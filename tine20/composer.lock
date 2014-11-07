@@ -334,11 +334,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "b8b4206b57d6b22f7368f46c22d96f131a881cb5"
+                "reference": "5760503195566eb11aa4e6e8be9272687d8fcaad"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -364,7 +364,7 @@
             ],
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
-            "time": "2013-10-23 14:05:40"
+            "time": "2014-11-07 12:52:57"
         },
         {
             "name": "zendframework/zend-escaper",

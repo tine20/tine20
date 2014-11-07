@@ -741,6 +741,28 @@ Zeile 3</AirSyncBase:Data>
     
         return array($serverId, $syncrotonEvent);
     }
+
+    /**
+     * testUpdateExdate
+     * 
+     * @see 0010417: Exdate update does not update seq of base event
+     */
+    public function testUpdateExdate()
+    {
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry();
+        
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $container = Tinebase_Container::getInstance()->get($event->container_id);
+        
+        $exception = Calendar_Controller_Event::getInstance()->getRecurExceptions($event)->getFirstRecord();
+        $exception->dtstart->subHour(1);
+        Calendar_Controller_Event::getInstance()->update($exception);
+        
+        $baseEventAfterExdateUpdate = Calendar_Controller_Event::getInstance()->get($serverId);
+        $containerAfterExdateUpdate = Tinebase_Container::getInstance()->get($event->container_id);
+        $this->assertEquals($event->seq + 1, $baseEventAfterExdateUpdate->seq, 'base sequence should be updated');
+        $this->assertEquals($container->content_seq + 2, $containerAfterExdateUpdate->content_seq, 'container sequence should be updated');
+    }
     
     public function testRecurEventExceptionFilters($syncrotonFolder = null)
     {

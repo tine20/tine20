@@ -81,6 +81,11 @@ class Tinebase_Core
     const USERCREDENTIALCACHE = 'usercredentialcache';
 
     /**
+     * const for current users access log
+     */
+    const USERACCESSLOG = 'useraccesslog';
+
+    /**
      * constant for database adapter
      */
     const DB = 'dbAdapter';

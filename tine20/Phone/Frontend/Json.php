@@ -96,8 +96,11 @@ class Phone_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMyPhone($recordData)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         unset($recordData['template_id']);
-
+        
         $phone = new Phone_Model_MyPhone();
         $phone->setFromArray($recordData);
         

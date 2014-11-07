@@ -314,7 +314,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         }
     
         $filter = new Calendar_Model_EventFilter(array(
-                array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
                 array('field' => 'attender'    , 'operator' => 'notin',  'value' => array(
                         array(
                                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
@@ -1015,7 +1015,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->delete($persistentEvent->getId());
         
         $contentSeq = Tinebase_Container::getInstance()->getContentSequence($this->_getTestCalendar());
-        $this->assertEquals(2, $contentSeq, 'container content seq should be increased 2 times!');
+        $this->assertEquals(3, $contentSeq, 'container content seq should be increased 3 times!');
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persistentEvent->getId());

@@ -624,12 +624,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _updateAccessLog(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog $accessLog)
     {
-        if (!$accessLog->getId()) {
+        if (! $accessLog->getId()) {
             $user->setLoginTime($accessLog->ip);
             if ($this->_writeAccessLog) {
                 $accessLog = Tinebase_AccessLog::getInstance()->create($accessLog);
             }
         }
+        
+        Tinebase_Core::set(Tinebase_Core::USERACCESSLOG, $accessLog);
     }
     
     /**

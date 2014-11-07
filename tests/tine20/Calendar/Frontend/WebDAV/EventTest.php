@@ -163,8 +163,6 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function testCreateEventWhichExistsAlreadyInAnotherContainer()
     {
-        $this->markTestSkipped('FIXME #10345');
-        
         $this->_testNeedsTransaction();
         
         $existingEvent = $this->testCreateEventWithExternalOrganizer()->getRecord();

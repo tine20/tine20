@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.8</version>
+    <version>8.9</version>
     <tables>
         <table>
             <name>applications</name>
@@ -647,7 +647,7 @@
         </table>
         <table>
             <name>container_content</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -683,7 +683,6 @@
                     <type>datetime</type>
                     <notnull>true</notnull>
                 </field>
-
                 <index>
                     <name>container_id-content_seq-record_id</name>
                     <primary>true</primary>
@@ -695,6 +694,12 @@
                     </field>
                     <field>
                         <name>record_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id</name>
+                    <field>
+                        <name>id</name>
                     </field>
                 </index>
                 <index>

@@ -1642,7 +1642,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
     
     /**
-     * touches (sets seq and last_modified_time) given event
+     * touches (sets seq, last_modified_time and container content sequence) given event
      * 
      * @param  $_event
      * @return void
@@ -1650,15 +1650,37 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _touch($_event, $_setModifier = FALSE)
     {
         $_event->last_modified_time = Tinebase_DateTime::now();
-        //$_event->last_modified_time = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         $_event->seq = (int)$_event->seq + 1;
         if ($_setModifier) {
             $_event->last_modified_by = Tinebase_Core::getUser()->getId();
         }
         
-        
         $this->_backend->update($_event);
+        
+        $this->_increaseContainerContentSequence($_event, Tinebase_Model_ContainerContent::ACTION_UPDATE);
     }
+    
+    /**
+     * increase container content sequence
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @param string $action
+     */
+    protected function _increaseContainerContentSequence(Tinebase_Record_Interface $record, $action = NULL)
+    {
+        parent::_increaseContainerContentSequence($record, $action);
+        
+        if ($record->attendee instanceof Tinebase_Record_RecordSet) {
+            $updatedContainerIds = array($record->container_id);
+            foreach ($record->attendee as $attender) {
+                if (isset($attender->displaycontainer_id) && ! in_array($attender->displaycontainer_id, $updatedContainerIds)) {
+                    Tinebase_Container::getInstance()->increaseContentSequence($attender->displaycontainer_id, $action, $record->getId());
+                    $updatedContainerIds[] = $attender->displaycontainer_id;
+                }
+            }
+        }
+    }
+    
     
     /****************************** attendee functions ************************/
     

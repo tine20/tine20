@@ -124,14 +124,35 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $conflictingEvent = Calendar_Controller_Event::getInstance()->create($event, TRUE);
     }
     
-    public function testDeleteResource()
+    /**
+     * testDeleteResource
+     * 
+     * @param Calendar_Model_Resource $resource
+     */
+    public function testDeleteResource($resource = null)
     {
-        $resource = $this->testCreateResource();
+        if ($resource === null) {
+            $resource = $this->testCreateResource();
+        }
         
         Calendar_Controller_Resource::getInstance()->delete($resource->getId());
         
         $this->assertEquals(0, count(Calendar_Controller_Resource::getInstance()->getMultiple(array($resource->getId()))));
         $this->setExpectedException('Tinebase_Exception_NotFound');
         Tinebase_Container::getInstance()->getContainerById($resource->container_id);
+    }
+    
+    /**
+     * testDeleteResourceWithmissingContainer
+     * 
+     * @see 0010421: could not delete resource if resource container already got deleted
+     */
+    public function testDeleteResourceMissingContainer()
+    {
+        $resource = $this->testCreateResource();
+        
+        Tinebase_Container::getInstance()->deleteContainer($resource->container_id);
+        
+        $this->testDeleteResource($resource);
     }
 }
