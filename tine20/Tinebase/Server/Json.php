@@ -43,7 +43,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
         
         // handle CORS requests
-        if ($request->getHeaders()->has('ORIGIN')) {
+        if ($request->getHeaders()->has('ORIGIN') && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')) {
             $origin = $request->getHeaders()->get('ORIGIN')->getFieldValue();
             $parsedUrl = parse_url($origin);
             
