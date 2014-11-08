@@ -15,6 +15,13 @@
  */
 class Tinebase_CoreTest extends TestCase
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+        
+        Tinebase_Core::set(Tinebase_Core::REQUEST, null);
+    }
+    
     public function testGetDispatchServerJSON()
     {
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
@@ -31,11 +38,11 @@ Access-Control-Request-Method: POST\r
 Access-Control-Request-Headers: X-PINGOTHER\r
 EOS
         );
+        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
         $server = Tinebase_Core::getDispatchServer($request);
         
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
-        
         
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
 POST /index.php HTTP/1.1\r
@@ -44,6 +51,7 @@ X-Tine20-Request-Type: JSON\r
 {"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}
 EOS
         );
+        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
         $server = Tinebase_Core::getDispatchServer($request);
         
@@ -57,6 +65,7 @@ Content-Type: application/json\r
 {"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}
 EOS
         );
+        Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
         $server = Tinebase_Core::getDispatchServer($request);
         

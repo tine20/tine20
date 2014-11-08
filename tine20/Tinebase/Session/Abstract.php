@@ -274,48 +274,66 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
      *
      * @param array $_options
      */
-    public static function setSessionOptions($_options = array())
+    public static function setSessionOptions($options = array())
     {
-        $array_options = array_merge($_options,
-                                     array(
-                                        'cookie_httponly' => true,
-                                        'hash_function'   => 1
-                                     )
+        $options = array_merge(
+            $options,
+             array (
+                'cookie_httponly' => true,
+                'hash_function'   => 1
+             )
         );
-        Zend_Session::setOptions($array_options);
         
         if (isset($_SERVER['REQUEST_URI'])) {
-            // cut of path behind caldav/webdav (removeme when dispatching is refactored)
-            if (isset($_SERVER['REDIRECT_WEBDAV']) && $_SERVER['REDIRECT_WEBDAV'] == 'true') {
-                $decodedUri = Sabre_DAV_URLUtil::decodePath($_SERVER['REQUEST_URI']);
-                $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'webdav/') + strlen('webdav/'));
-            } else if (isset($_SERVER['REDIRECT_CALDAV']) && $_SERVER['REDIRECT_CALDAV'] == 'true') {
-                $decodedUri = Sabre_DAV_URLUtil::decodePath($_SERVER['REQUEST_URI']);
-                $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'caldav/') + strlen('caldav/'));
+            $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+            
+            if ($request->getHeaders()->has('X-FORWARDED-HOST')) {
+                /************** Apache 2.4 with mod_proxy ****************
+                 * Apache set's X-FORWARDED-HOST and REFERER
+                 * 
+                 * ProxyPass /tine20 http://192.168.122.158/tine20
+                 * <Location /tine20>
+                 *      ProxyPassReverse http://192.168.122.158/tine20
+                 * </Location>
+                 * 
+                 * ProxyPass /192.168.122.158/tine20 http://192.168.122.158/tine20
+                 * <Location /192.168.122.158/tine20>
+                 *     ProxyPassReverse http://192.168.122.158/tine20
+                 * </Location>
+                 */
+                if ($request->getHeaders()->has('REFERER')) {
+                    $refererUri = \Zend\Uri\UriFactory::factory($request->getHeaders()->get('REFERER')->getFieldValue());
+                    $baseUri = $refererUri->getPath();
+                } else {
+                    $exploded = explode("/", $_SERVER['REQUEST_URI']);
+                    if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
+                         $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
+                    }
+                }
+                
             } else {
-                $baseUri = dirname($_SERVER['REQUEST_URI']);
+                $baseUri = $request->getBasePath();
             }
             
-            if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-                $exploded = explode("/", $_SERVER['REQUEST_URI']);
-                if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
-                     $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
-                }
+            // strip of index.php
+            if (substr($baseUri, -9) === 'index.php') {
+                $baseUri = dirname($baseUri);
             }
+            
+            // strip of trailing /
+            $baseUri = rtrim($baseUri, '/');
             
             // fix for windows server with backslash directory separator
             $baseUri = str_replace(DIRECTORY_SEPARATOR, '/', $baseUri);
             
-            Zend_Session::setOptions(array(
-                'cookie_path'     => $baseUri
-            ));
+            $options['cookie_path'] = $baseUri;
         }
         
         if (!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
-            Zend_Session::setOptions(array(
-                'cookie_secure'     => true
-            ));
+            $options['cookie_secure'] = true;
         }
+        
+        Zend_Session::setOptions($options);
     }
     
     public static function getSessionEnabled()
