@@ -297,7 +297,10 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
             }
             
             if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-                $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
+                $exploded = explode("/", $_SERVER['REQUEST_URI']);
+                if (strtolower($exploded[1]) == strtolower($_SERVER['HTTP_HOST'])) {
+                     $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
+                }
             }
             
             // fix for windows server with backslash directory separator
