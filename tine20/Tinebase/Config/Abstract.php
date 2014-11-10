@@ -315,31 +315,31 @@ abstract class Tinebase_Config_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
             $this->_cachedApplicationConfig = array();
         }
-
+        
         $cache = Tinebase_Core::getCache();
         if (!is_object($cache)) {
            Tinebase_Core::setupCache();
            $cache = Tinebase_Core::getCache();
         }
-
+        
         if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
             if ($cache->test('cachedAppConfig_' . $this->_appName)) {
                 $this->_cachedApplicationConfig = $cache->load('cachedAppConfig_' . $this->_appName);
                 return;
             }
         }
-
+        
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
-        } catch (Zend_Db_Adapter_Exception $zdae) {
-            // DB might not exist, yet
+        } catch (Zend_Db_Exception $zdae) {
+            // DB might not exist or tables are not created, yet
             Tinebase_Exception::log($zdae);
             $this->_cachedApplicationConfig = array();
             return;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
-    
+        
         $filter = new Tinebase_Model_ConfigFilter(array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
         ));
@@ -351,7 +351,7 @@ abstract class Tinebase_Config_Abstract
         foreach ($allConfigs as $config) {
             $this->_cachedApplicationConfig[$config->name] = $config;
         }
-
+        
         if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
             $cache->save($this->_cachedApplicationConfig, 'cachedAppConfig_' . $this->_appName);
         }
