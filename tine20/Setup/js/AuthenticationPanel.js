@@ -597,9 +597,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '1'
             }, commonComboConfig),
             Ext.applyIf({
-                name: 'accounts_' + type + 'useStartTls',
+                name: 'accounts_' + type + '_useStartTls',
                 fieldLabel: this.app.i18n._('Start TLS'),
-                store: [[['0', this.app.i18n._('No'), '1', this.app.i18n._('Yes')]]],
+                store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '0'
             }, commonComboConfig),
             Ext.applyIf({
@@ -648,9 +648,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '1'
             }, commonComboConfig), 
             Ext.applyIf({
-                name: 'accounts_' + type + (type === 'Ldap') ? '_useRfc2307bis' : '_useRfc2307',
+                name: 'accounts_' + type + ((type === 'Ldap') ? '_useRfc2307bis' : '_useRfc2307'),
                 fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use Rfc 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
-                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '0'
             }, commonComboConfig), 
             {
