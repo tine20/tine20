@@ -113,6 +113,16 @@ class Tinebase_Helper
     }
     
     /**
+     * get release Codename
+     *
+     * @return string
+     */
+    public static function getCodename()
+    {
+        return 'Koriander';
+    }
+    
+    /**
      * converts cache id
      * cache id strings can only contain the chars [a-zA-Z0-9_]
      * 

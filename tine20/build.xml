@@ -18,7 +18,7 @@
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
     <target name="prepare">
-        <echo msg="$buildDate: ${project.basedir}" />
+        <echo msg="basedir: ${project.basedir}" />
         <init />
 
         <php expression="Tinebase_Helper::getDevelopmentRevision();" returnProperty="buildRevision" />
