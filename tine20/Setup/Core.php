@@ -81,25 +81,25 @@ class Setup_Core extends Tinebase_Core
      */
     public static function dispatchRequest()
     {
+        $request = new \Zend\Http\PhpEnvironment\Request();
+        self::set(self::REQUEST, $request);
+        
         $server = NULL;
         
         /**************************** JSON API *****************************/
-
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  || 
              (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
            ) {
             $server = new Setup_Server_Json();
-
-        /**************************** CLI API *****************************/
         
+        /**************************** CLI API *****************************/
         } elseif (php_sapi_name() == 'cli') {
             $server = new Setup_Server_Cli();
-            
-        /**************************** HTTP API ****************************/
         
+        /**************************** HTTP API ****************************/
         } else {
             $server = new Setup_Server_Http();
-        }        
+        }
         
         $server->handle();
     }
