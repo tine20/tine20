@@ -43,31 +43,70 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
         
         // handle CORS requests
-        if ($request->getHeaders()->has('ORIGIN') && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')) {
-            $origin = $request->getHeaders()->get('ORIGIN')->getFieldValue();
-            $parsedUrl = parse_url($origin);
+        if ($request->getHeaders()->has('ORIGIN') && !$request->getHeaders()->has('X-FORWARDED-HOST')) {
+            /**
+             * First the client sends a preflight request
+             * 
+             * METHOD: OPTIONS
+             * Access-Control-Request-Headers:x-requested-with, content-type
+             * Access-Control-Request-Method:POST
+             * Origin:http://other.site
+             * Referer:http://other.site/example.html
+             * User-Agent:Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36
+             * 
+             * We have to respond with
+             * 
+             * Access-Control-Allow-Credentials:true
+             * Access-Control-Allow-Headers:x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey
+             * Access-Control-Allow-Methods:POST
+             * Access-Control-Allow-Origin:http://other.site
+             * 
+             * Then the client sends the standard JSON request with two additional headers
+             * 
+             * METHOD: POST
+             * Origin:http://other.site
+             * Referer:http://other.site/example.html
+             * Standard-JSON-Rquest-Headers...
+             * 
+             * We have to add two additional headers to our standard response
+             * 
+             * Access-Control-Allow-Credentials:true
+             * Access-Control-Allow-Origin:http://other.site
+             */
+            $origin = $request->getHeaders('ORIGIN')->getFieldValue();
+            $uri    = \Zend\Uri\UriFactory::factory($origin);
             
-            if ($parsedUrl['scheme'] == 'http' || $parsedUrl['scheme'] == 'https') {
+            if (in_array($uri->getScheme(), array('http', 'https'))) {
                 $allowedOrigins = array_merge(
                     (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
-                    array($request->getServer('SERVER_NAME'))
+                    array($this->_request->getServer('SERVER_NAME'))
                 );
                 
-                if (in_array($parsedUrl['host'], $allowedOrigins)) {
+                if (in_array($uri->getHost(), $allowedOrigins)) {
+                    // this headers have to be sent, for any CORS'ed JSON request
                     header('Access-Control-Allow-Origin: ' . $origin);
                     header('Access-Control-Allow-Credentials: true');
+                }
+                
+                // check for CORS preflight request
+                if ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS &&
+                    $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')
+                ) {
+                    $this->_methods = array('handleCors');
                     
-                    if ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD')) {
-                        header('Access-Control-Allow-Methods: POST, OPTIONS');
+                    if (in_array($uri->getHost(), $allowedOrigins)) {
+                        header('Access-Control-Allow-Methods: POST');
                         header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
-                        exit;
+                        header('Access-Control-Max-Age: 3600'); // cache result of OPTIONS request for 1 hour
+                        
+                    } else {
+                        Tinebase_Core::getLogger()->WARN (__METHOD__ . '::' . __LINE__ . " unhandled CORS preflight request from $origin");
+                        Tinebase_Core::getLogger()->INFO (__METHOD__ . '::' . __LINE__ . " you may want to set \"'allowedJsonOrigins' => array('{$uri->getHost()}'),\" to config.inc.php");
+                        Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
                     }
-                } else {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " forbidden CORS request from $origin");
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " you may want to set \"'allowedJsonOrigins' => array('{$parsedUrl['host']}'),\" to config.inc.php");
-                    Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " allowed origins: " . print_r($allowedOrigins, TRUE));
-                    header("HTTP/1.1 403 Access Forbidden");
-                    exit;
+                    
+                    // stop further processing => is OPTIONS request
+                    return;
                 }
             }
         }
