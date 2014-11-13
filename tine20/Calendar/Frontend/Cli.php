@@ -132,33 +132,33 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $writer->addFilter(new Zend_Log_Filter_Priority(6));
         Tinebase_Core::getLogger()->addWriter($writer);
         
-        $params = $this->_parseArgs($opts);
+        $args = $this->_parseArgs($opts);
         
         $be = new Calendar_Backend_Sql();
         $filterData = array(array(
             'field'    => 'dtstart',
             'operator' => 'after',
-            'value'    => isset($params['dtstart']) ? new Tinebase_DateTime($params['dtstart']) : Tinebase_DateTime::now(),
+            'value'    => isset($args['dtstart']) ? new Tinebase_DateTime($args['dtstart']) : Tinebase_DateTime::now(),
         ));
-        if (isset($params['organizer'])) {
+        if (isset($args['organizer'])) {
             $filterData[] = array(
                 'field'    => 'organizer',
                 'operator' => 'equals',
-                'value'    => $params['organizer'],
+                'value'    => $args['organizer'],
             );
         }
-        if (isset($params['created_by'])) {
+        if (isset($args['created_by'])) {
             $filterData[] = array(
                 'field'    => 'created_by',
                 'operator' => 'equals',
-                'value'    => $params['created_by'],
+                'value'    => $args['created_by'],
             );
         }
-        if (isset($params['summary'])) {
+        if (isset($args['summary'])) {
             $filterData[] = array(
                 'field'    => 'summary',
                 'operator' => 'contains',
-                'value'    => $params['summary'],
+                'value'    => $args['summary'],
             );
         }
         $filter = new Calendar_Model_EventFilter($filterData);
@@ -318,7 +318,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         // loop alarms and print alarm ack info
         foreach ($events as $event) {
             if (count($event->alarms) > 0) {
-                echo "Event '" . substr($event->summary, 0, 30) . "' (" . $event->dtstart->toString() . ' - ' . $event->dtend->toString() .")\n";
+                $this->_printShortEvent($event);
                 foreach ($event->alarms as $alarm) {
                     echo "  Alarm " . $alarm->alarm_time . "\n";
                     $ackTime = Calendar_Controller_Alarm::getAcknowledgeTime($alarm);
@@ -337,5 +337,48 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo "\n";
             }
         }
+    }
+    
+    protected function _printShortEvent($event)
+    {
+        echo "Event '" . substr($event->summary, 0, 30) . "' (" . $event->dtstart->toString() . ' - ' . $event->dtend->toString() .")\n";
+    }
+    
+    /**
+     * compare two calendars and create report of missing/different events
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function compareCalendars(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('cal1', 'cal2'));
+        
+        $from = isset($args['from']) ? new Tinebase_DateTime($args['from']) : Tinebase_DateTime::now();
+        $until = isset($args['until']) ? new Tinebase_DateTime($args['until']) : Tinebase_DateTime::now()->addYear(1);
+        
+        echo "Comparing Calendars with IDs " . $args['cal1'] . " / " . $args['cal2'] . " (" . $from . " - " . $until . ")...\n"
+            . " (All times in UTC)\n";
+        
+        $result = Calendar_Controller_Event::getInstance()->compareCalendars($args['cal1'], $args['cal2'], $from, $until);
+        
+        // print results
+        echo "-----------------------------\n";
+        echo "Found " . count($result['matching']) . " matching Events\n";
+        echo "-----------------------------\n";
+        echo "Found " . count($result['changed']) . " changed Events (same summary but different time):\n";
+        foreach ($result['changed'] as $event) {
+            $this->_printShortEvent($event);
+        }
+        echo "-----------------------------\n";
+        echo "Found " . count($result['missingInCal1']) . " missing Events from calendar " . $args['cal1'] . ":\n";
+        foreach ($result['missingInCal1'] as $event) {
+            $this->_printShortEvent($event);
+        }
+        echo "-----------------------------\n";
+        echo "Found " . count($result['missingInCal2']) . " missing Events from calendar " . $args['cal2'] . ":\n";
+        foreach ($result['missingInCal2'] as $event) {
+            $this->_printShortEvent($event);
+        }
+        echo "-----------------------------\n";
     }
 }

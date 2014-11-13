@@ -1376,4 +1376,73 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->assertEquals('Hello', $event->customfields['unittest']);
     }
+
+    /**
+     * @see 0010454: cli script for comparing calendars
+     */
+    public function testCompareCalendars()
+    {
+        $cal1 = $this->_testCalendar;
+        $cal2 = $this->_getTestContainer('Calendar');
+        
+        $this->_buildCompareCalendarsFixture($cal1, $cal2);
+        
+        $from = Tinebase_DateTime::now()->subDay(1);
+        $until = Tinebase_DateTime::now()->addWeek(2);
+        $result = Calendar_Controller_Event::getInstance()->compareCalendars($cal1->getId(), $cal2->getId(), $from, $until);
+        
+        $this->assertEquals(1, count($result['matching']), 'event3 + 4 should have matched: ' . print_r($result['matching']->toArray(), true));
+        $this->assertEquals(1, count($result['changed']), 'event 5 should appear in changed: ' . print_r($result['changed']->toArray(), true));
+        $this->assertEquals(1, count($result['missingInCal1']), 'event 2 should miss from cal1: ' . print_r($result['missingInCal1']->toArray(), true));
+        $this->assertEquals(1, count($result['missingInCal2']), 'event 6 should miss from cal2 ' . print_r($result['missingInCal2']->toArray(), true));
+    }
+    
+    /**
+     *  create some events to compare
+     *  
+     * - event1: in calendar 1
+     * - event2: only in calendar 2
+     * - event3+4: in both calendars
+     * - event5: slightly different from event1 (same summary) / in cal2
+     * - event6: only in cal1 (next week)
+     * 
+     * @param Tinebase_Model_Container $cal1
+     * @param Tinebase_Model_Container $cal2
+     */
+    protected function _buildCompareCalendarsFixture($cal1, $cal2)
+    {
+        $event1 = $this->_getEvent(true);
+        $event1->summary = 'event 1';
+        $this->_controller->create($event1);
+        
+        $event2 =  $this->_getEvent(true);
+        $event2->dtstart->addDay(1);
+        $event2->dtend->addDay(1);
+        $event2->summary = 'event 2';
+        $event2->container_id = $cal2->getId();
+        $this->_controller->create($event2);
+        
+        $event3 = $this->_getEvent(true);
+        $event3->dtstart->addDay(2);
+        $event3->dtend->addDay(2);
+        $event3->summary = 'event 3';
+        $event4 = clone $event3;
+        $this->_controller->create($event3);
+        
+        $event4->container_id = $cal2->getId();
+        $this->_controller->create($event4);
+        
+        $event5 = $this->_getEvent(true);
+        $event5->summary = 'event 1';
+        $event5->dtstart->addMinute(30);
+        $event5->container_id = $cal2->getId();
+        $this->_controller->create($event5);
+        
+        // this tests weekly processing, too
+        $event6 = $this->_getEvent(true);
+        $event6->summary = 'event 6';
+        $event6->dtstart->addDay(8);
+        $event6->dtend->addDay(8);
+        $this->_controller->create($event6);
+    }
 }
