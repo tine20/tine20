@@ -45,10 +45,11 @@ Tine.widgets.VersionCheck = function() {
         var latest = Date.parseDate(availableVersion.get('releaseTime'), Date.patterns.ISO8601Long);
         
         if (latest > local && Tine.Tinebase.common.hasRight('run', 'Tinebase')) {
+            var versionString = availableVersion.get('codeName') + ' ' + availableVersion.get('packageString');
             if (availableVersion.get('critical') == true) {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'), 
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), availableVersion.get('codeName')) + "\n" +
+                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
                                  _("It's a critical update and must be installed as soon as possible!"),
                     width: 500,
                     buttons: Ext.Msg.OK,
@@ -57,7 +58,7 @@ Tine.widgets.VersionCheck = function() {
             } else {
                 Ext.MessageBox.show({
                     title: _('New version of Tine 2.0 available'),
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), availableVersion.get('codeName')) + "\n" +
+                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
                                  _('Please consider updating!'),
                     width: 400,
                     buttons: Ext.Msg.OK,
