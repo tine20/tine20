@@ -30,7 +30,7 @@ class Sales_Controller_Offer extends Sales_Controller_NumberableAbstract
      *
      * @var string
      */
-    protected $_numberPrefix = 'ANG-';
+    protected $_numberPrefix = 'AN-';
     
     /**
      * check for container ACLs
