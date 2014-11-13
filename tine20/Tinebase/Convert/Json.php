@@ -426,7 +426,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     /**
      * converts Tinebase_Record_RecordSet to external format
      * 
-     * @param  Tinebase_Record_RecordSet  $_records
+     * @param Tinebase_Record_RecordSet  $_records
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * 

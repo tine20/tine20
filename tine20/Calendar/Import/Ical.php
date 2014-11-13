@@ -47,7 +47,13 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          * Model to be used for import
          * @var string
          */
-        'model' => 'Calendar_Model_Event'
+        'model' => 'Calendar_Model_Event',
+        
+        /**
+         * import only basic data (i.e. without attendee, alarms, uid, ...)
+         * @var string
+         */
+        'onlyBasicData'         => NULL,
     );
     
     /**
@@ -110,12 +116,15 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         }
         
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        if (isset($this->_options['onlyBasicData'])) {
+            $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));
+        }
         
         try {
             $events = $converter->toTine20RecordSet($_resource);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
-            $isce = new Calendar_Exception_IcalParser();
+            $isce = new Calendar_Exception_IcalParser('Can not parse ics file: ' . $e->getMessage());
             $isce->setParseError($e);
             throw $isce;
         }

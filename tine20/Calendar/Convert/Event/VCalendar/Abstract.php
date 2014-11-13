@@ -34,6 +34,26 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     protected $_method;
     
     /**
+     * options array
+     * @var array
+     * 
+     * TODO allow more options
+     * 
+     * current options:
+     *  - onlyBasicData (only use basic event data when converting from VCALENDAR to Tine 2.0)
+     */
+    protected $_options = array();
+    
+    /**
+     * set options
+     * @param array $options
+     */
+    public function setOptions($options)
+    {
+        $this->_options = $options;
+    }
+    
+    /**
      * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
      *
      * @param  Tinebase_Record_RecordSet  $_records
@@ -665,8 +685,19 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $shortenedFields = array();
         $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
+        $skipFieldsIfOnlyBasicData = array('ATTENDEE', 'UID', 'ORGANIZER', 'VALARM', 'ATTACH', 'CATEGORIES');
         
         foreach ($vevent->children() as $property) {
+            if (isset($this->_options['onlyBasicData'])
+                && $this->_options['onlyBasicData']
+                && in_array((string) $property->name, $skipFieldsIfOnlyBasicData))
+            {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping '
+                            . $property->name . ' (using option onlyBasicData)');
+                continue;
+            }
+            
             switch ($property->name) {
                 case 'CREATED':
                 case 'DTSTAMP':
@@ -746,7 +777,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                 case 'DESCRIPTION':
                 case 'LOCATION':
-                case 'UID':
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $value = $property->getValue();

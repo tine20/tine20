@@ -16,22 +16,25 @@
  * @subpackage  Convert
  */
 class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
-{   
+{
    /**
     * parent converts Tinebase_Record_RecordSet to external format
     * this resolves Image Paths
     * @TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved.
-    * @param  Tinebase_Record_RecordSet  $_records
+    * 
+    * @param Tinebase_Record_RecordSet  $_records
+    * @param Tinebase_Model_Filter_FilterGroup $_filter
+    * @param Tinebase_Model_Pagination $_pagination
     * @return mixed
     */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         if (count($_records) == 0) {
             return array();
         }
         
         Addressbook_Frontend_Json::resolveImages($_records);
-                
-        return parent::fromTine20RecordSet($_records);
+        
+        return parent::fromTine20RecordSet($_records, $_filter, $_pagination);
     }
 }

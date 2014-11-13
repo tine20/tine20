@@ -822,7 +822,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 'operator' => 'equals',
                 'value'    => new Tinebase_DateTime($row['dtend']),
             )));
-            $pagination = new Tinebase_Model_Pagination(array('sort' => $this->_tableName . '.creation_time')); 
+            $pagination = new Tinebase_Model_Pagination(array('sort' => array($this->_tableName . '.last_modified_time', $this->_tableName . '.creation_time'))); 
             
             $select = $this->_db->select();
             $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName));
@@ -842,8 +842,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             array_shift($deleteIds);
             
             if (! empty($deleteIds)) {
+                $deleteContainerIds = ($events->container_id);
+                $origContainer = array_shift($deleteContainerIds);
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                    . ' Deleting ' . count($deleteIds) . ' duplicates of: ' . $index);
+                    . ' Deleting ' . count($deleteIds) . ' duplicates of: ' . $index . ' in container_ids ' . implode(',', $deleteContainerIds) . ' (origin container: ' . $origContainer . ')');
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                     . ' ' . print_r($deleteIds, TRUE));
                 

@@ -156,11 +156,11 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * @param boolean $fromString
      * @return Tinebase_Record_RecordSet
      */
-    protected function _importHelper($filename, $expectedNumber = 1, $fromString = false)
+    protected function _importHelper($filename, $expectedNumber = 1, $fromString = false, $additionalOptions = array())
     {
-        $importer = new Calendar_Import_Ical(array(
+        $importer = new Calendar_Import_Ical(array_merge($additionalOptions,array(
             'container_id' => $this->_getTestCalendar()->getId(),
-        ));
+        )));
         
         if ($fromString) {
             $icalData = file_get_contents(dirname(__FILE__) . '/files/' . $filename);
@@ -271,5 +271,23 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         $firstOfMay2014 = $events[1];
         
         $this->assertEquals('2014-04-30 22:00:00', $firstOfMay2014->dtstart);
+    }
+
+    /**
+     * @see 0010449: allow to ignore data when importing ics
+     */
+    public function testImportWithOnlyBasicData()
+    {
+        $importEvents = $this->_importHelper('exchange2007_mail_anhang.ics', 1, false, array(
+            'onlyBasicData' => true
+        ));
+        $event = $importEvents->getFirstRecord();
+        
+        Tinebase_Alarm::getInstance()->getAlarmsOfRecord('Calendar_Model_Event', $event);
+        
+        $emptyFields = array('alarms', 'attendee', 'uid');
+        foreach ($emptyFields as $field) {
+            $this->assertTrue(empty($event->alarms), 'field ' . $field . ' should be empty in event ' . print_r($event->toArray(), true));
+        }
     }
 }
