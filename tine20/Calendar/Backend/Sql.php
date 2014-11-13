@@ -175,6 +175,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* table  */ array('attendee' => $this->_tablePrefix . 'cal_attendee'),
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
             /* select */ array());
+        // TODO move this to join?
+        $select->where($this->_db->quoteIdentifier('attendee.is_deleted') . ' = 0 OR ' . $this->_db->quoteIdentifier('attendee.is_deleted') . 'IS NULL');
         
         if (! $getDeleted) {
             $select->joinLeft(
@@ -182,6 +184,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 /* on     */ $this->_db->quoteIdentifier('dispcontainer.id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id'),
                 /* select */ array());
             
+            // TODO move this to join?
             $select->where($this->_db->quoteIdentifier('dispcontainer.is_deleted') . ' = 0 OR ' . $this->_db->quoteIdentifier('dispcontainer.is_deleted') . 'IS NULL');
         }
         
