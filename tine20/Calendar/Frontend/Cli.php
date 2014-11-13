@@ -381,4 +381,20 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         echo "-----------------------------\n";
     }
+    
+    public function repairAttendee(Zend_Console_Getopt $_opts)
+    {
+        $args = $this->_parseArgs($_opts, array('cal'));
+        $from = isset($args['from']) ? new Tinebase_DateTime($args['from']) : Tinebase_DateTime::now();
+        $until = isset($args['until']) ? new Tinebase_DateTime($args['until']) : Tinebase_DateTime::now()->addYear(1);
+        $dry = $_opts->d;
+        
+        echo "Repairing Calendar with IDs " . $args['cal'] .  "(" . $from . " - " . $until . ")...\n";
+        if ($dry) {
+            echo "-- DRY RUN --\n";
+        }
+        
+        $result = Calendar_Controller_Event::getInstance()->repairAttendee($args['cal'], $from, $until, $dry);
+        echo "Repaired " . $result . " events\n";
+    }
 }

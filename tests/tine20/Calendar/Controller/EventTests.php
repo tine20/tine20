@@ -1445,4 +1445,20 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event6->dtend->addDay(8);
         $this->_controller->create($event6);
     }
+    
+    public function testRepairAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->attendee = null;
+        $persistentEvent = $this->_controller->create($event);
+        
+        $result = $this->_controller->repairAttendee($persistentEvent->container_id, Tinebase_DateTime::now()->subDay(1), Tinebase_DateTime::now());
+        
+        $this->assertEquals(1, $result, 'should repair 1 event');
+        
+        $repairedEvent = $this->_controller->get($persistentEvent->getId());
+        $this->assertEquals(1, count($repairedEvent->attendee));
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($repairedEvent->attendee);
+        $this->assertTrue($ownAttender !== null);
+    }
 }

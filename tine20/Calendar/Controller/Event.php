@@ -2269,12 +2269,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $summaryMatch = $cal2Events->filter('summary', $event->summary);
                 if (count($summaryMatch) > 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " Found " . count($summaryMatch) . ' events with matching summaries: ' . print_r($summaryMatch->toArray(), true));
+                        . " Found " . count($summaryMatch) . ' events with matching summaries');
                     
                     $dtStartMatch = $cal2Events->filter('dtstart', $event->dtstart);
                     if (count($dtStartMatch) > 0) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " Found " . count($summaryMatch) . ' events with matching dtstarts and summaries: ' . print_r($dtStartMatch->toArray(), true));
+                            . " Found " . count($summaryMatch) . ' events with matching dtstarts and summaries');
                         
                         $matchingEvents->merge($dtStartMatch);
                         // remove from cal1+cal2
@@ -2325,5 +2325,75 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $events = Calendar_Controller_Event::getInstance()->search($filter);
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
         return $events;
+    }
+    
+    /**
+     * add calendar owner as attendee if not already set
+     * 
+     * @param string $calendarId
+     * @param Tinebase_DateTime $from
+     * @param Tinebase_DateTime $until
+     * @param boolean $dry run
+     * 
+     * @return number of updated events
+     */
+    public function repairAttendee($calendarId, $from, $until, $dry = false)
+    {
+        $container = Tinebase_Container::getInstance()->getContainerById($calendarId);
+        if ($container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+            throw new Calendar_Exception('Only allowed for personal containers!');
+        }
+        if ($container->owner_id !== Tinebase_Core::getUser()->getId()) {
+            throw new Calendar_Exception('Only allowed for own containers!');
+        }
+        
+        $updateCount = 0;
+        while ($from->isEarlier($until)) {
+            $endWeek = $from->getClone()->addWeek(1);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Repairing period ' . $from . ' - ' . $endWeek);
+            
+            
+            // TODO we need to detect events with DECLINED/DELETED attendee
+            $events = $this->_getEventsForPeriodAndCalendar($calendarId, $from, $endWeek);
+            
+            $from->addWeek(1);
+            
+            if (count($events) == 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No events found');
+                continue;
+            }
+            
+            foreach ($events as $event) {
+                // add attendee if not already set
+                if ($event->isRecurInstance()) {
+                    // TODO get base event
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Skip recur instance ' . $event->toShortString());
+                    continue;
+                }
+                
+                $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+                if (! $ownAttender) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Add missing attender to event ' . $event->toShortString());
+                    
+                    $attender = new Calendar_Model_Attender(array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                        'user_id'   => Tinebase_Core::getUser()->contact_id,
+                        'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+                    ));
+                    $event->attendee->addRecord($attender);
+                    if (! $dry) {
+                        $this->update($event);
+                    }
+                    $updateCount++;
+                }
+            }
+        }
+        
+        return $updateCount;
     }
 }
