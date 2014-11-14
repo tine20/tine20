@@ -205,7 +205,16 @@ class Tinebase_Auth
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $_username);
         
-        $this->_backend->setIdentity($_username);
+        try {
+            $this->_backend->setIdentity($_username);
+        } catch (Zend_Auth_Adapter_Exception $zaae) {
+            return new Zend_Auth_Result(
+                Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                $_username,
+                array($zaae->getMessage())
+            );
+        }
+        
         $this->_backend->setCredential($_password);
         
         if (Tinebase_Session::isStarted()) {
@@ -366,7 +375,7 @@ class Tinebase_Auth
                 Tinebase_Core::getLogger()->getFormatter()->addReplacement(self::$_backendConfiguration['password']);
             }
         }
-
+        
         if (isset($_key)) {
             return (isset(self::$_backendConfiguration[$_key]) || array_key_exists($_key, self::$_backendConfiguration)) ? self::$_backendConfiguration[$_key] : $_default;
         } else {

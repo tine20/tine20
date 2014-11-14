@@ -138,10 +138,11 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         if ($dname === null) {
             return true;
         }
-        $accountDomainName = $this->_getAccountDomainName();
+        
+        $accountDomainName      = $this->_getAccountDomainName();
         $accountDomainNameShort = $this->_getAccountDomainNameShort();
         
-        if ($accountDomainName === null && $accountDomainNameShort === null) {
+        if (empty($accountDomainName) && empty($accountDomainNameShort)) {
             return true;
         }
         if (strcasecmp($dname, $accountDomainName) == 0) {
@@ -150,6 +151,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         if (strcasecmp($dname, $accountDomainNameShort) == 0) {
             return true;
         }
+        
         return false;
     }
     
