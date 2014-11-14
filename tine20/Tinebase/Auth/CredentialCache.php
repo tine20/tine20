@@ -205,14 +205,21 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     protected function _getCache($id)
     {
-        $session = Tinebase_Session::getSessionNamespace();
-        $credentialSessionCache = ($session && is_object($session)) ? $session->{self::SESSION_NAMESPACE} : NULL;
-        if (isset($credentialSessionCache) && isset($credentialSessionCache[$id])) {
-            $result = new Tinebase_Model_CredentialCache($credentialSessionCache[$id]);
-        } else {
-            $result = $this->get($id);
-            $this->_saveInSession($result);
+        try {
+            $session = Tinebase_Session::getSessionNamespace();
+            
+            $credentialSessionCache = $session->{self::SESSION_NAMESPACE};
+            
+            if (isset($credentialSessionCache) && isset($credentialSessionCache[$id])) {
+                return new Tinebase_Model_CredentialCache($credentialSessionCache[$id]);
+            }
+            
+        } catch (Zend_Session_Exception $zse) {
+            // nothing to do
         }
+        
+        $result = $this->get($id);
+        $this->_saveInSession($result);
         
         return $result;
     }

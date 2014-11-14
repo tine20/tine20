@@ -342,13 +342,17 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
         
-        $felamimailSession = Felamimail_Session::getSessionNamespace();
-        
-        // reset capabilities if imap host / port changed
-        if (isset($felamimailSession->account) && ((isset($diff['host']) || array_key_exists('host', $diff)) || (isset($diff['port']) || array_key_exists('port', $diff)))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Resetting capabilities for account ' . $_record->name);
-            unset($felamimailSession->account[$_record->getId()]);
+        try {
+            $felamimailSession = Felamimail_Session::getSessionNamespace();
+            
+            // reset capabilities if imap host / port changed
+            if (isset($felamimailSession->account) && ((isset($diff['host']) || array_key_exists('host', $diff)) || (isset($diff['port']) || array_key_exists('port', $diff)))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Resetting capabilities for account ' . $_record->name);
+                unset($felamimailSession->account[$_record->getId()]);
+            }
+        } catch (Zend_Session_Exception $zse) {
+            // nothing to do
         }
     }
 
@@ -511,11 +515,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        $felamimailSession = Felamimail_Session::getSessionNamespace();
-        
-        if (isset($felamimailSession->account) && is_array($felamimailSession->account) && array_key_exists($_account->getId(), $felamimailSession->account)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
-            return $felamimailSession->account[$_account->getId()];
+        try {
+            $felamimailSession = Felamimail_Session::getSessionNamespace();
+            
+            if (isset($felamimailSession->account) && is_array($felamimailSession->account) && array_key_exists($_account->getId(), $felamimailSession->account)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
+                
+                return $felamimailSession->account[$_account->getId()];
+            }
+        } catch (Zend_Session_Exception $zse) {
+            // nothing to do
         }
         
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
