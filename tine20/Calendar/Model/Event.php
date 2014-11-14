@@ -451,6 +451,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         return !!$this->recurid;
     }
+
+    /**
+     * event is non persistent recur instance
+     * 
+     * @return boolean
+     */
+    public function isRecurInstance()
+    {
+        return (boolean) preg_match('/^fakeid/', $this->getId());
+    }
     
     /**
      * sets recurId of this model
@@ -683,5 +693,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         $organizer = $this->resolveOrganizer();
         
         return $organizer instanceof Addressbook_Model_Contact && ! $organizer->account_id;
+    }
+    
+    public function toShortString()
+    {
+        return $this->summary . '(' . $this->dtstart . ' - ' . $this->dtend . ')';
     }
 }

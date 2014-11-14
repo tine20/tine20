@@ -1374,4 +1374,109 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->assertEquals('Hello', $event->customfields['unittest']);
     }
+
+    /**
+     * @see 0010454: cli script for comparing calendars
+     */
+    public function testCompareCalendars()
+    {
+        $cal1 = $this->_testCalendar;
+        $cal2 = $this->_getTestContainer('Calendar');
+        
+        $this->_buildCompareCalendarsFixture($cal1, $cal2);
+        
+        $from = Tinebase_DateTime::now()->subDay(1);
+        $until = Tinebase_DateTime::now()->addWeek(2);
+        $result = Calendar_Controller_Event::getInstance()->compareCalendars($cal1->getId(), $cal2->getId(), $from, $until);
+        
+        $this->assertEquals(1, count($result['matching']), 'event3 + 4 should have matched: ' . print_r($result['matching']->toArray(), true));
+        $this->assertEquals(1, count($result['changed']), 'event 5 should appear in changed: ' . print_r($result['changed']->toArray(), true));
+        $this->assertEquals(1, count($result['missingInCal1']), 'event 2 should miss from cal1: ' . print_r($result['missingInCal1']->toArray(), true));
+        $this->assertEquals(1, count($result['missingInCal2']), 'event 6 should miss from cal2 ' . print_r($result['missingInCal2']->toArray(), true));
+    }
+    
+    /**
+     *  create some events to compare
+     *  
+     * - event1: in calendar 1
+     * - event2: only in calendar 2
+     * - event3+4: in both calendars
+     * - event5: slightly different from event1 (same summary) / in cal2
+     * - event6: only in cal1 (next week)
+     * - event7: only in displaycontainer
+     * 
+     * @param Tinebase_Model_Container $cal1
+     * @param Tinebase_Model_Container $cal2
+     */
+    protected function _buildCompareCalendarsFixture($cal1, $cal2)
+    {
+        $event1 = $this->_getEvent(true);
+        $event1->summary = 'event 1';
+        $this->_controller->create($event1);
+        
+        $event2 =  $this->_getEvent(true);
+        $event2->dtstart->addDay(1);
+        $event2->dtend->addDay(1);
+        $event2->summary = 'event 2';
+        $event2->container_id = $cal2->getId();
+        $this->_controller->create($event2);
+        
+        $event3 = $this->_getEvent(true);
+        $event3->dtstart->addDay(2);
+        $event3->dtend->addDay(2);
+        $event3->summary = 'event 3';
+        $event4 = clone $event3;
+        $this->_controller->create($event3);
+        
+        $event4->container_id = $cal2->getId();
+        $this->_controller->create($event4);
+        
+        $event5 = $this->_getEvent(true);
+        $event5->summary = 'event 1';
+        $event5->dtstart->addMinute(30);
+        $event5->container_id = $cal2->getId();
+        $this->_controller->create($event5);
+        
+        // this tests weekly processing, too
+        $event6 = $this->_getEvent(true);
+        $event6->summary = 'event 6';
+        $event6->dtstart->addDay(8);
+        $event6->dtend->addDay(8);
+        $this->_controller->create($event6);
+        
+        // add event that is only in displaycontainer (should not appear in report)
+        $currentDefault = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, Tinebase_Core::getUser()->getId());
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $cal1->getId());
+        $event7 = $this->_getEvent(true);
+        $event7->summary = 'event 7';
+        $event7->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            ),
+        ));
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $cal3 = $this->_getTestContainer('Calendar');
+        $event7->container_id = $cal3->getId();
+        $this->_controller->create($event7);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $currentDefault);
+    }
+    
+    public function testRepairAttendee()
+    {
+        $event = $this->_getEvent(true);
+        $event->attendee = null;
+        $persistentEvent = $this->_controller->create($event);
+        
+        $result = $this->_controller->repairAttendee($persistentEvent->container_id, Tinebase_DateTime::now()->subDay(1), Tinebase_DateTime::now());
+        
+        $this->assertEquals(1, $result, 'should repair 1 event');
+        
+        $repairedEvent = $this->_controller->get($persistentEvent->getId());
+        $this->assertEquals(1, count($repairedEvent->attendee));
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($repairedEvent->attendee);
+        $this->assertTrue($ownAttender !== null);
+    }
 }

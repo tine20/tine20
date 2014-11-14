@@ -2244,4 +2244,180 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_oldEvent ? $_oldEvent : NULL
         );
     }
+
+    public function compareCalendars($cal1, $cal2, $from, $until)
+    {
+        $matchingEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $changedEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $missingEventsInCal1 = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $missingEventsInCal2 = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $cal2EventIdsAlreadyProcessed = array();
+        
+        while ($from->isEarlier($until)) {
+    
+            $endWeek = $from->getClone()->addWeek(1);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Comparing period ' . $from . ' - ' . $endWeek);
+    
+            // get all events from cal1+cal2 for the week
+            $cal1Events = $this->_getEventsForPeriodAndCalendar($cal1, $from, $endWeek);
+            $cal1EventsClone = clone $cal1Events;
+            $cal2Events = $this->_getEventsForPeriodAndCalendar($cal2, $from, $endWeek);
+            $cal2EventsClone = clone $cal2Events;
+            
+            $from->addWeek(1);
+            if (count($cal1Events) == 0 && count($cal2Events) == 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No events found');
+                continue;
+            }
+    
+            foreach ($cal1Events as $event) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Checking event "' . $event->summary . '" ' . $event->dtstart . ' - ' . $event->dtend);
+                
+                if ($event->container_id != $cal1) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Event is in another calendar - skip');
+                    $cal1Events->removeRecord($event);
+                    continue;
+                }
+                
+                $summaryMatch = $cal2Events->filter('summary', $event->summary);
+                if (count($summaryMatch) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Found " . count($summaryMatch) . ' events with matching summaries');
+                    
+                    $dtStartMatch = $cal2Events->filter('dtstart', $event->dtstart);
+                    if (count($dtStartMatch) > 0) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Found " . count($summaryMatch) . ' events with matching dtstarts and summaries');
+                        
+                        $matchingEvents->merge($dtStartMatch);
+                        // remove from cal1+cal2
+                        $cal1Events->removeRecord($event);
+                        $cal2Events->removeRecords($dtStartMatch);
+                        $cal2EventIdsAlreadyProcessed = array_merge($cal2EventIdsAlreadyProcessed, $dtStartMatch->getArrayOfIds());
+                    } else {
+                        $changedEvents->merge($summaryMatch);
+                        $cal1Events->removeRecord($event);
+                        $cal2Events->removeRecords($summaryMatch);
+                        $cal2EventIdsAlreadyProcessed = array_merge($cal2EventIdsAlreadyProcessed, $summaryMatch->getArrayOfIds());
+                    }
+                }
+            }
+            
+            // add missing events
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Found " . count($cal1Events) . ' events missing in cal2');
+            $missingEventsInCal2->merge($cal1Events);
+            
+            // compare cal2 -> cal1 and add events as missing from cal1 that we did not detect before
+            foreach ($cal2EventsClone as $event) {
+                if (in_array($event->getId(), $cal2EventIdsAlreadyProcessed)) {
+                    continue;
+                }
+                if ($event->container_id != $cal2) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Event is in another calendar - skip');
+                    continue;
+                }
+                
+                $missingEventsInCal1->addRecord($event);
+            }
+        }
+        
+        $result = array(
+            'matching'      => $matchingEvents,
+            'changed'       => $changedEvents,
+            'missingInCal1' => $missingEventsInCal1,
+            'missingInCal2' => $missingEventsInCal2,
+        );
+        return $result;
+    }
+    
+    protected function _getEventsForPeriodAndCalendar($calendarId, $from, $until)
+    {
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' =>
+                array("from" => $from, "until" => $until)
+            ),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendarId),
+        ));
+    
+        $events = Calendar_Controller_Event::getInstance()->search($filter);
+        Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($events, $filter);
+        return $events;
+    }
+    
+    /**
+     * add calendar owner as attendee if not already set
+     * 
+     * @param string $calendarId
+     * @param Tinebase_DateTime $from
+     * @param Tinebase_DateTime $until
+     * @param boolean $dry run
+     * 
+     * @return number of updated events
+     */
+    public function repairAttendee($calendarId, $from, $until, $dry = false)
+    {
+        $container = Tinebase_Container::getInstance()->getContainerById($calendarId);
+        if ($container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+            throw new Calendar_Exception('Only allowed for personal containers!');
+        }
+        if ($container->owner_id !== Tinebase_Core::getUser()->getId()) {
+            throw new Calendar_Exception('Only allowed for own containers!');
+        }
+        
+        $updateCount = 0;
+        while ($from->isEarlier($until)) {
+            $endWeek = $from->getClone()->addWeek(1);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Repairing period ' . $from . ' - ' . $endWeek);
+            
+            
+            // TODO we need to detect events with DECLINED/DELETED attendee
+            $events = $this->_getEventsForPeriodAndCalendar($calendarId, $from, $endWeek);
+            
+            $from->addWeek(1);
+            
+            if (count($events) == 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No events found');
+                continue;
+            }
+            
+            foreach ($events as $event) {
+                // add attendee if not already set
+                if ($event->isRecurInstance()) {
+                    // TODO get base event
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Skip recur instance ' . $event->toShortString());
+                    continue;
+                }
+                
+                $ownAttender = Calendar_Model_Attender::getOwnAttender($event->attendee);
+                if (! $ownAttender) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Add missing attender to event ' . $event->toShortString());
+                    
+                    $attender = new Calendar_Model_Attender(array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                        'user_id'   => Tinebase_Core::getUser()->contact_id,
+                        'status'    => Calendar_Model_Attender::STATUS_ACCEPTED
+                    ));
+                    $event->attendee->addRecord($attender);
+                    if (! $dry) {
+                        $this->update($event);
+                    }
+                    $updateCount++;
+                }
+            }
+        }
+        
+        return $updateCount;
+    }
 }
