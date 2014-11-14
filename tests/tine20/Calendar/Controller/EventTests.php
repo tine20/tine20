@@ -1405,6 +1405,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * - event3+4: in both calendars
      * - event5: slightly different from event1 (same summary) / in cal2
      * - event6: only in cal1 (next week)
+     * - event7: only in displaycontainer
      * 
      * @param Tinebase_Model_Container $cal1
      * @param Tinebase_Model_Container $cal2
@@ -1444,6 +1445,25 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event6->dtstart->addDay(8);
         $event6->dtend->addDay(8);
         $this->_controller->create($event6);
+        
+        // add event that is only in displaycontainer (should not appear in report)
+        $currentDefault = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, Tinebase_Core::getUser()->getId());
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $cal1->getId());
+        $event7 = $this->_getEvent(true);
+        $event7->summary = 'event 7';
+        $event7->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'   => Tinebase_Core::getUser()->contact_id,
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+            ),
+        ));
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
+        $cal3 = $this->_getTestContainer('Calendar');
+        $event7->container_id = $cal3->getId();
+        $this->_controller->create($event7);
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $currentDefault);
     }
     
     public function testRepairAttendee()

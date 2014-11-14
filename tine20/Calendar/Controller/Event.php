@@ -2266,6 +2266,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Checking event "' . $event->summary . '" ' . $event->dtstart . ' - ' . $event->dtend);
                 
+                if ($event->container_id != $cal1) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Event is in another calendar - skip');
+                    $cal1Events->removeRecord($event);
+                    continue;
+                }
+                
                 $summaryMatch = $cal2Events->filter('summary', $event->summary);
                 if (count($summaryMatch) > 0) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -2300,6 +2307,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (in_array($event->getId(), $cal2EventIdsAlreadyProcessed)) {
                     continue;
                 }
+                if ($event->container_id != $cal2) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Event is in another calendar - skip');
+                    continue;
+                }
+                
                 $missingEventsInCal1->addRecord($event);
             }
         }
