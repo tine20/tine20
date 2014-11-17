@@ -31,7 +31,13 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
         $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
+        if ($body !== null) {
+            $this->_body = $body;
+        } else if ($this->_request instanceof \Zend\Http\Request) {
+            $this->_body = fopen('php://temp', 'r+');
+            fwrite($this->_body, $request->getContent());
+            rewind($this->_body);
+        }
         
         try {
             list($loginName, $password) = $this->_getAuthData($this->_request);
