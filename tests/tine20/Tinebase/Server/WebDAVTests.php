@@ -306,4 +306,63 @@ EOS
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
+    
+    /**
+     * test general functionality of Tinebase_Server_WebDAV
+     * @group ServerTests
+     */
+    public function testReportQuery()
+    {
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+REPORT /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r
+Host: localhost\r
+Depth: 1\r
+Content-Type: application/xml; charset="utf-8"\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+EOS
+        );
+        
+        $_SERVER['REQUEST_METHOD'] = $request->getMethod();
+        $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
+        $_SERVER['HTTP_DEPTH']     = '0';
+        
+        $credentials = $this->getTestCredentials();
+        
+        $request->getServer()->set('PHP_AUTH_USER', $credentials['username']);
+        $request->getServer()->set('PHP_AUTH_PW',   $credentials['password']);
+        $request->getServer()->set('REMOTE_ADDR',   'localhost');
+        
+        $body = fopen('php://temp', 'r+');
+        fwrite($body, '<?xml version="1.0" encoding="utf-8" ?>
+<C:calendar-query xmlns:D="DAV:"
+                  xmlns:C="urn:ietf:params:xml:ns:caldav">
+  <D:prop>
+    <D:getetag/>
+    <C:calendar-data/>
+  </D:prop>
+  <C:filter>
+    <C:comp-filter name="VCALENDAR">
+      <C:comp-filter name="VEVENT">
+        <C:time-range start="20060104T000000Z"
+                      end="20160105T000000Z"/>
+      </C:comp-filter>
+    </C:comp-filter>
+  </C:filter>
+</C:calendar-query>');
+        rewind($body);
+        
+        ob_start();
+        
+        $server = new Tinebase_Server_WebDAV();
+        
+        $server->handle($request, $body);
+        
+        $result = ob_get_contents();
+        
+        ob_end_clean();
+        
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+    }
+    
+    
 }
