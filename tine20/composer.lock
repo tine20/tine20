@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d98a8bafd7735dfa39b1f0d7fb87e975",
+    "hash": "12bf5af0b5e9f44868895d30b7624c21",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -408,12 +408,12 @@
         },
         {
             "name": "zendframework/zend-http",
-            "version": "2.2.8-p2",
+            "version": "2.2.8-p3",
             "target-dir": "Zend/Http",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lkneschke/Component_ZendHttp",
-                "reference": "2d65788807272b60e0c0f0b20d92b8b2e4a1516f"
+                "reference": "3a18baa98c6afd5b10c81c90489ad67876ee11cc"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -442,7 +442,7 @@
                 "http",
                 "zf2"
             ],
-            "time": "2014-10-29 08:18:58"
+            "time": "2014-11-17 08:32:22"
         },
         {
             "name": "zendframework/zend-loader",
@@ -3423,7 +3423,7 @@
         {
             "alias": "2.2.8",
             "alias_normalized": "2.2.8.0",
-            "version": "2.2.8.0-patch2",
+            "version": "2.2.8.0-patch3",
             "package": "zendframework/zend-http"
         }
     ],
