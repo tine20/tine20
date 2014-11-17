@@ -27,7 +27,7 @@
 
 %global vyear 2014
 %global vmonth 09
-%global vmin 3
+%global vmin 4
 # comment out release suffix when not an unstable release
 # %global rsuffix rc2
 
@@ -333,6 +333,9 @@ fi
 
 
 %changelog
+* Mon Nov 17 2014 Philipp Schüle <p.schuele@metaways.de> - 2014.09.4-0
+- New upstream release Koriander Service Release 3
+
 * Thu Nov 13 2014 Philipp Schüle <p.schuele@metaways.de> - 2014.09.3-0
 - New upstream release Koriander Service Release 2
 
