@@ -131,7 +131,23 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         );
         
         $this->assertEquals('9631', $syncrotonModelEmail->body->estimatedDataSize);
-        #$this->assertEquals(2787, strlen(stream_get_contents($syncrotonFileReference->data)));
+    }
+
+    /**
+     * validate getEntry with an Emoji
+     */
+    public function testGetEntryWithEmoji()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
+    
+        $message = $this->_createTestMessage('emoji.eml', 'emoji.eml');
+    
+        $syncrotonModelEmail = $controller->getEntry(
+                new Syncroton_Model_SyncCollection(array('collectionId' => 'foobar', 'options' => array('bodyPreferences' => array('2' => array('type' => '2'))))),
+                $message->getId()
+        );
+        
+        $this->assertEquals('1744', $syncrotonModelEmail->body->estimatedDataSize);
     }
     
     /**
@@ -156,15 +172,15 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * 
      * @return Felamimail_Model_Message
      */
-    protected function _createTestMessage()
+    protected function _createTestMessage($emailFile = 'multipart_mixed.eml', $headerToReplace = 'multipart/mixed')
     {
         $testMessageId = Tinebase_Record_Abstract::generateUID();
         
         $message = $this->_emailTestClass->messageTestHelper(
-            'multipart_mixed.eml',
+            $emailFile,
             $testMessageId,
             null,
-            array('X-Tine20TestMessage: multipart/mixed', 'X-Tine20TestMessage: ' . $testMessageId)
+            array('X-Tine20TestMessage: ' . $headerToReplace, 'X-Tine20TestMessage: ' . $testMessageId)
         );
         
         return $message;
@@ -215,10 +231,26 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $xml), $xml);
         
-        // try to encode XML until we have wbxml tests
+        self::encodeXml($testDoc);
+    }
+
+    /**
+     * try to encode XML until we have wbxml tests
+     *
+     * @param $testDoc
+     * @return string returns encoded/decoded xml string
+     */
+    public static function encodeXml($testDoc)
+    {
         $outputStream = fopen("php://temp", 'r+');
         $encoder = new Syncroton_Wbxml_Encoder($outputStream, 'UTF-8', 3);
         $encoder->encode($testDoc);
+
+        rewind($outputStream);
+        $decoder = new Syncroton_Wbxml_Decoder($outputStream);
+        $xml = $decoder->decode();
+
+        return $xml->saveXML();
     }
     
     /**
@@ -320,7 +352,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * 
      * @see 0008572: email reply text garbled
      */
-    public function testSendBase64DecodedMessage () {
+    public function testSendBase64DecodedMessage ()
+    {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
         
         $messageId = '<j4wxaho1t8ggvk5cef7kqc6i.1373048280847@email.android.com>';

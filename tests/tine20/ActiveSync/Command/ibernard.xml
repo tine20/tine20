@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<Sync xmlns="uri:AirSync" xmlns:Syncroton="uri:Syncroton" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email" xmlns:Email2="uri:Email2" xmlns:Tasks="uri:Tasks">
+  <Collections>
+    <Collection xmlns:default="uri:Email" xmlns:default1="uri:AirSyncBase" xmlns:default2="uri:Email2" xmlns:Syncroton="uri:Syncroton">
+      <Class>Email</Class>
+      <SyncKey>4</SyncKey>
+      <CollectionId>45898fd75f3990586f7f7c16fb1b53bf3a5128c8</CollectionId>
+      <Status>1</Status>
+      <MoreAvailable/>
+      <Commands xmlns:default="uri:Email" xmlns:default1="uri:AirSyncBase" xmlns:default2="uri:Email2" xmlns:Syncroton="uri:Syncroton">
+        <Add xmlns:default="uri:Email" xmlns:default1="uri:AirSyncBase" xmlns:default2="uri:Email2" xmlns:Syncroton="uri:Syncroton">
+          <ServerId>c48dfe5e1ccf22afbcf11aff2b9d1438020affb8</ServerId>
+          <ApplicationData>
+            <Email:DateReceived xmlns="uri:Email">2014-10-21T07:18:51.000Z</Email:DateReceived>
+            <Email:From xmlns="uri:Email">"Heinz Erhard Herno" &lt;heinz@erhard.de&gt;</Email:From>
+            <Email:Subject xmlns="uri:Email">Re-2: Frage</Email:Subject>
+            <Email:To xmlns="uri:Email">erhard@erhard.de</Email:To>
+            <AirSyncBase:Body xmlns="uri:AirSyncBase">
+              <AirSyncBase:Type>1</AirSyncBase:Type>
+              <AirSyncBase:EstimatedDataSize>9458</AirSyncBase:EstimatedDataSize>
+              <AirSyncBase:Data>ok!&#13;
+&#13;
+&#13;
+ Original Message processed by David.fx12  &#13;
+Re: Frage (21-Okt-2014 6:47)&#13;
+From:   Heinz Erhard&#13;
+To:Fritz Meister&#13;
+&#13;
+&#13;
+Guten Morgen Fritz,&#13;
+&#13;
+&#13;
+ich bin gerade nicht sicher, weil ich so viele Entwürfe und das momentane Formular nicht vor Augen habe. Es gibt ja Rechnungen und Erinnerungen usw. Mein Kopf ist gerade zu voll... 😃.&#13;
+Ich bin heute in hummel - wenn ich morgen wieder in himmel bin, schaue ich in den Unterlagen nach.&#13;
+&#13;
+&#13;
+Viele Grüße&#13;
+&#13;
+&#13;
+Heinz&#13;
+&#13;
+Von meinem iPa</AirSyncBase:Data>
+              <AirSyncBase:Truncated>1</AirSyncBase:Truncated>
+            </AirSyncBase:Body>
+            <AirSyncBase:NativeBodyType xmlns="uri:AirSyncBase">1</AirSyncBase:NativeBodyType>
+            <Email:MessageClass xmlns="uri:Email">IPM.Note</Email:MessageClass>
+            <Email:ContentClass xmlns="uri:Email">urn:content-classes:message</Email:ContentClass>
+            <Email:Read xmlns="uri:Email">1</Email:Read>
+            <Email:Flag xmlns="uri:Email">
+              <Email:Status>0</Email:Status>
+            </Email:Flag>
+            <Email2:ConversationId xmlns="uri:Email2" xmlns:Syncroton="uri:Syncroton" Syncroton:encoding="opaque"><![CDATA[YzQ4ZGZlNWUxY2NmMjJhZmJjZjExYWZmMmI5ZDE0MzgwMjBhZmZiOA==]]></Email2:ConversationId>
+            <Email2:ConversationIndex xmlns="uri:Email2" xmlns:Syncroton="uri:Syncroton" Syncroton:encoding="opaque"><![CDATA[AAECAwQ=]]></Email2:ConversationIndex>
+          </ApplicationData>
+        </Add>
+      </Commands>
+    </Collection>
+  </Collections>
+</Sync>
