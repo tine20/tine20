@@ -378,6 +378,28 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testCustomerConcurrencyManagement
+     */
+    public function testCustomerConcurrencyManagement()
+    {
+        $customer = $this->_instance->saveCustomer(array(
+            'name'      => Tinebase_Record_Abstract::generateUID(),
+        ));
+        
+        $customer['adr_type'] = 'postal';
+        $customer['adr_prefix1'] = 'test';
+        $customer = $this->_instance->saveCustomer($customer);
+        
+        $customer['adr_prefix1'] = 'test test';
+        // js client does not send adr_seq
+        unset($customer['adr_seq']);
+        $updatedCustomer = $this->_instance->saveCustomer($customer);
+        $this->assertEquals('test test', $updatedCustomer['postal_id']['prefix1']);
+        $this->assertEquals(3, $updatedCustomer['postal_id']['seq']);
+        $this->assertEquals(3, $updatedCustomer['adr_seq']);
+    }
+    
+    /**
      * testSaveContractWithManyRelations
      * 
      * @group longrunning

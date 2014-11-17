@@ -379,16 +379,18 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function saveCustomer($recordData, $duplicateCheck = TRUE)
     {
         $postalAddress = array();
-    
         foreach($recordData as $field => $value) {
             if (strpos($field, 'adr_') !== FALSE && ! empty($value)) {
                 $postalAddress[substr($field, 4)] = $value;
                 unset($recordData[$field]);
             }
         }
+        if (!isset($postalAddress['seq']) && isset($recordData['postal_id']) && isset($recordData['postal_id']['seq'])) {
+            $postalAddress['seq'] = $recordData['postal_id']['seq'];
+        }
     
         foreach (array('cpextern_id', 'cpintern_id') as $prop) {
-            if (is_array($recordData[$prop])) {
+            if (isset($recordData[$prop]) && is_array($recordData[$prop])) {
                 $recordData[$prop] = $recordData[$prop]['id'];
             }
         }
@@ -415,15 +417,15 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             } else {
                 // update if it has changed
                 $postalAddress['id'] = $postalAddressRecord->getId();
-                $postalAddress = new Sales_Model_Address($postalAddress);
-                $diff = $postalAddressRecord->diff($postalAddress);
+                $postalAddressRecordToUpdate = new Sales_Model_Address($postalAddress);
+                $diff = $postalAddressRecord->diff($postalAddressRecordToUpdate);
                 if (! empty($diff)) {
-                    $postalAddressRecord = $addressController->update($postalAddress);
+                    $postalAddressRecord = $addressController->update($postalAddressRecordToUpdate);
                 }
             }
         }
     
-        return $ret;
+        return $this->getCustomer($ret['id']);
     }
     
     /**
