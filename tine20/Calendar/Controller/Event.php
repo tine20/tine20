@@ -2278,7 +2278,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . " Found " . count($summaryMatch) . ' events with matching summaries');
                     
-                    $dtStartMatch = $cal2Events->filter('dtstart', $event->dtstart);
+                    $dtStartMatch = $summaryMatch->filter('dtstart', $event->dtstart);
                     if (count($dtStartMatch) > 0) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . " Found " . count($summaryMatch) . ' events with matching dtstarts and summaries');
