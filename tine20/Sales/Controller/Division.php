@@ -49,6 +49,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Abstract
      * @var boolean
      */
     protected $_omitModLog = FALSE;
+    
     /**
      * the constructor
      * don't use the constructor. use the singleton
@@ -58,7 +59,15 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Sales_Backend_Division();
         $this->_modelName = 'Sales_Model_Division';
     }
-
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone()
+    {
+    }
+    
     /**
      * holds the instance of the singleton
      * @var Sales_Controller_Division
@@ -72,7 +81,7 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Abstract
     public static function getInstance()
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Sales_Controller_Division();
+            self::$_instance = new self();
         }
 
         return self::$_instance;

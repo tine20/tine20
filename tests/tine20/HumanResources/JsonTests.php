@@ -167,6 +167,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     {
         $e = $this->_getEmployee();
         $e->contracts = array($this->_getContract($firstDate)->toArray());
+        
         if ($costCenter) {
             $e->costcenters = array($costCenter->toArray());
         }
@@ -901,6 +902,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     }
     
     /**
+<<<<<<< HEAD
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */
     public function testAlternatingContracts()

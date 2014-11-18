@@ -6,17 +6,17 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * Contract Status Record Class
+ * Invoice Type Record Class
  * 
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_Status extends Tinebase_Config_KeyFieldRecord
+class Sales_Model_InvoiceType extends Tinebase_Config_KeyFieldRecord
 {
     /**
      * application the record belongs to

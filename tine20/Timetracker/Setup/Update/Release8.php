@@ -43,4 +43,33 @@ class Timetracker_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('timetracker_timesheet', 5);
         $this->setApplicationVersion('Timetracker', '8.2');
     }
+    
+    /**
+     * update to 8.3
+     * 
+     * - adds invoice_id field
+     */
+    public function update_2()
+    {
+        if (! $this->_backend->columnExists('invoice_id', 'timetracker_timeaccount')) {
+            $field = '<field>
+                <name>invoice_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>';
+            
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            
+            $this->_backend->addCol('timetracker_timeaccount', $declaration);
+            $this->setTableVersion('timetracker_timeaccount', '11');
+            
+            $this->_backend->addCol('timetracker_timesheet', $declaration);
+            $this->setTableVersion('timetracker_timesheet', '6');
+        } else {
+            $this->update_1();
+        }
+        
+        $this->setApplicationVersion('Timetracker', '8.3');
+    }
 }

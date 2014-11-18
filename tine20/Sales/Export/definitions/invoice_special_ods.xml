@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Invoice</model>
+    <name>invoice_special_ods</name>
+    <type>export</type>
+    <plugin>Sales_Export_Ods_Invoice</plugin>
+    <description>special ods invoice export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <columns>
+        <column>
+            <identifier>number</identifier>
+            <header>Invoice Number</header>
+        </column>
+        <column>
+            <identifier>costcenter_id</identifier>
+            <header>Cost Center</header>
+        </column>
+        <column>
+            <identifier>customer</identifier>
+            <header>Customer</header>
+        </column>
+        <column>
+            <identifier>debitor</identifier>
+            <header>Debitor</header>
+        </column>
+    </columns>
+</config>

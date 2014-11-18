@@ -71,6 +71,11 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter' => TRUE,
             ),
+            'accountable' => array(
+                'label' => 'Accountable',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type' => 'string',
+            )
         )
     );
 }

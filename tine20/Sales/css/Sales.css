@@ -1,16 +1,15 @@
 /**
  * Tine 2.0
  * 
- * @package     Erp
+ * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Tasks.css 3797 2008-08-11 08:33:21Z c.weiss@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
  
-.SalesIconCls, .x-tree-node-icon.SalesProduct, .x-tree-node-icon.SalesContract, .SalesContract, .SalesProduct {
+.SalesIconCls, .x-tree-node-icon.SalesContract, .SalesContract {
     background-image:url(../../images/oxygen/16x16/apps/kcalc.png) !important;
 }
 .x-btn-medium .SalesIconCls {
@@ -20,10 +19,86 @@
     background-image:url(../../images/oxygen/32x32/apps/kcalc.png) !important;
 }
 
-.SalesDivision {
-    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+.x-tree-node-icon.SalesProduct, .SalesProduct, .x-tree-node-icon.SalesProductAggregate, .SalesProductAggregate {
+    background-image:url(../../images/oxygen/16x16/apps/ark.png) !important;
 }
 
 .SalesCostCenter {
     background-image:url("../../images/oxygen/16x16/apps/preferences-web-browser-cache.png") !important;
+}
+
+.SalesCustomer {
+    background-image:url("../../images/oxygen/16x16/apps/system-users.png") !important;
+}
+
+.SalesAddress {
+    background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
+}
+
+.SalesInvoice {
+    background-image:url("../../images/oxygen/16x16/actions/edit-select-all.png") !important;
+}
+
+.SalesDivision {
+    background-image:url("../../images/oxygen/16x16/actions/view-process-users.png") !important;
+}
+
+.x-btn-medium .action_reversal {
+    background-image:url("../../images/oxygen/22x22/actions/document-revert.png") !important;
+}
+
+.x-btn-medium .action_rebill {
+    background-image:url("../../images/oxygen/22x22/actions/edit-redo.png") !important;
+}
+
+.x-btn-medium .action_bill {
+    background-image:url("../../images/oxygen/22x22/categories/applications-office.png") !important;
+}
+
+.action_reversal {
+    background-image:url("../../images/oxygen/16x16/actions/document-revert.png") !important;
+}
+
+.action_rebill {
+    background-image:url("../../images/oxygen/16x16/actions/edit-redo.png") !important;
+}
+
+.action_bill {
+    background-image:url("../../images/oxygen/16x16/categories/applications-office.png") !important;
+}
+
+.preview-panel-symbolcompare.wide {width: 160px}
+.preview-panel-customer { margin: 5px 2px 5px 5px; width: 32%; min-width: 200px}
+.preview-panel-description.preview-panel-customer {width: 22%; min-width: 200px}
+
+.clipboard {
+    background-image:url("../../images/oxygen/16x16/apps/klipper.png") !important;
+}
+
+.preview-panel-invoice-default {
+    display: block;
+    height: 122px;
+    padding: 5px;
+    margin: 5px;
+    font-family: verdana;
+}
+
+.preview-panel-invoice-left {
+    float: left;
+    position: relative;
+    width: 32%;
+    height: 122px;
+    padding: 5px;
+    margin: 5px 2px 5px 5px;
+    font-family: verdana;
+    font-size: 10px;
+    color: #404040;
+}
+
+.SalesOrderConfirmation {
+    background-image:url("../../images/oxygen/16x16/apps/kwrite.png") !important;
+}
+
+.SalesOffer {
+    background-image:url("../../images/oxygen/16x16/apps/khangman.png") !important;
 }

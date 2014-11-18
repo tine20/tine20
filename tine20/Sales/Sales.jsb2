@@ -24,6 +24,10 @@
           "path": "js/"
         },
         {
+          "text": "CustomerSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "CostCenterSearchCombo.js",
           "path": "js/"
         },
@@ -36,7 +40,23 @@
           "path": "js/"
         },
         {
+          "text": "CostCenterGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "CostCenterEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractContactInternalFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractContactExternalFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DivisionEditDialog.js",
           "path": "js/"
         },
         {
@@ -53,6 +73,98 @@
         },
         {
           "text": "ProductEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DeliveryAddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "BillingAddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "CopyAddressDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "OrderConfirmationEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CustomerFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoicePositionGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoicePositionPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "OrderConfirmationFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "BillingDateDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "OfferEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractCustomerFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ProductAggregateGridPanel.js",
           "path": "js/"
         }
       ]

@@ -20,12 +20,18 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     recordClass: Tine.Timetracker.Model.Timeaccount,
     recordProxy: Tine.Timetracker.timeaccountBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    useInvoice: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function() {
 
+    },
+    
+    initComponent: function() {
+        this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
+        Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
     
     onRecordLoad: function() {
@@ -97,13 +103,16 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 scope: this,
                 select: this.onBilledChange.createDelegate(this)
             }
-        }, {
-            //disabled: true,
-            //emptyText: this.app.i18n._('not cleared yet...'),
+        }];
+        
+        secondRow.push({
+            columnWidth: 1/3,
+            disabled: false,
             fieldLabel: this.app.i18n._('Cleared In'),
-            name: 'billed_in',
-            xtype: 'textfield'
-        }, {
+            name: 'billed_in'
+        });
+        
+        secondRow.push({
             fieldLabel: this.app.i18n._('Booking deadline'),
             name: 'deadline',
             xtype: 'combo',
@@ -115,11 +124,13 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 ['none', this.app.i18n._('none')], 
                 ['lastweek', this.app.i18n._('last week')]
             ]
-        }, {
+        });
+        
+        secondRow.push({
             xtype: 'extuxclearabledatefield',
             name: 'cleared_at',
             fieldLabel: this.app.i18n._('Cleared at')
-        }];
+        });
         
         if (Tine.Tinebase.appMgr.get('Sales')) {
             secondRow.push({
@@ -135,27 +146,33 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             });
         }
         
-        secondRow.push({
+        var lastRow = [{
             columnWidth: 1/3,
             editDialog: this,
             xtype: 'tinerelationpickercombo',
-            fieldLabel: this.app.i18n._('Responsible person'),
+            fieldLabel: this.app.i18n._('Responsible Person'),
             allowBlank: true,
             app: 'Addressbook',
             recordClass: Tine.Addressbook.Model.Contact,
             relationType: 'RESPONSIBLE',
             relationDegree: 'sibling',
             modelUnique: true
-        });
-        
-        secondRow.push({
+        }, {
             hideLabel: true,
             boxLabel: this.app.i18n._('Timesheets are billable'),
             name: 'is_billable',
             xtype: 'checkbox',
-            columnWidth: .666
-        });
+            columnWidth: 1/3
+        }];
         
+        if (this.useInvoice) {
+            lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
+                columnWidth: 1/3,
+                disabled: true,
+                fieldLabel: this.app.i18n._('Invoice'),
+                name: 'invoice_id'
+            }));
+        }
         return {
             xtype: 'tabpanel',
             border: false,
@@ -200,7 +217,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype: 'textarea',
                         name: 'description',
                         height: 150
-                        }], secondRow] 
+                        }], secondRow, lastRow] 
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -328,6 +345,12 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 this.getForm().findField('cleared_at').setValue(new Date());
             }
         }
+    },
+    
+    doCopyRecord: function() {
+        Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
+        
+        this.record.set('status', 'not yet billed');
     }
 });
 

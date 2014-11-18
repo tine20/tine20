@@ -29,43 +29,17 @@ Ext.ns('Tine.Sales');
 Tine.Sales.ContractSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     allowBlank: false,
-    itemSelector: 'div.search-item',
     minListWidth: 200,
     
     //private
     initComponent: function(){
         this.recordClass = Tine.Sales.Model.Contract;
         this.recordProxy = Tine.Sales.contractBackend;
-        
-        this.initTemplate();
+
         Tine.Sales.ContractSearchCombo.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * init template
-     * @private
-     */
-    initTemplate: function() {
-        if (! this.tpl) {
-            this.tpl = new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
-                        '<tr>',
-                            '<td style="height:16px">{[this.encode(values)]}</td>',
-                        '</tr>',
-                    '</table>',
-                '</div></tpl>',
-                {
-                    encode: function(values) {
-                        var ret = '';
-                        if(values.number) ret += '<b>' + Ext.util.Format.htmlEncode(values.number) + '</b> - ';
-                        ret += Ext.util.Format.htmlEncode(values.title);
-                        return ret;
-                        
-                    }
-                }
-            );
-        }
+        
+        this.displayField = 'fulltext';
+        this.sortBy = 'number';
     }
 });
 

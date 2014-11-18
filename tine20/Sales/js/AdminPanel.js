@@ -21,7 +21,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
 
     layout : 'fit',
     border : false,
-    cls : 'tw-editdialog',    
+    cls : 'tw-editdialog',
 
     labelAlign : 'top',
 
@@ -120,11 +120,17 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                 method: 'Sales.setConfig',
                 config: {
                     contractNumberGeneration: this.getForm().findField('contractNumberGeneration').getValue(),
-                    contractNumberValidation: this.getForm().findField('contractNumberValidation').getValue()
+                    contractNumberValidation: this.getForm().findField('contractNumberValidation').getValue(),
+                    ownCurrency: this.getForm().findField('ownCurrency').getValue()
                 }
             },
             success : function(_result, _request) {
-                this.onCancel();
+                this.loadMask.hide();
+                // reload mainscreen to make sure registry gets updated
+                window.location = window.location.href.replace(/#+.*/, '');
+            },
+            failure: function(result) {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(result)
             }
         });
     },
@@ -134,9 +140,10 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
      * @return Object
      */
     getFormItems: function() {
-        
-        var cng = Tine.Sales.registry.get('config').contractNumberGeneration,
-            cnv = Tine.Sales.registry.get('config').contractNumberValidation;
+        var config = Tine.Sales.registry.get('config');
+        var cng = config.contractNumberGeneration,
+            cnv = config.contractNumberValidation,
+            oc  = config.ownCurrency;
 
         return {
             border: false,
@@ -176,6 +183,12 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                             forceSelection: true,
                             triggerAction: 'all',
                             store: cnv.definition.options
+                        },
+                        {
+                            fieldLabel: this.app.i18n._(oc.definition.label),
+                            name: 'ownCurrency',
+                            value: oc.value ? oc.value : oc['default'],
+                            xtype: 'textfield'
                         }
                     ] 
                     }]

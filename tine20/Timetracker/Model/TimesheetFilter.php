@@ -58,8 +58,17 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
                 'showClosed'        => TRUE
             )
         ),
+        'invoice_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
+            'options' => array(
+                'filtergroup'       => 'Sales_Model_InvoiceFilter',
+                'controller'        => 'Sales_Controller_Invoice',
+            )
+        ),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
+        
+        'billed_in'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        
         'is_billable_combined'  => array(
             'filter' => 'Tinebase_Model_Filter_Bool', 
             'options' => array(
@@ -67,6 +76,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
                 'requiredCols'  => array('is_billable_combined')
             ),
         ),
+        'is_billable'   => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'   => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared_combined'   => array(
             'filter' => 'Tinebase_Model_Filter_Bool', 

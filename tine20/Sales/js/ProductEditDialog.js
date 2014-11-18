@@ -32,22 +32,16 @@ Ext.namespace('Tine.Sales');
  */
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    windowWidth: 800,
+    windowHeight: 600,
     
-    /**
-     * @private
-     */
-    initComponent: function() {
-        Tine.Sales.ProductEditDialog.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * executed when record is loaded
-     * @private
-     */
     onRecordLoad: function() {
         Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (! this.copyRecord && ! this.record.id) {
+            this.window.setTitle(this.app.i18n._('Add New Product'));
+        }
     },
-    
     /**
      * returns dialog
      * 
@@ -98,10 +92,10 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Manufacturer'),
                         name: 'manufacturer'
                     }], [{
-                        columnWidth: 1,
+                        columnWidth: .5,
                         fieldLabel: this.app.i18n._('Category'),
                         name: 'category'
-                    }], [{
+                    }, this.getAccountableCombo()], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
@@ -135,12 +129,52 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, new Tine.widgets.activities.ActivitiesTabPanel({
+            },
+            new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })
             ]
         };
+    },
+    
+    /**
+     * creates the accountable combo box
+     * 
+     * @return {Ext.form.ComboBox}
+     */
+    getAccountableCombo: function() {
+        if (! this.accountableCombo) {
+            var data = [];
+            var id = 0;
+
+            Ext.each(Tine.Sales.AccountableRegistry.getArray(), function(rel) {
+                
+                var app = Tine.Tinebase.appMgr.get(rel.appName);
+                var tr = app.i18n._(rel.appName + rel.modelName);
+                
+                data.push([rel.appName + '_Model_' + rel.modelName, tr]);
+                id++;
+            });
+
+            this.accountableCombo = new Ext.ux.form.ClearableComboBox({
+                store: new Ext.data.ArrayStore({
+                    fields: ['key', 'modelName'],
+                    data: data
+                }),
+                fieldLabel: this.app.i18n._('Accountable'),
+                allowBlank: false,
+                forceSelection: true,
+                value: 'Sales_Model_Product',
+                displayField: 'modelName',
+                valueField: 'key',
+                name: 'accountable',
+                columnWidth: .5,
+                mode: 'local'
+            });
+
+        }
+        return this.accountableCombo;
     }
 });

@@ -330,8 +330,6 @@ class Phone_JsonTest extends TestCase
         $phoneController->callStarted($this->_objects['call2a']);
         $phoneController->callStarted($this->_objects['call3']);
         $phoneController->callStarted($this->_objects['call4']);
-        
-        
     }
 
     /**

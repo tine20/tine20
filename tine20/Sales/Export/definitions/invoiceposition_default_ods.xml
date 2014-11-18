@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_InvoicePosition</model>
+    <name>invoiceposition_default_ods</name>
+    <type>export</type>
+    <plugin>Sales_Export_Ods_InvoicePosition</plugin>
+    <description>default ods invoice position export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <columns>
+        <column>
+            <identifier>name</identifier>
+            <header>Name</header>
+        </column>
+        <column>
+            <identifier>month</identifier>
+            <header>Month</header>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Description</header>
+        </column>
+        <column>
+            <identifier>manufacturer</identifier>
+            <header>Manufacturer</header>
+        </column>
+        <column>
+            <identifier>category</identifier>
+            <header>Category</header>
+        </column>
+        <column>
+            <identifier>quantity</identifier>
+            <header>Quantity</header>
+        </column>
+    </columns>
+</config>

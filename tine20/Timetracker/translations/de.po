@@ -177,7 +177,7 @@ msgid "Cleared at"
 msgstr "Abgerechnet am"
 
 #: js/TimeaccountEditDialog.js:140
-msgid "Responsible person"
+msgid "Responsible Person"
 msgstr "Verantwortlicher"
 
 #: js/TimeaccountEditDialog.js:151
@@ -459,3 +459,16 @@ msgid "timeaccount list"
 msgid_plural "timeaccount lists"
 msgstr[0] "Stundenzettel-Liste"
 msgstr[1] "Stundenzettel-Listen"
+
+#: js/TimeaccountEditDialog.js:41
+msgid "Add New Timeaccount"
+msgstr "Neues Zeitkonto hinzufügen"
+
+msgid "hour"
+msgstr "Stunde"
+
+msgid "Invoice"
+msgstr "Rechnung"
+
+msgid "TimetrackerTimeaccount"
+msgstr "Zeitkonto"

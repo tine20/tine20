@@ -32,7 +32,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'              => "My Products", // _('My Products')
-                'description'       => "Products created by me", // _('Products created by myself')
+                'description'       => "Products created by me", // _('Products created by me')
                 'filters'           => array(
                     array(
                         'field'     => 'created_by',
@@ -59,5 +59,74 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 ),
             ))
         ));
+        
+        // Customers
+        $commonValues['model'] = 'Sales_Model_CustomerFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Customers", // _('All Customers')
+                'description' => "All customer records", // _('All customer records')
+                'filters'     => array(
+                ),
+            ))
+        ));
+        
+        // Offers
+        $commonValues['model'] = 'Sales_Model_OfferFilter';
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Offers", // _('All Offers')
+                'description' => "All offer records", // _('All offer records')
+                'filters'     => array(
+                ),
+            ))
+        ));
+        
+        Sales_Setup_Update_Release8::createDefaultFavoritesForSub20();
+    }
+    
+    /**
+     * init key fields
+     */
+    protected function _initializeKeyFields()
+    {
+        // create type config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+    
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_TYPE,
+            'records' => array(
+                array('id' => 'INVOICE',  'value' => 'invoice',   'system' => true), // _('invoice')
+                array('id' => 'REVERSAL', 'value' => 'reversal',  'system' => true), // _('reversal')
+                array('id' => 'CREDIT',   'value' => 'credit',    'system' => true) // _('credit')
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_TYPE,
+            'value'             => json_encode($tc),
+        )));
+    
+        // create cleared state keyfields
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_CLEARED,
+            'records' => array(
+                array('id' => 'TO_CLEAR',  'value' => 'to clear',   'system' => true), // _('to clear')
+                array('id' => 'CLEARED', 'value' => 'cleared',  'system' => true), // _('cleared')
+            ),
+        );
+    
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::INVOICE_CLEARED,
+            'value'             => json_encode($tc),
+        )));
     }
 }

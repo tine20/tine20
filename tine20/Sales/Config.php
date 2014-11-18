@@ -17,6 +17,20 @@
 class Sales_Config extends Tinebase_Config_Abstract
 {
     /**
+     * sets the biggest interval, contracts will be billed
+     * 
+     * @var string
+     */
+    const AUTO_INVOICE_CONTRACT_INTERVAL = 'auto_invoice_contract_interval';
+    
+    /**
+     * defines which billables should be ignored
+     * 
+     * @var string
+     */
+    const IGNORE_BILLABLES_BEFORE = 'ignoreBillablesBefore';
+    
+    /**
      * How should the contract number be created
      * @var string
      */
@@ -29,10 +43,51 @@ class Sales_Config extends Tinebase_Config_Abstract
     const CONTRACT_NUMBER_VALIDATION = 'contractNumberValidation';
     
     /**
+     * Invoice Type
+     * 
+     * @var string
+     */
+    const INVOICE_TYPE = 'invoiceType';
+    
+    /**
+     * Invoice Type
+     *
+     * @var string
+     */
+    const INVOICE_CLEARED = 'invoiceCleared';
+    
+    /**
+     * the own currency
+     *
+     * @var string
+     */
+    const OWN_CURRENCY = 'ownCurrency';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::AUTO_INVOICE_CONTRACT_INTERVAL => array(
+            //_('Auto Invoice Contract Interval')
+            'label'                 => 'Auto Invoice Contract Interval',
+            //_('Sets the biggest interval, contracts will be billed.')
+            'description'           => 'Sets the biggest interval, contracts will be billed.',
+            'type'                  => 'integer',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 12
+        ),
+        self::IGNORE_BILLABLES_BEFORE => array(
+            //_('Ignore Billables Before Date')
+            'label'                 => 'Ignore Billables Before Date',
+            //_('Sets the date billables will be ignored before.')
+            'description'           => 'Sets the date billables will be ignored before.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => '2000-01-01 22:00:00'
+        ),
         self::CONTRACT_NUMBER_GENERATION => array(
                                    //_('Contract Number Creation')
             'label'                 => 'Contract Number Creation',
@@ -57,7 +112,37 @@ class Sales_Config extends Tinebase_Config_Abstract
             'options'               => array(array('integer', 'Number'), array('string', 'Text')),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
-            'default'               => 'integer'
+            'default'               => 'string'
+        ),
+        self::OWN_CURRENCY => array(
+            // _('Own Currency')
+            'label'                 => 'Own Currency',
+            // _('The currency defined here is used as default currency in the customerd edit dialog.')
+            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'EUR'
+        ),
+        self::INVOICE_TYPE => array(
+                                   //_('Invoice Type')
+            'label'                 => 'Invoice Type',
+                                   //_('Possible Invoice Types.')
+            'description'           => 'Possible Invoice Types.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_InvoiceType'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'INVOICE'
+        ),
+        self::INVOICE_CLEARED => array(
+                                   //_('Invoice Cleared')
+            'label'                 => 'Invoice Cleared',
+                                   //_('Possible Invoice Cleared States.')
+            'description'           => 'Possible Invoice Cleared States.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_InvoiceCleared'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'TO_CLEAR'
         ),
     );
     

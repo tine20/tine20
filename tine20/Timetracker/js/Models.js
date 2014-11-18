@@ -27,6 +27,7 @@ Tine.Timetracker.Model.TimesheetArray = Tine.Tinebase.Model.modlogFields.concat(
     { name: 'is_cleared', type: 'bool' },
     { name: 'is_cleared_combined', type: 'bool' }, // ts is_cleared & ta status == 'billed'
     { name: 'billed_in' },
+    { name: 'invoice_id' },
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' },
@@ -70,7 +71,7 @@ Tine.Timetracker.Model.Timesheet = Tine.Tinebase.data.Record.create(Tine.Timetra
         timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
         return timeaccountTitle + description;
     },
-    copyOmitFields: ['billed_in', 'is_cleared']
+    copyOmitFields: ['billed_in', 'is_cleared', 'invoice_id']
 });
 
 Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
@@ -121,6 +122,7 @@ Tine.Timetracker.Model.TimeaccountArray = Tine.Tinebase.Model.genericFields.conc
     { name: 'is_open', type: 'bool'},
     { name: 'is_billable', type: 'bool' },
     { name: 'billed_in' },
+    { name: 'invoice_id' },
     { name: 'status' },
     { name: 'deadline' },
     { name: 'account_grants'},
@@ -152,6 +154,9 @@ Tine.Timetracker.Model.Timeaccount = Tine.Tinebase.data.Record.create(Tine.Timet
     // ngettext('timeaccount list', 'timeaccount lists', n);
     containerName: 'All Timeaccounts',
     containersName: 'timeaccount lists',
+    
+    copyOmitFields: ['cleared_at', 'billed_in', 'invoice_id', 'status'],
+    
     getTitle: function() {
         var closedText = this.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
         

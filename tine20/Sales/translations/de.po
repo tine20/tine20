@@ -36,10 +36,6 @@ msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
-#: Model/Contract.php:110
-msgid "Customer"
-msgstr "Kunde"
-
 #: Model/Contract.php:111
 msgid "Partner"
 msgstr "Partner"
@@ -112,7 +108,7 @@ msgstr "Von mir erstellte Produkte"
 
 #: Setup/Update/Release5.php:84 Setup/Initialize.php:51
 msgid "My Contracts"
-msgstr "Meine Aufträge"
+msgstr "Meine Verträge"
 
 #: Setup/Update/Release5.php:85 Setup/Initialize.php:52
 msgid "Contracts created by myself"
@@ -178,10 +174,6 @@ msgstr "Beschreibung"
 #: js/ProductEditDialog.js:115 js/ContractEditDialog.js:207
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung ein..."
-
-#: js/ContractCostCenterFilterModel.js:30
-msgid "Cost Center"
-msgstr "Kostenstelle"
 
 #: js/ContractCostCenterFilterModel.js:32
 msgid "without CostCenter"
@@ -284,3 +276,529 @@ msgstr "Firma"
 #: Controller/Contract.php:83
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
+
+msgid "manage cost centers"
+msgstr "Kostenstellen verwalten"
+
+msgid "add, edit and delete cost centers"
+msgstr "Kostenstellen hinzufügen, bearbeiten und löschen"
+
+msgid "Cost Center"
+msgid_plural "Cost Centers"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+msgid "Prefix"
+msgstr "Zusatz"
+
+msgid "Additional Prefix"
+msgstr "Zusatz 2"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "Postalcode"
+msgstr "Postleitzahl"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Locality"
+msgstr "Ort"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Number Debit"
+msgstr "Debitorennummer"
+
+msgid "Postbox"
+msgstr "Postfach"
+
+msgid "Address"
+msgid_plural "Addresses"
+msgstr[0] "Anschrift"
+msgstr[1] "Anschriften"
+
+msgid "Customer"
+msgid_plural "Customers"
+msgstr[0] "Kunde"
+msgstr[1] "Kunden"
+
+msgid "Billing Address"
+msgid_plural "Billing Addresses"
+msgstr[0] "Rechnungsanschrift"
+msgstr[1] "Rechnungsanschriften"
+
+msgid "Delivery Address"
+msgid_plural "Delivery Addresses"
+msgstr[0] "Lieferanschrift"
+msgstr[1] "Lieferanschriften"
+
+msgid "Web"
+msgstr "Internet"
+
+msgid "Contact Person (external)"
+msgstr "Kontaktperson (extern)"
+
+msgid "Contact Person (internal)"
+msgstr "Kontaktperson (intern)"
+
+msgid "VAT No."
+msgstr "USt.-ID"
+
+msgid "Credit Term (days)"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Currency"
+msgstr "Währung"
+
+msgid "Currency Translation Rate"
+msgstr "Wechselkurs"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Discount (%)"
+msgstr "Rabatt in Prozent"
+
+msgid "Postal address"
+msgstr "Postadresse"
+
+msgid "Core Data"
+msgstr "Stammdaten"
+
+msgid "Accounting"
+msgstr "Abrechnung"
+
+msgid "Unknown Currency Code"
+msgstr "Unbekannter Währungscode"
+
+msgid "The Currency Code you tried to use is not valid. Please use a valid Currency Code as defined in ISO 4217."
+msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
+
+msgid "Select customer"
+msgstr "Kunden auswählen"
+
+msgid "All Customers"
+msgstr "Alle Kunden"
+
+msgid "All customer records"
+msgstr "Datensätze aller Kunden"
+
+msgid "Clipboard"
+msgstr "Zwischenablage"
+
+msgid "Either street or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
+
+msgid "Postal Address"
+msgstr "Postanschrift"
+
+msgid "Number duplicate"
+msgstr "Mehrfach vergebene Nummer"
+
+msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
+
+msgid "Export Customers"
+msgstr "Export"
+
+msgid "Export selected customers as ODS"
+msgstr "Exportiere markierte Kunden als ODS"
+
+msgid "Export selected customer as ODS"
+msgstr "Exportiere markierten Kunden als ODS"
+
+msgid "Miscellaneous"
+msgstr "Sonstiges"
+
+msgid "Add new Billing Address"
+msgstr "Neue Rechnungsanschrift hinzufügen"
+
+msgid "Add new Delivery Address"
+msgstr "Neue Lieferanschrift hinzufügen"
+
+msgid "Billing Addresses"
+msgstr "Rechnungsanschriften"
+
+msgid "Delivery Addresses"
+msgstr "Lieferanschriften"
+
+msgid "Copy address to the clipboard"
+msgstr "Adresse in die Zwischenablage kopieren"
+
+msgid "Enter description"
+msgstr "Bitte geben Sie eine Beschreibung an"
+
+msgid "Apply postal address"
+msgstr "Postanschrift anwenden"
+
+msgid "Customer Number"
+msgstr "Kundennummer"
+
+msgid "add, edit and delete customers"
+msgstr "Kunden hinzufügen, bearbeiten und löschen"
+
+msgid "add, edit and delete invoices"
+msgstr "Rechnungen hinzufügen, bearbeiten und löschen"
+
+msgid "manage invoices"
+msgstr "Rechungen verwalten"
+
+msgid "manage customers"
+msgstr "Kunden verwalten"
+
+
+msgid "Credit Term"
+msgstr "Zahlungsziel in Tagen"
+
+msgid "Invoice Number"
+msgstr "Rechnungsnummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "invoice"
+msgstr "Rechnung"
+
+msgid "reversal"
+msgstr "Storno"
+
+msgid "credit"
+msgstr "Gutschrift"
+
+msgid "automatically set..."
+msgstr "automatisch ausgefüllt..."
+
+msgid "Invoice"
+msgid_plural "Invoices"
+msgstr[0] "Rechnung"
+msgstr[1] "Rechnungen"
+
+msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
+
+msgid "No customer assigned"
+msgstr "Kein Kunde zugeordnet"
+
+msgid "Edit Customer \"{0}\""
+msgstr "Kunden \"{0}\" bearbeiten"
+
+msgid "Add New Customer"
+msgstr "Neuen Kunden hinzufügen"
+
+msgid "Copy Customer"
+msgstr "Kunden kopieren"
+
+msgid "Add New Invoice"
+msgstr "Neue Rechnung hinzufügen"
+
+msgid "Copy Invoice"
+msgstr "Rechnung kopieren"
+
+msgid "Edit Invoice \"{0}\""
+msgstr "Rechnung \"{0}\" bearbeiten"
+
+msgid "cleared"
+msgstr "abgerechnet"
+
+msgid "to clear"
+msgstr "abzurechnen"
+
+msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
+msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
+
+msgid "No cost center assigned"
+msgstr "Keine Kostenstelle zugeordnet"
+
+msgid "Billing Interval"
+msgstr "Mtl. Abrechnungsintervall (variabel)"
+
+msgid "Billing Address Locality"
+msgstr "Rechnungsanschrift Ort"
+
+msgid "End Date"
+msgstr "Ende"
+
+msgid "Start Date"
+msgstr "Anfang"
+
+msgid "postal"
+msgstr "Niederlassung"
+
+msgid "billing"
+msgstr "Rechnung"
+
+msgid "delivery"
+msgstr "Lieferanten"
+
+msgid "Invoice is cleared already"
+msgstr "Rechnung ist bereits abgerechnet"
+
+msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits abgerechnet und kann nicht weiter bearbeitet werden!"
+
+msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgstr "Die Rechnung die Sie löschen wollten, ist bereits abgerechnet und kann nicht mehr gelöscht werden!"
+
+msgid "Select invoice"
+msgstr "Rechnung auswählen"
+
+msgid "Export selected invoice as ODS"
+msgstr "Ausgewählte Rechnung als ODS exportieren"
+
+msgid "Export selected invoices as ODS"
+msgstr "Ausgewählte Rechnungen als ODS exportieren"
+
+msgid "Export Invoices"
+msgstr "Rechnungen exportieren"
+
+msgid "Create Reversal Invoice"
+msgstr "Storno-Rechnung erstellen"
+
+msgid "Reversal Invoice"
+msgstr "Storno-Rechnung"
+
+msgid "Billing Point"
+msgstr "Abrechnungszeitpunkt"
+
+msgid "begin"
+msgstr "Anfang des Intervalls"
+
+msgid "end"
+msgstr "Ende des Intervalls"
+
+
+msgid "not yet cleared"
+msgstr "noch nicht abgerechnet"
+
+msgid "open"
+msgstr "offen"
+
+msgid "closed"
+msgstr "geschlossen"
+
+
+msgid "Interval Begins"
+msgstr "Abrechnungszeitraum Beginn"
+
+msgid "Interval Ends"
+msgstr "Abrechnungszeitraum Ende"
+
+msgid "without external contact person"
+msgstr "ohne externe Kontaktperson"
+
+msgid "without internal contact person"
+msgstr "ohne interne Kontaktperson"
+
+msgid "without customer"
+msgstr "ohne Kunde"
+
+msgid "Order Confirmation"
+msgid_plural "Order Confirmations"
+msgstr[0] "Auftragsbestätigung"
+msgstr[1] "Auftragsbestätigungen"
+
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Quantity"
+msgstr "Anzahl"
+
+msgid "Invoice Item"
+msgstr "Rechnungsposten"
+
+msgid "Costcenter"
+msgid_plural "Costcenters"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
+
+msgid "manage divisions"
+msgstr "Abteilungen verwalten"
+
+msgid "add, edit and delete divisions"
+msgstr "Abteilungen hinzufügen, bearbeiten und löschen"
+
+msgid "manage order confirmations"
+msgstr "Auftragsbestätigungen verwalten"
+
+msgid "add, edit and delete order confirmations"
+msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen"
+
+msgid "add, edit and delete contracts"
+msgstr "Verträge hinzufügen, bearbeiten und löschen"
+
+msgid "manage contracts"
+msgstr "Verträge verwalten"
+
+msgid "Item"
+msgstr "Position"
+
+msgid "Items"
+msgstr "Positionen"
+
+msgid "Month"
+msgstr "Monat"
+
+msgid "Positions"
+msgstr "Positionen"
+
+msgid "Unit"
+msgstr "Einheit"
+
+msgid "Piece"
+msgstr "Stück"
+
+msgid "set number of invoices"
+msgstr "Rechnungsnummer manuell vergeben"
+
+msgid "allow to set the number of an invoice"
+msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben"
+
+msgid "Last Billed"
+msgstr "Zuletzt abgerechnet"
+
+msgid "Following Invoices Found"
+msgstr "Nachfolgende Rechnungen gefunden"
+
+msgid "There is an invoice for the same contract after this one. Please delete the following invoice(s) before deleting this one!"
+msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
+
+#: Exception/DeleteUsedBillingAddress.php:26
+msgid "Address as Billing Address in Use"
+msgstr "Adresse als Rechnungsadresse in Benutzung"
+
+#: Exception/DeleteUsedBillingAddress.php:31
+msgid ""
+"The Address you tried to delete is used in one or more contract(s) as "
+"Billing Address. Please assign another Billing Address to these contracts or "
+"change this one and do not delete."
+msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+
+msgid "Invoice Position"
+msgid_plural "Invoice Positions"
+msgstr[0] "Rechnungsposition"
+msgstr[1] "Rechnungspositionen"
+
+#: Model/Invoice.php:146 js/InvoiceEditDialog.js:443
+msgid "Price Net"
+msgstr "Nettopreis"
+
+#: Model/Invoice.php:152 js/InvoiceEditDialog.js:449
+msgid "Price Gross"
+msgstr "Bruttopreis"
+
+#: Model/Invoice.php:158 js/InvoiceEditDialog.js:453
+msgid "Sales Tax (percent)"
+msgstr "Mehrwertsteuer in Prozent"
+
+msgid "Accountable"
+msgstr "Rechnet ab"
+
+msgid "Add New Product"
+msgstr "Neues Produkt hinzufügen"
+
+msgid "SalesProduct"
+msgstr "Produkt"
+
+msgid "SalesOffer"
+msgstr "Angebot"
+
+msgid "Offer"
+msgid_plural "Offers"
+msgstr[0] "Angebot"
+msgstr[1] "Angebote"
+
+msgid "All offer records"
+msgstr "Alle Angebote"
+
+msgid "All Offers"
+msgstr "Alle Angebotsdatensätze"
+
+msgid "manage offers"
+msgstr "Angebote verwalten"
+
+msgid "add, edit and delete offers"
+msgstr "Angebote hinzufügen, bearbeiten und löschen"
+
+msgid "without order confirmation"
+msgstr "ohne Auftragsbestätigung"
+
+msgid "Add New Offer"
+msgstr "Neues Angebot hinzufügen"
+
+msgid "Last Autobill"
+msgstr "Zuletzt Abgerechnet"
+
+msgid "All Products"
+msgstr "Alle Produkte"
+
+msgid "All product records"
+msgstr "Alle Produktdatensätze"
+
+msgid "All Contracts"
+msgstr "Alle Verträge"
+
+msgid "All contract records"
+msgstr "Alle Vertragsdatensätze"
+
+msgid "All Invoices"
+msgstr "Alle Rechnungen"
+
+msgid "All invoice records"
+msgstr "Alle Rechnungsdatensätze"
+
+msgid "All Cost Centers"
+msgstr "Alle Kostenstellen"
+
+msgid "All cost center records"
+msgstr "Alle Kostenstellendatensätze"
+
+msgid "All Divisions"
+msgstr "Alle Abteilungen"
+
+msgid "All division records"
+msgstr "Alle Abteilungsdatensätze"
+
+msgid "All Order Confirmations"
+msgstr "Alle Auftragsbestätigungen"
+
+msgid "All order confirmation records"
+msgstr "Alle Auftragsbestätigungsdatensätze"
+
+msgid "Products created by me"
+msgstr "Produktdatensätze, die ich angelegt habe"
+
+msgid "Contracts created by me"
+msgstr "Vertragsdatensätze, die ich angelegt habe"
+
+msgid "Sales Tax"
+msgstr "Mehrwertsteuer"
+
+msgid "change number of an order confirmations"
+msgstr "Nummer einer Auftragsbestätigung ändern"
+
+msgid "Rebill Invoice"
+msgstr "Rechnung neu erzeugen"
+
+msgid "Bill Contract \"{0} - {1}\""
+msgstr "Vertrag \"{0} - {1}\" abrechnen"
+
+msgid "Select the date to generate the bill for"
+msgstr "Bitte wählen Sie das Datum, zu dem Sie die Rechnung erzeugen möchten"
+
+msgid "Rebilling Invoice..."
+msgstr "Erzeuge Rechnung neu..."
+
+msgid "Billing Contract..."
+msgstr "Rechne Vertrag ab..."
+
+msgid "Bill Contract"
+msgstr "Vertrag abrechnen"

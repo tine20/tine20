@@ -45,4 +45,25 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
+
+    /**
+     * returns all ids of contracts by interval. last_autobill doesn't get respected here.
+     *
+     * @param Tinebase_DateTime $date
+     * @return array
+     */
+    public function getBillableContractIds(Tinebase_DateTime $date)
+    {
+        $date = clone $date;
+        $date->setTimezone('UTC');
+    
+        $be = new Sales_Backend_Contract();
+        $db = $be->getAdapter();
+    
+        $sql = 'SELECT ' . $db->quoteIdentifier('id') . ' FROM ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_contracts') .
+        ' WHERE (' . $db->quoteInto($db->quoteIdentifier('end_date') . ' >= ?', $date) . ' OR ' . $db->quoteIdentifier('end_date') . ' IS NULL ) ' .
+        ' AND '   . $db->quoteInto($db->quoteIdentifier('start_date') . ' <= ?', $date);
+    
+        return array_keys($db->fetchAssoc($sql));
+    }
 }

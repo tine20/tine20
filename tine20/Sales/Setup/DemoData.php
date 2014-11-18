@@ -54,7 +54,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * models to work on
      * @var array
      */
-    protected $_models = array('product', 'contract');
+    protected $_models = array('product', 'customer', 'contract', 'invoice', 'orderconfirmation', 'offer');
     
     /**
      * the constructor
@@ -168,6 +168,129 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
         }
     }
+
+    /**
+     * creates the customers with some addresses getting from the addressbook
+     */
+    protected function _createSharedCustomers()
+    {
+        $pagination = new Tinebase_Model_Pagination(array('limit' => 6, 'sort' => 'id', 'dir' => 'ASC'));
+        // @todo: use shared addresses only
+        $filter = new Addressbook_Model_ContactFilter(array(array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_CONTACT)));
+        $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
+        
+        $customers = array(
+            array(
+                'name' => 'ELKO Elektronik und Söhne',
+                'url' => 'www.elko-elektronik.de',
+                'discount' => 0
+            ), 
+            array(
+                'name' => 'Reifenlieferant Gebrüder Platt',
+                'url' => 'www.platt-reifen.de',
+                'discount' => 0
+            ), 
+            array(
+                'name' => 'Frische Fische Gmbh & Co. KG',
+                'url' => 'www.frische-fische-hamburg.de',
+                'discount' => 15.2
+            ),
+        );
+        
+        $i=0;
+        
+        $customerController = Sales_Controller_Customer::getInstance();
+        $addressController = Sales_Controller_Address::getInstance();
+        
+        $customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
+        
+        foreach ($customers as $customer) {
+            $customer['cpextern_id'] = $addresses->getByIndex($i)->getId();
+            $i++;
+            $customer['cpintern_id'] = $addresses->getByIndex($i)->getId();
+            $i++;
+            $customer['iban'] = Tinebase_Record_Abstract::generateUID(20);
+            $customer['bic'] = Tinebase_Record_Abstract::generateUID(12);
+            $customer['credit_term'] = 30;
+            $customer['currency'] = 'EUR';
+            $customer['currency_trans_rate'] = 1;
+            try {
+                $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
+            } catch (Tinebase_Exception_Duplicate $e) {
+                echo 'Skipping creating customer ' . $customer['name'] . ' - exists already.' . PHP_EOL;
+            }
+        }
+        
+        $pagination = new Tinebase_Model_Pagination(array('limit' => 16, 'sort' => 'id', 'dir' => 'DESC'));
+        $addresses = Addressbook_Controller_Contact::getInstance()->search($filter, $pagination);
+        
+        $i=0;
+        foreach($customerRecords as $customer) {
+            foreach(array('postal', 'billing', 'delivery', 'billing', 'delivery') as $type) {
+                $caddress = $addresses->getByIndex($i);
+                $address = new Sales_Model_Address(array(
+                    'customer_id' => $customer->getId(),
+                    'type'        => $type,
+                    'prefix1'     => $caddress->title,
+                    'prefix2'     => $caddress->n_fn,
+                    'street'      => $caddress->adr_two_street,
+                    'postalcode'  => $caddress->adr_two_postalcode,
+                    'locality'    => $caddress->adr_two_locality,
+                    'region'      => $caddress->adr_two_region,
+                    'countryname' => $caddress->adr_two_countryname,
+                    'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
+                ));
+                
+                $addressController->create($address);
+                
+                $i++;
+            }
+            // the last customer gets plus one delivery address
+            $caddress = $addresses->getByIndex($i);
+            $address = new Sales_Model_Address(array(
+                'customer_id' => $customer->getId(),
+                'type'        => $type,
+                'prefix1'     => $caddress->title,
+                'prefix2'     => $caddress->n_fn,
+                'street'      => $caddress->adr_two_street,
+                'postalcode'  => $caddress->adr_two_postalcode,
+                'locality'    => $caddress->adr_two_locality,
+                'region'      => $caddress->adr_two_region,
+                'countryname' => $caddress->adr_two_countryname,
+                'custom1'     => NULL
+            ));
+            
+            $addressController->create($address);
+        }
+        
+        if (static::$_createFullData) {
+            $i=0;
+            while ($i < 200) {
+                $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+                $i++;
+            }
+        }
+    }
+    
+    /**
+     * creates the invoices - no containers, just "shared"
+     */
+    protected function _createSharedInvoices()
+    {
+        $sic = Sales_Controller_Invoice::getInstance();
+        
+        $now = new Tinebase_DateTime();
+        $now->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $now->setDate($now->format('Y'), $now->format('m'), 1);
+        $now->setTime(3,0,0);
+        
+        $date = clone $this->_referenceDate;
+        
+        while ($date < $now) {
+            $sic->createAutoInvoices($date);
+            $date->addMonth(1);
+        }
+    }
     
     /**
      * creates the contracts - no containers, just "shared"
@@ -182,9 +305,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $i = 0;
         
+        $this->_setReferenceDate();
+        
+        $customers = Sales_Controller_Customer::getInstance()->getAll();
+        $addresses = Sales_Controller_Address::getInstance()->getAll();
+        
+        $customersCount = $customers->count();
+        $ccIndex = 0;
+        
         while ($i < 12) {
             $costcenter = $ccs[$i%2];
             $i++;
+            
+            $customer = $customers->getByIndex($ccIndex);
+            
+            $address = $addresses->filter('customer_id', $customer->getId())->filter('type', 'billing')->getFirstRecord();
+            $addressId = $address ? $address->getId() : NULL;
             
             $title = self::$_de ? ('Vertrag für KST ' . $costcenter->number . ' - ' . $costcenter->remark) : ('Contract for costcenter ' . $costcenter->number . ' - ' . $costcenter->remark) . ' ' . Tinebase_Record_Abstract::generateUID(3);
             $ccid = $costcenter->getId();
@@ -195,7 +331,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'description'  => 'Created by Tine 2.0 DemoData',
                 'container_id' => $cid,
                 'status'       => 'OPEN',
-                'cleared'      => 'NOT_YET_CLEARED'
+                'cleared'      => 'NOT_YET_CLEARED',
+                'start_date'   => clone $this->_referenceDate,
+                'billing_address_id' => $addressId
             ));
             
             $relations = array(
@@ -208,15 +346,122 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $ccid,
                     'type'                   => 'LEAD_COST_CENTER'
+                ),
+                array(
+                    'own_model'              => 'Sales_Model_Contract',
+                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_id'                 => NULL,
+                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => 'Sales_Model_Customer',
+                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_id'             => $customer->getId(),
+                    'type'                   => 'CUSTOMER'
                 )
             );
+            
+            $genericProduct = Sales_Controller_Product::getInstance()->create(new Sales_Model_Product(
+                self::$_de
+                    ? 
+                    array('name' => 'Generisches Produkt', 'description' => 'ein generisches produkt aus den demo daten', 'price' => 100)
+                    :
+                    array('name' => 'Generic Product', 'description' => 'this is a generic product used in demo data', 'price' => 100)
+            ));
+            
+            $contract->products = array(array(
+                'product_id' => $genericProduct->getId(),
+                'quantity' => 1
+            ));
+            
             $contract->relations = $relations;
             
             $this->_contractController->create($contract);
             $cNumber++;
+            $ccIndex++;
+            if ($ccIndex == $customersCount) {
+                $ccIndex = 0;
+            }
         }
     }
     
+    /**
+     * creates some order confirmations
+     */
+    protected function _createSharedOrderconfirmations()
+    {
+        $i = 1;
+        
+        $this->_setReferenceDate();
+        
+        $contracts = Sales_Controller_Contract::getInstance()->getAll('number');
+        
+        // create for each contract a order confirmation
+        foreach($contracts as $contract) {
+            $relations = array(array(
+                'own_model'              => 'Sales_Model_OrderConfirmation',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_Contract',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $contract->getId(),
+                'type'                   => 'CONTRACT'
+            ));
+            
+            $oc = Sales_Controller_OrderConfirmation::getInstance()->create(new Sales_Model_OrderConfirmation(array(
+                'number' => $i,
+                'title'  => self::$_de ? ('Auftragsbestätigung für Vertrag ' . $contract->title) : ('Order Confirmation for Contract' . $contract->title),
+                'description' => 'Created by Tine 2.0 DemoData',
+                'relations' => $relations
+            )));
+            
+            $i++;
+        }
+    }
+    
+    /**
+     * creates some offers
+     */
+    protected function _createSharedOffers()
+    {
+        $i = 0;
+        
+        $this->_setReferenceDate();
+        
+        $customers          = Sales_Controller_Customer::getInstance()->getAll('number');
+        $orderconfirmations = Sales_Controller_OrderConfirmation::getInstance()->getAll('number');
+
+        foreach($customers as $customer) {
+            $oc = $orderconfirmations->getByIndex($i);
+            $i++;
+            $relations = array(array(
+                'own_model'              => 'Sales_Model_Offer',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_Customer',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $customer->getId(),
+                'type'                   => 'OFFER'
+            ), array(
+                'own_model'              => 'Sales_Model_Offer',
+                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_id'                 => NULL,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => 'Sales_Model_OrderConfirmation',
+                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_id'             => $oc->getId(),
+                'type'                   => 'OFFER'
+            ));
+            $customer = $customers->getById($relation->own_id);
+            $offer = Sales_Controller_Offer::getInstance()->create(new Sales_Model_Offer(array(
+                'number' => $i,
+                'title'  => self::$_de ? ('Angebot für Kunde ' . $customer->name) : ('Offer for Customer' . $customer->name),
+                'description' => 'Created by Tine 2.0 DemoData',
+                'relations' => $relations
+            )));
+        }
+        
+    }
     /**
      * returns a new product
      * return Sales_Model_Product
@@ -239,7 +484,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
         ;
-    
+        
+        $be = new Sales_Backend_CostCenter();
+        $be->setModlogActive(FALSE);
+        $allCC = $be->getAll();
+        
         $id = 1;
         foreach($ccs as $title) {
             $cc = new Sales_Model_CostCenter(
@@ -249,7 +498,13 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $record = $controller->create($cc);
                 $this->_costCenters->addRecord($record);
             } catch (Zend_Db_Statement_Exception $e) {
-                $this->_costCenters = $controller->search(new Sales_Model_CostCenterFilter(array()));
+                $cc = $allCC->filter('number', $id)->getFirstRecord();
+                $cc->is_deleted = 0;
+                $this->_costCenters->addRecord($be->update($cc));
+            } catch (Tinebase_Exception_Duplicate $e) {
+                $cc = $allCC->filter('number', $e->getClientRecord()->number)->getFirstRecord();
+                $cc->is_deleted = 0;
+                $this->_costCenters->addRecord($be->update($cc));
             }
     
             $id++;

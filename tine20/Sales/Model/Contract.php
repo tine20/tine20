@@ -51,15 +51,28 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         
         'containerProperty' => 'container_id',
+
         'containerName'    => 'Contracts',
         'containersName'    => 'Contracts',
         'containerUsesFilter' => FALSE,
         
-        'titleProperty'     => 'title',
+        'titleProperty'     => 'fulltext',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'Contract',
         
         'filterModel' => array(
+            'customer' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Customer', // _('Customer')
+                'options' => array(
+                    'controller' => 'Sales_Controller_Customer',
+                    'filtergroup' => 'Sales_Model_CustomerFilter',
+                    'own_filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_controller' => 'Sales_Controller_Contract',
+                    'related_model' => 'Sales_Model_Customer',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contractcustomer')
+            ),
             'costcenter' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
                 'label' => 'Cost Center', // _('Cost Center')
@@ -72,6 +85,30 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 ),
                 'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
             ),
+            'contact_internal' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Contact Person (internal)', // _('Contact Person (internal)')
+                'options' => array(
+                    'controller' => 'Addressbook_Controller_Contact',
+                    'filtergroup' => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_controller' => 'Sales_Controller_Contract',
+                    'related_model' => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contract-contact-internal')
+            ),
+            'contact_external' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Contact Person (external)', // _('Contact Person (external)')
+                'options' => array(
+                    'controller' => 'Addressbook_Controller_Contact',
+                    'filtergroup' => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup' => 'Sales_Model_ContractFilter',
+                    'own_controller' => 'Sales_Controller_Contract',
+                    'related_model' => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contract-contact-external')
+            )
         ),
         
         'fields'            => array(
@@ -100,16 +137,105 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'idProperty'  => 'id',
                 )
             ),
+            'billing_address_id' => array(
+                'label'      => 'Billing Address', // _('Billing Address')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Address',
+                    'idProperty'  => 'id',
+                )
+            ),
             'start_date' => array(
-                'type' => 'date',
+                'type' => 'datetime',
                 'label'      => 'Start Date',    // _('Start Date')
             ),
             'end_date' => array(
-                'type' => 'date',
+                'type' => 'datetime',
                 'label'      => 'End Date',    // _('End Date')
+            ),
+            'customer' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Customer',    // _('Customer')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'Customer',
+                        'type' => 'CUSTOMER'
+                    )
+                )
+            ),
+            'contact_external' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Contact Person (external)',    // _('Contact Person (external)')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type' => 'CUSTOMER' // yes, it's the same name of type, but another model than the field before
+                    )
+                )
+            ),
+            'contact_internal' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Contact Person (internal)',    // _('Contact Person (internal)')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type' => 'RESPONSIBLE'
+                    )
+                )
+            ),
+            'costcenter' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Lead Cost Center',    // _('Lead Cost Center')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'CostCenter',
+                        'type' => 'LEAD_COST_CENTER'
+                    )
+                )
+            ),
+            'products' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Products', // _('Products')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'ProductAggregate',
+                    'refIdField'  => 'contract_id',
+                    'dependentRecords' => TRUE
+                ),
+            ),
+            
+            'fulltext' => array(
+                'type' => 'string',
             ),
         )
     );
+
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     *
+     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
+     */
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        $this->fulltext = $this->number . ' - ' . $this->title;
+    }
     
     /**
      * @see Tinebase_Record_Abstract
@@ -138,5 +264,36 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             array('type' => 'TIME_ACCOUNT', 'degree' => 'sibling', 'text' => 'Time Account', 'max' => '0:1'), // _('Time Account')
             ), 'defaultType' => ''
         ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Customer', 'config' => array(
+            array('type' => 'CUSTOMER', 'degree' => 'sibling', 'text' => 'Customer', 'max' => '1:0'), // _('Customer')
+            ), 'defaultType' => ''
+        ),
     );
+    
+    /**
+     * returns the product aggregate for a given accountable
+     * 
+     * @param Sales_Model_Accountable_Interface $record
+     */
+    public function findProductAggregate(Sales_Model_Accountable_Interface $record) {
+        
+        $accountableClassName = get_class($record);
+        $filter = new Sales_Model_ProductFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'accountable', 'operator' => 'equals', 'value' => $accountableClassName)));
+        $products = Sales_Controller_Product::getInstance()->search($filter);
+        
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'product_id', 'operator' => 'in', 'value' => $products->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->getId())));
+
+        $pas = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        
+        if ($pas->count() < 1) {
+            throw new Tinebase_Exception_Data('A contract aggregate could not be found!');
+        } elseif ($pas->count() > 1) {
+            throw new Tinebase_Exception_Data('At the moment a contract may have only one product aggregate for the same product, not more!');
+        }
+        
+        return $pas->getFirstRecord();
+    }
 }

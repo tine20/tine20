@@ -35,6 +35,24 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowHeight: 450,
     
     /**
+<<<<<<< HEAD
+=======
+     * @private
+     */
+    windowNamePrefix: 'CostCenterEditWindow_',
+    appName: 'Sales',
+
+    tbarItems: [],
+    
+    initComponent: function() {
+        
+        this.recordClass = Tine.Sales.Model.CostCenter;
+        this.recordProxy = Tine.Sales.costcenterBackend;
+        
+        Tine.Sales.CostCenterEditDialog.superclass.initComponent.call(this);
+    },
+    /**
+>>>>>>> pu/2013.10-invoices
      * called on multiple edit
      * @return {Boolean}
      */
@@ -96,3 +114,18 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
     }
 });
+
+/**
+ * Sales Edit Popup
+ */
+Tine.Sales.CostCenterEditDialog.openWindow = function (config) {
+    var id = (config.record && config.record.id) ? config.record.id : 0;
+    var window = Tine.WindowFactory.getWindow({
+        width: 650,
+        height: 450,
+        name: Tine.Sales.CostCenterEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.Sales.CostCenterEditDialog',
+        contentPanelConstructorConfig: config
+    });
+    return window;
+};

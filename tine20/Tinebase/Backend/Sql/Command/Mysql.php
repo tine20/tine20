@@ -43,7 +43,7 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
     
     /**
      * returns concatenation expression
-     *
+     * 
      * @param array $values
      */
     public function getConcat($values)

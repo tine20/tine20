@@ -114,13 +114,13 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // add contact2 as customer relation to contract2
         $this->_setContractRelations($contract2, array($contact2), 'CUSTOMER');
 
-        $ids = array($contract1->id, $contract2->id);
+        $contract1and2Ids = array($contract1->id, $contract2->id);
 
         $tbJson = new Tinebase_Frontend_Json();
         // add Responsible contact1 to both contracts
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact1->getId())),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
 
         $this->assertEquals(2, count($response['results']));
@@ -148,7 +148,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
                 array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => $contact3->getId()),
                 array('name' => '%RESPONSIBLE-Addressbook_Model_Contact', 'value' => $contact4->getId())
                 ),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
         $this->assertEquals(count($response['results']), 2);
         
@@ -161,14 +161,14 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         // remove customer
         $response = $tbJson->updateMultipleRecords('Sales', 'Contract',
             array(array('name' => '%CUSTOMER-Addressbook_Model_Contact', 'value' => '')),
-            array(array('field' => 'id', 'operator' => 'in', 'value' => $ids))
+            array(array('field' => 'id', 'operator' => 'in', 'value' => $contract1and2Ids))
         );
         
         $this->assertEquals(2, count($response['results']));
         
         $contract1res = $this->_instance->getContract($contract1->getId());
         $contract2res = $this->_instance->getContract($contract2->getId());
-
+        
         $this->assertEquals(1, count($contract1res['relations']));
         $this->assertEquals(1, count($contract2res['relations']));
     }
@@ -276,6 +276,24 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $search['totalcount']);
     }
 
+    /**
+     * try to get a customer
+     */
+    public function testSearchCustomers()
+    {
+        $customerController = Sales_Controller_Customer::getInstance();
+        $i = 0;
+        
+        while ($i < 104) {
+            $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+            $i++;
+        }
+        $result = $this->_instance->searchCustomers(array(), array('limit' => 50));
+        
+        $this->assertEquals(50, count($result['results']));
+        $this->assertGreaterThanOrEqual(104, $result['totalcount']);
+    }
+    
     /**
      * test product json api
      *
@@ -671,5 +689,24 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
         $contact4 = Addressbook_Controller_Contact::getInstance()->update($contact4);
+    }
+    
+    /**
+     * tests if a product interval of 36 is possible and if an empty string gets converted to null
+     */
+    public function testContract()
+    {
+        $product = Sales_Controller_Product::getInstance()->create($this->_getProduct());
+        $contract = array('id' => NULL, 'number' => 1, 'title' => 'test123', 'products' => array(array(
+            'product_id' => $product->getId(),
+            'interval' => 36,
+            'billing_point' => 'begin',
+            'quantity' => ''
+        )));
+        
+        $contract = $this->_instance->saveContract($contract);
+        
+        $this->assertEquals(NULL, $contract['products'][0]['quantity']);
+        $this->assertEquals(36, $contract['products'][0]['interval']);
     }
 }

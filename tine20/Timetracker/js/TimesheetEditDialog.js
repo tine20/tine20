@@ -24,6 +24,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     recordProxy: Tine.Timetracker.timesheetBackend,
     tbarItems: null,
     evalGrants: false,
+    useInvoice: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -96,6 +97,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initComponent: function() {
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         this.tbarItems = [addNoteButton];
+        this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
         
         Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.apply(this, arguments);
     },
@@ -122,6 +124,49 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * NOTE: when this method gets called, all initalisation is done.
      */
     getFormItems: function() {
+        var lastRow = [new Tine.Addressbook.SearchCombo({
+            allowBlank: false,
+            forceSelection: true,
+            columnWidth: 1,
+            disabled: true,
+            useAccountRecord: true,
+            userOnly: true,
+            nameField: 'n_fileas',
+            fieldLabel: this.app.i18n._('Account'),
+            name: 'account_id'
+        }), {
+            columnWidth: .25,
+            disabled: (this.useMultiple) ? false : true,
+            boxLabel: this.app.i18n._('Billable'),
+            name: 'is_billable',
+            xtype: 'checkbox'
+        }, {
+            columnWidth: .25,
+            disabled: (this.useMultiple) ? false : true,
+            boxLabel: this.app.i18n._('Cleared'),
+            name: 'is_cleared',
+            xtype: 'checkbox',
+            listeners: {
+                scope: this,
+                check: this.onClearedUpdate
+            }
+        }, {
+                columnWidth: .5,
+                disabled: true,
+                fieldLabel: this.app.i18n._('Cleared In'),
+                name: 'billed_in'
+            }];
+        
+        if (this.useInvoice) {
+            lastRow.push(Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
+                columnWidth: .5,
+                disabled: true,
+                fieldLabel: this.app.i18n._('Invoice'),
+                name: 'invoice_id'
+            }));
+        }
+        
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -189,39 +234,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         xtype: 'textarea',
                         height: 150
-                    }], [new Tine.Addressbook.SearchCombo({
-                        allowBlank: false,
-                        forceSelection: true,
-                        columnWidth: 1,
-                        disabled: true,
-                        useAccountRecord: true,
-                        userOnly: true,
-                        nameField: 'n_fileas',
-                        fieldLabel: this.app.i18n._('Account'),
-                        name: 'account_id'
-                    }), {
-                        columnWidth: .25,
-                        disabled: (this.useMultiple) ? false : true,
-                        boxLabel: this.app.i18n._('Billable'),
-                        name: 'is_billable',
-                        xtype: 'checkbox'
-                    }, {
-                        columnWidth: .25,
-                        disabled: (this.useMultiple) ? false : true,
-                        boxLabel: this.app.i18n._('Cleared'),
-                        name: 'is_cleared',
-                        xtype: 'checkbox',
-                        listeners: {
-                            scope: this,
-                            check: this.onClearedUpdate
-                        }                        
-                    }, {
-                        columnWidth: .5,
-                        disabled: (this.useMultiple) ? false : true,
-                        fieldLabel: this.app.i18n._('Cleared In'),
-                        name: 'billed_in',
-                        xtype: 'textfield'
-                    }]] 
+                    }], lastRow] 
                 }, {
                     // activities and tags
                     layout: 'accordion',

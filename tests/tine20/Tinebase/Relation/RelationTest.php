@@ -394,7 +394,7 @@ class Tinebase_Relation_RelationTest extends TestCase
      */
     public function testGetConstraintsConfigs() {
         $result = Tinebase_Relations::getConstraintsConfigs('Sales_Model_Contract');
-        $this->assertEquals(10, count($result));
+        $this->assertEquals(12, count($result));
         
         foreach($result as $item) {
             if ($item['ownRecordClassName'] == 'Sales_Model_Contract' && $item['relatedRecordClassName'] == 'Timetracker_Model_Timeaccount') {

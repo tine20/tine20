@@ -65,6 +65,10 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $_record['timeaccount_id']['account_grants'] = $this->_resolveTimesheetGrantsByTimeaccountGrants($_record['timeaccount_id']['account_grants'], $_record['account_id']);
                 Tinebase_User::getInstance()->resolveUsers($_record, 'account_id');
 
+                if (Tinebase_Core::getUser()->hasRight('Sales', 'manage_invoices') && ! empty($_record['invoice_id'])) {
+                    $_record['invoice_id'] = Sales_Controller_Invoice::getInstance()->get($_record['invoice_id']);
+                }
+                
                 $recordArray = parent::_recordToJson($_record);
                 break;
 
@@ -118,7 +122,9 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // resolve timeaccounts
                 $timeaccountIds = $_records->timeaccount_id;
                 $timeaccounts = $this->_timeaccountController->getMultiple(array_unique(array_values($timeaccountIds)));
-
+                
+                $invoices = FALSE;
+                
                 Timetracker_Model_TimeaccountGrants::getGrantsOfRecords($timeaccounts, Tinebase_Core::get('currentAccount'));
 
                 foreach ($_records as $record) {
@@ -141,6 +147,18 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $this->_resolveTimeaccountGrants($_records);
                 break;
         }
+        
+        if (Tinebase_Core::getUser()->hasRight('Sales', 'manage_invoices')) {
+            $invoiceIds = array_unique(array_values($_records->invoice_id));
+            $invoices   = Sales_Controller_Invoice::getInstance()->getMultiple($invoiceIds);
+            
+            foreach ($_records as $record) {
+                if ($invoices && $record->invoice_id) {
+                    $record->invoice_id = $invoices->getById($record->invoice_id);
+                }
+            }
+        }
+        
 
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         $_records->setTimezone(Tinebase_Core::getUserTimezone());

@@ -6,17 +6,17 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * Contract Cleared Record Class
+ * Invoice Cleared Record Class
  * 
  * @package     Sales
  * @subpackage  Model
  */
-class Sales_Model_Cleared extends Tinebase_Config_KeyFieldRecord
+class Sales_Model_InvoiceCleared extends Tinebase_Config_KeyFieldRecord
 {
     /**
      * application the record belongs to

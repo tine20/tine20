@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,12 +26,11 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_applicationName         = 'Sales';
         $this->_modelName               = 'Sales_Model_Product';
-        $this->_backend                 = new Tinebase_Backend_Sql(array(
-            'modelName' => $this->_modelName, 
-            'tableName' => 'sales_products',
-        ));
+        
+        $this->_backend = new Sales_Backend_Product();
+
         $this->_doContainerACLChecks    = FALSE;
-    }    
+    }
     
     /**
      * don't clone. Use the singleton.
@@ -57,7 +56,7 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Sales_Controller_Product();
+            self::$_instance = new self();
         }
         
         return self::$_instance;

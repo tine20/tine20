@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>8.2</version>
+    <version>8.3</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
@@ -71,6 +71,12 @@
                     <name>billed_in</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>invoice_id</name>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -194,6 +200,12 @@
                     <name>billed_in</name>
                     <type>text</type>
                     <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>invoice_id</name>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
