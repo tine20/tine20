@@ -613,10 +613,3 @@ msgstr "Alle Leads, für die ich verantwortlich bin"
 msgid "Leads with overdue tasks"
 msgstr "Leads mit überfälligen Aufgaben"
 
-#: js/LeadGridPanel.js:144 js/LeadEditDialog.js:393
-msgid "Resubmission Date"
-msgstr "Wiedervorlagedatum"
-
-msgid "Organizer"
-msgstr "Organisator"
-

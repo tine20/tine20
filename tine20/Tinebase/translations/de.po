@@ -103,12 +103,6 @@ msgstr "Der Monat muss das Format YYYY-MM haben!"
 msgid "Invalid Relations"
 msgstr "Ungültige Verknüpfung"
 
-#: Exception/InvalidRelationConstraints.php:36
-msgid ""
-"You tried to create a relation which is forbidden by the constraints config "
-"of one of the models."
-msgstr ""
-
 #: Exception/Record/SystemContainer.php:22
 msgid "System Container"
 msgstr "System Ordner"
@@ -1619,17 +1613,9 @@ msgstr "vorletzte Woche"
 msgid "last three months"
 msgstr "letzten drei Monate"
 
-<<<<<<< HEAD
 #: js/widgets/grid/FilterModel.js:188
 msgid "last six months"
 msgstr "letzten sechs Monate"
-=======
-#: js/widgets/relation/GenericPickerGridPanel.js:263
-msgid ""
-"The maximum number of {0} with the type \"{1}\" is reached. Please change the "
-"type of this relation"
-msgstr "Die maximale Anzahl an {0}n mit dem Typ \"{1}\" wurde erreicht. Bitte ändern Sie den Typ der Verknüpfung."
->>>>>>> pu/2013.10-invoices
 
 #: js/widgets/grid/FilterModel.js:189
 msgid "anytime"
