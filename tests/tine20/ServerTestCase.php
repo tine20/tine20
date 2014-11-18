@@ -78,4 +78,27 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
             'password' => $password
         );
     }
+    
+    /**
+     * get account by name
+     * 
+     * @param  string  $name
+     * @return Tinebase_Model_FullUser
+     */
+    public function getAccountByName($name)
+    {
+        return Tinebase_User::getInstance()->getFullUserByLoginName($name);
+    }
+    
+    /**
+     * 
+     * @param  Tinebase_Model_User  $account
+     * @param  string  $recordClass
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getPersonalContainer(Tinebase_Model_User $account, $recordClass)
+    {
+        return Tinebase_Container::getInstance()
+            ->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADMIN);
+    }
 }
