@@ -259,19 +259,19 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         if (! this.grantsGrid) {
             var columns = [
                 new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Read'),
+                    header: _('Read'),
                     dataIndex: 'readGrant',
                     tooltip: _('The grant to see and use this filter'),
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Edit'),
+                    header: _('Edit'),
                     tooltip: _('The grant to edit this filter'),
                     dataIndex: 'editGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: this.app.i18n._('Delete'),
+                    header: _('Delete'),
                     tooltip: _('The grant to delete this filter'),
                     dataIndex: 'deleteGrant',
                     width: 55
@@ -280,7 +280,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             
             this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
                 selectType: 'both',
-                title:  this.app.i18n._('Permissions'),
+                title:  _('Permissions'),
                 store: this.getGrantsStore(),
                 hasAccountPrefix: true,
                 configColumns: columns,
