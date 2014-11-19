@@ -225,7 +225,7 @@ msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
 #: js/Model.js:155 js/MessageEditDialog.js:955 js/GridPanel.js:482
-#: Controller/Message/Send.php:280
+#: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr ""
 
@@ -364,7 +364,7 @@ msgstr ""
 
 #: js/FolderFilterModel.js:30 js/TreeContextMenu.js:64
 #: js/TreeContextMenu.js:67 js/TreeContextMenu.js:70 js/Model.js:55
-#: js/Model.js:520 js/GridPanel.js:529
+#: js/Model.js:514 js/GridPanel.js:529
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -473,55 +473,55 @@ msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "INBOX"
 msgstr ""
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:514 js/GridPanel.js:514
+#: js/Model.js:508 js/GridPanel.js:514
 msgid "Sent"
 msgstr ""
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Templates"
 msgstr ""
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Junk"
 msgstr ""
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Trash"
 msgstr ""
 
-#: js/Model.js:523 js/Model.js:643 js/Model.js:709
+#: js/Model.js:517 js/Model.js:637 js/Model.js:703
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:640
+#: js/Model.js:634
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:706
+#: js/Model.js:700
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:833
+#: js/Model.js:827
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:836
+#: js/Model.js:830
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
@@ -604,7 +604,7 @@ msgstr ""
 msgid "Compose email:"
 msgstr ""
 
-#: js/MessageEditDialog.js:930 Controller/Message/Send.php:280
+#: js/MessageEditDialog.js:930 Controller/Message/Send.php:288
 msgid "Body"
 msgstr ""
 

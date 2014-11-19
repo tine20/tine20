@@ -240,16 +240,16 @@ msgstr ""
 msgid "Contracts"
 msgstr ""
 
-#: Model/Employee.php:245
+#: Model/Employee.php:246
 msgid "Cost Centers"
 msgstr ""
 
-#: Model/Employee.php:257 js/FreeTimeGridPanel.js:77
+#: Model/Employee.php:258 js/FreeTimeGridPanel.js:77
 #: js/FreeTimeGridPanel.js:275 Setup/Initialize.php:74
 msgid "Vacation"
 msgstr ""
 
-#: Model/Employee.php:270 js/FreeTimeGridPanel.js:73
+#: Model/Employee.php:271 js/FreeTimeGridPanel.js:73
 #: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121
 #: Setup/Initialize.php:73
 msgid "Sickness"

@@ -659,6 +659,22 @@ msgstr ""
 msgid "Qualify"
 msgstr ""
 
+#: js/Asterisk/SipPeerEditDialog.js:174
+msgid "Direct Media (canreinvite)"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:184
+msgid "yes"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:185
+msgid "no"
+msgstr ""
+
+#: js/Asterisk/SipPeerEditDialog.js:187
+msgid "nonat"
+msgstr ""
+
 #: js/Asterisk/SipPeerGridPanel.js:55
 msgid "account code"
 msgstr ""

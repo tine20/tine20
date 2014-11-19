@@ -635,6 +635,11 @@ msgstr ""
 msgid "default"
 msgstr ""
 
+#: Frontend/Cli.php:166
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
 msgstr ""
@@ -673,14 +678,17 @@ msgstr ""
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
+#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
