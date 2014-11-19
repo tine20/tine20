@@ -184,7 +184,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // do nothing
             } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' User sql plugin failure: ' . $e);
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' User sql plugin failure');
+                Tinebase_Exception::log($e);
             }
         }
             
