@@ -424,14 +424,10 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
-     * - add filter acl (check if table already exists)
-     * 
-     * @see 0009610: shared favorites acl
+     * adds and updates access_log columns
      */
     public function update_7()
     {
-        $this->validateTableVersion('access_log', 4);
-        
         $declaration = new Setup_Backend_Schema_Field_Xml('<field>
             <name>id</name>
             <type>text</type>
