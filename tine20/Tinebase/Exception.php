@@ -140,12 +140,14 @@ class Tinebase_Exception extends Exception
             "/->loginFromPost\('([^']*)', '[^']*'/",
             "/->validate\('([^']*)', '[^']*'/",
             "/->(_{0,1})authenticate\('([^']*)', '[^']*'/",
+            "/->updateCredentialCache\('[^']*'/",
         );
         $replacements = array(
             "->login('$1', '********'",
             "->loginFromPost('$1', '********'",
             "->validate('$1', '********'",
             "->$1authenticate('$2', '********'",
+            "->updateCredentialCache('********'",
         );
         
         return preg_replace($passwordPatterns, $replacements, $_traceString);
