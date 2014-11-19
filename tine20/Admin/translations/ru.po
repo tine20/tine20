@@ -184,11 +184,11 @@ msgstr "настройки"
 msgid "Search:"
 msgstr "Поиск:"
 
-#: js/Applications.js:230 js/user/EditDialog.js:886
+#: js/Applications.js:230 js/user/EditDialog.js:888
 msgid "disabled"
 msgstr "отключено"
 
-#: js/Applications.js:233 js/user/EditDialog.js:885
+#: js/Applications.js:233 js/user/EditDialog.js:887
 msgid "enabled"
 msgstr "включено"
 
@@ -218,7 +218,7 @@ msgstr "Порядок"
 msgid "Name"
 msgstr "Имя"
 
-#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:877
+#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:879
 msgid "Status"
 msgstr "Статус"
 
@@ -461,7 +461,7 @@ msgstr "Данный класс записи не найден"
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:734
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -701,19 +701,19 @@ msgstr "Не удалось сохранить группу."
 msgid "Group Name"
 msgstr "Название группы"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:924
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:926
 msgid "Visibility"
 msgstr "Видимость"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Display in addressbook"
 msgstr "Отображать в адресной книге"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Hide from addressbook"
 msgstr "Скрыть в адресной книги"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:945
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:947
 msgid "Saved in Addressbook"
 msgstr "Сохранено в адресную книгу"
 
@@ -808,32 +808,32 @@ msgstr "Сбросить пароль"
 msgid "Display name"
 msgstr "Отображать как"
 
-#: js/user/GridPanel.js:174 js/user/EditDialog.js:808
-#: js/user/EditDialog.js:853
+#: js/user/GridPanel.js:174 js/user/EditDialog.js:810
+#: js/user/EditDialog.js:855
 msgid "Login name"
 msgstr "Имя пользователя"
 
-#: js/user/GridPanel.js:175 js/user/EditDialog.js:802
+#: js/user/GridPanel.js:175 js/user/EditDialog.js:804
 msgid "Last name"
 msgstr "Фамилия"
 
-#: js/user/GridPanel.js:176 js/user/EditDialog.js:791
+#: js/user/GridPanel.js:176 js/user/EditDialog.js:793
 msgid "First name"
 msgstr "Имя"
 
-#: js/user/GridPanel.js:177 js/user/EditDialog.js:845
+#: js/user/GridPanel.js:177 js/user/EditDialog.js:847
 msgid "Email"
 msgstr "Электронная почта"
 
-#: js/user/GridPanel.js:178 js/user/EditDialog.js:852
+#: js/user/GridPanel.js:178 js/user/EditDialog.js:854
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/GridPanel.js:179 js/user/EditDialog.js:985
+#: js/user/GridPanel.js:179 js/user/EditDialog.js:987
 msgid "Last login at"
 msgstr "Последний регистрировался в"
 
-#: js/user/GridPanel.js:180 js/user/EditDialog.js:989
+#: js/user/GridPanel.js:180 js/user/EditDialog.js:991
 msgid "Last login from"
 msgstr "Последняя регистрация от"
 
@@ -841,7 +841,7 @@ msgstr "Последняя регистрация от"
 msgid "Password changed"
 msgstr "Пароль изменен"
 
-#: js/user/GridPanel.js:182 js/user/EditDialog.js:918
+#: js/user/GridPanel.js:182 js/user/EditDialog.js:920
 msgid "Expires"
 msgstr "Истекает"
 
@@ -876,7 +876,7 @@ msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Домен недопустим. Пожалуйста, проверьте настройки домена в конфигурации SMTP"
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:731
+#: js/user/EditDialog.js:733
 msgid "Passwords do not match!"
 msgstr "Пароли не совпадают!"
 
@@ -884,7 +884,7 @@ msgstr "Пароли не совпадают!"
 msgid "Passwords match!"
 msgstr "Пароли совпадают!"
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:859
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:861
 msgid "Primary group"
 msgstr "Основная группа"
 
@@ -912,8 +912,8 @@ msgstr "Домашний диск"
 msgid "Logon Time"
 msgstr "Время выхода"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:987
-#: js/user/EditDialog.js:991
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:989
+#: js/user/EditDialog.js:993
 msgid "never logged in"
 msgstr "никогда не регистрировался"
 
@@ -937,8 +937,8 @@ msgstr "Путь профиля"
 msgid "Password Last Set"
 msgstr "Последняя установка пароля"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:921
-#: js/user/EditDialog.js:995
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:923
+#: js/user/EditDialog.js:997
 msgid "never"
 msgstr "никогда"
 
@@ -987,7 +987,7 @@ msgstr "Квота Sieve (МБ)"
 msgid "Current Sieve size"
 msgstr "Размер Sieve"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:970
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:972
 msgid "Information"
 msgstr "Информация"
 
@@ -995,11 +995,11 @@ msgstr "Информация"
 msgid "Last Login"
 msgstr "Последний вход"
 
-#: js/user/EditDialog.js:616
+#: js/user/EditDialog.js:618
 msgid "Domain not allowed"
 msgstr "Домен недопустим"
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:619
 #, python-brace-format
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
@@ -1008,99 +1008,99 @@ msgid ""
 " configured already."
 msgstr ""
 
-#: js/user/EditDialog.js:626
+#: js/user/EditDialog.js:628
 msgid "Email Alias"
 msgstr "Псевдонимы почты"
 
-#: js/user/EditDialog.js:632
+#: js/user/EditDialog.js:634
 msgid "Add an alias address..."
 msgstr "Добавить псевдоним..."
 
-#: js/user/EditDialog.js:650
+#: js/user/EditDialog.js:652
 msgid "Forwarding to self"
 msgstr "Пересылка себе"
 
-#: js/user/EditDialog.js:651
+#: js/user/EditDialog.js:653
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
 msgstr "Вы не можете перенаправить письмо на заданный адрес."
 
-#: js/user/EditDialog.js:660
+#: js/user/EditDialog.js:662
 msgid "Email Forward"
 msgstr "Пересылка почты"
 
-#: js/user/EditDialog.js:666
+#: js/user/EditDialog.js:668
 msgid "Add a forward address..."
 msgstr "Добавить адрес для пересылки..."
 
-#: js/user/EditDialog.js:679
+#: js/user/EditDialog.js:681
 msgid "Forward Only"
 msgstr "Только пересылка"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:700
 msgid "Password confirmation"
 msgstr "Подтверждение пароля"
 
-#: js/user/EditDialog.js:715
+#: js/user/EditDialog.js:717
 msgid "Repeat password"
 msgstr "Повтор пароля"
 
-#: js/user/EditDialog.js:741
+#: js/user/EditDialog.js:743
 msgid "Ok"
 msgstr "Ok"
 
-#: js/user/EditDialog.js:776
+#: js/user/EditDialog.js:778
 msgid "Account"
 msgstr "Учётная запись"
 
-#: js/user/EditDialog.js:814
+#: js/user/EditDialog.js:816
 msgid "Password"
 msgstr "Пароль"
 
-#: js/user/EditDialog.js:887
+#: js/user/EditDialog.js:889
 msgid "expired"
 msgstr "завершённый"
 
-#: js/user/EditDialog.js:888
+#: js/user/EditDialog.js:890
 msgid "blocked"
 msgstr "заблокирован"
 
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:897
 msgid "Invalid Status"
 msgstr "Некорректный статус"
 
-#: js/user/EditDialog.js:896
+#: js/user/EditDialog.js:898
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr "Статус \"заблокировано\" будет стоять только в том случае, если пользователь часто ошибался с вводом пароля. Выставить этот статус здесь невозможно."
 
-#: js/user/EditDialog.js:987 js/user/EditDialog.js:991
+#: js/user/EditDialog.js:989 js/user/EditDialog.js:993
 msgid "don't know"
 msgstr "неизвестно"
 
-#: js/user/EditDialog.js:993
+#: js/user/EditDialog.js:995
 msgid "Password set"
 msgstr "Пароль установлен"
 
-#: js/user/EditDialog.js:1000
+#: js/user/EditDialog.js:1002
 msgid "User groups"
 msgstr "Группы пользователей"
 
-#: js/user/EditDialog.js:1006
+#: js/user/EditDialog.js:1008
 msgid "User roles"
 msgstr "Роли пользователей"
 
-#: js/user/EditDialog.js:1012
+#: js/user/EditDialog.js:1014
 msgid "Fileserver"
 msgstr "Файловый сервер"
 
-#: js/user/EditDialog.js:1018
+#: js/user/EditDialog.js:1020
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:1027
+#: js/user/EditDialog.js:1029
 msgid "SMTP"
 msgstr "SMTP"
 

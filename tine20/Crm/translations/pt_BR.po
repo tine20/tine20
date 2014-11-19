@@ -31,22 +31,23 @@ msgstr "Estado da Liderança"
 msgid "Leadtype"
 msgstr "Tipo da Liderança"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:369
-#: js/LeadGridDetailsPanel.js:459
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:146
+#: js/LeadEditDialog.js:369 js/LeadGridDetailsPanel.js:459
+#: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Fonte da Liderança"
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:147 js/Model.js:111
+#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:112
 #: Controller/Lead.php:200
 msgid "Turnover"
 msgstr "Volume de Negócios"
 
-#: Export/Pdf.php:90 js/LeadGridPanel.js:146 js/Model.js:110
+#: Export/Pdf.php:90 js/LeadGridPanel.js:147 js/Model.js:110
 #: js/LeadEditDialog.js:222 Controller/Lead.php:201
 msgid "Probability"
 msgstr "Probabilidade"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:406 js/LeadGridDetailsPanel.js:444
+#: Export/Pdf.php:93 js/LeadEditDialog.js:408 js/LeadGridDetailsPanel.js:444
 #: Controller/Lead.php:197
 msgid "Start"
 msgstr "Iniciar"
@@ -75,15 +76,15 @@ msgstr "Telefone"
 msgid "Email"
 msgstr "Email"
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr "Tarefas"
 
-#: Export/Pdf.php:252 js/Task.js:227
+#: Export/Pdf.php:252 js/Task.js:224
 msgid "Due Date"
 msgstr "Data de Vencimento"
 
-#: Export/Pdf.php:259 js/Task.js:240
+#: Export/Pdf.php:259 js/Task.js:237
 msgid "Priority"
 msgstr "Prioridade"
 
@@ -184,27 +185,27 @@ msgstr "Responsável"
 msgid "Task"
 msgstr ""
 
-#: js/Task.js:109
+#: js/Task.js:105
 msgid "No Tasks to display"
 msgstr "Nenhuma tarefa para exibir"
 
-#: js/Task.js:219
+#: js/Task.js:216
 msgid "Summary"
 msgstr "Sumário"
 
-#: js/Task.js:223
+#: js/Task.js:220
 msgid "Add a task..."
 msgstr "Adicionar uma tarefa..."
 
-#: js/Task.js:256
+#: js/Task.js:253
 msgid "Percent"
 msgstr "Percentual"
 
-#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "Status"
 
-#: js/Task.js:285
+#: js/Task.js:282
 msgid "Organizer"
 msgstr ""
 
@@ -282,7 +283,7 @@ msgstr "Editar selecionados {0}"
 msgid "Product"
 msgstr "Produto"
 
-#: js/Product.js:139 js/LeadEditDialog.js:444
+#: js/Product.js:139 js/LeadEditDialog.js:446
 msgid "Description"
 msgstr "Descrição"
 
@@ -310,36 +311,36 @@ msgstr "Marcadores"
 msgid "Lead name"
 msgstr "Nome Principal"
 
-#: js/LeadGridPanel.js:149 js/Model.js:118 js/LeadEditDialog.js:412
+#: js/LeadGridPanel.js:150 js/Model.js:119 js/LeadEditDialog.js:414
 #: js/LeadGridDetailsPanel.js:449
 msgid "Estimated end"
 msgstr "Fim Estimado"
 
-#: js/LeadGridPanel.js:150
+#: js/LeadGridPanel.js:151
 msgid "Probable Turnover"
 msgstr "Volume Provável de Negócios"
 
-#: js/LeadGridPanel.js:151 js/Model.js:119 js/LeadEditDialog.js:393
+#: js/LeadGridPanel.js:152 js/Model.js:120 js/LeadEditDialog.js:395
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadGridPanel.js:194
+#: js/LeadGridPanel.js:195
 msgid "Export Lead"
 msgstr "Exportar Liderança"
 
-#: js/LeadGridPanel.js:203
+#: js/LeadGridPanel.js:204
 msgid "Export as PDF"
 msgstr "Exportar como PDF"
 
-#: js/LeadGridPanel.js:210
+#: js/LeadGridPanel.js:211
 msgid "Export as CSV"
 msgstr "Exportar como CSV"
 
-#: js/LeadGridPanel.js:217
+#: js/LeadGridPanel.js:218
 msgid "Export as ODS"
 msgstr "Exportar como ODS"
 
-#: js/LeadGridPanel.js:224
+#: js/LeadGridPanel.js:225
 msgid "Export as XLS"
 msgstr "Exportar como XLS"
 
@@ -367,29 +368,29 @@ msgstr "listas de líderes"
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:113
+#: js/Model.js:114
 msgid "Last Modified Time"
 msgstr "Hora da Última Modificação"
 
-#: js/Model.js:114
+#: js/Model.js:115
 msgid "Last Modified By"
 msgstr "Modificado recentemente por"
 
-#: js/Model.js:115
+#: js/Model.js:116
 msgid "Creation Time"
 msgstr "Hora de Criação"
 
-#: js/Model.js:116
+#: js/Model.js:117
 msgid "Created By"
 msgstr "Criado por"
 
-#: js/Model.js:159
+#: js/Model.js:160
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Definições"
 msgstr[1] "Definições"
 
-#: js/Model.js:162
+#: js/Model.js:163
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "lista de registros"
@@ -411,11 +412,11 @@ msgstr "Você não possui privilégio para executar a aplicação de Vendas ou n
 msgid "Enter short name"
 msgstr "Insira um nome curto"
 
-#: js/LeadEditDialog.js:385
+#: js/LeadEditDialog.js:386
 msgid "Expected turnover"
 msgstr "Volume esperado de negócios"
 
-#: js/LeadEditDialog.js:458
+#: js/LeadEditDialog.js:460
 msgid "Enter description"
 msgstr "Insira a descrição"
 
@@ -449,7 +450,7 @@ msgid_plural "Lead Sources"
 msgstr[0] "Fonte da Liderança"
 msgstr[1] "Fonte das Lideranças"
 
-#: js/LeadSource.js:136
+#: js/LeadSource.js:153
 msgid "Add a Leadsource..."
 msgstr "Adicionar Fonte de Liderança..."
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:25+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -187,9 +187,13 @@ msgid ""
 "vendor!"
 msgstr "La finestra che si desidera utilizzare è in background. Il tuo browser non contempla la funzione di mettere automaticamnte in primo piano la finestra, quindi è necessario utilizzare la finestra di funzionamento dei sistemi di commutazione. Si prega di inviare eventuali reclami al fornitore browser!"
 
-#: js/ux/Percentage.js:193
+#: js/ux/Percentage.js:229
 msgid "(paused)"
 msgstr "(in pausa)"
+
+#: js/ux/grid/GroupingGridPlugin.js:95
+msgid "Export Records from these Positions"
+msgstr ""
 
 #: js/ux/grid/PagingToolbar.js:57
 #, python-brace-format
@@ -306,7 +310,7 @@ msgstr "scegli altri {0}..."
 msgid "Software Version"
 msgstr "Versione software"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:427
+#: js/ExceptionDialog.js:62 Frontend/Http.php:432
 msgid "Abnormal End"
 msgstr "Chiusura anomala"
 
@@ -314,7 +318,7 @@ msgstr "Chiusura anomala"
 msgid "Send Report"
 msgstr "Invia Rapporto"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:428
+#: js/ExceptionDialog.js:154 Frontend/Http.php:433
 msgid "An error occurred, the program ended abnormal."
 msgstr "È verificato un errore, il programma è terminato in modo anomalo."
 
@@ -420,7 +424,7 @@ msgid ""
 "administrator."
 msgstr "Non ci sono applicazioni abilitate per te. Si prega di contattare l'amministratore."
 
-#: js/ApplicationStarter.js:539
+#: js/ApplicationStarter.js:545
 msgid "New "
 msgstr ""
 
@@ -496,42 +500,42 @@ msgstr "Errore"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Le nuove password non corrispondono, si prega di correggerli."
 
-#: js/common.js:235
+#: js/common.js:261
 msgid "Usage:&#160;"
 msgstr "Utilizzo:&#160;"
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
 msgstr "personale"
 
-#: js/common.js:273 js/common.js:311
+#: js/common.js:300 js/common.js:338
 msgid "No Information"
 msgstr "Nessuna informazione"
 
-#: js/common.js:360
+#: js/common.js:387
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuti"
 msgstr[1] "{0} minuti"
 
-#: js/common.js:361
+#: js/common.js:388
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} ore"
 msgstr[1] "{0} ore"
 
-#: js/common.js:362
+#: js/common.js:389
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} giorno lavorativi"
 msgstr[1] "{0} giorno lavorativi"
 
-#: js/common.js:389
+#: js/common.js:416
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -1136,20 +1140,20 @@ msgstr "Impossibile aggiornare tag."
 msgid "Save current view as favorite"
 msgstr "Salva visualizzazione corrente come preferita"
 
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "New version of Tine 2.0 available"
 msgstr "Nuova versione di Tine 2.0 disponibile"
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Versione \"{0}\" di Tine 2.0 è disponibile."
 
-#: js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Si tratta di un aggiornamento critico e deve essere installato il più presto possibile!"
 
-#: js/widgets/VersionCheck.js:61
+#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr "Ti consigliamo di aggiornare!"
 
@@ -2400,7 +2404,7 @@ msgstr "Disconnessione..."
 msgid "Please wait!"
 msgstr "Si prega di attendere!"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:401
+#: js/ExceptionHandler.js:168 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr "Autorizzazione richiesta"
 
@@ -2794,16 +2798,21 @@ msgstr "Conferma Disconnessione"
 msgid "Show confirmation dialog on logout."
 msgstr "Visualizza finestra di conferma alla disconnessione."
 
-#: Frontend/Http.php:402
+#: Frontend/Cli.php:736
+#, python-format
+msgid "%s's personal "
+msgstr ""
+
+#: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
 msgstr "La tua sessione non è valida. Devi effettuare il login nuovamente."
 
-#: Container.php:690
+#: Container.php:706
 #, python-format
 msgid "%s's personal container"
 msgstr "contenitore personale di %s"
 
-#: Container.php:1549
+#: Container.php:1617
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3113,47 +3122,47 @@ msgstr "N/A"
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:504
+#: WebDav/PrincipalBackend.php:525
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3325
+#: Setup/setup.xml:3345
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3330
+#: Setup/setup.xml:3350
 msgid "default note type"
 msgstr "tipo di nota predefinita"
 
-#: Setup/setup.xml:3356
+#: Setup/setup.xml:3376
 msgid "telephone"
 msgstr "telefono"
 
-#: Setup/setup.xml:3361
+#: Setup/setup.xml:3381
 msgid "telephone call"
 msgstr "telefonata"
 
-#: Setup/setup.xml:3387
+#: Setup/setup.xml:3407
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3392
+#: Setup/setup.xml:3412
 msgid "email contact"
 msgstr "contatto email"
 
-#: Setup/setup.xml:3418
+#: Setup/setup.xml:3438
 msgid "created"
 msgstr "Creato"
 
-#: Setup/setup.xml:3423
+#: Setup/setup.xml:3443
 msgid "record created"
 msgstr "Dato creato"
 
-#: Setup/setup.xml:3449
+#: Setup/setup.xml:3469
 msgid "changed"
 msgstr "modificato"
 
-#: Setup/setup.xml:3454
+#: Setup/setup.xml:3474
 msgid "record changed"
 msgstr "dato modificato"
 

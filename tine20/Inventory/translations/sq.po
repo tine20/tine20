@@ -48,115 +48,69 @@ msgstr "Emri"
 msgid "Status"
 msgstr "Statusi"
 
-#: Model/InventoryItem.php:67
+#: Model/InventoryItem.php:66
 msgid "Inventory ID"
 msgstr "ID Inventari"
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:121
+#: Model/InventoryItem.php:70 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "Përshkrimi"
 
-#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:155
+#: Model/InventoryItem.php:74 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Vendndodhja"
 
-#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:283
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:283
 msgid "Invoice date"
 msgstr "Data e Faturës"
 
-#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:277
 msgid "Invoice"
 msgstr "Faturë"
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:257
 msgid "Price"
 msgstr "Çmimi"
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:264
 msgid "Cost centre"
 msgstr "Qëndra e Kostove"
 
-#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:168
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "Garancia"
 
-#: Model/InventoryItem.php:124
+#: Model/InventoryItem.php:123
 msgid "Item added"
 msgstr "Artikull i  shtuar"
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:130
 msgid "Item removed"
 msgstr "Artikull i hequr"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:289
 msgid "Depreciate"
 msgstr "Zhvlerëso"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Import CSV i inventarit"
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr "Eksporto Inventarin"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "importo listen (###CURRENTDATE###)"
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr "Eksporto si ODS"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "Artikuj të importuar në ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME###"
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr "Eksporto si CSV"
 
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Statusi i mundshëm i inventarit"
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr "Eksporto si..."
 
-#: Config.php:33
-msgid "Possible status."
-msgstr "Statusi i mundshëm"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "Inventari"
-
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
-msgid "All Inventory Items"
-msgstr "Të gjithë Artikujt e inventarit"
-
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
-msgid "All existing Inventory Items"
-msgstr "Të gjithë Artikujt egzistues të inventarit"
-
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "porositur"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "i mundshëm"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "difektoz"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "mungon"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "hequr"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "i/e panjohur"
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Kontenieri i paracaktuar për artikujt e rinj"
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
+msgstr "Importo Artikujt"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -194,22 +148,68 @@ msgstr "Numri i disponueshëm"
 msgid "Accounting"
 msgstr "Llogaritje"
 
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
-msgstr "Eksporto Inventarin"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Kontenieri i paracaktuar i artikujve te inventarit"
 
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
-msgstr "Eksporto si ODS"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Kontenieri i paracaktuar për artikujt e rinj"
 
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
-msgstr "Eksporto si CSV"
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Statusi i mundshëm i inventarit"
 
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
-msgstr "Eksporto si..."
+#: Config.php:33
+msgid "Possible status."
+msgstr "Statusi i mundshëm"
 
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
-msgstr "Importo Artikujt"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Import CSV i inventarit"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "importo listen (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Artikuj të importuar në ###CURRENTDATE### më ###CURRENTTIME### nga ###USERFULLNAME###"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "Inventari"
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr "porositur"
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr "i mundshëm"
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr "difektoz"
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr "mungon"
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr "hequr"
+
+#: Setup/Initialize.php:38
+msgid "unknown"
+msgstr "i/e panjohur"
+
+#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+msgid "All Inventory Items"
+msgstr "Të gjithë Artikujt e inventarit"
+
+#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+msgid "All existing Inventory Items"
+msgstr "Të gjithë Artikujt egzistues të inventarit"

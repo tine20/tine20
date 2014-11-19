@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,6 +18,11 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+
+#: Controller.php:102
+#, python-format
+msgid "%s's personal tasks"
+msgstr "%ss persönliche Aufgaben"
 
 #: Acl/Rights.php:96
 msgid "manage shared task lists"
@@ -35,158 +40,81 @@ msgstr "Gemeinsame Aufgaben-Favoriten verwalten"
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben-Favoriten erstellen oder bearbeiten"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal tasks"
-msgstr "%ss persönliche Aufgaben"
-
-#: Model/Task.php:206
+#: Model/Task.php:207
 msgid "Due"
 msgstr "Fälligkeit"
 
-#: Model/Task.php:207 js/TaskEditDialog.js:200
+#: Model/Task.php:208 js/TaskEditDialog.js:204
 msgid "Organizer"
 msgstr "Organisator"
 
-#: Model/Task.php:208
+#: Model/Task.php:209
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/Task.php:209 js/TaskGridPanel.js:119 js/TaskEditDialog.js:192
+#: Model/Task.php:210 js/TaskEditDialog.js:196 js/TaskGridPanel.js:119
 msgid "Priority"
 msgstr "Priorität"
 
-#: Model/Task.php:210 js/TaskGridPanel.js:148 js/TaskEditDialog.js:222
+#: Model/Task.php:211 js/TaskEditDialog.js:226 js/TaskGridPanel.js:148
 #: js/Models.js:110 js/Models.js:168
 msgid "Status"
 msgid_plural "Status"
 msgstr[0] "Status"
 msgstr[1] "Status"
 
-#: Model/Task.php:211 js/TaskGridPanel.js:135
+#: Model/Task.php:212 js/TaskGridPanel.js:135
 msgid "Percent"
 msgstr "Prozent"
 
-#: Model/Task.php:218 js/TaskGridPanel.js:90
+#: Model/Task.php:219 js/TaskGridPanel.js:87
 msgid "Lead"
 msgstr "Lead"
 
-#: Model/Task.php:224
+#: Model/Task.php:225
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Model/Task.php:225
+#: Model/Task.php:226
 msgid "Email"
 msgstr "Email"
 
-#: Config.php:38
-msgid "Tasks status available"
-msgstr "Verfügbare Taskstatus"
+#: js/TaskEditDialog.js:89
+msgid "Add New Task"
+msgstr ""
 
-#: Config.php:40
-msgid ""
-"Possible tasks status. Please note that additional attendee status might "
-"impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+#: js/TaskEditDialog.js:140
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
 
-#: Config.php:48
-msgid "Task priorities available"
-msgstr "Verfügbare Aufgabenprioritäten"
+#: js/TaskEditDialog.js:185 js/TaskGridPanel.js:97 js/Models.js:107
+msgid "Summary"
+msgstr "Beschreibung"
 
-#: Config.php:50
-msgid ""
-"Possible task priorities. Please note that additional priorities might "
-"impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenprioritäten. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+#: js/TaskEditDialog.js:192
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
 
-#: Setup/Update/Release5.php:74 Setup/Initialize.php:34
-msgid "No response"
-msgstr "Keine Antwort"
+#: js/TaskEditDialog.js:205
+msgid "Add Responsible ..."
+msgstr "Verantwortlichen hinzufügen ..."
 
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:35
-#: js/TaskGridPanel.js:171 js/TaskEditDialog.js:230
+#: js/TaskEditDialog.js:212
+msgid "Notes"
+msgstr "Anmerkungen"
+
+#: js/TaskEditDialog.js:213
+msgid "Enter description..."
+msgstr "Beschreibung eingeben..."
+
+#: js/TaskEditDialog.js:219
+msgid "Percentage"
+msgstr "Prozent"
+
+#: js/TaskEditDialog.js:234 js/TaskGridPanel.js:171 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:75
 msgid "Completed"
 msgstr "Abgeschlossen"
-
-#: Setup/Update/Release5.php:76 Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Abgebrochen"
-
-#: Setup/Update/Release5.php:77 Setup/Initialize.php:37
-msgid "In process"
-msgstr "Laufend"
-
-#: Setup/Update/Release5.php:167 Setup/Initialize.php:50
-msgid "low"
-msgstr "niedrig"
-
-#: Setup/Update/Release5.php:168 Setup/Initialize.php:51
-msgid "normal"
-msgstr "normal"
-
-#: Setup/Update/Release5.php:169 Setup/Initialize.php:52
-msgid "high"
-msgstr "hoch"
-
-#: Setup/Update/Release5.php:170 Setup/Initialize.php:53
-msgid "urgent"
-msgstr "dringend"
-
-#: Setup/Update/Release3.php:65 Setup/Initialize.php:81
-msgid "All tasks of my taskslists"
-msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
-
-#: Setup/Initialize.php:90
-msgid "My open tasks"
-msgstr "Offene Aufgaben für mich"
-
-#: Setup/Initialize.php:99
-msgid "My open tasks this week"
-msgstr "Offene Aufgaben für mich (diese Woche)"
-
-#: Setup/Initialize.php:108
-msgid "All tasks for me"
-msgstr "Alle Aufgaben für mich"
-
-#: Setup/Initialize.php:109
-msgid "All tasks that I am responsible for"
-msgstr "Alle Aufgaben, für die ich verantwortlich bin"
-
-#: Setup/Initialize.php:116
-msgid "Last modified by me"
-msgstr "Zuletzt von mir bearbeitet"
-
-#: Setup/Initialize.php:117
-msgid "All tasks that I have last modified"
-msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
-
-#: Setup/Initialize.php:126
-msgid "Tasks without responsible"
-msgstr "Aufgaben ohne Verantwortlichen"
-
-#: Preference.php:24
-msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
-
-#: Preference.php:66
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:67
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
-
-#: Preference.php:70
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:71
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: js/Tasks.js:39
-msgid "New Task"
-msgstr "Neue Aufgabe"
 
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
@@ -194,13 +122,9 @@ msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
 msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 
-#: js/TaskGridPanel.js:87
+#: js/TaskGridPanel.js:82
 msgid "Tags"
 msgstr "Tags"
-
-#: js/TaskGridPanel.js:97 js/TaskEditDialog.js:181 js/Models.js:107
-msgid "Summary"
-msgstr "Beschreibung"
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."
@@ -218,29 +142,9 @@ msgstr "Angelegt am"
 msgid "Responsible"
 msgstr "Verantwortlich"
 
-#: js/TaskEditDialog.js:136
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
-
-#: js/TaskEditDialog.js:188
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
-
-#: js/TaskEditDialog.js:201
-msgid "Add Responsible ..."
-msgstr "Verantwortlichen hinzufügen ..."
-
-#: js/TaskEditDialog.js:208
-msgid "Notes"
-msgstr "Anmerkungen"
-
-#: js/TaskEditDialog.js:209
-msgid "Enter description..."
-msgstr "Beschreibung eingeben..."
-
-#: js/TaskEditDialog.js:215
-msgid "Percentage"
-msgstr "Prozent"
+#: js/Tasks.js:39
+msgid "New Task"
+msgstr "Neue Aufgabe"
 
 #: js/Models.js:66
 msgid "Task"
@@ -281,3 +185,103 @@ msgstr "Angelegt von"
 #: Controller/Task.php:202
 msgid "Notification for Task "
 msgstr "Benachrichtigung für Aufgabe "
+
+#: Preference.php:24
+msgid "All my tasks"
+msgstr "Alle meine Aufgaben"
+
+#: Preference.php:66
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:67
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
+
+#: Preference.php:70
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:71
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: Config.php:38
+msgid "Tasks status available"
+msgstr "Verfügbare Taskstatus"
+
+#: Config.php:40
+msgid ""
+"Possible tasks status. Please note that additional attendee status might "
+"impact other Tasks systems on export or syncronisation."
+msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+
+#: Config.php:48
+msgid "Task priorities available"
+msgstr "Verfügbare Aufgabenprioritäten"
+
+#: Config.php:50
+msgid ""
+"Possible task priorities. Please note that additional priorities might "
+"impact other Tasks systems on export or syncronisation."
+msgstr "Verfügbare Aufgabenprioritäten. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+
+#: Setup/Initialize.php:34 Setup/Update/Release5.php:74
+msgid "No response"
+msgstr "Keine Antwort"
+
+#: Setup/Initialize.php:36 Setup/Update/Release5.php:76
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: Setup/Initialize.php:37 Setup/Update/Release5.php:77
+msgid "In process"
+msgstr "Laufend"
+
+#: Setup/Initialize.php:50 Setup/Update/Release5.php:167
+msgid "low"
+msgstr "niedrig"
+
+#: Setup/Initialize.php:51 Setup/Update/Release5.php:168
+msgid "normal"
+msgstr "normal"
+
+#: Setup/Initialize.php:52 Setup/Update/Release5.php:169
+msgid "high"
+msgstr "hoch"
+
+#: Setup/Initialize.php:53 Setup/Update/Release5.php:170
+msgid "urgent"
+msgstr "dringend"
+
+#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+msgid "All tasks of my taskslists"
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
+
+#: Setup/Initialize.php:90
+msgid "My open tasks"
+msgstr "Offene Aufgaben für mich"
+
+#: Setup/Initialize.php:99
+msgid "My open tasks this week"
+msgstr "Offene Aufgaben für mich (diese Woche)"
+
+#: Setup/Initialize.php:108
+msgid "All tasks for me"
+msgstr "Alle Aufgaben für mich"
+
+#: Setup/Initialize.php:109
+msgid "All tasks that I am responsible for"
+msgstr "Alle Aufgaben, für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:116
+msgid "Last modified by me"
+msgstr "Zuletzt von mir bearbeitet"
+
+#: Setup/Initialize.php:117
+msgid "All tasks that I have last modified"
+msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
+
+#: Setup/Initialize.php:126
+msgid "Tasks without responsible"
+msgstr "Aufgaben ohne Verantwortlichen"

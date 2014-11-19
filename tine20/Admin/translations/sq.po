@@ -182,11 +182,11 @@ msgstr "konfigurime"
 msgid "Search:"
 msgstr "Kërko:"
 
-#: js/Applications.js:230 js/user/EditDialog.js:886
+#: js/Applications.js:230 js/user/EditDialog.js:888
 msgid "disabled"
 msgstr "ç'aktivizuar"
 
-#: js/Applications.js:233 js/user/EditDialog.js:885
+#: js/Applications.js:233 js/user/EditDialog.js:887
 msgid "enabled"
 msgstr "aktivizuar"
 
@@ -216,7 +216,7 @@ msgstr "Renditje"
 msgid "Name"
 msgstr "Emri"
 
-#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:877
+#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:879
 msgid "Status"
 msgstr "Status"
 
@@ -454,7 +454,7 @@ msgstr "Klasa e dhëne e regjistrimit nuk u gjet"
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:734
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Anullo"
 
@@ -692,19 +692,19 @@ msgstr "Nuk mund të ruhej grupi"
 msgid "Group Name"
 msgstr "Emër Grupi"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:924
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:926
 msgid "Visibility"
 msgstr "Dukshmëria"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Display in addressbook"
 msgstr "Shfaqni në bllokun e adresave"
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Hide from addressbook"
 msgstr "Fshihni nga blloku i adresave"
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:945
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:947
 msgid "Saved in Addressbook"
 msgstr "U ruajt në bllokun e adresave"
 
@@ -799,32 +799,32 @@ msgstr "Rivendosni Fjalëkalimin"
 msgid "Display name"
 msgstr "Emri i Shfaqur"
 
-#: js/user/GridPanel.js:174 js/user/EditDialog.js:808
-#: js/user/EditDialog.js:853
+#: js/user/GridPanel.js:174 js/user/EditDialog.js:810
+#: js/user/EditDialog.js:855
 msgid "Login name"
 msgstr "Emrii Hyrjes"
 
-#: js/user/GridPanel.js:175 js/user/EditDialog.js:802
+#: js/user/GridPanel.js:175 js/user/EditDialog.js:804
 msgid "Last name"
 msgstr "Mbiemri"
 
-#: js/user/GridPanel.js:176 js/user/EditDialog.js:791
+#: js/user/GridPanel.js:176 js/user/EditDialog.js:793
 msgid "First name"
 msgstr "Emri"
 
-#: js/user/GridPanel.js:177 js/user/EditDialog.js:845
+#: js/user/GridPanel.js:177 js/user/EditDialog.js:847
 msgid "Email"
 msgstr "E-Posta"
 
-#: js/user/GridPanel.js:178 js/user/EditDialog.js:852
+#: js/user/GridPanel.js:178 js/user/EditDialog.js:854
 msgid "OpenID"
 msgstr "OpenID"
 
-#: js/user/GridPanel.js:179 js/user/EditDialog.js:985
+#: js/user/GridPanel.js:179 js/user/EditDialog.js:987
 msgid "Last login at"
 msgstr "Hyrja e fundit më"
 
-#: js/user/GridPanel.js:180 js/user/EditDialog.js:989
+#: js/user/GridPanel.js:180 js/user/EditDialog.js:991
 msgid "Last login from"
 msgstr "Hyrja e fundit nga"
 
@@ -832,7 +832,7 @@ msgstr "Hyrja e fundit nga"
 msgid "Password changed"
 msgstr "Fjalëkalimi ndryshoi"
 
-#: js/user/GridPanel.js:182 js/user/EditDialog.js:918
+#: js/user/GridPanel.js:182 js/user/EditDialog.js:920
 msgid "Expires"
 msgstr "Skadon"
 
@@ -865,7 +865,7 @@ msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr "Domain nuk lejohet, Kontrolloni konfigurimet e domain-it SMTP"
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:731
+#: js/user/EditDialog.js:733
 msgid "Passwords do not match!"
 msgstr "Fjalëkalimet nuk përkojne"
 
@@ -873,7 +873,7 @@ msgstr "Fjalëkalimet nuk përkojne"
 msgid "Passwords match!"
 msgstr "Fjalëkalimet përkojne"
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:859
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:861
 msgid "Primary group"
 msgstr "Grupi primar"
 
@@ -901,8 +901,8 @@ msgstr "Arkiva Kryesore"
 msgid "Logon Time"
 msgstr "Koha e Hyrjes"
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:987
-#: js/user/EditDialog.js:991
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:989
+#: js/user/EditDialog.js:993
 msgid "never logged in"
 msgstr "Nuk ka hyrë asnjëhere"
 
@@ -926,8 +926,8 @@ msgstr "Rruga e profilit"
 msgid "Password Last Set"
 msgstr "Fjalëkalimi i funidit i vendosur më"
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:921
-#: js/user/EditDialog.js:995
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:923
+#: js/user/EditDialog.js:997
 msgid "never"
 msgstr "asnjëhere"
 
@@ -976,7 +976,7 @@ msgstr "Kuota Sieve (MB)"
 msgid "Current Sieve size"
 msgstr "Madhësia aktuale e Sieve"
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:970
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:972
 msgid "Information"
 msgstr "Informacion"
 
@@ -984,11 +984,11 @@ msgstr "Informacion"
 msgid "Last Login"
 msgstr "Hyrja e Fundit"
 
-#: js/user/EditDialog.js:616
+#: js/user/EditDialog.js:618
 msgid "Domain not allowed"
 msgstr "Domain nuk lejohet"
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:619
 #, python-brace-format
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
@@ -997,99 +997,99 @@ msgid ""
 " configured already."
 msgstr ""
 
-#: js/user/EditDialog.js:626
+#: js/user/EditDialog.js:628
 msgid "Email Alias"
 msgstr "Pseudonime të E-Postës"
 
-#: js/user/EditDialog.js:632
+#: js/user/EditDialog.js:634
 msgid "Add an alias address..."
 msgstr "Shtoni një pseudonim adrese..."
 
-#: js/user/EditDialog.js:650
+#: js/user/EditDialog.js:652
 msgid "Forwarding to self"
 msgstr "Ridrejtuar tek vetja"
 
-#: js/user/EditDialog.js:651
+#: js/user/EditDialog.js:653
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
 msgstr "Ju nuk jeni të lejuar të vendosni një adresë poste ridrejtuese të njëjtë meadresVn parësore të përdoruesit ose pseudonimin"
 
-#: js/user/EditDialog.js:660
+#: js/user/EditDialog.js:662
 msgid "Email Forward"
 msgstr "Ridrejtim E-Poste"
 
-#: js/user/EditDialog.js:666
+#: js/user/EditDialog.js:668
 msgid "Add a forward address..."
 msgstr "Shto një adresë ridrejtimi"
 
-#: js/user/EditDialog.js:679
+#: js/user/EditDialog.js:681
 msgid "Forward Only"
 msgstr "Vetëm Ridrejtim"
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:700
 msgid "Password confirmation"
 msgstr "Konfirmim Fjalëkalimi"
 
-#: js/user/EditDialog.js:715
+#: js/user/EditDialog.js:717
 msgid "Repeat password"
 msgstr "Përsërisni Fjalëkalimin"
 
-#: js/user/EditDialog.js:741
+#: js/user/EditDialog.js:743
 msgid "Ok"
 msgstr "OK"
 
-#: js/user/EditDialog.js:776
+#: js/user/EditDialog.js:778
 msgid "Account"
 msgstr "Llogari"
 
-#: js/user/EditDialog.js:814
+#: js/user/EditDialog.js:816
 msgid "Password"
 msgstr "Fjalëkalimi"
 
-#: js/user/EditDialog.js:887
+#: js/user/EditDialog.js:889
 msgid "expired"
 msgstr "skaduar"
 
-#: js/user/EditDialog.js:888
+#: js/user/EditDialog.js:890
 msgid "blocked"
 msgstr "bllokuar"
 
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:897
 msgid "Invalid Status"
 msgstr "Status i Gabuar"
 
-#: js/user/EditDialog.js:896
+#: js/user/EditDialog.js:898
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr "Statusi i bllokuar është i vlefshëm vetëm nëse përdoruesi provoi të hynte shumë shpeshme fjalëkalim të gabuar. Nuk është e mundur të vendoset ky status këtu"
 
-#: js/user/EditDialog.js:987 js/user/EditDialog.js:991
+#: js/user/EditDialog.js:989 js/user/EditDialog.js:993
 msgid "don't know"
 msgstr "nuk e di"
 
-#: js/user/EditDialog.js:993
+#: js/user/EditDialog.js:995
 msgid "Password set"
 msgstr "Fjalëkalimi u vendos"
 
-#: js/user/EditDialog.js:1000
+#: js/user/EditDialog.js:1002
 msgid "User groups"
 msgstr "Grupet e përdoruesëve"
 
-#: js/user/EditDialog.js:1006
+#: js/user/EditDialog.js:1008
 msgid "User roles"
 msgstr "Rolet e përdoruesëve"
 
-#: js/user/EditDialog.js:1012
+#: js/user/EditDialog.js:1014
 msgid "Fileserver"
 msgstr "Serveri Skedarëve"
 
-#: js/user/EditDialog.js:1018
+#: js/user/EditDialog.js:1020
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:1027
+#: js/user/EditDialog.js:1029
 msgid "SMTP"
 msgstr "SMTP"
 

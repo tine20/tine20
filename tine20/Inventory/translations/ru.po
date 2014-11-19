@@ -50,115 +50,69 @@ msgstr "Название"
 msgid "Status"
 msgstr "Состояние"
 
-#: Model/InventoryItem.php:67
+#: Model/InventoryItem.php:66
 msgid "Inventory ID"
 msgstr "Инвентарный №"
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:121
+#: Model/InventoryItem.php:70 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "Описание"
 
-#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:155
+#: Model/InventoryItem.php:74 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Расположение"
 
-#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:283
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:283
 msgid "Invoice date"
 msgstr "Дата счёта"
 
-#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:277
 msgid "Invoice"
 msgstr "Счёт"
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:257
 msgid "Price"
 msgstr "Цена"
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:264
 msgid "Cost centre"
 msgstr "Затраты"
 
-#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:168
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "Гарантия"
 
-#: Model/InventoryItem.php:124
+#: Model/InventoryItem.php:123
 msgid "Item added"
 msgstr "Пункт добавлен"
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:130
 msgid "Item removed"
 msgstr "пункт удалён"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:289
 msgid "Depreciate"
 msgstr "Не используется"
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr "Импорт файла CSV"
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr "Экспорт инвентаризации"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "Импорт списка (###CURRENTDATE###)"
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr "Экспортировать как ODS"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr "Экспортировать как CSV"
 
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr "Доступен статус инвенторизации"
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr "Экспортировать как..."
 
-#: Config.php:33
-msgid "Possible status."
-msgstr "Возможное состояние."
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr "инвентарь"
-
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
-msgid "All Inventory Items"
-msgstr "Все предметы из инвентаризации"
-
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
-msgid "All existing Inventory Items"
-msgstr "Все существующие предметы из инвентаризации"
-
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "заказан"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "доступен"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "повреждён"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "утерян"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "списан"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "неизвестно"
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr "Контейнер по-умолчанию для инвентаризации"
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr "Контейнер по-умолчанию для новых предметов"
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
+msgstr "Добавить предметы"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -196,22 +150,68 @@ msgstr "Доступный номер"
 msgid "Accounting"
 msgstr "Учёт"
 
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
-msgstr "Экспорт инвентаризации"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
+msgstr "Контейнер по-умолчанию для инвентаризации"
 
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
-msgstr "Экспортировать как ODS"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr "Контейнер по-умолчанию для новых предметов"
 
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
-msgstr "Экспортировать как CSV"
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr "Доступен статус инвенторизации"
 
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
-msgstr "Экспортировать как..."
+#: Config.php:33
+msgid "Possible status."
+msgstr "Возможное состояние."
 
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
-msgstr "Добавить предметы"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr "Импорт файла CSV"
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Импорт списка (###CURRENTDATE###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr "инвентарь"
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr "заказан"
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr "доступен"
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr "повреждён"
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr "утерян"
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr "списан"
+
+#: Setup/Initialize.php:38
+msgid "unknown"
+msgstr "неизвестно"
+
+#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+msgid "All Inventory Items"
+msgstr "Все предметы из инвентаризации"
+
+#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+msgid "All existing Inventory Items"
+msgstr "Все существующие предметы из инвентаризации"

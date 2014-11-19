@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-11 13:02+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -34,315 +34,25 @@ msgstr "lägg till email konton"
 msgid "Create new email accounts"
 msgstr "Skapa nya email konton"
 
-#: Model/Message.php:275
+#: Model/Message.php:281
 msgid "Reading Confirmation:"
 msgstr ""
 
-#: Model/Message.php:276
+#: Model/Message.php:282
 msgid "Your message:"
 msgstr ""
 
-#: Model/Message.php:277
+#: Model/Message.php:283
 msgid "Received on"
 msgstr ""
 
-#: Model/Message.php:278
+#: Model/Message.php:284
 msgid "Was read by:"
 msgstr ""
 
-#: Model/Message.php:279
+#: Model/Message.php:285
 msgid "on"
 msgstr ""
-
-#: Config.php:45
-msgid "Vacation Templates Container ID"
-msgstr "Container-ID för semester-mallar"
-
-#: Config.php:54
-msgid "Custom Vacation Message"
-msgstr "Anpassat semester-meddelande"
-
-#: Config.php:56
-msgid "User is allowed to set custom vacation message for system account"
-msgstr "Användare tillåts sätta eget semestermeddelande för systemkonto"
-
-#: Config.php:65
-msgid "Cache email body"
-msgstr "Lagra mails innehåll i cache"
-
-#: Config.php:67
-msgid ""
-"Should the email body be cached (recommended for slow IMAP server "
-"connections)"
-msgstr "Skall mails innehåll lagras i cache (rekommenderas för långsamma anslutningar till IMAP-server)"
-
-#: Setup/Initialize.php:44
-msgid "All inboxes of my email accounts"
-msgstr "Alla inkorgar av mina e-postkonton"
-
-#: Setup/Initialize.php:51
-msgid "All unread mail"
-msgstr "Alla olästa mail"
-
-#: Setup/Initialize.php:52
-msgid "All unread mail of my email accounts"
-msgstr "Alla olästa mail av mina e-postkonton"
-
-#: Setup/Initialize.php:59
-msgid "All highlighted mail"
-msgstr "Alla markerade mail"
-
-#: Setup/Initialize.php:60
-msgid "All highlighted mail of my email accounts"
-msgstr "Alla markerade mail av mina e-post konton"
-
-#: Setup/Initialize.php:67
-msgid "All drafts"
-msgstr "Alla utkast"
-
-#: Setup/Initialize.php:68
-msgid "All mails with the draft flag"
-msgstr "Alla brev med utkast flaggning"
-
-#: Preference.php:59
-msgid "All inboxes"
-msgstr "Alla inkorgar"
-
-#: Preference.php:106
-msgid "Default Email Account"
-msgstr "Standard e-postkonto"
-
-#: Preference.php:107
-msgid "The default email account to use when sending mails."
-msgstr "Den förvalda e-post kontot för att använda när du skickar e-post."
-
-#: Preference.php:110
-msgid "Email Update Interval"
-msgstr "E-post Updaterings Intervall"
-
-#: Preference.php:111
-msgid "How often should Felamimail check for new Emails (in minutes)."
-msgstr ""
-
-#: Preference.php:114
-msgid "Use in Addressbook"
-msgstr "Använd i Adressbok"
-
-#: Preference.php:115
-msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Komponera e-postmeddelanden från adressboken med Felamimail."
-
-#: Preference.php:118
-msgid "Use for NOTES"
-msgstr "Använd för NOTERINGAR"
-
-#: Preference.php:119
-msgid "Save Note default Value."
-msgstr "Spara Notifiering standard värde"
-
-#: Preference.php:122
-msgid "Confirm Delete"
-msgstr "bekräfta borttagning"
-
-#: Preference.php:123
-msgid "Show confirmation dialog when deleting mails."
-msgstr "Visa bekräftelseruta när du tar bort e-post."
-
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:180
-#: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
-#: js/AccountEditDialog.js:276
-msgid "None"
-msgstr "Ingen"
-
-#: js/ContactGrid.js:270
-msgid "Add as \"To\""
-msgstr "Lägg till som \"Till\""
-
-#: js/ContactGrid.js:281
-msgid "Add as \"Cc\""
-msgstr "Lägg till som \"Cc\""
-
-#: js/ContactGrid.js:292
-msgid "Add as \"Bcc\""
-msgstr "Lägg till som \"Bcc\""
-
-#: js/ContactGrid.js:303
-msgid "Remove from recipients"
-msgstr "Ta bort från mottagarna"
-
-#: js/ContactGrid.js:357 js/MessageEditDialog.js:556
-msgid "Loading Mail Addresses"
-msgstr "Laddar mailadresser"
-
-#: js/TreeContextMenu.js:23
-msgid "Empty Folder"
-msgstr "Tom Mapp"
-
-#: js/TreeContextMenu.js:59
-msgid "Add Folder"
-msgstr "Lätt till Mapp"
-
-#: js/TreeContextMenu.js:64
-msgid "New {0}"
-msgstr "Ny {0}"
-
-#: js/TreeContextMenu.js:64 js/TreeContextMenu.js:67 js/TreeContextMenu.js:70
-#: js/FolderFilterModel.js:30 js/Model.js:55 js/Model.js:520
-#: js/GridPanel.js:529
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Mapp"
-msgstr[1] "Mappar"
-
-#: js/TreeContextMenu.js:64
-msgid "Please enter the name of the new {0}:"
-msgstr "Ange namnet på den nya {0}:"
-
-#: js/TreeContextMenu.js:67
-msgid "No {0} added"
-msgstr "Ingen {0} lades till"
-
-#: js/TreeContextMenu.js:67
-msgid "You have to supply a {0} name!"
-msgstr "Du måste ange ett {0} namn!"
-
-#: js/TreeContextMenu.js:70
-msgid "Please wait"
-msgstr "Var god vänta"
-
-#: js/TreeContextMenu.js:70
-msgid "Creating {0}..."
-msgstr "Skapar {0} ..."
-
-#: js/TreeContextMenu.js:100
-msgid "Edit Account"
-msgstr "Ändra Användare"
-
-#: js/TreeContextMenu.js:128
-msgid "Edit Vacation Message"
-msgstr "Redigera Semester Meddelande"
-
-#: js/TreeContextMenu.js:144
-msgid "Edit Filter Rules"
-msgstr "Redigera filterregler"
-
-#: js/TreeContextMenu.js:158
-msgid "Mark Folder as read"
-msgstr "Markera mapp som läst"
-
-#: js/TreeContextMenu.js:195
-msgid "Update Folder List"
-msgstr "Uppdatera mapp lista"
-
-#: js/Felamimail.js:33
-msgid "New Mail"
-msgstr "Nytt Mail"
-
-#: js/Felamimail.js:85
-msgid "Email"
-msgstr "Mail"
-
-#: js/Felamimail.js:120
-msgid "Active Vacation Message"
-msgstr "Aktuellt semestermeddelande"
-
-#: js/Felamimail.js:121
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "E-postkonto \"{0}\" har ett aktivt semestermeddelande."
-
-#: js/Felamimail.js:558
-msgid "New mails"
-msgstr "nya mail"
-
-#: js/Felamimail.js:559
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "Du har {0} ny mail(s) i mappen {1} ({2})."
-
-#: js/Felamimail.js:679
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP Referenser för {0}"
-
-#: js/Felamimail.js:682
-msgid "Credentials"
-msgstr "Inloggningsuppgifter"
-
-#: js/Felamimail.js:835 js/Felamimail.js:868
-msgid "IMAP Error"
-msgstr "IMAP Fel"
-
-#: js/Felamimail.js:836
-msgid "No connection to IMAP server."
-msgstr "Ingen anslutning till IMAP server."
-
-#: js/Felamimail.js:852
-msgid "IMAP Credentials Error"
-msgstr "Fel på IMAP inloggningsuppgifter"
-
-#: js/Felamimail.js:853
-msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Dina mail-inloggningsuppgifter är felaktiga. Vänligen kontakta din administratör"
-
-#: js/Felamimail.js:869
-msgid ""
-"One of your folders was deleted or renamed by another client. Please update "
-"the folder list of this account."
-msgstr "En av dina mappar har tagits bort eller har bytts namn på av någon annan klient. Uppdatera mapplistan av detta konto."
-
-#: js/Felamimail.js:898
-msgid "SMTP Error"
-msgstr "SMTP-fel"
-
-#: js/Felamimail.js:899
-msgid "No connection to SMTP server."
-msgstr "Ingen anslutning till SMTP server"
-
-#: js/Felamimail.js:907
-msgid "Sieve Error"
-msgstr "Filterfel"
-
-#: js/Felamimail.js:908
-msgid "No connection to Sieve server."
-msgstr "Ingen anslutning till Filterserver"
-
-#: js/Felamimail.js:916
-msgid "Save Sieve Script Error"
-msgstr "Fel vid sparning av filter-skript"
-
-#: js/Felamimail.js:917
-msgid "Could not save script on Sieve server."
-msgstr "Kunde inte spara skriptet på Filterserver."
-
-#: js/RecipientPickerFavoritePanel.js:43
-msgid "Recipient filter"
-msgstr "Motaggar filter"
-
-#: js/RecipientPickerFavoritePanel.js:54
-msgid "All recipients"
-msgstr "Alla mottagare"
-
-#: js/RecipientPickerFavoritePanel.js:57
-msgid "\"{0}\" recipients"
-msgstr "\"{0}\" mottagare"
-
-#: js/FolderSelectPanel.js:75
-msgid "Cancel"
-msgstr "Avbryt"
-
-#: js/FolderSelectPanel.js:84
-msgid "Ok"
-msgstr "Ok"
-
-#: js/FolderSelectPanel.js:175
-msgid "Folders of account {0}"
-msgstr "Mappar av konto {0}"
-
-#: js/FolderSelectPanel.js:176
-msgid "Folders of all accounts"
-msgstr "Mappar av alla konton"
-
-#: js/GridPanelHook.js:34
-msgid "Compose email"
-msgstr "Skriv mail"
 
 #: js/MessageDisplayDialog.js:47 js/GridPanel.js:294 js/GridPanel.js:295
 #: js/GridPanel.js:297
@@ -374,282 +84,17 @@ msgstr "Utskrifts Meddelande"
 msgid "Print Preview"
 msgstr "Förhandsvisa"
 
-#: js/MessageEditDialog.js:144
-msgid "Send"
-msgstr "Skicka"
-
-#: js/MessageEditDialog.js:152
-msgid "Search Recipients"
-msgstr "Sök mottagare"
-
-#: js/MessageEditDialog.js:160
-msgid "Save As Draft"
-msgstr "Spara som utkast"
-
-#: js/MessageEditDialog.js:168
-msgid "Save As Template"
-msgstr "Spara som mall"
-
-#: js/MessageEditDialog.js:177
-msgid "Save Email Note"
-msgstr "Spara e-post notifiering"
-
-#: js/MessageEditDialog.js:185
-msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
-msgstr "Aktivera denna växlingsknappen för att spara e-post som en bifogad anteckning till mottagare kontakt (er)."
-
-#: js/MessageEditDialog.js:189
-msgid "Reading Confirmation"
-msgstr ""
-
-#: js/MessageEditDialog.js:197
-msgid "Activate this toggle button to receive a reading confirmation."
-msgstr ""
-
-#: js/MessageEditDialog.js:215
-msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Klicka här för att söka efter och lägga till mottagare från Adressboken."
-
-#: js/MessageEditDialog.js:350
-msgid "On {0}, {1} wrote"
-msgstr "På {0}, {1} skrev"
-
-#: js/MessageEditDialog.js:370
-msgid "Original message"
-msgstr "Ursprungligt meddelande"
-
-#: js/MessageEditDialog.js:607
-msgid "Fwd:"
-msgstr "Fwd:"
-
-#: js/MessageEditDialog.js:610
-msgid "{0} Message"
-msgstr "{0} Meddelande"
-
-#: js/MessageEditDialog.js:664 js/MessageEditDialog.js:669
-msgid "Failed"
-msgstr "Misslyckades"
-
-#: js/MessageEditDialog.js:665
-msgid "{0} account setting empty."
-msgstr "{0} kontoinställning tom."
-
-#: js/MessageEditDialog.js:670 js/MessageEditDialog.js:995
-msgid "Files are still uploading."
-msgstr "Filer laddas fortfarande upp."
-
-#: js/MessageEditDialog.js:735 js/MessageEditDialog.js:968
-msgid "Compose email:"
-msgstr "Skriv e-post:"
-
-#: js/MessageEditDialog.js:798 js/GridDetailsPanel.js:347 js/GridPanel.js:468
-msgid "Attachments"
-msgstr "Bifogade"
-
-#: js/MessageEditDialog.js:864 js/GridDetailsPanel.js:246
-msgid "From"
-msgstr "Från"
-
-#: js/MessageEditDialog.js:933 Controller/Message/Send.php:281
-msgid "Body"
-msgstr "Layout"
-
-#: js/MessageEditDialog.js:958 js/GridDetailsPanel.js:245
-#: js/sieve/RuleConditionsPanel.js:75 js/Model.js:155 js/GridPanel.js:482
-#: Controller/Message/Send.php:281
-msgid "Subject"
-msgstr "Ämne"
-
-#: js/MessageEditDialog.js:1023
-msgid "Empty subject"
-msgstr "Inget ämne"
-
-#: js/MessageEditDialog.js:1024
-msgid "Do you really want to send a message with an empty subject?"
-msgstr "Vill du verkligen skicka ett meddelande utan ämne?"
-
-#: js/MessageEditDialog.js:1045
-msgid "Add Note"
-msgstr "Lägg till Notifiering"
-
-#: js/MessageEditDialog.js:1046
-msgid "Edit Email Note Text:"
-msgstr "Ändra E-post Notifierings text:"
-
-#: js/MessageEditDialog.js:1069
-msgid "No recipients set."
-msgstr "Inga mottagare inställd."
-
-#: js/GridDetailsPanel.js:158
-msgid "Message not available."
-msgstr "Meddelande är inte tillgängligt."
-
-#: js/GridDetailsPanel.js:247
-msgid "Add"
-msgstr "Lägg till"
-
-#: js/GridDetailsPanel.js:248
-msgid "Add contact to addressbook"
-msgstr "Lägg till kontakt i adressbok"
-
-#: js/GridDetailsPanel.js:249
-msgid "Date"
-msgstr "Datum"
-
-#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:481
-msgid "Show or hide header information"
-msgstr "Visa eller dölj rubrik-information"
-
-#: js/TreePanel.js:700
-msgid "Total Messages:"
-msgstr "Totala Meddelanden: "
-
-#: js/TreePanel.js:704
-msgid "Unread Messages:"
-msgstr "Olästa Meddelanden:"
-
-#: js/TreePanel.js:708
-msgid "Name on Server:"
-msgstr "Namn på Server:"
-
-#: js/TreePanel.js:712
-msgid "Last update:"
-msgstr "Senaste uppdatering:"
-
-#: js/TreePanel.js:732
-#, python-format
-msgid "Fetching messages... ({0}%% done)"
-msgstr "Hämtar meddelanden ... ({0}%% klart)"
-
-#: js/TreePanel.js:748
-msgid "{0} unread message"
-msgid_plural "{0} unread messages"
-msgstr[0] "{0} oläst meddelande"
-msgstr[1] "{0} olästa meddelanden"
-
-#: js/sieve/RuleEditDialog.js:97
-msgid "Edit Filter Rule"
-msgstr "Ändra Filter Regel"
-
-#: js/sieve/RuleEditDialog.js:260
-msgid "Apply filter if"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:264
-msgid "all conditions met"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:265
-msgid "any condition mets"
-msgstr ""
-
-#: js/sieve/RuleEditDialog.js:311
-msgid "Do this action:"
-msgstr "Gör denna åtgärd:"
-
-#: js/sieve/RuleEditDialog.js:401
-msgid "Move mail to folder"
-msgstr "Flytta mail till mapp"
-
-#: js/sieve/RuleEditDialog.js:402
-msgid "Redirect mail to address"
-msgstr "Omdirigera e-post till adress"
-
-#: js/sieve/RuleEditDialog.js:403
-msgid "Reject mail with this text"
-msgstr "Avvisa post med denna text"
-
-#: js/sieve/RuleEditDialog.js:404
-msgid "Discard mail"
-msgstr "kassera post"
-
-#: js/sieve/RuleEditDialog.js:405
-msgid "Keep mail"
-msgstr "Behåll epost"
-
-#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:156 js/GridPanel.js:488
-msgid "From (Email)"
-msgstr "Från (E-post)"
-
-#: js/sieve/RuleConditionsPanel.js:72
-msgid "From (Email and Name)"
-msgstr "Från (Mail och Namn)"
-
-#: js/sieve/RuleConditionsPanel.js:73
-msgid "To (Email)"
-msgstr "Till (Mail)"
-
-#: js/sieve/RuleConditionsPanel.js:74
-msgid "To (Email CC)"
-msgstr ""
-
-#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:537
-msgid "Size"
-msgstr "Storlek"
-
-#: js/sieve/RuleConditionsPanel.js:77
-msgid "Header contains"
-msgstr "Huvudrubriks innehåll"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header name"
-msgstr "Huvudrubrik namn"
-
-#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
-msgid "Header value"
-msgstr "Huvudrubrik värde"
-
-#: js/sieve/RuleConditionsPanel.js:79
-msgid "Header regex"
-msgstr "Huvudrubrik regex"
-
-#: js/sieve/RulesGridPanel.js:81
-msgid "Move up"
-msgstr "Flytta upp"
-
-#: js/sieve/RulesGridPanel.js:88
-msgid "Move down"
-msgstr "Flytta ner"
-
-#: js/sieve/RulesGridPanel.js:95
-msgid "Enable"
-msgstr "Aktivera"
-
-#: js/sieve/RulesGridPanel.js:102
-msgid "Disable"
-msgstr "Inaktivera"
-
-#: js/sieve/RulesGridPanel.js:203
-msgid "ID"
-msgstr "ID"
-
-#: js/sieve/RulesGridPanel.js:210
-msgid "Conditions"
-msgstr "Kondition"
-
-#: js/sieve/RulesGridPanel.js:218
-msgid "Action"
-msgstr "Handling"
-
-#: js/sieve/RulesGridPanel.js:308
-msgid "is greater than"
-msgstr "är större än"
-
-#: js/sieve/RulesGridPanel.js:308
-msgid "is less than"
-msgstr "är mindre än"
-
-#: js/sieve/RulesGridPanel.js:319
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr "Huvudrubrik \"{0}\" innehåller \"{1}\""
-
-#: js/sieve/RulesGridPanel.js:319
-msgid "Header \"{0}\" matches \"{1}\""
-msgstr "Huvudrubrik \"{0}\" matchar \"{1}\""
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "Sieve Filter Rules"
+
+#: js/sieve/RulesDialog.js:82
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr "Sålla filter regler för {0}"
 
 #: js/sieve/VacationEditDialog.js:77
+#, python-brace-format
 msgid "Vacation Message for {0}"
 msgstr "Semester Meddelande för {0}"
 
@@ -721,13 +166,271 @@ msgstr "Meddelande-mall"
 msgid "Choose Template ..."
 msgstr "Välj mall"
 
-#: js/sieve/RulesDialog.js:51
-msgid "Sieve Filter Rules"
-msgstr "Sieve Filter Rules"
+#: js/sieve/RulesGridPanel.js:81
+msgid "Move up"
+msgstr "Flytta upp"
 
-#: js/sieve/RulesDialog.js:82
-msgid "Sieve Filter Rules for {0}"
-msgstr "Sålla filter regler för {0}"
+#: js/sieve/RulesGridPanel.js:88
+msgid "Move down"
+msgstr "Flytta ner"
+
+#: js/sieve/RulesGridPanel.js:95
+msgid "Enable"
+msgstr "Aktivera"
+
+#: js/sieve/RulesGridPanel.js:102
+msgid "Disable"
+msgstr "Inaktivera"
+
+#: js/sieve/RulesGridPanel.js:203
+msgid "ID"
+msgstr "ID"
+
+#: js/sieve/RulesGridPanel.js:210
+msgid "Conditions"
+msgstr "Kondition"
+
+#: js/sieve/RulesGridPanel.js:218
+msgid "Action"
+msgstr "Handling"
+
+#: js/sieve/RulesGridPanel.js:308
+msgid "is greater than"
+msgstr "är större än"
+
+#: js/sieve/RulesGridPanel.js:308
+msgid "is less than"
+msgstr "är mindre än"
+
+#: js/sieve/RulesGridPanel.js:319
+#, python-brace-format
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Huvudrubrik \"{0}\" innehåller \"{1}\""
+
+#: js/sieve/RulesGridPanel.js:319
+#, python-brace-format
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Huvudrubrik \"{0}\" matchar \"{1}\""
+
+#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:156 js/GridPanel.js:488
+msgid "From (Email)"
+msgstr "Från (E-post)"
+
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "From (Email and Name)"
+msgstr "Från (Mail och Namn)"
+
+#: js/sieve/RuleConditionsPanel.js:73
+msgid "To (Email)"
+msgstr "Till (Mail)"
+
+#: js/sieve/RuleConditionsPanel.js:74
+msgid "To (Email CC)"
+msgstr ""
+
+#: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
+#: js/Model.js:155 js/MessageEditDialog.js:955 js/GridPanel.js:482
+#: Controller/Message/Send.php:288
+msgid "Subject"
+msgstr "Ämne"
+
+#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:537
+msgid "Size"
+msgstr "Storlek"
+
+#: js/sieve/RuleConditionsPanel.js:77
+msgid "Header contains"
+msgstr "Huvudrubriks innehåll"
+
+#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
+msgid "Header name"
+msgstr "Huvudrubrik namn"
+
+#: js/sieve/RuleConditionsPanel.js:78 js/sieve/RuleConditionsPanel.js:80
+msgid "Header value"
+msgstr "Huvudrubrik värde"
+
+#: js/sieve/RuleConditionsPanel.js:79
+msgid "Header regex"
+msgstr "Huvudrubrik regex"
+
+#: js/sieve/RuleEditDialog.js:97
+msgid "Edit Filter Rule"
+msgstr "Ändra Filter Regel"
+
+#: js/sieve/RuleEditDialog.js:263
+msgid "Apply filter if"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:267
+msgid "all conditions match"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:268
+msgid "any condition matches"
+msgstr ""
+
+#: js/sieve/RuleEditDialog.js:315
+msgid "Do this action:"
+msgstr "Gör denna åtgärd:"
+
+#: js/sieve/RuleEditDialog.js:407
+msgid "Move mail to folder"
+msgstr "Flytta mail till mapp"
+
+#: js/sieve/RuleEditDialog.js:408
+msgid "Redirect mail to address"
+msgstr "Omdirigera e-post till adress"
+
+#: js/sieve/RuleEditDialog.js:409
+msgid "Reject mail with this text"
+msgstr "Avvisa post med denna text"
+
+#: js/sieve/RuleEditDialog.js:410
+msgid "Discard mail"
+msgstr "kassera post"
+
+#: js/sieve/RuleEditDialog.js:411
+msgid "Keep mail"
+msgstr "Behåll epost"
+
+#: js/TreePanel.js:700
+msgid "Total Messages:"
+msgstr "Totala Meddelanden: "
+
+#: js/TreePanel.js:704
+msgid "Unread Messages:"
+msgstr "Olästa Meddelanden:"
+
+#: js/TreePanel.js:708
+msgid "Name on Server:"
+msgstr "Namn på Server:"
+
+#: js/TreePanel.js:712
+msgid "Last update:"
+msgstr "Senaste uppdatering:"
+
+#: js/TreePanel.js:732
+#, python-format, python-brace-format
+msgid "Fetching messages... ({0}%% done)"
+msgstr "Hämtar meddelanden ... ({0}%% klart)"
+
+#: js/TreePanel.js:748
+#, python-brace-format
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} oläst meddelande"
+msgstr[1] "{0} olästa meddelanden"
+
+#: js/GridDetailsPanel.js:158
+msgid "Message not available."
+msgstr "Meddelande är inte tillgängligt."
+
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:861
+msgid "From"
+msgstr "Från"
+
+#: js/GridDetailsPanel.js:247
+msgid "Add"
+msgstr "Lägg till"
+
+#: js/GridDetailsPanel.js:248
+msgid "Add contact to addressbook"
+msgstr "Lägg till kontakt i adressbok"
+
+#: js/GridDetailsPanel.js:249
+msgid "Date"
+msgstr "Datum"
+
+#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:481
+msgid "Show or hide header information"
+msgstr "Visa eller dölj rubrik-information"
+
+#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:795 js/GridPanel.js:468
+msgid "Attachments"
+msgstr "Bifogade"
+
+#: js/GridPanelHook.js:34
+msgid "Compose email"
+msgstr "Skriv mail"
+
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
+msgstr "Motaggar filter"
+
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
+msgstr "Alla mottagare"
+
+#: js/RecipientPickerFavoritePanel.js:57
+#, python-brace-format
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" mottagare"
+
+#: js/FolderFilterModel.js:30 js/TreeContextMenu.js:64
+#: js/TreeContextMenu.js:67 js/TreeContextMenu.js:70 js/Model.js:55
+#: js/Model.js:514 js/GridPanel.js:529
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Mapp"
+msgstr[1] "Mappar"
+
+#: js/TreeContextMenu.js:23
+msgid "Empty Folder"
+msgstr "Tom Mapp"
+
+#: js/TreeContextMenu.js:59
+msgid "Add Folder"
+msgstr "Lätt till Mapp"
+
+#: js/TreeContextMenu.js:64
+#, python-brace-format
+msgid "New {0}"
+msgstr "Ny {0}"
+
+#: js/TreeContextMenu.js:64
+#, python-brace-format
+msgid "Please enter the name of the new {0}:"
+msgstr "Ange namnet på den nya {0}:"
+
+#: js/TreeContextMenu.js:67
+#, python-brace-format
+msgid "No {0} added"
+msgstr "Ingen {0} lades till"
+
+#: js/TreeContextMenu.js:67
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "Du måste ange ett {0} namn!"
+
+#: js/TreeContextMenu.js:70
+msgid "Please wait"
+msgstr "Var god vänta"
+
+#: js/TreeContextMenu.js:70
+#, python-brace-format
+msgid "Creating {0}..."
+msgstr "Skapar {0} ..."
+
+#: js/TreeContextMenu.js:100
+msgid "Edit Account"
+msgstr "Ändra Användare"
+
+#: js/TreeContextMenu.js:128
+msgid "Edit Vacation Message"
+msgstr "Redigera Semester Meddelande"
+
+#: js/TreeContextMenu.js:144
+msgid "Edit Filter Rules"
+msgstr "Redigera filterregler"
+
+#: js/TreeContextMenu.js:158
+msgid "Mark Folder as read"
+msgstr "Markera mapp som läst"
+
+#: js/TreeContextMenu.js:195
+msgid "Update Folder List"
+msgstr "Uppdatera mapp lista"
 
 #: js/Model.js:51
 msgid "Message"
@@ -775,67 +478,160 @@ msgid_plural "Email Accounts"
 msgstr[0] "E-post Konton"
 msgstr[1] "E-post Konton"
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "INBOX"
 msgstr "INKORG"
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Drafts"
 msgstr "utkast"
 
-#: js/Model.js:514 js/GridPanel.js:514
+#: js/Model.js:508 js/GridPanel.js:514
 msgid "Sent"
 msgstr "Skickat"
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Templates"
 msgstr "mallar"
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Junk"
 msgstr "Skräppost"
 
-#: js/Model.js:514
+#: js/Model.js:508
 msgid "Trash"
 msgstr "Skräp"
 
-#: js/Model.js:523 js/Model.js:643 js/Model.js:709
+#: js/Model.js:517 js/Model.js:637 js/Model.js:703
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "postlista"
 msgstr[1] "postlistor"
 
-#: js/Model.js:640
+#: js/Model.js:634
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Semester"
 msgstr[1] "Semestrar"
 
-#: js/Model.js:706
+#: js/Model.js:700
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regler"
 
-#: js/Model.js:833
+#: js/Model.js:827
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flagga"
 msgstr[1] "Flaggar"
 
-#: js/Model.js:836
+#: js/Model.js:830
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flagg lista"
 msgstr[1] "Flagg listor"
 
-#: js/RecipientPickerDialog.js:63
-msgid "(new message)"
-msgstr "(nytt meddelande)"
+#: js/MessageEditDialog.js:144
+msgid "Send"
+msgstr "Skicka"
 
-#: js/RecipientPickerDialog.js:64
-msgid "Select recipients for \"{0}\""
-msgstr "Välj mottagare för \"{0}\""
+#: js/MessageEditDialog.js:152
+msgid "Search Recipients"
+msgstr "Sök mottagare"
+
+#: js/MessageEditDialog.js:160
+msgid "Save As Draft"
+msgstr "Spara som utkast"
+
+#: js/MessageEditDialog.js:168
+msgid "Save As Template"
+msgstr "Spara som mall"
+
+#: js/MessageEditDialog.js:177
+msgid "Save Email Note"
+msgstr "Spara e-post notifiering"
+
+#: js/MessageEditDialog.js:185
+msgid ""
+"Activate this toggle button to save the email text as a note attached to the"
+" recipient(s) contact(s)."
+msgstr "Aktivera denna växlingsknappen för att spara e-post som en bifogad anteckning till mottagare kontakt (er)."
+
+#: js/MessageEditDialog.js:189
+msgid "Reading Confirmation"
+msgstr ""
+
+#: js/MessageEditDialog.js:197
+msgid "Activate this toggle button to receive a reading confirmation."
+msgstr ""
+
+#: js/MessageEditDialog.js:215
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr "Klicka här för att söka efter och lägga till mottagare från Adressboken."
+
+#: js/MessageEditDialog.js:350
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr "På {0}, {1} skrev"
+
+#: js/MessageEditDialog.js:370
+msgid "Original message"
+msgstr "Ursprungligt meddelande"
+
+#: js/MessageEditDialog.js:556 js/ContactGrid.js:357
+msgid "Loading Mail Addresses"
+msgstr "Laddar mailadresser"
+
+#: js/MessageEditDialog.js:607
+msgid "Fwd:"
+msgstr "Fwd:"
+
+#: js/MessageEditDialog.js:610
+#, python-brace-format
+msgid "{0} Message"
+msgstr "{0} Meddelande"
+
+#: js/MessageEditDialog.js:664 js/MessageEditDialog.js:669
+msgid "Failed"
+msgstr "Misslyckades"
+
+#: js/MessageEditDialog.js:665
+#, python-brace-format
+msgid "{0} account setting empty."
+msgstr "{0} kontoinställning tom."
+
+#: js/MessageEditDialog.js:670 js/MessageEditDialog.js:992
+msgid "Files are still uploading."
+msgstr "Filer laddas fortfarande upp."
+
+#: js/MessageEditDialog.js:735 js/MessageEditDialog.js:965
+msgid "Compose email:"
+msgstr "Skriv e-post:"
+
+#: js/MessageEditDialog.js:930 Controller/Message/Send.php:288
+msgid "Body"
+msgstr "Layout"
+
+#: js/MessageEditDialog.js:1020
+msgid "Empty subject"
+msgstr "Inget ämne"
+
+#: js/MessageEditDialog.js:1021
+msgid "Do you really want to send a message with an empty subject?"
+msgstr "Vill du verkligen skicka ett meddelande utan ämne?"
+
+#: js/MessageEditDialog.js:1042
+msgid "Add Note"
+msgstr "Lägg till Notifiering"
+
+#: js/MessageEditDialog.js:1043
+msgid "Edit Email Note Text:"
+msgstr "Ändra E-post Notifierings text:"
+
+#: js/MessageEditDialog.js:1066
+msgid "No recipients set."
+msgstr "Inga mottagare inställd."
 
 #: js/RecipientGrid.js:230
 msgid "Click here to set To/CC/BCC."
@@ -856,6 +652,23 @@ msgstr "Bcc:"
 #: js/RecipientGrid.js:374
 msgid "Remove"
 msgstr "Flytta"
+
+#: js/FolderSelectPanel.js:75
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: js/FolderSelectPanel.js:84
+msgid "Ok"
+msgstr "Ok"
+
+#: js/FolderSelectPanel.js:175
+#, python-brace-format
+msgid "Folders of account {0}"
+msgstr "Mappar av konto {0}"
+
+#: js/FolderSelectPanel.js:176
+msgid "Folders of all accounts"
+msgstr "Mappar av alla konton"
 
 #: js/GridPanel.js:112
 msgid "No Messages found or the cache is empty."
@@ -910,6 +723,7 @@ msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
 #: js/GridPanel.js:1190
+#, python-brace-format
 msgid "{0} %"
 msgstr "{0} %"
 
@@ -918,8 +732,121 @@ msgid "Your quota"
 msgstr "Din kvota"
 
 #: js/GridPanel.js:1199
+#, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} tillgängligt (total: {1})"
+
+#: js/RecipientPickerDialog.js:63
+msgid "(new message)"
+msgstr "(nytt meddelande)"
+
+#: js/RecipientPickerDialog.js:64
+#, python-brace-format
+msgid "Select recipients for \"{0}\""
+msgstr "Välj mottagare för \"{0}\""
+
+#: js/ContactGrid.js:119 js/AccountEditDialog.js:180
+#: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
+#: js/AccountEditDialog.js:276
+msgid "None"
+msgstr "Ingen"
+
+#: js/ContactGrid.js:270
+msgid "Add as \"To\""
+msgstr "Lägg till som \"Till\""
+
+#: js/ContactGrid.js:281
+msgid "Add as \"Cc\""
+msgstr "Lägg till som \"Cc\""
+
+#: js/ContactGrid.js:292
+msgid "Add as \"Bcc\""
+msgstr "Lägg till som \"Bcc\""
+
+#: js/ContactGrid.js:303
+msgid "Remove from recipients"
+msgstr "Ta bort från mottagarna"
+
+#: js/Felamimail.js:33
+msgid "New Mail"
+msgstr "Nytt Mail"
+
+#: js/Felamimail.js:85
+msgid "Email"
+msgstr "Mail"
+
+#: js/Felamimail.js:120
+msgid "Active Vacation Message"
+msgstr "Aktuellt semestermeddelande"
+
+#: js/Felamimail.js:121
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "E-postkonto \"{0}\" har ett aktivt semestermeddelande."
+
+#: js/Felamimail.js:558
+msgid "New mails"
+msgstr "nya mail"
+
+#: js/Felamimail.js:559
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "Du har {0} ny mail(s) i mappen {1} ({2})."
+
+#: js/Felamimail.js:679
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP Referenser för {0}"
+
+#: js/Felamimail.js:682
+msgid "Credentials"
+msgstr "Inloggningsuppgifter"
+
+#: js/Felamimail.js:835 js/Felamimail.js:868
+msgid "IMAP Error"
+msgstr "IMAP Fel"
+
+#: js/Felamimail.js:836
+msgid "No connection to IMAP server."
+msgstr "Ingen anslutning till IMAP server."
+
+#: js/Felamimail.js:852
+msgid "IMAP Credentials Error"
+msgstr "Fel på IMAP inloggningsuppgifter"
+
+#: js/Felamimail.js:853
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Dina mail-inloggningsuppgifter är felaktiga. Vänligen kontakta din administratör"
+
+#: js/Felamimail.js:869
+msgid ""
+"One of your folders was deleted or renamed by another client. Please update "
+"the folder list of this account."
+msgstr "En av dina mappar har tagits bort eller har bytts namn på av någon annan klient. Uppdatera mapplistan av detta konto."
+
+#: js/Felamimail.js:898
+msgid "SMTP Error"
+msgstr "SMTP-fel"
+
+#: js/Felamimail.js:899
+msgid "No connection to SMTP server."
+msgstr "Ingen anslutning till SMTP server"
+
+#: js/Felamimail.js:907
+msgid "Sieve Error"
+msgstr "Filterfel"
+
+#: js/Felamimail.js:908
+msgid "No connection to Sieve server."
+msgstr "Ingen anslutning till Filterserver"
+
+#: js/Felamimail.js:916
+msgid "Save Sieve Script Error"
+msgstr "Fel vid sparning av filter-skript"
+
+#: js/Felamimail.js:917
+msgid "Could not save script on Sieve server."
+msgstr "Kunde inte spara skriptet på Filterserver."
 
 #: js/AccountEditDialog.js:85
 msgid "Signature"
@@ -1060,6 +987,15 @@ msgstr "Vanlig Text"
 msgid "Depending on content type (experimental)"
 msgstr "Beroende på innehållstyp (experimentell)"
 
+#: Controller/Message/Send.php:83
+#, python-format
+msgid "Error: %s"
+msgstr ""
+
+#: Controller/Message/Send.php:85
+msgid "Could not send message"
+msgstr ""
+
 #: Controller/Message/Flags.php:25
 msgid "Seen"
 msgstr "Sett"
@@ -1076,15 +1012,101 @@ msgstr "utkast"
 msgid "Flagged"
 msgstr "Markerad"
 
-#: Controller/Message/Send.php:83
-#, python-format
-msgid "Error: %s"
-msgstr ""
-
-#: Controller/Message/Send.php:85
-msgid "Could not send message"
-msgstr ""
-
 #: Controller/Sieve.php:338
 msgid "Out of Office reply from %1$s"
 msgstr "Frånvarande svar från %1$s"
+
+#: Preference.php:59
+msgid "All inboxes"
+msgstr "Alla inkorgar"
+
+#: Preference.php:106
+msgid "Default Email Account"
+msgstr "Standard e-postkonto"
+
+#: Preference.php:107
+msgid "The default email account to use when sending mails."
+msgstr "Den förvalda e-post kontot för att använda när du skickar e-post."
+
+#: Preference.php:110
+msgid "Email Update Interval"
+msgstr "E-post Updaterings Intervall"
+
+#: Preference.php:111
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr ""
+
+#: Preference.php:114
+msgid "Use for mailto links"
+msgstr ""
+
+#: Preference.php:115
+msgid ""
+"Use Felamimail in mailto links, otherwise use the default desktop client."
+msgstr ""
+
+#: Preference.php:118
+msgid "Use for NOTES"
+msgstr "Använd för NOTERINGAR"
+
+#: Preference.php:119
+msgid "Save Note default Value."
+msgstr "Spara Notifiering standard värde"
+
+#: Preference.php:122
+msgid "Confirm Delete"
+msgstr "bekräfta borttagning"
+
+#: Preference.php:123
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Visa bekräftelseruta när du tar bort e-post."
+
+#: Config.php:45
+msgid "Vacation Templates Container ID"
+msgstr "Container-ID för semester-mallar"
+
+#: Config.php:54
+msgid "Custom Vacation Message"
+msgstr "Anpassat semester-meddelande"
+
+#: Config.php:56
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "Användare tillåts sätta eget semestermeddelande för systemkonto"
+
+#: Config.php:65
+msgid "Cache email body"
+msgstr "Lagra mails innehåll i cache"
+
+#: Config.php:67
+msgid ""
+"Should the email body be cached (recommended for slow IMAP server "
+"connections)"
+msgstr "Skall mails innehåll lagras i cache (rekommenderas för långsamma anslutningar till IMAP-server)"
+
+#: Setup/Initialize.php:44
+msgid "All inboxes of my email accounts"
+msgstr "Alla inkorgar av mina e-postkonton"
+
+#: Setup/Initialize.php:51
+msgid "All unread mail"
+msgstr "Alla olästa mail"
+
+#: Setup/Initialize.php:52
+msgid "All unread mail of my email accounts"
+msgstr "Alla olästa mail av mina e-postkonton"
+
+#: Setup/Initialize.php:59
+msgid "All highlighted mail"
+msgstr "Alla markerade mail"
+
+#: Setup/Initialize.php:60
+msgid "All highlighted mail of my email accounts"
+msgstr "Alla markerade mail av mina e-post konton"
+
+#: Setup/Initialize.php:67
+msgid "All drafts"
+msgstr "Alla utkast"
+
+#: Setup/Initialize.php:68
+msgid "All mails with the draft flag"
+msgstr "Alla brev med utkast flaggning"

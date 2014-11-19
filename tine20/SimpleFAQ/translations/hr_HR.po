@@ -42,17 +42,116 @@ msgstr "Interno"
 msgid "Public"
 msgstr "Javno"
 
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr "Svi FAQ-ovi iz moje liste"
+#: js/SimpleFAQ.js:19 js/Model.js:35
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQ-a"
+msgstr[2] "FAQ-ova"
 
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "Koje sam ja zadnje izmijenio"
+#: js/SimpleFAQ.js:26
+msgid "Find Question"
+msgstr ""
 
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "Svi FAQ-ovi koje sam ja zadnji izmijenio"
+#: js/SimpleFAQ.js:35
+msgid "Search question"
+msgstr ""
+
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
+#: js/FaqGridDetailsPanel.js:157
+msgid "Answer"
+msgstr "Odgovor"
+
+#: js/FaqType.js:26 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Tip FAQ-a"
+msgstr[1] "Tipa FAQ-a"
+msgstr[2] "Tipova FAQ-a"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Dodaj novi FAQ tip..."
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ status"
+msgstr[1] "FAQ statusa"
+msgstr[2] "FAQ statusa"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Početne postavke"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Dodaj novi FAQ status..."
+
+#: js/FaqGridPanel.js:72
+msgid "FAQ id"
+msgstr "FAQ ID"
+
+#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
+msgid "Tags"
+msgstr "Oznake"
+
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
+msgid "Status"
+msgstr "Status"
+
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
+msgid "Type"
+msgstr "Tip"
+
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
+msgid "Question"
+msgstr "Pitanje"
+
+#: js/Model.js:39
+msgid "FAQ List"
+msgid_plural "FAQ Lists"
+msgstr[0] "FAQ lista"
+msgstr[1] "FAQ liste"
+msgstr[2] "FAQ listi"
+
+#: js/Model.js:39
+msgid "FAQ Lists"
+msgstr "FAQ liste"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr ""
+
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr ""
+
+#: js/FaqEditDialog.js:111
+msgid "Enter a question..."
+msgstr "Upišite pitanje..."
+
+#: js/FaqEditDialog.js:118
+msgid "Enter a answer..."
+msgstr "Upišite odgovor..."
+
+#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
+msgid "FAQ Infos"
+msgstr "Informacije o FAQ-u"
+
+#: js/FaqGridDetailsPanel.js:189
+msgid "Creation Time"
+msgstr "Vrijeme kreiranja"
+
+#: js/FaqGridDetailsPanel.js:194
+msgid "Created By"
+msgstr "Kreirao"
+
+#: js/FaqGridDetailsPanel.js:226
+msgid "No answer yet"
+msgstr "Nema još odgovora"
 
 #: Preference.php:28
 msgid "All my FAQs"
@@ -74,113 +173,14 @@ msgstr "Zadana FAQ lista"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Zadana FAQ lista za nove FAQ-ove"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
-#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "FAQ status"
-msgstr[1] "FAQ statusa"
-msgstr[2] "FAQ statusa"
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "Svi FAQ-ovi iz moje liste"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Tip FAQ-a"
-msgstr[1] "Tipa FAQ-a"
-msgstr[2] "Tipova FAQ-a"
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "Koje sam ja zadnje izmijenio"
 
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Početne postavke"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Dodaj novi FAQ tip..."
-
-#: js/SimpleFAQ.js:19 js/Model.js:35
-msgid "FAQ"
-msgid_plural "FAQs"
-msgstr[0] "FAQ"
-msgstr[1] "FAQ-a"
-msgstr[2] "FAQ-ova"
-
-#: js/SimpleFAQ.js:26
-msgid "Find Question"
-msgstr ""
-
-#: js/SimpleFAQ.js:35
-msgid "Search question"
-msgstr ""
-
-#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
-#: js/FaqGridDetailsPanel.js:157
-msgid "Answer"
-msgstr "Odgovor"
-
-#: js/FaqGridPanel.js:72
-msgid "FAQ id"
-msgstr "FAQ ID"
-
-#: js/FaqGridPanel.js:79 js/FaqGridDetailsPanel.js:163
-msgid "Tags"
-msgstr "Oznake"
-
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
-msgid "Status"
-msgstr "Status"
-
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
-msgid "Type"
-msgstr "Tip"
-
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
-msgid "Question"
-msgstr "Pitanje"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "Dodaj novi FAQ status..."
-
-#: js/Model.js:39
-msgid "FAQ List"
-msgid_plural "FAQ Lists"
-msgstr[0] "FAQ lista"
-msgstr[1] "FAQ liste"
-msgstr[2] "FAQ listi"
-
-#: js/Model.js:39
-msgid "FAQ Lists"
-msgstr "FAQ liste"
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr ""
-
-#: js/FaqEditDialog.js:112
-msgid "Enter a question..."
-msgstr "Upišite pitanje..."
-
-#: js/FaqEditDialog.js:119
-msgid "Enter a answer..."
-msgstr "Upišite odgovor..."
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
-
-#: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
-msgid "FAQ Infos"
-msgstr "Informacije o FAQ-u"
-
-#: js/FaqGridDetailsPanel.js:189
-msgid "Creation Time"
-msgstr "Vrijeme kreiranja"
-
-#: js/FaqGridDetailsPanel.js:194
-msgid "Created By"
-msgstr "Kreirao"
-
-#: js/FaqGridDetailsPanel.js:226
-msgid "No answer yet"
-msgstr "Nema još odgovora"
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "Svi FAQ-ovi koje sam ja zadnji izmijenio"

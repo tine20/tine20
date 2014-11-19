@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-10-25 08:24+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,7 +67,7 @@ msgstr "ปลายทาง"
 
 #: Model/MyPhone.php:32 js/DialerPanel.js:53
 msgid "Phone"
-msgstr ""
+msgstr "โทรศัพท์"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"
@@ -84,78 +84,6 @@ msgstr "สาย"
 #: Model/MyPhone.php:69
 msgid "Description"
 msgstr "การอธิบาย"
-
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "เบอร์ที่ติดต่อในสัปดาห์นี้"
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "เบอร์ที่ติดต่อสัปดาห์ที่แล้ว"
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "เบอร์ที่ติดต่อในเดือนนี้"
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "เบอร์ที่ติดต่อเดือนที่แล้ว"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "เบอร์โทรเข้า/ออกของสัปดาห์นี้"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "เบอร์โทรเข้า/ออกของสัปดาห์ที่แล้ว"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "เบอร์โทรเข้า/ออกของเดือนนี้"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "เบอร์โทรเข้า/ออกของเดือนที่แล้ว"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "หมายเลข"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "ยกเลิก"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "ติดต่อ"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "ผิดพลาด"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "ไม่สามารถติดต่อได้"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "จัดการการตั้งค่าโทรศัพท์"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "ติดต่อหมายเลข"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "เริ่มการโทรออกใหม่"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "ไม่ได้เลือกโทรศัพท์ใด ๆ "
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "กรุณาเลือกโทรศัพท์ที่ต้องการจากแผนผังต้นไม้"
 
 #: js/Phone.js:100
 msgid "Incoming call"
@@ -188,3 +116,75 @@ msgstr "มือถือ"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "โทรศัพท์เคลื่อนที่ ส่วนตัว"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "จัดการการตั้งค่าโทรศัพท์"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "ติดต่อหมายเลข"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "เริ่มการโทรออกใหม่"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "ไม่ได้เลือกโทรศัพท์ใด ๆ "
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "กรุณาเลือกโทรศัพท์ที่ต้องการจากแผนผังต้นไม้"
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "หมายเลข"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "ติดต่อ"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "ผิดพลาด"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "ไม่สามารถติดต่อได้"
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+msgid "Calls this week"
+msgstr "เบอร์ที่ติดต่อในสัปดาห์นี้"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "เบอร์โทรเข้า/ออกของสัปดาห์นี้"
+
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr "เบอร์ที่ติดต่อสัปดาห์ที่แล้ว"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "เบอร์โทรเข้า/ออกของสัปดาห์ที่แล้ว"
+
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr "เบอร์ที่ติดต่อในเดือนนี้"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "เบอร์โทรเข้า/ออกของเดือนนี้"
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
+msgstr "เบอร์ที่ติดต่อเดือนที่แล้ว"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "เบอร์โทรเข้า/ออกของเดือนที่แล้ว"

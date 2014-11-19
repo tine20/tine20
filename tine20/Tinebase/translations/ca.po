@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:25+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/tine20/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -185,8 +185,12 @@ msgid ""
 "vendor!"
 msgstr ""
 
-#: js/ux/Percentage.js:193
+#: js/ux/Percentage.js:229
 msgid "(paused)"
+msgstr ""
+
+#: js/ux/grid/GroupingGridPlugin.js:95
+msgid "Export Records from these Positions"
 msgstr ""
 
 #: js/ux/grid/PagingToolbar.js:57
@@ -304,7 +308,7 @@ msgstr "trieu un altre {0}..."
 msgid "Software Version"
 msgstr "Versió del programari."
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:427
+#: js/ExceptionDialog.js:62 Frontend/Http.php:432
 msgid "Abnormal End"
 msgstr "Finalització anormal"
 
@@ -312,7 +316,7 @@ msgstr "Finalització anormal"
 msgid "Send Report"
 msgstr "Envia informe"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:428
+#: js/ExceptionDialog.js:154 Frontend/Http.php:433
 msgid "An error occurred, the program ended abnormal."
 msgstr "S'ha produït un error i el programa s'ha tancat inesperadament."
 
@@ -418,7 +422,7 @@ msgid ""
 "administrator."
 msgstr "No hi ha aplicacions per les quals esteu habilitat. Contacteu amb l'administrador."
 
-#: js/ApplicationStarter.js:539
+#: js/ApplicationStarter.js:545
 msgid "New "
 msgstr ""
 
@@ -494,42 +498,42 @@ msgstr "Ha fallat"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Les contrasenyes no coincideixen, corregiu-ho."
 
-#: js/common.js:235
+#: js/common.js:261
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
 msgstr "personal"
 
-#: js/common.js:273 js/common.js:311
+#: js/common.js:300 js/common.js:338
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:360
+#: js/common.js:387
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minut"
 msgstr[1] "{0} minuts"
 
-#: js/common.js:361
+#: js/common.js:388
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hora"
 msgstr[1] "{0} hores"
 
-#: js/common.js:362
+#: js/common.js:389
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} dia laboral"
 msgstr[1] "{0} dies laborals"
 
-#: js/common.js:389
+#: js/common.js:416
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -1134,20 +1138,20 @@ msgstr "No s'ha pogut actualitzar l'etiqueta."
 msgid "Save current view as favorite"
 msgstr "Desa la visualització actual com a preferida"
 
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "New version of Tine 2.0 available"
 msgstr "Hi ha una nova versió del Tine 2.0 disponible"
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "La versió \"{0}\" del Tine 2.0 es troba disponible."
 
-#: js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Es tracta d'una actualització crítica i l'hauríeu d'instal·lar el més aviat possible!"
 
-#: js/widgets/VersionCheck.js:61
+#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr "Considereu fer l'actualització!"
 
@@ -2398,7 +2402,7 @@ msgstr "Tancant la sessió..."
 msgid "Please wait!"
 msgstr "Espereu!"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:401
+#: js/ExceptionHandler.js:168 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr "Autorització requerida"
 
@@ -2792,16 +2796,21 @@ msgstr "Confirma el tancament de sessió"
 msgid "Show confirmation dialog on logout."
 msgstr "Mostra diàleg de confirmació al tancament de sessió."
 
-#: Frontend/Http.php:402
+#: Frontend/Cli.php:736
+#, python-format
+msgid "%s's personal "
+msgstr ""
+
+#: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
 msgstr "La vostra sessió ja no és vàlida. Heu d'iniciar sessió altra vegada."
 
-#: Container.php:690
+#: Container.php:706
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1549
+#: Container.php:1617
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3111,47 +3120,47 @@ msgstr ""
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:504
+#: WebDav/PrincipalBackend.php:525
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3325
+#: Setup/setup.xml:3345
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3330
+#: Setup/setup.xml:3350
 msgid "default note type"
 msgstr "tipus de nota per defecte"
 
-#: Setup/setup.xml:3356
+#: Setup/setup.xml:3376
 msgid "telephone"
 msgstr "telèfon"
 
-#: Setup/setup.xml:3361
+#: Setup/setup.xml:3381
 msgid "telephone call"
 msgstr "trucada telefònica"
 
-#: Setup/setup.xml:3387
+#: Setup/setup.xml:3407
 msgid "email"
 msgstr "correu electrònic"
 
-#: Setup/setup.xml:3392
+#: Setup/setup.xml:3412
 msgid "email contact"
 msgstr "contacte de correu electrònic"
 
-#: Setup/setup.xml:3418
+#: Setup/setup.xml:3438
 msgid "created"
 msgstr "creat"
 
-#: Setup/setup.xml:3423
+#: Setup/setup.xml:3443
 msgid "record created"
 msgstr "registre creat"
 
-#: Setup/setup.xml:3449
+#: Setup/setup.xml:3469
 msgid "changed"
 msgstr "canviat"
 
-#: Setup/setup.xml:3454
+#: Setup/setup.xml:3474
 msgid "record changed"
 msgstr "registre canviat"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,9 +18,13 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Exception/NoConnection.php:29
-msgid "Could not connect to sipgate."
-msgstr "Ne mogu se spojiti na sipgate."
+#: Controller.php:95
+msgid "You do not have admin rights on Sales"
+msgstr "Nemate administratorska prava za prodaju"
+
+#: Controller.php:117
+msgid "You do not have admin rights on Sipgate"
+msgstr "Nemate administratorska prava na Sipgate"
 
 #: Exception/Authorization.php:29
 msgid "Could not authenticate to sipgate."
@@ -37,6 +41,10 @@ msgstr "Općenita Iznimka Backenda."
 #: Exception/MissingConfig.php:29
 msgid "The configuration is missing."
 msgstr "Nedostaje konfiguracije ."
+
+#: Exception/NoConnection.php:29
+msgid "Could not connect to sipgate."
+msgstr "Ne mogu se spojiti na sipgate."
 
 #: Acl/Rights.php:94
 msgid "manage accounts"
@@ -70,13 +78,524 @@ msgstr "upravljati privatnim računima"
 msgid "add, edit and delete private accounts"
 msgstr "dodavati, uređivati ​​i brisati privatne račune"
 
-#: Controller.php:95
-msgid "You do not have admin rights on Sales"
-msgstr "Nemate administratorska prava za prodaju"
+#: js/AccountFilterModel.js:38 js/LineGridPanel.js:73
+msgid "Account"
+msgstr "Račun"
 
-#: Controller.php:117
-msgid "You do not have admin rights on Sipgate"
-msgstr "Nemate administratorska prava na Sipgate"
+#: js/AccountGridPanel.js:54
+msgid "Telephone"
+msgstr "Telefon"
+
+#: js/AccountGridPanel.js:55 js/SearchAddressDialog.js:134
+#: js/SearchAddressDialog.js:156
+msgid "Fax"
+msgstr "Faks"
+
+#: js/AccountGridPanel.js:89 js/AssignLinesGrid.js:100 js/LineGridPanel.js:65
+#: js/AccountEditDialog.js:279
+msgid "Type"
+msgstr ""
+
+#: js/AccountGridPanel.js:98 js/AccountEditDialog.js:262 Config.php:68
+msgid "Account Type"
+msgstr "Vrsta računa"
+
+#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:286
+msgid "Mobile Number"
+msgstr "Mobitel"
+
+#: js/AccountGridPanel.js:115 js/AssignLinesGrid.js:101 js/LineGridPanel.js:88
+msgid "Uri Alias"
+msgstr "URI pseudonim"
+
+#: js/AccountGridPanel.js:124 js/ConnectionGridPanel.js:186
+#: js/LineGridPanel.js:163
+msgid "Dial number"
+msgstr "Biraj broj"
+
+#: js/AccountGridPanel.js:125 js/ConnectionGridPanel.js:187
+#: js/LineGridPanel.js:164
+msgid "Initiates a new outgoing call"
+msgstr "Uspostava novog izlaznog poziva"
+
+#: js/AddressbookGridPanelHook.js:38
+msgid "Call contact"
+msgstr "Nazovi"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Kreiraj SMS"
+
+#: js/AddressbookGridPanelHook.js:260
+msgid "Work"
+msgstr "Posao"
+
+#: js/AddressbookGridPanelHook.js:270
+msgid "Home"
+msgstr "Doma"
+
+#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
+msgid "Cell"
+msgstr "Mobitel"
+
+#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
+msgid "Cell private"
+msgstr "Mobitel privatno"
+
+#: js/DialNumberDialog.js:89 js/SmsEditDialog.js:74
+#: js/SearchAddressDialog.js:63 js/CallStateWindow.js:106
+msgid "Cancel"
+msgstr "Odustani"
+
+#: js/DialNumberDialog.js:97
+msgid "Ok"
+msgstr "U redu"
+
+#: js/DialNumberDialog.js:161
+msgid "Select Line"
+msgstr "Odabrana linija"
+
+#: js/DialNumberDialog.js:166
+msgid "Number to call"
+msgstr "Broj za zvanje"
+
+#: js/DialNumberDialog.js:171
+msgid "Please use a valid telephone number!"
+msgstr "Molimo Vas da koristite valjani telefonski broj!"
+
+#: js/DialNumberDialog.js:211
+#, python-brace-format
+msgid "Dial Number {0}"
+msgstr "Biraj broj {0}"
+
+#: js/LineFilterModel.js:32 js/ConnectionGridPanel.js:92
+msgid "Line"
+msgstr "Linija"
+
+#: js/SmsEditDialog.js:67
+msgid "Send"
+msgstr "Pošalji"
+
+#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
+msgid "Close"
+msgstr "Zatvori"
+
+#: js/SmsEditDialog.js:112
+msgid "Loading contact..."
+msgstr "Učitavanje kontakta..."
+
+#: js/SmsEditDialog.js:113
+msgid "Sending message..."
+msgstr "Slanje poruke..."
+
+#: js/SmsEditDialog.js:250
+msgid "Recipient"
+msgstr "Primalac"
+
+#: js/SmsEditDialog.js:259
+msgid "Recipient's phone number"
+msgstr ""
+
+#: js/SmsEditDialog.js:263
+msgid "please choose the recipient's phone number..."
+msgstr ""
+
+#: js/SmsEditDialog.js:267
+msgid "Your phone number"
+msgstr ""
+
+#: js/SmsEditDialog.js:270
+msgid "please choose your phone number..."
+msgstr ""
+
+#: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
+msgid "The message"
+msgstr ""
+
+#: js/SmsEditDialog.js:279
+msgid "enter the text..."
+msgstr ""
+
+#: js/SmsEditDialog.js:293
+msgid "Character"
+msgstr ""
+
+#: js/SmsEditDialog.js:293
+msgid "Message"
+msgstr ""
+
+#: js/SmsEditDialog.js:316
+#, python-brace-format
+msgid "Send message to \"{0}\""
+msgstr ""
+
+#: js/SmsEditDialog.js:316
+msgid "Send message"
+msgstr ""
+
+#: js/SearchAddressDialog.js:55
+msgid "Add Number"
+msgstr "Dodaj broj"
+
+#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
+msgid "Mobile"
+msgstr "Mobitel"
+
+#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
+msgid "Car phone"
+msgstr "Telefon u automobilu"
+
+#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
+msgid "Pager"
+msgstr "Pager"
+
+#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
+msgid "Phone (private)"
+msgstr "Telefon (privatno)"
+
+#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
+msgid "Fax (private)"
+msgstr "Faks (privatno)"
+
+#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
+msgid "Mobile (private)"
+msgstr "Mobitel (privatno)"
+
+#: js/SearchAddressDialog.js:144
+msgid "-- create new --"
+msgstr "-- kreiraj novog --"
+
+#: js/SearchAddressDialog.js:145
+msgid "Select existing contact or create a new one"
+msgstr "Odaberi postojećeg ili kreiraj novog"
+
+#: js/SearchAddressDialog.js:180
+msgid "Choose Device"
+msgstr "Odaberi uređaj"
+
+#: js/SearchAddressDialog.js:211
+#, python-brace-format
+msgid "Add number {0} to the addressbook"
+msgstr ""
+
+#: js/ConnectionGridPanel.js:64 js/Models.js:332
+msgid "TOS"
+msgstr ""
+
+#: js/ConnectionGridPanel.js:72 js/Models.js:107 js/Models.js:325
+msgid "Status"
+msgstr "Status"
+
+#: js/ConnectionGridPanel.js:80
+msgid "Remote Number"
+msgstr "Udaljeni broj"
+
+#: js/ConnectionGridPanel.js:86
+msgid "Local Number"
+msgstr "Lokalni broj"
+
+#: js/ConnectionGridPanel.js:99
+msgid "Call started"
+msgstr "Započeti poziv"
+
+#: js/ConnectionGridPanel.js:106
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/ConnectionGridPanel.js:178
+msgid "Save number"
+msgstr "Snimi broj"
+
+#: js/ConnectionGridPanel.js:179
+msgid "Adds this number to the Addressbook"
+msgstr "Dodaj ovaj broj u adresar"
+
+#: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
+msgid "Add Account"
+msgstr "Dodaj račun"
+
+#: js/AssignLinesGrid.js:57
+msgid "Assign Lines"
+msgstr "Dodjela linija"
+
+#: js/AssignLinesGrid.js:99
+msgid "Id"
+msgstr "Id"
+
+#: js/AssignLinesGrid.js:102
+msgid "Sip Uri"
+msgstr "SIP URI"
+
+#: js/AssignLinesGrid.js:103 js/LineGridPanel.js:108
+msgid "Outgoing"
+msgstr "Odlazni"
+
+#: js/AssignLinesGrid.js:104 js/LineGridPanel.js:100
+msgid "Incoming"
+msgstr "Dolazni"
+
+#: js/AssignLinesGrid.js:107
+msgid "Assigned User"
+msgstr ""
+
+#: js/CallStateWindow.js:138
+msgid "The call can't be observed anymore. Lost SessionID."
+msgstr ""
+
+#: js/CallStateWindow.js:142
+msgid "The call can't be observed anymore due to an unknown error."
+msgstr ""
+
+#: js/CallStateWindow.js:151
+#, python-brace-format
+msgid "Please pick up your phone to get connected to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:155
+#, python-brace-format
+msgid "Connecting to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:162
+#, python-brace-format
+msgid "Connected to {0}."
+msgstr ""
+
+#: js/CallStateWindow.js:167
+msgid "call 1 busy"
+msgstr "Linija 1 zauzeta"
+
+#: js/CallStateWindow.js:174
+#, python-brace-format
+msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
+msgstr ""
+
+#: js/CallStateWindow.js:180
+msgid "hungup before other called"
+msgstr "prekini prije drugog poziva"
+
+#: js/CallStateWindow.js:183
+msgid "hungup"
+msgstr "prekini"
+
+#: js/CallStateWindow.js:221
+#, python-brace-format
+msgid "Initializing call to {0}"
+msgstr ""
+
+#: js/CallStateWindow.js:244
+msgid "Connecting to:"
+msgstr ""
+
+#: js/ExceptionHandler.js:18
+msgid ""
+"A general backend error occurred. If this is a permanent error, please "
+"contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:26
+msgid ""
+"The application could not connect to the sipgate server. If this is a "
+"permanent error, please contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:34
+msgid ""
+"The authentication data provided are not valid. Please configure or contact "
+"your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:42
+msgid ""
+"The saved credentials and config data could not be resolved properly. Please"
+" reconfigure or contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:50
+msgid ""
+"There are missing parameters to connect to sipgate. Please reconfigure or "
+"contact your administrator."
+msgstr ""
+
+#: js/ExceptionHandler.js:60
+msgid ""
+"The account you've configured is already in use. Please contact your "
+"administrator or activate the account again if it's yours."
+msgstr ""
+
+#: js/LineGridPanel.js:81
+msgid "User"
+msgstr "Korisnik"
+
+#: js/LineGridPanel.js:94
+msgid "SIP Uri"
+msgstr "SIP URI"
+
+#: js/LineGridPanel.js:114
+msgid "Created"
+msgstr "Kreirano"
+
+#: js/LineGridPanel.js:170 js/LineGridPanel.js:171
+msgid "Synchronize Line"
+msgstr "Sihonizirati liniju"
+
+#: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
+msgid "Synchronize Lines"
+msgstr "Sihonizirati linije"
+
+#: js/LineGridPanel.js:174
+msgid "Synchronizes the selected line(s)"
+msgstr "Sihonizirati odabranu liniju(e)"
+
+#: js/LineGridPanel.js:229
+msgid "Synchronizing..."
+msgstr "Sihoniziranje"
+
+#: js/AccountEditDialog.js:43
+msgid "Validating account..."
+msgstr ""
+
+#: js/AccountEditDialog.js:44
+msgid "Synchronizing lines..."
+msgstr ""
+
+#: js/AccountEditDialog.js:60
+msgid "Save Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:62
+msgid "Saves the account (without closing window)"
+msgstr ""
+
+#: js/AccountEditDialog.js:70
+msgid ""
+"Synchronizes the selected account (creates or updates the associated lines)"
+msgstr ""
+
+#: js/AccountEditDialog.js:76
+msgid "Validate Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:78
+msgid ""
+"Validates the selected account (creates or updates the associated lines)"
+msgstr ""
+
+#: js/AccountEditDialog.js:95
+msgid "The account is not saved already!"
+msgstr ""
+
+#: js/AccountEditDialog.js:96
+msgid "Please save your account before syncing!"
+msgstr ""
+
+#: js/AccountEditDialog.js:109
+msgid "The lines have been synced sucessfully!"
+msgstr ""
+
+#: js/AccountEditDialog.js:110
+#, python-brace-format
+msgid ""
+"The account has now {0} lines. Go on assigning user accounts to the new "
+"lines in the next tab."
+msgstr ""
+
+#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
+msgid "Errors"
+msgstr ""
+
+#: js/AccountEditDialog.js:258
+msgid "Description"
+msgstr ""
+
+#: js/AccountEditDialog.js:289
+msgid "Sipgate Username"
+msgstr ""
+
+#: js/AccountEditDialog.js:291
+msgid "Hidden due to security reasons."
+msgstr ""
+
+#: js/AccountEditDialog.js:293
+msgid "Password"
+msgstr ""
+
+#: js/AccountEditDialog.js:297
+msgid "Password Repeat"
+msgstr ""
+
+#: js/AccountEditDialog.js:303
+msgid "Is Validated"
+msgstr ""
+
+#: js/AccountEditDialog.js:341
+msgid "Please validate the account settings before saving!"
+msgstr ""
+
+#: js/Models.js:97 js/Models.js:144 js/Models.js:321
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:98
+msgid "Created By"
+msgstr ""
+
+#: js/Models.js:100
+msgid "Account-Type"
+msgstr ""
+
+#: js/Models.js:146
+msgid "Assigned to"
+msgstr ""
+
+#: js/Models.js:303
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: Controller/Connection.php:242
+msgid "anonymous"
+msgstr ""
+
+#: Preference.php:78
+msgid "Your phone"
+msgstr "Vaš telefon"
+
+#: Preference.php:79
+msgid "This is your phone"
+msgstr "Ovo je vaš telefon"
+
+#: Preference.php:82
+msgid "Your fax"
+msgstr "Vaš faks"
+
+#: Preference.php:83
+msgid "This is your fax"
+msgstr "Ovo je vaš faks"
+
+#: Preference.php:87
+msgid "Your mobile number"
+msgstr "Vaš mobitel"
+
+#: Preference.php:88
+msgid "Used when sending SMS"
+msgstr "Upotrijebljen prilikom slanja SMS-a"
+
+#: Preference.php:92
+msgid "International calling code"
+msgstr "Međunarodni poziv kod"
+
+#: Preference.php:93
+msgid ""
+"Your international calling code (e.g. +1 in the United States, +49 in "
+"Germany)"
+msgstr "Vaš međunarodni poziv broj (npr. +1 u SAD-u, +49 u Njemačkoj)"
 
 #: Config.php:48
 msgid "Connection Status"
@@ -94,10 +613,6 @@ msgstr ""
 msgid "Possible connection type of services"
 msgstr ""
 
-#: Config.php:68 js/AccountGridPanel.js:98 js/AccountEditDialog.js:262
-msgid "Account Type"
-msgstr "Vrsta računa"
-
 #: Config.php:70
 msgid ""
 "Private Accounts are editable only for the creating user. Shared accounts "
@@ -112,39 +627,39 @@ msgstr "Sipgate vrsta računa"
 msgid "The type of your account as defined in the contract"
 msgstr "Vrsta računa kao što je definirano u ugovoru"
 
-#: Setup/Update/Release1.php:50 Setup/Initialize.php:34
+#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
 msgid "accepted"
 msgstr "prihvaćam"
 
-#: Setup/Update/Release1.php:51 Setup/Initialize.php:35
+#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
 msgid "outgoing"
 msgstr "odlazni"
 
-#: Setup/Update/Release1.php:52 Setup/Initialize.php:36
+#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
 msgid "missed"
 msgstr "propušteni"
 
-#: Setup/Update/Release1.php:66 Setup/Initialize.php:50
+#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
 msgid "Telephone Call"
 msgstr "Telefonski Poziv"
 
-#: Setup/Update/Release1.php:67 Setup/Initialize.php:51
+#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
 msgid "Facsimile"
 msgstr "Faks"
 
-#: Setup/Update/Release1.php:91 Setup/Initialize.php:65
+#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
 msgid "basic/plus"
 msgstr "osnovni/plus"
 
-#: Setup/Update/Release1.php:92 Setup/Initialize.php:66
+#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
 msgid "team"
 msgstr "tim"
 
-#: Setup/Update/Release1.php:106 Setup/Initialize.php:80
+#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
 msgid "private"
 msgstr "pivatni"
 
-#: Setup/Update/Release1.php:107 Setup/Initialize.php:81
+#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
 msgid "shared"
 msgstr "dijeljeni"
 
@@ -1114,510 +1629,4 @@ msgstr ""
 
 #: Setup/calling-codes.xml:1206
 msgid "+263 (Zimbabwe (Republic of))"
-msgstr ""
-
-#: Preference.php:78
-msgid "Your phone"
-msgstr "Vaš telefon"
-
-#: Preference.php:79
-msgid "This is your phone"
-msgstr "Ovo je vaš telefon"
-
-#: Preference.php:82
-msgid "Your fax"
-msgstr "Vaš faks"
-
-#: Preference.php:83
-msgid "This is your fax"
-msgstr "Ovo je vaš faks"
-
-#: Preference.php:87
-msgid "Your mobile number"
-msgstr "Vaš mobitel"
-
-#: Preference.php:88
-msgid "Used when sending SMS"
-msgstr "Upotrijebljen prilikom slanja SMS-a"
-
-#: Preference.php:92
-msgid "International calling code"
-msgstr "Međunarodni poziv kod"
-
-#: Preference.php:93
-msgid ""
-"Your international calling code (e.g. +1 in the United States, +49 in "
-"Germany)"
-msgstr "Vaš međunarodni poziv broj (npr. +1 u SAD-u, +49 u Njemačkoj)"
-
-#: js/ConnectionGridPanel.js:64 js/Models.js:332
-msgid "TOS"
-msgstr ""
-
-#: js/ConnectionGridPanel.js:72 js/Models.js:107 js/Models.js:325
-msgid "Status"
-msgstr "Status"
-
-#: js/ConnectionGridPanel.js:80
-msgid "Remote Number"
-msgstr "Udaljeni broj"
-
-#: js/ConnectionGridPanel.js:86
-msgid "Local Number"
-msgstr "Lokalni broj"
-
-#: js/ConnectionGridPanel.js:92 js/LineFilterModel.js:32
-msgid "Line"
-msgstr "Linija"
-
-#: js/ConnectionGridPanel.js:99
-msgid "Call started"
-msgstr "Započeti poziv"
-
-#: js/ConnectionGridPanel.js:106
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/ConnectionGridPanel.js:178
-msgid "Save number"
-msgstr "Snimi broj"
-
-#: js/ConnectionGridPanel.js:179
-msgid "Adds this number to the Addressbook"
-msgstr "Dodaj ovaj broj u adresar"
-
-#: js/ConnectionGridPanel.js:186 js/LineGridPanel.js:163
-#: js/AccountGridPanel.js:124
-msgid "Dial number"
-msgstr "Biraj broj"
-
-#: js/ConnectionGridPanel.js:187 js/LineGridPanel.js:164
-#: js/AccountGridPanel.js:125
-msgid "Initiates a new outgoing call"
-msgstr "Uspostava novog izlaznog poziva"
-
-#: js/ConnectionGridPanel.js:196 js/LineGridPanel.js:203
-msgid "Add Account"
-msgstr "Dodaj račun"
-
-#: js/SmsEditDialog.js:67
-msgid "Send"
-msgstr "Pošalji"
-
-#: js/SmsEditDialog.js:74 js/SearchAddressDialog.js:63
-#: js/DialNumberDialog.js:89 js/CallStateWindow.js:106
-msgid "Cancel"
-msgstr "Odustani"
-
-#: js/SmsEditDialog.js:81 js/SearchAddressDialog.js:71
-msgid "Close"
-msgstr "Zatvori"
-
-#: js/SmsEditDialog.js:112
-msgid "Loading contact..."
-msgstr "Učitavanje kontakta..."
-
-#: js/SmsEditDialog.js:113
-msgid "Sending message..."
-msgstr "Slanje poruke..."
-
-#: js/SmsEditDialog.js:250
-msgid "Recipient"
-msgstr "Primalac"
-
-#: js/SmsEditDialog.js:259
-msgid "Recipient's phone number"
-msgstr ""
-
-#: js/SmsEditDialog.js:263
-msgid "please choose the recipient's phone number..."
-msgstr ""
-
-#: js/SmsEditDialog.js:267
-msgid "Your phone number"
-msgstr ""
-
-#: js/SmsEditDialog.js:270
-msgid "please choose your phone number..."
-msgstr ""
-
-#: js/SmsEditDialog.js:276 js/SmsEditDialog.js:293
-msgid "The message"
-msgstr ""
-
-#: js/SmsEditDialog.js:279
-msgid "enter the text..."
-msgstr ""
-
-#: js/SmsEditDialog.js:293
-msgid "Character"
-msgstr ""
-
-#: js/SmsEditDialog.js:293
-msgid "Message"
-msgstr ""
-
-#: js/SmsEditDialog.js:316
-msgid "Send message to \"{0}\""
-msgstr ""
-
-#: js/SmsEditDialog.js:316
-msgid "Send message"
-msgstr ""
-
-#: js/SearchAddressDialog.js:55
-msgid "Add Number"
-msgstr "Dodaj broj"
-
-#: js/SearchAddressDialog.js:132 js/SearchAddressDialog.js:154
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/SearchAddressDialog.js:133 js/SearchAddressDialog.js:155
-msgid "Mobile"
-msgstr "Mobitel"
-
-#: js/SearchAddressDialog.js:134 js/SearchAddressDialog.js:156
-#: js/AccountGridPanel.js:55
-msgid "Fax"
-msgstr "Faks"
-
-#: js/SearchAddressDialog.js:135 js/SearchAddressDialog.js:157
-msgid "Car phone"
-msgstr "Telefon u automobilu"
-
-#: js/SearchAddressDialog.js:136 js/SearchAddressDialog.js:158
-msgid "Pager"
-msgstr "Pager"
-
-#: js/SearchAddressDialog.js:137 js/SearchAddressDialog.js:159
-msgid "Phone (private)"
-msgstr "Telefon (privatno)"
-
-#: js/SearchAddressDialog.js:138 js/SearchAddressDialog.js:160
-msgid "Fax (private)"
-msgstr "Faks (privatno)"
-
-#: js/SearchAddressDialog.js:139 js/SearchAddressDialog.js:161
-msgid "Mobile (private)"
-msgstr "Mobitel (privatno)"
-
-#: js/SearchAddressDialog.js:144
-msgid "-- create new --"
-msgstr "-- kreiraj novog --"
-
-#: js/SearchAddressDialog.js:145
-msgid "Select existing contact or create a new one"
-msgstr "Odaberi postojećeg ili kreiraj novog"
-
-#: js/SearchAddressDialog.js:180
-msgid "Choose Device"
-msgstr "Odaberi uređaj"
-
-#: js/SearchAddressDialog.js:211
-msgid "Add number {0} to the addressbook"
-msgstr ""
-
-#: js/LineGridPanel.js:65 js/AssignLinesGrid.js:100 js/AccountGridPanel.js:89
-#: js/AccountEditDialog.js:279
-msgid "Type"
-msgstr ""
-
-#: js/LineGridPanel.js:73 js/AccountFilterModel.js:38
-msgid "Account"
-msgstr "Račun"
-
-#: js/LineGridPanel.js:81
-msgid "User"
-msgstr "Korisnik"
-
-#: js/LineGridPanel.js:88 js/AssignLinesGrid.js:101 js/AccountGridPanel.js:115
-msgid "Uri Alias"
-msgstr "URI pseudonim"
-
-#: js/LineGridPanel.js:94
-msgid "SIP Uri"
-msgstr "SIP URI"
-
-#: js/LineGridPanel.js:100 js/AssignLinesGrid.js:104
-msgid "Incoming"
-msgstr "Dolazni"
-
-#: js/LineGridPanel.js:108 js/AssignLinesGrid.js:103
-msgid "Outgoing"
-msgstr "Odlazni"
-
-#: js/LineGridPanel.js:114
-msgid "Created"
-msgstr "Kreirano"
-
-#: js/LineGridPanel.js:170 js/LineGridPanel.js:171
-msgid "Synchronize Line"
-msgstr "Sihonizirati liniju"
-
-#: js/LineGridPanel.js:172 js/AccountEditDialog.js:68
-msgid "Synchronize Lines"
-msgstr "Sihonizirati linije"
-
-#: js/LineGridPanel.js:174
-msgid "Synchronizes the selected line(s)"
-msgstr "Sihonizirati odabranu liniju(e)"
-
-#: js/LineGridPanel.js:229
-msgid "Synchronizing..."
-msgstr "Sihoniziranje"
-
-#: js/AssignLinesGrid.js:57
-msgid "Assign Lines"
-msgstr "Dodjela linija"
-
-#: js/AssignLinesGrid.js:99
-msgid "Id"
-msgstr "Id"
-
-#: js/AssignLinesGrid.js:102
-msgid "Sip Uri"
-msgstr "SIP URI"
-
-#: js/AssignLinesGrid.js:107
-msgid "Assigned User"
-msgstr ""
-
-#: js/AccountGridPanel.js:54
-msgid "Telephone"
-msgstr "Telefon"
-
-#: js/AccountGridPanel.js:107 js/AccountEditDialog.js:286
-msgid "Mobile Number"
-msgstr "Mobitel"
-
-#: js/DialNumberDialog.js:97
-msgid "Ok"
-msgstr "U redu"
-
-#: js/DialNumberDialog.js:161
-msgid "Select Line"
-msgstr "Odabrana linija"
-
-#: js/DialNumberDialog.js:166
-msgid "Number to call"
-msgstr "Broj za zvanje"
-
-#: js/DialNumberDialog.js:171
-msgid "Please use a valid telephone number!"
-msgstr "Molimo Vas da koristite valjani telefonski broj!"
-
-#: js/DialNumberDialog.js:211
-msgid "Dial Number {0}"
-msgstr "Biraj broj {0}"
-
-#: js/ExceptionHandler.js:18
-msgid ""
-"A general backend error occurred. If this is a permanent error, please "
-"contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:26
-msgid ""
-"The application could not connect to the sipgate server. If this is a "
-"permanent error, please contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:34
-msgid ""
-"The authentication data provided are not valid. Please configure or contact "
-"your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:42
-msgid ""
-"The saved credentials and config data could not be resolved properly. Please"
-" reconfigure or contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:50
-msgid ""
-"There are missing parameters to connect to sipgate. Please reconfigure or "
-"contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:60
-msgid ""
-"The account you've configured is already in use. Please contact your "
-"administrator or activate the account again if it's yours."
-msgstr ""
-
-#: js/CallStateWindow.js:138
-msgid "The call can't be observed anymore. Lost SessionID."
-msgstr ""
-
-#: js/CallStateWindow.js:142
-msgid "The call can't be observed anymore due to an unknown error."
-msgstr ""
-
-#: js/CallStateWindow.js:151
-msgid "Please pick up your phone to get connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:155
-msgid "Connecting to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:162
-msgid "Connected to {0}."
-msgstr ""
-
-#: js/CallStateWindow.js:167
-msgid "call 1 busy"
-msgstr "Linija 1 zauzeta"
-
-#: js/CallStateWindow.js:174
-msgid "Connecting to {0} failed. {0} is busy or has rejected the call."
-msgstr ""
-
-#: js/CallStateWindow.js:180
-msgid "hungup before other called"
-msgstr "prekini prije drugog poziva"
-
-#: js/CallStateWindow.js:183
-msgid "hungup"
-msgstr "prekini"
-
-#: js/CallStateWindow.js:221
-msgid "Initializing call to {0}"
-msgstr ""
-
-#: js/CallStateWindow.js:244
-msgid "Connecting to: "
-msgstr "Spajanje na:"
-
-#: js/AccountEditDialog.js:43
-msgid "Validating account..."
-msgstr ""
-
-#: js/AccountEditDialog.js:44
-msgid "Synchronizing lines..."
-msgstr ""
-
-#: js/AccountEditDialog.js:60
-msgid "Save Account"
-msgstr ""
-
-#: js/AccountEditDialog.js:62
-msgid "Saves the account (without closing window)"
-msgstr ""
-
-#: js/AccountEditDialog.js:70
-msgid ""
-"Synchronizes the selected account (creates or updates the associated lines)"
-msgstr ""
-
-#: js/AccountEditDialog.js:76
-msgid "Validate Account"
-msgstr ""
-
-#: js/AccountEditDialog.js:78
-msgid ""
-"Validates the selected account (creates or updates the associated lines)"
-msgstr ""
-
-#: js/AccountEditDialog.js:95
-msgid "The account is not saved already!"
-msgstr ""
-
-#: js/AccountEditDialog.js:96
-msgid "Please save your account before syncing!"
-msgstr ""
-
-#: js/AccountEditDialog.js:109
-msgid "The lines have been synced sucessfully!"
-msgstr ""
-
-#: js/AccountEditDialog.js:110
-msgid ""
-"The account has now {0} lines. Go on assigning user accounts to the new "
-"lines in the next tab."
-msgstr ""
-
-#: js/AccountEditDialog.js:128 js/AccountEditDialog.js:341
-msgid "Errors"
-msgstr ""
-
-#: js/AccountEditDialog.js:258
-msgid "Description"
-msgstr ""
-
-#: js/AccountEditDialog.js:289
-msgid "Sipgate Username"
-msgstr ""
-
-#: js/AccountEditDialog.js:291
-msgid "Hidden due to security reasons."
-msgstr ""
-
-#: js/AccountEditDialog.js:293
-msgid "Password"
-msgstr ""
-
-#: js/AccountEditDialog.js:297
-msgid "Password Repeat"
-msgstr ""
-
-#: js/AccountEditDialog.js:303
-msgid "Is Validated"
-msgstr ""
-
-#: js/AccountEditDialog.js:341
-msgid "Please validate the account settings before saving!"
-msgstr ""
-
-#: js/Models.js:97 js/Models.js:144 js/Models.js:321
-msgid "Quick Search"
-msgstr ""
-
-#: js/Models.js:98
-msgid "Created By"
-msgstr ""
-
-#: js/Models.js:100
-msgid "Account-Type"
-msgstr ""
-
-#: js/Models.js:146
-msgid "Assigned to"
-msgstr ""
-
-#: js/Models.js:303
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/AddressbookGridPanelHook.js:38
-msgid "Call contact"
-msgstr "Nazovi"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Kreiraj SMS"
-
-#: js/AddressbookGridPanelHook.js:260
-msgid "Work"
-msgstr "Posao"
-
-#: js/AddressbookGridPanelHook.js:270
-msgid "Home"
-msgstr "Doma"
-
-#: js/AddressbookGridPanelHook.js:280 js/AddressbookGridPanelHook.js:325
-msgid "Cell"
-msgstr "Mobitel"
-
-#: js/AddressbookGridPanelHook.js:290 js/AddressbookGridPanelHook.js:335
-msgid "Cell private"
-msgstr "Mobitel privatno"
-
-#: Controller/Connection.php:242
-msgid "anonymous"
 msgstr ""

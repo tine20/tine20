@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:25+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -36,11 +36,11 @@ msgstr "ข้อมูล"
 
 #: Export/Spreadsheet/Xls.php:365
 msgid "Without company assigned"
-msgstr ""
+msgstr "บริษัทไม่ได้เป็นผู้มอบหมาย"
 
 #: User/Sql.php:1041
 msgid "Your Tine 2.0 account has been deactivated"
-msgstr ""
+msgstr "บัญชี Tine 2.0 ของคูณได้ถูกระงับ "
 
 #: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
 #: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
@@ -52,32 +52,32 @@ msgstr "ไม่รู้จัก"
 #: ModelConfiguration.php:82 ModelConfiguration.php:91
 msgid "Record Name"
 msgid_plural "Records Name"
-msgstr[0] ""
+msgstr[0] "บันทึกชื่อ"
 
 #: ModelConfiguration.php:164 ModelConfiguration.php:252
 msgid "Group"
-msgstr ""
+msgstr "กลุ่ม"
 
 #: ModelConfiguration.php:209
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:195
 msgid "Title"
-msgstr ""
+msgstr "คำนำหน้าชื่อ"
 
 #: ModelConfiguration.php:213
 msgid "New Car"
-msgstr ""
+msgstr "รถใหม่"
 
 #: ModelConfiguration.php:379 ModelConfiguration.php:382
 msgid "Banking Information"
-msgstr ""
+msgstr "ข้อมูลธนาคาร"
 
 #: ModelConfiguration.php:383
 msgid "Private Information"
-msgstr ""
+msgstr "ข้อมูลส่วนตัว"
 
 #: Exception/PasswordPolicyViolation.php:22
 msgid "Password Policy Violation"
-msgstr ""
+msgstr "การที่อาจจะเป็นอันตรายต่อนโยบายรหัสผ่าน"
 
 #: Exception/SystemGeneric.php:27
 msgid "Generic System Exception"
@@ -85,15 +85,15 @@ msgstr ""
 
 #: Exception/MonthFormat.php:26
 msgid "Wrong month format!"
-msgstr ""
+msgstr "รูปแบบของเดือนผิด!"
 
 #: Exception/MonthFormat.php:31
 msgid "The month must have the format YYYY-MM!"
-msgstr ""
+msgstr "เดือนจะต้องมีรูปแบบ YYYY-MM!"
 
 #: Exception/InvalidRelationConstraints.php:26
 msgid "Invalid Relations"
-msgstr ""
+msgstr "ความสัมพันธ์ไม่ถูกต้อง"
 
 #: Exception/InvalidRelationConstraints.php:36
 msgid ""
@@ -103,11 +103,11 @@ msgstr ""
 
 #: Exception/Record/SystemContainer.php:22
 msgid "System Container"
-msgstr ""
+msgstr "ที่จัดเก็บระบบ"
 
 #: Exception/Record/SystemContainer.php:28
 msgid "This is a system container which could not be deleted!"
-msgstr ""
+msgstr "นี่เป็นตัวจัดเก็บระบบซึ่งไม่สามารถลบทิ้งได้!"
 
 #: Acl/Rights.php:147
 msgid "Report bugs"
@@ -131,15 +131,15 @@ msgstr "จัดการโปรไฟล์ของตัวเอง"
 
 #: Acl/Rights.php:156
 msgid "The right to manage the own profile (selected contact data)."
-msgstr ""
+msgstr "สิทธิ์ในการจัดการโปรไฟล์ของตัวเอง (ข้อมูลการรติดต่อที่ได้รับเลือก)"
 
 #: Acl/Rights.php:159
 msgid "Manage own client state"
-msgstr ""
+msgstr "จัดการ สถานะของลูกค้าตัวเอง"
 
 #: Acl/Rights.php:160
 msgid "The right to manage the own client state."
-msgstr ""
+msgstr "สิทธิ์ในการจัดการสถานะของลูกค้าตัวเอง"
 
 #: Acl/Rights/Abstract.php:72
 msgid "admin"
@@ -159,23 +159,23 @@ msgstr "ดำเนินการอธิบายสิทธิ์"
 
 #: Preference/Abstract.php:517
 msgid "default"
-msgstr ""
+msgstr "ค่าหลัก"
 
 #: PersistentFilter.php:152
 msgid "- The last filter I used -"
-msgstr ""
+msgstr "- ตัวกรองที่ฉันได้ใช้ครั้งสุดท้าย -"
 
 #: Notes.php:426
 msgid "by"
-msgstr ""
+msgstr "โดย"
 
 #: Notes.php:435
 msgid "Changed fields:"
-msgstr ""
+msgstr "เขตข้อมูลที่ถูกเปลี่ยน:"
 
 #: js/ux/SearchField.js:44
 msgid "enter searchfilter"
-msgstr ""
+msgstr "ใส่ ตัวกรองการค้นหา"
 
 #: js/ux/PopupWindowManager.js:175
 msgid ""
@@ -183,10 +183,14 @@ msgid ""
 "support to foreground the window for you, so you need to use your operating "
 "systems window switching features. Please send complaints to your browser "
 "vendor!"
-msgstr ""
+msgstr "หน้าต่างที่คุณต้องการทำงานนั้นถูกตั้งเป็นพื้นหลัง เบราเซอร์ของคุณไม่สนับสนุนให้เลื่อนหน้าต่างมาอยู่ด้านหน้า ดังนั้นคุณต้องใช้ปฏิบัติการระบบหน้าต่างในการสลับการใช้งาน กรุณาส่งจดหมายร้องทุกข์ไปยังผู้จำหน่ายเบราเซอร์ของคุณ!"
 
-#: js/ux/Percentage.js:193
+#: js/ux/Percentage.js:229
 msgid "(paused)"
+msgstr "(หยุดพัก)"
+
+#: js/ux/grid/GroupingGridPlugin.js:95
+msgid "Export Records from these Positions"
 msgstr ""
 
 #: js/ux/grid/PagingToolbar.js:57
@@ -256,7 +260,7 @@ msgstr "กดปุ่มเพื่อแก้ไข"
 
 #: js/ux/form/ImageField.js:146
 msgid "Image Failed"
-msgstr ""
+msgstr "รูปภาพล้มเหลว"
 
 #: js/ux/form/ImageField.js:146
 msgid "Could not load image. Please notify your Administrator"
@@ -276,7 +280,7 @@ msgstr "การอัปโหลดได้ล้มเหลว"
 
 #: js/ux/form/ImageField.js:211
 msgid "Could not upload image. Please notify your Administrator"
-msgstr ""
+msgstr "ไม่สามารถโหลดภาพได้ กรุณาแจ้งผู้ดูแลระบบของคุณ"
 
 #: js/ux/form/ImageField.js:224
 msgid "Change Image"
@@ -298,33 +302,33 @@ msgstr "แสดงรูปดั้งเดิม"
 #: js/widgets/container/ContainerSelect.js:129
 #, python-brace-format
 msgid "choose other {0}..."
-msgstr ""
+msgstr "เลือก {0}... อันอื่น"
 
 #: js/ux/form/RecordsComboBox.js:26
 msgid "Software Version"
 msgstr "เวอร์ชั่นซอฟท์แวร์"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:427
+#: js/ExceptionDialog.js:62 Frontend/Http.php:432
 msgid "Abnormal End"
-msgstr ""
+msgstr "การยุติที่ผิดพลาด"
 
 #: js/ExceptionDialog.js:103 js/ExceptionDialog.js:126
 msgid "Send Report"
 msgstr "ส่งรายงาน"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:428
+#: js/ExceptionDialog.js:154 Frontend/Http.php:433
 msgid "An error occurred, the program ended abnormal."
-msgstr ""
+msgstr "เกิดข้อผิดพลาดขึ้น โปรแกรมได้จบแบบไม่ธรรมดา"
 
 #: js/ExceptionDialog.js:155
 msgid "The last action you made was potentially not performed correctly."
-msgstr ""
+msgstr "การกระทำครั้งสุดท้ายที่คุณได้ทำไปนั้น เป็นไปได้อย่างสูงว่าได้แสดงไม่ถูกต้อง"
 
 #: js/ExceptionDialog.js:156
 msgid ""
 "Please help improving this software and notify the vendor. Include a brief "
 "description of what you where doing when the error occurred."
-msgstr ""
+msgstr "กรุณาช่วยปรับปรุงซอฟท์แวร์นี้และแจ้งให้ผู้ค้ารับทราบด้วย รวมไปถึงการบรรยายอย่างคร่าว ๆ ว่าคุณทำอะไรที่ไหนเมื่อเกิดข้อผิดพลาดขึ้น"
 
 #: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:508
 #: js/widgets/relation/GenericPickerGridPanel.js:457
@@ -358,7 +362,7 @@ msgstr "รายงานของคุณถูกส่งไปแล้ว
 
 #: js/ExceptionDialog.js:261
 msgid "Please restart your browser now!"
-msgstr ""
+msgstr "กรุณาเปิดเบราเซอร์ของคุณตอนนี้อีกครั้ง!"
 
 #: js/AdminPanel.js:75
 msgid "Profile Information"
@@ -406,7 +410,7 @@ msgstr ""
 
 #: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
 msgid "Remove Formatting"
-msgstr ""
+msgstr "เอารูปแบบออก"
 
 #: js/AppManager.js:208
 msgid "Missing Applications"
@@ -416,11 +420,11 @@ msgstr "แอพพลิเคชั่นที่ขาดหาย"
 msgid ""
 "There are no applications enabled for you. Please contact your "
 "administrator."
-msgstr ""
+msgstr "ไม่มีแอพลิเคชั่นไหนที่คุณจะใช้ได้ กรุณาติดต่อผู้ดูแลระบบของคุณ"
 
-#: js/ApplicationStarter.js:539
+#: js/ApplicationStarter.js:545
 msgid "New "
-msgstr ""
+msgstr "ใหม่"
 
 #: js/Container.js:123
 #, python-brace-format
@@ -494,39 +498,39 @@ msgstr "ความล้มเหลว"
 msgid "The new passwords mismatch, please correct them."
 msgstr "รหัสผ่านใหม่ไม่ตรง กรุณาแก้ไข"
 
-#: js/common.js:235
+#: js/common.js:261
 msgid "Usage:&#160;"
 msgstr "การใช้:&#160;"
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
-msgstr ""
+msgstr "ส่วนตัว"
 
-#: js/common.js:273 js/common.js:311
+#: js/common.js:300 js/common.js:338
 msgid "No Information"
 msgstr "ไม่มีข้อมูล"
 
-#: js/common.js:360
+#: js/common.js:387
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] " {0} นาที"
 
-#: js/common.js:361
+#: js/common.js:388
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] " {0} ชั่วโมง"
 
-#: js/common.js:362
+#: js/common.js:389
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] " {0} วันทำงาน"
 
-#: js/common.js:389
+#: js/common.js:416
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -534,7 +538,7 @@ msgstr[0] " {0} วินาที"
 
 #: js/LicenseScreen.js:35
 msgid "License"
-msgstr ""
+msgstr "ลิขสิทธิ์"
 
 #: js/MainScreen.js:205
 msgid "Your password expired. Please enter a new user password:"
@@ -542,7 +546,7 @@ msgstr "รหัสผ่านของคุณหมดอายุ กร�
 
 #: js/widgets/TimezoneChooser.js:37 Preference.php:142
 msgid "Timezone"
-msgstr ""
+msgstr "เส้นแบ่งเวลา"
 
 #: js/widgets/TimezoneChooser.js:77
 msgid "setting new timezone..."
@@ -554,15 +558,15 @@ msgstr ""
 
 #: js/widgets/account/PickerGridPanel.js:164
 msgid "Search Group"
-msgstr ""
+msgstr "ค้นหา กลุ่ม"
 
 #: js/widgets/account/PickerGridPanel.js:170
 msgid "Add Anyone"
-msgstr ""
+msgstr "เพิ่ม ใครสักคน"
 
 #: js/widgets/account/PickerGridPanel.js:213
 msgid "Anyone"
-msgstr ""
+msgstr "ใครสักคน"
 
 #: js/widgets/account/PickerGridPanel.js:229
 msgid "Search for users ..."
@@ -661,31 +665,31 @@ msgstr ""
 #: js/widgets/tree/ContextMenu.js:124
 #: js/widgets/dialog/AttachmentsGridPanel.js:131
 msgid "Download"
-msgstr ""
+msgstr "ดาวน์โหลด"
 
 #: js/widgets/tree/ContextMenu.js:132
 msgid "Publish"
-msgstr ""
+msgstr "ตีพิมพ์"
 
 #: js/widgets/tree/ContextMenu.js:196
 #, python-brace-format
 msgid "New {0}"
-msgstr ""
+msgstr "{0} ใหม่"
 
 #: js/widgets/tree/ContextMenu.js:196
 #, python-brace-format
 msgid "Please enter the name of the new {0}:"
-msgstr ""
+msgstr "กรุณาใส่ชื่อของ {0} ใหม่:"
 
 #: js/widgets/tree/ContextMenu.js:199
 #, python-brace-format
 msgid "No {0} added"
-msgstr ""
+msgstr "ไม่ได้ {0} เพิ่ม"
 
 #: js/widgets/tree/ContextMenu.js:199 js/widgets/tree/ContextMenu.js:283
 #, python-brace-format
 msgid "You have to supply a {0} name!"
-msgstr ""
+msgstr "คุณต้องใช้ชื่อ {0} หนึ่ง!"
 
 #: js/widgets/tree/ContextMenu.js:202 js/widgets/container/GrantsDialog.js:95
 #: js/widgets/persistentfilter/PickerPanel.js:328
@@ -698,17 +702,17 @@ msgstr "กรุณารอ"
 #: js/widgets/tree/ContextMenu.js:202
 #, python-brace-format
 msgid "Creating {0}..."
-msgstr ""
+msgstr "กำลังสร้าง {0}..."
 
 #: js/widgets/tree/ContextMenu.js:277
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
-msgstr ""
+msgstr "กรุณาใส่ชื่อใหม่ของ {0}:"
 
 #: js/widgets/tree/ContextMenu.js:283
 #, python-brace-format
 msgid "Not renamed {0}"
-msgstr ""
+msgstr "ไม่ได้เปลี่ยนชื่อ {0}"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
@@ -721,7 +725,7 @@ msgstr "ยืนยัน"
 #: js/widgets/tree/ContextMenu.js:357
 #, python-brace-format
 msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr ""
+msgstr "คุณแน่ใจว่าต้องการจะลบ {0} \"{1}\"?"
 
 #: js/widgets/tree/ContextMenu.js:468
 #, python-brace-format
@@ -731,35 +735,35 @@ msgstr ""
 #: js/widgets/tree/ContextMenu.js:492
 #, python-brace-format
 msgid "Properties for {0} \"{1}\""
-msgstr ""
+msgstr "คุณสมบัติของ {0} \"{1}\""
 
 #: js/widgets/container/ContainerSelect.js:132
 #, python-brace-format
 msgid "Select a {0}"
-msgstr ""
+msgstr "เลือก {0}"
 
 #: js/widgets/container/ContainerSelect.js:152
 #, python-brace-format
 msgid "Recently used {0}:"
-msgstr ""
+msgstr " ล่าสุดได้ใช้ {0}:"
 
 #: js/widgets/container/ContainerSelect.js:478
 #, python-brace-format
 msgid "please select a {0}"
-msgstr ""
+msgstr "กรุณาเลือก {0}"
 
 #: js/widgets/container/CalDAVContainerPropertiesHookField.js:35
 msgid "CalDAV URL"
-msgstr ""
+msgstr "CalDAV URL"
 
 #: js/widgets/container/PropertiesDialog.js:90
 msgid "Properties"
-msgstr ""
+msgstr "คุณสมบัติ"
 
 #: js/widgets/container/PropertiesDialog.js:113
 #: js/widgets/tags/TagsPanel.js:512
 msgid "Color"
-msgstr ""
+msgstr "ีสี"
 
 #: js/widgets/container/PropertiesDialog.js:119
 msgid "My Grants"
@@ -773,7 +777,7 @@ msgstr[0] ""
 #: js/widgets/container/TreePanel.js:547
 #, python-brace-format
 msgid "You are not allowed to select the {0} '{1}':"
-msgstr ""
+msgstr "คุณไม่ได้รับอนุญาตให้เลือก {0} '{1}':"
 
 #: js/widgets/container/TreePanel.js:548
 #, python-brace-format
@@ -786,7 +790,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsDialog.js:52
 msgid "Folder"
-msgstr ""
+msgstr "แฟ้มเอกสาร"
 
 #: js/widgets/container/GrantsDialog.js:95
 msgid "Updating Grants"
@@ -794,7 +798,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsDialog.js:125
 msgid "Error"
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: js/widgets/container/GrantsDialog.js:126
 msgid "You are not allowed to remove all admins for this container!"
@@ -846,7 +850,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsGrid.js:55
 msgid "Admin"
-msgstr ""
+msgstr "ผู้ดูแลระบบ"
 
 #: js/widgets/container/GrantsGrid.js:56
 msgid "The grant to administrate this container"
@@ -862,7 +866,7 @@ msgstr ""
 
 #: js/widgets/container/GrantsGrid.js:60
 msgid "Private"
-msgstr ""
+msgstr "ส่วนตัว"
 
 #: js/widgets/container/GrantsGrid.js:61
 msgid "The grant to access records marked as private in this container"
@@ -870,12 +874,12 @@ msgstr ""
 
 #: js/widgets/container/FilterModel.js:160
 msgid "is personal of"
-msgstr ""
+msgstr "เป็นส่วนตัวของ"
 
 #: js/widgets/container/FilterModel.js:160
 #: js/widgets/container/FilterModel.js:164 js/widgets/grid/FilterModel.js:226
 msgid "is equal to"
-msgstr ""
+msgstr "เท่ากับ"
 
 #: js/widgets/container/FilterModel.js:267
 #: js/widgets/grid/PickerGridPanel.js:260
@@ -895,47 +899,47 @@ msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:153
 msgid "Add a Note..."
-msgstr ""
+msgstr "เพิ่มบันทึก"
 
 #: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:491
 msgid "Note"
-msgstr ""
+msgstr "บันทึก"
 
 #: js/widgets/ActivitiesPanel.js:182 js/widgets/ActivitiesPanel.js:413
 msgid "Add new note"
-msgstr ""
+msgstr "เพิ่มบันทึกใหม่"
 
 #: js/widgets/ActivitiesPanel.js:209 js/widgets/ActivitiesPanel.js:228
 msgid "Notes"
-msgstr ""
+msgstr "บันทึก"
 
 #: js/widgets/ActivitiesPanel.js:311
 msgid "Enter new note:"
-msgstr ""
+msgstr "ใส่ บันทึกใหม่:"
 
 #: js/widgets/ActivitiesPanel.js:356 js/widgets/ActivitiesPanel.js:412
 msgid "Add Note"
-msgstr ""
+msgstr "เพิ่มบันทึก"
 
 #: js/widgets/ActivitiesPanel.js:399
 #, python-brace-format
 msgid "Add a {0} Note"
-msgstr ""
+msgstr "เพิ่ม บันทึก {0} "
 
 #: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
 #: js/widgets/relation/GenericPickerGridPanel.js:460
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
-msgstr ""
+msgstr "ประเภท"
 
 #: js/widgets/ActivitiesPanel.js:492 js/widgets/grid/GridPanel.js:1420
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
-msgstr ""
+msgstr "สร้าง โดย"
 
 #: js/widgets/ActivitiesPanel.js:493
 msgid "Timestamp"
-msgstr ""
+msgstr "ปั้มเวลา"
 
 #: js/widgets/ActivitiesPanel.js:507
 #, python-brace-format
@@ -1005,27 +1009,27 @@ msgstr ""
 
 #: js/widgets/tags/TagsMassAttachAction.js:98
 msgid "Select Tag"
-msgstr ""
+msgstr "เลือก ป้ายกำกับ"
 
 #: js/widgets/tags/TagsMassAttachAction.js:128
 msgid "Attaching Tag"
-msgstr ""
+msgstr "กำลังแนบป้ายกำกับ"
 
 #: js/widgets/tags/TagCombo.js:46
 msgid "tag name"
-msgstr ""
+msgstr "ชื่อป้ายกำกับ"
 
 #: js/widgets/tags/TagsPanel.js:114
 msgid "Add a new personal tag"
-msgstr ""
+msgstr "เพิ่มป้ายกำกับส่วนตัวใหม่"
 
 #: js/widgets/tags/TagsPanel.js:117
 msgid "Add New Personal Tag"
-msgstr ""
+msgstr "เพิ่ม ป้ายกำกับส่วนตัวใหม่"
 
 #: js/widgets/tags/TagsPanel.js:118
 msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr ""
+msgstr "กรุณาจำไว้ว่า คุณสร้างป้ายกำกับส่วนตัวซึ่งคุณเท่านั้นที่จะเห็นได้!"
 
 #: js/widgets/tags/TagsPanel.js:118
 msgid "Enter tag name:"
@@ -1121,20 +1125,20 @@ msgstr ""
 msgid "Save current view as favorite"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "New version of Tine 2.0 available"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr ""
 
-#: js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:61
+#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr ""
 
@@ -1147,7 +1151,7 @@ msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:126
 msgid "Edit record"
-msgstr ""
+msgstr "แก้ไข สถิติ"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:133
 #: js/widgets/relation/FilterModel.js:32 js/Models.js:402
@@ -1161,11 +1165,11 @@ msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:163
 msgid "Parent"
-msgstr ""
+msgstr "พ่อแม่"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:164
 msgid "Child"
-msgstr ""
+msgstr "เด็ก"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:265
 #, python-brace-format
@@ -1198,11 +1202,11 @@ msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:458
 msgid "Remark"
-msgstr ""
+msgstr "หมายเหตุ"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:459
 msgid "Dependency"
-msgstr ""
+msgstr "การขึ้นอยู่กับ"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:461
 #: js/widgets/grid/GridPanel.js:1419
@@ -1644,57 +1648,57 @@ msgstr ""
 
 #: js/widgets/grid/FilterModel.js:230
 msgid "is not"
-msgstr ""
+msgstr "ไม่ใช่"
 
 #: js/widgets/grid/FilterModel.js:231
 msgid "one of"
-msgstr ""
+msgstr "หนึ่งใน"
 
 #: js/widgets/grid/FilterModel.js:232
 msgid "none of"
-msgstr ""
+msgstr "ไม่เลยของ"
 
 #: js/widgets/grid/FilterModel.js:233
 msgid "is before"
-msgstr ""
+msgstr "คือก่อน"
 
 #: js/widgets/grid/FilterModel.js:234
 msgid "is after"
-msgstr ""
+msgstr "คือภายหลัง"
 
 #: js/widgets/grid/FilterModel.js:235
 msgid "is within"
-msgstr ""
+msgstr "คือภายใน"
 
 #: js/widgets/grid/FilterModel.js:236
 msgid "is in week no."
-msgstr ""
+msgstr "คือในสัปดาห์ที่"
 
 #: js/widgets/grid/FilterModel.js:237
 msgid "starts with"
-msgstr ""
+msgstr "เริ่มด้วย"
 
 #: js/widgets/grid/FilterModel.js:238
 msgid "ends with"
-msgstr ""
+msgstr "จบด้วย"
 
 #: js/widgets/grid/FilterModel.js:239
 msgid "defined by"
-msgstr ""
+msgstr "เจาะจงโดย"
 
 #: js/widgets/grid/FilterModel.js:409
 msgid "Search Account ..."
-msgstr ""
+msgstr "หา บัญชี..."
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
 #: js/widgets/grid/FilterPanel.js:261
 msgid "show details"
-msgstr ""
+msgstr "แสดงรายละเอียด"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
 #: js/widgets/grid/FilterPanel.js:262
 msgid "Always show advanced filters"
-msgstr ""
+msgstr "แสดงตัวกรองขั้นสูงเสมอ"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
 #, python-brace-format
@@ -1704,11 +1708,11 @@ msgstr[0] ""
 
 #: js/widgets/grid/RendererManager.js:54
 msgid "has notes"
-msgstr ""
+msgstr "มีบันทึก"
 
 #: js/widgets/grid/RendererManager.js:57
 msgid "has relations"
-msgstr ""
+msgstr "มีความสัมพันธ์"
 
 #: js/widgets/grid/FilterPanel.js:78
 msgid "Attention: There are more filters active!"
@@ -1722,24 +1726,24 @@ msgstr ""
 #: js/widgets/dialog/SimpleImportDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:227
 msgid "Choose File and Format"
-msgstr ""
+msgstr "เลือก ไฟล์และรูปแบบ"
 
 #: js/widgets/dialog/SimpleImportDialog.js:138
 #: js/widgets/dialog/ImportDialog.js:236
 msgid "Choose Import File"
-msgstr ""
+msgstr "เลือก นำเข้าไฟล์"
 
 #: js/widgets/dialog/SimpleImportDialog.js:142
 #: js/widgets/dialog/ImportDialog.js:240
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
+msgstr "กรุณาเลือกไฟล์ที่มีบันทึกที่คุณต้องการจะเพิ่มใน Tine 2.0"
 
 #: js/widgets/dialog/SimpleImportDialog.js:146
 #: js/widgets/dialog/ImportDialog.js:244
 #, python-brace-format
 msgid "Select file containing your {0}"
-msgstr ""
+msgstr "เลือกไฟล์ที่มี {0} ของคุณ"
 
 #: js/widgets/dialog/SimpleImportDialog.js:154
 #: js/widgets/dialog/ImportDialog.js:340
@@ -1750,12 +1754,12 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:348
 #, python-brace-format
 msgid "Select {0} to add you {1} to:"
-msgstr ""
+msgstr "เลือก {0} เพื่อเพิ่ม {1} ให้คุณใน:"
 
 #: js/widgets/dialog/SimpleImportDialog.js:174
 #: js/widgets/dialog/ImportDialog.js:252 js/widgets/dialog/ImportDialog.js:257
 msgid "What should the file you upload look like?"
-msgstr ""
+msgstr "ไฟล์ที่คุณอัพโหลดควรมีหน้าตาอย่างไร?"
 
 #: js/widgets/dialog/SimpleImportDialog.js:179
 #: js/widgets/dialog/ImportDialog.js:260
@@ -1785,27 +1789,27 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:673
 #, python-brace-format
 msgid "Importing {0}"
-msgstr ""
+msgstr "กำลังนำเข้า {0}"
 
 #: js/widgets/dialog/WizardPanel.js:173
 msgid "Back"
-msgstr ""
+msgstr "กลับ"
 
 #: js/widgets/dialog/WizardPanel.js:180
 msgid "Next"
-msgstr ""
+msgstr "ถัดไป"
 
 #: js/widgets/dialog/WizardPanel.js:194
 msgid "Finish"
-msgstr ""
+msgstr "เสร็จ"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:134
 msgid "Merging Records..."
-msgstr ""
+msgstr "กำลังรวม สถิติ..."
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:173
 msgid "Merge Failed"
-msgstr ""
+msgstr "การรวมได้ล้มเหลว"
 
 #: js/widgets/dialog/DuplicateMergeDialog.js:173
 #, python-brace-format
@@ -1847,15 +1851,15 @@ msgstr ""
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:210
 msgid "My Value"
-msgstr ""
+msgstr "ค่าของฉัน"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:218
 msgid "Existing Value"
-msgstr ""
+msgstr "ค่าที่มีอยู่"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:226
 msgid "Final Value"
-msgstr ""
+msgstr "ค่าสุดท้าย"
 
 #: js/widgets/dialog/DuplicateResolveGridPanel.js:243
 msgid "Action:"
@@ -2000,12 +2004,12 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:628
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
-msgstr ""
+msgstr "ข้อสรุป"
 
 #: js/widgets/dialog/ImportDialog.js:657
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
-msgstr ""
+msgstr "ดัชนี"
 
 #: js/widgets/dialog/ImportDialog.js:704
 #, python-brace-format
@@ -2051,15 +2055,15 @@ msgstr ""
 #: js/widgets/dialog/ExportDialog.js:84
 #, python-brace-format
 msgid "Export {0} {1}"
-msgstr ""
+msgstr "ส่งออก {0} {1}"
 
 #: js/widgets/dialog/ExportDialog.js:111
 msgid "Export definition"
-msgstr ""
+msgstr "คำจำกัดความการส่งออก"
 
 #: js/widgets/dialog/ExportDialog.js:120
 msgid "Select Export Definition ..."
-msgstr ""
+msgstr "เลือก คำจำกัดความการส่งออก ..."
 
 #: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
@@ -2067,92 +2071,92 @@ msgstr ""
 
 #: js/widgets/dialog/AttachmentsGridPanel.js:63
 msgid "Attachments"
-msgstr ""
+msgstr "สิ่งที่แนบมาด้วย"
 
 #: js/widgets/dialog/AttachmentsGridPanel.js:64
 msgid "Attachment"
-msgstr ""
+msgstr "สิ่งที่แนบมาด้วย"
 
 #: js/widgets/dialog/AttachmentsGridPanel.js:94
 msgid "Size"
-msgstr ""
+msgstr "ขนาด"
 
 #: js/widgets/dialog/AttachmentsGridPanel.js:102
 msgid "Content Type"
-msgstr ""
+msgstr "ประเภทเนื้อหา"
 
 #: js/widgets/dialog/AlarmPanel.js:34
 msgid "Alarms"
-msgstr ""
+msgstr "การเตือน"
 
 #: js/widgets/dialog/AlarmPanel.js:37
 msgid "0 minutes before"
-msgstr ""
+msgstr "0 นาที ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:38
 msgid "5 minutes before"
-msgstr ""
+msgstr "5 นาที ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:39
 msgid "15 minutes before"
-msgstr ""
+msgstr "15 นาที ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:40
 msgid "30 minutes before"
-msgstr ""
+msgstr "30 นาที ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:41
 msgid "1 hour before"
-msgstr ""
+msgstr "1 ชั่วโมง ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:42
 msgid "2 hours before"
-msgstr ""
+msgstr "2 ชั่วโมง ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:43
 msgid "12 hours before"
-msgstr ""
+msgstr "12 ชั่วโมง ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:44
 msgid "1 day before"
-msgstr ""
+msgstr "1 วัน ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:45
 msgid "2 days before"
-msgstr ""
+msgstr "2 วัน ก่อน"
 
 #: js/widgets/dialog/AlarmPanel.js:46
 msgid "Custom Datetime"
-msgstr ""
+msgstr "ตั้งวันเวลาเอง"
 
 #: js/widgets/dialog/AlarmPanel.js:58
 msgid "Alarm Time"
-msgstr ""
+msgstr "เวลาเตือน"
 
 #: js/widgets/dialog/AlarmPanel.js:170
 #, python-brace-format
 msgid "{0} minutes before"
-msgstr ""
+msgstr " {0} นาที ก่อน"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:28
 #: js/widgets/dialog/MultiOptionsDialog.js:81
 #: js/widgets/dialog/FileListDialog.js:28
 msgid "What would you like to do?"
-msgstr ""
+msgstr "คุณต้องการจะทำอะไร?"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:141
 #: js/widgets/dialog/FileListDialog.js:32
 msgid "You need to select an option!"
-msgstr ""
+msgstr "คุณต้องเลือก!"
 
 #: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
-msgstr ""
+msgstr "โหมดผู้ดูแลระบบ"
 
 #: js/widgets/dialog/PreferencesDialog.js:163
 msgid "Applications"
-msgstr ""
+msgstr "การประยุกต์ใช้"
 
 #: js/widgets/dialog/PreferencesDialog.js:192
 msgid "Edit Preferences"
@@ -2160,12 +2164,12 @@ msgstr ""
 
 #: js/widgets/dialog/PreferencesDialog.js:193
 msgid "Loading ..."
-msgstr ""
+msgstr "กำลังโหลด ..."
 
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/form/ConfigPanel.js:134
 msgid "You need to correct the red marked fields before config could be saved"
-msgstr ""
+msgstr "คุณจำเป็นต้องแก้ไขตรงแถบสีแดงก่อนที่การตั้งค่าจะถูกบันทึก"
 
 #: js/widgets/dialog/PreferencesDialog.js:277
 msgid "Saving of preferences failed."
@@ -2198,32 +2202,32 @@ msgstr ""
 
 #: js/widgets/dialog/PreferencesTreePanel.js:87
 msgid "My Profile"
-msgstr ""
+msgstr "โปรไฟล์ของฉัน"
 
 #: js/widgets/dialog/EditDialog.js:626
 #, python-brace-format
 msgid "Add New {0}"
-msgstr ""
+msgstr "เพิ่ม {0} ใหม่"
 
 #: js/widgets/dialog/EditDialog.js:628
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
-msgstr ""
+msgstr "แก้ไข {0} \"{1}\""
 
 #: js/widgets/dialog/EditDialog.js:699
 #, python-brace-format
 msgid "Transferring {0}..."
-msgstr ""
+msgstr "กำลังโอนย้าย {0}..."
 
 #: js/widgets/dialog/EditDialog.js:851
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
-msgstr ""
+msgstr "คุณแน่ใจว่าต้องการจะลบ {0} นี้?"
 
 #: js/widgets/dialog/EditDialog.js:863
 #, python-brace-format
 msgid "Could not delete {0}."
-msgstr ""
+msgstr "ไม่สามารถลบ {0} ได้"
 
 #: js/widgets/dialog/EditDialog.js:918
 #, python-brace-format
@@ -2242,16 +2246,16 @@ msgstr ""
 
 #: js/widgets/dialog/FileListDialog.js:93
 msgid "No"
-msgstr ""
+msgstr "ไม่"
 
 #: js/widgets/dialog/FileListDialog.js:102
 msgid "Yes"
-msgstr ""
+msgstr "ใช่"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
 #, python-brace-format
 msgid "You edited {0} {1}."
-msgstr ""
+msgstr "คุณได้แก้ไข {0} {1}"
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:149
 #, python-brace-format
@@ -2278,11 +2282,11 @@ msgstr ""
 #: js/widgets/form/RecordPickerComboBox.js:119
 #: js/widgets/form/RecordPickerManager.js:48
 msgid "Searching..."
-msgstr ""
+msgstr "กำลังค้นหา"
 
 #: js/widgets/form/FileUploadButton.js:65
 msgid "Wrong File Type"
-msgstr ""
+msgstr "ประเภทไฟล์ผิด"
 
 #: js/widgets/form/FileUploadButton.js:65
 msgid "Please select a file with one of the following extensions:"
@@ -2290,23 +2294,23 @@ msgstr ""
 
 #: js/widgets/form/ConfigPanel.js:113
 msgid "Configuration Problem"
-msgstr ""
+msgstr "ปัญหาการตั้งค่า"
 
 #: js/widgets/form/ConfigPanel.js:134
 msgid "Invalid configuration"
-msgstr ""
+msgstr "การตั้งค่าไม่ถูกต้อง"
 
 #: js/widgets/form/ConfigPanel.js:158
 msgid "Transferring Configuration..."
-msgstr ""
+msgstr "กำลังโอนย้าย การตั้งค่า..."
 
 #: js/widgets/form/ConfigPanel.js:254
 msgid "Save config"
-msgstr ""
+msgstr "บันทึก การตั้งค่า"
 
 #: js/widgets/form/ConfigPanel.js:264
 msgid "Reload config"
-msgstr ""
+msgstr "โหลดการตั้งค่าอีกครั้ง"
 
 #: js/MainMenu.js:66
 #, python-brace-format
@@ -2315,7 +2319,7 @@ msgstr "ผู้ใช้: {0}"
 
 #: js/MainMenu.js:112
 msgid "Return to original user account"
-msgstr ""
+msgstr "กลับไปยังบัญชีของผู้ใช้เดิม"
 
 #: js/MainMenu.js:138 js/AboutDialog.js:41
 #, python-brace-format
@@ -2324,7 +2328,7 @@ msgstr "เกี่ยวกับ {0}"
 
 #: js/MainMenu.js:144
 msgid "Help"
-msgstr ""
+msgstr "การช่วยเหลือ"
 
 #: js/MainMenu.js:151
 msgid "Debug Console (Ctrl + F11)"
@@ -2350,7 +2354,7 @@ msgstr "เลิกใช้จาก {0}"
 #: js/MainMenu.js:186 js/AboutDialog.js:56
 #, python-brace-format
 msgid "Learn more about {0}"
-msgstr ""
+msgstr "เรียนเกี่ยวกับ {0} เพิ่มเติม"
 
 #: js/MainMenu.js:196
 msgid "Allow desktop notifications"
@@ -2380,7 +2384,7 @@ msgstr "กำลังนำคุณออกจากการเข้าใ
 msgid "Please wait!"
 msgstr "กรุณารอ"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:401
+#: js/ExceptionHandler.js:168 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr ""
 
@@ -2430,7 +2434,7 @@ msgstr ""
 
 #: js/ExceptionHandler.js:218
 msgid "Server Message:"
-msgstr ""
+msgstr "ข้อความระบบ"
 
 #: js/ExceptionHandler.js:220
 msgid "Invalid Data"
@@ -2438,7 +2442,7 @@ msgstr "ข้อมูลใช้ไม่ได้"
 
 #: js/ExceptionHandler.js:221
 msgid "Your input data is not valid. Please provide valid data."
-msgstr ""
+msgstr "ข้อมูลที่คุณป้อนไม่ถูกต้อง กรุณาให้ข้อมูลที่ถูกต้อง"
 
 #: js/ExceptionHandler.js:233 js/LoginPanel.js:482
 msgid "Connection lost, please check your network!"
@@ -2501,7 +2505,7 @@ msgstr ""
 #: js/Models.js:274
 msgid "Alarm"
 msgid_plural "Alarms"
-msgstr[0] ""
+msgstr[0] "การเตือน"
 
 #: js/Models.js:312
 msgid "Import"
@@ -2511,7 +2515,7 @@ msgstr[0] "นำเข้า"
 #: js/Models.js:375
 msgid "Credentials"
 msgid_plural "Credentials"
-msgstr[0] ""
+msgstr[0] "ตัวอ้างอิง"
 
 #: js/Models.js:423
 msgid "Department"
@@ -2521,11 +2525,11 @@ msgstr[0] "แผนก"
 #: js/Models.js:449
 msgid "Config"
 msgid_plural "Configs"
-msgstr[0] ""
+msgstr[0] "การตั้งค่า"
 
 #: js/Models.js:449
 msgid "Configs"
-msgstr ""
+msgstr "การตั้งค่า"
 
 #: js/AboutDialog.js:71
 msgid "Released under different"
@@ -2537,7 +2541,7 @@ msgstr ""
 
 #: js/AboutDialog.js:79
 msgid "with the help of our"
-msgstr ""
+msgstr "ด้วยความช่วยเหลือของพวกเรา"
 
 #: js/AboutDialog.js:80
 msgid "Contributors"
@@ -2553,12 +2557,12 @@ msgstr ""
 
 #: js/LoginPanel.js:185
 msgid "Version"
-msgstr ""
+msgstr "เวอร์ชั่น"
 
 #: js/LoginPanel.js:217
 #, python-brace-format
 msgid "{0} is made for you"
-msgstr ""
+msgstr "{0} ถูกสร้างเพื่อคุณ"
 
 #: js/LoginPanel.js:219
 #, python-brace-format
@@ -2571,7 +2575,7 @@ msgstr ""
 #: js/LoginPanel.js:225
 #, python-brace-format
 msgid "{0} Homepage"
-msgstr ""
+msgstr "{0} โฮมเพจ"
 
 #: js/LoginPanel.js:226
 #, python-brace-format
@@ -2580,19 +2584,19 @@ msgstr ""
 
 #: js/LoginPanel.js:230
 msgid "Translations"
-msgstr ""
+msgstr "การแปล"
 
 #: js/LoginPanel.js:232
 #, python-brace-format
 msgid "Translation state of {0}: {1}%."
-msgstr ""
+msgstr "สถานะการแปลของ {0}: {1}%."
 
 #: js/LoginPanel.js:234
 #, python-brace-format
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
 "please consider becoming a {0} translator."
-msgstr ""
+msgstr "ถ้าในระดับภาษาของคุณยังไม่เป็นที่น่าพอใจ หรือภาษาใดได้ขาดหายไป กรุณาพิจารณาการเป็นนักแปล {0} สักคน"
 
 #: js/LoginPanel.js:237
 #, python-brace-format
@@ -2601,11 +2605,11 @@ msgstr ""
 
 #: js/LoginPanel.js:238
 msgid "Detailed Language Statistics"
-msgstr ""
+msgstr "สถิติทางด้านภาษาอย่างละเอียด"
 
 #: js/LoginPanel.js:258
 msgid "Powered by:"
-msgstr ""
+msgstr "สนับสนุน โดย:"
 
 #: js/LoginPanel.js:258
 msgid "online open source groupware and crm"
@@ -2640,7 +2644,7 @@ msgstr "ระยะเวลา"
 
 #: js/LoginPanel.js:385
 msgid "Browser incompatible"
-msgstr ""
+msgstr "เบราเซอร์ไม่รองรับ"
 
 #: js/LoginPanel.js:387
 msgid "Your browser is not supported by Tine 2.0."
@@ -2648,7 +2652,7 @@ msgstr ""
 
 #: js/LoginPanel.js:392
 msgid "Browser incompatible?"
-msgstr ""
+msgstr "เบราเซอร์ไม่รองรับ?"
 
 #: js/LoginPanel.js:394
 msgid ""
@@ -2658,7 +2662,7 @@ msgstr ""
 
 #: js/LoginPanel.js:400
 msgid "You might try one of these browsers:"
-msgstr ""
+msgstr "คุณน่าจะลองใช้หนึ่งในเบราเซอร์ต่อไปนี้"
 
 #: js/LoginPanel.js:460
 msgid "Logging you in..."
@@ -2697,7 +2701,7 @@ msgstr[0] "รายการที่ต้องทำ"
 
 #: Preference.php:122
 msgid "Page size"
-msgstr ""
+msgstr "ขนาดของหน้า"
 
 #: Preference.php:123
 msgid "Page size in grids"
@@ -2767,16 +2771,21 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Frontend/Http.php:402
+#: Frontend/Cli.php:736
+#, python-format
+msgid "%s's personal "
+msgstr ""
+
+#: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Container.php:690
+#: Container.php:706
 #, python-format
 msgid "%s's personal container"
 msgstr "%s's ของตู้ใส่ของส่วนตัว"
 
-#: Container.php:1549
+#: Container.php:1617
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3084,51 +3093,51 @@ msgstr ""
 #: Exception.php:49
 #, python-brace-format
 msgid "Exception ({0})"
-msgstr ""
+msgstr "การยกเว้น ({0})"
 
-#: WebDav/PrincipalBackend.php:504
+#: WebDav/PrincipalBackend.php:525
 msgid "Shared folders"
-msgstr ""
+msgstr "แฟ้มเอกสารที่ใช้ร่วมกัน"
 
-#: Setup/setup.xml:3325
+#: Setup/setup.xml:3345
 msgid "note"
-msgstr ""
+msgstr "บันทึก"
 
-#: Setup/setup.xml:3330
+#: Setup/setup.xml:3350
 msgid "default note type"
-msgstr ""
+msgstr "ประเภทบันทึกหลัก"
 
-#: Setup/setup.xml:3356
+#: Setup/setup.xml:3376
 msgid "telephone"
-msgstr ""
+msgstr "โทรศัพท์"
 
-#: Setup/setup.xml:3361
+#: Setup/setup.xml:3381
 msgid "telephone call"
-msgstr ""
+msgstr "โทรศัพท์ที่โทร"
 
-#: Setup/setup.xml:3387
+#: Setup/setup.xml:3407
 msgid "email"
-msgstr ""
+msgstr "อีเมล"
 
-#: Setup/setup.xml:3392
+#: Setup/setup.xml:3412
 msgid "email contact"
-msgstr ""
+msgstr "การติดต่อทางอีเมล"
 
-#: Setup/setup.xml:3418
+#: Setup/setup.xml:3438
 msgid "created"
-msgstr ""
+msgstr "ถูกสร้าง"
 
-#: Setup/setup.xml:3423
+#: Setup/setup.xml:3443
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3449
+#: Setup/setup.xml:3469
 msgid "changed"
-msgstr ""
+msgstr "ได้เปลี่ยน"
 
-#: Setup/setup.xml:3454
+#: Setup/setup.xml:3474
 msgid "record changed"
-msgstr ""
+msgstr "บันทึกได้เปลี่ยน"
 
 #: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
@@ -3136,28 +3145,28 @@ msgstr ""
 
 #: views/update.php:25
 msgid "Please wait or contact your administrator"
-msgstr ""
+msgstr "กรุณารอหรือติอต่อผู้ดูแลระบบของคุณ"
 
 #: views/deactivationNotification.php:11
 msgid "Your user account has been deactivated"
-msgstr ""
+msgstr "บัญชีผู้ใช้ของคุณได้ถูกระงับ "
 
 #: views/deactivationNotification.php:13
 msgid "Deactivation date"
-msgstr ""
+msgstr "วันที่ระงับ"
 
 #: views/deactivationNotification.php:14
 msgid "Tine 2.0 URL"
-msgstr ""
+msgstr "Tine 2.0 URL"
 
 #: Record/RecordSetDiff.php:42
 msgid "added"
-msgstr ""
+msgstr "ได้เพิ่ม"
 
 #: Record/RecordSetDiff.php:43
 msgid "removed"
-msgstr ""
+msgstr "ได้ย้าย"
 
 #: Record/RecordSetDiff.php:44
 msgid "modified"
-msgstr ""
+msgstr "ได้ดัดแปลง"

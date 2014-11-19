@@ -31,22 +31,23 @@ msgstr "Trạng thái đầu mối"
 msgid "Leadtype"
 msgstr "Loại đầu mối"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:369
-#: js/LeadGridDetailsPanel.js:459
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:146
+#: js/LeadEditDialog.js:369 js/LeadGridDetailsPanel.js:459
+#: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Nguồn đầu mối"
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:147 js/Model.js:111
+#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:112
 #: Controller/Lead.php:200
 msgid "Turnover"
 msgstr "Doanh số"
 
-#: Export/Pdf.php:90 js/LeadGridPanel.js:146 js/Model.js:110
+#: Export/Pdf.php:90 js/LeadGridPanel.js:147 js/Model.js:110
 #: js/LeadEditDialog.js:222 Controller/Lead.php:201
 msgid "Probability"
 msgstr "Có khả năng"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:406 js/LeadGridDetailsPanel.js:444
+#: Export/Pdf.php:93 js/LeadEditDialog.js:408 js/LeadGridDetailsPanel.js:444
 #: Controller/Lead.php:197
 msgid "Start"
 msgstr "Bắt đầu"
@@ -75,15 +76,15 @@ msgstr "Điện thoại"
 msgid "Email"
 msgstr "Email"
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr "Công việc"
 
-#: Export/Pdf.php:252 js/Task.js:227
+#: Export/Pdf.php:252 js/Task.js:224
 msgid "Due Date"
 msgstr "Ngày đến hạn"
 
-#: Export/Pdf.php:259 js/Task.js:240
+#: Export/Pdf.php:259 js/Task.js:237
 msgid "Priority"
 msgstr "Độ quan trọng"
 
@@ -184,27 +185,27 @@ msgstr "Trách nhiệm"
 msgid "Task"
 msgstr "Công việc"
 
-#: js/Task.js:109
+#: js/Task.js:105
 msgid "No Tasks to display"
 msgstr "Chưa có việc gì"
 
-#: js/Task.js:219
+#: js/Task.js:216
 msgid "Summary"
 msgstr "Tóm tắt"
 
-#: js/Task.js:223
+#: js/Task.js:220
 msgid "Add a task..."
 msgstr "Thêm 1 việc..."
 
-#: js/Task.js:256
+#: js/Task.js:253
 msgid "Percent"
 msgstr "Phần trăm"
 
-#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/Task.js:285
+#: js/Task.js:282
 msgid "Organizer"
 msgstr ""
 
@@ -280,7 +281,7 @@ msgstr "Sửa phần chọn {0}"
 msgid "Product"
 msgstr "Sản phẩm"
 
-#: js/Product.js:139 js/LeadEditDialog.js:444
+#: js/Product.js:139 js/LeadEditDialog.js:446
 msgid "Description"
 msgstr "Mô tả"
 
@@ -308,36 +309,36 @@ msgstr "Thẻ"
 msgid "Lead name"
 msgstr "Tên đầu mối"
 
-#: js/LeadGridPanel.js:149 js/Model.js:118 js/LeadEditDialog.js:412
+#: js/LeadGridPanel.js:150 js/Model.js:119 js/LeadEditDialog.js:414
 #: js/LeadGridDetailsPanel.js:449
 msgid "Estimated end"
 msgstr "Dự kiến thời gian kết thúc"
 
-#: js/LeadGridPanel.js:150
+#: js/LeadGridPanel.js:151
 msgid "Probable Turnover"
 msgstr "Có thể bỏ qua"
 
-#: js/LeadGridPanel.js:151 js/Model.js:119 js/LeadEditDialog.js:393
+#: js/LeadGridPanel.js:152 js/Model.js:120 js/LeadEditDialog.js:395
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadGridPanel.js:194
+#: js/LeadGridPanel.js:195
 msgid "Export Lead"
 msgstr "Xuất dữ liệu đầu mối"
 
-#: js/LeadGridPanel.js:203
+#: js/LeadGridPanel.js:204
 msgid "Export as PDF"
 msgstr "Xuất dạng PDF"
 
-#: js/LeadGridPanel.js:210
+#: js/LeadGridPanel.js:211
 msgid "Export as CSV"
 msgstr "Xuất dạng CSV"
 
-#: js/LeadGridPanel.js:217
+#: js/LeadGridPanel.js:218
 msgid "Export as ODS"
 msgstr "Xuất dạng ODS"
 
-#: js/LeadGridPanel.js:224
+#: js/LeadGridPanel.js:225
 msgid "Export as XLS"
 msgstr "Xuất dạng XLS"
 
@@ -363,28 +364,28 @@ msgstr "danh sách lãnh đạo"
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:113
+#: js/Model.js:114
 msgid "Last Modified Time"
 msgstr "Thời gian sửa lần cuối"
 
-#: js/Model.js:114
+#: js/Model.js:115
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
 
-#: js/Model.js:115
+#: js/Model.js:116
 msgid "Creation Time"
 msgstr "Thời gian tạo"
 
-#: js/Model.js:116
+#: js/Model.js:117
 msgid "Created By"
 msgstr "Tạo bởi"
 
-#: js/Model.js:159
+#: js/Model.js:160
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "one: Thiết lập\nother: Thiết lập"
 
-#: js/Model.js:162
+#: js/Model.js:163
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "one: Danh sách biểu ghi\nother: Danh sách biểu ghi"
@@ -405,11 +406,11 @@ msgstr "Bạn không có quyền chạy ứng dụng Bán hàng hoặc nó chưa
 msgid "Enter short name"
 msgstr "Nhâp tên ngắn"
 
-#: js/LeadEditDialog.js:385
+#: js/LeadEditDialog.js:386
 msgid "Expected turnover"
 msgstr "Doanh số mong đợi"
 
-#: js/LeadEditDialog.js:458
+#: js/LeadEditDialog.js:460
 msgid "Enter description"
 msgstr "Nhập mô tả"
 
@@ -442,7 +443,7 @@ msgid "Lead Source"
 msgid_plural "Lead Sources"
 msgstr[0] "one: Nguồn đầu mối\nother: Nguồn đầu mối"
 
-#: js/LeadSource.js:136
+#: js/LeadSource.js:153
 msgid "Add a Leadsource..."
 msgstr "Thêm 1 nguồn đầu mối"
 

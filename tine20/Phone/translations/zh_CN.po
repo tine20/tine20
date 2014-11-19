@@ -86,78 +86,6 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr ""
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr ""
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr ""
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr ""
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr ""
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr ""
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "号码"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "取消"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "拨号"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "错误"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "无法拨打电话。"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "编辑电话设置"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "拨号"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "初始化一个新的向外呼叫"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr ""
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr ""
-
 #: js/Phone.js:100
 msgid "Incoming call"
 msgstr "打进的电话"
@@ -189,3 +117,75 @@ msgstr "手机"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "手机（私人）"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "编辑电话设置"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "拨号"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "初始化一个新的向外呼叫"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr ""
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr ""
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "号码"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "取消"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "拨号"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "错误"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "无法拨打电话。"
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+msgid "Calls this week"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr ""
+
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr ""
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr ""
+
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr ""
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr ""

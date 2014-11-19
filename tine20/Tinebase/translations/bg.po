@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:25+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/projects/p/tine20/language/bg/)\n"
 "MIME-Version: 1.0\n"
@@ -185,8 +185,12 @@ msgid ""
 "vendor!"
 msgstr ""
 
-#: js/ux/Percentage.js:193
+#: js/ux/Percentage.js:229
 msgid "(paused)"
+msgstr ""
+
+#: js/ux/grid/GroupingGridPlugin.js:95
+msgid "Export Records from these Positions"
 msgstr ""
 
 #: js/ux/grid/PagingToolbar.js:57
@@ -304,7 +308,7 @@ msgstr "избери други {0}..."
 msgid "Software Version"
 msgstr "Версия на програмата"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:427
+#: js/ExceptionDialog.js:62 Frontend/Http.php:432
 msgid "Abnormal End"
 msgstr "Програмен срив"
 
@@ -312,7 +316,7 @@ msgstr "Програмен срив"
 msgid "Send Report"
 msgstr "Изпрати рапорт"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:428
+#: js/ExceptionDialog.js:154 Frontend/Http.php:433
 msgid "An error occurred, the program ended abnormal."
 msgstr "Грешка, водеща до рограмен срив."
 
@@ -418,7 +422,7 @@ msgid ""
 "administrator."
 msgstr "Няма активирани програми за Вас. Моля свържете се с Вашият администратор."
 
-#: js/ApplicationStarter.js:539
+#: js/ApplicationStarter.js:545
 msgid "New "
 msgstr ""
 
@@ -494,42 +498,42 @@ msgstr "Грешка"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новито пароли не съвпадат. Моля задай повторно"
 
-#: js/common.js:235
+#: js/common.js:261
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
 msgstr "личен"
 
-#: js/common.js:273 js/common.js:311
+#: js/common.js:300 js/common.js:338
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:360
+#: js/common.js:387
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} минута"
 msgstr[1] "{0} минути"
 
-#: js/common.js:361
+#: js/common.js:388
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 
-#: js/common.js:362
+#: js/common.js:389
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} работен ден"
 msgstr[1] "{0} работни дни"
 
-#: js/common.js:389
+#: js/common.js:416
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -1134,20 +1138,20 @@ msgstr "Тага не бе актуализиран."
 msgid "Save current view as favorite"
 msgstr ""
 
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "New version of Tine 2.0 available"
 msgstr "Предлага се нова версия на Tine 2.0"
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Версия \"{0}\" на Tine 2.0 е на разположение."
 
-#: js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Това е един нестабилен ъпдейт и трябва да бъде инсталиран възможно най-бързо!"
 
-#: js/widgets/VersionCheck.js:61
+#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr "Внимание - актуализира!"
 
@@ -2398,7 +2402,7 @@ msgstr "Подготвя излизане..."
 msgid "Please wait!"
 msgstr "Моля изчакайте!"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:401
+#: js/ExceptionHandler.js:168 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr "Изискано упълномощаване"
 
@@ -2792,16 +2796,21 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Frontend/Http.php:402
+#: Frontend/Cli.php:736
+#, python-format
+msgid "%s's personal "
+msgstr ""
+
+#: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
 msgstr "Лимита на сесията е преминат. Трябва да се регистрирате наново."
 
-#: Container.php:690
+#: Container.php:706
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1549
+#: Container.php:1617
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3111,47 +3120,47 @@ msgstr ""
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:504
+#: WebDav/PrincipalBackend.php:525
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3325
+#: Setup/setup.xml:3345
 msgid "note"
 msgstr "бележка"
 
-#: Setup/setup.xml:3330
+#: Setup/setup.xml:3350
 msgid "default note type"
 msgstr "отсъстващ тип на бележка"
 
-#: Setup/setup.xml:3356
+#: Setup/setup.xml:3376
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:3361
+#: Setup/setup.xml:3381
 msgid "telephone call"
 msgstr "телефонно позвъняване"
 
-#: Setup/setup.xml:3387
+#: Setup/setup.xml:3407
 msgid "email"
 msgstr "Имейл"
 
-#: Setup/setup.xml:3392
+#: Setup/setup.xml:3412
 msgid "email contact"
 msgstr "Имейл контакт"
 
-#: Setup/setup.xml:3418
+#: Setup/setup.xml:3438
 msgid "created"
 msgstr "създаден"
 
-#: Setup/setup.xml:3423
+#: Setup/setup.xml:3443
 msgid "record created"
 msgstr "създадена документация"
 
-#: Setup/setup.xml:3449
+#: Setup/setup.xml:3469
 msgid "changed"
 msgstr "променен"
 
-#: Setup/setup.xml:3454
+#: Setup/setup.xml:3474
 msgid "record changed"
 msgstr "променена документация"
 

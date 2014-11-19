@@ -85,78 +85,6 @@ msgstr "Đường dây"
 msgid "Description"
 msgstr "Mô tả"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Cuộc gọi trong tuần"
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Cuộc gọi tuần trước"
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Cuộc gọi tháng này"
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Cuộc gọi tháng trước"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Cuộc gọi đi và đến trong tuần"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Cuộc gọi đi và đến tuần trước"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Cuộc gọi đi và đến tháng này"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Cuộc gọi đi và đến tháng trước"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Số"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Hủy"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Quay số"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Lỗi"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Không thể quay số"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Sửa thiết lập điện thoại"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Quay số"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Bắt đầu 1 cuộc gọi đi mới"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Chưa chọn điện thoại"
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Xin chọn điện thoại bạn muốn trong cây danh mục"
-
 #: js/Phone.js:100
 msgid "Incoming call"
 msgstr "Cuộc gọi đến"
@@ -188,3 +116,75 @@ msgstr "Di động"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Di động riêng"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Sửa thiết lập điện thoại"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Quay số"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Bắt đầu 1 cuộc gọi đi mới"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "Chưa chọn điện thoại"
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "Xin chọn điện thoại bạn muốn trong cây danh mục"
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "Số"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "Hủy"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "Quay số"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "Lỗi"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "Không thể quay số"
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+msgid "Calls this week"
+msgstr "Cuộc gọi trong tuần"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Cuộc gọi đi và đến trong tuần"
+
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr "Cuộc gọi tuần trước"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Cuộc gọi đi và đến tuần trước"
+
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr "Cuộc gọi tháng này"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Cuộc gọi đi và đến tháng này"
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
+msgstr "Cuộc gọi tháng trước"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Cuộc gọi đi và đến tháng trước"

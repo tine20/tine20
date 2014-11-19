@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 11:10+0000\n"
-"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2014-11-19 15:25+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -189,9 +189,13 @@ msgid ""
 "vendor!"
 msgstr ""
 
-#: js/ux/Percentage.js:193
+#: js/ux/Percentage.js:229
 msgid "(paused)"
 msgstr "(приостановлено)"
+
+#: js/ux/grid/GroupingGridPlugin.js:95
+msgid "Export Records from these Positions"
+msgstr ""
 
 #: js/ux/grid/PagingToolbar.js:57
 #, python-brace-format
@@ -308,7 +312,7 @@ msgstr "выберите другое {0}..."
 msgid "Software Version"
 msgstr "Версия программного обеспечения"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:427
+#: js/ExceptionDialog.js:62 Frontend/Http.php:432
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
@@ -316,7 +320,7 @@ msgstr "Неправильное завершение"
 msgid "Send Report"
 msgstr "Послать отчёт"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:428
+#: js/ExceptionDialog.js:154 Frontend/Http.php:433
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла ошибка, программа завершилась неправильно."
 
@@ -422,7 +426,7 @@ msgid ""
 "administrator."
 msgstr "Нет доступных вам приложений. Пожалуйста, обратитесь к своему системному администратору."
 
-#: js/ApplicationStarter.js:539
+#: js/ApplicationStarter.js:545
 msgid "New "
 msgstr "Новый"
 
@@ -498,21 +502,21 @@ msgstr "Сбой"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новые пароли не совпадают, пожалуйста, исправьте их."
 
-#: js/common.js:235
+#: js/common.js:261
 msgid "Usage:&#160;"
 msgstr "Использование:&#160;"
 
-#: js/common.js:255 js/common.js:260 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
 msgstr "личные"
 
-#: js/common.js:273 js/common.js:311
+#: js/common.js:300 js/common.js:338
 msgid "No Information"
 msgstr "Нет информации"
 
-#: js/common.js:360
+#: js/common.js:387
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
@@ -520,7 +524,7 @@ msgstr[0] "{0} минута"
 msgstr[1] "{0} минуты"
 msgstr[2] "{0} минут"
 
-#: js/common.js:361
+#: js/common.js:388
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
@@ -528,7 +532,7 @@ msgstr[0] "{0} час"
 msgstr[1] "{0} часа"
 msgstr[2] "{0} часов"
 
-#: js/common.js:362
+#: js/common.js:389
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
@@ -536,7 +540,7 @@ msgstr[0] "{0} рабочий день"
 msgstr[1] "{0} рабочих дня"
 msgstr[2] "{0} рабочих дней"
 
-#: js/common.js:389
+#: js/common.js:416
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -1151,20 +1155,20 @@ msgstr "Не удалось обновить тэг."
 msgid "Save current view as favorite"
 msgstr "Сохранить этот вид как избранное"
 
-#: js/widgets/VersionCheck.js:50 js/widgets/VersionCheck.js:59
+#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
 msgid "New version of Tine 2.0 available"
 msgstr "Доступна новая версия Tine 2.0"
 
-#: js/widgets/VersionCheck.js:51 js/widgets/VersionCheck.js:60
+#: js/widgets/VersionCheck.js:52 js/widgets/VersionCheck.js:61
 #, python-brace-format
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Доступна версия \"{0}\" Tine 2.0."
 
-#: js/widgets/VersionCheck.js:52
+#: js/widgets/VersionCheck.js:53
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "Эта важное обновление должно быть установлено как можно быстрее!"
 
-#: js/widgets/VersionCheck.js:61
+#: js/widgets/VersionCheck.js:62
 msgid "Please consider updating!"
 msgstr "Пожалуйста, рассмотрите обновление!"
 
@@ -1533,7 +1537,7 @@ msgstr "Слияние {0}"
 
 #: js/widgets/grid/GridPanel.js:1071
 msgid "No data to display"
-msgstr "Нет даты"
+msgstr "Нет данных, обновите"
 
 #: js/widgets/grid/GridPanel.js:1093
 #, python-brace-format
@@ -2420,7 +2424,7 @@ msgstr "завершаю программу..."
 msgid "Please wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:401
+#: js/ExceptionHandler.js:168 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr "Необходима регистрация"
 
@@ -2821,16 +2825,21 @@ msgstr "Подтверждение выхода"
 msgid "Show confirmation dialog on logout."
 msgstr "Показывать окно подтверждения при выходе."
 
-#: Frontend/Http.php:402
+#: Frontend/Cli.php:736
+#, python-format
+msgid "%s's personal "
+msgstr ""
+
+#: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова."
 
-#: Container.php:690
+#: Container.php:706
 #, python-format
 msgid "%s's personal container"
 msgstr "Личный контейнер %s"
 
-#: Container.php:1549
+#: Container.php:1617
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3140,47 +3149,47 @@ msgstr "Неопеределено"
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:504
+#: WebDav/PrincipalBackend.php:525
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3325
+#: Setup/setup.xml:3345
 msgid "note"
 msgstr "заметка"
 
-#: Setup/setup.xml:3330
+#: Setup/setup.xml:3350
 msgid "default note type"
 msgstr "тип заметки по умолчанию"
 
-#: Setup/setup.xml:3356
+#: Setup/setup.xml:3376
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:3361
+#: Setup/setup.xml:3381
 msgid "telephone call"
 msgstr "телефонный звонок"
 
-#: Setup/setup.xml:3387
+#: Setup/setup.xml:3407
 msgid "email"
 msgstr "электронная почта"
 
-#: Setup/setup.xml:3392
+#: Setup/setup.xml:3412
 msgid "email contact"
 msgstr "контакт электронной почты"
 
-#: Setup/setup.xml:3418
+#: Setup/setup.xml:3438
 msgid "created"
 msgstr "создано"
 
-#: Setup/setup.xml:3423
+#: Setup/setup.xml:3443
 msgid "record created"
 msgstr "запись создана"
 
-#: Setup/setup.xml:3449
+#: Setup/setup.xml:3469
 msgid "changed"
 msgstr "изменено"
 
-#: Setup/setup.xml:3454
+#: Setup/setup.xml:3474
 msgid "record changed"
 msgstr "запись изменена"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-12 13:30+0000\n"
-"Last-Translator: Juan Fortuna <jfortuna@antel.com.uy>\n"
+"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -70,8 +70,8 @@ msgstr "Trate de dividir nombre de usuario"
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
+#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "Yes"
 msgstr "Si"
 
@@ -81,8 +81,8 @@ msgstr "Si"
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
+#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "No"
 msgstr "No"
 
@@ -91,8 +91,8 @@ msgid "Account canonical form"
 msgstr "Formulación de cuenta canónica"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:353
-msgid "Account domain name "
-msgstr "Cuenta de dominio nombre"
+msgid "Account domain name"
+msgstr ""
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:356
 msgid "Account domain short name"
@@ -183,11 +183,11 @@ msgstr "Directorio CRL"
 msgid "Accounts storage"
 msgstr "Almacenamiento de cuentas"
 
-#: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:680
+#: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:681
 msgid "Default user group name"
 msgstr "Nombre predeterminado del grupo de usuarios"
 
-#: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:683
+#: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:684
 msgid "Default admin group name"
 msgstr "Nombre predeterminado del grupo de administradores"
 
@@ -255,151 +255,131 @@ msgstr "Redireccionar siempre (si no, sólo redirigir después de cerrar la sesi
 msgid "Redirect to referring site, if exists"
 msgstr "Redirigir al sitio de referencia, si es que existe"
 
-#: js/AuthenticationPanel.js:607
-msgid "Password encryption type"
-msgstr "Tipo de encriptado para contraseña"
-
-#: js/AuthenticationPanel.js:609
-msgid "des"
-msgstr "des"
-
-#: js/AuthenticationPanel.js:610
-msgid "blowfish_crypt"
-msgstr "blowfish_crypt"
-
-#: js/AuthenticationPanel.js:611
-msgid "md5_crypt"
-msgstr "md5_crypt"
-
-#: js/AuthenticationPanel.js:612
-msgid "ext_crypt"
-msgstr "ext_crypt"
-
-#: js/AuthenticationPanel.js:613
-msgid "md5"
-msgstr "md5"
-
-#: js/AuthenticationPanel.js:614
-msgid "smd5"
-msgstr "smd5"
-
-#: js/AuthenticationPanel.js:615
-msgid "sha"
-msgstr "sha"
-
-#: js/AuthenticationPanel.js:616
-msgid "ssha"
-msgstr "ssha"
-
-#: js/AuthenticationPanel.js:617
-msgid "ntpassword"
-msgstr "ntpassword"
-
-#: js/AuthenticationPanel.js:618
-msgid "plain"
-msgstr "plano"
-
-#: js/AuthenticationPanel.js:624
-msgid "User DN"
-msgstr "Usuario DN"
-
-#: js/AuthenticationPanel.js:627
-msgid "User Filter"
-msgstr "Filtrar usuario"
-
-#: js/AuthenticationPanel.js:631
-msgid "User Search Scope"
-msgstr "Usuario ámbito de búsqueda"
-
-#: js/AuthenticationPanel.js:637
-msgid "Groups DN"
-msgstr "Grupos DN"
-
-#: js/AuthenticationPanel.js:640
-msgid "Group Filter"
-msgstr "Filtrar Grupo"
-
-#: js/AuthenticationPanel.js:644
-msgid "Group Search Scope"
-msgstr "Grupo ámbito de búsqueda"
-
-#: js/AuthenticationPanel.js:650
+#: js/AuthenticationPanel.js:608
 msgid "Password encoding"
 msgstr "Codificación de contraseña"
 
-#: js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:610
+msgid "des"
+msgstr "des"
+
+#: js/AuthenticationPanel.js:611
+msgid "crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:612
+msgid "blowfish_crypt"
+msgstr "blowfish_crypt"
+
+#: js/AuthenticationPanel.js:613
+msgid "md5_crypt"
+msgstr "md5_crypt"
+
+#: js/AuthenticationPanel.js:614
+msgid "ext_crypt"
+msgstr "ext_crypt"
+
+#: js/AuthenticationPanel.js:615
+msgid "md5"
+msgstr "md5"
+
+#: js/AuthenticationPanel.js:616
+msgid "smd5"
+msgstr "smd5"
+
+#: js/AuthenticationPanel.js:617
+msgid "sha"
+msgstr "sha"
+
+#: js/AuthenticationPanel.js:618
+msgid "ssha"
+msgstr "ssha"
+
+#: js/AuthenticationPanel.js:619
+msgid "ntpassword"
+msgstr "ntpassword"
+
+#: js/AuthenticationPanel.js:620
+msgid "plain"
+msgstr "plano"
+
+#: js/AuthenticationPanel.js:626
+msgid "User DN"
+msgstr "Usuario DN"
+
+#: js/AuthenticationPanel.js:629
+msgid "User Filter"
+msgstr "Filtrar usuario"
+
+#: js/AuthenticationPanel.js:633
+msgid "User Search Scope"
+msgstr "Usuario ámbito de búsqueda"
+
+#: js/AuthenticationPanel.js:639
+msgid "Groups DN"
+msgstr "Grupos DN"
+
+#: js/AuthenticationPanel.js:642
+msgid "Group Filter"
+msgstr "Filtrar Grupo"
+
+#: js/AuthenticationPanel.js:646
+msgid "Group Search Scope"
+msgstr "Grupo ámbito de búsqueda"
+
+#: js/AuthenticationPanel.js:652
 msgid "Use Rfc 2307 bis"
 msgstr "Usar Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:652
 msgid "Maintain RFC 2307 attributes"
 msgstr "Mantener atributos RFC 2307"
 
-#: js/AuthenticationPanel.js:662
+#: js/AuthenticationPanel.js:658
 msgid "Min User Id"
 msgstr "Id Mínimo de Usuario"
 
-#: js/AuthenticationPanel.js:665
+#: js/AuthenticationPanel.js:661
 msgid "Max User Id"
 msgstr "ID Máximo de Usuario"
 
-#: js/AuthenticationPanel.js:668
+#: js/AuthenticationPanel.js:664
 msgid "Min Group Id"
 msgstr "Id de Grupo Mínimo de Usuario"
 
-#: js/AuthenticationPanel.js:671
+#: js/AuthenticationPanel.js:667
 msgid "Max Group Id"
 msgstr "Id de Grupo Máximo de Usuario"
 
-#: js/AuthenticationPanel.js:674
+#: js/AuthenticationPanel.js:671
 msgid "Group UUID Attribute name"
 msgstr "Nombre del atributo del grupo UUID"
 
-#: js/AuthenticationPanel.js:677
+#: js/AuthenticationPanel.js:676
 msgid "User UUID Attribute name"
 msgstr "Nombre del atributo del usuario UUID"
 
-#: js/AuthenticationPanel.js:687
+#: js/AuthenticationPanel.js:688
 msgid "Readonly access"
 msgstr "Acceso solo Lectura"
 
-#: js/AuthenticationPanel.js:701
+#: js/AuthenticationPanel.js:702
 msgid "Save config and install"
 msgstr "Guardar configuración e instalar"
 
-#: js/AuthenticationPanel.js:703 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:704 js/ConfigManagerPanel.js:499
 msgid "Save config"
 msgstr "Guardar configuración"
 
-#: js/AuthenticationPanel.js:728
+#: js/AuthenticationPanel.js:729
 msgid "Passwords don't match"
 msgstr "Las contraseñas no coinciden"
 
-#: js/AuthenticationPanel.js:738 js/AuthenticationPanel.js:745
-#: js/AuthenticationPanel.js:749 js/AuthenticationPanel.js:761
-#: js/AuthenticationPanel.js:772
+#: js/AuthenticationPanel.js:742 js/AuthenticationPanel.js:749
+#: js/AuthenticationPanel.js:753 js/AuthenticationPanel.js:765
+#: js/AuthenticationPanel.js:776
 msgid "Should not be empty"
 msgstr "No debería estar vacío"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "He leído los términos de la licencia y estoy de acuerdo con ellos"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Términos de Licenciamiento"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "He leído la política de privacidad y estoy de acuerdo con ella"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Política de Privacidad"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Aceptar Términos y Condiciones"
 
 #: js/Setup.js:53
 msgid "Terms and Conditions"
@@ -472,6 +452,7 @@ msgid "Update application"
 msgstr "Actualizar aplicación"
 
 #: js/ApplicationGridPanel.js:105
+#, python-brace-format
 msgid "Go to {0} login"
 msgstr "Ir al {0} de ingreso"
 
@@ -487,9 +468,13 @@ msgstr "¿Realmente desea desinstalar la(s) aplicación(es)?"
 msgid "This may take a while"
 msgstr "Puede tomar algún tiempo"
 
-#: js/ApplicationGridPanel.js:272
+#: js/ApplicationGridPanel.js:274
 msgid "Dependency Violation"
 msgstr "Violación de Dependencia"
+
+#: js/ApplicationGridPanel.js:283
+msgid "CLI Required"
+msgstr ""
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -635,11 +620,32 @@ msgstr "SSHA512"
 msgid "PLAIN"
 msgstr "PLANO"
 
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "He leído los términos de la licencia y estoy de acuerdo con ellos"
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Términos de Licenciamiento"
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "He leído la política de privacidad y estoy de acuerdo con ella"
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Política de Privacidad"
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Aceptar Términos y Condiciones"
+
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
 msgstr "Realizando controles de entorno..."
 
 #: js/EnvCheckGridPanel.js:130
+#, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."

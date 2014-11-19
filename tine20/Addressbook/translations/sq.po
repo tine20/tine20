@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -640,6 +640,11 @@ msgstr ""
 msgid "default"
 msgstr ""
 
+#: Frontend/Cli.php:166
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
 msgstr "Të gjithë kontaktet"
@@ -678,14 +683,17 @@ msgstr "CSV Outlook 2007 German"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
+#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr "Importo kontakte CSV"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importo listën (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"

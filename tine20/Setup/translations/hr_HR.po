@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-02-11 20:39+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,8 +71,8 @@ msgstr "Pokušajte razdvojiti korisničko ime"
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
+#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "Yes"
 msgstr "Da"
 
@@ -82,8 +82,8 @@ msgstr "Da"
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
 #: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
 #: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:657
-#: js/AuthenticationPanel.js:688 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
+#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "No"
 msgstr "Ne"
 
@@ -92,8 +92,8 @@ msgid "Account canonical form"
 msgstr "Kanonski oblik računa"
 
 #: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:353
-msgid "Account domain name "
-msgstr "Domensko ime računa"
+msgid "Account domain name"
+msgstr ""
 
 #: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:356
 msgid "Account domain short name"
@@ -184,11 +184,11 @@ msgstr ""
 msgid "Accounts storage"
 msgstr "Pohrana računa"
 
-#: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:680
+#: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:681
 msgid "Default user group name"
 msgstr "Zadano ime korisničke grupe"
 
-#: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:683
+#: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:684
 msgid "Default admin group name"
 msgstr "Zadano ime admin grupe"
 
@@ -256,151 +256,131 @@ msgstr "Preusmjeri uvijek (ako ne, preusmjeri samo nakon odjave)"
 msgid "Redirect to referring site, if exists"
 msgstr "Preusmjeravanje na web-lokaciju s koje dolazi, ako postoji"
 
-#: js/AuthenticationPanel.js:607
-msgid "Password encryption type"
-msgstr ""
-
-#: js/AuthenticationPanel.js:609
-msgid "des"
-msgstr ""
-
-#: js/AuthenticationPanel.js:610
-msgid "blowfish_crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:611
-msgid "md5_crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:612
-msgid "ext_crypt"
-msgstr ""
-
-#: js/AuthenticationPanel.js:613
-msgid "md5"
-msgstr ""
-
-#: js/AuthenticationPanel.js:614
-msgid "smd5"
-msgstr ""
-
-#: js/AuthenticationPanel.js:615
-msgid "sha"
-msgstr ""
-
-#: js/AuthenticationPanel.js:616
-msgid "ssha"
-msgstr ""
-
-#: js/AuthenticationPanel.js:617
-msgid "ntpassword"
-msgstr ""
-
-#: js/AuthenticationPanel.js:618
-msgid "plain"
-msgstr ""
-
-#: js/AuthenticationPanel.js:624
-msgid "User DN"
-msgstr "Korisnik DN"
-
-#: js/AuthenticationPanel.js:627
-msgid "User Filter"
-msgstr "Korisnički filter"
-
-#: js/AuthenticationPanel.js:631
-msgid "User Search Scope"
-msgstr "Područje traženja korisnika"
-
-#: js/AuthenticationPanel.js:637
-msgid "Groups DN"
-msgstr "Grupa DN"
-
-#: js/AuthenticationPanel.js:640
-msgid "Group Filter"
-msgstr "Filter grupe"
-
-#: js/AuthenticationPanel.js:644
-msgid "Group Search Scope"
-msgstr "Područje traženja grupe"
-
-#: js/AuthenticationPanel.js:650
+#: js/AuthenticationPanel.js:608
 msgid "Password encoding"
 msgstr "Kodiranje zaporke"
 
-#: js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:610
+msgid "des"
+msgstr ""
+
+#: js/AuthenticationPanel.js:611
+msgid "crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:612
+msgid "blowfish_crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:613
+msgid "md5_crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:614
+msgid "ext_crypt"
+msgstr ""
+
+#: js/AuthenticationPanel.js:615
+msgid "md5"
+msgstr ""
+
+#: js/AuthenticationPanel.js:616
+msgid "smd5"
+msgstr ""
+
+#: js/AuthenticationPanel.js:617
+msgid "sha"
+msgstr ""
+
+#: js/AuthenticationPanel.js:618
+msgid "ssha"
+msgstr ""
+
+#: js/AuthenticationPanel.js:619
+msgid "ntpassword"
+msgstr ""
+
+#: js/AuthenticationPanel.js:620
+msgid "plain"
+msgstr ""
+
+#: js/AuthenticationPanel.js:626
+msgid "User DN"
+msgstr "Korisnik DN"
+
+#: js/AuthenticationPanel.js:629
+msgid "User Filter"
+msgstr "Korisnički filter"
+
+#: js/AuthenticationPanel.js:633
+msgid "User Search Scope"
+msgstr "Područje traženja korisnika"
+
+#: js/AuthenticationPanel.js:639
+msgid "Groups DN"
+msgstr "Grupa DN"
+
+#: js/AuthenticationPanel.js:642
+msgid "Group Filter"
+msgstr "Filter grupe"
+
+#: js/AuthenticationPanel.js:646
+msgid "Group Search Scope"
+msgstr "Područje traženja grupe"
+
+#: js/AuthenticationPanel.js:652
 msgid "Use Rfc 2307 bis"
 msgstr "Koristi Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:656
+#: js/AuthenticationPanel.js:652
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:662
+#: js/AuthenticationPanel.js:658
 msgid "Min User Id"
 msgstr "Minimalan korisnički ID"
 
-#: js/AuthenticationPanel.js:665
+#: js/AuthenticationPanel.js:661
 msgid "Max User Id"
 msgstr "Maksimalan korisnički ID"
 
-#: js/AuthenticationPanel.js:668
+#: js/AuthenticationPanel.js:664
 msgid "Min Group Id"
 msgstr "Minimalan ID grupe"
 
-#: js/AuthenticationPanel.js:671
+#: js/AuthenticationPanel.js:667
 msgid "Max Group Id"
 msgstr "Maksimalan ID grupe"
 
-#: js/AuthenticationPanel.js:674
+#: js/AuthenticationPanel.js:671
 msgid "Group UUID Attribute name"
 msgstr "Naziv atributa za UUID grupe"
 
-#: js/AuthenticationPanel.js:677
+#: js/AuthenticationPanel.js:676
 msgid "User UUID Attribute name"
 msgstr "Naziv atributa za UUID korisnika"
 
-#: js/AuthenticationPanel.js:687
+#: js/AuthenticationPanel.js:688
 msgid "Readonly access"
 msgstr "Pristup samo za čitanja"
 
-#: js/AuthenticationPanel.js:701
+#: js/AuthenticationPanel.js:702
 msgid "Save config and install"
 msgstr "Spremi i instaliraj konfiguraciju"
 
-#: js/AuthenticationPanel.js:703 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:704 js/ConfigManagerPanel.js:499
 msgid "Save config"
 msgstr "Spremi konfiguraciju"
 
-#: js/AuthenticationPanel.js:728
+#: js/AuthenticationPanel.js:729
 msgid "Passwords don't match"
 msgstr "Zaporke nisu jednake"
 
-#: js/AuthenticationPanel.js:738 js/AuthenticationPanel.js:745
-#: js/AuthenticationPanel.js:749 js/AuthenticationPanel.js:761
-#: js/AuthenticationPanel.js:772
+#: js/AuthenticationPanel.js:742 js/AuthenticationPanel.js:749
+#: js/AuthenticationPanel.js:753 js/AuthenticationPanel.js:765
+#: js/AuthenticationPanel.js:776
 msgid "Should not be empty"
 msgstr "Ne bi trebalo biti prazno"
-
-#: js/TermsPanel.js:30
-msgid "I have read the license agreement and accept it"
-msgstr "Pročitao sam ugovor o korištenju i prihvaćam ga"
-
-#: js/TermsPanel.js:37
-msgid "License Agreement"
-msgstr "Ugovor o korištenju"
-
-#: js/TermsPanel.js:56
-msgid "I have read the privacy agreement and accept it"
-msgstr "Pročitao sam ugovor o privatnosti i prihvaćam ga"
-
-#: js/TermsPanel.js:63
-msgid "Privacy Agreement"
-msgstr "Ugovor o privatnosti"
-
-#: js/TermsPanel.js:80
-msgid "Accept Terms and Conditions"
-msgstr "Prihvaćam uvjete korištenja"
 
 #: js/Setup.js:53
 msgid "Terms and Conditions"
@@ -474,6 +454,7 @@ msgid "Update application"
 msgstr "Ažuriraj aplikaciju"
 
 #: js/ApplicationGridPanel.js:105
+#, python-brace-format
 msgid "Go to {0} login"
 msgstr "Idi na {0} prijavu"
 
@@ -489,9 +470,13 @@ msgstr "Želite li stvarno ukloniti aplikaciju(e)?"
 msgid "This may take a while"
 msgstr "Ovo bi moglo potrajati"
 
-#: js/ApplicationGridPanel.js:272
+#: js/ApplicationGridPanel.js:274
 msgid "Dependency Violation"
 msgstr "Kršenje ovisnosti"
+
+#: js/ApplicationGridPanel.js:283
+msgid "CLI Required"
+msgstr ""
 
 #: js/EmailPanel.js:150
 msgid "Standard IMAP"
@@ -637,11 +622,32 @@ msgstr "SSHA512"
 msgid "PLAIN"
 msgstr "PLAIN"
 
+#: js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "Pročitao sam ugovor o korištenju i prihvaćam ga"
+
+#: js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Ugovor o korištenju"
+
+#: js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "Pročitao sam ugovor o privatnosti i prihvaćam ga"
+
+#: js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Ugovor o privatnosti"
+
+#: js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Prihvaćam uvjete korištenja"
+
 #: js/EnvCheckGridPanel.js:89
 msgid "Performing Environment Checks..."
 msgstr "Izvršavam provjere okruženja..."
 
 #: js/EnvCheckGridPanel.js:130
+#, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."

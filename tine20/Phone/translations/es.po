@@ -86,78 +86,6 @@ msgstr "Lineas"
 msgid "Description"
 msgstr "Descripción"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Llamadas esta semana"
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Llamadas última semana"
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Llamadas este mes"
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Llamadas último mes"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Llamadas entrantes/salientes esta semana"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Llamadas entrantes/salientes última semana"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Llamadas entrantes/salientes este mes"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Llamadas entrantes/salientes último mes"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Número"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Marcar"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Error"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "Fue imposible discar."
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Editar preferencias del teléfono"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Número de discado"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Comenzar una nueva llamada de salida"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Teléfono no seleccionado"
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Seleccione teléfono"
-
 #: js/Phone.js:100
 msgid "Incoming call"
 msgstr "Llamada entrante"
@@ -189,3 +117,75 @@ msgstr "Móvil"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Móvil privado"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Editar preferencias del teléfono"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Número de discado"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Comenzar una nueva llamada de salida"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "Teléfono no seleccionado"
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "Seleccione teléfono"
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "Número"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "Marcar"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "Error"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "Fue imposible discar."
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+msgid "Calls this week"
+msgstr "Llamadas esta semana"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Llamadas entrantes/salientes esta semana"
+
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr "Llamadas última semana"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Llamadas entrantes/salientes última semana"
+
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr "Llamadas este mes"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Llamadas entrantes/salientes este mes"
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
+msgstr "Llamadas último mes"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Llamadas entrantes/salientes último mes"

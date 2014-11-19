@@ -19,6 +19,11 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Controller.php:79
+#, python-format
+msgid "%s's personal Projects"
+msgstr "Персональные проекты %s"
+
 #: Acl/Rights.php:91
 msgid "Manage shared project favorites"
 msgstr "Управление общими избранными проектами"
@@ -27,10 +32,120 @@ msgstr "Управление общими избранными проектам�
 msgid "Create new shared project favorites"
 msgstr "Создание новых общих избранных проектов"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal Projects"
-msgstr "Персональные проекты %s"
+#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Проект"
+msgstr[1] "Проекты"
+msgstr[2] "Проекты"
+
+#: js/Model.js:39
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Список проектов"
+msgstr[1] "Списки проектов"
+msgstr[2] "Списки проектов"
+
+#: js/Model.js:42
+msgid "Project lists"
+msgstr "Списки проектов"
+
+#: js/Model.js:74
+msgid "Quick Search"
+msgstr "Быстрый поиск"
+
+#: js/Model.js:75 js/ProjectEditDialog.js:133 js/ProjectGridPanel.js:128
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/Model.js:76 js/ProjectEditDialog.js:138 js/ProjectGridPanel.js:121
+msgid "Number"
+msgstr "Номер"
+
+#: js/Model.js:77 js/ProjectEditDialog.js:174
+msgid "Description"
+msgstr "Описание"
+
+#: js/Model.js:79 js/ProjectEditDialog.js:144 js/ProjectGridPanel.js:134
+msgid "Status"
+msgstr "Статус"
+
+#: js/Model.js:88
+msgid "Last Modified Time"
+msgstr "Время последнего изменения"
+
+#: js/Model.js:89
+msgid "Last Modified By"
+msgstr "Последнее изменение"
+
+#: js/Model.js:90
+msgid "Creation Time"
+msgstr "Время создания"
+
+#: js/Model.js:91
+msgid "Created By"
+msgstr "Создано"
+
+#: js/ProjectEditDialog.js:80 js/ProjectAttendeeFilter.js:38
+msgid "Attendee"
+msgstr "Участник"
+
+#: js/ProjectEditDialog.js:81 js/AddToProjectPanel.js:81
+msgid "Role"
+msgstr "Роль"
+
+#: js/ProjectEditDialog.js:188
+msgid "Enter description"
+msgstr "Введите описание"
+
+#: js/ProjectAttendeeFilter.js:49
+msgid "Attendee Role"
+msgstr "Роль участника"
+
+#: js/AddToProjectPanel.js:34
+msgid "Please choose the Project to add the contacts to"
+msgstr "Пожалуйста, выберите проект для добавления контактов"
+
+#: js/AddToProjectPanel.js:38
+msgid "Please select the attenders' role"
+msgstr "Пожалуйста, выберите роль участника"
+
+#: js/AddToProjectPanel.js:79
+msgid "Select Project"
+msgstr "Выберите проект"
+
+#: js/AddToProjectPanel.js:82
+msgid "Select Role"
+msgstr "Выберите роль"
+
+#: js/AddToProjectPanel.js:102
+#, python-brace-format
+msgid "Adding {0} Participants to project"
+msgstr "Добавлено {0} участников в проект"
+
+#: js/Projects.js:24 Setup/setup.xml:4
+msgid "Projects"
+msgstr "Проекты"
+
+#: js/ProjectGridPanel.js:75
+msgid "Search FAQ"
+msgstr "Найти FAQ"
+
+#: js/ProjectGridPanel.js:118
+msgid "Tags"
+msgstr "Теги"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Все мои проекты"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Избранный по умолчанию"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Будет загружено по-умолчанию при загрузке Проектов"
 
 #: Config.php:38
 msgid "Project Status Available"
@@ -52,10 +167,6 @@ msgid ""
 "attendee roles might impact other Projects systems on export or "
 "syncronisation."
 msgstr "Возможные роли участника проекта. Пожалуйста, обратите внимание, что дополнительные роли участника проекта могут повлиять на другие системы проектов при экспорте или синхронизации."
-
-#: Setup/setup.xml:4 js/Projects.js:24
-msgid "Projects"
-msgstr "Проекты"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -100,113 +211,3 @@ msgstr "Мои ожидающие проекты"
 #: Setup/Initialize.php:121
 msgid "My projects that are on hold"
 msgstr "Мои приостановленные проекты"
-
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Все мои проекты"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Избранный по умолчанию"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Будет загружено по-умолчанию при загрузке Проектов"
-
-#: js/AddToProjectPanel.js:34
-msgid "Please choose the Project to add the contacts to"
-msgstr "Пожалуйста, выберите проект для добавления контактов"
-
-#: js/AddToProjectPanel.js:38
-msgid "Please select the attenders' role"
-msgstr "Пожалуйста, выберите роль участника"
-
-#: js/AddToProjectPanel.js:79
-msgid "Select Project"
-msgstr "Выберите проект"
-
-#: js/AddToProjectPanel.js:81 js/ProjectEditDialog.js:81
-msgid "Role"
-msgstr "Роль"
-
-#: js/AddToProjectPanel.js:82
-msgid "Select Role"
-msgstr "Выберите роль"
-
-#: js/AddToProjectPanel.js:102
-msgid "Adding {0} Participants to project"
-msgstr "Добавлено {0} участников в проект"
-
-#: js/ProjectGridPanel.js:75
-msgid "Search FAQ"
-msgstr "Найти FAQ"
-
-#: js/ProjectGridPanel.js:118
-msgid "Tags"
-msgstr "Теги"
-
-#: js/ProjectGridPanel.js:121 js/Model.js:76 js/ProjectEditDialog.js:138
-msgid "Number"
-msgstr "Номер"
-
-#: js/ProjectGridPanel.js:128 js/Model.js:75 js/ProjectEditDialog.js:133
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/ProjectGridPanel.js:134 js/Model.js:79 js/ProjectEditDialog.js:144
-msgid "Status"
-msgstr "Статус"
-
-#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Проект"
-msgstr[1] "Проекты"
-msgstr[2] "Проекты"
-
-#: js/Model.js:39
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Список проектов"
-msgstr[1] "Списки проектов"
-msgstr[2] "Списки проектов"
-
-#: js/Model.js:42
-msgid "Project lists"
-msgstr "Списки проектов"
-
-#: js/Model.js:74
-msgid "Quick Search"
-msgstr "Быстрый поиск"
-
-#: js/Model.js:77 js/ProjectEditDialog.js:174
-msgid "Description"
-msgstr "Описание"
-
-#: js/Model.js:88
-msgid "Last Modified Time"
-msgstr "Время последнего изменения"
-
-#: js/Model.js:89
-msgid "Last Modified By"
-msgstr "Последнее изменение"
-
-#: js/Model.js:90
-msgid "Creation Time"
-msgstr "Время создания"
-
-#: js/Model.js:91
-msgid "Created By"
-msgstr "Создано"
-
-#: js/ProjectAttendeeFilter.js:38 js/ProjectEditDialog.js:80
-msgid "Attendee"
-msgstr "Участник"
-
-#: js/ProjectAttendeeFilter.js:49
-msgid "Attendee Role"
-msgstr "Роль участника"
-
-#: js/ProjectEditDialog.js:188
-msgid "Enter description"
-msgstr "Введите описание"

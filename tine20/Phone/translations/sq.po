@@ -85,78 +85,6 @@ msgstr "Linja"
 msgid "Description"
 msgstr "Përshkrimi"
 
-#: Setup/Update/Release7.php:30 Setup/Initialize.php:33
-msgid "Calls this week"
-msgstr "Thirrje kësaj jave"
-
-#: Setup/Update/Release7.php:40 Setup/Initialize.php:43
-msgid "Calls last week"
-msgstr "Thirrje javës së shkuar"
-
-#: Setup/Update/Release7.php:50 Setup/Initialize.php:53
-msgid "Calls this month"
-msgstr "Thirrje këtë muaj"
-
-#: Setup/Update/Release7.php:60 Setup/Initialize.php:63
-msgid "Calls last month"
-msgstr "Thirrje muajit të shkuar"
-
-#: Setup/Initialize.php:34
-msgid "Incoming and outgoing calls of this week"
-msgstr "Thirrje hyrjëse dhe dalëse të kësaj jave"
-
-#: Setup/Initialize.php:44
-msgid "Incoming and outgoing calls of last week"
-msgstr "Thirrje hyrëse dhe dalëse të javës së shkuar"
-
-#: Setup/Initialize.php:54
-msgid "Incoming and outgoing calls of this month"
-msgstr "Thirrje hyrëse dhe dalëse të këtij muaji"
-
-#: Setup/Initialize.php:64
-msgid "Incoming and outgoing calls of last month"
-msgstr "Thirrje hyrëse dhe dalëse të muajit të kaluar"
-
-#: js/DialerPanel.js:85
-msgid "Number"
-msgstr "Numër"
-
-#: js/DialerPanel.js:94
-msgid "Cancel"
-msgstr "Anullo"
-
-#: js/DialerPanel.js:104
-msgid "Dial"
-msgstr "Formo numrin"
-
-#: js/DialerPanel.js:124
-msgid "Error"
-msgstr "Gabim"
-
-#: js/DialerPanel.js:125
-msgid "Not possible to dial."
-msgstr "E pa mjundur të formohet numri"
-
-#: js/CallGridPanel.js:54
-msgid "Edit phone settings"
-msgstr "Modifiko konfigurimet e telefonit"
-
-#: js/CallGridPanel.js:68
-msgid "Dial number"
-msgstr "Thirr Numrin"
-
-#: js/CallGridPanel.js:69
-msgid "Initiate a new outgoing call"
-msgstr "Nis një thirrje dalëse"
-
-#: js/CallGridPanel.js:216
-msgid "No phone selected"
-msgstr "Nuk është zgjedhur asnjë telefon"
-
-#: js/CallGridPanel.js:217
-msgid "Please select the desired phone in the tree!"
-msgstr "Ju lutem zgjidhni telefonin e kërkuar në \"pemë\"!"
-
 #: js/Phone.js:100
 msgid "Incoming call"
 msgstr "Thirrje Hyrëse"
@@ -188,3 +116,75 @@ msgstr "Celular"
 #: js/AddressbookGridPanelHook.js:218
 msgid "Cell private"
 msgstr "Celular Privat"
+
+#: js/CallGridPanel.js:54
+msgid "Edit phone settings"
+msgstr "Modifiko konfigurimet e telefonit"
+
+#: js/CallGridPanel.js:68
+msgid "Dial number"
+msgstr "Thirr Numrin"
+
+#: js/CallGridPanel.js:69
+msgid "Initiate a new outgoing call"
+msgstr "Nis një thirrje dalëse"
+
+#: js/CallGridPanel.js:216
+msgid "No phone selected"
+msgstr "Nuk është zgjedhur asnjë telefon"
+
+#: js/CallGridPanel.js:217
+msgid "Please select the desired phone in the tree!"
+msgstr "Ju lutem zgjidhni telefonin e kërkuar në \"pemë\"!"
+
+#: js/DialerPanel.js:85
+msgid "Number"
+msgstr "Numër"
+
+#: js/DialerPanel.js:94
+msgid "Cancel"
+msgstr "Anullo"
+
+#: js/DialerPanel.js:104
+msgid "Dial"
+msgstr "Formo numrin"
+
+#: js/DialerPanel.js:124
+msgid "Error"
+msgstr "Gabim"
+
+#: js/DialerPanel.js:125
+msgid "Not possible to dial."
+msgstr "E pa mjundur të formohet numri"
+
+#: Setup/Initialize.php:33 Setup/Update/Release7.php:30
+msgid "Calls this week"
+msgstr "Thirrje kësaj jave"
+
+#: Setup/Initialize.php:34
+msgid "Incoming and outgoing calls of this week"
+msgstr "Thirrje hyrjëse dhe dalëse të kësaj jave"
+
+#: Setup/Initialize.php:43 Setup/Update/Release7.php:40
+msgid "Calls last week"
+msgstr "Thirrje javës së shkuar"
+
+#: Setup/Initialize.php:44
+msgid "Incoming and outgoing calls of last week"
+msgstr "Thirrje hyrëse dhe dalëse të javës së shkuar"
+
+#: Setup/Initialize.php:53 Setup/Update/Release7.php:50
+msgid "Calls this month"
+msgstr "Thirrje këtë muaj"
+
+#: Setup/Initialize.php:54
+msgid "Incoming and outgoing calls of this month"
+msgstr "Thirrje hyrëse dhe dalëse të këtij muaji"
+
+#: Setup/Initialize.php:63 Setup/Update/Release7.php:60
+msgid "Calls last month"
+msgstr "Thirrje muajit të shkuar"
+
+#: Setup/Initialize.php:64
+msgid "Incoming and outgoing calls of last month"
+msgstr "Thirrje hyrëse dhe dalëse të muajit të kaluar"

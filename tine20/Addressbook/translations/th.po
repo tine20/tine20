@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -35,23 +35,23 @@ msgstr "อีเมล"
 
 #: Export/Pdf.php:55
 msgid "Telephone Work"
-msgstr ""
+msgstr "โทรศัพท์ ที่ทำงาน"
 
 #: Export/Pdf.php:58
 msgid "Telephone Cellphone"
-msgstr ""
+msgstr "โทรศัพท์ เคลื่อนที่"
 
 #: Export/Pdf.php:61
 msgid "Telephone Car"
-msgstr ""
+msgstr "โทรศัพท์ ในรถ"
 
 #: Export/Pdf.php:64
 msgid "Telephone Fax"
-msgstr ""
+msgstr "โทรศัพท์ โทรสาร"
 
 #: Export/Pdf.php:67
 msgid "Telephone Page"
-msgstr ""
+msgstr "โทรศัพท์ หน้า"
 
 #: Export/Pdf.php:70
 msgid "URL"
@@ -94,11 +94,11 @@ msgstr "โทรศัพท์ ที่บ้าน"
 
 #: Export/Pdf.php:102
 msgid "Telephone Cellphone Private"
-msgstr ""
+msgstr "โทรศัพท์ เคลื่อนที่ ส่วนบุคคล"
 
 #: Export/Pdf.php:105
 msgid "Telephone Fax Home"
-msgstr ""
+msgstr "โทรศัพท์ โทรสารที่บ้าน"
 
 #: Export/Pdf.php:108
 msgid "URL Home"
@@ -120,23 +120,23 @@ msgstr "ตำแหน่งงาน"
 
 #: Export/Doc.php:69
 msgid "Dear Mister"
-msgstr ""
+msgstr "เรียน คุณ"
 
 #: Export/Doc.php:71
 msgid "Dear Miss"
-msgstr ""
+msgstr "เรียน คุณ"
 
 #: Export/Doc.php:73
 msgid "Dear"
-msgstr ""
+msgstr "เรียน"
 
 #: Export/Doc.php:89
 msgid "Mister"
-msgstr ""
+msgstr "นาย"
 
 #: Export/Doc.php:91
 msgid "Misses"
-msgstr ""
+msgstr "คุณผู้หญิงทั้งหลาย"
 
 #: Controller.php:105
 #, python-format
@@ -577,7 +577,7 @@ msgstr "ส่งออก เป็นไฟล์ XLS"
 
 #: js/ContactGrid.js:196
 msgid "Export as DOC"
-msgstr ""
+msgstr "ส่งออก เป็นไฟล์ DOC"
 
 #: js/ContactGrid.js:203
 msgid "Export as ..."
@@ -609,30 +609,35 @@ msgstr "สมุดรายชื่อหลักสำหรับการ
 
 #: Preference.php:85
 msgid "Default Favorite"
-msgstr ""
+msgstr "ค่าที่ชอบหลัก"
 
 #: Preference.php:86
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+msgstr "ค่าที่ชอบหลักที่จะโหลดทันทีเมื่อเริ่มเปิดสมุดที่อยู่"
 
 #: Preference.php:89
 msgid "Contacts ODS export configuration"
-msgstr ""
+msgstr "การกำหนดค่าส่งออกการติดต่อแบบ ODS"
 
 #: Preference.php:90
 msgid "Use this configuration for the contact ODS export."
-msgstr ""
+msgstr "ใช้ค่าติดตั้งนี้สำหรับการส่งออกการติดต่อแบบ ODS"
 
 #: Preference.php:93
 msgid "Contacts XLS export configuration"
-msgstr ""
+msgstr "การกำหนดค่าการส่งออกการติดต่อแบบ XLS"
 
 #: Preference.php:94
 msgid "Use this configuration for the contact XLS export."
-msgstr ""
+msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกการติดต่อแบบ XLS"
 
 #: Preference.php:165
 msgid "default"
+msgstr "ค่าหลัก"
+
+#: Frontend/Cli.php:166
+msgid ""
+"This contact has been automatically added by the system as an event attender"
 msgstr ""
 
 #: Frontend/CardDAV/AllContacts.php:41
@@ -657,7 +662,7 @@ msgstr "คำขึ้นต้นที่ใช้ในการติดต
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
-msgstr ""
+msgstr "คำขึ้นต้นการติดต่อที่น่าจะเป็นไปได้ กรุณาระลึกไว้ว่าค่าเพิ่มเติมเหล่านี้อาจมีผลกระทบต่อระบบของสมุดที่อยู่เวลาส่งออกหรือการที่มีการซิงค์ข้อมูล"
 
 #: Config.php:69
 msgid "Parsing rules for addresses"
@@ -673,14 +678,17 @@ msgstr "CSV Outlook 2007 ภาษาเยอรมัน"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
+#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr "นำเข้ารายชื่อติดต่อ CSV"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"

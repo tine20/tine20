@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -17,18 +17,18 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:149
+#: Controller.php:151
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s ของปฏิทินส่วนตัว"
 
 #: Exception/InvalidUrl.php:21
 msgid "Invalid URL given"
-msgstr ""
+msgstr "URL ที่ให้มาไม่ถูกต้อง"
 
 #: Exception/InvalidUrl.php:26
 msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
+msgstr "URL ที่คุณใช้ไม่ถูกต้อง กรุณาใช้ที่ถูกต้อง!"
 
 #: Acl/Rights.php:103
 msgid "manage shared calendars"
@@ -66,15 +66,15 @@ msgstr "ทุกวัน"
 #: Model/Rrule.php:349
 #, python-format
 msgid "Every %s week on"
-msgstr ""
+msgstr "ทุกๆ %s สัปดาห์ วัน"
 
 #: Model/Rrule.php:350
 msgid "Weekly on"
-msgstr ""
+msgstr "ทุกสัปดาห์ วัน"
 
 #: Model/Rrule.php:357
 msgid "and"
-msgstr ""
+msgstr "และ"
 
 #: Model/Rrule.php:369
 msgid "Every %1$s month on the %2$s %3$s"
@@ -130,32 +130,32 @@ msgstr "ที่ห้า"
 
 #: Model/Rrule.php:454
 msgid "st"
-msgstr ""
+msgstr "ที่"
 
 #: Model/Rrule.php:457
 msgid "nd"
-msgstr ""
+msgstr "ที่"
 
 #: Model/Rrule.php:460
 msgid "rd"
-msgstr ""
+msgstr "ที่"
 
 #: Model/Rrule.php:463
 msgid "th"
-msgstr ""
+msgstr "ที่"
 
 #: Model/Attender.php:156
 msgid "unknown"
 msgstr "ไม่รู้จัก"
 
-#: Model/Attender.php:450
+#: Model/Attender.php:463
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "ระบบได้เพิ่มการติดต่อนี้เข้าไปในเหตุการณ์ของผู้ร่วมอย่างอัตโนมัติ"
 
-#: Model/Attender.php:453
+#: Model/Attender.php:466
 msgid "The email address has been shortened:"
-msgstr ""
+msgstr "ที่อยู่อีเมลได้ถูกย่อลง"
 
 #: Model/Event.php:367
 msgid "Start"
@@ -174,17 +174,17 @@ msgid "Classification"
 msgstr "การแยกประเภท"
 
 #: Model/Event.php:371 js/ResourceEditDialog.js:84 js/EventEditDialog.js:264
-#: js/Model.js:278 js/GridView.js:161
+#: js/Model.js:285 js/GridView.js:161
 msgid "Description"
 msgstr "การอธิบาย"
 
 #: Model/Event.php:372 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
-#: js/EventEditDialog.js:132 js/Model.js:277 js/GridView.js:148
+#: js/EventEditDialog.js:132 js/Model.js:284 js/GridView.js:148
 msgid "Location"
 msgstr "สถานที่"
 
 #: Model/Event.php:373 js/EventDetailsPanel.js:284 js/EventEditDialog.js:327
-#: js/Model.js:297 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: js/Model.js:304 js/GridView.js:154 js/PerspectiveCombo.js:127
 msgid "Organizer"
 msgstr "ผู้นัดหมาย"
 
@@ -199,7 +199,7 @@ msgid "Status"
 msgstr "สถานะ"
 
 #: Model/Event.php:376 js/ContactEventsGridPanel.js:113
-#: js/EventEditDialog.js:87 js/Model.js:276 js/GridView.js:143
+#: js/EventEditDialog.js:87 js/Model.js:283 js/GridView.js:143
 msgid "Summary"
 msgstr "ข้อสรุป"
 
@@ -242,7 +242,7 @@ msgstr "เหตุการณ์นี้ได้รับการบัน
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr "เหตุการณ์นี้จะเพิ่มเข้าไปอัตโนมัติในปฏิทิน {0} ส่วนตัวของคุณ"
 
-#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:445
+#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:452
 #: js/AttendeeGridPanel.js:89 js/WestPanel.js:90
 msgid "Attendee"
 msgstr "ผู้เข้าร่วม"
@@ -333,121 +333,129 @@ msgstr "จัดการ แหล่งที่มา"
 msgid "Originally"
 msgstr "โดยเริ่มแรก"
 
-#: js/ImportDialog.js:103
+#: js/ImportDialog.js:112
 msgid "Import Definition Success!"
-msgstr ""
+msgstr "นำเข้าคำจำกัดความ ประสบความสำเร็จ!"
 
-#: js/ImportDialog.js:104
+#: js/ImportDialog.js:113
 msgid ""
 "The Ical Import definition has been created successfully! Please wait some "
-"minutes to get the events synced."
+"minutes to get the events synced by the cronjob."
 msgstr ""
 
-#: js/ImportDialog.js:122
+#: js/ImportDialog.js:139
 msgid "Choose Import File"
-msgstr ""
+msgstr "เลือก ไฟล์นำเข้า"
 
-#: js/ImportDialog.js:126
+#: js/ImportDialog.js:143
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
-
-#: js/ImportDialog.js:130
-#, python-brace-format
-msgid "Select file containing your {0}"
-msgstr ""
-
-#: js/ImportDialog.js:145
-msgid "once"
-msgstr ""
-
-#: js/ImportDialog.js:146
-msgid "hourly"
-msgstr ""
+msgstr "กรุณาเลือกไฟล์ที่มีบันทึกที่คุณต้องการจะเพิ่มใน Tine 2.0"
 
 #: js/ImportDialog.js:147
+#, python-brace-format
+msgid "Select file containing your {0}"
+msgstr "เลือกไฟล์ที่มี {0} ของคุณ"
+
+#: js/ImportDialog.js:162
+msgid "once"
+msgstr "ครั้งเดียว"
+
+#: js/ImportDialog.js:163
+msgid "hourly"
+msgstr "ทุกชั่วโมง"
+
+#: js/ImportDialog.js:164
 msgid "daily"
-msgstr ""
-
-#: js/ImportDialog.js:148
-msgid "weekly"
-msgstr ""
-
-#: js/ImportDialog.js:161
-msgid "Choose Remote Location"
-msgstr ""
+msgstr "ทุกวัน"
 
 #: js/ImportDialog.js:165
+msgid "weekly"
+msgstr "ทุกสัปดาห์"
+
+#: js/ImportDialog.js:178
+msgid "Choose Remote Location"
+msgstr "เลือกที่ตั้งที่ห่างไกล"
+
+#: js/ImportDialog.js:182
 msgid "Please choose a remote location you want to add to Tine 2.0"
+msgstr "กรุณาเลือกสถานที่ที่ห่างไกลที่คุณต้องการจะเพิ่มใน Tine 2.0"
+
+#: js/ImportDialog.js:197
+msgid "Username (CalDAV only)"
 msgstr ""
 
-#: js/ImportDialog.js:180
+#: js/ImportDialog.js:213
+msgid "Password (CalDAV only)"
+msgstr ""
+
+#: js/ImportDialog.js:230
 msgid "Refresh time"
 msgstr ""
 
-#: js/ImportDialog.js:212
+#: js/ImportDialog.js:262
 msgid "General Settings"
-msgstr ""
+msgstr "ค่าติดตั้งทั่วไป"
 
-#: js/ImportDialog.js:217
+#: js/ImportDialog.js:267
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
 msgstr ""
 
-#: js/ImportDialog.js:237
+#: js/ImportDialog.js:286
 msgid "or"
-msgstr ""
+msgstr "หรือ"
 
-#: js/ImportDialog.js:278
+#: js/ImportDialog.js:327
 msgid "What should the file you upload look like?"
 msgstr ""
 
-#: js/ImportDialog.js:283
+#: js/ImportDialog.js:332
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You"
 " will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
-#: js/ImportDialog.js:286
+#: js/ImportDialog.js:335
 msgid ""
 "Following you find a list of all supported import formats and a sample file,"
 " how Tine 2.0 expects your file to look like."
 msgstr ""
 
-#: js/ImportDialog.js:289
+#: js/ImportDialog.js:338
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/ImportDialog.js:310
+#: js/ImportDialog.js:359
 msgid "Download example file"
 msgstr ""
 
-#: js/ImportDialog.js:332
+#: js/ImportDialog.js:381
 msgid "Remote / ICS"
 msgstr ""
 
-#: js/ImportDialog.js:333
-msgid "Remote / CALDav"
+#: js/ImportDialog.js:382
+msgid "Remote / CalDAV (BETA)"
 msgstr ""
 
-#: js/ImportDialog.js:334
+#: js/ImportDialog.js:383
 msgid "Upload"
 msgstr ""
 
-#: js/ImportDialog.js:347
+#: js/ImportDialog.js:396
 msgid "Choose File and Format"
 msgstr ""
 
-#: js/ImportDialog.js:356
+#: js/ImportDialog.js:405
 msgid "Select type of source"
-msgstr ""
-
-#: js/ImportDialog.js:360
-msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr ""
+msgstr "เลือก ประเภทของแหล่งข้อมูล"
 
 #: js/ImportDialog.js:409
+msgid "Please select the type of source you want to add to Tine 2.0"
+msgstr "กรุณาเลือกประเภทของแหล่งข้อมูลที่คุณต้องการจะเพิ่มไปยัง Tine 2.0"
+
+#: js/ImportDialog.js:461
 #, python-brace-format
 msgid "Importing {0}"
 msgstr ""
@@ -472,43 +480,43 @@ msgstr "ตอบสนองต่อทุกชุด"
 msgid "Do not respond"
 msgstr "ไม่ตอบสนอง"
 
-#: js/iMIPDetailsPanel.js:197
+#: js/iMIPDetailsPanel.js:198
 msgid "The event of this message does not exist"
 msgstr "เหตุการณ์ในข้อความนี้ไม่มีอยู่"
 
-#: js/iMIPDetailsPanel.js:202
+#: js/iMIPDetailsPanel.js:203
 msgid "The sender is not authorised to update the event"
 msgstr "ผู้ส่งไม่ได้รับอนุญาตให้ปรับปรุงเหตุการณ์"
 
-#: js/iMIPDetailsPanel.js:207
+#: js/iMIPDetailsPanel.js:208
 msgid "This message is already processed"
 msgstr "ข้อความนี้ได้ถูกดำเนินการแล้ว"
 
-#: js/iMIPDetailsPanel.js:212
+#: js/iMIPDetailsPanel.js:213
 msgid "You are not an attendee of this event"
 msgstr "คุณไม่ได้เป็นผุ้เข้าร่วมในเหตุการณ์นี้"
 
-#: js/iMIPDetailsPanel.js:216
+#: js/iMIPDetailsPanel.js:217
 msgid "Unsupported message"
 msgstr "ข้อความที่ไม่ได้รับการสนับสนุน"
 
-#: js/iMIPDetailsPanel.js:226
+#: js/iMIPDetailsPanel.js:227
 msgid "This is an event invitation for someone else."
 msgstr "นี่เป็นการเชิญให้ร่วมเหตุการณ์สำหรับผู้อื่น"
 
-#: js/iMIPDetailsPanel.js:228
+#: js/iMIPDetailsPanel.js:229
 msgid "You have already replied to this event invitation."
 msgstr "คุณได้ตอบกลับไปยังคำเชิญเข้าร่วมเหตุการณ์นี้แล้ว"
 
-#: js/iMIPDetailsPanel.js:230
+#: js/iMIPDetailsPanel.js:231
 msgid "You received an event invitation. Set your response to:"
 msgstr "คุณได้รับคำเชิญเข้าร่วมเหตุการณ์ ตั้งค่าการตอบรับไปยัง:"
 
-#: js/iMIPDetailsPanel.js:238
+#: js/iMIPDetailsPanel.js:239
 msgid "An invited attendee responded to the invitation."
 msgstr "ผุ้เข้าร่วมที่ได้รับเชิญได้ตอบกลับเรื่องคำเชิญแล้ว"
 
-#: js/iMIPDetailsPanel.js:242
+#: js/iMIPDetailsPanel.js:243
 msgid "Unsupported method"
 msgstr "วิธีการที่ไม่สนับสนุน"
 
@@ -521,7 +529,7 @@ msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "ปฏิทิน"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:68 js/Model.js:449
+#: js/ContactEventsGridPanel.js:50 js/Model.js:68 js/Model.js:456
 msgid "Events"
 msgstr "เหตุการณ์"
 
@@ -560,9 +568,9 @@ msgstr "ใส่ คำอธิบาย"
 msgid "Grants"
 msgstr "อนุญาต"
 
-#: js/EventDetailsPanel.js:28 js/Model.js:461 js/AttendeeGridPanel.js:579
-#: js/AttendeeGridPanel.js:597 js/AttendeeGridPanel.js:614
-#: js/AttendeeGridPanel.js:626
+#: js/EventDetailsPanel.js:28 js/Model.js:468 js/AttendeeGridPanel.js:583
+#: js/AttendeeGridPanel.js:601 js/AttendeeGridPanel.js:618
+#: js/AttendeeGridPanel.js:630
 msgid "No Information"
 msgstr "ไม่มีข้อมูล"
 
@@ -623,7 +631,7 @@ msgid "Enter description"
 msgstr "ใส่ คำอธิบาย"
 
 #: js/EventEditDialog.js:315
-msgid "Mute Alert"
+msgid "Mute Notification"
 msgstr ""
 
 #: js/EventEditDialog.js:546
@@ -651,7 +659,7 @@ msgstr ""
 msgid "Errors"
 msgstr "ข้อผิดพลาด"
 
-#: js/Model.js:68 js/Model.js:449 js/SearchCombo.js:79
+#: js/Model.js:68 js/Model.js:456 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "เหตุการณ์"
@@ -660,41 +668,41 @@ msgstr[0] "เหตุการณ์"
 msgid "Calendars"
 msgstr "ปฏิทิน"
 
-#: js/Model.js:275
+#: js/Model.js:282
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: js/Model.js:282
+#: js/Model.js:289
 msgid "Attendee Status"
 msgstr "สถานะผู้เข้าร่วม"
 
-#: js/Model.js:291
+#: js/Model.js:298
 msgid "Attendee Role"
 msgstr "หน้าที่ผู้เข้าร่วม"
 
-#: js/Model.js:307
+#: js/Model.js:314
 msgid "Event (as attendee)"
 msgstr "เหตุการณ์ (ในฐานะ ผู้เข้าร่วม)"
 
-#: js/Model.js:314
+#: js/Model.js:321
 msgid "Event (as organizer)"
 msgstr "เหตุการณ์ (ในฐานะ ผู้นัดหมาย)"
 
-#: js/Model.js:324
+#: js/Model.js:331
 msgid "Event attendee"
 msgstr "ผู้เข้าร่วมเหตุการณ์"
 
-#: js/Model.js:445
+#: js/Model.js:452
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "ผู้เข้าร่วม"
 
-#: js/Model.js:641 js/AttendeeGridPanel.js:196
+#: js/Model.js:665 js/AttendeeGridPanel.js:196
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "แหล่งที่มา"
 
-#: js/Model.js:641
+#: js/Model.js:665
 msgid "Resources"
 msgstr "แหล่งที่มา"
 
@@ -720,7 +728,7 @@ msgstr "ประเภท"
 
 #: js/AttendeeGridPanel.js:187
 msgid "Click icon to change"
-msgstr ""
+msgstr "กดที่เครื่องหมายเพื่อเปลี่ยน"
 
 #: js/AttendeeGridPanel.js:194
 msgid "User"
@@ -734,19 +742,19 @@ msgstr "กลุ่ม"
 msgid "Member of group"
 msgstr "สมาชิกของกลุ่ม"
 
-#: js/AttendeeGridPanel.js:404
+#: js/AttendeeGridPanel.js:405
 msgid "Remove Attender"
 msgstr "เอาผู้เข้าร่วมออก"
 
-#: js/AttendeeGridPanel.js:417
+#: js/AttendeeGridPanel.js:418
 msgid "Compose email"
 msgstr "เขียนอีเมล"
 
-#: js/AttendeeGridPanel.js:584
+#: js/AttendeeGridPanel.js:588
 msgid "(as a group member)"
 msgstr "(ในฐานะสมาชิกกลุ่ม)"
 
-#: js/AttendeeGridPanel.js:675
+#: js/AttendeeGridPanel.js:679
 msgid "External Attendee"
 msgstr "ผู้เข้าร่วมจากภายนอก"
 
@@ -835,7 +843,7 @@ msgstr ""
 
 #: js/MainScreenCenterPanel.js:159
 msgid "Stop cut & paste"
-msgstr ""
+msgstr "หยุด ตัดและวาง"
 
 #: js/MainScreenCenterPanel.js:180
 msgid "Print Page"
@@ -863,12 +871,12 @@ msgstr "เดือน"
 
 #: js/MainScreenCenterPanel.js:261
 msgid "Import Events"
-msgstr ""
+msgstr "นำเข้า เหตุการณ์"
 
 #: js/MainScreenCenterPanel.js:304
 #, python-brace-format
 msgid "Paste event \"{0}\""
-msgstr ""
+msgstr "วาง เหตุการณ์ \"{0}\""
 
 #: js/MainScreenCenterPanel.js:611
 msgid "Set my response"
@@ -999,43 +1007,43 @@ msgstr "แยกประเภทผู้เข้าร่วม"
 msgid "Check to filter for this attendee"
 msgstr "ทำสัญลักษณ์เพื่อกรองให้ผู้เข้าร่วมคนนี้"
 
-#: Controller/EventNotifications.php:354
+#: Controller/EventNotifications.php:355
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "แจ้งเตือน เหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
-#: Controller/EventNotifications.php:357
+#: Controller/EventNotifications.php:358
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "คำเชิญเข้าร่วมเหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
-#: Controller/EventNotifications.php:361
+#: Controller/EventNotifications.php:362
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถูกยกเลิก"
 
-#: Controller/EventNotifications.php:369
+#: Controller/EventNotifications.php:370
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "เหตุการณ์ \"%1$s\" ได้เปลี่ยนจาก %2$s ไปเป็น %3$s"
 
-#: Controller/EventNotifications.php:376
+#: Controller/EventNotifications.php:377
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถูกปรับปรุง"
 
-#: Controller/EventNotifications.php:387
+#: Controller/EventNotifications.php:388
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s ได้ยอมรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:391
+#: Controller/EventNotifications.php:392
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s ได้ปฏิเสธเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:395
+#: Controller/EventNotifications.php:396
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "การตอบรับที่ยังไม่แน่นอนจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:399
+#: Controller/EventNotifications.php:400
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "ไม่มีการตอบรับจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:403
+#: Controller/EventNotifications.php:404
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "มีการเปลี่ยนแปลงเกี่ยวกับผู้เข้าร่วมสำหรับเหตุการณ์ \"%1$s\" เมื่อ %2$s"
 

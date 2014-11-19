@@ -1,0 +1,223 @@
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Korean (http://www.transifex.com/projects/p/tine20/language/ko/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:107
+msgid "Add new user"
+msgstr ""
+
+#: Acl/Rights.php:108
+msgid "Add new user as member to a course"
+msgstr ""
+
+#: Acl/Rights.php:111
+msgid "Add existing user"
+msgstr ""
+
+#: Acl/Rights.php:112
+msgid "Add existing user as member to a course"
+msgstr ""
+
+#: Acl/Rights.php:115
+msgid "Manage shared courses favorites"
+msgstr ""
+
+#: Acl/Rights.php:116
+msgid "Create or update shared courses favorites"
+msgstr ""
+
+#: js/CourseGridPanel.js:44 js/Models.js:72
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:50
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:95
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:96
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/CourseEditDialog.js:32
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:41
+msgid "Add new member"
+msgstr ""
+
+#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+
+#: js/CourseEditDialog.js:205
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:212
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:222
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
+msgid "Internet Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:238
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:270
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:297
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:301
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:306
+msgid "Reset Password"
+msgstr ""
+
+#: js/Models.js:47
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+
+#: js/Models.js:71
+msgid "Quick Search"
+msgstr ""
+
+#: js/Models.js:109
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+
+#: js/AddMemberDialog.js:63
+msgid "First Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:67
+msgid "Last Name"
+msgstr ""
+
+#: js/AddMemberDialog.js:86
+msgid "Add new member to course"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Errors"
+msgstr ""
+
+#: js/AddMemberDialog.js:118
+msgid "Please fix the errors noted."
+msgstr ""
+
+#: Controller/Course.php:256 Controller/Course.php:300
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:257
+msgid "Teacher Account"
+msgstr ""
+
+#: Controller/Course.php:317
+msgid "My course"
+msgstr ""
+
+#: Preference.php:24 Preference.php:60 Setup/Initialize.php:35
+#: Setup/Update/Release5.php:30
+msgid "All courses"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Classes startup"
+msgstr ""
+
+#: Config.php:91
+msgid "Internet access options."
+msgstr ""
+
+#: Config.php:98 Config.php:100
+msgid "Internet Access Group (ON)"
+msgstr ""
+
+#: Config.php:106 Config.php:108
+msgid "Internet Access Group (FILTERED)"
+msgstr ""
+
+#: Config.php:114 Config.php:116
+msgid "Students Group"
+msgstr ""
+
+#: Config.php:122 Config.php:124
+msgid "Students Import Definition"
+msgstr ""
+
+#: Config.php:130
+msgid "Students login name prefix"
+msgstr ""
+
+#: Config.php:137
+msgid "Student username schema"
+msgstr ""
+
+#: Config.php:139
+msgid ""
+"Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
+"chars of firstname"
+msgstr ""
+
+#: Config.php:146 Config.php:148
+msgid "Samba user settings"
+msgstr ""
+
+#: Config.php:157
+msgid "Default department"
+msgstr ""
+
+#: Config.php:159
+msgid "The default department for new Courses"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: Setup/Initialize.php:66
+msgid "On"
+msgstr ""
+
+#: Setup/Initialize.php:67
+msgid "Off"
+msgstr ""
+
+#: Setup/Initialize.php:68
+msgid "Filtered"
+msgstr ""

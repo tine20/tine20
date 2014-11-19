@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,41 +45,389 @@ msgstr "จัดการ ตารางเวลาร่วมที่ใ�
 msgid "Create or update shared timesheet favorites"
 msgstr "สร้าง หรือ ปรับปรุงตารางเวลาร่วมที่ใช้บ่อย"
 
-#: Model/Timeaccount.php:43 Model/Timeaccount.php:47
-#: js/TimeaccountEditDialog.js:125
+#: Model/Timesheet.php:164 Model/Timeaccount.php:458
+msgid "hour"
+msgstr ""
+
+#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:138
 msgid "Cost Center"
 msgstr "ศูนย์ต้นทุน"
+
+#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:153
+msgid "Responsible Person"
+msgstr ""
+
+#: js/Timetracker.js:25
+msgid "New Timesheet"
+msgstr "ตารางเวลาใหม่"
+
+#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+msgid "Not a valid time"
+msgstr "เวลาใช้ไม่ได้"
+
+#: js/TimeaccountPickerCombo.js:46
+msgid "Show closed"
+msgstr "แสดงที่ปิดแล้ว"
+
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "สัญญา"
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr "ปราศจากสัญญา"
+
+#: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:76
+msgid "Tags"
+msgstr "ป้ายกำกับ"
+
+#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:204
+#: js/Models.js:179
+msgid "Number"
+msgstr "ลำดับ"
+
+#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:210
+#: js/Models.js:180
+msgid "Title"
+msgstr "คำนำหน้าชื่อ"
+
+#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:90
+#: js/Models.js:182
+msgid "Billed"
+msgstr "เรียกเก็บเงินแล้ว"
+
+#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:79
+msgid "Budget"
+msgstr "วงเงิน"
+
+#: js/TimeaccountGridPanel.js:103 js/TimesheetGridPanel.js:91
+#: js/TimesheetGridPanel.js:395
+msgid "Cleared in"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:108 js/TimesheetGridPanel.js:92
+#: js/TimeaccountEditDialog.js:172 js/TimesheetEditDialog.js:164
+msgid "Invoice"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:116
+#: js/Models.js:189
+msgid "Booking deadline"
+msgstr "สิ้นสุดการจอง"
+
+#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:132
+#: js/Models.js:184
+msgid "Cleared at"
+msgstr "เคลียร์แล้วเมื่อ"
+
+#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:82
+#: js/Models.js:183
+msgid "Status"
+msgstr "สถานะ"
+
+#: js/TimeaccountGridPanel.js:137 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:88
+msgid "open"
+msgstr "เปิด"
+
+#: js/TimeaccountGridPanel.js:138 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:88 js/Models.js:161
+msgid "closed"
+msgstr "ปิดแล้ว"
+
+#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:312
+msgid "Export"
+msgstr "ส่งออก"
+
+#: js/TimeaccountGridPanel.js:169 js/TimesheetGridPanel.js:320
+msgid "Export as ODS"
+msgstr "ส่งออก เป็นไฟล์ ODS"
+
+#: js/TimeaccountGridPanel.js:176 js/TimesheetGridPanel.js:327
+msgid "Export as CSV"
+msgstr "ส่งออก เป็นไฟล์ CSV"
+
+#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:220 js/Models.js:93
+msgid "Date"
+msgstr "วันที่"
+
+#: js/TimesheetGridPanel.js:80
+msgid "Start time"
+msgstr "เวลาที่เริ่ม"
+
+#: js/TimesheetGridPanel.js:82
+msgid "Time Account (Number - Title)"
+msgstr "บัญชีเวลา (หมายเลข - ตำแหน่ง)"
+
+#: js/TimesheetGridPanel.js:84
+msgid "Time Account closed"
+msgstr "บัญชีเวลาปิดแล้ว"
+
+#: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:244
+#: js/TimeaccountEditDialog.js:216 js/TimeaccountEditDialog.js:235
+#: js/TimesheetEditDialog.js:231 js/Models.js:94 js/Models.js:181
+msgid "Description"
+msgstr "คำอธิบาย"
+
+#: js/TimesheetGridPanel.js:87 js/TimesheetGridPanel.js:385
+#: js/TimesheetEditDialog.js:140 js/Models.js:95
+msgid "Billable"
+msgstr "ที่เรียกเก็บเงินได้"
+
+#: js/TimesheetGridPanel.js:89 js/TimesheetGridPanel.js:390
+#: js/TimesheetEditDialog.js:146 js/Models.js:96
+msgid "Cleared"
+msgstr "เคลียร์แล้ว"
+
+#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:135 js/Models.js:92
+msgid "Account"
+msgstr "บัญชี"
+
+#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:215
+msgid "Duration"
+msgstr "ระยะเวลา"
+
+#: js/TimesheetGridPanel.js:157
+msgid "timeframe"
+msgstr "กรอบเวลา"
+
+#: js/TimesheetGridPanel.js:181
+msgid "summary"
+msgstr "ข้อสรุป"
+
+#: js/TimesheetGridPanel.js:184
+msgid "Total Timesheets"
+msgstr "ตารางเวลารวบยอด"
+
+#: js/TimesheetGridPanel.js:185
+msgid "Billable Timesheets"
+msgstr "ตารางเวลาที่เรียกเก็บเงินได้"
+
+#: js/TimesheetGridPanel.js:186
+msgid "Total Time"
+msgstr "เวลารวบยอด"
+
+#: js/TimesheetGridPanel.js:187
+msgid "Time of Billable Timesheets"
+msgstr "ช่วงเวลาของตารางเวลาที่เรียกเก็บเงินได้"
+
+#: js/TimesheetGridPanel.js:258
+msgid "Detail"
+msgstr "รายละเอียด"
+
+#: js/TimesheetGridPanel.js:311
+msgid "Export Timesheets"
+msgstr "ส่งออกตารางเวลา"
+
+#: js/TimesheetGridPanel.js:334
+msgid "Export as ..."
+msgstr "ส่งออก เป็น ..."
+
+#: js/TimesheetGridPanel.js:377
+msgid "Mass Update"
+msgstr "อัพเดทแบบมาก"
+
+#: js/TimesheetGridPanel.js:383
+msgid "Update field:"
+msgstr "เขตข้อมูลที่ทำการอัพเดท: "
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "บัญชีเวลา - สถานะ"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr "บัญชีเวลา - เรียกเก็บเงินแล้ว"
+
+#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:98
+#: Setup/setup.xml:87
+msgid "not yet billed"
+msgstr "ยังไม่ได้เรียกเก็บเงิบ"
+
+#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:99
+#: Setup/setup.xml:88
+msgid "to bill"
+msgstr "ที่จะต้องเรียกเก็บเงิน"
+
+#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:100
+#: Setup/setup.xml:89
+msgid "billed"
+msgstr "เรียกเก็บเงินแล้ว"
+
+#: js/TimeaccountEditDialog.js:46
+msgid "Add New Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:70
+msgid "Unit"
+msgstr "หน่วย/ แผนก"
+
+#: js/TimeaccountEditDialog.js:74
+msgid "Unit Price"
+msgstr "ราคาต่อหน่วย"
+
+#: js/TimeaccountEditDialog.js:111 js/TimesheetEditDialog.js:156
+msgid "Cleared In"
+msgstr "เคลียร์แล้วใน"
+
+#: js/TimeaccountEditDialog.js:124
+msgid "none"
+msgstr "ไม่มีเลย"
+
+#: js/TimeaccountEditDialog.js:125
+msgid "last week"
+msgstr "สัปดาห์ที่แล้ว"
+
+#: js/TimeaccountEditDialog.js:162
+msgid "Timesheets are billable"
+msgstr "เป็นตารางเวลาที่เรียกเก็บเงินได้"
+
+#: js/TimeaccountEditDialog.js:188 js/TimesheetEditDialog.js:200
+#: js/Models.js:149
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "บัญชีเวลา"
+
+#: js/TimeaccountEditDialog.js:249
+msgid "Enter description"
+msgstr "ใส่ คำอธิบาย"
+
+#: js/TimeaccountEditDialog.js:265
+msgid "Access"
+msgstr "การเข้าใช้"
+
+#: js/TimeaccountEditDialog.js:288
+msgid "Book Own"
+msgstr "จองเอง"
+
+#: js/TimeaccountEditDialog.js:290
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr "อนุญาตให้เพิ่มตารางเวลาเข้าไปบัญชีเวลานี้ได้"
+
+#: js/TimeaccountEditDialog.js:294
+msgid "View All"
+msgstr "ดูทั้งหมด"
+
+#: js/TimeaccountEditDialog.js:295
+msgid "The grant to view Timesheets of other users"
+msgstr "อนุญาตให้ดูตารางเวลาของผู้ใช้งานคนอื่นๆได้"
+
+#: js/TimeaccountEditDialog.js:300
+msgid "Book All"
+msgstr "จองทั้งหมด"
+
+#: js/TimeaccountEditDialog.js:301
+msgid "The grant to add Timesheets for other users"
+msgstr "อนุญาตให้เพิ่มตารางเวลาสำหรับผู้ใช้งานคนอื่นๆได้"
+
+#: js/TimeaccountEditDialog.js:306
+msgid "Manage Clearing"
+msgstr "จัดการการล้าง"
+
+#: js/TimeaccountEditDialog.js:307
+msgid "The grant to manage clearing of Timesheets"
+msgstr "อนุญาตให้จัดการการล้างตารางเวลาได้"
+
+#: js/TimeaccountEditDialog.js:313
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr "อนุญาตให้ส่งออกตารางเวลาของบัญชีเวลา"
+
+#: js/TimeaccountEditDialog.js:318
+msgid "Manage All"
+msgstr "จัดการทั้งหมด"
+
+#: js/TimeaccountEditDialog.js:319
+msgid "Includes all other grants"
+msgstr "รวมถึงการอนุญาตอื่น ๆ ทั้งหมด"
+
+#: js/TimeaccountEditDialog.js:327
+msgid "Permissions"
+msgstr "สิทธิ์ที่อนุญาต"
+
+#: js/TimesheetEditDialog.js:183 js/Models.js:51
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "ตารางเวลา"
+
+#: js/TimesheetEditDialog.js:201
+msgid "Select Time Account..."
+msgstr "เลือกบัญชีเวลา..."
+
+#: js/TimesheetEditDialog.js:225
+msgid "Start"
+msgstr "เริ่มต้น"
+
+#: js/TimesheetEditDialog.js:226
+msgid "not set"
+msgstr "ยังไม่ได้กำหนด"
+
+#: js/TimesheetEditDialog.js:232
+msgid "Enter description..."
+msgstr "ใส่ คำอธิบาย"
+
+#: js/TimesheetEditDialog.js:284
+msgid "Failed"
+msgstr "ได้ล้มเหลว"
+
+#: js/TimesheetEditDialog.js:285
+#, python-brace-format
+msgid "Could not save {0}."
+msgstr "ไม่สามารถจัดเก็บ {0} ได้"
+
+#: js/TimesheetEditDialog.js:286
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr "สิ้นสุดการจองสำหรับบัญชีเวลานี้ได้ถูกขยายออกไป"
+
+#: js/DurationSlider.js:94
+#, python-brace-format
+msgid "{0}"
+msgstr "{0}"
+
+#: js/Models.js:55
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "รายชื่อตารางเวลา"
+
+#: js/Models.js:91 js/Models.js:178
+msgid "Quick Search"
+msgstr "ค้นหาอย่างรวดเร็ว"
+
+#: js/Models.js:97 js/Models.js:185
+msgid "Last Modified Time"
+msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
+
+#: js/Models.js:98 js/Models.js:186
+msgid "Last Modified By"
+msgstr "ปรับปรุงครั้งล่าสุด โดย"
+
+#: js/Models.js:99 js/Models.js:187
+msgid "Creation Time"
+msgstr "เวลาที่สร้างขึ้น"
+
+#: js/Models.js:100 js/Models.js:188
+msgid "Created By"
+msgstr "สร้าง โดย"
+
+#: js/Models.js:154
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "รายชื่อบัญชีเวลา"
+
+#: Preference.php:64
+msgid "Timesheets ODS export configuration"
+msgstr "การกำหนดค่าส่งออกตารางเวลา ODS"
+
+#: Preference.php:65
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกตารางเวลา ODS"
+
+#: Preference.php:116
+msgid "default"
+msgstr "ค่าหลัก"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "ตัวติดตามเวลา"
-
-#: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
-#: js/TimeAccountBilledFilterModel.js:47
-msgid "not yet billed"
-msgstr "ยังไม่ได้เรียกเก็บเงิบ"
-
-#: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
-#: js/TimeAccountBilledFilterModel.js:48
-msgid "to bill"
-msgstr "ที่จะต้องเรียกเก็บเงิน"
-
-#: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
-#: js/TimeAccountBilledFilterModel.js:49
-msgid "billed"
-msgstr "เรียกเก็บเงินแล้ว"
-
-#: Setup/Update/Release5.php:81 Setup/Initialize.php:112
-msgid "Timeaccounts to bill"
-msgstr "บัญชีเวลาที่จะต้องเรียกเก็บเงิน"
-
-#: Setup/Update/Release5.php:95 Setup/Initialize.php:126
-msgid "Timeaccounts not yet billed"
-msgstr "บัญชีเวลาที่ยังไม่ได้เรียกเก็บเงิน"
-
-#: Setup/Update/Release5.php:109 Setup/Initialize.php:141
-msgid "Timeaccounts already billed"
-msgstr "บัญชีเวลาที่ได้เรียกเก็บเงินแล้ว"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
@@ -101,352 +449,14 @@ msgstr "ตารางเวลาของฉัน เดือนนี้"
 msgid "My Timesheets last month"
 msgstr "ตารางเวลาของฉัน เดือนที่แล้ว"
 
-#: Preference.php:64
-msgid "Timesheets ODS export configuration"
-msgstr "การกำหนดค่าส่งออกตารางเวลา ODS"
-
-#: Preference.php:65
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "ใช้กำหนดค่านี้สำหรับการส่งออกตารางเวลา ODS"
-
-#: Preference.php:116
-msgid "default"
-msgstr "ค่าหลัก"
-
-#: js/TimeaccountEditDialog.js:62
-msgid "Unit"
-msgstr "หน่วย/ แผนก"
-
-#: js/TimeaccountEditDialog.js:66
-msgid "Unit Price"
-msgstr "ราคาต่อหน่วย"
-
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
-msgid "Budget"
-msgstr "วงเงิน"
-
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
-#: js/Models.js:178
-msgid "Status"
-msgstr "สถานะ"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:124 js/Models.js:156
-msgid "closed"
-msgstr "ปิดแล้ว"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:123
-msgid "open"
-msgstr "เปิด"
-
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
-#: js/Models.js:177
-msgid "Billed"
-msgstr "เรียกเก็บเงินแล้ว"
-
-#: js/TimeaccountEditDialog.js:100
-msgid "not cleared yet..."
-msgstr "ยังไม่ได้เคลียร์..."
-
-#: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:221
-msgid "Cleared In"
-msgstr ""
-
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
-#: js/Models.js:184
-msgid "Booking deadline"
-msgstr "สิ้นสุดการจอง"
-
-#: js/TimeaccountEditDialog.js:113
-msgid "none"
-msgstr "ไม่มีเลย"
-
-#: js/TimeaccountEditDialog.js:114
-msgid "last week"
-msgstr "สัปดาห์ที่แล้ว"
-
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
-#: js/Models.js:179
-msgid "Cleared at"
-msgstr "เคลียร์แล้วเมื่อ"
-
-#: js/TimeaccountEditDialog.js:140
-msgid "Responsible person"
-msgstr "บุคคลที่รับผิดชอบ"
-
-#: js/TimeaccountEditDialog.js:151
-msgid "Timesheets are billable"
-msgstr "เป็นตารางเวลาที่เรียกเก็บเงินได้"
-
-#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:155
-#: js/Models.js:147
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "บัญชีเวลา"
-
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
-#: js/Models.js:174
-msgid "Number"
-msgstr "ลำดับ"
-
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
-#: js/Models.js:175
-msgid "Title"
-msgstr "คำนำหน้าชื่อ"
-
-#: js/TimeaccountEditDialog.js:195 js/TimeaccountEditDialog.js:214
-#: js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:86
-#: js/TimesheetGridPanel.js:234 js/Models.js:93 js/Models.js:176
-msgid "Description"
-msgstr "คำอธิบาย"
-
-#: js/TimeaccountEditDialog.js:228
-msgid "Enter description"
-msgstr "ใส่ คำอธิบาย"
-
-#: js/TimeaccountEditDialog.js:244
-msgid "Access"
-msgstr "การเข้าใช้"
-
-#: js/TimeaccountEditDialog.js:267
-msgid "Book Own"
-msgstr "จองเอง"
-
-#: js/TimeaccountEditDialog.js:269
-msgid "The grant to add Timesheets to this Timeaccount"
-msgstr "อนุญาตให้เพิ่มตารางเวลาเข้าไปบัญชีเวลานี้ได้"
-
-#: js/TimeaccountEditDialog.js:273
-msgid "View All"
-msgstr "ดูทั้งหมด"
-
-#: js/TimeaccountEditDialog.js:274
-msgid "The grant to view Timesheets of other users"
-msgstr "อนุญาตให้ดูตารางเวลาของผู้ใช้งานคนอื่นๆได้"
-
-#: js/TimeaccountEditDialog.js:279
-msgid "Book All"
-msgstr "จองทั้งหมด"
-
-#: js/TimeaccountEditDialog.js:280
-msgid "The grant to add Timesheets for other users"
-msgstr "อนุญาตให้เพิ่มตารางเวลาสำหรับผู้ใช้งานคนอื่นๆได้"
-
-#: js/TimeaccountEditDialog.js:285
-msgid "Manage Clearing"
-msgstr "จัดการการล้าง"
-
-#: js/TimeaccountEditDialog.js:286
-msgid "The grant to manage clearing of Timesheets"
-msgstr "อนุญาตให้จัดการการล้างตารางเวลาได้"
-
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
-msgid "Export"
-msgstr "ส่งออก"
-
-#: js/TimeaccountEditDialog.js:292
-msgid "The grant to export Timesheets of Timeaccount"
-msgstr "อนุญาตให้ส่งออกตารางเวลาของบัญชีเวลา"
-
-#: js/TimeaccountEditDialog.js:297
-msgid "Manage All"
-msgstr "จัดการทั้งหมด"
-
-#: js/TimeaccountEditDialog.js:298
-msgid "Includes all other grants"
-msgstr "รวมถึงการอนุญาตอื่น ๆ ทั้งหมด"
-
-#: js/TimeaccountEditDialog.js:306
-msgid "Permissions"
-msgstr "สิทธิ์ที่อนุญาต"
-
-#: js/TimesheetEditDialog.js:138 js/Models.js:50
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "ตารางเวลา"
-
-#: js/TimesheetEditDialog.js:156
-msgid "Select Time Account..."
-msgstr "เลือกบัญชีเวลา..."
-
-#: js/TimesheetEditDialog.js:170 js/TimesheetGridPanel.js:94
-msgid "Duration"
-msgstr "ระยะเวลา"
-
-#: js/TimesheetEditDialog.js:175 js/TimesheetGridPanel.js:78 js/Models.js:92
-msgid "Date"
-msgstr "วันที่"
-
-#: js/TimesheetEditDialog.js:180
-msgid "Start"
-msgstr "เริ่มต้น"
-
-#: js/TimesheetEditDialog.js:181
-msgid "not set"
-msgstr "ยังไม่ได้กำหนด"
-
-#: js/TimesheetEditDialog.js:187
-msgid "Enter description..."
-msgstr "ใส่ คำอธิบาย"
-
-#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:92 js/Models.js:91
-msgid "Account"
-msgstr "บัญชี"
-
-#: js/TimesheetEditDialog.js:205 js/TimesheetGridPanel.js:87
-#: js/TimesheetGridPanel.js:375 js/Models.js:94
-msgid "Billable"
-msgstr "ที่เรียกเก็บเงินได้"
-
-#: js/TimesheetEditDialog.js:211 js/TimesheetGridPanel.js:89
-#: js/TimesheetGridPanel.js:380 js/Models.js:95
-msgid "Cleared"
-msgstr "เคลียร์แล้ว"
-
-#: js/TimesheetEditDialog.js:271
-msgid "Failed"
-msgstr "ได้ล้มเหลว"
-
-#: js/TimesheetEditDialog.js:272
-msgid "Could not save {0}."
-msgstr "ไม่สามารถจัดเก็บ {0} ได้"
-
-#: js/TimesheetEditDialog.js:273
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "สิ้นสุดการจองสำหรับบัญชีเวลานี้ได้ถูกขยายออกไป"
-
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
-msgid "Not a valid time"
-msgstr "เวลาใช้ไม่ได้"
-
-#: js/TimeaccountPickerCombo.js:46
-msgid "Show closed"
-msgstr "แสดงที่ปิดแล้ว"
-
-#: js/Timetracker.js:25
-msgid "New Timesheet"
-msgstr "ตารางเวลาใหม่"
-
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "บัญชีเวลา - สถานะ"
-
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
-msgid "Tags"
-msgstr "ป้ายกำกับ"
-
-#: js/TimesheetGridPanel.js:80
-msgid "Start time"
-msgstr "เวลาที่เริ่ม"
-
-#: js/TimesheetGridPanel.js:82
-msgid "Time Account (Number - Title)"
-msgstr "บัญชีเวลา (หมายเลข - ตำแหน่ง)"
-
-#: js/TimesheetGridPanel.js:84
-msgid "Time Account closed"
-msgstr "บัญชีเวลาปิดแล้ว"
-
-#: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:103
-msgid "Cleared in"
-msgstr ""
-
-#: js/TimesheetGridPanel.js:147
-msgid "timeframe"
-msgstr "กรอบเวลา"
-
-#: js/TimesheetGridPanel.js:171
-msgid "summary"
-msgstr "ข้อสรุป"
-
-#: js/TimesheetGridPanel.js:174
-msgid "Total Timesheets"
-msgstr "ตารางเวลารวบยอด"
-
-#: js/TimesheetGridPanel.js:175
-msgid "Billable Timesheets"
-msgstr "ตารางเวลาที่เรียกเก็บเงินได้"
-
-#: js/TimesheetGridPanel.js:176
-msgid "Total Time"
-msgstr "เวลารวบยอด"
-
-#: js/TimesheetGridPanel.js:177
-msgid "Time of Billable Timesheets"
-msgstr "ช่วงเวลาของตารางเวลาที่เรียกเก็บเงินได้"
-
-#: js/TimesheetGridPanel.js:248
-msgid "Detail"
-msgstr "รายละเอียด"
-
-#: js/TimesheetGridPanel.js:301
-msgid "Export Timesheets"
-msgstr "ส่งออกตารางเวลา"
-
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
-msgid "Export as ODS"
-msgstr "ส่งออก เป็นไฟล์ ODS"
-
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
-msgid "Export as CSV"
-msgstr "ส่งออก เป็นไฟล์ CSV"
-
-#: js/TimesheetGridPanel.js:324
-msgid "Export as ..."
-msgstr "ส่งออก เป็น ..."
-
-#: js/TimesheetGridPanel.js:367
-msgid "Mass Update"
-msgstr "อัพเดทแบบมาก"
-
-#: js/TimesheetGridPanel.js:373
-msgid "Update field:"
-msgstr "เขตข้อมูลที่ทำการอัพเดท: "
-
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
-msgstr "บัญชีเวลา - เรียกเก็บเงินแล้ว"
-
-#: js/DurationSlider.js:94
-msgid "{0}"
-msgstr "{0}"
-
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr "สัญญา"
-
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr "ปราศจากสัญญา"
-
-#: js/Models.js:54
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] "รายชื่อตารางเวลา"
-
-#: js/Models.js:90 js/Models.js:173
-msgid "Quick Search"
-msgstr "ค้นหาอย่างรวดเร็ว"
-
-#: js/Models.js:96 js/Models.js:180
-msgid "Last Modified Time"
-msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
-
-#: js/Models.js:97 js/Models.js:181
-msgid "Last Modified By"
-msgstr "ปรับปรุงครั้งล่าสุด โดย"
-
-#: js/Models.js:98 js/Models.js:182
-msgid "Creation Time"
-msgstr "เวลาที่สร้างขึ้น"
-
-#: js/Models.js:99 js/Models.js:183
-msgid "Created By"
-msgstr "สร้าง โดย"
-
-#: js/Models.js:152
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] "รายชื่อบัญชีเวลา"
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:81
+msgid "Timeaccounts to bill"
+msgstr "บัญชีเวลาที่จะต้องเรียกเก็บเงิน"
+
+#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
+msgid "Timeaccounts not yet billed"
+msgstr "บัญชีเวลาที่ยังไม่ได้เรียกเก็บเงิน"
+
+#: Setup/Initialize.php:141 Setup/Update/Release5.php:109
+msgid "Timeaccounts already billed"
+msgstr "บัญชีเวลาที่ได้เรียกเก็บเงินแล้ว"

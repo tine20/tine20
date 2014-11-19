@@ -1,10 +1,11 @@
 # 
 # Translators:
+# Michel Le Belu <lebelu@gmail.com>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/projects/p/tine20/language/nb/)\n"
 "MIME-Version: 1.0\n"
@@ -345,7 +346,7 @@ msgstr ""
 
 #: js/Addressbook.js:22
 msgid "New Contact"
-msgstr ""
+msgstr "Ny kontakt"
 
 #: js/Addressbook.js:32 js/Model.js:99 js/Model.js:208
 msgid "Addressbook"
@@ -359,55 +360,55 @@ msgstr ""
 
 #: js/Model.js:19
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
-msgstr ""
+msgstr "Gate (Firma adresse)"
 
 #: js/Model.js:35
 msgid "Street 2 (Company Address)"
-msgstr ""
+msgstr "Gate 2 (Firma adresse)"
 
 #: js/Model.js:36
 msgid "City (Company Address)"
-msgstr ""
+msgstr "By (Firma adresse)"
 
 #: js/Model.js:37
 msgid "Region (Company Address)"
-msgstr ""
+msgstr "Fylke (Firma adresse)"
 
 #: js/Model.js:38
 msgid "Postal Code (Company Address)"
-msgstr ""
+msgstr "Postnr (Firma adresse)"
 
 #: js/Model.js:39
 msgid "Country (Company Address)"
-msgstr ""
+msgstr "Land (Firma adresse)"
 
 #: js/Model.js:43
 msgid "Street (Private Address)"
-msgstr ""
+msgstr "Gate (Privat adresse)"
 
 #: js/Model.js:44
 msgid "Street 2 (Private Address)"
-msgstr ""
+msgstr "Gate 2 (Privat adresse)"
 
 #: js/Model.js:45
 msgid "City (Private Address)"
-msgstr ""
+msgstr "By (Privat adresse)"
 
 #: js/Model.js:46
 msgid "Region (Private Address)"
-msgstr ""
+msgstr "Fylke (Privat adresse)"
 
 #: js/Model.js:47
 msgid "Postal Code (Private Address)"
-msgstr ""
+msgstr "Postnr (Privat adresse)"
 
 #: js/Model.js:48
 msgid "Country (Private Address)"
-msgstr ""
+msgstr "Land (Privat adresse)"
 
 #: js/Model.js:51
 msgid "Company Communication"
@@ -435,7 +436,7 @@ msgstr "Bruker Konto"
 
 #: js/Model.js:137
 msgid "Quick Search"
-msgstr ""
+msgstr "Hurtigsøk"
 
 #: js/Model.js:163 js/ContactGrid.js:101
 msgid "Type"
@@ -455,7 +456,7 @@ msgstr "Opprettelses dato"
 
 #: js/Model.js:167
 msgid "Created By"
-msgstr ""
+msgstr "Opprettet Av"
 
 #: js/Model.js:204
 msgid "List"
@@ -465,15 +466,15 @@ msgstr[1] ""
 
 #: js/Model.js:204
 msgid "Lists"
-msgstr ""
+msgstr "Lister"
 
 #: js/MapPanel.js:58
 msgid "Company address"
-msgstr ""
+msgstr "Firma Adresse"
 
 #: js/MapPanel.js:65
 msgid "Private address"
-msgstr ""
+msgstr "Privat Adresse"
 
 #: js/ContactGridDetailsPanel.js:65
 msgid "Select contact"
@@ -489,7 +490,7 @@ msgstr "Informasjon"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Insecure link"
-msgstr ""
+msgstr "Usikker link"
 
 #: js/ContactGridDetailsPanel.js:214
 msgid "Please review this link in edit dialog."
@@ -572,19 +573,19 @@ msgstr "Eksporter som CSV"
 
 #: js/ContactGrid.js:182
 msgid "Export as ODS"
-msgstr ""
+msgstr "Eksporter som ODS"
 
 #: js/ContactGrid.js:189
 msgid "Export as XLS"
-msgstr ""
+msgstr "Eksporter som XLS"
 
 #: js/ContactGrid.js:196
 msgid "Export as DOC"
-msgstr ""
+msgstr "Eksporter som DOC"
 
 #: js/ContactGrid.js:203
 msgid "Export as ..."
-msgstr ""
+msgstr "Eksporter som"
 
 #: js/ContactGrid.js:215
 msgid "Import contacts"
@@ -600,7 +601,7 @@ msgstr ""
 
 #: Preference.php:28
 msgid "All contacts"
-msgstr ""
+msgstr "Alle kontakter"
 
 #: Preference.php:81
 msgid "Default Addressbook"
@@ -636,11 +637,16 @@ msgstr ""
 
 #: Preference.php:165
 msgid "default"
+msgstr "Standard"
+
+#: Frontend/Cli.php:166
+msgid ""
+"This contact has been automatically added by the system as an event attender"
 msgstr ""
 
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
-msgstr ""
+msgstr "Alle kontakter"
 
 #: Config.php:45
 msgid "Contact duplicate check fields"
@@ -676,14 +682,17 @@ msgstr ""
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
+#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"

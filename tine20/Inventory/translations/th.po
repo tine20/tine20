@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-10-26 08:14+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,24 +20,24 @@ msgstr ""
 #: Controller.php:79
 #, python-format
 msgid "%s's personal inventory items"
-msgstr ""
+msgstr "%s's ของรายการส่วนตัว"
 
 #: Model/InventoryItem.php:34
 msgid "Inventory item"
 msgid_plural "Inventory items"
-msgstr[0] ""
+msgstr[0] "รายการสิ่งของที่มีอยู่"
 
 #: Model/InventoryItem.php:35
 msgid "Inventory items"
-msgstr ""
+msgstr "รายการสิ่งของที่มีอยู่"
 
 #: Model/InventoryItem.php:38
 msgid "Inventory item list"
-msgstr ""
+msgstr "รายชื่อของรายการสิ่งของที่มีอยู่"
 
 #: Model/InventoryItem.php:39
 msgid "Inventory items lists"
-msgstr ""
+msgstr "รายชื่อของรายการสิ่งของที่มีอยู่"
 
 #: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
@@ -47,115 +47,69 @@ msgstr "ชื่อ"
 msgid "Status"
 msgstr "สถานะ"
 
-#: Model/InventoryItem.php:67
+#: Model/InventoryItem.php:66
 msgid "Inventory ID"
-msgstr ""
+msgstr "รหัสรายการสิ่งของ"
 
-#: Model/InventoryItem.php:71 js/InventoryItemEditDialog.js:121
+#: Model/InventoryItem.php:70 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: Model/InventoryItem.php:75 js/InventoryItemEditDialog.js:155
+#: Model/InventoryItem.php:74 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "สถานที่"
 
-#: Model/InventoryItem.php:79 js/InventoryItemEditDialog.js:283
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:283
 msgid "Invoice date"
 msgstr "วันที่ของใบกำกับสินค้า"
 
-#: Model/InventoryItem.php:94 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:277
 msgid "Invoice"
 msgstr "ใบแจ้งกำกับสินค้า"
 
-#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:257
 msgid "Price"
 msgstr "ราคา"
 
-#: Model/InventoryItem.php:105 js/InventoryItemEditDialog.js:264
+#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:264
 msgid "Cost centre"
 msgstr "ศูนย์ต้นทุน"
 
-#: Model/InventoryItem.php:117 js/InventoryItemEditDialog.js:168
+#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "การรับประกัน"
 
-#: Model/InventoryItem.php:124
+#: Model/InventoryItem.php:123
 msgid "Item added"
 msgstr "สิ่งของได้เพิ่มแล้ว"
 
-#: Model/InventoryItem.php:131
+#: Model/InventoryItem.php:130
 msgid "Item removed"
 msgstr "สิ่งของได้เอาออกแล้ว"
 
-#: Model/InventoryItem.php:144 js/InventoryItemEditDialog.js:289
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:289
 msgid "Depreciate"
 msgstr ""
 
-#: Import/definitions/inv_tine_import_csv.xml:13
-msgid "Inventory CSV import"
-msgstr ""
+#: js/InventoryItemGridPanel.js:36
+msgid "Export Inventory"
+msgstr "ส่งออก สิ่งของที่มีอยู่"
 
-#: Import/definitions/inv_tine_import_csv.xml:20
-msgid "Import list (###CURRENTDATE###)"
-msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
+#: js/InventoryItemGridPanel.js:45
+msgid "Export as ODS"
+msgstr "ส่งออก เป็นไฟล์ ODS"
 
-#: Import/definitions/inv_tine_import_csv.xml:22
-msgid ""
-"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
-"###USERFULLNAME###"
-msgstr "สิ่งของถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
+#: js/InventoryItemGridPanel.js:52
+msgid "Export as CSV"
+msgstr "ส่งออก เป็นไฟล์ CSV"
 
-#: Config.php:31
-msgid "Inventory Status Available"
-msgstr ""
+#: js/InventoryItemGridPanel.js:59
+msgid "Export as ..."
+msgstr "ส่งออก เป็น ..."
 
-#: Config.php:33
-msgid "Possible status."
-msgstr "สถานะเป็นไปได้"
-
-#: Setup/setup.xml:4
-msgid "Inventory"
-msgstr ""
-
-#: Setup/Update/Release7.php:127 Setup/Initialize.php:65
-msgid "All Inventory Items"
-msgstr ""
-
-#: Setup/Update/Release7.php:128 Setup/Initialize.php:66
-msgid "All existing Inventory Items"
-msgstr ""
-
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "สั่งแล้ว"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "มีอยู่"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "ชำรุด"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "หาย"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "ได้เอาออก"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "ไม่รู้จัก"
-
-#: Preference.php:60
-msgid "Default Inventory Item Container"
-msgstr ""
-
-#: Preference.php:61
-msgid "The default container for new items"
-msgstr ""
+#: js/InventoryItemGridPanel.js:71
+msgid "Import items"
+msgstr "นำเข้าสิ่งของ"
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
@@ -193,22 +147,68 @@ msgstr "หมายเลขที่มีอยู่"
 msgid "Accounting"
 msgstr "การบัญชี"
 
-#: js/InventoryItemGridPanel.js:36
-msgid "Export Inventory"
+#: Preference.php:60
+msgid "Default Inventory Item Container"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:45
-msgid "Export as ODS"
-msgstr "ส่งออก เป็นไฟล์ ODS"
+#: Preference.php:61
+msgid "The default container for new items"
+msgstr ""
 
-#: js/InventoryItemGridPanel.js:52
-msgid "Export as CSV"
-msgstr "ส่งออก เป็นไฟล์ CSV"
+#: Config.php:31
+msgid "Inventory Status Available"
+msgstr ""
 
-#: js/InventoryItemGridPanel.js:59
-msgid "Export as ..."
-msgstr "ส่งออก เป็น ..."
+#: Config.php:33
+msgid "Possible status."
+msgstr "สถานะเป็นไปได้"
 
-#: js/InventoryItemGridPanel.js:71
-msgid "Import items"
-msgstr "นำเข้าสิ่งของ"
+#: Import/definitions/inv_tine_import_csv.xml:13
+msgid "Inventory CSV import"
+msgstr ""
+
+#: Import/definitions/inv_tine_import_csv.xml:20
+msgid "Import list (###CURRENTDATE###)"
+msgstr "นำเข้ารายชื่อ  (###วันปัจจุบัน###)"
+
+#: Import/definitions/inv_tine_import_csv.xml:22
+msgid ""
+"Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr "สิ่งของถูกนำเข้าเมื่อ ###วันปัจจุบัน### ณ ###เวลาปัจจุบัน### โดย ###ชื่อเต็มของผู้ใช้###"
+
+#: Setup/setup.xml:4
+msgid "Inventory"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "ordered"
+msgstr "สั่งแล้ว"
+
+#: Setup/Initialize.php:34
+msgid "available"
+msgstr "มีอยู่"
+
+#: Setup/Initialize.php:35
+msgid "defect"
+msgstr "ชำรุด"
+
+#: Setup/Initialize.php:36
+msgid "missing"
+msgstr "หาย"
+
+#: Setup/Initialize.php:37
+msgid "removed"
+msgstr "ได้เอาออก"
+
+#: Setup/Initialize.php:38
+msgid "unknown"
+msgstr "ไม่รู้จัก"
+
+#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+msgid "All Inventory Items"
+msgstr ""
+
+#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+msgid "All existing Inventory Items"
+msgstr ""

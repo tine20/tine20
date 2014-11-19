@@ -182,11 +182,11 @@ msgstr "instellingen"
 msgid "Search:"
 msgstr "Zoeken:"
 
-#: js/Applications.js:230 js/user/EditDialog.js:886
+#: js/Applications.js:230 js/user/EditDialog.js:888
 msgid "disabled"
 msgstr "uitgeschakeld"
 
-#: js/Applications.js:233 js/user/EditDialog.js:885
+#: js/Applications.js:233 js/user/EditDialog.js:887
 msgid "enabled"
 msgstr "ingeschakeld"
 
@@ -216,7 +216,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:877
+#: js/Applications.js:283 js/user/GridPanel.js:172 js/user/EditDialog.js:879
 msgid "Status"
 msgstr "Status"
 
@@ -454,7 +454,7 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:734
+#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -692,19 +692,19 @@ msgstr "Groep kan niet worden bewaard."
 msgid "Group Name"
 msgstr "Groep naam"
 
-#: js/GroupEditDialog.js:137 js/user/EditDialog.js:924
+#: js/GroupEditDialog.js:137 js/user/EditDialog.js:926
 msgid "Visibility"
 msgstr ""
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Display in addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:931
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/GroupEditDialog.js:159 js/user/EditDialog.js:945
+#: js/GroupEditDialog.js:159 js/user/EditDialog.js:947
 msgid "Saved in Addressbook"
 msgstr ""
 
@@ -799,32 +799,32 @@ msgstr ""
 msgid "Display name"
 msgstr ""
 
-#: js/user/GridPanel.js:174 js/user/EditDialog.js:808
-#: js/user/EditDialog.js:853
+#: js/user/GridPanel.js:174 js/user/EditDialog.js:810
+#: js/user/EditDialog.js:855
 msgid "Login name"
 msgstr ""
 
-#: js/user/GridPanel.js:175 js/user/EditDialog.js:802
+#: js/user/GridPanel.js:175 js/user/EditDialog.js:804
 msgid "Last name"
 msgstr "Achternaam"
 
-#: js/user/GridPanel.js:176 js/user/EditDialog.js:791
+#: js/user/GridPanel.js:176 js/user/EditDialog.js:793
 msgid "First name"
 msgstr "Voornaam"
 
-#: js/user/GridPanel.js:177 js/user/EditDialog.js:845
+#: js/user/GridPanel.js:177 js/user/EditDialog.js:847
 msgid "Email"
 msgstr "Email"
 
-#: js/user/GridPanel.js:178 js/user/EditDialog.js:852
+#: js/user/GridPanel.js:178 js/user/EditDialog.js:854
 msgid "OpenID"
 msgstr ""
 
-#: js/user/GridPanel.js:179 js/user/EditDialog.js:985
+#: js/user/GridPanel.js:179 js/user/EditDialog.js:987
 msgid "Last login at"
 msgstr ""
 
-#: js/user/GridPanel.js:180 js/user/EditDialog.js:989
+#: js/user/GridPanel.js:180 js/user/EditDialog.js:991
 msgid "Last login from"
 msgstr ""
 
@@ -832,7 +832,7 @@ msgstr ""
 msgid "Password changed"
 msgstr "Wachtwoord gewijzigd"
 
-#: js/user/GridPanel.js:182 js/user/EditDialog.js:918
+#: js/user/GridPanel.js:182 js/user/EditDialog.js:920
 msgid "Expires"
 msgstr ""
 
@@ -865,7 +865,7 @@ msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
-#: js/user/EditDialog.js:731
+#: js/user/EditDialog.js:733
 msgid "Passwords do not match!"
 msgstr ""
 
@@ -873,7 +873,7 @@ msgstr ""
 msgid "Passwords match!"
 msgstr ""
 
-#: js/user/EditDialog.js:286 js/user/EditDialog.js:859
+#: js/user/EditDialog.js:286 js/user/EditDialog.js:861
 msgid "Primary group"
 msgstr ""
 
@@ -901,8 +901,8 @@ msgstr ""
 msgid "Logon Time"
 msgstr ""
 
-#: js/user/EditDialog.js:408 js/user/EditDialog.js:987
-#: js/user/EditDialog.js:991
+#: js/user/EditDialog.js:408 js/user/EditDialog.js:989
+#: js/user/EditDialog.js:993
 msgid "never logged in"
 msgstr ""
 
@@ -926,8 +926,8 @@ msgstr ""
 msgid "Password Last Set"
 msgstr ""
 
-#: js/user/EditDialog.js:428 js/user/EditDialog.js:921
-#: js/user/EditDialog.js:995
+#: js/user/EditDialog.js:428 js/user/EditDialog.js:923
+#: js/user/EditDialog.js:997
 msgid "never"
 msgstr ""
 
@@ -976,7 +976,7 @@ msgstr ""
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/user/EditDialog.js:543 js/user/EditDialog.js:970
+#: js/user/EditDialog.js:543 js/user/EditDialog.js:972
 msgid "Information"
 msgstr ""
 
@@ -984,11 +984,11 @@ msgstr ""
 msgid "Last Login"
 msgstr ""
 
-#: js/user/EditDialog.js:616
+#: js/user/EditDialog.js:618
 msgid "Domain not allowed"
 msgstr ""
 
-#: js/user/EditDialog.js:617
+#: js/user/EditDialog.js:619
 #, python-brace-format
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
@@ -997,99 +997,99 @@ msgid ""
 " configured already."
 msgstr ""
 
-#: js/user/EditDialog.js:626
+#: js/user/EditDialog.js:628
 msgid "Email Alias"
 msgstr ""
 
-#: js/user/EditDialog.js:632
+#: js/user/EditDialog.js:634
 msgid "Add an alias address..."
 msgstr ""
 
-#: js/user/EditDialog.js:650
+#: js/user/EditDialog.js:652
 msgid "Forwarding to self"
 msgstr ""
 
-#: js/user/EditDialog.js:651
+#: js/user/EditDialog.js:653
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
 msgstr ""
 
-#: js/user/EditDialog.js:660
+#: js/user/EditDialog.js:662
 msgid "Email Forward"
 msgstr ""
 
-#: js/user/EditDialog.js:666
+#: js/user/EditDialog.js:668
 msgid "Add a forward address..."
 msgstr ""
 
-#: js/user/EditDialog.js:679
+#: js/user/EditDialog.js:681
 msgid "Forward Only"
 msgstr ""
 
-#: js/user/EditDialog.js:698
+#: js/user/EditDialog.js:700
 msgid "Password confirmation"
 msgstr ""
 
-#: js/user/EditDialog.js:715
+#: js/user/EditDialog.js:717
 msgid "Repeat password"
 msgstr ""
 
-#: js/user/EditDialog.js:741
+#: js/user/EditDialog.js:743
 msgid "Ok"
 msgstr ""
 
-#: js/user/EditDialog.js:776
+#: js/user/EditDialog.js:778
 msgid "Account"
 msgstr ""
 
-#: js/user/EditDialog.js:814
+#: js/user/EditDialog.js:816
 msgid "Password"
 msgstr ""
 
-#: js/user/EditDialog.js:887
+#: js/user/EditDialog.js:889
 msgid "expired"
 msgstr ""
 
-#: js/user/EditDialog.js:888
+#: js/user/EditDialog.js:890
 msgid "blocked"
 msgstr ""
 
-#: js/user/EditDialog.js:895
+#: js/user/EditDialog.js:897
 msgid "Invalid Status"
 msgstr ""
 
-#: js/user/EditDialog.js:896
+#: js/user/EditDialog.js:898
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
 msgstr ""
 
-#: js/user/EditDialog.js:987 js/user/EditDialog.js:991
+#: js/user/EditDialog.js:989 js/user/EditDialog.js:993
 msgid "don't know"
 msgstr ""
 
-#: js/user/EditDialog.js:993
+#: js/user/EditDialog.js:995
 msgid "Password set"
 msgstr ""
 
-#: js/user/EditDialog.js:1000
+#: js/user/EditDialog.js:1002
 msgid "User groups"
 msgstr ""
 
-#: js/user/EditDialog.js:1006
+#: js/user/EditDialog.js:1008
 msgid "User roles"
 msgstr ""
 
-#: js/user/EditDialog.js:1012
+#: js/user/EditDialog.js:1014
 msgid "Fileserver"
 msgstr ""
 
-#: js/user/EditDialog.js:1018
+#: js/user/EditDialog.js:1020
 msgid "IMAP"
 msgstr ""
 
-#: js/user/EditDialog.js:1027
+#: js/user/EditDialog.js:1029
 msgid "SMTP"
 msgstr ""
 

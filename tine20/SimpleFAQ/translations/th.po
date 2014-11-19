@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-10-26 07:29+0000\n"
+"Last-Translator: jaruwan <luca.ingianni@gmail.com>\n"
 "Language-Team: Thai (http://www.transifex.com/projects/p/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,11 +28,11 @@ msgstr "โครงร่าง"
 
 #: Controller.php:165
 msgid "released"
-msgstr ""
+msgstr "ได้ปล่อย"
 
 #: Controller.php:166
 msgid "obsolete"
-msgstr ""
+msgstr "เลิกใช้"
 
 #: Controller.php:169
 msgid "Internal"
@@ -41,58 +41,6 @@ msgstr "ภายใน"
 #: Controller.php:170
 msgid "Public"
 msgstr "สาธารณะ"
-
-#: Setup/Initialize.php:33
-msgid "All FAQs of my FAQ Lists"
-msgstr ""
-
-#: Setup/Initialize.php:40
-msgid "Last modified by me"
-msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
-
-#: Setup/Initialize.php:41
-msgid "All FAQs that I have last modified"
-msgstr "คำถามที่ถามบ่อยที่ฉันได้ปรับปรุงครั้งล่าสุด"
-
-#: Preference.php:28
-msgid "All my FAQs"
-msgstr "คำถามที่ถามบ่อยของฉันทั้งหมด"
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on FAQ startup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default FAQ List"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default FAQ list to create new FAQ in."
-msgstr ""
-
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
-#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:199
-msgid "FAQ Status"
-msgid_plural "FAQ Status"
-msgstr[0] "สถานะ คำถามที่ถามบ่อย"
-
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27 js/FaqGridDetailsPanel.js:204
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "ประเภทของคำถามที่ถามบ่อย"
-
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "ค่าหลัก"
-
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "ใส่ประเภทคำถามที่ถามบ่อยใหม่"
 
 #: js/SimpleFAQ.js:19 js/Model.js:35
 msgid "FAQ"
@@ -107,10 +55,34 @@ msgstr "หาคำถาม"
 msgid "Search question"
 msgstr "ค้นหาคำถาม"
 
-#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:118
+#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
 #: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "คำตอบ"
+
+#: js/FaqType.js:26 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqGridDetailsPanel.js:204 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "ประเภทของคำถามที่ถามบ่อย"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "ใส่ประเภทคำถามที่ถามบ่อยใหม่"
+
+#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27 js/FaqGridDetailsPanel.js:199
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "สถานะ คำถามที่ถามบ่อย"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "ค่าหลัก"
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "ใส่สถานะคำถามที่ถามบ่อยใหม่"
 
 #: js/FaqGridPanel.js:72
 msgid "FAQ id"
@@ -120,21 +92,17 @@ msgstr "รหัสของคำถามที่ถามบ่อย"
 msgid "Tags"
 msgstr "ป้ายกำกับ"
 
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:139
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
 msgid "Status"
 msgstr "สถานะ"
 
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:127
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
 msgid "Type"
 msgstr "ประเภท"
 
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:111 js/FaqGridDetailsPanel.js:151
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "คำถาม"
-
-#: js/FaqStatus.js:141
-msgid "Add a new FAQ Status..."
-msgstr "ใส่สถานะคำถามที่ถามบ่อยใหม่"
 
 #: js/Model.js:39
 msgid "FAQ List"
@@ -149,17 +117,17 @@ msgstr "รายการคำถามที่ถามบ่อย"
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: js/FaqEditDialog.js:112
+#: js/SearchCombo.js:8
+msgid "Search FAQ"
+msgstr "ค้นหาคำถามที่ถามบ่อย"
+
+#: js/FaqEditDialog.js:111
 msgid "Enter a question..."
 msgstr "ใส่คำถาม"
 
-#: js/FaqEditDialog.js:119
+#: js/FaqEditDialog.js:118
 msgid "Enter a answer..."
 msgstr "ใส่คำตอบ"
-
-#: js/SearchCombo.js:8
-msgid "Search FAQ"
-msgstr ""
 
 #: js/FaqGridDetailsPanel.js:97 js/FaqGridDetailsPanel.js:182
 msgid "FAQ Infos"
@@ -176,3 +144,35 @@ msgstr "สร้าง โดย"
 #: js/FaqGridDetailsPanel.js:226
 msgid "No answer yet"
 msgstr "ยังไม่มีคำตอบ"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "คำถามที่ถามบ่อยของฉันทั้งหมด"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "ค่าที่ชอบหลัก"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิด FAQ"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "รายการคำถามหลักที่ถามบ่อย"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "รายการ FAQ ค่าหลัก ที่จะสร้าง FAQ ใหม่เข้าไป"
+
+#: Setup/Initialize.php:33
+msgid "All FAQs of my FAQ Lists"
+msgstr "คำถามที่ถามบ่อยทั้งหมดของรายการคำถามที่ถามบ่อยของฉัน"
+
+#: Setup/Initialize.php:40
+msgid "Last modified by me"
+msgstr "ปรับปรุงครั้งล่าสุด โดยฉัน"
+
+#: Setup/Initialize.php:41
+msgid "All FAQs that I have last modified"
+msgstr "คำถามที่ถามบ่อยที่ฉันได้ปรับปรุงครั้งล่าสุด"

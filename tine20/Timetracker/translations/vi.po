@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -45,41 +45,389 @@ msgstr "Quản lý lối tắt dự án dùng chung"
 msgid "Create or update shared timesheet favorites"
 msgstr ""
 
-#: Model/Timeaccount.php:43 Model/Timeaccount.php:47
-#: js/TimeaccountEditDialog.js:125
+#: Model/Timesheet.php:164 Model/Timeaccount.php:458
+msgid "hour"
+msgstr ""
+
+#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:138
 msgid "Cost Center"
 msgstr "Trung tâm giá"
+
+#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:153
+msgid "Responsible Person"
+msgstr ""
+
+#: js/Timetracker.js:25
+msgid "New Timesheet"
+msgstr "Tạo chấm công"
+
+#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+msgid "Not a valid time"
+msgstr "Không là 1 thời gian hợp lệ"
+
+#: js/TimeaccountPickerCombo.js:46
+msgid "Show closed"
+msgstr "Hiển thị bị đóng"
+
+#: js/TimeAccountContractFilterModel.js:30
+msgid "Contract"
+msgstr "Hợp đồng"
+
+#: js/TimeAccountContractFilterModel.js:32
+msgid "without contract"
+msgstr "Không có hợp đồng"
+
+#: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:76
+msgid "Tags"
+msgstr "Th"
+
+#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:204
+#: js/Models.js:179
+msgid "Number"
+msgstr "Số"
+
+#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:210
+#: js/Models.js:180
+msgid "Title"
+msgstr "Tiêu đề"
+
+#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:90
+#: js/Models.js:182
+msgid "Billed"
+msgstr "Đã trả"
+
+#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:79
+msgid "Budget"
+msgstr "Quỹ"
+
+#: js/TimeaccountGridPanel.js:103 js/TimesheetGridPanel.js:91
+#: js/TimesheetGridPanel.js:395
+msgid "Cleared in"
+msgstr "Xóa trong"
+
+#: js/TimeaccountGridPanel.js:108 js/TimesheetGridPanel.js:92
+#: js/TimeaccountEditDialog.js:172 js/TimesheetEditDialog.js:164
+msgid "Invoice"
+msgstr ""
+
+#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:116
+#: js/Models.js:189
+msgid "Booking deadline"
+msgstr "Hạn đăng ký"
+
+#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:132
+#: js/Models.js:184
+msgid "Cleared at"
+msgstr "Xóa vào"
+
+#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:82
+#: js/Models.js:183
+msgid "Status"
+msgstr "Trạng thái"
+
+#: js/TimeaccountGridPanel.js:137 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:88
+msgid "open"
+msgstr "mở"
+
+#: js/TimeaccountGridPanel.js:138 js/TimeAccountStatusFilterModel.js:46
+#: js/TimeaccountEditDialog.js:88 js/Models.js:161
+msgid "closed"
+msgstr "đã đóng"
+
+#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:312
+msgid "Export"
+msgstr "Xuất dữ liệu"
+
+#: js/TimeaccountGridPanel.js:169 js/TimesheetGridPanel.js:320
+msgid "Export as ODS"
+msgstr "Xuất dữ liệu dạng ODS"
+
+#: js/TimeaccountGridPanel.js:176 js/TimesheetGridPanel.js:327
+msgid "Export as CSV"
+msgstr "Xuất dữ liệu dạng CSV"
+
+#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:220 js/Models.js:93
+msgid "Date"
+msgstr "Ngày"
+
+#: js/TimesheetGridPanel.js:80
+msgid "Start time"
+msgstr "Thời gian bắt đầu"
+
+#: js/TimesheetGridPanel.js:82
+msgid "Time Account (Number - Title)"
+msgstr "Tài khoản thời gian (số - tiêu đề)"
+
+#: js/TimesheetGridPanel.js:84
+msgid "Time Account closed"
+msgstr "Tài khoản thời gian đã đóng"
+
+#: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:244
+#: js/TimeaccountEditDialog.js:216 js/TimeaccountEditDialog.js:235
+#: js/TimesheetEditDialog.js:231 js/Models.js:94 js/Models.js:181
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/TimesheetGridPanel.js:87 js/TimesheetGridPanel.js:385
+#: js/TimesheetEditDialog.js:140 js/Models.js:95
+msgid "Billable"
+msgstr "Có thể trả"
+
+#: js/TimesheetGridPanel.js:89 js/TimesheetGridPanel.js:390
+#: js/TimesheetEditDialog.js:146 js/Models.js:96
+msgid "Cleared"
+msgstr "Đã xóa"
+
+#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:135 js/Models.js:92
+msgid "Account"
+msgstr "Tài khoản"
+
+#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:215
+msgid "Duration"
+msgstr "Thời lượng"
+
+#: js/TimesheetGridPanel.js:157
+msgid "timeframe"
+msgstr "khung thời gian"
+
+#: js/TimesheetGridPanel.js:181
+msgid "summary"
+msgstr "Tóm tắt"
+
+#: js/TimesheetGridPanel.js:184
+msgid "Total Timesheets"
+msgstr "Tổng thời gian chấm công"
+
+#: js/TimesheetGridPanel.js:185
+msgid "Billable Timesheets"
+msgstr "Thời gian tính phí"
+
+#: js/TimesheetGridPanel.js:186
+msgid "Total Time"
+msgstr "Tổng thời gian"
+
+#: js/TimesheetGridPanel.js:187
+msgid "Time of Billable Timesheets"
+msgstr "Thời gian chấm công tính phí"
+
+#: js/TimesheetGridPanel.js:258
+msgid "Detail"
+msgstr "Chi tiết"
+
+#: js/TimesheetGridPanel.js:311
+msgid "Export Timesheets"
+msgstr "Xuất dữ liệu tính công"
+
+#: js/TimesheetGridPanel.js:334
+msgid "Export as ..."
+msgstr "Xuất dạng ..."
+
+#: js/TimesheetGridPanel.js:377
+msgid "Mass Update"
+msgstr "Cập nhật toàn bộ"
+
+#: js/TimesheetGridPanel.js:383
+msgid "Update field:"
+msgstr "Cập nhật trường:"
+
+#: js/TimeAccountStatusFilterModel.js:24
+msgid "Time Account - Status"
+msgstr "Tài khoản thời gian - Trạng thái"
+
+#: js/TimeAccountBilledFilterModel.js:24
+msgid "Time Account - Billed"
+msgstr "Tài khoản theo thời gian - Đã trả"
+
+#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:98
+#: Setup/setup.xml:87
+msgid "not yet billed"
+msgstr "chưa trả"
+
+#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:99
+#: Setup/setup.xml:88
+msgid "to bill"
+msgstr "phải trả"
+
+#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:100
+#: Setup/setup.xml:89
+msgid "billed"
+msgstr "đã trả"
+
+#: js/TimeaccountEditDialog.js:46
+msgid "Add New Timeaccount"
+msgstr ""
+
+#: js/TimeaccountEditDialog.js:70
+msgid "Unit"
+msgstr "Đơn vị"
+
+#: js/TimeaccountEditDialog.js:74
+msgid "Unit Price"
+msgstr "Giá đơn vị"
+
+#: js/TimeaccountEditDialog.js:111 js/TimesheetEditDialog.js:156
+msgid "Cleared In"
+msgstr "Đã xóa trong"
+
+#: js/TimeaccountEditDialog.js:124
+msgid "none"
+msgstr "không"
+
+#: js/TimeaccountEditDialog.js:125
+msgid "last week"
+msgstr "tuần trước"
+
+#: js/TimeaccountEditDialog.js:162
+msgid "Timesheets are billable"
+msgstr "Chấm công có hóa đơn"
+
+#: js/TimeaccountEditDialog.js:188 js/TimesheetEditDialog.js:200
+#: js/Models.js:149
+msgid "Time Account"
+msgid_plural "Time Accounts"
+msgstr[0] "one: Tài khoản thời gian\nother: Tài khoản thời gian"
+
+#: js/TimeaccountEditDialog.js:249
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/TimeaccountEditDialog.js:265
+msgid "Access"
+msgstr "Truy cập"
+
+#: js/TimeaccountEditDialog.js:288
+msgid "Book Own"
+msgstr "Đặt của tôi"
+
+#: js/TimeaccountEditDialog.js:290
+msgid "The grant to add Timesheets to this Timeaccount"
+msgstr "Quyền để tạo chấm công tới Timeaccount này"
+
+#: js/TimeaccountEditDialog.js:294
+msgid "View All"
+msgstr "Xem tất cả"
+
+#: js/TimeaccountEditDialog.js:295
+msgid "The grant to view Timesheets of other users"
+msgstr "Quyền để xem chấm công cho người dùng khác"
+
+#: js/TimeaccountEditDialog.js:300
+msgid "Book All"
+msgstr "Đặt tất cả"
+
+#: js/TimeaccountEditDialog.js:301
+msgid "The grant to add Timesheets for other users"
+msgstr "Quyền thêm chấm công cho người dùng khác"
+
+#: js/TimeaccountEditDialog.js:306
+msgid "Manage Clearing"
+msgstr "Quản lý xóa dữ liệu"
+
+#: js/TimeaccountEditDialog.js:307
+msgid "The grant to manage clearing of Timesheets"
+msgstr "Quyền để quản lý việc xóa chấm công."
+
+#: js/TimeaccountEditDialog.js:313
+msgid "The grant to export Timesheets of Timeaccount"
+msgstr "Quyền để xuất dữ liệu chấm công của Timeaccount"
+
+#: js/TimeaccountEditDialog.js:318
+msgid "Manage All"
+msgstr "Quản lý tất cả"
+
+#: js/TimeaccountEditDialog.js:319
+msgid "Includes all other grants"
+msgstr "Bao gồm mọi quyền khác"
+
+#: js/TimeaccountEditDialog.js:327
+msgid "Permissions"
+msgstr "Quyền"
+
+#: js/TimesheetEditDialog.js:183 js/Models.js:51
+msgid "Timesheet"
+msgid_plural "Timesheets"
+msgstr[0] "one: Thời gian"
+
+#: js/TimesheetEditDialog.js:201
+msgid "Select Time Account..."
+msgstr "Chọn tài khoản thời gian..."
+
+#: js/TimesheetEditDialog.js:225
+msgid "Start"
+msgstr "Bắt đầu"
+
+#: js/TimesheetEditDialog.js:226
+msgid "not set"
+msgstr "chưa đặt"
+
+#: js/TimesheetEditDialog.js:232
+msgid "Enter description..."
+msgstr "Nhập mô tả"
+
+#: js/TimesheetEditDialog.js:284
+msgid "Failed"
+msgstr "Lỗi"
+
+#: js/TimesheetEditDialog.js:285
+#, python-brace-format
+msgid "Could not save {0}."
+msgstr "Không thể lưu lại {0}"
+
+#: js/TimesheetEditDialog.js:286
+msgid "Booking deadline for this Timeaccount has been exceeded."
+msgstr "Đặt thời gian kết thúc cho tài khoản thời gian sẽ kết thúc."
+
+#: js/DurationSlider.js:94
+#, python-brace-format
+msgid "{0}"
+msgstr "{0}"
+
+#: js/Models.js:55
+msgid "timesheets list"
+msgid_plural "timesheets lists"
+msgstr[0] "one: danh sách nhật ký chấm công\nother: danh sách nhật ký chấm công"
+
+#: js/Models.js:91 js/Models.js:178
+msgid "Quick Search"
+msgstr "Tìm nhanh"
+
+#: js/Models.js:97 js/Models.js:185
+msgid "Last Modified Time"
+msgstr "Thời gian sửa cuối cùng"
+
+#: js/Models.js:98 js/Models.js:186
+msgid "Last Modified By"
+msgstr "Sửa lần cuối bởi"
+
+#: js/Models.js:99 js/Models.js:187
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/Models.js:100 js/Models.js:188
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/Models.js:154
+msgid "timeaccount list"
+msgid_plural "timeaccount lists"
+msgstr[0] "one: danh sách tài khoản thời gian\nother: danh sách tài khoản thời gian"
+
+#: Preference.php:64
+msgid "Timesheets ODS export configuration"
+msgstr "Cấu hình xuất dữ liệu chấm công ODS"
+
+#: Preference.php:65
+msgid "Use this configuration for the timesheet ODS export."
+msgstr "Sử dụng cấu hình này cho việc xuất dữ liệu chấm công ODS"
+
+#: Preference.php:116
+msgid "default"
+msgstr "mặc định"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Bộ đếm thời gian"
-
-#: Setup/setup.xml:81 js/TimeaccountEditDialog.js:90
-#: js/TimeAccountBilledFilterModel.js:47
-msgid "not yet billed"
-msgstr "chưa trả"
-
-#: Setup/setup.xml:82 js/TimeaccountEditDialog.js:91
-#: js/TimeAccountBilledFilterModel.js:48
-msgid "to bill"
-msgstr "phải trả"
-
-#: Setup/setup.xml:83 js/TimeaccountEditDialog.js:92
-#: js/TimeAccountBilledFilterModel.js:49
-msgid "billed"
-msgstr "đã trả"
-
-#: Setup/Update/Release5.php:81 Setup/Initialize.php:112
-msgid "Timeaccounts to bill"
-msgstr "Tài khoản thời gian cần thanh toán"
-
-#: Setup/Update/Release5.php:95 Setup/Initialize.php:126
-msgid "Timeaccounts not yet billed"
-msgstr "Tài khoản thời gian chưa thanh toán"
-
-#: Setup/Update/Release5.php:109 Setup/Initialize.php:141
-msgid "Timeaccounts already billed"
-msgstr "Tài khoản thời gian đã thanh toán"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
@@ -101,352 +449,14 @@ msgstr "Chấm công tháng này của tôi"
 msgid "My Timesheets last month"
 msgstr "Chấm công tháng trước của tôi"
 
-#: Preference.php:64
-msgid "Timesheets ODS export configuration"
-msgstr "Cấu hình xuất dữ liệu chấm công ODS"
-
-#: Preference.php:65
-msgid "Use this configuration for the timesheet ODS export."
-msgstr "Sử dụng cấu hình này cho việc xuất dữ liệu chấm công ODS"
-
-#: Preference.php:116
-msgid "default"
-msgstr "mặc định"
-
-#: js/TimeaccountEditDialog.js:62
-msgid "Unit"
-msgstr "Đơn vị"
-
-#: js/TimeaccountEditDialog.js:66
-msgid "Unit Price"
-msgstr "Giá đơn vị"
-
-#: js/TimeaccountEditDialog.js:71 js/TimeaccountGridPanel.js:97
-msgid "Budget"
-msgstr "Quỹ"
-
-#: js/TimeaccountEditDialog.js:74 js/TimeaccountGridPanel.js:119
-#: js/Models.js:178
-msgid "Status"
-msgstr "Trạng thái"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:124 js/Models.js:156
-msgid "closed"
-msgstr "đã đóng"
-
-#: js/TimeaccountEditDialog.js:80 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountGridPanel.js:123
-msgid "open"
-msgstr "mở"
-
-#: js/TimeaccountEditDialog.js:82 js/TimeaccountGridPanel.js:91
-#: js/Models.js:177
-msgid "Billed"
-msgstr "Đã trả"
-
-#: js/TimeaccountEditDialog.js:100
-msgid "not cleared yet..."
-msgstr "vẫn chưa được xóa ..."
-
-#: js/TimeaccountEditDialog.js:101 js/TimesheetEditDialog.js:221
-msgid "Cleared In"
-msgstr "Đã xóa trong"
-
-#: js/TimeaccountEditDialog.js:105 js/TimeaccountGridPanel.js:109
-#: js/Models.js:184
-msgid "Booking deadline"
-msgstr "Hạn đăng ký"
-
-#: js/TimeaccountEditDialog.js:113
-msgid "none"
-msgstr "không"
-
-#: js/TimeaccountEditDialog.js:114
-msgid "last week"
-msgstr "tuần trước"
-
-#: js/TimeaccountEditDialog.js:119 js/TimeaccountGridPanel.js:114
-#: js/Models.js:179
-msgid "Cleared at"
-msgstr "Xóa vào"
-
-#: js/TimeaccountEditDialog.js:140
-msgid "Responsible person"
-msgstr "Người chịu trách nhiệm"
-
-#: js/TimeaccountEditDialog.js:151
-msgid "Timesheets are billable"
-msgstr "Chấm công có hóa đơn"
-
-#: js/TimeaccountEditDialog.js:169 js/TimesheetEditDialog.js:155
-#: js/Models.js:147
-msgid "Time Account"
-msgid_plural "Time Accounts"
-msgstr[0] "one: Tài khoản thời gian\nother: Tài khoản thời gian"
-
-#: js/TimeaccountEditDialog.js:185 js/TimeaccountGridPanel.js:81
-#: js/Models.js:174
-msgid "Number"
-msgstr "Số"
-
-#: js/TimeaccountEditDialog.js:190 js/TimeaccountGridPanel.js:86
-#: js/Models.js:175
-msgid "Title"
-msgstr "Tiêu đề"
-
-#: js/TimeaccountEditDialog.js:195 js/TimeaccountEditDialog.js:214
-#: js/TimesheetEditDialog.js:186 js/TimesheetGridPanel.js:86
-#: js/TimesheetGridPanel.js:234 js/Models.js:93 js/Models.js:176
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/TimeaccountEditDialog.js:228
-msgid "Enter description"
-msgstr "Nhập mô tả"
-
-#: js/TimeaccountEditDialog.js:244
-msgid "Access"
-msgstr "Truy cập"
-
-#: js/TimeaccountEditDialog.js:267
-msgid "Book Own"
-msgstr "Đặt của tôi"
-
-#: js/TimeaccountEditDialog.js:269
-msgid "The grant to add Timesheets to this Timeaccount"
-msgstr "Quyền để tạo chấm công tới Timeaccount này"
-
-#: js/TimeaccountEditDialog.js:273
-msgid "View All"
-msgstr "Xem tất cả"
-
-#: js/TimeaccountEditDialog.js:274
-msgid "The grant to view Timesheets of other users"
-msgstr "Quyền để xem chấm công cho người dùng khác"
-
-#: js/TimeaccountEditDialog.js:279
-msgid "Book All"
-msgstr "Đặt tất cả"
-
-#: js/TimeaccountEditDialog.js:280
-msgid "The grant to add Timesheets for other users"
-msgstr "Quyền thêm chấm công cho người dùng khác"
-
-#: js/TimeaccountEditDialog.js:285
-msgid "Manage Clearing"
-msgstr "Quản lý xóa dữ liệu"
-
-#: js/TimeaccountEditDialog.js:286
-msgid "The grant to manage clearing of Timesheets"
-msgstr "Quyền để quản lý việc xóa chấm công."
-
-#: js/TimeaccountEditDialog.js:291 js/TimeaccountGridPanel.js:146
-msgid "Export"
-msgstr "Xuất dữ liệu"
-
-#: js/TimeaccountEditDialog.js:292
-msgid "The grant to export Timesheets of Timeaccount"
-msgstr "Quyền để xuất dữ liệu chấm công của Timeaccount"
-
-#: js/TimeaccountEditDialog.js:297
-msgid "Manage All"
-msgstr "Quản lý tất cả"
-
-#: js/TimeaccountEditDialog.js:298
-msgid "Includes all other grants"
-msgstr "Bao gồm mọi quyền khác"
-
-#: js/TimeaccountEditDialog.js:306
-msgid "Permissions"
-msgstr "Quyền"
-
-#: js/TimesheetEditDialog.js:138 js/Models.js:50
-msgid "Timesheet"
-msgid_plural "Timesheets"
-msgstr[0] "one: Thời gian"
-
-#: js/TimesheetEditDialog.js:156
-msgid "Select Time Account..."
-msgstr "Chọn tài khoản thời gian..."
-
-#: js/TimesheetEditDialog.js:170 js/TimesheetGridPanel.js:94
-msgid "Duration"
-msgstr "Thời lượng"
-
-#: js/TimesheetEditDialog.js:175 js/TimesheetGridPanel.js:78 js/Models.js:92
-msgid "Date"
-msgstr "Ngày"
-
-#: js/TimesheetEditDialog.js:180
-msgid "Start"
-msgstr "Bắt đầu"
-
-#: js/TimesheetEditDialog.js:181
-msgid "not set"
-msgstr "chưa đặt"
-
-#: js/TimesheetEditDialog.js:187
-msgid "Enter description..."
-msgstr "Nhập mô tả"
-
-#: js/TimesheetEditDialog.js:200 js/TimesheetGridPanel.js:92 js/Models.js:91
-msgid "Account"
-msgstr "Tài khoản"
-
-#: js/TimesheetEditDialog.js:205 js/TimesheetGridPanel.js:87
-#: js/TimesheetGridPanel.js:375 js/Models.js:94
-msgid "Billable"
-msgstr "Có thể trả"
-
-#: js/TimesheetEditDialog.js:211 js/TimesheetGridPanel.js:89
-#: js/TimesheetGridPanel.js:380 js/Models.js:95
-msgid "Cleared"
-msgstr "Đã xóa"
-
-#: js/TimesheetEditDialog.js:271
-msgid "Failed"
-msgstr "Lỗi"
-
-#: js/TimesheetEditDialog.js:272
-msgid "Could not save {0}."
-msgstr "Không thể lưu lại {0}"
-
-#: js/TimesheetEditDialog.js:273
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "Đặt thời gian kết thúc cho tài khoản thời gian sẽ kết thúc."
-
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
-msgid "Not a valid time"
-msgstr "Không là 1 thời gian hợp lệ"
-
-#: js/TimeaccountPickerCombo.js:46
-msgid "Show closed"
-msgstr "Hiển thị bị đóng"
-
-#: js/Timetracker.js:25
-msgid "New Timesheet"
-msgstr "Tạo chấm công"
-
-#: js/TimeAccountStatusFilterModel.js:24
-msgid "Time Account - Status"
-msgstr "Tài khoản thời gian - Trạng thái"
-
-#: js/TimesheetGridPanel.js:76 js/TimeaccountGridPanel.js:78
-msgid "Tags"
-msgstr "Th"
-
-#: js/TimesheetGridPanel.js:80
-msgid "Start time"
-msgstr "Thời gian bắt đầu"
-
-#: js/TimesheetGridPanel.js:82
-msgid "Time Account (Number - Title)"
-msgstr "Tài khoản thời gian (số - tiêu đề)"
-
-#: js/TimesheetGridPanel.js:84
-msgid "Time Account closed"
-msgstr "Tài khoản thời gian đã đóng"
-
-#: js/TimesheetGridPanel.js:91 js/TimesheetGridPanel.js:385
-#: js/TimeaccountGridPanel.js:103
-msgid "Cleared in"
-msgstr "Xóa trong"
-
-#: js/TimesheetGridPanel.js:147
-msgid "timeframe"
-msgstr "khung thời gian"
-
-#: js/TimesheetGridPanel.js:171
-msgid "summary"
-msgstr "Tóm tắt"
-
-#: js/TimesheetGridPanel.js:174
-msgid "Total Timesheets"
-msgstr "Tổng thời gian chấm công"
-
-#: js/TimesheetGridPanel.js:175
-msgid "Billable Timesheets"
-msgstr "Thời gian tính phí"
-
-#: js/TimesheetGridPanel.js:176
-msgid "Total Time"
-msgstr "Tổng thời gian"
-
-#: js/TimesheetGridPanel.js:177
-msgid "Time of Billable Timesheets"
-msgstr "Thời gian chấm công tính phí"
-
-#: js/TimesheetGridPanel.js:248
-msgid "Detail"
-msgstr "Chi tiết"
-
-#: js/TimesheetGridPanel.js:301
-msgid "Export Timesheets"
-msgstr "Xuất dữ liệu tính công"
-
-#: js/TimesheetGridPanel.js:310 js/TimeaccountGridPanel.js:155
-msgid "Export as ODS"
-msgstr "Xuất dữ liệu dạng ODS"
-
-#: js/TimesheetGridPanel.js:317 js/TimeaccountGridPanel.js:162
-msgid "Export as CSV"
-msgstr "Xuất dữ liệu dạng CSV"
-
-#: js/TimesheetGridPanel.js:324
-msgid "Export as ..."
-msgstr "Xuất dạng ..."
-
-#: js/TimesheetGridPanel.js:367
-msgid "Mass Update"
-msgstr "Cập nhật toàn bộ"
-
-#: js/TimesheetGridPanel.js:373
-msgid "Update field:"
-msgstr "Cập nhật trường:"
-
-#: js/TimeAccountBilledFilterModel.js:24
-msgid "Time Account - Billed"
-msgstr "Tài khoản theo thời gian - Đã trả"
-
-#: js/DurationSlider.js:94
-msgid "{0}"
-msgstr "{0}"
-
-#: js/TimeAccountContractFilterModel.js:30
-msgid "Contract"
-msgstr "Hợp đồng"
-
-#: js/TimeAccountContractFilterModel.js:32
-msgid "without contract"
-msgstr "Không có hợp đồng"
-
-#: js/Models.js:54
-msgid "timesheets list"
-msgid_plural "timesheets lists"
-msgstr[0] "one: danh sách nhật ký chấm công\nother: danh sách nhật ký chấm công"
-
-#: js/Models.js:90 js/Models.js:173
-msgid "Quick Search"
-msgstr "Tìm nhanh"
-
-#: js/Models.js:96 js/Models.js:180
-msgid "Last Modified Time"
-msgstr "Thời gian sửa cuối cùng"
-
-#: js/Models.js:97 js/Models.js:181
-msgid "Last Modified By"
-msgstr "Sửa lần cuối bởi"
-
-#: js/Models.js:98 js/Models.js:182
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
-#: js/Models.js:99 js/Models.js:183
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/Models.js:152
-msgid "timeaccount list"
-msgid_plural "timeaccount lists"
-msgstr[0] "one: danh sách tài khoản thời gian\nother: danh sách tài khoản thời gian"
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:81
+msgid "Timeaccounts to bill"
+msgstr "Tài khoản thời gian cần thanh toán"
+
+#: Setup/Initialize.php:126 Setup/Update/Release5.php:95
+msgid "Timeaccounts not yet billed"
+msgstr "Tài khoản thời gian chưa thanh toán"
+
+#: Setup/Initialize.php:141 Setup/Update/Release5.php:109
+msgid "Timeaccounts already billed"
+msgstr "Tài khoản thời gian đã thanh toán"

@@ -32,22 +32,23 @@ msgstr "Estado Iniciativa"
 msgid "Leadtype"
 msgstr "Tipo de Iniciativa"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:369
-#: js/LeadGridDetailsPanel.js:459
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:146
+#: js/LeadEditDialog.js:369 js/LeadGridDetailsPanel.js:459
+#: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Fuente de la Iniciativa"
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:147 js/Model.js:111
+#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:112
 #: Controller/Lead.php:200
 msgid "Turnover"
 msgstr "Facturación"
 
-#: Export/Pdf.php:90 js/LeadGridPanel.js:146 js/Model.js:110
+#: Export/Pdf.php:90 js/LeadGridPanel.js:147 js/Model.js:110
 #: js/LeadEditDialog.js:222 Controller/Lead.php:201
 msgid "Probability"
 msgstr "Probabilidad"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:406 js/LeadGridDetailsPanel.js:444
+#: Export/Pdf.php:93 js/LeadEditDialog.js:408 js/LeadGridDetailsPanel.js:444
 #: Controller/Lead.php:197
 msgid "Start"
 msgstr "Inicio"
@@ -76,15 +77,15 @@ msgstr "Teléfono"
 msgid "Email"
 msgstr "Email"
 
-#: Export/Pdf.php:232 js/Task.js:83 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:245
 msgid "Tasks"
 msgstr "Tareas"
 
-#: Export/Pdf.php:252 js/Task.js:227
+#: Export/Pdf.php:252 js/Task.js:224
 msgid "Due Date"
 msgstr "Fecha Apta"
 
-#: Export/Pdf.php:259 js/Task.js:240
+#: Export/Pdf.php:259 js/Task.js:237
 msgid "Priority"
 msgstr "Prioridad"
 
@@ -185,27 +186,27 @@ msgstr "Responsable"
 msgid "Task"
 msgstr "Tarea"
 
-#: js/Task.js:109
+#: js/Task.js:105
 msgid "No Tasks to display"
 msgstr "No hay tareas que mostar"
 
-#: js/Task.js:219
+#: js/Task.js:216
 msgid "Summary"
 msgstr "Resumen"
 
-#: js/Task.js:223
+#: js/Task.js:220
 msgid "Add a task..."
 msgstr "Agregar una tarea..."
 
-#: js/Task.js:256
+#: js/Task.js:253
 msgid "Percent"
 msgstr "Porcentaje"
 
-#: js/Task.js:269 js/LeadGridDetailsPanel.js:439
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:439
 msgid "Status"
 msgstr "Estado"
 
-#: js/Task.js:285
+#: js/Task.js:282
 msgid "Organizer"
 msgstr ""
 
@@ -283,7 +284,7 @@ msgstr "Editar seleccionados {0}"
 msgid "Product"
 msgstr "Producto"
 
-#: js/Product.js:139 js/LeadEditDialog.js:444
+#: js/Product.js:139 js/LeadEditDialog.js:446
 msgid "Description"
 msgstr "Descripción"
 
@@ -311,36 +312,36 @@ msgstr "Etiquetas"
 msgid "Lead name"
 msgstr "Nombre de la Iniciativa"
 
-#: js/LeadGridPanel.js:149 js/Model.js:118 js/LeadEditDialog.js:412
+#: js/LeadGridPanel.js:150 js/Model.js:119 js/LeadEditDialog.js:414
 #: js/LeadGridDetailsPanel.js:449
 msgid "Estimated end"
 msgstr "Estimación finaliza"
 
-#: js/LeadGridPanel.js:150
+#: js/LeadGridPanel.js:151
 msgid "Probable Turnover"
 msgstr "Facturación Prevista"
 
-#: js/LeadGridPanel.js:151 js/Model.js:119 js/LeadEditDialog.js:393
+#: js/LeadGridPanel.js:152 js/Model.js:120 js/LeadEditDialog.js:395
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadGridPanel.js:194
+#: js/LeadGridPanel.js:195
 msgid "Export Lead"
 msgstr "Exportar Iniciativa"
 
-#: js/LeadGridPanel.js:203
+#: js/LeadGridPanel.js:204
 msgid "Export as PDF"
 msgstr "Exportar como PDF"
 
-#: js/LeadGridPanel.js:210
+#: js/LeadGridPanel.js:211
 msgid "Export as CSV"
 msgstr "Exportar como CVS"
 
-#: js/LeadGridPanel.js:217
+#: js/LeadGridPanel.js:218
 msgid "Export as ODS"
 msgstr "Exportar como ODS"
 
-#: js/LeadGridPanel.js:224
+#: js/LeadGridPanel.js:225
 msgid "Export as XLS"
 msgstr "Exportar como XLS"
 
@@ -368,29 +369,29 @@ msgstr "Listados de iniciativas"
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
-#: js/Model.js:113
+#: js/Model.js:114
 msgid "Last Modified Time"
 msgstr "Fecha última modificación"
 
-#: js/Model.js:114
+#: js/Model.js:115
 msgid "Last Modified By"
 msgstr "Última modificación por"
 
-#: js/Model.js:115
+#: js/Model.js:116
 msgid "Creation Time"
 msgstr "Fecha de Creación"
 
-#: js/Model.js:116
+#: js/Model.js:117
 msgid "Created By"
 msgstr "Creado por"
 
-#: js/Model.js:159
+#: js/Model.js:160
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Preferencia"
 msgstr[1] "Preferencias"
 
-#: js/Model.js:162
+#: js/Model.js:163
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "listado de registros"
@@ -412,11 +413,11 @@ msgstr "No tiene privilegios para ejecutar la aplicación Ventas o no esta activ
 msgid "Enter short name"
 msgstr "Escribir nombre corto"
 
-#: js/LeadEditDialog.js:385
+#: js/LeadEditDialog.js:386
 msgid "Expected turnover"
 msgstr "Facturación anual"
 
-#: js/LeadEditDialog.js:458
+#: js/LeadEditDialog.js:460
 msgid "Enter description"
 msgstr "Escribir descripción"
 
@@ -450,7 +451,7 @@ msgid_plural "Lead Sources"
 msgstr[0] "Fuente de la iniciativa"
 msgstr[1] "Fuentes de las iniciativas"
 
-#: js/LeadSource.js:136
+#: js/LeadSource.js:153
 msgid "Add a Leadsource..."
 msgstr "Añadir fuente de iniciativas"
 
