@@ -145,7 +145,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         }
         
         $from->setDate($from->format('Y'), $from->format('m'), 1);
-        $from->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $from->setTimezone(Tinebase_Core::getUserTimezone());
         $from->setTime(0,0,0);
         
         $to = clone $from;
@@ -169,7 +169,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         list($from, $to) = $this->getInterval();
         $this->_billables = array();
         
-        $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->setTimezone(Tinebase_Core::getUserTimezone());
         
         while($from < $to) {
             $this->_billables[$from->format('Y-m')] = array(clone $this);
@@ -213,7 +213,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
              $nextBill->addMonth($this->interval);
          }
 
-         $nextBill->setTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+         $nextBill->setTimeZone(Tinebase_Core::getUserTimezone());
          
          return $nextBill < $date;
      }

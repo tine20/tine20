@@ -48,7 +48,7 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
         $cc3 = $this->_costcenterRecords->filter('remark', 'unittest3')->getFirstRecord();
         $cc4 = $this->_costcenterRecords->filter('remark', 'unittest4')->getFirstRecord();
         
-        $all->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $all->setTimezone(Tinebase_Core::getUserTimezone());
         
         $customer3Invoices = $all->filter('costcenter_id', $cc3->getId())->sort('start_date');
         $customer4Invoices = $all->filter('costcenter_id', $cc4->getId())->sort('start_date');

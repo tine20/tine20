@@ -134,7 +134,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     public function getInterval()
     {
         $startDate = clone new Tinebase_DateTime($this->start_date);
-        $startDate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $startDate->setTimezone(Tinebase_Core::getUserTimezone());
         $startDate->setDate($startDate->format('Y'), $startDate->format('n'), 1);
         $startDate->setTime(0,0,0);
         

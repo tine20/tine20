@@ -280,7 +280,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $sic = Sales_Controller_Invoice::getInstance();
         
         $now = new Tinebase_DateTime();
-        $now->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $now->setTimezone(Tinebase_Core::getUserTimezone());
         $now->setDate($now->format('Y'), $now->format('m'), 1);
         $now->setTime(3,0,0);
         

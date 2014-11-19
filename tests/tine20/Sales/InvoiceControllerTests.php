@@ -142,7 +142,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $cc3 = $this->_costcenterRecords->filter('remark', 'unittest3')->getFirstRecord();
         $cc4 = $this->_costcenterRecords->filter('remark', 'unittest4')->getFirstRecord();
         
-        $all->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $all->setTimezone(Tinebase_Core::getUserTimezone());
         
         $customer1Invoices = $all->filter('costcenter_id', $cc1->getId())->sort('start_date');
         $customer2Invoices = $all->filter('costcenter_id', $cc2->getId())->sort('start_date');
@@ -640,7 +640,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         // find product aggregate
         $paController = Sales_Controller_ProductAggregate::getInstance();
         $productAggregate = $paController->getAll()->getFirstRecord();
-        $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
         
         $this->assertEquals(NULL, $productAggregate->last_autobill);
         
@@ -656,7 +656,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals(1, $result['created_count']);
             
             $productAggregate = $paController->get($productAggregate->getId());
-            $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
             $this->assertEquals($testDate, $productAggregate->last_autobill);
         }
         
@@ -674,7 +674,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $testDate = clone $this->_referenceDate;
         
         $productAggregate = $paController->get($productAggregate->getId());
-        $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
         
         $this->assertEquals(NULL, $productAggregate->last_autobill);
         
@@ -690,7 +690,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals(1, $result['created_count']);
         
             $productAggregate = $paController->get($productAggregate->getId());
-            $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
             $this->assertEquals($testDate, $productAggregate->last_autobill);
         }
         
@@ -1116,7 +1116,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(12, $invoicePositions->count());
         
         $contract = $this->_contractRecords->getFirstRecord();
-        $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $contract->setTimezone(Tinebase_Core::getUserTimezone());
         
         $autobillDate = clone $this->_referenceDate;
         
@@ -1127,7 +1127,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
         
         $productAggregate = Sales_Controller_ProductAggregate::getInstance()->getAll()->getFirstRecord();
-        $productAggregate->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
         $this->assertEquals($autobillDate, $productAggregate->last_autobill);
     }
     

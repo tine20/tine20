@@ -132,7 +132,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         Sales_Controller_Contract::getInstance()->setHandleDependentRecords(FALSE);
         Sales_Controller_ProductAggregate::getInstance()->resolveCustomfields(FALSE);
         
-        $contracts->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $contracts->setTimezone(Tinebase_Core::getUserTimezone());
         
         foreach ($contracts as $contract) {
             
@@ -267,7 +267,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         ));
         
         $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
-        $productAggregates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $productAggregates->setTimezone(Tinebase_Core::getUserTimezone());
         
         return $productAggregates;
     }
@@ -538,7 +538,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $firstBill = (! $productAggregate->last_autobill);
             
             $lab = $productAggregate->last_autobill ? clone $productAggregate->last_autobill : ($productAggregate->start_date ? clone $productAggregate->start_date : clone $this->_currentBillingContract->start_date);
-            $lab->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $lab->setTimezone(Tinebase_Core::getUserTimezone());
             $lab->setTime(0,0,0);
             
             if (! $firstBill) {
@@ -788,7 +788,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _inspectDelete(array $_ids)
     {
         $records = $this->_backend->getMultiple($_ids);
-        $records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $records->setTimezone(Tinebase_Core::getUserTimezone());
         
         $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
         $contractController = Sales_Controller_Contract::getInstance();
@@ -817,12 +817,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 if ($contractRelation) {
                     $contract = $contractRelation->related_record;
-                    $contract->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $contract->setTimezone(Tinebase_Core::getUserTimezone());
                     
                     // get all invoices related to this contract. throw exception if a follwing invoice has been found
                     $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
                     foreach($invoiceRelations as $invoiceRelation) {
-                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
                         if ($record->getId() !== $invoiceRelation->related_record->getId() && $record->creation_time < $invoiceRelation->related_record->creation_time) {
                             throw new Sales_Exception_DeletePreviousInvoice();
                         }
@@ -880,7 +880,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     
                     $paController = Sales_Controller_ProductAggregate::getInstance();
                     $productAggregates = $paController->search($filter);
-                    $productAggregates->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $productAggregates->setTimezone(Tinebase_Core::getUserTimezone());
                     
                     foreach($productAggregates as $productAggregate) {
                         if ($productAggregate->last_autobill) {

@@ -68,7 +68,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         
                         $date = new Tinebase_DateTime();
                         // use usertimezone
-                        $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                        $date->setTimezone(Tinebase_Core::getUserTimezone());
                         // if a date is given, set hour to 3
                         $date->setDate($split[0], $split[1], $split[2])->setTime(3,0,0);
                     } catch (Exception $e) {
@@ -83,7 +83,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         if (! $date) {
             $date = Tinebase_DateTime::now();
-            $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -223,7 +223,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $cc = Sales_Controller_Contract::getInstance();
         $pc = Sales_Controller_ProductAggregate::getInstance();
         
-        $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone());
         $date->setDate($date->format('Y'), 1, 1)->setTime(0,0,0);
         $date->setTimezone('UTC');
         

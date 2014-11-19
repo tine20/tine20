@@ -510,7 +510,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                 if (! $lastInvoicePosition) {
                     // if no invoice position has been found, this is a new contract, so set start_date to the first day of the month of the contracts start_date
                     $date = clone $contract->start_date;
-                    $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $date->setTimezone(Tinebase_Core::getUserTimezone());
                     $date->setTime(0,0,0);
                     $date->setDate($date->format('Y'), $date->format('m'), 1);
                     $date->setTimezone('UTC');
@@ -520,7 +520,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                 } else {
                     $split = explode('-', $lastInvoicePosition->month);
                     $date = Tinebase_DateTime::now();
-                    $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $date->setTimezone(Tinebase_Core::getUserTimezone());
                     $date->setTime(0,0,0);
                     $date->setDate($split[0], $split[1], 1);
                     
@@ -541,7 +541,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                     $firstInvoicePosition = Sales_Controller_InvoicePosition::getInstance()->search($filter, $pagination)->getFirstRecord();
                     $split = explode('-', $firstInvoicePosition->month);
                     
-                    $startDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+                    $startDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone());
                     $startDate->setTime(0,0,0);
                     $startDate->setDate($split[0], $split[1], 1);
                     
