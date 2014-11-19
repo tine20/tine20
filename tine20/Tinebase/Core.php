@@ -723,7 +723,13 @@ class Tinebase_Core
                     case 'Redis':
                         $host = $config->caching->host ? $config->caching->host : ($config->caching->redis->host ? $config->caching->redis->host : 'localhost');
                         $port = $config->caching->port ? $config->caching->port : ($config->caching->redis->port ? $config->caching->redis->port : 6379);
-                        $prefix = (Setup_Controller::getInstance()->isInstalled('Tinebase')) ? Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() : 'TINESETUP';
+                        if ($config->caching && $config->caching->prefix) {
+                            $prefix = $config->caching->prefix;
+                        } else if ($config->caching && $config->caching->redis && $config->caching->redis->prefix) {
+                            $prefix = $config->caching->redis->prefix;
+                        } else {
+                            $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                        }
                         $prefix .= '_CACHE_';
                         $backendOptions = array(
                             'servers' => array(

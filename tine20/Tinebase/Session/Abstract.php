@@ -240,10 +240,14 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 break;
                 
             case 'Redis':
-                
                 $host   = ($config->session->host) ? $config->session->host : 'localhost';
                 $port   = ($config->session->port) ? $config->session->port : 6379;
-                $prefix = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_SESSION_';
+                if ($config->session && $config->session->prefix) {
+                    $prefix = $config->session->prefix;
+                } else {
+                    $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                }
+                $prefix = $prefix . '_SESSION_';
                 
                 Zend_Session::setOptions(array(
                     'gc_maxlifetime' => $maxLifeTime,
