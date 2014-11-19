@@ -1387,7 +1387,8 @@ class Tinebase_Core
             try {
                 $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
             } catch (Zend_Db_Statement_Exception $zdse) {
-                // could not get credential cache adapter, perhaps Tine 2.0 is not installed yet
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Could not get credential cache adapter, perhaps Tine 2.0 is not installed yet");
                 $cache = NULL;
             }
         
