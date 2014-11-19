@@ -497,7 +497,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $dir = new DirectoryIterator($path);
             } catch (UnexpectedValueException $uve) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . " Could not cleanup sessions: " . $e->getMessage());
+                    __METHOD__ . '::' . __LINE__ . " Could not cleanup sessions");
+                Tinebase_Exception::log($uve);
                 return;
             }
             
@@ -628,6 +629,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (! $accessLog->getId()) {
             $user->setLoginTime($accessLog->ip);
             if ($this->_writeAccessLog) {
+                $accessLog->setId(Tinebase_Record_Abstract::generateUID());
                 $accessLog = Tinebase_AccessLog::getInstance()->create($accessLog);
             }
         }
