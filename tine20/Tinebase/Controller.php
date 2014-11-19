@@ -207,7 +207,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _initUserSession($fixCookieHeader = true)
     {
-        Tinebase_Session::registerValidatorAccountStatus();
+        // FIXME 0010508: Session_Validator_AccountStatus causes problems
+        //Tinebase_Session::registerValidatorAccountStatus();
         
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();
