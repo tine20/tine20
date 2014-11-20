@@ -344,7 +344,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'loginFailures'         => $this->rowNameMapping['loginFailures'],
                     'contact_id',
                     'openid',
-                    'visibility'
+                    'visibility',
+                    'created_by',
+                    'creation_time',
+                    'last_modified_by',
+                    'last_modified_time',
+                    'is_deleted',
+                    'deleted_time',
+                    'deleted_by',
+                    'seq',
                 )
             )
             ->joinLeft(
@@ -751,22 +759,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
-        
-        $accountData = array(
-            'login_name'        => $_user->accountLoginName,
-            'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
-            'primary_group_id'  => $_user->accountPrimaryGroup,
-            'home_dir'          => $_user->accountHomeDirectory,
-            'login_shell'       => $_user->accountLoginShell,
-            'openid'            => $_user->openid,
-            'visibility'        => $_user->visibility,
-            'contact_id'        => $_user->contact_id,
-            $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
-            $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
-            $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
-            $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
-            $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
-        );
+        $accountData = $this->_recordToRawData($_user);
+        // don't update id
+        unset($accountData['id']);
         
         // ignore all other states (expired and blocked)
         if ($_user->accountStatus == Tinebase_User::STATUS_ENABLED) {
@@ -858,6 +853,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->contact_id = null;
         }
         
+        $accountData = $this->_recordToRawData($_user);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
+        
+        $accountsTable->insert($accountData);
+            
+        return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
+    }
+    
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_user
+     * @return array
+     */
+    protected function _recordToRawData($_user)
+    {
         $accountData = array(
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
@@ -867,20 +879,28 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'home_dir'          => $_user->accountHomeDirectory,
             'login_shell'       => $_user->accountLoginShell,
             'openid'            => $_user->openid,
-            'visibility'        => $_user->visibility, 
+            'visibility'        => $_user->visibility,
             'contact_id'        => $_user->contact_id,
             $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
             $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
             $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
             $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
+            'created_by'            => $_user->created_by,
+            'creation_time'         => $_user->creation_time,
+            'last_modified_by'      => $_user->last_modified_by,
+            'last_modified_time'    => $_user->last_modified_time,
+            'is_deleted'            => $_user->is_deleted,
+            'deleted_time'          => $_user->deleted_time,
+            'deleted_by'            => $_user->deleted_by,
+            'seq'                   => $_user->seq,
         );
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
+        if (empty($accountData['seq'])) {
+            unset($accountData['seq']);
+        }
         
-        $accountsTable->insert($accountData);
-            
-        return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
+        return $accountData;
     }
     
     /**

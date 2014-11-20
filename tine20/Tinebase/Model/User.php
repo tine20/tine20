@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * 
- * @todo        write more tests for functions
  */
 
 /**
@@ -79,6 +77,18 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     const ACCOUNT_STATUS_BLOCKED  = 'blocked';
     
     /**
+     * name of fields containing datetime or or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
+    );
+    
+    /**
      * list of zend inputfilter
      * 
      * this filter get used when validating user generated content with Zend_Input_Filter
@@ -109,6 +119,15 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'accountFirstName'      => array('allowEmpty' => true),
         'accountFullName'       => array('presence' => 'required'),
         'contact_id'            => array('allowEmpty' => true),
+        // @todo do we need this information in this model?
+        'created_by'            => array('allowEmpty' => true),
+        'creation_time'         => array('allowEmpty' => true),
+        'last_modified_by'      => array('allowEmpty' => true),
+        'last_modified_time'    => array('allowEmpty' => true),
+        'is_deleted'            => array('allowEmpty' => true),
+        'deleted_time'          => array('allowEmpty' => true),
+        'deleted_by'            => array('allowEmpty' => true),
+        'seq'                   => array('allowEmpty' => true),
     );
     
     /**
@@ -142,7 +161,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * represents the identifier
      * 
      * @var string
-     */    
+     */
     protected $_identifier = 'accountId';
     
     /**

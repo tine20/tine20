@@ -832,8 +832,8 @@ abstract class Tinebase_Controller_Record_Abstract
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Current record: ' . print_r($currentRecord->toArray(), TRUE));
-
-        // add _doForceModlogInfo behavior
+            
+            // add _doForceModlogInfo behavior
             $origRecord = clone ($_record);
             $this->_updateACLCheck($_record, $currentRecord);
             $this->_concurrencyManagement($_record, $currentRecord);

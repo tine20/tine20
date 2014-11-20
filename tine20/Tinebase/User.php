@@ -753,9 +753,11 @@ class Tinebase_User
         // update or create user in local sql backend
         try {
             $userBackend->getUserByProperty('accountLoginName', $adminLoginName);
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'update');
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
             // call addUser here to make sure, sql user plugins (email, ...) are triggered
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $user = $userBackend->addUser($user);
         }
         

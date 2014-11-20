@@ -39,50 +39,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $fields = array('<field>
-                <name>created_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>creation_time</name>
-                <type>datetime</type>
-            </field> ','
-            <field>
-                <name>last_modified_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>last_modified_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>is_deleted</name>
-                <type>boolean</type>
-                <default>false</default>
-            </field>','
-            <field>
-                <name>deleted_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>deleted_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>seq</name>
-                <type>integer</type>
-                <notnull>true</notnull>
-                <default>0</default>
-            </field>');
-        
-        foreach($fields as $field) {
-            $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            $this->_backend->addCol('sales_cost_centers', $declaration);
-        }
-        
+        $this->_addModlogFields('sales_cost_centers');
         $this->setTableVersion('sales_cost_centers', 2);
         $this->setApplicationVersion('Sales', '8.2');
     }
@@ -565,53 +522,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     protected function _addDivisionsModlog()
     {
-        $fields = array('<field>
-                <name>created_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>creation_time</name>
-                <type>datetime</type>
-            </field> ','
-            <field>
-                <name>last_modified_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>last_modified_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>is_deleted</name>
-                <type>boolean</type>
-                <default>false</default>
-            </field>','
-            <field>
-                <name>deleted_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>deleted_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>seq</name>
-                <type>integer</type>
-                <notnull>true</notnull>
-                <default>0</default>
-            </field>');
-        
-        foreach ($fields as $field) {
-            $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            try {
-                $this->_backend->addCol('sales_divisions', $declaration);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                Tinebase_Exception::log($zdse);
-            }
-        }
+        $this->_addModlogFields('sales_divisions');
         $this->setTableVersion('sales_divisions', 2);
     }
     
@@ -830,58 +741,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     protected function _addModlogToAddresses()
     {
-        $fields = array('<field>
-                    <name>start_date</name>
-                    <type>datetime</type>
-                </field>','
-                <field>
-                    <name>end_date</name>
-                    <type>datetime</type>
-                </field>','
-                <field>
-                    <name>created_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>','
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                </field>','
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>','
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                </field>','
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>','
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>','
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>','
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
-                </field>');
-    
-        foreach($fields as $field) {
-            $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            $this->_backend->addCol('sales_addresses', $declaration);
-        }
-    
+        $this->_addModlogFields('sales_addresses');
         $this->setTableVersion('sales_addresses', 2);
     }
     
@@ -1601,50 +1461,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     protected function _addModlogToProductAggregates()
     {
-        $fields = array('<field>
-                <name>created_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>creation_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>last_modified_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>last_modified_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>is_deleted</name>
-                <type>boolean</type>
-                <default>false</default>
-            </field>','
-            <field>
-                <name>deleted_by</name>
-                <type>text</type>
-                <length>40</length>
-            </field>','
-            <field>
-                <name>deleted_time</name>
-                <type>datetime</type>
-            </field>','
-            <field>
-                <name>seq</name>
-                <type>integer</type>
-                <notnull>true</notnull>
-                <default>0</default>
-            </field>');
-    
-        foreach($fields as $field) {
-            $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            $this->_backend->addCol('sales_product_agg', $declaration);
-        }
-    
+        $this->_addModlogFields('sales_product_agg');
         $this->setTableVersion('sales_product_agg', 3);
     }
 }

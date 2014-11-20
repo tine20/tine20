@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -57,6 +57,18 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
     protected $_identifier = 'id';
     
     /**
+     * name of fields containing datetime or or an array of datetime
+     * information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
+    );
+    
+    /**
      * @see Tinebase_Record_Abstract
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
@@ -69,8 +81,18 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
             'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
             'email'         => array('allowEmpty' => true),
-            'visibility'    => array(new Zend_Validate_InArray(array(self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED)),
-                Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED)
+            'visibility'    => array(
+                new Zend_Validate_InArray(array(self::VISIBILITY_HIDDEN, self::VISIBILITY_DISPLAYED)),
+                Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_DISPLAYED
+            ),
+            'created_by'             => array('allowEmpty' => true),
+            'creation_time'          => array('allowEmpty' => true),
+            'last_modified_by'       => array('allowEmpty' => true),
+            'last_modified_time'     => array('allowEmpty' => true),
+            'is_deleted'             => array('allowEmpty' => true),
+            'deleted_time'           => array('allowEmpty' => true),
+            'deleted_by'             => array('allowEmpty' => true),
+            'seq'                    => array('allowEmpty' => true),
         );
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);

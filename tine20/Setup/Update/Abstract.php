@@ -341,4 +341,55 @@ class Setup_Update_Abstract
             }
         }
     }
+
+    protected function _addModlogFields($table)
+    {
+        $fields = array('<field>
+                <name>created_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>creation_time</name>
+                <type>datetime</type>
+            </field> ','
+            <field>
+                <name>last_modified_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>last_modified_time</name>
+                <type>datetime</type>
+            </field>','
+            <field>
+                <name>is_deleted</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>','
+            <field>
+                <name>deleted_by</name>
+                <type>text</type>
+                <length>40</length>
+            </field>','
+            <field>
+                <name>deleted_time</name>
+                <type>datetime</type>
+            </field>','
+            <field>
+                <name>seq</name>
+                <type>integer</type>
+                <notnull>true</notnull>
+                <default>0</default>
+            </field>');
+        
+        foreach ($fields as $field) {
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            try {
+                $this->_backend->addCol($table, $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+            }
+        }
+    }
 }

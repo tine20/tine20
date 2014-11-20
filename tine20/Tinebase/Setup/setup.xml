@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>8.9</version>
+    <version>8.10</version>
     <tables>
         <table>
             <name>applications</name>
@@ -144,7 +144,7 @@
 
         <table>
             <name>groups</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -181,6 +181,44 @@
                     <type>text</type>
                     <length>40</length>
                 </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -206,7 +244,7 @@
 
         <table>
             <name>accounts</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -326,6 +364,44 @@
                     <name>contact_id</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
                 </field>
                 <index>
                     <name>id</name>

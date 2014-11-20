@@ -484,4 +484,16 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('container_content', '2');
         $this->setApplicationVersion('Tinebase', '8.9');
     }
+
+    /**
+     * update 9 -> adds modlog to users and groups
+     */
+    public function update_9()
+    {
+        $this->_addModlogFields('accounts');
+        $this->setTableVersion('accounts', '11');
+        $this->_addModlogFields('groups');
+        $this->setTableVersion('groups', '5');
+        $this->setApplicationVersion('Tinebase', '8.10');
+    }
 }

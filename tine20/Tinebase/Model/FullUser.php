@@ -68,12 +68,15 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
      * information
      *
      * @var array list of datetime fields
-     */    
+     */
     protected $_datetimeFields = array(
         'accountLastLogin',
         'accountLastPasswordChange',
         'accountExpires',
-        'lastLoginFailure'
+        'lastLoginFailure',
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
     );
     
     /**
@@ -229,6 +232,14 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 Tinebase_Model_User::VISIBILITY_HIDDEN, 
                 Tinebase_Model_User::VISIBILITY_DISPLAYED)
             ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
+            'created_by'            => array('allowEmpty' => true),
+            'creation_time'         => array('allowEmpty' => true),
+            'last_modified_by'      => array('allowEmpty' => true),
+            'last_modified_time'    => array('allowEmpty' => true),
+            'is_deleted'            => array('allowEmpty' => true),
+            'deleted_time'          => array('allowEmpty' => true),
+            'deleted_by'            => array('allowEmpty' => true),
+            'seq'                   => array('allowEmpty' => true),
         );
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);

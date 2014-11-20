@@ -200,8 +200,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 $_user->contact_id = $contact->getId();
             }
             
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
+            
             $user = $this->_userBackend->updateUser($_user);
-    
+            
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
@@ -268,6 +270,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 $contact = $this->createOrUpdateContact($_user);
                 $_user->contact_id = $contact->getId();
             }
+            
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'create');
             
             $user = $this->_userBackend->addUser($_user);
             

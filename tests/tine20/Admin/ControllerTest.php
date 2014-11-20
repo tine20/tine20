@@ -4,8 +4,10 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ * 
+ * @todo make tests independent
  */
 
 /**
@@ -102,22 +104,22 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to add an account
-     *
      */
     public function testAddAccount()
     {
         $account = Admin_Controller_User::getInstance()->create($this->objects['initialAccount'], 'lars', 'lars');
         $this->assertTrue(!empty($account->accountId));
-        //$this->assertTrue($this->objects['initialAccount']->accountId != $account->accountId);
         $this->assertEquals($this->objects['initialAccount']->accountLoginName, $account->accountLoginName);
         
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
         $this->assertTrue(!empty($contact->creation_time));
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account->created_by, 'created_by not matching');
+        $this->assertTrue($account->creation_time instanceof Tinebase_DateTime, 'creation time not set: ' . print_r($account->toArray(), true));
+        $this->assertEquals(Tinebase_DateTime::now()->format('Y-m-d'), $account->creation_time->format('Y-m-d'));
     }
     
     /**
      * try to get all accounts containing phpunit in there name
-     *
      */
     public function testGetAccounts()
     {
@@ -128,7 +130,6 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to delete an accout
-     *
      */
     public function testDeleteAccount()
     {
@@ -152,18 +153,18 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to add a group
-     *
      */
     public function testAddGroup()
     {
         $group = Admin_Controller_Group::getInstance()->create($this->objects['initialGroup']);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $group->created_by);
+        $this->assertEquals(Tinebase_DateTime::now()->format('Y-m-d'), $group->creation_time->format('Y-m-d'));
     }
     
     /**
      * try to get all groups
-     *
      */
     public function testGetGroups()
     {
@@ -199,5 +200,4 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
 
         $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());
     }
-    
 }

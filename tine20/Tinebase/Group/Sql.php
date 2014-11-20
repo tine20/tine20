@@ -423,7 +423,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         unset($data['container_id']);
         
         $this->groupsTable->insert($data);
-                
+        
         return $_group;
     }
     
@@ -465,8 +465,20 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             'description'   => $_group->description,
             'visibility'    => $_group->visibility,
             'email'         => $_group->email,
-            'list_id'       => $_group->list_id
+            'list_id'       => $_group->list_id,
+            'created_by'            => $_group->created_by,
+            'creation_time'         => $_group->creation_time,
+            'last_modified_by'      => $_group->last_modified_by,
+            'last_modified_time'    => $_group->last_modified_time,
+            'is_deleted'            => $_group->is_deleted,
+            'deleted_time'          => $_group->deleted_time,
+            'deleted_by'            => $_group->deleted_by,
+            'seq'                   => $_group->seq,
         );
+        
+        if (empty($data['seq'])) {
+            unset($data['seq']);
+        }
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
         
@@ -696,7 +708,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
         $select = $this->_db->select();
-
+        
         $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
         
         if ($this->_addressBookInstalled === true) {

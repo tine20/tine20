@@ -181,6 +181,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $_group->list_id = $list->getId();
         }
         
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'create');
         
         try {
             $group = Tinebase_Group::getInstance()->addGroup($_group);
@@ -233,6 +234,8 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $list = $this->createOrUpdateList($_group);
             $_group->list_id = $list->getId();
         }
+        
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, 'update', $oldGroup);
         
         $group = Tinebase_Group::getInstance()->updateGroup($_group);
         

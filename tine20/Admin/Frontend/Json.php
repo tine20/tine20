@@ -360,7 +360,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'errorMessage'      => 'invalid data for some fields',
                 'status'            => 'failure'
             );
-
+            
             return $result;
         }
         
@@ -643,9 +643,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $group = new Tinebase_Model_Group($groupData);
         $group->members = $groupMembers;
         
-        // this needs long 3execution time because cache invalidation may take long
-        // @todo remove this when "0007266: make groups / group memberships cache cleaning more efficient" is resolved 
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        // this needs long execution time because cache invalidation may take long
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(60); // 1 minute
         
         if ( empty($group->id) ) {
             $group = Admin_Controller_Group::getInstance()->create($group);

@@ -276,12 +276,11 @@ class Admin_JsonTest extends TestCase
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role');
         $this->assertEquals(array($adminRole->getId()), $roles);
-
+        
         $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
         $account['groups'] = array($account['accountPrimaryGroup']);
         
-        if (is_array($account['container_id']) && is_array($account['container_id']['id']))
-        {
+        if (is_array($account['container_id']) && is_array($account['container_id']['id'])) {
             $account['container_id'] = $account['container_id']['id'];
         }
         
@@ -289,6 +288,8 @@ class Admin_JsonTest extends TestCase
         
         $roles = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account['accountId']);
         $this->assertEquals(array(), $roles);
+        $this->assertTrue(isset($account['last_modified_by']), 'modlog fields missing from account: ' . print_r($account, true));
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $account['last_modified_by']);
     }
 
     /**
@@ -437,6 +438,7 @@ class Admin_JsonTest extends TestCase
 
         $this->assertGreaterThan(0,sizeof($result['groupMembers']));
         $this->assertEquals($this->objects['updatedGroup']->description, $result['description']);
+        $this->assertEquals(Tinebase_Core::getUser()->accountId, $result['last_modified_by'], 'last_modified_by not matching');
     }
 
     /**
@@ -446,7 +448,7 @@ class Admin_JsonTest extends TestCase
     {
         $this->testAddGroup();
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['updatedGroup']->name);
-
+        
         // set group members
         $userArray = $this->_createUser();
         Tinebase_Group::getInstance()->setGroupMembers($group->getId(), array($userArray['accountId']));
