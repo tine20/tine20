@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Ingo Ratsdorf <ingo@envirology.co.nz>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2014-11-20 23:20+0000\n"
+"Last-Translator: Ingo Ratsdorf <ingo@envirology.co.nz>\n"
 "Language-Team: English (Australia) (http://www.transifex.com/projects/p/tine20/language/en_AU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: Exception/InvalidUrl.php:26
 msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
+msgstr "This URL is invalid. Please use a valid one!"
 
 #: Acl/Rights.php:103
 msgid "manage shared calendars"
@@ -150,7 +151,7 @@ msgstr "unknown"
 #: Model/Attender.php:463
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr "This contact has been automatically added by the system as an event attender"
+msgstr "This contact has automatically been added by the system as an  attendee"
 
 #: Model/Attender.php:466
 msgid "The email address has been shortened:"
@@ -715,7 +716,7 @@ msgstr "Tags"
 
 #: js/AttendeeGridPanel.js:26
 msgid "Click here to invite another attender..."
-msgstr "Click here to invite another attender..."
+msgstr "Click here to invite another attendee..."
 
 #: js/AttendeeGridPanel.js:139 js/AddToEventPanel.js:78
 msgid "Role"
@@ -723,7 +724,7 @@ msgstr "Role"
 
 #: js/AttendeeGridPanel.js:153
 msgid "This is the calendar where the attender has saved this event in"
-msgstr "This is the calendar where the attender has saved this event in"
+msgstr "This is the calendar the attendee has saved this event in"
 
 #: js/AttendeeGridPanel.js:186
 msgid "Type"
@@ -747,7 +748,7 @@ msgstr "Member of group"
 
 #: js/AttendeeGridPanel.js:405
 msgid "Remove Attender"
-msgstr "Remove Attender"
+msgstr "Remove attendee"
 
 #: js/AttendeeGridPanel.js:418
 msgid "Compose email"
@@ -809,7 +810,7 @@ msgstr ""
 #: js/DaysView.js:110
 #, python-brace-format
 msgid "{0}, the {1}. of {2}"
-msgstr "{0}, the {1}. of {2}"
+msgstr "{0}, {1}. {2}"
 
 #: js/DaysView.js:706
 msgid "The summary must not be longer than 255 characters."

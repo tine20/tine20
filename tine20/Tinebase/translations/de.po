@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:43+0000\n"
+"PO-Revision-Date: 2014-11-21 11:57+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -109,7 +109,7 @@ msgstr "Ungültige Verknüpfung"
 msgid ""
 "You tried to create a relation which is forbidden by the constraints config "
 "of one of the models."
-msgstr ""
+msgstr "Sie haben versucht eine Relation zu erstellen, die durch eine, für dieses model konfigurierte, Beschränkung, verboten ist."
 
 #: Exception/Record/SystemContainer.php:22
 msgid "System Container"
@@ -201,7 +201,7 @@ msgstr "(pausiert)"
 
 #: js/ux/grid/GroupingGridPlugin.js:95
 msgid "Export Records from these Positions"
-msgstr ""
+msgstr "Exportiere Einträge dieser Positionen"
 
 #: js/ux/grid/PagingToolbar.js:57
 #, python-brace-format
@@ -2809,7 +2809,7 @@ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 #: Frontend/Cli.php:736
 #, python-format
 msgid "%s's personal "
-msgstr ""
+msgstr "%s's persönliche"
 
 #: Frontend/Http.php:407
 msgid "Your session is not valid. You need to login again."
@@ -2960,7 +2960,7 @@ msgstr "Konfiguriere Hook-Klasse für die Synchronisation durch den Benutzer"
 
 #: Config.php:477
 msgid "Allows to change data after fetching user from sync backend"
-msgstr ""
+msgstr "Änderung der Daten erlauben, nachdem ein Benutzer von einem synchronisierten Backend geladen wurde"
 
 #: Config.php:485
 msgid "IP Session Validator"
@@ -3105,7 +3105,7 @@ msgstr "Konto-Deaktivierungs Benachrichtigung"
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login"
 " with deactivated account"
-msgstr ""
+msgstr "Sende eine E-Mail an den Benutzer, wenn der Account deaktiviert wurde oder wenn der Benutzer versucht sich mit einem deaktivierten Account anzumelden."
 
 #: Config.php:676
 msgid "Role change allowed"

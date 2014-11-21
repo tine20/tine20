@@ -1,21 +1,16 @@
 # 
 # Translators:
-# Ettore Atalan <atalanttore@googlemail.com>, 2014
-# corneliusweiss <mail@corneliusweiss.de>, 2012
-# pschuele <p.schuele@metaways.de>, 2013
-# pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-21 11:50+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Language: en_NZ\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
@@ -24,328 +19,328 @@ msgstr ""
 #: Controller.php:102
 #, python-format
 msgid "%s's personal files"
-msgstr "Persönliche Dateien von %s"
+msgstr ""
 
 #: Exception/DestinationIsSameNode.php:26
 msgid "Destination has the same Path"
-msgstr "Ziel hat den gleichen Pfad"
+msgstr ""
 
 #: Exception/DestinationIsSameNode.php:31
 msgid ""
 "The destination has the same path the source has. No action has been "
 "performed."
-msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
+msgstr ""
 
 #: Exception/DestinationIsOwnChild.php:26
 msgid "Destination is a Subfolder"
-msgstr "Ziel ist ein Unterordner"
+msgstr ""
 
 #: Exception/DestinationIsOwnChild.php:31
 msgid ""
 "The destination is a subfolder. It is not allowed to copy or move a folder "
 "into one of its subfolders."
-msgstr "Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen seiner Unterordner zu kopieren oder zu verschieben."
+msgstr ""
 
 #: Acl/Rights.php:103
 msgid "manage shared folders"
-msgstr "Gemeinsame Ordner verwalten"
+msgstr ""
 
 #: Acl/Rights.php:104
 msgid "Create new shared folders"
-msgstr "Neue gemeinsame Ordner anlegen und verwalten"
+msgstr ""
 
 #: Acl/Rights.php:107
 msgid "Manage anonymous download links"
-msgstr "anonyme Download Links verwalten"
+msgstr ""
 
 #: Acl/Rights.php:108
 msgid "Allow to see, add and delete download links of files and folders"
-msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
+msgstr ""
 
 #: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:339
 msgid "Save locally"
-msgstr "Lokal speichern"
+msgstr ""
 
 #: js/NodeEditDialog.js:65
 msgid "Edit folder"
-msgstr "Ordner bearbeiten"
+msgstr ""
 
 #: js/NodeEditDialog.js:65
 msgid "edit file"
-msgstr "Datei bearbeiten"
+msgstr ""
 
 #: js/NodeEditDialog.js:67 js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
 msgid_plural "Folders"
-msgstr[0] "Ordner"
-msgstr[1] "Ordner"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/NodeEditDialog.js:67 js/Model.js:40
 msgid "File"
 msgid_plural "Files"
-msgstr[0] "Datei"
-msgstr[1] "Dateien"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/NodeEditDialog.js:113
 msgid "Public Links"
-msgstr "Öffentliche Links"
+msgstr ""
 
 #: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
 msgid "Name"
-msgstr "Name"
+msgstr ""
 
 #: js/NodeEditDialog.js:153 js/Model.js:527
 msgid "Type"
-msgstr "Typ"
+msgstr ""
 
 #: js/NodeEditDialog.js:161 js/DownloadLinkGridPanel.js:244
 #: js/NodeGridPanel.js:182
 msgid "Created By"
-msgstr "Erstellt von"
+msgstr ""
 
 #: js/NodeEditDialog.js:164 js/DownloadLinkGridPanel.js:252 js/Model.js:529
 #: js/NodeGridPanel.js:174
 msgid "Creation Time"
-msgstr "Erstellt am"
+msgstr ""
 
 #: js/NodeEditDialog.js:173
 msgid "Modified By"
-msgstr "Zuletzt geändert von"
+msgstr ""
 
 #: js/NodeEditDialog.js:176
 msgid "Last Modified"
-msgstr "Letzter Änderungszeitpunkt"
+msgstr ""
 
 #: js/NodeEditDialog.js:199
 msgid "Description"
-msgstr "Beschreibung"
+msgstr ""
 
 #: js/NodeEditDialog.js:213
 msgid "Enter description"
-msgstr "Beschreibung eingeben"
+msgstr ""
 
 #: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
 #: js/NodeGridPanel.js:847
 msgid "Upload Failed"
-msgstr "Hochladen fehlgeschlagen"
+msgstr ""
 
 #: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size:"
-msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
+msgstr ""
 
 #: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
 msgid "Putting files in this folder is not allowed!"
-msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:63
 msgid "Create Public Link"
-msgstr "Öffentlichen Link erstellen"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:71
 msgid "Remove record"
-msgstr "Eintrag entfernen"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:133
 msgid "Creating new Download Link..."
-msgstr "Erstelle neuen Download Link..."
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:171
 msgid "Deleting Download Links..."
-msgstr "Lösche Download Links..."
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:171
 msgid "Deleting Download Link..."
-msgstr "Lösche Download Link..."
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:228
 msgid "Url"
-msgstr "URL"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
-msgstr "Fristablauf"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:269 js/NodeGridPanel.js:189
 msgid "Last Modified Time"
-msgstr "Zuletzt geändert"
+msgstr ""
 
 #: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
 msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
+msgstr ""
 
 #: js/GridContextMenu.js:34
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den neuen Namen von {0} eingeben"
+msgstr ""
 
 #: js/GridContextMenu.js:40
 #, python-brace-format
 msgid "Not renamed {0}"
-msgstr "Unbenannter {0}"
+msgstr ""
 
 #: js/GridContextMenu.js:40 js/NodeGridPanel.js:547
 #, python-brace-format
 msgid "You have to supply a {0} name!"
-msgstr "Sie müssen einen {0}-namen angeben!"
+msgstr ""
 
 #: js/GridContextMenu.js:144 js/NodeGridPanel.js:588
 msgid "Do you really want to delete the following files?"
-msgstr "Möchten Sie folgende Datei(en) löschen?"
+msgstr ""
 
 #: js/Filemanager.js:36
 msgid "Filemanager"
-msgstr "Dateimanager"
+msgstr ""
 
 #: js/PathFilterModel.js:50
 msgid "path"
-msgstr "Pfad"
+msgstr ""
 
 #: js/Model.js:279 js/Model.js:295
 #, python-brace-format
 msgid "Copying data .. {0}"
-msgstr "Kopiere Daten .. {0}"
+msgstr ""
 
 #: js/Model.js:282 js/Model.js:297
 #, python-brace-format
 msgid "Moving data .. {0}"
-msgstr "Verschiebe Daten .. {0}"
+msgstr ""
 
 #: js/Model.js:301
 msgid "Please wait"
-msgstr "Bitte warten"
+msgstr ""
 
 #: js/Model.js:526
 msgid "Quick Search"
-msgstr "Schnellsuche"
+msgstr ""
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
-msgstr "Typ"
+msgstr ""
 
 #: js/Model.js:553
 msgid "Download Link"
 msgid_plural "Download Links"
-msgstr[0] "Download Link"
-msgstr[1] "Download Links"
+msgstr[0] ""
+msgstr[1] ""
 
 #: js/ExceptionHandler.js:32
 msgid "Service Unavailable"
-msgstr "Dienst nicht verfügbar"
+msgstr ""
 
 #: js/ExceptionHandler.js:33
 #, python-brace-format
 msgid ""
 "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0"
 " Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
+msgstr ""
 
 #: js/ExceptionHandler.js:55
 msgid "Files already exists"
-msgstr "Datei(en) schon vorhanden"
+msgstr ""
 
 #: js/ExceptionHandler.js:55
 msgid "Do you want to replace the following file(s)?"
-msgstr "Möchten Sie die folgenden Datei(en) ersetzen?"
+msgstr ""
 
 #: js/ExceptionHandler.js:99
 msgid "Failure on create folder"
-msgstr "Fehler beim anlegen des Ordners"
+msgstr ""
 
 #: js/ExceptionHandler.js:100
 msgid "Item with this name already exists!"
-msgstr "Item(s) mit diesem Namen schon vorhanden!"
+msgstr ""
 
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
-msgstr "Knoten Download Links"
+msgstr ""
 
 #: js/DownloadLinkDialog.js:83
 #, python-brace-format
 msgid "Sieve Filter Rules for {0}"
-msgstr "Sieve Filterregeln für {0}"
+msgstr ""
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"
-msgstr "Tags"
+msgstr ""
 
 #: js/NodeGridPanel.js:135
 msgid "Size"
-msgstr "Größe"
+msgstr ""
 
 #: js/NodeGridPanel.js:159
 msgid "Revision"
-msgstr "Version"
+msgstr ""
 
 #: js/NodeGridPanel.js:244
 #, python-brace-format
 msgid "The max. Upload Filesize is {0} MB"
-msgstr "Die maximale Dateigröße beträgt {0} MB"
+msgstr ""
 
 #: js/NodeGridPanel.js:282
 msgid "Upload"
-msgstr "Hochladen"
+msgstr ""
 
 #: js/NodeGridPanel.js:306
 msgid "Edit Properties"
-msgstr "Eigenschaften bearbeiten"
+msgstr ""
 
 #: js/NodeGridPanel.js:317
 msgid "Create Folder"
-msgstr "Ordner anlegen"
+msgstr ""
 
 #: js/NodeGridPanel.js:328
 msgid "Folder Up"
-msgstr "Aufwärts"
+msgstr ""
 
 #: js/NodeGridPanel.js:349 js/NodeGridPanel.js:350 js/NodeGridPanel.js:352
 msgid "Delete"
-msgstr "Löschen"
+msgstr ""
 
 #: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
 msgid "Publish"
-msgstr "Veröffentlichen"
+msgstr ""
 
 #: js/NodeGridPanel.js:422
 msgid "Folder has been published successfully"
-msgstr "Ordner wurde erfolgreich veröffentlicht"
+msgstr ""
 
 #: js/NodeGridPanel.js:422
 msgid "File has been published successfully"
-msgstr "Datei wurde erfolgreich veröffentlicht"
+msgstr ""
 
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Url: {0}"
-msgstr "URL: {0}"
+msgstr ""
 
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Valid Until: {1}"
-msgstr "Gültig bis: {1}"
+msgstr ""
 
 #: js/NodeGridPanel.js:543
 msgid "New Folder"
-msgstr "Neuer Ordner"
+msgstr ""
 
 #: js/NodeGridPanel.js:543
 msgid "Please enter the name of the new folder:"
-msgstr "Bitte geben Sie den Namen für den neuen Ordner ein:"
+msgstr ""
 
 #: js/NodeGridPanel.js:547
 #, python-brace-format
 msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
+msgstr ""
 
 #: Controller/Node.php:318
 msgid "My folders"
-msgstr "Meine Ordner"
+msgstr ""
 
 #: Controller/Node.php:325
 msgid "Shared folders"
-msgstr "Gemeinsame Ordner"
+msgstr ""
 
 #: Controller/Node.php:332
 msgid "Other users folders"
-msgstr "Ordner anderer Benutzer"
+msgstr ""
