@@ -450,7 +450,6 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
             $this->_backend->renameTable('humanresources_extra_freetime', 'humanresources_extrafreetime');
         }
         
-        
         $field = '<field>
                     <name>expires</name>
                     <type>datetime</type>
@@ -458,7 +457,11 @@ class HumanResources_Setup_Update_Release7 extends Setup_Update_Abstract
                 </field>';
     
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
-        $this->_backend->addCol('humanresources_extrafreetime', $declaration);
+        try {
+            $this->_backend->addCol('humanresources_extrafreetime', $declaration);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_Exception::log($zdse);
+        }
         $this->setTableVersion('humanresources_extrafreetime', '2');
         
         $field = '<field>
