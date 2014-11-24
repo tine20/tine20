@@ -485,7 +485,6 @@
                     <type>text</type>
                     <default>yes</default>
                     <length>10</length>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>context_id</name>
