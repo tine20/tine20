@@ -1389,7 +1389,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $until = Tinebase_DateTime::now()->addWeek(2);
         $result = Calendar_Controller_Event::getInstance()->compareCalendars($cal1->getId(), $cal2->getId(), $from, $until);
         
-        $this->assertEquals(1, count($result['matching']), 'event3 + 4 should have matched: ' . print_r($result['matching']->toArray(), true));
+        $this->assertEquals(2, count($result['matching']), 'events 3+4 / 8+9 should have matched: ' . print_r($result['matching']->toArray(), true));
         $this->assertEquals(1, count($result['changed']), 'event 5 should appear in changed: ' . print_r($result['changed']->toArray(), true));
         $this->assertEquals(1, count($result['missingInCal1']), 'event 2 should miss from cal1: ' . print_r($result['missingInCal1']->toArray(), true));
         $this->assertEquals(1, count($result['missingInCal2']), 'event 6 should miss from cal2 ' . print_r($result['missingInCal2']->toArray(), true));
@@ -1404,6 +1404,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * - event5: slightly different from event1 (same summary) / in cal2
      * - event6: only in cal1 (next week)
      * - event7: only in displaycontainer
+     * - event8+9: in both calendars (whole day)
      * 
      * @param Tinebase_Model_Container $cal1
      * @param Tinebase_Model_Container $cal2
@@ -1462,6 +1463,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->create($event7);
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $currentDefault);
+        
+        $event8 = $this->_getEvent(true);
+        $event8->summary = 'event 8';
+        $event8->is_all_day_event = true;
+        $event9 = clone $event8;
+        $this->_controller->create($event8);
+        
+        $event9->container_id = $cal2->getId();
+        $this->_controller->create($event9);
     }
     
     public function testRepairAttendee()
