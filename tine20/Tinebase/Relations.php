@@ -483,7 +483,7 @@ class Tinebase_Relations
                 $u = Tinebase_Core::getUser();
                 
                 // if a manage right is defined and the user has no manage_record or admin right, remove relations having this record class as related model
-                if ($ref->hasConstant(strtoupper($rightName)) && (! $u->hasRight($split[0], $rightName)) && (! $u->hasRight($split[0], Tinebase_Acl_Rights::ADMIN))) {
+                if (is_object($u) && $ref->hasConstant(strtoupper($rightName)) && (! $u->hasRight($split[0], $rightName)) && (! $u->hasRight($split[0], Tinebase_Acl_Rights::ADMIN))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         $_relations->removeRecords($relations);
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping relation due to no manage right: ' . $modelName);

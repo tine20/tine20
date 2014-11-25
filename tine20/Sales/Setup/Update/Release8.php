@@ -93,7 +93,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         
         if (count($groupMembers) > 0) {
-            Tinebase_Core::set(Tinebase_Core::USER, $groupMembers[0]);
+            $user = Tinebase_User::getInstance()->getUserById($groupMembers[0]);
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
         
             // cleared, cleared_in, status gets deleted, if the update is not called on cli
             $controller = Sales_Controller_Contract::getInstance();
@@ -1185,7 +1186,14 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_products') . ' SET ' . $db->quoteInto($db->quoteIdentifier('accountable') . ' = ?', 'Sales_Model_Product');
         $db->query($sql);
         
-        $this->_transferBillingInformation();
+        if (! $this->_backend->columnExists('created_by', 'sales_product_agg')) {
+            $this->_addModlogToProductAggregates();
+        }
+        try {
+            $this->_transferBillingInformation();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
         
         // remove billing_point, last_autobill, interval from contracts
         $this->_backend->dropCol('sales_contracts', 'billing_point');
@@ -1203,7 +1211,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($adminGroup->getId());
         
         if (count($groupMembers) > 0) {
-            Tinebase_Core::set(Tinebase_Core::USER, $groupMembers[0]);
+            $user = Tinebase_User::getInstance()->getUserById($groupMembers[0]);
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
             Sales_Controller_Contract::getInstance()->transferBillingInformation();
         }
     }
