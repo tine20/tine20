@@ -199,14 +199,14 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     
                     $user->contact_id = $contact->getId();
                 }
-
+                
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
                 $user = Tinebase_User::getInstance()->addUser($user);
-
+                
                 Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
-
+                
                 if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
                     $listBackend = new Addressbook_Backend_List();
-
                     $listBackend->addListMember($group->list_id, $user->contact_id);
                 }
 
