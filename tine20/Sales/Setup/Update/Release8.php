@@ -208,8 +208,12 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         );
         
         foreach($fields as $field) {
-            $declaration = new Setup_Backend_Schema_Field_Xml($field);
-            $this->_backend->addCol('sales_contracts', $declaration);
+            try {
+                $declaration = new Setup_Backend_Schema_Field_Xml($field);
+                $this->_backend->addCol('sales_contracts', $declaration);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+            }
         }
         
         $table = new Zend_Db_Table(SQL_TABLE_PREFIX . 'sales_contracts', new Zend_Db_Table_Definition(array(
