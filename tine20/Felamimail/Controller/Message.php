@@ -609,7 +609,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $bodyCharCountBefore = strlen($body);
                 $body = $this->_purifyBodyContent($body, $_message->getId());
-                $body = Tinebase_Mail::linkify($body);
                 $bodyCharCountAfter = strlen($body);
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
