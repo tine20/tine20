@@ -495,10 +495,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $unlinked = 0;
             try {
                 $dir = new DirectoryIterator($path);
-            } catch (UnexpectedValueException $uve) {
+            } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . " Could not cleanup sessions");
-                Tinebase_Exception::log($uve);
+                Tinebase_Exception::log($e);
                 return;
             }
             
