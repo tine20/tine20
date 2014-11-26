@@ -140,7 +140,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             height: 100,
             items: [{
                 xtype: 'label',
-                html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0') + '</p><br />'
             }, {
                 xtype: 'tw.uploadbutton',
                 ref: '../../uploadButton',
@@ -179,7 +179,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             //height: 230,
             items: [{
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Please choose a remote location you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p>' + this.app.i18n._('Please choose a remote location you want to add to Tine 2.0') + '</p><br />'
             }, {
                 ref: '../../remoteLocation',
                 xtype: 'textfield',
@@ -227,7 +227,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }
             }, {
                 xtype: 'label',
-                html: '<p><br />' + this.app.i18n._('Refresh time').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p><br />' + this.app.i18n._('Refresh time') + '</p><br />'
             }, {
                 xtype: 'combo',
                 mode: 'local',
@@ -329,13 +329,13 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             items: [
             {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                html: '<p>' + this.app.i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.') + '</p><br />'
             }, {
 //                xtype: 'label',
-//                html: '<p>' + this.app.i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+//                html: '<p>' + this.app.i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.') + '</p><br />'
 //            }, {
                 xtype: 'label',
-                html: '<p>' + this.app.i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '<br /><br /></p>'
+                html: '<p>' + this.app.i18n._('Please select the import format of the file you want to upload') + '<br /><br /></p>'
             }, {
                 xtype: 'combo',
                 ref: '../../definitionCombo',
