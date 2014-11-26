@@ -207,10 +207,15 @@ class Tinebase_Core
     
     /**
      * dispatch request
+     * 
+     * @param \Zend\Http\Request $request
      */
     public static function getDispatchServer(\Zend\Http\Request $request)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " " . $request->toString());
+        // TODO think about logging only the headers here
+//         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+//             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $request->toString());
+//         }
         
         /**************************** JSON API *****************************/
         if (($request->getHeaders('X-TINE20-REQUEST-TYPE') && $request->getHeaders('X-TINE20-REQUEST-TYPE')->getFieldValue() === 'JSON')  ||
