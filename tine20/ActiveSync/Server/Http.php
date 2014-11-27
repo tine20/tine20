@@ -66,9 +66,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         
         $this->_initializeRegistry();
         
-        $request = new Zend_Controller_Request_Http(
-            Zend_Uri::factory('http://localhost' . $this->_request->getUriString())
-        );
+        $request = new Zend_Controller_Request_Http();
+        $request->setRequestUri($this->_request->getRequestUri());
         
         $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $request, $this->_body);
         
