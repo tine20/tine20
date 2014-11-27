@@ -404,7 +404,8 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         // check alarm ack client + ip
         $accessLog = Tinebase_Core::get(Tinebase_Core::USERACCESSLOG);
         $this->assertEquals($accessLog->ip, $updatedAlarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_IP), 'ip not found in options: ' . print_r($updatedAlarm->toArray(), true));
-        $this->assertEquals($accessLog->clienttype, $updatedAlarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT), 'clienttype not found in options: ' . print_r($updatedAlarm->toArray(), true));
+        $expectedClient = $accessLog->clienttype . '|' . $_SERVER['HTTP_USER_AGENT'];
+        $this->assertEquals($expectedClient, $updatedAlarm->getOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT), 'clienttype not found in options: ' . print_r($updatedAlarm->toArray(), true));
     }
     
     /**
