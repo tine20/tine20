@@ -18,6 +18,16 @@
 class Setup_Server_Json extends Tinebase_Server_Json
 {
     /**
+     *
+     */
+    public function __construct()
+    {
+        if ($this->_supportsSessions) {
+            Tinebase_Session_Abstract::setSessionEnabled('TINE20SETUPSESSID');
+        }
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
      */
@@ -31,8 +41,6 @@ class Setup_Server_Json extends Tinebase_Server_Json
             $server->setAutoHandleExceptions(false);
             $server->setAutoEmitResponse(false);
             $request = new Zend_Json_Server_Request_Http();
-            
-            Tinebase_Session_Abstract::setSessionEnabled('TINE20SETUPSESSID');
             
             if (Tinebase_Session::sessionExists()) {
                 Setup_Core::startSetupSession();

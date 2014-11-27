@@ -57,8 +57,9 @@ class Setup_Core extends Tinebase_Core
     }
     
     /**
+     * startSetupSession
      * 
-     * @throws Exception
+     * TODO remove redundancy with Tinebase_Core::startCoreSession()
      */
     public static function startSetupSession ()
     {
@@ -72,7 +73,10 @@ class Setup_Core extends Tinebase_Core
             self::set(self::USER, $setupSession->setupuser);
         }
         
-        Tinebase_Core::startCoreSession();
+        if (!isset($setupSession->jsonKey)) {
+            $setupSession->jsonKey = Tinebase_Record_Abstract::generateUID();
+        }
+        self::set('jsonKey', $setupSession->jsonKey);
     }
     
     /**

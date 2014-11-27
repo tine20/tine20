@@ -48,6 +48,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      */
     public function login($username, $password)
     {
+        Setup_Core::startSetupSession();
+        
         if (Setup_Controller::getInstance()->login($username, $password)) {
             $response = array(
                 'success'       => TRUE,

@@ -1319,7 +1319,6 @@ class Setup_Controller
         
         if ($authResult->isValid()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
-            //Tinebase_Session::registerValidator(new Tinebase_Session_Validator_HttpUserAgent());
             Tinebase_Session::regenerateId();
             
             Setup_Core::set(Setup_Core::USER, $_username);

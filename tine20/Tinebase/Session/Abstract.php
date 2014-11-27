@@ -192,6 +192,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
             $sessionDir .= DIRECTORY_SEPARATOR . $sessionDirName;
         }
         
+        Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " Using session dir: " . $sessionDir);
+        
         return $sessionDir;
     }
     
