@@ -557,13 +557,19 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
     {
+        if ($header = $request->getHeaders('USER-AGENT')) {
+            $userAgent = substr($header->getFieldValue(), 0, 255);
+        } else {
+            $userAgent = 'unknown';
+        }
+        
         $accessLog = new Tinebase_Model_AccessLog(array(
             'ip'         => $request->getServer('REMOTE_ADDR'),
             'li'         => Tinebase_DateTime::now(),
             'result'     => $authResult->getCode(),
             'clienttype' => $clientIdString,
             'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
-            'user_agent' => substr($request->getHeaders('USER-AGENT')->getFieldValue(), 0, 255)
+            'user_agent' => $userAgent
         ), true);
         
         return $accessLog;
