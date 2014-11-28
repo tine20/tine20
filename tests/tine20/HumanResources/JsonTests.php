@@ -228,7 +228,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * test if no account is found, id should stay
      * 
      * 0008608: After an account got deleted, opening of the corresponding employee fails
-     * rt111840: https://service.metaways.net/Ticket/Display.html?id=111840
      */
     public function testResolveDeactivatedAccounts()
     {
@@ -245,9 +244,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $e = $this->_json->getEmployee($e['id']);
         
-        $this->assertFalse(is_array($e['account_id']));
-        $this->assertEquals($a->accountId, $e['account_id']);
+        $this->assertEquals($a->accountId, $e['account_id']['accountId']);
     }
+    
+    /**
+     * remove employees helper
+     */
     protected function _removeAllEmployees()
     {
         $es = $this->_json->searchEmployees(array(), array());
@@ -256,7 +258,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $eIds[] = $e['id'];
         }
         $this->_json->deleteEmployees($eIds);
-    } 
+    }
+    
     /**
      * test employee creation/update with contracts
      */

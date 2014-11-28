@@ -75,6 +75,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         if ($resolveFields && is_array($resolveFields)) {
             // don't search twice if the same recordClass gets resolved on multiple fields
+            $resolveRecords = array();
             foreach ($resolveFields as $fieldKey => $fieldConfig) {
                 $resolveRecords[$fieldConfig['config']['recordClassName']][] = $fieldKey;
             }
@@ -82,45 +83,62 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             foreach ($resolveRecords as $foreignRecordClassName => $fields) {
                 $foreignIds = array();
                 $fields = (array) $fields;
-                
-                foreach($fields as $field) {
-                    $foreignIds = array_unique(array_merge($foreignIds, $_records->{$field}));
+                foreach ($fields as $field) {
+                    $idsForField = $_records->{$field};
+                    foreach ($idsForField as $key => $value) {
+                        if ($value && ! in_array($value, $foreignIds)) {
+                            $foreignIds[] = $value;
+                        }
+                    }
                 }
                 
-                if (! Tinebase_Core::getUser()->hasRight(substr($foreignRecordClassName, 0, strpos($foreignRecordClassName, "_")), Tinebase_Acl_Rights_Abstract::RUN)) {
+                if (empty($foreignIds)) {
                     continue;
                 }
                 
                 $cfg = $resolveFields[$fields[0]];
                 
                 if ($cfg['type'] == 'user') {
-                    $foreignRecords = Tinebase_User::getInstance()->getUsers();
-                } elseif ($cfg['type'] == 'container') {
+                    $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
+                } else if ($cfg['type'] == 'container') {
                     $foreignRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
                     $foreignRecords->addRecord(Tinebase_Container::getInstance()->get($_id));
                 // TODO: resolve recursive records of records better in controller
                 // TODO: resolve containers
                 } else {
-                    $controller = (isset($cfg['config']['controllerClassName']) || array_key_exists('controllerClassName', $cfg['config'])) ? $cfg['config']['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-                    $foreignRecords = $controller->getMultiple($foreignIds);
+                    try {
+                        $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+                        $foreignRecords = $controller->getMultiple($foreignIds);
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' No right to access application of record ' . $foreignRecordClassName);
+                        continue;
+                    }
                 }
                 
+                if ($foreignRecords->count() === 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No matching foreign records found (' . $foreignRecordClassName . ')');
+                    continue;
+                }
                 $foreignRecords->setTimezone(Tinebase_Core::getUserTimezone());
                 $foreignRecords->convertDates = true;
-                Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($foreignRecords);
+                Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($foreignRecords);
                 $fr = $foreignRecords->getFirstRecord();
                 if ($fr && $fr->has('notes')) {
                     Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
                 }
                 
-                if ($foreignRecords->count()) {
-                    foreach ($_records as $record) {
-                        foreach ($fields as $field) {
-                            if (is_scalar($record->{$field})) {
-                                $idx = $foreignRecords->getIndexById($record->{$field});
-                                if (isset($idx) && $idx !== FALSE) {
-                                    $record->{$field} = $foreignRecords[$idx];
-                                }
+                foreach ($_records as $record) {
+                    foreach ($fields as $field) {
+                        $foreignId = $record->{$field};
+                        if (is_scalar($foreignId)) {
+                            $idx = $foreignRecords->getIndexById($foreignId);
+                            if (isset($idx) && $idx !== FALSE) {
+                                $record->{$field} = $foreignRecords[$idx];
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                    . ' No matching foreign record found for id: ' . $foreignId);
                             }
                         }
                     }
@@ -164,7 +182,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     }
     
     /**
-     * resolve foreign fields for records
+     * resolve foreign fields for records like user ids to users, etc.
      * 
      * @param Tinebase_Record_RecordSet $records
      * @param string $foreignRecordClassName
@@ -183,8 +201,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Not resolving ' . $foreignRecordClassName . ' records because user has no right to run app.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                . ' No right to access application of record ' . $foreignRecordClassName);
             return;
         }
         
@@ -341,7 +359,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             return $controller->resolveVirtualFields($resultSet);
         }
         
-        foreach($virtualFields as $field) {
+        foreach ($virtualFields as $field) {
             // resolve virtual relation record from relations property
             if (! $multiple && isset($field['type']) && $field['type'] == 'relation') {
                 $fc = $field['config'];
@@ -353,7 +371,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     }
                 }
             // resolve virtual field by function
-            } elseif ((isset($field['function']) || array_key_exists('function', $field))) {
+            } else if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
                         $class  = $field['function'][0];
@@ -390,7 +408,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
-        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($records);
+        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records);
         
         self::resolveMultipleIdFields($records);
         
