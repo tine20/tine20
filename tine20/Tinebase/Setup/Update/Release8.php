@@ -437,13 +437,14 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->_backend->alterCol('access_log', $declaration);
         
-        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-            <name>user_agent</name>
-            <type>text</type>
-            <length>255</length>
-        </field>');
-        
-        $this->_backend->addCol('access_log', $declaration);
+        if (! $this->_backend->columnExists('user_agent', 'access_log')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                <name>user_agent</name>
+                <type>text</type>
+                <length>255</length>
+            </field>');
+            $this->_backend->addCol('access_log', $declaration);
+        }
         
         $declaration = new Setup_Backend_Schema_Index_Xml('<index>
             <name>account_id-ip</name>
