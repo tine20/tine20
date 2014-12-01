@@ -271,13 +271,23 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
      */
     protected function _checkManageRightForCurrentUser($record, $_throwException = false, $oldRecord = null)
     {
+        $user = Tinebase_Core::getUser();
+        
+        if (! is_object($user)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' No valid user found.');
+            return true;
+        }
+        
         if ($this->_belongsToCurrentUser($record)) {
-            // you always have the right to manage your own filters
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' You always have the right to manage your own filters');
             return true;
         }
         
         if ($oldRecord && $oldRecord->account_id === $record->account_id && $this->_checkGrant($record, 'update')) {
-            // edit grant is sufficient to change record if account id does not change
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Edit grant is sufficient to change record if account id does not change');
             return true;
         }
         
@@ -293,7 +303,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
             $rec = $record;
         }
         
-        $right = Tinebase_Core::getUser()->hasRight($record->application_id, $this->_getManageSharedRight($rec));
+        $right = $user->hasRight($record->application_id, $this->_getManageSharedRight($rec));
         if (! $right && $_throwException) {
             throw new Tinebase_Exception_AccessDenied('You are not allowed to manage shared favorites!'); 
         }
