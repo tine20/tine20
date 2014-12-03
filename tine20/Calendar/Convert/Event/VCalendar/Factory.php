@@ -26,6 +26,13 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_TINE        = 'tine';
     
     /**
+     * cache parsed user-agent strings
+     * 
+     * @var array
+     */
+    static protected $_parsedUserAgentCache = array();
+    
+    /**
      * factory function to return a selected vcalendar backend class
      *
      * @param   string $_backend
@@ -71,6 +78,10 @@ class Calendar_Convert_Event_VCalendar_Factory
      */
     static public function parseUserAgent($_userAgent)
     {
+        if (isset(self::$_parsedUserAgentCache[$_userAgent])) {
+            return self::$_parsedUserAgentCache[$_userAgent];
+        }
+        
         // MacOS X
         if (preg_match(Calendar_Convert_Event_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX;
@@ -109,6 +120,8 @@ class Calendar_Convert_Event_VCalendar_Factory
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
+        
+        self::$_parsedUserAgentCache[$_userAgent] = array($backend, $version);
         
         return array($backend, $version);
     }

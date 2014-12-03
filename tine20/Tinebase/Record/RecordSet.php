@@ -52,13 +52,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     protected $_validationErrors = array();
 
     /**
-     * Holds indices
-     *
-     * @var array indicesname => indicesarray
-     */
-    protected $_indices = array();
-    
-    /**
      * creates new Tinebase_Record_RecordSet
      *
      * @param string $_className the required classType
@@ -89,7 +82,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         foreach ($this->_listOfRecords as $key => $record) {
             $this->_listOfRecords[$key] = clone $record;
         }
-        $this->_buildIndices();
     }
     
     /**
@@ -125,9 +117,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->_idMap[$recordId] = $index;
         } else {
             $this->_idLess[] = $index;
-        }
-        foreach ($this->_indices as $name => &$propertyIndex) {
-            $propertyIndex[$index] = $_record->$name;
         }
         
         return $index;
@@ -327,18 +316,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_name
      * @param mixed $_value
      * @return void
-     * 
-     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     public function __set($_name, $_value)
     {
         foreach ($this->_listOfRecords as $record) {
             $record->$_name = $_value;
-        }
-        if (FALSE && (isset($this->_indices[$_name]) || array_key_exists($_name, $this->_indices))) {
-            foreach ($this->_indices[$_name] as $key => $oldvalue) {
-                $this->_indices[$_name][$key] = $_value;
-            }
         }
     }
     
@@ -347,20 +329,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * 
      * @param  string $_name property
      * @return array index => property
-     * 
-     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     public function __get($_name)
     {
-        // NOTE: indices may lead to wrong results if a record is changed after build of indices
-        if (FALSE && (isset($this->_indices[$_name]) || array_key_exists($_name, $this->_indices))) {
-            $propertiesArray = $this->_indices[$_name];
-        } else {
-            $propertiesArray = array();
-            foreach ($this->_listOfRecords as $index => $record) {
-                $propertiesArray[$index] = $record->$_name;
-            }
+        $propertiesArray = array();
+        
+        foreach ($this->_listOfRecords as $index => $record) {
+            $propertiesArray[$index] = $record->$_name;
         }
+        
         return $propertiesArray;
     }
     
@@ -513,29 +490,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function addIndices(array $_properties)
     {
-        if (! empty($_properties)) {
-            foreach ($_properties as $property) {
-                if (! (isset($this->_indices[$property]) || array_key_exists($property, $this->_indices))) {
-                    $this->_indices[$property] = array();
-                }
-            }
-            
-            $this->_buildIndices();
-        }
-        
         return $this;
-    }
-    
-    /**
-     * build all indices of this set
-     *
-     */
-    protected function _buildIndices()
-    {
-        foreach ($this->_indices as $name => $propertyIndex) {
-            unset($this->_indices[$name]);
-            $this->_indices[$name] = $this->__get($name);
-        }
     }
     
     /**
@@ -550,7 +505,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $matchingRecords = $this->_getMatchingRecords($_field, $_value, $_valueIsRegExp);
         
         $result = new Tinebase_Record_RecordSet($this->_recordClass, $matchingRecords);
-        $result->addIndices(array_keys($this->_indices));
         
         return $result;
     }
@@ -565,7 +519,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     {
         if ($recordsByRef) {
             $result = new Tinebase_Record_RecordSet($this->_recordClass, $this->_listOfRecords);
-            $result->addIndices(array_keys($this->_indices));
         } else {
             $result = clone $this;
         }
@@ -593,22 +546,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_value
      * @param boolean $_valueIsRegExp
      * @return array
-     * 
-     * @todo reactivate indices (@see 0007558: reactivate indices in Tinebase_Record_RecordSet)
      */
     protected function _getMatchingRecords($_field, $_value, $_valueIsRegExp = FALSE)
     {
         if (!is_string($_field) && is_callable($_field)) {
             $matchingRecords = array_filter($this->_listOfRecords, $_field);
         } else {
-            // NOTE: indices may lead to wrong results if a record is changed after build of indices
-            if (FALSE && (isset($this->_indices[$_field]) || array_key_exists($_field, $this->_indices))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Filtering with indices, expecting fast results ;-)');
-                $valueMap = $this->_indices[$_field];
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
-                $valueMap = $this->$_field;
-            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Filtering field '$_field' of '{$this->_recordClass}' without indices, expecting slow results");
+            $valueMap = $this->$_field;
             
             if ($_valueIsRegExp) {
                 $matchingMap = preg_grep($_value,  $valueMap);
@@ -618,6 +563,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             
             $matchingRecords = array_intersect_key($this->_listOfRecords, $matchingMap);
         }
+        
         return $matchingRecords;
     }
     
@@ -755,9 +701,6 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         $this->_idLess        = array();
         $this->_idMap         = array();
         $this->_listOfRecords = array();
-        $namedIndices = array_keys($this->_indices);
-        $this->_indices = array();
-        $this->addIndices($namedIndices);
         
         foreach (array_keys($offsetToSortFieldMap) as $oldOffset) {
             $this->addRecord($oldListOfRecords[$oldOffset]);

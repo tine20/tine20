@@ -23,7 +23,14 @@ class Tasks_Convert_Task_VCalendar_Factory
     const CLIENT_KDE         = 'kde';
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
-    const CLIENT_EMCLIENT     = 'emclient';
+    const CLIENT_EMCLIENT    = 'emclient';
+    
+    /**
+     * cache parsed user-agent strings
+     * 
+     * @var array
+     */
+    static protected $_parsedUserAgentCache = array();
     
     /**
      * factory function to return a selected vcalendar backend class
@@ -75,6 +82,10 @@ class Tasks_Convert_Task_VCalendar_Factory
      */
     static public function parseUserAgent($_userAgent)
     {
+        if (isset(self::$_parsedUserAgentCache[$_userAgent])) {
+            return self::$_parsedUserAgentCache[$_userAgent];
+        }
+        
         // MacOS X
         if (preg_match(Tasks_Convert_Task_VCalendar_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_MACOSX;
@@ -105,8 +116,10 @@ class Tasks_Convert_Task_VCalendar_Factory
             $version = null;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . " backend: $backend version: $version");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
+        
+        self::$_parsedUserAgentCache[$_userAgent] = array($backend, $version);
         
         return array($backend, $version);
     }

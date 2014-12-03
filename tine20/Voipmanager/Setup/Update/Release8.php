@@ -70,7 +70,6 @@ class Voipmanager_Setup_Update_Release8 extends Setup_Update_Abstract
             <type>text</type>
             <default>yes</default>
             <length>10</length>
-            <notnull>true</notnull>
         </field>';
         
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
