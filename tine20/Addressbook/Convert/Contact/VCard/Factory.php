@@ -27,6 +27,13 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_AKONADI        = 'akonadi';
     
     /**
+     * cache parsed user-agent strings
+     * 
+     * @var array
+     */
+    static protected $_parsedUserAgentCache = array();
+    
+    /**
      * factory function to return a selected phone backend class
      *
      * @param   string $_backend
@@ -85,7 +92,9 @@ class Addressbook_Convert_Contact_VCard_Factory
      */
     static public function parseUserAgent($_userAgent)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' user agent: ' . $_userAgent);
+        if (isset(self::$_parsedUserAgentCache[$_userAgent])) {
+            return self::$_parsedUserAgentCache[$_userAgent];
+        }
         
         // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
@@ -127,6 +136,11 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
             $version = null;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $_userAgent ->  backend: $backend version: $version");
+        
+        self::$_parsedUserAgentCache[$_userAgent] = array($backend, $version);
         
         return array($backend, $version);
     }
