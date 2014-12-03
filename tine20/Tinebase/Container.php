@@ -612,6 +612,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
     {
+        $accountId = $_accountId instanceof Tinebase_Record_Abstract
+            ? $_accountId->getId()
+            : $_accountId;
+        
         $db = $_select->getAdapter();
         
         $grants = is_array($_grant) ? $_grant : array($_grant);
@@ -622,14 +626,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
 
         // @todo add groupmembers via join
-        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
+        $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
         $quotedActId   = $db->quoteIdentifier("{$_aclTableName}.account_id");
         $quotedActType = $db->quoteIdentifier("{$_aclTableName}.account_type");
         
         $accountSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $accountSelect
-            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $_accountId)
+            ->orWhere("{$quotedActId} = ? AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $accountId)
             ->orWhere("{$quotedActId} IN (?) AND {$quotedActType} = " . $db->quote(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP), empty($groupMemberships) ? ' ' : $groupMemberships);
         
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::ANYONE_ACCOUNT_DISABLED)) {
@@ -724,7 +728,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getSharedContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
-        $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         $grant       = $_ignoreACL ? '*' : $_grant;
         
@@ -741,7 +744,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             ->order('container.name');
         
-        $this->addGrantsSql($select, $accountId, $grant);
+        $this->addGrantsSql($select, $_accountId, $grant);
         
         $stmt = $this->_db->query($select);
 
@@ -1215,21 +1218,23 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id', $_grantModel = 'Tinebase_Model_Grants')
     {
-        $containers = array();
+        $containerIds = array();
         foreach ($_records as $record) {
-            if (isset($record[$_containerProperty]) && !isset($containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
-                $containers[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = array();
+            if (isset($record[$_containerProperty]) && !isset($containerIds[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
+                $containerIds[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])] = null;
             }
         }
         
-        if (empty($containers)) {
+        if (empty($containerIds)) {
             return;
         }
         
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
+        $accountId = $_accountId instanceof Tinebase_Record_Abstract
+            ? $_accountId->getId()
+            : $_accountId;
         
         $select = $this->_getSelect('*', TRUE)
-            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", array_keys($containers))
+            ->where("{$this->_db->quoteIdentifier('container.id')} IN (?)", array_keys($containerIds))
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
@@ -1244,30 +1249,44 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
+        if (empty($rows)) {
+            return;
+        }
+        
+        $containers = array();
+        
         // add results to container ids and get grants array
         foreach ($rows as $row) {
             // NOTE id is non-ambiguous
-            $row['id'] = $row['container_id'];
+            $row['id']   = $row['container_id'];
+            
             $grantsArray = array_unique(explode(',', $row['account_grants']));
             $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId, $_grantModel)->toArray();
+            
             $containers[$row['id']] = new Tinebase_Model_Container($row, TRUE);
+            
+            try {
+                $containers[$row['id']]->path = $containers[$row['id']]->getPath();
+            } catch (Exception $e) {
+                // @todo is it correct to catch all exceptions here?
+                Tinebase_Exception::log($e);
+            }
         }
         
         // add container & grants to records
         foreach ($_records as &$record) {
-            try {
-                if (!isset($record->$_containerProperty)) {
-                    continue;
+            if (!$containerId = $record->$_containerProperty) {
+                continue;
+            }
+            
+            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && isset($containers[$containerId])) {
+                if (isset($containers[$containerId]->path)) {
+                    $record->$_containerProperty = $containers[$containerId];
+                } else {
+                    // if path is not determinable, skip this container
+                    // @todo is it correct to remove record from recordSet???
+                    $_records->removeRecord($record);
                 }
-                
-                $containerId = $record[$_containerProperty];
-                if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
-                    $record[$_containerProperty] = $containers[$containerId];
-                    $record[$_containerProperty]['path'] = $containers[$containerId]->getPath();
-                }
-            } catch (Exception $e) {
-                // if path is not determinable, skip this container
-                $_records->removeRecord($record);
             }
         }
     }
