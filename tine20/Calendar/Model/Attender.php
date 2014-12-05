@@ -723,14 +723,18 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // build type map 
         foreach ($eventAttendees as $eventAttendee) {
             foreach ($eventAttendee as $attendee) {
-                if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id])) {
+                $userId = $attendee->user_id instanceof Tinebase_Record_Abstract
+                    ? $attendee->user_id->getId()
+                    : $attendee->user_id;
+                
+                if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$userId])) {
                     // already in cache
                     continue;
                 }
                 
                 if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
                     // can fill cache with model from $attendee
-                    self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id] = $attendee->user_id;
+                    self::$_resolvedAttendeesCache[$attendee->user_type][$userId] = $attendee->user_id;
                     
                     continue;
                 }
