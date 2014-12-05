@@ -629,37 +629,42 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * get a single attendee from set of attendee
      * 
-     * @param Tinebase_Record_RecordSet $_attendeeSet
-     * @param Calendar_Model_Attender $_attendee
+     * @param Tinebase_Record_RecordSet $_attendeesSet
+     * @param Calendar_Model_Attender   $_attendee
      * @return Calendar_Model_Attender|NULL
      */
-    public static function getAttendee($_attendeeSet, $_attendee)
+    public static function getAttendee($_attendeesSet, Calendar_Model_Attender $_attendee)
     {
-        $attendeeSet  = $_attendeeSet instanceof Tinebase_Record_RecordSet ? clone $_attendeeSet : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        $attendeeSet->addIndices(array('user_type', 'user_id'));
-        
-        // transform id to string
-        foreach ($attendeeSet as $attendee) {
-            $attendee->user_id  = $attendee->user_id instanceof Tinebase_Record_Abstract ? $attendee->user_id->getId() : $attendee->user_id;
+        if (!$_attendeesSet instanceof Tinebase_Record_RecordSet) {
+            return null;
         }
         
-        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract
+            ? $_attendee->user_id->getId()
+            : $_attendee->user_id;
         
-        $foundAttendee = $attendeeSet
-            ->filter('user_type', $_attendee->user_type)
-            ->filter('user_id', $attendeeUserId)
-            ->getFirstRecord();
-        
-        // search for groupmember if no user got found
-        if ($foundAttendee === null && $_attendee->user_type == Calendar_Model_Attender::USERTYPE_USER) {
-            $foundAttendee = $attendeeSet
-                ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-                ->filter('user_id', $attendeeUserId)
-                ->getFirstRecord();
-        }
+        foreach ($_attendeesSet as $attendeeFromSet) {
+            $attendeeFromSetUserId = $attendeeFromSet->user_id instanceof Tinebase_Record_Abstract 
+                ? $attendeeFromSet->user_id->getId()
+                : $attendeeFromSet->user_id;
             
-        return $foundAttendee ? $_attendeeSet[$attendeeSet->indexOf($foundAttendee)] : NULL;
+            if ($attendeeFromSetUserId === $attendeeUserId) {
+                if ($attendeeFromSet->user_type === $_attendee->user_type) {
+                    // can stop here
+                    return $attendeeFromSet;
+                }
+                
+                if (   $_attendee->user_type       === Calendar_Model_Attender::USERTYPE_USER
+                    && $attendeeFromSet->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER
+                ) {
+                    $foundGroupMember = $attendeeFromSet;
+                    // continue searching for $_attendee->user_type
+                    // @todo maybe we can also return in this case immediately
+                }
+            }
+        }
         
+        return isset($foundGroupMember) ? $foundGroupMember : null;
     }
     
     /**
