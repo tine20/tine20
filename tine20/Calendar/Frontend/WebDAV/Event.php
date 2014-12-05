@@ -58,11 +58,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
         }
         
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
-        
-        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
     }
     
     /**
@@ -411,7 +407,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     public function put($cardData) 
     {
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
-        if (get_class($this->_converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
+        if (get_class($this->_getConverter()) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
             throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
@@ -438,7 +434,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $recordBeforeUpdate = clone $this->getRecord();
         
         // concurrency management is based on etag in CalDAV
-        $event = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
+        $event = $this->_getConverter()->toTine20Model($vobject, $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
 
@@ -569,6 +565,22 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     }
     
     /**
+     * create instance of Calendar_Convert_Event_VCalendar_*
+     * 
+     * @return Calendar_Convert_Event_VCalendar_Abstract
+     */
+    public function _getConverter()
+    {
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        
+        if (!$this->_converter) {
+            $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        }
+        
+        return $this->_converter;
+    }
+    
+    /**
      * return vcard and convert Calendar_Model_Event to vcard if needed
      * 
      * @return string
@@ -576,7 +588,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     protected function _getVEvent()
     {
         if ($this->_vevent == null) {
-            $this->_vevent = $this->_converter->fromTine20Model($this->getRecord());
+            $this->_vevent = $this->_getConverter()->fromTine20Model($this->getRecord());
             
             foreach ($this->_vevent->children() as $component) {
                 if ($component->name == 'VEVENT') {
