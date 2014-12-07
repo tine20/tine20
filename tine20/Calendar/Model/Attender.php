@@ -821,16 +821,20 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // build type map 
         foreach ($eventAttendees as $eventAttendee) {
             foreach ($eventAttendee as $attendee) {
-                $allAttendees->addRecord($attendee);
-                
                 if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
+                    $allAttendees->addRecord($attendee);
+                    
                     continue;
                 }
                 
                 if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id])) {
-                    // resolved from cache
-                    $attendee->user_id = self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id];
+                    $clonedAttendee = clone $attendee;
+                    
+                    // resolveable from cache
+                    $clonedAttendee->user_id = self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id];
+                    
+                    $allAttendees->addRecord($clonedAttendee);
                     
                     continue;
                 }
