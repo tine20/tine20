@@ -1218,6 +1218,42 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id', $_grantModel = 'Tinebase_Model_Grants')
     {
+        $containers = $this->getContainerGrantsOfRecords($_records, $_accountId, $_containerProperty, $_grantModel);
+        
+        if (!$containers) {
+            return;
+        }
+        
+        // add container & grants to records
+        foreach ($_records as &$record) {
+            if (!$containerId = $record->$_containerProperty) {
+                continue;
+            }
+            
+            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && isset($containers[$containerId])) {
+                if (isset($containers[$containerId]->path)) {
+                    $record->$_containerProperty = $containers[$containerId];
+                } else {
+                    // if path is not determinable, skip this container
+                    // @todo is it correct to remove record from recordSet???
+                    $_records->removeRecord($record);
+                }
+            }
+        }
+    }
+    
+    /**
+     * get grants for containers assigned to given account of multiple records
+     *
+     * @param   Tinebase_Record_RecordSet   $_records records to get the grants for
+     * @param   string|Tinebase_Model_User  $_accountId the account to get the grants for
+     * @param   string                      $_containerProperty container property
+     * @param   string                      $_grantModel
+     * @throws  Tinebase_Exception_NotFound
+     * @return  array of containers|void
+     */
+    public function getContainerGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id', $_grantModel = 'Tinebase_Model_Grants')
+    {
         $containerIds = array();
         foreach ($_records as $record) {
             if (isset($record[$_containerProperty]) && !isset($containerIds[Tinebase_Model_Container::convertContainerIdToInt($record[$_containerProperty])])) {
@@ -1273,22 +1309,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        // add container & grants to records
-        foreach ($_records as &$record) {
-            if (!$containerId = $record->$_containerProperty) {
-                continue;
-            }
-            
-            if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && isset($containers[$containerId])) {
-                if (isset($containers[$containerId]->path)) {
-                    $record->$_containerProperty = $containers[$containerId];
-                } else {
-                    // if path is not determinable, skip this container
-                    // @todo is it correct to remove record from recordSet???
-                    $_records->removeRecord($record);
-                }
-            }
-        }
+        return $containers;
     }
     
     /**
