@@ -175,6 +175,14 @@ class Tinebase_Core
      */
     protected static $appInstanceCache = array();
     
+    /**
+     * variable to cache value of logLevel during request
+     * 
+     * @var int
+     */
+    protected static $logLevel;
+    
+    
     /******************************* DISPATCH *********************************/
     
     /**
@@ -1422,21 +1430,6 @@ class Tinebase_Core
     }
 
     /**
-     * get max configured loglevel
-     * 
-     * @return integer
-     */
-    public static function getLogLevel()
-    {
-        if (! ($logLevel = self::get(self::LOGLEVEL))) {
-            $config = self::getConfig();
-            $logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
-            self::set(self::LOGLEVEL, $logLevel);
-        }
-        return $logLevel;
-    }
-    
-    /**
      * check if given loglevel should be logged
      * 
      * @param  integer $_prio
@@ -1444,7 +1437,13 @@ class Tinebase_Core
      */
     public static function isLogLevel($_prio)
     {
-        return self::getLogLevel() >= $_prio;
+        if (!isset(self::$logLevel)) {
+            $config = self::getConfig();
+            
+            self::$logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
+        }
+        
+        return self::$logLevel >= $_prio;
     }
     
     /**
