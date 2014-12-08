@@ -235,7 +235,7 @@
             $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
         }
     }
-    
+
     /**
      * send notification to a single attender
      * 
@@ -247,7 +247,7 @@
      * @param array                      $_updates
      * @return void
      */
-    public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
+    public function sendNotificationToAttender(Calendar_Model_Attender $_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
     {
         try {
             $organizer = $_event->resolveOrganizer();
@@ -322,10 +322,20 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
-            
+
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
-        
-            Tinebase_Notification::getInstance()->send($sender, array($attendee), $messageSubject, $messageBody, $calendarPart, $attachments);
+
+            $recipients = array($attendee);
+            if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE
+                && Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)
+            ) {
+                $recipients = array_merge($recipients,
+                    Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
+                        Calendar_Controller_Resource::getInstance()->get($_attender->user_id)
+                    )
+                );
+            }
+            Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             return;

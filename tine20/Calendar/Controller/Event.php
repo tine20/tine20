@@ -2237,9 +2237,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Tinebase_Model_FullAccount $_updater
      * @param Sting                      $_action
      * @param Calendar_Model_Event       $_oldEvent
+     * @param Array                      $_additionalRecipients
      * @return void
      */
-    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent = NULL)
     {
         Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
             $_event, 

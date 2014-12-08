@@ -170,7 +170,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 break;
             case self::USERTYPE_GROUP:
             case self::USERTYPE_RESOURCE:
-                return $resolvedUser->name;
+                return $resolvedUser->name ?: $resolvedUser->n_fileas;
                 break;
             default:
                 throw new Exception("type $type not yet supported");
