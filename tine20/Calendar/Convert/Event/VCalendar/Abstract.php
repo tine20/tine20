@@ -979,7 +979,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' attachment found that could not be imported due to missing managed id');
                     }
                     
-                    if($readFromURL) {
+                    if ($readFromURL) {
                         if (preg_match('#^(https?://)(.*)$#', str_replace(array("\n","\r"), '', $url), $matches)) {
                             // we are client and found an external hosted attachment that we need to import
                             $user = Tinebase_Core::getUser();
@@ -993,7 +993,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                 
                                 $stream = fopen($url, 'r');
                                 $attachment = new Tinebase_Model_Tree_Node(array(
-                                    'name'         => $name,
+                                    'name'         => rawurldecode($name),
                                     'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
                                     'contenttype'  => (string) $property['FMTTYPE'],
                                     'tempFile'     => $stream,
