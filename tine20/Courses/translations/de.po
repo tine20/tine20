@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2014-12-09 15:48+0100\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:99
 msgid "Add new user"
@@ -37,11 +37,11 @@ msgstr "Einen bestehenden Benutzer als Schüler zur Klasse hinzufügen"
 
 #: Config.php:89 js/CourseEditDialog.js:229 js/Models.js:74
 msgid "Internet Access"
-msgstr "Internet freigegeben"
+msgstr "Internetzugang"
 
 #: Config.php:91
 msgid "Internet access options."
-msgstr "Internet -Zugangsoptionen"
+msgstr "Internet  Zugangsoptionen"
 
 #: Config.php:98 Config.php:100
 msgid "Internet Access Group (ON)"
@@ -71,7 +71,9 @@ msgstr "Benutzernamensschema für Schüler"
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
+msgstr ""
+"Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = "
+"Nachname + 2 Zeichen des Vornamens)"
 
 #: Config.php:146 Config.php:148
 msgid "Samba user settings"
@@ -79,11 +81,11 @@ msgstr "Samba-Benutzereinstellungen"
 
 #: Config.php:157
 msgid "Default department"
-msgstr ""
+msgstr "Standard Abteilung"
 
 #: Config.php:159
 msgid "The default department for new Courses"
-msgstr ""
+msgstr "Die standard Abteilung für neue Kurse"
 
 #: Setup/setup.xml:4
 msgid "Courses"
