@@ -44,7 +44,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @var array type => array of id => object
      */
-    protected static $_resovedAttendeeCache = array();
+    protected static $_resolvedAttendeesCache = array(
+        self::USERTYPE_USER        => array(),
+        self::USERTYPE_GROUPMEMBER => array(),
+        self::USERTYPE_GROUP       => array(),
+        self::USERTYPE_LIST        => array(),
+        self::USERTYPE_RESOURCE    => array(),
+        Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
+    );
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -622,37 +629,42 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * get a single attendee from set of attendee
      * 
-     * @param Tinebase_Record_RecordSet $_attendeeSet
-     * @param Calendar_Model_Attender $_attendee
+     * @param Tinebase_Record_RecordSet $_attendeesSet
+     * @param Calendar_Model_Attender   $_attendee
      * @return Calendar_Model_Attender|NULL
      */
-    public static function getAttendee($_attendeeSet, $_attendee)
+    public static function getAttendee($_attendeesSet, Calendar_Model_Attender $_attendee)
     {
-        $attendeeSet  = $_attendeeSet instanceof Tinebase_Record_RecordSet ? clone $_attendeeSet : new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        $attendeeSet->addIndices(array('user_type', 'user_id'));
-        
-        // transform id to string
-        foreach ($attendeeSet as $attendee) {
-            $attendee->user_id  = $attendee->user_id instanceof Tinebase_Record_Abstract ? $attendee->user_id->getId() : $attendee->user_id;
+        if (!$_attendeesSet instanceof Tinebase_Record_RecordSet) {
+            return null;
         }
         
-        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract ? $_attendee->user_id->getId() : $_attendee->user_id;
+        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract
+            ? $_attendee->user_id->getId()
+            : $_attendee->user_id;
         
-        $foundAttendee = $attendeeSet
-            ->filter('user_type', $_attendee->user_type)
-            ->filter('user_id', $attendeeUserId)
-            ->getFirstRecord();
-        
-        // search for groupmember if no user got found
-        if ($foundAttendee === null && $_attendee->user_type == Calendar_Model_Attender::USERTYPE_USER) {
-            $foundAttendee = $attendeeSet
-                ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
-                ->filter('user_id', $attendeeUserId)
-                ->getFirstRecord();
-        }
+        foreach ($_attendeesSet as $attendeeFromSet) {
+            $attendeeFromSetUserId = $attendeeFromSet->user_id instanceof Tinebase_Record_Abstract 
+                ? $attendeeFromSet->user_id->getId()
+                : $attendeeFromSet->user_id;
             
-        return $foundAttendee ? $_attendeeSet[$attendeeSet->indexOf($foundAttendee)] : NULL;
+            if ($attendeeFromSetUserId === $attendeeUserId) {
+                if ($attendeeFromSet->user_type === $_attendee->user_type) {
+                    // can stop here
+                    return $attendeeFromSet;
+                }
+                
+                if (   $_attendee->user_type       === Calendar_Model_Attender::USERTYPE_USER
+                    && $attendeeFromSet->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER
+                ) {
+                    $foundGroupMember = $attendeeFromSet;
+                    // continue searching for $_attendee->user_type
+                    // @todo maybe we can also return in this case immediately
+                }
+            }
+        }
         
+        return isset($foundGroupMember) ? $foundGroupMember : null;
     }
     
     /**
@@ -684,21 +696,182 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
-     * resolves given attendee for json representation
+     * fill resolved attendees class cache
      * 
-     * @TODO move status_authkey cleanup elsewhere
-     * 
-     * @param Tinebase_Record_RecordSet|array   $_eventAttendee 
-     * @param bool                              $_resolveDisplayContainers
-     * @param Calendar_Model_Event|array        $_events
+     * @param  Tinebase_Record_RecordSet|array  $eventAttendees
+     * @throws Calendar_Exception
      */
-    public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE, $_events = NULL)
+    public static function fillResolvedAttendeesCache($eventAttendees)
     {
-        if (empty($_eventAttendee)) {
+        if (empty($eventAttendees)) {
             return;
         }
         
-        $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
+        $eventAttendees = $eventAttendees instanceof Tinebase_Record_RecordSet
+            ? array($eventAttendees)
+            : $eventAttendees;
+        
+        $typeMap = array(
+            self::USERTYPE_USER        => array(),
+            self::USERTYPE_GROUPMEMBER => array(),
+            self::USERTYPE_GROUP       => array(),
+            self::USERTYPE_LIST        => array(),
+            self::USERTYPE_RESOURCE    => array(),
+            Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF => array()
+        );
+        
+        // build type map 
+        foreach ($eventAttendees as $eventAttendee) {
+            foreach ($eventAttendee as $attendee) {
+                $userId = $attendee->user_id instanceof Tinebase_Record_Abstract
+                    ? $attendee->user_id->getId()
+                    : $attendee->user_id;
+                
+                if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$userId])) {
+                    // already in cache
+                    continue;
+                }
+                
+                if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
+                    // can fill cache with model from $attendee
+                    self::$_resolvedAttendeesCache[$attendee->user_type][$userId] = $attendee->user_id;
+                    
+                    continue;
+                }
+                
+                // must be resolved
+                $typeMap[$attendee->user_type][] = $attendee->user_id;
+            }
+        }
+        
+        // get all missing user_id entries
+        foreach ($typeMap as $type => $ids) {
+            $ids = array_unique($ids);
+            
+            if (empty($ids)) {
+                continue;
+            }
+            
+            switch ($type) {
+                case self::USERTYPE_USER:
+                case self::USERTYPE_GROUPMEMBER:
+                    $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
+                    $contacts  = Addressbook_Controller_Contact::getInstance()->getMultiple($ids, TRUE);
+                    Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+                    
+                    foreach ($contacts as $contact) {
+                        self::$_resolvedAttendeesCache[$type][$contact->getId()] = $contact;
+                    }
+                    
+                    break;
+                    
+                case self::USERTYPE_GROUP:
+                case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
+                    // first fetch the groups, then the lists identified by list_id
+                    $groups = Tinebase_Group::getInstance()->getMultiple($ids);
+                    $lists  = Addressbook_Controller_List::getInstance()->getMultiple($groups->list_id, true);
+                    
+                    foreach ($groups as $group) {
+                        $list = $lists->getById($group->list_id);
+                        if ($list) {
+                            self::$_resolvedAttendeesCache[$type][$group->getId()] = $list;
+                        }
+                    }
+                    
+                    break;
+                    
+                case self::USERTYPE_RESOURCE:
+                    $resources = Calendar_Controller_Resource::getInstance()->getMultiple($ids, true);
+                    
+                    foreach ($resources as $resource) {
+                        self::$_resolvedAttendeesCache[$type][$resource->getId()] = $resource;
+                    }
+                    
+                    break;
+                    
+                default:
+                    throw new Calendar_Exception("type $type not supported");
+                    
+                    break;
+            }
+        }
+    }
+    
+    /**
+     * return list of resolved attendee for given record(set)
+     * 
+     * @param Tinebase_Record_RecordSet|array   $eventAttendees 
+     * @param bool                              $resolveDisplayContainers
+     */
+    public static function getResolvedAttendees($eventAttendees, $resolveDisplayContainers = TRUE)
+    {
+        if (empty($eventAttendees)) {
+            return;
+        }
+        
+        self::fillResolvedAttendeesCache($eventAttendees);
+        
+        $eventAttendees = $eventAttendees instanceof Tinebase_Record_RecordSet
+            ? array($eventAttendees)
+            : $eventAttendees;
+        
+        // set containing all attendee
+        $allAttendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        
+        // build type map 
+        foreach ($eventAttendees as $eventAttendee) {
+            foreach ($eventAttendee as $attendee) {
+                if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
+                    // already resolved
+                    $allAttendees->addRecord($attendee);
+                    
+                    continue;
+                }
+                
+                if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id])) {
+                    $clonedAttendee = clone $attendee;
+                    
+                    // resolveable from cache
+                    $clonedAttendee->user_id = self::$_resolvedAttendeesCache[$attendee->user_type][$attendee->user_id];
+                    
+                    $allAttendees->addRecord($clonedAttendee);
+                    
+                    continue;
+                }
+                
+                // not resolved => problem!!!
+            }
+        }
+        
+        // resolve display containers
+        if ($resolveDisplayContainers) {
+            $displaycontainerIds = array_diff($allAttendees->displaycontainer_id, array(''));
+            
+            if (! empty($displaycontainerIds)) {
+                Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendees, Tinebase_Core::getUser(), 'displaycontainer_id');
+            }
+        }
+        
+        return $allAttendees;
+    }
+    
+    /**
+     * resolves given attendee for json representation
+     * 
+     * @todo move status_authkey cleanup elsewhere
+     * @todo use self::getResolvedAttendees to avoid code duplication
+     * 
+     * @param Tinebase_Record_RecordSet|array   $eventAttendees 
+     * @param bool                              $resolveDisplayContainers
+     * @param Calendar_Model_Event|array        $_events
+     */
+    public static function resolveAttendee($eventAttendees, $resolveDisplayContainers = TRUE, $_events = NULL)
+    {
+        if (empty($eventAttendees)) {
+            return;
+        }
+        
+        $eventAttendee = $eventAttendees instanceof Tinebase_Record_RecordSet ? array($eventAttendees) : $eventAttendees;
         $events = $_events instanceof Tinebase_Record_Abstract ? array($_events) : $_events;
         
         // set containing all attendee
@@ -709,13 +882,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
                 $allAttendee->addRecord($attender);
-            
+                
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
                     continue;
-                } elseif ((isset(self::$_resovedAttendeeCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resovedAttendeeCache)) && (isset(self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, self::$_resovedAttendeeCache[$attender->user_type]))){
+                } elseif ((isset(self::$_resolvedAttendeesCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resolvedAttendeesCache)) && (isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, self::$_resolvedAttendeesCache[$attender->user_type]))){
                     // already in cache
-                    $attender->user_id = self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id];
+                    $attender->user_id = self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id];
                 } else {
                     if (! (isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap))) {
                         $typeMap[$attender->user_type] = array();
@@ -726,7 +899,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         // resolve display containers
-        if ($_resolveDisplayContainers) {
+        if ($resolveDisplayContainers) {
             $displaycontainerIds = array_diff($allAttendee->displaycontainer_id, array(''));
             if (! empty($displaycontainerIds)) {
                 Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendee, Tinebase_Core::getUser(), 'displaycontainer_id');
@@ -764,7 +937,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // allready resolved from cache
                     continue;
                 }
-
+                
                 $idx = false;
                 
                 if ($attender->user_type == self::USERTYPE_GROUP) {
@@ -777,17 +950,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         
                         $attendeeTypeSet = $typeMap[self::USERTYPE_LIST];
                         $idx = $attendeeTypeSet->getIndexById($group->list_id);
-                    } 
+                    }
                 } else {
                     $attendeeTypeSet = $typeMap[$attender->user_type];
                     $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                 }
+                
                 if ($idx !== false) {
                     // copy to cache
-                    if (! (isset(self::$_resovedAttendeeCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resovedAttendeeCache))) {
-                        self::$_resovedAttendeeCache[$attender->user_type] = array();
-                    }
-                    self::$_resovedAttendeeCache[$attender->user_type][$attender->user_id] = $attendeeTypeSet[$idx];
+                    self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id] = $attendeeTypeSet[$idx];
                     
                     $attender->user_id = $attendeeTypeSet[$idx];
                 }

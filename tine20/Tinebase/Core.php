@@ -178,6 +178,13 @@ class Tinebase_Core
      */
     protected static $cacheStatus = NULL;
     
+    /**
+     * variable to cache value of logLevel during request
+     * 
+     * @var int
+     */
+    protected static $logLevel;
+    
     /******************************* DISPATCH *********************************/
     
     /**
@@ -1260,7 +1267,11 @@ class Tinebase_Core
      */
     public static function get($index)
     {
-        return (Zend_Registry::isRegistered($index)) ? Zend_Registry::get($index) : NULL;
+        try {
+            return Zend_Registry::get($index);
+        } catch (Zend_Exception $ze) {
+            return null;
+        }
     }
     
     /**
@@ -1331,6 +1342,7 @@ class Tinebase_Core
     }
     
     /**
+<<<<<<< HEAD
      * get max configured loglevel
      * 
      * @return integer
@@ -1347,6 +1359,8 @@ class Tinebase_Core
     }
     
     /**
+=======
+>>>>>>> 2013.10
      * check if given loglevel should be logged
      * 
      * @param  integer $_prio
@@ -1354,7 +1368,13 @@ class Tinebase_Core
      */
     public static function isLogLevel($_prio)
     {
-        return self::getLogLevel() >= $_prio;
+        if (!isset(self::$logLevel)) {
+            $config = self::getConfig();
+            
+            self::$logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
+        }
+        
+        return self::$logLevel >= $_prio;
     }
     
     /**

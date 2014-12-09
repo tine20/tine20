@@ -136,10 +136,15 @@ class Calendar_Controller_Alarm
         $alarm->setOption("acknowledged-{$user->contact_id}", $time->format(Tinebase_Record_Abstract::ISO8601LONG));
         
         $accessLog = Tinebase_Core::get(Tinebase_Core::USERACCESSLOG);
+        $client = '';
         if ($accessLog) {
             $alarm->setOption(Tinebase_Model_Alarm::OPTION_ACK_IP, $accessLog->ip);
-            $alarm->setOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT, $accessLog->clienttype);
+            $client = 'type: ' . $accessLog->clienttype;
         }
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $client .= '|useragent: ' . $_SERVER['HTTP_USER_AGENT'];
+        }
+        $alarm->setOption(Tinebase_Model_Alarm::OPTION_ACK_CLIENT, $client);
     }
     
     /**

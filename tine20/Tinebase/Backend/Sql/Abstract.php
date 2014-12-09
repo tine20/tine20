@@ -151,12 +151,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (! $this->_db) {
             throw new Tinebase_Exception_Backend_Database('Database adapter must be configured or given.');
         }
-        
-        try {
-            $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
-        } catch (Zend_Db_Adapter_Exception $zdae) {
-            throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
-        }
     }
     
     /*************************** getters and setters *********************************/
@@ -190,6 +184,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function getSchema()
     {
+        if (!$this->_schema) {
+            try {
+                $this->_schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_tablePrefix . $this->_tableName, $this->_db);
+            } catch (Zend_Db_Adapter_Exception $zdae) {
+                throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
+            }
+        }
+        
         return $this->_schema;
     }
     
@@ -407,7 +409,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $select = $this->_getSelect();
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', $ids);
         
-        if ($_containerIds !== NULL && isset($this->_schema['container_id'])) {
+        $schema = $this->getSchema();
+        
+        if ($_containerIds !== NULL && isset($schema['container_id'])) {
             if (empty($_containerIds)) {
                 $select->where('1=0 /* insufficient grants */');
             } else {
@@ -915,7 +919,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 unset($recordArray['id']);
             }
             
-            $recordArray = array_intersect_key($recordArray, $this->_schema);
+            $recordArray = array_intersect_key($recordArray, $this->getSchema());
             
             $this->_prepareData($recordArray);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -970,7 +974,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _hasHashId()
     {
         $identifier = $this->_getRecordIdentifier();
-        $result = (in_array($this->_schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $this->_schema[$identifier]['LENGTH'] == 40);
+        $schema = $this->getSchema();
+        $result = (in_array($schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $schema[$identifier]['LENGTH'] == 40);
         
         return $result;
     }
@@ -1141,7 +1146,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $id = $_record->getId();
 
         $recordArray = $this->_recordToRawData($_record);
-        $recordArray = array_intersect_key($recordArray, $this->_schema);
+        $recordArray = array_intersect_key($recordArray, $this->getSchema());
         
         $this->_prepareData($recordArray);
         
@@ -1204,7 +1209,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $identifier = $this->_getRecordIdentifier();
         
         $recordArray = $myFields;
-        $recordArray = array_intersect_key($recordArray, $this->_schema);
+        $recordArray = array_intersect_key($recordArray, $this->getSchema());
         
         $this->_prepareData($recordArray);
                 
@@ -1252,7 +1257,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function deleteByProperty($_value, $_property, $_operator = 'equals')
     {
-        if (! (isset($this->_schema[$_property]) || array_key_exists($_property, $this->_schema))) {
+        $schema = $this->getSchema();
+        
+        if (! (isset($schema[$_property]) || array_key_exists($_property, $schema))) {
             throw new Tinebase_Exception_InvalidArgument('Property ' . $_property . ' does not exist in table ' . $this->_tableName);
         }
         

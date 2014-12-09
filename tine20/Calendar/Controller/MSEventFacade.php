@@ -803,9 +803,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if (! $event->attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
-
-        $attendeeClone = clone $event->attendee;
-        Calendar_Model_Attender::resolveAttendee($attendeeClone, FALSE);
+        
+        Calendar_Model_Attender::fillResolvedAttendeesCache($event->attendee);
     }
     
     /**

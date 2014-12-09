@@ -48,6 +48,11 @@ class Courses_JsonTest extends TestCase
     protected $_schemaConfig;
     
     /**
+     * Student username length
+     */
+    protected $_usernameLengthConfig;
+    
+    /**
      * The default department
      * @var string
      */
@@ -57,6 +62,11 @@ class Courses_JsonTest extends TestCase
      * @var Boolean
      */
     protected $_schemaConfigChanged = FALSE;
+    
+    /**
+     * @var Boolean
+     */
+    protected $_usernameLengthConfigChanged = FALSE;
     
      /**
      * @var Boolean
@@ -97,6 +107,7 @@ class Courses_JsonTest extends TestCase
         )));
         
         $this->_schemaConfig = Courses_Config::getInstance()->get(Courses_Config::STUDENTS_USERNAME_SCHEMA);
+        $this->_usernameLengthConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
         $this->_defaultDepartmentConfig = Courses_Config::getInstance()->get(Courses_Config::DEFAULT_DEPARTMENT);
     }
 
@@ -111,6 +122,10 @@ class Courses_JsonTest extends TestCase
         $this->_groupIdsToDelete = $this->_groupsToDelete->getArrayOfIds();
         if ($this->_schemaConfigChanged) {
             Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, $this->_schemaConfig);
+        }
+        
+        if ($this->_usernameLengthConfigChanged) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::MAX_USERNAME_LENGTH, $this->_usernameLengthConfig);
         }
         
         if ($this->_defaultDepartmentConfigChanged) {
@@ -507,6 +522,38 @@ class Courses_JsonTest extends TestCase
     
         $newUser = Tinebase_User::getInstance()->getFullUserById($id);
         $this->assertEquals('u.hoet', $newUser->accountLoginName);
+    }
+    
+    /**
+     * Test students loginname with schema set max length
+     */
+    public function testStudentNameSchemaMaxLength()
+    {
+        $this->_schemaConfigChanged = true;
+        $this->_usernameLengthConfigChanged = true;
+        
+        Courses_Config::getInstance()->set(Courses_Config::STUDENTS_USERNAME_SCHEMA, 3);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MAX_USERNAME_LENGTH, 4);
+        
+        $course = $this->_getCourseData();
+        $courseData = $this->_json->saveCourse($course);
+        $this->_groupsToDelete->addRecord(Tinebase_Group::getInstance()->getGroupById($courseData['group_id']));
+        
+        $result = $this->_json->addNewMember(array(
+                'accountFirstName' => 'Jams',
+                'accountLastName'  => 'Hot',
+        ), $courseData);
+        $this->assertEquals(2, count($result['results']));
+        $id = NULL;
+        foreach ($result['results'] as $result) {
+            if ($result['name'] === 'Hot, Jams') {
+                $id = $result['id'];
+            }
+        }
+        $this->assertTrue($id !== NULL);
+        
+        $newUser = Tinebase_User::getInstance()->getFullUserById($id);
+        $this->assertEquals('j.ho', $newUser->accountLoginName);
     }
     
     /**
