@@ -688,6 +688,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
         self::MAX_USERNAME_LENGTH => array(
                 //_('Max username length')
                 'label'                 => 'Max username length',
