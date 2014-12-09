@@ -97,6 +97,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     },
     
     getUserActions: function() {
+
         if (! this.userActions) {
             this.userActions = [
                 this.action_editProfile,
@@ -125,6 +126,14 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     this.userActions = this.userActions.concat(this.action_changeUserAccount);
                 }
             }
+            
+            var regItems = Ext.ux.ItemRegistry.itemMap['Tine.Tinebase.MainMenu.userActions'] || [];
+            
+            Ext.each(regItems, function(reg) {
+                var addItem = def = reg.item;
+
+                this.userActions.push(addItem);
+            }, this);
         }
         return this.userActions;
     },
@@ -288,6 +297,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 } else {
                     document.execCommand('ClearAuthenticationCache');
                 }
+
+                // clear registry
+                Tine.Tinebase.tineInit.clearRegistry();
+
                 // remove the event handler
                 // the reload() trigers the unload event
                 var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
