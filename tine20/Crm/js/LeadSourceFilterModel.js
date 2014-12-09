@@ -41,7 +41,7 @@ Tine.Crm.LeadSourceFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         var value = new Tine.Crm.LeadSourceFilterModelValueField({
             app: this.app,
             filter: filter,
-            width: 200,
+            width: 350,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el

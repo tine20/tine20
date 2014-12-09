@@ -298,6 +298,10 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         }
         
         $loginname = $i18n->_('Teacher') . Courses_Config::getInstance()->get('teacher_login_name_delimiter', '-') . $course->name;
+        $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
+        if (!empty($maxLoginNameLength) && strlen($loginname) > $maxLoginNameLength) {
+            $loginname = substr($loginname, 0, $maxLoginNameLength);
+        }
         return strtolower($loginname);
     }
     

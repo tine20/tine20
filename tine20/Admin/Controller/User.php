@@ -187,6 +187,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($oldUser->accountLoginName !== $_user->accountLoginName) {
             $this->_checkLoginNameExistance($_user);
         }
+        $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
@@ -253,6 +254,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
         
         $this->_checkLoginNameExistance($_user);
+        $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
         
         if ($_password != $_passwordRepeat) {
@@ -315,6 +317,22 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         } catch (Tinebase_Exception_NotFound $tenf) {
         }
         
+        return TRUE;
+    }
+    
+    /**
+     * Check login name length
+     *
+     * @param Tinebase_Model_FullUser $user
+     * @return boolean
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkLoginNameLength(Tinebase_Model_FullUser $user)
+    {
+        $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
+        if (!empty($maxLoginNameLength) && strlen($user->accountLoginName) > $maxLoginNameLength) {
+            throw new Tinebase_Exception_SystemGeneric('The login name exceeds the maximum length of  ' . $maxLoginNameLength . ' characters. Please choose another one.');
+        }
         return TRUE;
     }
     
