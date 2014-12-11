@@ -48,6 +48,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         }, this);
         this.calPanel.on('afterlayout', function() {
             this.calPanel.body.setWidth(this.calPanel.getWidth());
+            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);;
         }, this);
         
         this.mainStore = this.calPanel.view.store;
@@ -214,12 +215,14 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                     //assert position
                     this.calPanel.items.remove(attendeeView.ownerCt);
                     this.calPanel.items.insert(idx, attendeeView.ownerCt);
-                    
+
                     var filterFn = attendeeView.store.filterFn;
                     attendeeView.initData(this.cloneStore(filterFn));
                     attendeeView.onLoad();
                 }
             }, this);
+
+            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
         }
     },
     
@@ -328,12 +331,25 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     resizeWholeDayArea: function(onupdate) {
         if (this.attendeeViews.items.length > 1) {
             var maxWholeDayAreaSize = 10;
+            var scrollerSize = this.getActiveView().scroller.getHeight();
             this.attendeeViews.each(function(view) {
                 if (onupdate) {
-                    view.heightIsCalculated = false;
+                    view.wholeDayArea.heightIsCalculated = false;
                 }
-                if (view.wholeDayArea.children.length > 1  && ((view.wholeDayArea.hasOwnProperty('heightIsCalculated') && view.wholeDayArea.heightIsCalculated == false) || (! view.wholeDayArea.hasOwnProperty('heightIsCalculated')))) {
-                    maxWholeDayAreaSize = (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) ? view.wholeDayArea.clientHeight : maxWholeDayAreaSize;
+                if (view.wholeDayArea.children.length > 1
+                    && ((view.wholeDayArea.hasOwnProperty('heightIsCalculated')
+                    && view.wholeDayArea.heightIsCalculated == false)
+                    || (! view.wholeDayArea.hasOwnProperty('heightIsCalculated'))))
+                {
+                    if (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) {
+                        maxWholeDayAreaSize = view.wholeDayArea.clientHeight;
+                        scrollerSize = view.scroller.getHeight();
+                    }
+                }
+
+                if (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) {
+                    maxWholeDayAreaSize = view.wholeDayArea.clientHeight;
+                    scrollerSize = this.container.getSize(true);
                 }
             });
             this.attendeeViews.each(function(view) {
@@ -345,6 +361,11 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                     view.wholeDayArea.heightIsCalculated = false;
                 }
                 Ext.fly(view.wholeDayScroller).setHeight(maxWholeDayAreaSize);
+
+                var hdHeight = this.mainHd.getHeight();
+                var vh = this.container.getSize(true).height - (hdHeight);
+
+                Ext.fly(view.scroller).setHeight(vh);
             });
         }
     },
