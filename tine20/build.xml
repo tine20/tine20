@@ -155,6 +155,33 @@
         </exec>
     </target>
 
+    <!-- ============================================      -->
+    <!-- Target: phpunit-serv                              -->
+    <!--                                                   -->
+    <!-- this runs phpunit in an exec task. we do this     -->
+    <!-- to overcome some drawbacks (for example we can't  -->
+    <!-- use the LogListener) of the phing phpunit task.   -->
+    <!-- ============================================      -->
+    <target name="phpunit-serv" depends="clean, phpunit-prepare">
+        <property name="testinclude" value="AllServerTests.php" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library/" override="true" />
+        <property name="testadditionalparams" value="" override="true" />
+
+        <echo msg="Starting Server Tests..." />
+        <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
+        <echo msg="Setting include_path to ${includepath}" />
+
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
+            <arg line="-d max_execution_time=0
+             -d include_path=${includepath}
+             --configuration ${testconfigdir}/phpunit.xml
+             --log-junit ${builddir}/reports/junit.xml
+             --bootstrap ServerTestHelper.php
+             ${testadditionalparams}
+             ${testinclude} " />
+        </exec>
+    </target>
+
     <!-- ============================================  -->
     <!-- Target: report                                -->
     <!-- TODO remove code duplication (phpunit target) -->

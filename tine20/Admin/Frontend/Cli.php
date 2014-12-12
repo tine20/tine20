@@ -143,4 +143,45 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo('Found ' . $count . ' users!');
         echo("\n");
     }
+    
+    /**
+     * shorten loginnmes to fit ad samaccountname
+     *
+     */
+    public function shortenLoginnames($_opts)
+    {
+        $count = 0;
+        $tinebaseUser  = Tinebase_User::getInstance();
+        $users = $tinebaseUser->getUsers();
+        $length = 20;
+        
+        foreach ($users as $id) {
+            $user = $tinebaseUser->getFullUserById($id->getId());
+            if (strlen($user->accountLoginName) > $length) {
+                $newAccountLoginName = substr($user->accountLoginName, 0, $length);
+                
+                echo($user->getId() . ' : ' . $user->accountLoginName . ' > ' . $newAccountLoginName);
+                echo("\n");
+                
+                $samUser = new Tinebase_Model_SAMUser(array(
+                        'homePath'    => str_replace($user->accountLoginName, $newAccountLoginName, $user->sambaSAM->homePath),
+                        'homeDrive'   => $user->sambaSAM->homeDrive,
+                        'logonScript' => $user->sambaSAM->logonScript,
+                        'profilePath' => $user->sambaSAM->profilePath
+                ));
+                $user->sambaSAM = $samUser;
+                
+                $user->accountLoginName = $newAccountLoginName;
+                
+                if ($_opts->d) {
+                    var_dump($user);
+                } else {
+                    $tinebaseUser->updateUser($user);
+                }
+                $count++;
+            };
+        }
+        echo('Found ' . $count . ' users!');
+        echo("\n");
+    }
 }

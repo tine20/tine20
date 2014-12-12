@@ -145,6 +145,20 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
             cnv = config.contractNumberValidation,
             oc  = config.ownCurrency;
 
+        var currency = [
+            ['EUR', this.app.i18n._('EUR')]
+        ];
+
+        var currencyStore = new Ext.data.ArrayStore({
+            fields: [
+                'currency_id',
+                'currency'
+            ],
+            data: currency,
+            disabled: false
+        });
+
+
         return {
             border: false,
             frame:  false,
@@ -185,12 +199,17 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
                             store: cnv.definition.options
                         },
                         {
-                            fieldLabel: this.app.i18n._(oc.definition.label),
+                            xtype: 'combo',
                             name: 'ownCurrency',
+                            fieldLabel: this.app.i18n._(oc.definition.label),
                             value: oc.value ? oc.value : oc['default'],
-                            xtype: 'textfield'
+                            mode: 'local',
+                            scope: this,
+                            valueField: 'currency_id',
+                            displayField: 'currency',
+                            store: currencyStore
                         }
-                    ] 
+                    ]
                     }]
 
             }]
