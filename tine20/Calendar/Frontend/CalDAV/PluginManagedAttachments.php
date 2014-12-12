@@ -143,12 +143,21 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
         $name = 'NO NAME';
         $disposition = $this->server->httpRequest->getHeader('Content-Disposition');
         $contentType = $this->server->httpRequest->getHeader('Content-Type');
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+             Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ .
+            " disposition/contentType: " . $disposition . ' / '. $contentType);
+        
         $managedId = isset($getVars['managed-id']) ? $getVars['managed-id'] : NULL;
         $rid = $this->getRecurranceIds($getVars);
         list($contentType) = explode(';', $contentType);
-        if (preg_match('/filename=(.*)[ ;]{0,1}/', $disposition, $matches)) {
-            $name = trim($matches[1], " \t\n\r\0\x0B\"'");
+        if (preg_match("/filename\*=utf-8''(.*)/", $disposition, $matches)) {
+            // handle utf-8 dispositions (like this: filename=\"Reservierungsbesta?tigung _ OTTER.txt\";filename*=utf-8''Reservierungsbesta%CC%88tigung%20_%20OTTER.txt)
+            $name = $matches[1];
+        } else if (preg_match('/filename=(.*)[ ;]{0,1}/', $disposition, $matches)) {
+            $name = $matches[1];
         }
+        $name = trim($name, " \t\n\r\0\x0B\"'");
         
         // NOTE inputstream can not be rewinded
         $inputStream = fopen('php://temp','r+');
@@ -161,7 +170,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
             case 'attachment-add':
                 
                 $attachment = new Tinebase_Model_Tree_Node(array(
-                    'name'         => $name,
+                    'name'         => rawurldecode($name),
                     'type'         => Tinebase_Model_Tree_Node::TYPE_FILE,
                     'contenttype'  => $contentType,
                     'hash'         => $attachmentId,

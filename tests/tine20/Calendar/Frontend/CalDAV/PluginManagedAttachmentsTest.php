@@ -104,13 +104,13 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     /**
      * test testAddAttachment 
      */
-    public function testAddAttachment()
+    public function testAddAttachment($disposition = 'attachment;filename="agenda.txt"', $filename = 'agenda.txt')
     {
         $event = $this->calDAVTests->testCreateRepeatingEventAndPutExdate();
         
         $request = new Sabre\HTTP\Request(array(
             'HTTP_CONTENT_TYPE' => 'text/plain',
-            'HTTP_CONTENT_DISPOSITION' => 'attachment;filename="agenda.txt"',
+            'HTTP_CONTENT_DISPOSITION' => $disposition,
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/calendars/' . 
                 Tinebase_Core::getUser()->contact_id . '/'. 
@@ -127,7 +127,6 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->server->exec();
         
         $vcalendar = stream_get_contents($this->response->body);
-//         echo $vcalendar;
         
         $baseAttachments = Tinebase_FileSystem_RecordAttachments::getInstance()
             ->getRecordAttachments($event->getRecord());
@@ -137,9 +136,16 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
         $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
         $this->assertEquals(1, $baseAttachments->count());
-        $this->assertEquals('agenda.txt', $baseAttachments[0]->name);
+        $this->assertEquals($filename, $baseAttachments[0]->name);
         $this->assertEquals(1, $exdateAttachments->count());
-        $this->assertEquals('agenda.txt', $exdateAttachments[0]->name);
+        $this->assertEquals($filename, $exdateAttachments[0]->name);
+    }
+    
+    public function testAddAttachmentWithUmlauts()
+    {
+        //$filename = 'Reservierungsbestätigung : OTTER.txt';
+        $disposition = "filename=\"Reservierungsbesta?tigung _ OTTER.txt\";filename*=utf-8''Reservierungsbesta%CC%88tigung%20_%20OTTER.txt";
+        $this->testAddAttachment($disposition, 'Reservierungsbestätigung _ OTTER.txt');
     }
     
     /**
