@@ -228,7 +228,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Internet Access'),
                         app: 'Courses',
                         keyFieldName: 'internetAccess',
-                        value: 'OFF',
+                        value: 'FILTERED',
                         name: 'internet',
                         hideLabel: internetAccessDeactivated,
                         hidden: internetAccessDeactivated

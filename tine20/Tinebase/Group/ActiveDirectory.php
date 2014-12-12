@@ -318,10 +318,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         
         $this->getLdap()->update($dn, $ldapData);
         
-        if ($metaData['cn'] != $ldapData['cn']) {
-            $newDn = "cn={$ldapData['cn']},{$this->_options['baseDn']}";
+        $newDn = "cn={$ldapData['cn']},{$this->_options['baseDn']}";
+        if ($newDn != $dn) {
             $this->_ldap->rename($dn, $newDn);
         }
+        
         
         $group = $this->getGroupByIdFromSyncBackend($_group);
         

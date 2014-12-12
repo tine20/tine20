@@ -287,8 +287,11 @@ class Tinebase_Translation
             'disableNotices' => true
         );
         
+        // TODO remove workaround for server tests, maybe we should fix/rework bootstrap of tests
+        $buildtype = (! defined('TINE20_BUILDTYPE')) ? 'DEVELOPMENT' : TINE20_BUILDTYPE;
+        
         // Switch between Po and Mo adapter depending on the mode
-        switch (TINE20_BUILDTYPE) {
+        switch ($buildtype) {
             case 'DEVELOPMENT':
                 $translate = new Zend_Translate('gettextPo', $info['path'], $info['locale'], $options);
                 break;

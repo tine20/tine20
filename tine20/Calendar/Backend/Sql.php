@@ -286,17 +286,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * calculate event permissions and remove events that don't match
      * 
-     * @param Tinebase_Record_RecordSet $result
-     * @param Tinebase_Model_Filter_AclFilter $grantsFilter
+     * @param  Tinebase_Record_RecordSet        $events
+     * @param  Tinebase_Model_Filter_AclFilter  $grantsFilter
      */
-    protected function _checkGrants($result, $grantsFilter)
+    protected function _checkGrants($events, $grantsFilter)
     {
-        $clones = clone $result;
+        $currentContact    = Tinebase_Core::getUser()->contact_id;
+        $containerGrants   = Tinebase_Container::getInstance()->getContainerGrantsOfRecords($events, Tinebase_Core::getUser());
+        $resolvedAttendees = Calendar_Model_Attender::getResolvedAttendees($events->attendee, true);
         
-        Tinebase_Container::getInstance()->getGrantsOfRecords($clones, Tinebase_Core::getUser());
-        Calendar_Model_Attender::resolveAttendee($clones->attendee, TRUE, $clones);
-        
-        $me = Tinebase_Core::getUser()->contact_id;
+        $toRemove          = array();
         $inheritableGrants = array(
             Tinebase_Model_Grants::GRANT_FREEBUSY,
             Tinebase_Model_Grants::GRANT_READ,
@@ -304,59 +303,76 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             Tinebase_Model_Grants::GRANT_EXPORT,
             Tinebase_Model_Grants::GRANT_PRIVATE,
         );
-        $toRemove = array();
         
-        foreach ($result as $event) {
-            $clone = $clones->getById($event->getId());
-            if ($event->organizer == $me) {
-                foreach($this->_recordBasedGrants as $grant) {
-                    $event->{$grant}     = TRUE;
-                }
-            } else {
-                // grants to original container
-                if ($clone->container_id instanceof Tinebase_Model_Container && $clone->container_id->account_grants) {
-                    foreach($this->_recordBasedGrants as $grant) {
-                        $event->{$grant} =     $clone->container_id->account_grants[$grant] 
-                                            || $clone->container_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN];
-                    }
+        if ($grantsFilter instanceof Calendar_Model_GrantFilter) {
+            $requiredGrants = array_intersect($grantsFilter->getRequiredGrants(), $this->_recordBasedGrants);
+        }
+        
+        foreach ($events as $event) {
+            $containerId = $event->container_id instanceof Tinebase_Model_Container
+                ? $event->container_id->getId()
+                : $event->container_id;
+            
+            // either current user is organizer or has admin right on container
+            if (   $event->organizer === $currentContact
+                || (isset($containerGrants[$containerId]) && $containerGrants[$containerId]->account_grants[Tinebase_Model_Grants::GRANT_ADMIN])
+            ) {
+                foreach ($this->_recordBasedGrants as $grant) {
+                    $event->{$grant} = true;
                 }
                 
-                // check grant inheritance
+                // has all rights => no need to filter
+                continue;
+            }
+            
+            // grants to original container
+            if (isset($containerGrants[$containerId])) {
+                foreach ($this->_recordBasedGrants as $grant) {
+                    $event->{$grant} = $containerGrants[$containerId]->account_grants[$grant];
+                }
+            }
+            
+            // check grant inheritance
+            if ($event->attendee instanceof Tinebase_Record_RecordSet) {
                 foreach ($inheritableGrants as $grant) {
-                    if (! $event->{$grant} && $clone->attendee instanceof Tinebase_Record_RecordSet) {
-                        foreach($clone->attendee as $attendee) {
+                    if (! $event->{$grant}) {
+                        foreach ($event->attendee as $attendee) {
+                            $attendee = $resolvedAttendees->getById($attendee->getId());
+                            
+                            if (!$attendee) {
+                                continue;
+                            }
+                            
                             if (   $attendee->displaycontainer_id instanceof Tinebase_Model_Container
                                 && $attendee->displaycontainer_id->account_grants 
                                 && (    $attendee->displaycontainer_id->account_grants[$grant]
                                      || $attendee->displaycontainer_id->account_grants[Tinebase_Model_Grants::GRANT_ADMIN]
                                    )
-                            ){
-                                $event->{$grant} = TRUE;
+                            ) {
+                                $event->{$grant} = true;
                                 break;
                             }
                         }
                     }
                 }
-                
-                if ($grantsFilter) {
-                    $requiredGrants = array_intersect($grantsFilter->getRequiredGrants(), $this->_recordBasedGrants);
-                    
-                    $hasGrant = FALSE;
-                    foreach($requiredGrants as $requiredGrant) {
-                        if ($event->{$requiredGrant}) {
-                            $hasGrant |= $event->{$requiredGrant};
-                        }
-                    }
-                    
-                    if (! $hasGrant) {
-                        $toRemove[] = $event;
+            }
+            
+            // check if one of the grants is set ...
+            if (isset($requiredGrants)) {
+                foreach ($requiredGrants as $requiredGrant) {
+                    if ($event->{$requiredGrant}) {
+                        continue 2;
                     }
                 }
+                
+                // ... otherwise mark for removal
+                $toRemove[] = $event;
             }
         }
         
+        // remove records with non matching grants
         foreach ($toRemove as $event) {
-            $result->removeRecord($event);
+            $events->removeRecord($event);
         }
     }
     
