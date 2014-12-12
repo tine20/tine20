@@ -51,4 +51,75 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         
         return self::$_instance;
     }
+
+    /**
+     * reset sync for user
+     *
+     * @param string $username
+     * @param array $classesToReset
+     * @return boolean
+     */
+    public function resetSyncForUser($username, $classesToReset)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Resetting sync for user ' . $username . ' collections: ' . print_r($classesToReset, true));
+        
+        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $username);
+        
+        self::initSyncrotonRegistry();
+        
+        $devices = $this->_getDevicesForUser($user);
+        
+        foreach ($devices as $device) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Resetting device' . $device->friendlyname . ' / id: ' . $device->getId());
+            
+            foreach ($classesToReset as $class) {
+                $folderToReset = $this->_getFoldersForDeviceAndClass($device, $class);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Resetting ' . count($folderToReset) . ' folder(s) for class ' . $class);
+                
+                foreach ($folderToReset as $folderState) {
+                    Syncroton_Registry::getSyncStateBackend()->resetState($device->getId(), $folderState->id);
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * fetch devices for user
+     * 
+     * @param Tinebase_Model_FullUser $user
+     */
+    protected function _getDevicesForUser($user)
+    {
+        $deviceBackend = new ActiveSync_Backend_Device();
+        $deviceFilter = new ActiveSync_Model_DeviceFilter(array(
+            array('field' => 'owner_id', 'operator' => 'equals', 'value' => $user->getId())
+        ));
+        $devices = $deviceBackend->search($deviceFilter);
+        return $devices;
+    }
+    
+    protected function _getFoldersForDeviceAndClass($device, $class)
+    {
+        $folderState = Syncroton_Registry::getFolderBackend()->getFolderState($device->getId(), $class);
+        return $folderState;
+    }
+    
+    public static function initSyncrotonRegistry()
+    {
+        Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
+        Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
+        
+        Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
+        Syncroton_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
+    }
 }

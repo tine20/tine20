@@ -128,9 +128,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function deleteDuplicateEvents($opts)
     {
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $writer->addFilter(new Zend_Log_Filter_Priority(6));
-        Tinebase_Core::getLogger()->addWriter($writer);
+        $this->_addOutputLogWriter(6);
         
         $args = $this->_parseArgs($opts);
         

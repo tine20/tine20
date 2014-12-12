@@ -740,7 +740,6 @@ abstract class ActiveSync_Controller_Abstract implements Syncroton_Data_IData
 
     }
 
-
     /**
      * convert contact from xml to Tinebase_Record_Interface
      *
