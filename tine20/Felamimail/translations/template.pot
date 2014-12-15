@@ -461,7 +461,7 @@ msgstr ""
 msgid "Received"
 msgstr ""
 
-#: js/Model.js:374 js/AccountEditDialog.js:112
+#: js/Model.js:374 js/AccountEditDialog.js:115
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] ""
@@ -740,9 +740,9 @@ msgstr ""
 msgid "Select recipients for \"{0}\""
 msgstr ""
 
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:180
-#: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
-#: js/AccountEditDialog.js:276
+#: js/ContactGrid.js:119 js/AccountEditDialog.js:183
+#: js/AccountEditDialog.js:224 js/AccountEditDialog.js:239
+#: js/AccountEditDialog.js:279
 msgid "None"
 msgstr ""
 
@@ -843,142 +843,146 @@ msgstr ""
 msgid "Could not save script on Sieve server."
 msgstr ""
 
-#: js/AccountEditDialog.js:85
+#: js/AccountEditDialog.js:75
+msgid "Add New Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:88
 msgid "Signature"
 msgstr ""
 
-#: js/AccountEditDialog.js:119
+#: js/AccountEditDialog.js:122
 msgid "Account Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:123
+#: js/AccountEditDialog.js:126
 msgid "User Email"
 msgstr ""
 
-#: js/AccountEditDialog.js:128
+#: js/AccountEditDialog.js:131
 msgid "User Name (From)"
 msgstr ""
 
-#: js/AccountEditDialog.js:131
+#: js/AccountEditDialog.js:134
 msgid "Organization"
 msgstr ""
 
-#: js/AccountEditDialog.js:135
+#: js/AccountEditDialog.js:138
 msgid "Signature position"
 msgstr ""
 
-#: js/AccountEditDialog.js:146
+#: js/AccountEditDialog.js:149
 msgid "Above the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:147
+#: js/AccountEditDialog.js:150
 msgid "Below the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:152
+#: js/AccountEditDialog.js:155
 msgid "IMAP"
 msgstr ""
 
-#: js/AccountEditDialog.js:159 js/AccountEditDialog.js:202
-#: js/AccountEditDialog.js:257
+#: js/AccountEditDialog.js:162 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:260
 msgid "Host"
 msgstr ""
 
-#: js/AccountEditDialog.js:163
+#: js/AccountEditDialog.js:166
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr ""
 
-#: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
-#: js/AccountEditDialog.js:266
+#: js/AccountEditDialog.js:172 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:269
 msgid "Secure Connection"
 msgstr ""
 
-#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
-#: js/AccountEditDialog.js:277
+#: js/AccountEditDialog.js:184 js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:280
 msgid "TLS"
 msgstr ""
 
-#: js/AccountEditDialog.js:182 js/AccountEditDialog.js:223
+#: js/AccountEditDialog.js:185 js/AccountEditDialog.js:226
 msgid "SSL"
 msgstr ""
 
-#: js/AccountEditDialog.js:185
+#: js/AccountEditDialog.js:188
 msgid "Username"
 msgstr ""
 
-#: js/AccountEditDialog.js:189
+#: js/AccountEditDialog.js:192
 msgid "Password"
 msgstr ""
 
-#: js/AccountEditDialog.js:195
+#: js/AccountEditDialog.js:198
 msgid "SMTP"
 msgstr ""
 
-#: js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:208
 msgid "Port (Default: 25)"
 msgstr ""
 
-#: js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:229
 msgid "Authentication"
 msgstr ""
 
-#: js/AccountEditDialog.js:237
+#: js/AccountEditDialog.js:240
 msgid "Login"
 msgstr ""
 
-#: js/AccountEditDialog.js:238
+#: js/AccountEditDialog.js:241
 msgid "Plain"
 msgstr ""
 
-#: js/AccountEditDialog.js:241
+#: js/AccountEditDialog.js:244
 msgid "Username (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:244
+#: js/AccountEditDialog.js:247
 msgid "Password (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:250
+#: js/AccountEditDialog.js:253
 msgid "Sieve"
 msgstr ""
 
-#: js/AccountEditDialog.js:261
+#: js/AccountEditDialog.js:264
 msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/AccountEditDialog.js:281
+#: js/AccountEditDialog.js:284
 msgid "Other Settings"
 msgstr ""
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:291
 msgid "Sent Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:294
+#: js/AccountEditDialog.js:297
 msgid "Trash Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:300
+#: js/AccountEditDialog.js:303
 msgid "Drafts Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:306
+#: js/AccountEditDialog.js:309
 msgid "Templates Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:312
+#: js/AccountEditDialog.js:315
 msgid "Display Format"
 msgstr ""
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:326
 msgid "HTML"
 msgstr ""
 
-#: js/AccountEditDialog.js:324
+#: js/AccountEditDialog.js:327
 msgid "Plain Text"
 msgstr ""
 
-#: js/AccountEditDialog.js:325
+#: js/AccountEditDialog.js:328
 msgid "Depending on content type (experimental)"
 msgstr ""
 
