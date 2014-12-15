@@ -530,7 +530,7 @@ class Tinebase_User
         try {
             $contact = $addressbook->getByUserId($syncedUser->getId());
             
-            $userBackend->updateContactFromSyncBackend($syncedUser, $contact);
+            Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
             if (! empty($syncedUser->container_id)) {
                 $contact->container_id = $syncedUser->container_id;
             }
@@ -545,7 +545,7 @@ class Tinebase_User
             $addressbook->update($contact);
         } catch (Addressbook_Exception_NotFound $aenf) {
             self::createContactForSyncedUser($syncedUser);
-            $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
         }
     }
     
