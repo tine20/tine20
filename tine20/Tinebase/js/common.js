@@ -464,8 +464,12 @@ Tine.Tinebase.common = {
             displayName = record.data.account_name;
         }
         
-        iconCls = type === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
+        if (displayName == 'Anyone') {
+            displayName = _(displayName);
+            type = 'group';
+        }
         
+        iconCls = type === 'user' ? 'renderer renderer_accountUserIcon' : 'renderer renderer_accountGroupIcon';
         return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName || '');
     },
     
