@@ -719,7 +719,7 @@ msgstr ""
 #: js/widgets/persistentfilter/PickerPanel.js:326
 #: js/widgets/grid/GridPanel.js:1810
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
-#: js/widgets/dialog/EditDialog.js:885 js/MainMenu.js:263
+#: js/widgets/dialog/EditDialog.js:885 js/MainMenu.js:251
 msgid "Confirm"
 msgstr ""
 
@@ -1247,6 +1247,10 @@ msgstr ""
 
 #: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
+msgstr ""
+
+#: js/widgets/ContentTypeTreePanel.js:39
+msgid "Modules"
 msgstr ""
 
 #: js/widgets/customfields/EditDialogPlugin.js:155
@@ -2209,7 +2213,7 @@ msgstr ""
 msgid "Please enter your credentials"
 msgstr ""
 
-#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:157
+#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:156
 msgid "Preferences"
 msgstr ""
 
@@ -2337,70 +2341,62 @@ msgstr ""
 msgid "User: {0}"
 msgstr ""
 
-#: js/MainMenu.js:112
+#: js/MainMenu.js:111
 msgid "Return to original user account"
 msgstr ""
 
-#: js/MainMenu.js:138 js/AboutDialog.js:41
+#: js/MainMenu.js:137 js/AboutDialog.js:41
 #, python-brace-format
 msgid "About {0}"
 msgstr ""
 
-#: js/MainMenu.js:144
+#: js/MainMenu.js:143
 msgid "Help"
 msgstr ""
 
-#: js/MainMenu.js:151
+#: js/MainMenu.js:150
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainMenu.js:164
+#: js/MainMenu.js:163
 msgid "Edit Profile"
 msgstr ""
 
-#: js/MainMenu.js:171
+#: js/MainMenu.js:170
 msgid "Change password"
 msgstr ""
 
-#: js/MainMenu.js:178
+#: js/MainMenu.js:177
 msgid "Logout"
 msgstr ""
 
-#: js/MainMenu.js:179
+#: js/MainMenu.js:178
 #, python-brace-format
 msgid "Logout from {0}"
 msgstr ""
 
-#: js/MainMenu.js:186 js/AboutDialog.js:56
+#: js/MainMenu.js:185 js/AboutDialog.js:56
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr ""
 
-#: js/MainMenu.js:196
+#: js/MainMenu.js:195
 msgid "Allow desktop notifications"
 msgstr ""
 
-#: js/MainMenu.js:197
+#: js/MainMenu.js:196
 msgid "Request permissions for webkit desktop notifications."
 msgstr ""
 
-#: js/MainMenu.js:207
-msgid "Install web app"
-msgstr ""
-
-#: js/MainMenu.js:208
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr ""
-
-#: js/MainMenu.js:263
+#: js/MainMenu.js:251
 msgid "Are you sure you want to logout?"
 msgstr ""
 
-#: js/MainMenu.js:277
+#: js/MainMenu.js:265
 msgid "Logging you out..."
 msgstr ""
 
-#: js/MainMenu.js:277 js/LoginPanel.js:474
+#: js/MainMenu.js:265 js/LoginPanel.js:474
 msgid "Please wait!"
 msgstr ""
 
