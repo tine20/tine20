@@ -200,4 +200,37 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
 
         $group = Admin_Controller_Group::getInstance()->get($groups[0]->getId());
     }
+
+    public function testCustomFieldCreate()
+    {
+        $cf = Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'name'              => 'unittest_test',
+            'model'             => 'Addressbook_Model_Contact',
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
+        )));
+
+        $lookupCf = Tinebase_CustomField::getInstance()->getCustomField($cf->getId());
+
+        $this->assertEquals('unittest_test', $lookupCf->name);
+    }
+
+    public function testCustomFieldDelete()
+    {
+        $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
+        $result = $cfs->filter('name', 'unittest_test')->getFirstRecord();
+
+        $deleted = Admin_Controller_Customfield::getInstance()->delete($result->getId());
+
+        $this->assertEquals(1, count($deleted));
+    }
 }
