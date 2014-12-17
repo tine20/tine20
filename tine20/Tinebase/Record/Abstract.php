@@ -361,13 +361,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function setFromArray(array $_data)
     {
         if ($this->convertDates === true) {
-            if (! is_string($this->dateConversionFormat)) {
-                $this->_convertISO8601ToDateTime($_data);
-            } else {
-                $this->_convertCustomDateToDateTime($_data, $this->dateConversionFormat);
-            }
-            
-            $this->_convertTime($_data);
+            $this->_convertISO8601ToDateTime($_data);
         }
         
         // set internal state to "not validated"
@@ -743,67 +737,47 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * Converts iso8601 formated dates into Tinebase_DateTime representation
      * 
-     * NOTE: Instead of using the Tinebase_DateTime build in date creation from iso, we 
-     *       first convert the dates to UNIX timestamp by hand and create Tinebase_DateTimes
-     *       from this timestamp. This brings a 15 times performance boost
-     *
      * @param array &$_data
-     * 
      * @return void
      */
     protected function _convertISO8601ToDateTime(array &$_data)
     {
         foreach ($this->_datetimeFields as $field) {
-            if (!isset($_data[$field]) || $_data[$field] instanceof DateTime) continue;
+            if (!isset($_data[$field])) {
+                continue;
+            }
             
-            if (! is_array($_data[$field]) && strpos($_data[$field], ',') !== false) {
-                $_data[$field] = explode(',', $_data[$field]);
+            $value = $_data[$field];
+            
+            if ($value instanceof DateTime) {
+                continue;
+            }
+            
+            if (! is_array($value) && strpos($value, ',') !== false) {
+                $value = explode(',', $value);
             }
             
             try {
-                if (is_array($_data[$field])) {
-                    foreach($_data[$field] as $dataKey => $dataValue) {
-                        if ($dataValue instanceof DateTime) continue;
-                        $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
+                if (is_array($value)) {
+                    foreach ($value as $dataKey => $dataValue) {
+                        if ($dataValue instanceof DateTime) {
+                            continue;
+                        }
+                        
+                        $value[$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
                     }
                 } else {
-                    $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Tinebase_DateTime($_data[$field]);
+                    $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
                     
                 }
             } catch (Tinebase_DateTime_Exception $zde) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());
-                $_data[$field] = NULL;
+                $value = NULL;
             }
+            
+            $_data[$field] = $value;
         }
         
-    }
-    
-    /**
-     * Converts custom formated dates into Tinebase_DateTime representation
-     *
-     * @param array &$_data
-     * @param string $_format {@see Tinebase_DateTime}
-     * 
-     * @return void
-     */
-    protected function _convertCustomDateToDateTime(array &$_data, $_format)
-    {
-        foreach ($this->_datetimeFields as $field) {
-            if (!isset($_data[$field]) || $_data[$field] instanceof DateTime) continue;
-            
-            if (strpos($_data[$field], ',') !== false) {
-                $_data[$field] = explode(',', $_data[$field]);
-            }
-            
-            if (is_array($_data[$field])) {
-                foreach($_data[$field] as $dataKey => $dataValue) {
-                    if ($dataValue instanceof DateTime) continue;
-                    $_data[$field][$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
-                }
-            } else {
-                $_data[$field] = (int)$_data[$field] == 0 ? NULL : new Tinebase_DateTime($_data[$field]);
-            }
-        }
     }
     
     /**
