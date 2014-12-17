@@ -471,7 +471,7 @@ class Tinebase_User
             if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
                 $currentUser->visibility            = $user->visibility;
                 if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
-                    self::syncContact($currentUser);
+                    self::createContactForSyncedUser($currentUser);
                 }
             }
         
@@ -492,38 +492,61 @@ class Tinebase_User
             }
             
             if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
-                self::syncContact($user);
+                self::createContactForSyncedUser($user);
             }
             $syncedUser = $userBackend->addUserInSqlBackend($user);
             $userBackend->addPluginUser($syncedUser, $user);
         }
         
-        // import contactdata(phone, address, fax, birthday. photo)
-        if (isset($options['syncContactData']) 
-                && $options['syncContactData'] 
-                && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true
-                && $syncedUser->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN
-        ) {
-            $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-            
-            try {
-                $contact = $addressbook->getByUserId($syncedUser->getId());
-                
-                $userBackend->updateContactFromSyncBackend($syncedUser, $contact);
-                if (! empty($syncedUser->container_id)) {
-                    $contact->container_id = $syncedUser->container_id;
-                }
-                $addressbook->update($contact);
-            } catch (Addressbook_Exception_NotFound $aenf) {
-                self::syncContact($syncedUser);
-                $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
-            }
-        }
+        self::syncContactData($syncedUser, $options);
         
         // sync group memberships
         Tinebase_Group::syncMemberships($syncedUser);
         
         return $syncedUser;
+    }
+    
+    /**
+     * import contactdata(phone, address, fax, birthday. photo)
+     * 
+     * @param Tinebase_Model_FullUser $syncedUser
+     * @param array $options
+     */
+    public static function syncContactData($syncedUser, $options)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true)
+                || ! isset($options['syncContactData'])
+                || ! $options['syncContactData']
+                || ! Tinebase_Application::getInstance()->isInstalled('Addressbook')
+                ||   $syncedUser->visibility === Tinebase_Model_FullUser::VISIBILITY_HIDDEN
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Contact data sync disabled');
+            return;
+        }
+        
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        try {
+            $contact = $addressbook->getByUserId($syncedUser->getId());
+            
+            Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
+            if (! empty($syncedUser->container_id)) {
+                $contact->container_id = $syncedUser->container_id;
+            }
+            
+            // add modlog info
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+            Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Updating contact data for user ' . $syncedUser->accountLoginName);
+            
+            $addressbook->update($contact);
+        } catch (Addressbook_Exception_NotFound $aenf) {
+            self::createContactForSyncedUser($syncedUser);
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
+        }
     }
     
     /**
@@ -599,7 +622,7 @@ class Tinebase_User
      * 
      * @param Tinebase_Model_FullUser $user
      */
-    public static function syncContact($user)
+    public static function createContactForSyncedUser($user)
     {
         if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
             return;
