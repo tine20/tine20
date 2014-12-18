@@ -540,11 +540,11 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var app = this.app,
             nodeName = Tine.Filemanager.Model.Node.getContainerName();
         
-        Ext.MessageBox.prompt(_('New Folder'), _('Please enter the name of the new folder:'), function(_btn, _text) {
+        Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), function(_btn, _text) {
             var currentFolderNode = app.getMainScreen().getCenterPanel().currentFolderNode;
             if(currentFolderNode && _btn == 'ok') {
                 if (! _text) {
-                    Ext.Msg.alert(String.format(_('No {0} added'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
+                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
                     return;
                 }
                 

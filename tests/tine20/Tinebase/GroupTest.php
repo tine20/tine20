@@ -263,7 +263,7 @@ class Tinebase_GroupTest extends TestCase
         $testUser->contact_id = $contact->getId();
         $testUser = Tinebase_User::getInstance()->addUserInSqlBackend($testUser);
         
-        Tinebase_User::syncContact($testUser);
+        Tinebase_User::createContactForSyncedUser($testUser);
         Tinebase_User::getInstance()->updateUserInSqlBackend($testUser);
         
         $this->testSetGroupMembers($testGroup, array($testUser->accountId));

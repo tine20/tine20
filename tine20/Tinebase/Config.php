@@ -145,6 +145,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
     
     /**
+     * configure if user contact data should be synced from sync backend
+     *
+     * @var boolean
+     */
+    const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
+    
+    /**
      * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
      * 
      * @var string
@@ -487,6 +494,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
+        ),
+        self::SYNC_USER_CONTACT_DATA => array(
+                //_('Sync contact data from sync backend')
+                'label'                 => 'Sync contact data from sync backend',
+                //_('Sync user contact data from sync backend')
+                'description'           => 'Sync user contact data from sync backend',
+                'type'                  => 'bool',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+                'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')

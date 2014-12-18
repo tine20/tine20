@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -475,5 +475,35 @@ class ActiveSync_Command_SyncTests extends TestCase
         $this->assertEquals("uri:Email", $syncDoc->lookupNamespaceURI('Email'), $syncDoc->saveXML());
         
         $emailTest->tearDown();
+    }
+
+    
+    /**
+     * testResetSync
+     * 
+     * @see 0010584: CLI function for resetting sync on devices
+     */
+    public function testResetSync()
+    {
+        $class = 'Calendar';
+        $this->testSyncOfEvents();
+        
+        $result = ActiveSync_Controller::getInstance()->resetSyncForUser(Tinebase_Core::getUser()->accountLoginName, array($class));
+        
+        $this->assertTrue($result);
+        
+        // check if synckey = 0
+        $folderState = Syncroton_Registry::getFolderBackend()->getFolderState($this->_device->id, $class);
+        
+        $this->assertTrue(count($folderState) > 0);
+        
+        foreach ($folderState as $folder) {
+            try {
+               $syncState = Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device->id, $folder->id);
+               $this->fail('should not find sync state for folder');
+            } catch (Exception $e) {
+                $this->assertEquals('id not found', $e->getMessage());
+            }
+        }
     }
 }

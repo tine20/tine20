@@ -189,6 +189,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             },
             applyState: function(state) {
                 if (state.detailsButtonPressed) {
+                    this.setText( _('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
             },
@@ -227,6 +228,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
+        btn.setText(btn.pressed ? _('hide details') : _('show details'));
+        
         this.ftb[btn.pressed ? 'show' : 'hide']();
         
         // cares for resizing

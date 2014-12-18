@@ -154,7 +154,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
         
-        $this->assertContains("ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@" . $this->_getMailDomain(), (string) $ics, 'ATTENDEE missing/broken');
+        $this->assertContains("ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@" . substr($this->_getMailDomain(), 0, -14), (string) $ics, 'ATTENDEE missing/broken');
     }
     
     public function testExportAlarm()

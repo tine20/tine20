@@ -34,7 +34,7 @@ msgstr ""
 msgid "Without company assigned"
 msgstr ""
 
-#: User/Sql.php:1041
+#: User/Sql.php:1062
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
@@ -224,7 +224,7 @@ msgstr ""
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:398
+#: js/widgets/dialog/EditDialog.js:432
 #: js/widgets/dialog/ExceptionHandlerDialog.js:197 js/CreditsScreen.js:53
 #: js/AboutDialog.js:61
 msgid "Ok"
@@ -242,7 +242,7 @@ msgstr ""
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:418
+#: js/widgets/dialog/EditDialog.js:452
 #: js/widgets/dialog/ExceptionHandlerDialog.js:189
 msgid "Cancel"
 msgstr ""
@@ -366,7 +366,7 @@ msgid "Profile Information"
 msgstr ""
 
 #: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:409
+#: js/widgets/dialog/EditDialog.js:443
 msgid "Apply"
 msgstr ""
 
@@ -603,12 +603,12 @@ msgstr ""
 msgid "Changing user account ..."
 msgstr ""
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:466
-#: js/widgets/dialog/EditDialog.js:494
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:500
+#: js/widgets/dialog/EditDialog.js:528
 msgid "Saved in"
 msgstr ""
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:427
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:461
 msgid "delete"
 msgstr ""
 
@@ -719,7 +719,7 @@ msgstr ""
 #: js/widgets/persistentfilter/PickerPanel.js:326
 #: js/widgets/grid/GridPanel.js:1810
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
-#: js/widgets/dialog/EditDialog.js:851 js/MainMenu.js:263
+#: js/widgets/dialog/EditDialog.js:885 js/MainMenu.js:251
 msgid "Confirm"
 msgstr ""
 
@@ -1106,7 +1106,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
-#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:863
+#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:897
 msgid "Failed"
 msgstr ""
 
@@ -1247,6 +1247,10 @@ msgstr ""
 
 #: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
+msgstr ""
+
+#: js/widgets/ContentTypeTreePanel.js:39
+msgid "Modules"
 msgstr ""
 
 #: js/widgets/customfields/EditDialogPlugin.js:155
@@ -1496,7 +1500,7 @@ msgid_plural "Edit {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:567 js/widgets/dialog/EditDialog.js:623
+#: js/widgets/grid/GridPanel.js:567 js/widgets/dialog/EditDialog.js:657
 #, python-brace-format
 msgid "Copy {0}"
 msgstr ""
@@ -1560,7 +1564,7 @@ msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1853 js/widgets/dialog/EditDialog.js:853
+#: js/widgets/grid/GridPanel.js:1853 js/widgets/dialog/EditDialog.js:887
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr ""
@@ -1704,7 +1708,8 @@ msgid "Search Account ..."
 msgstr ""
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
+#: js/widgets/grid/FilterPanel.js:261 js/widgets/grid/FilterPanel.js:312
 msgid "show details"
 msgstr ""
 
@@ -1713,7 +1718,13 @@ msgstr ""
 msgid "Always show advanced filters"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:192
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
+#: js/widgets/grid/FilterPanel.js:272 js/widgets/grid/FilterPanel.js:312
+msgid "hide details"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:371
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
@@ -1732,7 +1743,7 @@ msgstr ""
 msgid "Attention: There are more filters active!"
 msgstr ""
 
-#: js/widgets/grid/FilterPanel.js:511
+#: js/widgets/grid/FilterPanel.js:513
 #, python-brace-format
 msgid "Criteria {0}"
 msgstr ""
@@ -1924,14 +1935,14 @@ msgstr ""
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:822 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:856 js/LoginPanel.js:508
 msgid "Errors"
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 #: js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:844 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:878 js/LoginPanel.js:508
 msgid "Please fix the errors noted."
 msgstr ""
 
@@ -2202,7 +2213,7 @@ msgstr ""
 msgid "Please enter your credentials"
 msgstr ""
 
-#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:157
+#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:156
 msgid "Preferences"
 msgstr ""
 
@@ -2218,32 +2229,32 @@ msgstr ""
 msgid "My Profile"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:626
+#: js/widgets/dialog/EditDialog.js:660
 #, python-brace-format
 msgid "Add New {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:628
+#: js/widgets/dialog/EditDialog.js:662
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:699
+#: js/widgets/dialog/EditDialog.js:733
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:851
+#: js/widgets/dialog/EditDialog.js:885
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:863
+#: js/widgets/dialog/EditDialog.js:897
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:918
+#: js/widgets/dialog/EditDialog.js:952
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
@@ -2330,70 +2341,62 @@ msgstr ""
 msgid "User: {0}"
 msgstr ""
 
-#: js/MainMenu.js:112
+#: js/MainMenu.js:111
 msgid "Return to original user account"
 msgstr ""
 
-#: js/MainMenu.js:138 js/AboutDialog.js:41
+#: js/MainMenu.js:137 js/AboutDialog.js:41
 #, python-brace-format
 msgid "About {0}"
 msgstr ""
 
-#: js/MainMenu.js:144
+#: js/MainMenu.js:143
 msgid "Help"
 msgstr ""
 
-#: js/MainMenu.js:151
+#: js/MainMenu.js:150
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainMenu.js:164
+#: js/MainMenu.js:163
 msgid "Edit Profile"
 msgstr ""
 
-#: js/MainMenu.js:171
+#: js/MainMenu.js:170
 msgid "Change password"
 msgstr ""
 
-#: js/MainMenu.js:178
+#: js/MainMenu.js:177
 msgid "Logout"
 msgstr ""
 
-#: js/MainMenu.js:179
+#: js/MainMenu.js:178
 #, python-brace-format
 msgid "Logout from {0}"
 msgstr ""
 
-#: js/MainMenu.js:186 js/AboutDialog.js:56
+#: js/MainMenu.js:185 js/AboutDialog.js:56
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr ""
 
-#: js/MainMenu.js:196
+#: js/MainMenu.js:195
 msgid "Allow desktop notifications"
 msgstr ""
 
-#: js/MainMenu.js:197
+#: js/MainMenu.js:196
 msgid "Request permissions for webkit desktop notifications."
 msgstr ""
 
-#: js/MainMenu.js:207
-msgid "Install web app"
-msgstr ""
-
-#: js/MainMenu.js:208
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr ""
-
-#: js/MainMenu.js:263
+#: js/MainMenu.js:251
 msgid "Are you sure you want to logout?"
 msgstr ""
 
-#: js/MainMenu.js:277
+#: js/MainMenu.js:265
 msgid "Logging you out..."
 msgstr ""
 
-#: js/MainMenu.js:277 js/LoginPanel.js:474
+#: js/MainMenu.js:265 js/LoginPanel.js:474
 msgid "Please wait!"
 msgstr ""
 
@@ -2799,305 +2802,309 @@ msgstr ""
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
-#: Container.php:706
+#: Container.php:709
 #, python-format
 msgid "%s's personal container"
 msgstr ""
 
-#: Container.php:1617
+#: Container.php:1656
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr ""
 
-#: Config.php:309
+#: Config.php:316
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:311
+#: Config.php:318
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:320
+#: Config.php:327
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:322
+#: Config.php:329
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:331
+#: Config.php:338
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:333
+#: Config.php:340
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:342
+#: Config.php:349
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:344
+#: Config.php:351
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:352
+#: Config.php:359
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:354
+#: Config.php:361
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:363
+#: Config.php:370
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:365
+#: Config.php:372
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:373
+#: Config.php:380
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:375
+#: Config.php:382
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:384
+#: Config.php:391
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:386
+#: Config.php:393
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:394
+#: Config.php:401
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:396
+#: Config.php:403
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:404
+#: Config.php:411
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:406
+#: Config.php:413
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:414
+#: Config.php:421
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:416
+#: Config.php:423
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:424
+#: Config.php:431
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:426
+#: Config.php:433
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:434
+#: Config.php:441
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:436
+#: Config.php:443
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:444
+#: Config.php:451
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:446
+#: Config.php:453
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:454
+#: Config.php:461
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:456
+#: Config.php:463
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:464
+#: Config.php:471
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:466
+#: Config.php:473
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:475
+#: Config.php:482
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:477
+#: Config.php:484
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:485
+#: Config.php:492
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:487
+#: Config.php:494
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:495
+#: Config.php:502
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:497
+#: Config.php:504
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:505
+#: Config.php:512
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:507
+#: Config.php:514
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:515 Config.php:517
+#: Config.php:522 Config.php:524
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:525 Config.php:527
+#: Config.php:532 Config.php:534
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:536 Config.php:538
+#: Config.php:543 Config.php:545
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:546
+#: Config.php:553
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:548
+#: Config.php:555
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:556
+#: Config.php:563
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:558
+#: Config.php:565
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:566
+#: Config.php:573
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:568
+#: Config.php:575
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:576
+#: Config.php:583
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:578
+#: Config.php:585
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:586
+#: Config.php:593
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:588
+#: Config.php:595
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:596
+#: Config.php:603
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:598
+#: Config.php:605
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:606
+#: Config.php:613
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:608
+#: Config.php:615
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:616
+#: Config.php:623
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:618
+#: Config.php:625
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:626
+#: Config.php:633
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:628
+#: Config.php:635
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:636
+#: Config.php:643
 msgid "Maximum login failures"
 msgstr ""
 
-#: Config.php:638
+#: Config.php:645
 msgid "Maximum allowed login failures before blocking account"
 msgstr ""
 
-#: Config.php:646
+#: Config.php:653
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:648
+#: Config.php:655
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Config.php:656
+#: Config.php:663
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:658
+#: Config.php:665
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of "
 "sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:666
+#: Config.php:673
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:668
+#: Config.php:675
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login "
 "with deactivated account"
 msgstr ""
 
-#: Config.php:676
+#: Config.php:683
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:678
+#: Config.php:685
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
+msgstr ""
+
+#: Config.php:693 Config.php:695
+msgid "Max username length"
 msgstr ""
 
 #: Import/Csv/Abstract.php:200
@@ -3118,43 +3125,43 @@ msgstr ""
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3345
+#: Setup/setup.xml:3421
 msgid "note"
 msgstr ""
 
-#: Setup/setup.xml:3350
+#: Setup/setup.xml:3426
 msgid "default note type"
 msgstr ""
 
-#: Setup/setup.xml:3376
+#: Setup/setup.xml:3452
 msgid "telephone"
 msgstr ""
 
-#: Setup/setup.xml:3381
+#: Setup/setup.xml:3457
 msgid "telephone call"
 msgstr ""
 
-#: Setup/setup.xml:3407
+#: Setup/setup.xml:3483
 msgid "email"
 msgstr ""
 
-#: Setup/setup.xml:3412
+#: Setup/setup.xml:3488
 msgid "email contact"
 msgstr ""
 
-#: Setup/setup.xml:3438
+#: Setup/setup.xml:3514
 msgid "created"
 msgstr ""
 
-#: Setup/setup.xml:3443
+#: Setup/setup.xml:3519
 msgid "record created"
 msgstr ""
 
-#: Setup/setup.xml:3469
+#: Setup/setup.xml:3545
 msgid "changed"
 msgstr ""
 
-#: Setup/setup.xml:3474
+#: Setup/setup.xml:3550
 msgid "record changed"
 msgstr ""
 

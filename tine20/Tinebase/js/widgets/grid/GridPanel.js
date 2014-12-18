@@ -418,6 +418,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             var columns = [];
             Ext.each(this.modelConfig.fieldKeys, function(key) {
                 var fieldConfig = this.modelConfig.fields[key];
+                    globalI18n = (fieldConfig && fieldConfig.hasOwnProperty('useGlobalTranslation'));
                 
                 // don't show multiple record fields
                 if (fieldConfig.type == 'records') {
@@ -439,7 +440,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     var config = {
                         id: key,
                         dataIndex: (fieldConfig.type == 'relation') ? 'relations' : key,
-                        header: this.app.i18n._(fieldConfig.label),
+                        header: globalI18n ? _(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
                         hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
                         sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
                     };

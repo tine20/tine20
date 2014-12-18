@@ -133,6 +133,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
     public static function getPreferenceValues($_appName, $_accountId = null, $_returnDefaultId = null)
     {
         $i18n = Tinebase_Translation::getTranslation($_appName);
+        $i18nTinebase = Tinebase_Translation::getTranslation('Tinebase');
         $pfilters = self::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName($_appName)->getId()),
             array('field' => 'account_id',     'operator' => 'equals', 'value'  => $_accountId ? $_accountId : Tinebase_Core::getUser()->getId()),
@@ -149,8 +150,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
             
             $result[] = array(
                 Tinebase_Preference_Abstract::LASTUSEDFILTER,
-                //_('- The last filter I used -')
-                $i18n->translate('- The last filter I used -')
+                $i18nTinebase->translate('- The last filter I used -')
             );
             return $result;
         } else {
