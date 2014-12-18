@@ -31,7 +31,7 @@ class Zend_Db_SelectTest extends TestCase
             $this->assertEquals(' ORDER BY `id; SLEEP(1)` ASC', $select->__toString());
         } else if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             $select->order('id; SELECT PG_SLEEP(5)');
-            $this->assertEquals(' ORDER BY `id; SELECT PG_SLEEP(5)` ASC', $select->__toString());
+            $this->assertEquals(' ORDER BY "id; SELECT PG_SLEEP(5)" ASC', $select->__toString());
         } else {
             $this->markTestSkipped('no test for this adapter yet');
         }
