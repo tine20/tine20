@@ -26,15 +26,15 @@ class ActiveSync_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * reset sync
      * 
-     * @param Zend_Console_Getopt $_opts
+     * @param Zend_Console_Getopt $opts
      */
-    public function resetSync(Zend_Console_Getopt $_opts)
+    public function resetSync(Zend_Console_Getopt $opts)
     {
         $this->_addOutputLogWriter(6);
         
-        $args = $this->_parseArgs($opts, array('username'));
+        $args = $this->_parseArgs($opts, array('user'));
         
-        if ($args['username'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight()) {
+        if ($args['user'] != Tinebase_Core::getUser()->accountLoginName && ! $this->_checkAdminRight()) {
             return 1;
         }
         
@@ -43,7 +43,7 @@ class ActiveSync_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ? array($args['collection'])
             : $possibleClasses;
         
-        ActiveSync_Controller::getInstance()->resetSyncForUser($args['username'], $classesToReset);
+        $result = ActiveSync_Controller::getInstance()->resetSyncForUser($args['user'], $classesToReset);
         
         return ($result) ? 0 : 1;
     }
