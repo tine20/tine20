@@ -536,8 +536,8 @@ class Tinebase_User
             }
             
             // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
-            Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+            // Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+            // Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Updating contact data for user ' . $syncedUser->accountLoginName);
