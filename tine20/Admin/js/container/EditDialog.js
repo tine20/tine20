@@ -38,7 +38,8 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     evalGrants: false,
-    
+    modelStore: null,
+
     /**
      * executed after record got updated from proxy
      */
@@ -92,7 +93,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return this.grantsGrid;
     },
-    
+
     /**
      * returns dialog
      */
@@ -103,11 +104,17 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             totalProperty: 'totalcount',
             fields: Tine.Admin.Model.Application
         });
+
         this.appStore.loadData({
             results: userApplications,
             totalcount: userApplications.length
         });
-        
+
+        this.modelStore = new Ext.data.ArrayStore({
+            idIndex: 0,
+            fields: [{name: 'value'}, {name: 'name'}]
+        });
+
         return {
             layout: 'vbox',
             layoutConfig: {
@@ -137,18 +144,30 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     mode: 'local',
                     anchor: '100%',
                     allowBlank: false,
-                    forceSelection: true
-                }, 
-                    // TODO: in master we can fill a combo using app.registry.get('models'), 
-                    //        but at the moment this is just a ro textfield, and we have no 
-                    //        apps with more than one model having containers
+                    forceSelection: true,
+                    listeners: {
+                        scope: this,
+                        'select': function (combo, rec) {
+                            this.modelStore.loadData(this.getApplicationModels(rec, false));
+                            Ext.getCmp('modelCombo').setValue('');
+                        }
+                    }
+                },
                 {
-                    readOnly: 1,
+                    xtype: 'combo',
+                    readOnly: this.record.id != 0,
+                    store: this.modelStore,
                     columnWidth: 0.225,
                     name: 'model',
+                    displayField: 'name',
+                    valueField: 'value',
                     fieldLabel: this.app.i18n._('Model'),
+                    mode: 'local',
                     anchor: '100%',
-                    allowBlank: true
+                    allowBlank: false,
+                    forceSelection: true,
+                    editable: false,
+                    id: 'modelCombo'
                 }, {
                     xtype: 'combo',
                     columnWidth: 0.225,

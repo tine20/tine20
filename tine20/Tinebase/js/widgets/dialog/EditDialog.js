@@ -189,7 +189,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-    
+
     /**
      * relations panel
      * 
@@ -387,6 +387,40 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }, this);
         }
+    },
+
+    /**
+     * Get available model for given application
+     *
+     *  @param {Mixed} application
+     *  @param {Boolean} customFieldModel
+     */
+    getApplicationModels: function (application, customFieldModel) {
+        var models      = [],
+            useModel,
+            appName     = Ext.isString(application) ? application : application.get('name'),
+            app         = Tine.Tinebase.appMgr.get(appName),
+            trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation,
+            appModels   = Tine[appName].Model;
+
+        if (appModels) {
+            for (var model in appModels) {
+                if (appModels.hasOwnProperty(model) && typeof appModels[model].getMeta === 'function') {
+                    if (customFieldModel && appModels[model].getField('customfields')) {
+                        useModel = appModels[model].getMeta('appName') + '_Model_' + appModels[model].getMeta('modelName');
+
+                        Tine.log.info('Found model with customfields property: ' + useModel);
+                        models.push([useModel, trans.n_(appModels[model].getMeta('recordName'), appModels[model].getMeta('recordsName'), 1)]);
+                    } else if (! customFieldModel) {
+                        useModel = 'Tine.' + appModels[model].getMeta('appName') + '.Model.' + appModels[model].getMeta('modelName');
+
+                        Tine.log.info('Found model: ' + useModel);
+                        models.push([useModel, trans.n_(appModels[model].getMeta('recordName'), appModels[model].getMeta('recordsName'), 1)]);
+                    }
+                }
+            }
+        }
+        return models;
     },
 
     /**

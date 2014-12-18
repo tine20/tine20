@@ -173,15 +173,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      */
     protected function _initializeRegistry()
     {
-        Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
-        Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
-        
-        Syncroton_Registry::set(Syncroton_Registry::DEVICEBACKEND,       new Syncroton_Backend_Device(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set(Syncroton_Registry::FOLDERBACKEND,       new Syncroton_Backend_Folder(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
+        ActiveSync_Controller::initSyncrotonRegistry();
         
         $applications = is_object(Tinebase_Core::getUser())
             ? Tinebase_Core::getUser()->getApplications()

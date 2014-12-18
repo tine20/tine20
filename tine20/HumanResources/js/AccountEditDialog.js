@@ -27,7 +27,7 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     evalGrants: false,
 
     windowWidth: 550,
-    windowHeight: 490,
+    windowHeight: 560,
     
     /**
      * inits the component

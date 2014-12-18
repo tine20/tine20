@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012
 # Björn Balazs <transifex@lazs.de>, 2013
@@ -13,17 +13,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-10-26 17:46+0000\n"
-"Last-Translator: lkneschke <l.kneschke@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2014-12-15 16:23+0100\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
@@ -473,7 +473,7 @@ msgstr "Flags"
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/Model.js:374 js/AccountEditDialog.js:112
+#: js/Model.js:374 js/AccountEditDialog.js:115
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
@@ -561,9 +561,10 @@ msgstr "E-Mailnotiz anlegen"
 
 #: js/MessageEditDialog.js:185
 msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
-msgstr "Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
+"Activate this toggle button to save the email text as a note attached to the "
+"recipient(s) contact(s)."
+msgstr ""
+"Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
 
 #: js/MessageEditDialog.js:189
 msgid "Reading Confirmation"
@@ -575,7 +576,9 @@ msgstr "Aktivieren Sie diesen Knopf um eine Lesebestätigung zu erhalten."
 
 #: js/MessageEditDialog.js:215
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
+msgstr ""
+"Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste "
+"hinzuzufügen."
 
 #: js/MessageEditDialog.js:350
 #, python-brace-format
@@ -752,9 +755,9 @@ msgstr "(neue Nachricht)"
 msgid "Select recipients for \"{0}\""
 msgstr "Empfänger für \"{0}\" auswählen"
 
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:180
-#: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
-#: js/AccountEditDialog.js:276
+#: js/ContactGrid.js:119 js/AccountEditDialog.js:183
+#: js/AccountEditDialog.js:224 js/AccountEditDialog.js:239
+#: js/AccountEditDialog.js:279
 msgid "None"
 msgstr "Keine"
 
@@ -823,13 +826,17 @@ msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
 #: js/Felamimail.js:853
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
+msgstr ""
+"Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren "
+"Administrator."
 
 #: js/Felamimail.js:869
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
-msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
+msgstr ""
+"Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  "
+"Bitte aktualisieren Sie die Ordnerliste."
 
 #: js/Felamimail.js:898
 msgid "SMTP Error"
@@ -855,142 +862,146 @@ msgstr "Fehler beim Speichern des Sieve-Skriptes"
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
-#: js/AccountEditDialog.js:85
+#: js/AccountEditDialog.js:75
+msgid "Add New Account"
+msgstr "Neues Konto hinzufügen"
+
+#: js/AccountEditDialog.js:88
 msgid "Signature"
 msgstr "Signatur"
 
-#: js/AccountEditDialog.js:119
+#: js/AccountEditDialog.js:122
 msgid "Account Name"
 msgstr "Konto Name"
 
-#: js/AccountEditDialog.js:123
+#: js/AccountEditDialog.js:126
 msgid "User Email"
 msgstr "E-Mail Adresse"
 
-#: js/AccountEditDialog.js:128
+#: js/AccountEditDialog.js:131
 msgid "User Name (From)"
 msgstr "E-Mail Absender"
 
-#: js/AccountEditDialog.js:131
+#: js/AccountEditDialog.js:134
 msgid "Organization"
 msgstr "Firma"
 
-#: js/AccountEditDialog.js:135
+#: js/AccountEditDialog.js:138
 msgid "Signature position"
 msgstr "Signaturposition"
 
-#: js/AccountEditDialog.js:146
+#: js/AccountEditDialog.js:149
 msgid "Above the quote"
 msgstr "Über dem Zitat"
 
-#: js/AccountEditDialog.js:147
+#: js/AccountEditDialog.js:150
 msgid "Below the quote"
 msgstr "Unter dem Zitat"
 
-#: js/AccountEditDialog.js:152
+#: js/AccountEditDialog.js:155
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:159 js/AccountEditDialog.js:202
-#: js/AccountEditDialog.js:257
+#: js/AccountEditDialog.js:162 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:260
 msgid "Host"
 msgstr "Host"
 
-#: js/AccountEditDialog.js:163
+#: js/AccountEditDialog.js:166
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (Standard: 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
-#: js/AccountEditDialog.js:266
+#: js/AccountEditDialog.js:172 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:269
 msgid "Secure Connection"
 msgstr "Sichere Verbindung"
 
-#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
-#: js/AccountEditDialog.js:277
+#: js/AccountEditDialog.js:184 js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:280
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:182 js/AccountEditDialog.js:223
+#: js/AccountEditDialog.js:185 js/AccountEditDialog.js:226
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AccountEditDialog.js:185
+#: js/AccountEditDialog.js:188
 msgid "Username"
 msgstr "Benutzername"
 
-#: js/AccountEditDialog.js:189
+#: js/AccountEditDialog.js:192
 msgid "Password"
 msgstr "Passwort"
 
-#: js/AccountEditDialog.js:195
+#: js/AccountEditDialog.js:198
 msgid "SMTP"
 msgstr "SMTP"
 
-#: js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:208
 msgid "Port (Default: 25)"
 msgstr "Port (Standard: 25)"
 
-#: js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:229
 msgid "Authentication"
 msgstr "Authentifizierung"
 
-#: js/AccountEditDialog.js:237
+#: js/AccountEditDialog.js:240
 msgid "Login"
 msgstr "Login"
 
-#: js/AccountEditDialog.js:238
+#: js/AccountEditDialog.js:241
 msgid "Plain"
 msgstr "Klartext"
 
-#: js/AccountEditDialog.js:241
+#: js/AccountEditDialog.js:244
 msgid "Username (optional)"
 msgstr "Benutzername (optional)"
 
-#: js/AccountEditDialog.js:244
+#: js/AccountEditDialog.js:247
 msgid "Password (optional)"
 msgstr "Passwort (optional)"
 
-#: js/AccountEditDialog.js:250
+#: js/AccountEditDialog.js:253
 msgid "Sieve"
 msgstr "Sieve"
 
-#: js/AccountEditDialog.js:261
+#: js/AccountEditDialog.js:264
 msgid "Port (Default: 2000)"
 msgstr "Port (Standard: 2000)"
 
-#: js/AccountEditDialog.js:281
+#: js/AccountEditDialog.js:284
 msgid "Other Settings"
 msgstr "Andere Einstellungen"
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:291
 msgid "Sent Folder Name"
 msgstr "'Gesendet' Ordnername"
 
-#: js/AccountEditDialog.js:294
+#: js/AccountEditDialog.js:297
 msgid "Trash Folder Name"
 msgstr "'Papierkorb' Ordnername"
 
-#: js/AccountEditDialog.js:300
+#: js/AccountEditDialog.js:303
 msgid "Drafts Folder Name"
 msgstr "'Entwürfe' Ordnername"
 
-#: js/AccountEditDialog.js:306
+#: js/AccountEditDialog.js:309
 msgid "Templates Folder Name"
 msgstr "'Vorlagen' Ordnername"
 
-#: js/AccountEditDialog.js:312
+#: js/AccountEditDialog.js:315
 msgid "Display Format"
 msgstr "Anzeigeformat"
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:326
 msgid "HTML"
 msgstr "HTML"
 
-#: js/AccountEditDialog.js:324
+#: js/AccountEditDialog.js:327
 msgid "Plain Text"
 msgstr "Nur Text"
 
-#: js/AccountEditDialog.js:325
+#: js/AccountEditDialog.js:328
 msgid "Depending on content type (experimental)"
 msgstr "Abhängig vom Content-Typ (experimentell)"
 
@@ -1050,7 +1061,9 @@ msgstr "Für mailto: Verweise verwenden"
 #: Preference.php:115
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr "Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm verwenden"
+msgstr ""
+"Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm "
+"verwenden"
 
 #: Preference.php:118
 msgid "Use for NOTES"
@@ -1058,7 +1071,9 @@ msgstr "E-Mail-Notiz erzeugen"
 
 #: Preference.php:119
 msgid "Save Note default Value."
-msgstr "Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht erzeugt."
+msgstr ""
+"Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht "
+"erzeugt."
 
 #: Preference.php:122
 msgid "Confirm Delete"
@@ -1078,7 +1093,9 @@ msgstr "Benutzerdefnierte Abwesenheitsnotiz"
 
 #: Config.php:56
 msgid "User is allowed to set custom vacation message for system account"
-msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
+msgstr ""
+"Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das "
+"Systemkonto einstellen"
 
 #: Config.php:65
 msgid "Cache email body"
@@ -1088,7 +1105,9 @@ msgstr "E-Mail zwischenspeichern"
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
-msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
+msgstr ""
+"Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP "
+"Verbindungen)"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"

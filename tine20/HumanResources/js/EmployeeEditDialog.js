@@ -31,7 +31,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     evalGrants: false,
     
     windowWidth: 800,
-    windowHeight: 630,
+    windowHeight: 670,
     
     /**
      * show private Information (autoset due to rights)

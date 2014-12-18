@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012-2013
 # Björn Balazs <transifex@lazs.de>, 2012-2013
@@ -14,17 +14,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-21 11:33+0000\n"
-"Last-Translator: Michael Spahn <michael@spahn.me>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2014-12-16 14:25+0100\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
@@ -38,7 +38,9 @@ msgstr "Vertrag nicht bearbeitbar"
 msgid ""
 "You are not allowed to change the record if a vacation has been booked "
 "already!"
-msgstr "Der Vertrag kann nicht mehr geändert werden, wenn bereits Urlaub gebucht worden ist."
+msgstr ""
+"Der Vertrag kann nicht mehr geändert werden, wenn bereits Urlaub gebucht "
+"worden ist."
 
 #: Exception/ContractDates.php:26
 msgid "Negative Timespace"
@@ -62,7 +64,8 @@ msgstr "Kein Personalkonto gefunden"
 
 #: Exception/NoAccount.php:31
 msgid "An existing personal account could not be found. Please create one!"
-msgstr "Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
+msgstr ""
+"Es konnte kein Personalkonto gefunden werden. Bitte erstellen Sie eines!"
 
 #: Exception/NeedsYear.php:26
 msgid "No or no valid year given"
@@ -103,8 +106,7 @@ msgstr "Private Daten des Mitarbeiters bearbeiten"
 
 #: Acl/Rights.php:94
 msgid ""
-"Edit birthday, account data and other private information of employee "
-"records"
+"Edit birthday, account data and other private information of employee records"
 msgstr "Bearbeiten von persönlichen Daten und Vertragsdaten des Mitarbeiters."
 
 #: Model/Employee.php:35 Model/Contract.php:49 Model/FreeTime.php:49
@@ -374,7 +376,7 @@ msgstr "Ablaufdatum"
 #: js/CostCenterGridPanel.js:125
 msgid "Cost Center"
 msgid_plural "Cost Centers"
-msgstr[0] ""
+msgstr[0] "Kostenstelle"
 msgstr[1] "Kostenstelle"
 
 #: js/ExtraFreeTimeEditDialog.js:167 js/EmployeeEditDialog.js:442
@@ -412,7 +414,8 @@ msgstr "Urlaub vom letzten Jahr als Sonderurlaub buchen"
 
 #: js/AccountGridPanel.js:46
 msgid "Please enter the year you want to create accounts for:"
-msgstr "Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
+msgstr ""
+"Bitte geben Sie das Jahr an, für das Personalkonten erzeugt werden sollen:"
 
 #: js/AccountGridPanel.js:68
 msgid "Accounts have been created"
@@ -469,7 +472,10 @@ msgstr "Das Jahr kann nicht geändert werden"
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
-msgstr "Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage einzutragen."
+msgstr ""
+"Sie haben bereits ein odere mehrere Tage aus einem anderen Jahr gewählt. "
+"Bitte erstellen Sie einen neuen Datensatz, um die gewünschten Tage "
+"einzutragen."
 
 #: js/DatePicker.js:451
 msgid "No more vacation days"
@@ -477,10 +483,13 @@ msgstr "Keine weiteren Urlaubstage vorhanden"
 
 #: js/DatePicker.js:452
 msgid ""
-"The Employee has no more possible vacation days left for this year. Create a"
-" new vacation and use another personal account the vacation should be taken "
+"The Employee has no more possible vacation days left for this year. Create a "
+"new vacation and use another personal account the vacation should be taken "
 "from."
-msgstr "Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, von dem die Urlaubstage abgezogen werden sollen."
+msgstr ""
+"Der Mitarbeiter hat keine Urlaubstage auf dem gewünschten Personalkonto. "
+"Erstellen Sie einen neuen Urlaub und wählen Sie ein anderes Personalkonto, "
+"von dem die Urlaubstage abgezogen werden sollen."
 
 #: js/ContractEditDialog.js:86
 #, python-brace-format
@@ -570,7 +579,9 @@ msgstr "Krankheitstage"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria "
 "or view-options."
-msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
+msgstr ""
+"Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien "
+"oder Ansichtseinstellungen."
 
 #: js/FreeTimeGridPanel.js:135
 msgid "Could not book as vacation"
@@ -580,7 +591,9 @@ msgstr "Konnte nicht als Urlaub gebucht werden"
 msgid ""
 "The unexcused sickness days could not be booked as vacation. There are not "
 "enough days left!"
-msgstr "Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, da keine Urlaubstage mehr übrig sind!"
+msgstr ""
+"Die unentschuldigten Krankheitstage konnten nicht als Urlaub gebucht werden, "
+"da keine Urlaubstage mehr übrig sind!"
 
 #: js/CostCenterGridPanel.js:58
 msgid "CostCenter"
@@ -609,11 +622,15 @@ msgstr "Füge {0} für {1} hinzu"
 
 #: js/FreeTimeEditDialog.js:187
 msgid "You have to select at least one day to save this sickness entry."
-msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag speichern zu können."
+msgstr ""
+"Sie müssen mindestens einen Tag auswählen, um diesen Kranksheitseintrag "
+"speichern zu können."
 
 #: js/FreeTimeEditDialog.js:187
 msgid "You have to select at least one day to save this vacation entry."
-msgstr "Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu können."
+msgstr ""
+"Sie müssen mindestens einen Tag auswählen, um diesen Urlaub speichern zu "
+"können."
 
 #: js/FreeTimeEditDialog.js:191
 msgid "No day selected"
@@ -720,7 +737,9 @@ msgstr "Standard Feiertagskalender"
 msgid ""
 "Here you can define the default feast calendar used to set feast days and "
 "other free days in datepicker"
-msgstr "Hier können Sie den Standard Feiertagskalender festlegen, der benutzt wird um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
+msgstr ""
+"Hier können Sie den Standard Feiertagskalender festlegen, der benutzt wird "
+"um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
 
 #: Config.php:108
 msgid "Extra freetime type"
@@ -734,7 +753,9 @@ msgstr "Mögliche Sonderurlaube"
 msgid ""
 "Here you can define the day, when the vacation days taken from last year "
 "expires, the format is MM-DD."
-msgstr "Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr verfallen sind. Bitte im Format JJ-DD angeben."
+msgstr ""
+"Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr "
+"verfallen sind. Bitte im Format JJ-DD angeben."
 
 #: Config.php:128
 msgid "Report Templates Container ID"
