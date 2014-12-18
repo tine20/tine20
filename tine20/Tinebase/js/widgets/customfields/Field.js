@@ -53,9 +53,9 @@ Tine.widgets.customfields.Field = {
                             sortBy: 'id'
                         });
                         break;
-                       case 'record':
-                           var options = def.options ? def.options : {},
-                            recordConfig = def.recordConfig ? def.recordConfig : null;
+                    case 'record':
+                        var options = def.options ? def.options : {},
+                           recordConfig = def.recordConfig ? def.recordConfig : null;
                             
                         Ext.apply(fieldDef, {
                             xtype: 'tinerecordpickercombobox',
@@ -85,6 +85,8 @@ Tine.widgets.customfields.Field = {
                     case 'boolean':
                     case 'bool':
                         fieldDef.xtype = 'checkbox';
+                        fieldDef.hideLabel = true;
+                        fieldDef.boxLabel = fieldDef.fieldLabel;
                         break;
                     case 'string':
                     default:
