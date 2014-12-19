@@ -44,6 +44,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_json = new Timetracker_Frontend_Json();
     }
@@ -57,6 +58,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
     }
 
     /************ protected helper funcs *************/

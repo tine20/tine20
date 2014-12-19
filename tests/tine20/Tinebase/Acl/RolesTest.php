@@ -60,7 +60,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
         Tinebase_Group::getInstance()->addGroupMember($this->objects['user']->accountPrimaryGroup, $this->objects['user']);
         
-        return;
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
     }
 
     /**
@@ -72,7 +72,7 @@ class Tinebase_Acl_RolesTest extends TestCase
     protected function tearDown()
     {
         Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
-        
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
         parent::tearDown();
     }
 
