@@ -148,17 +148,19 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * @param string $default
      * @return string
      */
-    private function createTimespanDataXML($default)
+    protected function _createTimespanDataXML($start=0, $end=24)
     {
         $doc = new DomDocument('1.0');
         $options = $doc->createElement('options');
         $doc->appendChild($options);
         
         $time = new Tinebase_DateTime('@0');
-        for ($i=0; $i<48; $i++) {
-            $time->addMinute($i ? 30 : 0);
+        for ($i=$start; $i<=$end; $i++) {
+            $time->setHour($i);
             $timeString = $time->format('H:i');
-            
+            if ($i == $end && $timeString == '00:00') {
+                $timeString = '24:00';
+            }
             $value  = $doc->createElement('value');
             $value->appendChild($doc->createTextNode($timeString));
             $label  = $doc->createElement('label');
@@ -191,11 +193,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         switch ($_preferenceName) {
             case self::DAYSVIEW_STARTTIME:
                 $preference->value      = '08:00';
-                $preference->options = $this->createTimespanDataXML($preference->value);
+                $preference->options = $this->_createTimespanDataXML(0, 23);
                 break;
             case self::DAYSVIEW_ENDTIME:
                 $preference->value      = '18:00';
-                $preference->options = $this->createTimespanDataXML($preference->value);
+                $preference->options = $this->_createTimespanDataXML(1, 24);
                 break;
             case self::DEFAULTCALENDAR:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
