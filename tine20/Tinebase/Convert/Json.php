@@ -138,7 +138,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      */
     public static function resolveMultipleIdFields($records, $resolveFields = NULL)
     {
-        if (! $records instanceof Tinebase_Record_RecordSet) {
+        if (! $records instanceof Tinebase_Record_RecordSet || !$records->count()) {
             return;
         }
         
@@ -180,15 +180,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             $foreignIds = array_unique(array_merge($foreignIds, $records->{$field}));
         }
         
-        if (! Tinebase_Core::getUser()->hasRight(substr($foreignRecordClassName, 0, strpos($foreignRecordClassName, "_")), Tinebase_Acl_Rights_Abstract::RUN)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Not resolving ' . $foreignRecordClassName . ' records because user has no right to run app.');
-            return;
-        }
-        
         try {
             $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
         } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Not resolving ' . $foreignRecordClassName . ' records because user has no right to run app.');
             return;
         }
         
