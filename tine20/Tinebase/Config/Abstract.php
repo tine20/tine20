@@ -323,8 +323,8 @@ abstract class Tinebase_Config_Abstract
         }
 
         if (Tinebase_Core::get(Tinebase_Core::SHAREDCACHE)) {
-            if ($cache->test('cachedAppConfig_' . $this->_appName)) {
-                $this->_cachedApplicationConfig = $cache->load('cachedAppConfig_' . $this->_appName);
+            if ($cachedApplicationConfig = $cache->load('cachedAppConfig_' . $this->_appName)) {
+                $this->_cachedApplicationConfig = $cachedApplicationConfig;
                 return;
             }
         }

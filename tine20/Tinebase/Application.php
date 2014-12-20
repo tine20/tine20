@@ -172,12 +172,12 @@ class Tinebase_Application
         
         if ($cache instanceof Zend_Cache_Core) {
             $cacheId = 'getApplicationByName_' . $_applicationName;
-            if ($cache->test($cacheId)) {
-                $result = $cache->load($cacheId);
-                if ($result instanceof Tinebase_Model_Application) {
-                    $this->_addToClassCache($result);
-                    return $result;
-                }
+            
+            $result = $cache->load($cacheId);
+            
+            if ($result instanceof Tinebase_Model_Application) {
+                $this->_addToClassCache($result);
+                return $result;
             }
         }
         
