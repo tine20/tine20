@@ -17,6 +17,10 @@
  */
 class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 {
+    protected static $_classCache = array(
+        'getTableDescriptionFromCache' => array()
+    );
+    
     /**
      * wrapper around Zend_Db_Table_Abstract::fetchAll
      *
@@ -82,19 +86,35 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         if ($db === NULL) {
             $db = Tinebase_Core::getDb();
         }
-        try {
-            $config = array(
-                'name' => $tableName,
-                'db'   => $db
-            );
-            $tableDescription = new Tinebase_Db_Table($config);
-            $tableInfo = $tableDescription->info();
-            $result = $tableInfo['metadata'];
-        } catch (Zend_Db_Table_Exception $zdte) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' Could not fetch schema from cache: ' . $zdte->getMessage());
-            $result = $db->describeTable($tableName);
+        
+        $cache = Tinebase_Core::getCache();
+        $dbConfig = $db->getConfig();
+        
+        $classCacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
+        
+        if (isset(self::$_classCache[__FUNCTION__][$classCacheId])) {
+            return self::$_classCache[__FUNCTION__][$classCacheId];
         }
+        
+        $cacheId = __FUNCTION__ . $classCacheId;
+        
+        #if ($result = apc_fetch($cacheId)) {
+        #    self::$_classCache[__FUNCTION__][$classCacheId] = $result;
+        #    
+        #    return $result;
+        #}
+        
+        $result = $cache->load($cacheId);
+        
+        if (!$result) {
+            $result = $db->describeTable($tableName);
+            
+            $cache->save($result, $cacheId);
+            #apc_store($cacheId, $result, 60);
+            self::$_classCache[__FUNCTION__][$classCacheId] = $result;
+        }
+        
+        
         return $result;
     }
 }
