@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        delete notes completely or just set the is_deleted flag?
@@ -168,7 +168,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $_pagination->appendPaginationSql($select);
         }
         
-        $rows = $this->_db->fetchAssoc($select);
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
 
         return $result;
@@ -555,7 +557,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             array(
                 'field' => 'note_type_id',
                 'operator' => 'in',
-                'value' => $this->getNoteTypes($_onlyNonSystemNotes)->getArrayOfIdsAsString()
+                'value' => $this->getNoteTypes($_onlyNonSystemNotes, true)
             )
         ));
         
@@ -570,14 +572,25 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param boolean|optional $onlyNonSystemNotes
      * @return Tinebase_Record_RecordSet of Tinebase_Model_NoteType
      */
-    public function getNoteTypes($onlyNonSystemNotes = FALSE)
+    public function getNoteTypes($onlyNonSystemNotes = false, $onlyIds = false)
     {
-        $types = new Tinebase_Record_RecordSet('Tinebase_Model_NoteType');
-        foreach ($this->_noteTypesTable->fetchAll() as $type) {
-            if (!$onlyNonSystemNotes || $type->is_user_type) {
-                $types->addRecord(new Tinebase_Model_NoteType($type->toArray(), true));
-            }
+        $select = $this->_db->select()
+            ->from(array('note_types' => SQL_TABLE_PREFIX . 'note_types'), ($onlyIds ? 'id' : '*'));
+        
+        if ($onlyNonSystemNotes) {
+            $select->where($this->_db->quoteIdentifier('is_user_type') . ' = 1');
         }
+        
+        $stmt = $this->_db->query($select);
+        
+        if ($onlyIds) {
+            $types = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        } else {
+            $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            
+            $types = new Tinebase_Record_RecordSet('Tinebase_Model_NoteType', $rows, true);
+        }
+        
         return $types;
     }
 
