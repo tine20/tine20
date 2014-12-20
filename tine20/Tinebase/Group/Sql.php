@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -51,6 +51,15 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected $_addressBookInstalled = false;
     
     /**
+     * in class cache 
+     * 
+     * @var array
+     */
+    protected $_classCache = array (
+        'getGroupMemberships' => array()
+    );
+    
+    /**
      * the constructor
      */
     public function __construct() 
@@ -83,24 +92,30 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        $cacheId = convertCacheId('groupMemberships' . $accountId);
+        $classCacheId = $accountId;
+        
+        if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+            return $this->_classCache[__FUNCTION__][$classCacheId];
+        }
+        
+        $cacheId     = convertCacheId(__FUNCTION__ . $classCacheId);
         $memberships = Tinebase_Core::getCache()->load($cacheId);
-
+        
         if (! $memberships) {
-            $memberships = array();
-            $colName = $this->groupsTable->getAdapter()->quoteIdentifier('account_id');
-            $select = $this->groupMembersTable->select();
-            $select->where($colName . ' = ?', $accountId);
+            $select = $this->_db->select()
+                ->distinct()
+                ->from(array('group_members' => SQL_TABLE_PREFIX . 'group_members'), array('group_id'))
+                ->where($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId);
             
-            $rows = $this->groupMembersTable->fetchAll($select);
+            $stmt = $this->_db->query($select);
             
-            foreach($rows as $membership) {
-                $memberships[] = $membership->group_id;
-            }
-
+            $memberships = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+            
             Tinebase_Core::getCache()->save($memberships, $cacheId);
         }
-
+        
+        $this->_classCache[__FUNCTION__][$classCacheId] = $memberships;
+        
         return $memberships;
     }
     
@@ -114,7 +129,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
         
-        $cacheId = convertCacheId('groupMembers' . $groupId);
+        $cacheId = convertCacheId(__FUNCTION__ . $groupId);
         $members = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $members) {
@@ -184,11 +199,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                         . ' User with ID ' . $accountId . ' does not have an account!');
                 }
                 
-                $this->_clearCache(array('groupMemberships' => $accountId));
+                $this->_clearCache(array('getGroupMemberships' => $accountId));
             }
         }
         
-        $this->_clearCache(array('groupMembers' => $groupId));
+        $this->_clearCache(array('getGroupMembers' => $groupId));
     }
     
     /**
@@ -198,10 +213,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     protected function _clearCache($cacheIds = array())
     {
+        $cache = Tinebase_Core::getCache();
+        
         foreach ($cacheIds as $type => $id) {
             $cacheId = convertCacheId($type . $id);
-            Tinebase_Core::getCache()->remove($cacheId);
+            $cache->remove($cacheId);
         }
+        
+        $this->resetClassCache();
     }
     
     /**
@@ -309,8 +328,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $this->groupMembersTable->insert($data);
             
             $this->_clearCache(array(
-                'groupMembers'     => $groupId,
-                'groupMemberships' => $accountId,
+                'getGroupMembers'     => $groupId,
+                'getGroupMemberships' => $accountId,
             ));
         }
         
@@ -350,8 +369,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $this->groupMembersTable->delete($where);
         
         $this->_clearCache(array(
-            'groupMembers'     => $groupId,
-            'groupMemberships' => $accountId,
+            'getGroupMembers'     => $groupId,
+            'getGroupMemberships' => $accountId,
         ));
     }
     
