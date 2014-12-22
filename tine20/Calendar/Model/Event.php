@@ -114,7 +114,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'alarms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Tinebase_Model_Alarm
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally categories handled by Tinebase_Tags
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally comment handled by Tinebase_Notes
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         //'contact'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),

@@ -849,7 +849,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         // assert effective grants are set
         $this->assertEquals((bool) $expectedEventData[Tinebase_Model_Grants::GRANT_EDIT], (bool) $eventData[Tinebase_Model_Grants::GRANT_EDIT], $msg . ': effective grants mismatch');
-        // container, assert attendee, tags, relations
+        // container, assert attendee, tags
         $this->assertEquals($expectedEventData['dtstart'], $eventData['dtstart'], $msg . ': dtstart mismatch');
         $this->assertTrue(is_array($eventData['container_id']), $msg . ': failed to "resolve" container');
         $this->assertTrue(is_array($eventData['container_id']['account_grants']), $msg . ': failed to "resolve" container account_grants');
@@ -1491,5 +1491,37 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['attendee'][1]['quantity'] = '';
         $event = $this->_uit->saveEvent($eventData);
         $this->assertEquals(1, $event['attendee'][1]['quantity'], 'The invalid quantity should be saved as 1');
+    }
+    
+    /**
+     * testGetRelations
+     * 
+     * @see 0009542: load event relations on demand
+     */
+    public function testGetRelations()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family' => 'Contact for relations test'
+        )));
+        $eventData = $this->_getEvent()->toArray();
+        $eventData['relations'] = array(
+        array(
+            'own_model'              => 'Calendar_Model_Event',
+            'own_backend'            => 'Sql',
+            'own_id'                 => 0,
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'type'                   => '',
+            'related_backend'        => 'Sql',
+            'related_id'             => $contact->getId(),
+            'related_model'          => 'Addressbook_Model_Contact',
+            'remark'                 => NULL,
+        ));
+        $event = $this->_uit->saveEvent($eventData);
+        
+        $tfj = new Tinebase_Frontend_Json();
+        $relations = $tfj->getRelations('Calendar_Model_Event', $event['id']);
+        
+        $this->assertEquals(1, $relations['totalcount']);
+        $this->assertEquals($contact->n_fn, $relations['results'][0]['related_record']['n_family'], print_r($relations['results'], true));
     }
 }
