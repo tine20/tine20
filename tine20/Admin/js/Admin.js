@@ -19,7 +19,7 @@ Tine.Admin = function () {
      */
     var getInitialTree = function (translation) {
         
-        return [{
+        var tree = [{
             text: translation.ngettext('User', 'Users', 50),
             cls: 'treemain',
             iconCls: 'admin-node-user',
@@ -146,6 +146,24 @@ Tine.Admin = function () {
             dataPanelType: "serverinfo",
             viewRight: 'serverinfo'
         }];
+        
+        // TODO find a generic hooking mechanism
+        if (Tine.Tinebase.appMgr.get('ActiveSync') && Tine.Tinebase.common.hasRight('manage_devices', 'ActiveSync')) {
+            tree.push({
+                text: translation.gettext('ActiveSync Devices'),
+                cls: "treemain",
+                iconCls: 'activesync-device-standard',
+                allowDrag: false,
+                allowDrop: true,
+                id: "devices",
+                children: [],
+                leaf: null,
+                expanded: true,
+                dataPanelType: "devices"
+            });
+        }
+        
+        return tree;
     };
 
     /**
@@ -268,6 +286,10 @@ Tine.Admin = function () {
                    Tine.Tinebase.MainScreen.setActiveToolbar(this.infoPanelToolbar, true);
                }, this);
                break;
+           // TODO find a generic hooking mechanism
+            case 'devices':
+                Tine.ActiveSync.syncdevices.show();
+                break;
             }
         }, this);
 
@@ -291,13 +313,6 @@ Tine.Admin = function () {
 
         treePanel.on('contextmenu', function (node, event) {
             event.stopEvent();
-            //node.select();
-            //node.getOwnerTree().fireEvent('click', _node);
-            /* switch(node.attributes.contextMenuClass) {
-                case 'ctxMenuContactsTree':
-                    ctxMenuContactsTree.showAt(event.getXY());
-                    break;
-            } */
         });
 
         return treePanel;

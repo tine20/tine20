@@ -9,16 +9,11 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tasks_Controller_Task
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
+class ActiveSync_Controller_TasksTests extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application

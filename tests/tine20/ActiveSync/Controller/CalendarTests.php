@@ -13,7 +13,7 @@
  * 
  * @package     ActiveSync
  */
-class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
+class ActiveSync_Controller_CalendarTests extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application

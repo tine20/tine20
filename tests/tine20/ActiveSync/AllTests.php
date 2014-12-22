@@ -4,14 +4,9 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 class ActiveSync_AllTests
 {
@@ -28,6 +23,8 @@ class ActiveSync_AllTests
         $suite->addTestSuite('ActiveSync_Command_AllTests');
         $suite->addTestSuite('ActiveSync_Controller_AllTests');
         $suite->addTestSuite('ActiveSync_Backend_AllTests');
+        
+        $suite->addTestSuite('ActiveSync_Frontend_JsonTests');
         
         return $suite;
     }

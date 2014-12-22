@@ -158,10 +158,9 @@
     background-image:url(../../images/oxygen/16x16/apps/kexi.png) !important;
 }
 
-
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-checkbox ,
 .x-tree-node-leaf-checkbox {
-	width:0px;
+    width:0px;
 }

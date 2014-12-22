@@ -9,16 +9,11 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Calendar_Controller_Event
  * 
  * @package     Calendar
  */
-class ActiveSync_Controller_ContactsTests extends ActiveSync_TestCase
+class ActiveSync_Controller_ContactsTests extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application
