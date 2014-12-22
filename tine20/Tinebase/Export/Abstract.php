@@ -264,7 +264,7 @@ abstract class Tinebase_Export_Abstract
         } else {
             $types = $this->_resolvedFields;
         }
-        
+
         // resolve users
         foreach ($this->_userFields as $field) {
             if (in_array($field, $types) || in_array($field, $identifiers)) {
@@ -272,7 +272,7 @@ abstract class Tinebase_Export_Abstract
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, TRUE);
             }
         }
-        
+
         // add notes
         if (in_array('notes', $types)) {
             Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records, 'notes', 'Sql', FALSE);

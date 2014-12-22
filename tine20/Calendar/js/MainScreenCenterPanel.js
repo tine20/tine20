@@ -183,7 +183,37 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }]
             }
         });
-        
+
+        /**
+         * @type {Ext.Action}
+         */
+        this.actions_exportEvents = new Ext.Action({
+            requiredGrant: 'exportGrant',
+            text: this.app.i18n._('Export Events'),
+            translationObject: this.app.i18n,
+            iconCls: 'action_export',
+            scope: this,
+            allowMultiple: true,
+            menu: {
+                items: [
+                    new Tine.Calendar.ExportButton({
+                        text: this.app.i18n._('Export as ODS'),
+                        format: 'ods',
+                        iconCls: 'tinebase-action-export-ods',
+                        exportFunction: 'Calendar.exportEvents',
+                        gridPanel: this
+                    }),
+                    new Tine.Calendar.ExportButton({
+                        text: this.app.i18n._('Export as ...'),
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: 'Calendar.exportEvents',
+                        showExportDialog: true,
+                        gridPanel: this
+                    })
+                ]
+            }
+        });
+
         this.showSheetView = new Ext.Button({
             pressed: String(this.activeView).match(/sheet$/i),
             scale: 'medium',
@@ -264,7 +294,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     getActionToolbar: Tine.widgets.grid.GridPanel.prototype.getActionToolbar,
     
     getActionToolbarItems: function() {
-        return {
+        return [/*{
+            xtype: 'buttongroup',
+            columns: 1,
+            rows: 2,
+            frame: false,
+            items: [
+                this.actions_exportEvents
+                // @TODO move import btn here
+            ]
+        }, */{
             xtype: 'buttongroup',
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -274,7 +313,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.showSheetView,
                 this.showGridView
             ]
-        };
+        }];
     },
     
     /**
@@ -424,13 +463,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * returns all filter data for current view
      */
-    getAllFilterData: function () {
+    getAllFilterData: function (options) {
         var store = this.getCalendarPanel(this.activeView).getStore();
         
-        var options = {
+        options = Ext.apply({
             refresh: true, // ommit loadMask
             noPeriodFilter: true
-        };
+        }, options || {});
         this.onStoreBeforeload(store, options);
         
         return options.params.filter;

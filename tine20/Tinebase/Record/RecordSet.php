@@ -675,8 +675,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function sort($_field, $_direction = 'ASC', $_sortFunction = 'asort', $_flags = SORT_REGULAR)
     {
-        $offsetToSortFieldMap = $this->__get($_field);
-        
+        if (! is_string($_field) && is_callable($_field)) {
+            $_sortFunction = 'function';
+        } else {
+            $offsetToSortFieldMap = $this->__get($_field);
+        }
+
         switch ($_sortFunction) {
             case 'asort':
                 $fn = $_direction == 'ASC' ? 'asort' : 'arsort';
@@ -688,6 +692,10 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                     // @todo check if this is working
                     $offsetToSortFieldMap = array_reverse($offsetToSortFieldMap);
                 }
+                break;
+            case 'function':
+                uasort ($this->_listOfRecords , $_field);
+                $offsetToSortFieldMap = $this->_listOfRecords;
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('Sort function unknown.');

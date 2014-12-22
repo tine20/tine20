@@ -519,17 +519,25 @@ class Tinebase_Translation
         
         $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);
-        
-        $dateString = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
-        if ($addWeekday) {
-            $dateString = $date->toString('EEEE', $locale) . ', ' . $dateString;
+
+        if (in_array($part, array('date', 'time', 'datetime'))) {
+            $dateString = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+            if ($addWeekday) {
+                $dateString = $date->toString('EEEE', $locale) . ', ' . $dateString;
+            }
+            $timeString = $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+
+            switch ($part) {
+                case 'date':
+                    return $dateString;
+                case 'time':
+                    return $timeString;
+                default:
+                    return $dateString . ' ' . $timeString;
+            }
+        } else {
+            return $date->toString($part, $locale);
         }
-        $timeString = $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
-        
-        switch($part) {
-            case 'date': return $dateString;
-            case 'time': return $timeString;
-            default: return $dateString . ' ' . $timeString;
-        }
+
     }
 }
