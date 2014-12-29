@@ -391,6 +391,37 @@ class Calendar_JsonTests extends Calendar_TestCase
 
         return $updatedEventData;
     }
+
+    /**
+     * testCreateRecurEventYearly
+     * 
+     * @see 0010610: yearly event is not shown in week view
+     */
+    public function testCreateRecurEventYearly()
+    {
+        $eventData = $this->_getEvent()->toArray();
+        $eventData['is_all_day_event'] = true;
+        $eventData['dtstart'] = '2015-01-04 00:00:00';
+        $eventData['dtend'] = '2015-01-04 23:59:59';
+        $eventData['rrule'] = array(
+            'freq'       => 'YEARLY',
+            'interval'   => 1,
+            'bymonthday' => 4,
+            'bymonth'    => 1,
+        );
+        
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+        $this->assertTrue(is_array($updatedEventData['rrule']));
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $eventData['container_id']),
+            array('field' => 'period', 'operator' => 'within', 'value' =>
+                array("from" => '2014-12-29 00:00:00', "until" => '2015-01-05 00:00:00')
+            )
+        );
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $this->assertEquals(1, $searchResultData['totalcount'], 'event not found');
+    }
     
     /**
      * testCreateRecurEventWithRruleUntil

@@ -267,9 +267,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $gs->where($quotedRrule . ' NOT LIKE ?', 'FREQ=YEARLY%')
         ->orWhere($quotedRrule . ' IS NULL');
         
+        // TODO improve view detection to handle year boundaries, too
+        if ($fromMonth > $untilMonth) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Skipping performance optimization because we can\'t handle year boundaries yet');
+            return;
+        }
         if ($fromMonth == $untilMonth && $untilDay-$fromDay <= 10) {
             // day|week view
-            for($day=$fromDay; $day<=$untilDay; $day++) {
+            for ($day=$fromDay; $day<=$untilDay; $day++) {
                 $gs->orWhere($quotedRrule . ' LIKE ?', "FREQ=YEARLY;INTERVAL=1;BYMONTH={$fromMonth};BYMONTHDAY={$day}%");
             }
         } else {
@@ -280,7 +286,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         
         $gs->appendWhere(Zend_Db_Select::SQL_AND);
-        //            Tinebase_Core::getLogger()->ERR($select);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . $select);
     }
     
     /**
