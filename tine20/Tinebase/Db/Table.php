@@ -104,16 +104,25 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
         #    return $result;
         #}
         
-        $result = $cache->load($cacheId);
+        $result = null;
+        
+        // maybe cache has to be initialized yet
+        if ($cache) {
+            $result = $cache->load($cacheId);
+        }
         
         if (!$result) {
             $result = $db->describeTable($tableName);
             
-            $cache->save($result, $cacheId);
-            #apc_store($cacheId, $result, 60);
-            self::$_classCache[__FUNCTION__][$classCacheId] = $result;
+            // if table does not exist (yet), $result is an empty array
+            if (count($result) > 0) {
+                if ($cache) {
+                    $cache->save($result, $cacheId);
+                }
+                #apc_store($cacheId, $result, 60);
+                self::$_classCache[__FUNCTION__][$classCacheId] = $result;
+            }
         }
-        
         
         return $result;
     }
