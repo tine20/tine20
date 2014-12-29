@@ -132,20 +132,20 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($_sort !== NULL && isset($this->rowNameMapping[$_sort])) {
             $select->order($this->_db->table_prefix . $this->_tableName . '.' . $this->rowNameMapping[$_sort] . ' ' . $_dir);
         }
-
+        
         if (!empty($_filter)) {
             $whereStatement = array();
-            $defaultValues = array(
+            $defaultValues  = array(
                 $this->rowNameMapping['accountLastName'], 
                 $this->rowNameMapping['accountFirstName'], 
                 $this->rowNameMapping['accountLoginName']
             );
+            
             // prepare for case insensitive search
-            $db = Tinebase_Core::getDb();
             foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('?');
+                $whereStatement[] = $this->_dbCommand->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
             }
-        
+            
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
         
@@ -154,16 +154,48 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
-
+        
         $stmt = $select->query();
-
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
+        
         $result = new Tinebase_Record_RecordSet($_accountClass, $rows, TRUE);
         
         return $result;
     }
+    
+    /**
+     * get total count of users
+     *
+     * @param string $_filter
+     * @return int
+     */
+    public function getUsersCount($_filter = null)
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'));
         
+        if (!empty($_filter)) {
+            $whereStatement = array();
+            $defaultValues  = array(
+                $this->rowNameMapping['accountLastName'], 
+                $this->rowNameMapping['accountFirstName'], 
+                $this->rowNameMapping['accountLoginName']
+            );
+            
+            // prepare for case insensitive search
+            foreach ($defaultValues as $defaultValue) {
+                $whereStatement[] = $this->_dbCommand->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
+            }
+            
+            $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
+        }
+        
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        
+        return $rows[0];
+    }
+    
     /**
      * get user by property
      *
