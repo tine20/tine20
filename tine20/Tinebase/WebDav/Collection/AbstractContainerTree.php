@@ -63,6 +63,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      */
     protected $_useIdAsName;
     
+    protected static $_classCache = array (
+        '_getContact' => array()
+    );
+    
     /**
      * contructor
      * 
@@ -726,6 +730,12 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      */
     protected function _getContact($contactId)
     {
+        $classCacheId = ($this->_useIdAsName ? 'id' : 'n_fileas') . $contactId;
+        
+        if (isset(self::$_classCache[__FUNCTION__][$classCacheId])) {
+            return self::$_classCache[__FUNCTION__][$classCacheId];
+        }
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array(
                 'field'     => 'type',
@@ -744,6 +754,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
         if (!$contact) {
             throw new Tinebase_Exception_NotFound('contact not found');
         }
+        
+        self::$_classCache[__FUNCTION__][$classCacheId] = $contact;
         
         return $contact;
     }

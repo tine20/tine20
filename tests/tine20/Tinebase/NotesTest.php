@@ -6,23 +6,14 @@
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_NotesTest::main();
-}
-
-/**
  * Test class for Tinebase_Group
  */
-class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
+class Tinebase_NotesTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -48,64 +39,71 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      * set up tests
      *
      */
-    public function setUp()
+    protected function setUp()
     {
+        parent::setUp();
+        
         $this->_instance = Tinebase_Notes::getInstance();
         
-        $this->_objects['record'] = array(
-            'id'        => 1,
-            'model'     => 'Addressbook_Model_Contact',
-            'backend'    => 'Sql',
-        );
-
         $this->_objects['contact'] = new Addressbook_Model_Contact(array(
-            'id'        => 1,
+            'id'        => Tinebase_Record_Abstract::generateUID(),
             'n_family'  => 'phpunit notes contact'
         ));
         
-        $this->_objects['noteType'] = new Tinebase_Model_NoteType(array(
-            'id'            => '5001',
-            'name'          => 'phpunit note type',
-            'icon'          => '/images/oxygen/16x16/actions/document-properties.png',
-            'is_user_type'  => TRUE
-        ));
-        
-        $this->_objects['note'] = new Tinebase_Model_Note(array(
-            'id'                => 123,
-            'note_type_id'      => $this->_objects['noteType']->getId(),
-            'note'              => 'phpunit test note',    
-            'record_model'      => $this->_objects['record']['model'],
-            'record_backend'    => $this->_objects['record']['backend'],       
-            'record_id'         => $this->_objects['record']['id']
-        ));
+        $this->_objects['record'] = array(
+            'id'        => $this->_objects['contact']->getId(),
+            'model'     => 'Addressbook_Model_Contact',
+            'backend'    => 'Sql',
+        );
     }
     
     /**
      * try to add a note type
      *
+     * @return Tinebase_Model_NoteType
      */
     public function testAddNoteType()
     {
-        $this->_instance->addNoteType($this->_objects['noteType']);
+        $noteType = new Tinebase_Model_NoteType(array(
+            'name'          => 'phpunit note type',
+            'icon'          => '/images/oxygen/16x16/actions/document-properties.png',
+            'is_user_type'  => TRUE
+        ));
         
-        // find our note type
-        $testNoteType = $this->_instance->getNoteTypeByName($this->_objects['noteType']->name);
+        $this->_instance->addNoteType($noteType);
+        
+        // read back created note type
+        $testNoteType = $this->_instance->getNoteTypeByName($noteType->name);
                 
-        $this->assertEquals($this->_objects['noteType']->name, $testNoteType->name);
+        $this->assertEquals('phpunit note type', $noteType->name);
         $this->assertEquals(1, $testNoteType->is_user_type, 'user type not set');
+        
+        return $testNoteType;
     }
     
     /**
      * try to add a note
-     *
+     * 
+     * @return Tinebase_Model_Note
      */
     public function testAddNote()
     {
-        $this->_instance->addNote($this->_objects['note']);
+        $note = new Tinebase_Model_Note(array(
+            'note_type_id'      => $this->testAddNoteType()->getId(),
+            'note'              => 'phpunit test note',
+            'record_model'      => $this->_objects['record']['model'],
+            'record_backend'    => $this->_objects['record']['backend'],
+            'record_id'         => $this->_objects['record']['id']
+        ));
         
-        $note = $this->_instance->getNote($this->_objects['note']->getId());
+        // generates id
+        $this->_instance->addNote($note);
         
-        $this->assertEquals($this->_objects['note']->note, $note->note);
+        $testNote = $this->_instance->getNote($note->getId());
+        
+        $this->assertEquals($note->note, $testNote->note);
+        
+        return $testNote;
     }
 
     /**
@@ -147,6 +145,8 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchNotes()
     {
+        $note = $this->testAddNote();
+        
         $filter = new Tinebase_Model_NoteFilter(array(array(
             'field' => 'query',
             'operator' => 'contains',
@@ -158,7 +158,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $notesCount);
         foreach ($notes as $note) {
-            if ($this->_objects['note']->note === $note['note']) {
+            if ($note->note === $note['note']) {
                 $found = true;
             }
         }
@@ -171,7 +171,7 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testToArray()
     {
-        $note = $this->_instance->getNote($this->_objects['note']->getId());
+        $note = $this->_instance->getNote($this->testAddNote()->getId());
         
         $noteArray = $note->toArray();
         //print_r($noteArray);
@@ -185,15 +185,17 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteNote()
     {
+        $note = $this->testAddNote();
+        
         $this->_instance->deleteNotesOfRecord(
-            $this->_objects['record']['model'], 
-            $this->_objects['record']['backend'], 
+            $this->_objects['record']['model'],
+            $this->_objects['record']['backend'],
             $this->_objects['record']['id']
         );
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $note = $this->_instance->getNote($this->_objects['note']->getId());
+        $note = $this->_instance->getNote($note->getId());
     }
     
     /**
@@ -202,11 +204,11 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
     public function testDoNotGetDeletedNotes()
     {
         $filter = new Tinebase_Model_NoteFilter(array(array(
-            'field' => 'query',
+            'field'    => 'query',
             'operator' => 'contains',
-            'value' => 'phpunit'
+            'value'    => 'phpunit'
         )));
-        $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
+        $notes      = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
         $notesCount = $this->_instance->searchNotesCount($filter);
         
         $this->assertEquals(0, $notes->count());
@@ -219,13 +221,28 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteNoteType()
     {
+        $noteType = $this->testAddNoteType();
+        
         $noteTypesPre = $this->_instance->getNoteTypes();
         
-        $this->_instance->deleteNoteType($this->_objects['noteType']->getId());
+        $this->_instance->deleteNoteType($noteType->getId());
         
         $noteTypesPost = $this->_instance->getNoteTypes();
         
         $this->assertLessThan(count($noteTypesPre), count($noteTypesPost));
+    }
+    
+    /**
+     * test get note types ids only
+     */
+    public function testGetNotesTypeOnlyIds()
+    {
+        $noteType = $this->testAddNoteType();
+        
+        $noteTypesIds = $this->_instance->getNoteTypes(false, true);
+        
+        $this->assertTrue(is_array($noteTypesIds));
+        $this->assertTrue(is_string($noteTypesIds[0]));
     }
     
     /**
@@ -235,9 +252,8 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMultipleNotes()
     {
-        $personas = Zend_Registry::get('personas');
         $personasContactIds = array();
-        foreach ($personas as $persona) {
+        foreach ($this->_personas as $persona) {
             $personasContactIds[] = $persona->contact_id;
         }
         $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($personasContactIds);

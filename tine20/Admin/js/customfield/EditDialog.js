@@ -457,6 +457,18 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             totalcount: Tine.Tinebase.registry.get('userApplications').length
         });
 
+        this.appStore.each(function (app) {
+            if (this.getApplicationModels(app, true).length == 0) {
+                this.appStore.remove(app);
+                return;
+            }
+
+            var curApp =  Tine.Tinebase.appMgr.get(app.get('name'));
+            var curTitle = curApp.getTitle();
+
+            app.set('i18nName', curTitle);
+        }, this);
+
         this.modelStore = new Ext.data.ArrayStore({
             idIndex: 0,
             fields: [{name: 'value'}, {name: 'name'}]
@@ -472,7 +484,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this,
             handler: this.showStoreWindow
         });
-        
+
         return {
             layout: 'vbox',
             layoutConfig: {
@@ -490,8 +502,9 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: this.appStore,
                     columnWidth: 0.5,
                     name: 'application_id',
-                    displayField: 'name',
+                    displayField: 'i18nName',
                     valueField: 'id',
+                    scope: this,
                     fieldLabel: this.app.i18n._('Application'),
                     mode: 'local',
                     anchor: '100%',
@@ -503,6 +516,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         'select': function (combo, rec) {
                             // add models for select application
                             this.modelStore.loadData(this.getApplicationModels(rec, true));
+                            Ext.getCmp('cfModelCombo').setValue(this.modelStore.getAt(0).get('value'));
                         }
                     }
                 }, {
@@ -518,7 +532,8 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     anchor: '100%',
                     allowBlank: false,
                     forceSelection: true,
-                    editable: false
+                    editable: false,
+                    id: 'cfModelCombo'
                 }]]
             }, {
                 xtype: 'fieldset',

@@ -185,12 +185,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         // setup cache if available
         if (is_array($classes) && Tinebase_Core::getCache()) {
             $masterFiles = array();
-        
+            
             $dirname = dirname(__FILE__) . '/../../';
             foreach ($classes as $class => $namespace) {
                 $masterFiles[] = $dirname . str_replace('_', '/', $class) . '.php';
             }
-        
+            
             try {
                 $cache = new Zend_Cache_Frontend_File(array(
                     'master_files'              => $masterFiles,
@@ -203,16 +203,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
                 $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes));
+                
+                $server = $cache->load($cacheId);
+                if ($server instanceof Zend_Json_Server) {
+                    return $server;
+                }
+                
             } catch (Zend_Cache_Exception $zce) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . " Failed to create cache. Exception: \n". $zce);
-            }
-        }
-        
-        if (isset($cache) && $cache->test($cacheId)) {
-            $server = $cache->load($cacheId);
-            if ($server instanceof Zend_Json_Server) {
-                return $server;
             }
         }
         
