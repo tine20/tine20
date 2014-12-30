@@ -134,6 +134,7 @@ class Tinebase_Auth
             'accountCanonicalForm' => '2',
             'accountDomainName' => '',
             'accountDomainNameShort' => '',
+            'tryUsernameSplit' => '0'
          ),
          self::IMAP => array(
             'host'      => '',
