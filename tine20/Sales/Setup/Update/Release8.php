@@ -496,15 +496,15 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
-    
+        
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
-    
+        
         // create one persistent filter (looks better)
-    
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-    
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array(
                 'account_id'        => NULL,
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
@@ -656,17 +656,17 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>';
-    
+        
         $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition);
         $this->_backend->createTable($table);
-    
+        
         // create keyfield config
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config',
             'tableName' => 'config',
         ));
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
-    
+        
         $tc = array(
             'name'    => Sales_Config::INVOICE_TYPE,
             'records' => array(
@@ -675,13 +675,13 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 array('id' => 'CREDIT',   'value' => 'credit',    'system' => TRUE)
             ),
         );
-    
+        
         $cb->create(new Tinebase_Model_Config(array(
             'application_id'    => $appId,
             'name'              => Sales_Config::INVOICE_TYPE,
             'value'             => json_encode($tc),
         )));
-    
+        
         // create cleared state keyfields
         $tc = array(
             'name'    => Sales_Config::INVOICE_CLEARED,
@@ -690,7 +690,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 array('id' => 'CLEARED', 'value' => 'cleared',  'system' => TRUE),
             ),
         );
-    
+        
         $cb->create(new Tinebase_Model_Config(array(
             'application_id'    => $appId,
             'name'              => Sales_Config::INVOICE_CLEARED,
@@ -728,12 +728,12 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             <notnull>false</notnull>
         </field>'
         );
-    
+        
         foreach($fields as $field) {
             $declaration = new Setup_Backend_Schema_Field_Xml($field);
             $this->_backend->addCol('sales_contracts', $declaration);
         }
-    
+        
         if ($this->getTableVersion('sales_contracts') == 5) {
             $this->setTableVersion('sales_contracts', 6);
         } else {
@@ -1326,9 +1326,9 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             'model'             => 'Sales_Model_OfferFilter',
         );
         
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Offers", // _('All Offers')
                 'description' => "All offer records", // _('All offer records')
@@ -1385,12 +1385,12 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
         );
         
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         // Products
         $commonValues['model'] = 'Sales_Model_ProductFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Products", // _('All Products')
                 'description' => "All product records", // _('All product records')
@@ -1401,7 +1401,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         // Contracts
         $commonValues['model'] = 'Sales_Model_ContractFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Contracts", // _('All Contracts')
                 'description' => "All contract records", // _('All contract records')
@@ -1412,7 +1412,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         // Invoices
         $commonValues['model'] = 'Sales_Model_InvoiceFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Invoices", // _('All Invoices')
                 'description' => "All invoice records", // _('All invoice records')
@@ -1423,7 +1423,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         // CostCenters
         $commonValues['model'] = 'Sales_Model_CostCenterFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Cost Centers", // _('All Cost Centers')
                 'description' => "All cost center records", // _('All costcenter records')
@@ -1434,7 +1434,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         // Divisions
         $commonValues['model'] = 'Sales_Model_DivisionFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Divisions", // _('All Divisions')
                 'description' => "All division records", // _('All division records')
@@ -1445,7 +1445,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         // OrderConfirmations
         $commonValues['model'] = 'Sales_Model_OrderConfirmationFilter';
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
                 'name'        => "All Order Confirmations", // _('All Order Confirmations')
                 'description' => "All order confirmation records", // _('All order confirmation records')
