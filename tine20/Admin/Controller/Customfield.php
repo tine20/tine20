@@ -125,9 +125,9 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
             'operator'  => 'in',
             'value'     => (array) $ids
         )));
-        
+
         $result = $this->_customfieldController->search($filter, NULL, FALSE, TRUE);
-        if (! empty($result)) {
+        if ($result->count() > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . count($result) . ' records still have custom field values.');
             

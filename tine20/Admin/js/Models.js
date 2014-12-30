@@ -115,6 +115,7 @@ Tine.Admin.Model.Group.getDefaultData = function () {
 Tine.Admin.Model.Application = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'name'},
+    {name: 'i18nName'},
     {name: 'status'},
     {name: 'order'},
     {name: 'app_tables'},

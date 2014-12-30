@@ -224,11 +224,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var prefs = this.app.getRegistry().get('preferences'),
             startTime = Date.parseDate(prefs.get('daysviewstarttime'), 'H:i'),
             endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i');
-
+        
         this.dayStart = Ext.isDate(startTime) ? startTime : Date.parseDate(this.dayStart, 'H:i');
         this.dayEnd = Ext.isDate(endTime) ? endTime : Date.parseDate(this.dayEnd, 'H:i');
         this.dayEndPx = this.getTimeOffset(this.dayEnd);
-        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar');
+        
+        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart) && !this.getTimeOffset(this.dayEnd));
         
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
@@ -473,8 +474,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 cropHeightPx = this.getTimeOffset(this.dayEnd) +2;
                 
             this.mainBody.setStyle('margin-top', '-' + cropStartPx + 'px');
-            this.mainBody.setStyle('height', cropHeightPx + 'px');
-            this.mainBody.setStyle('overflow', 'hidden');
+            if (this.getTimeOffset(this.dayEnd)) {
+                this.mainBody.setStyle('height', cropHeightPx + 'px');
+                this.mainBody.setStyle('overflow', 'hidden');
+            }
             this.scroller.addClass('cal-daysviewpanel-body-cropDayTime');
         }
         

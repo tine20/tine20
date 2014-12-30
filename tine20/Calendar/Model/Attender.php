@@ -723,24 +723,26 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // build type map 
         foreach ($eventAttendees as $eventAttendee) {
             foreach ($eventAttendee as $attendee) {
-                $userId = $attendee->user_id instanceof Tinebase_Record_Abstract
-                    ? $attendee->user_id->getId()
-                    : $attendee->user_id;
+                $user     = $attendee->user_id;
+                $userType = $attendee->user_type;
+                $userId   = $user instanceof Tinebase_Record_Abstract
+                    ? $user->getId()
+                    : $user;
                 
-                if (isset(self::$_resolvedAttendeesCache[$attendee->user_type][$userId])) {
+                if (isset(self::$_resolvedAttendeesCache[$userType][$userId])) {
                     // already in cache
                     continue;
                 }
                 
-                if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
+                if ($user instanceof Tinebase_Record_Abstract) {
                     // can fill cache with model from $attendee
-                    self::$_resolvedAttendeesCache[$attendee->user_type][$userId] = $attendee->user_id;
+                    self::$_resolvedAttendeesCache[$userType][$userId] = $user;
                     
                     continue;
                 }
                 
                 // must be resolved
-                $typeMap[$attendee->user_type][] = $attendee->user_id;
+                $typeMap[$userType][] = $userId;
             }
         }
         
@@ -815,12 +817,21 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             ? array($eventAttendees)
             : $eventAttendees;
         
+        $foundDisplayContainers = false;
+        
         // set containing all attendee
         $allAttendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         
         // build type map 
         foreach ($eventAttendees as $eventAttendee) {
             foreach ($eventAttendee as $attendee) {
+                if (   $resolveDisplayContainers
+                    && ! $foundDisplayContainers
+                    && is_string($attendee->displaycontainer_id)
+                ) {
+                        $foundDisplayContainers = true;
+                }
+                
                 if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
                     $allAttendees->addRecord($attendee);
@@ -844,12 +855,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         // resolve display containers
-        if ($resolveDisplayContainers) {
-            $displaycontainerIds = array_diff($allAttendees->displaycontainer_id, array(''));
-            
-            if (! empty($displaycontainerIds)) {
-                Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendees, Tinebase_Core::getUser(), 'displaycontainer_id');
-            }
+        if ($resolveDisplayContainers && $foundDisplayContainers) {
+            Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendees, Tinebase_Core::getUser(), 'displaycontainer_id');
         }
         
         return $allAttendees;

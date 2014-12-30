@@ -42,6 +42,7 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_Import_ICalTest');
         $suite->addTestSuite('Calendar_Import_CalDAVTest');
         $suite->addTestSuite('Calendar_Export_ICalTest');
+        $suite->addTestSuite('Calendar_Export_OdsTests');
         $suite->addTestSuite('Calendar_Convert_Event_VCalendar_AllTests');
         $suite->addTestSuite('Calendar_Setup_DemoDataTests');
         

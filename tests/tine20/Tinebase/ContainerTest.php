@@ -650,7 +650,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, TRUE);
         Tinebase_Core::getCache()->clean();
-        $readGrant = $this->_instance->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
+        $readGrant = $this->_instance->resetClassCache('hasGrant')->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
         $this->assertFalse($readGrant);
     }
     
