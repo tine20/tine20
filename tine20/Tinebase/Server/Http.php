@@ -86,17 +86,22 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
             
             header('HTTP/1.0 403 Forbidden');
-
             exit;
             
         } catch (Exception $exception) {
-            Tinebase_Exception::log($exception);
+            Tinebase_Exception::log($exception, false);
             
             try {
                 $setupController = Setup_Controller::getInstance();
                 if ($setupController->setupRequired()) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setup required');
                     $this->_method = 'Tinebase.setupRequired';
+                } else if (preg_match('/download|export/', $this->_method)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Server error during download/export - exit with 500');
+                    header('HTTP/1.0 500 Internal Server Error');
+                    exit;
                 } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Show mainscreen with setup exception');
                     $this->_method = 'Tinebase.exception';
                 }
                 
