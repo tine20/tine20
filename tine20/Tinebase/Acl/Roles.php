@@ -139,7 +139,7 @@ class Tinebase_Acl_Roles
             return false;
         }
         
-        $classCacheId = convertCacheId(implode('', $roleMemberships));
+        $classCacheId = Tinebase_Helper::convertCacheId(implode('', $roleMemberships));
         
         if (!isset($this->_classCache[__FUNCTION__][$classCacheId])) {
             $select = $this->_db->select()
@@ -487,11 +487,11 @@ class Tinebase_Acl_Roles
                 throw new Tinebase_Exception_NotFound('Any account must belong to at least one group. The account with accountId ' . $accountId . ' does not belong to any group.');
             }
             
-            $classCacheId = convertCacheId ($accountId . implode('', $groupMemberships) . $type);
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . implode('', $groupMemberships) . $type);
         } else if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
             $accountId = Tinebase_Model_Group::convertGroupIdToInt($accountId);
             
-            $classCacheId = convertCacheId ($accountId . $type);
+            $classCacheId = Tinebase_Helper::convertCacheId ($accountId . $type);
         } else {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $type);
         }
