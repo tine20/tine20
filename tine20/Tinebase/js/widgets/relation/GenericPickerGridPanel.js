@@ -33,6 +33,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @type Record
      */
     record: null,
+
     /**
      *
      * @type {String}
@@ -170,9 +171,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.editDialog.on('save', this.onSaveRecord, this);
         this.editDialog.on('load', this.loadRecord, this);
-        
+
         Tine.widgets.relation.GenericPickerGridPanel.superclass.initComponent.call(this);
-        
+
         this.selModel.on('selectionchange', function(sm) {
             this.actionEditInNewWindow.setDisabled(sm.getCount() != 1);
         }, this);
@@ -1137,7 +1138,22 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     loadRecord: function(dialog, record, ticketFn) {
         this.store.removeAll();
         var interceptor = ticketFn();
-        var relations = record.get('relations');
+
+
+        if (dialog.mode == 'local') {
+            // if dialog is local, relations must be fetched async
+            Tine.Tinebase.getRelations('Calendar_Model_Event', record.get('id'), null, [], null, function (response, request) {
+                this.loadRelations(response.results, interceptor);
+            }.createDelegate(this));
+        } else {
+            var relations = record.get('relations');
+            this.loadRelations(relations, interceptor);
+        }
+
+
+    },
+
+    loadRelations: function(relations, interceptor) {
         if (relations && relations.length > 0) {
             var relationRecords = [];
             

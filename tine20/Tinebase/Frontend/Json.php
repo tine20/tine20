@@ -1093,6 +1093,35 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
+    /************************* relation functions ***************************/
+    
+    /**
+     * get all relations of a given record
+     *
+     * @param  string       $_model         own model to get relations for
+     * @param  string       $_id            own id to get relations for
+     * @param  string       $_degree        only return relations of given degree
+     * @param  array        $_type          only return relations of given type
+     * @param  string       $_relatedModel  only return relations having this related model
+     * @return array
+     */
+    public function getRelations($model, $id, $degree = NULL, $type = array(), $relatedModel = NULL)
+    {
+        $relations = Tinebase_Relations::getInstance()->getRelations($model, 'Sql', $id, $degree, $type, false, $relatedModel);
+
+        // @TODO we still have no converter for relations :-(
+        // -> related records returned here are different to the records returned by the apps itself!
+        // -> this problem also applies to to generic json converter!
+        $relations->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $relations->bypassFilters = true;
+        $result = $relations->toArray();
+
+        return array(
+            'results'       => array_values($result),
+            'totalcount'    => count($result),
+        );
+    }
+    
     /************************ config functions ******************************/
     
     /**

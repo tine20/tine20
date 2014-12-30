@@ -305,7 +305,14 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         );
         
         if ($grantsFilter instanceof Calendar_Model_GrantFilter) {
-            $requiredGrants = array_intersect($grantsFilter->getRequiredGrants(), $this->_recordBasedGrants);
+            $requiredGrants = $grantsFilter->getRequiredGrants();
+            if (is_array($requiredGrants)) {
+                $requiredGrants = array_intersect($requiredGrants, $this->_recordBasedGrants);
+            } else {
+                // TODO throw exception here?
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Required grants not set in grants filter: ' . print_r($grantsFilter->toArray(), true));
+            }
         }
         
         foreach ($events as $event) {
@@ -358,7 +365,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
             
             // check if one of the grants is set ...
-            if (isset($requiredGrants)) {
+            if (isset($requiredGrants) && is_array($requiredGrants)) {
                 foreach ($requiredGrants as $requiredGrant) {
                     if ($event->{$requiredGrant}) {
                         continue 2;

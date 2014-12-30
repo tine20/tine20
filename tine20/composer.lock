@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "12bf5af0b5e9f44868895d30b7624c21",
+    "hash": "ea2d9f4f8849c7a892cce2141b896dc0",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -103,11 +103,11 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "dev-master",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "6ab49555d48f9a943ab2609084b3fe7317f6c858"
+                "reference": "7b207195ee569777873e404673370e5b14320cbd"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -131,15 +131,15 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2014-02-05 16:44:17"
+            "time": "2014-12-17 15:33:26"
         },
         {
             "name": "metaways/timezoneconvert",
-            "version": "dev-master",
+            "version": "0.2",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/timezoneconvert",
-                "reference": "c7030f34909e52786259dd6cd425f835d9e5ce9b"
+                "reference": "1eba807e6104c80c31a2170cf34923610de9ab23"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -166,7 +166,7 @@
                 "Timezones",
                 "UTC"
             ],
-            "time": "2014-10-14 12:43:34"
+            "time": "2014-06-02 12:00:27"
         },
         {
             "name": "phpword/phpword",
@@ -263,8 +263,8 @@
             "authors": [
                 {
                     "name": "Evert Pot",
-                    "email": "evert@rooftopsolutions.nl",
-                    "homepage": "http://www.rooftopsolutions.nl/",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
                     "role": "Developer"
                 }
             ],
@@ -3429,11 +3429,13 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpword/phpword": 20,
-        "metaways/opendocument": 20,
-        "metaways/timezoneconvert": 20
+        "phpword/phpword": 20
     },
     "prefer-stable": false,
-    "platform": [],
-    "platform-dev": []
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }

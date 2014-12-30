@@ -84,8 +84,6 @@ class Tinebase_DateTime extends DateTime
      */
     public function __construct($_time = "now", $_timezone = NULL)
     {
-        $time = (is_numeric($_time)) ? "@" . $_time : $_time;
-        
         // allow to pass instanceof DateTime
         if ($_time instanceof DateTime) {
             if (! $_timezone) {
@@ -96,6 +94,8 @@ class Tinebase_DateTime extends DateTime
             }
             
             $time = $_time->format("Y-m-d H:i:s");
+        } else {
+            $time = (is_numeric($_time)) ? "@" . $_time : $_time;
         }
         
         if ($_timezone) {

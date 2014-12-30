@@ -93,7 +93,14 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      * @var OpenDocument_Document
      */
     protected $_openDocumentObject = NULL;
-    
+
+    /**
+     * the spreadsheet object
+     *
+     * @var OpenDocument_SpreadSheet
+     */
+    protected $_spreadSheetObject = NULL;
+
     /**
      * spreadsheet table
      * 
@@ -120,14 +127,14 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         // build export table (use current table if using template)
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating export for ' . $this->_modelName . ' . ' . $this->_getDataTableName());
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config->toArray(), TRUE));
-        
-        $spreadSheet = $this->_openDocumentObject->getBody();
+
+        $this->_spreadSheetObject = $this->_openDocumentObject->getBody();
         
         // append / use existing table
-        if ($spreadSheet->tableExists($this->_getDataTableName()) === true) {
-            $this->_activeTable = $spreadSheet->getTable($this->_getDataTableName());
+        if ($this->_spreadSheetObject->tableExists($this->_getDataTableName()) === true) {
+            $this->_activeTable = $this->_spreadSheetObject->getTable($this->_getDataTableName());
         } else {
-            $this->_activeTable = $spreadSheet->appendTable($this->_getDataTableName());
+            $this->_activeTable = $this->_spreadSheetObject->appendTable($this->_getDataTableName());
         }
         
         $this->_setColumnStyles();
@@ -300,27 +307,37 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
-            
-            $row = $this->_activeTable->appendRow();
-
-            foreach ($this->_config->columns->column as $field) {
-                // get type and value for cell
-                $cellType = $this->_getCellType($field->type);
-                $cellValue = $this->_getCellValue($field, $record, $cellType);
-                
-                // create cell with type and value and add style
-                $cell = $row->appendCell($cellValue, $cellType);
-                
-                if ($field->columnStyle) {
-                    $cell->setStyle((string) $field->columnStyle);
-                }
-                
-                // add formula
-                if ($field->formula) {
-                    $cell->setFormula($field->formula);
-                }
-            }
+            $this->processRecord($record, $i);
             $i++;
+        }
+        
+    }
+    
+    /**
+     * add single body row
+     *
+     * @param $record
+     */
+    public function processRecord($record, $idx)
+    {
+        $row = $this->_activeTable->appendRow();
+        
+        foreach ($this->_config->columns->column as $field) {
+            // get type and value for cell
+            $cellType = $this->_getCellType($field->type);
+            $cellValue = $this->_getCellValue($field, $record, $cellType);
+
+            // create cell with type and value and add style
+            $cell = $row->appendCell($cellValue, $cellType);
+            
+            if ($field->columnStyle) {
+                $cell->setStyle((string) $field->columnStyle);
+            }
+            
+            // add formula
+            if ($field->formula) {
+                $cell->setFormula($field->formula);
+            }
         }
     }
     

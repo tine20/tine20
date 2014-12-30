@@ -6,21 +6,16 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test for manage_billable
  */
 
 /**
- * Test helper
+ * Test class for Timetracker_ControllerTest
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tinebase_Group
- */
-class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
+class Timetracker_ControllerTest extends TestCase
 {
     /**
      * @var Timetracker_Controller_Timeaccount
@@ -47,18 +42,6 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
     protected $_objects = array();
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -66,12 +49,16 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+        
         $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
         $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
 
         // get timesheet
         $this->_objects['timesheet'] = $this->_getTimesheet();
         $this->_objects['timeaccount'] = $this->_timeaccountController->get($this->_objects['timesheet']->timeaccount_id);
+        
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         $this->_roleRights = self::removeManageAllRight();
     }
@@ -107,11 +94,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // reset old admin role rights
-        Tinebase_Acl_Roles::getInstance()->setRoleRights(Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role')->getId(), $this->_roleRights);
+        parent::tearDown();
         
-        // delete timeaccount
-        $this->_timeaccountController->delete($this->_objects['timeaccount']->getId());
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
     }
     
     /************ test functions follow **************/
