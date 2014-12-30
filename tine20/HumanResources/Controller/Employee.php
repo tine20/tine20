@@ -106,8 +106,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
         }
         
-        $firstDate = $_createdRecord->employment_begin ? $_createdRecord->employment_begin : Tinebase_DateTime::now();
-        $lastDate = $_createdRecord->employment_end ? $_createdRecord->employment_end : Tinebase_DateTime::now()->addYear(1);
+        $firstDate = $_createdRecord->employment_begin instanceof Tinebase_DateTime ? $_createdRecord->employment_begin : Tinebase_DateTime::now();
+        $lastDate = $_createdRecord->employment_end instanceof Tinebase_DateTime ? $_createdRecord->employment_end : Tinebase_DateTime::now()->addYear(1);
         
         $firstYear = (int) $firstDate->format('Y');
         $lastYear  = (int) $lastDate->format('Y');

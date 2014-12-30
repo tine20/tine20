@@ -449,9 +449,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $toConvert = $this->_properties[$field];
             }
 
-            
             foreach ($toConvert as $field => &$value) {
-                
                 if (! method_exists($value, 'setTimezone')) {
                     throw new Tinebase_Exception_Record_Validation($field . 'must be a method setTimezone');
                 } 
@@ -749,41 +747,44 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _convertISO8601ToDateTime(array &$_data)
     {
-        foreach ($this->_datetimeFields as $field) {
-            if (!isset($_data[$field])) {
-                continue;
-            }
-            
-            $value = $_data[$field];
-            
-            if ($value instanceof DateTime) {
-                continue;
-            }
-            
-            if (! is_array($value) && strpos($value, ',') !== false) {
-                $value = explode(',', $value);
-            }
-            
-            try {
-                if (is_array($value)) {
-                    foreach ($value as $dataKey => $dataValue) {
-                        if ($dataValue instanceof DateTime) {
-                            continue;
-                        }
-                        
-                        $value[$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
-                    }
-                } else {
-                    $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
-                    
+        foreach (array($this->_datetimeFields, $this->_dateFields) as $dtFields) {
+            foreach ($dtFields as $field) {
+                if (!isset($_data[$field])) {
+                    continue;
                 }
-            } catch (Tinebase_DateTime_Exception $zde) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());
-                $value = NULL;
+                
+                $value = $_data[$field];
+                
+                if ($value instanceof DateTime) {
+                    continue;
+                }
+                
+                if (! is_array($value) && strpos($value, ',') !== false) {
+                    $value = explode(',', $value);
+                }
+                
+                try {
+                    if (is_array($value)) {
+                        foreach($value as $dataKey => $dataValue) {
+                            if ($dataValue instanceof DateTime) {
+                                continue;
+                            }
+                            
+                            $value[$dataKey] =  (int)$dataValue == 0 ? NULL : new Tinebase_DateTime($dataValue);
+                        }
+                    } else {
+                        $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
+                        
+                    }
+                } catch (Tinebase_DateTime_Exception $zde) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());
+                    $value = NULL;
+                }
+                
+                $_data[$field] = $value;
             }
-            
-            $_data[$field] = $value;
         }
+        
     }
     
     /**

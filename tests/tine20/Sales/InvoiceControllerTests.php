@@ -533,7 +533,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
         
         $invoices = $this->_invoiceController->getAll('start_date');
-        $this->assertEquals('0101', $invoices->getFirstRecord()->start_date->format('md'));
+        $firstInvoice = $invoices->getFirstRecord();
+        $this->assertInstanceOf('Tinebase_DateTime', $firstInvoice->start_date);
+        $this->assertEquals('0101', $firstInvoice->start_date->format('md'));
         
         $this->assertEquals(24, $invoices->count());
         
