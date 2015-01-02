@@ -400,6 +400,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
     
     /**
+     * returns default internal addressbook container
+     * 
+     * @return string|int ID
+     */
+    public function getDefaultInternalAddressbook()
+    {
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        return $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+    }
+    
+    /**
      * create or update contact in addressbook backend
      * 
      * @param  Tinebase_Model_FullUser $_user
@@ -411,8 +422,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $contactsBackend->setGetDisabledContacts(true);
         
         if (empty($_user->container_id)) {
-            $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-            $_user->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+            $_user->container_id = $this->getDefaultInternalAddressbook();
         }
         
         try {
