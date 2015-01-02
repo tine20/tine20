@@ -3,10 +3,15 @@
 # Tine 2.0 Vhost
 tine20_vhost="
 <VirtualHost *:80>\n
-    DocumentRoot   \"/vagrant/tine20.git/tine20/\"\n
+    DocumentRoot   \"/usr/local/share/tine20.git/tine20/\"\n
     ServerName      tine20.vagrant\n
     ServerAlias     www.tine20.vagrant\n
     \n
+     <Directory /usr/local/share/tine20.git/tine20/>\n
+       AllowOverride None\n
+       Require all granted\n
+     </Directory>\n
+     \n
     # Active Sync\n
     RewriteEngine on\n
     RewriteRule ^/Microsoft-Server-ActiveSync /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]\n
@@ -21,14 +26,14 @@ tine20_vhost="
     RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]\n
     RewriteRule ^/remote.php   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]\n
     \n
-    php_value include_path "/vagrant/conf:/vagrant/tine20.git/tine20/"\n
+    php_value include_path "/etc/tine20:/usr/local/share/tine20.git/tine20/"\n
     \n
-    ErrorLog "/vagrant/logs/error_log"\n
-    CustomLog "/vagrant/logs/access_log" common\n
+    ErrorLog "/var/log/tine20/error_log"\n
+    CustomLog "/var/log/tine20/access_log" common\n
     \n
 </VirtualHost>\n"
 
-echo -e $tine20_vhost > /etc/apache2/sites-available/tine20-vagrant
+echo -e $tine20_vhost > /etc/apache2/sites-available/tine20-vagrant.conf
 
 service apache2 restart
 
@@ -39,12 +44,15 @@ mysql -u root -p"vagrant" -e "CREATE DATABASE tine20;"
 a2ensite tine20-vagrant
 
 # update dependencies
-cd /vagrant/tine20.git/tine20
+cd /usr/local/share/tine20.git/tine20
 sudo -u vagrant composer install --dev --prefer-source --no-interaction
 
 # setup directories
-mkdir -p /vagrant/logs /vagrant/conf /vagrant/cache /vagrant/files /vagrant/tmp
-chown www-data /vagrant/logs /vagrant/conf /vagrant/cache /vagrant/files /vagrant/tmp
+mkdir -p /var/lib/tine20/cache /var/lib/tine20/files /var/lib/tine20/tmp
+mkdir -p /etc/tine20
+mkdir -p /var/log/tine20
+chown -R vagrant /var/lib/tine20
+chown -R vagrant /var/log/tine20
 
 # generate config.inc.php
 tine20_config="
@@ -68,21 +76,21 @@ tine20_config="
     \n
     'caching' => array (\n
         'active' => true,\n
-        'path' => '/vagrant/cache',\n
+        'path' => '/var/lib/tine20/cache',\n
         'lifetime' => 3600,\n
     ),\n
     \n
     'logger' => array (\n
         'active' => true,\n
-        'filename' => '/vagrant/logs/tine20.log',\n
+        'filename' => '/var/log/tine20/tine20.log',\n
         'priority' => '7',\n
     ),\n
-    'filesdir'  => '/vagrant/files',\n
-    'tmpdir' => '/vargrant/tmp',\n
+    'filesdir'  => '/var/lib/tine20/files',\n
+    'tmpdir' => '/var/lib/tine20/tmp',\n
   );\n"
 
-if [ ! -f /vagrant/conf/config.inc.php ]; then
-  echo -e $tine20_config > /vagrant/conf/config.inc.php
+if [ ! -f /etc/tine20/config.inc.php ]; then
+  echo -e $tine20_config > /etc/tine20/config.inc.php
 fi
 
 # generate install.properties
@@ -95,9 +103,30 @@ adminEmailAddress=vagrant@tine20.vagrant\n
 #imap=\n
 #smtp=\n"
 
-if [ ! -f /vagrant/conf/install.properties ]; then
-  echo -e $tine20_installprops > /vagrant/conf/install.properties
+if [ ! -f /etc/tine20/install.properties ]; then
+  echo -e $tine20_installprops > /etc/tine20/install.properties
 fi
 
-cd /vagrant/tine20.git/tine20
-sudo -u vagrant /vagrant/tine20.git/tine20/vendor/bin/phing -D configdir=/vagrant/conf/ tine-install
+cd /usr/local/share/tine20.git/tine20
+sudo -u vagrant /usr/local/share/tine20.git/tine20/vendor/bin/phing -D configdir=/etc/tine20/ tine-install
+
+echo "
+##################################################################################
+# Welcome to tine20.vagrant
+#
+# 1. make sure you have a tine20.vagrant entry in you /etc/hosts file
+#    with your vagrant machine ip (10.10.10.10 per default)
+# 2. navigate in your browser to
+#      http://tine20.vagrant (normal login)
+#      http://tine20.vagrant/setup.php (setup)
+#        username: vagrant
+#        password: vagrant
+# 3. to run phpunit tests:
+       vagrant ssh
+       cd /usr/local/share/tine20.git/tests/tine20
+       /usr/local/share/tine20.git/tine20/vendor/bin/phpunit \
+ -d include_path=/etc/tine20 -d memory_limit=-1 AllTests.php
+#
+# 4. Happy codeing! :-)
+##################################################################################
+"
