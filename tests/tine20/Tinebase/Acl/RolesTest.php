@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Acl_Roles
@@ -73,6 +68,11 @@ class Tinebase_Acl_RolesTest extends TestCase
     {
         Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
+        
+        // cleanup for testHasRight/test disabled app
+        if (Tinebase_Application::getInstance()->getApplicationById($this->objects['application']->getId())->status == Tinebase_Application::DISABLED) {
+            Tinebase_Application::getInstance()->setApplicationState($this->objects['application'], Tinebase_Application::ENABLED);
+        }
         parent::tearDown();
     }
 

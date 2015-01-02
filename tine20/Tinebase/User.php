@@ -50,7 +50,16 @@ class Tinebase_User
      *
      */
     const DEFAULT_ADMIN_GROUP_NAME_KEY = 'defaultAdminGroupName';
-
+    
+    protected static $_contact2UserMapping = array(
+        'n_family'      => 'accountLastName',
+        'n_given'       => 'accountFirstName',
+        'n_fn'          => 'accountFullName',
+        'n_fileas'      => 'accountDisplayName',
+        'email'         => 'accountEmailAddress',
+        'container_id'  => 'container_id',
+    );
+    
     /**
      * the constructor
      *
@@ -529,20 +538,28 @@ class Tinebase_User
         
         try {
             $contact = $addressbook->getByUserId($syncedUser->getId());
+            $originalContact = clone $contact;
             
             Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
-            if (! empty($syncedUser->container_id)) {
-                $contact->container_id = $syncedUser->container_id;
+            $contact = self::_user2Contact($syncedUser, $contact);
+            
+            // TODO allow to diff jpegphoto, too
+            $diff = $contact->diff($originalContact, array('jpegphoto'));
+            if (! $diff->isEmpty()) {
+                // add modlog info
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+                Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating contact data for user ' . $syncedUser->accountLoginName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Diff: ' . print_r($diff->toArray(), true));
+                
+                $addressbook->update($contact);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User contact is up to date.');
             }
-            
-            // add modlog info
-            // Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
-            // Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Updating contact data for user ' . $syncedUser->accountLoginName);
-            
-            $addressbook->update($contact);
         } catch (Addressbook_Exception_NotFound $aenf) {
             self::createContactForSyncedUser($syncedUser);
             $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
@@ -628,28 +645,50 @@ class Tinebase_User
             return;
         }
         
-        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-    
-        $contact = new Addressbook_Model_Contact(array(
-            'n_family'      => $user->accountLastName,
-            'n_given'       => $user->accountFirstName,
-            'n_fn'          => $user->accountFullName,
-            'n_fileas'      => $user->accountDisplayName,
-            'email'         => $user->accountEmailAddress,
-            'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
-            'container_id'  => (! empty($user->container_id)) ? $user->container_id : $internalAddressbook->getId()
-        ));
-    
+        $contact = self::_user2Contact($user);
+        
         // add modlog info
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
-    
+        
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $contact = $addressbook->create($contact);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . " Added contact " . $contact->n_given);
-    
+        
         $user->contact_id = $contact->getId();
+    }
+    
+    /**
+     * sync user data to contact
+     * 
+     * @param Tinebase_Model_FullUser $user
+     * @param Addressbook_Model_Contact $contact
+     * @return Addressbook_Model_Contact
+     */
+    protected static function _user2Contact($user, $contact = null)
+    {
+        if ($contact === null) {
+            $contact = new Addressbook_Model_Contact(array(), true);
+        }
+        
+        $contact->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
+        
+        foreach (self::$_contact2UserMapping as $contactKey => $userKey) {
+            if (! empty($contact->{$contactKey}) && $contact->{$contactKey} == $user->{$userKey}) {
+                continue;
+            }
+            
+            switch ($contactKey) {
+                case 'container_id':
+                    $contact->container_id = (! empty($user->container_id)) ? $user->container_id : Admin_Controller_User::getInstance()->getDefaultInternalAddressbook();
+                    break;
+                default:
+                    $contact->{$contactKey} = $user->{$userKey};
+            }
+        }
+        
+        return $contact;
     }
     
     /**

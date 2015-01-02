@@ -113,10 +113,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param Tinebase_Record_RecordSet $_records
      * @param array $_resolveProperties
-     * 
-     * @todo rename function as this no longer resolves users!
      */
-    public static function resolveContainerTagsUsers(Tinebase_Record_RecordSet $_records, $_resolveProperties = array('container_id', 'tags'))
+    public static function resolveContainersAndTags(Tinebase_Record_RecordSet $_records, $_resolveProperties = array('container_id', 'tags'))
     {
         $firstRecord = $_records->getFirstRecord();
         

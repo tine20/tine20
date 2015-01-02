@@ -115,7 +115,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
         $_records->sortByPagination($_pagination);
         
-        Tinebase_Frontend_Json_Abstract::resolveContainerTagsUsers($_records, array('container_id'));
+        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, array('container_id'));
 
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
