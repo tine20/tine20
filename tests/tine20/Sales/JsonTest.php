@@ -4,25 +4,20 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Sales_Frontend_Json
  */
-class Sales_JsonTest extends PHPUnit_Framework_TestCase
+class Sales_JsonTest extends TestCase
 {
     /**
      * @var Sales_Frontend_Json
      */
     protected $_instance = array();
-
+    
     /**
      * Runs the test methods of this class.
      *
@@ -34,7 +29,7 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -43,23 +38,12 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_instance = new Sales_Frontend_Json();
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /**
@@ -69,8 +53,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddContract()
     {
-        $this->markTestSkipped('FIXME 0010347: fix failing tests in Sales_JsonTest (user is not resolved)');
-        
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
         
@@ -87,8 +69,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContract()
     {
-        $this->markTestSkipped('FIXME 0010347: fix failing tests in Sales_JsonTest (user is not resolved)');
-        
         $contract = $this->_getContract();
         $contractData = $this->_instance->saveContract($contract->toArray());
         $contractData = $this->_instance->getContract($contractData['id']);
@@ -538,8 +518,6 @@ class Sales_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAllCostCenterMethods()
     {
-        $this->markTestSkipped('FIXME 0010347: fix failing tests in Sales_JsonTest (user is not resolved)');
-        
         $remark = Tinebase_Record_Abstract::generateUID(10);
         $number = Tinebase_DateTime::now()->getTimestamp();
         

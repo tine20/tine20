@@ -343,6 +343,12 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             fieldLabel: this.app.i18n._('Search filter')
                         }, 
                         Ext.applyIf({
+                            name: 'authentication_Ldap_tryUsernameSplit',
+                            fieldLabel: this.app.i18n._('Try to split username'),
+                            store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
+                            value: '1'
+                        }, commonComboConfig),
+                        Ext.applyIf({
                             name: 'authentication_Ldap_accountCanonicalForm',
                             fieldLabel: this.app.i18n._('Account canonical form'),
                             store: [['2', 'ACCTNAME_FORM_USERNAME'], ['3', 'ACCTNAME_FORM_BACKSLASH'], ['4', 'ACCTNAME_FORM_PRINCIPAL']],

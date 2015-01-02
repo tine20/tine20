@@ -55,97 +55,104 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
         
         'fields'            => array(
             'number' => array(
-                'label' => 'Customer Number', //_('Customer Number')
-                'group' => 'core',
+                'label'       => 'Customer Number', //_('Customer Number')
+                'group'       => 'core',
                 'queryFilter' => TRUE,
-                'type'  => 'integer'
+                'type'        => 'integer'
             ),
             'name' => array(
-                'label'   => 'Name', // _('Name')
-                'type'    => 'text',
+                'label'       => 'Name', // _('Name')
+                'type'        => 'text',
                 'duplicateCheckGroup' => 'name',
-                'group' => 'core',
+                'group'       => 'core',
                 'queryFilter' => TRUE,
             ),
             'url' => array(
-                'label'   => 'Web', // _('Web')
-                'type'    => 'text',
-                'group' => 'misc',
+                'label'       => 'Web', // _('Web')
+                'type'        => 'text',
+                'group'       => 'misc',
+                'shy'         => TRUE
             ),
             'description' => array(
-                'label'   => 'Description', // _('Description')
-                'group' => 'core',
-                'type'    => 'text',
+                'label'       => 'Description', // _('Description')
+                'group'       => 'core',
+                'type'        => 'text',
                 'queryFilter' => TRUE,
+                'shy'         => TRUE
             ),
             'cpextern_id'       => array(
-                'label'      => 'Contact Person (external)',    // _('Contact Person (external)')
+                'label'   => 'Contact Person (external)',    // _('Contact Person (external)')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'record',
-                'group' => 'core',
-                'config' => array(
+                'type'    => 'record',
+                'group'   => 'core',
+                'config'  => array(
                     'appName'     => 'Addressbook',
                     'modelName'   => 'Contact',
                     'idProperty'  => 'id',
                 )
             ),
-            'cpintern_id'       => array(
+            'cpintern_id'    => array(
                 'label'      => 'Contact Person (internal)',    // _('Contact Person (internal)')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type'       => 'record',
-                'group' => 'core',
+                'group'      => 'core',
                 'config' => array(
                     'appName'     => 'Addressbook',
                     'modelName'   => 'Contact',
                     'idProperty'  => 'id',
                 )
             ),
-            'vatid' => array(
+            'vatid' => array (
                 'label'   => 'VAT No.', // _('VAT No.')
                 'type'    => 'text',
-                'group' => 'accounting',
+                'group'   => 'accounting',
+                'shy'     => TRUE
             ),
-            'credit_term' => array(
+            'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
-                'group' => 'accounting',
+                'group'   => 'accounting',
                 'default' => 10,
+                'shy'     => TRUE
             ),
-            'currency' => array(
+            'currency' => array (
                 'label'   => 'Currency', // _('Currency')
                 'type'    => 'text',
-                'group' => 'accounting'
+                'group'   => 'accounting'
             ),
-            'currency_trans_rate' => array(
+            'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
                 'type'    => 'float',
-                'group' => 'accounting',
-                'default' => 1
+                'group'   => 'accounting',
+                'default' => 1,
+                'shy'     => TRUE
             ),
-            'iban' => array(
-                'label' => 'IBAN',
-                'group' => 'accounting',
+            'iban' => array (
+                'label'   => 'IBAN',
+                'group'   => 'accounting',
+                'shy'     => TRUE
             ),
-            'bic' => array(
-                'label' => 'BIC',
-                'group' => 'accounting',
+            'bic' => array (
+                'label'   => 'BIC',
+                'group'   => 'accounting',
+                'shy'     => TRUE
             ),
-            'discount' => array(
+            'discount' => array (
                 'label'   => 'Discount (%)', // _('Discount (%)')
                 'type'    => 'float',
-                'group' => 'accounting',
-                'default'    => 0.0
+                'group'   => 'accounting',
+                'default' => 0.0
             ),
-            'delivery' => array(
+            'delivery' => array (
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Delivery Addresses', // _('Delivery Addresses')
                 'type'       => 'records',
                 'config'     => array(
-                    'appName' => 'Sales',
-                    'modelName'   => 'Address',
-                    'refIdField'  => 'customer_id',
-                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
-                    'paging'        => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'appName'          => 'Sales',
+                    'modelName'        => 'Address',
+                    'refIdField'       => 'customer_id',
+                    'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
+                    'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE
                 ),
             ),
@@ -155,12 +162,12 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'type'       => 'records',
                 'config'     => array(
                     // we need the billing address on search in the contract-customer combo to automatically set the first billing address
-                    'omitOnSearch' => FALSE,
-                    'appName' => 'Sales',
-                    'modelName'   => 'Address',
-                    'refIdField'  => 'customer_id',
-                    'addFilters' => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
-                    'paging'        => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'omitOnSearch'     => FALSE,
+                    'appName'          => 'Sales',
+                    'modelName'        => 'Address',
+                    'refIdField'       => 'customer_id',
+                    'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
+                    'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
                     'dependentRecords' => TRUE
                 ),
             ),
@@ -170,69 +177,74 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'type' => 'virtual',
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'label'      => NULL,
+                    'label'         => NULL,
                 )
             ),
             
             'adr_prefix1' => array(
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'label'   => 'Prefix', //_('Prefix')
+                    'label'         => 'Prefix', //_('Prefix')
+                    'shy'           => TRUE
                 ),
-                'type' => 'virtual',
+                'type'   => 'virtual',
             ),
             'adr_prefix2' => array(
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'label'   => 'Additional Prefix', //_('Additional Prefix')
+                    'label'         => 'Additional Prefix', //_('Additional Prefix')
+                    'shy'           => TRUE
                 ),
-                'type' => 'virtual',
-                
+                'type'   => 'virtual',
             ),
             'adr_street' => array(
                 'config' => array(
-                    'label' => 'Street', //_('Street')
-                    'duplicateOmit' => TRUE
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Street', //_('Street')
+                    'shy'           => TRUE
                 ),
                 'type' => 'virtual',
-                
             ),
             'adr_postalcode' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'label' => 'Postalcode', //_('Postalcode')
+                    'label'         => 'Postalcode', //_('Postalcode')
+                    'shy'           => TRUE
                 ),
             ),
             'adr_locality' => array(
                 'type' => 'virtual',
                 'config' => array(
-                    'label' => 'Locality', //_('Locality')
-                    'duplicateOmit' => TRUE
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Locality', //_('Locality')
+                    'shy'           => TRUE
                 ),
             ),
             'adr_region' => array(
                 'type' => 'virtual',
                 'config' => array(
-                    'label' => 'Region', //_('Region')
-                    'duplicateOmit' => TRUE
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Region', //_('Region')
+                    'shy'           => TRUE
                 ),
             ),
             'adr_countryname' => array(
                 'type' => 'virtual',
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'default' => 'DE',
-                    'label'   => 'Country', //_('Country')
+                    'label'         => 'Country', //_('Country')
+                    'shy'           => TRUE,
+                    'default'       => 'DE'
                 ),
-                
             ),
             'adr_pobox' => array(
                 'type' => 'virtual',
                 'config' => array(
-                    'label' => 'Postbox', //_('Postbox')
-                    'duplicateOmit' => TRUE
-                ),
+                    'duplicateOmit' => TRUE,
+                    'label'         => 'Postbox', //_('Postbox')
+                    'shy'           => TRUE
+                ),           
             ),
             'fulltext' => array(
                 'type' => 'string'
