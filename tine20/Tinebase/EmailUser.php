@@ -99,6 +99,20 @@ class Tinebase_EmailUser
     const SMTP_LDAP_QMAIL       = 'Smtp_Ldapsmtpqmail';
     
     /**
+     * univention smtp ldap backend const
+     * 
+     * @staticvar string
+     */
+    const SMTP_LDAP_UNIVENTION  = 'Smtp_Ldap_univention';
+
+    /**
+     * univention imap ldap backend const
+     * 
+     * @staticvar string
+     */
+    const IMAP_LDAP_UNIVENTION  = 'Imap_Ldap_univention';
+
+    /**
      * Smtp standard backend const
      * 
      * @staticvar string
@@ -117,9 +131,11 @@ class Tinebase_EmailUser
         self::IMAP_DOVECOT_COMBINED => 'Tinebase_EmailUser_Imap_DovecotCombined',
         self::IMAP_STANDARD         => 'Tinebase_EmailUser_Imap_Standard',
         self::IMAP_LDAP             => 'Tinebase_EmailUser_Imap_LdapDbmailSchema',
+        self::IMAP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Imap_LdapUniventionMailSchema',
         self::SMTP_LDAP             => 'Tinebase_EmailUser_Smtp_LdapDbmailSchema',
         self::SMTP_LDAP_MAIL        => 'Tinebase_EmailUser_Smtp_LdapMailSchema',
         self::SMTP_LDAP_QMAIL       => 'Tinebase_EmailUser_Smtp_LdapQmailSchema',
+        self::SMTP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Smtp_LdapUniventionMailSchema',
         self::SMTP_POSTFIX          => 'Tinebase_EmailUser_Smtp_Postfix',
         self::SMTP_POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
         self::SMTP_STANDARD         => 'Tinebase_EmailUser_Smtp_Standard',
