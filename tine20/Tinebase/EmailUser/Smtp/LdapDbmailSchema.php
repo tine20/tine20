@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -15,7 +15,7 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
+class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
      * dbmail config

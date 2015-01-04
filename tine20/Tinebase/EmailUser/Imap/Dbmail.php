@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -18,7 +18,7 @@
  * 
  * @todo generalize some logic and move it to abstract parent class
  */
-class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
+class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * @var Zend_Db_Adapter

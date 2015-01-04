@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
- * 
- * 
  * 
  * example dovecot db schema:
  * 
@@ -175,7 +173,7 @@ query = SELECT destination FROM smtp_aliases WHERE source='%s'
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
+class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * quotas table name with prefix
@@ -234,22 +232,30 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         'emailLastLogin',
     );
     
+    protected $_defaults = array(
+        'emailPort'   => 143,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS
+    );
+    
+    /**
+     * subconfig for user email backend (for example: dovecot)
+     * 
+     * @var string
+     */
+    protected $_subconfigKey = 'dovecot';
+    
     /**
      * the constructor
      */
     public function __construct(array $_options = array())
     {
-        $this->_configKey = Tinebase_Config::IMAP;
-        $this->_subconfigKey = 'dovecot';
-        
-        $emailConfig = parent::__construct($_options);
+        parent::__construct($_options);
         
         // _quotaTable = dovecot_aliases
         $this->_quotasTable = $this->_config['prefix'] . $this->_config['quotaTable'];
         
         // set domain from imap config
-        $emailConfig =Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
-        $this->_config['domain'] = !empty($emailConfig['domain']) ? $emailConfig['domain'] : null;
+        $this->_config['domain'] = !empty($this->_config['domain']) ? $this->_config['domain'] : null;
         
         // copy over default scheme, home, UID, GID from preconfigured defaults
         $this->_config['emailScheme'] = $this->_config['scheme'];
@@ -310,7 +316,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
      */
     protected function _rawDataToRecord(array $_rawdata)
     {
-        $data = array();
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         
         foreach ($_rawdata as $key => $value) {
             $keyMapping = array_search($key, $this->_propertyMapping);
@@ -413,7 +419,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
             $domain,
             $emailUsername
         );
-
+        
         $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
         $rawData[$this->_propertyMapping['emailUsername']] = $emailUsername;
         

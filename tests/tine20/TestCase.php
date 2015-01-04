@@ -242,7 +242,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _getMailDomain()
     {
         $testconfig = Zend_Registry::get('testConfig');
-        return ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+        
+        if ($testconfig && isset($testconfig->maildomain)) {
+            return $testconfig->maildomain;
+        }
+        
+        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
+            
+            return $domain;
+        }
+        
+        return 'tine20.org';
     }
     
     /**

@@ -15,22 +15,19 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract
+class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
-     * config key (Tinebase_Config::IMAP || Tinebase_Config::SMTP)
+     * email user config defaults
      * 
-     * @var string
+     * @var array 
      */
-    protected $_configKey = Tinebase_Config::SMTP;
-    
-    /**
-     * subconfig for user email backend (for example: dovecot)
-     * 
-     * @var string
-     */
-    protected $_subconfigKey =  NULL;
-    
+    protected $_defaults = array(
+        'emailPort'   => 25,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailAuth'   => 'plain'
+    );
+
     /**
      * the constructor
      * 
@@ -38,19 +35,62 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract
      */
     public function __construct(array $_options = array())
     {
-        if ($this->_configKey === NULL) {
-            throw new Tinebase_Exception_UnexpectedValue('$this->_configKey can not be emoty');
-        }
-        
         // get email user backend config options (host, dbname, username, password, port)
-        $emailConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
+        $emailConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         
         // merge _config and email backend config
-        if ($this->_subconfigKey) {
-            $this->_config = array_merge($emailConfig[$this->_subconfigKey], $this->_config);
-        }
+        $this->_config = array_merge($this->_config, $emailConfig);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
+    }
+    
+    /**
+     * inspect get user by property
+     * 
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        if (! $_user instanceof Tinebase_Model_FullUser) {
+            return;
+        }
+        
+        // convert data to Tinebase_Model_EmailUser
+        $emailUser = $this->_rawDataToRecord(array());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
+        
+        $emailUser->emailUsername = $this->_getEmailUserName($_user);
+        
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $_user->smtpUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
+        } else {
+            $_user->imapUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
+        }
+    }
+    
+    /**
+     * update/set email user password
+     * 
+     * @param  string  $_userId
+     * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
+     */
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
+    {
+        // do nothing
+    }
+    
+    /**
+    * delete user by id
+    *
+    * @param  Tinebase_Model_FullUser  $_user
+    */
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
+    {
+        // do nothing
     }
     
     /**
@@ -62,6 +102,48 @@ class Tinebase_EmailUser_Smtp_Standard extends Tinebase_User_Plugin_Abstract
     protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
         // do nothing
+    }
+    
+    protected function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
+        
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+        
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+        
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+        
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+        
+        return $systemDefaults;
+    }
+    
+    /**
+     * converts raw data from adapter into a single record / do mapping
+     *
+     * @param  array $_data
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _rawDataToRecord(array $_rawdata)
+    {
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' raw data: ' . print_r($_rawdata, true));
+        
+        $emailUser = new Tinebase_Model_EmailUser($data, TRUE);
+        
+        return $emailUser;
     }
     
     /**

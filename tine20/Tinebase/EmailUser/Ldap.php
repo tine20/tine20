@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  */
@@ -39,59 +39,30 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
         'inetOrgPerson'
     );
     
-    /**
-     * the constructor
-     *
-     */
-    public function __construct(array $_options = array())
-    {
-        parent::__construct($_options);
-
-        $ldapOptions = Tinebase_User::getBackendConfiguration();
-        $config  = Tinebase_EmailUser::getConfig($this->_backendType);
-        $this->_options = array_merge($this->_options, $config);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_options, true));
-    }
+    protected $_defaults = array();
     
     /******************* protected functions *********************/
-    
-    /**
-     * Check if we should append domain name or not
-     *
-     * @param  string $_userName
-     * @return string
-     */
-    protected function _appendDomain($_userName)
-    {
-        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
-            $_userName .= '@' . $this->_config['domain'];
-        }
-        
-        return $_userName;
-    }
     
     /**
      * Returns a user object with raw data from ldap
      *
      * @param array $_userData
      * @param string $_accountClass
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Model_EmailUser
      * 
      * @todo add generic function for this in Tinebase_User_Ldap or Tinebase_Ldap?
      */
     protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_ldapEntry, true));
+        $accountArray = $this->_defaults;
         
-        if ($this->_backendType == Tinebase_Config::SMTP) {
-            $accountArray = array(
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $accountArray = array_merge($accountArray, array(
                 'emailForwardOnly' => false,
                 'emailAliases'     => array(),
                 'emailForwards'    => array()
-            );
-        } else {
-            $accountArray = array();
+            ));
         }
         
         foreach ($_ldapEntry as $key => $value) {
@@ -124,15 +95,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountArray, true));
-        
-        if ($this->_backendType == Tinebase_Config::SMTP) {
-            $_user->smtpUser  = new Tinebase_Model_EmailUser($accountArray);
-            $_user->emailUser = Tinebase_EmailUser::merge(isset($_user->emailUser) ? $_user->emailUser : null, $_user->smtpUser);
-        } else {
-            $_user->imapUser  = new Tinebase_Model_EmailUser($accountArray);
-            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
-        }
+        return new Tinebase_Model_EmailUser($accountArray, true);
     }
     
     /**
@@ -144,7 +107,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
      */
     protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
-        if ($this->_backendType == Tinebase_Config::SMTP) {
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
             if (empty($_user->smtpUser)) {
                 return;
             }
