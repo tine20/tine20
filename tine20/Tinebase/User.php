@@ -483,7 +483,8 @@ class Tinebase_User
                     self::createContactForSyncedUser($currentUser);
                 }
             }
-        
+            
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
             $syncedUser = $userBackend->updateUserInSqlBackend($currentUser);
             if (! empty($user->container_id)) {
                 $syncedUser->container_id = $user->container_id;
@@ -503,6 +504,7 @@ class Tinebase_User
             if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
                 self::createContactForSyncedUser($user);
             }
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $syncedUser = $userBackend->addUserInSqlBackend($user);
             $userBackend->addPluginUser($syncedUser, $user);
         }
