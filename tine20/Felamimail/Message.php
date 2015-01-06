@@ -60,7 +60,9 @@ class Felamimail_Message extends Zend_Mail_Message
     {
         $string = $_string;
         if (preg_match('/=?[\d,\w,-]*?[q,Q,b,B]?.*?=/', $string)) {
-            $string = preg_replace('/(=[1-9,a-f]{2})/e', "strtoupper('\\1')", $string);
+            $string = preg_replace_callback('/(=[1-9,a-f]{2})/', function ($matches) { 
+                return strtoupper($matches[1]);
+            }, $string);
             if ($_isHeader) {
                 $string = iconv_mime_decode($string, 2);
             }
