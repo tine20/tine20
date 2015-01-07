@@ -341,7 +341,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param integer $_schema 0 = lastname (10 chars) / 1 = lastname + 2 chars of firstname / 2 = 1-x chars of firstname + lastname 
      * @return string
      */
-    public function generateUserName($_account, $_schema = 1, $_length = NULL)
+    public function generateUserName($_account, $_schema = 1)
     {
         if (! empty($_account->accountFirstName) && $_schema > 0 && method_exists($this, '_generateUserWithSchema' . $_schema)) {
             $userName = call_user_func_array(array($this, '_generateUserWithSchema' . $_schema), array($_account));
@@ -349,12 +349,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             $userName = strtolower(substr(replaceSpecialChars($_account->accountLastName), 0, 10));
         }
         
-        if (!empty($_length) && (strlen($userName) > $_length)) {
-            $userName = substr($userName, 0, $_length);
-        }
-        $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName, $_length);
+        $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName . ' with schema: '. $_schema);
         
         return $userName;
     }
@@ -432,7 +429,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param string $_name
      * @return string
      */
-    protected function _addSuffixToNameIfExists($_property, $_name, $_length)
+    protected function _addSuffixToNameIfExists($_property, $_name)
     {
         $result = $_name;
         if ($this->nameExists($_property, $_name)) {
@@ -441,9 +438,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             while ($numSuffix < 100) {
                 $suffix = sprintf('%02d', $numSuffix);
                 
-                if (!empty($_length) && (strlen($_name . $suffix) > $_length)) {
-                    $_name = substr($_name, 0, strlen($_name) - (strlen($_name . $suffix) - $_length));
-                }
                 if (! $this->nameExists($_property, $_name . $suffix)) {
                     $result = $_name . $suffix;
                     break;
