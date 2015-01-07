@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        add search count function
@@ -20,6 +20,13 @@
  
 abstract class Tinebase_Group_Abstract
 {
+    /**
+     * in class cache 
+     * 
+     * @var array
+     */
+    protected $_classCache = array ();
+    
     /**
      * return all groups an account is member of
      *
@@ -62,6 +69,23 @@ abstract class Tinebase_Group_Abstract
      * @return unknown
      */
     abstract public function removeGroupMember($_groupId, $_accountId);
+    
+    /**
+     * reset class cache
+     * 
+     * @param string $key
+     * @return Tinebase_Group_Sql
+     */
+    public function resetClassCache($key = null)
+    {
+        foreach ($this->_classCache as $cacheKey => $cacheValue) {
+            if ($key === null || $key === $cacheKey) {
+                $this->_classCache[$cacheKey] = array();
+            }
+        }
+        
+        return $this;
+    }
     
     /**
      * create a new group
