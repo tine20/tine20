@@ -928,8 +928,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'seq'                   => $_user->seq,
         );
         
-        if (empty($accountData['seq'])) {
-            unset($accountData['seq']);
+        $unsetIfEmpty = array('seq', 'creation_time', 'created_by', 'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_time', 'deleted_by');
+        foreach ($unsetIfEmpty as $property) {
+            if (empty($accountData[$property])) {
+                unset($accountData[$property]);
+            }
         }
         
         return $accountData;

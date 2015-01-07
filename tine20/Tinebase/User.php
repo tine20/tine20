@@ -483,7 +483,8 @@ class Tinebase_User
                     self::createContactForSyncedUser($currentUser);
                 }
             }
-        
+            
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
             $syncedUser = $userBackend->updateUserInSqlBackend($currentUser);
             if (! empty($user->container_id)) {
                 $syncedUser->container_id = $user->container_id;
@@ -503,6 +504,7 @@ class Tinebase_User
             if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
                 self::createContactForSyncedUser($user);
             }
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $syncedUser = $userBackend->addUserInSqlBackend($user);
             $userBackend->addPluginUser($syncedUser, $user);
         }
@@ -548,7 +550,9 @@ class Tinebase_User
             if (! $diff->isEmpty()) {
                 // add modlog info
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
-                Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+                if ($contact->container_id !== null) {
+                    Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+                }
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Updating contact data for user ' . $syncedUser->accountLoginName);

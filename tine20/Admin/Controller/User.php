@@ -416,7 +416,13 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     public function getDefaultInternalAddressbook()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        return $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        if (empty($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])) {
+            $internalAdb = Addressbook_Setup_Initialize::setDefaultInternalAddressbook();
+            $internalAdbId = $internalAdb->getId();
+        } else {
+            $internalAdbId = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        }
+        return $internalAdbId;
     }
     
     /**

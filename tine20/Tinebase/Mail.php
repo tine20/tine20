@@ -20,7 +20,7 @@ class Tinebase_Mail extends Zend_Mail
     /**
     * email address regexp
     */
-    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i';
+    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,63})/i';
     
     /**
      * Sender: address
