@@ -147,7 +147,7 @@ msgstr ""
 msgid "Teacher Account"
 msgstr ""
 
-#: Controller/Course.php:317
+#: Controller/Course.php:321
 msgid "My course"
 msgstr ""
 
@@ -220,4 +220,12 @@ msgstr ""
 
 #: Setup/Initialize.php:68
 msgid "Filtered"
+msgstr ""
+
+#: Setup/Initialize.php:91
+msgid "School"
+msgstr ""
+
+#: Setup/Initialize.php:92
+msgid "Defaul school for Courses application"
 msgstr ""
