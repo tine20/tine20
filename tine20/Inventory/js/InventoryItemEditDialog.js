@@ -28,9 +28,9 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowHeight: 470,
     windowWidth: 800,
+    displayNotes: true,
     
     /**
      * check validity of activ number field
@@ -217,12 +217,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     border: true,
                     
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Inventory',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Inventory',
                             border: false,

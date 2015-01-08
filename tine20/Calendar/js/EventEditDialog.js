@@ -31,7 +31,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Calendar.backend,
     showContainerSelector: false,
     tbarItems: [],
-    
+    displayNotes: true,
+
     mode: 'local',
     
     // note: we need up use new action updater here or generally in the widget!

@@ -214,7 +214,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @type {Ext.LoadMask}
      */
     loadMask: null,
-    
+
+    /**
+     * hook notes panel into dialog
+     */
+    displayNotes: false,
+
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -1001,7 +1006,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * create notes panel
      */
     initNotesPanel: function() {
-        this.items.items.push(new Tine.widgets.activities.ActivitiesGridPanel({ anchor: '100% 100%', editDialog: this }));
+        // This dialog is pretty generic but for some cases it's used in a differend way
+        if(this.displayNotes == true) {
+            this.items.items.push(new Tine.widgets.activities.ActivitiesGridPanel({
+                anchor: '100% 100%',
+                editDialog: this
+            }));
+        }
     },
 
     /**

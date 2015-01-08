@@ -29,7 +29,8 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
      */
     windowHeight: 470,
     windowWidth: 800,
-    
+    displayNotes: true,
+
     /**
      * returns dialog
      * 

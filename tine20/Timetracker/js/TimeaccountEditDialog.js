@@ -19,8 +19,8 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     appName: 'Timetracker',
     recordClass: Tine.Timetracker.Model.Timeaccount,
     recordProxy: Tine.Timetracker.timeaccountBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     useInvoice: false,
+    displayNotes: true,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -230,31 +230,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
-                    items: [/*new Ext.Panel({
-                        // @todo generalise!
-                        title: this.app.i18n._('Description'),
-                        iconCls: 'descriptionIcon',
-                        layout: 'form',
-                        labelAlign: 'top',
-                        border: false,
-                        items: [{
-                            style: 'margin-top: -4px; border 0px;',
-                            labelSeparator: '',
-                            xtype:'textarea',
-                            name: 'description',
-                            hideLabel: true,
-                            grow: false,
-                            preventScrollbars:false,
-                            anchor:'100% 100%',
-                            emptyText: this.app.i18n._('Enter description')                            
-                        }]
-                    }),*/
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Timetracker',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
+                    items: [
                     new Tine.widgets.tags.TagPanel({
                         app: 'Timetracker',
                         border: false,

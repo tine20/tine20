@@ -33,6 +33,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     recordClass: Tine.Addressbook.Model.Contact,
     showContainerSelector: true,
     multipleEdit: true,
+    displayNotes: true,
 
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('mapPanel') && Tine.widgets.MapPanel) {

@@ -39,7 +39,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Admin.containerBackend,
     evalGrants: false,
     modelStore: null,
-
+    
     /**
      * executed after record got updated from proxy
      */

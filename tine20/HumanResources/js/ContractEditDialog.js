@@ -47,6 +47,8 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     allowEdit: null,
 
+    displayNotes: true,
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private

@@ -40,7 +40,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
-    
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private

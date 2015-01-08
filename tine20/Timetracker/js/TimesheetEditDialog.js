@@ -25,6 +25,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     tbarItems: null,
     evalGrants: false,
     useInvoice: false,
+    displayNotes: true,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)

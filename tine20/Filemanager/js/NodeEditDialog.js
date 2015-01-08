@@ -34,6 +34,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: null,
     evalGrants: true,
     showContainerSelector: false,
+    displayNotes: true,
     
     /**
      * @type Tine.Filemanager.DownloadLinkGridPanel
