@@ -679,17 +679,14 @@ msgstr ""
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
-#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr "وارد نمودن مخاطبین از فایل CSV"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
-#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"

@@ -58,49 +58,52 @@ msgstr "Potvrzení hesla"
 msgid "Authentication provider"
 msgstr "Poskytovatel autentikace"
 
-#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:403
+#: js/AuthenticationPanel.js:284 js/AuthenticationPanel.js:347
+#: js/AuthenticationPanel.js:409
 msgid "Try to split username"
 msgstr "Zkusit rozdělit uživatelské jméno"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:404
-#: js/AuthenticationPanel.js:475 js/AuthenticationPanel.js:499
+#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:348
+#: js/AuthenticationPanel.js:410 js/AuthenticationPanel.js:481
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
-#: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
-#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:517 js/AuthenticationPanel.js:538
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:565
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:608
+#: js/AuthenticationPanel.js:659 js/AuthenticationPanel.js:695
+#: js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "Yes"
 msgstr "Ano"
 
 #: js/AuthenticationPanel.js:285 js/AuthenticationPanel.js:329
-#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:404
-#: js/AuthenticationPanel.js:475 js/AuthenticationPanel.js:499
+#: js/AuthenticationPanel.js:335 js/AuthenticationPanel.js:348
+#: js/AuthenticationPanel.js:410 js/AuthenticationPanel.js:481
 #: js/AuthenticationPanel.js:505 js/AuthenticationPanel.js:511
-#: js/AuthenticationPanel.js:532 js/AuthenticationPanel.js:553
-#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:596
-#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:653
-#: js/AuthenticationPanel.js:689 js/EmailPanel.js:207 js/EmailPanel.js:267
+#: js/AuthenticationPanel.js:517 js/AuthenticationPanel.js:538
+#: js/AuthenticationPanel.js:559 js/AuthenticationPanel.js:565
+#: js/AuthenticationPanel.js:602 js/AuthenticationPanel.js:608
+#: js/AuthenticationPanel.js:659 js/AuthenticationPanel.js:695
+#: js/EmailPanel.js:207 js/EmailPanel.js:267
 msgid "No"
 msgstr "Ne"
 
-#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:347
+#: js/AuthenticationPanel.js:290 js/AuthenticationPanel.js:353
 msgid "Account canonical form"
 msgstr "Kanonická forma účtu"
 
-#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:359
 msgid "Account domain name"
 msgstr ""
 
-#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:356
+#: js/AuthenticationPanel.js:299 js/AuthenticationPanel.js:362
 msgid "Account domain short name"
 msgstr "Krátký název domény"
 
-#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:584
+#: js/AuthenticationPanel.js:313 js/AuthenticationPanel.js:590
 msgid "Host"
 msgstr "Server"
 
-#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:372
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:378
 #: js/EmailPanel.js:195 js/EmailPanel.js:296 js/EmailPanel.js:400
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
@@ -108,21 +111,21 @@ msgstr "Server"
 msgid "Port"
 msgstr "Port"
 
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:587
+#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:593
 msgid "Login name"
 msgstr "Přihlašovací jméno"
 
-#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:590
+#: js/AuthenticationPanel.js:323 js/AuthenticationPanel.js:596
 #: js/EmailPanel.js:190 js/ConfigManagerPanel.js:214
 #: js/ConfigManagerPanel.js:245
 msgid "Password"
 msgstr "Heslo"
 
-#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:595
+#: js/AuthenticationPanel.js:328 js/AuthenticationPanel.js:601
 msgid "Bind requires DN"
 msgstr "Připojení vyžaduje DN"
 
-#: js/AuthenticationPanel.js:334 js/AuthenticationPanel.js:601
+#: js/AuthenticationPanel.js:334 js/AuthenticationPanel.js:607
 msgid "Start TLS"
 msgstr ""
 
@@ -134,248 +137,248 @@ msgstr "Základní DN"
 msgid "Search filter"
 msgstr "Vyhledávací filtr"
 
-#: js/AuthenticationPanel.js:369 js/EmailPanel.js:182 js/EmailPanel.js:292
+#: js/AuthenticationPanel.js:375 js/EmailPanel.js:182 js/EmailPanel.js:292
 #: js/EmailPanel.js:396 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
 #: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
 msgid "Hostname"
 msgstr "Název nebo adresa počítače"
 
-#: js/AuthenticationPanel.js:376 js/EmailPanel.js:199 js/EmailPanel.js:300
+#: js/AuthenticationPanel.js:382 js/EmailPanel.js:199 js/EmailPanel.js:300
 #: js/EmailPanel.js:404
 msgid "Secure Connection"
 msgstr "Zabezpečení připojení"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
 #: js/EmailPanel.js:309 js/EmailPanel.js:407
 msgid "None"
 msgstr "Žádné"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
 #: js/EmailPanel.js:407
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:202 js/EmailPanel.js:303
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
 #: js/EmailPanel.js:407
 msgid "SSL"
 msgstr "SSL"
 
-#: js/AuthenticationPanel.js:383 js/EmailPanel.js:212
+#: js/AuthenticationPanel.js:389 js/EmailPanel.js:212
 msgid "Append domain to login name"
 msgstr "Připojit doménu k přihlašovacímu jménu"
 
-#: js/AuthenticationPanel.js:396
+#: js/AuthenticationPanel.js:402
 msgid "Certificate validation"
 msgstr ""
 
-#: js/AuthenticationPanel.js:409
+#: js/AuthenticationPanel.js:415
 msgid "CA file"
 msgstr ""
 
-#: js/AuthenticationPanel.js:412
+#: js/AuthenticationPanel.js:418
 msgid "CRL directory"
 msgstr ""
 
-#: js/AuthenticationPanel.js:422
+#: js/AuthenticationPanel.js:428
 msgid "Accounts storage"
 msgstr "Uložení účtů"
 
-#: js/AuthenticationPanel.js:444 js/AuthenticationPanel.js:681
+#: js/AuthenticationPanel.js:450 js/AuthenticationPanel.js:687
 msgid "Default user group name"
 msgstr "Jméno výchozí skupiny pro uživatele"
 
-#: js/AuthenticationPanel.js:447 js/AuthenticationPanel.js:684
+#: js/AuthenticationPanel.js:453 js/AuthenticationPanel.js:690
 msgid "Default admin group name"
 msgstr "Jméno výchozí skupiny pro administrátory"
 
-#: js/AuthenticationPanel.js:459
+#: js/AuthenticationPanel.js:465
 msgid "Login panel"
 msgstr ""
 
-#: js/AuthenticationPanel.js:474
+#: js/AuthenticationPanel.js:480
 msgid "Reuse last username logged"
 msgstr ""
 
-#: js/AuthenticationPanel.js:483
+#: js/AuthenticationPanel.js:489
 msgid "Password Settings"
 msgstr ""
 
-#: js/AuthenticationPanel.js:498
+#: js/AuthenticationPanel.js:504
 msgid "User can change password"
 msgstr "Uživatel si může měnit heslo"
 
-#: js/AuthenticationPanel.js:504
+#: js/AuthenticationPanel.js:510
 msgid "Enable password policy"
 msgstr ""
 
-#: js/AuthenticationPanel.js:510
+#: js/AuthenticationPanel.js:516
 msgid "Only ASCII"
 msgstr ""
 
-#: js/AuthenticationPanel.js:515
+#: js/AuthenticationPanel.js:521
 msgid "Minimum length"
 msgstr ""
 
-#: js/AuthenticationPanel.js:518
+#: js/AuthenticationPanel.js:524
 msgid "Minimum word chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:521
+#: js/AuthenticationPanel.js:527
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:524
+#: js/AuthenticationPanel.js:530
 msgid "Minimum special chars"
 msgstr ""
 
-#: js/AuthenticationPanel.js:527
+#: js/AuthenticationPanel.js:533
 msgid "Minimum numbers"
 msgstr ""
 
-#: js/AuthenticationPanel.js:531
+#: js/AuthenticationPanel.js:537
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: js/AuthenticationPanel.js:540
+#: js/AuthenticationPanel.js:546
 msgid "Redirect Settings"
 msgstr "Nastavení přesměrování"
 
-#: js/AuthenticationPanel.js:548
+#: js/AuthenticationPanel.js:554
 msgid "Redirect Url (redirect to login screen if empty)"
 msgstr "URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací obrazovku)"
 
-#: js/AuthenticationPanel.js:552
+#: js/AuthenticationPanel.js:558
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Vždy přesměrovat (pokud Ne, přesměrovat jen při odhlášení)"
 
-#: js/AuthenticationPanel.js:558
+#: js/AuthenticationPanel.js:564
 msgid "Redirect to referring site, if exists"
 msgstr "Přesměrovat na odkazovaný web, pokud existuje"
 
-#: js/AuthenticationPanel.js:608
+#: js/AuthenticationPanel.js:614
 msgid "Password encoding"
 msgstr "Kódování hesla"
 
-#: js/AuthenticationPanel.js:610
+#: js/AuthenticationPanel.js:616
 msgid "des"
 msgstr ""
 
-#: js/AuthenticationPanel.js:611
+#: js/AuthenticationPanel.js:617
 msgid "crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:612
+#: js/AuthenticationPanel.js:618
 msgid "blowfish_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:613
+#: js/AuthenticationPanel.js:619
 msgid "md5_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:614
+#: js/AuthenticationPanel.js:620
 msgid "ext_crypt"
 msgstr ""
 
-#: js/AuthenticationPanel.js:615
+#: js/AuthenticationPanel.js:621
 msgid "md5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:616
+#: js/AuthenticationPanel.js:622
 msgid "smd5"
 msgstr ""
 
-#: js/AuthenticationPanel.js:617
+#: js/AuthenticationPanel.js:623
 msgid "sha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:618
+#: js/AuthenticationPanel.js:624
 msgid "ssha"
 msgstr ""
 
-#: js/AuthenticationPanel.js:619
+#: js/AuthenticationPanel.js:625
 msgid "ntpassword"
 msgstr ""
 
-#: js/AuthenticationPanel.js:620
+#: js/AuthenticationPanel.js:626
 msgid "plain"
 msgstr ""
 
-#: js/AuthenticationPanel.js:626
+#: js/AuthenticationPanel.js:632
 msgid "User DN"
 msgstr "DN uživatele"
 
-#: js/AuthenticationPanel.js:629
+#: js/AuthenticationPanel.js:635
 msgid "User Filter"
 msgstr "Filtr uživatelů"
 
-#: js/AuthenticationPanel.js:633
+#: js/AuthenticationPanel.js:639
 msgid "User Search Scope"
 msgstr "Oblast hledání uživatelů"
 
-#: js/AuthenticationPanel.js:639
+#: js/AuthenticationPanel.js:645
 msgid "Groups DN"
 msgstr "DN pro skupiny"
 
-#: js/AuthenticationPanel.js:642
+#: js/AuthenticationPanel.js:648
 msgid "Group Filter"
 msgstr "Filtr skupin"
 
-#: js/AuthenticationPanel.js:646
+#: js/AuthenticationPanel.js:652
 msgid "Group Search Scope"
 msgstr "Oblast hledání skupin"
 
-#: js/AuthenticationPanel.js:652
+#: js/AuthenticationPanel.js:658
 msgid "Use Rfc 2307 bis"
 msgstr "Používat Rfc 2307 bis"
 
-#: js/AuthenticationPanel.js:652
+#: js/AuthenticationPanel.js:658
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-#: js/AuthenticationPanel.js:658
+#: js/AuthenticationPanel.js:664
 msgid "Min User Id"
 msgstr "Minimální Id uživatele"
 
-#: js/AuthenticationPanel.js:661
+#: js/AuthenticationPanel.js:667
 msgid "Max User Id"
 msgstr "Maximální Id uživatele"
 
-#: js/AuthenticationPanel.js:664
+#: js/AuthenticationPanel.js:670
 msgid "Min Group Id"
 msgstr "Minimální Id skupiny"
 
-#: js/AuthenticationPanel.js:667
+#: js/AuthenticationPanel.js:673
 msgid "Max Group Id"
 msgstr "Maximální Id skupiny"
 
-#: js/AuthenticationPanel.js:671
+#: js/AuthenticationPanel.js:677
 msgid "Group UUID Attribute name"
 msgstr "Název atributu pro UUID skupiny"
 
-#: js/AuthenticationPanel.js:676
+#: js/AuthenticationPanel.js:682
 msgid "User UUID Attribute name"
 msgstr "Název atributu pro UUID uživatele"
 
-#: js/AuthenticationPanel.js:688
+#: js/AuthenticationPanel.js:694
 msgid "Readonly access"
 msgstr ""
 
-#: js/AuthenticationPanel.js:702
+#: js/AuthenticationPanel.js:708
 msgid "Save config and install"
 msgstr "Uložit konfiguraci a instalovat"
 
-#: js/AuthenticationPanel.js:704 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:710 js/ConfigManagerPanel.js:499
 msgid "Save config"
 msgstr "Uložit konfiguraci"
 
-#: js/AuthenticationPanel.js:729
+#: js/AuthenticationPanel.js:735
 msgid "Passwords don't match"
 msgstr "Hesla se neshodují"
 
-#: js/AuthenticationPanel.js:742 js/AuthenticationPanel.js:749
-#: js/AuthenticationPanel.js:753 js/AuthenticationPanel.js:765
-#: js/AuthenticationPanel.js:776
+#: js/AuthenticationPanel.js:748 js/AuthenticationPanel.js:755
+#: js/AuthenticationPanel.js:759 js/AuthenticationPanel.js:771
+#: js/AuthenticationPanel.js:782
 msgid "Should not be empty"
 msgstr "Nemělo by být prázdné"
 

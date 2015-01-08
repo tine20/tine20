@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Ingo Ratsdorf <ingo@envirology.co.nz>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:30+0000\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2014-11-28 00:24+0000\n"
+"Last-Translator: Ingo Ratsdorf <ingo@envirology.co.nz>\n"
 "Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,107 +20,107 @@ msgstr ""
 #: js/Model.js:42
 msgid "Device"
 msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Device"
+msgstr[1] "Devices"
 
 #: js/Model.js:42
 msgid "Devices"
-msgstr ""
+msgstr "Devices"
 
 #: js/Application.js:27
 msgid "Active Sync"
-msgstr ""
+msgstr "ActiveSync"
 
 #: js/Application.js:43
 msgid "Select a Device"
-msgstr ""
+msgstr "Select a device"
 
 #: js/Application.js:57
 msgid "No ActiveSync Device registered"
-msgstr ""
+msgstr "No ActiveSync device registered"
 
 #: js/Application.js:65
 #, python-brace-format
 msgid "Set as {0} Filter"
-msgstr ""
+msgstr "Set as {0} filter"
 
 #: js/Application.js:90
 msgid "Resetted Sync Filter"
-msgstr ""
+msgstr "Sync filter reset"
 
 #: js/Application.js:91 js/Application.js:103
 #, python-brace-format
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
+msgstr "{0} filter for device \"{1}\" is now \"{2}\""
 
 #: js/Application.js:94
 msgid "resetted"
-msgstr ""
+msgstr "reset"
 
 #: js/Application.js:102
 msgid "Set Sync Filter"
-msgstr ""
+msgstr "Set sync filter"
 
 #: Preference.php:75
 msgid "Default Addressbook"
-msgstr ""
+msgstr "Default addressbook"
 
 #: Preference.php:76
 msgid "The default addressbook to create new contacts in."
-msgstr ""
+msgstr "The default addressbook for new contacts."
 
 #: Preference.php:79
 msgid "Default Calendar"
-msgstr ""
+msgstr "Default calendar"
 
 #: Preference.php:80
 msgid "The default calendar to create new events in."
-msgstr ""
+msgstr "The default calendar for new events"
 
 #: Preference.php:83
 msgid "Default Task List"
-msgstr ""
+msgstr "Default task list"
 
 #: Preference.php:84
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "The default task list for new tasks"
 
 #: Config.php:52
 msgid "Default policy for new devices"
-msgstr ""
+msgstr "Default policy for new devices"
 
 #: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
-msgstr ""
+msgstr "Enter the id of the policy to apply to newly created devices."
 
 #: Config.php:62
 msgid "Disable Access Log"
-msgstr ""
+msgstr "Disable access log"
 
 #: Config.php:64
 msgid "Disable ActiveSync Access Log creation."
-msgstr ""
+msgstr "Disable ActiveSync access log creation."
 
 #: Config.php:73
 msgid "Filter timeslot for emails"
-msgstr ""
+msgstr "Filter timeslot for emails"
 
 #: Config.php:75
 msgid "For how long in the past the emails should be synchronized."
-msgstr ""
+msgstr "For how long in the past the emails should be synchronized."
 
 #: Config.php:96
 msgid "Filter timeslot for events"
-msgstr ""
+msgstr "Filter timeslot for events"
 
 #: Config.php:98
 msgid "For how long in the past the events should be synchronized."
-msgstr ""
+msgstr "For how long in the past the events should be synchronized."
 
 #: Setup/setup.xml:546 Setup/Update/Release6.php:290
 msgid "Default Policy"
-msgstr ""
+msgstr "Default policy"
 
 #: Setup/setup.xml:551 Setup/Update/Release6.php:295
 msgid "Default Policy installed during setup"
-msgstr ""
+msgstr "Default policy installed during setup"

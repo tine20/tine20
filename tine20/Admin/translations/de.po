@@ -209,13 +209,13 @@ msgstr "Zeige Anwendung {0} - {1} von {2}"
 msgid "No applications to display"
 msgstr "Keine Anwendungen anzuzeigen"
 
-#: js/Applications.js:281 js/customfield/EditDialog.js:630
+#: js/Applications.js:281 js/customfield/EditDialog.js:611
 msgid "Order"
 msgstr "Sortierung"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:596 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:124 js/AccessLog.js:128 js/Tags.js:227
+#: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
 #: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
@@ -253,8 +253,8 @@ msgstr "Fehlgeschlagen"
 msgid "Could not save tag ({0})"
 msgstr "Konnte Tag ({0}) nicht speichern"
 
-#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
-#: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
+#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
+#: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
 #: js/GroupEditDialog.js:78
 msgid "Errors"
 msgstr "Fehler"
@@ -293,7 +293,7 @@ msgstr "Tag Name"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:171 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
 msgid "Color"
 msgstr "Farbe"
 
@@ -333,7 +333,7 @@ msgstr "Rollen"
 msgid "Computers"
 msgstr "Computer"
 
-#: js/Admin.js:74 js/Models.js:127
+#: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
 msgstr "Anwendungen"
 
@@ -371,32 +371,32 @@ msgstr "Aktualisieren"
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
-#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
 #: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
 #: js/Groups.js:235 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
-#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:602
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:583
 msgid "Label"
 msgstr "Bezeichner"
 
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:565
 #: js/container/GridPanel.js:68 js/container/GridPanel.js:99
-#: js/container/EditDialog.js:156
+#: js/container/EditDialog.js:175
 msgid "Type"
 msgstr "Typ"
 
-#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:136 js/ApplicationFilter.js:33 js/Models.js:127
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:352
+#: js/customfield/EditDialog.js:508 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:143 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:550
-#: js/container/EditDialog.js:149
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:530
+#: js/container/EditDialog.js:164
 msgid "Model"
 msgstr "Modell"
 
@@ -415,117 +415,117 @@ msgstr "Bestätigen"
 msgid "Restart application to apply new customfields?"
 msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
 
-#: js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr "Bitte konfigurieren Sie einen Datenspeicher für diesen Feldtyp"
 
-#: js/customfield/EditDialog.js:244
+#: js/customfield/EditDialog.js:209
 msgid "Default"
 msgstr "Standard"
 
-#: js/customfield/EditDialog.js:288
+#: js/customfield/EditDialog.js:253
 msgid "Add a New ID..."
 msgstr "Neue ID setzen ..."
 
-#: js/customfield/EditDialog.js:292
+#: js/customfield/EditDialog.js:257
 msgid "Value"
 msgstr "Wert"
 
-#: js/customfield/EditDialog.js:297
+#: js/customfield/EditDialog.js:262
 msgid "Add a New Value..."
 msgstr "Neuen Wert hinzufügen ..."
 
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:272 js/customfield/EditDialog.js:278
 msgid "Error"
 msgstr "Fehler"
 
-#: js/customfield/EditDialog.js:307
+#: js/customfield/EditDialog.js:272
 msgid "ID already exists"
 msgstr "ID bereits vorhanden"
 
-#: js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:278
 msgid "Value already exists"
 msgstr "Wert bereits vorhanden"
 
-#: js/customfield/EditDialog.js:407
+#: js/customfield/EditDialog.js:372
 msgid "Record Class"
 msgstr "Datensatz-Klasse"
 
-#: js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:397
 msgid "Given record class not found"
 msgstr "Datensatz-Klasse nicht gefunden"
 
-#: js/customfield/EditDialog.js:465
+#: js/customfield/EditDialog.js:430
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
+#: js/customfield/EditDialog.js:436 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Abbruch"
 
-#: js/customfield/EditDialog.js:504
+#: js/customfield/EditDialog.js:482
 msgid "Configure store"
 msgstr "Datenspeicher konfigurieren"
 
-#: js/customfield/EditDialog.js:561
+#: js/customfield/EditDialog.js:542
 msgid "Custom field definition"
 msgstr "Zusatzfeld-Definition"
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:553
 msgid "Text"
 msgstr "Text"
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:554
 msgid "Number"
 msgstr "Zahl"
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:555
 msgid "Date"
 msgstr "Datum"
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:556
 msgid "DateTime"
 msgstr "Datum mit Uhrzeit"
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:557
 msgid "Time"
 msgstr "Uhrzeit"
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:558
 msgid "Boolean"
 msgstr "Logischer Term"
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:559
 msgid "Search Combo"
 msgstr "Suchfeld"
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:560
 msgid "Key Field"
 msgstr "Schlüsselfeld"
 
-#: js/customfield/EditDialog.js:580
+#: js/customfield/EditDialog.js:561
 msgid "Record"
 msgstr "Datensatz"
 
-#: js/customfield/EditDialog.js:608
+#: js/customfield/EditDialog.js:589
 msgid "Length"
 msgstr "Länge"
 
-#: js/customfield/EditDialog.js:613
+#: js/customfield/EditDialog.js:594
 msgid "Required"
 msgstr "Erforderlich"
 
-#: js/customfield/EditDialog.js:620
+#: js/customfield/EditDialog.js:601
 msgid "Custom field additional properties"
 msgstr "Zusätzliche Eigenschaft des Zusatzfeldes"
 
-#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:606 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Gruppe"
 msgstr[1] "Gruppen"
 
-#: js/customfield/EditDialog.js:653
+#: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
 msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
@@ -543,15 +543,15 @@ msgstr[1] "Container"
 msgid "Container Name"
 msgstr "Containername"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "personal"
 msgstr "persönlich"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "shared"
 msgstr "gemeinsam"
 
-#: js/container/EditDialog.js:176
+#: js/container/EditDialog.js:195
 msgid "Note for Owner"
 msgstr "Notiz für den Besitzer"
 

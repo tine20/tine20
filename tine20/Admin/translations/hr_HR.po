@@ -206,13 +206,13 @@ msgstr "Prikaz modula {0} - {1} od {2}"
 msgid "No applications to display"
 msgstr "Nema modula za prikaz"
 
-#: js/Applications.js:281 js/customfield/EditDialog.js:630
+#: js/Applications.js:281 js/customfield/EditDialog.js:611
 msgid "Order"
 msgstr "Redoslijed"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:596 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:124 js/AccessLog.js:128 js/Tags.js:227
+#: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
 #: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
@@ -251,8 +251,8 @@ msgstr "Neuspjelo"
 msgid "Could not save tag ({0})"
 msgstr ""
 
-#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
-#: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
+#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
+#: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
 #: js/GroupEditDialog.js:78
 msgid "Errors"
 msgstr "Greške"
@@ -291,7 +291,7 @@ msgstr "Naziv oznake"
 msgid "Description"
 msgstr "Opis"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:171 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
 msgid "Color"
 msgstr "Boja"
 
@@ -332,7 +332,7 @@ msgstr "Uloge"
 msgid "Computers"
 msgstr "Računala"
 
-#: js/Admin.js:74 js/Models.js:127
+#: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
 msgstr "Moduli"
 
@@ -371,33 +371,33 @@ msgstr "Osvježiti"
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Početni adresar za nove kontakte i grupe"
 
-#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
 #: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
 #: js/Groups.js:235 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
-#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:602
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:583
 msgid "Label"
 msgstr "Labela"
 
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:565
 #: js/container/GridPanel.js:68 js/container/GridPanel.js:99
-#: js/container/EditDialog.js:156
+#: js/container/EditDialog.js:175
 msgid "Type"
 msgstr "Tip"
 
-#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:136 js/ApplicationFilter.js:33 js/Models.js:127
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:352
+#: js/customfield/EditDialog.js:508 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:143 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Modul"
 msgstr[1] "Moduli"
 msgstr[2] "Modula"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:550
-#: js/container/EditDialog.js:149
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:530
+#: js/container/EditDialog.js:164
 msgid "Model"
 msgstr "Model"
 
@@ -417,118 +417,118 @@ msgstr "Potvrdi"
 msgid "Restart application to apply new customfields?"
 msgstr "Osvježiti modul kako bi se primijenila nova Dodatna polja?"
 
-#: js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr "Molimo Vas postavite spremanje za ovo polje"
 
-#: js/customfield/EditDialog.js:244
+#: js/customfield/EditDialog.js:209
 msgid "Default"
 msgstr "Početno"
 
-#: js/customfield/EditDialog.js:288
+#: js/customfield/EditDialog.js:253
 msgid "Add a New ID..."
 msgstr "Dodaj novi ID..."
 
-#: js/customfield/EditDialog.js:292
+#: js/customfield/EditDialog.js:257
 msgid "Value"
 msgstr "Vrijednost"
 
-#: js/customfield/EditDialog.js:297
+#: js/customfield/EditDialog.js:262
 msgid "Add a New Value..."
 msgstr "Dodaj novu vrijednost..."
 
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:272 js/customfield/EditDialog.js:278
 msgid "Error"
 msgstr "Greška"
 
-#: js/customfield/EditDialog.js:307
+#: js/customfield/EditDialog.js:272
 msgid "ID already exists"
 msgstr "ID već postoji"
 
-#: js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:278
 msgid "Value already exists"
 msgstr "Vrijednost već postoji"
 
-#: js/customfield/EditDialog.js:407
+#: js/customfield/EditDialog.js:372
 msgid "Record Class"
 msgstr "Zapisnik klase"
 
-#: js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:397
 msgid "Given record class not found"
 msgstr "Zadni zapisnik klase nije pronađen"
 
-#: js/customfield/EditDialog.js:465
+#: js/customfield/EditDialog.js:430
 msgid "OK"
 msgstr "U redu"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
+#: js/customfield/EditDialog.js:436 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Odustani"
 
-#: js/customfield/EditDialog.js:504
+#: js/customfield/EditDialog.js:482
 msgid "Configure store"
 msgstr "Postavite spremanje"
 
-#: js/customfield/EditDialog.js:561
+#: js/customfield/EditDialog.js:542
 msgid "Custom field definition"
 msgstr "Definicija Dodatnog polja"
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:553
 msgid "Text"
 msgstr "Tekst"
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:554
 msgid "Number"
 msgstr "Broj"
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:555
 msgid "Date"
 msgstr "Datum"
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:556
 msgid "DateTime"
 msgstr "Datum i vrijeme"
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:557
 msgid "Time"
 msgstr "Vrijeme"
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:558
 msgid "Boolean"
 msgstr "Boolean"
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:559
 msgid "Search Combo"
 msgstr "Polje za pretragu"
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:560
 msgid "Key Field"
 msgstr "Polje vrijednosti"
 
-#: js/customfield/EditDialog.js:580
+#: js/customfield/EditDialog.js:561
 msgid "Record"
 msgstr "Zapis"
 
-#: js/customfield/EditDialog.js:608
+#: js/customfield/EditDialog.js:589
 msgid "Length"
 msgstr "Dužina"
 
-#: js/customfield/EditDialog.js:613
+#: js/customfield/EditDialog.js:594
 msgid "Required"
 msgstr "Obavezno"
 
-#: js/customfield/EditDialog.js:620
+#: js/customfield/EditDialog.js:601
 msgid "Custom field additional properties"
 msgstr "Dodatne opcije Dodatnih polja"
 
-#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:606 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Grupa"
 msgstr[1] "Grupe"
 msgstr[2] "Grupa"
 
-#: js/customfield/EditDialog.js:653
+#: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
 msgstr "Dodatno polje već postoji. Molimo odaberite drugo ime."
 
@@ -547,15 +547,15 @@ msgstr[2] "Spremnika"
 msgid "Container Name"
 msgstr "Naziv spremnika"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "personal"
 msgstr "osobni"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "shared"
 msgstr "dijeljeni"
 
-#: js/container/EditDialog.js:176
+#: js/container/EditDialog.js:195
 msgid "Note for Owner"
 msgstr "Biljaška za vlasnika"
 

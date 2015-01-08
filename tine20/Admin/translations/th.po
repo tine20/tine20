@@ -204,13 +204,13 @@ msgstr "แสดงการใช้ {0} - {1} จาก {2}"
 msgid "No applications to display"
 msgstr "ไม่มีการใช้ใด ๆ ให้แสดง"
 
-#: js/Applications.js:281 js/customfield/EditDialog.js:630
+#: js/Applications.js:281 js/customfield/EditDialog.js:611
 msgid "Order"
 msgstr "คำสั่ง"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:596 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:124 js/AccessLog.js:128 js/Tags.js:227
+#: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
 #: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
@@ -247,8 +247,8 @@ msgstr "ได้ล้มเหลว"
 msgid "Could not save tag ({0})"
 msgstr "ไม่สามารถจัดเก็บป้ายกำกับ ({0}) ได้"
 
-#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
-#: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
+#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
+#: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
 #: js/GroupEditDialog.js:78
 msgid "Errors"
 msgstr "ข้อผิดพลาด"
@@ -287,7 +287,7 @@ msgstr "ชื่อป้ายกำกับ"
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:171 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
 msgid "Color"
 msgstr "สี"
 
@@ -326,7 +326,7 @@ msgstr "หน้าที่"
 msgid "Computers"
 msgstr "คอมพิวเตอร์"
 
-#: js/Admin.js:74 js/Models.js:127
+#: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
 msgstr "การประยุกต์ใช้"
 
@@ -363,31 +363,31 @@ msgstr ""
 msgid "Default Addressbook for new contacts and groups"
 msgstr "สมุดรายชื่อหลักสำหรับการติดต่อและกลุ่มใหม่"
 
-#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
 #: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
 #: js/Groups.js:235 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "รหัส"
 
-#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:602
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:583
 msgid "Label"
 msgstr "ป้าย"
 
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:565
 #: js/container/GridPanel.js:68 js/container/GridPanel.js:99
-#: js/container/EditDialog.js:156
+#: js/container/EditDialog.js:175
 msgid "Type"
 msgstr "ประเภท"
 
-#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:136 js/ApplicationFilter.js:33 js/Models.js:127
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:352
+#: js/customfield/EditDialog.js:508 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:143 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "การประยุกต์ใช้"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:550
-#: js/container/EditDialog.js:149
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:530
+#: js/container/EditDialog.js:164
 msgid "Model"
 msgstr "รุ่น"
 
@@ -405,116 +405,116 @@ msgstr "ยืนยัน"
 msgid "Restart application to apply new customfields?"
 msgstr ""
 
-#: js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr ""
 
-#: js/customfield/EditDialog.js:244
+#: js/customfield/EditDialog.js:209
 msgid "Default"
 msgstr "ค่าหลัก"
 
-#: js/customfield/EditDialog.js:288
+#: js/customfield/EditDialog.js:253
 msgid "Add a New ID..."
 msgstr "เพิ่มรหัสใหม่..."
 
-#: js/customfield/EditDialog.js:292
+#: js/customfield/EditDialog.js:257
 msgid "Value"
 msgstr "ค่า"
 
-#: js/customfield/EditDialog.js:297
+#: js/customfield/EditDialog.js:262
 msgid "Add a New Value..."
 msgstr "เพิ่มค่าใหม่..."
 
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:272 js/customfield/EditDialog.js:278
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: js/customfield/EditDialog.js:307
+#: js/customfield/EditDialog.js:272
 msgid "ID already exists"
 msgstr "รหัสนี้มีแล้ว"
 
-#: js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:278
 msgid "Value already exists"
 msgstr "ค่านี้มีแล้ว"
 
-#: js/customfield/EditDialog.js:407
+#: js/customfield/EditDialog.js:372
 msgid "Record Class"
 msgstr "บันทึก ชั้น"
 
-#: js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:397
 msgid "Given record class not found"
 msgstr "ที่ให้บันทึกชั้นมานั้นหาไม่พบ"
 
-#: js/customfield/EditDialog.js:465
+#: js/customfield/EditDialog.js:430
 msgid "OK"
 msgstr "ตกลง"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
+#: js/customfield/EditDialog.js:436 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "ยกเลิก"
 
-#: js/customfield/EditDialog.js:504
+#: js/customfield/EditDialog.js:482
 msgid "Configure store"
 msgstr ""
 
-#: js/customfield/EditDialog.js:561
+#: js/customfield/EditDialog.js:542
 msgid "Custom field definition"
 msgstr ""
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:553
 msgid "Text"
 msgstr "ข้อความ"
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:554
 msgid "Number"
 msgstr "ลำดับ"
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:555
 msgid "Date"
 msgstr "วันที่"
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:556
 msgid "DateTime"
 msgstr "วันเวลา"
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:557
 msgid "Time"
 msgstr "เวลา"
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:558
 msgid "Boolean"
 msgstr ""
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:559
 msgid "Search Combo"
 msgstr ""
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:560
 msgid "Key Field"
 msgstr ""
 
-#: js/customfield/EditDialog.js:580
+#: js/customfield/EditDialog.js:561
 msgid "Record"
 msgstr "บันทึก"
 
-#: js/customfield/EditDialog.js:608
+#: js/customfield/EditDialog.js:589
 msgid "Length"
 msgstr "ความยาว"
 
-#: js/customfield/EditDialog.js:613
+#: js/customfield/EditDialog.js:594
 msgid "Required"
 msgstr "ได้ต้องการ"
 
-#: js/customfield/EditDialog.js:620
+#: js/customfield/EditDialog.js:601
 msgid "Custom field additional properties"
 msgstr ""
 
-#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:606 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "กลุ่ม"
 
-#: js/customfield/EditDialog.js:653
+#: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
 msgstr ""
 
@@ -531,15 +531,15 @@ msgstr[0] "ที่จัดเก็บ"
 msgid "Container Name"
 msgstr "ชื่อที่จัดเก็บ"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "personal"
 msgstr "ส่วนตัว"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "shared"
 msgstr "ใช้ร่วมกัน"
 
-#: js/container/EditDialog.js:176
+#: js/container/EditDialog.js:195
 msgid "Note for Owner"
 msgstr "บันทึกสำหรับเจ้าของ"
 

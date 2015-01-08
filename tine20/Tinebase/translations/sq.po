@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:25+0000\n"
+"PO-Revision-Date: 2015-01-08 11:11+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +31,7 @@ msgstr "Krijuar nga"
 msgid "Activities"
 msgstr "Aktivitete"
 
-#: Export/Spreadsheet/Ods.php:353
+#: Export/Spreadsheet/Ods.php:370
 msgid "Data"
 msgstr "Të dhëna"
 
@@ -39,13 +39,13 @@ msgstr "Të dhëna"
 msgid "Without company assigned"
 msgstr ""
 
-#: User/Sql.php:1041
+#: User/Sql.php:1097
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
 #: User/Abstract.php:319 User/Abstract.php:320 User/Abstract.php:321
 #: User/Abstract.php:322 User/Abstract.php:323 User/Abstract.php:324
-#: js/ux/ConnectionStatus.js:58 Group/Abstract.php:191
+#: js/ux/ConnectionStatus.js:58 Group/Abstract.php:215
 msgid "unknown"
 msgstr "i panjohur"
 
@@ -163,21 +163,28 @@ msgstr "kryej përshkrimin e të drejtave"
 msgid "default"
 msgstr "e paracaktuar"
 
-#: PersistentFilter.php:152
-msgid "- The last filter I used -"
-msgstr "-Filtri i fundit që perdora-"
-
-#: Notes.php:426
+#: Notes.php:428
 msgid "by"
 msgstr "nga"
 
-#: Notes.php:435
+#: Notes.php:437
 msgid "Changed fields:"
 msgstr "Fusha të ndryshuara"
 
 #: js/ux/SearchField.js:44
 msgid "enter searchfilter"
 msgstr "vendosni filtrin e kërkimit"
+
+#: js/ux/PopupWindow.js:236
+msgid "Window can be closed"
+msgstr ""
+
+#: js/ux/PopupWindow.js:237
+#, python-brace-format
+msgid ""
+"This Window can be closed now. To avoid this message please deactivate your "
+"browsers popup blocker for {0}"
+msgstr ""
 
 #: js/ux/PopupWindowManager.js:175
 msgid ""
@@ -229,7 +236,7 @@ msgstr "jashtë linje"
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:398
+#: js/widgets/dialog/EditDialog.js:432
 #: js/widgets/dialog/ExceptionHandlerDialog.js:197 js/CreditsScreen.js:53
 #: js/AboutDialog.js:61
 msgid "Ok"
@@ -247,7 +254,7 @@ msgstr "Ok"
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:418
+#: js/widgets/dialog/EditDialog.js:452
 #: js/widgets/dialog/ExceptionHandlerDialog.js:189
 msgid "Cancel"
 msgstr "Anullo"
@@ -333,7 +340,7 @@ msgid ""
 msgstr "Ju ltem ndihmoni përmirësimin e këtij programi dhe njoftoni shitësin. Përfshini nje përshkrim të shkurtërtë asaj që po bënit kur ndodhi gabimi."
 
 #: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:508
-#: js/widgets/relation/GenericPickerGridPanel.js:457
+#: js/widgets/relation/GenericPickerGridPanel.js:458
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 msgid "Description"
 msgstr "Përshkrim"
@@ -371,7 +378,7 @@ msgid "Profile Information"
 msgstr "Informacion i Profilit"
 
 #: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:409
+#: js/widgets/dialog/EditDialog.js:443
 msgid "Apply"
 msgstr "Apliko"
 
@@ -448,12 +455,6 @@ msgstr "Përdorues të tjerë {0}"
 msgid "My {0}"
 msgstr "Imi {0}"
 
-#: js/tineInit.js:605
-msgid ""
-"Fatal Error: Client self-update failed, please contact your administrator "
-"and/or restart/reload your browser."
-msgstr "Gabim Madhor: Vetë-Përditësimi i clientit dështoi. Kontaktoni administratorin dhe/oseringarkoni/rindizni shfletuesin tuaj"
-
 #: js/PasswordChangeDialog.js:32
 #, python-brace-format
 msgid "Change Password For \"{0}\""
@@ -488,8 +489,8 @@ msgid "Your password has been changed."
 msgstr "Fjalëkalimi juaj u ndryshua"
 
 #: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/widgets/relation/GenericPickerGridPanel.js:916
-#: js/widgets/relation/GenericPickerGridPanel.js:929
+#: js/widgets/relation/GenericPickerGridPanel.js:917
+#: js/widgets/relation/GenericPickerGridPanel.js:930
 #: js/widgets/dialog/ImportDialog.js:658
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
@@ -500,42 +501,42 @@ msgstr "Dështim"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Fjalëkalimet e reja mospërputhen, ju lutem korrigjoini"
 
-#: js/common.js:261
+#: js/common.js:285
 msgid "Usage:&#160;"
 msgstr "Perdorur:&#160;"
 
-#: js/common.js:282 js/common.js:287 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:306 js/common.js:311 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
 msgid "personal"
 msgstr "personal"
 
-#: js/common.js:300 js/common.js:338
+#: js/common.js:324 js/common.js:362
 msgid "No Information"
 msgstr "Nuk ka Informacion"
 
-#: js/common.js:387
+#: js/common.js:411
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minutë"
 msgstr[1] "{0} minuta"
 
-#: js/common.js:388
+#: js/common.js:412
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} orë"
 msgstr[1] "{0} orë"
 
-#: js/common.js:389
+#: js/common.js:413
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} ditë punë"
 msgstr[1] "{0} ditë punë"
 
-#: js/common.js:416
+#: js/common.js:440
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -609,17 +610,17 @@ msgstr ""
 msgid "Changing user account ..."
 msgstr ""
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:466
-#: js/widgets/dialog/EditDialog.js:494
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:500
+#: js/widgets/dialog/EditDialog.js:528
 msgid "Saved in"
 msgstr "Ruajtur në"
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:427
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:461
 msgid "delete"
 msgstr "fshij"
 
-#: js/widgets/tree/ContextMenu.js:35 js/widgets/grid/FileUploadGrid.js:241
-#: js/widgets/grid/GridPanel.js:578
+#: js/widgets/tree/ContextMenu.js:35 js/widgets/grid/FileUploadGrid.js:296
+#: js/widgets/grid/GridPanel.js:579
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Shto {0}"
@@ -629,8 +630,8 @@ msgstr "Shto {0}"
 msgid "Rename {0}"
 msgstr "Riemëro {0}"
 
-#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:652
-#: js/widgets/grid/GridPanel.js:653 js/widgets/grid/GridPanel.js:655
+#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:653
+#: js/widgets/grid/GridPanel.js:654 js/widgets/grid/GridPanel.js:656
 #, python-brace-format
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -723,9 +724,9 @@ msgstr "{0} e pa riemëruar"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1810
+#: js/widgets/grid/GridPanel.js:1811
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
-#: js/widgets/dialog/EditDialog.js:851 js/MainMenu.js:263
+#: js/widgets/dialog/EditDialog.js:885 js/MainMenu.js:260
 msgid "Confirm"
 msgstr "Konfirmo"
 
@@ -936,12 +937,12 @@ msgid "Add a {0} Note"
 msgstr "Shto një shënim {0}"
 
 #: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
-#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/relation/GenericPickerGridPanel.js:461
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Tip"
 
-#: js/widgets/ActivitiesPanel.js:492 js/widgets/grid/GridPanel.js:1420
+#: js/widgets/ActivitiesPanel.js:492 js/widgets/grid/GridPanel.js:1421
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr "Krijuar nga"
@@ -1112,7 +1113,7 @@ msgstr[0] "Duke fshirë Etiketën"
 msgstr[1] "Dike fshirë Etiketat"
 
 #: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
-#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:863
+#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:897
 msgid "Failed"
 msgstr "Dështoi"
 
@@ -1164,79 +1165,79 @@ msgid ""
 "once!"
 msgstr "{1} \"{2}\" është përdorur në fushën \"{0}\" dhe mund të lidhet vetëm një herë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:126
+#: js/widgets/relation/GenericPickerGridPanel.js:127
 msgid "Edit record"
 msgstr "Modifiko të dhënën"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:133
+#: js/widgets/relation/GenericPickerGridPanel.js:134
 #: js/widgets/relation/FilterModel.js:32 js/Models.js:402
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Marrdhënie"
 msgstr[1] "Marrdhënie"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:162
+#: js/widgets/relation/GenericPickerGridPanel.js:163
 msgid "Sibling"
 msgstr "Vëlla-Motër"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:163
+#: js/widgets/relation/GenericPickerGridPanel.js:164
 msgid "Parent"
 msgstr "Prind"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:164
+#: js/widgets/relation/GenericPickerGridPanel.js:165
 msgid "Child"
 msgstr "Fëmijë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:265
+#: js/widgets/relation/GenericPickerGridPanel.js:266
 #, python-brace-format
 msgid ""
 "The maximum number of {0} with the type \"{1}\" is reached. Please change "
 "the type of this relation"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:270
+#: js/widgets/relation/GenericPickerGridPanel.js:271
 #, python-brace-format
 msgid ""
 "The maximum number of {0}s with the type \"{1}\" is reached at the {2} you "
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:299
+#: js/widgets/relation/GenericPickerGridPanel.js:300
 msgid "No Dialog"
 msgstr "S'ka Dialog "
 
-#: js/widgets/relation/GenericPickerGridPanel.js:300
+#: js/widgets/relation/GenericPickerGridPanel.js:301
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr "E dhëna nuk mund të hapet. Nuk ekziston ndonjë dialog për të modifikuar këtë të dhënë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:456
-#: js/widgets/grid/GridPanel.js:1148
+#: js/widgets/relation/GenericPickerGridPanel.js:457
+#: js/widgets/grid/GridPanel.js:1149
 msgid "Record"
 msgstr "E dhënë"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:458
+#: js/widgets/relation/GenericPickerGridPanel.js:459
 msgid "Remark"
 msgstr "Vërejtje"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:459
+#: js/widgets/relation/GenericPickerGridPanel.js:460
 msgid "Dependency"
 msgstr "Varësi"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:461
-#: js/widgets/grid/GridPanel.js:1419
+#: js/widgets/relation/GenericPickerGridPanel.js:462
+#: js/widgets/grid/GridPanel.js:1420
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Koha e kijimit"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:917
+#: js/widgets/relation/GenericPickerGridPanel.js:918
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "E dhëna që po mundoheni të lidhni është tashmë e lidhur. Ju lutem modifikoni lidhjen ekzistuese"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:930
+#: js/widgets/relation/GenericPickerGridPanel.js:931
 #: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Ju u munduhat të lidhni një të dhënë me vehtëveten. Kjo gjë nuk lejohet!"
@@ -1254,6 +1255,10 @@ msgstr "zgjidh një operator"
 #: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
 msgstr "Përcakto..."
+
+#: js/widgets/ContentTypeTreePanel.js:39
+msgid "Modules"
+msgstr ""
 
 #: js/widgets/customfields/EditDialogPlugin.js:155
 msgid "General"
@@ -1468,15 +1473,15 @@ msgstr ""
 msgid "Remove {0}"
 msgstr "Hiq {0}"
 
-#: js/widgets/grid/FileUploadGrid.js:283
+#: js/widgets/grid/FileUploadGrid.js:338
 msgid "name"
 msgstr "emër"
 
-#: js/widgets/grid/FileUploadGrid.js:290
+#: js/widgets/grid/FileUploadGrid.js:345
 msgid "size"
 msgstr "madhësi"
 
-#: js/widgets/grid/FileUploadGrid.js:297
+#: js/widgets/grid/FileUploadGrid.js:352
 msgid "type"
 msgstr "tip"
 
@@ -1494,84 +1499,84 @@ msgid ""
 " view-options or change the module you search in."
 msgstr " Nuk u gjet ndonjë {0}. Ju lutem ndryshoni kerkesat e filtrave, opsoniet e pamjes, ose ndryshoni modulin ku po kerkoni"
 
-#: js/widgets/grid/GridPanel.js:326 js/widgets/grid/GridPanel.js:552
-#: js/widgets/grid/GridPanel.js:553 js/widgets/grid/GridPanel.js:554
+#: js/widgets/grid/GridPanel.js:326 js/widgets/grid/GridPanel.js:553
+#: js/widgets/grid/GridPanel.js:554 js/widgets/grid/GridPanel.js:555
 #, python-brace-format
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "Modifiko {0}"
 msgstr[1] "Modifiko {0}"
 
-#: js/widgets/grid/GridPanel.js:567 js/widgets/dialog/EditDialog.js:623
+#: js/widgets/grid/GridPanel.js:568 js/widgets/dialog/EditDialog.js:657
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "Kopje {0}"
 
-#: js/widgets/grid/GridPanel.js:586
+#: js/widgets/grid/GridPanel.js:587
 msgid "Print Page"
 msgstr "Printo Faqen"
 
-#: js/widgets/grid/GridPanel.js:616
+#: js/widgets/grid/GridPanel.js:617
 #: js/widgets/dialog/DuplicateMergeDialog.js:220
 #, python-brace-format
 msgid "Merge {0}"
 msgstr "Shkrij {0}"
 
-#: js/widgets/grid/GridPanel.js:1071
+#: js/widgets/grid/GridPanel.js:1072
 msgid "No data to display"
 msgstr "Nuk ka të dhëna për të shfaqur"
 
-#: js/widgets/grid/GridPanel.js:1093
+#: js/widgets/grid/GridPanel.js:1094
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Duke shfaqur të dhënat {0} - {1} nga {2}"
 
-#: js/widgets/grid/GridPanel.js:1094
+#: js/widgets/grid/GridPanel.js:1095
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "Nuk ka {0} për të shfaqur"
 
-#: js/widgets/grid/GridPanel.js:1148
+#: js/widgets/grid/GridPanel.js:1149
 msgid "Records"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1352
+#: js/widgets/grid/GridPanel.js:1353
 msgid "New..."
 msgstr "E re..."
 
-#: js/widgets/grid/GridPanel.js:1371
+#: js/widgets/grid/GridPanel.js:1372
 msgid "Add to..."
 msgstr "Shto tek"
 
-#: js/widgets/grid/GridPanel.js:1421
+#: js/widgets/grid/GridPanel.js:1422
 msgid "Last Modified Time"
 msgstr "Koha e modifikimit të fundit"
 
-#: js/widgets/grid/GridPanel.js:1422
+#: js/widgets/grid/GridPanel.js:1423
 msgid "Last Modified By"
 msgstr "Midifikimi i fundit nga"
 
-#: js/widgets/grid/GridPanel.js:1784
+#: js/widgets/grid/GridPanel.js:1785
 msgid "Not Allowed"
 msgstr "Nuk lejohet"
 
-#: js/widgets/grid/GridPanel.js:1785
+#: js/widgets/grid/GridPanel.js:1786
 msgid "You are not allowed to delete all pages at once"
 msgstr "Ju nuk lejoheni të fshini të gjithë faqet njëherazi"
 
-#: js/widgets/grid/GridPanel.js:1808
+#: js/widgets/grid/GridPanel.js:1809
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Doni vertetë të fshini të dhënën e zgjedhur ({0})?"
 msgstr[1] "Doni vërtetë të fshini të dhënat e zgjedhura ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1853 js/widgets/dialog/EditDialog.js:853
+#: js/widgets/grid/GridPanel.js:1854 js/widgets/dialog/EditDialog.js:887
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Duke fshirë {0}"
 
-#: js/widgets/grid/GridPanel.js:1853
+#: js/widgets/grid/GridPanel.js:1854
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -1710,7 +1715,8 @@ msgid "Search Account ..."
 msgstr "Kërko Llogarinë..."
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
-#: js/widgets/grid/FilterPanel.js:261
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
+#: js/widgets/grid/FilterPanel.js:261 js/widgets/grid/FilterPanel.js:312
 msgid "show details"
 msgstr "trego detajet"
 
@@ -1719,7 +1725,13 @@ msgstr "trego detajet"
 msgid "Always show advanced filters"
 msgstr "Gjithmonë trego fitrat e përparuar"
 
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:192
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
+#: js/widgets/grid/FilterPanel.js:272 js/widgets/grid/FilterPanel.js:312
+msgid "hide details"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:371
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
 msgid_plural "Your view is limited by {0} criterias:"
@@ -1738,7 +1750,7 @@ msgstr "ka mardhënie"
 msgid "Attention: There are more filters active!"
 msgstr "Kujdes: Ka flitra të tjerë aktivë"
 
-#: js/widgets/grid/FilterPanel.js:511
+#: js/widgets/grid/FilterPanel.js:513
 #, python-brace-format
 msgid "Criteria {0}"
 msgstr "Kriteret {0}"
@@ -1930,14 +1942,14 @@ msgstr "Fusha ka vlera të ndryshme. Modifikimi i kësaj fushë do ti mbivenosej
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:822 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:856 js/LoginPanel.js:508
 msgid "Errors"
 msgstr "Gabime"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 #: js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:844 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:878 js/LoginPanel.js:508
 msgid "Please fix the errors noted."
 msgstr "Ju lutem rregulloni gabimet e vëna në dukje"
 
@@ -2208,7 +2220,7 @@ msgstr "Fjalëkalim"
 msgid "Please enter your credentials"
 msgstr "Ju lutem vendosni kredencialet tuaja"
 
-#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:157
+#: js/widgets/dialog/PreferencesPanel.js:36 js/MainMenu.js:165
 msgid "Preferences"
 msgstr "Preferencat"
 
@@ -2224,32 +2236,32 @@ msgstr "Preverencat e përgjithshme"
 msgid "My Profile"
 msgstr "Profili im"
 
-#: js/widgets/dialog/EditDialog.js:626
+#: js/widgets/dialog/EditDialog.js:660
 #, python-brace-format
 msgid "Add New {0}"
 msgstr "Shto {0} të ri"
 
-#: js/widgets/dialog/EditDialog.js:628
+#: js/widgets/dialog/EditDialog.js:662
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr "Modifiko {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:699
+#: js/widgets/dialog/EditDialog.js:733
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "Duke transferuar {0}..."
 
-#: js/widgets/dialog/EditDialog.js:851
+#: js/widgets/dialog/EditDialog.js:885
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr "Doni vërtetë të fshini këtë {0}?"
 
-#: js/widgets/dialog/EditDialog.js:863
+#: js/widgets/dialog/EditDialog.js:897
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr "Nuk mund të fshiej {0}."
 
-#: js/widgets/dialog/EditDialog.js:918
+#: js/widgets/dialog/EditDialog.js:952
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Zbërthe dyshimin e duplikatës {0}"
@@ -2332,6 +2344,14 @@ msgstr "Ruaj konfigurimin"
 msgid "Reload config"
 msgstr "Ringarko konfigurimin"
 
+#: js/Application.js:152
+msgid "Not Supported"
+msgstr ""
+
+#: js/Application.js:153
+msgid "Your request is not supported by this version."
+msgstr ""
+
 #: js/MainMenu.js:66
 #, python-brace-format
 msgid "User: {0}"
@@ -2341,178 +2361,170 @@ msgstr "Përdorues: {0} "
 msgid "Return to original user account"
 msgstr ""
 
-#: js/MainMenu.js:138 js/AboutDialog.js:41
+#: js/MainMenu.js:146 js/AboutDialog.js:41
 #, python-brace-format
 msgid "About {0}"
 msgstr "Rreth {0}"
 
-#: js/MainMenu.js:144
+#: js/MainMenu.js:152
 msgid "Help"
 msgstr "Ndihmë"
 
-#: js/MainMenu.js:151
+#: js/MainMenu.js:159
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Konsola rregulluese (Ctrl + F11)"
 
-#: js/MainMenu.js:164
+#: js/MainMenu.js:172
 msgid "Edit Profile"
 msgstr "Modifiko Profilin"
 
-#: js/MainMenu.js:171
+#: js/MainMenu.js:179
 msgid "Change password"
 msgstr "Ndrysho Fjalëkalimin"
 
-#: js/MainMenu.js:178
+#: js/MainMenu.js:186
 msgid "Logout"
 msgstr "Dil"
 
-#: js/MainMenu.js:179
+#: js/MainMenu.js:187
 #, python-brace-format
 msgid "Logout from {0}"
 msgstr "Dil nga {0}"
 
-#: js/MainMenu.js:186 js/AboutDialog.js:56
+#: js/MainMenu.js:194 js/AboutDialog.js:56
 #, python-brace-format
 msgid "Learn more about {0}"
 msgstr "Mëso më shume për {0}"
 
-#: js/MainMenu.js:196
+#: js/MainMenu.js:204
 msgid "Allow desktop notifications"
 msgstr "Lejo njoftimet në desktop"
 
-#: js/MainMenu.js:197
+#: js/MainMenu.js:205
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Kërkesë autorizimi për njoftimet webkit desktop"
 
-#: js/MainMenu.js:207
-msgid "Install web app"
-msgstr "Instalo aplikacionin web"
-
-#: js/MainMenu.js:208
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr "Instalo Tine dy si aplikacion në shfletuesin tuaj"
-
-#: js/MainMenu.js:263
+#: js/MainMenu.js:260
 msgid "Are you sure you want to logout?"
 msgstr "A jeni të sigurtë që doni të dilni"
 
-#: js/MainMenu.js:277
+#: js/MainMenu.js:274
 msgid "Logging you out..."
 msgstr "Duke ju nxjerrë ...."
 
-#: js/MainMenu.js:277 js/LoginPanel.js:474
+#: js/MainMenu.js:274 js/LoginPanel.js:474
 msgid "Please wait!"
 msgstr "Ju lutem prisni!"
 
-#: js/ExceptionHandler.js:168 Frontend/Http.php:406
+#: js/ExceptionHandler.js:170 Frontend/Http.php:406
 msgid "Authorisation Required"
 msgstr "Kërkohet autorizim"
 
-#: js/ExceptionHandler.js:169
+#: js/ExceptionHandler.js:171
 msgid "Your session timed out. You need to login again."
 msgstr "Seksioni juaj Humbi Kohën . Ju duhet të hyni përsëri"
 
-#: js/ExceptionHandler.js:184
+#: js/ExceptionHandler.js:203
 msgid "Insufficient Rights"
 msgstr "Të drejta të pamjaftueshme"
 
-#: js/ExceptionHandler.js:185
+#: js/ExceptionHandler.js:204
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Na falni, ju nuk jeni të lejuar të kryeni këtë veprim"
 
-#: js/ExceptionHandler.js:193
+#: js/ExceptionHandler.js:212
 msgid "Not Found"
 msgstr "Nuk u gjet"
 
-#: js/ExceptionHandler.js:194
+#: js/ExceptionHandler.js:213
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Na falni . kërkesa juaj nuk mund të përfundonte pasi të dhënat e kërkuara nuk u gjendën. Në shumëraste kjo do të thotë qe dikush i ka fshirë të dhënat tashmë. Ju lutem rifreskoni pamjen tuaj aktuale"
 
-#: js/ExceptionHandler.js:202
+#: js/ExceptionHandler.js:221
 msgid "Concurrent Updates"
 msgstr "Përditësime të njëkohshme"
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:222
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "Dikush tjetër ruajti këtë të dhënë gjatë kohs që ju po modifikonit. Ju duhet ta ringarkoni dhetë bëni ndryshimet tuaja përsëri"
 
-#: js/ExceptionHandler.js:211
+#: js/ExceptionHandler.js:230
 msgid "Service Unavailable"
 msgstr "Shërbim i padisponueshëm"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:231
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Serveri e ka të pamundur të trajtojë kërkesen për arsye të një mbingakimi të përkohshëm, mirmbajtje,ose keqkonfigurimi. Ju lutemi porvojeni përsëri ose kontaktoni administratorin tuaj"
 
-#: js/ExceptionHandler.js:218
+#: js/ExceptionHandler.js:237
 msgid "Server Message:"
 msgstr "Mesazh Serveri:"
 
-#: js/ExceptionHandler.js:220
+#: js/ExceptionHandler.js:239
 msgid "Invalid Data"
 msgstr "Të dhëna të gabuara"
 
-#: js/ExceptionHandler.js:221
+#: js/ExceptionHandler.js:240
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Të dhënat tuaja hyrëse jo të vlefshme. Ju lutem jipni të dhëna të vlefshme"
 
-#: js/ExceptionHandler.js:233 js/LoginPanel.js:482
+#: js/ExceptionHandler.js:252 js/LoginPanel.js:482
 msgid "Connection lost, please check your network!"
 msgstr "Lidhja humbi, kontrolloni rrjetin tuaj"
 
-#: js/ExceptionHandler.js:239
+#: js/ExceptionHandler.js:258
 msgid "Timeout"
 msgstr "Humbje-kohe"
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:259
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Na falni ka patur hubje-kohe gjatë përpunimit të kërkesës suaj. Ju lutem ringarkoni shfletuesin tuaj,provoni përsëri, ose kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:248
+#: js/ExceptionHandler.js:267
 msgid "No Response"
 msgstr "Nuk ka Përgjigje"
 
-#: js/ExceptionHandler.js:249
+#: js/ExceptionHandler.js:268
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Na falni, Serveri nuk kthehu ndonjë të dhene.Ju lutem ringarkoni shfletuesin tuaj,provoni përsëri, ose kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:256
+#: js/ExceptionHandler.js:275
 msgid "Out of Resources"
 msgstr "Në mungesë të burimeve"
 
-#: js/ExceptionHandler.js:257
+#: js/ExceptionHandler.js:276
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Na Falni, Serveri deklaroi nje gjëndje \"memory exhausted\" Kontaktoni administraotin!"
 
-#: js/ExceptionHandler.js:273
+#: js/ExceptionHandler.js:292
 msgid "No Role Memberships"
 msgstr "Nuk ka role antarësish"
 
-#: js/ExceptionHandler.js:274
+#: js/ExceptionHandler.js:293
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Llogaria juaj nuk ka role antarësish. Ju lutemi kontaktoni me administratorin"
 
-#: js/ExceptionHandler.js:289
+#: js/ExceptionHandler.js:308
 msgid "Method Not Found / Insufficent Permissions"
 msgstr "Metoda nuk u gjet / Të drejta të pamjaftueshme"
 
-#: js/ExceptionHandler.js:290
+#: js/ExceptionHandler.js:309
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2807,305 +2819,317 @@ msgstr ""
 msgid "Your session is not valid. You need to login again."
 msgstr "Seksioni juaj nuk është i vlefshëm. Ju duhet të hyni përsëri"
 
-#: Container.php:706
+#: Container.php:731
 #, python-format
 msgid "%s's personal container"
 msgstr "Kontenieri personal i %s"
 
-#: Container.php:1617
+#: Container.php:1708
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr "Ju nuk lejoheni të fshini këtë Konteiner. Ju lutem përcaktoni një tjetër konteniersi bllok adresash të paracaktuar për kontaktet e brëndshme"
 
-#: Config.php:309
+#: Config.php:323
 msgid "System IMAP"
 msgstr "Sistem IMAP"
 
-#: Config.php:311
+#: Config.php:325
 msgid "System IMAP server configuration."
 msgstr "Konfigurimi i serverit të sistemit IMAP"
 
-#: Config.php:320
+#: Config.php:334
 msgid "System SMTP"
 msgstr "Sistem SMTP"
 
-#: Config.php:322
+#: Config.php:336
 msgid "System SMTP server configuration."
 msgstr "Konfigirmi i serverit të sistemit SMTP"
 
-#: Config.php:331
+#: Config.php:345
 msgid "System SIEVE"
 msgstr "Sistem SIEVE"
 
-#: Config.php:333
+#: Config.php:347
 msgid "System SIEVE server configuration."
 msgstr "Konfigurimi i serverit të sistemit SIEVE"
 
-#: Config.php:342
+#: Config.php:356
 msgid "Authentication Backend"
 msgstr "Fundori Autentifikimit"
 
-#: Config.php:344
+#: Config.php:358
 msgid "Backend adapter for user authentication."
 msgstr "Adaptuesi fundorit për autentifikimin e përdoruesit"
 
-#: Config.php:352
+#: Config.php:366
 msgid "Authentication Configuration"
 msgstr "Konfigurimi i autentifikimit"
 
-#: Config.php:354
+#: Config.php:368
 msgid "Authentication backend configuration."
 msgstr "Konfigurimi i fundorit të autentifikimit"
 
-#: Config.php:363
+#: Config.php:377
 msgid "User Backend"
 msgstr "Fundori përdoruesit"
 
-#: Config.php:365
+#: Config.php:379
 msgid "Backend adapter for user data."
 msgstr "Adaptuesi fundorit për të dhënat e përdoruesit"
 
-#: Config.php:373
+#: Config.php:387
 msgid "User Configuration"
 msgstr "Konfigurimi Përdoruesit"
 
-#: Config.php:375
+#: Config.php:389
 msgid "User backend configuration."
 msgstr "Konfigurimi i fundorit të përdoruesit"
 
-#: Config.php:384
+#: Config.php:398
 msgid "Cronuser ID"
 msgstr "ID e përdoruesit Cron"
 
-#: Config.php:386
+#: Config.php:400
 msgid "User ID of the cron user."
 msgstr "ID e përdoruesit për përdoruesin e cron"
 
-#: Config.php:394
+#: Config.php:408
 msgid "Title Postfix"
 msgstr "Titullo Postfix"
 
-#: Config.php:396
+#: Config.php:410
 msgid "Postfix string appended to the title of this installation."
 msgstr "Vargu Postfix bashkangjitur titullit të këtij instalimi"
 
-#: Config.php:404
+#: Config.php:418
 msgid "Redirect URL"
 msgstr "Ridrejto URL"
 
-#: Config.php:406
+#: Config.php:420
 msgid "Redirect to this URL after logout."
 msgstr "Ridrejtohu tek kjo URL pas daljes"
 
-#: Config.php:414
+#: Config.php:428
 msgid "Redirect to Referrer"
 msgstr "Ridrejto tek Referuesi"
 
-#: Config.php:416
+#: Config.php:430
 msgid "Redirect to referrer after logout."
 msgstr "Ridrejto tek referuesi pas daljes"
 
-#: Config.php:424
+#: Config.php:438
 msgid "Redirect Always"
 msgstr "Ridrejto gjithmonë"
 
-#: Config.php:426
+#: Config.php:440
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Ridrejto tek URL ridrejtuese e konfiguruar edhe pas hyrjes"
 
-#: Config.php:434
+#: Config.php:448
 msgid "Allowed Origins"
 msgstr "Origjina të lejuara"
 
-#: Config.php:436
+#: Config.php:450
 msgid "Allowed Origins for the JSON API."
 msgstr "Origjina të lejuara për JSON API"
 
-#: Config.php:444
+#: Config.php:458
 msgid "Accepted Terms Version"
 msgstr "Versionet e Kushteve të pranuara"
 
-#: Config.php:446
+#: Config.php:460
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Nr i versionit të pranuar të dokumentit të Kushteve dhe Konditave"
 
-#: Config.php:454
+#: Config.php:468
 msgid "Use Geolocation Services"
 msgstr "Perdor shërbimet e Gjeopozicionimit"
 
-#: Config.php:456
+#: Config.php:470
 msgid "Use of external Geolocation services is allowed."
 msgstr "Përdoirmi i shërbimeve të jashtme të Gjeopozicionimit është i lejuar "
 
-#: Config.php:464
+#: Config.php:478
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:466
+#: Config.php:480
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:475
+#: Config.php:489
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:477
+#: Config.php:491
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:485
+#: Config.php:499
+msgid "Sync contact data from sync backend"
+msgstr ""
+
+#: Config.php:501
+msgid "Sync user contact data from sync backend"
+msgstr ""
+
+#: Config.php:510
 msgid "IP Session Validator"
 msgstr "Vlerësuesi i seksionit IP"
 
-#: Config.php:487
+#: Config.php:512
 msgid "Destroy session if the users IP changes."
 msgstr "Shkatërro seksionin nëse IP e përdoruesit ndryshon"
 
-#: Config.php:495
+#: Config.php:520
 msgid "UA Session Validator"
 msgstr "Vlerësuesi i seksionit UA"
 
-#: Config.php:497
+#: Config.php:522
 msgid "Destroy session if the users user agent string changes."
 msgstr "Shkatërro seksionin nëse vargu i agjentit të përdorimit të përdoruesit ndryshon"
 
-#: Config.php:505
+#: Config.php:530
 msgid "Files Directory"
 msgstr "Dega e Skedarëve"
 
-#: Config.php:507
+#: Config.php:532
 msgid "Directory with web server write access for user files."
 msgstr "Dega me të drejta shkrimi të serverit web për skedarët e përdoruesit"
 
-#: Config.php:515 Config.php:517
+#: Config.php:540 Config.php:542
 msgid "Reuse last username logged"
 msgstr "Ri-përdor emirn e përdoruesit të futur së fundmi"
 
-#: Config.php:525 Config.php:527
+#: Config.php:550 Config.php:552
 msgid "User may change password"
 msgstr "Përdoruesi mund të ndryshojë fjalëkalimin"
 
-#: Config.php:536 Config.php:538
+#: Config.php:561 Config.php:563
 msgid "Enable password policy"
 msgstr "Aktivizo politikën e fjalëkalimit"
 
-#: Config.php:546
+#: Config.php:571
 msgid "Only ASCII"
 msgstr "Vetëm ASCII"
 
-#: Config.php:548
+#: Config.php:573
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Vetem karaktere ASCII janë të lejuar në fjalëkalimet"
 
-#: Config.php:556
+#: Config.php:581
 msgid "Minimum length"
 msgstr "Gjatësia minimale"
 
-#: Config.php:558
+#: Config.php:583
 msgid "Minimum password length"
 msgstr "Gjatësia minimale e fjalëkalimit"
 
-#: Config.php:566
+#: Config.php:591
 msgid "Minimum word chars"
 msgstr "Minimumi i karaktereve të fjalës"
 
-#: Config.php:568
+#: Config.php:593
 msgid "Minimum word chars in password"
 msgstr "Minimumi i karaktereve të fjalës në Fjalëkalim"
 
-#: Config.php:576
+#: Config.php:601
 msgid "Minimum uppercase chars"
 msgstr "Minimumi i gërmave të mëdha"
 
-#: Config.php:578
+#: Config.php:603
 msgid "Minimum uppercase chars in password"
 msgstr "Minimumi i gërmave të mëdha në Fjalëkalim"
 
-#: Config.php:586
+#: Config.php:611
 msgid "Minimum special chars"
 msgstr "Minimumi karaktereve të veçantë"
 
-#: Config.php:588
+#: Config.php:613
 msgid "Minimum special chars in password"
 msgstr "Minimumi i karaktereve të veçantë në Fjalëkalim"
 
-#: Config.php:596
+#: Config.php:621
 msgid "Minimum numbers"
 msgstr "Minimumi i numrave"
 
-#: Config.php:598
+#: Config.php:623
 msgid "Minimum numbers in password"
 msgstr "Minimumi i mumrave në Fjalëkalim"
 
-#: Config.php:606
+#: Config.php:631
 msgid "Forbid part of username"
 msgstr "Përjashto një pjesë të emrit të përdoruesit"
 
-#: Config.php:608
+#: Config.php:633
 msgid "Forbid part of username in password"
 msgstr "Përjashto një pjesë të emrit të përdoruesit në Fjalëkalim"
 
-#: Config.php:616
+#: Config.php:641
 msgid "Automatic bugreports"
 msgstr "Raporte problemesh automatik"
 
-#: Config.php:618
+#: Config.php:643
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Gjithmonë dërgo raporte problemesh, edhe ne humbje-kohe Përjashtime / Dështime të tjera"
 
-#: Config.php:626
+#: Config.php:651
 msgid "Last sessions cleanup run"
 msgstr "Kryej pastrimin e seksionit të fundit"
 
-#: Config.php:628
+#: Config.php:653
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Ruan vulën kohore e kryerjes së pastrimit të seksionit të fundit  "
 
-#: Config.php:636
+#: Config.php:661
 msgid "Maximum login failures"
 msgstr "Maksimumi i hyrjeve të gabuara"
 
-#: Config.php:638
+#: Config.php:663
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Maksimumi i lejuar i hyrjeve të gabuara përpara se të bllokohet llogaria"
 
-#: Config.php:646
+#: Config.php:671
 msgid "Disable Anyone Account"
 msgstr "Ç'aktivizo llogarinë e Gjithkujt"
 
-#: Config.php:648
+#: Config.php:673
 msgid "Disallow anyone account in grant configurations"
 msgstr "Refuzo llogarine e gjithkujt ne konfigurimet e të drejtave"
 
-#: Config.php:656
+#: Config.php:681
 msgid "Alarms sent each job"
 msgstr "Alarme te derguara per cdo pune"
 
-#: Config.php:658
+#: Config.php:683
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of"
 " sendPendingAlarms (0 = no limit)"
 msgstr "Lejon konfigurimin e numrit maksimal te njoftimeve te alarmeve ne cdo procesim te sendPendingAlarms (0 = pa limit)"
 
-#: Config.php:666
+#: Config.php:691
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:668
+#: Config.php:693
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login"
 " with deactivated account"
 msgstr ""
 
-#: Config.php:676
+#: Config.php:701
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:678
+#: Config.php:703
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
+msgstr ""
+
+#: Config.php:711 Config.php:713
+msgid "Max username length"
 msgstr ""
 
 #: Import/Csv/Abstract.php:200
@@ -3126,43 +3150,43 @@ msgstr "Përjashtim ({0})"
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3345
+#: Setup/setup.xml:3421
 msgid "note"
 msgstr "shënim"
 
-#: Setup/setup.xml:3350
+#: Setup/setup.xml:3426
 msgid "default note type"
 msgstr "tipi i paracaktuar i shënimit"
 
-#: Setup/setup.xml:3376
+#: Setup/setup.xml:3452
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3381
+#: Setup/setup.xml:3457
 msgid "telephone call"
 msgstr "thirrje telefonike"
 
-#: Setup/setup.xml:3407
+#: Setup/setup.xml:3483
 msgid "email"
 msgstr "e-postë"
 
-#: Setup/setup.xml:3412
+#: Setup/setup.xml:3488
 msgid "email contact"
 msgstr "kontak e-poste"
 
-#: Setup/setup.xml:3438
+#: Setup/setup.xml:3514
 msgid "created"
 msgstr "krijuar"
 
-#: Setup/setup.xml:3443
+#: Setup/setup.xml:3519
 msgid "record created"
 msgstr "e dhëna u krijua"
 
-#: Setup/setup.xml:3469
+#: Setup/setup.xml:3545
 msgid "changed"
 msgstr "ndyshuar"
 
-#: Setup/setup.xml:3474
+#: Setup/setup.xml:3550
 msgid "record changed"
 msgstr "e dhëna u ndryshua"
 
