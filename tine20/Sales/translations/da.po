@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-01-08 11:11+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Danish (http://www.transifex.com/projects/p/tine20/language/da/)\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +174,7 @@ msgstr ""
 msgid "allow to set the number of an invoice"
 msgstr ""
 
-#: Model/Customer.php:35 Model/Customer.php:264 Model/Contract.php:66
+#: Model/Customer.php:35 Model/Customer.php:276 Model/Contract.php:66
 #: Model/Contract.php:162 Model/Contract.php:247 Model/Contract.php:268
 #: Model/Address.php:52 Model/Offer.php:49 Model/Offer.php:93
 #: Model/Invoice.php:64 Model/Invoice.php:197 Model/Invoice.php:217
@@ -217,7 +217,7 @@ msgstr ""
 msgid "Web"
 msgstr ""
 
-#: Model/Customer.php:76 Model/OrderConfirmation.php:72 Model/Contract.php:126
+#: Model/Customer.php:77 Model/OrderConfirmation.php:72 Model/Contract.php:126
 #: Model/Offer.php:84 Model/Product.php:55 Model/Invoice.php:83
 #: js/InvoiceEditDialog.js:395 js/CustomerEditDialog.js:398
 #: js/OfferEditDialog.js:146 js/InvoiceDetailsPanel.js:103
@@ -226,85 +226,85 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: Model/Customer.php:82 Model/Contract.php:102 Model/Contract.php:174
+#: Model/Customer.php:84 Model/Contract.php:102 Model/Contract.php:174
 #: js/CustomerEditDialog.js:214 js/ContractContactExternalFilterModel.js:30
 #: js/ContractEditDialog.js:260 js/CustomerDetailsPanel.js:128
 msgid "Contact Person (external)"
 msgstr ""
 
-#: Model/Customer.php:93 Model/Contract.php:90 Model/Contract.php:186
+#: Model/Customer.php:95 Model/Contract.php:90 Model/Contract.php:186
 #: js/CustomerEditDialog.js:224 js/ContractEditDialog.js:272
 #: js/ContractContactInternalFilterModel.js:30 js/CustomerDetailsPanel.js:129
 msgid "Contact Person (internal)"
 msgstr ""
 
-#: Model/Customer.php:104 js/CustomerEditDialog.js:240
+#: Model/Customer.php:106 js/CustomerEditDialog.js:240
 #: js/CustomerDetailsPanel.js:145
 msgid "VAT No."
 msgstr ""
 
-#: Model/Customer.php:109 js/CustomerEditDialog.js:243
+#: Model/Customer.php:112 js/CustomerEditDialog.js:243
 msgid "Credit Term (days)"
 msgstr ""
 
-#: Model/Customer.php:115 js/CustomerEditDialog.js:254
+#: Model/Customer.php:119 js/CustomerEditDialog.js:254
 #: js/CustomerDetailsPanel.js:146
 msgid "Currency"
 msgstr ""
 
-#: Model/Customer.php:120 js/CustomerEditDialog.js:259
+#: Model/Customer.php:124 js/CustomerEditDialog.js:259
 #: js/CustomerDetailsPanel.js:147
 msgid "Currency Translation Rate"
 msgstr ""
 
-#: Model/Customer.php:134 js/CustomerEditDialog.js:277
+#: Model/Customer.php:141 js/CustomerEditDialog.js:277
 msgid "Discount (%)"
 msgstr ""
 
-#: Model/Customer.php:141 js/AddressEditDialog.js:78
+#: Model/Customer.php:148 js/AddressEditDialog.js:78
 msgid "Delivery Addresses"
 msgstr ""
 
-#: Model/Customer.php:154 js/AddressEditDialog.js:75
+#: Model/Customer.php:161 js/AddressEditDialog.js:75
 msgid "Billing Addresses"
 msgstr ""
 
-#: Model/Customer.php:180 Model/Address.php:89 js/CustomerEditDialog.js:332
+#: Model/Customer.php:187 Model/Address.php:89 js/CustomerEditDialog.js:332
 #: js/AddressEditDialog.js:166
 msgid "Prefix"
 msgstr ""
 
-#: Model/Customer.php:187 Model/Address.php:93 js/CustomerEditDialog.js:336
+#: Model/Customer.php:195 Model/Address.php:93 js/CustomerEditDialog.js:336
 #: js/AddressEditDialog.js:169
 msgid "Additional Prefix"
 msgstr ""
 
-#: Model/Customer.php:194 Model/Address.php:64 js/CustomerEditDialog.js:303
+#: Model/Customer.php:203 Model/Address.php:64 js/CustomerEditDialog.js:303
 #: js/AddressEditDialog.js:147
 msgid "Street"
 msgstr ""
 
-#: Model/Customer.php:204 Model/Address.php:72 js/CustomerEditDialog.js:313
+#: Model/Customer.php:212 Model/Address.php:72 js/CustomerEditDialog.js:313
 #: js/AddressEditDialog.js:153
 msgid "Postalcode"
 msgstr ""
 
-#: Model/Customer.php:210 Model/Address.php:76 js/CustomerEditDialog.js:318
+#: Model/Customer.php:220 Model/Address.php:76 js/CustomerEditDialog.js:318
 #: js/AddressEditDialog.js:156
 msgid "Locality"
 msgstr ""
 
-#: Model/Customer.php:217 Model/Address.php:80 js/CustomerEditDialog.js:322
+#: Model/Customer.php:228 Model/Address.php:80 js/CustomerEditDialog.js:322
 #: js/AddressEditDialog.js:159
 msgid "Region"
 msgstr ""
 
-#: Model/Customer.php:226 Model/Address.php:84 js/CustomerEditDialog.js:327
+#: Model/Customer.php:236 Model/Address.php:84 js/CustomerEditDialog.js:327
 #: js/AddressEditDialog.js:163
 msgid "Country"
 msgstr ""
 
-#: Model/Customer.php:233 Model/Address.php:68 js/CustomerEditDialog.js:307
+#: Model/Customer.php:245 Model/Address.php:68 js/CustomerEditDialog.js:307
 #: js/AddressEditDialog.js:150
 msgid "Postbox"
 msgstr ""
@@ -481,7 +481,7 @@ msgid "Credit Term"
 msgstr ""
 
 #: Model/Invoice.php:130 js/InvoiceEditDialog.js:484
-#: js/InvoiceDetailsPanel.js:131 Setup/Update/Release8.php:194
+#: js/InvoiceDetailsPanel.js:131 Setup/Update/Release8.php:152
 msgid "Cleared"
 msgstr ""
 
@@ -605,6 +605,10 @@ msgstr ""
 
 #: js/AdminPanel.js:90
 msgid "Loading..."
+msgstr ""
+
+#: js/AdminPanel.js:149
+msgid "EUR"
 msgstr ""
 
 #: js/CustomerEditDialog.js:45
@@ -898,19 +902,19 @@ msgstr ""
 msgid "Contracts created by myself"
 msgstr ""
 
-#: Setup/Initialize.php:68 Setup/Update/Release8.php:550
+#: Setup/Initialize.php:68 Setup/Update/Release8.php:512
 msgid "All Customers"
 msgstr ""
 
-#: Setup/Initialize.php:69 Setup/Update/Release8.php:551
+#: Setup/Initialize.php:69 Setup/Update/Release8.php:513
 msgid "All customer records"
 msgstr ""
 
-#: Setup/Initialize.php:80 Setup/Update/Release8.php:1460
+#: Setup/Initialize.php:80 Setup/Update/Release8.php:1333
 msgid "All Offers"
 msgstr ""
 
-#: Setup/Initialize.php:81 Setup/Update/Release8.php:1461
+#: Setup/Initialize.php:81 Setup/Update/Release8.php:1334
 msgid "All offer records"
 msgstr ""
 
@@ -934,59 +938,59 @@ msgstr ""
 msgid "cleared"
 msgstr ""
 
-#: Setup/Update/Release8.php:188
+#: Setup/Update/Release8.php:146
 msgid "Status"
 msgstr ""
 
-#: Setup/Update/Release8.php:200
+#: Setup/Update/Release8.php:158
 msgid "Cleared In"
 msgstr ""
 
-#: Setup/Update/Release8.php:1522
+#: Setup/Update/Release8.php:1395
 msgid "All Products"
 msgstr ""
 
-#: Setup/Update/Release8.php:1523
+#: Setup/Update/Release8.php:1396
 msgid "All product records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1533
+#: Setup/Update/Release8.php:1406
 msgid "All Contracts"
 msgstr ""
 
-#: Setup/Update/Release8.php:1534
+#: Setup/Update/Release8.php:1407
 msgid "All contract records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1544
+#: Setup/Update/Release8.php:1417
 msgid "All Invoices"
 msgstr ""
 
-#: Setup/Update/Release8.php:1545
+#: Setup/Update/Release8.php:1418
 msgid "All invoice records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1555
+#: Setup/Update/Release8.php:1428
 msgid "All Cost Centers"
 msgstr ""
 
-#: Setup/Update/Release8.php:1556
+#: Setup/Update/Release8.php:1429
 msgid "All costcenter records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1566
+#: Setup/Update/Release8.php:1439
 msgid "All Divisions"
 msgstr ""
 
-#: Setup/Update/Release8.php:1567
+#: Setup/Update/Release8.php:1440
 msgid "All division records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1577
+#: Setup/Update/Release8.php:1450
 msgid "All Order Confirmations"
 msgstr ""
 
-#: Setup/Update/Release8.php:1578
+#: Setup/Update/Release8.php:1451
 msgid "All order confirmation records"
 msgstr ""
 

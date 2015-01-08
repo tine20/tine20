@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-01-08 11:11+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Norwegian Bokmål (http://www.transifex.com/projects/p/tine20/language/nb/)\n"
 "MIME-Version: 1.0\n"
@@ -144,86 +144,86 @@ msgstr ""
 msgid "th"
 msgstr ""
 
-#: Model/Attender.php:156
+#: Model/Attender.php:163
 msgid "unknown"
 msgstr "ukjent"
 
-#: Model/Attender.php:463
+#: Model/Attender.php:470
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "Denne kontakten har blitt automatisk lagt til av systemet som en handligs deltager"
 
-#: Model/Attender.php:466
+#: Model/Attender.php:473
 msgid "The email address has been shortened:"
 msgstr ""
 
-#: Model/Event.php:367
+#: Model/Event.php:366
 msgid "Start"
 msgstr "Start"
 
-#: Model/Event.php:368 js/RrulePanel.js:321
+#: Model/Event.php:367 js/RrulePanel.js:321
 msgid "End"
 msgstr "Slutt"
 
-#: Model/Event.php:369 js/EventDetailsPanel.js:270 js/GridView.js:127
+#: Model/Event.php:368 js/EventDetailsPanel.js:270 js/GridView.js:127
 msgid "Blocking"
 msgstr "Blokkerer"
 
-#: Model/Event.php:370
+#: Model/Event.php:369
 msgid "Classification"
 msgstr "Klasifisering"
 
-#: Model/Event.php:371 js/ResourceEditDialog.js:84 js/EventEditDialog.js:264
+#: Model/Event.php:370 js/ResourceEditDialog.js:84 js/EventEditDialog.js:256
 #: js/Model.js:285 js/GridView.js:161
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: Model/Event.php:372 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
-#: js/EventEditDialog.js:132 js/Model.js:284 js/GridView.js:148
+#: Model/Event.php:371 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
+#: js/EventEditDialog.js:124 js/Model.js:284 js/GridView.js:148
 msgid "Location"
 msgstr "Sted"
 
-#: Model/Event.php:373 js/EventDetailsPanel.js:284 js/EventEditDialog.js:327
+#: Model/Event.php:372 js/EventDetailsPanel.js:284 js/EventEditDialog.js:319
 #: js/Model.js:304 js/GridView.js:154 js/PerspectiveCombo.js:127
 msgid "Organizer"
 msgstr "Organiserer"
 
-#: Model/Event.php:374
+#: Model/Event.php:373
 msgid "Priority"
 msgstr "Prioritet"
 
-#: Model/Event.php:375 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:186 js/GridView.js:173 js/AttendeeGridPanel.js:212
+#: Model/Event.php:374 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:178 js/GridView.js:173 js/AttendeeGridPanel.js:212
 #: js/AddToEventPanel.js:88
 msgid "Status"
 msgstr "Status"
 
-#: Model/Event.php:376 js/ContactEventsGridPanel.js:113
-#: js/EventEditDialog.js:87 js/Model.js:283 js/GridView.js:143
+#: Model/Event.php:375 js/ContactEventsGridPanel.js:113
+#: js/EventEditDialog.js:79 js/Model.js:283 js/GridView.js:143
 msgid "Summary"
 msgstr "Oppsumering"
 
-#: Model/Event.php:377
+#: Model/Event.php:376
 msgid "Url"
 msgstr "Url"
 
-#: Model/Event.php:378
+#: Model/Event.php:377
 msgid "Recurrance rule"
 msgstr "Gjentagelse regel"
 
-#: Model/Event.php:379
+#: Model/Event.php:378
 msgid "Is all day event"
 msgstr "Er hele dagen hendelse"
 
-#: Model/Event.php:380
+#: Model/Event.php:379
 msgid "Organizer timezone"
 msgstr "Organiserer tidssone"
 
-#: Model/Event.php:405
+#: Model/Event.php:404
 msgid "No"
 msgstr "Nei"
 
-#: Model/Event.php:405
+#: Model/Event.php:404
 msgid "Yes"
 msgstr "Ja"
 
@@ -535,7 +535,7 @@ msgid "Events"
 msgstr "Hendelser"
 
 #: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:260
-#: js/EventEditDialog.js:138 js/GridView.js:109 Preference.php:103
+#: js/EventEditDialog.js:130 js/GridView.js:109 Preference.php:103
 msgid "Start Time"
 msgstr "Start Tid"
 
@@ -592,71 +592,71 @@ msgstr ""
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:152 js/GridView.js:115
+#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:144 js/GridView.js:115
 #: Preference.php:107
 msgid "End Time"
 msgstr "Slutt Tid"
 
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:206 js/GridView.js:135
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:198 js/GridView.js:135
 #: Setup/Initialize.php:115 Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr "Foreløpig"
 
-#: js/EventEditDialog.js:103
+#: js/EventEditDialog.js:95
 msgid "View"
 msgstr ""
 
-#: js/EventEditDialog.js:119
+#: js/EventEditDialog.js:111
 msgid "Details"
 msgstr "Detaljer:"
 
-#: js/EventEditDialog.js:146 js/GridView.js:121 js/SearchCombo.js:201
+#: js/EventEditDialog.js:138 js/GridView.js:121 js/SearchCombo.js:201
 #: js/Printer/Base.js:73
 msgid "whole day"
 msgstr "hele dagen"
 
-#: js/EventEditDialog.js:168
+#: js/EventEditDialog.js:160
 msgid "Saved in"
 msgstr "Lagret i"
 
-#: js/EventEditDialog.js:190 js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:182 js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr "ikke-blokert"
 
-#: js/EventEditDialog.js:220 js/GridView.js:94
+#: js/EventEditDialog.js:212 js/GridView.js:94
 msgid "Private"
 msgstr "Privat"
 
-#: js/EventEditDialog.js:278
+#: js/EventEditDialog.js:270
 msgid "Enter description"
 msgstr "Tast inn beskrivelse"
 
-#: js/EventEditDialog.js:315
+#: js/EventEditDialog.js:307
 msgid "Mute Notification"
 msgstr ""
 
-#: js/EventEditDialog.js:546
+#: js/EventEditDialog.js:542
 msgid "End date is not valid"
 msgstr "Slutt dato er ikke gyldig"
 
-#: js/EventEditDialog.js:549
+#: js/EventEditDialog.js:545
 msgid "End date must be after start date"
 msgstr "Slutt dato må være etter start dato"
 
-#: js/EventEditDialog.js:552
+#: js/EventEditDialog.js:548
 msgid ""
 "End date is not allowed to be be higher than the configured time range."
 msgstr ""
 
-#: js/EventEditDialog.js:573
+#: js/EventEditDialog.js:569
 msgid "Start date is not valid"
 msgstr "Start datoen er ikke gyldig"
 
-#: js/EventEditDialog.js:576
+#: js/EventEditDialog.js:572
 msgid "End date is not allowed to be be lower than the configured time range."
 msgstr ""
 
-#: js/EventEditDialog.js:596
+#: js/EventEditDialog.js:592
 msgid "Errors"
 msgstr "Feil"
 
@@ -812,19 +812,19 @@ msgstr ""
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, den {1}. av {2}"
 
-#: js/DaysView.js:706
+#: js/DaysView.js:709
 msgid "The summary must not be longer than 255 characters."
 msgstr ""
 
-#: js/DaysView.js:708
+#: js/DaysView.js:711
 msgid "The summary must have at least 1 character."
 msgstr ""
 
-#: js/DaysView.js:745
+#: js/DaysView.js:748
 msgid "Summary too Long"
 msgstr ""
 
-#: js/DaysView.js:755
+#: js/DaysView.js:758
 msgid "Summary too Short"
 msgstr ""
 
@@ -853,150 +853,162 @@ msgstr ""
 msgid "Print Page"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:189 js/MainScreenCenterPanel.js:223
+#: js/MainScreenCenterPanel.js:189 js/MainScreenCenterPanel.js:253
 msgid "Grid"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:193 js/MainScreenCenterPanel.js:208
+#: js/MainScreenCenterPanel.js:193 js/MainScreenCenterPanel.js:238
 msgid "Sheet"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:233
+#: js/MainScreenCenterPanel.js:206
+msgid "Export Events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:214
+msgid "Export as ODS"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:221
+msgid "Export as ..."
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:263
 msgid "Day"
 msgstr "Dag"
 
-#: js/MainScreenCenterPanel.js:242 js/PagingToolbar.js:300
+#: js/MainScreenCenterPanel.js:272 js/PagingToolbar.js:300
 msgid "Week"
 msgstr "Uke"
 
-#: js/MainScreenCenterPanel.js:251
+#: js/MainScreenCenterPanel.js:281
 msgid "Month"
 msgstr "Måned"
 
-#: js/MainScreenCenterPanel.js:261
+#: js/MainScreenCenterPanel.js:291
 msgid "Import Events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:304
+#: js/MainScreenCenterPanel.js:334
 #, python-brace-format
 msgid "Paste event \"{0}\""
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:611
+#: js/MainScreenCenterPanel.js:650
 msgid "Set my response"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:640
+#: js/MainScreenCenterPanel.js:679
 #, python-brace-format
 msgid "Copy {0}"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:656
+#: js/MainScreenCenterPanel.js:695
 msgid "Updating event in the past"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:657
+#: js/MainScreenCenterPanel.js:696
 msgid "Update this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:658
+#: js/MainScreenCenterPanel.js:697
 msgid "Do not update this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:662
+#: js/MainScreenCenterPanel.js:701
 msgid "Creating event in the past"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:663
+#: js/MainScreenCenterPanel.js:702
 msgid "Create this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:664
+#: js/MainScreenCenterPanel.js:703
 msgid "Do not create this event"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:791
+#: js/MainScreenCenterPanel.js:830
 msgid "Update Event"
 msgstr "Oppdater Hendelse"
 
-#: js/MainScreenCenterPanel.js:795
+#: js/MainScreenCenterPanel.js:834
 msgid "Update this event only"
 msgstr "Oppdater kun denne hendelsen"
 
-#: js/MainScreenCenterPanel.js:796
+#: js/MainScreenCenterPanel.js:835
 msgid "Update this and all future events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:797
+#: js/MainScreenCenterPanel.js:836
 msgid "Update whole series"
 msgstr "Oppdater hele serien"
 
-#: js/MainScreenCenterPanel.js:798
+#: js/MainScreenCenterPanel.js:837
 msgid "Update nothing"
 msgstr "Oppdater ingenting"
 
-#: js/MainScreenCenterPanel.js:942
+#: js/MainScreenCenterPanel.js:981
 msgid "Please Change Selection"
 msgstr "Vennligst Endre Valg"
 
-#: js/MainScreenCenterPanel.js:943
+#: js/MainScreenCenterPanel.js:982
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr "Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes separat!"
 
-#: js/MainScreenCenterPanel.js:956
+#: js/MainScreenCenterPanel.js:995
 msgid "Delete Event"
 msgstr "Slette Hendelse"
 
-#: js/MainScreenCenterPanel.js:960
+#: js/MainScreenCenterPanel.js:999
 msgid "Delete this event only"
 msgstr "Slette kun denne hendelsen"
 
-#: js/MainScreenCenterPanel.js:961
+#: js/MainScreenCenterPanel.js:1000
 msgid "Delete this and all future events"
 msgstr "Slett denne og alle framtidige hendelser"
 
-#: js/MainScreenCenterPanel.js:962
+#: js/MainScreenCenterPanel.js:1001
 msgid "Delete whole series"
 msgstr "Slett hele serien"
 
-#: js/MainScreenCenterPanel.js:963
+#: js/MainScreenCenterPanel.js:1002
 msgid "Delete nothing"
 msgstr "Slett ingenting"
 
-#: js/MainScreenCenterPanel.js:1014
+#: js/MainScreenCenterPanel.js:1053
 #, python-brace-format
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Vil du virkelig slette denn hendelsen?"
 msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
 
-#: js/MainScreenCenterPanel.js:1229
+#: js/MainScreenCenterPanel.js:1268
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1229
+#: js/MainScreenCenterPanel.js:1268
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:1382
+#: js/MainScreenCenterPanel.js:1421
 msgid "Scheduling Conflict"
 msgstr "Avtale Konflikt"
 
-#: js/MainScreenCenterPanel.js:1384
+#: js/MainScreenCenterPanel.js:1423
 msgid "The following attendee are busy at the requested time:"
 msgstr "Følgende deltagere er opptatt på ønsket tid:"
 
-#: js/MainScreenCenterPanel.js:1388
+#: js/MainScreenCenterPanel.js:1427
 msgid "Ignore Conflict"
 msgstr "Ignorer Konflikt"
 
-#: js/MainScreenCenterPanel.js:1389
+#: js/MainScreenCenterPanel.js:1428
 msgid "Edit Event"
 msgstr "Rediger Hendelse"
 
-#: js/MainScreenCenterPanel.js:1390
+#: js/MainScreenCenterPanel.js:1429
 msgid "Cancel this action"
 msgstr ""
 
@@ -1123,23 +1135,23 @@ msgstr ""
 msgid "Default Attendee Strategy for new events"
 msgstr ""
 
-#: Preference.php:209
+#: Preference.php:211
 msgid "Never"
 msgstr "aldri"
 
-#: Preference.php:209
+#: Preference.php:211
 msgid "On invitation and cancellation only"
 msgstr ""
 
-#: Preference.php:209
+#: Preference.php:211
 msgid "On time changes"
 msgstr ""
 
-#: Preference.php:209
+#: Preference.php:211
 msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Preference.php:209
+#: Preference.php:211
 msgid "On attendee responses too"
 msgstr ""
 

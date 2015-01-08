@@ -681,17 +681,14 @@ msgstr "CSV Outlook 2007 German"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 #: Import/definitions/adb_tine_import_csv.xml:11
-#: Import/definitions/adb_tine_import_custom_csv.xml:11
 msgid "Contact CSV import"
 msgstr "Contact CSV import"
 
 #: Import/definitions/adb_tine_import_csv.xml:18
-#: Import/definitions/adb_tine_import_custom_csv.xml:18
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Import list (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:20
-#: Import/definitions/adb_tine_import_custom_csv.xml:20
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"

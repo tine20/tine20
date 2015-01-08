@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:02+0000\n"
+"PO-Revision-Date: 2015-01-08 11:11+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
@@ -227,7 +227,7 @@ msgid "To (Email CC)"
 msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:955 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:974 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr ""
@@ -323,7 +323,7 @@ msgstr[0] ""
 msgid "Message not available."
 msgstr ""
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:861
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:880
 msgid "From"
 msgstr ""
 
@@ -343,7 +343,7 @@ msgstr ""
 msgid "Show or hide header information"
 msgstr ""
 
-#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:795 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:814 js/GridPanel.js:468
 msgid "Attachments"
 msgstr ""
 
@@ -461,7 +461,7 @@ msgstr ""
 msgid "Received"
 msgstr ""
 
-#: js/Model.js:374 js/AccountEditDialog.js:112
+#: js/Model.js:374 js/AccountEditDialog.js:115
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] ""
@@ -558,66 +558,66 @@ msgstr ""
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr ""
 
-#: js/MessageEditDialog.js:350
+#: js/MessageEditDialog.js:369
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr ""
 
-#: js/MessageEditDialog.js:370
+#: js/MessageEditDialog.js:389
 msgid "Original message"
 msgstr ""
 
-#: js/MessageEditDialog.js:556 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:575 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr ""
 
-#: js/MessageEditDialog.js:607
+#: js/MessageEditDialog.js:626
 msgid "Fwd:"
 msgstr ""
 
-#: js/MessageEditDialog.js:610
+#: js/MessageEditDialog.js:629
 #, python-brace-format
 msgid "{0} Message"
 msgstr ""
 
-#: js/MessageEditDialog.js:664 js/MessageEditDialog.js:669
+#: js/MessageEditDialog.js:683 js/MessageEditDialog.js:688
 msgid "Failed"
 msgstr ""
 
-#: js/MessageEditDialog.js:665
+#: js/MessageEditDialog.js:684
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr ""
 
-#: js/MessageEditDialog.js:670 js/MessageEditDialog.js:992
+#: js/MessageEditDialog.js:689 js/MessageEditDialog.js:1011
 msgid "Files are still uploading."
 msgstr ""
 
-#: js/MessageEditDialog.js:735 js/MessageEditDialog.js:965
+#: js/MessageEditDialog.js:754 js/MessageEditDialog.js:984
 msgid "Compose email:"
 msgstr ""
 
-#: js/MessageEditDialog.js:930 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:949 Controller/Message/Send.php:288
 msgid "Body"
 msgstr ""
 
-#: js/MessageEditDialog.js:1020
+#: js/MessageEditDialog.js:1039
 msgid "Empty subject"
 msgstr ""
 
-#: js/MessageEditDialog.js:1021
+#: js/MessageEditDialog.js:1040
 msgid "Do you really want to send a message with an empty subject?"
 msgstr ""
 
-#: js/MessageEditDialog.js:1042
+#: js/MessageEditDialog.js:1061
 msgid "Add Note"
 msgstr ""
 
-#: js/MessageEditDialog.js:1043
+#: js/MessageEditDialog.js:1062
 msgid "Edit Email Note Text:"
 msgstr ""
 
-#: js/MessageEditDialog.js:1066
+#: js/MessageEditDialog.js:1085
 msgid "No recipients set."
 msgstr ""
 
@@ -733,9 +733,9 @@ msgstr ""
 msgid "Select recipients for \"{0}\""
 msgstr ""
 
-#: js/ContactGrid.js:119 js/AccountEditDialog.js:180
-#: js/AccountEditDialog.js:221 js/AccountEditDialog.js:236
-#: js/AccountEditDialog.js:276
+#: js/ContactGrid.js:119 js/AccountEditDialog.js:183
+#: js/AccountEditDialog.js:224 js/AccountEditDialog.js:239
+#: js/AccountEditDialog.js:279
 msgid "None"
 msgstr ""
 
@@ -759,219 +759,228 @@ msgstr ""
 msgid "New Mail"
 msgstr ""
 
-#: js/Felamimail.js:85
+#: js/Felamimail.js:91
 msgid "Email"
 msgstr ""
 
-#: js/Felamimail.js:120
+#: js/Felamimail.js:127
 msgid "Active Vacation Message"
 msgstr ""
 
-#: js/Felamimail.js:121
+#: js/Felamimail.js:128
 #, python-brace-format
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:558
+#: js/Felamimail.js:165
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr ""
+
+#: js/Felamimail.js:577
 msgid "New mails"
 msgstr ""
 
-#: js/Felamimail.js:559
+#: js/Felamimail.js:578
 #, python-brace-format
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr ""
 
-#: js/Felamimail.js:679
+#: js/Felamimail.js:698
 #, python-brace-format
 msgid "IMAP Credentials for {0}"
 msgstr ""
 
-#: js/Felamimail.js:682
+#: js/Felamimail.js:701
 msgid "Credentials"
 msgstr ""
 
-#: js/Felamimail.js:835 js/Felamimail.js:868
+#: js/Felamimail.js:896 js/Felamimail.js:929
 msgid "IMAP Error"
 msgstr ""
 
-#: js/Felamimail.js:836
+#: js/Felamimail.js:897
 msgid "No connection to IMAP server."
 msgstr ""
 
-#: js/Felamimail.js:852
+#: js/Felamimail.js:913
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:853
+#: js/Felamimail.js:914
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:869
+#: js/Felamimail.js:930
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr ""
 
-#: js/Felamimail.js:898
+#: js/Felamimail.js:959
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:899
+#: js/Felamimail.js:960
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:907
+#: js/Felamimail.js:968
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:908
+#: js/Felamimail.js:969
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:916
+#: js/Felamimail.js:977
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:917
+#: js/Felamimail.js:978
 msgid "Could not save script on Sieve server."
 msgstr ""
 
-#: js/AccountEditDialog.js:85
+#: js/AccountEditDialog.js:75
+msgid "Add New Account"
+msgstr ""
+
+#: js/AccountEditDialog.js:88
 msgid "Signature"
 msgstr ""
 
-#: js/AccountEditDialog.js:119
+#: js/AccountEditDialog.js:122
 msgid "Account Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:123
+#: js/AccountEditDialog.js:126
 msgid "User Email"
 msgstr ""
 
-#: js/AccountEditDialog.js:128
+#: js/AccountEditDialog.js:131
 msgid "User Name (From)"
 msgstr ""
 
-#: js/AccountEditDialog.js:131
+#: js/AccountEditDialog.js:134
 msgid "Organization"
 msgstr ""
 
-#: js/AccountEditDialog.js:135
+#: js/AccountEditDialog.js:138
 msgid "Signature position"
 msgstr ""
 
-#: js/AccountEditDialog.js:146
+#: js/AccountEditDialog.js:149
 msgid "Above the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:147
+#: js/AccountEditDialog.js:150
 msgid "Below the quote"
 msgstr ""
 
-#: js/AccountEditDialog.js:152
+#: js/AccountEditDialog.js:155
 msgid "IMAP"
 msgstr ""
 
-#: js/AccountEditDialog.js:159 js/AccountEditDialog.js:202
-#: js/AccountEditDialog.js:257
+#: js/AccountEditDialog.js:162 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:260
 msgid "Host"
 msgstr ""
 
-#: js/AccountEditDialog.js:163
+#: js/AccountEditDialog.js:166
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr ""
 
-#: js/AccountEditDialog.js:169 js/AccountEditDialog.js:211
-#: js/AccountEditDialog.js:266
+#: js/AccountEditDialog.js:172 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:269
 msgid "Secure Connection"
 msgstr ""
 
-#: js/AccountEditDialog.js:181 js/AccountEditDialog.js:222
-#: js/AccountEditDialog.js:277
+#: js/AccountEditDialog.js:184 js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:280
 msgid "TLS"
 msgstr ""
 
-#: js/AccountEditDialog.js:182 js/AccountEditDialog.js:223
+#: js/AccountEditDialog.js:185 js/AccountEditDialog.js:226
 msgid "SSL"
 msgstr ""
 
-#: js/AccountEditDialog.js:185
+#: js/AccountEditDialog.js:188
 msgid "Username"
 msgstr ""
 
-#: js/AccountEditDialog.js:189
+#: js/AccountEditDialog.js:192
 msgid "Password"
 msgstr ""
 
-#: js/AccountEditDialog.js:195
+#: js/AccountEditDialog.js:198
 msgid "SMTP"
 msgstr ""
 
-#: js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:208
 msgid "Port (Default: 25)"
 msgstr ""
 
-#: js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:229
 msgid "Authentication"
 msgstr ""
 
-#: js/AccountEditDialog.js:237
+#: js/AccountEditDialog.js:240
 msgid "Login"
 msgstr ""
 
-#: js/AccountEditDialog.js:238
+#: js/AccountEditDialog.js:241
 msgid "Plain"
 msgstr ""
 
-#: js/AccountEditDialog.js:241
+#: js/AccountEditDialog.js:244
 msgid "Username (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:244
+#: js/AccountEditDialog.js:247
 msgid "Password (optional)"
 msgstr ""
 
-#: js/AccountEditDialog.js:250
+#: js/AccountEditDialog.js:253
 msgid "Sieve"
 msgstr ""
 
-#: js/AccountEditDialog.js:261
+#: js/AccountEditDialog.js:264
 msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/AccountEditDialog.js:281
+#: js/AccountEditDialog.js:284
 msgid "Other Settings"
 msgstr ""
 
-#: js/AccountEditDialog.js:288
+#: js/AccountEditDialog.js:291
 msgid "Sent Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:294
+#: js/AccountEditDialog.js:297
 msgid "Trash Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:300
+#: js/AccountEditDialog.js:303
 msgid "Drafts Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:306
+#: js/AccountEditDialog.js:309
 msgid "Templates Folder Name"
 msgstr ""
 
-#: js/AccountEditDialog.js:312
+#: js/AccountEditDialog.js:315
 msgid "Display Format"
 msgstr ""
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:326
 msgid "HTML"
 msgstr ""
 
-#: js/AccountEditDialog.js:324
+#: js/AccountEditDialog.js:327
 msgid "Plain Text"
 msgstr ""
 
-#: js/AccountEditDialog.js:325
+#: js/AccountEditDialog.js:328
 msgid "Depending on content type (experimental)"
 msgstr ""
 

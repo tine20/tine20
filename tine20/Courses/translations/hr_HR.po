@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
+"PO-Revision-Date: 2015-01-08 11:11+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
@@ -154,7 +154,7 @@ msgstr "Učitelj"
 msgid "Teacher Account"
 msgstr "Račun učitelja"
 
-#: Controller/Course.php:317
+#: Controller/Course.php:321
 msgid "My course"
 msgstr "Moji tečajevi"
 
@@ -228,3 +228,11 @@ msgstr "isključen"
 #: Setup/Initialize.php:68
 msgid "Filtered"
 msgstr "Filtriran"
+
+#: Setup/Initialize.php:91
+msgid "School"
+msgstr ""
+
+#: Setup/Initialize.php:92
+msgid "Defaul school for Courses application"
+msgstr ""
