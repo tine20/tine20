@@ -227,9 +227,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.dayStart = Ext.isDate(startTime) ? startTime : Date.parseDate(this.dayStart, 'H:i');
         this.dayEnd = Ext.isDate(endTime) ? endTime : Date.parseDate(this.dayEnd, 'H:i');
-        this.dayEndPx = this.getTimeOffset(this.dayEnd);
+        this.dayEndPx = this.getTimeOffset(this.dayEnd, true);
         
-        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart) && !this.getTimeOffset(this.dayEnd));
+        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart, false) && !this.getTimeOffset(this.dayEnd, true));
         
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
@@ -470,14 +470,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         // crop daytime
         if (this.cropDayTime) {
-            var cropStartPx = this.getTimeOffset(this.dayStart),
-                cropHeightPx = this.getTimeOffset(this.dayEnd) +2;
+            var cropStartPx = this.getTimeOffset(this.dayStart, false),
+                cropHeightPx = this.getTimeOffset(this.dayEnd, true) +2;
                 
             this.mainBody.setStyle('margin-top', '-' + cropStartPx + 'px');
-            if (this.getTimeOffset(this.dayEnd)) {
-                this.mainBody.setStyle('height', cropHeightPx + 'px');
-                this.mainBody.setStyle('overflow', 'hidden');
-            }
+            this.mainBody.setStyle('height', cropHeightPx + 'px');
+            this.mainBody.setStyle('overflow', 'hidden');
             this.scroller.addClass('cal-daysviewpanel-body-cropDayTime');
         }
         
@@ -495,7 +493,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     
     scrollTo: function(time) {
         time = Ext.isDate(time) ? time : new Date();
-        this.scroller.dom.scrollTop = this.getTimeOffset(time);
+        this.scroller.dom.scrollTop = this.getTimeOffset(time, false);
     },
     
     onBeforeScroll: function() {
@@ -553,7 +551,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     
     onShow: function() {
         this.onLayout();
-        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date());
+        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date(), false);
     },
     
     onBeforeHide: function() {
@@ -1205,10 +1203,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         }
     },
     
-    getTimeOffset: function(date) {
-        var d = this.granularityUnitHeights / this.timeGranularity;
+    getTimeOffset: function(date, isEnd) {
+        var d = this.granularityUnitHeights / this.timeGranularity
+            hours = isEnd && (date.getHours() == 0) ? 24 : date.getHours();
         
-        return Math.round(d * ( 60 * date.getHours() + date.getMinutes()));
+        return Math.round(d * ( 60 * hours + date.getMinutes()));
     },
     
     getTimeHeight: function(dtStart, dtEnd) {
