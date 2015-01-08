@@ -378,8 +378,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 continue;
             }
             
-            var top = view.getTimeOffset(this.dtStart);
-            var height = this.startColNum == this.endColNum ? view.getTimeHeight(this.dtStart, this.dtEnd) : view.getTimeOffset(this.dtEnd);
+            var top = view.getTimeOffset(this.dtStart, false);
+            var height = this.startColNum == this.endColNum ? view.getTimeHeight(this.dtStart, this.dtEnd) : view.getTimeOffset(this.dtEnd, true);
             
             if (currColNum != this.startColNum) {
                 top = 0;
