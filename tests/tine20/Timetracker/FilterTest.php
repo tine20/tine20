@@ -6,7 +6,7 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -110,6 +110,19 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         $result = $this->_timeaccountController->search($f);
         $this->assertEquals(1, $result->count());
         $this->assertEquals('TA1', $result->getFirstRecord()->title);
+        
+        // test "not" operator
+        $f = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'contract', 'operator' => 'AND', 'value' =>
+                array(array('field' => ':id', 'operator' => 'not', 'value' => $contract->getId()))
+            ),
+            array('field' => 'description', 'operator' => 'equals', 'value' => 'UnitTest')
+        ));
+        
+        $result = $this->_timeaccountController->search($f);
+        
+        // TODO is this correct? do we expect the timaccount without contract to be missing from results?
+        $this->assertEquals(0, $result->count(), 'No record should be found');
     }
 
     /**
