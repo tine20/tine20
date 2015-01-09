@@ -23,9 +23,10 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
      * @var array list of allowed operators
      */
     protected $_operators = array(
-        0 => 'equals',
-        1 => 'in',
-        2 => 'notin',
+        'equals',
+        'not',
+        'in',
+        'notin'
     );
     
     /**
@@ -33,8 +34,9 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
      */
     protected $_opSqlMap = array(
         'equals'     => array('sqlop' => ' = ?'   ),
+        'not'        => array('sqlop' => ' != ?'  ),
         'in'         => array('sqlop' => ' IN (?)'),
-        'notin'      => array('sqlop' => ' NOT IN (?)'),
+        'notin'      => array('sqlop' => ' NOT IN (?)')
     );
     
     /**
