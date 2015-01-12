@@ -49,6 +49,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_removeGroupMembers = true;
     
     /**
+     * invalidate roles cache
+     * 
+     * @var boolean
+     */
+    protected $_invalidateRolesCache = false;
+    
+    /**
      * test personas
      * 
      * @var array
@@ -108,6 +115,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        
+        if ($this->_invalidateRolesCache) {
+            Tinebase_Acl_Roles::getInstance()->resetClassCache();
+        }
     }
     
     /**
@@ -357,5 +368,34 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(__FILE__) . '/Filemanager/files/test.txt');
         return $tempFile;
+    }
+    
+    /**
+     * remove right in all users roles
+     * 
+     * @param string $applicationName
+     * @param string $right
+     * @param boolean $removeAdminRight
+     * @return array original role rights by role id
+     */
+    protected function _removeRoleRight($applicationName, $rightToRemove, $removeAdminRight = true)
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
+        $rolesOfUser = Tinebase_Acl_Roles::getInstance()->getRoleMemberships(Tinebase_Core::getUser()->getId());
+        $this->_invalidateRolesCache = true;
+        
+        foreach ($rolesOfUser as $roleId) {
+            $roleRights[$roleId] = $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($roleId);
+            foreach ($rights as $idx => $right) {
+                if ($right['application_id'] === $app->getId() && ($right['right'] === $rightToRemove || $right['right'] === Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Removing right ' . $right['right'] . ' from app ' . $applicationName . ' in role (id) ' . $roleId);
+                    unset($rights[$idx]);
+                }
+            }
+            Tinebase_Acl_Roles::getInstance()->setRoleRights($roleId, $rights);
+        }
+        
+        return $roleRights;
     }
 }

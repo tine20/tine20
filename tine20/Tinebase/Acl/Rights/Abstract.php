@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -23,7 +23,7 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      * @staticvar string
      */
     const ADMIN = 'admin';
-        
+    
     /**
      * the right to run an application
      *
@@ -45,6 +45,13 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      * @staticvar string
      */
     const MANAGE_SHARED_FAVORITES = 'manage_shared_favorites';
+    
+    /**
+     * the right to use personal tags in an application
+     * 
+     * @staticvar string
+     */
+    const USE_PERSONAL_TAGS = 'use_personal_tags';
     
     /**
      * get all possible application rights
@@ -75,6 +82,10 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
             self::RUN                   => array(
                 'text'          => $translate->_('run'),
                 'description'   => $translate->_('run right description'),
+            ),
+            self::USE_PERSONAL_TAGS     => array(
+                'text'          => $translate->_('Personal tags'),
+                'description'   => $translate->_('Use and see personal tags'),
             ),
         );
         

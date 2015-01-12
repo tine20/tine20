@@ -5,10 +5,8 @@
  * @package     Crm
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
- * @todo        add more specific rights
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -85,6 +83,7 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array ( 
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_SHARED_LEAD_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
@@ -115,6 +114,4 @@ class Crm_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
-
-    
 }

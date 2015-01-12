@@ -282,6 +282,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return array(
             'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
+            // TODO we normally use 'totalcount' (all lower case) - this should be streamlined
             'totalCount' => Tinebase_Tags::getInstance()->getSearchTagsCount($filter)
         );
     }

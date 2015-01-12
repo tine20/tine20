@@ -4,16 +4,11 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Addressbook_Frontend_Json
@@ -73,6 +68,8 @@ class Addressbook_JsonTest extends TestCase
      * @var array
      */
     protected $_groupIdsToDelete = NULL;
+    
+    protected $_originalRoleRights = null;
     
     /**
      * Runs the test methods of this class.
@@ -157,8 +154,21 @@ class Addressbook_JsonTest extends TestCase
                 $this->objects['createdTagIds'] = array();
             }
         }
+        
+        $this->_resetOriginalRoleRights();
     }
-
+    
+    protected function _resetOriginalRoleRights()
+    {
+        if (! empty($this->_originalRoleRights)) {
+            foreach ($this->_originalRoleRights as $roleId => $rights) {
+                Tinebase_Acl_Roles::getInstance()->setRoleRights($roleId, $rights);
+            }
+            
+            $this->_originalRoleRights = null;
+        }
+    }
+    
     /**
      * try to get all contacts
      */
@@ -491,8 +501,10 @@ class Addressbook_JsonTest extends TestCase
 
     /**
     * test attach multiple tags modlog
+    * 
+    * @param string $type tag type
     */
-    public function testAttachMultipleTagsModlog()
+    public function testAttachMultipleTagsModlog($type = Tinebase_Model_Tag::TYPE_SHARED)
     {
         $contact = $this->_addContact();
         $filter = new Addressbook_Model_ContactFilter(array(array(
@@ -500,7 +512,7 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'equals',
             'value'    =>  $contact['id']
         )));
-        $sharedTagName = $this->_createAndAttachTag($filter);
+        $sharedTagName = $this->_createAndAttachTag($filter, $type);
         $this->_checkChangedNote($contact['id'], array(',"name":"' . $sharedTagName . '","description":"testTagDescription"', 'tags ([] -> [{'));
     }
     
@@ -517,6 +529,38 @@ class Addressbook_JsonTest extends TestCase
             'tags',
             '1 ' . Tinebase_Translation::getTranslation('Tinebase')->_('removed'),
         ), 4);
+    }
+    
+    /**
+     * testCreatePersonalTagWithoutRight
+     * 
+     * @see 0010732: add "use personal tags" right to all applications
+     */
+    public function testCreatePersonalTagWithoutRight()
+    {
+        $this->_originalRoleRights = $this->_removeRoleRight('Addressbook', Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
+        
+        try {
+            $this->testAttachMultipleTagsModlog(Tinebase_Model_Tag::TYPE_PERSONAL);
+            $this->fail('personal tags right is disabled');
+        } catch (Tinebase_Exception $e) {
+            $this->assertTrue($e instanceof Tinebase_Exception_AccessDenied, 'did not get expected exception: ' . $e);
+        }
+    }
+    
+    /**
+     * testFetchPersonalTagWithoutRight
+     * 
+     * @see 0010732: add "use personal tags" right to all applications
+     */
+    public function testFetchPersonalTagWithoutRight()
+    {
+        $contact = $this->testAttachMultipleTagsModlog(Tinebase_Model_Tag::TYPE_PERSONAL);
+        $this->_originalRoleRights = $this->_removeRoleRight('Addressbook', Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
+        
+        $contact = $this->_instance->getContact($contact['id']);
+        
+        $this->assertTrue(! isset($contact['tags']) || count($contact['tags'] === 0), 'record should not have any tags');
     }
     
     /**

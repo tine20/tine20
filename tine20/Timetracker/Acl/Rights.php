@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -96,6 +96,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_TIMEACCOUNTS,
             self::ADD_TIMEACCOUNTS,
             self::MANAGE_SHARED_TIMEACCOUNT_FAVORITES,

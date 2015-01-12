@@ -135,7 +135,8 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $allRights = parent::getAllApplicationRights();
         
-        $addRights = array ( 
+        $addRights = array (
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_PRODUCTS,
             self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
