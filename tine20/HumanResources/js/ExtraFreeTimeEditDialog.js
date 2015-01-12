@@ -28,7 +28,6 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     appName: 'HumanResources',
     recordClass: Tine.HumanResources.Model.ExtraFreeTime,
     recordProxy: Tine.HumanResources.freetimeBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     showContainerSelector: false,
     mode: 'local',
@@ -167,12 +166,6 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                             emptyText: this.app.i18n._('Enter description'),
                             requiredGrant: 'editGrant'
                         }]
-                    }),
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'HumanResources',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'HumanResources',

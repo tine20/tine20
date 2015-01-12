@@ -44,7 +44,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
     loadRecord: false,
     tbarItems: [],
     evalGrants: false,
-    
+
     /**
      * @private
      */

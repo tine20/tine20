@@ -1060,9 +1060,8 @@ class Tinebase_Core
      * sets the user locale
      *
      * @param  string $localeString
-     * @param  bool   $saveaspreference
      */
-    public static function setupUserLocale($localeString = 'auto', $saveaspreference = FALSE)
+    public static function setupUserLocale($localeString = 'auto')
     {
         try {
             $session = Tinebase_Session::getSessionNamespace();
@@ -1108,6 +1107,11 @@ class Tinebase_Core
             if ($session !== NULL) {
                 $session->userLocale = $locale;
             }
+            
+            // check if the detected locale should be saved in preferences
+            if ($localeString === 'auto' && is_object(Tinebase_Core::getUser())) {
+                self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
+            }
         }
         
         // save in registry
@@ -1115,11 +1119,6 @@ class Tinebase_Core
         
         $localeString = (string)$locale;
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Setting user locale: " . $localeString);
-        
-        // save locale as preference
-        if (is_object(Tinebase_Core::getUser()) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
-            self::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
-        }
         
         // set correct ctype locale, to make sure that the filesystem functions like basename() are working correctly with utf8 chars
         $ctypeLocale = setlocale(LC_CTYPE, 0);

@@ -53,8 +53,8 @@ Ext.namespace('Tine.Tasks');
     recordClass: Tine.Tasks.Model.Task,
     recordProxy: Tine.Tasks.JsonBackend,
     showContainerSelector: true,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    
+    displayNotes: true,
+
     /**
      * @private
      */
@@ -248,12 +248,6 @@ Ext.namespace('Tine.Tasks');
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Tasks',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Tasks',
                             border: false,

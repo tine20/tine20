@@ -58,29 +58,17 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @type {String} validateNumber
      */
     validateNumber: null,
+
+    displayNotes: true,
     
     initComponent: function() {
         this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
-        
-        this.initToolbar();
-        
+
         Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
     },
     
     /**
-<<<<<<< HEAD
-=======
-     * initializes the toolbar
-     */
-    initToolbar: function() {
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
-
-        this.tbarItems = [addNoteButton];
-    },
-    
-    /**
->>>>>>> pu/2013.10-invoices
      * called on multiple edit
      * @return {Boolean}
      */
@@ -341,12 +329,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Sales',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Sales',
                             border: false,

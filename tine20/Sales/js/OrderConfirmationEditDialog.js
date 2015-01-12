@@ -33,26 +33,17 @@ Tine.Sales.OrderConfirmationEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     
     windowWidth: 650,
     windowHeight: 350,
+
+    displayNotes: true,
     
     
     /**
      * init component
      */
     initComponent: function () {
-        this.initToolbar();
-
         Tine.Sales.OrderConfirmationEditDialog.superclass.initComponent.call(this);
     },
-    
-    /**
-     * initializes the toolbar
-     */
-    initToolbar: function() {
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
 
-        this.tbarItems = [addNoteButton];
-    },
-    
     /**
      * called on multiple edit
      * @return {Boolean}
@@ -160,12 +151,6 @@ Tine.Sales.OrderConfirmationEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Sales',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Sales',

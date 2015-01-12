@@ -35,6 +35,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: true,
     showContainerSelector: true,
     hideRelationsPanel: true,
+    displayNotes: true,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)

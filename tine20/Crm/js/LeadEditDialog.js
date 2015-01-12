@@ -54,8 +54,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Crm',
     recordClass: Tine.Crm.Model.Lead,
     recordProxy: Tine.Crm.leadBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     showContainerSelector: true,
+    displayNotes: true,
+
     /**
      * ignore these models in relation grid
      * @type {Array}
@@ -459,12 +460,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     anchor:'100% 100%',
                                     emptyText: this.app.i18n._('Enter description')
                                 }]
-                            }),
-                            new Tine.widgets.activities.ActivitiesPanel({
-                                app: 'Crm',
-                                showAddNoteForm: false,
-                                border: false,
-                                bodyStyle: 'border:1px solid #B5B8C8;'
                             }),
                             new Tine.widgets.tags.TagPanel({
                                 app: 'Crm',

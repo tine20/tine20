@@ -25,9 +25,9 @@ Ext.ns('Tine.Sales');
 Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 900,
     windowHeight: 800,
+    displayNotes: true,
     
     initComponent: function() {
-        this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];
         Tine.Sales.CustomerEditDialog.superclass.initComponent.call(this);
     },
     
@@ -412,12 +412,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             emptyText: this.app.i18n._('Enter description'),
                             requiredGrant: 'editGrant'
                         }]
-                    }),
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Sales',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'Sales',

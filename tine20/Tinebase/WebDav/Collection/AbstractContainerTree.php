@@ -313,7 +313,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     }
                     
                     try {
-                        if ($this->_getApplicationName() !== 'Calendar' || $this->_clientSupportsDelegations()) {
+                        if ($this->_getApplicationName() === 'Filemanager' || $this->_clientSupportsDelegations()) {
                             $containers = Tinebase_Container::getInstance()->getPersonalContainer(
                                 Tinebase_Core::getUser(),
                                 $this->_getApplicationName(),

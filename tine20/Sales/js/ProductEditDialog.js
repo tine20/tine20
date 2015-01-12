@@ -31,9 +31,9 @@ Ext.namespace('Tine.Sales');
  * Create a new Tine.Sales.ProductGridPanel
  */
 Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowWidth: 800,
     windowHeight: 600,
+    displayNotes: true,
     
     onRecordLoad: function() {
         Tine.Sales.ProductEditDialog.superclass.onRecordLoad.call(this);
@@ -116,12 +116,6 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Sales',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Sales',
                             border: false,

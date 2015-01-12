@@ -169,7 +169,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
         
         if (! this.operators) {
-            this.operators = ['equals', 'definedBy'];
+            this.operators = ['equals', 'not', 'definedBy'];
         }
         
         if (! this.defaultOperator) {
@@ -242,7 +242,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     setRelatedRecordValue: function(filter) {
         var value = filter.get('value');
         
-        if (['equals', 'oneOf'].indexOf(filter.get('operator') ? filter.get('operator') : filter.formFields.operator.origGetValue()) >= 0 ) {
+        if (['equals', 'not', 'oneOf'].indexOf(filter.get('operator') ? filter.get('operator') : filter.formFields.operator.origGetValue()) >= 0 ) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
             return filter.formFields.value.origSetValue(arguments[1] ? arguments[1] : value);
         }
@@ -486,6 +486,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
         switch(operator) {
             case 'equals':
+            case 'not':
                 
                 value = Tine.widgets.form.RecordPickerManager.get(this.foreignRecordClass.getMeta('appName'), this.foreignRecordClass, Ext.apply({
                     filter: filter,

@@ -214,7 +214,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @type {Ext.LoadMask}
      */
     loadMask: null,
-    
+
+    /**
+     * hook notes panel into dialog
+     */
+    displayNotes: false,
+
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -330,11 +335,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.initRecord();
         // get items for this dialog
         this.items = this.getFormItems();
-        
+
         // init relations panel if relations are defined
         this.initRelationsPanel();
         // init attachments panel
         this.initAttachmentsPanel();
+        // init notes panel
+        this.initNotesPanel();
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
         
@@ -994,7 +1001,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             Tine.log.debug('Tine.widgets.dialog.EditDialog::initRelationsPanel() - Initialized relations panel and added to dialog tab items.');
         }
     },
-    
+
+    /**
+     * create notes panel
+     */
+    initNotesPanel: function() {
+        // This dialog is pretty generic but for some cases it's used in a differend way
+        if(this.displayNotes == true) {
+            this.items.items.push(new Tine.widgets.activities.ActivitiesGridPanel({
+                anchor: '100% 100%',
+                editDialog: this
+            }));
+        }
+    },
+
     /**
      * creates attachments panel
      */

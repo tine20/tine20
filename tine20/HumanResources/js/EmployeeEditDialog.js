@@ -27,7 +27,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: false,
     
     windowWidth: 800,
@@ -442,12 +441,6 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             emptyText: this.app.i18n._('Enter description'),
                             requiredGrant: 'editGrant'
                         }]
-                    }),
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'HumanResources',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'HumanResources',

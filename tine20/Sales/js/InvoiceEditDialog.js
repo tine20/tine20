@@ -58,9 +58,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     windowWidth: 800,
     windowHeight: 700,
+
+    displayNotes: true,
     
     initComponent: function() {
-        this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];
         Tine.Sales.InvoiceEditDialog.superclass.initComponent.call(this);
     },
     
@@ -517,12 +518,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 margins: '0 5 0 5',
                 border: true,
                 items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Sales',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'Sales',
                         border: false,

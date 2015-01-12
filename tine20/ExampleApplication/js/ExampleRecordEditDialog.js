@@ -27,10 +27,10 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
     /**
      * @private
      */
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     windowHeight: 470,
     windowWidth: 800,
-    
+    displayNotes: true,
+
     /**
      * returns dialog
      * 
@@ -76,7 +76,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                         })]
                     ] 
                 }, {
-                    // activities and tags
+                    // tags
                     layout: 'accordion',
                     animate: true,
                     region: 'east',
@@ -88,12 +88,6 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'ExampleApplication',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'ExampleApplication',
                         border: false,
