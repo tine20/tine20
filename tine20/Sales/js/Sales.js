@@ -25,11 +25,11 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'Product', requiredRight: 'manage_products', singularContainerMode: true},
         {modelName: 'Contract', requiredRight: 'manage_contracts', singularContainerMode: true, genericCtxActions: ['grants']},
         {modelName: 'Customer', requiredRight: 'manage_customers', singularContainerMode: true},
-        {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
+        //{modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         {modelName: 'CostCenter', requiredRight: 'manage_costcenters', singularContainerMode: true},
         {modelName: 'Division', requiredRight: 'manage_divisions', singularContainerMode: true},
-        {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
-        {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true}
+        //{modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
+        //{modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true}
     ]
 });
 
