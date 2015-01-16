@@ -59,6 +59,15 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         }, {
             label: this.app.i18n._('Web'),
             dataField: 'url'
+        }, {
+            label: this.app.i18n._('Street'),
+            dataField: 'adr_one_street'
+        }, {
+            label: this.app.i18n._('Postalcode'),
+            dataField: 'adr_one_postalcode'
+        }, {
+            label: this.app.i18n._('City'),
+            dataField: 'adr_one_locality'
         }];
         var labelMarkup = '<label class="x-form-item x-form-item-label">';
         
