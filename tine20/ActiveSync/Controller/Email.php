@@ -893,10 +893,6 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract impleme
             . " Found " . count($folders) . ' subfolders of folder "' . $globalname . '"');
         
         foreach ($folders as $folder) {
-            if (! $folder->is_selectable) {
-                continue;
-            }
-            
             $result[$folder->getId()] = new Syncroton_Model_Folder(array(
                 'serverId'      => $folder->getId(),
                 'parentId'      => ($parentFolder) ? $parentFolder->getId() : 0,
