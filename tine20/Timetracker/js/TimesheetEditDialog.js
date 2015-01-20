@@ -97,7 +97,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     initComponent: function() {
         var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
         this.tbarItems = [addNoteButton];
-        this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
+        // TODO find a better way (feature switch?) to check if invoices are available
+        //this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
         
         Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.apply(this, arguments);
     },
