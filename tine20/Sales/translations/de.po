@@ -364,7 +364,7 @@ msgstr "Kostenstelle"
 #: js/InvoiceDetailsPanel.js:115 js/ContractEditDialog.js:240
 #: js/AddressEditDialog.js:74
 msgid "Billing Address"
-msgstr "Rechnungsanschriften"
+msgstr "Rechnungsanschrift"
 
 #: Model/Contract.php:152 Model/ProductAggregate.php:106
 #: js/ProductAggregateGridPanel.js:231 js/ContractEditDialog.js:250
@@ -736,7 +736,7 @@ msgstr "Ok"
 
 #: js/AddressEditDialog.js:77
 msgid "Delivery Address"
-msgstr "Lieferanschriften"
+msgstr "Lieferanschrift"
 
 #: js/AddressEditDialog.js:84
 #, python-brace-format

@@ -86,6 +86,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     numOfDays: 4,
     /**
+     * @cfg {String} (H:i) defaultStart
+     * generic scroll start of the (work) day
+     */
+    defaultStart: '08:00',
+    /**
      * @cfg {String} (H:i) dayStart
      * generic start of the (work) day
      */
@@ -217,19 +222,31 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         if (! this.selModel) {
             this.selModel = this.selModel || new Tine.Calendar.EventSelectionModel();
         }
-        
-        this.onLayout = Function.createBuffered(this.onLayout, 100, this);
+
+        this.onLayout = Function.createBuffered(this.unbufferedOnLayout, 100, this);
 
         // apply preferences
         var prefs = this.app.getRegistry().get('preferences'),
+            defaultStartTime = Date.parseDate(prefs.get('daysviewdefaultstarttime'), 'H:i'),
             startTime = Date.parseDate(prefs.get('daysviewstarttime'), 'H:i'),
             endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i');
         
         this.dayStart = Ext.isDate(startTime) ? startTime : Date.parseDate(this.dayStart, 'H:i');
         this.dayEnd = Ext.isDate(endTime) ? endTime : Date.parseDate(this.dayEnd, 'H:i');
-        this.dayEndPx = this.getTimeOffset(this.dayEnd, true);
+        // 00:00 in users timezone is a spechial case where the user expects
+        // something like 24:00 and not 00:00
+        if (this.dayEnd.format('H:i') == '00:00') {
+            this.dayEnd = this.dayEnd.add(Date.MINUTE, -1);
+        }
+        this.dayEndPx = this.getTimeOffset(this.dayEnd);
         
-        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart, false) && !this.getTimeOffset(this.dayEnd, true));
+        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart) && !this.getTimeOffset(this.dayEnd));
+        
+        if (this.cropDayTime) {
+            this.defaultStart = Ext.isDate(defaultStartTime) ? defaultStartTime : Date.parseDate(this.defaultStart, 'H:i');
+        } else {
+            this.defaultStart = this.dayStart;
+        }
         
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
@@ -470,30 +487,38 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         // crop daytime
         if (this.cropDayTime) {
-            var cropStartPx = this.getTimeOffset(this.dayStart, false),
-                cropHeightPx = this.getTimeOffset(this.dayEnd, true) +2;
+            var cropStartPx = this.getTimeOffset(this.dayStart),
+                cropHeightPx = this.getTimeOffset(this.dayEnd) +2;
                 
             this.mainBody.setStyle('margin-top', '-' + cropStartPx + 'px');
             this.mainBody.setStyle('height', cropHeightPx + 'px');
             this.mainBody.setStyle('overflow', 'hidden');
             this.scroller.addClass('cal-daysviewpanel-body-cropDayTime');
         }
-        
+
+        this.unbufferedOnLayout();
+
         // scrollTo initial position
         this.isScrolling = true;
+
         try {
-            this.scrollTo(this.dayStart);
+            this.scrollTo.defer(500, this, [this.defaultStart]);
         } catch (e) {
             this.scrollTo();
         }
-        
-        this.onLayout();
+
         this.rendered = true;
     },
     
     scrollTo: function(time) {
         time = Ext.isDate(time) ? time : new Date();
-        this.scroller.dom.scrollTop = this.getTimeOffset(time, false);
+        
+        var scrollTop = this.getTimeOffset(time);
+        if (this.cropDayTime) {
+            scrollTop = scrollTop - this.getTimeOffset(this.dayStart);
+        }
+
+        this.scroller.dom.scrollTop = scrollTop;
     },
     
     onBeforeScroll: function() {
@@ -522,7 +547,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             vStartMinutes = this.getHeightMinutes(visibleStart),
             vEndMinutes   = this.getHeightMinutes(visibleEnd);
             
-        
         Ext.each(this.dayCols, function(dayCol, idx) {
             var dayColEl    = Ext.get(dayCol),
                 dayStart    = this.startDate.add(Date.DAY, idx),
@@ -551,7 +575,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     
     onShow: function() {
         this.onLayout();
-        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date(), false);
+        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(this.defaultStart);
     },
     
     onBeforeHide: function() {
@@ -1203,11 +1227,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         }
     },
     
-    getTimeOffset: function(date, isEnd) {
-        var d = this.granularityUnitHeights / this.timeGranularity
-            hours = isEnd && (date.getHours() == 0) ? 24 : date.getHours();
+    getTimeOffset: function(date) {
+        var d = this.granularityUnitHeights / this.timeGranularity;
         
-        return Math.round(d * ( 60 * hours + date.getMinutes()));
+        return Math.round(d * ( 60 * date.getHours() + date.getMinutes()));
     },
     
     getTimeHeight: function(dtStart, dtEnd) {
@@ -1242,7 +1265,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.scroller.setStyle('overflow-x', 'hidden');
         this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
         this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
-        
+
         this.mainBody = new E(this.scroller.dom.firstChild);
         this.dayCols = this.mainBody.dom.firstChild.lastChild.childNodes;
 
@@ -1282,11 +1305,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             Ext.fly(this.wholeDayArea.childNodes[freeIdxs[i]]).remove();
         }
     },
-    
+
+    /**
+     * buffered version of this.unbufferedOnLayout
+     * @see this.initComponent
+     */
+    onLayout: Ext.emptyFn,
+
     /**
      * layouts the view
      */
-    onLayout: function() {
+    unbufferedOnLayout: function() {
         Tine.Calendar.DaysView.superclass.onLayout.apply(this, arguments);
         if(!this.mainBody){
             return; // not rendered
