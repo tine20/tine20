@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -109,18 +109,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        $account = $this->_getAccount();
         
-        try {
-            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . " no email account configured");
-            
+        if (!$account) {
             throw new Syncroton_Exception('no email account configured');
         }
         
-        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
             throw new Syncroton_Exception('no email address set for current user');
         }
         
@@ -262,11 +257,9 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        $account = $this->_getAccount();
         
-        try {
-            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
+        if (!$account) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                 __METHOD__ . '::' . __LINE__ . " no email account configured");
             
@@ -329,11 +322,9 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function sendEmail($inputStream, $saveInSent)
     {
-        $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
+        $account = $this->_getAccount();
         
-        try {
-            $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
+        if (!$account) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
                 __METHOD__ . '::' . __LINE__ . " no email account configured");
             
@@ -893,15 +884,11 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             . " Found " . count($folders) . ' subfolders of folder "' . $globalname . '"');
         
         foreach ($folders as $folder) {
-            if (! $folder->is_selectable) {
-                continue;
-            }
-            
             $result[$folder->getId()] = new Syncroton_Model_Folder(array(
                 'serverId'      => $folder->getId(),
                 'parentId'      => ($parentFolder) ? $parentFolder->getId() : 0,
                 'displayName'   => $folder->localname,
-                'type'          => $this->_getFolderType($folder->localname)
+                'type'          => $this->_getFolderType($folder)
             ));
             
             if ($folder->has_children) {
@@ -953,19 +940,51 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     /**
      * set activesync foldertype
      * 
-     * @param string $_folderName
+     * @param Felamimail_Model_Folder $folder
      */
-    protected function _getFolderType($_folderName)
+    protected function _getFolderType(Felamimail_Model_Folder $folder)
     {
-        if (strtoupper($_folderName) == 'INBOX') {
-            return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
-        } elseif (strtoupper($_folderName) == 'TRASH') {
-            return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
-        } elseif (strtoupper($_folderName) == 'SENT') {
-            return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
-        } else {
-            return Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
+        $account = $this->_getAccount();
+        
+        // first lookup folder type by account settings ...
+        if ($account) {
+            if ($account->trash_folder === $folder->globalname) {
+                return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
+            }
+            
+            if ($account->sent_folder === $folder->globalname) {
+                return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
+            }
+            
+            if ($account->drafts_folder === $folder->globalname) {
+                return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
+            }
         }
+        
+        // ... then try to guess folder type by name
+        switch (strtoupper($folder->localname)) {
+            case 'INBOX':
+                return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
+                
+                break;
+                
+            case 'TRASH':
+                return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
+                
+                break;
+                
+            case 'SENT':
+                return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
+                
+                break;
+                
+            case 'DRAFTS':
+                return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
+                
+                break;
+        }
+        
+        return Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
     }
     
     /**
