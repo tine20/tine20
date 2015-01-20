@@ -31,14 +31,14 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Frontend_Json_Abstract
      */
     protected $_relatableModels = array(
-        'Sales_Model_OrderConfirmation',
+        #'Sales_Model_OrderConfirmation',
         'Sales_Model_Contract',
         'Sales_Model_CostCenter',
         'Sales_Model_Customer',
         'Sales_Model_Address',
-        'Sales_Model_Invoice',
+        #'Sales_Model_Invoice',
         'Sales_Model_ProductAggregate',
-        'Sales_Model_Offer',
+        #'Sales_Model_Offer',
     );
 
     /**
@@ -53,11 +53,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'CostCenter',
         'Customer',
         'Address',
-        'Invoice',
-        'OrderConfirmation',
+        #'Invoice',
+        #'OrderConfirmation',
         'ProductAggregate',
-        'InvoicePosition',
-        'Offer'
+        #'InvoicePosition',
+        #'Offer'
     );
     
    /**

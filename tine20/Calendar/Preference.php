@@ -25,6 +25,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * where daysvoew should be scrolled maximum up to
      */
     const DAYSVIEW_ENDTIME = 'daysviewendtime';
+    
+    /**
+     * where daysview should be scrolled to
+     */
+    const DAYSVIEW_DEFAULT_STARTTIME = 'daysviewdefaultstarttime';
 
     /**
      * default calendar all newly created/invited events are placed in
@@ -74,6 +79,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     public function getAllApplicationPreferences()
     {
+        $cropDays = Calendar_Config::getInstance()->get(Calendar_Config::CROP_DAYS_VIEW);
+        
         $allPrefs = array(
             self::DAYSVIEW_STARTTIME,
             self::DAYSVIEW_ENDTIME,
@@ -85,6 +92,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTALARM_MINUTESBEFORE,
             self::DEFAULTATTENDEE_STRATEGY
         );
+        
+        if ($cropDays) {
+            array_unshift($allPrefs, self::DAYSVIEW_DEFAULT_STARTTIME);
+        }
             
         return $allPrefs;
     }
@@ -106,6 +117,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DAYSVIEW_ENDTIME => array(
                 'label'         => $translate->_('End Time'),
                 'description'   => $translate->_('Position on the left time axis, day and week view should end with'),
+            ),
+            self::DAYSVIEW_DEFAULT_STARTTIME => array(
+                'label'         => $translate->_('Default Start Time'),
+                'description'   => $translate->_('Scroll position on the left time axis, day and week view should start with'),
             ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
@@ -198,6 +213,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::DAYSVIEW_ENDTIME:
                 $preference->value      = '18:00';
                 $preference->options = $this->_createTimespanDataXML(1, 24);
+                break;
+            case self::DAYSVIEW_DEFAULT_STARTTIME:
+                $preference->value      = '08:00';
+                $preference->options = $this->_createTimespanDataXML(0, 23);
                 break;
             case self::DEFAULTCALENDAR:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
