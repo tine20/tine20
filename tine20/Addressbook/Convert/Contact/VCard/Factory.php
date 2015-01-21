@@ -25,6 +25,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_EMCLIENT       = 'emclient';
     const CLIENT_COLLABORATOR   = 'WebDAVCollaborator';
     const CLIENT_AKONADI        = 'akonadi';
+    const CLIENT_TELEFONBUCH    = 'telefonbuch';
     
     /**
      * cache parsed user-agent strings
@@ -80,8 +81,10 @@ class Addressbook_Convert_Contact_VCard_Factory
                 
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR:
                 return new Addressbook_Convert_Contact_VCard_WebDAVCollaborator($_version);
-                
                 break;
+
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
+                return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
         }
     }
     
