@@ -305,9 +305,13 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         
         var offsetWidth = Ext.fly(view.wholeDayArea).getWidth();
         
-        var width = Math.round(offsetWidth * (this.dtEnd.getTime() - this.dtStart.getTime()) / (view.numOfDays * Date.msDAY)) -5;
-        var left = Math.round(offsetWidth * (this.dtStart.getTime() - view.startDate.getTime()) / (view.numOfDays * Date.msDAY));
-        
+        //var width = Math.round(offsetWidth * (this.dtEnd.getTime() - this.dtStart.getTime()) / (view.numOfDays * Date.msDAY)) -5;
+        //var left = Math.round(offsetWidth * (this.dtStart.getTime() - view.startDate.getTime()) / (view.numOfDays * Date.msDAY));
+
+        var width = Math.floor(1000 * (this.dtEnd.getTime() - this.dtStart.getTime()) / (view.numOfDays * Date.msDAY) -5) /10;
+        var left = 100 * (this.dtStart.getTime() - view.startDate.getTime()) / (view.numOfDays * Date.msDAY);
+
+
         if (left < 0) {
             width = width + left;
             left = 0;
@@ -332,9 +336,9 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             bgColor: this.colorSet.light,
             textColor: this.colorSet.text,
             zIndex: 100,
-            width: width  +'px',
+            width: width  +'%',
             height: '15px',
-            left: left + 'px',
+            left: left + '%',
             top: pos * 18 + 'px',//'1px'
             statusIcons: this.statusIcons
         }, true);

@@ -20,7 +20,15 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     }
     Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
   },
-  
+
+  /**
+   * template method to intercept when document is ready
+   *
+   * @param {Document} document
+   * @pram {Ext.Component} component
+   */
+  onBeforePrint: Ext.emptyFn,
+
   /**
    * Prints the component
    * @param {Ext.Component} component The component to print
@@ -42,7 +50,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     
     win.document.write(this.generateHTML(component));
     win.document.close();
-    
+
+    this.onBeforePrint(win.document, component);
+
     // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
     if (Ext.isGecko) {
         win.print();
@@ -87,7 +97,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     doc.open();
     doc.write(this.generateHTML(component));
     doc.close();
-    
+
+    this.onBeforePrint(doc, component);
+
     this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow]);
 //    frame.contentWindow.focus();
 //    frame.contentWindow.print();
