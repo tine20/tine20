@@ -764,6 +764,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     // NOTE delete needs to update sequence otherwise iTIP based protocolls ignore the delete
                     $record->status = Calendar_Model_Event::STATUS_CANCELED;
                     $this->_touch($record);
+                    if ($record->isRecurException()) {
+                        try {
+                            $baseEvent = $this->getRecurBaseEvent($record);
+                            $this->_touch($baseEvent);
+                        } catch (Tinebase_Exception_NotFound $tnfe) {
+                            // base Event might be gone already
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . " BaseEvent of exdate {$record->uid} to delete not found ");
+
+                        }
+                    }
                     parent::delete($record);
                 }
                 
@@ -796,7 +807,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     
     /**
      * delete range of events starting with given recur exception
-     * 
+     *
+     * NOTE: if exdate is persistent, it will not be deleted by this function
+     *       but by the original call of delete
+     *
      * @param Calendar_Model_Event $exdate
      * @param string $range
      */
