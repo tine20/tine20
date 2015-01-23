@@ -140,13 +140,21 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
             self::MANAGE_CUSTOMERS,
-            #self::MANAGE_INVOICES,
             self::MANAGE_DIVISIONS,
-            #self::MANAGE_ORDERCONFIRMATIONS,
-            #self::MANAGE_OFFERS,
-            #self::CHANGE_OC_NUMBER,
-            #self::SET_INVOICE_NUMBER,
         );
+        
+        // add rights dependent on feature switches
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $addRights[] = self::MANAGE_INVOICES;
+            $addRights[] = self::SET_INVOICE_NUMBER;
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
+            $addRights[] = self::MANAGE_OFFERS;
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
+            $addRights[] = self::MANAGE_ORDERCONFIRMATIONS;
+            $addRights[] = self::CHANGE_OC_NUMBER;
+        }
         
         $allRights = array_merge($allRights, $addRights);
         
@@ -179,30 +187,30 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage customers'),
                 'description'   => $translate->_('add, edit and delete customers'),
             ),
-            #self::MANAGE_INVOICES => array(
-            #    'text'          => $translate->_('manage invoices'),
-            #    'description'   => $translate->_('add, edit and delete invoices'),
-            #),
+            self::MANAGE_INVOICES => array(
+                'text'          => $translate->_('manage invoices'),
+                'description'   => $translate->_('add, edit and delete invoices'),
+            ),
             self::MANAGE_DIVISIONS => array(
                 'text'          => $translate->_('manage divisions'),
                 'description'   => $translate->_('add, edit and delete divisions'),
             ),
-            #self::MANAGE_ORDERCONFIRMATIONS => array(
-            #    'text'          => $translate->_('manage order confirmations'),
-            #    'description'   => $translate->_('add, edit and delete order confirmations'),
-            #),
-            #self::MANAGE_OFFERS => array(
-            #    'text'          => $translate->_('manage offers'),
-            #    'description'   => $translate->_('add, edit and delete offers'),
-            #),
-            #self::CHANGE_OC_NUMBER => array(
-            #    'text'          => $translate->_('change number of an order confirmations'),
-            #    'description'   => $translate->_('allow to change the number of an order confirmation on update'),
-            #),
-            #self::SET_INVOICE_NUMBER => array(
-            #    'text'          => $translate->_('set number of invoices'),
-            #    'description'   => $translate->_('allow to set the number of an invoice'),
-            #),
+            self::MANAGE_ORDERCONFIRMATIONS => array(
+                'text'          => $translate->_('manage order confirmations'),
+                'description'   => $translate->_('add, edit and delete order confirmations'),
+            ),
+            self::MANAGE_OFFERS => array(
+                'text'          => $translate->_('manage offers'),
+                'description'   => $translate->_('add, edit and delete offers'),
+            ),
+            self::CHANGE_OC_NUMBER => array(
+                'text'          => $translate->_('change number of an order confirmations'),
+                'description'   => $translate->_('allow to change the number of an order confirmation on update'),
+            ),
+            self::SET_INVOICE_NUMBER => array(
+                'text'          => $translate->_('set number of invoices'),
+                'description'   => $translate->_('allow to set the number of an invoice'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());

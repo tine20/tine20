@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -62,6 +62,27 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const OWN_CURRENCY = 'ownCurrency';
+    
+    /**
+     * invoices module feature
+     *
+     * @var string
+     */
+    const FEATURE_INVOICES_MODULE = 'invoicesModule';
+    
+    /**
+     * offers module feature
+     *
+     * @var string
+     */
+    const FEATURE_OFFERS_MODULE = 'offersModule';
+    
+    /**
+     * order confirmations module feature
+     *
+     * @var string
+     */
+    const FEATURE_ORDERCONFIRMATIONS_MODULE = 'orderConfirmationsModule';
     
     /**
      * (non-PHPdoc)
@@ -143,6 +164,49 @@ class Sales_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Sales_Model_InvoiceCleared'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'TO_CLEAR'
+        ),
+        /**
+         * enabled Sales features
+         * 
+         * to overwrite the defaults, you can add a Sales/config.inc.php like this:
+         * 
+         * <?php
+            return array (
+                // this switches some modules off
+                'features' => array(
+                    'invoicesModule'             => false,
+                    'offersModule'               => false,
+                    'orderConfirmationsModule'   => false,
+                )
+            );
+         */
+        self::ENABLED_FEATURES => array(
+                                   //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+                                   //_('Enabled Features in Sales Application.')
+            'description'           => 'Enabled Features in Sales Application.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_INVOICES_MODULE => array(
+                    'label'         => 'Invoices Module', //_('Invoices Module')
+                    'description'   => 'Invoices Module',
+                ),
+                self::FEATURE_OFFERS_MODULE => array(
+                    'label'         => 'Offers Module', //_('Offers Module')
+                    'description'   => 'Offers Module',
+                ),
+                self::FEATURE_ORDERCONFIRMATIONS_MODULE => array(
+                    'label'         => 'Order Confirmations Module', //_('Order Confirmations Module')
+                    'description'   => 'Order Confirmations Module',
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_INVOICES_MODULE           => true,
+                self::FEATURE_OFFERS_MODULE             => true,
+                self::FEATURE_ORDERCONFIRMATIONS_MODULE => true,
+            ),
         ),
     );
     

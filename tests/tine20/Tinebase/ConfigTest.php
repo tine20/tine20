@@ -191,4 +191,16 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
         }
     }
+    
+    /**
+     * testFeatureEnabled
+     * 
+     * @see 0010756: add feature switches for easy enabling/disabling of features
+     */
+    public function testFeatureEnabled()
+    {
+        $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
+        
+        $this->assertTrue($invoicesFeatureEnabled);
+    }
 }

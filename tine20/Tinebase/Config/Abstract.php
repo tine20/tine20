@@ -70,6 +70,13 @@ abstract class Tinebase_Config_Abstract
     const TYPE_KEYFIELD = 'keyFieldConfig';
     
     /**
+     * config key for enabled features / feature switch
+     *
+     * @var string
+     */
+    const ENABLED_FEATURES = 'features';
+    
+    /**
      * application name this config belongs to
      *
      * @var string
@@ -548,5 +555,21 @@ abstract class Tinebase_Config_Abstract
         $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
         
         return !! $configFile;
+    }
+
+    /**
+     * returns true if a certain feature is enabled
+     * 
+     * @param string $featureName
+     * @return boolean
+     */
+    public function featureEnabled($featureName)
+    {
+        $features = $this->get(self::ENABLED_FEATURES);
+        if (isset($features->{$featureName})) {
+            return $features->{$featureName};
+        }
+        
+        return false;
     }
 }
