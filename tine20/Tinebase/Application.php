@@ -152,9 +152,9 @@ class Tinebase_Application
      * @param string $_filter optional search parameter
      * @param int $_limit optional how many applications to return
      * @param int $_start optional offset for applications
-     * @return Tinebase_RecordSet_Application
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Application
      */
-    public function getApplications($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getApplications($_filter = NULL, $_sort = null, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
         $filter = null;
         if ($_filter) {
@@ -242,6 +242,7 @@ class Tinebase_Application
         
         return $result[0];
     }
+    
     /**
      * return if application is installed (and enabled)
      *
@@ -360,6 +361,7 @@ class Tinebase_Application
         }
         
         $descriptions = call_user_func(array($appAclClassName, $function));
+        
         return $descriptions;
     }
     
