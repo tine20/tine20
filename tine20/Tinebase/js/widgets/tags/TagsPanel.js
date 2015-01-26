@@ -102,7 +102,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             searchField.blur();
             searchField.reset();
         },this);
-        
+
         this.bottomBar = new Ext.Container({
             layout: 'column',
             items: [
@@ -113,21 +113,22 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     iconCls: 'action_add',
                     tooltip: _('Add a new personal tag'),
                     scope: this,
+                    hidden: !Tine.Tinebase.common.hasRight('use_personal_tags', this.app.appName),
                     handler: function() {
                         Ext.Msg.prompt(_('Add New Personal Tag'),
-                                       _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'), 
+                                       _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'),
                             function(btn, text) {
                                 if (btn == 'ok'){
                                     this.onTagAdd(text);
                                 }
-                            }, 
+                            },
                         this, false, this.searchField.lastQuery);
                     }
                 })
             ]
-        
+
         });
-        
+
         var tagTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
