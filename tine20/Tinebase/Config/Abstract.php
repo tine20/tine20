@@ -84,6 +84,13 @@ abstract class Tinebase_Config_Abstract
     private static $_configFileData;
     
     /**
+     * application defaults config file data.
+     * 
+     * @var array
+     */
+    private static $_appDefaultsConfigFileData;
+    
+    /**
      * config database backend
      * 
      * @var Tinebase_Backend_Sql
@@ -105,6 +112,7 @@ abstract class Tinebase_Config_Abstract
      *       and can not even be declared here
      * 
      * @return array
+     * TODO should be possible now as we no longer support PHP < 5.3
      */
 //    abstract public static function getProperties();
     
@@ -158,12 +166,38 @@ abstract class Tinebase_Config_Abstract
         }
         
        // get default from definition if needed
-       if ($default === NULL) {
-           $definition = self::getDefinition($name);
-           if ($definition && (isset($definition['default']) || array_key_exists('default', $definition))) {
-               return $definition['default'];
-           }
+       if ($default === null) {
+           $default = $this->_getDefault($name);
        }
+        
+        return $default;
+    }
+    
+    /**
+     * get config default
+     * - checks if application config.inc.php is available for defaults first
+     * - checks definition default second
+     * 
+     * @param string $name
+     * @return mixed
+     * 
+     * @todo merge defaults into Tinebase_Config_Struct values if available
+     */
+    protected function _getDefault($name)
+    {
+        $default = null;
+        $definition = self::getDefinition($name);
+        
+        $appDefaultConfig = $this->_getAppDefaultsConfigFileData();
+        if (isset($appDefaultConfig[$name])) {
+            $default = $appDefaultConfig[$name];
+        } else if ($definition && (isset($definition['default']) || array_key_exists('default', $definition))) {
+            $default = $definition['default'];
+        }
+        
+        if ($definition && $definition['type'] === 'object' && $definition['class'] === 'Tinebase_Config_Struct' && is_array($default)) {
+            return new Tinebase_Config_Struct($default);
+        }
         
         return $default;
     }
@@ -273,6 +307,35 @@ abstract class Tinebase_Config_Abstract
         }
         
         return self::$_configFileData;
+    }
+    
+    /**
+     * returns data from application specific config.inc.php file
+     *
+     * @return array
+     * 
+     * @todo cache this
+     */
+    protected function _getAppDefaultsConfigFileData()
+    {
+        if (! self::$_appDefaultsConfigFileData) {
+            $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName . DIRECTORY_SEPARATOR . 'config.inc.php';
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Looking for defaults config.inc.php at ' . $configFilename);
+            if (file_exists($configFilename)) {
+                $configData = include($configFilename);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Found default config.inc.php for app ' . $this->_appName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . print_r($configData, true));
+            } else {
+                $configData = array();
+            }
+            self::$_appDefaultsConfigFileData = $configData;
+        }
+        
+        return self::$_appDefaultsConfigFileData;
     }
     
     /**
