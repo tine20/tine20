@@ -116,7 +116,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         
         this.on('click', this.saveClickedNodeState, this);
         
-        Ext.each(this.contentTypes, function(ct) {
+        Ext.each (this.contentTypes, function(ct) {
             var modelName = ct.hasOwnProperty('meta') 
                 ? ct.meta.modelName 
                 : (
@@ -128,6 +128,11 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var modelApp = ct.appName ? Tine.Tinebase.appMgr.get(ct.appName) : this.app;
             
             var recordClass = Tine[modelApp.appName].Model[modelName];
+            
+            if (! recordClass) {
+                // module is disabled (feature switch) or otherwise non-functional
+                return;
+            }
             
             var group = recordClass.getMeta('group');
             

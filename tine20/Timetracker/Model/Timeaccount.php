@@ -18,7 +18,7 @@
  * @package     Timetracker
  * @subpackage  Model
  */
-class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract implements Sales_Model_Billable_Interface
+class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 

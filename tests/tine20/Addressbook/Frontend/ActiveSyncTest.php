@@ -13,7 +13,7 @@
  * 
  * @package     Addressbook
  */
-class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_TestCase
+class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application

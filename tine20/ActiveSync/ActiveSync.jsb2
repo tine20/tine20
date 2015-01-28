@@ -22,6 +22,22 @@
         {
           "text": "DeviceStore.js",
           "path": "js/"
+        },
+        {
+          "text": "SyncDevices.js",
+          "path": "js/"
+        },
+        {
+          "text": "EditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SyncDevicesGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
         }
       ]
     },

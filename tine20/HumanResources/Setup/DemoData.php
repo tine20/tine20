@@ -194,8 +194,6 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // get pwulf as supervisor
         $pwulf = $employees->filter('n_family', 'Wulf')->getFirstRecord();
         
-        $i = 0;
-        
         $sdate = new Tinebase_DateTime();
         $sdate->subMonth(6);
         
@@ -222,7 +220,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             }
             
             // add costcenter
-            $scs = $this->_costCenters->getByIndex($i);
+            $scs = $this->_costCenters->getByIndex(0);
             
             $hrc = array('cost_center_id' => $scs->getId(), 'start_date' => $this->_startDate);
             $employee->costcenters = array($hrc);
@@ -232,12 +230,11 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $employee->contracts = array($contract->toArray());
             
             // add division
-            $division = $this->_divisions->getByIndex($i);
+            $division = $this->_divisions->getByIndex(0);
             $employee->division_id = $division->getId();
             
             // update and increment counter
             $controller->update($employee);
-            $i++;
         }
         HumanResources_Controller_Account::getInstance()->createMissingAccounts();
     }

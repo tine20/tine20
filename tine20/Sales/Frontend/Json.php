@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
  * @todo        check if we can add these functions to the reflection without implementing them here
@@ -31,14 +31,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @see Tinebase_Frontend_Json_Abstract
      */
     protected $_relatableModels = array(
-        #'Sales_Model_OrderConfirmation',
         'Sales_Model_Contract',
         'Sales_Model_CostCenter',
         'Sales_Model_Customer',
         'Sales_Model_Address',
-        #'Sales_Model_Invoice',
         'Sales_Model_ProductAggregate',
-        #'Sales_Model_Offer',
     );
 
     /**
@@ -53,12 +50,28 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'CostCenter',
         'Customer',
         'Address',
-        #'Invoice',
-        #'OrderConfirmation',
         'ProductAggregate',
-        #'InvoicePosition',
-        #'Offer'
     );
+    
+    /**
+     * the constructor
+     */
+    public function __construct()
+    {
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $this->_relatableModels[] = 'Sales_Model_Invoice';
+            $this->_configuredModels[] = 'InvoicePosition';
+            $this->_configuredModels[] = 'Invoice';
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
+            $this->_relatableModels[] = 'Sales_Model_Offer';
+            $this->_configuredModels[] = 'Offer';
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
+            $this->_relatableModels[] = 'Sales_Model_OrderConfirmation';
+            $this->_configuredModels[] = 'OrderConfirmation';
+        }
+    }
     
    /**
      * Returns registry data of the application.

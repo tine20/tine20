@@ -30,8 +30,10 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     initComponent: function() {
-        // TODO find a better way (feature switch?) to check if invoices are available
-        // this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
+        var salesApp = Tine.Tinebase.appMgr.get('Sales');
+        this.useInvoice = salesApp
+            && salesApp.featureEnabled('invoicesModule')
+            && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
         Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
     
