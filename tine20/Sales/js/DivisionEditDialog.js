@@ -62,7 +62,7 @@ Tine.Sales.DivisionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             items:[
                 {
-                title: this.app.i18n.n_('Division', 'Division', 1),
+                title: this.app.i18n.n_('Division', 'Divisions', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
