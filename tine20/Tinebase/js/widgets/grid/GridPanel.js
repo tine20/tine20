@@ -301,7 +301,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @property splitAddButton
      */
     splitAddButton: true,
-
+    
+    /**
+     * add "create new record" button
+     * 
+     * @type Bool
+     * @property addButton
+     */
+    addButton: false,
+    
     layout: 'border',
     border: false,
     stateful: true,
@@ -573,14 +581,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
 
-        this.action_addInNewWindow = new Ext.Action({
+        this.action_addInNewWindow = (this.addButton) ? new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
             iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
             scope: this
-        });
+        }) : null;
 
         this.actions_print = new Ext.Action({
             requiredGrant: 'readGrant',

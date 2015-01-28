@@ -539,7 +539,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     if ($exceptionId) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Found exdate to be deleted (id: ' . $exceptionId . ')');
-                        $ids[] = $exceptionId;
+                        array_unshift($ids, $exceptionId);
                     }
                 }
             }

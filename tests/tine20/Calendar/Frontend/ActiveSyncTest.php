@@ -13,7 +13,7 @@
  * 
  * @package     Calendar
  */
-class Calendar_Frontend_ActiveSyncTest extends ActiveSync_TestCase
+class Calendar_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application
@@ -763,7 +763,28 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals($event->seq + 1, $baseEventAfterExdateUpdate->seq, 'base sequence should be updated');
         $this->assertEquals($container->content_seq + 2, $containerAfterExdateUpdate->content_seq, 'container sequence should be updated');
     }
-    
+
+    /**
+     * testDeleteExdate
+     *
+     * @see : Exdate delete does not update seq of base event
+     */
+    public function testDeleteExdate()
+    {
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry();
+
+        $event = Calendar_Controller_Event::getInstance()->get($serverId);
+        $container = Tinebase_Container::getInstance()->get($event->container_id);
+
+        $exception = Calendar_Controller_Event::getInstance()->getRecurExceptions($event)->getFirstRecord();
+        Calendar_Controller_Event::getInstance()->delete($exception);
+
+        $baseEventAfterExdateDelete = Calendar_Controller_Event::getInstance()->get($serverId);
+        $containerAfterExdateDelete = Tinebase_Container::getInstance()->get($event->container_id);
+        $this->assertGreaterThan($event->seq, $baseEventAfterExdateDelete->seq, 'base sequence should be updated');
+        $this->assertGreaterThan($container->content_seq, $containerAfterExdateDelete->content_seq, 'container sequence should be updated');
+    }
+
     public function testRecurEventExceptionFilters($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {

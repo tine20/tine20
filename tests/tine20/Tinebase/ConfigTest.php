@@ -29,6 +29,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     protected $objects = array();
 
+    protected $_filenamesToDelete = array();
+    
     /**
      * Runs the test methods of this class.
      *
@@ -60,6 +62,9 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        foreach ($this->_filenamesToDelete as $filename) {
+            unlink($filename);
+        }
     }
     
     /**
@@ -150,7 +155,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     /**
      * test if config returns empty array if it's empty
      */
-    public function testReturnEmptyValue() {
+    public function testReturnEmptyValue()
+    {
         // Hold original value for further tests of sieve.
         $keepOriginalValue = $this->_instance->get("sieve");
         
@@ -165,5 +171,36 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         
         // restore value
         $this->_instance->set("sieve", $keepOriginalValue);
+    }
+    
+    /**
+     * testApplicationDefaultConfig
+     */
+    public function testApplicationDefaultConfig()
+    {
+        $ignoreBillablesConfig = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
+        $this->assertEquals('2000-01-01 22:00:00', $ignoreBillablesConfig);
+        
+        $dest = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20' . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+        
+        if (! file_exists($dest)) {
+            copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $dest);
+            $this->_filenamesToDelete[] = $dest;
+            
+            $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
+            $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
+        }
+    }
+    
+    /**
+     * testFeatureEnabled
+     * 
+     * @see 0010756: add feature switches for easy enabling/disabling of features
+     */
+    public function testFeatureEnabled()
+    {
+        $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
+        
+        $this->assertTrue($invoicesFeatureEnabled);
     }
 }

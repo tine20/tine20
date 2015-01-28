@@ -504,8 +504,6 @@ class Tinebase_Core
             $coreSession->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
         self::set('jsonKey', $coreSession->jsonKey);
-        
-        self::setDbCapabilitiesInSession($coreSession);
     }
     
     /**
@@ -822,23 +820,6 @@ class Tinebase_Core
     }
     
     /**
-     * set database capabilities in session
-     * 
-     * @param Zend_Session_Namespace $session
-     */
-    public static function setDbCapabilitiesInSession($session)
-    {
-        if (! isset($session->dbcapabilities)) {
-            $db = Tinebase_Core::getDb();
-            $capabilities = array();
-            if ($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-                $capabilities['unaccent'] = Tinebase_Core::checkUnaccentExtension($db);
-            }
-            $session->dbcapabilities = $capabilities;
-        }
-    }
-    
-    /**
      * initializes the database connection
      */
     public static function setupDatabaseConnection()
@@ -957,37 +938,6 @@ class Tinebase_Core
         return $db;
     }
     
-    /**
-     * get value of session variable "unaccent"
-     * 
-     * @param Zend_Db_Adapter_Abstract $db
-     * @return boolean $valueUnaccent
-     * 
-     * @todo should be moved to pgsql adapter / helper functions
-     */
-    public static function checkUnaccentExtension($db)
-    {
-        $tableName = 'pg_extension';
-        $cols = 'COUNT(*)';
-        
-        $select = $db->select()
-            ->from($tableName, $cols)
-            ->where("extname = 'unaccent'");
-        
-        // if there is no table pg_extension, returns 0 (false)
-        try {
-            // checks if unaccent extension is installed or not
-            // (1 - yes; unaccent found)
-            $result = (bool) $db->fetchOne($select);
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            // (0 - no; unaccent not found)
-            self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Unaccent extension disabled (' . $zdse->getMessage() . ')');
-            $result = FALSE;
-        }
-        
-        return $result;
-    }
-
     /**
      * get db profiling
      * 

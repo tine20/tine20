@@ -30,7 +30,15 @@ class Tinebase_ApplicationTest extends TestCase
         $suite  = new PHPUnit_Framework_TestSuite('Tinebase_ApplicationTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
-
+    
+    protected function tearDown()
+    {
+        parent::tearDown();
+        
+        // delete an non existing application to trigger file system cache cleanup
+        Tinebase_Application::getInstance()->deleteApplication('1234567890123456789012345678901234567890');
+    }
+    
     /**
      * try to get all application rights
      */
@@ -225,8 +233,9 @@ class Tinebase_ApplicationTest extends TestCase
      */
     public function testSetupXML()
     {
-        $_applications = Tinebase_Application::getInstance()->getApplications();
-        foreach ($_applications->name as $applicationName) {
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        
+        foreach ($applications->name as $applicationName) {
             // skip ActiveSync
             // @todo remove that when #7452 is resolved
             if ($applicationName === 'ActiveSync') {

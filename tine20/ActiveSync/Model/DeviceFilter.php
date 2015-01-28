@@ -37,7 +37,7 @@ class ActiveSync_Model_DeviceFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        #'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'email', 'adr_one_locality',))),
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('deviceid', 'devicetype', 'friendlyname'))),
         'deviceid'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'owner_id'             => array('filter' => 'Tinebase_Model_Filter_Text'),
     );

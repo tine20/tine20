@@ -808,9 +808,12 @@ class Tinebase_Timemachine_ModificationLog
         $_newRecord->creation_time      = $_curRecord ? $_curRecord->creation_time : NULL;
         $_newRecord->last_modified_by   = $_curRecord ? $_curRecord->last_modified_by : NULL;
         $_newRecord->last_modified_time = $_curRecord ? $_curRecord->last_modified_time : NULL;
-        $_newRecord->is_deleted         = $_curRecord ? $_curRecord->is_deleted : 0;
-        $_newRecord->deleted_time       = $_curRecord ? $_curRecord->deleted_time : NULL;
-        $_newRecord->deleted_by         = $_curRecord ? $_curRecord->deleted_by : NULL;
+        
+        if ($_newRecord->has('is_deleted')) {
+            $_newRecord->is_deleted     = $_curRecord ? $_curRecord->is_deleted : 0;
+            $_newRecord->deleted_time   = $_curRecord ? $_curRecord->deleted_time : NULL;
+            $_newRecord->deleted_by     = $_curRecord ? $_curRecord->deleted_by : NULL;
+        }
         
         switch ($_action) {
             case 'create':
