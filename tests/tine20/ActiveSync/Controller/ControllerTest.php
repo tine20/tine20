@@ -95,7 +95,7 @@ abstract class ActiveSync_Controller_ControllerTest extends ActiveSync_TestCase
         
         //var_dump($changedFolders);
         
-        $this->assertEquals(1, count($changedFolders));
+        $this->assertGreaterThanOrEqual(1, count($changedFolders));
         $this->assertArrayHasKey($syncrotonFolder->serverId, $changedFolders);
     }
     
