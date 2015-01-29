@@ -437,7 +437,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if (! is_object($importer)) {
             throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
         }
-
+        
         // extend execution time to 30 minutes
         $this->_longRunningRequest(1800);
 
