@@ -76,7 +76,7 @@ phpmyadmin_vhost="
 	ServerAlias	www.pma.local\n
 </VirtualHost>\n"
 
-echo -e $phpmyadmin_vhost > /etc/apache2/sites-available/pma-local
+echo -e $phpmyadmin_vhost > /etc/apache2/sites-available/pma-local.conf
 
 # Enable pma-local for apache
 a2ensite pma-local
@@ -101,9 +101,14 @@ if [ -e /etc/php5/conf.d/xdebug.ini ]; then
     echo xdebug.remote_log=/vagrant/logs/php5-xdebug.log >> /etc/php5/conf.d/xdebug.ini
 fi
 
-###################### INSTALL TINE20  ######################
-if [ -d /vagrant/tine20.git/tine20 ]; then
-    source /vagrant/setup-tine20.sh
+
+# Fix mcrypt
+ln -sf /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available/mcrypt.ini
+php5enmod mcrypt
+
+###################### INSTALL TINE20 ######################
+if [ -d /usr/local/share/tine20.git/tine20 ]; then
+    source /usr/local/share/tine20.git/scripts/vagrant/setup-tine20.sh
 fi
 
 ###################### FINALS ###########################

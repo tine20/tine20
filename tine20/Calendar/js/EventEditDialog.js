@@ -532,7 +532,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var prefs = this.app.getRegistry().get('preferences'),
             endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i');
-      
+        
+        if (endTime.format('H:i') == '00:00') {
+            endTime = endTime.add(Date.MINUTE, -1);
+        }
+        
         // Update to the selected day
         endTime.setDate(dtEnd.getDate());
         endTime.setMonth(dtEnd.getMonth());

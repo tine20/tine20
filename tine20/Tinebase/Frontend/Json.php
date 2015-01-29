@@ -78,7 +78,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function setLocale($localeString, $saveaspreference, $setcookie)
     {
-        Tinebase_Core::setupUserLocale($localeString, $saveaspreference);
+        Tinebase_Core::setupUserLocale($localeString);
+        
+        if ($saveaspreference) {
+            Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
+        }
+        
         $locale = Tinebase_Core::get('locale');
         
         // save in cookie (expires in 365 days)
@@ -1112,10 +1117,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // @TODO we still have no converter for relations :-(
         // -> related records returned here are different to the records returned by the apps itself!
         // -> this problem also applies to to generic json converter!
-        $relations->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
-        $relations->bypassFilters = true;
-        $result = $relations->toArray();
-
+        if (count($relations) > 0) {
+            $relations->setTimezone(Tinebase_Core::getUserTimezone());
+            $relations->bypassFilters = true;
+            $result = $relations->toArray();
+        } else {
+            $result = array();
+        }
         return array(
             'results'       => array_values($result),
             'totalcount'    => count($result),

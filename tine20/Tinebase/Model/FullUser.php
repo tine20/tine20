@@ -93,7 +93,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             . ' ' . print_r($options, TRUE));
         
         if (! isset($this->accountLoginName)) {
-            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1, (Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH)));
+            $this->accountLoginName = Tinebase_User::getInstance()->generateUserName($this, (isset($options['userNameSchema'])) ? $options['userNameSchema'] : 1);
             $this->accountFullName = Tinebase_User::getInstance()->generateAccountFullName($this);
         }
         
@@ -112,6 +112,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         if (! empty($options['accountLoginNamePrefix'])) {
             $this->accountLoginName = $options['accountLoginNamePrefix'] . $this->accountLoginName;
         }
+        
+        // short username if needed
+        $this->accountLoginName = $this->shortenUsername();
         
         // add home dir if empty and prefix is given (append login name)
         if (empty($this->accountHomeDirectory) && ! empty($options['accountHomeDirectoryPrefix'])) {
@@ -303,5 +306,20 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         }
         
         return $result;
+    }
+    
+    
+    /**
+     * Short username to a configured length
+     */
+    public function shortenUsername()
+    {
+        $username = $this->accountLoginName;
+        $maxLoginNameLength = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
+        if (!empty($maxLoginNameLength) && strlen($username) > $maxLoginNameLength) {
+            $username = substr($username, 0, $maxLoginNameLength);
+        }
+        
+        return $username;
     }
 }

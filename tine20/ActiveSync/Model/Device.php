@@ -6,8 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ * @copyright   Copyright (c) 2014-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -24,7 +23,7 @@
  * @property  string  $policykey          the current policykey
  * @property  string  $tasksfilter_id     the tasks filter id
  */
-class ActiveSync_Model_Device extends Tinebase_Record_Abstract #implements Syncroton_Model_IDevice
+class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -40,6 +39,20 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract #implements Syncr
      * @var string
      */
     protected $_application = 'ActiveSync';
+    
+    /**
+     * if foreign Id fields should be resolved on search and get from json
+     * should have this format:
+     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     * or for more fields:
+     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     * (e.g. resolves contact_id with the corresponding Model)
+     *
+     * @var array
+     */
+    protected static $_resolveForeignIdFields = array(
+        'Tinebase_Model_User' => array('owner_id'),
+    );
     
     /**
      * list of zend inputfilter
@@ -65,7 +78,7 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract #implements Syncr
         'devicetype'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'owner_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'policy_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'policykey'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        //'policykey'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'acsversion'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'useragent'             => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
         'model'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -81,6 +94,16 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract #implements Syncr
         'contactsfilter_id'     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'emailfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tasksfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'lastping'              => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+    );
+    
+    /**
+     * name of fields containing datetime or or an array of datetime information
+     *
+     * @var array list of datetime fields
+     */
+    protected $_datetimeFields = array(
+        'lastping'
     );
     
     /**

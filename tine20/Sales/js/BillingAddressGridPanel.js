@@ -35,8 +35,9 @@ Tine.Sales.BillingAddressGridPanel = Ext.extend(Tine.Sales.AddressGridPanel, {
     initComponent: function() {
         this.addressType = 'billing';
         
-        this.i18nRecordName  = this.app.i18n.n_hidden('Billing Address', 'Billing Addresses', 1);
-        this.i18nRecordsName = this.app.i18n.n_hidden('Billing Address', 'Billing Addresses', 2);
+        // TODO use singular/plural translations here
+        this.i18nRecordName  = this.app.i18n._('Billing Address');
+        this.i18nRecordsName = this.app.i18n._('Billing Addresses');
         
         Tine.Sales.BillingAddressGridPanel.superclass.initComponent.call(this);
     }

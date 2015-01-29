@@ -6,7 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	# Name
-	config.vm.box = "precise32"
+	config.vm.box = "saucy-server-cloudimg-amd64-vagrant-disk1"
+    config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/saucy/current/saucy-server-cloudimg-amd64-vagrant-disk1.box"
 
 	# vagrant-cachier caches packages for your vm local
 	if Vagrant.has_plugin?("vagrant-cachier")
@@ -25,10 +26,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.provision :shell, :path => "bootstrap_vagrant.sh"
 
 	# Configure NFS shared folder
-	config.vm.synced_folder "../../", "/vagrant/tine20.git", type: "nfs"
-	config.vm.synced_folder "", "/vagrant/", type: "nfs"
-
-        #config.vm.synced_folder "../../", "/vagrant/tine20.git", :nfs => false
+    config.vm.synced_folder "", "/vagrant/", type: "nfs"
+    # config.vm.synced_folder "../../", "/usr/local/share/tine20.git", type: "rsync", rsync__exclude: "/.git/"
+    # config.vm.synced_folder "../../", "/usr/local/share/tine20.git", :nfs => false
+    config.vm.synced_folder "../../", "/usr/local/share/tine20.git", type: "nfs"
 
 	# Create a private network, which allows host-only access to the machine
 	# using a specific IP.

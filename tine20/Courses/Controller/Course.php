@@ -400,6 +400,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             
             if ($this->_config->get(Courses_Config::STUDENT_LOGINNAME_PREFIX, FALSE) && ($position = strrpos($user->accountLoginName, '-')) !== false) {
                 $user->accountLoginName = $courseName . '-' . substr($user->accountLoginName, $position + 1);
+                
+                //short User name
+                $user->accountLoginName = $user->shortenUsername();
             }
             
             $user->accountPrimaryGroup  = $course->group_id;

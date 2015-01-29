@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -30,6 +25,16 @@ class Tinebase_GroupTest extends TestCase
      * @var boolean
      */
     protected $_removeGroupMembers = false;
+    
+    /**
+     * set up tests
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        Tinebase_Group::getInstance()->resetClassCache();
+    }
     
     /**
      * try to add a group

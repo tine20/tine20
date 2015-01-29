@@ -129,7 +129,7 @@ Tine20.login = {
      */
     checkAuth: function(config, username, password, cb) {
         var ua = navigator.userAgent.toLowerCase(),
-            isIE = ua.match(/msie (\d+)/)
+            isIE = ua.match(/msie (\d+)/),
             useCOSR = !isIE || isIE[1] > 9,
             conn = useCOSR ? Ext.Ajax : new Ext.ux.data.windowNameConnection({
                 proxyUrl: config.tine20ProxyUrl

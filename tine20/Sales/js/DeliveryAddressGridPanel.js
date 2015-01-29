@@ -35,8 +35,9 @@ Tine.Sales.DeliveryAddressGridPanel = Ext.extend(Tine.Sales.AddressGridPanel, {
     initComponent: function() {
         this.addressType = 'delivery';
         
-        this.i18nRecordName  = this.app.i18n.n_hidden('Delivery Address', 'Delivery Addresses', 1);
-        this.i18nRecordsName = this.app.i18n.n_hidden('Delivery Address', 'Delivery Addresses', 2);
+        // TODO use singular/plural translations here
+        this.i18nRecordName  = this.app.i18n._('Delivery Address');
+        this.i18nRecordsName = this.app.i18n._('Delivery Addresses');
         
         this.modelConfig = Ext.decode(Ext.encode(this.modelConfig));
         

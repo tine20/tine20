@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -30,12 +30,15 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     initComponent: function() {
-        this.useInvoice = Tine.Tinebase.appMgr.get('Sales') && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
+        var salesApp = Tine.Tinebase.appMgr.get('Sales');
+        this.useInvoice = salesApp
+            && salesApp.featureEnabled('invoicesModule')
+            && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
         Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
     
     onRecordLoad: function() {
-        // make sure grants grid is initialised
+        // make sure grants grid is initialized
         this.getGrantsGrid();
         
         var grants = this.record.get('grants') || [];

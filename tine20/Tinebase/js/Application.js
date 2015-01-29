@@ -91,6 +91,16 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     },
     
     /**
+     * returns true if a specific feature is enabled for this application
+     * 
+     * @param {String} featureName
+     * @return {Boolean}
+     */
+    featureEnabled: function(featureName) {
+        return Tine[this.appName].registry.get("config").features && Tine[this.appName].registry.get("config").features.value[featureName];
+    },
+    
+    /**
      * template function for subclasses to initialize application
      */
     init: Ext.emptyFn,

@@ -171,6 +171,7 @@ class Tinebase_Group
                 $groupBackend->getGroupById($groupId);
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
                 $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
                 $groupBackend->addGroupInSqlBackend($group);
             }
         }
@@ -228,7 +229,7 @@ class Tinebase_Group
                 // list id changed / is new -> update group and make group visible
                 $group->list_id = $list->getId();
                 $group->visibility = Tinebase_Model_Group::VISIBILITY_DISPLAYED;
-                
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
                 Tinebase_Group::getInstance()->updateGroup($group);
             }
             
@@ -274,6 +275,7 @@ class Tinebase_Group
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                     ' Merge missing properties and update group.');
                 $groupBackend->mergeMissingProperties($group, $sqlGroup);
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'update');
                 $groupBackend->updateGroupInSqlBackend($group);
                 
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
@@ -290,6 +292,7 @@ class Tinebase_Group
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
                         ' Group not found by ID and name, adding new group.');
                 }
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
                 $groupBackend->addGroupInSqlBackend($group);
             }
         }
@@ -309,6 +312,7 @@ class Tinebase_Group
             'name'          => $defaultAdminGroupName,
             'description'   => 'Group of administrative accounts'
         ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($adminGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($adminGroup);
 
         $defaultUserGroupName = (Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY))
@@ -318,6 +322,7 @@ class Tinebase_Group
             'name'          => $defaultUserGroupName,
             'description'   => 'Group of user accounts'
         ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($userGroup, 'create');
         Tinebase_Group::getInstance()->addGroup($userGroup);
     }
 }

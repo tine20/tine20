@@ -13,7 +13,7 @@
  * 
  * @package     Tasks
  */
-class Tasks_Frontend_ActiveSyncTest extends ActiveSync_TestCase
+class Tasks_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerTest
 {
     /**
      * name of the application

@@ -140,13 +140,21 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
             self::MANAGE_CUSTOMERS,
-            self::MANAGE_INVOICES,
             self::MANAGE_DIVISIONS,
-            self::MANAGE_ORDERCONFIRMATIONS,
-            self::MANAGE_OFFERS,
-            self::CHANGE_OC_NUMBER,
-            self::SET_INVOICE_NUMBER,
         );
+        
+        // add rights dependent on feature switches
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $addRights[] = self::MANAGE_INVOICES;
+            $addRights[] = self::SET_INVOICE_NUMBER;
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
+            $addRights[] = self::MANAGE_OFFERS;
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
+            $addRights[] = self::MANAGE_ORDERCONFIRMATIONS;
+            $addRights[] = self::CHANGE_OC_NUMBER;
+        }
         
         $allRights = array_merge($allRights, $addRights);
         

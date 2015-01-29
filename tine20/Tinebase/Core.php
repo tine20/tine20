@@ -1060,9 +1060,8 @@ class Tinebase_Core
      * sets the user locale
      *
      * @param  string $localeString
-     * @param  bool   $saveaspreference
      */
-    public static function setupUserLocale($localeString = 'auto', $saveaspreference = FALSE)
+    public static function setupUserLocale($localeString = 'auto')
     {
         try {
             $session = Tinebase_Session::getSessionNamespace();
@@ -1108,6 +1107,11 @@ class Tinebase_Core
             if ($session !== NULL) {
                 $session->userLocale = $locale;
             }
+            
+            // check if the detected locale should be saved in preferences
+            if ($localeString === 'auto' && is_object(Tinebase_Core::getUser())) {
+                self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
+            }
         }
         
         // save in registry
@@ -1115,11 +1119,6 @@ class Tinebase_Core
         
         $localeString = (string)$locale;
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Setting user locale: " . $localeString);
-        
-        // save locale as preference
-        if (is_object(Tinebase_Core::getUser()) && ($saveaspreference || self::getPreference()->{Tinebase_Preference::LOCALE} === 'auto')) {
-            self::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
-        }
         
         // set correct ctype locale, to make sure that the filesystem functions like basename() are working correctly with utf8 chars
         $ctypeLocale = setlocale(LC_CTYPE, 0);
@@ -1139,40 +1138,38 @@ class Tinebase_Core
      * @param  bool   $_saveaspreference
      * @return string
      */
-    public static function setupUserTimezone($_timezone = NULL, $_saveaspreference = FALSE)
+    public static function setupUserTimezone($_timezone = null, $_saveaspreference = FALSE)
     {
         try {
             $session = Tinebase_Session::getSessionNamespace();
         } catch (Zend_Session_Exception $zse) {
             $session = null;
         }
-
-        if ($_timezone === NULL) {
-            
-            if ($session instanceof Zend_Session_Namespace && isset($session->timezone)) {
-                $timezone = $session->timezone;
-            } else {
-                // get timezone from preferences
-                $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
-                if ($session instanceof Zend_Session_Namespace) {
-                    $session->timezone = $timezone;
-                }
-            }
-
+        
+        // get timezone from session, parameter or preference
+        if ($_timezone === null && $session instanceof Zend_Session_Namespace && isset($session->timezone)) {
+            $timezone = $session->timezone;
         } else {
             $timezone = $_timezone;
-            if ($session instanceof Zend_Session_Namespace) {
-                $session->timezone = $timezone;
-            }
-            
-            if ($_saveaspreference) {
-                // save as user preference
-                self::getPreference()->setValue(Tinebase_Preference::TIMEZONE, $timezone);
-            }
         }
-
+        if ($timezone === null) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' get timezone from preferences');
+            $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+        }
+        
+        // set timezone in registry, session and preference
         self::set(self::USERTIMEZONE, $timezone);
-
+        if ($session instanceof Zend_Session_Namespace) {
+            $session->timezone = $timezone;
+        }
+        if ($_saveaspreference) {
+            self::getPreference()->setValue(Tinebase_Preference::TIMEZONE, $timezone);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' User timezone: ' . $timezone);
+        
         return $timezone;
     }
 
@@ -1452,8 +1449,8 @@ class Tinebase_Core
      */
     public static function getUserTimezone()
     {
-        if (!self::isRegistered(self::USERTIMEZONE)) {
-            Tinebase_Core::setupUserTimezone();
+        if (!self::isRegistered(self::USERTIMEZONE) || self::get(self::USERTIMEZONE) == NULL) {
+            return Tinebase_Core::setupUserTimezone();
         }
         
         return self::get(self::USERTIMEZONE);
