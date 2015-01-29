@@ -35,13 +35,14 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function exportContacts($filter, $options)
     {
         $decodedFilter = Zend_Json::decode($filter);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
         
         if (! is_array($decodedFilter)) {
             $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
         }
         
-        $filter = new Addressbook_Model_ContactFilter($decodedFilter);
+        $filter = new Addressbook_Model_ContactFilter(count($decodedFilter) >= 0 ? $decodedFilter[0] : $decodedFilter);
         parent::_export($filter, Zend_Json::decode($options), Addressbook_Controller_Contact::getInstance());
     }
 }
