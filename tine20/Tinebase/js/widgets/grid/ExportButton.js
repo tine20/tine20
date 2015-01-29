@@ -82,13 +82,12 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 })
             });
         } else {
-            // Start download by submitting current filter settings and sort information of the grid
-            this.startDownload(filterSettings, this.gridPanel.getStore().sortInfo);
+            this.startDownload(filterSettings);
         }
     },
     
     /**
-     * start download
+     * Start download by submitting current filter settings and sort information of the grid
      * 
      * @param {Object} filterSettings
      */
@@ -97,9 +96,10 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
-                filter: Ext.util.JSON.encode([filterSettings, sortInfo]),
+                filter: Ext.util.JSON.encode(filterSettings),
                 options: Ext.util.JSON.encode({
-                    format: this.format
+                    format: this.format,
+                    sortInfo: this.gridPanel.getStore().sortInfo
                 })
             }
         }).start();

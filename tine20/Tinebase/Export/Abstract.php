@@ -154,13 +154,20 @@ abstract class Tinebase_Export_Abstract
      */
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
-        // init member vars
         $this->_modelName = $_filter->getModelName();
         $this->_filter = $_filter;
         $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig($_additionalOptions);
         $this->_locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        if (isset($_additionalOptions['sortInfo'])) {
+            if (isset($_additionalOptions['sortInfo']['field'])) {
+                $this->_sortInfo['sort'] = $_additionalOptions['sortInfo']['field'];
+                $this->_sortInfo['dir'] = isset($_additionalOptions['sortInfo']['direction']) ? $_additionalOptions['sortInfo']['direction'] : 'ASC';
+            } else {
+                $this->_sortInfo =  $_additionalOptions['sortInfo'];
+            }
+        }
     }
     
     /**
@@ -222,7 +229,8 @@ abstract class Tinebase_Export_Abstract
     protected function _exportRecords()
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Starting export of ' . $this->_modelName . ' with filter: ' . print_r($this->_filter->toArray(), true));
+            . ' Starting export of ' . $this->_modelName . ' with filter: ' . print_r($this->_filter->toArray(), true)
+            . ' and sort info: ' . print_r($this->_sortInfo, true));
         
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
@@ -230,7 +238,7 @@ abstract class Tinebase_Export_Abstract
             'filter'     => $this->_filter,
             'options'     => array(
                 'searchAction' => 'export',
-                'sortInfo'       => $this->_sortInfo,
+                'sortInfo'     => $this->_sortInfo,
                 'getRelations' => $this->_getRelations,
             ),
         ));

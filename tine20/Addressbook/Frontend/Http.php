@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -35,14 +35,17 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function exportContacts($filter, $options)
     {
         $decodedFilter = Zend_Json::decode($filter);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
+        $decodedOptions = Zend_Json::decode($options);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Export filter: ' . print_r($decodedFilter, true)
+            . ' Options: ' . print_r($decodedOptions, true));
         
         if (! is_array($decodedFilter)) {
             $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
         }
         
-        $filter = new Addressbook_Model_ContactFilter(count($decodedFilter) >= 0 ? $decodedFilter[0] : $decodedFilter);
-        parent::_export($filter, Zend_Json::decode($options), Addressbook_Controller_Contact::getInstance());
+        $filter = new Addressbook_Model_ContactFilter($decodedFilter);
+        parent::_export($filter, $decodedOptions, Addressbook_Controller_Contact::getInstance());
     }
 }
