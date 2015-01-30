@@ -95,14 +95,25 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: .5,
                         fieldLabel: this.app.i18n._('Category'),
                         name: 'category'
-                    }, this.getAccountableCombo()], [{
+                    }, this.getAccountableCombo()],
+                    [{
+                        columnWidth: 0.5,
+                        name: 'lifespan_start',
+                        xtype: 'datefield',
+                        fieldLabel: this.app.i18n._('Lifespan start')
+                    }, {
+                        columnWidth: 0.5,
+                        xtype: 'datefield',
+                        name: 'lifespan_end',
+                        fieldLabel: this.app.i18n._('Lifespan end')
+                    }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),
                         emptyText: this.app.i18n._('Enter description...'),
                         name: 'description',
                         xtype: 'textarea',
                         height: 150
-                    }]] 
+                    }]]
                 }, {
                     // activities and tags
                     layout: 'accordion',

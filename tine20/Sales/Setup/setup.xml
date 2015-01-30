@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.21</version>
+    <version>8.22</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -170,7 +170,7 @@
         </table>
         <table>
             <name>sales_products</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -210,6 +210,19 @@
                     <name>accountable</name>
                     <type>text</type>
                     <length>40</length>
+                </field>
+                <field>
+                    <name>lifespan_start</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>lifespan_end</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_active</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>created_by</name>

@@ -155,7 +155,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     onBeforeLoad: function (store, options) {
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onBeforeLoad.call(this, store, options);
-        
+
         this.lastStoreTransactionId = options.transactionId = Ext.id();
         
         var paging = {

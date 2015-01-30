@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
@@ -1476,5 +1476,47 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     {
         $this->_addModlogFields('sales_product_agg');
         $this->setTableVersion('sales_product_agg', 3);
+    }
+    
+    /**
+     * update to 8.22
+     *
+     * @see 0010766: set product lifespan
+     */
+    public function update_21()
+    {
+        if (! $this->_backend->columnExists('lifespan_end', 'sales_products')) {
+            $declarations = array(
+                new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>lifespan_start</name>
+                        <type>datetime</type>
+                    </field>'),
+                new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>lifespan_end</name>
+                        <type>datetime</type>
+                    </field>'),
+                new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>is_active</name>
+                        <type>boolean</type>
+                        <default>false</default>
+                    </field>'),
+            );
+            
+            foreach($declarations as $declaration) {
+                try {
+                    $this->_backend->addCol('sales_products', $declaration);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    Tinebase_Exception::log($zdse);
+                }
+            }
+            
+            $this->setTableVersion('sales_products', 5);
+        }
+        
+        // add hourly async job
+        $scheduler = Tinebase_Core::getScheduler();
+        Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
+        
+        $this->setApplicationVersion('Sales', '8.22');
     }
 }
