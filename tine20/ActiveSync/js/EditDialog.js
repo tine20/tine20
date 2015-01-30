@@ -91,6 +91,7 @@ Tine.ActiveSync.SyncDeviceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         useAccountRecord: true,
                         blurOnSelect: true,
                         selectOnFocus: true,
+                        readOnly: true,
                         maxLength: 40
                     }], [{
                         columnWidth: 0.33,
@@ -120,11 +121,13 @@ Tine.ActiveSync.SyncDeviceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         columnWidth: 0.33,
                         fieldLabel: this.app.i18n._('IMEI'),
                         name: 'imei',
+                        readOnly: true,
                         maxLength: 40
                     }, {
                         columnWidth: 0.333,
                         fieldLabel: this.app.i18n._('Friendly Name'),
                         name: 'friendlyname',
+                        readOnly: true,
                         maxLength: 40
                     }], [{
                         columnWidth: 0.33,
@@ -142,6 +145,7 @@ Tine.ActiveSync.SyncDeviceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         columnWidth: 0.333,
                         fieldLabel: this.app.i18n._('Phonenumber'),
                         name: 'phonenumber',
+                        readOnly: true,
                         maxLength: 40
                     }]
                 ]
