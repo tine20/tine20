@@ -237,7 +237,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         this.quickFilter = new Ext.ux.SearchField({
-            width: 300,
+            width: 350,
             enableKeyEvents: true
         });
         
@@ -246,30 +246,29 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.criteriaText = new Ext.Panel({
             border: 0,
-            html: '',
             bodyStyle: {
                 border: 0,
-                background: 'none', 
-                'text-align': 'left', 
-                'line-height': '11px'
+                background: 'none',
+                'line-height': '11px',
+                'text-align': 'left'
             }
         });
         
         this.detailsToggleBtn = new Ext.Button({
             style: {'margin-top': '2px'},
             enableToggle: true,
-            text: _('show details'), //'Advanced Search'
+            text: _('show details'),
             tooltip: _('Always show advanced filters'),
             scope: this,
             handler: this.onDetailsToggle,
             stateful: stateful,
-            stateId : stateful ? stateId : null,
+            stateId: stateful ? stateId : null,
             getState: function() {
                 return {detailsButtonPressed: this.pressed};
             },
             applyState: function(state) {
                 if (state.detailsButtonPressed) {
-                    this.setText( _('hide details'));
+                    this.setText(_('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
             },
@@ -283,8 +282,34 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 }
             }
         });
+
+        this.advancedSearchButton = new Ext.Button({
+            enableToggle: true,
+            pressed: Tine.Tinebase.registry.get('preferences').get('advancedSearch') == 1,
+            text: _('Advanced search'),
+            tooltip: _('Search in related records as well.'),
+            scope: this,
+            handler: this.onAdvancedSearchToggle,
+            hidden: !this.filterToolbarConfig.app.enableAdvancedSearch,
+            stateEvents: ['toggle']
+        });
     },
-    
+
+    onAdvancedSearchToggle: function(btn) {
+        Ext.Ajax.request({
+            params: {
+                application: 'Tinebase',
+                method: 'Tinebase.toogleAdvancedSearch',
+                state: btn.pressed || 0
+            },
+            timeout: 1800, // 30 Seconds
+            scope: this,
+            success: function () {
+                Tine.log.debug("Toogled advanced search through references.");
+            }
+        });
+    },
+
     /**
      * called when the (external) quick filter is cleared
      */
@@ -425,17 +450,18 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      * gets the (extra) quick filter toolbar items
      * 
      * @return {Ext.ButtonGroup}
+     *
+     *
      */
     getQuickFilterField: function() {
         if (! this.quickFilterGroup) {
             this.quickFilterGroup = new Ext.ButtonGroup({
-                columns: 1,
+                columns: 2,
                 items: [
-                    this.quickFilter, {
-                        xtype: 'toolbar',
-                        style: {border: 0, background: 'none'},
-                        items: [this.criteriaText, '->', this.detailsToggleBtn]
-                    }
+                    this.quickFilter,
+                    this.advancedSearchButton,
+                    this.criteriaText,
+                    this.detailsToggleBtn
                 ]
             });
         }
