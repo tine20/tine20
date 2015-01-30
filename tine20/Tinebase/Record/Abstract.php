@@ -964,6 +964,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($ownField instanceof DateTime
                     && $recordField instanceof DateTime) {
+                    
+                    if (! $ownField instanceof Tinebase_DateTime) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                            ' Convert ' . $fieldName .' to Tinebase_DateTime to make sure we have the compare() method');
+                        $ownField = new Tinebase_DateTime($ownField);
+                    }
+                        
                     if ($ownField->compare($recordField) === 0) {
                         continue;
                     } else {

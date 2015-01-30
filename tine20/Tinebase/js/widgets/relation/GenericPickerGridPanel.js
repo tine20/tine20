@@ -1143,7 +1143,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         if (dialog.mode == 'local') {
             // if dialog is local, relations must be fetched async
             Tine.Tinebase.getRelations('Calendar_Model_Event', record.get('id'), null, [], null, function (response, request) {
-                this.loadRelations(response.results, interceptor);
+                if(response) {
+                    this.loadRelations(response.results, interceptor);
+                }
             }.createDelegate(this));
         } else {
             var relations = record.get('relations');
