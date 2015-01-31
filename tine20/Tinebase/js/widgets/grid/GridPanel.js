@@ -294,7 +294,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type Bool
      * @property addButton
      */
-    addButton: false,
+    addButton: true,
     
     layout: 'border',
     border: false,
