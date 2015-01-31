@@ -1110,7 +1110,7 @@ class Tinebase_Core
         
         // set timezone in registry, session and preference
         self::set(self::USERTIMEZONE, $timezone);
-        if ($session instanceof Zend_Session_Namespace) {
+        if ($session instanceof Zend_Session_Namespace && Tinebase_Session::isWritable()) {
             $session->timezone = $timezone;
         }
         if ($_saveaspreference) {
