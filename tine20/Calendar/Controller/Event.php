@@ -234,10 +234,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($this->_sendNotifications) {
+        if ($this->_sendNotifications && $_record['mute'] != 1) {
             $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
-        }
-        
+        }        
+
         return $createdEvent;
     }
     

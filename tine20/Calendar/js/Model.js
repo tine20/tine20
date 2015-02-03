@@ -48,6 +48,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     //{ name: 'exrule' },
     //{ name: 'rdate' },
     { name: 'rrule' },
+    { name: 'mute' },
     { name: 'is_all_day_event', type: 'bool'},
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'originator_tz' },

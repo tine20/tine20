@@ -112,9 +112,10 @@ abstract class Calendar_TestCase extends TestCase
      * returns a simple event
      * 
      * @param bool $now
+     * @param bool $mute
      * @return Calendar_Model_Event
      */
-    protected function _getEvent($now = FALSE)
+    protected function _getEvent($now = FALSE, $mute = NULL)
     {
         $event = new Calendar_Model_Event(array(
             'summary'     => 'Wakeup',
@@ -126,6 +127,8 @@ abstract class Calendar_TestCase extends TestCase
             'container_id' => $this->_testCalendar->getId(),
             'organizer'    => $this->_testUserContact->getId(),
             'uid'          => Calendar_Model_Event::generateUID(),
+
+            'mute'         => $mute,
         
             Tinebase_Model_Grants::GRANT_READ    => true,
             Tinebase_Model_Grants::GRANT_EDIT    => true,
