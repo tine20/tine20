@@ -280,19 +280,22 @@ class Setup_Update_Abstract
      */
     public function shortenTextValues($table, $field, $length)
     {
-        $results = $this->_db->query(
-            "SELECT " . $this->_db->quoteIdentifier($field) .
-            ", LEFT(" . $this->_db->quoteIdentifier($field) . "," . $length . ") AS short" .
-            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $table) .
-            " WHERE CHAR_LENGTH(" . $this->_db->quoteIdentifier($field) . ") > " . $length
-            )->fetchAll();
+        $select = $this->_db->select()
+            ->from(array($table => SQL_TABLE_PREFIX . $table), array($field))
+            ->where("CHAR_LENGTH(" . $this->_db->quoteIdentifier($field) . ") > ?", $length);
+        
+        $stmt = $this->_db->query($select);
+        $results = $stmt->fetchAll();
+        $stmt->closeCursor();
         
         foreach ($results as $result) {
-            $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier($field) . ' = ?', $result[$field]),
+            $where = array(
+                array($this->_db->quoteIdentifier($field) . ' = ?' => $result[$field])
             );
             
-            $newContent = array($field => $result['short']);
+            $newContent = array(
+                $field => iconv_substr($result[$field], 0 , $length, 'UTF-8')
+            );
             
             try {
                 $this->_db->update(SQL_TABLE_PREFIX . $table, $newContent, $where);
