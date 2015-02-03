@@ -224,6 +224,15 @@ Tine.Filemanager.GridContextMenu = {
     },
     
     /**
+     * publish file
+     */
+    publishFile: function() {
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.getMainScreen().getCenterPanel();
+        grid.onPublishFile.call(grid);
+    },
+    
+    /**
      * reload node
      */
     reloadNode: function() {

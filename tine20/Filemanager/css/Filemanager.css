@@ -83,3 +83,16 @@
     background-repeat: no-repeat;
     padding-left: 19px;
 }
+
+.action_publish {
+    background-image: url("../../images/oxygen/16x16/apps/package-network.png");
+    background-repeat: no-repeat;
+}
+
+.x-btn-medium .action_publish {
+    background-image: url("../../images/oxygen/22x22/apps/package-network.png");
+} 
+
+.x-btn-large .action_publish {
+    background-image: url("../../images/oxygen/32x32/apps/package-network.png");
+}

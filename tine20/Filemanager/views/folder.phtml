@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title><?php echo $this->title ?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" />
+</head>
+ <body>
+    <img alt="Tine 2.0" src="/images/tine_logo.png"><h1><?php echo $this->path ?></h1>
+    <hr>
+    <table>
+        <tr><th>Name</th><th>letzte Änderung</th><th>Größe</th><th>Beschreibung</th></tr>
+        <?php foreach ($this->files as $file) { ?>
+        <tr>
+            <td><a href="<?php echo $file->path ?>"><?php echo htmlentities($file->name) ?></a></td>
+            <td><?php echo ($file->last_modified_time ? $file->last_modified_time->format('Y-m-d H:i:s') : $file->creation_time->format('Y-m-d H:i:s')) ?></td>
+            <td><?php echo $file->size ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <?php } ?>
+    </table>
+</body>
+</html>

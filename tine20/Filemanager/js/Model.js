@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager.Model');
     
@@ -149,7 +149,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 parentNode.appendChild(newNode);
             }
             grid.getStore().reload();
-//            this.fireEvent('containeradd', nodeData);
         };
         
         return this.doXHTTPRequest(options);
@@ -213,7 +212,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             grid.getStore().remove(nodeData);
             grid.selectionModel.deselectRange(0, grid.getStore().getCount());
             grid.pagingToolbar.refresh.enable();
-//            this.fireEvent('containerdelete', nodeData);
             
         }).createDelegate({items: items});
         
@@ -365,7 +363,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
             }
         });
-               
     },
     
     /**
@@ -516,7 +513,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
 
 
 /**
- * get filtermodel of contact model
+ * get filtermodel of Node records
  * 
  * @namespace Tine.Filemanager.Model
  * @static
@@ -534,3 +531,35 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
         {filtertype : 'tinebase.tag', app : app} 
     ];
 };
+
+/**
+ * @namespace   Tine.Filemanager.Model
+ * @class       Tine.Filemanager.Model.DownloadLink
+ * @extends     Tine.Tinebase.data.Record
+ * Example record definition
+ */
+Tine.Filemanager.Model.DownloadLink = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.modlogFields.concat([
+    { name: 'id' },
+    { name: 'node_id' },
+    { name: 'url' },
+    { name: 'expiry_time', type: 'datetime' },
+    { name: 'access_count' },
+    { name: 'password' }
+]), {
+    appName: 'Filemanager',
+    modelName: 'DownloadLink',
+    idProperty: 'id',
+    titleProperty: 'url',
+    // ngettext('Download Link', 'Download Links', n); gettext('Download Link');
+    recordName: 'Download Link',
+    recordsName: 'Download Links'
+});
+
+/**
+ * download link backend
+ */
+Tine.Filemanager.downloadLinkRecordBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Filemanager',
+    modelName: 'DownloadLink',
+    recordClass: Tine.Filemanager.Model.DownloadLink
+});

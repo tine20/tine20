@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Filemanager');
 
@@ -34,6 +34,11 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: null,
     evalGrants: true,
     showContainerSelector: false,
+    
+    /**
+     * @type Tine.Filemanager.DownloadLinkGridPanel
+     */
+    downloadLinkGrid: null,
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Filemanager');
@@ -101,6 +106,13 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             readOnly: true,
             disabled: true
         };
+        
+        this.downloadLinkGrid = new Tine.Filemanager.DownloadLinkGridPanel({
+            node: this.record,
+            app: this.app,
+            title: this.app.i18n._('Public Links'),
+            editDialog: this
+        });
         
         return {
             xtype: 'tabpanel',
@@ -221,7 +233,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-                })
+                }),
+                this.downloadLinkGrid
             ]
         };
     }
