@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <rules>
+        <rule>
+            <field>n_family</field>
+            <regex>/^(\w+)\s\w+/um</regex>
+        </rule>
+        <rule>
+            <field>n_given</field>
+            <regex>/^\w+\s(\w+)/um</regex>
+        </rule>
+        <rule>
+            <field>n_prefix</field>
+            <regex>/([Dr\.|Prof\.][\w+{2-4}\.]+)/um</regex>
+        </rule>
+        <rule>
+            <field>org_name</field>
+            <regex>/^\w+\s\w+\s[\w+{2-4}\.]+\s(\w+)/u</regex>
+        </rule>
+        <rule>
+            <field>adr_one_postalcode</field>
+            <regex>/\s*(\d{5})\s+[\w]+/um</regex>
+        </rule>
+        <rule>
+            <field>adr_one_postalcode</field>
+            <regex>/[A-Z]{1,3}-(\d{5})\s+[\w ]+/um</regex>
+        </rule>
+        <rule>
+            <field>adr_one_locality</field>
+            <regex>/\d{5}\s+([\w ]+)/um</regex>
+        </rule>
+        <rule>
+            <field>adr_one_street</field>
+            <regex>/^([\w ]+\s+\d+)/um</regex>
+        </rule>
+        <rule>
+            <field>org_name</field>
+            <regex>/(^.*(?:GmbH|GbR|OHG|KG).*)/um</regex>
+        </rule>
+        <rule>
+            <field>tel_work</field>
+            <regex>/^(?:Tel[^+^0-9]*)(\+{0,1}[0-9\ \t()-]+)/um</regex>
+        </rule>
+        <rule>
+            <field>tel_fax</field>
+            <regex>/^(?:Fax[^+^0-9]*)(\+{0,1}[0-9\ \t()-]+)/um</regex>
+        </rule>
+        <rule>
+            <field>email</field>
+            <regex>/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i</regex>
+        </rule>
+        <rule>
+            <field>url</field>
+            <regex>/((mailto\:|(news|(ht|f)tp(s?))\:\/\/){1}\S+)/i</regex>
+        </rule>
+    </rules>
+</config>
