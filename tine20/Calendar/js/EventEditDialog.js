@@ -345,7 +345,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
         
-        this.rrulePanel = new Tine.Calendar.RrulePanel({});
+        this.rrulePanel = new Tine.Calendar.RrulePanel({
+            eventEditDialog : this
+        });
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.attendeeStore = this.attendeeGridPanel.getStore();
         
