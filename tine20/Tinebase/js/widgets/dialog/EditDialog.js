@@ -797,7 +797,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.saving = true;
 
         this.loadMask.show();
-        
+
         var ticketFn = this.doApplyChanges.deferByTickets(this, [closeWindow]),
             wrapTicket = ticketFn();
 

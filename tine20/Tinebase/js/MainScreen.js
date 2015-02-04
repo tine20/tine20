@@ -12,12 +12,12 @@ Ext.ns('Tine.Tinebase');
  * Tine 2.0 jsclient MainScreen.
  * 
  * @namespace   Tine.Tinebase
- * @class       Tine.Tinebase.MainScreen
+ * @class       Tine.Tinebase.MainScreenPanel
  * @extends     Ext.Panel
  * @singleton   
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
+Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
     
     border: false,
     layout: {

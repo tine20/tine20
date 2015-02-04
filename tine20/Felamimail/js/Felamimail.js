@@ -75,7 +75,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @type Number
      */
     unreadcountInDefaultInbox: 0,
-    
+
+    routes : {
+        'MailTo/:params' : {
+            action     : 'mailto'
+        }
+    },
+
     /**
      * returns title (Email)
      * 
@@ -107,6 +113,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             this.showActiveVacation();
             this.initGridPanelHooks();
+            this.registerProtocolHandler();
         }
     },
     
@@ -153,7 +160,19 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
         });
     },
-    
+
+    registerProtocolHandler: function() {
+        var text = String.format(_('{0} as default mailer'), Tine.title),
+            enabled = true; //Tine.Tinebase.configManager.get('registerMailToHandler', 'Felamimail');
+        Tine.Felamimail.registerProtocolHandlerAction.setText(text);
+
+        if (! (enabled && Ext.isFunction(navigator.registerProtocolHandler))) {
+            Tine.Felamimail.registerProtocolHandlerAction.setHidden(true);
+        }
+
+
+    },
+
     /**
      * check mails
      * 
@@ -713,8 +732,50 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }
         });
+    },
+
+    /**
+     * compose mail via mailto link
+     *
+     * @param params from mailto link
+     */
+    mailto: function(paramString) {
+        var decodedParamString = decodeURIComponent(paramString).replace(/mailto:/, ''),
+            parts = decodedParamString.split(/\?|&/),
+            params = {};
+
+        Ext.each(parts, function(part){
+            var pair = part.split('='),
+                param = pair[1] ? pair[0] : 'to',
+                value = decodeURIComponent(pair[1] ? pair[1] : pair[0]);
+
+            value = param.match(/(body)|(subject)/) ? value : value.split(',');
+            param = param == 'body' ? 'msgBody' : param;
+
+            params[param] = value.length > 1 ? value : value[0];
+        });
+
+        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+        params['accountId'] = activeAccount ? activeAccount.id : null;
+
+        return {
+            name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
+            contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
+            contentPanelConstructorConfig: params
+        }
+
     }
 });
+
+Tine.Felamimail.registerProtocolHandlerAction = new Ext.Action({
+    iconCls: 'FelamimailIconCls',
+    handler: function() {
+        var url = Tine.Tinebase.common.getUrl() + '#Felamimail/MailTo/%s';
+        navigator.registerProtocolHandler('mailto', url, Ext.util.Format.stripTags(Tine.title));
+    }
+});
+Ext.ux.ItemRegistry.registerItem('Tine.Tinebase.MainMenu.userActions', Tine.Felamimail.registerProtocolHandlerAction);
+
 
 /**
  * @namespace Tine.Felamimail
