@@ -40,6 +40,16 @@ interface Tinebase_Backend_Sql_Command_Interface
     public function getIfElse($condition, $returnIfTrue, $returnIfFalse);
     
     /**
+     * get switch case expression with multiple cases
+     *
+     * @param string $field
+     * @param array $cases
+     *
+     * @return Zend_Db_Expr
+     */
+    public function getSwitch($field, $cases);
+    
+    /**
      * @param date $date
      */
     public function setDate($date);

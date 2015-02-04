@@ -8,6 +8,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add tests testInvitationCancel and testOrganizerSendBy
+ * @todo extend Calendar_TestCase
  */
 
 /**

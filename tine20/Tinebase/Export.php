@@ -38,11 +38,12 @@ class Tinebase_Export
             );
         }
         
+        // always merge options? this needs to be refactored!
+        $_additionalOptions = array_merge($_additionalOptions, $_options);
+        
         if ((isset($_options['definitionId']) || array_key_exists('definitionId', $_options))) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
-            // export plugin needs the definition id
-            $_additionalOptions = array_merge($_additionalOptions, $_options);
             
         } else if ((isset($_options['format']) || array_key_exists('format', $_options)) && ! empty($_options['format'])) {
             $appName = $_filter->getApplicationName();

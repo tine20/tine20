@@ -168,11 +168,14 @@ class Tinebase_Record_Iterator
      */
     protected function _getRecords()
     {
+        $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
+        
         if ($this->_recordIds === NULL) {
-            // need to fetch record ids first because filtered fields can change during iteration step 
+            // need to fetch record ids first because filtered fields can change during iteration step
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Getting record ids using filter: ' . print_r($this->_filter->toArray(), TRUE));
-            $this->_recordIds = $this->_controller->search($this->_filter, NULL, FALSE, TRUE, $this->_options['searchAction']);
+                . ' Getting record ids using filter: ' . print_r($this->_filter->toArray(), TRUE) . ' and pagination: ' . print_r($pagination->toArray(), true));
+            
+            $this->_recordIds = $this->_controller->search($this->_filter, $pagination, FALSE, TRUE, $this->_options['searchAction']);
             $this->_totalCount = count($this->_recordIds);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Found ' . $this->_totalCount . ' total records to process.');
@@ -180,17 +183,16 @@ class Tinebase_Record_Iterator
                 return new Tinebase_Record_RecordSet($this->_filter->getModelName());
             }
         }
-
-        $pagination = (! empty($this->_options['sortInfo'])) ? new Tinebase_Model_Pagination($this->_options['sortInfo']) : new Tinebase_Model_Pagination();
-
+        
         // get records by filter (ensure acl)
         $filterClassname = get_class($this->_filter);
         $recordIdsForIteration = array_splice($this->_recordIds, 0, $this->_options['limit']);
         $idFilter = new $filterClassname(array(
-            array('field' => (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
+            array('field' => (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options))
+                ? $this->_options['idProperty']
+                : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)
         ));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Getting records using filter: ' . print_r($idFilter->toArray(), TRUE));
+        
         $records = $this->_controller->search($idFilter, $pagination, $this->_options['getRelations']);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
