@@ -66,21 +66,19 @@
     _.fireEvent = function(key, oldValue, newValue) {
         var event;
         if (document.createEvent) {
-            event = document.createEvent("StorageEvent");
-            event.initEvent("storage", true, true);
+            event = document.createEvent('StorageEvent');
+            event.initStorageEvent('storage', true, true, key, oldValue, newValue, window.location.href, window.localStorage);
+
+            return dispatchEvent(event);
         } else {
+            // IE < 11?
             event = document.createEventObject();
             event.eventType = "storage";
-        }
+            //event.eventName = "storage";
+            event.key = key;
+            event.newValue = newValue;
+            event.oldValue = oldValue;
 
-        event.eventName = "storage";
-        event.key = key;
-        event.newValue = newValue;
-        event.oldValue = oldValue;
-
-        if (document.createEvent) {
-            return window.dispatchEvent(event);
-        } else {
             return document.fireEvent("onstorage", event);
         }
     };
