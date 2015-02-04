@@ -551,7 +551,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *
      * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveStrategy
-     * @param array $_recordData
+     * @param array $_recordData not needed here but in other import classes (i.a. Admin_Import_Csv)
      * @return void
      * @throws Tinebase_Exception_Record_Validation
      */
@@ -817,13 +817,15 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * import record and resolve possible conflicts
      * 
      * supports $_resolveStrategy(s): ['mergeTheirs', ('Merge, keeping existing details')],
-     *                              ['mergeMine',   ('Merge, keeping my details')],
-     *                              ['keep',        ('Keep both records')]
+     *                                ['mergeMine',   ('Merge, keeping my details')],
+     *                                ['keep',        ('Keep both records')]
      * 
      * @param Tinebase_Record_Abstract $record
      * @param string $resolveStrategy
      * @param Tinebase_Record_Abstract $clientRecord
      * @return Tinebase_Record_Abstract
+     * 
+     * @todo we should refactor the merge handling: this function should always get the merged record OR always do the merging itself
      */
     protected function _importAndResolveConflict(Tinebase_Record_Abstract $record, $resolveStrategy = null, $clientRecord = null)
     {
@@ -835,12 +837,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         switch ($resolveStrategy) {
             case 'mergeTheirs':
             case 'mergeMine':
-                if ($resolveStrategy === 'mergeTheirs') {
-                    $recordToUpdate = $this->_mergeRecord($record, $clientRecord);
-                } else if ($clientRecord) {
-                    $recordToUpdate = $this->_mergeRecord($clientRecord, $record);
+                if ($clientRecord) {
+                    if ($resolveStrategy === 'mergeTheirs') {
+                        $recordToUpdate = $this->_mergeRecord($record, $clientRecord);
+                    } else {
+                        $recordToUpdate = $this->_mergeRecord($clientRecord, $record);
+                    }
                 } else {
-                    $recordToUpdate = null;
+                    $recordToUpdate = $record;
                 }
                 
                 if ($recordToUpdate !== null) {

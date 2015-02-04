@@ -31,17 +31,32 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
         
         return head;
     },
-    
+
+    onBeforePrint: function(document, view) {
+        //if (this.printMode == 'sheet') {
+        //    // FF has scale to page option but scrambles everything after the first page
+        //    // @TODO downscale to fit one page
+        //
+        //    // Chrome does not have a scale to page option
+        //    // A4 Landscape is about 1000px in my chrome ;-)
+        //    var zoom = 1000 / vw;
+        //    document.body.style.zoom = zoom;
+        //    document.body.style.MozTransform = 'scale(' + zoom + ')';
+        //    document.body.style.MozTransformOrigin = 'top left';
+        //}
+    },
+
     generateSheetHTML: function(view) {
         var node = view.el.dom.cloneNode(true),
             header = node.getElementsByClassName('cal-daysviewpanel-wholedayheader-scroller')[0],
-            scroller = node.getElementsByClassName('cal-daysviewpanel-scroller')[0];
+            scroller = node.getElementsByClassName('cal-daysviewpanel-scroller')[0],
+            fullHeight = view.dayEndPx - view.getTimeOffset(view.dayStart) + 20;
         
         // resize header/scroller to fullsize
         header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
-        scroller.style.height = view.dayEndPx - view.getTimeOffset(view.dayStart) + 20 + 'px';
+        scroller.style.height =  fullHeight + 'px';
         scroller.style.width = null;
-        
+
         return this.generateTitle(view) + node.innerHTML;
     },
     

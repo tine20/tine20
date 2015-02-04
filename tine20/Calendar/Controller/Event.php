@@ -234,7 +234,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($this->_sendNotifications && $_record['mute'] != 1) {
+        if ($this->_sendNotifications && $_record->mute != 1) {
             $this->doSendNotifications($createdEvent, Tinebase_Core::getUser(), 'created');
         }        
 
@@ -555,7 +555,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // send notifications
         $this->sendNotifications($sendNotifications);
-        if ($this->_sendNotifications) {
+        if ($this->_sendNotifications && $_record->mute != 1) {
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
         return $updatedEvent;
@@ -614,6 +614,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' ' . print_r($nextRegularRecurEvent->toArray(), TRUE));
                 
+                $nextRegularRecurEvent->mute = $exdate->mute;
                 $newBaseEvent = $this->createRecurException($nextRegularRecurEvent, FALSE, TRUE);
                 // @todo this should be done by createRecurException
                 $exdatesOfNewBaseEvent = $this->getRecurExceptions($newBaseEvent);
@@ -1154,7 +1155,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->doContainerACLChecks($doContainerACLChecks);
         
         // send notifications
-        if ($this->_sendNotifications) {
+        if ($this->_sendNotifications && $_event->mute != 1) {
             // NOTE: recur exception is a fake event from client. 
             //       this might lead to problems, so we wrap the calls
             try {
@@ -1899,7 +1900,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // send notifications
-        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications) {
+        if ($currentAttender->status != $updatedAttender->status && $this->_sendNotifications && $_event->mute != 1) {
             $updatedEvent = $this->get($event->getId());
             $this->doSendNotifications($updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
