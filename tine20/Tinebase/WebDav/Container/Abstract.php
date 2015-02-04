@@ -423,20 +423,19 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         foreach ($mutations as $key => $value) {
             switch ($key) {
                 case '{DAV:}displayname':
-                    if ($value === $this->_container->uuid) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ 
-                            . ' It is not allowed to overwrite the name with the uuid');
-                        if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ 
+                    if ($value === $this->_container->uuid || $value === $this->_container->getId()) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' It is not allowed to overwrite the name with the uuid/id');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                             . ' ' . print_r(array(
                                 'useIdAsName' => $this->_useIdAsName,
                                 'container'   => $this->_container->toArray(),
                                 'new value'   => $value
                             ), true));
-                        $result['403'][$key] = null;
                     } else {
                         $this->_container->name = $value;
-                        $result['200'][$key] = null;
                     }
+                    $result['200'][$key] = null;
                     break;
                     
                 case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
