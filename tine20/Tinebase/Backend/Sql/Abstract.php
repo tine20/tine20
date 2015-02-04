@@ -475,18 +475,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
     {
         $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
-
+        
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
-
+        
         // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
             $_cols = self::IDCOL;
         } else if ($_cols === FALSE) {
             $_cols = '*';
         }
-    
+        
         // (1) eventually get only ids or id/value pair
         list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
 
@@ -503,13 +503,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         } else {
             $select = $this->_getSelect($_cols, $getDeleted);
         }
-
+        
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
         $this->_addSecondarySort($_pagination);
+        $this->_appendForeignSort($_pagination, $select);
         $_pagination->appendPaginationSql($select);
-
+        
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
         if ($getIdValuePair) {
@@ -668,6 +669,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $_pagination->sort = array_merge((array)$_pagination->sort, array($this->_defaultSecondarySort));
             }
         }
+    }
+    
+    /**
+     * append foreign sorting to select
+     * 
+     * @param Tinebase_Model_Pagination $pagination
+     * @param Zend_Db_Select $select
+     * 
+     * @todo allow generic foreign record/relation/keyfield sorting
+     */
+    protected function _appendForeignSort(Tinebase_Model_Pagination $pagination, Zend_Db_Select $select)
+    {
     }
     
     /**

@@ -95,9 +95,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     /**
      * Test event creation with muted invitation
      */
-    public function testMuteToogle()
+    public function testMuteToogleCreation()
     {
-        $event = $this->_getEvent(false, /* $mute = */ 1);
+        $event = $this->_getEvent(TRUE, /* $mute = */ 1);
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
 
         self::flushMailer();
@@ -105,6 +105,44 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
 
         $this->assertEquals($event->mute, 1);
+    }
+    
+    /**
+     * Test event reschedul with muted invitation
+     */
+    public function testMuteToogleReschedul()
+    {
+        $event = $this->_getEvent(TRUE, /* $mute = */ 1);
+        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $persistentEvent->summary = 'reschedule notification has precedence over normal update';
+        $persistentEvent->dtstart->addHour(1);
+        $persistentEvent->dtend->addHour(1);
+        $persistentEvent->mute = 1;
+        $this->assertEquals($persistentEvent->mute, 1);
+        
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
+    }
+    
+    /**
+     * testMuteToogleUpdateAttendeeStatus
+     */
+    public function testMuteToogleUpdateAttendeeStatus()
+    {
+        $event = $this->_getEvent(TRUE, /* $mute = */ 1);
+        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
+        $persistentEvent = $this->_eventController->create($event);
+    
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentEvent->mute = 1;
+        $this->assertEquals($persistentEvent->mute, 1);
+    
+        self::flushMailer();
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
     }
 
     /**
