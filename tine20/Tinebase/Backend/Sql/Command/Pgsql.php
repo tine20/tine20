@@ -93,6 +93,24 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * get get switch case expression with multiple cases
+     * 
+     * @param string $field
+     * @param array $cases
+     * 
+     * @return Zend_Db_Expr
+     */
+    public function getSwitch($field, $cases)
+    {
+        $case = 'CASE ' . $this->_adapter->quoteIdentifier($field) . ' ';
+        foreach ($cases as $when => $then) {
+            $case .=  $this->_adapter->quoteInto(' WHEN ' . $when . ' THEN ?', $then);
+        }
+        $case .= ' END';
+        return new Zend_Db_Expr($case);
+    }
+    
+    /**
      * @param string $date
      * @return string
      */

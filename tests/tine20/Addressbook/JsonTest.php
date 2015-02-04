@@ -1007,6 +1007,38 @@ class Addressbook_JsonTest extends TestCase
     }
     
     /**
+     * testImportMergeTheirsWithTag
+     *
+     */
+    public function testImportMergeTheirsWithTag()
+    {
+        $result = $this->_importHelper(array('dryrun' => 0));
+        $this->assertTrue(count($result['results']) > 0, 'no record were imported');
+        $klaus = $result['results'][0];
+        
+        $klaus['tags'][] = $this->_getTag()->toArray();
+        $klaus['adr_one_postalcode'] = '12345';
+        
+        $clientRecords = array(array(
+            'recordData'        => $klaus,
+            'resolveStrategy'   => 'mergeTheirs',
+            'index'             => 0,
+        ));
+        
+        $options = array(
+            'dryrun'     => 0,
+            'duplicateResolveStrategy' => 'mergeTheirs',
+        );
+        
+        $result = $this->_importHelper($options, $clientRecords);
+        $this->assertEquals(2, count($result['results'][0]['tags']), 'klaus should have both tags: ' . print_r($result['results'][0], TRUE));
+        
+        $klaus = $this->_instance->getContact($klaus['id']);
+        $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus, TRUE));
+        $this->assertEquals('12345', $klaus['adr_one_postalcode']);
+    }
+    
+    /**
      * helper for import with tags and keep/discard strategy
      * 
      * @param string $resolveStrategy

@@ -4,15 +4,10 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Crm_Json
@@ -448,6 +443,9 @@ class Crm_JsonTest extends Crm_AbstractTest
         $taskJson->saveTask($taskData);
     }
     
+    /**
+     * testOtherRecordConstraintsConfig
+     */
     public function testOtherRecordConstraintsConfig()
     {
         $leadData1 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
@@ -573,11 +571,12 @@ class Crm_JsonTest extends Crm_AbstractTest
             $cfc = Tinebase_CustomFieldTest::getCustomField(array(
                 'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
                 'model'          => 'Crm_Model_Lead',
-                'name'           => 'crmcf',
+                'name'           => Tinebase_Record_Abstract::generateUID(),
             ));
+            $this->_cfcName = $cfc->name;
             
             $cfs = array(
-                'crmcf' => '1234'
+                $this->_cfcName => '1234'
             );
             
             Tinebase_CustomField::getInstance()->addCustomField($cfc);
@@ -655,7 +654,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 unset($savedLead['relations'][$key]);
             }
         }
-        $savedLead['customfields']['crmcf'] = '5678';
+        $savedLead['customfields'][$this->_cfcName] = '5678';
         $updatedLead = $this->_instance->saveLead($savedLead);
         
         // check modlog + history
@@ -666,7 +665,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         foreach ($modifications as $modification) {
             switch ($modification->modified_attribute) {
                 case 'customfields':
-                    $this->assertEquals('{"crmcf":"5678"}', $modification->new_value);
+                    $this->assertEquals('{"' . $this->_cfcName . '":"5678"}', $modification->new_value);
                     break;
                 case 'relations':
                     $diff = new Tinebase_Record_RecordSetDiff(Zend_Json::decode($modification->new_value));
@@ -768,5 +767,26 @@ class Crm_JsonTest extends Crm_AbstractTest
         $newLead = $this->_instance->saveLead($leadArray);
         
         $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
+    }
+    
+    /**
+     * testSortByLeadState
+     * 
+     * @see 0010792: Sort leads by status and source
+     */
+    public function testSortByLeadState()
+    {
+        $savedLead1 = $this->_saveLead();
+        $lead2 = $this->_getLead()->toArray();  // open
+        $lead2['leadstate_id'] = 2;             // contacted
+        $savedLead2 = $this->_instance->saveLead($lead2);
+        
+        $sort = array(
+            'sort' => 'leadstate_id',
+            'dir' => 'ASC'
+        );
+        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), $sort);
+        
+        $this->assertEquals(2, $searchLeads['results'][0]['leadstate_id'], 'leadstate "contacted" should come first');
     }
 }

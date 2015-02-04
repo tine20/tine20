@@ -65,7 +65,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         }
         
         var filterSettings = this.sm.getSelectionFilter();
-        
+
         if (this.showExportDialog) {
             var gridRecordClass = this.gridPanel.recordClass,
                 model = gridRecordClass.getMeta('appName') + '_Model_' + gridRecordClass.getMeta('modelName');
@@ -87,18 +87,19 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
     },
     
     /**
-     * start download
+     * Start download by submitting current filter settings and sort information of the grid
      * 
      * @param {Object} filterSettings
      */
-    startDownload: function(filterSettings) {
+    startDownload: function(filterSettings, sortInfo) {
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
                 filter: Ext.util.JSON.encode(filterSettings),
                 options: Ext.util.JSON.encode({
-                    format: this.format
+                    format: this.format,
+                    sortInfo: this.gridPanel.getStore().sortInfo
                 })
             }
         }).start();

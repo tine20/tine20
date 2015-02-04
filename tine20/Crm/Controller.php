@@ -138,7 +138,7 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      * @return  Crm_Model_Config
      * 
      * @todo check 'endslead' values
-     * @todo generalize this / adopt Tinebase_Controller_Abstract::getConfigSettings()
+     * @todo use keyfield configs here
      */
     public function getConfigSettings($_resolve = FALSE)
     {

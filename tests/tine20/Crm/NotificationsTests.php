@@ -4,14 +4,9 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Crm Notifications
@@ -65,57 +60,9 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         ), TRUE));
         $this->_leadController->create($lead);
         
-        $messages = $this->getMessages();
+        $messages = self::getMessages();
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
         $this->assertContains(' Lars Kneschke (Metaways', $bodyText);
-    }
-    
-    /**
-     * get messages
-     * 
-     * @return array
-     * 
-     * @todo move this to TestServer?
-     */
-    public function getMessages()
-    {
-        // make sure messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
-        }
-        
-        return self::getMailer()->getMessages();
-    }
-    
-    /**
-     * get mailer
-     * 
-     * @return Zend_Mail_Transport_Abstract
-     * 
-     * @todo move this to TestServer?
-     */
-    public static function getMailer()
-    {
-        if (! self::$_mailer) {
-            self::$_mailer = Tinebase_Smtp::getDefaultTransport();
-        }
-        
-        return self::$_mailer;
-    }
-    
-    /**
-     * flush mailer (send all remaining mails first)
-     * 
-     * @todo move this to TestServer?
-     */
-    public static function flushMailer()
-    {
-        // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(10000);
-        }
-        
-        self::getMailer()->flush();
-    }
+    }    
 }
