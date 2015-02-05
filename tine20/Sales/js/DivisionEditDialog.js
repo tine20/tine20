@@ -43,6 +43,17 @@ Tine.Sales.DivisionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * @see: Tine.widgets.dialog.EditDialog.onRecordLoad
+     */
+    onRecordLoad: function() {
+        Tine.Sales.DivisionEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (! this.copyRecord && ! this.record.id) {
+            this.window.setTitle(this.app.i18n._('Add New Division'));
+        }
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.

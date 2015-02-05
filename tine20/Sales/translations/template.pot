@@ -91,44 +91,84 @@ msgstr ""
 msgid "You are not allowed to alter the number afterwards!"
 msgstr ""
 
-#: Acl/Rights.php:167
+#: Acl/Rights.php:175
 msgid "manage products"
 msgstr ""
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:176
 msgid "add, edit and delete products"
 msgstr ""
 
-#: Acl/Rights.php:171
+#: Acl/Rights.php:179
 msgid "manage contracts"
 msgstr ""
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:180
 msgid "add, edit and delete contracts"
 msgstr ""
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:183
 msgid "manage cost centers"
 msgstr ""
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:184
 msgid "add, edit and delete cost centers"
 msgstr ""
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:187
 msgid "manage customers"
 msgstr ""
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:188
 msgid "add, edit and delete customers"
 msgstr ""
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:191
+msgid "manage invoices"
+msgstr ""
+
+#: Acl/Rights.php:192
+msgid "add, edit and delete invoices"
+msgstr ""
+
+#: Acl/Rights.php:195
 msgid "manage divisions"
 msgstr ""
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:196
 msgid "add, edit and delete divisions"
+msgstr ""
+
+#: Acl/Rights.php:199
+msgid "manage order confirmations"
+msgstr ""
+
+#: Acl/Rights.php:200
+msgid "add, edit and delete order confirmations"
+msgstr ""
+
+#: Acl/Rights.php:203
+msgid "manage offers"
+msgstr ""
+
+#: Acl/Rights.php:204
+msgid "add, edit and delete offers"
+msgstr ""
+
+#: Acl/Rights.php:207
+msgid "change number of an order confirmations"
+msgstr ""
+
+#: Acl/Rights.php:208
+msgid "allow to change the number of an order confirmation on update"
+msgstr ""
+
+#: Acl/Rights.php:211
+msgid "set number of invoices"
+msgstr ""
+
+#: Acl/Rights.php:212
+msgid "allow to set the number of an invoice"
 msgstr ""
 
 #: Model/Customer.php:35 Model/Customer.php:276 Model/Contract.php:66
@@ -179,7 +219,7 @@ msgstr ""
 #: js/InvoiceEditDialog.js:395 js/CustomerEditDialog.js:398
 #: js/OfferEditDialog.js:146 js/InvoiceDetailsPanel.js:103
 #: js/ProductEditDialog.js:100 js/ContractEditDialog.js:294
-#: js/CustomerDetailsPanel.js:157 js/OrderConfirmationEditDialog.js:146
+#: js/CustomerDetailsPanel.js:157 js/OrderConfirmationEditDialog.js:157
 msgid "Description"
 msgstr ""
 
@@ -275,9 +315,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: Model/Division.php:50 Model/OrderConfirmation.php:67 Model/Contract.php:121
-#: Model/Offer.php:79 Model/InvoicePosition.php:64 js/DivisionEditDialog.js:81
+#: Model/Offer.php:79 Model/InvoicePosition.php:64 js/DivisionEditDialog.js:92
 #: js/OfferEditDialog.js:116 js/ContractEditDialog.js:220
-#: js/ExceptionHandler.js:96 js/OrderConfirmationEditDialog.js:105
+#: js/ExceptionHandler.js:96 js/OrderConfirmationEditDialog.js:116
 msgid "Title"
 msgstr ""
 
@@ -292,7 +332,7 @@ msgstr[1] ""
 #: Model/Contract.php:44 Model/ProductAggregate.php:68 Model/Invoice.php:52
 #: Model/Invoice.php:185 Model/Invoice.php:213 js/InvoiceEditDialog.js:399
 #: js/InvoiceDetailsPanel.js:105 js/ContractFilterModel.js:30
-#: js/OrderConfirmationEditDialog.js:110
+#: js/OrderConfirmationEditDialog.js:121
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
@@ -300,9 +340,9 @@ msgstr[1] ""
 
 #: Model/OrderConfirmation.php:62 Model/Contract.php:116 Model/Offer.php:74
 #: Model/CostCenter.php:50 js/OfferEditDialog.js:111
-#: js/CostCenterEditDialog.js:97 js/ContractEditDialog.js:213
+#: js/CostCenterEditDialog.js:108 js/ContractEditDialog.js:213
 #: js/CostCenterGridPanel.js:56 js/ExceptionHandler.js:91
-#: js/OrderConfirmationEditDialog.js:100 Config.php:110
+#: js/OrderConfirmationEditDialog.js:111 Config.php:131
 msgid "Number"
 msgstr ""
 
@@ -359,7 +399,7 @@ msgstr[1] ""
 msgid "Number Debit"
 msgstr ""
 
-#: Model/Offer.php:33 js/OrderConfirmationEditDialog.js:121
+#: Model/Offer.php:33 js/OrderConfirmationEditDialog.js:132
 msgid "Offer"
 msgid_plural "Offers"
 msgstr[0] ""
@@ -470,7 +510,7 @@ msgstr ""
 msgid "Reversal Invoice"
 msgstr ""
 
-#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:104
+#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:115
 #: js/CostCenterGridPanel.js:62
 msgid "Remark"
 msgstr ""
@@ -549,6 +589,10 @@ msgstr ""
 msgid "automatically set..."
 msgstr ""
 
+#: js/DivisionEditDialog.js:52
+msgid "Add New Division"
+msgstr ""
+
 #: js/AdminPanel.js:61 js/BillingDateDialog.js:127
 msgid "Cancel"
 msgstr ""
@@ -595,7 +639,7 @@ msgid "Postal Address"
 msgstr ""
 
 #: js/CustomerEditDialog.js:412 js/OfferEditDialog.js:160
-#: js/OrderConfirmationEditDialog.js:160
+#: js/OrderConfirmationEditDialog.js:171
 msgid "Enter description"
 msgstr ""
 
@@ -650,6 +694,10 @@ msgstr ""
 
 #: js/ProductAggregateGridPanel.js:237
 msgid "Last Modified By"
+msgstr ""
+
+#: js/CostCenterEditDialog.js:67
+msgid "Add New Cost Center"
 msgstr ""
 
 #: js/ProductEditDialog.js:42
@@ -766,78 +814,102 @@ msgstr ""
 msgid "without contract"
 msgstr ""
 
+#: js/OrderConfirmationEditDialog.js:71
+msgid "Add New Order Confirmation"
+msgstr ""
+
 #: Controller/NumberableAbstract.php:99
 msgid "The number you have tried to set is already in use!"
 msgstr ""
 
-#: Config.php:72
+#: Config.php:93
 msgid "Auto Invoice Contract Interval"
 msgstr ""
 
-#: Config.php:74
+#: Config.php:95
 msgid "Sets the biggest interval, contracts will be billed."
 msgstr ""
 
-#: Config.php:82
+#: Config.php:103
 msgid "Ignore Billables Before Date"
 msgstr ""
 
-#: Config.php:84
+#: Config.php:105
 msgid "Sets the date billables will be ignored before."
 msgstr ""
 
-#: Config.php:92
+#: Config.php:113
 msgid "Contract Number Creation"
 msgstr ""
 
-#: Config.php:94
+#: Config.php:115
 msgid "Should the contract number be set manually or be auto-created?"
 msgstr ""
 
-#: Config.php:97
+#: Config.php:118
 msgid "automatically"
 msgstr ""
 
-#: Config.php:98
+#: Config.php:119
 msgid "manually"
 msgstr ""
 
-#: Config.php:105
+#: Config.php:126
 msgid "Contract Number Validation"
 msgstr ""
 
-#: Config.php:107
+#: Config.php:128
 msgid "The Number can be validated as text or number."
 msgstr ""
 
-#: Config.php:111
+#: Config.php:132
 msgid "Text"
 msgstr ""
 
-#: Config.php:118
+#: Config.php:139
 msgid "Own Currency"
 msgstr ""
 
-#: Config.php:120
+#: Config.php:141
 msgid ""
 "The currency defined here is used as default currency in the customerd edit "
 "dialog."
 msgstr ""
 
-#: Config.php:128
+#: Config.php:149
 msgid "Invoice Type"
 msgstr ""
 
-#: Config.php:130
+#: Config.php:151
 msgid "Possible Invoice Types."
 msgstr ""
 
-#: Config.php:138
+#: Config.php:159
 msgid "Invoice Cleared"
 msgstr ""
 
-#: Config.php:140
+#: Config.php:161
 msgid "Possible Invoice Cleared States."
+msgstr ""
+
+#: Config.php:184
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:186
+msgid "Enabled Features in Sales Application."
+msgstr ""
+
+#: Config.php:193
+msgid "Invoices Module"
+msgstr ""
+
+#: Config.php:197
+msgid "Offers Module"
+msgstr ""
+
+#: Config.php:201
+msgid "Order Confirmations Module"
 msgstr ""
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:63

@@ -516,7 +516,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 grow: false,
                                 preventScrollbars: false,
                                 anchor: '100% 100%',
-                                emptyText: _('Enter description'),
+                                emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
                         })
