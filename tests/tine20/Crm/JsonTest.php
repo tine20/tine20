@@ -769,4 +769,21 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
     }
+    
+    /**
+     * testAdvancedSearch in related products
+     * 
+     * @see 0010814: quicksearch should search in related records
+     */
+    public function testAdvancedSearchInProduct()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
+        
+        $lead = $this->_saveLead();
+        $filter = array(
+            array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit test product'),
+        );
+        $searchLeads = $this->_instance->searchLeads($filter, '');
+        $this->assertEquals(1, $searchLeads['totalcount']);
+    }
 }

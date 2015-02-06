@@ -237,7 +237,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         this.quickFilter = new Ext.ux.SearchField({
-            width: 350,
+            width: 250,
             enableKeyEvents: true
         });
         
