@@ -59,7 +59,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }],
             items:[
                 {
-                title: this.app.i18n.n_('Product', 'Product', 1),
+                title: this.app.i18n.n_('Product', 'Products', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,

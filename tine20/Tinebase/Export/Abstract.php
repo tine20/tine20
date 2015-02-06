@@ -429,6 +429,10 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _addMatrices(Zend_Config_Xml $config)
     {
+        if (! isset($config->columns) || ! isset($config->columns->column)) {
+            return;
+        }
+        
         for ($i = 0; $i < $config->columns->column->count(); $i++) {
             $column = $config->columns->column->{$i};
             if ($column->separateColumns) {

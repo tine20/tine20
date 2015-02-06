@@ -18,23 +18,17 @@ msgstr ""
 msgid "%s's personal inventory items"
 msgstr ""
 
-#: Model/InventoryItem.php:34
+#: Model/InventoryItem.php:35
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: Model/InventoryItem.php:35
-msgid "Inventory items"
-msgstr ""
-
-#: Model/InventoryItem.php:38
-msgid "Inventory item list"
-msgstr ""
-
 #: Model/InventoryItem.php:39
-msgid "Inventory items lists"
-msgstr ""
+msgid "Inventory item list"
+msgid_plural "Inventory item lists"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
@@ -68,8 +62,8 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:264
-msgid "Cost centre"
+#: Model/InventoryItem.php:104
+msgid "Cost Center"
 msgstr ""
 
 #: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
@@ -142,6 +136,10 @@ msgstr ""
 
 #: js/InventoryItemEditDialog.js:236
 msgid "Accounting"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:264
+msgid "Cost centre"
 msgstr ""
 
 #: Preference.php:60

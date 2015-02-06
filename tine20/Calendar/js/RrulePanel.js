@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Calendar');
@@ -18,6 +18,12 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
      * @property
      */    
     activeRuleCard: null,
+    
+    /**
+     * the event edit dialog (parent)
+     * @type Tine.Calendar.EventEditDialog
+     */
+    eventEditDialog: null,
     
     layout: 'form',
     frame: true,
@@ -68,7 +74,6 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             id: this.idPrefix + 'tglbtn' + 'NONE',
             xtype: 'tbbtnlockedtoggle',
             enableToggle: true,
-            //pressed: true,
             text: this.app.i18n._('None'),
             handler: this.onFreqChange.createDelegate(this, ['NONE']),
             toggleGroup: this.idPrefix + 'freqtglgroup'
@@ -374,10 +379,31 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
     },
     
     isValid: function(record) {
-        var until = this.until.getValue();
+        var until = this.until.getValue(),
+            freq = this.freq;
+        
         if (Ext.isDate(until) && Ext.isDate(record.get('dtstart'))) {
             if (until.getTime() < record.get('dtstart').getTime()) {
                 this.until.markInvalid(this.app.i18n._('Until has to be after event start'));
+                return false;
+            }
+        } 
+        
+        if (Ext.isDate(record.get('dtend')) && Ext.isDate(record.get('dtstart'))) {
+            var dayDifference = (record.get('dtend').getTime() - record.get('dtstart').getTime()) / 1000 / 60 / 60 / 24,
+                dtendField = this.rrulePanel.eventEditDialog.getForm().findField('dtend');
+            
+            if(freq == 'DAILY' && dayDifference >= 1) {
+                dtendField.markInvalid(this.app.i18n._('The event is longer than the recurring interval'));
+                return false;
+            } else if(freq == 'WEEKLY' && dayDifference >= 7) {
+                dtendField.markInvalid(this.app.i18n._('The event is longer than the recurring interval'));
+                return false;
+            } else if(freq == 'MONTHLY' && dayDifference >= 28) {
+                dtendField.markInvalid(this.app.i18n._('The event is longer than the recurring interval'));
+                return false;
+            } else if(freq == 'YEARLY' && dayDifference >= 365) {
+                dtendField.markInvalid(this.app.i18n._('The event is longer than the recurring interval'));
                 return false;
             }
         }

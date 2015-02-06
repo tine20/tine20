@@ -31,12 +31,12 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'Inventory item', // _('Inventory item') ngettext('Inventory item', 'Inventory items', n)
-        'recordsName'       => 'Inventory items', // _('Inventory items')
+        'recordName'        => 'Inventory item',
+        'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
         'titleProperty'     => 'name',
-        'containerName'     => 'Inventory item list', // _('Inventory item list')
-        'containersName'    => 'Inventory items lists', // _('Inventory items lists')
+        'containerName'     => 'Inventory item list',
+        'containersName'    => 'Inventory item lists', // ngettext('Inventory item list', 'Inventory item lists', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         'hasNotes'          => TRUE,
@@ -101,7 +101,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ),
             'costcentre' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'Cost centre', // _('Cost centre')
+                'label'      => 'Cost centre', // _('Cost Center')
                 'hidden'     => TRUE,
                 'type'       => 'record',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),

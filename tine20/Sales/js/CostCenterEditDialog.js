@@ -35,8 +35,6 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowHeight: 450,
     
     /**
-<<<<<<< HEAD
-=======
      * @private
      */
     windowNamePrefix: 'CostCenterEditWindow_',
@@ -52,12 +50,22 @@ Tine.Sales.CostCenterEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Sales.CostCenterEditDialog.superclass.initComponent.call(this);
     },
     /**
->>>>>>> pu/2013.10-invoices
      * called on multiple edit
      * @return {Boolean}
      */
     isMultipleValid: function() {
         return true;
+    },
+    
+    /**
+     * @see: Tine.widgets.dialog.EditDialog.onRecordLoad
+     */
+    onRecordLoad: function() {
+        Tine.Sales.CostCenterEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (! this.copyRecord && ! this.record.id) {
+            this.window.setTitle(this.app.i18n._('Add New Cost Center'));
+        }
     },
     
     /**

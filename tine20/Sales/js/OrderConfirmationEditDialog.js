@@ -53,6 +53,17 @@ Tine.Sales.OrderConfirmationEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
     
     /**
+     * @see: Tine.widgets.dialog.EditDialog.onRecordLoad
+     */
+    onRecordLoad: function() {
+        Tine.Sales.OrderConfirmationEditDialog.superclass.onRecordLoad.call(this);
+        
+        if (! this.copyRecord && ! this.record.id) {
+            this.window.setTitle(this.app.i18n._('Add New Order Confirmation'));
+        }
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
