@@ -29,7 +29,7 @@ Tine.Sales.ContractCostCenterFilterModel = Ext.extend(Tine.widgets.grid.ForeignR
         this.app = Tine.Tinebase.appMgr.get('Sales');
         this.label = this.app.i18n.n_('Cost Center', 'Cost Centers', 1);
         this.foreignRecordClass = Tine.Sales.Model.CostCenter;
-        this.pickerConfig = {emptyText: this.app.i18n._('without CostCenter'), allowBlank: true};
+        this.pickerConfig = {emptyText: this.app.i18n._('without Cost Center'), allowBlank: true};
 
         Tine.Sales.ContractCostCenterFilterModel.superclass.initComponent.call(this);
     }

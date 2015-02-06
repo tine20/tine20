@@ -127,7 +127,7 @@ Tine.Sales.InvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     '<div class="preview-panel-declaration">' + this.app.i18n._('Miscellaneous') + '</div>',
                     '<div class="preview-panel-left">',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Credit Term') + '</span>{[this.encode(values, "credit_term")]}<br/>',
-                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Cost Center') + '</span>{[this.encode(values, "costcenter_id")]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n.n_('Cost Center', 'Cost Centers', 1) + '</span>{[this.encode(values, "costcenter_id")]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Cleared') + '</span>{[this.encode(values, "cleared")]}<br/>',
                     '</div>',
                 '</div>',

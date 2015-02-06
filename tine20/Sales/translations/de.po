@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
 # Ettore Atalan <atalanttore@googlemail.com>, 2014
@@ -12,17 +12,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-21 11:59+0000\n"
+"PO-Revision-Date: 2015-02-05 11:57+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Export/Ods/Invoice.php:125
 msgid "CLEARED"
@@ -43,9 +43,12 @@ msgstr "Adresse als Rechnungsadresse in Benutzung"
 #: Exception/DeleteUsedBillingAddress.php:31
 msgid ""
 "The Address you tried to delete is used in one or more contract(s) as "
-"Billing Address. Please assign another Billing Address to these contracts or"
-" change this one and do not delete."
-msgstr "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+"Billing Address. Please assign another Billing Address to these contracts or "
+"change this one and do not delete."
+msgstr ""
+"Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen "
+"als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere "
+"Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
 
 #: Exception/DeletePreviousInvoice.php:26
 msgid "Following Invoices Found"
@@ -55,7 +58,9 @@ msgstr "Nachfolgende Rechnungen gefunden"
 msgid ""
 "There is an invoice for the same contract after this one. Please delete the "
 "following invoice(s) before deleting this one!"
-msgstr "Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
+msgstr ""
+"Es existiert bereits eine spätere Rechnung für den selben Vertrag. Bitte "
+"löschen Sie die spätere(n) Rechnung(en), bevor Sie diese Rechnung löschen!"
 
 #: Exception/DuplicateNumber.php:26
 msgid "Number duplicate"
@@ -65,7 +70,10 @@ msgstr "Mehrfach vergebene Nummer"
 msgid ""
 "The number you tried to use has been taken already. Please use another one "
 "leave the field blank to take the next free number."
-msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld leer, um die nächst freie Nummer zu verwenden."
+msgstr ""
+"Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits "
+"vergeben. Bitte versuchen Sie es mit einer anderen, oder lassen das Feld "
+"leer, um die nächst freie Nummer zu verwenden."
 
 #: Exception/InvoiceAlreadyClearedEdit.php:26
 #: Exception/InvoiceAlreadyClearedDelete.php:26
@@ -76,7 +84,9 @@ msgstr "Rechnung ist bereits abgerechnet"
 msgid ""
 "The Invoice you tried to edit is cleared already, so no editing is possible "
 "anymore!"
-msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits abgerechnet und kann nicht weiter bearbeitet werden!"
+msgstr ""
+"Die Rechnung die Sie bearbeiten wollten, ist bereits abgerechnet und kann "
+"nicht weiter bearbeitet werden!"
 
 #: Exception/UnknownCurrencyCode.php:26
 msgid "Unknown Currency Code"
@@ -84,15 +94,19 @@ msgstr "Unbekannter Währungscode"
 
 #: Exception/UnknownCurrencyCode.php:31
 msgid ""
-"The Currency Code you tried to use is not valid. Please use a valid Currency"
-" Code as defined in ISO 4217."
-msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
+"The Currency Code you tried to use is not valid. Please use a valid Currency "
+"Code as defined in ISO 4217."
+msgstr ""
+"Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig. "
+"Bitte verwenden Sie einen gültigen Währungscode nach ISO 4217."
 
 #: Exception/InvoiceAlreadyClearedDelete.php:31
 msgid ""
 "The Invoice you tried to delete is cleared already, so deleting is not "
 "possible anymore!"
-msgstr "Die Rechnung die Sie löschen wollten, ist bereits abgerechnet und kann nicht mehr gelöscht werden!"
+msgstr ""
+"Die Rechnung die Sie löschen wollten, ist bereits abgerechnet und kann nicht "
+"mehr gelöscht werden!"
 
 #: Exception/AlterOCNumberForbidden.php:26
 msgid "No Right to alter the Number"
@@ -102,87 +116,87 @@ msgstr "Keine Berechtigung die Nummer zu verändern"
 msgid "You are not allowed to alter the number afterwards!"
 msgstr "Die Nummer kann nachträglich nicht mehr geändert werden!"
 
-#: Acl/Rights.php:167
+#: Acl/Rights.php:175
 msgid "manage products"
 msgstr "Produkte verwalten"
 
-#: Acl/Rights.php:168
+#: Acl/Rights.php:176
 msgid "add, edit and delete products"
 msgstr "Hinzufügen, Editieren und Löschen von Produkten"
 
-#: Acl/Rights.php:171
+#: Acl/Rights.php:179
 msgid "manage contracts"
 msgstr "Verträge verwalten"
 
-#: Acl/Rights.php:172
+#: Acl/Rights.php:180
 msgid "add, edit and delete contracts"
 msgstr "Verträge hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:183
 msgid "manage cost centers"
 msgstr "Kostenstellen verwalten"
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:184
 msgid "add, edit and delete cost centers"
 msgstr "Kostenstellen hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:187
 msgid "manage customers"
 msgstr "Kunden verwalten"
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:188
 msgid "add, edit and delete customers"
 msgstr "Kunden hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:183
+#: Acl/Rights.php:191
 msgid "manage invoices"
-msgstr "Rechungen verwalten"
+msgstr "Rechnungen verwalten"
 
-#: Acl/Rights.php:184
+#: Acl/Rights.php:192
 msgid "add, edit and delete invoices"
 msgstr "Rechnungen hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:195
 msgid "manage divisions"
 msgstr "Abteilungen verwalten"
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:196
 msgid "add, edit and delete divisions"
 msgstr "Abteilungen hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:191
+#: Acl/Rights.php:199
 msgid "manage order confirmations"
 msgstr "Auftragsbestätigungen verwalten"
 
-#: Acl/Rights.php:192
+#: Acl/Rights.php:200
 msgid "add, edit and delete order confirmations"
 msgstr "Auftragsbestätigungen hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:203
 msgid "manage offers"
 msgstr "Angebote verwalten"
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:204
 msgid "add, edit and delete offers"
 msgstr "Angebote hinzufügen, bearbeiten und löschen"
 
-#: Acl/Rights.php:199
+#: Acl/Rights.php:207
 msgid "change number of an order confirmations"
-msgstr "Nummer einer Auftragsbestätigung ändern"
+msgstr "ändere die Nummer einer Auftragsbestätigung"
 
-#: Acl/Rights.php:200
+#: Acl/Rights.php:208
 msgid "allow to change the number of an order confirmation on update"
-msgstr "Änderung der Nummer einer Auftragsbestätigung beim Update erlauben"
+msgstr "erlaube die Nummer einer Auftragsbestätigung beim Update zu ändern"
 
-#: Acl/Rights.php:203
+#: Acl/Rights.php:211
 msgid "set number of invoices"
-msgstr "Rechnungsnummer manuell vergeben"
+msgstr "Rechnungsnummern setzen"
 
-#: Acl/Rights.php:204
+#: Acl/Rights.php:212
 msgid "allow to set the number of an invoice"
-msgstr "Erlaubt, die Rechnungsnummer manuell zu vergeben"
+msgstr "erlaube die Rechnungsnummer zu setzen"
 
-#: Model/Customer.php:35 Model/Customer.php:264 Model/Contract.php:66
+#: Model/Customer.php:35 Model/Customer.php:276 Model/Contract.php:66
 #: Model/Contract.php:162 Model/Contract.php:247 Model/Contract.php:268
 #: Model/Address.php:52 Model/Offer.php:49 Model/Offer.php:93
 #: Model/Invoice.php:64 Model/Invoice.php:197 Model/Invoice.php:217
@@ -225,94 +239,96 @@ msgstr "Name"
 msgid "Web"
 msgstr "Internet"
 
-#: Model/Customer.php:76 Model/OrderConfirmation.php:72 Model/Contract.php:126
+#: Model/Customer.php:77 Model/OrderConfirmation.php:72 Model/Contract.php:126
 #: Model/Offer.php:84 Model/Product.php:55 Model/Invoice.php:83
 #: js/InvoiceEditDialog.js:395 js/CustomerEditDialog.js:398
 #: js/OfferEditDialog.js:146 js/InvoiceDetailsPanel.js:103
 #: js/ProductEditDialog.js:100 js/ContractEditDialog.js:294
-#: js/CustomerDetailsPanel.js:157 js/OrderConfirmationEditDialog.js:146
+#: js/CustomerDetailsPanel.js:157 js/OrderConfirmationEditDialog.js:157
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/Customer.php:82 Model/Contract.php:102 Model/Contract.php:174
+#: Model/Customer.php:84 Model/Contract.php:102 Model/Contract.php:174
 #: js/CustomerEditDialog.js:214 js/ContractContactExternalFilterModel.js:30
 #: js/ContractEditDialog.js:260 js/CustomerDetailsPanel.js:128
 msgid "Contact Person (external)"
 msgstr "Kontaktperson (extern)"
 
-#: Model/Customer.php:93 Model/Contract.php:90 Model/Contract.php:186
+#: Model/Customer.php:95 Model/Contract.php:90 Model/Contract.php:186
 #: js/CustomerEditDialog.js:224 js/ContractEditDialog.js:272
 #: js/ContractContactInternalFilterModel.js:30 js/CustomerDetailsPanel.js:129
 msgid "Contact Person (internal)"
 msgstr "Kontaktperson (intern)"
 
-#: Model/Customer.php:104 js/CustomerEditDialog.js:240
+#: Model/Customer.php:106 js/CustomerEditDialog.js:240
 #: js/CustomerDetailsPanel.js:145
 msgid "VAT No."
 msgstr "USt.-ID"
 
-#: Model/Customer.php:109 js/CustomerEditDialog.js:243
+#: Model/Customer.php:112 js/CustomerEditDialog.js:243
 msgid "Credit Term (days)"
 msgstr "Zahlungsziel in Tagen"
 
-#: Model/Customer.php:115 js/CustomerEditDialog.js:254
+#: Model/Customer.php:119 js/CustomerEditDialog.js:254
 #: js/CustomerDetailsPanel.js:146
 msgid "Currency"
 msgstr "Währung"
 
-#: Model/Customer.php:120 js/CustomerEditDialog.js:259
+#: Model/Customer.php:124 js/CustomerEditDialog.js:259
 #: js/CustomerDetailsPanel.js:147
 msgid "Currency Translation Rate"
 msgstr "Wechselkurs"
 
-#: Model/Customer.php:134 js/CustomerEditDialog.js:277
+#: Model/Customer.php:141 js/CustomerEditDialog.js:277
 msgid "Discount (%)"
 msgstr "Rabatt in Prozent"
 
-#: Model/Customer.php:141 js/AddressEditDialog.js:78
+#: Model/Customer.php:148 js/AddressEditDialog.js:78
+#: js/DeliveryAddressGridPanel.js:40
 msgid "Delivery Addresses"
 msgstr "Lieferanschriften"
 
-#: Model/Customer.php:154 js/AddressEditDialog.js:75
+#: Model/Customer.php:161 js/BillingAddressGridPanel.js:40
+#: js/AddressEditDialog.js:75
 msgid "Billing Addresses"
 msgstr "Rechnungsanschriften"
 
-#: Model/Customer.php:180 Model/Address.php:89 js/CustomerEditDialog.js:332
+#: Model/Customer.php:187 Model/Address.php:89 js/CustomerEditDialog.js:332
 #: js/AddressEditDialog.js:166
 msgid "Prefix"
 msgstr "Zusatz"
 
-#: Model/Customer.php:187 Model/Address.php:93 js/CustomerEditDialog.js:336
+#: Model/Customer.php:195 Model/Address.php:93 js/CustomerEditDialog.js:336
 #: js/AddressEditDialog.js:169
 msgid "Additional Prefix"
 msgstr "Zusatz 2"
 
-#: Model/Customer.php:194 Model/Address.php:64 js/CustomerEditDialog.js:303
+#: Model/Customer.php:203 Model/Address.php:64 js/CustomerEditDialog.js:303
 #: js/AddressEditDialog.js:147
 msgid "Street"
 msgstr "Straße"
 
-#: Model/Customer.php:204 Model/Address.php:72 js/CustomerEditDialog.js:313
+#: Model/Customer.php:212 Model/Address.php:72 js/CustomerEditDialog.js:313
 #: js/AddressEditDialog.js:153
 msgid "Postalcode"
 msgstr "Postleitzahl"
 
-#: Model/Customer.php:210 Model/Address.php:76 js/CustomerEditDialog.js:318
+#: Model/Customer.php:220 Model/Address.php:76 js/CustomerEditDialog.js:318
 #: js/AddressEditDialog.js:156
 msgid "Locality"
 msgstr "Ort"
 
-#: Model/Customer.php:217 Model/Address.php:80 js/CustomerEditDialog.js:322
+#: Model/Customer.php:228 Model/Address.php:80 js/CustomerEditDialog.js:322
 #: js/AddressEditDialog.js:159
 msgid "Region"
 msgstr "Region"
 
-#: Model/Customer.php:226 Model/Address.php:84 js/CustomerEditDialog.js:327
+#: Model/Customer.php:236 Model/Address.php:84 js/CustomerEditDialog.js:327
 #: js/AddressEditDialog.js:163
 msgid "Country"
 msgstr "Land"
 
-#: Model/Customer.php:233 Model/Address.php:68 js/CustomerEditDialog.js:307
+#: Model/Customer.php:245 Model/Address.php:68 js/CustomerEditDialog.js:307
 #: js/AddressEditDialog.js:150
 msgid "Postbox"
 msgstr "Postfach"
@@ -321,12 +337,12 @@ msgstr "Postfach"
 msgid "Division"
 msgid_plural "Divisions"
 msgstr[0] "Abteilung"
-msgstr[1] "Abteilung"
+msgstr[1] "Abteilungen"
 
 #: Model/Division.php:50 Model/OrderConfirmation.php:67 Model/Contract.php:121
-#: Model/Offer.php:79 Model/InvoicePosition.php:64 js/DivisionEditDialog.js:81
+#: Model/Offer.php:79 Model/InvoicePosition.php:64 js/DivisionEditDialog.js:92
 #: js/OfferEditDialog.js:116 js/ContractEditDialog.js:220
-#: js/ExceptionHandler.js:96 js/OrderConfirmationEditDialog.js:105
+#: js/ExceptionHandler.js:96 js/OrderConfirmationEditDialog.js:116
 msgid "Title"
 msgstr "Titel"
 
@@ -341,7 +357,7 @@ msgstr[1] "Auftragsbestätigungen"
 #: Model/Contract.php:44 Model/ProductAggregate.php:68 Model/Invoice.php:52
 #: Model/Invoice.php:185 Model/Invoice.php:213 js/InvoiceEditDialog.js:399
 #: js/InvoiceDetailsPanel.js:105 js/ContractFilterModel.js:30
-#: js/OrderConfirmationEditDialog.js:110
+#: js/OrderConfirmationEditDialog.js:121
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Vertrag"
@@ -349,20 +365,21 @@ msgstr[1] "Verträge"
 
 #: Model/OrderConfirmation.php:62 Model/Contract.php:116 Model/Offer.php:74
 #: Model/CostCenter.php:50 js/OfferEditDialog.js:111
-#: js/CostCenterEditDialog.js:100 js/ContractEditDialog.js:213
+#: js/CostCenterEditDialog.js:108 js/ContractEditDialog.js:213
 #: js/CostCenterGridPanel.js:56 js/ExceptionHandler.js:91
-#: js/OrderConfirmationEditDialog.js:100 Config.php:110
+#: js/OrderConfirmationEditDialog.js:111 Config.php:131
 msgid "Number"
 msgstr "Nummer"
 
-#: Model/Contract.php:78 Model/Invoice.php:121 js/InvoiceEditDialog.js:478
-#: js/InvoiceDetailsPanel.js:130
+#: Model/Contract.php:78 Model/Invoice.php:121 Model/CostCenter.php:34
 msgid "Cost Center"
-msgstr "Kostenstelle"
+msgid_plural "Cost Centers"
+msgstr[0] "Kostenstelle"
+msgstr[1] "Kostenstellen"
 
 #: Model/Contract.php:141 js/InvoiceEditDialog.js:431
-#: js/InvoiceDetailsPanel.js:115 js/ContractEditDialog.js:240
-#: js/AddressEditDialog.js:74
+#: js/BillingAddressGridPanel.js:39 js/InvoiceDetailsPanel.js:115
+#: js/ContractEditDialog.js:240 js/AddressEditDialog.js:74
 msgid "Billing Address"
 msgstr "Rechnungsanschrift"
 
@@ -407,7 +424,7 @@ msgstr[1] "Anschriften"
 msgid "Number Debit"
 msgstr "Debitorennummer"
 
-#: Model/Offer.php:33 js/OrderConfirmationEditDialog.js:121
+#: Model/Offer.php:33 js/OrderConfirmationEditDialog.js:132
 msgid "Offer"
 msgid_plural "Offers"
 msgstr[0] "Angebot"
@@ -489,7 +506,7 @@ msgid "Credit Term"
 msgstr "Zahlungsziel in Tagen"
 
 #: Model/Invoice.php:130 js/InvoiceEditDialog.js:484
-#: js/InvoiceDetailsPanel.js:131 Setup/Update/Release8.php:194
+#: js/InvoiceDetailsPanel.js:131 Setup/Update/Release8.php:152
 msgid "Cleared"
 msgstr "Abgerechnet"
 
@@ -518,13 +535,7 @@ msgstr "Positionen"
 msgid "Reversal Invoice"
 msgstr "Storno-Rechnung"
 
-#: Model/CostCenter.php:34
-msgid "Costcenter"
-msgid_plural "Costcenters"
-msgstr[0] "Kostenstelle"
-msgstr[1] "Kostenstellen"
-
-#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:107
+#: Model/CostCenter.php:57 js/CostCenterEditDialog.js:115
 #: js/CostCenterGridPanel.js:62
 msgid "Remark"
 msgstr "Anmerkung"
@@ -548,7 +559,9 @@ msgstr "Einheit"
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria "
 "or view-options."
-msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
+msgstr ""
+"Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien "
+"oder Ansichtseinstellungen."
 
 #: js/AddressGridPanel.js:56
 msgid "Clipboard"
@@ -583,7 +596,9 @@ msgstr "Kein Kunde zugeordnet"
 msgid ""
 "The selected contract doesn't have a customer assigned, yet. Add a customer "
 "to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einem Kunden."
+msgstr ""
+"Dem ausgewählten Vertrag ist bisher kein Kunde zugeordnet worden. Bitte "
+"verknüpfen Sie den Vertrag mit einem Kunden."
 
 #: js/InvoiceEditDialog.js:267
 msgid "No cost center assigned"
@@ -593,7 +608,9 @@ msgstr "Keine Kostenstelle zugeordnet"
 msgid ""
 "The selected contract doesn't have a cost center assigned, yet. Add a cost "
 "center to the contract with the contract edit dialog."
-msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
+msgstr ""
+"Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worden. "
+"Bitte verknüpfen Sie den Vertrag mit einer Kostenstelle."
 
 #: js/InvoiceEditDialog.js:346
 msgid "Sales Tax (percent)"
@@ -602,6 +619,10 @@ msgstr "Mehrwertsteuer in Prozent"
 #: js/InvoiceEditDialog.js:380 js/InvoiceEditDialog.js:386
 msgid "automatically set..."
 msgstr "automatisch ausgefüllt..."
+
+#: js/DivisionEditDialog.js:52
+msgid "Add New Division"
+msgstr "Neue Abteilung hinzufügen"
 
 #: js/AdminPanel.js:61 js/BillingDateDialog.js:127
 msgid "Cancel"
@@ -614,6 +635,10 @@ msgstr "OK"
 #: js/AdminPanel.js:90
 msgid "Loading..."
 msgstr "Lade ..."
+
+#: js/AdminPanel.js:149
+msgid "EUR"
+msgstr "EUR"
 
 #: js/CustomerEditDialog.js:45
 msgid "Either street or postbox is required!"
@@ -645,7 +670,7 @@ msgid "Postal Address"
 msgstr "Postanschrift"
 
 #: js/CustomerEditDialog.js:412 js/OfferEditDialog.js:160
-#: js/OrderConfirmationEditDialog.js:160
+#: js/OrderConfirmationEditDialog.js:171
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an"
 
@@ -654,8 +679,8 @@ msgid "without external contact person"
 msgstr "ohne externe Kontaktperson"
 
 #: js/ContractCostCenterFilterModel.js:32
-msgid "without CostCenter"
-msgstr "ohne Kostenstelle"
+msgid "without Cost Center"
+msgstr "Ohne Kostenstelle"
 
 #: js/OfferEditDialog.js:54
 msgid "Add New Offer"
@@ -702,6 +727,10 @@ msgstr "Letztes Modifikationsdatum"
 msgid "Last Modified By"
 msgstr "Zuletzt geändert von"
 
+#: js/CostCenterEditDialog.js:67
+msgid "Add New Cost Center"
+msgstr "Neue Kostenstelle hinzufügen"
+
 #: js/ProductEditDialog.js:42
 msgid "Add New Product"
 msgstr "Neues Produkt hinzufügen"
@@ -730,7 +759,7 @@ msgstr "ohne Auftragsbestätigung"
 msgid "Ok"
 msgstr "Ok"
 
-#: js/AddressEditDialog.js:77
+#: js/AddressEditDialog.js:77 js/DeliveryAddressGridPanel.js:39
 msgid "Delivery Address"
 msgstr "Lieferanschrift"
 
@@ -816,79 +845,106 @@ msgstr "Bitte wählen Sie das Datum, zu dem Sie die Rechnung erzeugen möchten"
 msgid "without contract"
 msgstr "ohne Vertrag"
 
+#: js/OrderConfirmationEditDialog.js:71
+msgid "Add New Order Confirmation"
+msgstr "Neue Auftragsbestätigung hinzufügen"
+
 #: Controller/NumberableAbstract.php:99
 msgid "The number you have tried to set is already in use!"
 msgstr "Diese Nummer ist bereits vergeben!"
 
-#: Config.php:72
+#: Config.php:93
 msgid "Auto Invoice Contract Interval"
 msgstr "Vertragsintervall automatisch abrechnen"
 
-#: Config.php:74
+#: Config.php:95
 msgid "Sets the biggest interval, contracts will be billed."
 msgstr "Setze das größte Intervall, zu dem Verträge abgerechnet werden"
 
-#: Config.php:82
+#: Config.php:103
 msgid "Ignore Billables Before Date"
 msgstr "Abrechenbares vor Datum ignorieren"
 
-#: Config.php:84
+#: Config.php:105
 msgid "Sets the date billables will be ignored before."
 msgstr "Setze Datum, bis zu dem Abrechnbares ignoriert wird."
 
-#: Config.php:92
+#: Config.php:113
 msgid "Contract Number Creation"
 msgstr "Vertragsnummer-Erstellung"
 
-#: Config.php:94
+#: Config.php:115
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr "Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
+msgstr ""
+"Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
 
-#: Config.php:97
+#: Config.php:118
 msgid "automatically"
 msgstr "automatisch"
 
-#: Config.php:98
+#: Config.php:119
 msgid "manually"
 msgstr "manuell"
 
-#: Config.php:105
+#: Config.php:126
 msgid "Contract Number Validation"
 msgstr "Vertragsnummer-Validierung"
 
-#: Config.php:107
+#: Config.php:128
 msgid "The Number can be validated as text or number."
 msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
 
-#: Config.php:111
+#: Config.php:132
 msgid "Text"
 msgstr "Text"
 
-#: Config.php:118
+#: Config.php:139
 msgid "Own Currency"
 msgstr "Eigene Währung"
 
-#: Config.php:120
+#: Config.php:141
 msgid ""
 "The currency defined here is used as default currency in the customerd edit "
 "dialog."
-msgstr "Die hier definierte Währung wird als standard Währung für den Kunden bearbeiten Dialog verwendet."
+msgstr ""
+"Die hier definierte Währung wird als standard Währung für den Kunden "
+"bearbeiten Dialog verwendet."
 
-#: Config.php:128
+#: Config.php:149
 msgid "Invoice Type"
 msgstr "Rechnungstyp "
 
-#: Config.php:130
+#: Config.php:151
 msgid "Possible Invoice Types."
 msgstr "Mögliche Rechnungstypen."
 
-#: Config.php:138
+#: Config.php:159
 msgid "Invoice Cleared"
 msgstr "Rechnung abgerechnet"
 
-#: Config.php:140
+#: Config.php:161
 msgid "Possible Invoice Cleared States."
 msgstr "Mögliche Werte für Abgerechnetstatus"
+
+#: Config.php:184
+msgid "Enabled Features"
+msgstr "Feature aktivieren"
+
+#: Config.php:186
+msgid "Enabled Features in Sales Application."
+msgstr "Feature in der Sales Anwenundung aktivieren"
+
+#: Config.php:193
+msgid "Invoices Module"
+msgstr "Rechnungsmodul"
+
+#: Config.php:197
+msgid "Offers Module"
+msgstr "Auftragsmodul"
+
+#: Config.php:201
+msgid "Order Confirmations Module"
+msgstr "Auftragsbestätigungsmodul"
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:63
 msgid "My Products"
@@ -906,19 +962,19 @@ msgstr "Meine Verträge"
 msgid "Contracts created by myself"
 msgstr "Von mir erstellte Aufträge"
 
-#: Setup/Initialize.php:68 Setup/Update/Release8.php:550
+#: Setup/Initialize.php:68 Setup/Update/Release8.php:512
 msgid "All Customers"
 msgstr "Alle Kunden"
 
-#: Setup/Initialize.php:69 Setup/Update/Release8.php:551
+#: Setup/Initialize.php:69 Setup/Update/Release8.php:513
 msgid "All customer records"
 msgstr "Datensätze aller Kunden"
 
-#: Setup/Initialize.php:80 Setup/Update/Release8.php:1460
+#: Setup/Initialize.php:80 Setup/Update/Release8.php:1333
 msgid "All Offers"
 msgstr "Alle Angebotsdatensätze"
 
-#: Setup/Initialize.php:81 Setup/Update/Release8.php:1461
+#: Setup/Initialize.php:81 Setup/Update/Release8.php:1334
 msgid "All offer records"
 msgstr "Alle Angebote"
 
@@ -942,59 +998,59 @@ msgstr "abzurechnen"
 msgid "cleared"
 msgstr "abgerechnet"
 
-#: Setup/Update/Release8.php:188
+#: Setup/Update/Release8.php:146
 msgid "Status"
 msgstr "Status"
 
-#: Setup/Update/Release8.php:200
+#: Setup/Update/Release8.php:158
 msgid "Cleared In"
 msgstr "Abgerechnet in"
 
-#: Setup/Update/Release8.php:1522
+#: Setup/Update/Release8.php:1395
 msgid "All Products"
 msgstr "Alle Produkte"
 
-#: Setup/Update/Release8.php:1523
+#: Setup/Update/Release8.php:1396
 msgid "All product records"
 msgstr "Alle Produktdatensätze"
 
-#: Setup/Update/Release8.php:1533
+#: Setup/Update/Release8.php:1406
 msgid "All Contracts"
 msgstr "Alle Verträge"
 
-#: Setup/Update/Release8.php:1534
+#: Setup/Update/Release8.php:1407
 msgid "All contract records"
 msgstr "Alle Vertragsdatensätze"
 
-#: Setup/Update/Release8.php:1544
+#: Setup/Update/Release8.php:1417
 msgid "All Invoices"
 msgstr "Alle Rechnungen"
 
-#: Setup/Update/Release8.php:1545
+#: Setup/Update/Release8.php:1418
 msgid "All invoice records"
 msgstr "Alle Rechnungsdatensätze"
 
-#: Setup/Update/Release8.php:1555
+#: Setup/Update/Release8.php:1428
 msgid "All Cost Centers"
 msgstr "Alle Kostenstellen"
 
-#: Setup/Update/Release8.php:1556
+#: Setup/Update/Release8.php:1429
 msgid "All costcenter records"
 msgstr "Alle Kostenstellendatensätze"
 
-#: Setup/Update/Release8.php:1566
+#: Setup/Update/Release8.php:1439
 msgid "All Divisions"
 msgstr "Alle Abteilungen"
 
-#: Setup/Update/Release8.php:1567
+#: Setup/Update/Release8.php:1440
 msgid "All division records"
 msgstr "Alle Abteilungsdatensätze"
 
-#: Setup/Update/Release8.php:1577
+#: Setup/Update/Release8.php:1450
 msgid "All Order Confirmations"
 msgstr "Alle Auftragsbestätigungen"
 
-#: Setup/Update/Release8.php:1578
+#: Setup/Update/Release8.php:1451
 msgid "All order confirmation records"
 msgstr "Alle Auftragsbestätigungsdatensätze"
 
