@@ -69,7 +69,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     public function toTine20Model($blob, Tinebase_Record_Abstract $_record = null, $options = array())
     {
         $vcard = self::getVObject($blob);
-        
+
         if ($_record instanceof Addressbook_Model_Contact) {
             $contact = $_record;
         } else {
@@ -77,7 +77,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         }
         
         $data = $this->_emptyArray;
-        
+
         foreach ($vcard->children() as $property) {
             switch ($property->name) {
                 case 'VERSION':
@@ -99,7 +99,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     }
                     
                     $parts = $property->getParts();
-                    
+
                     if ($type == 'home') {
                         // home address
                         $data['adr_two_street2']     = $parts[1];
@@ -212,9 +212,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 $data['n_family'] = $data['n_fn'];
             }
         }
-        
+
         $contact->setFromArray($data);
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
         

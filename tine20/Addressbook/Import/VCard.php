@@ -171,6 +171,9 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         if ($addressProperty) {
             $properties = $card->getProperties($addressProperty);
             foreach ($properties as $property){
+                if (! array_key_exists('TYPE', $property->params)) {
+                    $property->params['TYPE'] = 'work';
+                }
                 // types available from RFC : 'dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref'
                 $types = $property->params['TYPE'];
                 
@@ -180,7 +183,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
                 
                 $components = $property->getComponents();
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' Address components ' . print_r($components, TRUE));
                 
                 $mapping = array(NULL, 'street2', 'street', 'locality', 'region', 'postalcode', 'countryname');
