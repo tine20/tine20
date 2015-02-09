@@ -225,7 +225,18 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $noteTypes = $this->_instance->getNoteTypes();
         $this->assertTrue($noteTypes['totalcount'] >= 5);
     }
-    
+
+    /**
+     * toogle advanced search preference
+     */
+    public function testAdvancedSearchToogle()
+    {
+        $toogle = $this->_instance->toogleAdvancedSearch(1);
+
+        $this->assertEquals($toogle, 1);
+        $this->assertEquals(Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0), 1);
+    }
+
     /**
      * search preferences by application
      *
