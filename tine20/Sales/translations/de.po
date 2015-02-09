@@ -7,7 +7,7 @@
 # pschuele <p.schuele@metaways.de>, 2013-2014
 # pschuele <p.schuele@metaways.de>, 2012
 # pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014-2015
+# sstamer <s.stamer@metaways.de>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"

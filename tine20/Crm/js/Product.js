@@ -208,10 +208,11 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.contextMenu = new Ext.menu.Menu({
             items: this.actions
         });
+
         this.tbar = new Ext.Panel({
             layout: 'fit',
             items: [
-                new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                new Tine.Crm.ProductPickerCombo({
                     anchor: '90%',
                     emptyText: this.app.i18n._('Search for Products to add ...'),
                     productsStore: this.store,

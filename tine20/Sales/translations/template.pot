@@ -31,7 +31,7 @@ msgstr ""
 #: js/ContractEditDialog.js:282 js/InvoiceEditDialog.js:396
 #: js/CustomerDetailsPanel.js:157 js/CustomerEditDialog.js:398
 #: js/InvoiceDetailsPanel.js:103 js/OrderConfirmationEditDialog.js:148
-#: js/ProductEditDialog.js:100 js/OfferEditDialog.js:137
+#: js/ProductEditDialog.js:111 js/OfferEditDialog.js:137
 msgid "Description"
 msgstr ""
 
@@ -45,6 +45,18 @@ msgstr ""
 
 #: Model/Product.php:70 js/ProductEditDialog.js:96
 msgid "Category"
+msgstr ""
+
+#: Model/Product.php:80
+msgid "Lifespan Start"
+msgstr ""
+
+#: Model/Product.php:85
+msgid "Lifespan End"
+msgstr ""
+
+#: Model/Product.php:90
+msgid "Is Active"
 msgstr ""
 
 #: Model/Division.php:34
@@ -484,83 +496,83 @@ msgstr ""
 msgid "Products created by myself"
 msgstr ""
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:176
 msgid "manage products"
 msgstr ""
 
-#: Acl/Rights.php:176
+#: Acl/Rights.php:177
 msgid "add, edit and delete products"
 msgstr ""
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:180
 msgid "manage contracts"
 msgstr ""
 
-#: Acl/Rights.php:180
+#: Acl/Rights.php:181
 msgid "add, edit and delete contracts"
 msgstr ""
 
-#: Acl/Rights.php:183
+#: Acl/Rights.php:184
 msgid "manage cost centers"
 msgstr ""
 
-#: Acl/Rights.php:184
+#: Acl/Rights.php:185
 msgid "add, edit and delete cost centers"
 msgstr ""
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:188
 msgid "manage customers"
 msgstr ""
 
-#: Acl/Rights.php:188
+#: Acl/Rights.php:189
 msgid "add, edit and delete customers"
 msgstr ""
 
-#: Acl/Rights.php:191
+#: Acl/Rights.php:192
 msgid "manage invoices"
 msgstr ""
 
-#: Acl/Rights.php:192
+#: Acl/Rights.php:193
 msgid "add, edit and delete invoices"
 msgstr ""
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:196
 msgid "manage divisions"
 msgstr ""
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:197
 msgid "add, edit and delete divisions"
 msgstr ""
 
-#: Acl/Rights.php:199
+#: Acl/Rights.php:200
 msgid "manage order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:200
+#: Acl/Rights.php:201
 msgid "add, edit and delete order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:203
+#: Acl/Rights.php:204
 msgid "manage offers"
 msgstr ""
 
-#: Acl/Rights.php:204
+#: Acl/Rights.php:205
 msgid "add, edit and delete offers"
 msgstr ""
 
-#: Acl/Rights.php:207
+#: Acl/Rights.php:208
 msgid "change number of an order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:208
+#: Acl/Rights.php:209
 msgid "allow to change the number of an order confirmation on update"
 msgstr ""
 
-#: Acl/Rights.php:211
+#: Acl/Rights.php:212
 msgid "set number of invoices"
 msgstr ""
 
-#: Acl/Rights.php:212
+#: Acl/Rights.php:213
 msgid "allow to set the number of an invoice"
 msgstr ""
 
@@ -596,7 +608,7 @@ msgstr ""
 msgid "Please use a decimal number here!"
 msgstr ""
 
-#: js/ContractEditDialog.js:283 js/ProductEditDialog.js:101
+#: js/ContractEditDialog.js:283 js/ProductEditDialog.js:112
 msgid "Enter description..."
 msgstr ""
 
@@ -853,7 +865,15 @@ msgstr ""
 msgid "Add New Product"
 msgstr ""
 
-#: js/ProductEditDialog.js:160
+#: js/ProductEditDialog.js:103
+msgid "Lifespan start"
+msgstr ""
+
+#: js/ProductEditDialog.js:108
+msgid "Lifespan end"
+msgstr ""
+
+#: js/ProductEditDialog.js:171
 msgid "Accountable"
 msgstr ""
 

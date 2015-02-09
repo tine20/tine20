@@ -126,17 +126,17 @@ msgstr ""
 msgid "Lead Data"
 msgstr ""
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:372
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:373
 #: js/LeadGridPanel.js:145 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:391
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:392
 #: js/LeadGridDetailsPanel.js:463
 msgid "Leadtype"
 msgstr ""
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:398
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:399
 #: js/LeadGridPanel.js:146 js/LeadGridDetailsPanel.js:468
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
@@ -147,17 +147,17 @@ msgstr ""
 msgid "Turnover"
 msgstr ""
 
-#: Export/Pdf.php:90 js/LeadEditDialog.js:222 js/LeadGridPanel.js:147
+#: Export/Pdf.php:90 js/LeadEditDialog.js:223 js/LeadGridPanel.js:147
 #: js/Model.js:109 Controller/Lead.php:201
 msgid "Probability"
 msgstr ""
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:453
+#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
 #: Controller/Lead.php:197
 msgid "Start"
 msgstr ""
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:199
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:199
 msgid "End"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:245 js/Task.js:82
+#: Export/Pdf.php:232 js/LeadEditDialog.js:246 js/Task.js:82
 msgid "Tasks"
 msgstr ""
 
@@ -185,7 +185,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:256 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:257 js/Product.js:85
 msgid "Products"
 msgstr ""
 
@@ -232,46 +232,46 @@ msgstr[1] ""
 msgid "Add a Leadtype..."
 msgstr ""
 
-#: js/LeadEditDialog.js:246
+#: js/LeadEditDialog.js:247
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:257
+#: js/LeadEditDialog.js:258
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:303 js/AddToLeadPanel.js:73 js/Model.js:52
+#: js/LeadEditDialog.js:304 js/AddToLeadPanel.js:73 js/Model.js:52
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/LeadEditDialog.js:330
+#: js/LeadEditDialog.js:331
 msgid "Enter short name"
 msgstr ""
 
-#: js/LeadEditDialog.js:426
+#: js/LeadEditDialog.js:427
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:435 js/LeadGridPanel.js:152 js/Model.js:119
+#: js/LeadEditDialog.js:436 js/LeadGridPanel.js:152 js/Model.js:119
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadEditDialog.js:454 js/LeadGridPanel.js:150 js/Model.js:118
+#: js/LeadEditDialog.js:455 js/LeadGridPanel.js:150 js/Model.js:118
 #: js/LeadGridDetailsPanel.js:458
 msgid "Estimated end"
 msgstr ""
 
-#: js/LeadEditDialog.js:486 js/Product.js:139
+#: js/LeadEditDialog.js:487 js/Product.js:139
 msgid "Description"
 msgstr ""
 
-#: js/LeadEditDialog.js:500
+#: js/LeadEditDialog.js:501
 msgid "Enter description"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 msgid "Unlink selected {0}"
 msgstr ""
 
-#: js/Product.js:216
+#: js/Product.js:217
 msgid "Search for Products to add ..."
 msgstr ""
 

@@ -83,4 +83,79 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
                break;
         }
     }
+
+    /**
+     * updateProductLifespan (switch products active/inactive)
+     */
+    public function updateProductLifespan()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Updating product lifespans...');
+        
+        $productIdsToChangeToInactive = $this->_getProductIdsForLifespanUpdate(/* $setToActive = */ false);
+        $productIdsToChangeToActive = $this->_getProductIdsForLifespanUpdate(/* $setToActive = */ true);
+        
+        $this->_backend->updateMultiple($productIdsToChangeToInactive, array('is_active' => false));
+        $this->_backend->updateMultiple($productIdsToChangeToActive, array('is_active' => true));
+    }
+    
+    /**
+     * helper function for updateProductLifespan
+     * 
+     * @param boolean $setToActive
+     * return array of product ids
+     */
+    protected function _getProductIdsForLifespanUpdate($setToActive = true)
+    {
+        $now = Tinebase_DateTime::now();
+        
+        if ($setToActive) {
+            // find all products that should be set to active
+            $filter = new Sales_Model_ProductFilter(array(array(
+                'field'    => 'is_active',
+                'operator' => 'equals',
+                'value'    => false
+            ), array('condition' => 'OR', 'filters' => array(array(
+                'field'    => 'lifespan_start',
+                'operator' => 'before',
+                'value'    => $now
+            ), array(
+                'field'    => 'lifespan_start',
+                'operator' => 'isnull',
+                'value'    => null
+            ))), array('condition' => 'OR', 'filters' => array(array(
+                'field'    => 'lifespan_end',
+                'operator' => 'after',
+                'value'    => $now
+            ), array(
+                'field'    => 'lifespan_end',
+                'operator' => 'isnull',
+                'value'    => null
+            )))));
+            
+        } else {
+            // find all products that should be set to inactive
+            $filter = new Sales_Model_ProductFilter(array(array(
+                'field'    => 'is_active',
+                'operator' => 'equals',
+                'value'    => true
+            ), array('condition' => 'OR', 'filters' => array(array(
+                'field'    => 'lifespan_start',
+                'operator' => 'after',
+                'value'    => $now
+            ), array(
+                'field'    => 'lifespan_end',
+                'operator' => 'before',
+                'value'    => $now
+            )
+            ))));
+        }
+        
+        $productIdsToChange = $this->_backend->search($filter, null, Tinebase_Backend_Sql_Abstract::IDCOL);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($productIdsToChange) . ' to change to ' . ($setToActive ? 'active' : 'inactive'));
+        
+        return $productIdsToChange;
+    }
 }

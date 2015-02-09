@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-02-09 13:39+0100\n"
-"Last-Translator: Philipp Schüle <p.schuele@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
-"de/)\n"
+"PO-Revision-Date: 2014-09-10 18:54+0000\n"
+"Last-Translator: Michael Spahn <michael@spahn.me>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.4\n"
 
 #: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
 #: js/Contact.js:355 js/Contact.js:392
@@ -241,20 +241,12 @@ msgid "Add a Leadtype..."
 msgstr "Lead-Typ hinzufügen..."
 
 #: js/LeadEditDialog.js:246
-msgid ""
-"You do not have the run right for the Tasks application or it is not "
-"activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen "
-"oder sie ist deaktiviert."
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
 
 #: js/LeadEditDialog.js:257
-msgid ""
-"You do not have the run right for the Sales application or it is not "
-"activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder "
-"sie ist deaktiviert."
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
 
 #: js/LeadEditDialog.js:303 js/AddToLeadPanel.js:73 js/Model.js:52
 msgid "Lead"
@@ -289,8 +281,7 @@ msgstr "Beschreibung eingeben"
 
 #: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-"Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToLeadPanel.js:36
 msgid "Please select the attenders' role"
@@ -359,7 +350,7 @@ msgstr "Als XLS exportieren"
 
 #: js/LeadGridPanel.js:232
 msgid "Export as ..."
-msgstr "Exportieren als ..."
+msgstr ""
 
 #: js/Contact.js:162
 msgid "Change type to Customer"
@@ -423,7 +414,7 @@ msgstr "Entferne {0}"
 msgid "Unlink selected {0}"
 msgstr "Ausgewählte {0} entfernen"
 
-#: js/Product.js:216
+#: js/Product.js:217
 msgid "Search for Products to add ..."
 msgstr "Produkte zum Hinzufügen suchen..."
 
@@ -516,15 +507,15 @@ msgstr "Webseite"
 
 #: js/LeadGridDetailsPanel.js:63
 msgid "Street"
-msgstr "Straße"
+msgstr ""
 
 #: js/LeadGridDetailsPanel.js:66
 msgid "Postalcode"
-msgstr "Postleitzahl"
+msgstr ""
 
 #: js/LeadGridDetailsPanel.js:69
 msgid "City"
-msgstr "Stadt"
+msgstr ""
 
 #: js/LeadGridDetailsPanel.js:448 js/Task.js:266
 msgid "Status"
@@ -562,7 +553,7 @@ msgstr "Lead-Quelle hinzufügen..."
 
 #: js/LeadSource.js:157
 msgid "archived"
-msgstr "archiviert"
+msgstr ""
 
 #: Controller/Lead.php:194
 msgid "State"
@@ -629,8 +620,7 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:92
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:95
 msgid "Default Favorite"
