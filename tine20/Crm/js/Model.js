@@ -80,7 +80,6 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         start: new Date().clearTime(),
         leadstate_id: defaults.leadstate_id,
         leadtype_id: defaults.leadtype_id,
-        leadsource_id: defaults.leadsource_id,
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaults.container_id),
         probability: 0,
         turnover: 0,
@@ -151,7 +150,6 @@ Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
         {name: 'leadsources'},
         {name: 'default_leadstate_id',  type: 'int'},
         {name: 'default_leadtype_id',   type: 'int'},
-        {name: 'default_leadsource_id', type: 'int'}
     ], {
     appName: 'Crm',
     modelName: 'Settings',

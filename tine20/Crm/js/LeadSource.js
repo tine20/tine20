@@ -19,8 +19,9 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.LeadSource');
  * lead source model
  */ 
 Tine.Crm.LeadSource.Model = Tine.Tinebase.data.Record.create([
-   {name: 'id', type: 'int'},
-   {name: 'leadsource'}
+    {name: 'id', type: 'int'},
+    {name: 'leadsource'},
+    {name: 'archived'}
 ], {
     appName: 'Crm',
     modelName: 'LeadState',
@@ -89,10 +90,10 @@ Tine.Crm.LeadSource.getStore = function() {
             remoteSort: false
         });
         
-        if ( Tine.Crm.registry.get('leadsources') ) {
+        if (Tine.Crm.registry.get('leadsources')) {
             store.loadData(Tine.Crm.registry.get('leadsources'));
         }
-            
+
         Ext.StoreMgr.add('CrmLeadSourceStore', store);
     }
     return store;
@@ -152,6 +153,16 @@ Tine.Crm.LeadSource.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
             quickaddField: new Ext.form.TextField({
                 emptyText: this.app.i18n._('Add a Leadsource...')
             })
+        }, {
+            header: this.app.i18n._('archived'),
+            id:'archived',
+            dataIndex: 'archived',
+            width: 70,
+            editor: new Ext.form.Checkbox({}),
+            quickaddField: new Ext.form.Checkbox({
+                name: 'archived'
+            }),
+            renderer: Tine.Tinebase.common.booleanRenderer
         }]);
     }
 });
