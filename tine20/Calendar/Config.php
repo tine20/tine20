@@ -91,7 +91,12 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SKIP_DOUBLE_EVENTS = 'skipdoubleevents';
-    
+
+    /**
+     * Send attendee mails to users with edit permissions to the added resource
+     */
+    const RESOURCE_MAIL_FOR_EDITORS = 'resourcemailforeditors';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -213,6 +218,16 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 'setBySetupModule'      => FALSE,
                 'default'               => '',
         ),
+        self::RESOURCE_MAIL_FOR_EDITORS => array(
+            //_('Send notifications to every user with edit permissions of the added resources')
+            'label'                 => 'Send notifications to every user with edit permissions of the added resources',
+            'description'           => 'Send notifications to every user with edit permissions of the added resources',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => false,
+            'setByAdminModule'      => false,
+            'default'               => false
+        )
     );
     
     /**
