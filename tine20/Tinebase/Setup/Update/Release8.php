@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
@@ -496,5 +496,30 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->_addModlogFields('groups');
         $this->setTableVersion('groups', '5');
         $this->setApplicationVersion('Tinebase', '8.10');
+    }
+    
+    /**
+     * update 10 -> adds "use personal tags" role right to all installed apps
+     * 
+     * @see 0010732: add "use personal tags" right to all applications
+     */
+    public function update_10()
+    {
+        try {
+            $userRole = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+            
+            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+            foreach ($enabledApplications as $application) {
+                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+                if (in_array(Tinebase_Acl_Rights::USE_PERSONAL_TAGS, $allRights)) {
+                    Tinebase_Acl_Roles::getInstance()->addSingleRight($userRole->getId(), $application->getId(), Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
+                }
+            }
+            
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
+        
+        $this->setApplicationVersion('Tinebase', '8.11');
     }
 }

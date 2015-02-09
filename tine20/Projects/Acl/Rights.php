@@ -5,10 +5,8 @@
  * @package     Projects
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * 
- * @todo        add more specific rights
  */
 
 class Projects_Acl_Rights extends Tinebase_Acl_Rights_Abstract
@@ -70,6 +68,7 @@ class Projects_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array ( 
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_SHARED_PROJECT_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
@@ -96,6 +95,4 @@ class Projects_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
         return $rightDescriptions;
     }
-
-    
 }

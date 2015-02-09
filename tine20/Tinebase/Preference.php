@@ -80,6 +80,11 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      *
      */
     const CONFIRM_LOGOUT = 'confirmLogout';
+
+    /**
+     * advanced search through relations and so on
+     */
+    const ADVANCED_SEARCH = 'advancedSearch';
     
     /**************************** public functions *********************************/
     
@@ -102,6 +107,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::GRID_LOAD_MASK,
                 self::DIALOG_BUTTONS_ORDER_STYLE,
                 self::FILTER_CHANGE_AUTO_SEARCH,
+                self::ADVANCED_SEARCH
             )
             : array();
             
@@ -158,6 +164,10 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Confirm Logout'),
                 'description'   => $translate->_('Show confirmation dialog on logout.'),
             ),
+            self::ADVANCED_SEARCH => array(
+                'label'         => $translate->_('Enable advanced search'),
+                'description'   => $translate->_('If enabled quickfilter searches through relations as well.')
+            )
         );
         
         return $prefDescriptions;
@@ -263,6 +273,13 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::CONFIRM_LOGOUT:
                 $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::ADVANCED_SEARCH:
+                $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>

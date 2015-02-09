@@ -4,10 +4,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        add tasks / products
  */
 
 /**
@@ -23,8 +21,6 @@ class Crm_Model_LeadQueryFilter extends Tinebase_Model_Filter_Abstract
     protected $_operators = array(
         'contains',
     );
-    
-    //, 'options' => array('fields' => array('lead_name', 'description'))
     
     /**
      * appends sql to given select statement
@@ -48,23 +44,44 @@ class Crm_Model_LeadQueryFilter extends Tinebase_Model_Filter_Abstract
         );
         
         $filter = new Crm_Model_LeadFilter($filterData, 'OR');
-        
-        /*** also filter for related contacts ***/
-        $contactFilter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'query',   'operator' => 'contains', 'value' => $this->_value),
-        ));
-        $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
-        
-        $relationFilter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'own_model',     'operator' => 'equals', 'value' => 'Crm_Model_Lead'),
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
-            array('field' => 'related_id',    'operator' => 'in'    , 'value' => $contactIds)
-        ));
-        $leadIds = Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id;
-        
-        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $leadIds));
-        
+        $this->_appendRelationFilter($filter);
         
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
+    }
+    
+    /**
+     * append relation filter
+     * 
+     * @param Crm_Model_LeadFilter $filter
+     */
+    protected function _appendRelationFilter($filter)
+    {
+        if (! Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, false)) {
+            return;
+        }
+        
+        $relationsToSearchIn = array(
+            'Addressbook_Model_Contact',
+            'Sales_Model_Product',
+            'Tasks_Model_Task'
+        );
+        $leadIds = array();
+        
+        foreach ($relationsToSearchIn as $relatedModel) {
+            $filterModel = $relatedModel . 'Filter';
+            $relatedFilter = new $filterModel(array(
+                array('field' => 'query',   'operator' => 'contains', 'value' => $this->_value),
+            ));
+            $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
+            
+            $relationFilter = new Tinebase_Model_RelationFilter(array(
+                array('field' => 'own_model',     'operator' => 'equals', 'value' => 'Crm_Model_Lead'),
+                array('field' => 'related_model', 'operator' => 'equals', 'value' => $relatedModel),
+                array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
+            ));
+            $leadIds = array_merge($leadIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id);
+        }
+        
+        $filter->addFilter(new Tinebase_Model_Filter_Id('id', 'in', $leadIds));
     }
 }

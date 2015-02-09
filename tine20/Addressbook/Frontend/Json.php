@@ -158,16 +158,45 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     */
     public function parseAddressData($address)
     {
-        $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
-        $contactData = $this->_recordToJson($result['contact']);
-        
-        unset($contactData['jpegphoto']);
-        unset($contactData['salutation']);
-        
-        return array(
-            'contact'             => $contactData,
-            'unrecognizedTokens'  => $result['unrecognizedTokens'],
-        );
+        if (preg_match('/^http/', $address)) {
+            $vcard = file_get_contents($address);
+
+            // Could not load file from remote
+            if ($vcard === false) {
+                return array('exceptions' => "Cannot get file from remote.");
+            }
+
+            $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+                strpos($address, 'dastelefonbuch')
+                ? Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH
+                : Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+            );
+
+            $record = $converter->toTine20Model($vcard);
+            $contactData = $this->_recordToJson($record);
+
+            if (array_key_exists('jpegphoto', $contactData)) {
+                unset($contactData['jpegphoto']);
+            }
+
+            return array('contact' => $contactData);
+        } else {
+            $result = Addressbook_Controller_Contact::getInstance()->parseAddressData($address);
+            $contactData = $this->_recordToJson($result['contact']);
+
+            if (array_key_exists('jpegphoto', $contactData)) {
+                unset($contactData['jpegphoto']);
+            }
+
+            if (array_key_exists('salutation', $contactData)) {
+                unset($contactData['salutation']);
+            }
+
+            return array(
+                'contact' => $contactData,
+                'unrecognizedTokens' => $result['unrecognizedTokens'],
+            );
+        }
     }
     
     /**

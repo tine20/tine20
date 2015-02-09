@@ -258,7 +258,36 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 html: this.app.i18n._('You do not have the run right for the Sales application or it is not activated.')
             })
         }
-        
+
+        // Don't show item if it's a archived source!
+        var sourceStore = Tine.Crm.LeadSource.getStore();
+
+        var preserveRecords = [];
+
+        sourceStore.each(function(record) {
+            preserveRecords.push(record.copy());
+        });
+
+        var copiedStore = new Ext.data.Store({
+            recordType: sourceStore.recordType
+        });
+
+        copiedStore.add(preserveRecords);
+
+        sourceStore.each(function(item) {
+            if (item.get('archived') == true) {
+                sourceStore.remove(item);
+            }
+        });
+
+        var setdeffered = function (combo) {
+            var rawValue = parseInt(combo.getRawValue());
+
+            if (Ext.isNumber(rawValue)) {
+                combo.setRawValue(copiedStore.getById(combo.getValue()).get('leadsource'));
+            }
+        };
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -370,9 +399,20 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         fieldLabel: this.app.i18n._('Leadsource'), 
                                         id:'leadsource',
                                         name:'leadsource_id',
-                                        store: Tine.Crm.LeadSource.getStore(),
-                                        value: (Tine.Crm.LeadSource.getStore().getCount() > 0) ? Tine.Crm.LeadSource.getStore().getAt(0).id : null,
-                                        displayField:'leadsource'
+                                        store: sourceStore,
+                                        displayField:'leadsource',
+                                        value: (sourceStore.getCount() > 0) ? sourceStore.getAt(0).id : null,
+                                        listeners: {
+                                            scope: this,
+                                            // When loading
+                                            'beforerender': function (combo) {
+                                                setdeffered.defer(5, this, [combo]);
+                                            },
+                                            // When focus changed
+                                            'blur': function(combo) {
+                                                setdeffered.defer(5, this, [combo]);
+                                            }
+                                        }
                                     }]
                                 }]
                             }, {

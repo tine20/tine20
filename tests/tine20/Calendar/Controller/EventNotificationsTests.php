@@ -1323,4 +1323,42 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
     }
+
+    /**
+     * Enable by a preference which sends mails to every user who got permissions to edit the resource
+     */
+    public function testResourceNotificationForGrantedUsers()
+    {
+        // Enable feature, disabled by default!
+        Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
+
+        $resource = $this->_getResource();
+        $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
+
+        $event = $this->_getEvent(/*now = */ true);
+        $event->attendee->addRecord($this->_createAttender($persistentResource->getId(), Calendar_Model_Attender::USERTYPE_RESOURCE));
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id);
+
+        $newGrants = array(
+                'account_id' => $this->_personas['sclever']->getId(),
+                'account_type' => 'user',
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_EDIT => true
+            );
+
+        Tinebase_Container::getInstance()->setGrants($resource->container_id, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array_merge(array($newGrants), $grants->toArray())), TRUE);
+
+        self::flushMailer();
+
+        $persistentEvent = $this->_eventController->create($event);
+
+        $messages = self::getMessages();
+
+        Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants);
+
+        $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
+        $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody whos allowed to edit this resource)');
+        $this->assertEquals(3, count($persistentEvent->attendee));
+    }
 }

@@ -789,4 +789,21 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->assertEquals(2, $searchLeads['results'][0]['leadstate_id'], 'leadstate "contacted" should come first');
     }
+    
+    /**
+     * testAdvancedSearch in related products
+     * 
+     * @see 0010814: quicksearch should search in related records
+     */
+    public function testAdvancedSearchInProduct()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
+        
+        $lead = $this->_saveLead();
+        $filter = array(
+            array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit test product'),
+        );
+        $searchLeads = $this->_instance->searchLeads($filter, '');
+        $this->assertEquals(1, $searchLeads['totalcount']);
+    }
 }

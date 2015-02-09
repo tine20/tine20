@@ -6,7 +6,7 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -225,7 +225,18 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $noteTypes = $this->_instance->getNoteTypes();
         $this->assertTrue($noteTypes['totalcount'] >= 5);
     }
-    
+
+    /**
+     * toogle advanced search preference
+     */
+    public function testAdvancedSearchToogle()
+    {
+        $toogle = $this->_instance->toogleAdvancedSearch(1);
+
+        $this->assertEquals($toogle, 1);
+        $this->assertEquals(Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0), 1);
+    }
+
     /**
      * search preferences by application
      *
@@ -639,6 +650,27 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertEquals('sclever', Tinebase_Session::getSessionNamespace()->currentAccount->accountLoginName);
         
         Tinebase_Controller::getInstance()->initUser($this->_originalTestUser, /* $fixCookieHeader = */ false);
+    }
+    
+    /**
+     * testOmitPersonalTagsOnSearch
+     * 
+     * @see 0010732: add "use personal tags" right to all applications
+     */
+    public function testOmitPersonalTagsOnSearch()
+    {
+        $personalTag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
+        Tinebase_Tags::getInstance()->createTag($personalTag);
+        
+        $this->_removeRoleRight('Addressbook', Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
+        $filter = array(
+            'application' => 'Addressbook',
+            'grant' => Tinebase_Model_TagRight::VIEW_RIGHT,
+            'type' => Tinebase_Model_Tag::TYPE_PERSONAL
+        );
+        $result = $this->_instance->searchTags($filter, array());
+        
+        $this->assertEquals(0, $result['totalCount']);
     }
     
     /******************** protected helper funcs ************************/

@@ -28,6 +28,10 @@
           "path": "js/"
         },
         {
+          "text": "ProductPickerCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "LinkGridPanel.js",
           "path": "js/"
         },

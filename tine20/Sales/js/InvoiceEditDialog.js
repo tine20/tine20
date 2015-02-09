@@ -476,7 +476,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     columnWidth: 1/2,
                                     blurOnSelect: true,
                                     allowBlank: false,
-                                    fieldLabel: this.app.i18n._('Cost Center'),
+                                    fieldLabel: this.app.i18n.n_('Cost Center', 'Cost Centers', 1),
                                     name: 'costcenter_id'
                             })], [
                                 new Tine.Tinebase.widgets.keyfield.ComboBox({

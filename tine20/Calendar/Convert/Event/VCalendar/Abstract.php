@@ -1062,6 +1062,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         $this->_manageAttachmentsFromClient($event, $attachments);
         
         if (empty($event->dtend)) {
+            if (empty($event->dtstart)) {
+                throw new Tinebase_Exception_UnexpectedValue("Got event without dtstart and dtend");
+            }
+            
             // TODO find out duration (see TRIGGER DURATION)
 //             if (isset($vevent->DURATION)) {
 //             }

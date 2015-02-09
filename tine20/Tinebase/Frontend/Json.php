@@ -282,6 +282,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return array(
             'results'    => Tinebase_Tags::getInstance()->searchTags($filter, $paging)->toArray(),
+            // TODO we normally use 'totalcount' (all lower case) - this should be streamlined
             'totalCount' => Tinebase_Tags::getInstance()->getSearchTagsCount($filter)
         );
     }
@@ -771,6 +772,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'stateInfo'          => Tinebase_State::getInstance()->loadStateInfo(),
             'mustchangepw'       => $user->mustChangePassword(),
             'confirmLogout'      => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
+            'advancedSearch'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
             'persistentFilters'  => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
         );
@@ -1275,5 +1277,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $result;
+    }
+
+    /**
+     * Toogles advanced search preference
+     *
+     * @param $state
+     * @return true
+     */
+    public function toogleAdvancedSearch($state)
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, (int)$state);
+        return $state == Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0);
     }
 }

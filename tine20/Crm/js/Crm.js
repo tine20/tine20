@@ -85,6 +85,8 @@ Ext.extend(Tine.Crm.LeadTreePanel , Tine.widgets.container.TreePanel);
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Tine.Crm.LeadFilterPanel = function(config) {
+    config.app.enableAdvancedSearch = true;
+
     Ext.apply(this, config);
     Tine.Crm.LeadFilterPanel.superclass.constructor.call(this);
 };

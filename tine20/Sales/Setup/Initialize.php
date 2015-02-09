@@ -129,4 +129,13 @@ class Sales_Setup_Initialize extends Setup_Initialize
             'value'             => json_encode($tc),
         )));
     }
+    
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
+    }
 }

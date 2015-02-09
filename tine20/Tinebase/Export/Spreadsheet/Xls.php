@@ -197,7 +197,8 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
             // TODO file a bugreport to PHPExcel 
             @stream_wrapper_restore("zip");
             
-            $this->_excelObject->setActiveSheetIndex(1);
+            $activeSheet = isset($this->_config->sheet) ? $this->_config->sheet : 1;
+            $this->_excelObject->setActiveSheetIndex($activeSheet);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new PHPExcel object.');
             $this->_excelObject = new PHPExcel();
@@ -214,17 +215,21 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
     {
-        switch($_field->type) {
+        switch ($_field->type) {
             case 'datetime':
             case 'date':
                 if ($_record->{$_field->identifier} instanceof DateTime) {
-                    $result = PHPExcel_Shared_Date::PHPToExcel($_record->{$_field->identifier}->getTimestamp());
+                    if (! isset($_field->timestamp) || $_field->timestamp == 1) {
+                        $result = PHPExcel_Shared_Date::PHPToExcel($_record->{$_field->identifier}->getTimestamp());
+                    } else {
+                        $result = parent::_getCellValue($_field, $_record, $_cellType);
+                    }
                 } else {
                     $result = $_record->{$_field->identifier};
                 }
                 
                 // empty date cells, get displayed as 30.12.1899
-                if(empty($result)) {
+                if (empty($result)) {
                     $result = NULL;
                 }
                 break;
@@ -367,12 +372,17 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         // add record rows
         $i = 0;
         foreach ($_records as $record) {
-            if ($this->_groupBy !== NULL && $lastGroup !== $record->{$this->_groupBy} && (! (empty($record->{$this->_groupBy}) && $record->{$this->_groupBy} == $woString))) {
+            if ($this->_groupBy !== NULL && $lastGroup !== $record->{$this->_groupBy} 
+                && (! (empty($record->{$this->_groupBy}) && $record->{$this->_groupBy} == $woString))) 
+            {
                 $lastGroup = empty($record->{$this->_groupBy}) ? $woString : $record->{$this->_groupBy};
                 $this->_addGroupHeader($lastGroup);
             }
             
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($record->toArray(), true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($this->_config->columns->toArray(), true));
             
             $columnId = 0;
             
@@ -388,9 +398,13 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
                 
                 // add formula
                 if ($field->formula) {
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding formula: ' . $field->formula);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Adding formula: ' . $field->formula);
                     $cellValue = $field->formula;
                 }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' Setting col/row' . $columnId . ' / ' . $this->_currentRowIndex . ' = ' . $cellValue);
                 
                 $this->_excelObject->getActiveSheet()->setCellValueByColumnAndRow($columnId++, $this->_currentRowIndex, $cellValue);
             }
@@ -413,6 +427,5 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         for ($i = 0; $i < $this->_columnCount; $i++) {
             $sheet->getColumnDimension($i)->setAutoSize(TRUE);
         }
-        
     }
 }
