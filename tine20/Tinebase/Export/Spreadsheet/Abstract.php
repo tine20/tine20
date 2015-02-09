@@ -157,7 +157,12 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 break;
                 */
             case 'relation':
-                $result = $this->_addRelations($_record, $_field->identifier, $_field->field);
+                $result = $this->_addRelations(
+                    $_record,
+                    /* $relationType = */       $_field->identifier,
+                    /* $recordField = */        $_field->field,
+                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false
+                );
                 break;
             case 'notes':
                 $result = $this->_addNotes($_record);
