@@ -298,14 +298,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     initComponent: function() {
-        this.tbarItems.push(new Ext.Button(new Ext.Action({
+        this.tbarItems = new Ext.Button(new Ext.Action({
                     text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
                     handler: this.onMuteNotificationOnce,
                     iconCls: 'notes_noteIcon',
                     disabled: false,
                     scope: this,
                     enableToggle: true
-                })));
+                }));
 
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
