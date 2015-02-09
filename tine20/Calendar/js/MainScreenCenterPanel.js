@@ -147,6 +147,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             iconCls: 'action_add'
         });
         
+        this.action_cut = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            text: this.app.i18n._('Cut event'),
+            handler: this.onCutEvent.createDelegate(this),
+            iconCls: 'action_cut'
+        });
+        
+        this.action_cancelPasting = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            text: this.app.i18n._('Stop cut & paste'),
+            handler: this.onCutCancelEvent.createDelegate(this),
+            iconCls: 'action_cut_break'
+        });
+        
         // note: unprecise plural form here, but this is hard to change
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
@@ -290,6 +304,21 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
+    /**
+     * returns the paste action
+     * 
+     * @param {Date} datetime
+     * @param {Tine.Calendar.Model.Event} event
+     */
+    getPasteAction: function(datetime, event) {
+        var shortSummary = Ext.util.Format.ellipsis(event.get('summary'), 15);
+        return new Ext.Action({
+            requiredGrant: 'addGrant',
+            text: String.format(this.app.i18n._('Paste event "{0}"'), shortSummary),
+            handler: this.onPasteEvent.createDelegate(this, [datetime]),
+            iconCls: 'action_paste'
+        });
+    },
         
     getActionToolbar: Tine.widgets.grid.GridPanel.prototype.getActionToolbar,
     
@@ -533,6 +562,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.getSelectionModel().clearSelections();
         }
         
+        var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
+        
+        if (event) {
+            menuitems = menuitems.concat(['-', this.action_cut, '-']);
+        } else if (Tine.Tinebase.data.Clipboard.has('Calendar', 'Event')) {
+            menuitems = menuitems.concat(['-', this.getPasteAction(datetime, Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event', true)), this.action_cancelPasting, '-']);
+        }
+        
         var ctxMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -547,7 +584,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 ptype: 'ux.itemregistry',
                 key:   'Calendar-GridPanel-ContextMenu'
             }],
-            items: this.recordActions.concat(addAction, responseAction || [], copyAction || [])
+            items: menuitems
         });
         ctxMenu.showAt(e.getXY());
     },
@@ -714,10 +751,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 if (createdEvent.isRecurBase()) {
                     store.load({refresh: true});
                 } else {
+                    // store may be lost on conflict or else
                     if (store) {
                         store.replaceRecord(event, createdEvent);
+                        this.setLoading(false);
+                    } else {
+                        this.refresh();
                     }
-                    this.setLoading(false);
+                    
                     if (view && view.rendered) {
                         view.getSelectionModel().select(createdEvent);
                     }
@@ -756,6 +797,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 handler: function(option) {
                     var store = event.store;
 
+                    if (! store) {
+                        store = this.getStore();
+                    }
+                    
                     switch (option) {
                         case 'series':
                             if (this.loadMask) {
@@ -845,11 +890,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (! (event.ui && event.ui.rendered)) {
             event.store.replaceRecord(event, updatedEvent);
             this.setLoading(false);
-            return
+            return;
         }
         
         var filterData = this.getAllFilterData(),
             store = event.store;
+        
+        if (! store) {
+            store = this.getStore();
+        }
         
         filterData[0].filters[0].filters.push({field: 'id', operator: 'in', value: [ updatedEvent.get('id') ]});
         
@@ -996,6 +1045,70 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         Ext.each(selection, function (event) {
             event.ui.clearDirty();
         });
+    },
+    
+    /**
+     * is called on action cut
+     * 
+     * @param {} action
+     * @param {} event
+     */
+    onCutEvent: function(action, event) {
+        var panel = this.getCalendarPanel(this.activeView);
+        var selection = panel.getSelectionModel().getSelectedEvents();
+        if (Ext.isArray(selection) && selection.length === 1) {
+            event = selection[0];
+        }
+        if (event.ui) {
+            event.ui.markDirty();
+        }
+        Tine.Tinebase.data.Clipboard.push(event);
+    },
+    
+    /**
+     * is called on cancelling cut & paste
+     */
+    onCutCancelEvent: function() {
+        var store = this.getStore();
+        var ids = Tine.Tinebase.data.Clipboard.getIds('Calendar', 'Event');
+        
+        for (var index = 0; index < ids.length; index++) {
+            var record = store.getAt(store.findExact('id', ids[index]));
+            if (record.ui) {
+                record.ui.clearDirty();
+            }
+        }
+
+        Tine.Tinebase.data.Clipboard.clear('Calendar', 'Event');
+    },
+    
+    /**
+     * is called on action paste
+     * 
+     * @param {Date} datetime
+     */
+    onPasteEvent: function(datetime) {
+        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
+        
+        if (! record) {
+            return;
+        }
+        
+        var dtend   = record.get('dtend');
+        var dtstart = record.get('dtstart');
+        var eventLength = dtend - dtstart;
+        
+        // remove before update
+        var store = this.getStore();
+        var oldRecord = store.getAt(store.findExact('id', record.getId()));
+        if (oldRecord && oldRecord.hasOwnProperty('ui')) {
+            oldRecord.ui.remove();
+        }
+        
+        record.set('dtstart', datetime);
+        record.set('dtend', new Date(datetime.getTime() + eventLength));
+        
+        this.onUpdateEvent(record);
     },
     
     /**

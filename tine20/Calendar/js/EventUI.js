@@ -287,7 +287,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             this.renderScrollerEvent(view, maxParallels, position);
         }
         
-        if (this.event.dirty) {
+        var ids = Tine.Tinebase.data.Clipboard.getIds('Calendar', 'Event');
+        
+        if (ids.indexOf(this.event.get('id')) > -1) {
+            this.markDirty(true);
+        } else if (this.event.dirty) {
             // the event was selected before
             this.onSelectedChange(true);
         }

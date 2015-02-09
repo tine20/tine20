@@ -1110,3 +1110,9 @@ msgstr "Geänderte Teilnehmer beim Termin  \"%1$s\" am %2$s"
 #: js/EventEditDialog.js:315
 msgid "Mute Alert"
 msgstr "Benachrichtigungen unterdrücken"
+
+msgid "Cut event"
+msgstr "Termin ausschneiden"
+
+msgid "Paste event \"{0}\""
+msgstr "\"{0}\" hier einsetzen"

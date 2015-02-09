@@ -1110,3 +1110,12 @@ msgstr ""
 #: Config.php:120
 msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
+
+msgid "Cut event"
+msgstr ""
+
+msgid "Paste event \"{0}\""
+msgstr ""
+
+msgid "Stop cut & paste"
+msgstr "Verschieben & Einfügen abbrechen"
