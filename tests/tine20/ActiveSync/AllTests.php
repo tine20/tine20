@@ -29,8 +29,8 @@ class ActiveSync_AllTests
         $suite->addTest(ActiveSync_Backend_AllTests::suite());
         
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
-        
         $suite->addTestSuite('ActiveSync_Frontend_JsonTests');
+        $suite->addTestSuite('ActiveSync_Server_PluginTests');
         
         return $suite;
     }

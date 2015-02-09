@@ -165,7 +165,14 @@ class Tinebase_Core
      * minimal version of Oracle supported
      */
     const ORACLE_MINIMAL_VERSION = '9.0.0';
-    
+
+    /**
+     * Key for storing server plugins into cache
+     *
+     * @var string
+     */
+    const TINEBASE_SERVER_PLUGINS = 'Tinebase_Server_Plugins';
+
     /**
      * Application Instance Cache
      * @var array
@@ -184,7 +191,14 @@ class Tinebase_Core
      * @var int
      */
     protected static $logLevel;
-    
+
+    /**
+     * Server classes provided by applications
+     *
+     * @var array
+     */
+    protected static $_serverPlugins = array();
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -223,76 +237,17 @@ class Tinebase_Core
 //         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
 //             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $request->toString());
 //         }
-        
-        /**************************** JSON API *****************************/
-        if (($request->getHeaders('X-TINE20-REQUEST-TYPE') && $request->getHeaders('X-TINE20-REQUEST-TYPE')->getFieldValue() === 'JSON')  ||
-            ($request->getHeaders('CONTENT-TYPE') && substr($request->getHeaders('CONTENT-TYPE')->getFieldValue(),0,16) === 'application/json') ||
-            ($request->getPost('requestType') === 'JSON') ||
-            ($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
-        ) {
-            $server = new Tinebase_Server_Json();
-            
-        /**************************** SNOM API *****************************/
-        } else if (
-            $request->getHeaders('USER-AGENT') &&
-            preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $request->getHeaders('USER-AGENT')->getFieldValue())
-        ) {
-            $server = new Voipmanager_Server_Snom();
-            
-        /**************************** ASTERISK API *****************************/
-        } else if (
-            $request->getHeaders('USER-AGENT') &&
-            $request->getHeaders('USER-AGENT')->getFieldValue() === 'asterisk-libcurl-agent/1.0'
-        ) {
-            $server = new Voipmanager_Server_Asterisk();
-            
-        /**************************** ActiveSync API ****************************
-         * RewriteRule ^Microsoft-Server-ActiveSync index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         */
-        } else if (
-            (isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') || // legacy
-            ($request->getQuery('frontend') === 'activesync')
-        ) {
-            $server = new ActiveSync_Server_Http();
-            self::set('serverclassname', get_class($server));
 
-        /**************************** WebDAV / CardDAV / CalDAV API **********************************
-         * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-         * RewriteRule ^/$            /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         *
-         * RewriteRule ^/addressbooks /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/calendars    /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/principals   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         * RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
-         */
-        } else if ($request->getQuery('frontend') === 'webdav') {
-            $server = new Tinebase_Server_WebDAV();
+        // Test server conditions from server plugins
+        foreach(self::_getServerPlugins() as $serverPlugin){
+            $server = call_user_func_array(array($serverPlugin,'getServer'), array($request));
             
-        /**************************** CLI API *****************************/
-        } else if (php_sapi_name() == 'cli') {
-            $server = new Tinebase_Server_Cli();
-            
-        /**************************** HTTP API ****************************/
-        } else {
-            
-            /**************************** OpenID ****************************
-             * RewriteRule ^/users/(.*)                      /index.php?frontend=openid&username=$1 [L,QSA]
-             */
-            if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) {
-                $_REQUEST['method'] = 'Tinebase.getXRDS';
-            } else if ((isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') ||
-                      (isset($_REQUEST['frontend']) && $_REQUEST['frontend'] == 'openid')) {
-                $_REQUEST['method'] = 'Tinebase.userInfoPage';
+            if ($server instanceof Tinebase_Server_Interface) {
+                Tinebase_Core::set('serverclassname', get_class($server));
+                
+                return $server;
             }
-            
-            if (!isset($_REQUEST['method']) && (isset($_REQUEST['openid_action']) || isset($_REQUEST['openid_assoc_handle'])) ) {
-                $_REQUEST['method'] = 'Tinebase.openId';
-            }
-            
-            $server = new Tinebase_Server_Http();
         }
-        
-        return $server;
     }
     
     /**
@@ -1570,5 +1525,84 @@ class Tinebase_Core
     public static function callSystemCommand($cmd)
     {
         return shell_exec(escapeshellcmd($cmd));
+    }
+
+    /**
+     * Search server plugins from applications configuration
+     *
+     */
+    protected static function _searchServerPlugins()
+    {
+        $cache = Tinebase_Core::getCache();
+        
+        if ($cache &&
+            $plugins = $cache->load(self::TINEBASE_SERVER_PLUGINS)
+        ) {
+            return $plugins;
+        }
+        
+        // get list of available applications
+        $applications = array();
+        
+        $d = dir(realpath(__DIR__ . '/../'));
+        
+        while (false !== ($entry = $d->read())) {
+           if ($entry[0] == '.') {
+               continue;
+           }
+           
+           if (ctype_upper($entry[0])){
+                $applications[] = $entry;
+           }
+        }
+        
+        $d->close();
+        
+        // get list of plugins
+        $plugins = array();
+        
+        foreach ($applications as $application) {
+            $config = $application . '_Config';
+            
+            try {
+                if (class_exists($config)) {
+                    $reflectedClass = new ReflectionClass($config);
+                    
+                    if ($reflectedClass->isSubclassOf('Tinebase_Config_Abstract')) {
+                        $plugins = array_merge(
+                            $plugins,
+                            call_user_func(array($config,'getServerPlugins'))
+                        );
+                    }
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
+        
+        // sort plugins by priority
+        asort($plugins);
+        
+        $plugins = array_keys($plugins);
+        
+        if ($cache) {
+            $cache->save($plugins, self::TINEBASE_SERVER_PLUGINS);
+        }
+        
+        return $plugins;
+    }
+
+    /**
+     * Return server plugins ensuring that they were found
+     *
+     * @return array
+     */
+    protected static function _getServerPlugins()
+    {
+        if (empty(self::$_serverPlugins)) {
+           self::$_serverPlugins = self::_searchServerPlugins();
+        }
+        
+        return self::$_serverPlugins;
     }
 }

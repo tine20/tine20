@@ -127,6 +127,15 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
     private static $_instance = NULL;
     
     /**
+     * server classes
+     *
+     * @var array
+     */
+    protected static $_serverPlugins = array(
+        'ActiveSync_Server_Plugin' => 50
+    );
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 

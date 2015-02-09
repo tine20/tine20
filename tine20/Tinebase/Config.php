@@ -730,19 +730,31 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var Tinebase_Config
      */
     private static $_instance = NULL;
-    
+
+    /**
+     * server classes
+     *
+     * @var array
+     */
+    protected static $_serverPlugins = array(
+        'Tinebase_Server_Plugin_Json'   => 80,
+        'Tinebase_Server_Plugin_WebDAV' => 80,
+        'Tinebase_Server_Plugin_Cli'    => 90,
+        'Tinebase_Server_Plugin_Http'   => 100
+    );
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */    
+     */
     private function __construct() {}
     
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
-     */    
+     */
     private function __clone() {}
     
     /**

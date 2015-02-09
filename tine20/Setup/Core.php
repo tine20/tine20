@@ -82,6 +82,7 @@ class Setup_Core extends Tinebase_Core
     /**
      * dispatch request
      *
+     * @see Tinebase_Core::dispatchRequest()
      */
     public static function dispatchRequest()
     {
