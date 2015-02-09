@@ -93,7 +93,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         )), NULL, TRUE);
         
         if ($_record->grants instanceof Tinebase_Record_RecordSet) {
-            $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
+            Tinebase_Container::getInstance()->setGrants($container->getId(), $_record->grants, TRUE, FALSE);
         }
         
         $_record->container_id = $container->getId();
@@ -164,5 +164,46 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             Tinebase_Exception::log($tenf, false, $_record->toArray());
         }
         return parent::_deleteLinkedObjects($_record);
+    }
+
+    /**
+     * returns recipients for a resource notification
+     *
+     *  users who are allowed to edit a resource, should receive a notification
+     *
+     * @param  Calendar_Model_Resource $_lead
+     * @return array          array of int|Addressbook_Model_Contact
+     */
+    public function getNotificationRecipients(Calendar_Model_Resource $resource)
+    {
+        $recipients = array();
+
+        $relations = Tinebase_Relations::getInstance()->getRelations('Calendar_Model_Resource', 'Sql', $resource->getId(), true);
+
+        foreach ($relations as $relation) {
+            if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
+                $recipients[] = $relation->related_record;
+            }
+        }
+
+        if (empty($recipients)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for calendar resource: ' .
+                $resource->getId() . ' sending notification to all people having edit access to container ' . $resource->container_id);
+
+            $containerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id, TRUE);
+
+            foreach ($containerGrants as $grant) {
+                if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::GRANT_EDIT] == 1) {
+                    try {
+                        $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE);
+                    } catch (Addressbook_Exception_NotFound $aenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__
+                            . ' Do not send notification to non-existant user: ' . $aenf->getMessage());
+                    }
+                }
+            }
+        }
+
+        return $recipients;
     }
 }
