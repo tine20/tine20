@@ -173,7 +173,6 @@ class Crm_Acl_RolesTest extends TestCase
     
     /**
      * try to add a role right
-     *
      */
     public function testSetRoleRight()
     {

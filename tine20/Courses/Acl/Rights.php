@@ -5,7 +5,7 @@
  * @package     Courses
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -84,6 +84,7 @@ class Courses_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $allRights = parent::getAllApplicationRights();
         
         $addRights = array(
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::ADD_NEW_USER,
             self::ADD_EXISTING_USER,
             self::MANAGE_SHARED_COURSE_FAVORITES,

@@ -85,6 +85,11 @@ class Tinebase_Tags
         
         Tinebase_Model_TagRight::applyAclSql($select, $_filter->grant);
         
+        if (isset($_filter->application)) {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($_filter->application);
+            $this->_filterSharedOnly($select, $app->getId());
+        }
+        
         if ($_paging !== NULL) {
             $_paging->appendPaginationSql($select);
         }
@@ -310,7 +315,7 @@ class Tinebase_Tags
             case Tinebase_Model_Tag::TYPE_PERSONAL:
                 $_tag->owner = $currentAccountId;
                 $this->_db->insert(SQL_TABLE_PREFIX . 'tags', $_tag->toArray());
-                // for personal tags we set rights and scope temprary here,
+                // for personal tags we set rights and scope temporary here,
                 // this needs to be moved into Tinebase Controller later
                 $right = new Tinebase_Model_TagRight(array(
                     'tag_id'        => $newId,
@@ -550,13 +555,18 @@ class Tinebase_Tags
     {
         $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty])->getArrayOfIds();
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT)->getArrayOfIds();
-
+        
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
+        if (! $this->_userHasPersonalTagRight($appId)) {
+            $tagsToSet = $tagsToSet->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
+            $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
+        }
+        
         $toAttach = array_diff($tagsToSet, $currentTags);
         $toDetach = array_diff($currentTags, $tagsToSet);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
-
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
+        
         $recordId = $_record->getId();
         foreach ($toAttach as $tagId) {
             $this->_db->insert(SQL_TABLE_PREFIX . 'tagging', array(
@@ -610,7 +620,11 @@ class Tinebase_Tags
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could attach the tag to');
             return;
         }
-
+        
+        if ($tag->type === Tinebase_Model_Tag::TYPE_PERSONAL && ! $this->_userHasPersonalTagRight($appId)) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to attach personal tags');
+        }
+        
         // fetch ids of records already having the tag
         $alreadyAttachedIds = array();
         $select = $this->_db->select()
@@ -1024,8 +1038,33 @@ class Tinebase_Tags
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
             ->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
-
+        
+        $this->_filterSharedOnly($select, $_applicationId);
+        
         return $select;
+    }
+    
+    /**
+     * apply filter for type shared only
+     * 
+     * @param Zend_Db_Select $select
+     * @param string $applicationId
+     */
+    protected function _filterSharedOnly($select, $applicationId)
+    {
+        if (! $this->_userHasPersonalTagRight($applicationId)) {
+            $select->where($this->_db->quoteIdentifier('type') . ' = ?', Tinebase_Model_Tag::TYPE_SHARED);
+        }
+    }
+    
+    /**
+     * checks if user is allowed to use personal tags in application
+     * 
+     * @param string $applicationId
+     */
+    protected function _userHasPersonalTagRight($applicationId)
+    {
+        return ! is_object(Tinebase_Core::getUser()) || Tinebase_Core::getUser()->hasRight($applicationId, Tinebase_Acl_Rights_Abstract::USE_PERSONAL_TAGS);
     }
 
     /**
