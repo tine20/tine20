@@ -71,7 +71,7 @@ Tine.Admin.Applications.Main = function() {
                     if(result.success === true) {
                         // reload mainscreen because apps have to be loaded / unloaded
                         Tine.Tinebase.ApplicationStarter.init();
-                        window.location = window.location.href.replace(/#+.*/, '');
+                        Tine.Tinebase.common.reload();
                     }
                 }
             }

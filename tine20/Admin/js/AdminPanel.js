@@ -59,7 +59,7 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
  */
 Tine.Admin.AdminPanel.onUpdate = function() {
     // reload mainscreen to make sure registry gets updated
-    window.location = window.location.href.replace(/#+.*/, '');
+    Tine.Tinebase.common.reload();
 }
 
 /**

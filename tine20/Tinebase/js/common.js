@@ -122,6 +122,24 @@ Tine.Tinebase.common = {
 
     },
 
+    /**
+     * reload client
+     *
+     * @param {Object} options
+     *      {Boolean} keepRegistry
+     *      {Boolean} clearCache
+     *      {String}  url
+     */
+    reload: function(options) {
+        options = options || {};
+
+        if (! options.keepRegistry) {
+            Tine.Tinebase.tineInit.clearRegistry();
+        }
+
+        window.location.reload.defer(500,  window.location, [!! options.clearCache]);
+    },
+
     showDebugConsole: function () {
         if (! Ext.debug) {
             var head = document.getElementsByTagName("head")[0],

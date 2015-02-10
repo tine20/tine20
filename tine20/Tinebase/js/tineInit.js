@@ -102,6 +102,11 @@ Tine.Tinebase.tineInit = {
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
+            } else if (window.isMainWindow && e.ctrlKey && e.getKey() === e.L) {
+                // reload on ctrl-l
+                Tine.Tinebase.common.reload({
+                    clearCache: true
+                });
             }
         });
         
@@ -171,7 +176,11 @@ Tine.Tinebase.tineInit = {
         // handle logouts in other windows
         Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
             if (oldValue && !newValue) {
-                Ext.ux.PopupWindow.close(window);
+                if (window.isMainWindow) {
+                    Tine.Tinebase.common.reload();
+                } else {
+                    Ext.ux.PopupWindow.close(window);
+                }
             }
         }, this, 'currentAccount');
     },
@@ -619,8 +628,10 @@ Tine.Tinebase.tineInit = {
             case 'timezone':
             case 'locale':
                 // reload mainscreen
-                window.location.reload.defer(500,  window.location, [key == 'locale']);
-                
+                Tine.Tinebase.common.reload({
+                    clearCache: key == 'locale'
+                });
+
                 break;
         }
     },
