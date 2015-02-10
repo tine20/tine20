@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -24,7 +24,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var Crm_Controller_Lead
      */
     protected $_controller = NULL;
-        
+    
     protected $_relatableModels = array('Crm_Model_Lead');
     
     /**
@@ -56,7 +56,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['totalleadtypes'] = $result['totalcount']['leadtypes'];
         
         $result['totalcount'] = $result['totalcount']['totalcount'];
-                
+        
         return $result;
     }
     

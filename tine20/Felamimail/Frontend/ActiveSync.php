@@ -944,42 +944,50 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     protected function _getFolderType(Felamimail_Model_Folder $folder)
     {
+        $personalNameSpaceSuffix = null;
+
         $account = $this->_getAccount();
         
         // first lookup folder type by account settings ...
-        if ($account) {
-            if ($account->trash_folder === $folder->globalname) {
-                return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
-            }
-            
-            if ($account->sent_folder === $folder->globalname) {
-                return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
-            }
-            
-            if ($account->drafts_folder === $folder->globalname) {
-                return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
-            }
+        if ($account && !empty($account->ns_personal)) {
+            $personalNameSpaceSuffix = $account->ns_personal . $account->delimiter;
         }
         
-        // ... then try to guess folder type by name
         switch (strtoupper($folder->localname)) {
             case 'INBOX':
-                return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
+                if ($personalNameSpaceSuffix . 'INBOX' === $folder->globalname) {
+                    return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
+                }
                 
                 break;
                 
             case 'TRASH':
-                return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
+                // either use configured trash folder or detect by name
+                if (($account && $account->trash_folder === $folder->globalname) ||
+                    ($personalNameSpaceSuffix . $folder->localname === $folder->globalname)
+                ) {
+                    return Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS;
+                }
                 
                 break;
                 
             case 'SENT':
-                return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
+                // either use configured sent folder or detect by name
+                if (($account && $account->sent_folder === $folder->globalname) ||
+                    ($personalNameSpaceSuffix . $folder->localname === $folder->globalname)
+                ) {
+                    return Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL;
+                }
                 
                 break;
                 
             case 'DRAFTS':
-                return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
+                // either use configured drafts folder or detect by name
+                if (($account && $account->drafts_folder === $folder->globalname) ||
+                    ($personalNameSpaceSuffix . $folder->localname === $folder->globalname)
+                ) {
+                    return Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS;
+                }
                 
                 break;
         }

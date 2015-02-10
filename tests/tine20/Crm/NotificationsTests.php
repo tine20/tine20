@@ -42,7 +42,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     }
     
     /**
-     * testInvitation
+     * testNotification
      */
     public function testNotification()
     {
@@ -64,5 +64,34 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
         $this->assertContains(' Lars Kneschke (Metaways', $bodyText);
-    }    
+    }
+
+    /**
+     * testNotificationToResponsible
+     */
+    public function testNotificationToResponsible()
+    {
+        self::flushMailer();
+        
+        $lead = $this->_getLead();
+        
+        // give sclever access to lead container
+        $this->_setPersonaGrantsForTestContainer($lead['container_id'], 'sclever');
+        
+        $lead->relations = array(new Tinebase_Model_Relation(array(
+            'type'                   => 'RESPONSIBLE',
+            'related_record'         => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
+            'own_model'              => 'Crm_Model_Lead',
+            'own_backend'            => 'Sql',
+            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'          => 'Addressbook_Model_Contact',
+            'related_backend'        => Tasks_Backend_Factory::SQL,
+        ), TRUE));
+        $savedLead = $this->_leadController->create($lead);
+        
+        $messages = self::getMessages();
+        $this->assertEquals(1, count($messages));
+        $bodyText = $messages[0]->getBodyText()->getContent();
+        $this->assertContains('**PHPUnit **', $bodyText);
+    }
 }

@@ -8,7 +8,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -250,9 +250,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     {
         $recipients = array();
         
-        $relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
-        
-        foreach ($relations as $relation) {
+        if (! $_lead->relations instanceof Tinebase_Record_RecordSet) {
+            $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
+        }
+        foreach ($_lead->relations as $relation) {
             if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
                 $recipients[] = $relation->related_record;
             }

@@ -591,23 +591,22 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_inspectAfterCreate($createdRecord, $_record);
             $this->_setRelatedData($createdRecord, $_record, TRUE);
             $this->_setNotes($createdRecord, $_record);
-
+            
             if ($this->sendNotifications()) {
                 $this->doSendNotifications($createdRecord, Tinebase_Core::getUser(), 'created');
             }
             
             $this->_increaseContainerContentSequence($createdRecord, Tinebase_Model_ContainerContent::ACTION_CREATE);
-
+            
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
         } catch (Exception $e) {
             $this->_handleRecordCreateOrUpdateException($e);
         }
-
+        
         if ($this->_clearCustomFieldsCache) {
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
         }
-
+        
         return $this->get($createdRecord);
     }
     
