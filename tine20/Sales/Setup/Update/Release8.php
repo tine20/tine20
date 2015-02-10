@@ -1452,7 +1452,6 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         ));
     }
     
-    
     /**
      * update to 8.21
      *
@@ -1460,7 +1459,6 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_20()
     {
-        // this breaks if the cache is not valid
         if ($this->_backend->tableVersionQuery('sales_product_agg') != '3') {
             $this->_addModlogToProductAggregates();
         }
