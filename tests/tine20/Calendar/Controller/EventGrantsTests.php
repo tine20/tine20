@@ -341,7 +341,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      */
     public function testFreeBusyViaAttendee()
     {
-        // whipe grants from jmcblack
+        // wipe grants from jmcblack
         Tinebase_Container::getInstance()->setGrants($this->_getPersonasDefaultCals('jmcblack'), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_getPersona('jmcblack')->getId(),
             'account_type'  => 'user',
