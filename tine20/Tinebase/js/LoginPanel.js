@@ -473,7 +473,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.title), _('Please wait!'));
                         window.document.title = this.originalTitle;
-                        this.onLogin.call(this.scope, response);
+                        this.onLogin.call(this.scope);
                     } else {
                         if (responseData.data && responseData.data.code === 510) {
                             // NOTE: when communication is lost, we can't create a nice ext window.

@@ -223,7 +223,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         ) && this.file) {
      
             // free browse plugin
-//            this.getInput();
+            this.getInput();
             
             if (this.isHtml5ChunkedUpload()) {
 
@@ -747,7 +747,6 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'progress', type: 'number', system: true},
     {name: 'form', system: true},
     {name: 'input', system: true},
-    {name: 'url', system: true},
     {name: 'request', system: true},
     {name: 'path', system: true},
     {name: 'tempFile', system: true}

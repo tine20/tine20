@@ -273,11 +273,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * attaches message when forwarding mails
-     *
+     * init attachments when forwarding message
+     * 
      * @param {Tine.Felamimail.Model.Message} message
      */
-    attachForwardedMessage: function(message) {
+    initAttachements: function(message) {
         if (message.get('attachments').length > 0) {
             this.record.set('attachments', [{
                 name: message.get('subject'),
@@ -306,7 +306,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.setMessageBody(message, account);
                     
                     if (this.isForwardedMessage() || this.draftOrTemplate) {
-                        this.attachForwardedMessage(message);
+                        this.initAttachements(message);
                     }
                 }
             } 
@@ -314,27 +314,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             this.record.set('body', this.msgBody);
         }
-
-        if (this.attachments) {
-            this.attachments = Ext.isArray(this.attachments) ? this.attachments : [this.attachments];
-            var attachments = [];
-            Ext.each(this.attachments, function(attachment) {
-
-                // external URL with COSR header enabled
-                if (Ext.isString(attachment)) {
-                    attachment = {
-                        url: attachment
-                    };
-                }
-
-                attachments.push(attachment);
-            }, this);
-
-            this.record.set('attachments', attachments);
-        }
         
         delete this.msgBody;
-        delete this.attachments;
         this.onRecordLoad();
     },
     
@@ -1032,7 +1013,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges()');
         
         this.loadMask.show();
-
+        
         if (this.getForm().findField('subject').getValue() == '') {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
             Ext.MessageBox.confirm(

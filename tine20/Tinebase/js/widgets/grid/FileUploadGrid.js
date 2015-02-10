@@ -227,65 +227,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.store = new Ext.data.SimpleStore({
             fields: Ext.ux.file.Upload.file
         });
-
-        this.store.on('add', this.onStoreAdd, this);
-
+        
         this.loadRecord(this.record);
     },
-
-    onStoreAdd: function(store, records, idx) {
-        Ext.each(records, function(attachment) {
-            if (attachment.get('url')) {
-                // we can't use Ext.data.connection here as we can't control xhr obj. directly :-(
-                var me = this,
-                    url = attachment.get('url'),
-                    name = url.split('/').pop(),
-                    xhr = new XMLHttpRequest();
-
-                xhr.open('GET', url, true);
-                xhr.responseType = 'blob';
-
-                store.suspendEvents();
-                attachment.set('name', name);
-                attachment.set('type', name.split('.').pop());
-                store.resumeEvents();
-
-                xhr.onprogress = function(e) {
-                    var progress = Math.floor(100 * e.loaded/e.total) + '% loaded';
-                    console.log(e);
-                }
-
-
-                xhr.onload = function(e) {
-//                    attachment.set('type', xhr.response.type);
-//                    attachment.set('size', xhr.response.size);
-
-                    var upload = new Ext.ux.file.Upload({
-                        file: new File([xhr.response], name),
-                        type: xhr.response.type,
-                        size: xhr.response.size
-                    });
-                    // work around chrome bug which dosn't take type from blob
-                    upload.file.fileType = xhr.response.type;
-
-                    var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);
-                    var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);
-
-                    upload.on('uploadfailure', me.onUploadFail, me);
-                    upload.on('uploadcomplete', me.onUploadComplete, fileRecord);
-                    upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, me);
-
-                    store.remove(attachment);
-                    store.add(fileRecord);
-
-                };
-
-                xhr.send();
-
-            }
-        }, this);
-    },
-
+    
     /**
      * returns add action
      * 
@@ -379,6 +324,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @param {} e
      */
     onFilesSelect: function (fileSelector, e) {
+        
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 

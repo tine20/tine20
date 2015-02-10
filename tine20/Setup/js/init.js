@@ -27,34 +27,13 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
  * init registry
  */
 Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function () {
-    Tine.Tinebase.tineInit.clearRegistry();
     Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
     Tine.Tinebase.tineInit.stateful = false;
     
     return true;
 });
 
-Tine.Tinebase.tineInit.onRegistryLoad = Tine.Tinebase.tineInit.onRegistryLoad.createInterceptor(function () {
-    // fake a setup user
-    var setupUser = {
-        accountId           : 1,
-        accountDisplayName  : Tine.Setup.registry.get('currentAccount'),
-        accountLastName     : 'Admin',
-        accountFirstName    : 'Setup',
-        accountFullName     : 'Setup Admin'
-    };
-    Tine.Tinebase.registry.add('currentAccount', setupUser);
-
-    // enable setup app
-    Tine.Tinebase.registry.add('userApplications', [{
-        name:   'Setup',
-        status: 'enabled'
-    }]);
-    Tine.Tinebase.MainScreenPanel.prototype.defaultAppName = 'Setup';
-    Tine.Tinebase.MainScreenPanel.prototype.appPickerStyle = 'none';
-
-    return true;
-});
+Tine.Tinebase.tineInit.checkSelfUpdate = Ext.emptyFn;
 
 /**
  * render window
@@ -64,23 +43,50 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     
     // if a config file exists, the admin needs to login!        
     if (Tine.Setup.registry.get('configExists') && !Tine.Setup.registry.get('currentAccount')) {
-        Tine.loginPanel = new Tine.Tinebase.LoginPanel({
-            loginMethod: 'Setup.login',
-            loginLogo: 'images/tine_logo_setup.png',
-            scope: this,
-            onLogin: function (response) {
-                Tine.Tinebase.tineInit.initRegistry(true, function() {
-                    Ext.MessageBox.hide();
-                    Tine.Tinebase.tineInit.renderWindow();
-                });
-            }
-        });
-        mainCardPanel.layout.container.add(Tine.loginPanel);
+        if (! Tine.loginPanel) {
+            Tine.loginPanel = new Tine.Tinebase.LoginPanel({
+                loginMethod: 'Setup.login',
+                loginLogo: 'images/tine_logo_setup.png',
+                scope: this,
+                onLogin: function (response) {
+                    Tine.Tinebase.tineInit.initList.initRegistry = false;
+                    Tine.Tinebase.tineInit.initRegistry();
+                    var waitForRegistry = function () {
+                        if (Tine.Tinebase.tineInit.initList.initRegistry) {
+                            Ext.MessageBox.hide();
+                            Tine.Tinebase.tineInit.renderWindow();
+                        } else {
+                            waitForRegistry.defer(100);
+                        }
+                    };
+                    waitForRegistry();
+                }
+            });
+            mainCardPanel.layout.container.add(Tine.loginPanel);
+        }
         mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
         Tine.loginPanel.doLayout();
         
         return false;
     }
+        
+    // fake a setup user
+    var setupUser = {
+        accountId           : 1,
+        accountDisplayName  : Tine.Setup.registry.get('currentAccount'),
+        accountLastName     : 'Admin',
+        accountFirstName    : 'Setup',
+        accountFullName     : 'Setup Admin'
+    };
+    Tine.Tinebase.registry.add('currentAccount', setupUser);
+    
+    // enable setup app
+    Tine.Tinebase.registry.add('userApplications', [{
+        name:   'Setup',
+        status: 'enabled'
+    }]);
+    Tine.Tinebase.MainScreen.prototype.defaultAppName = 'Setup';
+    Tine.Tinebase.MainScreen.prototype.appPickerStyle = 'none';
+    
+    return true;
 });
-
-

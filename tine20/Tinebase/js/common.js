@@ -97,31 +97,7 @@ Tine.Tinebase.common = {
         return popup;
         
     },
-
-    /**
-     *
-     * @param {String} part
-     */
-    getUrl: function(part) {
-        var pathname = window.location.pathname.replace('index.php', ''),
-            hostname = window.location.host,
-            protocol = window.location.protocol,
-            url;
-
-        switch (part) {
-            case 'path':
-                url = pathname;
-                break;
-            case 'full':
-            default:
-                url = protocol + '//' + hostname + pathname;
-                break;
-        }
-
-        return url;
-
-    },
-
+    
     showDebugConsole: function () {
         if (! Ext.debug) {
             var head = document.getElementsByTagName("head")[0],
