@@ -270,10 +270,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     public function update_4()
     {
         $columns = array("sales_contracts" => array(
-                    "title" => "true",
-                    "cleared_in" => "false"
-                    )
-                );
+            "title" => "true"
+        ));
         
         $this->truncateTextColumn($columns, 255);
         $this->setTableVersion('sales_contracts', 6);
@@ -1064,7 +1062,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             <default>1</default>
         </field>');
         
-        $this->_backend->alterCol('sales_invoice_positions', $declaration, 'quantity');
+        $this->_backend->alterCol('sales_invoice_positions', $declaration);
         
         $this->setTableVersion('sales_invoice_positions', 2);
         $this->setApplicationVersion('Sales', '8.12');
@@ -1462,7 +1460,8 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_20()
     {
-        if (! $this->_backend->columnExists('created_by', 'sales_product_agg')) {
+        // this breaks if the cache is not valid
+        if ($this->_backend->tableVersionQuery('sales_product_agg') != '3') {
             $this->_addModlogToProductAggregates();
         }
         
