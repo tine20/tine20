@@ -117,16 +117,18 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 array()
             )
             ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_SCHEMA')    . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('table_constraints.TABLE_SCHEMA')         . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('key_column_usage.TABLE_SCHEMA')          . ' = ?', $this->_config->database->dbname)
             ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_TYPE')      . ' = ?', 'FOREIGN KEY')
             ->where($this->_db->quoteIdentifier('key_column_usage.REFERENCED_TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $tableName);
-        
+
         $foreignKeyNames = array();
-        
+
         $stmt = $select->query();
         while ($row = $stmt->fetch()) {
             $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
-                'table_name'      => str_replace(SQL_TABLE_PREFIX, '', $row['TABLE_NAME']), 
-                'constraint_name' => str_replace(SQL_TABLE_PREFIX, '', $row['CONSTRAINT_NAME']));
+                'table_name'      => preg_replace('/' . SQL_TABLE_PREFIX . '/', '', $row['TABLE_NAME']),
+                'constraint_name' => preg_replace('/' . SQL_TABLE_PREFIX. '/', '', $row['CONSTRAINT_NAME']));
         }
         
         return $foreignKeyNames;
