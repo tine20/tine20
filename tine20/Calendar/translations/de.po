@@ -1344,3 +1344,10 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+#: js/EventEditDialog.js:315
+msgid "Mute Alert"
+msgstr "Benachrichtigungen unterdrücken"
+
+msgid "Paste event \"{0}\""
+msgstr "\"{0}\" hier einsetzen"
