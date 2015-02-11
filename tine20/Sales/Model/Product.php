@@ -77,17 +77,17 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
                 'type' => 'string',
             ),
             'lifespan_start'  => array(
-                'label'      => 'Lifespan Start',    // _('Lifespan Start')
+                'label'      => 'Lifespan start',    // _('Lifespan start')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type' => 'datetime',
             ),
             'lifespan_end'  => array(
-                'label'      => 'Lifespan End',    // _('Lifespan End')
+                'label'      => 'Lifespan end',    // _('Lifespan end')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type' => 'datetime',
             ),
             'is_active'  => array(
-                'label'      => 'Is Active',    // _('Is Active')
+                'label'      => 'Is active',    // _('Is active')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type' => 'boolean',
             ),
