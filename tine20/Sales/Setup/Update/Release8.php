@@ -1519,4 +1519,16 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.22');
     }
+
+    /**
+     * Set all products to is_active = 1
+     *
+     * @see 0010766: set product lifespan
+     */
+    public function update_22 ()
+    {
+        $this->_db->update(SQL_TABLE_PREFIX . "sales_products", array('is_active' => 1));
+
+        $this->setApplicationVersion('Sales', '8.23');
+    }
 }
