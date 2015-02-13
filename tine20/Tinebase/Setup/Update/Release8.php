@@ -468,21 +468,23 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_8()
     {
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>id</name>
-                <field>
+        $tableVersion = $this->getTableVersion('container_content');
+        
+        if ($tableVersion < 2) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
                     <name>id</name>
-                </field>
-            </index>
-        ');
-        try {
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            ');
+            
             $this->_backend->addIndex('container_content', $declaration);
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            Tinebase_Exception::log($zdse);
+            
+            $this->setTableVersion('container_content', '2');
         }
         
-        $this->setTableVersion('container_content', '2');
         $this->setApplicationVersion('Tinebase', '8.9');
     }
 
