@@ -858,8 +858,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $allGidNumbers = array();
         $gidNumber = null;
         
-        $filter = Zend_Ldap_Filter::equals(
-            'objectclass', 'posixgroup'
+        $filter = Zend_Ldap_Filter::orFilter(
+            Zend_Ldap_Filter::equals('objectclass', 'posixgroup'),
+            Zend_Ldap_Filter::equals('objectclass', 'group')
         );
         
         $groups = $this->getLdap()->search(
