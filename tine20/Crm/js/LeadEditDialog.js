@@ -187,7 +187,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             delete relations[i]['related_record']['relation'];
             newLinkObject.relation = relations[i];
             newLinkObject.relation_type = relations[i]['type'].toLowerCase();
-    
+            
             if ((newLinkObject.relation_type === 'responsible' 
               || newLinkObject.relation_type === 'customer' 
               || newLinkObject.relation_type === 'partner')) {
@@ -201,7 +201,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 products.push(newLinkObject);
             }
         }
-
+        
         return {
             contacts: contacts,
             tasks: tasks,

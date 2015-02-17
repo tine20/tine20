@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -151,7 +151,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     /* on     */ $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
                                  ' AND ' .  $gs->getSQL(),
                     /* select */ array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
-            $_select->having($adapter->quoteIdentifier($dname) . ' IS NULL');
+            $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NULL');
         } else {
             $gs->appendWhere(Zend_Db_Select::SQL_OR);
         }

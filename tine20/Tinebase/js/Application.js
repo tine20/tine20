@@ -41,17 +41,12 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @cfg {Boolean} hasMainScreen
      */
     hasMainScreen: true,
-
-    /**
-     * @cfg {Object} routes
-     */
-    routes: null,
-
+    
     /**
      * @property {Locale.gettext} i18n
      */
     i18n: null,
-
+    
     /**
      * returns title of this application
      * 
@@ -128,45 +123,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
             });
         }
     },
-
-    /**
-     * Ext 5 like route dispatcher
-     *
-     * @see http://docs.sencha.com/extjs/5.0/application_architecture/router.html
-     *
-     * @param {String} action
-     * @param {Array} params
-     */
-    dispatchRoute: function(action, params) {
-        var route, methodName, paramNames;
-
-        if (this.routes) {
-            for (route in this.routes) {
-                if (this.routes.hasOwnProperty(route)) {
-                    paramNames = route.split('/');
-                    if (action == paramNames.shift()) {
-                        methodName = this.routes[route].action;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (methodName) {
-            // @TODO validate parameters according to docs
-
-            return this[methodName].apply(this, params);
-        }
-
-        Ext.MessageBox.show(Ext.apply(defaults, {
-            title: _('Not Supported'),
-            msg: _('Your request is not supported by this version.'),
-            fn: function() {
-                window.location = window.location.href.replace(/#+.*/, '');
-            }
-        }));
-    },
-
+    
     /**
      * template function for subclasses is called before app activation. Return false to cancel activation
      */

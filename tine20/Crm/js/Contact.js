@@ -52,7 +52,7 @@ Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
             
         this.collapse();
         this.clearValue();
-    }    
+    }
 });
 
 /**

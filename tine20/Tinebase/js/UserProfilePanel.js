@@ -48,7 +48,11 @@ Tine.Tinebase.UserProfilePanel = Ext.extend(Ext.Panel, {
             // don't display generic fields
             var fieldDefinition = Tine.Addressbook.Model.Contact.getField(fieldName);
             
-            switch(fieldName) {
+            if (! fieldDefinition) {
+                return;
+            }
+            
+            switch (fieldName) {
                 default: 
                     this.add(new Ext.form.TextField({
                         hidden: this.genericFields.indexOf(fieldName) >= 0,

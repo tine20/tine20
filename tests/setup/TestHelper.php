@@ -5,8 +5,10 @@
  * @package     setup tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * 
+ * @todo        refactor setup tests bootstrap
  */
 
 /*
@@ -51,11 +53,8 @@ if (version_compare($phpUnitVersion[1], "3.6.0") >= 0) {
 }
 
 // get config
-if(file_exists(dirname(__FILE__) . '/phpunitconfig.inc.php')) {
-    $config = new Zend_Config(require dirname(__FILE__) . '/phpunitconfig.inc.php');
-} else {
-    throw new Exception("Couldn't find phpunitconfig.inc.php! \n");
-}
+$configData = include('phpunitconfig.inc.php');
+$config = new Zend_Config($configData);
 
 $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
 
