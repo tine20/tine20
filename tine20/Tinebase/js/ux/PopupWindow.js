@@ -95,9 +95,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         this.height = Math.min(screen.availHeight, this.height);
 
         // open popup window first to save time
-        if (! this.popup) {
-            this.popup = Tine.Tinebase.common.openWindow(this.name, this.url, this.width, this.height);
-        }
+        this.popup = Tine.Tinebase.common.openWindow(this.name, this.url, this.width, this.height);
         
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
@@ -175,16 +173,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     close: function() {
         if(this.fireEvent("beforeclose", this) !== false){
             this.fireEvent('close', this);
-
-            var popup = this.popup;
-
             this.destroy();
-
-            if (popup.history && popup.history.length > 1) {
-                popup.history.back();
-            } else {
-                Ext.ux.PopupWindow.close(popup);
-            }
         }
     },
     
@@ -218,25 +207,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         
         this.purgeListeners();
         this.windowManager.unregister(this);
-
+        this.popup.close();
         this.popup = null;
     }
 });
 
-/**
- * close window and show close message
- *
- * @static
- * @param win
- */
-Ext.ux.PopupWindow.close = function(win) {
-    win = win || window;
-    win.close();
-    win.Ext.MessageBox.alert(
-        _('Window can be closed'),
-        String.format(_('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
-        function() {
-            win.close();
-        }
-    );
-};
