@@ -488,7 +488,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      */
     onParseAddress: function (button) {
         if (button.pressed) {
-            Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address that should be parsed:'), function(btn, text) {
+            Ext.Msg.prompt(this.app.i18n._('Paste address'), this.app.i18n._('Please paste an address or a URI to a vcard that should be parsed:'), function(btn, text) {
                 if (btn == 'ok'){
                     this.parseAddress(text);
                 } else if (btn == 'cancel') {
@@ -513,19 +513,27 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             Tine.log.debug('parsed address:');
             Tine.log.debug(result);
 
-            // only set the fields that could be detected
-            Ext.iterate(result.contact, function(key, value) {
-                if (value && ! this.record.get(key)) {
-                    this.record.set(key, value);
+            if (result.hasOwnProperty('exceptions')) {
+                Ext.Msg.alert(this.app.i18n._('Failed to parse address!'), this.app.i18n._('The address could not be read.'));
+            } else {
+                // only set the fields that could be detected
+                Ext.iterate(result.contact, function(key, value) {
+                    if (value && ! this.record.get(key)) {
+                        this.record.set(key, value);
+                    }
+                }, this);
+
+                var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
+
+                if (result.hasOwnProperty('unrecognizedTokens')) {
+                    this.record.set('note', result.unrecognizedTokens.join(' ') + oldNote);
                 }
-            }, this);
 
-            var oldNote = (this.record.get('note')) ? this.record.get('note') : '';
-            this.record.set('note', result.unrecognizedTokens.join(' ') + oldNote);
-            this.onRecordLoad();
+                this.onRecordLoad();
 
-            this.parseAddressButton.setText(this.app.i18n._('End token mode'));
-            this.tokenModePlugin.startTokenMode();
+                this.parseAddressButton.setText(this.app.i18n._('End token mode'));
+                this.tokenModePlugin.startTokenMode();
+            }
         }, this);
     },
 
