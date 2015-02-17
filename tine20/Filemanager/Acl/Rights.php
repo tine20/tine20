@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -82,6 +82,7 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
+            Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_DOWNLOADLINKS
         );
         $allRights = array_merge($allRights, $addRights);

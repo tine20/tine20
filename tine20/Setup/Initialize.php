@@ -92,9 +92,16 @@ class Setup_Initialize
      */
     protected function _createInitialRights(Tinebase_Model_Application $_application)
     {
+        $allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
+        $userRights = $this->_userRoleRights;
+        
+        if (in_array(Tinebase_Acl_Rights::USE_PERSONAL_TAGS, $allRights)) {
+            $userRights[] = Tinebase_Acl_Rights::USE_PERSONAL_TAGS;
+        }
+        
         $roleRights = array(
-            'user role'     => $this->_userRoleRights,
-            'admin role'    => Tinebase_Application::getInstance()->getAllRights($_application->getId()),
+            'user role'     => $userRights,
+            'admin role'    => $allRights
         );
         
         foreach ($roleRights as $roleName => $rights) {

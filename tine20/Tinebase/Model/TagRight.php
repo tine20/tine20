@@ -86,6 +86,10 @@ class Tinebase_Model_TagRight extends Tinebase_Record_Abstract
      */
     public static function applyAclSql($_select, $_right = self::VIEW_RIGHT, $_idProperty = 'id')
     {
+        if (empty($_right)) {
+            throw new Tinebase_Exception_InvalidArgument('right is empty');
+        }
+        
         $db = Tinebase_Core::getDb();
         if($_idProperty == 'id'){
             $_idProperty = $db->quoteIdentifier('id');
