@@ -116,25 +116,30 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
                 }
             }
         }
-    }    
+    }
     
-        
+    /**
+     * 
+     * @return array
+     */
     public function toArray()
     {
         if ('decimal' == $this->type) {
             return array();
         } 
         
-        return array('name'=> $this->name, 
-                    'type' => $this->type,
-                    'autoincrement' => $this->autoincrement,
-                    'length' => (int) $this->length ,
-                    'unsigned' => $this->unsigned,
-                    'value' => $this->value,
-                    'mul' => $this->mul,
-                    'primary' => $this->primary,
-                    'unique' => $this->unique,
-                   );
+        return array(
+            'name'          => $this->name, 
+            'type'          => $this->type,
+            'autoincrement' => $this->autoincrement,
+            'length'        => (int) $this->length ,
+            'unsigned'      => $this->unsigned,
+            'value'         => $this->value,
+            'mul'           => $this->mul,
+            'primary'       => $this->primary,
+            'unique'        => $this->unique,
+            'default'       => $this->default
+       );
     }
     
     /**

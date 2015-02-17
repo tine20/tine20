@@ -297,8 +297,8 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             $this->execQueryVoid($statement);
         }
         
-        if (preg_match('/(?P<DEFAULT>DEFAULT .*)/', $fieldDeclaration, $matches)) {
-            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET ' . $matches['DEFAULT'];
+        if (isset($_declaration->default)) {
+            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET ' . $this->_db->quoteInto("DEFAULT ?", $_declaration->default);
             $this->execQueryVoid($statement);
         }
     }

@@ -84,7 +84,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
         probability: 0,
         turnover: 0,
         relations: [{
-            type: 'responsible',
+            type: 'RESPONSIBLE',
             related_record: Tine.Tinebase.registry.get('userContact')
         }]
     };

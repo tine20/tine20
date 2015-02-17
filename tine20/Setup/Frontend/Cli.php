@@ -57,7 +57,7 @@ class Setup_Frontend_Cli
         } elseif(isset($_opts->uninstall)) {
             $this->_uninstall($_opts);
         } elseif(isset($_opts->list)) {
-            $this->_listInstalled();
+            $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
         } elseif(isset($_opts->sync_passwords_from_ldap)) {
@@ -264,7 +264,7 @@ class Setup_Frontend_Cli
         }
         
         $controller->uninstallApplications($applications->name);
-
+        
         echo "Successfully uninstalled " . count($applications) . " applications.\n";
     }
 
@@ -277,13 +277,15 @@ class Setup_Frontend_Cli
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         } catch (Zend_Db_Statement_Exception $e) {
             echo "No applications installed\n";
-            return;
+            return 1;
         }
         
         echo "Currently installed applications:\n";
         foreach($applications as $application) {
             echo "* $application\n";
         }
+        
+        return 0;
     }
     
     /**

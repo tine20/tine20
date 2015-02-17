@@ -99,7 +99,6 @@ class Crm_JsonTest extends Crm_AbstractTest
             Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
             $registry['defaults']['container_id']['id']
         );
-        //print_r($registry);
     }
     
     /**
