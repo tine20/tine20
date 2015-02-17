@@ -522,31 +522,22 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     validateDtEnd: function() {
-        var dtStart = this.getForm().findField('dtstart').getValue();
+        var dtStart = this.getForm().findField('dtstart').getValue(),
+            dtEndField = this.getForm().findField('dtend'),
+            dtEnd = dtEndField.getValue(),
+            endTime = this.adjustTimeToUserPreference(dtEndField.getValue(), 'daysviewendtime');
         
-        var dtEndField = this.getForm().findField('dtend');
-        var dtEnd = dtEndField.getValue();
-        
-        var prefs = this.app.getRegistry().get('preferences'),
-            endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i');
-        
-        if (endTime.format('H:i') == '00:00') {
-            endTime = endTime.add(Date.MINUTE, -1);
-        }
-        
-        // Update to the selected day
-        endTime.setDate(dtEnd.getDate());
-        endTime.setMonth(dtEnd.getMonth());
-        endTime.setYear(dtEnd.getYear() + 1900);
-
         if (! Ext.isDate(dtEnd)) {
             dtEndField.markInvalid(this.app.i18n._('End date is not valid'));
             return false;
         } else if (Ext.isDate(dtStart) && dtEnd.getTime() - dtStart.getTime() <= 0) {
             dtEndField.markInvalid(this.app.i18n._('End date must be after start date'));
             return false;
-        } else if  (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar') && this.getForm().findField('is_all_day_event').checked === false && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && dtEnd > endTime) {
-            dtEndField.markInvalid(this.app.i18n._('End date is not allowed to be be higher than the configured time range.'));
+        } else if (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar')
+                && this.getForm().findField('is_all_day_event').checked === false
+                && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && dtEnd > endTime)
+        {
+            dtEndField.markInvalid(this.app.i18n._('End time is not allowed to be after the configured time.'));
             return false;
         } else {
             dtEndField.clearInvalid();
@@ -554,23 +545,42 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
     
-    validateDtStart: function() {
-        var dtStartField = this.getForm().findField('dtstart');
-        var dtStart = dtStartField.getValue();
+    /**
+     * adjusts given date (end/start) to user preference (hours)
+     * 
+     * @param {Date} dateValue
+     * @param {String} prefKey
+     * @return {Date}
+     */
+    adjustTimeToUserPreference: function(dateValue, prefKey) {
+        var userPreferenceDate = dateValue;
+            prefs = this.app.getRegistry().get('preferences'),
+            hour = prefs.get(prefKey).split(':')[0];
         
-        var prefs = this.app.getRegistry().get('preferences'),
-            startTime = Date.parseDate(prefs.get('daysviewstarttime'), 'H:i');
-      
-        // Update to the selected day
-        startTime.setDate(dtStart.getDate());
-        startTime.setMonth(dtStart.getMonth());
-        startTime.setYear(dtStart.getYear() + 1900);
-
+        // adjust date to user preference
+        userPreferenceDate.setHours(hour);
+        userPreferenceDate.setMinutes(0);
+        if (prefKey == 'daysviewendtime' && userPreferenceDate.format('H:i') == '00:00') {
+            userPreferenceDate = userPreferenceDate.add(Date.MINUTE, -1);
+        }
+        
+        return userPreferenceDate;
+    },
+    
+    validateDtStart: function() {
+        var dtStartField = this.getForm().findField('dtstart'),
+            dtStart = dtStartField.getValue(),
+            startTime = this.adjustTimeToUserPreference(dtStartField.getValue(), 'daysviewstarttime');
+        
         if (! Ext.isDate(dtStart)) {
             dtStartField.markInvalid(this.app.i18n._('Start date is not valid'));
             return false;
-        } else if  (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar') && this.getForm().findField('is_all_day_event').checked === false && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && dtStart < startTime) {
-            dtStartField.markInvalid(this.app.i18n._('End date is not allowed to be be lower than the configured time range.'));
+        } else if (! Tine.Tinebase.configManager.get('daysviewallowallevents', 'Calendar')
+                && this.getForm().findField('is_all_day_event').checked === false
+                && !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar')
+                && dtStart < startTime)
+        {
+            dtStartField.markInvalid(this.app.i18n._('Start date is not allowed to be before the configured time.'));
             return false;
         } else {
             dtStartField.clearInvalid();
