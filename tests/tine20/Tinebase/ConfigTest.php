@@ -181,7 +181,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $ignoreBillablesConfig = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
         $this->assertEquals('2000-01-01 22:00:00', $ignoreBillablesConfig);
         
-        $dest = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20' . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+        $dest = $this->_getSalesCustomDefaultConfig();
         
         if (! file_exists($dest)) {
             copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $dest);
@@ -192,6 +192,11 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    protected function _getSalesCustomDefaultConfig()
+    {
+        return dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20' . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+    }
+    
     /**
      * testFeatureEnabled
      * 
@@ -199,6 +204,11 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testFeatureEnabled()
     {
+        $customConfigFilename = $this->_getSalesCustomDefaultConfig();
+        if (file_exists($customConfigFilename)) {
+            $this->markTestSkipped('do not test with existing custom config');
+        }
+        
         $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
         
         $this->assertTrue($invoicesFeatureEnabled);
