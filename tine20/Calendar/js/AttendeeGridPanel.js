@@ -189,6 +189,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: new Ext.form.ComboBox({
                 blurOnSelect  : true,
                 expandOnFocus : true,
+                listWidth     : 100,
                 mode          : 'local',
                 store         : [
                     ['user',     this.app.i18n._('User')   ],
