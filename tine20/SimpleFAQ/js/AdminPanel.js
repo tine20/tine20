@@ -152,7 +152,7 @@ Tine.SimpleFAQ.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.SimpleFAQ.AdminPanel.onUpdate = function() {
     // reload mainscreen to make sure registry gets updated
-    window.location = window.location.href.replace(/#+.*/, '');
+    Tine.Tinebase.common.reload();
 }
 
 /**

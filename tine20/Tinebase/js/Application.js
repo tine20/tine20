@@ -162,7 +162,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
             title: _('Not Supported'),
             msg: _('Your request is not supported by this version.'),
             fn: function() {
-                window.location = window.location.href.replace(/#+.*/, '');
+                Tine.Tinebase.common.reload();
             }
         }));
     },
