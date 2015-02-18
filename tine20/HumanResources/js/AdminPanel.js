@@ -147,7 +147,7 @@ Tine.HumanResources.AdminPanel = Ext.extend(Ext.FormPanel, {
             success : function(_result, _request) {
                 this.loadMask.hide();
                 // reload mainscreen to make sure registry gets updated
-                window.location = window.location.href.replace(/#+.*/, '');
+                Tine.Tinebase.common.reload();
             }
         });
     },

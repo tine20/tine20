@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         allow to add user defined part to Tine.title
- * TODO         move locale/timezone registry values to preferences MixedCollection?
  */
 
 /*global Ext, Tine, google, OpenLayers, Locale, */
@@ -87,14 +86,11 @@ Tine.Tinebase.tineInit = {
     requestUrl: 'index.php',
     
     /**
-     * list of initialised items
+     * prefix for localStorage keys
+     * @type String
      */
-    initList: {
-        initWindow:   false,
-        initViewport: false,
-        initRegistry: false
-    },
-    
+    lsPrefix: Tine.Tinebase.common.getUrl('path') + 'Tine',
+
     initWindow: function () {
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
@@ -106,6 +102,11 @@ Tine.Tinebase.tineInit = {
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
+            } else if (window.isMainWindow && e.ctrlKey && e.getKey() === e.L) {
+                // reload on ctrl-l
+                Tine.Tinebase.common.reload({
+                    clearCache: true
+                });
             }
         });
         
@@ -115,9 +116,6 @@ Tine.Tinebase.tineInit = {
             e.preventDefault();
             e.browserEvent.dataTransfer.dropEffect = 'none';
         }, this);
-        
-        //init window is done in Ext.ux.PopupWindowMgr. yet
-        this.initList.initWindow = true;
     },
     
     initDebugConsole: function () {
@@ -160,62 +158,115 @@ Tine.Tinebase.tineInit = {
                 border: false,
                 activeItem: 0,
                 items: this.splash
-            },
-            listeners: {
-                scope: this,
-                render: function (p) {
-                    this.initList.initViewport = true;
-                }
             }
         });
     },
-    
+
+    initLoginPanel: function() {
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
+
+        if (! Tine.loginPanel) {
+            Tine.loginPanel = new Tine.Tinebase.LoginPanel({
+                defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
+                defaultPassword: Tine.Tinebase.registry.get('defaultPassword')
+            });
+            mainCardPanel.add(Tine.loginPanel);
+        }
+
+        // handle logouts in other windows
+        Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
+            if (oldValue && !newValue) {
+                if (window.isMainWindow) {
+                    Tine.Tinebase.common.reload();
+                } else {
+                    Ext.ux.PopupWindow.close(window);
+                }
+            }
+        }, this, 'currentAccount');
+    },
+
+    showLoginBox: function(cb, scope) {
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel,
+            activeItem = mainCardPanel.layout.activeItem;
+
+        mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
+        Tine.loginPanel.doLayout();
+        Tine.loginPanel.onLogin = function(response) {
+            mainCardPanel.layout.setActiveItem(activeItem);
+            cb.call(scope||window, response);
+        }
+
+//        //listen for other windows login?
+//        Tine.Tinebase.registry.on('replace', function() {
+//            mainCardPanel.layout.setActiveItem(activeItem);
+//        }, this, 'currentAccount');
+
+    },
+
     renderWindow: function () {
         var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
-        
-        // check if user is already logged in        
+
+        // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
-            if (! Tine.loginPanel) {
-                Tine.loginPanel = new Tine.Tinebase.LoginPanel({
-                    defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
-                    defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
-                    scope: this,
-                    onLogin: function (response) {
-                        Tine.Tinebase.tineInit.initList.initRegistry = false;
-                        Tine.Tinebase.tineInit.initRegistry();
-                        var waitForRegistry = function () {
-                            if (Tine.Tinebase.tineInit.initList.initRegistry) {
-                                Ext.MessageBox.hide();
-                                Tine.Tinebase.tineInit.initExtDirect();
-                                Tine.Tinebase.tineInit.initState();
-                                Tine.Tinebase.tineInit.renderWindow();
-                            } else {
-                                waitForRegistry.defer(100);
-                            }
-                        };
-                        waitForRegistry();
-                    }
+            Tine.Tinebase.tineInit.showLoginBox(function(response){
+                // fetch users registry
+                Tine.Tinebase.tineInit.initRegistry(true, function() {
+                    Ext.MessageBox.hide();
+                    Tine.Tinebase.tineInit.initWindowMgr();
+                    Tine.Tinebase.tineInit.renderWindow();
                 });
-                mainCardPanel.add(Tine.loginPanel);
-            }
-            mainCardPanel.layout.setActiveItem(Tine.loginPanel.id);
-            Tine.loginPanel.doLayout();
+            });
             
             return;
         }
-        
-        // todo: find a better place for stuff to do after successfull login
-        Tine.Tinebase.tineInit.initAppMgr();
-        
-        Tine.Tinebase.tineInit.initUploadMgr();
-        
-        /** temporary Tine.onReady for smooth transition to new window handling **/
-        if (typeof(Tine.onReady) === 'function') {
-            Tine.Tinebase.viewport.destroy();
-            Tine.onReady();
-            return;
+
+        // experimental deep link
+        if (window.location.hash) {
+            var hash = window.location.hash.replace(/^#+/, ''),
+                config;
+
+            if (hash.match(/\//)) {
+                var args = hash.split('/'),
+                    app = Tine.Tinebase.appMgr.get(args.shift()),
+                    method = args.shift();
+
+                var config = app.dispatchRoute(method, args);
+
+            } else {
+                //http://tine.example.com/#{"name":"TimesheetEditWindow_0","contentPanelConstructor":"Tine.Timetracker.TimesheetEditDialog","recordId":0}
+                config = Ext.decode(hash);
+            }
+
+            if (window.history && window.history.replaceState) {
+                window.history.replaceState({}, document.title, Tine.Tinebase.common.getUrl());
+            }
+
+            // what about plugins?
+            Ext.applyIf(config, {
+                name: window.name,
+                popup: window
+            })
+
+            window.name = config.name;
+
+            // disable mainWindows per hash for the moment. MainWindow concept needs to be rethought
+            // in the context of window manager rewrite
+            window.isMainWindow = false;
+
+            Ext.ux.PopupWindowMgr.register(new Ext.ux.PopupWindow(config));
         }
-        
+
+        /**
+         * register MainWindow
+         */
+        else if (window.isMainWindow) {
+            Ext.ux.PopupWindowMgr.register({
+                name: window.name,
+                popup: window,
+                contentPanelConstructor: 'Tine.Tinebase.MainScreenPanel'
+            });
+        }
+
         // fetch window config from WindowMgr
         var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
@@ -227,8 +278,6 @@ Tine.Tinebase.tineInit = {
         mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);
         card.doLayout();
-        
-        //var ping = new Tine.Tinebase.sync.Ping({});
         
         window.initializationComplete = true;
     },
@@ -266,7 +315,7 @@ Tine.Tinebase.tineInit = {
             if (options.params && !options.isUpload) {
                 var params = {};
                 
-                var def = Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
+                var def = Tine.Tinebase.registry.get('serviceMap') ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
                 if (def) {
                     // sort parms according to def
                     for (var i = 0, p; i < def.parameters.length; i += 1) {
@@ -451,13 +500,26 @@ Tine.Tinebase.tineInit = {
             }
         });
     },
-    
+
     /**
      * init registry
+     *
+     * @param {Bool} forceReload
+     * @param {Function} cb
+     * @param {Object} scope
      */
-    initRegistry: function () {
-        Ext.namespace('Tine.Tinebase.registry');
-        if (window.isMainWindow) {
+    initRegistry: function (forceReload, cb, scope) {
+        Tine.Tinebase.registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + 'Tinebase.registry');
+
+        var version = Tine.Tinebase.registry.get('version'),
+            userApplications = Tine.Tinebase.registry.get('userApplications') || [];
+
+        var reloadNeeded =
+               !version
+            || !userApplications
+            || userApplications.length < 2;
+
+        if (forceReload || reloadNeeded) {
             Ext.Ajax.request({
                 timeout: 120000, // 2 minutes
                 params: {
@@ -476,73 +538,85 @@ Tine.Tinebase.tineInit = {
                         if (registryData.hasOwnProperty(app)) {
                             var appData = registryData[app];
                             if (Tine[app]) {
-                                Tine[app].registry = new Ext.util.MixedCollection();
+                                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
 
                                 for (var key in appData) {
                                     if (appData.hasOwnProperty(key)) {
                                         if (key === 'preferences') {
-                                            var prefs = new Ext.util.MixedCollection();
+                                            Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
                                             for (var pref in appData[key]) {
                                                 if (appData[key].hasOwnProperty(pref)) {
-                                                    prefs.add(pref, appData[key][pref]);
+                                                    Tine[app].preferences.set(pref, appData[key][pref]);
                                                 }
                                             }
-                                            prefs.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
-                                            Tine[app].registry.add(key, prefs);
+
                                         } else {
-                                            Tine[app].registry.add(key, appData[key]);
+                                            Tine[app].registry.set(key, appData[key]);
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    // update window factory window type (required after login)
-                    if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
-                        var windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
-                        // init ApplicationStarter on Ext window once
-                        if (windowType == 'Ext') {
-                            Tine.Tinebase.ApplicationStarter.init();
-                        }
-                        if (Tine.WindowFactory && Tine.WindowFactory.windowType !== windowType) {
-                            Tine.WindowFactory.windowType = windowType;
-                        }
-                    }
-                    
-                    Tine.Tinebase.tineInit.overrideFields();
-                    
-                    Tine.Tinebase.tineInit.initList.initRegistry = true;
+
+                    Tine.Tinebase.tineInit.onRegistryLoad();
+                    cb.call(scope);
                 }
             });
         } else {
-            var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
-            
-            for (var p in mainWindow.Tine) {
-                if (Object.prototype.hasOwnProperty.call(mainWindow.Tine[p], 'registry') && Tine.hasOwnProperty(p)) {
-                    Tine[p].registry = mainWindow.Tine[p].registry;
+            for (var app,i=0;i<userApplications.length;i++) {
+                app = userApplications[i].name;
+                if (Tine[app]) {
+                  Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
+                  Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
                 }
             }
-            
-            Tine.Tinebase.tineInit.overrideFields();
-            
-            Tine.Tinebase.tineInit.initList.initRegistry = true;
+
+            Tine.Tinebase.tineInit.onRegistryLoad();
+            cb.call(scope);
         }
+
+
     },
-    
+
     /**
-     * Applying registry entries to Tine classes
+     * apply registry data
      */
-    overrideFields: function () {
-        
+    onRegistryLoad: function() {
+        if (Tine.Tinebase.registry.get('preferences')) {
+            Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
+        }
+
+        Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
+
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
         });
-                
+
+        Tine.Tinebase.tineInit.initExtDirect();
+
+        Tine.Tinebase.tineInit.initState();
+
+        if (Tine.Tinebase.registry.get('currentAccount')) {
+            Tine.Tinebase.tineInit.initAppMgr();
+        }
+
+        Tine.Tinebase.tineInit.initUploadMgr();
+
+        Tine.Tinebase.tineInit.initLoginPanel();
     },
-    
+
+    /**
+     * remove all registry data
+     */
+    clearRegistry: function() {
+        store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
+    },
+
     /**
      * executed when a value in Tinebase registry/preferences changed
+     *
      * @param {string} key
      * @param {value} oldValue
      * @param {value} newValue
@@ -553,81 +627,12 @@ Tine.Tinebase.tineInit = {
             case 'confirmLogout':
             case 'timezone':
             case 'locale':
-                // TODO do we still need the gears stuff here?
-                if (window.google && google.gears && google.gears.localServer) {
-                    var pkgStore = google.gears.localServer.openStore('tine20-package-store');
-                    if (pkgStore) {
-                        google.gears.localServer.removeStore('tine20-package-store');
-                    }
-                }
                 // reload mainscreen
-                window.location.reload.defer(500,  window.location, [key == 'locale']);
-                
+                Tine.Tinebase.common.reload({
+                    clearCache: key == 'locale'
+                });
+
                 break;
-        }
-    },
-    
-    /**
-     * check if selfupdate is needed
-     */
-    checkSelfUpdate: function () {
-        if (! Tine.Tinebase.registry.get('version')) {
-            return false;
-        }        
-        
-        var needSelfUpdate, serverVersion = Tine.Tinebase.registry.get('version'), clientVersion = Tine.clientVersion;
-        if (clientVersion.codeName.match(/^\$HeadURL/)) {
-            return;
-        }
-        
-        var cp = new Ext.state.CookieProvider({});
-        
-        if (serverVersion.packageString !== 'none') {
-            needSelfUpdate = (serverVersion.packageString !== clientVersion.packageString);
-        } else {
-            needSelfUpdate = (serverVersion.codeName !== clientVersion.codeName);
-        }
-        
-        if (needSelfUpdate) {
-            if (window.google && google.gears && google.gears.localServer) {
-                google.gears.localServer.removeManagedStore('tine20-store');
-                google.gears.localServer.removeStore('tine20-package-store');
-            }
-            if (cp.get('clientreload', '0') === '0') {
-                
-                cp.set('clientreload', '1');
-                window.location.reload(true);
-                return;
-                
-            } else {
-                cp.clear('clientreload');
-                var loadMask = new Ext.LoadMask(Ext.getBody(), {
-                    msg: _('Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser.'),
-                    msgCls: ''
-                }).show();
-            }
-        } else {
-            cp.clear('clientreload');
-            
-            // if no selfupdate is needed we store langfile and index.php in manifest
-            if (window.google && google.gears && google.gears.localServer) {
-                if (serverVersion.buildType === 'RELEASE') {
-                    var pkgStore = google.gears.localServer.createStore('tine20-package-store');
-                    var resources = [
-                        '',
-                        'index.php',
-                        'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
-                    ];
-                    
-                    Ext.each(resources, function (resource) {
-                        if (! pkgStore.isCaptured(resource)) {
-                            pkgStore.capture(resources, function () {/*console.log(arguments)*/});
-                        }
-                    }, this);
-                } else {
-                    google.gears.localServer.removeStore('tine20-package-store');
-                }
-            }
         }
     },
     
@@ -636,28 +641,23 @@ Tine.Tinebase.tineInit = {
      */
     initWindowMgr: function () {
         /**
-         * init the window handling
-         */
-        Ext.ux.PopupWindow.prototype.url = 'index.php';
-        
-        /**
          * initialise window types
          */
-        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('windowtype')) ? Tine.Tinebase.registry.get('preferences').get('windowtype') : 'Browser';
-            
+        var windowType = 'Browser';
+        Ext.ux.PopupWindow.prototype.url = 'index.php';
+
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
+            // update window factory window type (required after login)
+            windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
+        }
+
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
-        
-        /**
-         * register MainWindow
-         */
-        if (window.isMainWindow) {
-            Ext.ux.PopupWindowMgr.register({
-                name: window.name,
-                popup: window,
-                contentPanelConstructor: 'Tine.Tinebase.MainScreen'
-            });
+
+        // init ApplicationStarter on Ext window once
+        if (windowType == 'Ext') {
+            Tine.Tinebase.ApplicationStarter.init();
         }
     },
     /**
@@ -730,15 +730,7 @@ Tine.Tinebase.tineInit = {
             return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
         };
         Tine.Tinebase.prototypeTranslation();
-    },
-    
-    /**
-     * Last stage of initialisation, to be done after Tine.onReady!
-     */
-    onLangFilesLoad: function () {
-        //Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
-    }    
-    
+    }
 };
 
 Ext.onReady(function () {
@@ -747,20 +739,10 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
-    Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initLibs();
-    var waitForInits = function () {
-        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
-            waitForInits.defer(100);
-        } else {
-            Tine.Tinebase.tineInit.initExtDirect();
-            Tine.Tinebase.tineInit.initState();
-            Tine.Tinebase.tineInit.initWindowMgr();
-            //Tine.Tinebase.tineInit.onLangFilesLoad();
-            //Tine.Tinebase.tineInit.checkSelfUpdate();
-            Tine.Tinebase.tineInit.renderWindow();
-            Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
-        }
-    };
-    waitForInits();
+
+    Tine.Tinebase.tineInit.initRegistry(false, function() {
+        Tine.Tinebase.tineInit.initWindowMgr();
+        Tine.Tinebase.tineInit.renderWindow();
+    });
 });

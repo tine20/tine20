@@ -97,6 +97,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     },
     
     getUserActions: function() {
+
         if (! this.userActions) {
             this.userActions = [
                 this.action_editProfile,
@@ -284,6 +285,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 } else {
                     document.execCommand('ClearAuthenticationCache');
                 }
+
+                // clear registry
+                Tine.Tinebase.tineInit.clearRegistry();
+
                 // remove the event handler
                 // the reload() trigers the unload event
                 var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
