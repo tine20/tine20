@@ -108,7 +108,7 @@ Tine.Crm.LeadState.Renderer = function(_leadstateId) {
     if (record) {
        return record.data.leadstate;
     } else {
-        return 'undefined';
+        return Tine.Tinebase.appMgr.get('Crm').i18n._('undefined');
     }
 };
 

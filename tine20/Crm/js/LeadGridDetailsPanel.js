@@ -122,7 +122,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         if (record) {
             return record.data[definitionsLabel];
         } else {
-            return 'undefined';
+            return this.app.i18n._('undefined');
         }
     },
     

@@ -61,7 +61,7 @@ Tine.Crm.LeadSource.Renderer = function(_leadsourceId) {
     if (record) {
         return record.data.leadsource;
     } else {
-        return 'undefined';
+        return Tine.Tinebase.appMgr.get('Crm').i18n._('undefined');
     }
 };
 

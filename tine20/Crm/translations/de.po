@@ -615,3 +615,7 @@ msgstr "Webseite"
 
 #~ msgid "Expected turnover"
 #~ msgstr "Erwarteter Umsatz"
+
+#: js/LeadState.js:111
+msgid "undefined"
+msgstr "undefiniert"
