@@ -120,7 +120,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $scheduler = Tinebase_Core::getScheduler();
         $responses = $scheduler->run();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($responses, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r(array_keys($responses), TRUE));
         
         $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
         echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
