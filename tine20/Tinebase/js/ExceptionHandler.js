@@ -164,10 +164,29 @@ Tine.Tinebase.ExceptionHandler = function() {
         switch (exception.code) {
             // not authorised
             case 401:
+                Tine.Tinebase.registry.remove('currentAccount');
+
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Authorisation Required'), 
                     msg: _('Your session timed out. You need to login again.'),
                     fn: function() {
+
+                        /*
+                        // NOTE: this should be a password only longing box
+                        //       as we can't handle user changes here!
+                        Tine.Tinebase.tineInit.showLoginBox(function(response) {
+                            // arg: we need a full account in response here
+                            Tine.Tinebase.registry.set('currentAccount',...)
+                            // should we retry last action with correct callbacks?
+                            Ext.MessageBox.hide();
+                        }, this);
+                        return;
+                        */
+
+                        if (! window.isMainWindow) {
+                            Ext.ux.PopupWindow.close();
+                            return;
+                        }
                         var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
                         if (redirect && redirect != '') {
                             window.location = Tine.Tinebase.registry.get('redirectUrl');

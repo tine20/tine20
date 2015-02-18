@@ -538,6 +538,12 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                 } else if (userData.hasOwnProperty('account_id')) {
                     // userData contains contact
                     return userData.id;
+                } else if (userData.group_id) {
+                    // userData contains list
+                    return userData.id;
+                } else if (userData.list_id) {
+                    // userData contains group
+                    return userData.list_id;
                 }
                 break;
             default:
