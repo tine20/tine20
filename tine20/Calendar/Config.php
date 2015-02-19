@@ -42,6 +42,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CROP_DAYS_VIEW = 'daysviewcroptime';
+
+    /**
+     * Days view mouse wheel increment
+     *
+     * @var integer
+     */
+    const DAYS_VIEW_MOUSE_WHEEL_INCREMENT = 'daysviewwheelincrement';
     
     /**
      * Allow events outside the definition created by the edit dialog
@@ -119,6 +126,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'description'           => 'Crop calendar view configured start and endtime.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
             'default'               => false
         
         ),
@@ -129,9 +138,24 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'description'           => 'Allow events outside start and endtime.',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
             'default'               => false
         
         ),
+        self::DAYS_VIEW_MOUSE_WHEEL_INCREMENT => array(
+                                    //_('Week View Mouse Wheel Increment')
+            'label'                 => 'Week View Mouse Wheel Increment',
+            //_('Crop calendar view configured start and endtime.')
+            'description'           => 'Number of pixels to scroll per mouse wheel',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+            'default'               => 50
+
+        ),
+
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')
             'label'                 => 'Attendee Status Available',
