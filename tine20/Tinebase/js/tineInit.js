@@ -204,6 +204,8 @@ Tine.Tinebase.tineInit = {
     },
 
     renderWindow: function () {
+        Tine.log.info('renderWindow::start');
+        
         var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
 
         // check if user is already logged in
@@ -267,13 +269,18 @@ Tine.Tinebase.tineInit = {
             });
         }
 
+
+        Tine.log.info('renderWindow::before get window');
+        
         // fetch window config from WindowMgr
         var c = Ext.ux.PopupWindowMgr.get(window) || {};
         
         // set window title
         window.document.title = Ext.util.Format.stripTags(c.title ? c.title : window.document.title);
         
-        // finally render the window contents in a new card  
+        Tine.log.info('renderWindow::getCenterPanel');
+        
+        // finally render the window contents in a new card
         var card = Tine.WindowFactory.getCenterPanel(c);
         mainCardPanel.add(card);
         mainCardPanel.layout.setActiveItem(card.id);

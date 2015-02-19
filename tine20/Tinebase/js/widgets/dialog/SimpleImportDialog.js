@@ -257,7 +257,7 @@ Tine.widgets.dialog.SimpleImportDialog.openWindow = function (config) {
         height: 600,
         name: Tine.widgets.dialog.SimpleImportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.SimpleImportDialog',
-        contentPanelConstructorConfig: config,
+        contentPanelConstructorConfig: config
     });
     return window;
 };
