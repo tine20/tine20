@@ -254,7 +254,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         view.getSelectionModel().on('selectionchange', this.onSelectionChange.createDelegate(this, [view]));
         
         if (view.onBeforeScroll) {
-            view.onBeforeScroll = view.onBeforeScroll.createSequence(this.onScroll, this, view);
+            view.onBeforeScroll = view.onBeforeScroll.createSequence(this.onScroll.createDelegate(this, [view], 0));
         }
         
         return view;
@@ -265,21 +265,20 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
      * 
      * @param {Object} activeView
      */
-    onScroll: function(activeView) {
-        
-        if (! activeView) {
+    onScroll: function(activeView, e) {
+        if (! (activeView && activeView.scroller && activeView.scroller.dom)) {
             return;
         }
         
-        var scrollTop = activeView.target.scrollTop;
-        
+        var scrollTop = activeView.scroller.dom.scrollTop;
+
         this.attendeeViews.each(function(view) {
-            if (activeView.id != view.id) {
+            if (activeView.id != view.id && view.scroller) {
                 view.scroller.dom.scrollTop = scrollTop;
             }
         }, this);
     },
-    
+
     getActiveView: function() {
         if (! this.attendeeViews.getCount()) {
             return this.calPanel.view;
