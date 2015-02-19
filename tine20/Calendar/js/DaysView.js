@@ -106,6 +106,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     cropDayTime: false,
     /**
+     *  @cfg {Integer} wheelIncrement
+     *  the number of pixels to increment on mouse wheel scrolling (defaults to 50)
+     */
+    wheelIncrement: 50,
+    /**
      * @cfg {String} newEventSummary
      * _('New Event')
      */
@@ -241,12 +246,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.dayEndPx = this.getTimeOffset(this.dayEnd);
         
         this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart) && !this.getTimeOffset(this.dayEnd));
-        
+
         if (this.cropDayTime) {
             this.defaultStart = Ext.isDate(defaultStartTime) ? defaultStartTime : Date.parseDate(this.defaultStart, 'H:i');
         } else {
             this.defaultStart = this.dayStart;
         }
+
+        this.wheelIncrement = Tine.Tinebase.configManager.get('daysviewwheelincrement', 'Calendar') || this.wheelIncrement;
         
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
@@ -520,7 +527,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         this.scroller.dom.scrollTop = scrollTop;
     },
-    
+
+    onMouseWheel: function(e) {
+        var d = e.getWheelDelta()*this.wheelIncrement*-1;
+        e.stopEvent();
+
+        var scrollTop = this.scroller.dom.scrollTop,
+            newTop = scrollTop + d,
+            sh = this.scroller.dom.scrollHeight-this.scroller.dom.clientHeight;
+
+        var s = Math.max(0, Math.min(sh, newTop));
+        if(s != scrollTop){
+            this.scroller.scrollTo('top', s);
+        }
+    },
+
     onBeforeScroll: function() {
         if (! this.isScrolling) {
             this.isScrolling = true;
@@ -1263,6 +1284,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
+
+
+        this.mon(this.scroller, 'mousewheel', this.onMouseWheel, this);
         this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
         this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
 
