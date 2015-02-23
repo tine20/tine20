@@ -378,7 +378,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             this.selectPath.defer(100, this, [root + defaultContainerPath]);
         }
         
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin && this.filterPlugin.getGridPanel()) {
             this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
         }
     },
