@@ -395,7 +395,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
                     event.set('dtstart', event.get('dtstart').add(Date.DAY, diff));
                     event.set('dtend', event.get('dtend').add(Date.DAY, diff));
                     event.endEdit();
-                    
+
                     v.fireEvent('updateEvent', event);
                 }
                 

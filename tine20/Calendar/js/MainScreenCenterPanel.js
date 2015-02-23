@@ -773,7 +773,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     onAddEvent: function(event, checkBusyConflicts, pastChecked) {
-
         if(!pastChecked) {
             this.checkPastEvent(event, checkBusyConflicts, 'add');
             return;
@@ -1185,6 +1184,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             Ext.each(record.data.attendee, function(attender) {
                 delete attender.id;
             }, this);
+        }
+
+        // Allow to change attendee if in split view
+        var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
+        if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
+            record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
         }
 
         record.set('dtstart', datetime);
