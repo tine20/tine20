@@ -281,7 +281,7 @@ Tine.Tinebase.ApplicationStarter = {
         
         var app = Tine.Tinebase.appMgr.get(appName);
         if (! app) {
-            Tine.log.err('Application ' + appName + ' not found!');
+            Tine.log.error('Application ' + appName + ' not found!');
             return null;
         }
         
@@ -309,7 +309,7 @@ Tine.Tinebase.ApplicationStarter = {
         
         if (filterconfig) {
             if (filterconfig.hasOwnProperty('options') && (filterconfig.options.hasOwnProperty('jsFilterType') || filterconfig.options.hasOwnProperty('jsFilterValueType'))) {
-                Tine.log.err('jsFilterType and jsFilterValueType are deprecated. Use jsConfig.<property> instead.');
+                Tine.log.error('jsFilterType and jsFilterValueType are deprecated. Use jsConfig.<property> instead.');
             }
             // if js filter is defined in filterconfig.options, take this and return
             if (filterconfig.hasOwnProperty('jsConfig')) {

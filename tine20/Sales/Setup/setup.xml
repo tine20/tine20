@@ -776,7 +776,7 @@
         </table>
         <table>
             <name>sales_product_agg</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
