@@ -844,62 +844,66 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
-        $identifier = $_record->getIdProperty();
-        
-        if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
-        }
-        
-        // set uid if record has hash id and id is empty
-        if ($this->_hasHashId() && empty($_record->$identifier)) {
-            $newId = $_record->generateUID();
-            $_record->setId($newId);
-        }
-        
-        $recordArray = $this->_recordToRawData($_record);
-        
-        // unset id if autoincrement & still empty
-        if (empty($_record->$identifier) || $_record->$identifier == 'NULL' ) {
-            unset($recordArray['id']);
-        }
-        
-        $recordArray = array_intersect_key($recordArray, $this->_schema);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+        try {
+            $identifier = $_record->getIdProperty();
 
-        $this->_prepareData($recordArray);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . " Prepared data for INSERT: " . print_r($recordArray, true)
-        );
+            if (!$_record instanceof $this->_modelName) {
+                throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
 
-        $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
-        
-        if (!$this->_hasHashId()) {
-            $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
-            if(!$newId && isset($_record[$identifier])){
-                $newId = $_record[$identifier];
             }
+
+            // set uid if record has hash id and id is empty
+            if (empty($_record->$identifier) && $this->_hasHashId()) {
+                $_record->setId($_record->generateUID());
+            }
+
+            $recordArray = $this->_recordToRawData($_record);
+
+            // unset id if autoincrement & still empty
+            if ($this->_hasAutoIncrementId() || $_record->$identifier == 'NULL' ) {
+                unset($recordArray['id']);
+            }
+
+            $recordArray = array_intersect_key($recordArray, $this->getSchema());
+
+            $this->_prepareData($recordArray);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . " Prepared data for INSERT: " . print_r($recordArray, true)
+            );
+
+            $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
+
+            if ($this->_hasAutoIncrementId()) {
+                $newId = $this->_db->lastInsertId($this->getTablePrefix() . $this->getTableName(), $identifier);
+                if (!$newId) {
+                    throw new Tinebase_Exception_UnexpectedValue("New record auto increment id is empty");
+                }
+                $_record->setId($newId);
+            }
+
+            // if we insert a record without an id, we need to get back one
+            if (empty($_record->$identifier)) {
+                throw new Tinebase_Exception_UnexpectedValue("Returned record id is empty.");
+            }
+
+            // add custom fields
+            if ($_record->has('customfields') && !empty($_record->customfields)) {
+                Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
+            }
+
+            $this->_updateForeignKeys('create', $_record);
+
+            $result = $this->get($_record->$identifier);
+
+            $this->_inspectAfterCreate($result, $_record);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch(Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
         }
 
-        // if we insert a record without an id, we need to get back one
-        if (empty($_record->$identifier) && $newId == 0) {
-            throw new Tinebase_Exception_UnexpectedValue("Returned record id is 0.");
-        }
-        
-        // if the record had no id set, set the id now
-        if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
-            $_record->$identifier = $newId;
-        }
-        
-        // add custom fields
-        if ($_record->has('customfields') && !empty($_record->customfields)) {
-            Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
-        }
-        
-        $this->_updateForeignKeys('create', $_record);
-        
-        $result = $this->get($_record->$identifier);
-        
-        $this->_inspectAfterCreate($result, $_record);
-        
         return $result;
     }
     
@@ -912,9 +916,84 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _hasHashId()
     {
         $identifier = $this->_getRecordIdentifier();
-        $result = (in_array($this->_schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $this->_schema[$identifier]['LENGTH'] == 40);
+        $schema     = $this->getSchema();
+
+        if (!isset($schema[$identifier])) {
+            // should never happen
+            return false;
+        }
         
-        return $result;
+        $column = $schema[$identifier];
+        
+        if (!in_array($column['DATA_TYPE'], array('varchar', 'VARCHAR2'))) {
+            return false;
+        }
+        
+        return ($column['LENGTH'] == 40);
+    }
+    
+    /**
+     * returns true if id is an autoincrementing column
+     * 
+     * IDENTITY is 1 for auto increment columns
+     * 
+     * MySQL
+     * 
+     * Array (
+        [SCHEMA_NAME] => 
+        [TABLE_NAME] => tine20_container
+        [COLUMN_NAME] => id
+        [COLUMN_POSITION] => 1
+        [DATA_TYPE] => int
+        [DEFAULT] => 
+        [NULLABLE] => 
+        [LENGTH] => 
+        [SCALE] => 
+        [PRECISION] => 
+        [UNSIGNED] => 1
+        [PRIMARY] => 1
+        [PRIMARY_POSITION] => 1
+        [IDENTITY] => 1
+     * )
+     * 
+     * PostgreSQL
+     * 
+     * Array (
+        [SCHEMA_NAME] => public
+        [TABLE_NAME] => tine20_container
+        [COLUMN_NAME] => id
+        [COLUMN_POSITION] => 1
+        [DATA_TYPE] => int4
+        [DEFAULT] => nextval('tine20_container_id_seq'::regclass)
+        [NULLABLE] => 
+        [LENGTH] => 4
+        [SCALE] => 
+        [PRECISION] => 
+        [UNSIGNED] => 
+        [PRIMARY] => 1
+        [PRIMARY_POSITION] => 1
+        [IDENTITY] => 1
+     * )
+     * 
+     * @return boolean
+     */
+    protected function _hasAutoIncrementId()
+    {
+        $identifier = $this->_getRecordIdentifier();
+        $schema     = $this->getSchema();
+        
+        if (!isset($schema[$identifier])) {
+            // should never happen
+            return false;
+        }
+        
+        $column = $schema[$identifier];
+        
+        if (!in_array($column['DATA_TYPE'], array('int', 'int4'))) {
+            return false;
+        }
+        
+        return !!$column['IDENTITY'];
     }
     
     /**
