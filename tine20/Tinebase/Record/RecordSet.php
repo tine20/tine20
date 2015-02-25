@@ -279,13 +279,20 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_name property name
      * @param array  $_values index => property value
+     * @param boolean $skipMissing
      * @throws Tinebase_Exception_Record_NotDefined
      */
-    public function setByIndices($_name, array $_values)
+    public function setByIndices($_name, array $_values, $skipMissing = false)
     {
         foreach ($_values as $index => $value) {
             if (! (isset($this->_listOfRecords[$index]) || array_key_exists($index, $this->_listOfRecords))) {
-                throw new Tinebase_Exception_Record_NotDefined('Could not find record with index ' . $index);
+                if ($skipMissing) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' Skip missing record ' . $index . ' => ' . $value . ' property: ' . $_name);
+                    continue;
+                } else {
+                    throw new Tinebase_Exception_Record_NotDefined('Could not find record with index ' . $index);
+                }
             }
             $this->_listOfRecords[$index]->$_name = $value;
         }

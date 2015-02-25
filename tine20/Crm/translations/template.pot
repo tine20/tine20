@@ -466,6 +466,10 @@ msgid_plural "Lead States"
 msgstr[0] ""
 msgstr[1] ""
 
+#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
+msgid "undefined"
+msgstr ""
+
 #: js/LeadState.js:166
 msgid "Add a Leadstate..."
 msgstr ""

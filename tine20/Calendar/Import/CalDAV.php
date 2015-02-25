@@ -82,23 +82,23 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
     public function import($_resource = NULL, $_clientRecordData = array())
     {
         $_resource['options'] = Zend_Json::decode($_resource['options']);
-
+        
         $credentials = new Tinebase_Model_CredentialCache(array(
             'id'    => $_resource['options']['cid'],
             'key'   => $_resource['options']['ckey']
         ));
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentials);
-
+        
         $uri = $this->_splitUri($_resource['remoteUrl']);
-
+        
         $caldavClientOptions = array(
             'baseUri' => $uri['host'],
             'calenderUri' => $uri['path'],
             'userName' => $credentials->username,
             'password' => $credentials->password,
-            'allowDuplicateEvents' => $_resource['options']['allowDuplicateEvents'],
+            'allowDuplicateEvents' => isset($_resource['options']['allowDuplicateEvents']) ? $_resource['options']['allowDuplicateEvents'] : false,
         );
-
+        
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Trying to get calendar container Name:' . $_resource['options']['container_id']);
         $container = Tinebase_Container::getInstance()->getContainerById($this->_getImportCalendarByName($_resource['options']['container_id']));
@@ -107,14 +107,17 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
             throw new Tinebase_Exception('Could not import, aborting ..');
             return false;
         }
-
+        
         $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($credentials->username, $credentials->password);
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $_resource['remoteUrl']);
+        }
+        
         $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic', $container->name);
         $this->_calDAVClient->setVerifyPeer(false);
         $this->_calDAVClient->getDecorator()->initCalendarImport();
-
         $this->_calDAVClient->updateAllCalendarData();
     }
     

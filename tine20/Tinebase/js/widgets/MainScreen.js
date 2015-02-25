@@ -99,8 +99,8 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                     plugins: [this.getWestPanel().getFilterPlugin(contentType)]
                 });
             } catch (e) {
-                Tine.log.err('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + this.centerPanelClassNameSuffix + '"');
-                Tine.log.err(e.stack ? e.stack : e);
+                Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + this.centerPanelClassNameSuffix + '"');
+                Tine.log.error(e.stack ? e.stack : e);
                 this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({html: 'ERROR'});
             }
         }
@@ -133,8 +133,8 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
             try {
                 this[contentType + 'ActionToolbar'] = this[contentType + this.centerPanelClassNameSuffix].getActionToolbar();
             } catch (e) {
-                Tine.log.err('Could not create northPanel');
-                Tine.log.err(e.stack ? e.stack : e);
+                Tine.log.error('Could not create northPanel');
+                Tine.log.error(e.stack ? e.stack : e);
                 this[contentType + 'ActionToolbar'] = new Ext.Panel({html: 'ERROR'});
             }
         }
@@ -209,8 +209,8 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 if(Tine[this.app.name].hasOwnProperty(wpName)) this[wpName] = new Tine[this.app.appName][wpName](wpconfig);
                 else this[wpName] = new Tine.widgets.mainscreen.WestPanel(wpconfig);
             } catch (e) {
-                Tine.log.err('Could not create westPanel');
-                Tine.log.err(e.stack ? e.stack : e);
+                Tine.log.error('Could not create westPanel');
+                Tine.log.error(e.stack ? e.stack : e);
                 this[wpName] = new Ext.Panel({html: 'ERROR'});
             }
         }

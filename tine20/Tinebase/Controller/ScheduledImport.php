@@ -95,7 +95,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $filter = new Tinebase_Model_ImportFilter(array(), 'OR');
         
         $filter0 = new Tinebase_Model_ImportFilter(array(
-                array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_ONCE),
                 array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
         ), 'AND');
         
@@ -131,6 +130,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         if (! $record) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' No ScheduledImport could be found.');
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' Filter used: ' . print_r($filter->toArray(), true));
             }
             
             return NULL;

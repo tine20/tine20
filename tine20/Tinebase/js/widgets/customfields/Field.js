@@ -23,7 +23,7 @@ Tine.widgets.customfields.Field = {
         Tine.log.debug(cfConfig);
         
         if (! cfConfig) {
-            Tine.log.err('cfConfig empty!');
+            Tine.log.error('cfConfig empty!');
             return;
         }
         
@@ -108,7 +108,7 @@ Tine.widgets.customfields.Field = {
             return fieldObj;
         } catch (e) {
             Tine.log.debug(e);
-            Tine.log.err('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
+            Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
         }
     }
 };
