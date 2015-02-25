@@ -15,9 +15,9 @@
 <?php echo $this->lead->description ?>
 
 <?php echo $this->lang_customer ?>: <?php echo $this->customer . "\n"?>
-<?php echo $this->lang_state ?>: <?php echo $this->leadState['leadstate'] . "\n"?>
-<?php echo $this->lang_type ?>: <?php echo $this->leadType['leadtype']. "\n" ?>
-<?php echo $this->lang_source ?>: <?php echo $this->leadSource['leadsource'] . "\n" ?>
+<?php echo $this->lang_state ?>: <?php echo (isset($this->leadState['leadstate']) ? $this->leadState['leadstate'] : '') . "\n"?>
+<?php echo $this->lang_type ?>: <?php echo (isset($this->leadState['leadtype']) ? $this->leadType['leadtype'] : '') . "\n" ?>
+<?php echo $this->lang_source ?>: <?php echo (isset($this->leadState['leadsource']) ? $this->leadSource['leadsource'] : '') . "\n" ?>
 
 <?php echo $this->lang_start ?>: <?php echo $this->start . "\n" ?>
 <?php echo $this->lang_scheduledEnd ?>: <?php echo $this->ScheduledEnd . "\n" ?>
