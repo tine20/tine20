@@ -29,7 +29,9 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
     {name: 'model'},
     {name: 'filters'},
     {name: 'name'},
-    {name: 'description'}
+    {name: 'description'},
+    {name: 'grants'},
+    {name: 'account_grants'}
 ]), {
     appName: 'Tinebase',
     modelName: 'PersistentFilter',

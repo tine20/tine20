@@ -477,8 +477,8 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_16()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
-        $myInboxPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $myInboxPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All inboxes of my email accounts",
             'account_id'        => NULL,
@@ -498,7 +498,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_17()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -506,7 +506,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
             'model'             => 'Felamimail_Model_MessageFilter',
         );
         
-        $myUnseenPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $myUnseenPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => 'All unread mail',
             'description'       => 'All unread mail of my email accounts',
             'filters'           => array(
@@ -514,7 +514,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
             )
         ))));
 
-        $myHighlightedPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $myHighlightedPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => 'All highlighted mail',
             'description'       => 'All highlighted mail of my email accounts',
             'filters'           => array(
@@ -522,7 +522,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
             )
         ))));
 
-        $myDraftsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $myDraftsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => 'All drafts',
             'description'       => 'All mails with the draft flag',
             'filters'           => array(

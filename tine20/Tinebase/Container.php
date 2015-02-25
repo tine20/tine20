@@ -9,6 +9,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage, use standard record controller/backend functions
+ *              -> make use of Tinebase_Backend_Sql_Grants
  * @todo        move (or replace from) functions to backend
  * @todo        switch containers to hash ids
  */
@@ -1361,7 +1362,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * set all grant for given container
+     * set all grants for given container
      *
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   Tinebase_Record_RecordSet $_grants
@@ -1412,7 +1413,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     'account_id'    => $recordGrants['account_id'],
                     'account_type'  => $recordGrants['account_type'],
                 );
-                if(empty($data['id'])) {
+                if (empty($data['id'])) {
                     $data['id'] = $recordGrants->generateUID();
                 }
                 

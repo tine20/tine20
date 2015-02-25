@@ -18,7 +18,7 @@ class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -26,7 +26,7 @@ class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
             'model'             => 'Phone_Model_CallFilter',
         );
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls this week", // _("Calls this week")
             'description'       => "Incoming and outgoing calls from this week",
             'filters'           => array(array(
@@ -36,7 +36,7 @@ class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls last week", // _("Calls last week")
             'description'       => "Incoming and outgoing calls from last week",
             'filters'           => array(array(
@@ -46,7 +46,7 @@ class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls this month", // _("Calls this month")
             'description'       => "Incoming and outgoing calls from this month",
             'filters'           => array(array(
@@ -56,7 +56,7 @@ class Phone_Setup_Update_Release7 extends Setup_Update_Abstract
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Calls last month", // _("Calls last month")
             'description'       => "Incoming and outgoing calls from last month",
             'filters'           => array(array(

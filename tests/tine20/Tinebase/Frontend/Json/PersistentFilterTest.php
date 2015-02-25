@@ -2,22 +2,14 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Frontend_Json_PersistentFilter
  * 
- * @todo test search -> filter resolving not yet implemented -> do we need this? -> filters need to cope with resolved values!
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * 
  */
-class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
 {
     /**
      * @var Tinebase_Frontend_Json_PersistentFilter
@@ -36,7 +28,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
+        
         $this->_uit = new Tinebase_Frontend_Json_PersistentFilter();
         $this->_originalTestUser = Tinebase_Core::getUser();
     }
@@ -47,7 +40,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     public function tearDown()
     {
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        parent::tearDown();
     }
     
     /**
@@ -59,6 +53,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $savedFilterData = $this->_uit->savePersistentFilter(self::getPersistentFilterData());
         
         $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
+        $this->assertTrue(! empty($savedFilterData['grants']));
+        $this->assertTrue(! empty($savedFilterData['account_grants']));
+        foreach (array('readGrant', 'editGrant', 'deleteGrant') as $grant) {
+            $this->assertTrue($savedFilterData['account_grants'][$grant]);
+        }
         
         return $savedFilterData;
     }
@@ -123,6 +122,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
 
         $this->assertEquals(1, $searchResult['totalcount']);
+        $this->assertTrue(isset($searchResult['results'][0]), 'filter not found in results: ' . print_r($searchResult['results'], true));
         $this->_assertSavedFilterData($exampleFilterData, $searchResult['results'][0]);
     }
 
@@ -135,8 +135,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $sharedFavorite->name = 'PHPUnit shared filter';
         $sharedFavorite->account_id = NULL;
         
-        $backend = new Tinebase_PersistentFilter_Backend_Sql();
-        $persistentSharedFavirite = $backend->create($sharedFavorite);
+        $persistentSharedFavorite = Tinebase_PersistentFilter::getInstance()->create($sharedFavorite);
         
         $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
@@ -151,10 +150,14 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertGreaterThanOrEqual(2, $searchResult['totalcount']);
         
         $ids = array();
-        foreach($searchResult['results'] as $filterData) {
+        foreach ($searchResult['results'] as $filterData) {
             $ids[] = $filterData['id'];
         }
-        $this->assertEquals(2, count(array_intersect($ids, array($persistentSharedFavirite->getId(), $savedFilterData['id']))));
+        $this->assertEquals(
+            2,
+            count(array_intersect($ids, array($persistentSharedFavorite->getId(), $savedFilterData['id']))),
+            'did not find both favorites in search results: ' . print_r($searchResult['results'], true)
+        );
     }
     
     /**
@@ -287,7 +290,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertTrue((isset($savedFilterData['filters']) || array_key_exists('filters', $savedFilterData)), 'saved filter data is not included');
         $this->assertTrue((isset($savedFilterData['name']) || array_key_exists('name', $savedFilterData)), 'saved filter name is not included');
         
-        foreach($expectedFilterData['filters'] as $requestFilter) {
+        foreach ($expectedFilterData['filters'] as $requestFilter) {
             $responseFilter = $this->_getFilter($requestFilter['field'], $savedFilterData);
             $this->assertTrue(is_array($responseFilter), 'filter is missing in response');
             $this->assertEquals($requestFilter['operator'], $responseFilter['operator'], 'operator missmatch');
@@ -302,14 +305,12 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
                     $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
                     break;
                 case 'due':
-                    //echo date_default_timezone_get();
                     $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
                     break;
                 default:
                     // do nothting
                     break;
             }
-            
         }
     }
     

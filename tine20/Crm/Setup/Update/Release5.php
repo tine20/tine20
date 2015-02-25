@@ -18,9 +18,9 @@ class Crm_Setup_Update_Release5 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $filters = Tinebase_PersistentFilter::getInstance()->getAll();
-        $crmFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId());
         $pfBackend = new Tinebase_PersistentFilter_Backend_Sql();
+        $filters = $pfBackend->getAll();
+        $crmFilters = $filters->filter('application_id', Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId());
         
         foreach ($crmFilters as $pfilter) {
             foreach ($pfilter->filters as $filter) {

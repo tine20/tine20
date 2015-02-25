@@ -313,7 +313,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      */
     protected function _createDefaultFilterForTeacher($account, $course)
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         $filter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'account_id'        => $account->getId(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Courses')->getId(),

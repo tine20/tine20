@@ -30,9 +30,9 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_1()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
-        $myEventsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+        $myEventsPFilter = $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array(
             'name'              => Addressbook_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All contacts I have read grants for", // _("All contacts I have read grants for")
             'account_id'        => NULL,
@@ -512,7 +512,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_10()
     {
-        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $pfe = Tinebase_PersistentFilter::getInstance();
         
         $commonValues = array(
             'account_id'        => NULL,
@@ -522,7 +522,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         
         try {
             $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
-            $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
                 'name'              => "My company",
                 'description'       => "All coworkers in my company",
                 'filters'           => array(array(
@@ -539,7 +539,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
             // do not create filter
         }
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "My contacts",
             'description'       => "All contacts in my Addressbooks",
             'filters'           => array(array(
@@ -552,7 +552,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
             )),
         ))));
         
-        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me",
             'description'       => "All contacts that I have last modified",
             'filters'           => array(array(

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -89,6 +89,8 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
      *
      * @param Tinebase_Record_Interface $_record
      * @return array record data
+     * 
+     * @todo move to converter
      */
     protected function _recordToJson($_record)
     {
@@ -104,12 +106,15 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data
+     * 
+     * @todo move to converter
+     * @todo get multiple grants at once
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
-        foreach($result as $idx => $recordArray) {
+        foreach ($result as $idx => $recordArray) {
             $recordIdx = $_records->getIndexById($recordArray['id']);
             try {
                 if (! is_object($_records[$recordIdx]->filters)) {
@@ -120,6 +125,14 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Skipping filter: ' . $e->getMessage());
                 unset($result[$idx]);
+                continue;
+            }
+            
+            // resolve grant users/groups
+            if (isset($result[$idx]['grants'])) {
+                $result[$idx]['grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result[$idx]['grants']);
+                $result[$idx]['account_grants'] = Tinebase_PersistentFilter::getInstance()->getGrantsOfAccount(
+                    Tinebase_Core::getUser(), $_records[$recordIdx])->toArray();
             }
         }
         

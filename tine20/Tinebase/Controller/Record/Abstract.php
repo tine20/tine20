@@ -195,9 +195,12 @@ abstract class Tinebase_Controller_Record_Abstract
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
         $this->_addDefaultFilter($_filter);
-
+        
         $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
-
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got ' . count($result) . ' search results');
+        
         if (! $_onlyIds) {
             if ($_getRelations) {
                 $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId()));
@@ -230,12 +233,11 @@ abstract class Tinebase_Controller_Record_Abstract
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $this->checkFilterACL($_filter, $_action);
-
+        
         $count = $this->_backend->searchCount($_filter);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got ' . is_array($count) ? print_r($count, 1) : $count . ' search count');
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Got ' . is_array($count) ? print_r($count, 1) : $count . ' search count');
         
         return $count;
     }
@@ -263,7 +265,8 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $currValue = $this->{$name};
         if ($value !== NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting ' . $name . ' to ' . (int) $value);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Resetting ' . $name . ' to ' . (int) $value);
             $this->{$name} = $value;
         }
         
@@ -515,7 +518,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         $this->_checkRight('create');
 
@@ -904,9 +907,14 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface $_newRecord
      * @param Tinebase_Record_Interface $_oldRecord
      * @return NULL|Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _writeModLog($_newRecord, $_oldRecord)
     {
+        if (! is_object($_newRecord)) {
+            throw new Tinebase_Exception_InvalidArgument('record object expected');
+        }
+        
         if (! $_newRecord->has('created_by') || $this->_omitModLog === TRUE) {
             return NULL;
         }
@@ -929,6 +937,9 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Update record: ' . print_r($record->toArray(), true));
+        
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
             $type = $this->_getBackendType();
             Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations);
@@ -1510,13 +1521,13 @@ abstract class Tinebase_Controller_Record_Abstract
                 break;
         }
 
-        if (!$hasGrant) {
+        if (! $hasGrant) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $_action . ' in container ' . $_record->container_id);
             if ($_throw) {
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             }
         }
-
+        
         return $hasGrant;
     }
 

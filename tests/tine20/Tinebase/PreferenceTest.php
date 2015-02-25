@@ -187,7 +187,9 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchCalendarPreferencesForAnyone()
     {
-        $tasksPersistentFilter = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Tasks', Tinebase_Core::getUser()->getId());
+        $tasksPersistentFilter = Tinebase_PersistentFilter::getInstance()->getPreferenceValues('Tasks');
+        $this->assertTrue(isset($tasksPersistentFilter[5]), 'could not find tasks persistent filter pref: ' . print_r($tasksPersistentFilter, true));
+        
         $json = new Tinebase_Frontend_Json();
         $filter = $this->_getPreferenceFilter(NULL, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         $result = $json->searchPreferencesForApplication('Tasks', $filter->toArray());
