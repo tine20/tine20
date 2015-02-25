@@ -20,13 +20,14 @@ Ext.applyIf(Function.prototype, {
         return function(){
             var timerId;
             return function() {
-                var me = this;
+                var me = this,
+                    argsPassed = arguments;
                 if (timerId) {
                     clearInterval(timerId);
                     timerId = null;
                 }
                 timerId = setTimeout(function(){
-                    fn.apply(scope || me, args || arguments);
+                    fn.apply(scope || me, args || argsPassed);
                 }, buffer);
             };
         }();
