@@ -101,7 +101,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $currentUser = Tinebase_Core::getUser();
         
         $this->_getDays();
-        $this->_sharedTaskContainer = $this->_createSharedContainer('Tasks aus Leads', array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('tasks')->getId()), false);
+        $this->_sharedTaskContainer = $this->_createSharedContainer('Tasks aus Leads', array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId()), false);
         
         $fe = new Tinebase_Frontend_Json();
         $fe->savePreferences(array(
