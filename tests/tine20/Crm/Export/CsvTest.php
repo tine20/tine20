@@ -5,15 +5,10 @@
  * @package     Crm
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Crm_Export_Csv
@@ -34,18 +29,6 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
      */
     protected $_filename;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_CsvTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -69,7 +52,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         unlink($this->_filename);
         parent::tearDown();
     }
-
+    
     /**
      * test csv export
      * 
@@ -98,5 +81,25 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         
         $dateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat(NULL, NULL, NULL, 'date');
         $this->assertContains($dateString, $export, 'note date wrong');
+    }
+    
+    /**
+     * test sorted csv export
+     * 
+     * @return void
+     * 
+     * @see 0010790: use current grid sort in exports
+     */
+    public function testSortedExportCsv()
+    {
+        $options = array(
+            'sortInfo' => array('field' => 'leadstate_id')
+        );
+        $this->_instance = new Crm_Export_Csv(new Crm_Model_LeadFilter($this->_getLeadFilter()), Crm_Controller_Lead::getInstance(), $options);
+        
+        $this->_filename = $this->_instance->generate();
+        
+        $export = file_get_contents($this->_filename);
+        $this->assertContains('"Metaways Infosystems GmbH"', $export);
     }
 }

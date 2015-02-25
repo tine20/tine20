@@ -477,7 +477,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
         
         if ($_pagination === NULL) {
-            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
+            $pagination = new Tinebase_Model_Pagination(NULL, TRUE);
+        } else {
+            // clone pagination to prevent accidental change of original object
+            $pagination = clone($_pagination);
         }
         
         // legacy: $_cols param was $_onlyIds (boolean) ...
@@ -488,7 +491,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         
         // (1) eventually get only ids or id/value pair
-        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
+        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $pagination);
 
         // check if we should do one or two queries
         $doSecondQuery = true;
@@ -507,9 +510,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
-        $this->_addSecondarySort($_pagination);
-        $this->_appendForeignSort($_pagination, $select);
-        $_pagination->appendPaginationSql($select);
+        
+        $this->_addSecondarySort($pagination);
+        $this->_appendForeignSort($pagination, $select);
+        $pagination->appendPaginationSql($select);
         
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
         
@@ -536,7 +540,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $select = $this->_getSelect($_cols, $getDeleted);
         $this->_addWhereIdIn($select, $ids);
-        $_pagination->appendSort($select);
+        $pagination->appendSort($select);
         
         $rows = $this->_fetch($select, self::FETCH_ALL);
         
