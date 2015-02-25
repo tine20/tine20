@@ -410,7 +410,7 @@ msgstr ""
 msgid "Unlink selected {0}"
 msgstr ""
 
-#: js/Product.js:216
+#: js/Product.js:217
 msgid "Search for Products to add ..."
 msgstr ""
 

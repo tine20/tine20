@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        get categories from settings/config
  */
@@ -75,7 +75,22 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
                 'label' => 'Accountable',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'type' => 'string',
-            )
+            ),
+            'lifespan_start'  => array(
+                'label'      => 'Lifespan start',    // _('Lifespan start')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type' => 'datetime',
+            ),
+            'lifespan_end'  => array(
+                'label'      => 'Lifespan end',    // _('Lifespan end')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type' => 'datetime',
+            ),
+            'is_active'  => array(
+                'label'      => 'Is active',    // _('Is active')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+                'type' => 'boolean',
+            ),
         )
     );
 }
