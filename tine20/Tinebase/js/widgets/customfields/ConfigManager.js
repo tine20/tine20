@@ -20,17 +20,14 @@ Tine.widgets.customfields.ConfigManager = function() {
                 data: allCfs ? allCfs : []
             });
             
-            // place customefield keyFieldConfig in registry so we can use the standard widgets
-            // keyfields are used for key/value customfields with a defined store 
+            // place keyFieldConfig in registry so we can use the standard widgets
             stores[app.appName].each(function(cfConfig) {
                 var definition = cfConfig.get('definition'),
                     options = definition.options ? definition.options : {},
                     keyFieldConfig = definition.keyFieldConfig ? definition.keyFieldConfig : null;
                     
                 if (keyFieldConfig) {
-                    var config = app.getRegistry().get('config');
-                    config[cfConfig.get('name')] = keyFieldConfig;
-                    app.getRegistry().set('config', config);
+                    app.getRegistry().get('config')[cfConfig.get('name')] = keyFieldConfig;
                 }
             });
         }

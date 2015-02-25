@@ -601,23 +601,32 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
-     * copy record
+     * copy this.record record
      */
     doCopyRecord: function() {
+        this.record = this.doCopyRecordToReturn(this.record);
+    },
+
+    /**
+     * Copy record and returns "new record with same settings"
+     *
+     * @param record
+     */
+    doCopyRecordToReturn: function(record) {
         var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
         // always omit id + notes + attachments
         omitFields = omitFields.concat(['id', 'notes', 'attachments', 'relations']);
-        
+
         var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
-            recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
+            recordData = Ext.copyTo({}, record.data, fieldsToCopy);
 
         var resetProperties = {
             alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
             relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
         };
-        
+
         var setProperties = {alarms: {sent_status: 'pending'}};
-        
+
         Ext.iterate(resetProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
@@ -630,7 +639,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         });
-        
+
         Ext.iterate(setProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
@@ -643,9 +652,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         });
-        
-        this.record = new this.recordClass(recordData, 0);
+
+        return new this.recordClass(recordData, 0);
     },
+
     
     /**
      * executed after record got updated from proxy

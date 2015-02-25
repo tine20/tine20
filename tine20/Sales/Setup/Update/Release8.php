@@ -772,12 +772,12 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             $this->_createCustomerAndAddressTables();
         }
         
-        // repeat from update_4 if setup has been run on another branch
-        if (! $this->_backend->columnExists('seq', 'sales_divisions')) {
+        // repeat from update_3 if setup has been run on another branch
+        if ($this->getTableVersion('sales_divisions') < 2) {
             $this->_addDivisionsModlog();
         }
-        // repeat from update_4 if setup has been run on another branch
-        if (! $this->_backend->columnExists('start_date', 'sales_contracts')) {
+        // repeat from update_3 if setup has been run on another branch
+        if ($this->getTableVersion('sales_contracts') < 6) {
             $this->_updateContractsFields();
         }
         
@@ -1188,7 +1188,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_products') . ' SET ' . $db->quoteInto($db->quoteIdentifier('accountable') . ' = ?', 'Sales_Model_Product');
         $db->query($sql);
         
-        if (! $this->_backend->columnExists('created_by', 'sales_product_agg')) {
+        if ($this->getTableVersion('sales_product_agg') < 3) {
             $this->_addModlogToProductAggregates();
         }
         try {
@@ -1226,7 +1226,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_16()
     {
-        if (! $this->_backend->columnExists('billing_point', 'sales_product_agg')) {
+        if ($this->getTableVersion('sales_product_agg') < 2) {
             $this->update_15();
         }
         
@@ -1352,12 +1352,11 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             <notnull>false</notnull>
             <default>null</default>
         </field>';
-    
+        
         $declaration = new Setup_Backend_Schema_Field_Xml($field);
         $this->_backend->alterCol('sales_product_agg', $declaration);
-    
-    
-        $this->setTableVersion('sales_product_agg', 2);
+        
+        $this->setTableVersion('sales_product_agg', 4);
         $this->setApplicationVersion('Sales', '8.19');
     }
     
@@ -1459,8 +1458,12 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_20()
     {
-        if ($this->_backend->tableVersionQuery('sales_product_agg') != '3') {
+        if ($this->getTableVersion('sales_product_agg') < 3) {
             $this->_addModlogToProductAggregates();
+        }
+        
+        if ($this->getTableVersion('sales_product_agg') < 4) {
+            $this->update_18();
         }
         
         $this->setApplicationVersion('Sales', '8.21');

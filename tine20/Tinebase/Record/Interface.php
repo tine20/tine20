@@ -53,6 +53,13 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function getId();
     
     /**
+     * returns id property of this model
+     *
+     * @return string
+     */
+    public function getIdProperty();
+    
+    /**
      * gets application the records belongs to
      * 
      * @return string application

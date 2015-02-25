@@ -468,7 +468,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // Calendar is the only app with record based grants -> user gets edit grant for all fields when copying
         this.record.set('editGrant', true);
-        
+
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);
     },
