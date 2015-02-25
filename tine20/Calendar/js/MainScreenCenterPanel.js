@@ -153,10 +153,17 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             handler: this.onCutEvent.createDelegate(this),
             iconCls: 'action_cut'
         });
+
+        this.action_copy_to = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            text: this.app.i18n._('Copy Event to clipboard'),
+            handler: this.onCopyToEvent.createDelegate(this),
+            iconCls: 'action_editcopy'
+        });
         
         this.action_cancelPasting = new Ext.Action({
             requiredGrant: 'deleteGrant',
-            text: this.app.i18n._('Stop cut & paste'),
+            text: this.app.i18n._('Stop cut / copy & paste'),
             handler: this.onCutCancelEvent.createDelegate(this),
             iconCls: 'action_cut_break'
         });
@@ -522,7 +529,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     onContextMenu: function (e) {
         e.stopEvent();
-        
+
         var view = this.getCalendarPanel(this.activeView).getView();
         var event = view.getTargetEvent(e);
         var datetime = view.getTargetDateTime(e);
@@ -534,6 +541,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         var addAction, responseAction, copyAction;
+
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
             if (dtStart.format('H:i') === '00:00') {
@@ -551,7 +559,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 responseAction = this.getResponseAction(event);
                 copyAction = this.getCopyAction(event);
             }
-        
         } else {
             addAction = this.action_addInNewWindow;
         }
@@ -561,15 +568,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         } else {
             view.getSelectionModel().clearSelections();
         }
-        
+
         var menuitems = this.recordActions.concat(addAction, responseAction || [], copyAction || []);
         
         if (event) {
-            menuitems = menuitems.concat(['-', this.action_cut, '-']);
+            this.action_copy_to.setDisabled(event.isRecurInstance() || event.isRecurException() || event.isRecurBase());
+            menuitems = menuitems.concat(['-', this.action_cut, this.action_copy_to, '-']);
         } else if (Tine.Tinebase.data.Clipboard.has('Calendar', 'Event')) {
             menuitems = menuitems.concat(['-', this.getPasteAction(datetime, Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event', true)), this.action_cancelPasting, '-']);
         }
-        
+
         var ctxMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -633,14 +641,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     getCopyAction: function(event) {
         var copyAction = {
-            text: String.format(_('Copy {0}'), this.i18nRecordName),
+            text: String.format(this.app.i18n._('Copy {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, ["copy", event]),
             iconCls: 'action_editcopy',
             // TODO allow to copy recurring events / exceptions
             disabled: event.isRecurInstance() || event.isRecurException() || event.isRecurBase()
         };
         
-        return copyAction;
+        return copyAction
     },
     
     checkPastEvent: function(event, checkBusyConflicts, actionType) {
@@ -1064,6 +1072,24 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         Tine.Tinebase.data.Clipboard.push(event);
     },
+
+    /**
+     * Is called on copy to clipboard
+     *
+     * @param action
+     * @param event
+     */
+    onCopyToEvent: function(action, event) {
+        var panel = this.getCalendarPanel(this.activeView);
+        var selection = panel.getSelectionModel().getSelectedEvents();
+        if (Ext.isArray(selection) && selection.length === 1) {
+            event = selection[0];
+        }
+
+        event.isCopy = true;
+
+        Tine.Tinebase.data.Clipboard.push(event);
+    },
     
     /**
      * is called on cancelling cut & paste
@@ -1074,7 +1100,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         for (var index = 0; index < ids.length; index++) {
             var record = store.getAt(store.findExact('id', ids[index]));
-            if (record.ui) {
+            if (record && record.ui) {
                 record.ui.clearDirty();
             }
         }
@@ -1089,7 +1115,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     onPasteEvent: function(datetime) {
         var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
-        
+        var isCopy = record.isCopy;
+
         if (! record) {
             return;
         }
@@ -1097,18 +1124,40 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var dtend   = record.get('dtend');
         var dtstart = record.get('dtstart');
         var eventLength = dtend - dtstart;
-        
-        // remove before update
-        var store = this.getStore();
-        var oldRecord = store.getAt(store.findExact('id', record.getId()));
-        if (oldRecord && oldRecord.hasOwnProperty('ui')) {
-            oldRecord.ui.remove();
+
+        if (isCopy != true) {
+            // remove before update
+            var store = this.getStore();
+            var oldRecord = store.getAt(store.findExact('id', record.getId()));
+            if (oldRecord && oldRecord.hasOwnProperty('ui')) {
+                oldRecord.ui.remove();
+            }
+        } else {
+            record = Tine.Calendar.EventEditDialog.superclass.doCopyRecordToReturn.call(this, record);
+
+            record.set('editGrant', true);
+            record.set('id', '');
+
+            // remove attender ids
+            Ext.each(record.data.attendee, function(attender) {
+                delete attender.id;
+            }, this);
         }
-        
+
         record.set('dtstart', datetime);
         record.set('dtend', new Date(datetime.getTime() + eventLength));
-        
-        this.onUpdateEvent(record);
+
+        if (isCopy == true) {
+            record.isCopy = true;
+            Tine.Tinebase.data.Clipboard.push(record);
+            if (record.ui) {
+                record.ui.clearDirty();
+            }
+
+            this.onAddEvent(record);
+        } else {
+            this.onUpdateEvent(record);
+        }
     },
     
     /**
@@ -1149,7 +1198,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::onEditInNewWindow() - Opening event edit dialog with action: ' + action);
-        
+
         Tine.Calendar.EventEditDialog.openWindow({
             plugins: plugins ? Ext.encode(plugins) : null,
             record: Ext.encode(event.data),
