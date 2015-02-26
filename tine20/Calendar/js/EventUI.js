@@ -48,7 +48,7 @@ Tine.Calendar.EventUI.prototype = {
      */
     getEls: function() {
         var domEls = [];
-        for (var i=0; i<this.domIds.length; i++) {
+        for (var i=0; i < this.domIds.length; i++) {
             var el = Ext.get(this.domIds[i]);
             if (el) {
                 domEls.push(el);

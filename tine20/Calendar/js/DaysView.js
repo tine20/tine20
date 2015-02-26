@@ -838,7 +838,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     
     redrawWholeDayEvents: function() {
         this.store.each(function(event) {
-            if (event.ui && event.get('is_all_day_event')) {
+            // check if event is currently visible by looking into ui.domIds
+            if (event.ui && event.ui.domIds.length > 0 && event.get('is_all_day_event')) {
                 this.removeEvent(event);
                 this.insertEvent(event);
             }
