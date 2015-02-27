@@ -163,9 +163,8 @@ Tine.Tinebase.tineInit = {
     },
 
     initLoginPanel: function() {
-        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
-
-        if (! Tine.loginPanel) {
+        if (window.isMainWindow && ! Tine.loginPanel) {
+            var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
             Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                 defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
                 defaultPassword: Tine.Tinebase.registry.get('defaultPassword')
