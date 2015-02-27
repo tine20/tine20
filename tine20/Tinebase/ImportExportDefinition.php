@@ -144,20 +144,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         if (! $cache->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Generate new Zend_Config_Xml object' . $cacheId);
-            $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
             
-            if (! $tmpfname) {
-                throw new Tinebase_Exception_AccessDenied('Could not create temporary file.');
-            }
-            
-            $handle = fopen($tmpfname, "w");
-            fwrite($handle, $_definition->plugin_options);
-            fclose($handle);
-            
-            // read file with Zend_Config_Xml
-            $config = new Zend_Config_Xml($tmpfname, null, true);
-            unlink($tmpfname);
-            
+            $config = new Zend_Config_Xml($_definition->plugin_options, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
