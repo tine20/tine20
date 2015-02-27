@@ -36,7 +36,9 @@ Tine.SimpleFAQ.Application = Ext.extend(Tine.Tinebase.Application, {
                 listeners: {
                     scope: this,
                     'select': function (combo, record) {
-                        qWin.get(1).get(0).setValue(record.get('answer'));
+                        if (record) {
+                            qWin.get(1).get(0).setValue(record.get('answer'));
+                        }
                     }
                 }
             }, {

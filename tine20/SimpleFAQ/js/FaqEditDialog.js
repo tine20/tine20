@@ -18,13 +18,13 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.SimpleFAQ.Model.Faq,
     recordProxy: Tine.SimpleFAQ.faqBackend,
     showContainerSelector: true,
+    displayNotes: true,
 
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * @private
      */
     updateToolbars: function() {
-
     },
 
     /**
@@ -53,18 +53,8 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      */
     handlingCompletedData: function() {
-            
+        
     },
-
-    /**
-     * checks if form data is valid
-     *
-     * @return {Boolean}
-     */
-//    @todo pr:
-//    isValid: function() {
-//
-//    },
 
     /**
      * returns dialog
@@ -74,7 +64,6 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Object}
      * @private
      */
-
     getFormItems: function(){
         return {
             xtype: 'tabpanel',
@@ -154,12 +143,6 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         margins: '0 5 0 5',
                         border: true,
                         items: [
-                            new Tine.widgets.activities.ActivitiesPanel({
-                                app: 'SimpleFAQ',
-                                showAddNoteForm: true,
-                                border: false,
-                                bodyStyle: 'border:1px solid #B5B8C8;'
-                            }),
                             new Tine.widgets.tags.TagPanel({
                                 app: 'SimpleFAQ',
                                 border: false,

@@ -31,7 +31,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Projects',
     recordClass: Tine.Projects.Model.Project,
     recordProxy: Tine.Projects.recordBackend,
-    tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
     showContainerSelector: true,
     hideRelationsPanel: true,
@@ -42,7 +41,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     updateToolbars: function() {
-
     },
     
     /**
@@ -171,6 +169,11 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Projects',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
                         new Ext.Panel({
                             title: this.app.i18n._('Description'),
                             iconCls: 'descriptionIcon',
@@ -187,19 +190,8 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 preventScrollbars: false,
                                 anchor: '100% 100%',
                                 emptyText: this.app.i18n._('Enter description'),
-                                requiredGrant: 'editGrant'                           
+                                requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Projects',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Projects',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]
