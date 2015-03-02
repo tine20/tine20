@@ -9,7 +9,6 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
-
 /**
  * class Tinebase_Log
  * 
@@ -23,7 +22,50 @@ class Tinebase_Log extends Zend_Log
      * @var Tinebase_Log_Formatter
      */
     protected $_formatter;
-    
+
+    /**
+     * Keeps flipped priorities from _priorities array in Zend_Log
+     * @var array
+     */
+    protected $_flippedPriorities;
+
+    /**
+     * Class constructor.  Create a new logger
+     *
+     * @param Zend_Log_Writer_Abstract|null  $writer  default writer
+     */
+    public function __construct(Zend_Log_Writer_Abstract $writer = null)
+    {
+        parent::__construct($writer);
+        $this->_flippedPriorities = array_flip($this->_priorities);
+    }
+
+    /**
+     * adds a priority in flippedPriorities array
+     * @param string  $name
+     * @param integer $priority
+     */
+    public function addPriority($name, $priority)
+    {
+        parent::addPriority($name, $priority);
+        $this->_flippedPriorities[strtoupper($name)] = $priority;
+    }
+
+    /**
+     * Checks the priority and calls respective log is its it can be called
+     * @param string $method
+     * @param string $params
+     */
+    public function __call($method, $params)
+    {
+        $priority = strtoupper($method);
+        if(isset($this->_flippedPriorities[$priority])) {
+            if(Tinebase_Core::isLogLevel($this->_flippedPriorities[$priority])) {
+                parent::__call($method, $params);
+            }
+        }
+    }
+
     /**
      * add strings to replace in log output (passwords for example)
      * 

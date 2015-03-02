@@ -40,8 +40,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             defaults: {
                 xtype: 'textfield',
                 inputType: 'password',
-                anchor: '100%',
-                allowBlank: false
+                anchor: '100%'
             },
             items: [{
                 id: 'oldPassword',
@@ -114,7 +113,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                             });
                         }
                     }
-                }                    
+                }
             }]
         });
         

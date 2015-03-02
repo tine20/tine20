@@ -16,6 +16,15 @@
         _on = _.storeAPI.on,
         _isPrefExp = /\.preferences$/;
 
+    _.stringify = function(d) {
+        return d === undefined || typeof d === "function" ? d+'' : Ext.encode(d);
+    };
+    
+    _.parse = function(s) {
+        // if it doesn't parse, return as is
+        try{ return Ext.decode(s); }catch(e){ return s; }
+    };
+
     _.containsKey = function(key) {
         if (key && key.match(_isPrefExp)) {
             var parts = key.split('.');

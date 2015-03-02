@@ -166,6 +166,7 @@ Ext.ux.WindowFactory.prototype = {
             }
             
             // finally construct the content panel
+            Tine.log.info('WindowFactory::getCenterPanel - construct content panel');
             items = new ref(config.contentPanelConstructorConfig);
             
             // remove x-window reference

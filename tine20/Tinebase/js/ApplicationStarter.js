@@ -50,6 +50,8 @@ Tine.Tinebase.ApplicationStarter = {
             return;
         }
         
+        Tine.log.info('ApplicationStarter::init');
+        
         if (! this.userApplications || this.userApplications.length == 0) {
             this.userApplications = Tine.Tinebase.registry.get('userApplications');
             this.createStructure(true);
@@ -339,7 +341,9 @@ Tine.Tinebase.ApplicationStarter = {
     createStructure: function(initial) {
         var start = new Date();
         Ext.each(this.userApplications, function(app) {
+            
             var appName = app.name;
+            Tine.log.info('ApplicationStarter::createStructure for app ' + appName);
             Ext.namespace('Tine.' + appName);
             
             var models = Tine[appName].registry ? Tine[appName].registry.get('models') : null;
@@ -363,7 +367,9 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     var modelArrayName = modelName + 'Array',
                         modelArray = [];
-
+                    
+                    Tine.log.info('ApplicationStarter::createStructure for model ' + modelName);
+                    
                     if (modelConfig.createModule) {
                         contentTypes.push(modelConfig);
                     }

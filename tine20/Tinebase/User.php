@@ -828,7 +828,10 @@ class Tinebase_User
         }
         
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword($user, $adminPassword);
+        // empty password triggers password change dialogue during first login
+        if (!empty($adminPassword)) {
+            Tinebase_User::getInstance()->setPassword($user, $adminPassword);
+        }
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);

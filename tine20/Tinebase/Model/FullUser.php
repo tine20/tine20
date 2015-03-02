@@ -80,6 +80,59 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     );
     
     /**
+     * @see Tinebase_Record_Abstract
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array(
+            'accountId'             => array('allowEmpty' => true),
+            'accountLoginName'      => array('presence' => 'required'),
+            'accountLastLogin'      => array('allowEmpty' => true),
+            'accountLastLoginfrom'  => array('allowEmpty' => true),
+            'accountLastPasswordChange' => array('allowEmpty' => true),
+            'accountStatus'         => array(new Zend_Validate_InArray(array(
+                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED,
+                Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED)
+            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
+            'accountExpires'        => array('allowEmpty' => true),
+            'accountPrimaryGroup'   => array('presence' => 'required'),
+            'accountDisplayName'    => array('presence' => 'required'),
+            'accountLastName'       => array('presence' => 'required'),
+            'accountFirstName'      => array('allowEmpty' => true),
+            'accountFullName'       => array('presence' => 'required'),
+            'accountEmailAddress'   => array('allowEmpty' => true),
+            'accountHomeDirectory'  => array('allowEmpty' => true),
+            'accountLoginShell'     => array('allowEmpty' => true),
+            'lastLoginFailure'      => array('allowEmpty' => true),
+            'loginFailures'         => array('allowEmpty' => true),
+            'sambaSAM'              => array('allowEmpty' => true),
+            'openid'                => array('allowEmpty' => true),
+            'contact_id'            => array('allowEmpty' => true),
+            'container_id'          => array('allowEmpty' => true),
+            'emailUser'             => array('allowEmpty' => true),
+            'groups'                => array('allowEmpty' => true),
+            'imapUser'              => array('allowEmpty' => true),
+            'smtpUser'              => array('allowEmpty' => true),
+            'visibility'            => array(new Zend_Validate_InArray(array(
+                Tinebase_Model_User::VISIBILITY_HIDDEN, 
+                Tinebase_Model_User::VISIBILITY_DISPLAYED)
+            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
+            'created_by'            => array('allowEmpty' => true),
+            'creation_time'         => array('allowEmpty' => true),
+            'last_modified_by'      => array('allowEmpty' => true),
+            'last_modified_time'    => array('allowEmpty' => true),
+            'is_deleted'            => array('allowEmpty' => true),
+            'deleted_time'          => array('allowEmpty' => true),
+            'deleted_by'            => array('allowEmpty' => true),
+            'seq'                   => array('allowEmpty' => true),
+        );
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
+    
+    /**
      * adds email and samba users, generates username + user password and 
      *   applies multiple options (like accountLoginNamePrefix, accountHomeDirectoryPrefix, ...)
      * 
@@ -149,10 +202,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     }
     
     /**
-    * add samba settings to user
-    *
-    * @param array $options
-    */
+     * add samba settings to user
+     *
+     * @param array $options
+     */
     protected function _addSambaSettings($options)
     {
         $samUser = new Tinebase_Model_SAMUser(array(
@@ -195,57 +248,51 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     }
     
     /**
-     * @see Tinebase_Record_Abstract
+     * check if windows password needs to b changed
+     *  
+     * @return boolean
      */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    protected function _sambaSamPasswordChangeNeeded()
     {
-        $this->_validators = array(
-            'accountId'             => array('allowEmpty' => true),
-            'accountLoginName'      => array('presence' => 'required'),
-            'accountLastLogin'      => array('allowEmpty' => true),
-            'accountLastLoginfrom'  => array('allowEmpty' => true),
-            'accountLastPasswordChange' => array('allowEmpty' => true),
-            'accountStatus'         => array(new Zend_Validate_InArray(array(
-                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
-                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-                Tinebase_Model_User::ACCOUNT_STATUS_BLOCKED,
-                Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED)
-            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
-            'accountExpires'        => array('allowEmpty' => true),
-            'accountPrimaryGroup'   => array('presence' => 'required'),
-            'accountDisplayName'    => array('presence' => 'required'),
-            'accountLastName'       => array('presence' => 'required'),
-            'accountFirstName'      => array('allowEmpty' => true),
-            'accountFullName'       => array('presence' => 'required'),
-            'accountEmailAddress'   => array('allowEmpty' => true),
-            'accountHomeDirectory'  => array('allowEmpty' => true),
-            'accountLoginShell'     => array('allowEmpty' => true),
-            'lastLoginFailure'      => array('allowEmpty' => true),
-            'loginFailures'         => array('allowEmpty' => true),
-            'sambaSAM'              => array('allowEmpty' => true),
-            'openid'                => array('allowEmpty' => true),
-            'contact_id'            => array('allowEmpty' => true),
-            'container_id'          => array('allowEmpty' => true),
-            'emailUser'             => array('allowEmpty' => true),
-            'groups'                => array('allowEmpty' => true),
-            'imapUser'              => array('allowEmpty' => true),
-            'smtpUser'              => array('allowEmpty' => true),
-            'visibility'            => array(new Zend_Validate_InArray(array(
-                Tinebase_Model_User::VISIBILITY_HIDDEN, 
-                Tinebase_Model_User::VISIBILITY_DISPLAYED)
-            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
-            'created_by'            => array('allowEmpty' => true),
-            'creation_time'         => array('allowEmpty' => true),
-            'last_modified_by'      => array('allowEmpty' => true),
-            'last_modified_time'    => array('allowEmpty' => true),
-            'is_deleted'            => array('allowEmpty' => true),
-            'deleted_time'          => array('allowEmpty' => true),
-            'deleted_by'            => array('allowEmpty' => true),
-            'seq'                   => array('allowEmpty' => true),
-        );
+        if ($this->sambaSAM instanceof Tinebase_Model_SAMUser 
+            && isset($this->sambaSAM->pwdMustChange) 
+            && $this->sambaSAM->pwdMustChange instanceof DateTime) 
+        {
+            if ($this->sambaSAM->pwdMustChange->compare(Tinebase_DateTime::now()) < 0) {
+                if (!isset($this->sambaSAM->pwdLastSet)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' User ' . $this->accountLoginName . ' has to change his pw: it got never set by user');
+                        
+                    return true;;
+                    
+                } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof DateTime) {
+                    $dateToCompare = $this->sambaSAM->pwdLastSet;
+                    
+                    if ($this->sambaSAM->pwdMustChange->compare($dateToCompare) > 0) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' User ' . $this->accountLoginName . ' has to change his pw: ' . $this->sambaSAM->pwdMustChange . ' > ' . $dateToCompare);
+                            
+                        return true;
+                    }
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Password is up to date.');
+                }
+            }
+        }
         
-        parent::__construct($_data, $_bypassFilters, $_convertDates);
+        return false;
     }
+    
+    /**
+     * check if sql password needs to be changed
+     * 
+     * @return boolean
+     */
+    protected function _sqlPasswordChangeNeeded()
+    {
+        return empty($this->accountLastPasswordChange);
+    }
+    
     
     /**
      * return the public informations of this user only
@@ -271,43 +318,28 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     
     /**
      * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Tinebase_DateTime::now())
-     * NOTE: this only applies for user with samba settings atm
      * 
      * @return boolean
      */
     public function mustChangePassword()
     {
-        $result = FALSE;
-        
-        if ($this->sambaSAM instanceof Tinebase_Model_SAMUser 
-            && isset($this->sambaSAM->pwdMustChange) 
-            && $this->sambaSAM->pwdMustChange instanceof DateTime) 
-        {
-            if ($this->sambaSAM->pwdMustChange->compare(Tinebase_DateTime::now()) < 0) {
-                if (!isset($this->sambaSAM->pwdLastSet)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                        . ' User ' . $this->accountLoginName . ' has to change his pw: it got never set by user');
-                        
-                    $result = TRUE;
-                    
-                } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof DateTime) {
-                    $dateToCompare = $this->sambaSAM->pwdLastSet;
-                    
-                    if ($this->sambaSAM->pwdMustChange->compare($dateToCompare) > 0) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                            . ' User ' . $this->accountLoginName . ' has to change his pw: ' . $this->sambaSAM->pwdMustChange . ' > ' . $dateToCompare);
-                            
-                        $result = TRUE;
-                    }
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Password is up to date.');
-                }
-            }
+        switch (Tinebase_User::getConfiguredBackend()) {
+            case Tinebase_User::ACTIVEDIRECTORY:
+                return $this->_sambaSamPasswordChangeNeeded();
+                
+                break;
+                
+            case Tinebase_User::LDAP:
+                return $this->_sambaSamPasswordChangeNeeded();
+                
+                break;
+                
+            default:
+                return $this->_sqlPasswordChangeNeeded();
+                
+                break;
         }
-        
-        return $result;
     }
-    
     
     /**
      * Short username to a configured length
