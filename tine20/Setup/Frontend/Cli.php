@@ -395,7 +395,7 @@ class Setup_Frontend_Cli
             $errors[] = 'Missing argument: configvalue';
         }
         $configKey = (string)$options['configkey'];
-        $configValue = (Tinebase_Helper::is_json($options['configvalue'])) ? Zend_Json::decode($options['configvalue']) : self::parseConfigValue($options['configvalue']);
+        $configValue = self::parseConfigValue($options['configvalue']);
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
         
         if (empty($errors)) {
@@ -572,6 +572,11 @@ class Setup_Frontend_Cli
     public static function parseConfigValue($_value)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
+        
+        // check value is json encoded
+        if (Tinebase_Helper::is_json($_value)) {
+            return Zend_Json::decode($_value); 
+        }
         
         $result = array(
             'active' => 1
