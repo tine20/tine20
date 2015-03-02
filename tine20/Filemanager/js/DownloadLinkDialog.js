@@ -74,16 +74,6 @@ Tine.Filemanager.DownloadLinkDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * @private
      */
     onRecordLoad: function() {
-        // interrupt process flow till dialog is rendered
-//        if (! this.rendered) {
-//            this.onRecordLoad.defer(250, this);
-//            return;
-//        }
-//        
-//        var title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name'));
-//        this.window.setTitle(title);
-//        
-//        this.loadMask.hide();
     },
         
     /**
@@ -101,32 +91,7 @@ Tine.Filemanager.DownloadLinkDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         });
         
         return [this.linkGrid];
-    },
-    
-    /**
-     * apply changes handler (get rules and send them to saveRules)
-     */
-//    onApplyChanges: function(closeWindow) {
-//        var rules = [];
-//        this.rulesGrid.store.each(function(record) {
-//            rules.push(record.data);
-//        });
-//        
-//        this.loadMask.show();
-//        Tine.Felamimail.rulesBackend.saveRules(this.account.id, rules, {
-//            scope: this,
-//            success: function(record) {
-//                if (closeWindow) {
-//                    this.purgeListeners();
-//                    this.window.close();
-//                }
-//            },
-//            failure: Tine.Felamimail.handleRequestException.createSequence(function() {
-//                this.loadMask.hide();
-//            }, this),
-//            timeout: 150000 // 3 minutes
-//        });
-//    }
+    }
 });
 
 /**
