@@ -113,7 +113,7 @@ Tine.widgets.activities.ActivitiesPanel = Ext.extend(Ext.Panel, {
                         return Tine.widgets.activities.getTypeIcon(value);
                     case 'user':
                         if (!value) {
-                            value = Tine.Tinebase.registry.map.currentAccount.accountDisplayName;
+                            value = Tine.Tinebase.registry.get('currentAccount').accountDisplayName;
                         }
                         var username = value;
                         return '<i>' + username + '</i>';
