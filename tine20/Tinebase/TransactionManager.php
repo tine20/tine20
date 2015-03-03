@@ -79,7 +79,6 @@ class Tinebase_TransactionManager
     public function startTransaction($_transactionable)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  startTransaction request");
-        
         if (! in_array($_transactionable, $this->_openTransactionables)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  new transactionable. Starting transaction on this resource");
             if ($_transactionable instanceof Zend_Db_Adapter_Abstract) {
@@ -92,9 +91,7 @@ class Tinebase_TransactionManager
         }
         
         $transactionId = Tinebase_Record_Abstract::generateUID();
-        
-        $this->_openTransactions[$transactionId] = $_transactionable;
-        
+        array_push($this->_openTransactions, $transactionId);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  queued transaction with id $transactionId");
         
         return $transactionId;
@@ -109,24 +106,24 @@ class Tinebase_TransactionManager
     public function commitTransaction($_transactionId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commitTransaction request for $_transactionId");
-        
-        if (isset($this->_openTransactions[$_transactionId])) {
-            unset($this->_openTransactions[$_transactionId]);
-        }
-        
-        foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
-            $transactionsIds = array_keys($this->_openTransactions, $transactionable);
-            
-            if (! $transactionsIds) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
-                if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
-                    $transactionable->commit();
-                }
-                unset($this->_openTransactionables[$transactionableIdx]);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
-            }
-        }
+         $transactionIdx = array_search($_transactionId, $this->_openTransactions);
+         if ($transactionIdx !== false) {
+             unset($this->_openTransactions[$transactionIdx]);
+         }
+         
+         $numOpenTransactions = count($this->_openTransactions);
+         if ($numOpenTransactions === 0) {
+             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
+             foreach ($this->_openTransactionables as $transactionableIdx => $transactionable) {
+                 if ($transactionable instanceof Zend_Db_Adapter_Abstract) {
+                     $transactionable->commit();
+                 }
+             }
+             $this->_openTransactionables = array();
+             $this->_openTransactions = array();
+         } else {
+             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
+         }
     }
     
     /**

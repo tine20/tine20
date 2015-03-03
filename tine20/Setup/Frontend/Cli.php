@@ -155,8 +155,8 @@ class Setup_Frontend_Cli
                 }
             }
             
-            // initial password
-            if (! isset($_options['adminPassword'])) {
+            // initial password / can be empty => will trigger password change dialogue
+            if (! array_key_exists('adminPassword', $_options)) {
                 $_options['adminPassword'] = $this->_promptPassword();
             }
         }
