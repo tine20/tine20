@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about splitting email user model in two (imap + smtp)
@@ -27,7 +27,7 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const DBMAIL    = 'Dbmail';
-
+    
     /**
      * Dovecot imap backend const
      * 
@@ -36,19 +36,33 @@ class Tinebase_EmailUser
     const DOVECOT_IMAP    = 'Dovecot_imap';
     
     /**
+     * Dovecot imap combined backend const
+     * 
+     * @staticvar string
+     */
+    const DOVECOT_IMAP_COMBINED    = 'Dovecot_imap_combined';
+    
+    /**
      * postfix backend const
      * 
      * @staticvar string
      */
     const POSTFIX    = 'Postfix';
-
+    
+    /**
+     * postfix backend const
+     * 
+     * @staticvar string
+     */
+    const POSTFIX_COMBINED    = 'Postfix_combined';
+    
     /**
      * imap ldap backend const
      * 
      * @staticvar string
      */
     const LDAP_IMAP      = 'Ldap_imap';
-
+    
     /**
      * smtp ldap backend const
      * 
@@ -69,7 +83,7 @@ class Tinebase_EmailUser
      * @staticvar string
      */
     const LDAP_SMTP_QMAIL      = 'Ldapsmtpqmail';
-
+    
     /**
      * cyrus backend const
      * 
@@ -156,6 +170,12 @@ class Tinebase_EmailUser
                 }
                 break;
                 
+            case self::POSTFIX_COMBINED:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_PostfixCombined();
+                }
+                break;
+                
             case self::LDAP_SMTP:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapDbmailSchema();
@@ -173,10 +193,16 @@ class Tinebase_EmailUser
                     self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapQmailSchema();
                 }
                 break;
-            
+                
             case self::DOVECOT_IMAP:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dovecot();
+                }
+                break;
+                
+            case self::DOVECOT_IMAP_COMBINED:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_DovecotCombined();
                 }
                 break;
                 
@@ -230,7 +256,7 @@ class Tinebase_EmailUser
                     break;
             }
         }
-
+        
         if (empty($result)) {
             throw new Tinebase_Exception_NotFound("Config for type $_configType / $backend not found.");
         }

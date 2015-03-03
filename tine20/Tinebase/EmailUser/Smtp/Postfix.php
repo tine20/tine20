@@ -106,7 +106,8 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         'destinationTable'  => 'destinations',
         'emailScheme'       => 'ssha256',
         'domain'            => null,
-        'alloweddomains'    => array()
+        'alloweddomains'    => array(),
+        'adapter'           => Tinebase_Core::PDO_MYSQL
     );
 
     /**

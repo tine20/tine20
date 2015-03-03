@@ -18,7 +18,7 @@
 abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_SqlInterface
 {
     /**
-    * @var Zend_Db_Adapter
+    * @var Zend_Db_Adapter_Abstract
     */
     protected $_db = NULL;
     
@@ -88,29 +88,28 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * set database
      * 
      * @param array $_config
-     * 
-     * @todo allow other db backends than mysql
      */
     protected function _getDb($_config)
     {
         $tine20DbConfig = Tinebase_Core::getDb()->getConfig();
+        $tine20DbConfig['adapter'] = str_replace('Tinebase_Backend_Sql_Adapter_', '', get_class(Tinebase_Core::getDb()));
         
-        if ($this->_config['host'] == $tine20DbConfig['host'] && 
-            $this->_config['dbname'] == $tine20DbConfig['dbname'] &&
-            $this->_config['username'] == $tine20DbConfig['username'] &&
-            Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql
+        if ($this->_config['adapter']  == $tine20DbConfig['adapter'] &&
+            $this->_config['host']     == $tine20DbConfig['host'] && 
+            $this->_config['dbname']   == $tine20DbConfig['dbname'] &&
+            $this->_config['username'] == $tine20DbConfig['username']
         ) {
             $this->_db = Tinebase_Core::getDb();
         } else {
-            $dbConfig = array_intersect_key($_config, array_flip(array('host', 'dbname', 'username', 'password', 'prefix', 'port')));
-            $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig, 'Pdo_Mysql');
+            $dbConfig = array_intersect_key($_config, array_flip(array('adapter', 'host', 'dbname', 'username', 'password', 'port')));
+            $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig);
         }
     }
     
     /**
      * get database object
      * 
-     * @return Zend_Db_Adapter
+     * @return Zend_Db_Adapter_Abstract
      */
     public function getDb()
     {
