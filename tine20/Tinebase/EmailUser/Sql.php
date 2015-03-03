@@ -66,7 +66,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function __construct(array $_options = array())
     {
-        if ($this->_configKey === NULL || $this->_subconfigKey === NULL) {
+        if ($this->_configKey === NULL) {
             throw new Tinebase_Exception_UnexpectedValue('Need config keys for this backend');
         }
         
@@ -74,7 +74,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         $emailConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
         
         // merge _config and email backend config
-        $this->_config = array_merge($emailConfig[$this->_subconfigKey], $this->_config);
+        if ($this->_subconfigKey) {
+            $this->_config = array_merge($emailConfig[$this->_subconfigKey], $this->_config);
+        }
         
         // _tablename (for example "dovecot_users")
         $this->_userTable = $this->_config['prefix'] . $this->_config['userTable'];

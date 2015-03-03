@@ -40,7 +40,7 @@ class Tinebase_EmailUser
      * 
      * @staticvar string
      */
-    const DOVECOT_IMAP_COMBINED    = 'Dovecot_imap_combined';
+    const DOVECOT_COMBINED    = 'Dovecotcombined';
     
     /**
      * postfix backend const
@@ -54,7 +54,7 @@ class Tinebase_EmailUser
      * 
      * @staticvar string
      */
-    const POSTFIX_COMBINED    = 'Postfix_combined';
+    const POSTFIX_COMBINED    = 'Postfixcombined';
     
     /**
      * imap ldap backend const
@@ -157,7 +157,7 @@ class Tinebase_EmailUser
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dbmail();
                 }
                 break;
-            
+                
             case self::CYRUS:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Cyrus();
@@ -200,7 +200,7 @@ class Tinebase_EmailUser
                 }
                 break;
                 
-            case self::DOVECOT_IMAP_COMBINED:
+            case self::DOVECOT_COMBINED:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Tinebase_EmailUser_Imap_DovecotCombined();
                 }
@@ -218,50 +218,29 @@ class Tinebase_EmailUser
     /**
      * returns the configured backend
      * 
-     * @param string $_configType
+     * @param string $configType
      * @return string
      * @throws Tinebase_Exception_NotFound
      */
-    public static function getConfiguredBackend($_configType = Tinebase_Config::IMAP)
+    public static function getConfiguredBackend($configType = Tinebase_Config::IMAP)
     {
-        $result = '';
-        
-        $config = self::getConfig($_configType);
+        $config = self::getConfig($configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
-        if (isset($config['backend'])) {
-            $backend = ucfirst(strtolower($config['backend']));
-            switch ($_configType) {
-                case Tinebase_Config::IMAP:
-                    if ($backend == self::DBMAIL) {
-                        $result = self::DBMAIL;
-                    } else if ($backend == self::LDAP_IMAP) {
-                        $result = self::LDAP_IMAP;
-                    } else if ($backend == self::CYRUS) {
-                        $result = self::CYRUS;
-                    } else if ($backend == self::DOVECOT_IMAP) {
-                        $result = self::DOVECOT_IMAP;
-                    } 
-                    break;
-                case Tinebase_Config::SMTP:
-                    if ($backend == self::POSTFIX) {
-                        $result = self::POSTFIX;
-                    } else if ($backend == self::LDAP_SMTP) {
-                        $result = self::LDAP_SMTP;
-                    } else if ($backend == self::LDAP_SMTP_MAIL) {
-                        $result = self::LDAP_SMTP_MAIL;
-                    } else if ($backend == self::LDAP_SMTP_QMAIL) {
-                        $result = self::LDAP_SMTP_QMAIL;
-                    }
-                    break;
-            }
+        if (!isset($config['backend'])) {
+            throw new Tinebase_Exception_NotFound("No backend in config for type $configType found.");
         }
         
-        if (empty($result)) {
-            throw new Tinebase_Exception_NotFound("Config for type $_configType / $backend not found.");
+        $backend = ucfirst(strtolower($config['backend']));
+        
+        if (!in_array($backend, array(
+            self::DBMAIL, self::LDAP_IMAP, self::CYRUS, self::DOVECOT_IMAP, self::DOVECOT_COMBINED,
+            self::POSTFIX, self::POSTFIX_COMBINED, self::LDAP_SMTP, self::LDAP_SMTP_MAIL, self::LDAP_SMTP_QMAIL
+        ))) {
+            throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
         }
         
-        return $result;
+        return $backend;
     }
     
     /**
