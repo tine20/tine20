@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -147,7 +147,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         };
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus'], ['dovecot_imap', 'Dovecot MySQL']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus'], ['dovecot_imap', 'Dovecot MySQL'], ['dovecotcombined', 'Dovecot SQL (combined schema)']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -157,7 +157,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         this.imapBackendCombo = new Ext.form.ComboBox(backendComboConfig);
         
         // smtp combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['Ldapsmtpmail', 'Ldap (only mail attribute)'], ['ldapSmtp', 'Postfix Ldap (dbmail schema)'], ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['postfixcombined', 'Postfix SQL (combined schema)'], ['Ldapsmtpmail', 'Ldap (only mail attribute)'], ['ldapSmtp', 'Postfix Ldap (dbmail schema)'], ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)']];
         backendComboConfig.name = 'smtp_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -277,6 +277,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                             xtype: 'textfield'
                         },
                         items: this.getDbConfigFields('imap', 'dovecot').concat(this.getDovecotExtraConfig('imap'))
+                    }, {
+                        // dovecot combined with postfix config options
+                        id: this.imapBackendIdPrefix + 'dovecotcombined',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: this.getDbAdapterField('imap', 'dovecotcombined').concat(this.getDbConfigFields('imap', 'dovecotcombined'))
                     }]
                 }
             ]
@@ -353,7 +363,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         id: this.smtpBackendIdPrefix + 'ldap_smtp_mail',
                         layout: 'form',
                         items: []
-                    },{
+                    }, {
                         // postfix config options
                         id: this.smtpBackendIdPrefix + 'postfix',
                         layout: 'form',
@@ -363,6 +373,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                             xtype: 'textfield'
                         },
                         items: this.getDbConfigFields('smtp', 'postfix')
+                    }, {
+                        // postfix config options
+                        id: this.smtpBackendIdPrefix + 'postfixcombined',
+                        layout: 'form',
+                        autoHeight: 'auto',
+                        defaults: {
+                            width: 300,
+                            xtype: 'textfield'
+                        },
+                        items: []
                     }, {
                         // postfix config options
                         id: this.smtpBackendIdPrefix + 'ldap_smtp',
@@ -414,6 +434,34 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      */
     applyRegistryState: function () {
         this.action_saveConfig.setDisabled(!this.isValid());
+    },
+    
+    /**
+     * get db adapter field
+     * 
+     * @param {String} type1 (imap, smtp)
+     * @param {String} type2 (dbmail, postfix, ...)
+     * @return {Array}
+     */
+    getDbAdapterField: function (type1, type2) {
+        var typeString = (this.showType) ? (Ext.util.Format.capitalize(type2) + ' ') : '';
+        
+        return [{
+            name          : type1 + '_' + type2 + '_adapter',
+            fieldLabel    : typeString + this.app.i18n._('Backend'),
+            typeAhead     : false,
+            triggerAction : 'all',
+            lazyRender    : true,
+            editable      : false,
+            mode          : 'local',
+            xtype         : 'combo',
+            listWidth     : 300,
+            value         : 'pdo_mysql',
+            store: [
+                ['pdo_mysql', 'MySQL'],
+                ['pdo_pgsql', 'PostgreSQL']
+            ],
+        }];
     },
     
     /**
@@ -474,7 +522,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             mode          : 'local',
             xtype: 'combo',
             listWidth: 300,
-            value: 'PLAIN-MD5',
+            value: 'SSHA256',
             store: [
                 ['PLAIN-MD5',      this.app.i18n._('PLAIN-MD5')],
                 ['MD5-CRYPT',    this.app.i18n._('MD5-CRYPT')],
