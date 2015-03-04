@@ -51,7 +51,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         'userTable'    => 'users',
         'emailScheme'  => 'md5',
         'mailboxTable' => 'mailboxes',
-        'emailGID'     => null
+        'emailGID'     => null,
+        'adapter'      => Tinebase_Core::PDO_MYSQL
     );
 
     /**
