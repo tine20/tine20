@@ -198,6 +198,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql
         'emailGID'          => 'vmail',
         'emailScheme'       => 'SSHA256',
         'domain'            => null,
+        'adapter'           => Tinebase_Core::PDO_MYSQL
     );
     
     /**
