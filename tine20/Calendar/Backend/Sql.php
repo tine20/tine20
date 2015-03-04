@@ -143,7 +143,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * Calendar optimized search function
      * 
      * 1. get all events neglecting grants filter
-     * 2. get all related container grants (via resolveing)
+     * 2. get all related container grants (via resolving)
      * 3. compute effective grants in PHP and only keep events 
      *    user has required grant for
      * 
@@ -191,8 +191,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_filter->removeFilter('grants');
         }
         
-        // clonde the filter, as the filter is also used in the json frontend
-        // and the calendarfilter is used in the UI to
+        // clone the filter, as the filter is also used in the json frontend
+        // and the calendar filter is used in the UI to
         $clonedFilters = clone $_filter;
         
         $calendarFilter = null;
@@ -208,14 +208,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $select->group($this->_tableName . '.' . 'id');
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
-        $period = $_filter->getFilter('period');
-
-        // filter out unnecessary YEARLY candidates for web client requests
-        // periods < 40 days should be client web client requests.
-        if ($period && $period->getFrom()->getClone()->addDay(40) > $period->getUntil()) {
-            $this->_removeNonMatchingBaseEvents($select, $period);
-        }
         
         if ($calendarFilter) {
             $select1 = clone $select;
@@ -244,53 +236,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $_onlyIds ? $result->{is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds} : $result;
     }
-    
-    /**
-     * removes non-matching rrule base events
-     * 
-     * @param Zend_Db_Select $select
-     * @param Calendar_Model_PeriodFilter $period
-     * 
-     * TODO improve this by moving the rrules to a separate table to simplify SQL statment
-     */
-    protected function _removeNonMatchingBaseEvents($select, $period)
-    {
-        $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($select);
-        $from = $period->getFrom()->getClone()->subDay(1);
-        $fromMonth = $from->format('n');
-        $fromDay = $from->format('j');
-        $until = $period->getUntil()->getClone()->addDay(1);
-        $untilMonth = $until->format('n');
-        $untilDay = $until->format('j');
-        $quotedRrule = $this->_db->quoteIdentifier('rrule');
-        
-        $gs->where($quotedRrule . ' NOT LIKE ?', 'FREQ=YEARLY%')
-        ->orWhere($quotedRrule . ' IS NULL');
-        
-        // TODO improve view detection to handle year boundaries, too
-        if ($fromMonth > $untilMonth) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Skipping performance optimization because we can\'t handle year boundaries yet');
-            return;
-        }
-        if ($fromMonth == $untilMonth && $untilDay-$fromDay <= 10) {
-            // day|week view
-            for ($day=$fromDay; $day<=$untilDay; $day++) {
-                $gs->orWhere($quotedRrule . ' LIKE ?', "FREQ=YEARLY;INTERVAL=1;BYMONTH={$fromMonth};BYMONTHDAY={$day}%");
-            }
-        } else {
-            // monthview
-            for ($month=$fromMonth; $month<=$untilMonth; $month++) {
-                $gs->orWhere($quotedRrule . ' LIKE ?', "FREQ=YEARLY;INTERVAL=1;BYMONTH={$month};%");
-            }
-        }
-        
-        $gs->appendWhere(Zend_Db_Select::SQL_AND);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' ' . $select);
-    }
-    
+
     /**
      * calculate event permissions and remove events that don't match
      * 
