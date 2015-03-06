@@ -209,10 +209,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         if ($_action == 'changed') {
             $subject = sprintf($translate->_('Lead %s has been changed'), $_lead->lead_name);
+        } else if ($_action == 'deleted') {
+            $subject = sprintf($translate->_('Lead %s has been deleted'), $_lead->lead_name);
         } else {
             $subject = sprintf($translate->_('Lead %s has been created'), $_lead->lead_name);
         }
-
+        
         // create pdf
         try {
             $pdfGenerator = new Crm_Export_Pdf();
