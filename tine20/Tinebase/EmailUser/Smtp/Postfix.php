@@ -109,7 +109,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         'alloweddomains'    => array(),
         'adapter'           => Tinebase_Core::PDO_MYSQL
     );
-
+    
     /**
      * user properties mapping
      *
@@ -344,7 +344,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
     {
         return ((isset($_smtpSettings[$this->_propertyMapping['emailForwards']]) || array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings)) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']]));
     }
-
+    
     /**
      * add forward destinations
      * 
