@@ -90,7 +90,9 @@ Tine.Tinebase.tineInit = {
      * @type String
      */
     lsPrefix: Tine.Tinebase.common.getUrl('path') + 'Tine',
-
+    
+    onPreferenceChangeRegistered: false,
+    
     initWindow: function () {
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
@@ -171,17 +173,20 @@ Tine.Tinebase.tineInit = {
             });
             mainCardPanel.add(Tine.loginPanel);
         }
-
-        // handle logouts in other windows
-        Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
-            if (oldValue && !newValue) {
-                if (window.isMainWindow) {
-                    Tine.Tinebase.common.reload();
-                } else {
-                    Ext.ux.PopupWindow.close(window);
+        
+        // event firing is unpredictable in IE9, you'll never know when it comes ...
+        if (! Ext.isIE9) {
+            Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
+                if (oldValue && !newValue) {
+                    Tine.log.info('tineInit::initLoginPanel - handle logout in other window');
+                    if (window.isMainWindow) {
+                        Tine.Tinebase.common.reload();
+                    } else {
+                        Ext.ux.PopupWindow.close(window);
+                    }
                 }
-            }
-        }, this, 'currentAccount');
+            }, this, 'currentAccount');
+        }
     },
 
     showLoginBox: function(cb, scope) {
@@ -193,7 +198,7 @@ Tine.Tinebase.tineInit = {
         Tine.loginPanel.onLogin = function(response) {
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
-        }
+        };
 
 //        //listen for other windows login?
 //        Tine.Tinebase.registry.on('replace', function() {
@@ -231,7 +236,7 @@ Tine.Tinebase.tineInit = {
                     app = Tine.Tinebase.appMgr.get(args.shift()),
                     method = args.shift();
 
-                var config = app.dispatchRoute(method, args);
+                config = app.dispatchRoute(method, args);
 
             } else {
                 //http://tine.example.com/#{"name":"TimesheetEditWindow_0","contentPanelConstructor":"Tine.Timetracker.TimesheetEditDialog","recordId":0}
@@ -246,7 +251,7 @@ Tine.Tinebase.tineInit = {
             Ext.applyIf(config, {
                 name: window.name,
                 popup: window
-            })
+            });
 
             window.name = config.name;
 
@@ -510,7 +515,7 @@ Tine.Tinebase.tineInit = {
     /**
      * init registry
      *
-     * @param {Bool} forceReload
+     * @param {Boolean} forceReload
      * @param {Function} cb
      * @param {Object} scope
      */
@@ -566,6 +571,7 @@ Tine.Tinebase.tineInit = {
                     }
 
                     Tine.Tinebase.tineInit.onRegistryLoad();
+
                     cb.call(scope);
                 }
             });
@@ -589,8 +595,14 @@ Tine.Tinebase.tineInit = {
      * apply registry data
      */
     onRegistryLoad: function() {
-        if (Tine.Tinebase.registry.get('preferences')) {
+        if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
+            && Tine.Tinebase.registry.get('preferences')
+            && Tine.Tinebase.registry.get('currentAccount')
+            && ! Ext.isIE9
+        ) {
+            Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
             Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);
+            Tine.Tinebase.tineInit.onPreferenceChangeRegistered = true;
         }
 
         Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
@@ -617,6 +629,7 @@ Tine.Tinebase.tineInit = {
      * remove all registry data
      */
     clearRegistry: function() {
+        Tine.log.info('tineInit::clearRegistry');
         store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
     },
 
@@ -628,12 +641,16 @@ Tine.Tinebase.tineInit = {
      * @param {value} newValue
      */
     onPreferenceChange: function (key, oldValue, newValue) {
+        if (Tine.Tinebase.tineInit.isReloading) {
+            return;
+        }
+        
         switch (key) {
             case 'windowtype':
             case 'confirmLogout':
             case 'timezone':
             case 'locale':
-                // reload mainscreen
+                Tine.log.info('tineInit::onPreferenceChange - reload mainscreen');
                 Tine.Tinebase.common.reload({
                     clearCache: key == 'locale'
                 });

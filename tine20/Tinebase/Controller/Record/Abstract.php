@@ -1345,6 +1345,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $ids = $this->_inspectDelete((array) $_ids);
 
         $records = $this->_backend->getMultiple((array)$ids);
+        
         if (count((array)$ids) != count($records)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Only ' . count($records) . ' of ' . count((array)$ids) . ' records exist.');
         }
@@ -1360,8 +1361,11 @@ abstract class Tinebase_Controller_Record_Abstract
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             $this->_checkRight('delete');
-
+            
             foreach ($records as $record) {
+                if ($this->sendNotifications()) {
+                    $this->_getRelatedData($record);
+                }
                 $this->_deleteRecord($record);
             }
 
