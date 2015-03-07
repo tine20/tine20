@@ -4,14 +4,9 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Frontend_Cli
@@ -96,6 +91,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         
         ob_start();
         $this->_cli->clearTable($opts);
+        // TODO check $out
         $out = ob_get_clean();
         
         $accessLogsAfter = Admin_Controller_AccessLog::getInstance()->search();
@@ -139,7 +135,7 @@ class Tinebase_Frontend_CliTest extends TestCase
 
         $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $deletedRecord = $contactBackend->get($deletedRecord->getId(), TRUE);
+        $contactBackend->get($deletedRecord->getId(), TRUE);
     }
 
     /**
@@ -294,5 +290,22 @@ class Tinebase_Frontend_CliTest extends TestCase
         preg_match('/LOGINS OK \| count=(\d+);;;;/', $out, $matches);
         $this->assertGreaterThan(1, count($matches));
         $this->assertGreaterThanOrEqual(0, $matches[1]);
+    }
+
+    /**
+     * testMonitoringActiveUsers
+     *
+     * TODO generalize monitoring tests
+     */
+    public function testMonitoringActiveUsers()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringActiveUsers();
+        $out = ob_get_clean();
+        $this->assertEquals(0, $result);
+
+        preg_match('/ACTIVE USERS OK \| count=(\d+);;;;/', $out, $matches);
+        $this->assertGreaterThan(1, count($matches));
+        $this->assertGreaterThanOrEqual(1, $matches[1], 'at least unittest user should have logged in once');
     }
 }
