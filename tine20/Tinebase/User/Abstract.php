@@ -536,9 +536,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         
         return true;
     }
-    
-    /******************* abstract functions *********************/
-    
+
     /**
      * get user by login name
      *
@@ -550,7 +548,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     {
         return $this->getUserByProperty('accountLoginName', $_loginName, $_accountClass);
     }
-    
+
     /**
      * get user by id
      *
@@ -558,12 +556,36 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param   string  $_accountClass  type of model to return
      * @return  Tinebase_Model_User user
      */
-    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User') 
+    public function getUserById($_accountId, $_accountClass = 'Tinebase_Model_User')
     {
         $userId = $_accountId instanceof Tinebase_Model_User ? $_accountId->getId() : $_accountId;
-        
+
         return $this->getUserByProperty('accountId', $userId, $_accountClass);
     }
+
+    /**
+     * returns active users
+     *
+     * @return int
+     */
+    public function getActiveUserCount()
+    {
+        $backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_User',
+            'tableName' => 'accounts',
+        ));
+
+        // TODO allow to set this as param
+        $afterDate = Tinebase_DateTime::now()->subMonth(1);
+        $filter = new Tinebase_Model_FullUserFilter(array(
+            array('field' => 'last_login', 'operator' => 'after', 'value' => $afterDate),
+            array('field' => 'status', 'operator' => 'equals', 'value' => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
+        ));
+
+        return $backend->searchCount($filter);
+    }
+
+    /******************* abstract functions *********************/
     
     /**
      * setPassword() - sets / updates the password in the account backend

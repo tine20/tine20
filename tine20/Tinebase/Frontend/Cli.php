@@ -525,7 +525,32 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo $message . "\n";
         return $result;
     }
-    
+
+    /**
+     * nagios monitoring for tine 2.0 active users
+     *
+     * @return number
+     *
+     * @todo allow to configure timeslot / currently the active users of the last month are returned
+     */
+    public function monitoringActiveUsers()
+    {
+        $message = 'ACTIVE USERS';
+        $result  = 0;
+
+        try {
+            $userCount = Tinebase_User::getInstance()->getActiveUserCount();
+            $valueString = ' | count=' . $userCount . ';;;;';
+            $message .= ' OK' . $valueString;
+        } catch (Exception $e) {
+            $message .= ' FAIL: ' . $e->getMessage();
+            $result = 2;
+        }
+
+        echo $message . "\n";
+        return $result;
+    }
+
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
