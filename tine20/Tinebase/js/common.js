@@ -134,10 +134,13 @@ Tine.Tinebase.common = {
         options = options || {};
 
         if (! options.keepRegistry) {
+            Tine.Tinebase.tineInit.isReloading = true;
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
-        window.location.reload.defer(500,  window.location, [!! options.clearCache]);
+        window.setTimeout(function(){
+            window.location.reload(window.location, [!! options.clearCache]);
+        }, 500);
     },
 
     showDebugConsole: function () {

@@ -73,6 +73,11 @@
      * fire a simulated storage event
      */
     _.fireEvent = function(key, oldValue, newValue) {
+        if (Ext.isIE8 || Ext.isIE9) {
+            // IEs fire same window events on their own
+            return;
+        }
+
         var event;
         if (document.createEvent) {
             event = document.createEvent('StorageEvent');
@@ -80,7 +85,7 @@
 
             return dispatchEvent(event);
         } else {
-            // IE < 11?
+            // IE < 9?
             event = document.createEventObject();
             event.eventType = "storage";
             //event.eventName = "storage";
