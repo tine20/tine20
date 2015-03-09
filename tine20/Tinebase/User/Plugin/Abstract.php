@@ -26,7 +26,14 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      * @var Tinebase_Backend_Sql_Command_Interface
      */
     protected $_dbCommand;
-    
+
+    /**
+     * email user config
+     *
+     * @var array
+     */
+    protected $_config = array();
+
     /**
      * inspect data used to create user
      * 
@@ -57,7 +64,39 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
             $this->_addUser($_updatedUser, $_newUserProperties);
         }
     }
-    
+
+    /**
+     * inspect get user by property
+     *
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        // do nothing
+    }
+
+    /**
+     * update/set email user password
+     *
+     * @param  string  $_userId
+     * @param  string  $_password
+     * @param  bool    $_encrypt encrypt password
+     */
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
+    {
+        // do nothing
+    }
+
+    /**
+     * delete user by id
+     *
+     * @param   Tinebase_Model_FullUser $_user
+     */
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
+    {
+        // do nothing
+    }
+
     /**
      * adds email properties for a new user
      * 
@@ -127,7 +166,8 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         // create a salt that ensures crypt creates an sha2 hash
         $base64_alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
             .'abcdefghijklmnopqrstuvwxyz0123456789+/';
-        
+
+        $salt = '';
         for($i=0; $i<16; $i++){
             $salt .= $base64_alphabet[rand(0,63)];
         }

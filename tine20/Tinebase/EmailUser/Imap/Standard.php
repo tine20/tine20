@@ -18,13 +18,6 @@
 class Tinebase_EmailUser_Imap_Standard extends Tinebase_User_Plugin_Abstract
 {
     /**
-     * email user config
-     * 
-     * @var array 
-     */
-    protected $_config = array();
-    
-    /**
      * config key (Tinebase_Config::IMAP || Tinebase_Config::SMTP)
      * 
      * @var string
