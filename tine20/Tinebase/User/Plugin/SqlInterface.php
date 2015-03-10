@@ -41,22 +41,6 @@ interface Tinebase_User_Plugin_SqlInterface extends Tinebase_User_Plugin_Interfa
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
     
     /**
-     * inspect set expiry date
-     * 
-     * @param Tinebase_DateTime  $_expiryDate  the expirydate
-     * @param array      $_ldapData    the data to be written to ldap
-     */
-#    public function inspectExpiryDate($_expiryDate, array &$_ldapData);
-    
-    /**
-     * inspect setStatus
-     * 
-     * @param string  $_status    the status
-     * @param array   $_ldapData  the data to be written to ldap
-     */
-#    public function inspectStatus($_status, array &$_ldapData);
-
-    /**
      * update/set email user password
      * 
      * @param  string  $_userId
