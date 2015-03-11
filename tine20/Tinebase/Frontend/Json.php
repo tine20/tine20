@@ -81,10 +81,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Core::setupUserLocale($localeString);
         
         if ($saveaspreference) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Saving locale: " . $localeString);
             Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
         }
-        
-        $locale = Tinebase_Core::get('locale');
         
         // save in cookie (expires in 365 days)
         if ($setcookie) {
@@ -258,9 +258,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function updateMultipleRecords($appName, $modelName, $changes, $filter)
     {
         // increase execution time to 30 minutes
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
+        Tinebase_Core::setExecutionLifeTime(1800);
         
         $filterModel = $appName . '_Model_' . $modelName . 'Filter';
+        $data = array();
         foreach ($changes as $f) {
             $data[preg_replace('/^customfield_/','#', $f['name'])] = $f['value'];
         }
@@ -344,7 +345,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array  $filterData
      * @param string $filterName
      * @param mixed  $tag       string|array existing and non-existing tag
-     * @return void
+     * @return array
      */
     public function attachTagToMultipleRecords($filterData, $filterName, $tag)
     {
@@ -361,7 +362,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array  $filterData
      * @param string $filterName
      * @param mixed  $tag       string|array existing and non-existing tag
-     * @return void
+     * @return array
      */
     public function detachTagsFromMultipleRecords($filterData, $filterName, $tag)
     {
@@ -747,7 +748,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             try {
                 $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
             } catch (Addressbook_Exception_NotFound $aenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' User not found in Addressbook: ' . $user->accountDisplayName);
             }
         }
@@ -795,9 +797,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                . ' User applications to fetch registry for: ' . print_r($userApplications->name, TRUE));
-            
+
             if (! in_array('Tinebase', $userApplications->name)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase.');
                 $this->logout();
@@ -1171,7 +1174,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * joins all given tempfiles in given order to a single new tempFile
      *
-     * @param array of tempfiles arrays $tempFiles
+     * @param array $tempFilesData of tempfiles arrays $tempFiles
      * @return array new tempFile
      */
     public function joinTempFiles($tempFilesData)
