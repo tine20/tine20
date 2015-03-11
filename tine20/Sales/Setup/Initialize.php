@@ -85,6 +85,10 @@ class Sales_Setup_Initialize extends Setup_Initialize
         ));
         
         Sales_Setup_Update_Release8::createDefaultFavoritesForSub20();
+        
+        Sales_Setup_Update_Release8::createDefaultFavoritesForSub22();
+        
+        Sales_Setup_Update_Release8::createDefaultFavoritesForSub24();
     }
     
     /**
@@ -92,13 +96,13 @@ class Sales_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeKeyFields()
     {
-        // create type config
         $cb = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_Config',
             'tableName' => 'config',
         ));
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
-    
+        
+        // create type config
         $tc = array(
             'name'    => Sales_Config::INVOICE_TYPE,
             'records' => array(
@@ -107,13 +111,13 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 array('id' => 'CREDIT',   'value' => 'credit',    'system' => true) // _('credit')
             ),
         );
-    
+        
         $cb->create(new Tinebase_Model_Config(array(
             'application_id'    => $appId,
             'name'              => Sales_Config::INVOICE_TYPE,
             'value'             => json_encode($tc),
         )));
-    
+        
         // create cleared state keyfields
         $tc = array(
             'name'    => Sales_Config::INVOICE_CLEARED,
@@ -122,12 +126,28 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 array('id' => 'CLEARED', 'value' => 'cleared',  'system' => true), // _('cleared')
             ),
         );
-    
+        
         $cb->create(new Tinebase_Model_Config(array(
             'application_id'    => $appId,
             'name'              => Sales_Config::INVOICE_CLEARED,
             'value'             => json_encode($tc),
         )));
+        
+        // create payment types config
+        $tc = array(
+            'name'    => Sales_Config::PAYMENT_METHODS,
+            'records' => array(
+                array('id' => 'BANK TRANSFER',  'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
+                array('id' => 'DIRECT DEBIT',   'value' => 'Direct debit',  'system' => true)  // _('Direct debit')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::PAYMENT_METHODS,
+            'value'             => json_encode($tc),
+        )));
+        
     }
     
     /**

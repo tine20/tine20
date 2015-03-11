@@ -1,5 +1,7 @@
 <?php
 /**
+ * Tine 2.0
+ * 
  * @package     Sales
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -49,6 +51,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const INVOICE_TYPE = 'invoiceType';
     
+    const PAYMENT_METHODS = 'paymentMethods';
+    
     /**
      * Invoice Type
      *
@@ -69,6 +73,20 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_INVOICES_MODULE = 'invoicesModule';
+    
+    /**
+     * suppliers module feature
+     *
+     * @var string
+     */
+    const FEATURE_SUPPLIERS_MODULE = 'suppliersModule';
+    
+    /**
+     * purchase invoices module feature
+     *
+     * @var string
+     */
+    const FEATURE_PURCHASE_INVOICES_MODULE = 'purchaseInvoicesModule';
     
     /**
      * offers module feature
@@ -155,6 +173,16 @@ class Sales_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
             'default'               => 'INVOICE'
         ),
+        self::PAYMENT_METHODS => array(
+                                   //_('Payment Method')
+            'label'                 => 'Payment Method',
+                                   //_('Possible Payment Methods.')
+            'description'           => 'Possible Payment Methods.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_PaymentMethod'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'BANK TRANSFER'
+        ),
         self::INVOICE_CLEARED => array(
                                    //_('Invoice Cleared')
             'label'                 => 'Invoice Cleared',
@@ -201,11 +229,21 @@ class Sales_Config extends Tinebase_Config_Abstract
                     'label'         => 'Order Confirmations Module', //_('Order Confirmations Module')
                     'description'   => 'Order Confirmations Module',
                 ),
+                self::FEATURE_SUPPLIERS_MODULE => array(
+                        'label'         => 'Suppliers Module', //_('Suppliers Module')
+                        'description'   => 'Suppliers Module',
+                ),
+                self::FEATURE_PURCHASE_INVOICES_MODULE => array(
+                        'label'         => 'Purchase Invoice Module', //_('Purchase Invoice Module')
+                        'description'   => 'Purchase Invoice Module',
+                ),
             ),
             'default'               => array(
                 self::FEATURE_INVOICES_MODULE           => true,
                 self::FEATURE_OFFERS_MODULE             => true,
                 self::FEATURE_ORDERCONFIRMATIONS_MODULE => true,
+                self::FEATURE_SUPPLIERS_MODULE          => true,
+                self::FEATURE_PURCHASE_INVOICES_MODULE  => true,
             ),
         ),
     );

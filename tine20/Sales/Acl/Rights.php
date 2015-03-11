@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  */
@@ -54,6 +54,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_CUSTOMERS = 'manage_customers';
     
     /**
+     * the right to manage suppliers
+     * 
+     * @staticvar string
+     */
+    const MANAGE_SUPPLIERS = 'manage_suppliers';
+    
+    /**
      * the right to manage offers
      *
      * @staticvar string
@@ -94,6 +101,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_INVOICES = 'manage_invoices';
+    
+    /**
+     * the right to manage purchase invoices
+     * 
+     * @staticvar string
+     */
+    const MANAGE_PURCHASE_INVOICES = 'manage_purchase_invoices';
     
     /**
      * holds the instance of the singleton
@@ -149,6 +163,12 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             $addRights[] = self::MANAGE_INVOICES;
             $addRights[] = self::SET_INVOICE_NUMBER;
         }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_SUPPLIERS_MODULE)) {
+            $addRights[] = self::MANAGE_SUPPLIERS;
+        }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_PURCHASE_INVOICES_MODULE)) {
+            $addRights[] = self::MANAGE_PURCHASE_INVOICES;
+        }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_OFFERS_MODULE)) {
             $addRights[] = self::MANAGE_OFFERS;
         }
@@ -188,6 +208,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage customers'),
                 'description'   => $translate->_('add, edit and delete customers'),
             ),
+            self::MANAGE_SUPPLIERS => array(
+                'text'          => $translate->_('manage suppliers'),
+                'description'   => $translate->_('add, edit and delete suppliers'),
+            ),
             self::MANAGE_INVOICES => array(
                 'text'          => $translate->_('manage invoices'),
                 'description'   => $translate->_('add, edit and delete invoices'),
@@ -203,6 +227,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_OFFERS => array(
                 'text'          => $translate->_('manage offers'),
                 'description'   => $translate->_('add, edit and delete offers'),
+            ),
+            self::MANAGE_PURCHASE_INVOICES => array(
+                'text'          => $translate->_('manage purchase invoices'),
+                'description'   => $translate->_('add, edit and delete purchase invoices'),
             ),
             self::CHANGE_OC_NUMBER => array(
                 'text'          => $translate->_('change number of an order confirmations'),

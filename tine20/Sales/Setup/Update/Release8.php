@@ -1373,7 +1373,57 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
     
     /**
-     * creates default favorited vor version 8.20 (gets called in initialization of this app)
+     * creates default favorited for version 8.22 (gets called in initialization of this app)
+     */
+    public static function createDefaultFavoritesForSub22()
+    {
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+        );
+        
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        
+        // Purchase Invoices
+        $commonValues['model'] = 'Sales_Model_SupplierFilter';
+        
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Suppliers",        // _('All Suppliers')
+                'description' => "All supllier records", // _('All supllier records')
+                'filters'     => array(
+                ),
+            ))
+        ));
+    }
+    
+    /**
+     * creates default favorited for version 8.24 (gets called in initialization of this app)
+     */
+    public static function createDefaultFavoritesForSub24()
+    {
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+        );
+        
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        
+        // Purchase Invoices
+        $commonValues['model'] = 'Sales_Model_PurchaseInvoiceFilter';
+        
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, array(
+                'name'        => "All Purchase Imvoices", // _('All Purchase Imvoices')
+                'description' => "All purchase invoices", // _('All purchase invoices')
+                'filters'     => array(
+                ),
+            ))
+        ));
+    }
+    
+    /**
+     * creates default favorited for version 8.20 (gets called in initialization of this app)
      */
     public static function createDefaultFavoritesForSub20()
     {
@@ -1530,5 +1580,339 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->_db->update(SQL_TABLE_PREFIX . "sales_products", array('is_active' => 1));
 
         $this->setApplicationVersion('Sales', '8.23');
+    }
+    
+    /**
+     * update to 8.24
+     *
+     *  - add sales_suppliers table
+     */
+    public function update_23()
+    {
+        $tableDefinition = '<table>
+            <name>sales_suppliers</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                    <length>32</length>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>url</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>cpextern_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>cpintern_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>vatid</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>iban</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>bic</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>currency</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                    <length>4</length>
+                </field>
+                <field>
+                    <name>currency_trans_rate</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $this->createTable('sales_suppliers', Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition), 'Sales');
+        
+        self::createDefaultFavoritesForSub22();
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
+        
+        $this->setApplicationVersion('Sales', '8.24');
+    }
+    
+    /**
+     * update to 8.25
+     *
+     *  - rename sales_invoices to sales_sales_invoices
+     */
+    public function update_24()
+    {
+        $this->validateTableVersion('sales_invoices', '3');
+        
+        $this->renameTable('sales_invoices', 'sales_sales_invoices');
+        
+        $this->setTableVersion('sales_sales_invoices', 4);
+        
+        $this->setApplicationVersion('Sales', '8.25');
+    }
+    
+    /**
+     * update to 8.26
+     *
+     *  - add sales_suppliers table
+     */
+    public function update_25()
+    {
+        $tableDefinition = '<table>
+            <name>sales_purchase_invoices</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>date</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>due_in</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <length>10</length>
+                </field>
+                <field>
+                    <name>due_at</name>
+                    <type>date</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>pay_at</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>overdue_at</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>is_payed</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>payed_at</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>dunned_at</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>payment_method</name>
+                    <type>text</type>
+                    <length>254</length>
+                </field>
+                <field>
+                    <name>discount</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <length>10</length>
+                </field>
+                <field>
+                    <name>discount_until</name>
+                    <type>date</type>
+                </field>
+                <field>
+                    <name>is_approved</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>price_net</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>price_gross</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>price_tax</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>sales_tax</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>';
+        
+        $this->createTable('sales_purchase_invoices', Setup_Backend_Schema_Table_Factory::factory('Xml', $tableDefinition), 'Sales');
+        
+        // create keyfield config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+        
+        // create payment types config
+        $tc = array(
+            'name'    => Sales_Config::PAYMENT_METHODS,
+            'records' => array(
+                array('id' => 'BANK TRANSFER',  'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
+                array('id' => 'DIRECT DEBIT',   'value' => 'Direct debit',  'system' => true)  // _('Direct debit')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::PAYMENT_METHODS,
+            'value'             => json_encode($tc),
+        )));
+        
+        self::createDefaultFavoritesForSub24();
+        
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
+        
+        $this->setApplicationVersion('Sales', '8.26');
     }
 }
