@@ -49,6 +49,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected $_currentBillingCustomer = NULL;
     
     /**
+     * the date of the month that needs to be billed next for the current contract
+     * 
+     * @var Tinebase_DateTime
+     */
+    protected $_currentMonthToBill = NULL;
+    /**
      * holds the limit the iterator should have
      * 
      * @var integer
@@ -300,37 +306,54 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach ($productAggregates as $productAggregate) {
             // is null, if this is the first time to bill the product aggregate
             $lastBilled = $productAggregate->last_autobill == NULL ? NULL : clone $productAggregate->last_autobill;
-        
+            $productEnded = false;
+            
             // if the product has been billed already, add the interval
             if ($lastBilled) {
-                $nextBill = clone $lastBilled;
-                $nextBill->addMonth($productAggregate->interval);
+                if (NULL != $productAggregate->end_date && $lastBilled->isLaterOrEquals($productAggregate->end_date)) {
+                    $productEnded = true;
+                } else {
+                    $nextBill = $lastBilled;
+                    $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
+                    $nextBill->addMonth($productAggregate->interval);
+                }
             } else {
-                // it hasn't been billed already, so take the start_date of the contract as date
-                $nextBill = clone $this->_currentBillingContract->start_date;
-        
+                // it hasn't been billed already
+                if (NULL != $productAggregate->start_date && $productAggregate->start_date->isLaterOrEquals($this->_currentBillingContract->start_date)) {
+                    $nextBill = clone $productAggregate->start_date;
+                } else {
+                    $nextBill = clone $this->_currentBillingContract->start_date;
+                }
+                $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
+                
                 // add interval, if the billing point is at the end of the interval
                 if ($productAggregate->billing_point == 'end') {
                     $nextBill->addMonth($productAggregate->interval);
                 }
             }
-        
-            // assure creating the last bill if a contract has been terminated
-            if (($this->_currentBillingContract->end_date !== NULL) && $nextBill->isLater($this->_currentBillingContract->end_date)) {
-                $nextBill = clone $this->_currentBillingContract->end_date;
-            }
-        
-            $nextBill->setTime(0,0,0);
-        
-            $product = $this->_cachedProducts->getById($productAggregate->product_id);
-        
-            if (! $product) {
-                $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
-                $this->_cachedProducts->addRecord($product);
+            
+            if (!$productEnded) {
+                if (NULL != $productAggregate->end_date && $nextBill->isLater($productAggregate->end_date)) {
+                    $nextBill = clone $productAggregate->end_date;
+                }
+                
+                // assure creating the last bill if a contract has been terminated
+                if (($this->_currentBillingContract->end_date !== NULL) && $nextBill->isLater($this->_currentBillingContract->end_date)) {
+                    $nextBill = clone $this->_currentBillingContract->end_date;
+                }
+                
+                $nextBill->setTime(0,0,0);
+                
+                $product = $this->_cachedProducts->getById($productAggregate->product_id);
+                
+                if (! $product) {
+                    $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+                    $this->_cachedProducts->addRecord($product);
+                }
             }
             
             // find out if this model has to be billed or skipped
-            if ($this->_currentBillingDate->isLaterOrEquals($nextBill)) {
+            if (! $productEnded && $this->_currentMonthToBill->isLaterOrEquals($nextBill)) {
                 if (($product->accountable == 'Sales_Model_Product') || ($product->accountable == '')) {
                     $simpleProductsToBill[] = array('pa' => $productAggregate, 'ac' => $productAggregate);
                 } else {
@@ -425,12 +448,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $earliestStartDate = $latestEndDate = NULL;
         
         foreach ($billableAccountables as $ba) {
-            if (! $ba['ac']->isBillable($this->_currentBillingDate, $this->_currentBillingContract, $ba['pa'])) {
+            if (! $ba['ac']->isBillable($this->_currentMonthToBill, $this->_currentBillingContract, $ba['pa'])) {
                 continue;
             }
         
-            $ba['ac']->loadBillables($this->_currentBillingDate, $ba['pa']);
-            $billables = $ba['ac']->getBillables($this->_currentBillingDate, $ba['pa']);
+            $ba['ac']->loadBillables($this->_currentMonthToBill, $ba['pa']);
+            $billables = $ba['ac']->getBillables($this->_currentMonthToBill, $ba['pa']);
         
             if (empty($billables)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -467,7 +490,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _createAutoInvoicesForContract(Sales_Model_Contract $contract, Tinebase_DateTime $currentDate)
     {
         // set this current billing date (user timezone)
-        $this->_currentBillingDate     = $currentDate;
+        $this->_currentBillingDate = clone $currentDate;
+        $this->_currentBillingDate->setDate($this->_currentBillingDate->format('Y'), $this->_currentBillingDate->format('m'), 1);
+        $this->_currentBillingDate->setTime(0,0,0);
         
         // check all prerequisites needed for billing of the contract
         if (! $this->_validateContract($contract)) {
@@ -484,80 +509,160 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // find product aggregates of the current contract
         $productAggregates = $this->_findProductAggregates();
         
-        // prepare relations and find all billable accountables of the current contract
-        list($relations, $billableAccountables) = $this->_prepareInvoiceRelationsAndFindBillableAccountables($productAggregates);
-        
-        // find invoice positions and the first start date and last end date of all billables
-        list($invoicePositions, $earliestStartDate, $latestEndDate) = $this->_findInvoicePositionsAndInvoiceInterval($billableAccountables);
-        
-        // if there are no positions, no bill will be created, but the last_autobill info is set, if the current date is later 
-        if ($invoicePositions->count() == 0) {
-        
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' No efforts for the contract "' . $this->_currentBillingContract->title . '" could be found.', Zend_Log::INFO);
-            }
-            
-            return false;
-        }
-        
-        // prepare invoice
-        $invoice = new Sales_Model_Invoice(array(
-            'is_auto'       => TRUE,
-            'description'   => $this->_currentBillingContract->title . ' (' . $this->_currentBillingDate->toString() . ')',
-            'type'          => 'INVOICE',
-            'address_id'    => $this->_currentBillingContract->billing_address_id,
-            'credit_term'   => $this->_currentBillingCustomer['credit_term'],
-            'customer_id'   => $this->_currentBillingCustomer['id'],
-            'costcenter_id' => $this->_currentBillingCostCenter->getId(),
-            'start_date'    => $earliestStartDate,
-            'end_date'      => $latestEndDate,
-            'positions'     => $invoicePositions->toArray(),
-            'date'          => NULL,
-            'sales_tax'     => 19
-        ));
-        
-        $invoice->relations = $relations;
-        
-        $invoice->setTimezone('UTC', TRUE);
-
-        // create invoice
-        $invoice = $this->create($invoice);
-        $this->_autoInvoiceIterationResults[] = $invoice->getId();
-        
-        $paToUpdate = array();
-        
-        // conjunct billables with invoice, find out which productaggregates to update
-        foreach($billableAccountables as $ba) {
-            $ba['ac']->conjunctInvoiceWithBillables($invoice);
-            if ($ba['pa']->getId()) {
-                $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
-            }
-        }
-        
-        foreach($paToUpdate as $paId => $productAggregate) {
-            $firstBill = (! $productAggregate->last_autobill);
-            
-            $lab = $productAggregate->last_autobill ? clone $productAggregate->last_autobill : ($productAggregate->start_date ? clone $productAggregate->start_date : clone $this->_currentBillingContract->start_date);
-            $lab->setTimezone(Tinebase_Core::getUserTimezone());
-            $lab->setTime(0,0,0);
-            
-            if (! $firstBill) {
-                $lab->addMonth($productAggregate->interval);
-            } else {
-                if ($productAggregate->billing_point == 'end') {
-                    // if first bill, add interval on billing_point end
-                    $lab->addMonth($productAggregate->interval);
+        // find month that needs to be billed next (note: _currentMonthToBill is the 01-01 00:00:00 of the next month, its the border, like last_autobill)
+        $this->_currentMonthToBill = null;
+        foreach ($productAggregates as $productAggregate) {
+            if ( null != $productAggregate->last_autobill ) {
+                $tmp = clone $productAggregate->last_autobill;
+                $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
+                $tmp->setTime(0,0,0);
+                if ( null == $this->_currentMonthToBill || $tmp->isLater($this->_currentMonthToBill) ) {
+                    $this->_currentMonthToBill = $tmp;
                 }
             }
-
-            $productAggregate->last_autobill = $lab;
-            $productAggregate->setTimezone('UTC');
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $productAggregate->getId() . '": ' . $lab->__toString());
+        }
+        
+        // this contract has no productAggregates, maybe just time accounts? use last invoice to find already billed month
+        if ( null == $this->_currentMonthToBill ) {
+            // find newest invoice of contract (probably can be done more efficient!)
+            $invoiceRelations = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Contract', 'Sql', $contract->getId(), NULL, array(), TRUE, array('Sales_Model_Invoice'));
+            // do not modify $newestInvoiceTime!!!! it does NOT get cloned!
+            $newestInvoiceTime = null;
+            $newestInvoice = null;
+            foreach($invoiceRelations as $invoiceRelation) {
+                $invoiceRelation->related_record->setTimezone(Tinebase_Core::getUserTimezone());
+                if ( null == $newestInvoiceTime || $invoiceRelation->related_record->creation_time->isLater($newestInvoiceTime) ) {
+                    $newestInvoiceTime = $invoiceRelation->related_record->creation_time;
+                    $newestInvoice = $invoiceRelation->related_record;
+                }
             }
             
-            Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
+            if ( null != $newestInvoice ) {
+                // we can only take the end_date because there are no product aggregates (that have a last_autobill set) in this contract, otherwise it might be one interval ahead!
+                $this->_currentMonthToBill = clone $newestInvoice->end_date;
+                $this->_currentMonthToBill->addDay(4);
+                $this->_currentMonthToBill->subMonth(1);
+                //$this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
+            }
+        }
+        
+        if ( null == $this->_currentMonthToBill ) {
+            $this->_currentMonthToBill = clone $contract->start_date;
+        }
+        $this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
+        $this->_currentMonthToBill->setDate($this->_currentMonthToBill->format('Y'), $this->_currentMonthToBill->format('m'), 1);
+        $this->_currentMonthToBill->setTime(0,0,0);
+        $this->_currentMonthToBill->addMonth(1);
+        
+        $doSleep = false;
+        
+        while ( $this->_currentMonthToBill->isEarlierOrEquals($this->_currentBillingDate) ) {
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $this->_currentMonthToBill: ' . $this->_currentMonthToBill
+                    . ' $this->_currentBillingDate ' . $this->_currentBillingDate);
+                foreach ($productAggregates as $productAggregate) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $productAggregate->id . ' ' . $productAggregate->last_autobill);
+                }
+            }
+            
+            //required to have one sec difference in the invoice creation_time, can be optimized to look for milliseconds
+            if ( $doSleep ) {
+                sleep(1);
+                $doSleep = false;
+            }
+            // prepare relations and find all billable accountables of the current contract
+            list($relations, $billableAccountables) = $this->_prepareInvoiceRelationsAndFindBillableAccountables($productAggregates);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' count $billableAccountables: ' . count($billableAccountables));
+                foreach ($billableAccountables as $ba) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' accountable: ' . get_class($ba['ac']) . ' id: ' . $ba['ac']->getId());
+                }
+            }
+            
+            // find invoice positions and the first start date and last end date of all billables
+            list($invoicePositions, $earliestStartDate, $latestEndDate) = $this->_findInvoicePositionsAndInvoiceInterval($billableAccountables);
+            
+            /**** TODO ****/
+            // if there are no positions, no more bills need to be created,
+            // but the last_autobill info is set, if the current date is later
+            if ($invoicePositions->count() > 0 ) {
+                
+                // prepare invoice
+                $invoice = new Sales_Model_Invoice(array(
+                    'is_auto'       => TRUE,
+                    'description'   => $this->_currentBillingContract->title . ' (' . $this->_currentMonthToBill->toString() . ')',
+                    'type'          => 'INVOICE',
+                    'address_id'    => $this->_currentBillingContract->billing_address_id,
+                    'credit_term'   => $this->_currentBillingCustomer['credit_term'],
+                    'customer_id'   => $this->_currentBillingCustomer['id'],
+                    'costcenter_id' => $this->_currentBillingCostCenter->getId(),
+                    'start_date'    => $earliestStartDate,
+                    'end_date'      => $latestEndDate,
+                    'positions'     => $invoicePositions->toArray(),
+                    'date'          => NULL,
+                    'sales_tax'     => 19
+                ));
+                
+                $invoice->relations = $relations;
+                
+                $invoice->setTimezone('UTC', TRUE);
+        
+                // create invoice
+                $invoice = $this->create($invoice);
+                $this->_autoInvoiceIterationResults[] = $invoice->getId();
+                
+                $paToUpdate = array();
+                
+                // conjunct billables with invoice, find out which productaggregates to update
+                foreach($billableAccountables as $ba) {
+                    $ba['ac']->conjunctInvoiceWithBillables($invoice);
+                    if ($ba['pa']->getId()) {
+                        $paToUpdate[$ba['pa']->getId()] = $ba['pa'];
+                    }
+                }
+                
+                foreach($paToUpdate as $paId => $productAggregate) {
+                    $firstBill = (! $productAggregate->last_autobill);
+                    
+                    $lab = $productAggregate->last_autobill ? clone $productAggregate->last_autobill : ($productAggregate->start_date ? clone $productAggregate->start_date : clone $this->_currentBillingContract->start_date);
+                    $lab->setTimezone(Tinebase_Core::getUserTimezone());
+                    $lab->setDate($lab->format('Y'), $lab->format('m'), 1);
+                    $lab->setTime(0,0,0);
+                    
+                    if (! $firstBill) {
+                        $lab->addMonth($productAggregate->interval);
+                    } else {
+                        if ($productAggregate->billing_point == 'end') {
+                            // if first bill, add interval on billing_point end
+                            $lab->addMonth($productAggregate->interval);
+                        }
+                    }
+                    
+                    while ($this->_currentMonthToBill->isLater($lab)) {
+                        $lab->addMonth($productAggregate->interval);
+                    }
+                    if ($lab->isLater($this->_currentMonthToBill)) {
+                        $lab->subMonth($productAggregate->interval);
+                    }
+                    
+                    $productAggregate->last_autobill = $lab;
+                    $productAggregate->setTimezone('UTC');
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating last_autobill of "' . $productAggregate->getId() . '": ' . $lab->__toString());
+                    }
+                    
+                    Sales_Controller_ProductAggregate::getInstance()->update($productAggregate);
+                    
+                    $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
+                }
+                
+                $doSleep = true;
+            }
+            
+            $this->_currentMonthToBill->addMonth(1);
         }
     }
     
@@ -827,10 +932,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             throw new Sales_Exception_DeletePreviousInvoice();
                         }
                     }
+                    $this->_currentBillingContract = $contract;
+                    $productAggregates = $this->_findProductAggregates();
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . ' Could not find contract relation -> skip contract handling');
                     $contract = null;
+                    $productAggregates = array();
                 }
                 
                 // remove invoice_id from billables
@@ -839,7 +947,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 $invoicePositions = $invoicePositionController->search($filter);
                 
                 $allModels = array_unique($invoicePositions->model);
-
+                
                 foreach($allModels as $model) {
                     
                     if ($model == 'Sales_Model_ProductAggregate') {
@@ -872,31 +980,56 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 
                 // set last_autobill a period back
                 if ($contract) {
-                    // check product aggregates
-                    $filter = new Sales_Model_ProductAggregateFilter(array());
-                    $filter->addFilter(new Tinebase_Model_Filter_Text(
-                        array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
-                    ));
-                    
+                    //find the month of each productAggregate we have to set it back to
+                    $undoProductAggregates = array();
                     $paController = Sales_Controller_ProductAggregate::getInstance();
-                    $productAggregates = $paController->search($filter);
-                    $productAggregates->setTimezone(Tinebase_Core::getUserTimezone());
+                    
+                    foreach($invoicePositions as $inPos)
+                    {
+                        if ($inPos->model != 'Sales_Model_ProductAggregate')
+                            continue;
+                        
+                        //if we didnt find a month for the productAggreagte yet or if the month found is greater than the one we have at hands
+                        if ( !isset($undoProductAggregates[$inPos->accountable_id]) || strcmp($undoProductAggregates[$inPos->accountable_id], $inPos->month) > 0 )
+                        {
+                            $undoProductAggregates[$inPos->accountable_id] = $inPos->month;
+                        }
+                    }
                     
                     foreach($productAggregates as $productAggregate) {
-                        if ($productAggregate->last_autobill) {
-                            $lab = clone $productAggregate->last_autobill;
-                            $add = 0 - (int) $productAggregate->interval;
-                            $productAggregate->last_autobill = $lab->addMonth($add);
-                            $productAggregate->last_autobill->setTime(0,0,0);
+                        
+                        if (!$productAggregate->last_autobill)
+                            continue;
+                        
+                        if ( !isset($undoProductAggregates[$productAggregate->id]) ) {
+                            $product = $this->_cachedProducts->getById($productAggregate->product_id);
+                            if (! $product) {
+                                $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+                                $this->_cachedProducts->addRecord($product);
+                            }
+                            if ($product->accountable == 'Sales_Model_ProductAggregate')
+                                continue;
                             
-                            // last_autobill may not be before aggregate starts (may run into this case if interval has been resized)
-                            if (! $productAggregate->start_date || $productAggregate->last_autobill < $productAggregate->start_date) {
-                                $productAggregate->last_autobill = NULL;
+                            $productAggregate->last_autobill->subMonth($productAggregate->interval);
+                        } else {
+                            
+                            $productAggregate->last_autobill = new Tinebase_DateTime($undoProductAggregates[$productAggregate->id] . '-01 00:00:00', Tinebase_Core::getUserTimezone());
+                            if ($productAggregate->billing_point == 'begin') {
+                                $productAggregate->last_autobill->subMonth($productAggregate->interval);
+                            }
+                            if ( $productAggregate->start_date && $productAggregate->last_autobill < $productAggregate->start_date) {
+                                $tmp = clone $productAggregate->start_date;
+                                $tmp->setTimezone(Tinebase_Core::getUserTimezone());
+                                $tmp->setDate($tmp->format('Y'), $tmp->format('m'), 1);
+                                $tmp->setTime(0,0,0);
+                                if ($productAggregate->last_autobill < $tmp || ($productAggregate->billing_point == 'end' && $productAggregate->last_autobill == $tmp)) {
+                                    $productAggregate->last_autobill = NULL;
+                                }
                             }
                         }
-                        
                         $productAggregate->setTimezone('UTC');
                         $paController->update($productAggregate);
+                        $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
                     }
                 }
             }

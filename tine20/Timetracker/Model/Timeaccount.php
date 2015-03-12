@@ -416,7 +416,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             ), 'AND');
             // NOTE: using text filter here for id (operator equals is not defined in default timeaccount_id filter)
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
-
             $tsController->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
         } else {
             $ids = $this->_getIdsOfBillables();
