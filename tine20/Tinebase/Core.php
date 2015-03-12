@@ -418,10 +418,6 @@ class Tinebase_Core
             $controllerNameModel = $controllerName . '_' . $modelName;
             if (! class_exists($controllerNameModel)) {
                 throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
-                // check for generic app controller
-                if (! class_exists($controllerName)) {
-                    throw new Tinebase_Exception_NotFound('No Controller found (checked classes '. $controllerName . ' and ' . $controllerNameModel . ')!');
-                }
             } else {
                 $controllerName = $controllerNameModel;
             }
@@ -1109,7 +1105,9 @@ class Tinebase_Core
             }
             
             // check if the detected locale should be saved in preferences
-            if ($localeString === 'auto' && is_object(Tinebase_Core::getUser())) {
+            if ($localeString === 'auto' && is_object(Tinebase_Core::getUser()) && (string)$locale !== 'en') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Saving locale: " . (string)$locale);
                 self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
             }
         }
@@ -1401,7 +1399,7 @@ class Tinebase_Core
     /**
      * get credentials cache from the registry or initialize it
      *
-     * @return  the cache
+     * @return  Tinebase_Model_CredentialCache
      */
     public static function getUserCredentialCache()
     {
@@ -1608,6 +1606,7 @@ class Tinebase_Core
      * checks if a system command exists. Works on POSIX systems.
      * 
      * @param string $name
+     * @return bool
      */
     public static function systemCommandExists($name)
     {
@@ -1618,7 +1617,8 @@ class Tinebase_Core
     /**
      * calls a system command with escapeshellcmd
      * 
-     * @param unknown $cmd
+     * @param string $cmd
+     * @return bool
      */
     public static function callSystemCommand($cmd)
     {

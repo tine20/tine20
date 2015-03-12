@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -791,13 +791,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // only create account if email address is set
         if ($email) {
-            $systemAccount = new Felamimail_Model_Account(NULL, TRUE);
+            $systemAccount = new Felamimail_Model_Account(array(
+                'type'    => Felamimail_Model_Account::TYPE_SYSTEM,
+                'user_id' => Tinebase_Core::getUser()->getId()
+            ), TRUE);
             
             $this->_addSystemAccountConfigValues($systemAccount);
-            
-            $systemAccount->type    = Felamimail_Model_Account::TYPE_SYSTEM;
-            $systemAccount->user_id = Tinebase_Core::getUser()->getId();
-            $this->_addUserValues($systemAccount, Tinebase_Core::getUser(), $email);
             
             $this->_addFolderDefaults($systemAccount, TRUE);
             
@@ -927,11 +926,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $configs = array(
             Tinebase_Config::IMAP     => array(
                 'keys'      => array('host', 'port', 'ssl'),
-                'defaults'  => array('port' => 143),
+                'defaults'  => array(), // @todo remove when not needed for sieve anymore
             ),
             Tinebase_Config::SMTP     => array(
                 'keys'      => array('hostname', 'port', 'ssl', 'auth'),
-                'defaults'  => array('port' => 25),
+                'defaults'  => array(), // @todo remove when not needed for sieve anymore
             ),
             Tinebase_Config::SIEVE    => array(
                 'keys'      => array('hostname', 'port', 'ssl'),
@@ -963,16 +962,68 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
     {
-        $config = ($_configKey == Tinebase_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->get($_configKey, new Tinebase_Config_Struct($_defaults))->toArray();
-        $prefix = ($_configKey == Tinebase_Config::IMAP) ? '' : strtolower($_configKey) . '_';
-        if (! is_array($config)) {
-            throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
+        try {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            throw new Felamimail_Exception('User not found: ' . $_account->user_id, null, $tenf);
         }
         
-        foreach ($config as $key => $value) {
-            if (in_array($key, $_keysOverwrite) && ! empty($value)) {
-                $_account->{$prefix . $key} = $value;
-            }
+        switch ($_configKey) {
+            case Tinebase_Config::IMAP:
+                $imapUser = $fullUser->imapUser;
+                
+                if (!$imapUser) {
+                    throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
+                }
+                foreach (array(
+                    'emailUsername' => 'user',
+                    'emailHost'     => 'host',
+                    'emailPort'     => 'port',
+                    'emailSecure'   => 'ssl'
+                ) as $key => $value) {
+                    if ($imapUser->$key) {
+                        $_account->$value = $imapUser->$key;
+                    }
+                }
+                
+                break;
+                
+            case Tinebase_Config::SMTP:
+                $smtpUser = $fullUser->smtpUser;
+                
+                if (!$smtpUser) {
+                    throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
+                }
+                
+                foreach (array(
+                    'emailUsername' => 'smtp_user',
+                    'emailHost'     => 'smtp_hostname',
+                    'emailPort'     => 'smtp_port',
+                    'emailSecure'   => 'smtp_ssl',
+                    'emailAuth'     => 'smtp_auth'
+                ) as $key => $value) {
+                    if ($smtpUser->$key) {
+                        $_account->$value = $smtpUser->$key;
+                    }
+                }
+                
+                break;
+                
+            case Tinebase_Config::SIEVE:
+                $config = Tinebase_Config::getInstance()->get($_configKey, new Tinebase_Config_Struct($_defaults))->toArray();
+                $prefix = strtolower($_configKey) . '_';
+                
+                if (! is_array($config)) {
+                    throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
+                }
+                
+                foreach ($config as $key => $value) {
+                    if (in_array($key, $_keysOverwrite) && ! empty($value)) {
+                        $_account->{$prefix . $key} = $value;
+                    }
+                }
+                
+                break;
         }
     }
     
@@ -991,7 +1042,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // add user data
-        $_account->user   = $_user->accountLoginName;
         $_account->email  = $_email;
         $_account->name   = $_email;
         $_account->from   = $_user->accountFullName;

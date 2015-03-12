@@ -1,12 +1,12 @@
 <?php
 /**
- * class to hold Account data
+ * Tine 2.0
  * 
  * @package     Felamimail
- * @subpackage    Model
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        update account credentials if user password changed
  * @todo        use generic (JSON encoded) field for 'other' settings like folder names
@@ -232,9 +232,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         // set some fields to default if not set
-        $this->_filters['ssl']              = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
-        $this->_filters['smtp_ssl']         = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
-        $this->_filters['sieve_ssl']        = array(new Zend_Filter_Empty(self::SECURE_TLS), 'StringTrim', 'StringToLower');
+        $this->_filters['ssl']              = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
+        $this->_filters['smtp_ssl']         = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
+        $this->_filters['sieve_ssl']        = array(new Zend_Filter_Empty(self::SECURE_TLS),   'StringTrim', 'StringToLower');
         $this->_filters['display_format']   = array(new Zend_Filter_Empty(self::DISPLAY_HTML), 'StringTrim', 'StringToLower');
         $this->_filters['port']             = new Zend_Filter_Empty(NULL);
         $this->_filters['smtp_port']        = new Zend_Filter_Empty(NULL);
@@ -253,50 +253,16 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     {
         $this->resolveCredentials(FALSE);
         
-        $imapConfigFields = array('host', 'port', 'user', 'password');
         $result = array();
-        foreach ($imapConfigFields as $field) {
-            if ($field === 'user') {
-                $result[$field] = $this->getUsername();
-            } else {
-                $result[$field] = $this->{$field};
-            }
+        foreach (array('host', 'port', 'user', 'password') as $field) {
+            $result[$field] = $this->{$field};
         }
         
-        if ($this->ssl && $this->ssl != 'none') {
+        if ($this->ssl && $this->ssl !== Felamimail_Model_Account::SECURE_NONE) {
             $result['ssl'] = strtoupper($this->ssl);
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
-        
-        return $result;
-    }
-    
-    /**
-     * add domain from imap settings to username
-     * 
-     * @param string $username
-     * @param string $type (imap|smtp)
-     * @param array $config
-     * @return string
-     */
-    public function getUsername($username = null, $type = Tinebase_Config::IMAP, $config = null)
-    {
-        $result = ($username !== null) ? $username : $this->user;
-        
-        if ($this->type == self::TYPE_SYSTEM) {
-            if (! $config) {
-                $config = Tinebase_Config::getInstance()->get($type, new Tinebase_Config_Struct())->toArray();
-            }
-            
-            // @todo add documentation for config option and add it to setup gui
-            $domainConfigKey = ($type === Tinebase_Config::IMAP) ? 'domain' : 'primarydomain';
-            if (isset($config['useEmailAsUsername']) && $config['useEmailAsUsername']) {
-                $result = $this->email;
-            } else if (isset($config[$domainConfigKey]) && ! empty($config[$domainConfigKey])) {
-                $result .= '@' . $config[$domainConfigKey];
-            }
-        }
         
         return $result;
     }
@@ -332,20 +298,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['port'] = $this->smtp_port;
         }
         
-        // system account: overwriting with values from config if set
-        if ($this->type == self::TYPE_SYSTEM) {
-            $systemAccountConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccountConfig, true));
-            // we don't need username/pass from system config (those are the notification service credentials)
-            // @todo think about renaming config keys (to something like notification_email/pass)
-            unset($systemAccountConfig['username']);
-            unset($systemAccountConfig['password']);
-            $result = array_merge($result, $systemAccountConfig);
-            
-            $result['username'] = $this->getUsername($result['username'], Tinebase_Config::SMTP, $systemAccountConfig);
-        }
-        
-        if ((isset($result['auth']) || array_key_exists('auth', $result)) && $result['auth'] == 'none') {
+        if (isset($result['auth']) && $result['auth'] === 'none') {
             unset($result['username']);
             unset($result['password']);
             unset($result['auth']);
@@ -374,7 +327,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'host'      => $this->sieve_hostname,
             'port'      => $this->sieve_port, 
             'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
-            'username'  => $this->getUsername(),
+            'username'  => $this->user,
             'password'  => $this->password,
         );
         
@@ -477,7 +430,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                 }
             }
             
-            $this->{$userField} = $credentials->username;
+            if (! $this->{$userField}) {
+                $this->{$userField} = $credentials->username;
+            }
+            
             $this->{$passwordField} = $credentials->password;
         }
         

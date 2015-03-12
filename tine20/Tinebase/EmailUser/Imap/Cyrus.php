@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -18,7 +18,7 @@
  * @subpackage User
  * @todo add quota support
  */
-class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
+class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * 
