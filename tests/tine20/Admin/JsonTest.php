@@ -55,7 +55,7 @@ class Admin_JsonTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@' . $this->_getMailDomain()
         ));
         
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -398,7 +398,7 @@ class Admin_JsonTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountEmailAddress'   => 'phpunit@' . $this->_getMailDomain()
         ));
         
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user['accountId']);

@@ -5,27 +5,18 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2014-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * plugin to handle smtp settings for dbmail ldap schema
+ * plugin to handle smtp settings for univentionMail ldap schema
  * 
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap implements Tinebase_EmailUser_Smtp_Interface
+class Tinebase_EmailUser_Smtp_LdapUniventionMailSchema extends Tinebase_EmailUser_Ldap implements Tinebase_EmailUser_Smtp_Interface
 {
-    /**
-     * dbmail config
-     * 
-     * @var array 
-     */
-    protected $_config = array(
-        'emailGID' => null
-    );
-    
     /**
      * user properties mapping 
      * -> we need to use lowercase for ldap fields because ldap_fetch returns lowercase keys
@@ -33,10 +24,10 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap i
      * @var array
      */
     protected $_propertyMapping = array(
-        'emailAddress'     => 'mail',
-        'emailAliases'     => 'mailalternateaddress', 
-        'emailForwards'    => 'mailforwardingaddress',
-        'emailForwardOnly' => 'deliverymode'
+        'emailUsername' => 'mailprimaryaddress',
+        'emailHost'     => 'univentionmailhomeserver',
+        'emailAddress'  => 'mailprimaryaddress',
+        'emailAliases'  => 'mailalternativeaddress'
     );
     
     /**
@@ -45,20 +36,14 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap i
      * @var array
      */
     protected $_requiredObjectClass = array(
-        'dbmailUser'
+        'univentionMail'
     );
     
-    protected $_backendType = Tinebase_Config::SMTP;
-    
-    /**
-     * the constructor
-     */
-    public function __construct(array $_options = array())
-    {
-        parent::__construct($_options);
-        
-        $this->_config['emailGID'] = sprintf("%u", crc32(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()));
-    }
+    protected $_defaults = array(
+        'emailPort'   => 25,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailAuth'   => 'login'
+    );
     
     /**
      * (non-PHPdoc)
@@ -70,8 +55,6 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap i
             foreach ($this->_propertyMapping as $ldapKeyName) {
                 $_ldapData[$ldapKeyName] = array();
             }
-            $_ldapData['accountStatus'] = array();
-            $_ldapData['mailHost']      = array();
             
             $_ldapData['objectclass'] = array_unique(array_diff($_ldapData['objectclass'], $this->_requiredObjectClass));
             
@@ -81,4 +64,4 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap i
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
     }
-}  
+}

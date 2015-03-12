@@ -113,8 +113,10 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     protected function _appendDomain($_userName)
     {
-        if ((isset($this->_config['domain']) || array_key_exists('domain', $this->_config)) && ! empty($this->_config['domain'])) {
-            $domain = '@' . $this->_config['domain'];
+        $domainConfigKey = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'domain' : 'primarydomain';
+        
+        if (!empty($this->_config[$domainConfigKey])) {
+            $domain = '@' . $this->_config[$domainConfigKey];
             if (strpos($_userName, $domain) === FALSE) {
                 $_userName .= $domain;
             }
@@ -125,24 +127,42 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     
     /**
      * set database
-     * 
-     * @param array $_config
      */
-    protected function _getDb($_config)
+    protected function _getDb()
     {
+        $mailDbConfig = $this->_config[$this->_subconfigKey];
+        $mailDbConfig['adapter'] = !empty($mailDbConfig['adapter']) ?
+            strtolower($mailDbConfig['adapter']) :
+            strtolower($this->_config['adapter']);
+        
         $tine20DbConfig = Tinebase_Core::getDb()->getConfig();
         $tine20DbConfig['adapter'] = strtolower(str_replace('Tinebase_Backend_Sql_Adapter_', '', get_class(Tinebase_Core::getDb())));
         
-        if (strtolower($this->_config['adapter']) == $tine20DbConfig['adapter'] &&
-            $this->_config['host']     == $tine20DbConfig['host'] && 
-            $this->_config['dbname']   == $tine20DbConfig['dbname'] &&
-            $this->_config['username'] == $tine20DbConfig['username']
+        if ($mailDbConfig['adapter']  == $tine20DbConfig['adapter'] &&
+            $mailDbConfig['host']     == $tine20DbConfig['host']    &&
+            $mailDbConfig['dbname']   == $tine20DbConfig['dbname']  &&
+            $mailDbConfig['username'] == $tine20DbConfig['username']
         ) {
             $this->_db = Tinebase_Core::getDb();
         } else {
-            $dbConfig = array_intersect_key($_config, array_flip(array('adapter', 'host', 'dbname', 'username', 'password', 'port')));
+            $dbConfig = array_intersect_key($mailDbConfig, array_flip(array('adapter', 'host', 'dbname', 'username', 'password', 'port')));
             $this->_db = Tinebase_Core::createAndConfigureDbAdapter($dbConfig);
         }
+    }
+    
+    /**
+     * 
+     * @param Tinebase_Model_User $user
+     * @return string
+     */
+    protected function _getEmailUserName(Tinebase_Model_User $user)
+    {
+        // @todo add documentation for config option and add it to setup gui
+        if (isset($this->_options['useEmailAsUsername'])) {
+            return $user->accountEmailAddress;
+        }
+        
+        return $this->_appendDomain($user->accountLoginName);
     }
     
     /**

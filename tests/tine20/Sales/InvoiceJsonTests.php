@@ -79,6 +79,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         
         $date = clone $this->_referenceDate;
         $date->addHour(3);
+        $date->addMonth(1);
         
         $this->_invoiceController->createAutoInvoices($date);
         
@@ -106,7 +107,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         // first invoice for customer 4
         $invoice = $json->getInvoice($c4Invoice['id']);
         
-        $this->assertEquals(9, count($invoice['positions']));
+        $this->assertEquals(18, count($invoice['positions']));
         
         foreach($invoice['relations'] as $relation) {
             switch ($relation['type']) {
@@ -148,14 +149,9 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->_createFullFixtures();
         
         // the whole year, 12 months
-        $i = 0;
         $date = clone $this->_referenceDate;
-        
-        while ($i < 12) {
-            $result = $this->_invoiceController->createAutoInvoices($date);
-            $date->addMonth(1);
-            $i++;
-        }
+        $date->addMonth(12);
+        $this->_invoiceController->createAutoInvoices($date);
         
         $json = new Sales_Frontend_Json();
         
@@ -275,6 +271,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $i = 0;
         $date = clone $this->_referenceDate;
         $date->addHour(3);
+        $date->addMonth(1);
         
         $result = $this->_invoiceController->createAutoInvoices($date);
         

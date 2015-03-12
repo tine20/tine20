@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
 --
@@ -86,7 +86,7 @@ query = SELECT destination FROM smtp_destinations WHERE source='%s'
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
+class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
      * destination table name with prefix
@@ -94,6 +94,13 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
      * @var string
      */
     protected $_destinationTable = NULL;
+    
+    /**
+     * subconfig for user email backend (for example: dovecot)
+     * 
+     * @var string
+     */
+    protected $_subconfigKey = 'postfix';
     
     /**
      * postfix config
@@ -125,27 +132,28 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         'emailForwards'     => 'destination'
     );
     
+    protected $_defaults = array(
+        'emailPort'   => 25,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailAuth'   => 'plain'
+    );
+    
     /**
      * the constructor
      */
     public function __construct(array $_options = array())
     {
-        $this->_configKey    = Tinebase_Config::SMTP;
-        $this->_subconfigKey = 'postfix';
-
         parent::__construct($_options);
         
-        $smtpConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
-        
         // set domain from smtp config
-        $this->_config['domain'] = !empty($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : null;
+        $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
         
         // add allowed domains
-        if (! empty($smtpConfig['primarydomain'])) {
-            $this->_config['alloweddomains'] = array($smtpConfig['primarydomain']);
-            if (! empty($smtpConfig['secondarydomains'])) {
+        if (! empty($this->_config['primarydomain'])) {
+            $this->_config['alloweddomains'] = array($this->_config['primarydomain']);
+            if (! empty($this->_config['secondarydomains'])) {
                 // merge primary and secondary domains and split secondary domains + trim whitespaces
-                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $smtpConfig['secondarydomains']));
+                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $this->_config['secondarydomains']));
             } 
         }
         
@@ -395,7 +403,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
      */
     protected function _rawDataToRecord(array $_rawdata)
     {
-        $data = array();
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' raw data: ' . print_r($_rawdata, true));
@@ -558,7 +566,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
         $result = true;
         
         if (! empty($this->_config['alloweddomains'])) {
-
+            
             list($user, $domain) = explode('@', $_email, 2);
             
             if (! in_array($domain, $this->_config['alloweddomains'])) {
@@ -567,7 +575,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($this->_config['alloweddomains'], TRUE));
                 
                 if ($_throwException) {
-                    throw new Tinebase_Exception_UnexpectedValue('Email address not in allowed domains!');
+                    throw new Tinebase_Exception_UnexpectedValue("Emails domainpart $domain is not in the list of allowed domains! " . implode(',', $this->_config['alloweddomains']));
                 } else {
                     $result = false;
                 }

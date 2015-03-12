@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -15,7 +15,7 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
+class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * dbmail config
@@ -24,7 +24,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      */
     protected $_config = array(
         'encryptionType'    => 'md5',
-        'emailGID'            => null,
+        'emailGID'          => null,
         'domain'            => null
     );
     
@@ -48,8 +48,6 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
     protected $_requiredObjectClass = array(
         'dbmailUser'
     );
-    
-    protected $_backendType = Tinebase_Config::IMAP;
     
     /**
      * the constructor

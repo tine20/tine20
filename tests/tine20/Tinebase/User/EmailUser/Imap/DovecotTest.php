@@ -57,7 +57,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     protected function setUp()
     {
         $this->_config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        if (!isset($this->_config['backend']) || !(ucfirst($this->_config['backend']) == Tinebase_EmailUser::DOVECOT_IMAP) || $this->_config['active'] != true) {
+        if (!isset($this->_config['backend']) || !('Imap_' . ucfirst($this->_config['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $this->_config['active'] != true) {
             $this->markTestSkipped('Dovecot MySQL backend not configured or not enabled');
         }
         
@@ -113,7 +113,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailLastLogin'  => null,
             'emailMailSize'   => 0,
             #'emailSieveQuota' => 0,
-            'emailSieveSize'  => null
+            'emailSieveSize'  => null,
+            'emailPort'       => 143,
+            'emailSecure'     => 'tls',
+            'emailHost'       => 'localhost'
         ), $this->_objects['user']->imapUser->toArray());
         
         return $this->_objects['user'];
@@ -137,13 +140,16 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(array(
             'emailUserId'      => $this->_objects['user']->getId(),
             'emailUsername'    => $this->_objects['user']->imapUser->emailUsername,
-            'emailMailQuota'   => 600,
+            'emailMailQuota'   => '600',
             'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'         => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'   => null,
             'emailMailSize'    => 0,
             #'emailSieveQuota'  => 0,
-            'emailSieveSize'   => null
+            'emailSieveSize'   => null,
+            'emailPort'        => 143,
+            'emailSecure'      => 'tls',
+            'emailHost'        => 'localhost'
         ), $this->_objects['user']->imapUser->toArray());
     }
     

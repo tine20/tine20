@@ -360,6 +360,16 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function getTestRecord()
     {
+        $testconfig = Zend_Registry::get('testConfig');
+        
+        if ($testconfig && isset($testconfig->maildomain)) {
+            $domain = $testconfig->maildomain;
+        } else if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+            list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
+        } else {
+             $domain = 'tine20.org';
+        }
+        
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',
@@ -367,14 +377,9 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
-            'accountEmailAddress'   => 'phpunit@tine20.org'
+            'accountEmailAddress'   => 'phpunit@' . $domain
         ));
         
         return $user;
     }
-}       
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_User_SqlTest::main') {
-    Tinebase_User_SqlTest::main();
 }

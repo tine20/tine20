@@ -70,18 +70,26 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql
         'emailLastLogin',
     );
     
+    protected $_defaults = array(
+        'emailPort'   => 143,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS
+    );
+    
+    /**
+     * subconfig for user email backend (for example: dovecot)
+     * 
+     * @var string
+     */
+    protected $_subconfigKey = 'dovecotcombined';
+    
     /**
      * the constructor
      */
     public function __construct(array $_options = array())
     {
-        $this->_configKey = Tinebase_Config::IMAP;
-        $this->_subconfigKey = 'dovecotcombined';
-        
         parent::__construct($_options);
         
         // set domain from imap config
-        $emailConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
         $this->_config['domain'] = !empty($emailConfig['domain']) ? $emailConfig['domain'] : null;
     }
     

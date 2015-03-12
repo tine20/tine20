@@ -130,13 +130,27 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      */
     public function getInterval(Tinebase_DateTime $date = NULL)
     {
+        if ($date != NULL) {
+            $date = clone $date;
+        } elseif($this->_referenceDate != NULL) {
+            $date = clone $this->_referenceDate;
+        }
+        if ($date != NULL) {
+            $date->setDate($date->format('Y'), $date->format('m'), 1);
+            // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
+            $date->setTimezone(Tinebase_Core::getUserTimezone());
+            $date->setTime(0,0,0);
+            if ($this->billing_point == 'begin') {
+                $date->addMonth($this->interval);
+            }
+        }
+        
         if (! $this->last_autobill) {
             if (! $this->start_date) {
                 $from = clone $this->_referenceContract->start_date;
             } else {
                 $from = clone $this->start_date;
             }
-             
         } else {
             $from = clone $this->last_autobill;
             if ($this->billing_point == 'begin') {
@@ -145,11 +159,17 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         }
         
         $from->setDate($from->format('Y'), $from->format('m'), 1);
+        // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
         $from->setTimezone(Tinebase_Core::getUserTimezone());
         $from->setTime(0,0,0);
         
         $to = clone $from;
-        $to->addMonth($this->interval);
+        do {
+            $to->addMonth($this->interval);
+        } while($date != NULL && $to->isEarlier($date)) ;
+        if ($this->billing_point == 'end' && $to->isLater($date)) {
+            $to->subMonth($this->interval);
+        }
         $to->subSecond(1);
         
         return array($from, $to);
@@ -169,10 +189,12 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         list($from, $to) = $this->getInterval();
         $this->_billables = array();
         
+        // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
         $this->setTimezone(Tinebase_Core::getUserTimezone());
         
         while($from < $to) {
             $this->_billables[$from->format('Y-m')] = array(clone $this);
+            // 1 or interval?!? should show up every month as a position, so 1! NOT interval
             $from->addMonth(1);
         }
     }
@@ -204,18 +226,22 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
              } else {
                  $nextBill = clone $this->start_date;
              }
+             $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
              if ($this->billing_point == 'end') {
                 $nextBill->addMonth($this->interval);
              }
              
          } else {
              $nextBill = clone $this->last_autobill;
+             $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
              $nextBill->addMonth($this->interval);
          }
-
-         $nextBill->setTimeZone(Tinebase_Core::getUserTimezone());
          
-         return $nextBill < $date;
+         // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
+         $nextBill->setTimeZone(Tinebase_Core::getUserTimezone());
+         $nextBill->setTime(0,0,0);
+         
+         return $date->isLaterOrEquals($nextBill);
      }
      
      /**
@@ -280,9 +306,6 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      */
     protected function _setFromJson(array &$_data)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' json data: ' . print_r($_data, true));
-        
         // sanitize product id if it is an array
         if (is_array($_data['product_id']) && isset($_data['product_id']['id']) ) {
             $_data['product_id'] = $_data['product_id']['id'];
