@@ -41,7 +41,7 @@ class Tinebase_AccountTest extends TestCase
                 'accountPrimaryGroup' => Tinebase_Core::getUser()->accountPrimaryGroup,
                 'accountLastName'     => 'Tine 2.0',
                 'accountFirstName'    => 'PHPUnit',
-                'accountEmailAddress' => 'phpunit@metaways.de'
+                'accountEmailAddress' => 'phpunit@' . $this->_getMailDomain()
             )
         ));
         

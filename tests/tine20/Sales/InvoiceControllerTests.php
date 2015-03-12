@@ -270,14 +270,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createFullFixtures();
         
         $date = clone $this->_referenceDate;
-        $i = 0;
+        $date->addMonth(12);
         
-        // the whole year, 12 months
-        while ($i < 12) {
-            $result = $this->_invoiceController->createAutoInvoices($date);
-            $date->addMonth(1);
-            $i++;
-        }
+        $this->_invoiceController->createAutoInvoices($date);
         
         $paController = Sales_Controller_ProductAggregate::getInstance();
         $productAggregates = $paController->getAll();
@@ -520,24 +515,18 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         )));
         
         $startDate = clone $this->_referenceDate;
-        // the whole year, 12 months
-        $i=0;
-        
         $startDate->addDay(5);
+        $startDate->addMonth(24);
         
-        while ($i < 24) {
-            $startDate->addMonth(1);
-            $result = $this->_invoiceController->createAutoInvoices($startDate);
-            $this->assertEquals(1, $result['created_count']);
-            $i++;
-        }
+        $result = $this->_invoiceController->createAutoInvoices($startDate);
+        $this->assertEquals(25, $result['created_count']);
         
         $invoices = $this->_invoiceController->getAll('start_date');
         $firstInvoice = $invoices->getFirstRecord();
         $this->assertInstanceOf('Tinebase_DateTime', $firstInvoice->start_date);
         $this->assertEquals('0101', $firstInvoice->start_date->format('md'));
         
-        $this->assertEquals(24, $invoices->count());
+        $this->assertEquals(25, $invoices->count());
         
         $filter = new Sales_Model_InvoicePositionFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'in', 'value' => $invoices->getArrayOfIds())));
@@ -561,13 +550,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertEquals($invoice->end_date->format('Y-m'), $pos->month);
         }
         
-        $this->assertEquals(24, $invoicePositions->count());
+        $this->assertEquals(25, $invoicePositions->count());
         
         $this->assertEquals($this->_referenceYear . '-01', $invoicePositions->getFirstRecord()->month);
         
         $invoicePositions->sort('month', 'DESC');
         
-        $this->assertEquals($this->_referenceYear + 1 . '-12', $invoicePositions->getFirstRecord()->month);
+        $this->assertEquals($this->_referenceYear + 2 . '-01', $invoicePositions->getFirstRecord()->month);
     }
     
     /**
@@ -673,12 +662,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->_invoiceController->delete($invoice);
         }
         
-        $testDate = clone $this->_referenceDate;
-        
         $productAggregate = $paController->get($productAggregate->getId());
         $productAggregate->setTimezone(Tinebase_Core::getUserTimezone());
         
-        $this->assertEquals(NULL, $productAggregate->last_autobill);
+        $this->assertEquals($this->_referenceDate, $productAggregate->last_autobill);
         
         // create 6 invoices again - each month one invoice - last autobill must be increased each month
         for ($i = 1; $i < 7; $i++) {
@@ -1023,7 +1010,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     
         $result = $this->_invoiceController->createAutoInvoices($date);
     
-        $this->assertEquals(3, count($result['created']));
+        $this->assertEquals(5, count($result['created']));
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
     
@@ -1146,7 +1133,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     
         $result = $this->_invoiceController->createAutoInvoices($date);
     
-        $this->assertEquals(3, count($result['created']));
+        $this->assertEquals(5, count($result['created']));
         
         $invoice = $this->_invoiceController->get($result['created'][0]);
         $invoice->cleared = 'CLEARED';

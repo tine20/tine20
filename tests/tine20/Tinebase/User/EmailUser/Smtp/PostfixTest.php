@@ -102,7 +102,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
-
+        
         $this->assertTrue($testUser instanceof Tinebase_Model_FullUser);
         $this->assertTrue(isset($testUser->smtpUser), 'no smtpUser data found in ' . print_r($testUser->toArray(), TRUE));
         $this->assertEquals(array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain), $testUser->smtpUser->emailForwards, 'forwards not found');

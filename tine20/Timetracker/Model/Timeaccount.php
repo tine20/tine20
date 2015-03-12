@@ -148,11 +148,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @param mixed $_data
      * @param bool $_bypassFilters
      * @param mixed $_convertDates
-     * @return void
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
-        $this->_filters['budget']  = array('Digits', new Zend_Filter_Empty(NULL));
+        $this->_filters['budget']  = new Zend_Filter_Empty(0);
         $this->_filters['price'] = array(new Zend_Filter_PregReplace('/,/', '.'), new Zend_Filter_Empty(NULL));
         $this->_filters['is_open'] = new Zend_Filter_Empty(0);
         $this->_filters['invoice_id']  = array(new Zend_Filter_Empty(NULL));
@@ -295,6 +294,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             
         } else {
             $filter = $this->_getBillableTimesheetsFilter($date);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' TS Filter: ' . print_r($filter->toArray(), true));
             $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
             
             foreach($timesheets as $timesheet) {
@@ -346,7 +347,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             $filter = $this->_getBillableTimesheetsFilter($date, $contract);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Use filter in "isBillable"-Method of Timetracker_Model_Timeaccount: ' . print_r($filter->toArray(), 1));
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Use filter in "isBillable"-Method of Timetracker_Model_Timeaccount: '
+                    . print_r($filter->toArray(), 1));
             }
             
             $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter, $pagination, FALSE, /* $_onlyIds = */ TRUE);
@@ -401,12 +404,18 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             // set this ta billed
             $this->invoice_id = $invoice->getId();
             Timetracker_Controller_Timeaccount::getInstance()->update($this, FALSE);
-            
-            // set all ts of this ta billed
-            $filter = new Timetracker_Model_TimesheetFilter(array());
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' TA got budget: set all unbilled TS of this TA billed');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' TA:' . print_r($this->toArray(), true));
+
+            $filter = new Timetracker_Model_TimesheetFilter(array(
+                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+            ), 'AND');
+            // NOTE: using text filter here for id (operator equals is not defined in default timeaccount_id filter)
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
-            
-            
             $tsController->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
         } else {
             $ids = $this->_getIdsOfBillables();
@@ -414,7 +423,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             if (! empty($ids)) {
                 $filter = new Timetracker_Model_TimesheetFilter(array());
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $ids)));
-                
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Bill ' . count($ids) . ' TS');
+
                 $tsController->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
             }
         }

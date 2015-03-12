@@ -15,15 +15,15 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
+class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Smtp_Interface
 {
     /**
      * destination table name with prefix
      *
      * @var string
      */
-    protected $_destinationTable = NULL;
-    protected $_forwardTable = 'forwards';
+    protected $_destinationTable = null;
+    protected $_forwardsTable    = null;
     
     /**
      * postfix config
@@ -34,6 +34,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
         'prefix'            => '',
         'userTable'         => 'mailboxes',
         'destinationTable'  => 'aliases',
+        'forwardsTable'     => 'forwards',
         'domain'            => null,
         'alloweddomains'    => array()
     );
@@ -52,40 +53,45 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
         'emailForwards'     => 'forwards'
     );
     
+    protected $_defaults = array(
+        'emailPort'   => 25,
+        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailAuth'   => 'plain'
+    );
+    
     /**
      * the constructor
      */
     public function __construct(array $_options = array())
     {
-        $this->_configKey    = Tinebase_Config::SMTP;
-
         parent::__construct($_options);
         
-        $smtpConfig = Tinebase_Config::getInstance()->get($this->_configKey, new Tinebase_Config_Struct())->toArray();
-        
         // set domain from smtp config
-        $this->_config['domain'] = !empty($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : null;
+        $this->_config['domain'] = !empty($this->_config['primarydomain']) ? $this->_config['primarydomain'] : null;
         
         // add allowed domains
-        if (! empty($smtpConfig['primarydomain'])) {
-            $this->_config['alloweddomains'] = array($smtpConfig['primarydomain']);
-            if (! empty($smtpConfig['secondarydomains'])) {
+        if (! empty($this->_config['primarydomain'])) {
+            $this->_config['alloweddomains'] = array($this->_config['primarydomain']);
+            if (! empty($this->_config['secondarydomains'])) {
                 // merge primary and secondary domains and split secondary domains + trim whitespaces
-                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $smtpConfig['secondarydomains']));
+                $this->_config['alloweddomains'] = array_merge($this->_config['alloweddomains'], preg_split('/\s*,\s*/', $this->_config['secondarydomains']));
             } 
         }
         
         $this->_destinationTable = $this->_config['prefix'] . $this->_config['destinationTable'];
+        $this->_forwardsTable    = $this->_config['prefix'] . $this->_config['forwardsTable'];
     }
     
     /**
      * set database connection shared with Tinebase_EmailUser::DOVECOT_IMAP_COMBINED backend
-     * 
-     * @param array $_config
      */
-    protected function _getDb($_config)
+    protected function _getDb()
     {
-        $dovecotCombined = Tinebase_EmailUser::factory(Tinebase_EmailUser::DOVECOT_COMBINED);
+        $dovecotCombined = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        
+        if (! $dovecotCombined instanceof Tinebase_EmailUser_Imap_DovecotCombined) {
+            throw new Tinebase_Exception_UnexpectedValue('IMAP backend must be instance of Tinebase_EmailUser_Imap_DovecotCombined');
+        }
         
         $this->_db = $dovecotCombined->getDb();
     }
@@ -115,7 +121,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
          
             // select forwards from forwards table
             ->joinLeft(
-                /* table  */ array('forwards' => $this->_forwardTable),
+                /* table  */ array('forwards' => $this->_forwardsTable),
                 /* on     */ $userIDMap . ' = ' . $this->_db->quoteIdentifier('forwards.mailbox_id'),
                 /* select */ array($this->_propertyMapping['emailForwards'] => $this->_dbCommand->getAggregate('forwards.forward')))
             
@@ -203,7 +209,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
         );
         
         $this->_db->delete($this->_destinationTable, $where);
-        $this->_db->delete($this->_forwardTable, $where);
+        $this->_db->delete($this->_forwardsTable, $where);
     }
     
     /**
@@ -262,7 +268,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql
         foreach ($_smtpSettings[$this->_propertyMapping['emailForwards']] as $forwardAddress) {
             if (! empty($forwardAddress)) {
                 // create email -> forward
-                $this->_db->insert($this->_forwardTable, array(
+                $this->_db->insert($this->_forwardsTable, array(
                     'id'         => Tinebase_Record_Abstract::generateUID(),
                     'mailbox_id' => $_smtpSettings[$this->_propertyMapping['emailUserId']],
                     'forward'    => $forwardAddress

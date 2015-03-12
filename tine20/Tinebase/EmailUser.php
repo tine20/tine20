@@ -22,88 +22,102 @@
 class Tinebase_EmailUser
 {
     /**
-     * dbmail backend const
+     * Imap Cyrus backend const
      * 
      * @staticvar string
      */
-    const DBMAIL    = 'Dbmail';
+    const IMAP_CYRUS            = 'Imap_Cyrus';
     
     /**
-     * Dovecot imap backend const
+     * Imap standard backend const
      * 
      * @staticvar string
      */
-    const DOVECOT_IMAP    = 'Dovecot_imap';
+    const IMAP_STANDARD         = 'Imap_Standard';
     
     /**
-     * Dovecot imap combined backend const
+     * Imap DBmail backend const
      * 
      * @staticvar string
      */
-    const DOVECOT_COMBINED    = 'Dovecotcombined';
+    const IMAP_DBMAIL           = 'Imap_Dbmail';
     
     /**
-     * postfix backend const
+     * Imap Dovecot backend const
      * 
      * @staticvar string
      */
-    const POSTFIX    = 'Postfix';
+    const IMAP_DOVECOT          = 'Imap_Dovecot_imap';
     
     /**
-     * postfix backend const
+     * Imap Dovecot combined backend const
      * 
      * @staticvar string
      */
-    const POSTFIX_COMBINED    = 'Postfixcombined';
+    const IMAP_DOVECOT_COMBINED = 'Imap_Dovecotcombined';
     
     /**
-     * imap ldap backend const
+     * Smtp Postfix backend const
      * 
      * @staticvar string
      */
-    const LDAP_IMAP      = 'Ldap_imap';
+    const SMTP_POSTFIX          = 'Smtp_Postfix';
     
     /**
-     * smtp ldap backend const
+     * Smtp Postfix backend const
      * 
      * @staticvar string
      */
-    const LDAP_SMTP      = 'Ldapsmtp';
+    const SMTP_POSTFIX_COMBINED = 'Smtp_Postfixcombined';
     
     /**
-     * smtp ldap mail attribute backend const
+     * Imap ldap backend const
      * 
      * @staticvar string
      */
-    const LDAP_SMTP_MAIL      = 'Ldapsmtpmail';
+    const IMAP_LDAP             = 'Imap_Ldap_imap';
     
     /**
-     * smtp ldap backend const
+     * Smtp Ldap backend const
      * 
      * @staticvar string
      */
-    const LDAP_SMTP_QMAIL      = 'Ldapsmtpqmail';
+    const SMTP_LDAP             = 'Smtp_Ldapsmtp';
     
     /**
-     * cyrus backend const
+     * Smtp Ldap mail attribute backend const
      * 
      * @staticvar string
      */
-    const CYRUS    = 'Cyrus';
+    const SMTP_LDAP_MAIL        = 'Smtp_Ldapsmtpmail';
     
     /**
-     * imap standard backend const
+     * Smtp Ldap backend const
      * 
      * @staticvar string
      */
-    const IMAP_STANDARD      = 'Standard';
+    const SMTP_LDAP_QMAIL       = 'Smtp_Ldapsmtpqmail';
     
     /**
-     * smtp standard backend const
+     * univention smtp ldap backend const
      * 
      * @staticvar string
      */
-    const SMTP_STANDARD      = 'Standard';
+    const SMTP_LDAP_UNIVENTION  = 'Smtp_Ldap_univention';
+
+    /**
+     * univention imap ldap backend const
+     * 
+     * @staticvar string
+     */
+    const IMAP_LDAP_UNIVENTION  = 'Imap_Ldap_univention';
+
+    /**
+     * Smtp standard backend const
+     * 
+     * @staticvar string
+     */
+    const SMTP_STANDARD         = 'Smtp_Standard';
     
     /**
      * supported backends
@@ -111,18 +125,20 @@ class Tinebase_EmailUser
      * @var array
      */
     protected static $_supportedBackends = array(
-        self::CYRUS            => 'Tinebase_EmailUser_Imap_Cyrus',
-        self::DBMAIL           => 'Tinebase_EmailUser_Imap_Dbmail',
-        self::DOVECOT_IMAP     => 'Tinebase_EmailUser_Imap_Dovecot',
-        self::DOVECOT_COMBINED => 'Tinebase_EmailUser_Imap_DovecotCombined',
-        self::IMAP_STANDARD    => 'Tinebase_EmailUser_Imap_Standard',
-        self::LDAP_IMAP        => 'Tinebase_EmailUser_Imap_LdapDbmailSchema',
-        self::LDAP_SMTP        => 'Tinebase_EmailUser_Smtp_LdapDbmailSchema',
-        self::LDAP_SMTP_MAIL   => 'Tinebase_EmailUser_Smtp_LdapMailSchema',
-        self::LDAP_SMTP_QMAIL  => 'Tinebase_EmailUser_Smtp_LdapQmailSchema',
-        self::POSTFIX          => 'Tinebase_EmailUser_Smtp_Postfix',
-        self::POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
-        self::SMTP_STANDARD    => 'Tinebase_EmailUser_Smtp_Standard',
+        self::IMAP_CYRUS            => 'Tinebase_EmailUser_Imap_Cyrus',
+        self::IMAP_DBMAIL           => 'Tinebase_EmailUser_Imap_Dbmail',
+        self::IMAP_DOVECOT          => 'Tinebase_EmailUser_Imap_Dovecot',
+        self::IMAP_DOVECOT_COMBINED => 'Tinebase_EmailUser_Imap_DovecotCombined',
+        self::IMAP_STANDARD         => 'Tinebase_EmailUser_Imap_Standard',
+        self::IMAP_LDAP             => 'Tinebase_EmailUser_Imap_LdapDbmailSchema',
+        self::IMAP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Imap_LdapUniventionMailSchema',
+        self::SMTP_LDAP             => 'Tinebase_EmailUser_Smtp_LdapDbmailSchema',
+        self::SMTP_LDAP_MAIL        => 'Tinebase_EmailUser_Smtp_LdapMailSchema',
+        self::SMTP_LDAP_QMAIL       => 'Tinebase_EmailUser_Smtp_LdapQmailSchema',
+        self::SMTP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Smtp_LdapUniventionMailSchema',
+        self::SMTP_POSTFIX          => 'Tinebase_EmailUser_Smtp_Postfix',
+        self::SMTP_POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
+        self::SMTP_STANDARD         => 'Tinebase_EmailUser_Smtp_Standard',
     );
     
     /**
@@ -162,7 +178,7 @@ class Tinebase_EmailUser
      * @param string $configType
      * @return Tinebase_User_Plugin_Abstract
      */
-    public static function getInstance($configType = Tinebase_Config::IMAP) 
+    public static function getInstance($configType = Tinebase_Config::IMAP)
     {
         $type = self::getConfiguredBackend($configType);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $type);
@@ -210,7 +226,7 @@ class Tinebase_EmailUser
             throw new Tinebase_Exception_NotFound("No backend in config for type $configType found.");
         }
         
-        $backend = ucfirst(strtolower($config['backend']));
+        $backend = ucfirst(strtolower($configType)) . '_' . ucfirst(strtolower($config['backend']));
         
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");

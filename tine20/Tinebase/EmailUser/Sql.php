@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle
  * */
 
@@ -66,8 +66,12 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
      */
     public function __construct(array $_options = array())
     {
-        if ($this->_configKey === NULL) {
-            throw new Tinebase_Exception_UnexpectedValue('Need config keys for this backend');
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $this->_configKey = Tinebase_Config::SMTP;
+        } else if ($this instanceof Tinebase_EmailUser_Imap_Interface) {
+            $this->_configKey = Tinebase_Config::IMAP;
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('Plugin must be instance of Tinebase_EmailUser_Smtp_Interface or Tinebase_EmailUser_Imap_Interface');
         }
         
         // get email user backend config options (host, dbname, username, password, port)
@@ -75,14 +79,17 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         
         // merge _config and email backend config
         if ($this->_subconfigKey) {
-            $this->_config = array_merge($emailConfig[$this->_subconfigKey], $this->_config);
+            // flatten array
+            $emailConfig = array_merge($emailConfig[$this->_subconfigKey], $emailConfig);
         }
+        // merge _config and email backend config
+        $this->_config = array_merge($this->_config, $emailConfig);
         
         // _tablename (for example "dovecot_users")
         $this->_userTable = $this->_config['prefix'] . $this->_config['userTable'];
         
         // connect to DB
-        $this->_getDB($this->_config);
+        $this->_getDB();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
@@ -186,27 +193,52 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_Abstract
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' ' . $this->_subconfigKey . ' config for user ' . $userId . ' not found!');
-            return;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
         
-        // convert data to Tinebase_Model_EmailUser       
-        $emailUser = $this->_rawDataToRecord($queryResult);
+        // convert data to Tinebase_Model_EmailUser
+        $emailUser = $this->_rawDataToRecord((array)$queryResult);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
         // modify/correct user name
-        // set emailUsername to Tine accout login name and append domain for login purposes if set
-        $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
+        // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
+        if (empty($emailUser->emailUsername)) {
+            $emailUser->emailUsername = $this->_getEmailUserName($_user);
+        }
         
-        $userProperty = $this->_configKey . 'User';
-        $_user->{$userProperty} = $emailUser;
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $_user->smtpUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
+        } else {
+            $_user->imapUser  = $emailUser;
+            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
+        }
+    }
+    
+    protected function _getConfiguredSystemDefaults()
+    {
+        $systemDefaults = array();
         
-        $_user->emailUser = isset($_user->emailUser) ? $_user->emailUser : null;
-        $imapUser = ($this->_configKey === Tinebase_Config::SMTP) ? $_user->emailUser : clone($emailUser);
-        $smtpUser = ($this->_configKey === Tinebase_Config::SMTP) ? clone($emailUser) : $_user->emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge($imapUser, $smtpUser);
+        $hostAttribute = ($this instanceof Tinebase_EmailUser_Imap_Interface) ? 'host' : 'hostname';
+        if (!empty($this->_config[$hostAttribute])) {
+            $systemDefaults['emailHost'] = $this->_config[$hostAttribute];
+        }
+        
+        if (!empty($this->_config['port'])) {
+            $systemDefaults['emailPort'] = $this->_config['port'];
+        }
+        
+        if (!empty($this->_config['ssl'])) {
+            $systemDefaults['emailSecure'] = $this->_config['ssl'];
+        }
+        
+        if (!empty($this->_config['auth'])) {
+            $systemDefaults['emailAuth'] = $this->_config['auth'];
+        }
+        
+        return $systemDefaults;
     }
     
     /**

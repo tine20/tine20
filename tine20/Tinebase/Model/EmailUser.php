@@ -52,6 +52,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailAddress'      => array('allowEmpty' => true),
     // dbmail username (tine username + dbmail domain)
         'emailUsername'     => array('allowEmpty' => true),
+        'emailHost'         => array('allowEmpty' => true),
+        'emailPort'         => array('allowEmpty' => true),
+        'emailSecure'       => array('allowEmpty' => true),
+        'emailAuth'         => array('allowEmpty' => true)
     );
     
     /**
@@ -74,10 +78,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
         $this->_filters['emailForwardOnly'] = new Zend_Filter_Empty(0);
-        $this->_filters['emailMailSize'] = new Zend_Filter_Empty(0);
-        $this->_filters['emailMailQuota'] = new Zend_Filter_Empty(0);
-        $this->_filters['emailForwards'] = new Zend_Filter_Empty(array());
-        $this->_filters['emailAliases'] = new Zend_Filter_Empty(array());
+        $this->_filters['emailMailSize']    = new Zend_Filter_Empty(0);
+        $this->_filters['emailMailQuota']   = new Zend_Filter_Empty(0);
+        $this->_filters['emailForwards']    = new Zend_Filter_Empty(array());
+        $this->_filters['emailAliases']     = new Zend_Filter_Empty(array());
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);
     }

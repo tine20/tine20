@@ -268,7 +268,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      /**
      * renders and send to browser one captcha image
      *
-     * @return void
+     * @return array
      */
     public function makeCaptcha()
     {
@@ -278,7 +278,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * renders and send to browser one captcha image
      *
-     * @return void
+     * @return array
      */
     protected function _makeImage()
     {
@@ -299,7 +299,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         try {
             $image = @imagecreate($width, $height);
             /* set the colours */
-            $background_color = imagecolorallocate($image, 255, 255, 255);
             $text_color = imagecolorallocate($image, 20, 40, 100);
             $noise_color = imagecolorallocate($image, 100, 120, 180);
             /* generate random dots in background */
@@ -424,6 +423,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $this->initUser($user, /* $fixCookieHeader = */ false);
             return true;
         }
+
+        return false;
     }
     
     /**
