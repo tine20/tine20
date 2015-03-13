@@ -25,14 +25,14 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
      * @var string name of model this filter group is designed for
      */
     protected $_modelName = 'Calendar_Model_Event';
-    
+
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
     protected $_className = 'Calendar_Model_EventFilter';
-    
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -54,7 +54,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
             'applicationName' => 'Calendar',
         )),
         'grants'                => array('filter' => 'Calendar_Model_GrantFilter'),
-        // NOTE using dtstart and dtend filters may not lead to the desired result. 
+        // NOTE using dtstart and dtend filters may not lead to the desired result.
         //      you need to use the period filter to filter for events in a given period
         'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'dtend'                 => array('filter' => 'Tinebase_Model_Filter_DateTime'),
@@ -62,16 +62,15 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'rrule'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_Date'),
         'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'deleted_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'         => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
+        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
     );
 }
