@@ -53,6 +53,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      * constructs a new importer from given config
      * 
      * @param array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function __construct(array $_options = array())
     {
@@ -77,7 +78,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         
         $this->_setController();
     }
-    
+
     /**
      * get raw data of a single record
      * 
@@ -134,6 +135,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      *
      * @param array $_data
      * @return array
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _doMapping($_data)
     {
@@ -143,7 +145,11 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         if (! empty($this->_headline) && sizeof($this->_headline) == sizeof($_data)) {
             $_data_indexed = array_combine($this->_headline, $_data);
         }
-        
+
+        if (! isset($this->_options['mapping']['field']) || ! is_array($this->_options['mapping']['field'])) {
+            throw new Tinebase_Exception_UnexpectedValue('No field mapping defined');
+        }
+
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order

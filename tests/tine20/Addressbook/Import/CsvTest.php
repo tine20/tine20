@@ -4,37 +4,21 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Addressbook_Import_Csv
  */
-class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
+class Addressbook_Import_CsvTest extends ImportTestCase
 {
-    /**
-     * @var Addressbook_Import_Csv instance
-     */
-    protected $_instance = NULL;
-    
-    /**
-     * @var string $_filename
-     */
-    protected $_filename = NULL;
-    
-    /**
-     * @var boolean
-     */
-    protected $_deleteImportFile = TRUE;
-    
-    protected $_deletePersonalContacts = FALSE;
-    
+    protected $_deletePersonalContacts = false;
+
+    protected $_importerClassName = 'Addressbook_Import_Csv';
+    protected $_exporterClassName = 'Addressbook_Export_Csv';
+    protected $_modelName = 'Addressbook_Model_Contact';
+
     /**
      * Runs the test methods of this class.
      *
@@ -173,7 +157,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImportCustomField()
     {
-        $customField = $this->_createCustomField();
+        $this->_createCustomField();
         
         // create/get new import/export definition with customfield
         $filename = dirname(__FILE__) . '/files/adb_google_import_csv_test.xml';
@@ -263,31 +247,6 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * import helper
-     * 
-     * @param array $_options
-     * @param string|Tinebase_Model_ImportExportDefinition $_definition
-     * @param Addressbook_Model_ContactFilter $_exportFilter
-     * @return array
-     */
-    protected function _doImport(array $_options, $_definition, Addressbook_Model_ContactFilter $_exportFilter = NULL)
-    {
-        $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
-        $this->_instance = Addressbook_Import_Csv::createFromDefinition($definition, $_options);
-        
-        // export first
-        if ($_exportFilter !== NULL) {
-            $exporter = new Addressbook_Export_Csv($_exportFilter, Addressbook_Controller_Contact::getInstance());
-            $this->_filename = $exporter->generate();
-        }
-        
-        // then import
-        $result = $this->_instance->importFile($this->_filename);
-        
-        return $result;
-    }
-    
-    /**
     * get custom field record
     * 
     * @param string $name
@@ -334,7 +293,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->_filename = dirname(__FILE__) . '/files/import_duplicate_1.csv';
         $this->_deleteImportFile = FALSE;
         
-        $result = $this->_doImport(array(), $definition);
+        $this->_doImport(array(), $definition);
         $this->_deletePersonalContacts = TRUE;
 
         $this->_filename = dirname(__FILE__) . '/files/import_duplicate_2.csv';

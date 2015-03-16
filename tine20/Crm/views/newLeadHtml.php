@@ -22,15 +22,15 @@
   </tr>
 <tr>
     <td><?php echo $this->lang_state ?></td>
-    <td><?php echo $this->leadState['leadstate'] ?></td>
+    <td><?php echo (isset($this->leadState['leadstate']) ? $this->leadState['leadstate'] : '') ?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_type ?></td>
-    <td><?php echo $this->leadType['leadtype'] ?></td>
+    <td><?php echo (isset($this->leadType['leadtype']) ? $this->leadType['leadtype'] : '') ?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_source ?></td>
-    <td><?php echo $this->leadSource['leadsource'] ?></td>
+    <td><?php echo (isset($this->leadSource['leadsource']) ? $this->leadSource['leadsource'] : '') ?></td>
   </tr>
   <tr>
     <td><?php echo $this->lang_start ?></td>

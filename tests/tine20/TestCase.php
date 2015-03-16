@@ -14,7 +14,7 @@
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Test class for Calendar_Backend_Sql
+ * Abstract test class
  * 
  * @package     Tests
  */
@@ -30,7 +30,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * usernames to be deleted (in sync backend)
      * 
-     * @var string
+     * @var array
      */
     protected $_usernamesToDelete = array();
     
@@ -394,7 +394,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $app = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
         $rolesOfUser = Tinebase_Acl_Roles::getInstance()->getRoleMemberships(Tinebase_Core::getUser()->getId());
         $this->_invalidateRolesCache = true;
-        
+
+        $roleRights = array();
         foreach ($rolesOfUser as $roleId) {
             $roleRights[$roleId] = $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($roleId);
             foreach ($rights as $idx => $right) {
