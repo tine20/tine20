@@ -332,6 +332,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
             }
             
+            $product = $this->_cachedProducts->getById($productAggregate->product_id);
+            
+            if (! $product) {
+                $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+                $this->_cachedProducts->addRecord($product);
+            }
+            
             if (!$productEnded) {
                 if (NULL != $productAggregate->end_date && $nextBill->isLater($productAggregate->end_date)) {
                     $nextBill = clone $productAggregate->end_date;
@@ -343,13 +350,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 
                 $nextBill->setTime(0,0,0);
-                
-                $product = $this->_cachedProducts->getById($productAggregate->product_id);
-                
-                if (! $product) {
-                    $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
-                    $this->_cachedProducts->addRecord($product);
-                }
             }
             
             // find out if this model has to be billed or skipped
