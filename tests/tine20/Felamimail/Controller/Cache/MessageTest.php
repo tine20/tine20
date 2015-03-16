@@ -118,7 +118,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         }
         
         // reset user if changed
-        if (Tinebase_Core::getUser()->getId() !== $this->_testUser->getId()) {
+        if (is_object($this->_testUser) && Tinebase_Core::getUser()->getId() !== $this->_testUser->getId()) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
         }
     }
@@ -202,7 +202,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
         
         // update message cache
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 10, 1);
         $loopCount = 1;
         do {
             $updatedFolder = $this->_controller->updateCache($this->_folder, 10, 1);
@@ -239,7 +238,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdateCountersOnly()
     {
         // update message cache
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
+        $this->_controller->updateCache($this->_folder, 30, 1);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
