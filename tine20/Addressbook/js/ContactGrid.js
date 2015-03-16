@@ -228,6 +228,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Addressbook.ContactGridPanel.superclass.initActions.call(this);
     },
+
+    getDefaultContainer: function() {
+        this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook');
+    },
     
     /**
      * add custom items to action toolbar
@@ -263,34 +267,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return items;
     },
     
-    /**
-     * import contacts
-     * 
-     * @param {Button} btn 
-     * 
-     * TODO generalize this & the import button
-     */
-    onImport: function(btn) {
-        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
-            appName: 'Addressbook',
-            modelName: 'Contact',
-            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook'),
-            
-            // update grid after import
-            listeners: {
-                scope: this,
-                'finish': function() {
-                    this.loadGridData({
-                        preserveCursor:     false, 
-                        preserveSelection:  false, 
-                        preserveScroller:   false,
-                        removeStrategy:     'default'
-                    });
-                }
-            }
-        });
-    },
-        
     /**
      * tid renderer
      * 

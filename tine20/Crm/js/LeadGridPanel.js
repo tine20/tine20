@@ -36,13 +36,13 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @cfg {Tine.Crm.Model.Lead} recordClass
      */
     recordClass: Tine.Crm.Model.Lead,
-    
+
     /**
      * eval grants
      * @cfg {Boolean} evalGrants
      */
     evalGrants: true,
-    
+
     /**
      * grid specific
      * @private
@@ -54,15 +54,15 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
     },
-    
-    
+
+
     /**
      * returns view row class (scope is this.grid.view)
      */
-    getViewRowClass: function(record, index, rowParams, store) {
-        
+    getViewRowClass: function (record, index, rowParams, store) {
+
         var className = Tine.Crm.LeadGridPanel.superclass.getViewRowClass(record, index, rowParams, store);
-        
+
         var now = new Date();
         if (this.endingLeadStateIds.indexOf(record.get('leadstate_id')) == -1) {
             var rsd = record.get('resubmission_date');
@@ -71,46 +71,57 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 className += ' crm-highlight-task';
             }
         }
-        
+
         return className;
     },
-    
+
     /**
      * inits this cmp
      * @private
      */
-    initComponent: function() {
+    initComponent: function () {
         this.recordProxy = Tine.Crm.leadBackend;
-        
+
         this.gridConfig.cm = this.getColumnModel();
-        
-        this.defaultFilters = [ {field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()} ];
-        
+
+        this.defaultFilters = [{field: 'leadstate_id', operator: 'notin', value: Tine.Crm.LeadState.getClosedStatus()}];
+
         this.detailsPanel = new Tine.Crm.LeadGridDetailsPanel({
             grid: this
         });
-        
+
         Tine.Crm.LeadGridPanel.superclass.initComponent.call(this);
-        
+
         this.grid.view.endingLeadStateIds = Tine.Crm.getEndedLeadStateIds();
     },
-    
+
     /**
      * add custom items to action toolbar
-     * 
+     *
      * @return {Object}
      */
-    getActionToolbarItems: function() {
-        return [
-            Ext.apply(new Ext.SplitButton(this.actions_exportLead), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top',
-                arrowAlign:'right'
-            })
+    getActionToolbarItems: function () {
+        var items = [
+            this.actions_export = new Ext.SplitButton(this.actions_exportLead)
         ];
+        if (this.app.featureEnabled('featureLeadImport')) {
+            items.push(this.actions_import = new Ext.Action({
+                text: this.app.i18n._('Import leads'),
+                disabled: false,
+                handler: this.onImport,
+                iconCls: 'action_import',
+                scope: this,
+                allowMultiple: true
+            }));
+        }
+        return [{
+            xtype: 'buttongroup',
+            columns: 1,
+            frame: false,
+            items: items
+        }];
     },
-    
+
     /**
      * add custom items to context menu
      * 
@@ -250,7 +261,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 /**
  * contact column renderer
  * 
- * @param       {String} value
+ * @param       {String} data
  * @param       {String} type (CUSTOMER|PARTNER)
  * @return      {String}
  * 
