@@ -140,6 +140,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      *
      * @param  Tinebase_Model_User  $_user
      * @param  array                $_ldapEntry
+     * @return Tinebase_Model_User
      */
     protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
@@ -168,6 +169,8 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         }
         
         $_user->sambaSAM = new Tinebase_Model_SAMUser($accountArray);
+        
+        return $_user;
     }
     
     /**
