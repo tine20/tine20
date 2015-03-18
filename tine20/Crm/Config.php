@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -12,16 +12,49 @@
  * 
  * @package     Crm
  * @subpackage  Config
- * 
- * @todo add config settings/properties here
  */
 class Crm_Config extends Tinebase_Config_Abstract
 {
+    /**
+     * config key for enabled features / feature switch
+     *
+     * @var string
+     */
+    const ENABLED_FEATURES = 'features';
+
+    /**
+     * lead import feature
+     *
+     * @var string
+     */
+    const FEATURE_LEAD_IMPORT = 'featureLeadImport';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        /**
+         * enabled Crm features
+         */
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            //_('Enabled Features in Crm Application.')
+            'description'           => 'Enabled Features in Crm Application.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_LEAD_IMPORT => array(
+                    'label'         => 'Lead Import', //_('Lead Import')
+                    'description'   => 'Lead Import',
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_LEAD_IMPORT => false,
+            ),
+        ),
     );
     
     /**
