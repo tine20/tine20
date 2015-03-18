@@ -52,6 +52,10 @@
           "path": "js/"
         },
         {
+          "text": "YearView.js",
+          "path": "js/"
+        },
+        {
           "text": "GridView.js",
           "path": "js/"
         },
@@ -136,6 +140,10 @@
           "path": "js/Printer/"
         },
         {
+          "text": "YearView.js",
+          "path": "js/Printer/"
+        },
+        {
           "text": "ContactEventsGridPanel.js",
           "path": "js/"
         },
@@ -176,6 +184,10 @@
         },
         {
           "text": "monthviewpanel.css",
+          "path": "css/"
+        },
+        {
+          "text": "yearviewpanel.css",
           "path": "css/"
         },
         {

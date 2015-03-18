@@ -112,6 +112,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_SPLIT_VIEW = 'featureSplitView';
 
     /**
+     * FEATURE_YEAR_VIEW
+     *
+     * @var string
+     */
+    const FEATURE_YEAR_VIEW = 'featureYearView';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -270,11 +277,16 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'content'               => array(
                 self::FEATURE_SPLIT_VIEW => array(
                     'label'         => 'Calendar Split View', //_('Calendar Split View')
-                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee)
+                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee')
+                ),
+                self::FEATURE_YEAR_VIEW => array(
+                    'label'         => 'Calendar Year View', //_('Calendar Year View')
+                    'description'   => 'Adds year view to Calendar', //_('Adds year view to Calendar')
                 ),
             ),
             'default'               => array(
                 self::FEATURE_SPLIT_VIEW           => true,
+                self::FEATURE_YEAR_VIEW            => true,
             ),
         ),
 

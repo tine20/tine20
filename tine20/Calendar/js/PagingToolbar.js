@@ -453,3 +453,73 @@ Tine.Calendar.PagingToolbar.MonthPeriodPicker = Ext.extend(Tine.Calendar.PagingT
         };
     }
 });
+
+/**
+ * @class Tine.Calendar.PagingToolbar.YearPeriodPicker
+ * @extends Tine.Calendar.PagingToolbar.AbstractPeriodPicker
+ * @constructor
+ */
+Tine.Calendar.PagingToolbar.YearPeriodPicker = Ext.extend(Tine.Calendar.PagingToolbar.AbstractPeriodPicker, {
+    init: function() {
+        this.label = new Ext.form.Label({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Year'),
+            style: 'padding-right: 3px'
+        });
+        this.field = new Ext.form.TextField({
+            value: this.tb.dtStart.format('Y'),
+            width: 40,
+            cls: "x-tbar-page-number",
+            listeners: {
+                scope: this,
+                specialkey: this.onSelect,
+                blur: this.onSelect
+            }
+        });
+    },
+    onSelect: function(field, e) {
+        if (e && e.getKey() == e.ENTER) {
+            return field.blur();
+        }
+        var diff = field.getValue() - this.dtStart.format('Y'); 
+        if (diff !== 0) {
+            this.update(this.dtStart.add(Date.YEAR, diff ))
+            this.fireEvent('change', this, 'year', this.getPeriod());
+        }
+        
+    },
+    update: function(dtStart) {
+        this.dtStart = dtStart.clone();
+        if (this.field && this.field.rendered) {
+            this.field.setValue(dtStart.format('Y'));
+        }
+    },
+    render: function() {
+        this.tb.addField(this.label);
+        this.tb.addField(this.field);
+    },
+    hide: function() {
+        this.label.hide();
+        this.field.hide();
+    },
+    show: function() {
+        this.label.show();
+        this.field.show();
+    },
+    next: function() {
+        this.dtStart = this.dtStart.add(Date.YEAR, 1);
+        this.update(this.dtStart);
+    },
+    prev: function() {
+        this.dtStart = this.dtStart.add(Date.YEAR, -1);
+        this.update(this.dtStart);
+    },
+    getPeriod: function() {
+        var from = Date.parseDate(this.dtStart.format('Y') + '-01-01 00:00:00', Date.patterns.ISO8601Long);
+        return {
+            from: from,
+            until: from.add(Date.YEAR, 1)
+        };
+    }
+});
+
+

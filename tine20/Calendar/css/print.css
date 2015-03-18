@@ -177,10 +177,18 @@ div.page
 
 .cal-print-monthview .cal-print-daysview-day-untilseperator,
 .cal-print-monthview .cal-print-daysview-day-endtime {
-<<<<<<< HEAD
     display: none;
 }
-=======
-	display: none;
+
+/* ------------ yearview ------------ */
+.cal-print-yearview .cal-print-daycell {
+    width: 8%;
+    padding: 0px;
+    padding-left: 1px;
+    border: 1px solid #d0d0d0;
 }
->>>>>>> 2013.10
+.cal-print-rowheader {
+    width: 1% !important;
+}
+
+

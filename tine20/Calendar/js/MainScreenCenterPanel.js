@@ -57,7 +57,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      */
     defaultPrintMode: 'sheet',
     
-    periodRe: /^(day|week|month)/i,
+    periodRe: /^(day|week|month|year)/i,
     presentationRe: /(sheet|grid)$/i,
     
     calendarPanels: {},
@@ -292,6 +292,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
+        this.showYearView = new Ext.Toolbar.Button({
+            pressed: String(this.activeView).match(/^year/i),
+            text: this.app.i18n._('Year'),
+            iconCls: 'cal-year-view',
+            xtype: 'tbbtnlockedtoggle',
+            handler: this.changeView.createDelegate(this, ["year"]),
+            enableToggle: true,
+            toggleGroup: 'Calendar_Toolbar_tgViews'
+        });
         
        this.action_import = new Ext.Action({
             requiredGrant: 'addGrant',
@@ -313,7 +322,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.showWeekView,
             this.showMonthView
         ];
-        
+
+        if (this.app.featureEnabled('featureYearView')) {
+            this.changeViewActions.push(this.showYearView);
+        }
+
         this.recordActions = [
             this.action_import,
             this.action_editInNewWindow,
@@ -1656,6 +1669,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         break;
                     case 'monthSheet':
                         view = new Tine.Calendar.MonthView({
+                            store: store,
+                            period: tbar.getPeriod()
+                        });
+                        break;
+                    case 'yearSheet':
+                        view = new Tine.Calendar.YearView({
                             store: store,
                             period: tbar.getPeriod()
                         });

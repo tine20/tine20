@@ -477,3 +477,23 @@ Tine.Calendar.MonthViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         }
     }
 });
+
+Tine.Calendar.YearViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
+    onSelectedChange: function(state){
+        Tine.Calendar.YearViewEventUI.superclass.onSelectedChange.call(this, state);
+        if (state){
+            this.addClass('cal-yearview-active');
+            this.setStyle({
+                'background-color': this.color,
+                'color':            (this.colorSet) ? this.colorSet.text : '#000000'
+            });
+            
+        } else {
+            this.removeClass('cal-yearview-active');
+            this.setStyle({
+                'background-color': this.is_all_day_event ? this.bgColor : '',
+                'color':            this.is_all_day_event ? '#000000' : this.color
+            });
+        }
+    }
+});

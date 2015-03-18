@@ -1,0 +1,173 @@
+.cal-yearview {
+    color:black;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    white-space:nowrap;
+}
+
+.cal-yearview-inner th {
+    border-top: none;
+    text-align: center;
+    vertical-align: middle;
+}
+.cal-yearview-daycell {
+    vertical-align: top;
+    border-right: 1px solid #E1E1E1;
+    border-top: 1px solid #E1E1E1;
+    overflow: hidden;
+}
+
+.cal-yearview-daycell:hover {
+    background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
+    /*cursor: pointer; see ticket #1484*/
+}
+
+.cal-yearview-inner-header,
+cal-yearview-wkcell-header {
+    position: relative;
+    background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
+    height: 23px;
+}
+
+.cal-yearview-daycell {
+    position: relative;
+/*    width: 100%;*/
+}
+
+.cal-yearview-daycell-saturday {
+    background-color:#dddddd; 
+}
+
+.cal-yearview-daycell-sunday {
+    background-color:#bbbbbb; 
+}
+
+.cal-yearview-daycell-date {
+    padding: 2px 5px;
+    border-collapse: separate;
+    color: #233D6D;
+    /*cursor: pointer; see ticket #1484*/
+    float: left;
+    text-align: left;
+}
+
+.cal-yearview-daybody {
+    overflow: hidden;
+    float: left;
+    height: 100%;
+}
+
+/*********************************** Events ***********************************/
+.cal-yearview-eventslice {
+/*    height: 18px;*/
+    overflow: hidden;
+    float: left;
+    height: 100%;
+}
+
+.cal-yearview-event {
+    margin: 0px 0px;
+/*    width: 100%;*/
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 0px 1px 0px 1px;
+    height: 100%;
+    line-height: 100%;
+}
+
+.cal-yearview-eventslice .cal-yearview-event-editgrant {
+    cursor: move;
+}
+
+.cal-yearview-event-summary {
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ext-gecko .cal-yearview-alldayevent {
+    -moz-border-radius: 8px;
+}
+
+.ext-safari .cal-yearview-alldayevent {
+    -webkit-border-radius: 8px;
+}
+
+/** todo: add khtml switch **/
+.cal-yearview-alldayevent {
+    -khtml-border-radius: 8px;
+}
+
+.cal-yearview-event-croptop {
+/*    margin-left: 0px;
+    border-left-style: none;*/
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+/*
+.ext-gecko .cal-yearview-alldayevent-cropleft {
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-bottomleft: 0px;
+}
+
+.ext-safari .cal-yearview-alldayevent-cropleft {
+    -webkit-border-top-left-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+}
+
+.cal-yearview-alldayevent-cropleft {
+    -khtml-border-top-left-radius: 0px;
+    -khtml-border-bottom-left-radius: 0px;
+}
+*/
+.cal-yearview-event-cropbottom {
+/*    margin-right: 0px;
+    background-image: none;
+    border-right-style: hidden;*/
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+/*
+.ext-gecko .cal-yearview-alldayevent-cropright {
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 0px;
+}
+
+.ext-safari .cal-yearview-alldayevent-cropright {
+    -webkit-border-top-right-radius: 0px;
+    -webkit-border-bottom-right-radius: 0px;
+}
+
+.cal-yearview-alldayevent-cropright {
+    -khtml-border-top-right-radius: 0px;
+    -khtml-border-bottom-right-radius: 0px;
+}
+*/
+
+.cal-yearview-alldayevent-summary {
+    white-space: nowrap;
+    overflow: hidden;
+    min-height: 12px;
+    /*overflow: visible; */
+}
+
+.cal-yearview-event-info-hide {
+    display: none;
+}
+
+.cal-yearview-daypreviewbox .cal-yearview-event-info-hide {
+    display: block;
+}
+
+/******************************* daypreviewbox ********************************/
+.cal-yearview-daypreviewbox {
+    position: absolute;
+    border-bottom: 1px solid #E1E1E1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 5000;
+}

@@ -37,7 +37,7 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         return ['<table style="', this.titleStyle, '"><tr><th class="cal-print-title">', this.extraTitle,  this.getTitle(view), '</th></tr></table>'].join('');
     },
     
-    generateCalRows: function(days, numCols, alignHorizontal) {
+    generateCalRows: function(days, numCols, alignHorizontal, hasRowHeader) {
         var row, col, cellsHtml, idx,
             numRows = Math.ceil(days.length/numCols),
             rowsHtml = '';
@@ -48,7 +48,8 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             
             for (col=0; col<numCols; col++) {
                 idx = alignHorizontal ? row*numCols + col: col*numRows + row;
-                cellsHtml += String.format('<td class="cal-print-daycell" style="vertical-align: top;">{0}</td>', days[idx] || '');
+                rowheader = hasRowHeader && col == 0 ? 'cal-print-rowheader' : '';
+                cellsHtml += String.format('<td class="cal-print-daycell ' + rowheader + '" style="vertical-align: top;">{0}</td>', days[idx] || '');
             }
             
             rowsHtml += String.format('<tr class="cal-print-dayrow" style="height: {1}mm">{0}</tr>', cellsHtml, this.paperHeight/numRows);
