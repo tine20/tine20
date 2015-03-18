@@ -121,6 +121,6 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     },
     
     onSuccess: function() {
-        window.location.reload();
+        Tine.Tinebase.common.reload({});
     }
 });
