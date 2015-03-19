@@ -106,57 +106,45 @@
             <destination>seq</destination>
         </field>
         <field>
-            <source>CUSTOMER-org_name</source>
-            <destination>CUSTOMER-org_name</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-n_family</source>
-            <destination>CUSTOMER-n_family</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-n_given</source>
-            <destination>CUSTOMER-n_given</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-adr_one_street</source>
-            <destination>CUSTOMER-adr_one_street</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-adr_one_postalcode</source>
-            <destination>CUSTOMER-adr_one_postalcode</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-adr_one_locality</source>
-            <destination>CUSTOMER-adr_one_locality</destination>
-        </field>
-                
-        <field>
-            <source>CUSTOMER-adr_one_countryname</source>
-            <destination>CUSTOMER-adr_one_countryname</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-tel_work</source>
-            <destination>CUSTOMER-tel_work</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-tel_cell</source>
-            <destination>CUSTOMER-tel_cell</destination>
-        </field>
-        <field>
-            <source>CUSTOMER-email</source>
-            <destination>CUSTOMER-email</destination>
+            <source>CUSTOMER</source>
+            <destination>CUSTOMER</destination>
+            <relation>1</relation>
+            <findExistingBy>n_family</findExistingBy>
+            <related_model>Addressbook_Model_Contact</related_model>
+            <degree>parent</degree>
         </field>
         <field>
             <source>PARTNER</source>
             <destination>PARTNER</destination>
+            <relation>1</relation>
+            <findExistingBy>n_family</findExistingBy>
+            <related_model>Addressbook_Model_Contact</related_model>
+            <degree>parent</degree>
         </field>
         <field>
             <source>RESPONSIBLE</source>
             <destination>RESPONSIBLE</destination>
+            <relation>1</relation>
+            <findExistingBy>n_family</findExistingBy>
+            <related_model>Addressbook_Model_Contact</related_model>
+            <degree>parent</degree>
         </field>
         <field>
             <source>TASK</source>
             <destination>TASK</destination>
+            <relation>1</relation>
+            <findExistingBy>summary</findExistingBy>
+            <related_model>Tasks_Model_Task</related_model>
+            <degree>sibling</degree>
+        </field>
+        <field>
+            <source>PRODUCT</source>
+            <destination>PRODUCT</destination>
+            <relation>1</relation>
+            <findExistingBy>name</findExistingBy>
+            <related_model>Sales_Model_Product</related_model>
+            <degree>sibling</degree>
+            <separator>;</separator>
         </field>
     </mapping>
 </config>

@@ -26,11 +26,11 @@ class Crm_Import_CsvTest extends ImportTestCase
 
         $this->_testContainer = $this->_getTestContainer('Crm');
         $this->_filename = dirname(__FILE__) . '/files/leads.csv';
-        $this->_deleteImportFile = FALSE;
+        $this->_deleteImportFile = false;
 
         $options = array(
             'container_id'  => $this->_testContainer->getId(),
-            'dryrun' => TRUE,
+            'dryrun' => true,
         );
 
         $result = $this->_doImport($options, 'crm_tine_import_csv');
@@ -40,8 +40,10 @@ class Crm_Import_CsvTest extends ImportTestCase
         $firstLead = $result['results']->getFirstRecord();
         $this->assertContains('neuer lead', $firstLead->lead_name);
         $this->assertEquals(1, count($firstLead->tags));
-
-        // TODO check imported relations
+        $this->assertEquals(5, count($firstLead->relations),
+            'relations not imported for first lead ' . print_r(print_r($firstLead->toArray(), true)));
+        $this->assertEquals(6, count($result['results'][1]->relations),
+            'relations not imported for second lead ' . print_r(print_r($result['results'][1]->toArray(), true)));
     }
 
     /**
