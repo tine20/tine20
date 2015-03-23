@@ -92,23 +92,27 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
         if (! $_user instanceof Tinebase_Model_FullUser) {
             return;
         }
-
-        $emailUser = $this->_ldap2User($_user, $_ldapEntry);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
+        $user = $this->_ldap2User($_user, $_ldapEntry);
         
-        // modify/correct user name
-        // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
-        if (empty($emailUser->emailUsername)) {
-            $emailUser->emailUsername = $this->_getEmailUserName($_user);
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
         
-        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
-            $_user->smtpUser  = $emailUser;
-            $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
-        } else {
-            $_user->imapUser  = $emailUser;
-            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
+        if ($this instanceof Tinebase_EmailUser_Ldap) {
+            // TODO this should be moved to Tinebase_EmailUser_Ldap
+            
+            // modify/correct user name
+            // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
+            if (empty($user->emailUsername)) {
+                $user->emailUsername = $this->_getEmailUserName($_user);
+            }
+            
+            if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+                $_user->smtpUser  = $user;
+                $_user->emailUser = Tinebase_EmailUser::merge($_user->emailUser, clone $_user->smtpUser);
+            } else {
+                $_user->imapUser  = $user;
+                $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, $_user->emailUser);
+            }
         }
     }
     

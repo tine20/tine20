@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ea2d9f4f8849c7a892cce2141b896dc0",
+    "hash": "3c4e37f33be203c3651e09e77ec6e7ac",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -103,11 +103,11 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "7b207195ee569777873e404673370e5b14320cbd"
+                "reference": "b9e14b4cf343a549eeefe3e83712d02dd8a0c1e7"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -131,7 +131,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2014-12-17 15:33:26"
+            "time": "2015-03-19 09:35:16"
         },
         {
             "name": "metaways/timezoneconvert",
@@ -3429,7 +3429,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpword/phpword": 20
+        "phpword/phpword": 20,
+        "metaways/opendocument": 20
     },
     "prefer-stable": false,
     "platform": [

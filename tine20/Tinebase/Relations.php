@@ -256,8 +256,7 @@ class Tinebase_Relations
         $excludeCount  = array_merge($toDelete, $toUpdate);
 
         $ownId         = $relations->getFirstRecord()->own_id;
-        $ownConfig     = $ownModel::getRelatableConfig();
-        
+
         // find out all models having a constraints config
         $allModels = $relatedModels;
         $allModels[] = $ownModel;
@@ -265,8 +264,6 @@ class Tinebase_Relations
 
         $constraintsConfigs = self::getConstraintsConfigs($allModels);
         $relatedConstraints = $this->_backend->countRelatedConstraints($ownModel, $relations, $excludeCount);
-        
-        $newConstraints = $myConstraints = array();
         
         $groups = array();
         foreach($relations as $relation) {

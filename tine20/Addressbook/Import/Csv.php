@@ -28,11 +28,11 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     
     /**
      * creates a new importer from an importexport definition
-     * 
+     *
      * @param  Tinebase_Model_ImportExportDefinition $_definition
      * @param  array                                 $_options
      * @return Calendar_Import_Ical
-     * 
+     *
      * @todo move this to abstract when we no longer need to be php 5.2 compatible
      */
     public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())

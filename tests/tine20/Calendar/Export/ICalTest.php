@@ -14,6 +14,13 @@
  */
 class Calendar_Export_ICalTest extends Calendar_TestCase
 {
+    /**
+     * the test event
+     *
+     * @var Calendar_Model_Event
+     */
+    protected $_testEvent = null;
+
     public function setUp()
     {
         $this->_testEvent = new Calendar_Model_Event(array(
@@ -37,7 +44,6 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     {
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
 
         // assert basics
         $this->assertEquals(1, preg_match("/SUMMARY:{$this->_testEvent->summary}\r\n/", $ics), 'SUMMARY not correct');
@@ -61,8 +67,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
-        
+
         // assert dtstart/dtend tz
         $this->assertEquals(1, preg_match("/DTSTART;VALUE=DATE:20101230\r\n/", $ics), 'DTSTART not correct');
         $this->assertEquals(1, preg_match("/DTEND;VALUE=DATE:20101231\r\n/", $ics), 'DTEND not correct');
@@ -76,7 +81,6 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($nextOccurance);
-//        echo $ics;
 
         // assert recurid
         $this->assertEquals(1, preg_match("/RECURRENCE-ID;TZID=Europe\/Berlin:20101231T130000\r\n/", $ics), 'RECURRENCE-ID broken');
@@ -94,10 +98,8 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
 
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
 
         // assert exdate
-//        $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20101231T130000,20110101T130000\r\n/", $ics), 'RECURRENCE-ID broken');
         $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20101231T130000\r\n/", $ics), 'RECURRENCE-ID broken');
         $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20110101T130000\r\n/", $ics), 'RECURRENCE-ID broken');
     }
@@ -119,7 +121,6 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
 
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($eventSet);
-//        echo $ics;
 
         $this->assertEquals(2, preg_match_all('/BEGIN:VEVENT\r\n/', $ics, $matches), 'There should be exactly 2 VEVENT compontents');
     }
@@ -129,12 +130,14 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
      */
     public function testExportOrganizer()
     {
-        $this->_testEvent->organizer = Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id;
+        $pwulf = Tinebase_Helper::array_value('pwulf', $this->_getPersonas());
+        $this->_testEvent->organizer = $pwulf->contact_id;
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
         
-        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":mailto:pwulf@" . $this->_getMailDomain() . "\r\n/", $ics), 'ORGANIZER missing/broken');
+        $this->assertContains("ORGANIZER;CN=\"Wulf, Paul\":mailto:" . $pwulf->accountEmailAddress,
+            (string) $ics, 'ORGANIZER missing/broken');
     }
     
     /**
@@ -142,19 +145,21 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
      */
     public function testExportAttendee()
     {
+        $pwulf = Tinebase_Helper::array_value('pwulf', $this->_getPersonas());
         $this->_testEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array(
                 'role'          => Calendar_Model_Attender::ROLE_REQUIRED,
                 'status'        => Calendar_Model_Attender::STATUS_ACCEPTED,
                 'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'       => Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id,
+                'user_id'       => $pwulf->contact_id,
             )
         ));
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
         
-        $this->assertContains("ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@" . substr($this->_getMailDomain(), 0, -14), (string) $ics, 'ATTENDEE missing/broken');
+        $this->assertContains("ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=" . substr($pwulf->accountEmailAddress, 0, -14),
+            (string) $ics, 'ATTENDEE missing/broken');
     }
     
     public function testExportAlarm()
@@ -173,7 +178,6 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         
         $exporter = new Calendar_Export_Ical();
         $ics = $exporter->eventToIcal($this->_testEvent);
-//        echo $ics;
 
         // assert organizer
         $this->assertEquals(1, preg_match("/TRIGGER:-PT15M\r\n/", $ics), 'TRIGGER missing/broken');
@@ -187,7 +191,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     {
         $eventData = $this->_getEvent(TRUE)->toArray();
         $this->_uit = new Calendar_Frontend_Json();
-        $persistentEventData = $this->_uit->saveEvent($eventData);
+         $this->_uit->saveEvent($eventData);
         
         $this->_testNeedsTransaction();
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportICS ' .
@@ -198,7 +202,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
         $result = implode(',', $output);
         
         $failMessage = print_r($output, TRUE);
-        $this->assertEquals(1, preg_match("/SUMMARY:{$eventData['summary']}/", $result), 'DESCRIPTION not correct');
+        $this->assertEquals(1, preg_match("/SUMMARY:{$eventData['summary']}/", $result), 'DESCRIPTION not correct: ' . $failMessage);
     }
     
     /**
