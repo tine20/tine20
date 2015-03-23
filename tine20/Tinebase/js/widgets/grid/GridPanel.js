@@ -68,12 +68,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     filterToolbar: null,
     /**
-     * @cfg {Bool} evalGrants
+     * @cfg {Boolean} evalGrants
      * should grants of a grant-aware records be evaluated (defaults to true)
      */
     evalGrants: true,
     /**
-     * @cfg {Bool} filterSelectionDelete
+     * @cfg {Boolean} filterSelectionDelete
      * is it allowed to deleteByFilter?
      */
     filterSelectionDelete: false,
@@ -86,7 +86,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     storeRemoteSort: true,
     /**
-     * @cfg {Bool} usePagingToolbar 
+     * @cfg {Boolean} usePagingToolbar 
      */
     usePagingToolbar: true,
     /**
@@ -167,7 +167,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     newRecordIcon: null,
 
     /**
-     * @cfg {Bool} i18nDeleteRecordAction 
+     * @cfg {Boolean} i18nDeleteRecordAction 
      * update details panel if context menu is shown
      */
     updateDetailsPanelOnCtxMenu: true,
@@ -178,24 +178,24 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     autoRefreshInterval: 300,
 
     /**
-     * @cfg {Bool} hasFavoritesPanel 
+     * @cfg {Boolean} hasFavoritesPanel 
      */
     hasFavoritesPanel: true,
     
     /**
-     * @cfg {Bool} hasQuickSearchFilterToolbarPlugin 
+     * @cfg {Boolean} hasQuickSearchFilterToolbarPlugin 
      */
     hasQuickSearchFilterToolbarPlugin: true,
 
     /**
      * disable 'select all pages' in paging toolbar
-     * @cfg {Bool} disableSelectAllPages
+     * @cfg {Boolean} disableSelectAllPages
      */
     disableSelectAllPages: false,
 
     /**
      * enable if records should be multiple editable
-     * @cfg {Bool} multipleEdit
+     * @cfg {Boolean} multipleEdit
      */
     multipleEdit: false,
     
@@ -207,7 +207,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     /**
      * enable if selection of 2 records should allow merging
-     * @cfg {Bool} duplicateResolvable
+     * @cfg {Boolean} duplicateResolvable
      */
     duplicateResolvable: false,
     
@@ -218,13 +218,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     autoRefreshTask: null,
 
     /**
-     * @type Bool
+     * @type Boolean
      * @property updateOnSelectionChange
      */
     updateOnSelectionChange: true,
 
     /**
-     * @type Bool
+     * @type Boolean
      * @property copyEditAction
      * 
      * TODO activate this by default
@@ -297,7 +297,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * add records from other applications using the split add button
      * - activated by default
      * 
-     * @type Bool
+     * @type Boolean
      * @property splitAddButton
      */
     splitAddButton: true,
@@ -305,7 +305,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * add "create new record" button
      * 
-     * @type Bool
+     * @type Boolean
      * @property addButton
      */
     addButton: true,
@@ -1024,6 +1024,33 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // hide current records from store.loadRecords()
         // @see 0008210: email grid: set flag does not work sometimes
         this.store.clearData();
+    },
+
+    /**
+     * import records
+     *
+     * @param {Button} btn
+     */
+    onImport: function(btn) {
+        Tine.widgets.dialog.ImportDialog.openWindow({
+            appName: this.app.appName,
+            modelName: this.recordClass.getMeta('modelName'),
+            defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
+                ? this.getDefaultContainer
+                : this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
+            // update grid after import
+            listeners: {
+                scope: this,
+                'finish': function() {
+                    this.loadGridData({
+                        preserveCursor:     false,
+                        preserveSelection:  false,
+                        preserveScroller:   false,
+                        removeStrategy:     'default'
+                    });
+                }
+            }
+        });
     },
 
     /**

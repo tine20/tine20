@@ -178,7 +178,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Adding streamfilter for correct linebreaks');
         require_once 'StreamFilter/StringReplace.php';
-        $filter = stream_filter_append($resource, 'str.replace', STREAM_FILTER_READ, array(
+        stream_filter_append($resource, 'str.replace', STREAM_FILTER_READ, array(
             'search'            => '/\r\n{0,1}/',
             'replace'           => "\r\n",
             'searchIsRegExp'    => TRUE
@@ -235,7 +235,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 foreach ($recordDataToImport as $idx => $processedRecordData) {
                     $recordToImport = $this->_createRecordToImport($processedRecordData);
                     if ($resolveStrategy !== 'discard') {
-                        $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
+                        $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                                 . ' Discarding record ' . $recordIndex);
@@ -344,6 +344,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param array $data
      * @return Array|ArrayObject
+     * @throws Tinebase_Exception_UnexpectedValue
+     * @throws Tinebase_Exception
      */
     protected function _postMappingHook ($data)
     {
@@ -368,7 +370,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } catch (Exception $e) {
             $jsonReceivedData = null;
 
-            throw new Tinebase_Exception('Could not execture script: ' . $script);
+            throw new Tinebase_Exception('Could not execute script: ' . $script);
         }
 
         $returnJDecodedData = Zend_Json_Decoder::decode($jsonReceivedData);
@@ -444,7 +446,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _doConvert($string)
     {
-        if ((! isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto') && extension_loaded('mbstring')) {
+        $result = $string;
+
+        if ((!isset($this->_options['encoding']) || $this->_options['encoding'] === 'auto') && extension_loaded('mbstring')) {
             $encoding = mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
             if ($encoding !== FALSE) {
                 $encodingFn = 'mb_convert_encoding';
@@ -454,12 +458,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $encoding = $this->_options['encoding'];
             $encodingFn = 'iconv';
             $result = @iconv($encoding, $this->_options['encodingTo'] . '//TRANSLIT', $string);
-        } else {
-            return $string;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Encoded ' . $string . ' from ' . $encoding . ' to ' . $this->_options['encodingTo'] . ' using ' . $encodingFn . ' . => ' . $result);
+        if (isset($encoding) && isset($encodingFn) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Encoded ' . $string . ' from ' . $encoding . ' to ' . $this->_options['encodingTo']
+                . ' using ' . $encodingFn . ' . => ' . $result);
+        }
+
         return $result;
     }
     
@@ -483,8 +489,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if ($field['replace'] === '\n') {
                     $data[$key] = str_replace("\\n", "\r\n", $_data[$key]);
                 }
+            } else if (isset($field['relation'])) {
+                if (! isset($data['relations'])) {
+                    $data['relations'] = array();
+                }
+                $data['relations'] = array_merge($data['relations'], $this->_mapRelation($_data[$key], $field));
             } else if (isset($field['separator'])) {
-                $data[$key] = preg_split('/\s*' . $field['separator'] . '\s*/', $_data[$key]);
+                $data[$key] = $this->_splitBySeparator($field['separator'], $_data[$key]);
             } else if (isset($field['fixed'])) {
                 $data[$key] = $field['fixed'];
             } else if (isset($field['append'])) {
@@ -521,11 +532,65 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         return $data;
     }
+    
+    protected function _splitBySeparator($separator, $value)
+    {
+        return preg_split('/\s*' . $separator . '\s*/', $value);
+    }
+
+    /**
+     * map import relation
+     * 
+     * @param array $fieldValue
+     * @param array $field definition
+     * @return array
+     *
+     * <field>
+     *      <source>RESPONSIBLE</source>
+     *      <destination>RESPONSIBLE-n_fn</destination>
+     *      <relation>1</relation>
+     *      <findExistingBy>n_fn</findExistingBy>
+     *      <related_model>Addressbook_Model_Contact</related_model>
+     *      <degree>parent</degree>
+     * </field>
+     */
+    protected function _mapRelation($fieldValue, $field)
+    {
+        if (! isset($field['related_model']) || ! isset($field['findExistingBy'])) {
+            throw new Tinebase_Exception_UnexpectedValue('field config missing');
+        }
+        
+        $values = (isset($field['separator'])) ? $this->_splitBySeparator($field['separator'], $fieldValue): array($fieldValue);
+        
+        $relations = array();
+        
+        foreach ($values as $value) {
+            // check if related record exists
+            $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
+            $filterModel = $field['related_model'] . 'Filter';
+            $filter = new $filterModel(array(
+                array('field' => $field['findExistingBy'], 'operator' => 'equals', 'value' => $value)
+            ));
+            $result = $controller->search($filter);
+            $record = (count($result) > 0) ? $result->getFirstRecord()->toArray() : array($field['findExistingBy'] => $value);
+            
+            $relation = array(
+                'type'  => $field['destination'], 
+                'related_record' => $record
+            );
+            
+            // TODO add some more relation defintion stuff?
+            
+            $relations[] = $relation;
+        }
+        
+        return $relations;
+    }
 
     /**
      * add some more values (overwrite that if you need some special/dynamic fields)
      *
-     * @param  array recordData
+     * @return  array
      */
     protected function _addData()
     {
@@ -560,7 +625,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $_record->isValid(TRUE);
         
         if ($this->_options['dryrun']) {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+            Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
         $this->_handleTags($_record, $_resolveStrategy);
@@ -702,7 +767,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             'description'   => $description,
             'type'          => strtolower($type),
             'color'         => $color,
-            'type'          => $type,
         ));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
