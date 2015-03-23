@@ -696,6 +696,9 @@ abstract class Tinebase_Controller_Record_Abstract
         $filters = array();
         foreach ($this->_duplicateCheckFields as $group) {
             $addFilter = array();
+            if (! is_array($group)) {
+                $group = array($group);
+            }
             foreach ($group as $field) {
                 if (! empty($_record->{$field})) {
                     $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});

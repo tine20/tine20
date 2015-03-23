@@ -33,14 +33,21 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * default model (needed for application starter -> defaultContentType)
      * @var string
      */
-    protected $_defaultModel = NULL;
+    protected $_defaultModel = null;
     
     /**
      * All configured models
      * @var array
      */
-    protected $_configuredModels = NULL;
-    
+    protected $_configuredModels = null;
+
+    /**
+     * default import definition name
+     *
+     * @var string
+     */
+    protected $_defaultImportDefinitionName = null;
+
     /**
      * Returns registry data of the application.
      *
@@ -222,10 +229,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * creates/updates a record
      *
-     * @param   $_recordData
+     * @param   array $_recordData
      * @param   Tinebase_Controller_Record_Interface $_controller the record controller
-     * @param   $_modelName for example: 'Task' for Tasks_Model_Task or the full model name (like 'Tinebase_Model_Container')
-     * @param   $_identifier of the record (default: id)
+     * @param   string $_modelName for example: 'Task' for Tasks_Model_Task or the full model name (like 'Tinebase_Model_Container')
+     * @param   string $_identifier of the record (default: id)
      * @param   array $_additionalArguments
      * @return  array created/updated record
      */
@@ -315,7 +322,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _longRunningRequest($executionTime = 0)
     {
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime($executionTime);
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
         
@@ -328,7 +335,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $_id record id
      * @param array  $_data key/value pairs with fields to update
      * @param Tinebase_Controller_Record_Interface $_controller
-     * @return updated record
+     * @return Tinebase_Record_Abstract record
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
@@ -358,7 +365,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $_ids = Zend_Json::decode($_ids);
         }
         $args = array_merge(array($_ids), $additionalArguments);
-        $savedRecord = call_user_func_array(array($_controller, 'delete'), $args);
+        call_user_func_array(array($_controller, 'delete'), $args);
 
         return array(
             'status'    => 'success'
@@ -480,5 +487,80 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             'totalcount' => count($result),
             'results'    => $result,
         );
+    }
+
+    /**
+     * fetch import definition data
+     *
+     * @return array
+     */
+    protected function _getImportDefinitionRegistryData()
+    {
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
+        $importDefinitions = $this->_getImportDefinitions();
+        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
+
+        $definitionData = array(
+            'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
+            'importDefinitions'         => array(
+                'results'    => $definitionConverter->fromTine20RecordSet($importDefinitions),
+                'totalcount' => count($importDefinitions),
+            ),
+        );
+
+        return $definitionData;
+    }
+
+    /**
+     * get application import definitions
+     *
+     * @return Tinebase_Record_RecordSet
+     *
+     * @todo move to Tinebase_Frontend_Json and fetch all import definitions in one query
+     */
+    protected function _getImportDefinitions()
+    {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array(
+                'field' => 'application_id',
+                'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+            ),
+            array(
+                'field' => 'type',
+                'operator' => 'equals',
+                'value' => 'import'
+            ),
+        ));
+
+        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+
+        return $importDefinitions;
+    }
+
+    /**
+     * get default definition
+     *
+     * @param Tinebase_Record_RecordSet $_importDefinitions
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    protected function _getDefaultImportDefinition($_importDefinitions)
+    {
+        try {
+            $defaultName = $this->_defaultImportDefinitionName
+                ? $this->_defaultImportDefinitionName
+                : strtolower($this->_applicationName . '_tine_import_csv');
+            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName($defaultName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (count($_importDefinitions) > 0) {
+                $defaultDefinition = $_importDefinitions->getFirstRecord();
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' No import definitions found for ' . $this->_applicationName);
+                $defaultDefinition = NULL;
+            }
+        }
+
+        return $defaultDefinition;
     }
 }

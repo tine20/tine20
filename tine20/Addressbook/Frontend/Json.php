@@ -25,7 +25,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var string
      */
     protected $_applicationName = 'Addressbook';
-    
+
+    protected $_defaultImportDefinitionName = 'adb_tine_import_csv';
+
     /**
      * resolve images
      * @param Tinebase_Record_RecordSet $_records
@@ -271,68 +273,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * Returns registry data of addressbook.
+     * Returns registry data of Addressbook.
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
      */
     public function getRegistryData()
     {
-        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
-        $importDefinitions = $this->_getImportDefinitions();
-        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
-        
         $registryData = array(
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
-            'importDefinitions'         => array(
-                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
-                'totalcount'            => count($importDefinitions),
-            ),
         );
+
+        $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
+
         return $registryData;
-    }
-    
-    /**
-     * get addressbook import definitions
-     * 
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo generalize this
-     */
-    protected function _getImportDefinitions()
-    {
-        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
-            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
-        ));
-        
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
-        
-        return $importDefinitions;
-    }
-    
-    /**
-     * get default definition
-     * 
-     * @param Tinebase_Record_RecordSet $_importDefinitions
-     * @return Tinebase_Model_ImportExportDefinition
-     * 
-     * @todo generalize this
-     */
-    protected function _getDefaultImportDefinition($_importDefinitions)
-    {
-        try {
-            $defaultDefinition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            if (count($_importDefinitions) > 0) {
-                $defaultDefinition = $_importDefinitions->getFirstRecord();
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No import definitions found for Addressbook');
-                $defaultDefinition = NULL;
-            }
-        }
-        
-        return $defaultDefinition;
     }
 }

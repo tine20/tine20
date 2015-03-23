@@ -121,7 +121,9 @@ Tine.widgets.dialog.WizardPanel = Ext.extend(Ext.Panel, {
      */
     manageButtons: function() {
         Ext.each(['back', 'next', 'cancel', 'finish'], function(key) {
-            this[key + 'Button'].setDisabled(! this[key + 'IsAllowed']());
+            if (this[key + 'Button'] && Ext.isFunction(this[key + 'IsAllowed'])) {
+                this[key + 'Button'].setDisabled(!this[key + 'IsAllowed']());
+            }
         }, this);
     },
     
