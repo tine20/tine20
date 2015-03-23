@@ -257,6 +257,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @return  Tinebase_Model_User the user object
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_Record_Validation
+     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
@@ -282,7 +283,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($row === false) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');
         }
-        
+
         try {
             $account = new $_accountClass(NULL, TRUE);
             $account->setFromArray($row);
@@ -559,7 +560,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @param mixed   $_accountId
      * @param string  $_status
-     * @return unknown
+     * @return integer
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function setStatus($_accountId, $_status)
     {
@@ -581,7 +583,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 break;
                 
             case 'expired':
-                $accountData['expires_at'] = Tinebase_DateTime::getTimestamp();
+                $accountData['expires_at'] = Tinebase_DateTime::now()->getTimestamp();
                 break;
             
             default:
@@ -665,7 +667,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      *
      * @param int $_accountId
      * @param string $_ipAddress
-     * @return void
+     * @return integer
      */
     public function setLoginTime($_accountId, $_ipAddress) 
     {
@@ -704,12 +706,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * update contact data(first name, last name, ...) of user in local sql storage
      * 
      * @param Addressbook_Model_Contact $contact
+     * @return integer
+     * @throws Exception
      */
     public function updateContactInSqlBackend(Addressbook_Model_Contact $_contact)
     {
         $contactId = $_contact->getId();
-
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
 
         $accountData = array(
             $this->rowNameMapping['accountDisplayName']  => $_contact->n_fileas,
@@ -725,7 +727,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId)
             );
-            $accountsTable->update($accountData, $where);
+            return $accountsTable->update($accountData, $where);
 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -784,8 +786,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
         $oldUser = $this->getFullUserById($accountId);
-        
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         if (empty($_user->contact_id)) {
             $_user->visibility = 'hidden';
@@ -995,10 +995,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             );
             $accountsTable->delete($where);
 
-            $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $user->accountLoginName),
-            );
-            
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
@@ -1102,5 +1098,45 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
+    }
+
+
+    /**
+     * returns number of current non-system users
+     *
+     * @return number
+     */
+    public function countNonSystemUsers()
+    {
+        $select = $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
+            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')");
+        $userCount = $this->_db->fetchOne($select);
+        return $userCount;
+    }
+
+    /**
+     * fetch creation time of the first/oldest user
+     *
+     * @return Tinebase_DateTime
+     */
+    public function getFirstUserCreationTime()
+    {
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        $fallback = new Tinebase_DateTime('2014-12-01');
+        if (! isset($schema['creation_time'])) {
+            return $fallback;
+        }
+
+        $select = $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'creation_time')
+            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
+            ->where($this->_db->quoteIdentifier('creation_time') . " is not null")
+            ->order('creation_time ASC')
+            ->limit(1);
+        $creationTime = $this->_db->fetchOne($select);
+
+        $result = (! empty($creationTime)) ? new Tinebase_DateTime($creationTime) : $fallback;
+        return $result;
     }
 }

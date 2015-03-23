@@ -64,4 +64,11 @@ interface Tinebase_User_Interface
      * @param string $_loginName
      */
     public function setLastLoginFailure($_loginName);
+
+    /**
+     * count user accounts (non-system)
+     *
+     * @return integer
+     */
+    public function countNonSystemUsers();
 }
