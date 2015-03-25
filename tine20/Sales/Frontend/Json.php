@@ -657,6 +657,25 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * merge an invoice
+     *
+     * @param string $id
+     */
+    public function mergeInvoice($id)
+    {
+        $invoice = Sales_Controller_Invoice::getInstance()->get($id);
+        $relation = Tinebase_Relations::getInstance()->getRelations('Sales_Model_Invoice', 'Sql', $id, 'sibling', array('CONTRACT'), 'Sales_Model_Contract')->getFirstRecord();
+        $contract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
+    
+        $date = clone $invoice->creation_time;
+        $date->setTimezone(Tinebase_Core::getUserTimezone());
+    
+        Sales_Controller_Invoice::getInstance()->delete(array($id));
+    
+        return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contractm, true);
+    }
+    
+    /**
      * Search for records matching given arguments
      *
      * @param  array $filter

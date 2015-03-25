@@ -775,6 +775,53 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     }
     
     /**
+     * tests invoice merging
+     */
+    public function testMergingInvoices()
+    {
+        $startDate = clone $this->_referenceDate;
+        
+        $this->_createProducts();
+        
+        $this->_createCustomers(1);
+        $this->_createCostCenters();
+        
+        $monthBack = clone $this->_referenceDate;
+        $monthBack->subMonth(1);
+        $addressId = $this->_addressRecords->filter(
+                'customer_id', $this->_customerRecords->filter(
+                    'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        'type', 'billing')->getFirstRecord()->getId();
+        
+        $this->assertTrue($addressId !== NULL);
+        
+        // this contract begins 6 months before the first invoice will be created
+        $this->_createContracts(array(array(
+            'number'       => 100,
+            'title'        => 'MyContract',
+            'description'  => 'unittest',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_point' => 'begin',
+            'billing_address_id' => $addressId,
+            
+            'interval' => 1,
+            'start_date' => $startDate->subMonth(6),
+            'last_autobill' => clone $this->_referenceDate,
+            'end_date' => NULL,
+            'products' => array(
+                array('product_id' => $this->_productRecords->getByIndex(0)->getId(), 'quantity' => 1, 'interval' => 1, 'last_autobill' => $monthBack),
+            )
+        )));
+        
+        $startDate = clone $this->_referenceDate;
+        $startDate->addDay(5);
+        $startDate->addMonth(24);
+        
+        $result = $this->_invoiceController->createAutoInvoices($startDate, null, true);
+        $this->assertEquals(1, $result['created_count']);
+    }
+    
+    /**
      * tests if a product aggregate gets billed in the correct periods
      */
     public function testOneProductContractInterval()
