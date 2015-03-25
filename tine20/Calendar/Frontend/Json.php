@@ -117,17 +117,12 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $defaultCalendarArray = array();
         }
         
-        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         $importDefinitions = $this->_getImportDefinitions();
-        $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
         
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
-            'defaultImportDefinition'   => ($defaultDefinition) ? $definitionConverter->fromTine20Model($defaultDefinition) : array(),
-            'importDefinitions'         => array(
-                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
-                'totalcount'            => count($importDefinitions),
-            ),
+            'defaultImportDefinition'   => $importDefinitions['default'],
+            'importDefinitions'         => $importDefinitions
         );
         
         return $registryData;
@@ -212,7 +207,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get addressbook import definitions
      * 
-     * @return Tinebase_Record_RecordSet
+     * @return array
      * 
      * @todo generalize this
      */
@@ -223,9 +218,28 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
         ));
         
-        $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+        $definitionConverter = new Tinebase_Convert_ImportExportDefinition_Json();
         
-        return $importDefinitions;
+        try {
+            $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
+            $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
+            $result = array(
+                'results'               => $definitionConverter->fromTine20RecordSet($importDefinitions),
+                'totalcount'            => count($importDefinitions),
+                'default'               => ($defaultDefinition) ? $definitionConverter->fromTine20Model($defaultDefinition) : array(),
+            );
+        } catch (Exception $e) {
+            Tinebase_Exception::log($zce);
+            $result = array(
+                array(
+                    'results'               => array(),
+                    'totalcount'            => 0,
+                    'default'               => array(),
+                )
+            );
+        }
+        
+        return $result;
     }
     
     /**
