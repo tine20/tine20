@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_PurchaseInvoice</model>
+    <name>purchaseinvoice_default_ods</name>
+    <type>export</type>
+    <plugin>Sales_Export_Ods_PurchaseInvoice</plugin>
+    <description>default ods purchase invoice export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <defaultColumnStyle>
+        <column-width>3cm</column-width>
+    </defaultColumnStyle>
+    <columns>
+        <column>
+            <identifier>supplier</identifier>
+            <header>Supplier</header>
+            <style>
+                <column-width>5cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>number</identifier>
+            <header>Invoice Number</header>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>date</identifier>
+            <header>Date</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>price_net</identifier>
+            <header>Price Net</header>
+            <type>currency</type>
+            <columnStyle>currencyEURCell</columnStyle>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>price_tax</identifier>
+            <header>Price Tax</header>
+            <type>currency</type>
+            <columnStyle>currencyEURCell</columnStyle>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>price_gross</identifier>
+            <header>Price Gross</header>
+            <type>currency</type>
+            <columnStyle>currencyEURCell</columnStyle>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>due_in</identifier>
+            <header>Due In</header>
+            <type>float</type>
+        </column>
+        <column>
+            <identifier>due_at</identifier>
+            <header>Due At</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>pay_at</identifier>
+            <header>Pay At</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>payment_method</identifier>
+            <header>Payment Method</header>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>overdue_at</identifier>
+            <header>Overdue At</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>discount</identifier>
+            <header>Discount</header>
+            <type>percentage</type>
+        </column>
+        <column>
+            <identifier>discount_until</identifier>
+            <header>Discount Until</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>approver</identifier>
+            <header>Approver</header>
+        </column>
+        <column>
+            <identifier>payed_at</identifier>
+            <header>Payed At</header>
+            <type>date</type>
+            <columnStyle>dateDMYCell</columnStyle>
+        </column>
+        <column>
+            <identifier>dunned_at</identifier>
+            <header>Dunned At</header>
+            <type>date</type>
+            <columnStyle>dateDMY</columnStyle>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Description</header>
+            <style>
+                <column-width>6cm</column-width>
+            </style>
+        </column>
+    </columns>
+</config>

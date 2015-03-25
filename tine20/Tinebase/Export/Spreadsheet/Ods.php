@@ -33,12 +33,39 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             <number:month number:style="long"/>
             <number:text>.</number:text>
             <number:year number:style="long"/>
-        </number:date-style>',
+         </number:date-style>',
         '<number:number-style style:name="N2"
                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
             <number:number number:decimal-places="2" number:min-integer-digits="1"/>
-        </number:number-style>',    
+         </number:number-style>',
+        '<number:currency-style style:name="currencyEURP0" style:volatile="true"
+                xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+             <number:number number:decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+             <number:text> </number:text>
+             <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
+         </number:currency-style>',
+        '<number:currency-style style:name="currencyEUR"
+                xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+            <style:text-properties fo:color="#ff0000"/>
+            <number:text>-</number:text>
+            <number:number number:decimal-places="2" number:min-integer-digits="1" number:grouping="true"/>
+            <number:text> </number:text>
+            <number:currency-symbol number:language="de" number:country="DE">€</number:currency-symbol>
+            <style:map style:condition="value()&gt;=0" style:apply-style-name="currencyEURP0"/>
+         </number:currency-style>',
+        '<number:date-style style:name="dateDMY" number:language="de" number:country="DE" number:automatic-order="true"
+                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+             <number:day number:style="long"/>
+             <number:text>.</number:text>
+             <number:month number:style="long"/>
+             <number:text>.</number:text>
+             <number:year number:style="long"/>
+          </number:date-style>',
         '<style:style style:name="ceHeader" style:family="table-cell" 
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
@@ -78,6 +105,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             <style:table-cell-properties fo:background-color="#ccccff"/>
             <style:paragraph-properties fo:text-align="right"/>
         </style:style>',
+        '<style:style style:name="currencyEURCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="currencyEUR"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
+        '<style:style style:name="dateDMYCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="dateDMY"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>'
     );
     
     /**
@@ -310,7 +341,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $this->processRecord($record, $i);
             $i++;
         }
-        
     }
     
     /**
@@ -349,7 +379,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _addColumnStyle($styleName, $values)
     {
-        $xml = '<style:style style:name="' . $styleName . '" style:family="table-column"><style:table-column-properties';
+        $xml = '<style:style style:name="' . $styleName . '" style:family="table-column" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><style:table-column-properties';
 
         foreach($values as $attr => $value) {
             $xml .= ' style:' . $attr . '="' . $value . '"';

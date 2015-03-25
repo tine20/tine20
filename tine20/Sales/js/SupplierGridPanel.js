@@ -40,9 +40,6 @@ Tine.Sales.SupplierGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array} of Ext.Action
      */
     getActionToolbarItems: function() {
-        return [];
-
-        // TODO reactivate export when it works
         this.actions_export = new Ext.Action({
             // _('Export Suppliers')
             text: this.app.i18n._hidden('Export Suppliers'),
@@ -83,12 +80,10 @@ Tine.Sales.SupplierGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getContextMenuItems: function() {
-        var items = [
+        return [
             '-',
             this.actions_export
-            ];
-        
-        return items;
+        ];
     },
     
     /**
