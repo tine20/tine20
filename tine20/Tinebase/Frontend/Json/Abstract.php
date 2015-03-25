@@ -500,11 +500,25 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $importDefinitions = $this->_getImportDefinitions();
         $defaultDefinition = $this->_getDefaultImportDefinition($importDefinitions);
 
+        try {
+            $defaultDefinitionArray = $definitionConverter->fromTine20Model($defaultDefinition);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $defaultDefinitionArray = array();
+        }
+
+        try {
+            $definitionsArray = $definitionConverter->fromTine20RecordSet($importDefinitions);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $definitionsArray = array();
+        }
+
         $definitionData = array(
-            'defaultImportDefinition'   => $definitionConverter->fromTine20Model($defaultDefinition),
+            'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(
-                'results'    => $definitionConverter->fromTine20RecordSet($importDefinitions),
-                'totalcount' => count($importDefinitions),
+                'results'    => $definitionsArray,
+                'totalcount' => count($definitionsArray),
             ),
         );
 
