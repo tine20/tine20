@@ -23,7 +23,7 @@ interface Tinebase_Convert_Interface
      * 
      * @param  mixed                     $_blob
      * @param  Tinebase_Record_Abstract  $_record  update existing record
-     * @return Tinebase_Model_Contact
+     * @return Tinebase_Record_Abstract
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = null);
     

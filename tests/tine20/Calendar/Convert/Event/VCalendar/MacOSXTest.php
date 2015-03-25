@@ -85,7 +85,7 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
 
     public function testConvertToTine20ModelXCalendarAccess()
     {
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.7.5');
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.10.2');
 
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_lion_access_private.ics', 'r');
         $event = $converter->toTine20Model($vcalendarStream);
@@ -94,5 +94,18 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends PHPUnit_Framework_Test
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_lion_access_attendee.ics', 'r');
         $event = $converter->toTine20Model($vcalendarStream);
         $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC, $event->class);
+
+        $iosPrivateIcs = dirname(__FILE__) . '/../../../Import/files/ios_private.ics';
+        $vcalendarStream = fopen($iosPrivateIcs, 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
+
+        // try again with ios user agent
+        $iosUserAgent = 'iOS/8.2 (12D508) dataaccessd/1.0';
+        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($iosUserAgent);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $vcalendarStream = fopen($iosPrivateIcs, 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+        $this->assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
     }
 }
