@@ -5,32 +5,32 @@
  * @package     Sales
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
 /**
- * backend for sales invoices
+ * backend for purchase invoices
  *
  * @package     Sales
  * @subpackage  Backend
  */
-class Sales_Backend_Invoice extends Tinebase_Backend_Sql_Abstract
+class Sales_Backend_PurchaseInvoice extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
      *
      * @var string
      */
-    protected $_tableName = 'sales_sales_invoices';
+    protected $_tableName = 'sales_purchase_invoices';
     
     /**
      * Model name
      *
      * @var string
      */
-    protected $_modelName = 'Sales_Model_Invoice';
+    protected $_modelName = 'Sales_Model_PurchaseInvoice';
 
     /**
      * default column(s) for count
