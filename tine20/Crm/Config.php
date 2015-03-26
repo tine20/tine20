@@ -16,18 +16,18 @@
 class Crm_Config extends Tinebase_Config_Abstract
 {
     /**
-     * config key for enabled features / feature switch
-     *
-     * @var string
-     */
-    const ENABLED_FEATURES = 'features';
-
-    /**
      * lead import feature
      *
      * @var string
      */
     const FEATURE_LEAD_IMPORT = 'featureLeadImport';
+
+    /**
+     * fields for lead record duplicate check
+     *
+     * @var string
+     */
+    const LEAD_DUP_FIELDS = 'leadDupFields';
 
     /**
      * (non-PHPdoc)
@@ -52,8 +52,18 @@ class Crm_Config extends Tinebase_Config_Abstract
                 ),
             ),
             'default'               => array(
-                self::FEATURE_LEAD_IMPORT => false,
+                self::FEATURE_LEAD_IMPORT => true,
             ),
+        ),
+        self::LEAD_DUP_FIELDS => array(
+            //_('Lead duplicate check fields')
+            'label'                 => 'Lead duplicate check fields',
+            //_('These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown.')
+            'description'           => 'These fields are checked when a new lead is created. If a record with the same data in the fields is found, a duplicate exception is thrown.',
+            'type'                  => 'array',
+            'contents'              => 'array',
+            'clientRegistryInclude' => TRUE,
+            'default'               => array('lead_name'),
         ),
     );
     

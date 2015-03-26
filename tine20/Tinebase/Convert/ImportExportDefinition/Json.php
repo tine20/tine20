@@ -20,7 +20,7 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
     /**
      * converts Tinebase_Record_Abstract to external format
      * 
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Abstract $_model
      * @return mixed
      * 
      * @todo rename model to record?
@@ -41,10 +41,14 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     protected function _convertOptions(Tinebase_Model_ImportExportDefinition $_definition)
     {
-        $options = (empty($_definition->plugin_options))
-            ? array()
-            : Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
-        
+        $options = array();
+
+        if (is_array($_definition->plugin_options)) {
+            $options = $_definition->plugin_options;
+        } else if (! empty($_definition->plugin_options)) {
+            $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition)->toArray();
+        }
+
         if (isset($options['autotags'])) {
             $options['autotags'] = $this->_handleAutotags($options['autotags']);
         }

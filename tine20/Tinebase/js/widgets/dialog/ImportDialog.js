@@ -355,7 +355,13 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 containersName: this.recordClass.getContainersName(),
                 appName: this.appName,
                 value: this.defaultImportContainer,
-                requiredGrant: false
+                listeners: {
+                    scope: this,
+                    select: function() {
+                        this.manageButtons();
+                    }
+                },
+                requiredGrant: false // 'add' ?
             }), new Tine.widgets.tags.TagPanel({
                 app: this.appName,
                 ref: '../tagsPanel',

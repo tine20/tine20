@@ -71,4 +71,63 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
         $result['container_id'] = $this->_options['container_id'];
         return $result;
     }
+
+    /**
+     * do conversions (transformations, charset, replacements ...)
+     *
+     * @param array $_data
+     * @return array
+     *
+     * TODO think about moving this to import definition
+     * TODO simplify crm/lead config handling for leadstate/source/type
+     */
+    protected function _doConversions($_data)
+    {
+        $data = parent::_doConversions($_data);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($data, true));
+
+        // adjust lead_name/leadstate/source/types if missing
+        $configSettings = Crm_Controller::getInstance()->getConfigSettings()->toArray();
+
+        $requiredFields = array(
+            'lead_name' => 'lead_name',
+            'leadstate_id' => 'leadstates',
+            'leadtype_id' => 'leadtypes',
+            'leadsource_id' => 'leadsources'
+        );
+        foreach ($requiredFields as $requiredField => $configKey) {
+            if (! empty($data[$requiredField])) {
+                continue;
+            }
+
+            switch ($requiredField) {
+                case 'lead_name':
+                    // use CUSTOMER name as lead name
+                    $data['lead_name'] = isset($_data['CUSTOMER']) ? $_data['CUSTOMER'] : 'Imported lead';
+                    break;
+                default:
+                    // get default leadstate/source/type OR try to find it by name if given
+                    if (! isset($configSettings[$configKey])) {
+                        continue;
+                    }
+                    $settingField = preg_replace('/s$/', '', $configKey);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' config settings' . print_r($configSettings[$configKey], true));
+
+                    // init with default
+                    $data[$requiredField] = isset($configSettings[$configKey][0]['id']) ? $configSettings[$configKey][0]['id'] : 1;
+                    foreach ($configSettings[$configKey] as $setting) {
+                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && $setting[$settingField] === $_data[$settingField]) {
+                            $data[$requiredField] = $setting['id'];
+                        }
+                    }
+            }
+        }
+
+        return $data;
+    }
+
 }

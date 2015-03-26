@@ -33,6 +33,14 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     protected $_fsController;
 
+
+    /**
+     * customfield name
+     *
+     * @var string
+     */
+    protected $_cfcName = null;
+
    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -45,6 +53,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->_instance = new Crm_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
+        Crm_Controller_Lead::getInstance()->duplicateCheckFields(array());
     }
 
     /**
@@ -66,6 +75,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         }
         
         parent::tearDown();
+        Crm_Controller_Lead::getInstance()->duplicateCheckFields(array('lead_name'));
     }
      
     /**
@@ -176,13 +186,15 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($searchLeads['results'][0]['turnover']*$getLead['probability']/100, $searchLeads['results'][0]['probableTurnover']);
         // now we need 2 relations here (frontend search shall return relations with related_model Addressbook_Model_Contact or Sales_Model_Product
         $this->assertEquals(2, count($searchLeads['results'][0]['relations']), 'did not get all relations');
-        
+
+        $relatedTask = null;
         foreach($getLead['relations'] as $rel) {
             if ($rel['type'] == 'TASK') {
                 $relatedTask = $rel['related_record'];
             }
         }
-        
+
+        $this->assertTrue($relatedTask !== null);
         $this->assertEquals($this->_getTask()->summary, $relatedTask['summary'], 'task summary does not match');
         $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
         $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
@@ -382,7 +394,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $taskData = $taskJson->saveTask($taskData);
         $taskData['description'] = 1;
-        $taskData = $taskJson->saveTask($taskData);
+        $taskJson->saveTask($taskData);
         
         $savedLead = $this->_instance->getLead($leadData['id']);
         $savedLead['relations'][0]['related_record']['description'] = '2';
@@ -391,7 +403,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         // client may send wrong seq -> this should cause a concurrency conflict
         $savedLead['relations'][0]['related_record']['seq'] = 0;
         try {
-            $savedLead = $this->_instance->saveLead($savedLead);
+            $this->_instance->saveLead($savedLead);
             $this->fail('expected concurrency exception');
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
@@ -775,10 +787,10 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testSortByLeadState()
     {
-        $savedLead1 = $this->_saveLead();
+        $this->_saveLead();
         $lead2 = $this->_getLead()->toArray();  // open
         $lead2['leadstate_id'] = 2;             // contacted
-        $savedLead2 = $this->_instance->saveLead($lead2);
+        $this->_instance->saveLead($lead2);
         
         $sort = array(
             'sort' => 'leadstate_id',
@@ -798,7 +810,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
         
-        $lead = $this->_saveLead();
+        $this->_saveLead();
         $filter = array(
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit test product'),
         );

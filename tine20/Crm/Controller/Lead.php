@@ -39,7 +39,11 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords            = FALSE;
         $this->_doRightChecks           = TRUE;
         $this->_resolveCustomFields     = TRUE;
-        
+
+        $this->_duplicateCheckFields = Crm_Config::getInstance()->get(Crm_Config::LEAD_DUP_FIELDS, array(
+            array('lead_name')
+        ));
+
         $this->_backend                 = new Crm_Backend_Lead();
     }
     

@@ -22,37 +22,33 @@ class Crm_Import_CsvTest extends ImportTestCase
      */
     public function testImport()
     {
-        $this->_testNeedsTransaction();
-
-        $this->_testContainer = $this->_getTestContainer('Crm');
-        $this->_filename = dirname(__FILE__) . '/files/leads.csv';
-        $this->_deleteImportFile = false;
-
-        $options = array(
-            'container_id'  => $this->_testContainer->getId(),
-            'dryrun' => true,
-        );
-
-        $result = $this->_doImport($options, 'crm_tine_import_csv');
-
+        $result = $this->_importHelper('leads.csv');
         $this->assertEquals(2, $result['totalcount'], 'should import 2 records: ' . print_r($result, true));
 
         $firstLead = $result['results']->getFirstRecord();
         $this->assertContains('neuer lead', $firstLead->lead_name);
         $this->assertEquals(1, count($firstLead->tags));
         $this->assertEquals(5, count($firstLead->relations),
-            'relations not imported for first lead ' . print_r(print_r($firstLead->toArray(), true)));
+            'relations not imported for first lead ' . print_r($firstLead->toArray(), true));
         $this->assertEquals(6, count($result['results'][1]->relations),
-            'relations not imported for second lead ' . print_r(print_r($result['results'][1]->toArray(), true)));
+            'relations not imported for second lead ' . print_r($result['results'][1]->toArray(), true));
     }
 
-    /**
-     * test import
-     *
-     * TODO implement
-     */
-    public function testImportDuplicate()
+    protected function _importHelper($importFilename, $definitionName = 'crm_tine_import_csv', $dryrun = true)
     {
-        $this->markTestIncomplete('needs to be implemented');
+        $this->_testNeedsTransaction();
+
+        $this->_testContainer = $this->_getTestContainer('Crm');
+        $this->_filename = dirname(__FILE__) . '/files/' . $importFilename;
+        $this->_deleteImportFile = false;
+
+        $options = array(
+            'container_id'  => $this->_testContainer->getId(),
+            'dryrun' => $dryrun,
+        );
+
+        $result = $this->_doImport($options, $definitionName);
+
+        return $result;
     }
 }
