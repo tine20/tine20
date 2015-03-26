@@ -15,32 +15,12 @@
  * @package     Calendar
  * @subpackage  Convert
  */
-class Calendar_Convert_Event_VCalendar_Iphone extends Calendar_Convert_Event_VCalendar_Abstract
+class Calendar_Convert_Event_VCalendar_Iphone extends Calendar_Convert_Event_VCalendar_MacOSX
 {
     // DAVKit/4.0 (728.4); iCalendar/1 (42.1); iPhone/3.1.3 7E18
     // DAVKit/5.0 (767); iCalendar/5.0 (79); iPhone/4.2.1 8C148
     // iOS/5.0.1 (9A405) dataaccessd/1.0
+    // iOS/7.1.2 (11D257) dataaccessd/1.0
+    // iOS/8.2 (12D508) dataaccessd/1.0
     const HEADER_MATCH = '/(iPhone|iOS)\/(?P<version>\S+)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz'
-    );
 }

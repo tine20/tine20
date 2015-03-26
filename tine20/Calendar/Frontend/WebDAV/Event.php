@@ -445,6 +445,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
+
+
         $currentEvent = $this->getRecord();
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($currentEvent->container_id);
 

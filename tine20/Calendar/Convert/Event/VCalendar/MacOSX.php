@@ -79,12 +79,10 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     {
         $return = parent::_findMainEvent($vcalendar);
 
-        if (version_compare($this->_version, '10.8', '<')) {
-            // NOTE 10.7 sometimes writes access into calendar property
-            if (isset($vcalendar->{'X-CALENDARSERVER-ACCESS'})) {
-                foreach ($vcalendar->VEVENT as $vevent) {
-                    $vevent->{'X-CALENDARSERVER-ACCESS'} = $vcalendar->{'X-CALENDARSERVER-ACCESS'};
-                }
+        // NOTE 10.7 and 10.10 sometimes write access into calendar property
+        if (isset($vcalendar->{'X-CALENDARSERVER-ACCESS'})) {
+            foreach ($vcalendar->VEVENT as $vevent) {
+                $vevent->{'X-CALENDARSERVER-ACCESS'} = $vcalendar->{'X-CALENDARSERVER-ACCESS'};
             }
         }
 
@@ -102,13 +100,11 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     {
         $return = parent::_convertVevent($vevent, $event, $options);
 
-        if (version_compare($this->_version, '10.8', '<')) {
-            // NOTE: 10.7 sometimes uses (internal?) int's
-            if (isset($vevent->{'X-CALENDARSERVER-ACCESS'}) && (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} > 0) {
-                $event->class = (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} == 1 ?
-                    Calendar_Model_Event::CLASS_PUBLIC :
-                    Calendar_Model_Event::CLASS_PRIVATE;
-            }
+        // NOTE: 10.7 sometimes uses (internal?) int's
+        if (isset($vevent->{'X-CALENDARSERVER-ACCESS'}) && (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} > 0) {
+            $event->class = (int) (string) $vevent->{'X-CALENDARSERVER-ACCESS'} == 1 ?
+                Calendar_Model_Event::CLASS_PUBLIC :
+                Calendar_Model_Event::CLASS_PRIVATE;
         }
 
         return $return;
