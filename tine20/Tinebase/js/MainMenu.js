@@ -276,7 +276,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             params : {
                 method : 'Tinebase.logout'
             },
-            callback : function(options, Success, response) {
+            callback : function(options, success, response) {
                 // clear the authenticated mod_ssl session
                 if (document.all == null) {
                     if (window.crypto && Ext.isFunction(window.crypto.logout)) {
@@ -290,12 +290,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 Tine.Tinebase.tineInit.clearRegistry();
 
                 // remove the event handler
-                // the reload() trigers the unload event
+                // the reload() triggers the unload event
+                // TODO move redirect handling to Tine.Tinebase.common.reload
                 var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
                 if (redirect && redirect != '') {
                     window.location = Tine.Tinebase.registry.get('redirectUrl');
                 } else {
-                    window.location.reload();
+                    Tine.Tinebase.common.reload({});
                 }
             }
         });
