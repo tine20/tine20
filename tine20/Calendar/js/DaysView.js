@@ -321,7 +321,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         if (! event.data.is_all_day_event) {
                             Ext.fly(dd.proxy.el.query('div[class=cal-daysviewpanel-event-header-inner]')[0]).update(dtString);
                         }
-                        
+
                         if (event.get('editGrant')) {
                             return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                         }
@@ -343,25 +343,25 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 
                 if (targetDate) {
                     var event = data.event;
-                    
+
                     var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
 
                     // Get the new endDate to ensure it's not out of croptimes
                     var copyTargetDate = targetDate;
                     var newEnd = copyTargetDate.add(Date.MINUTE, originalDuration);
-                    
+
                     v.dayEnd.setDate(newEnd.getDate());
-                       
+
                     // deny drop for missing edit grant or no time change
                     if (! event.get('editGrant') || Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE
                             || ((v.cropDayTime == true) && (newEnd > v.dayEnd))) {
                         return false;
                     }
-                    
+
                     event.beginEdit();
-                    
+
                     event.set('dtstart', targetDate);
-                    
+
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {
                         // draged from scroller -> dropped to allDay and duration less than a day
                         event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
@@ -371,13 +371,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     } else {
                         event.set('dtend', targetDate.add(Date.MINUTE, originalDuration));
                     }
-                    
+
                     event.set('is_all_day_event', targetDate.is_all_day_event);
                     event.endEdit();
 
-                    var attendee = new Tine.Calendar.Model.Attender(this.me.ownerCt.attendee);
-
-                    event.data.attendee[0].user_id = attendee.data.data.user_id;
+                    if (this.me.ownerCt.attendee) {
+                        var attendee = new Tine.Calendar.Model.Attender(this.me.ownerCt.attendee);
+                        event.data.attendee[0].user_id = attendee.data.data.user_id;
+                    }
 
                     v.fireEvent('updateEvent', event);
                 }
