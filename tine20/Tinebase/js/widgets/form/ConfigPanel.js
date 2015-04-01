@@ -116,7 +116,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                                 icon: Ext.MessageBox.WARNING,
                                 fn: function() {
                                     // TODO only reload own config data
-                                    window.location.reload();
+                                    Tine.Tinebase.common.reload({});
                                 }
                             });
                             break;
@@ -151,7 +151,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         Tine.Tinebase.widgets.form.ConfigPanel.superclass.onRender.call(this, ct, position);
         
         // always the same shit! when form panel is rendered, the form fields are not yet rendered ;-(
-        var formData = this.config2form.defer(250, this, [Tine.Setup.registry.get(this.registryKey)]);
+        this.config2form.defer(250, this, [Tine.Setup.registry.get(this.registryKey)]);
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
         

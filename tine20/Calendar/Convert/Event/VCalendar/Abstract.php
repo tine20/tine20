@@ -183,13 +183,13 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
             if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
                 $organizer = $vevent->add(
-                    'ORGANIZER', 
-                    'mailto:' . $organizerContact->email, 
+                    'ORGANIZER',
+                    'mailto:' . $organizerContact->email,
                     array('CN' => $organizerContact->n_fileas, 'EMAIL' => $organizerContact->email)
                 );
             }
         }
-        
+
         $this->_addEventAttendee($vevent, $event);
         
         $optionalProperties = array(
@@ -210,9 +210,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             }
         }
 
-        $vevent->add('X-CALENDARSERVER-ACCESS',
-            $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL'
-        );
+        $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
+        $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
+        $vevent->add('X-CALENDARSERVER-ACCESS', $class);
 
         // categories
         if (!isset($event->tags)) {
@@ -678,7 +678,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();

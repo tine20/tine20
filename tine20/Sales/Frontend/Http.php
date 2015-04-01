@@ -47,6 +47,28 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
+     * export suppliers
+     *
+     * @param string $filter JSON encoded string with employee ids for multi export or employee filter
+     * @param string $options format or export definition id
+     */
+    public function exportSuppliers($filter, $options)
+    {
+        $decodedFilter = Zend_Json::decode($filter);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
+        }
+    
+        if (! is_array($decodedFilter)) {
+            $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
+        }
+    
+        $filter = new Sales_Model_SupplierFilter($decodedFilter);
+        parent::_export($filter, Zend_Json::decode($options), Sales_Controller_Supplier::getInstance());
+    }
+    
+    /**
      * export invoices
      *
      * @param string $filter JSON encoded string with employee ids for multi export or employee filter
@@ -66,6 +88,29 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     
         $filter = new Sales_Model_InvoiceFilter($decodedFilter);
         parent::_export($filter, Zend_Json::decode($options), Sales_Controller_Invoice::getInstance());
+    }
+    
+
+    /**
+     * export purchase invoices
+     *
+     * @param string $filter JSON encoded string with employee ids for multi export or employee filter
+     * @param string $options format or export definition id
+     */
+    public function exportPurchaseInvoices($filter, $options)
+    {
+        $decodedFilter = Zend_Json::decode($filter);
+    
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Export filter: ' . print_r($decodedFilter, TRUE));
+        }
+    
+        if (! is_array($decodedFilter)) {
+            $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
+        }
+    
+        $filter = new Sales_Model_PurchaseInvoiceFilter($decodedFilter);
+        parent::_export($filter, Zend_Json::decode($options), Sales_Controller_PurchaseInvoice::getInstance());
     }
     
 
@@ -128,6 +173,13 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         if ($accountable == 'Sales_Model_ProductAggregate') {
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'model', 'operator' => 'equals', 'value' => 'Sales_Model_ProductAggregate')));
+        } elseif ($accountable == 'Timetracker_Model_Timeaccount') {
+            $filter = new Timetracker_Model_TimesheetFilter(array(
+                array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                    array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                )),
+            ));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
         }
         
         parent::_export($filter, array('format' => 'ods'), $billableControllerName::getInstance());

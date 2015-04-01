@@ -28,6 +28,10 @@
           "path": "js/"
         },
         {
+          "text": "SupplierSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "CostCenterSearchCombo.js",
           "path": "js/"
         },
@@ -80,6 +84,10 @@
           "path": "js/"
         },
         {
+          "text": "SupplierEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "AddressGridPanel.js",
           "path": "js/"
         },
@@ -100,7 +108,15 @@
           "path": "js/"
         },
         {
+          "text": "SupplierDetailsPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "CustomerGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "SupplierGridPanel.js",
           "path": "js/"
         },
         {
@@ -124,7 +140,15 @@
           "path": "js/"
         },
         {
+          "text": "SupplierFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "InvoiceEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "PurchaseInvoiceEditDialog.js",
           "path": "js/"
         },
         {
@@ -140,11 +164,19 @@
           "path": "js/"
         },
         {
+          "text": "PurchaseInvoiceGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "AddressSearchCombo.js",
           "path": "js/"
         },
         {
           "text": "InvoiceDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "PurchaseInvoiceDetailsPanel.js",
           "path": "js/"
         },
         {
@@ -161,6 +193,10 @@
         },
         {
           "text": "ContractCustomerFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "PurchaseInvoiceApproverFilterModel.js",
           "path": "js/"
         },
         {

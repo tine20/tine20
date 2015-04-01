@@ -20,7 +20,7 @@ Ext.ns('Tine.widgets');
 Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
     
     /**
-     * @cfg {Sring}
+     * @cfg {String}
      */
     fieldLabel: null,
     
@@ -84,8 +84,7 @@ Tine.widgets.TimezoneChooser = Ext.extend(Ext.form.ComboBox, {
                     saveaspreference: true
                 },
                 success: function(result, request){
-                    var responseData = Ext.util.JSON.decode(result.responseText);
-                    window.location.reload();
+                    Tine.Tinebase.common.reload({});
                 }
             });
         }

@@ -144,7 +144,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         if (! $cache->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Generate new Zend_Config_Xml object' . $cacheId);
-            
             $config = new Zend_Config_Xml($_definition->plugin_options, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {

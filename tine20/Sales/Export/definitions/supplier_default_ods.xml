@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_Customer</model>
+    <name>customer_default_ods</name>
+    <type>export</type>
+    <plugin>Sales_Export_Ods_Customer</plugin>
+    <description>default ods customer export definition</description>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <defaultColumnStyle>
+        <column-width>4cm</column-width>
+    </defaultColumnStyle>
+    <columns>
+        <column>
+            <identifier>number</identifier>
+            <header>Customer Number</header>
+            <type>number</type>
+            <width>10cm</width>
+        </column>
+        <column>
+            <identifier>name</identifier>
+            <header>Name</header>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Description</header>
+        </column>
+        <column>
+            <identifier>cpextern_id</identifier>
+            <header>Contact Person (external)</header>
+            <type>address</type>
+        </column>
+        <column>
+            <identifier>cpintern_id</identifier>
+            <header>Contact Person (internal)</header>
+            <type>address</type>
+        </column>
+        <column>
+            <identifier>vatid</identifier>
+            <header>VAT No.</header>
+        </column>
+        <column>
+            <identifier>url</identifier>
+            <header>Web</header>
+        </column>
+        <column>
+            <identifier>iban</identifier>
+            <header>IBAN</header>
+        </column>
+        <column>
+            <identifier>bic</identifier>
+            <header>BIC</header>
+        </column>
+        <column>
+            <identifier>credit_term</identifier>
+            <header>Credit Term (days)</header>
+        </column>
+        <column>
+            <identifier>currency</identifier>
+            <header>Currency</header>
+        </column>
+        <column>
+            <identifier>currency_trans_rate</identifier>
+            <header>Currency Translation Rate</header>
+        </column>
+        <column>
+            <identifier>discount</identifier>
+            <header>Discount (%)</header>
+        </column>
+    </columns>
+</config>

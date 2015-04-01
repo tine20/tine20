@@ -1,0 +1,237 @@
+<?php
+/**
+ * Tine 2.0
+
+ * @package     Sales
+ * @subpackage  Model
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
+/**
+ * class to hold Purchase Invoice data
+ *
+ * @package     Sales
+ * @subpackage  Model
+ */
+
+class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
+{
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+    
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Purchase Invoice',
+        'recordsName'       => 'Purchase Invoices', // ngettext('Purchase Invoice', 'Purchase Invoices', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
+        'defaultFilter'     => 'description',
+        'titleProperty'     => 'description',
+        'appName'           => 'Sales',
+        'modelName'         => 'PurchaseInvoice',
+        
+        'filterModel' => array(
+            'supplier' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Supplier', // _('Supplier')
+                'options' => array(
+                    'controller'      => 'Sales_Controller_Supplier',
+                    'filtergroup'     => 'Sales_Model_SupplierFilter',
+                    'own_filtergroup' => 'Sales_Model_PurchaseInvoiceFilter',
+                    'own_controller'  => 'Sales_Controller_PurchaseInvoice',
+                    'related_model'   => 'Sales_Model_Supplier',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.supplier')
+            ),
+            'costcenter' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Cost Center', // _('Cost Center')
+                'options' => array(
+                    'controller'      => 'Sales_Controller_CostCenter',
+                    'filtergroup'     => 'Sales_Model_CostCenterFilter',
+                    'own_filtergroup' => 'Sales_Model_PurchaseInvoiceFilter',
+                    'own_controller'  => 'Sales_Controller_PurchaseInvoice',
+                    'related_model'   => 'Sales_Model_CostCenter',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.contractcostcenter')
+            ),
+            'approver' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Approver', // _('Approver')
+                'options' => array(
+                    'controller'      => 'Addressbook_Controller_Contact',
+                    'filtergroup'     => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup' => 'Sales_Model_PurchaseInvoiceFilter',
+                    'own_controller'  => 'Sales_Controller_PurchaseInvoice',
+                    'related_model'   => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig' => array('filtertype' => 'sales.purchaseinvoice_approver')
+            )
+        ),
+        
+        'fields'            => array(
+            'number' => array(
+                'label' => 'Invoice Number',    // _('Invoice Number')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'queryFilter' => TRUE,
+            ),
+            'description' => array(
+                'label'   => 'Description',     // _('Description')
+                'queryFilter' => TRUE,
+            ),
+            'date' => array(
+                'type'  => 'date',
+                'label' => 'Date of invoice',   // _('Date of invoice')
+            ),
+            'due_in' => array(
+                'title' => 'Due in',            // _('Due in')
+                'type'  => 'integer',
+                'default' => 10,
+                'shy' => TRUE,
+            ),
+            'due_at' => array(
+                'type'  => 'date',
+                'label' => 'Due at',            // _('Due at')
+            ),
+            'pay_at' => array(
+                'type'  => 'date',
+                'label' => 'Pay at',            // _('Pay at')
+            ),
+            'overdue_at' => array(
+                'type'  => 'date',
+                'label' => 'Overdue at',        // _('Overdue at')
+                'shy'   => TRUE,
+            ),
+            'payed_at' => array(
+                'type'  => 'date',
+                'label' => 'Payed at',          // _('Payed at')
+            ),
+            'dunned_at' => array(
+                'type'  => 'date',
+                'label' => 'Dunned at',    // _('Dunned at')
+                'shy'   => TRUE,
+            ),
+            'payment_method' => array(
+                'label'   => 'Payment_method', //_('Payment_method')
+                'default' => 'BANK TRANSFER',
+                'type'    => 'keyfield',
+                'name'    => Sales_Config::PAYMENT_METHODS,
+                'shy'     => TRUE,
+            ),
+            'discount' => array(
+                'label'   => 'Discount (%)', // _('Discount (%)')
+                'type'    => 'float',
+                'specialType' => 'percent',
+                'default' => 0,
+                'shy'     => TRUE,
+            ),
+            'discount_until' => array(
+                'type'  => 'date',
+                'label' => 'Discount until',    // _('Discount until')
+                'shy' => TRUE,
+            ),
+            'price_net' => array(
+                'label' => 'Price Net', // _('Price Net')
+                'type'  => 'float',
+                'specialType' => 'euMoney',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
+            ),
+            'price_gross' => array(
+                'label' => 'Price Gross', // _('Price Gross')
+                'type'  => 'float',
+                'specialType' => 'euMoney',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+            ),
+            'price_tax' => array(
+                'label' => 'Price Tax', // _('Price Tax')
+                'type'  => 'float',
+                'specialType' => 'euMoney',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
+            ),
+            'sales_tax' => array(
+                'label' => 'Sales Tax', // _('Sales Tax')
+                'type'  => 'float',
+                'specialType' => 'percent',
+                'default' => 19,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
+            ),
+            'costcenter' => array(
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'relation',
+                    'label'  => 'Cost Center',    // _('Cost Center')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'CostCenter',
+                        'type'      => 'COST_CENTER'
+                    ),
+                    'shy' => TRUE,
+                ),
+            ),
+            'approver' => array(
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'relation',
+                    'label'  => 'Approver',    // _('Approver')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type'      => 'APPROVER'
+                    )
+                )
+            ),
+            'supplier' => array(
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'relation',
+                    'label'  => 'Supplier',    // _('Supplier')
+                    'config' => array(
+                        'appName'   => 'Sales',
+                        'modelName' => 'Supplier',
+                        'type'      => 'SUPPLIER'
+                    )
+                )
+            )
+        )
+    );
+    
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    protected static $_relatableConfig = array(
+        array('relatedApp' => 'Sales', 'relatedModel' => 'Supplier', 'config' => array(
+            array('type' => 'SUPPLIER', 'degree' => 'sibling', 'text' => 'Supplier', 'max' => '0:0'), // _('Supplier')
+            ), 'defaultType' => 'SUPPLIER'
+        ),
+        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
+            array('type' => 'APPROVER', 'degree' => 'sibling', 'text' => 'Approver', 'max' => '0:0'), // _('Approver')
+            ), 'defaultType' => 'APPROVER'
+        ),
+        array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
+            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
+            ), 'defaultType' => 'LEAD_COST_CENTER'
+        ),
+    );
+}

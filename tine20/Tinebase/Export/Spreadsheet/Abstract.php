@@ -1,12 +1,12 @@
 <?php
 /**
- * Tinebase Abstract spreadsheet export class
+ * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage    Export
+ * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -142,8 +142,8 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 break;
             case 'currency':
                 $currency = ($_field->currency) ? $_field->currency : 'EUR';
-                $result =  ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';
-                $result .= ' ' . $currency;
+                $result = ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';
+                $result = number_format($result, 2, '.', '') . ' ' . $currency;
                 break;
             case 'percentage':
                 $result    = $_record->{$_field->identifier} / 100;

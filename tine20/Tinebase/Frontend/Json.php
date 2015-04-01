@@ -761,7 +761,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . " Failed to fetch persistent filters. Exception: \n". $tenf);
             $persistentFilters = array();
+        }  catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n". $e);
+            $persistentFilters = array();
         }
+
         
         $userRegistryData = array(
             'timeZone'           => Tinebase_Core::getUserTimezone(),
