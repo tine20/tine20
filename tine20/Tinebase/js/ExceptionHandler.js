@@ -97,7 +97,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             error.description = args[0].description;
             
         } else if ((args.length == 3) && (typeof(args[2]) == "number")) { // Check the signature for a match with an unhandled exception
-            error.name    = 'catchable exception'
+            error.name    = 'catchable exception';
             error.message = args[0];
             error.url     = args[1];
             error.line    = args[2];
@@ -120,7 +120,7 @@ Tine.Tinebase.ExceptionHandler = function() {
      * 
      * NOTE: status codes 9xx are reserved for applications and must not be handled here!
      * 
-     * @param {Tine.Exception|Object} exception
+     * @param {exception|Object} exception
      * @param {Function} callback
      * @param {Object}   callbackScope
      * @param {Function} callbackOnOk
@@ -191,7 +191,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                         if (redirect && redirect != '') {
                             window.location = Tine.Tinebase.registry.get('redirectUrl');
                         } else {
-                            window.location.reload();
+                            Tine.Tinebase.common.reload({});
                         }
                     }
                 }));
@@ -345,7 +345,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             });
             Tine.Tinebase.exceptionDlg.show();
         }
-    }
+    };
     
     // init window error handler
     window.onerror = !window.onerror ? 
