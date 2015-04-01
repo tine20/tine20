@@ -330,34 +330,37 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             },
             
             notifyOut : function() {
-                //console.log('notifyOut');
                 //delete this.grid;
             },
             
             notifyDrop : function(dd, e, data) {
-                var v = data.scope;
-                
-                var targetDate = v.getTargetDateTime(e);
+                var v = data.scope,
+                    targetDate = v.getTargetDateTime(e);
                 
                 if (targetDate) {
-                    var event = data.event;
-                    
-                    var originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
-                    
+                    var event = data.event,
+                        originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
+
                     // Get the new endDate to ensure it's not out of croptimes
-                    var copyTargetDate = targetDate;
-                    var newEnd = copyTargetDate.add(Date.MINUTE, originalDuration);
-                    
-                    v.dayEnd.setDate(newEnd.getDate());
-                       
+                    var outOfCropBounds = false;
+                    if (v.cropDayTime == true) {
+                        var newEnd = new Date(),
+                            dayEndCompare = new Date();
+
+                        newEnd.setTime(targetDate.getTime());
+                        newEnd.add(Date.MINUTE, originalDuration);
+                        dayEndCompare.setTime(targetDate.getTime());
+                        dayEndCompare.setHours(v.dayEnd.getHours(), v.dayEnd.getMinutes());
+                        outOfCropBounds = (newEnd > dayEndCompare);
+                    }
+
                     // deny drop for missing edit grant or no time change
                     if (! event.get('editGrant') || Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE
-                            || ((v.cropDayTime == true) && (newEnd > v.dayEnd))) {
+                            || outOfCropBounds) {
                         return false;
                     }
                     
                     event.beginEdit();
-                    
                     event.set('dtstart', targetDate);
                     
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {

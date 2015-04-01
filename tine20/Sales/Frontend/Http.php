@@ -173,6 +173,13 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         if ($accountable == 'Sales_Model_ProductAggregate') {
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'model', 'operator' => 'equals', 'value' => 'Sales_Model_ProductAggregate')));
+        } elseif ($accountable == 'Timetracker_Model_Timeaccount') {
+            $filter = new Timetracker_Model_TimesheetFilter(array(
+                array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                    array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                )),
+            ));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
         }
         
         parent::_export($filter, array('format' => 'ods'), $billableControllerName::getInstance());
