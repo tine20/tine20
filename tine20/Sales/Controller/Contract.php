@@ -76,12 +76,15 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      * get by id
      *
      * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
      * @return Tinebase_Record_RecordSet
      */
-    public function get($_id)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
     {
-        $sharedContracts = $this->getSharedContractsContainer();
-        return parent::get($_id, $sharedContracts->getId());
+        $containerId = $_containerId !== null ? $_containerId : $this->getSharedContractsContainer();
+        
+        return parent::get($_id, $containerId, $_getRelatedData);
     }
     
 
