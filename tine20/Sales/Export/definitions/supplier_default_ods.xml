@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <model>Sales_Model_Customer</model>
-    <name>customer_default_ods</name>
+    <model>Sales_Model_Supplier</model>
+    <name>supplier_default_ods</name>
     <type>export</type>
-    <plugin>Sales_Export_Ods_Customer</plugin>
-    <description>default ods customer export definition</description>
+    <plugin>Sales_Export_Ods_Supplier</plugin>
+    <description>default ods supplier export definition</description>
     <header>1</header>
     <headers>
         <header>{date}</header>
