@@ -75,7 +75,7 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
             if ($filter['field'] == ':id' && $filter['operator'] == 'equals' && is_string($filter['value']) && strlen($filter['value']) == 40) {
                 $split = explode('_Model_', $this->_options['related_model']);
                 $cname = $split[0] . '_Controller_' . $split[1];
-                $fr = $cname::getInstance()->get($filter['value']);
+                $fr = $cname::getInstance()->get($filter['value'], /* $_containerId = */ null, /* $_getRelatedData = */ false);
                 $fr->relations = null;
                 $filter['value'] = $fr->toArray();
             }

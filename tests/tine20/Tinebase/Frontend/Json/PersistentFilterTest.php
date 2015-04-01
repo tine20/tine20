@@ -5,7 +5,7 @@
  * Test class for Tinebase_Frontend_Json_PersistentFilter
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
@@ -373,5 +373,62 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $personas['jsmith']);
         
         $this->testOverwriteExistingFilter();
+    }
+
+    /**
+     * testFilterResolving
+     * 
+     * -> relations should not be resolved here!
+     */
+    public function testFilterResolving()
+    {
+        $contact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'test heini')));
+        $contactWithRelations = array(
+            'n_family' => 'test typ',
+            'relations' => array(array(
+                'own_model'              => 'Addressbook_Model_Contact',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => '',
+                'related_backend'        => 'Sql',
+                'related_id'             => $contact1->getId(),
+                'related_model'          => 'Addressbook_Model_Contact',
+                'remark'                 => NULL,
+            ),
+            )
+        );
+        $contact2 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact($contactWithRelations));
+        $exampleFilterData = self::getPersistentFilterData();
+        $exampleFilterData['filters'] = array(
+            array('field' => 'foreignRecord', 'operator' => 'AND', 'value' => array(
+                'appName' => 'Addressbook',
+                'modelName' => 'Contact',
+                'linkType' => 'relation',
+                'filters' => array
+                (
+                    array
+                    (
+                        'field' => ':id',
+                        'operator' => 'equals',
+                        'value' => $contact2->getId()
+                    )
+                )
+            ))
+        );
+        $savedFilterData = $this->_uit->savePersistentFilter($exampleFilterData);
+        
+        $filterData = array(
+            array('field' => 'model',   'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'),
+            array('field' => 'id',      'operator' => 'equals', 'value' => $savedFilterData['id'])
+        );
+        
+        $searchResult = $this->_uit->searchPersistentFilter($filterData, NULL);
+        
+        $this->assertEquals(1, $searchResult['totalcount']);
+        
+        $this->assertTrue(isset($searchResult['results'][0]['filters'][0]['value']['filters'][0]['value']));
+        $filterContact = $searchResult['results'][0]['filters'][0]['value']['filters'][0]['value'];
+        $this->assertTrue(! isset($filterContact['relations']), 'relations should not be resolved:' . print_r($filterContact, true));
     }
 }
