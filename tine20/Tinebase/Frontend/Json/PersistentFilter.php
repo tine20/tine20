@@ -76,12 +76,20 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
             
             // return only filters of activated apps
             $applicationIds = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->getArrayOfIds();
-            
-            return $obj->searchPersistentFilter(array(
+            $filterArray = array(
                 array('field' => 'account_id',      'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
                 array('field' => 'application_id',  'operator' => 'in',     'value' => $applicationIds),
-            ), NULL);
+            );
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Fetching all filters of user ' . Tinebase_Core::getUser()->accountLoginName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($filterArray, true));
+
+            return $obj->searchPersistentFilter($filterArray, NULL);
         }
+
+        return array();
     }
     
     /**

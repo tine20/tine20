@@ -487,15 +487,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function toArray($_recursive = TRUE)
     {
-        /*
-        foreach ($this->_properties as $key => $value) {
-            if ($value instanceof DateTime) {
-                $date = new Tinebase_DateTime($value->get(Tinebase_Record_Abstract::ISO8601LONG));
-                $date->setTimezone($value->getTimezone());
-                $this->_properties[$key] = $date;
-            }
-        }
-        */
         $recordArray = $this->_properties;
         if ($this->convertDates === true) {
             if (! is_string($this->dateConversionFormat)) {
