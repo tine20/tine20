@@ -1915,4 +1915,15 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.26');
     }
+    
+    /**
+     * update to 8.27
+     *
+     *  - update export definition
+     */
+    public function update_26()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
+        $this->setApplicationVersion('Sales', '8.27');
+    }
 }
