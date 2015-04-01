@@ -63,7 +63,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * resolves single record fields (Tinebase_ModelConfiguration._recordsFields)
      * 
      * @param Tinebase_Record_RecordSet $_records the records
-     * @param Tinebase_ModelConfiguration
+     * @param Tinebase_ModelConfiguration $modelConfig
      */
     protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfig = NULL)
     {
@@ -101,10 +101,13 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if ($cfg['type'] == 'user') {
                     $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
                 } else if ($cfg['type'] == 'container') {
+                    // TODO: resolve recursive records of records better in controller
+                    // TODO: resolve containers
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' No handling for container foreign records implemented');
+
                     $foreignRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
-                    $foreignRecords->addRecord(Tinebase_Container::getInstance()->get($_id));
-                // TODO: resolve recursive records of records better in controller
-                // TODO: resolve containers
+                    // $foreignRecords->addRecord(Tinebase_Container::getInstance()->get(XXX));
                 } else {
                     try {
                         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
@@ -250,6 +253,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_Record_RecordSet $_records
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _resolveMultipleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfiguration = NULL, $multiple = false)
     {
@@ -271,16 +275,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if ($multiple && !(isset($config['omitOnSearch']) && $config['omitOnSearch'] === FALSE)) {
                 continue;
             }
-            
+
+            if (! isset($config['controllerClassName'])) {
+                throw new Tinebase_Exception_UnexpectedValue('Controller class name needed');
+            }
+
             // fetch the fields by the refIfField
-            $controller = isset($config['controllerClassName']) ? $config['controllerClassName']::getInstance() : Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+            $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
             
             $filterArray = array();
             
             // addFilters can be added and must be added if the same model resides in more than one records fields
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
-                $useaddFilters = true;
                 $filterArray = $config['addFilters'];
             }
             
@@ -451,6 +458,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (! $_records || count($_records) == 0) {
             return array();
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Processing ' . count($_records) . ' records ...');
         
         // find out if there is a modelConfiguration
         $ownRecordClass = $_records->getRecordClassName();
