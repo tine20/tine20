@@ -1,6 +1,6 @@
 Tine.Calendar.CalendarPanelSplitPlugin = function() {
     
-}
+};
 
 /**
  * @TODO ui for active view?
@@ -48,7 +48,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         }, this);
         this.calPanel.on('afterlayout', function() {
             this.calPanel.body.setWidth(this.calPanel.getWidth());
-            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);;
+            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
         }, this);
         
         this.mainStore = this.calPanel.view.store;
@@ -207,7 +207,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             // add subviews new to filter
             // NOTE: we don't iterate the attendeeStore as we would loose attendee order than
             Ext.each(filteredAttendee, function(attendeeData, idx) {
-                var attendee = new Tine.Calendar.Model.Attender(attendeeData, attendeeData.id)
+                var attendee = new Tine.Calendar.Model.Attender(attendeeData, attendeeData.id);
                 var attendeeView = this.attendeeViews.get(this.getAttendeeViewId(attendee));
                 if (! attendeeView) {
                     this.addAttendeeView(attendee, idx);
@@ -264,6 +264,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
      * is called on scroll of a grid, scrolls the other grids
      * 
      * @param {Object} activeView
+     * @param {Object} e Event
      */
     onScroll: function(activeView, e) {
         if (! (activeView && activeView.scroller && activeView.scroller.dom)) {
@@ -465,6 +466,13 @@ Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn = Ext.extend(Ext.Button, {
     stateEvents: ['toggle'],
     
     initComponent: function() {
+        if (! Tine.Tinebase.appMgr.get('Calendar').featureEnabled('featureSplitView')) {
+            // hide button and make sure it isn't pressed
+            Tine.log.info('Split view feature is deactivated');
+            this.hidden = true;
+            this.pressed = false;
+        }
+
         Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn.superclass.initComponent.apply(this, arguments);
         Tine.Calendar.CalendarPanelSplitPlugin.splitBtn = this;
     },
