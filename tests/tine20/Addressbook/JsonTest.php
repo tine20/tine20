@@ -395,8 +395,8 @@ class Addressbook_JsonTest extends TestCase
         $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
         
         // check invalid data
-        
         $changes = array(
+            array('name' => 'n_fileas', 'value' => ''),
             array('name' => 'n_family', 'value' => ''),
             array('name' => 'n_given',  'value' => ''),
             array('name' => 'org_name', 'value' => '')

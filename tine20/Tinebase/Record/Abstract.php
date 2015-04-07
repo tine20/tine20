@@ -227,7 +227,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param mixed $_data
      * @param bool $bypassFilters sets {@see this->bypassFilters}
      * @param mixed $convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
-     * @return void
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
