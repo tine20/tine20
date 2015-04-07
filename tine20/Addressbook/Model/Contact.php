@@ -14,49 +14,49 @@
  * 
  * @package     Addressbook
  * @subpackage  Model
- * @property    account_id                 id of associated user
- * @property    adr_one_countryname        name of the country the contact lives in
- * @property    adr_one_locality           locality of the contact
- * @property    adr_one_postalcode         postalcode belonging to the locality
- * @property    adr_one_region             region the contact lives in
- * @property    adr_one_street             street where the contact lives
- * @property    adr_one_street2            street2 where contact lives
- * @property    adr_two_countryname        second home/country where the contact lives
- * @property    adr_two_locality           second locality of the contact
- * @property    adr_two_postalcode         ostalcode belonging to second locality
- * @property    adr_two_region             second region the contact lives in
- * @property    adr_two_street             second street where the contact lives
- * @property    adr_two_street2            second street2 where the contact lives
- * @property    assistent                  name of the assistent of the contact
- * @property    bday                       date of birth of contact
- * @property    container_id               id of container
- * @property    email                      the email address of the contact
- * @property    email_home                 the private email address of the contact
- * @property    jpegphoto                  photo of the contact
- * @property    n_family                   surname of the contact
- * @property    n_fileas                   display surname, name
- * @property    n_fn                       the full name
- * @property    n_given                    forename of the contact
- * @property    n_middle                   middle name of the contact
- * @property    note                       notes of the contact    
- * @property    n_prefix
- * @property    n_suffix
- * @property    org_name                   name of the company the contact works at
- * @property    org_unit
- * @property    role                       type of role of the contact  
- * @property    tel_assistent              phone number of the assistent
- * @property    tel_car
- * @property    tel_cell                   mobile phone number
- * @property    tel_cell_private           private mobile number
- * @property    tel_fax                    number for calling the fax
- * @property    tel_fax_home               private fax number
- * @property    tel_home                   telephone number of contact's home
- * @property    tel_pager                  contact's pager number
- * @property    tel_work                   contact's office phone number
- * @property    title                      special title of the contact
- * @property    type                       type of contact
- * @property    url                        url of the contact
- * @property    url_home                   private url of the contact
+ * @property    string account_id                 id of associated user
+ * @property    string adr_one_countryname        name of the country the contact lives in
+ * @property    string adr_one_locality           locality of the contact
+ * @property    string adr_one_postalcode         postalcode belonging to the locality
+ * @property    string adr_one_region             region the contact lives in
+ * @property    string adr_one_street             street where the contact lives
+ * @property    string adr_one_street2            street2 where contact lives
+ * @property    string adr_two_countryname        second home/country where the contact lives
+ * @property    string adr_two_locality           second locality of the contact
+ * @property    string adr_two_postalcode         ostalcode belonging to second locality
+ * @property    string adr_two_region             second region the contact lives in
+ * @property    string adr_two_street             second street where the contact lives
+ * @property    string adr_two_street2            second street2 where the contact lives
+ * @property    string assistent                  name of the assistent of the contact
+ * @property    datetime bday                     date of birth of contact
+ * @property    integer container_id              id of container
+ * @property    string email                      the email address of the contact
+ * @property    string email_home                 the private email address of the contact
+ * @property    blob jpegphoto                    photo of the contact
+ * @property    string n_family                   surname of the contact
+ * @property    string n_fileas                   display surname, name
+ * @property    string n_fn                       the full name
+ * @property    string n_given                    forename of the contact
+ * @property    string n_middle                   middle name of the contact
+ * @property    string note                       notes of the contact
+ * @property    string n_prefix
+ * @property    string n_suffix
+ * @property    string org_name                   name of the company the contact works at
+ * @property    string org_unit
+ * @property    string role                       type of role of the contact
+ * @property    string tel_assistent              phone number of the assistent
+ * @property    string tel_car
+ * @property    string tel_cell                   mobile phone number
+ * @property    string tel_cell_private           private mobile number
+ * @property    string tel_fax                    number for calling the fax
+ * @property    string tel_fax_home               private fax number
+ * @property    string tel_home                   telephone number of contact's home
+ * @property    string tel_pager                  contact's pager number
+ * @property    string tel_work                   contact's office phone number
+ * @property    string title                      special title of the contact
+ * @property    string type                       type of contact
+ * @property    string url                        url of the contact
+ * @property    string url_home                   private url of the contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {
@@ -240,7 +240,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     * @param mixed $_data
     * @param bool $_bypassFilters
     * @param mixed $_convertDates
-    * @return void
     */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
@@ -250,7 +249,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             $this->_filters[$geoField]        = new Zend_Filter_Empty(NULL);
         }
     
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
     
     /**
@@ -283,17 +282,26 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         if (! (isset($_data['org_name']) || array_key_exists('org_name', $_data))) {
             $_data['org_name'] = '';
         }
+
+        // try to guess name from n_fileas
+        // TODO: n_fn
+        if (empty($_data['org_name']) && empty($_data['n_family'])) {
+            if (! empty($_data['n_fileas'])) {
+                $names = preg_split('/\s*,\s*/', $_data['n_fileas']);
+                $_data['n_family'] = $names[0];
+                if (empty($_data['n_given'])&& isset($names[1])) {
+                    $_data['n_given'] = $names[1];
+                }
+            }
+        }
         
         // always update fileas and fn
         $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family']
             : ((! empty($_data['org_name'])) ? $_data['org_name']
             : ((isset($_data['n_fileas'])) ? $_data['n_fileas'] : ''));
-        
+
         if (!empty($_data['n_given'])) {
             $_data['n_fileas'] .= ', ' . $_data['n_given'];
-            
-            // to change n_fileas to "ngiven nfamily" use this line instead of the above
-            //$_data['n_fileas'] = $_data['n_given'] . ' ' . $_data['n_fileas'];
         }
 
         $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
@@ -362,14 +370,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         }
         
         if ($_throwExceptionOnInvalidData && (!$valid || !$parentValid)) {
-            
-            if(!$valid) {
-                $message = 'either "org_name" or "n_family" must be given!';
+
+            $message = (!$valid) ? 'either "org_name" or "n_family" must be given!' : '';
+            if ($parentException) {
+                $message .= ', ' . $parentException->getMessage();
             }
-            
-            if($parentException) $message .= ', ' . $parentException->getMessage();
             $e = new Tinebase_Exception_Record_Validation($message);
-            if(!$valid) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" . print_r($this->_validationErrors,true). $e);
+            if (!$valid) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" . print_r($this->_validationErrors, true) . $e);
+            }
             throw $e;
         }
         

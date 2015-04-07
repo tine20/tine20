@@ -255,6 +255,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         this.wheelIncrement = Tine.Tinebase.configManager.get('daysviewwheelincrement', 'Calendar') || this.wheelIncrement;
         
+        this.wheelIncrement = Tine.Tinebase.configManager.get('daysviewwheelincrement', 'Calendar') || this.wheelIncrement;
+        
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
     
@@ -304,7 +306,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     initDropZone: function() {
         this.dd = new Ext.dd.DropZone(this.mainWrap.dom, {
             ddGroup: 'cal-event',
-            
+
+            me: this,
+
             notifyOver : function(dd, e, data) {
                 var sourceEl = Ext.fly(data.sourceEl);
                 sourceEl.setStyle({'border-style': 'dashed'});
@@ -312,14 +316,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 
                 if (data.event) {
                     var event = data.event;
-                    
+
                     var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
                     if (targetDateTime) {
                         var dtString = targetDateTime.format(targetDateTime.is_all_day_event ? Ext.form.DateField.prototype.format : 'H:i');
                         if (! event.data.is_all_day_event) {
                             Ext.fly(dd.proxy.el.query('div[class=cal-daysviewpanel-event-header-inner]')[0]).update(dtString);
                         }
-                        
+
                         if (event.get('editGrant')) {
                             return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                         }
@@ -359,10 +363,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                             || outOfCropBounds) {
                         return false;
                     }
-                    
+
                     event.beginEdit();
                     event.set('dtstart', targetDate);
-                    
+
                     if (! event.get('is_all_day_event') && targetDate.is_all_day_event && event.duration < Date.msDAY) {
                         // draged from scroller -> dropped to allDay and duration less than a day
                         event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
@@ -372,10 +376,15 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     } else {
                         event.set('dtend', targetDate.add(Date.MINUTE, originalDuration));
                     }
-                    
+
                     event.set('is_all_day_event', targetDate.is_all_day_event);
                     event.endEdit();
-                    
+
+                    if (this.me.ownerCt.attendee) {
+                        var attendee = new Tine.Calendar.Model.Attender(this.me.ownerCt.attendee);
+                        event.data.attendee[0].user_id = attendee.data.data.user_id;
+                    }
+
                     v.fireEvent('updateEvent', event);
                 }
                 
@@ -429,7 +438,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         Ext.fly(d).setWidth(width);
                         Ext.fly(d).setHeight(this.view.getTimeHeight.call(this.view, event.get('dtstart'), event.get('dtend')));
                     }
-                    
+
                     return {
                         scope: this.view,
                         sourceEl: eventEl,
@@ -469,7 +478,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.initElements();
         this.getSelectionModel().init(this);
     },
-    
+
     /**
      * fill the events into the view
      */
@@ -678,7 +687,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @param {} event
      */
     createEvent: function(e, event) {
-        
         // only add range events if mouse is down long enough
         if (this.editing || (event.isRangeAdd && ! this.mouseDown)) {
             return;

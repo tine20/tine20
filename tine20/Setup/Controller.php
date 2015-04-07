@@ -674,6 +674,7 @@ class Setup_Controller
             try {
                 $applicationTable = Setup_Core::getDb()->describeTable(SQL_TABLE_PREFIX . 'applications');
                 if (empty($applicationTable)) {
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Applications table empty');
                     $result = TRUE;
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
