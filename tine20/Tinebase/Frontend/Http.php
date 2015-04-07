@@ -146,7 +146,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         // display openId trust form
         } else if (isset($_GET['openid_action']) && $_GET['openid_action'] === 'trust') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " display openId trust screen");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Display openId trust screen");
             $view = new Zend_View();
             $view->setScriptPath('Tinebase/views');
             
@@ -202,6 +203,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         foreach ($applications as $application) {
             if ($setupController->updateNeeded($application)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " " . $application->name . ' needs an update');
                 $this->setupRequired();
             }
         }
