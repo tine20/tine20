@@ -158,6 +158,10 @@
         {
           "text": "ImportDialog.js",
           "path": "js/"
+        },
+        {
+          "text": "CalendarPanelSplitPlugin.js",
+          "path": "js/"
         }
       ]
     },

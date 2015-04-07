@@ -764,7 +764,8 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initLibs();
 
-    Tine.Tinebase.tineInit.initRegistry(false, function() {
+    // FIXME: we now always load the registry because otherwise loginFromPost would not work
+    Tine.Tinebase.tineInit.initRegistry(window.isMainWindow, function() {
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });
