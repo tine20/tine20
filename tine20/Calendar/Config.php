@@ -105,6 +105,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const RESOURCE_MAIL_FOR_EDITORS = 'resourcemailforeditors';
 
     /**
+     * FEATURE_SPLIT_VIEW
+     *
+     * @var string
+     */
+    const FEATURE_SPLIT_VIEW = 'featureSplitView';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -251,7 +258,26 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
             'setByAdminModule'      => false,
             'default'               => false
-        )
+        ),
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            //_('Enabled Features in Calendar Application.')
+            'description'           => 'Enabled Features in Calendar Application.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_SPLIT_VIEW => array(
+                    'label'         => 'Calendar Split View', //_('Calendar Split View')
+                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee)
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_SPLIT_VIEW           => true,
+            ),
+        ),
+
     );
     
     /**
