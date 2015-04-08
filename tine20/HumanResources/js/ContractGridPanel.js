@@ -80,6 +80,11 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 return;
             }
             
+            if (record.id.length == 13) {
+                action.enable();
+                return;
+            }
+            
             action.setDisabled(! (record.get('is_editable') == true)); // may be undefined
         }
         
@@ -97,6 +102,58 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     onEditInNewWindow: function(button, record, plugins) {
         Tine.HumanResources.ContractGridPanel.superclass.onEditInNewWindow.call(this, button, record, plugins);
+    },
+    
+    /**
+     * called when Records have been added to the Store
+     */
+    onStoreAdd: function(store, records, index) {
+        var contract = records[0];
+        
+        // has a temporary id -> check vacation overlap
+        if (contract.id.length == 13) {
+            this.checkVacationOverlap(contract);
+        }
+        
+        Tine.HumanResources.ContractGridPanel.superclass.onStoreAdd.call(this, store, records, index);
+    },
+    
+    /**
+     * shows message if a previous defined vacation is in the time periodof the added contract
+     * 
+     * @param {Tine.Sales.Model.Contract} contract
+     */
+    checkVacationOverlap: function(contract) {
+        var startDate = contract.get('start_date');
+        var store = this.editDialog.vacationGridPanel.getStore();
+
+        // if vacation grid panel has not been loaded, fetch records from the parent record
+        if (store.getCount() == 0) {
+            store = new Ext.util.MixedCollection();
+            if (this.editDialog.record.data.vacation && this.editDialog.record.data.vacation.length) {
+                for (var index = 0; index < this.editDialog.record.data.vacation.length; index++) {
+                    store.add(new Tine.HumanResources.Model.FreeDay(this.editDialog.record.data.vacation[index]));
+                }
+            }
+            
+        }
+        
+        var found = false;
+        store.each(function(record, index) {
+            if (record.get('firstday_date') >= startDate) {
+                found = true;
+            }
+        });
+        
+        if (found) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Vacation in same period'), 
+                msg: this.app.i18n._('There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore.'),
+                buttons: Ext.Msg.OK,
+                scope: this,
+                icon: Ext.MessageBox.WARNING
+            });
+        }
     }
 });
 

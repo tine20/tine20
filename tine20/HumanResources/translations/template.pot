@@ -797,3 +797,15 @@ msgstr ""
 #: Setup/Update/Release6.php:330
 msgid "Currently employed"
 msgstr ""
+
+msgid "Accounts have been created"
+msgstr ""
+
+msgid "{0} accounts for the year {1} have been created successfully!"
+msgstr ""
+
+msgid "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
+msgstr ""
+
+msgid "Vacation in same period"
+msgstr ""
