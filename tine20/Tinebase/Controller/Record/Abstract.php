@@ -209,9 +209,9 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Got ' . count($result) . ' search results');
         
         if (! $_onlyIds) {
-            if ($_getRelations) {
+            if ($_getRelations && count($result) > 0 && $result->getFirstRecord()->has('relations')) {
                 // if getRelations is true, all relations should be fetched
-                if ($_getRelations === TRUE) {
+                if ($_getRelations === true) {
                     $_getRelations = NULL;
                 }
                 $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId(), NULL, array(), FALSE, $_getRelations));
@@ -661,7 +661,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Doing duplicate check.');
 
-        $duplicates = $this->search($duplicateFilter, new Tinebase_Model_Pagination(array('limit' => 5)));
+        $duplicates = $this->search($duplicateFilter, new Tinebase_Model_Pagination(array('limit' => 5)), /* $_getRelations = */ true);
 
         if (count($duplicates) > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .

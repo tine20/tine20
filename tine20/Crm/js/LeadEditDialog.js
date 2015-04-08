@@ -195,9 +195,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             } else if (newLinkObject.relation_type === 'task') {
                 tasks.push(newLinkObject);
             } else if (newLinkObject.relation_type === 'product') {
-                newLinkObject.remark_description = relations[i].remark.description;
-                newLinkObject.remark_price = relations[i].remark.price;
-                newLinkObject.remark_quantity = relations[i].remark.quantity;
+                newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
+                newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
+                newLinkObject.remark_quantity = (relations[i].remark) ? relations[i].remark.quantity : 1;
                 products.push(newLinkObject);
             }
         }
