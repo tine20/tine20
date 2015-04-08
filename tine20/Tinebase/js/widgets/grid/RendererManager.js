@@ -53,8 +53,7 @@ Tine.widgets.grid.RendererManager = function() {
                 // @TODO
                 renderer = function(value) {return value ? _('has notes') : '';};
             } else if (fieldName == 'relations') {
-                // @TODO
-                renderer = function(value) {return value ? _('has relations') : '';};
+                renderer = Tine.Tinebase.common.relationsRenderer;
             } else if (fieldName == 'customfields') {
                 // @TODO
                 // we should not come here!

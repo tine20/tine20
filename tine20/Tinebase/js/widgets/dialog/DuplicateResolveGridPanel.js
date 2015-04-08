@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -133,7 +133,23 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             resolveRecord = this.store.getAt(rowIndex);
 
         if (resolveRecord && dataIndex && dataIndex.match(/clientValue|value\d+/)) {
-            resolveRecord.set('finalValue', resolveRecord.get(dataIndex));
+            if (e.shiftKey && Ext.isString(resolveRecord.get(dataIndex))) {
+                // combine string values if shift is pressed
+                var record = this.store.getAt(rowIndex),
+                    combined = record.get('clientValue') + ' / ' + record.get('value0'),
+                    colToSelect = (colIndex == 2) ? 3 : 2,
+                    otherCellEl = this.getView().getCell(rowIndex, colToSelect);
+
+                if (otherCellEl) {
+                    // TODO it would be nicer if this worked ...
+                    //Ext.fly(otherCellEl).addClass('x-grid3-cell-selected');
+                    Ext.fly(otherCellEl).highlight();
+                }
+
+                resolveRecord.set('finalValue', combined);
+            } else {
+                resolveRecord.set('finalValue', resolveRecord.get(dataIndex));
+            }
 
             var celEl = this.getView().getCell(rowIndex, this.getColumnModel().getIndexById('finalValue'));
             if (celEl) {
@@ -370,7 +386,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             });
         }
 
-        // forece dublicate 0 atm.
+        // forece duplicate 0 atm.
         this.duplicateIdx = 0;
 
         if (initialData) {

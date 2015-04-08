@@ -404,7 +404,28 @@ Tine.Tinebase.common = {
         
         return result;
     },
-    
+
+    /**
+     * Returns rendered relations
+     *
+     * @param {mixed} container
+     * @return {String}
+     *
+     * TODO use/invent renderer registry to show more information on relations
+     */
+    relationsRenderer: function(relations, metaData) {
+        var result = '';
+        if (relations) {
+            for (var i = 0; i < relations.length; i += 1) {
+                if (relations[i]) {
+                    var qtipText = Tine.Tinebase.common.doubleEncode(relations[i].type);
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:white"' + ';">&#160;</div>';
+                }
+            }
+        }
+        return result;
+    },
+
     /**
      * Returns prettyfied minutes
      * 
