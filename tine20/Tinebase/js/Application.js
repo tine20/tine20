@@ -97,7 +97,16 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {Boolean}
      */
     featureEnabled: function(featureName) {
-        return Tine[this.appName].registry.get("config").features && Tine[this.appName].registry.get("config").features.value[featureName];
+        var featureConfig = Tine[this.appName].registry.get("config").features,
+            result = featureConfig && featureConfig.value[featureName];
+
+        if (result == undefined) {
+            // check defaults if key is missing
+            result = featureConfig && featureConfig.definition && featureConfig.definition.default
+                && featureConfig.definition.default[featureName];
+        }
+
+        return result;
     },
     
     /**
