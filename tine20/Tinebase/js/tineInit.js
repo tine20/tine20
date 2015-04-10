@@ -174,8 +174,8 @@ Tine.Tinebase.tineInit = {
             mainCardPanel.add(Tine.loginPanel);
         }
         
-        // event firing is unpredictable in IE9, you'll never know when it comes ...
-        if (! Ext.isIE9) {
+        // event firing is unpredictable in IE9/10/11, you'll never know when it comes ...
+        if (! Ext.isNewIE) {
             Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
                 if (oldValue && !newValue) {
                     Tine.log.info('tineInit::initLoginPanel - handle logout in other window');
@@ -598,7 +598,7 @@ Tine.Tinebase.tineInit = {
         if (! Tine.Tinebase.tineInit.onPreferenceChangeRegistered 
             && Tine.Tinebase.registry.get('preferences')
             && Tine.Tinebase.registry.get('currentAccount')
-            && ! Ext.isIE9
+            && ! Ext.isNewIE
         ) {
             Tine.log.info('tineInit::onRegistryLoad - register onPreferenceChange handler');
             Tine.Tinebase.preferences.on('replace', Tine.Tinebase.tineInit.onPreferenceChange);

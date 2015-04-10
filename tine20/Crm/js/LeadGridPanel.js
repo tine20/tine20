@@ -102,7 +102,7 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbarItems: function () {
         var items = [
-            this.actions_export = new Ext.SplitButton(this.actions_exportLead)
+            this.actions_export = this.actions_exportLead
         ];
         if (this.app.featureEnabled('featureLeadImport')) {
             items.push(this.actions_import = new Ext.Action({
@@ -128,11 +128,10 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getContextMenuItems: function() {
-        var items = [
+        return [
             '-',
             this.actions_exportLead
         ];
-        return items;
     },
     
     /**
