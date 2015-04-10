@@ -232,11 +232,18 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 Ext.ux.PopupWindow.close = function(win) {
     win = win || window;
     win.close();
-    win.Ext.MessageBox.alert(
-        _('Window can be closed'),
-        String.format(_('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
-        function() {
-            win.close();
+    // defer messagebox as it should not be displayed too early
+    window.setTimeout(function(){
+        if (! win) {
+            return;
         }
-    );
+
+        win.Ext.MessageBox.alert(
+            _('Window can be closed'),
+            String.format(_('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+            function() {
+                win.close();
+            }
+        );
+    }, 500);
 };
