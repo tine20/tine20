@@ -80,12 +80,17 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
                 $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " IN (?)", $months));
             }
         } elseif ($this->_operator == 'equals') {
-            $split = explode('-', $this->_value);
-            if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
-                throw new Tinebase_Exception_MonthFormat();
+            if ('' == $this->_value) {
+                $_select->where($this->_getQuotedFieldName($_backend) . " = '0000-00-00 00:00:00' OR " .
+                                $this->_getQuotedFieldName($_backend) . ' IS NULL');
+            } else {
+                $split = explode('-', $this->_value);
+                if (!((strlen($this->_value) == 7) && ((int) $split[0] > 1900) && ((int) $split[1] > 0) && ((int) $split[1] < 13))) {
+                    throw new Tinebase_Exception_MonthFormat();
+                }
+                
+                $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));
             }
-            
-            $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " = (?)", $this->_value));
         } else {
             
             $date = new Tinebase_DateTime($this->_value);
