@@ -220,7 +220,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
         }
-
+        
         return $result;
     }
     
