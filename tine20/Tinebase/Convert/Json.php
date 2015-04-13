@@ -458,7 +458,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (! $_records || count($_records) == 0) {
             return array();
         }
-
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Processing ' . count($_records) . ' records ...');
         
@@ -470,12 +470,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         $_records->setTimezone(Tinebase_Core::getUserTimezone());
         $_records->convertDates = true;
-
+        
         $result = $_records->toArray();
         
         // resolve all virtual fields after converting to array, so we can add these properties "virtually"
         $result = $this->_resolveAfterToArray($result, $config, TRUE);
-
+        
         return $result;
     }
 }

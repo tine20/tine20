@@ -69,7 +69,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.window.setTitle(this.app.i18n._('Add New Supplier'));
             } else {
                 this.window.setTitle(String.format(this.app.i18n._('Edit Supplier "{0}"'), this.record.getTitle()));
-                this.getForm().findField('number').disable();
+                //this.getForm().findField('number').disable();
             }
         }
     },

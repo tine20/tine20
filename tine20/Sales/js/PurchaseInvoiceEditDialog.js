@@ -414,13 +414,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     columnWidth: 1/4,
                                 }, {
                                     xtype: 'extuxclearabledatefield',
-                                    name: 'pay_at',
-                                    //allowBlank: false,
-                                    fieldLabel: this.app.i18n._('Payment date'),
-                                    columnWidth: 1/4,
-                                    //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
-                                }, {
-                                    xtype: 'extuxclearabledatefield',
                                     name: 'payed_at',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Payed at'),
@@ -432,7 +425,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     app: 'Sales',
                                     keyFieldName: 'paymentMethods',
                                     fieldLabel: this.app.i18n._('Method of payment'),
-                                    name: 'type',
+                                    name: 'payment_method',
                                     columnWidth: 1/4
                                 })
                             ], [
@@ -455,7 +448,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     allowBlank: true,
                                     app: 'Sales',
                                     recordClass: Tine.Sales.Model.CostCenter,
-                                    relationType: 'LEAD_COST_CENTER',
+                                    relationType: 'COST_CENTER',
                                     relationDegree: 'sibling',
                                     modelUnique: true
                                 }
@@ -519,20 +512,20 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }];
         
         items.push(new Tine.widgets.activities.ActivitiesTabPanel({
-            app: this.appName,
-            record_id: this.record.id,
-            record_model: 'Sales_Model_Invoice'
+            app:           this.appName,
+            record_id:     this.record.id,
+            record_model: 'Sales_Model_PurchaseInvoice'
         }));
         
         return {
-            xtype: 'tabpanel',
+            xtype:     'tabpanel',
             defaults: {
                 hideMode: 'offsets'
             },
-            border: false,
-            plain: true,
+            border:    false,
+            plain:     true,
             activeTab: 0,
-            items: items
+            items:     items
         };
     }
 });

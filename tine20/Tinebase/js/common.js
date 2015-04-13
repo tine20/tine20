@@ -702,6 +702,8 @@ Tine.Tinebase.common = {
                 console.error('Tine.Tinebase.appMgr not yet available');
             } else if (Tine.Tinebase.appMgr.get(application)) {
                 console.error('Tine.' + application + '.rights is not available, initialisation Error!');
+                // reload registry/mainscreen - registry problem?
+                Tine.Tinebase.common.reload({});
             }
             return false;
         }

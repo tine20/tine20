@@ -140,9 +140,9 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
             // if we are not already in user timezone we are in deep shit, add assertation rather instead or something
             $date->setTimezone(Tinebase_Core::getUserTimezone());
             $date->setTime(0,0,0);
-            if ($this->billing_point == 'begin') {
+            /*if ($this->billing_point == 'begin') {
                 $date->addMonth($this->interval);
-            }
+            }*/
         }
         
         if (! $this->last_autobill) {
@@ -166,7 +166,7 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
         $to = clone $from;
         do {
             $to->addMonth($this->interval);
-        } while($date != NULL && $to->isEarlier($date)) ;
+        } while($date != NULL && $to->isEarlierOrEquals($date)) ;
         if ($this->billing_point == 'end' && $to->isLater($date)) {
             $to->subMonth($this->interval);
         }
