@@ -107,7 +107,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         // first invoice for customer 4
         $invoice = $json->getInvoice($c4Invoice['id']);
         
-        $this->assertEquals(18, count($invoice['positions']));
+        $this->assertEquals(9, count($invoice['positions']));
         
         foreach($invoice['relations'] as $relation) {
             switch ($relation['type']) {

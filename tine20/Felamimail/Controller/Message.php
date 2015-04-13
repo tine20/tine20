@@ -221,6 +221,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $structure = $_message->getPartStructure($_partId, FALSE);
             
             $message = new Felamimail_Model_Message(array(
+                'account_id'  => $_message->account_id,
                 'messageuid'  => $_message->messageuid,
                 'folder_id'   => $_message->folder_id,
                 'received'    => $_message->received,
@@ -782,8 +783,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Fetched Headers: ' . $rawHeaders);
-        
-        Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
+
+        $headers = array();
+        $body = null;
+        Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $body);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'), 86400);
         
@@ -813,7 +816,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($_select) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                     . ' Select folder ' . $_folder->globalname);
-                $backendFolderValues = $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
+                $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
             }
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // @todo remove the folder from cache if it could not be found on the IMAP server?
