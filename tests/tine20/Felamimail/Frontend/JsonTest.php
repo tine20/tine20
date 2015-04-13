@@ -679,6 +679,20 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try search for a message with three cache filters to force a foreign relation join with at least 2 tables
+     */
+    public function testSearchMessageWithThreeCacheFilter()
+    {
+        $filter = array(
+            array('field' => 'flags',   'operator' => 'in',       'value' => Zend_Mail_Storage::FLAG_ANSWERED),
+            array('field' => 'to',      'operator' => 'contains', 'value' => 'testDOESNOTEXIST'),
+            array('field' => 'subject', 'operator' => 'contains', 'value' => 'testDOESNOTEXIST'),
+        );
+        $result = $this->_json->searchMessages($filter, '');
+        $this->assertEquals(0, $result['totalcount']);
+    }
+    
+    /**
      * try search for a message with empty path filter
      */
     public function testSearchMessageEmptyPath()

@@ -877,6 +877,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _removeColFromSelect(Zend_Db_Select $_select, $_column)
     {
         $columns = $_select->getPart(Zend_Db_Select::COLUMNS);
+        $from = $_select->getPart(Zend_Db_Select::FROM);
         
         foreach ($columns as $id => $column) {
             if ($column[2] == $_column) {
@@ -888,7 +889,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 // reset all all columns and add as again
                 $_select->reset(Zend_Db_Select::COLUMNS);
                 foreach ($columns as $newColumn) {
-                    $_select->columns(!empty($newColumn[2]) ? array($newColumn[2] => $newColumn[1]) : $newColumn[1], $newColumn[0]);
+                    
+                    if (isset($from[$newColumn[0]])) {
+                        $_select->columns(!empty($newColumn[2]) ? array($newColumn[2] => $newColumn[1]) : $newColumn[1], $newColumn[0]);
+                    }
                 }
                 
                 break;
