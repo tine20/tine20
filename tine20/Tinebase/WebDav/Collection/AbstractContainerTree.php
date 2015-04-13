@@ -245,8 +245,6 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
             
                 break;
         }
-    
-        
     }
     
     /**

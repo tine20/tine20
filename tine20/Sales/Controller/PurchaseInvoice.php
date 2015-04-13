@@ -51,7 +51,53 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
         
         return self::$_instance;
     }
-
+    
+    /**
+     * import one purchase imvoice file
+     * 
+     * a new invoice with default data will be created and the invoice file will be attached
+     * 
+     * @param string $name  name of the invoice
+     * @param resource $data  binary data of the invoice (aka a pdf)
+     * @throws Sabre\DAV\Exception\Forbidden
+     * @return Sales_Model_PurchaseInvoice
+     */
+    public function importPurchaseInvoice($name, $data)
+    {
+        // create invoice
+        $purchaseInvoice = new Sales_Model_PurchaseInvoice(array(
+            'number'      => '',
+            'description' => '',
+            'date'        => Tinebase_DateTime::now(),
+            'discount'    => 0,
+            'due_in'      => 0,
+            'due_at'      => Tinebase_DateTime::now(),
+            'price_gross' => 0,
+            'price_net'   => 0,
+            'price_tax'   => 0,
+            'sales_tax'   => 0
+        ));
+        
+        $invoice = $this->create($purchaseInvoice);
+        
+        // attach invoice file (aka a pdf)
+        $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, TRUE);
+        
+        $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
+        
+        if (!is_resource($handle)) {
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+        }
+        
+        if (is_resource($data)) {
+            stream_copy_to_stream($data, $handle);
+        }
+        
+        Tinebase_FileSystem::getInstance()->fclose($handle);
+        
+        return $this->get($purchaseInvoice);
+    }
+    
     /**
      * relation defaults
      * 
@@ -60,12 +106,12 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
     protected function _getRelationDefaults()
     {
         return array(
-            'own_model'              => 'Sales_Model_PurchaseInvoice',
-            'own_backend'            => Tasks_Backend_Factory::SQL,
-            'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_backend'        => Tasks_Backend_Factory::SQL,
-            'type'                   => 'PURCHASE_INVOICE'
+            'own_model'       => 'Sales_Model_PurchaseInvoice',
+            'own_backend'     => Tasks_Backend_Factory::SQL,
+            'own_id'          => NULL,
+            'own_degree'      => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_backend' => Tasks_Backend_Factory::SQL,
+            'type'            => 'PURCHASE_INVOICE'
         );
     }
     
