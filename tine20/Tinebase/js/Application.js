@@ -102,8 +102,10 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
 
         if (result == undefined) {
             // check defaults if key is missing
-            result = featureConfig && featureConfig.definition && featureConfig.definition.default
-                && featureConfig.definition.default[featureName];
+            result = featureConfig
+                && featureConfig.definition
+                && featureConfig.definition['default']
+                && featureConfig.definition['default'][featureName];
         }
 
         return result;
