@@ -273,6 +273,11 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         } catch(e) {
             console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
             console.warn(e);
+            if (! Tine[app.appName].registry) {
+                // registry load problem: reload
+                Tine.Tinebase.common.reload({});
+            }
+
             return false;
         }
     },

@@ -176,7 +176,10 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         } elseif ($accountable == 'Timetracker_Model_Timeaccount') {
             $filter = new Timetracker_Model_TimesheetFilter(array(
                 array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
-                    array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                    array('condition' => 'OR', 'filters' => array(
+                        array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                        array('field' => 'budget', 'operator' => 'equals', 'value' => NULL),
+                    )),
                 )),
             ));
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));

@@ -382,6 +382,9 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $ftController = HumanResources_Controller_FreeTime::getInstance();
         $fdController = HumanResources_Controller_FreeDay::getInstance();
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' $_employeeId ' . $_employeeId . ' $_year ' . $_year . ' $_freeTimeId ' . $_freeTimeId . ' $_accountId ' . $_accountId);
+        
         // validate employeeId
         $employee = $eController->get($_employeeId);
         $_freeTimeId = (strlen($_freeTimeId) == 40) ? $_freeTimeId : NULL;
@@ -418,10 +421,36 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new HumanResources_Exception_NoAccount();
         }
         
+        $accountYear = $account->year;
+        $minAccountDate = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
+        $minAccountDate->setDate($accountYear, 1, 1);
+        $maxAccountDate = clone $minAccountDate;
+        $maxAccountDate->addYear(1)->subSecond(1);
+        
         $maxDate = clone $minDate;
         $maxDate->addYear(1)->subSecond(1);
 
-        // find contracts
+        // find contracts of the account year
+        $contracts = $cController->getValidContracts($minAccountDate, $maxAccountDate, $_employeeId);
+        $contracts->sort('start_date', 'ASC');
+        
+        if ($contracts->count() < 1) {
+            throw new HumanResources_Exception_NoContract();
+        }
+        
+        $remainingVacation = 0;
+        
+        $contracts->setTimezone(Tinebase_Core::getUserTimezone());
+        
+        // find out total amount of vacation days for the different contracts
+        foreach ($contracts as $contract) {
+            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
+        }
+        
+        $remainingVacation = round($remainingVacation, 0);
+        $allVacation = $remainingVacation;
+        
+        // find contracts of the year in which the vacation days will be taken
         $contracts = $cController->getValidContracts($minDate, $maxDate, $_employeeId);
         $contracts->sort('start_date', 'ASC');
         $excludeDates = array();
@@ -432,8 +461,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $first = TRUE;
         
-        $allVacation = 0;
-        $remainingVacation = 0;
         $feastDays = array();
         
         $contracts->setTimezone(Tinebase_Core::getUserTimezone());
@@ -448,8 +475,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $firstDay = clone $startDay;
                 $first = FALSE;
             }
-            
-            $remainingVacation += $cController->calculateVacationDays($contract, $minDate, $maxDate);
             
             // find out weekdays to disable
             if (is_object($json)) {
@@ -470,8 +495,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // search feast days
             $feastDays = array_merge($cController->getFeastDays($contract, $startDay, $stopDay), $feastDays);
         }
-        
-        $remainingVacation = round($remainingVacation, 0);
         
         // set time to 0
         foreach($feastDays as &$feastDay) {

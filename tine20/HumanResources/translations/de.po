@@ -791,3 +791,11 @@ msgstr "Teilzeit 20 Stunden"
 #: Setup/Update/Release6.php:330
 msgid "Currently employed"
 msgstr "Momentan angestellt"
+
+#: js/ContractEditDialog.js:296
+msgid "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
+msgstr "Es gibt bereits Urlaubseinträge, die in den Zeitraum des Vertrags fallen. Wird der Mitarbeiter gespeichert, kann der Vertrag nicht mehr geändert werden."
+
+msgid "Vacation in same period"
+msgstr "Urlaub fällt in den gleichen Zeitraum"
+

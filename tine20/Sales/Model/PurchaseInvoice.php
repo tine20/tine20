@@ -221,17 +221,29 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
      * @see Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
-        array('relatedApp' => 'Sales', 'relatedModel' => 'Supplier', 'config' => array(
-            array('type' => 'SUPPLIER', 'degree' => 'sibling', 'text' => 'Supplier', 'max' => '0:0'), // _('Supplier')
-            ), 'defaultType' => 'SUPPLIER'
+        array(
+            'relatedApp'   => 'Sales',
+            'relatedModel' => 'Supplier',
+            'config'       => array(
+                array('type' => 'SUPPLIER', 'degree' => 'sibling', 'text' => 'Supplier', 'max' => '1:0'), // _('Supplier')
+            ),
+            'defaultType'  => 'SUPPLIER'
         ),
-        array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(
-            array('type' => 'APPROVER', 'degree' => 'sibling', 'text' => 'Approver', 'max' => '0:0'), // _('Approver')
-            ), 'defaultType' => 'APPROVER'
+        array(
+            'relatedApp'   => 'Addressbook',
+            'relatedModel' => 'Contact',
+            'config' => array(
+                array('type' => 'APPROVER', 'degree' => 'sibling', 'text' => 'Approver', 'max' => '1:0'), // _('Approver')
+            ),
+            'defaultType'  => 'APPROVER'
         ),
-        array('relatedApp' => 'Sales', 'relatedModel' => 'CostCenter', 'config' => array(
-            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
-            ), 'defaultType' => 'LEAD_COST_CENTER'
+        array(
+            'relatedApp'   => 'Sales',
+            'relatedModel' => 'CostCenter',
+            'config' => array(
+                array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
+            ),
+            'defaultType'  => 'COST_CENTER'
         ),
     );
 }
