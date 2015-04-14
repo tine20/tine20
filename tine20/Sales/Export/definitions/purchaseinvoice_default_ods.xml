@@ -63,18 +63,18 @@
         </column>
         <column>
             <identifier>due_in</identifier>
-            <header>Due In</header>
+            <header>Due in</header>
             <type>float</type>
         </column>
         <column>
             <identifier>due_at</identifier>
-            <header>Due At</header>
+            <header>Due at</header>
             <type>date</type>
             <columnStyle>dateDMYCell</columnStyle>
         </column>
         <column>
             <identifier>pay_at</identifier>
-            <header>Pay At</header>
+            <header>Pay at</header>
             <type>date</type>
             <columnStyle>dateDMYCell</columnStyle>
         </column>
@@ -87,7 +87,7 @@
         </column>
         <column>
             <identifier>overdue_at</identifier>
-            <header>Overdue At</header>
+            <header>Overdue at</header>
             <type>date</type>
             <columnStyle>dateDMYCell</columnStyle>
         </column>
@@ -98,7 +98,7 @@
         </column>
         <column>
             <identifier>discount_until</identifier>
-            <header>Discount Until</header>
+            <header>Discount until</header>
             <type>date</type>
             <columnStyle>dateDMYCell</columnStyle>
         </column>
@@ -108,13 +108,13 @@
         </column>
         <column>
             <identifier>payed_at</identifier>
-            <header>Payed At</header>
+            <header>Payed at</header>
             <type>date</type>
             <columnStyle>dateDMYCell</columnStyle>
         </column>
         <column>
             <identifier>dunned_at</identifier>
-            <header>Dunned At</header>
+            <header>Dunned at</header>
             <type>date</type>
             <columnStyle>dateDMY</columnStyle>
         </column>

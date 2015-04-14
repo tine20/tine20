@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-03-24 16:17+0100\n"
+"PO-Revision-Date: 2015-04-14 16:06+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
 "de/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Model/InvoicePosition.php:33
 msgid "Invoice Position"
@@ -443,7 +443,7 @@ msgstr[1] "Eingangsrechnungen"
 #: Model/PurchaseInvoice.php:229 js/PurchaseInvoiceEditDialog.js:443
 #: js/PurchaseInvoiceApproverFilterModel.js:30
 msgid "Approver"
-msgstr ""
+msgstr "Genehmigt von"
 
 #: Model/PurchaseInvoice.php:100 js/PurchaseInvoiceEditDialog.js:206
 msgid "Date of invoice"
