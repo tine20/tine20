@@ -843,7 +843,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         $grant       = $_ignoreACL ? '*' : $_grant;
-        
+
+        $classCacheId = convertCacheId($accountId . $application->getId() . implode('', (array)$grant) .(int)$_ignoreACL);
+        try {
+            return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue...
+        }
+
         // first grab all container ids ...
         $select = $this->_db->select()
             ->distinct()
@@ -888,6 +895,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $accountIds = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+
+        $this->saveInClassCache(__FUNCTION__, $classCacheId, $accountIds);
         
         return $accountIds;
     }
@@ -975,7 +984,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
-        
+
         $this->saveInClassCache(__FUNCTION__, $classCacheId, $containers);
         
         return $containers;

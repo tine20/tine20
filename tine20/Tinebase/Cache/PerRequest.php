@@ -34,7 +34,16 @@ class Tinebase_Cache_PerRequest
      * TODO allow to configure this
      */
     protected $_usePersistentCache = false;
-    
+
+    /**
+     * verbose log
+     *
+     * @var bool
+     *
+     * TODO allow to configure this
+     */
+    protected $_verboseLog = false;
+
     /**
      * holds the instance of the singleton
      *
@@ -106,7 +115,7 @@ class Tinebase_Cache_PerRequest
         $this->_inMemoryCache[$class][$method][$cacheId] = $value;
 
         if ($this->_usePersistentCache) {
-            Tinebase_Core::getCache()->save($value, $cacheId);
+            Tinebase_Core::getCache()->save($value, $method . $cacheId);
         }
         
         return $this;
@@ -123,19 +132,33 @@ class Tinebase_Cache_PerRequest
      */
     public function load($class, $method, $cacheId)
     {
+        if ($this->_verboseLog) {
+            $traceException = new Exception();
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " class/method/cacheid: $class $method $cacheId stack: " . $traceException->getTraceAsString());
+        }
+
         $cacheId = sha1($cacheId);
-        
+
         if (!isset($this->_inMemoryCache[$class]) ||
             !isset($this->_inMemoryCache[$class][$method]) ||
             !(isset($this->_inMemoryCache[$class][$method][$cacheId]) || array_key_exists($cacheId, $this->_inMemoryCache[$class][$method]))
         ) {
 
+            if ($this->_verboseLog) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in class cache');
+            }
+
             if ($this->_usePersistentCache) {
                 // TODO better use Tinebase_Core::getCache()->test() ?
-                $value = Tinebase_Core::getCache()->load($cacheId);
+                $value = Tinebase_Core::getCache()->load($method . $cacheId);
                 if ($value !== false) {
                     $this->_inMemoryCache[$class][$method][$cacheId] = $value;
                     return $value;
+                }
+
+                if ($this->_verboseLog) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in zend cache');
                 }
             }
 
@@ -173,8 +196,10 @@ class Tinebase_Cache_PerRequest
             $this->_inMemoryCache[$class][$method] = array();
             
             return $this;
-        } else if ($this->_usePersistentCache) {
-            Tinebase_Core::getCache()->remove($cacheId);
+        }
+
+        if ($this->_usePersistentCache && $method && $cacheId) {
+            Tinebase_Core::getCache()->remove($method . $cacheId);
         }
         
         if (isset($this->_inMemoryCache[$class]) &&
