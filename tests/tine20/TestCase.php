@@ -108,6 +108,8 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         
         Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        
+        Tinebase_Cache_PerRequest::getInstance()->resetCache();
     }
     
     /**

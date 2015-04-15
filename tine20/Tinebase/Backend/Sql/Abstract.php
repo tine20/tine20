@@ -1612,4 +1612,58 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         }
         return $result;
     }
+    
+    /**
+     * save value in in-class cache
+     * 
+     * @param string $method
+     * @param string $cacheId
+     * @param string $value
+     * @return Tinebase_Cache_PerRequest
+     */
+    public function saveInClassCache($method, $cacheId, $value)
+    {
+        return Tinebase_Cache_PerRequest::getInstance()->save($this->_getInClassCacheIdentifier(), $method, $cacheId, $value);
+    }
+    
+    /**
+     * load value from in-class cache
+     * 
+     * @param string $method
+     * @param string $cacheId
+     * @return mixed
+     */
+    public function loadFromClassCache($method, $cacheId)
+    {
+        return Tinebase_Cache_PerRequest::getInstance()->load($this->_getInClassCacheIdentifier(), $method, $cacheId);
+    }
+    
+    /**
+     * reset class cache
+     * 
+     * @param string $key
+     * @return Tinebase_Model_Filter_Abstract
+     */
+    public function resetClassCache($method = null)
+    {
+        Tinebase_Cache_PerRequest::getInstance()->resetCache($this->_getInClassCacheIdentifier(), $method);
+        
+        return $this;
+    }
+    
+    /**
+     * return class cache identifier
+     * 
+     * if class extend parent class, you can define the name of the parent class here
+     * 
+     * @return string
+     */
+    public function _getInClassCacheIdentifier()
+    {
+        if (isset($this->_classCacheIdentifier)) {
+            return $this->_classCacheIdentifier;
+        }
+        
+        return get_class($this);
+    }
 }
