@@ -428,6 +428,10 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
                         ' Appending configured pwsuffix to system account password.');
                     $credentials->password .= $imapConfig['pwsuffix'];
                 }
+
+                if (! empty($imapConfig['domain']) && strpos($credentials->username, $imapConfig['domain']) === false) {
+                    $credentials->username .= '@' . $imapConfig['domain'];
+                }
             }
             
             if (! $this->{$userField}) {

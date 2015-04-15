@@ -1337,7 +1337,6 @@ class Tinebase_Core
     }
     
     /**
-<<<<<<< HEAD
      * get max configured loglevel
      * 
      * @return integer
@@ -1354,8 +1353,6 @@ class Tinebase_Core
     }
     
     /**
-=======
->>>>>>> 2013.10
      * check if given loglevel should be logged
      * 
      * @param  integer $_prio
