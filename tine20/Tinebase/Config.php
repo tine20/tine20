@@ -313,7 +313,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAX_USERNAME_LENGTH = 'max_username_length';
-    
+
+    /**
+     * conf.d folder name
+     *
+     * @var string
+     */
+    const CONFD_FOLDER = 'confdfolder';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -716,6 +723,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'default'               => NULL,
                 'clientRegistryInclude' => FALSE,
         ),
+        self::CONFD_FOLDER => array(
+            //_('conf.d folder name')
+            'label'                 => 'conf.d folder name',
+            //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
+            'description'           => 'Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!',
+            'type'                  => 'string',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
     );
     
     /**
@@ -848,5 +866,5 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         $result = (isset($option[$_label])) ? $option[$_label] : '';
         
         return $result;
-    }    
+    }
 }
