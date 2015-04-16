@@ -360,7 +360,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $metaData = $this->_getMetaData($user);
 
         $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;
-        $userpassword = $_encrypt ? Hash_Password::generate($encryptionType, $_password) : $_password;
+        $userpassword = ($_encrypt && $encryptionType !== Tinebase_User_Abstract::ENCRYPT_PLAIN)
+            ? Hash_Password::generate($encryptionType, $_password)
+            : $_password;
         
         $ldapData = array(
             'userpassword'     => $userpassword,
@@ -468,7 +470,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
         if ($this->_isReadOnlyBackend) {
-            return;
+            return $_account;
         }
         
         $ldapEntry = $this->_getLdapEntry('accountId', $_account);
@@ -913,7 +915,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             'adr_two_postalcode'    => 'mozillahomepostalcode',
             'adr_two_region'        => 'mozillahomestate',
             'adr_two_street'        => 'mozillahomestreet',
-            'adr_one_region'        => 'l',
             'adr_one_postalcode'    => 'postalcode',
             'adr_one_street'        => 'street',
             'adr_one_region'        => 'st',

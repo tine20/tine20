@@ -36,6 +36,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $this->_backend = new Tinebase_Backend_Sql(array(
             'modelName' => $this->_modelName, 
             'tableName' => 'import',
+            'modlogActive' => true,
         ));
         $this->_purgeRecords = false;
         // activate this if you want to use containers

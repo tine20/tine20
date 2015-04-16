@@ -147,7 +147,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                         $this->_addresses[$i]['salutation'] = 'MR';
                     } else {
                         $isMan = false;
-                        $this->_addresses[$i]['salutation'] = 'MRS';
+                        $this->_addresses[$i]['salutation'] = 'MS';
                     }
                 } else {
                     $this->_addresses[$i][$indexes[$index]] = $field;
@@ -194,7 +194,8 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         try {
             $record = $this->_controller->create($record);
             if ($imageData) {
-                $be->_saveImage($record->getId(), $imageData);
+                // @todo We should not use copyrighted/random pictures for demo data
+                //$be->_saveImage($record->getId(), $imageData);
             }
         } catch (Exception $e) {
             echo 'Skipping: ' . $data['n_given'] .' ' . $data['n_family'] . ($data['org_name'] ? ' ('.$data['org_name'].') ' : '') . $e->getMessage() . PHP_EOL;
