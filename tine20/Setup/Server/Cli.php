@@ -51,7 +51,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
                           setup.php --egw14import /path/to/config.ini',
-                'reset_demodata USERNAME'            => 'reinstall applications and install Demodata (Needs Admin user)'
+                'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)'
                     
             ));
             $opts->parse();
