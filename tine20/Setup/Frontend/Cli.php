@@ -72,6 +72,8 @@ class Setup_Frontend_Cli
             $this->_createAdminUser($_opts);
         } elseif(isset($_opts->getconfig)) {
             $this->_getConfig($_opts);
+        } elseif(isset($_opts->reset_demodata)) {
+            $this->_resetDemodata($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -266,6 +268,77 @@ class Setup_Frontend_Cli
         $controller->uninstallApplications($applications->name);
         
         echo "Successfully uninstalled " . count($applications) . " applications.\n";
+    }
+    
+    /**
+     * reinstall applications
+     * and reset Demodata
+     * php setup.php --reset_demodata USERNAME
+     * 
+     * @param Zend_Console_Getopt $_opts
+     */
+    protected function _resetDemodata(Zend_Console_Getopt $_opts)
+    {
+        $controller = Setup_Controller::getInstance();
+        $userController = Admin_Controller_User::getInstance();
+        $containerController = Tinebase_Container::getInstance();
+        $cli = new Tinebase_Frontend_Cli();
+        
+        //Don't reset this applications
+        $fixedApplications = array('Tinebase', 'Admin', 'Addressbook');
+        
+        //Log in
+        $opts = $_opts->getRemainingArgs();
+        $username = $opts[0];
+        if (empty($username)) {
+            echo "Username is missing!\n";
+            exit;
+        }
+        $user = Tinebase_User::getInstance()->getUserByLoginName($username);
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+        
+        //get all applications and remove some
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        
+        foreach ($applications as $key => &$application) {
+            if (in_array($application, $fixedApplications)) {
+                unset($applications[$key]);
+            }
+        }
+        
+        //Uninstall Applications
+        try {
+            $controller->uninstallApplications($applications->name);
+            echo "Successfully uninstalled " . count($applications) . " applications.\n";
+        } catch (Tinebase_Exception_NotFound $e) {
+        }
+        //Install Applications
+        try {
+            $controller->installApplications($applications->name);
+            echo "Successfully installed " . count($applications) . " applications.\n";
+        } catch (Tinebase_Exception_NotFound $e) {
+        }
+        
+        //Clean up addressbooks
+        $internalContacts = $userController->getDefaultInternalAddressbook();
+        $containers = $containerController->getAll();
+        foreach ($containers as $key => &$container) {
+            if ($container->id == $internalContacts) {
+                // Do nothing
+            } else {
+                try {
+                    $containerController->deleteContainer($container, true);
+                } catch (Tinebase_Exception_NotFound $e) {
+                }
+            }
+        }
+        
+        echo "Successfully cleand up containers.\n";
+        
+        //Get Demodata
+        $cli->createAllDemoData();
+        
+        echo "Every thing done!\n";
     }
 
     /**
