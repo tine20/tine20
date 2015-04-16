@@ -915,6 +915,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             'adr_two_postalcode'    => 'mozillahomepostalcode',
             'adr_two_region'        => 'mozillahomestate',
             'adr_two_street'        => 'mozillahomestreet',
+            'adr_one_locality'      => 'l',
             'adr_one_postalcode'    => 'postalcode',
             'adr_one_street'        => 'street',
             'adr_one_region'        => 'st',
