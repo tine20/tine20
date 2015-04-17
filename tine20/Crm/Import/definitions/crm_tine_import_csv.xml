@@ -109,40 +109,49 @@
             <source>CUSTOMER</source>
             <destination>CUSTOMER</destination>
             <relation>1</relation>
-            <findExistingBy>n_family</findExistingBy>
+            <filter>query</filter>
+            <operator>contains</operator>
             <related_model>Addressbook_Model_Contact</related_model>
+            <related_field>n_family</related_field>
             <degree>parent</degree>
         </field>
         <field>
             <source>PARTNER</source>
             <destination>PARTNER</destination>
             <relation>1</relation>
-            <findExistingBy>n_family</findExistingBy>
+            <filter>query</filter>
+            <operator>contains</operator>
             <related_model>Addressbook_Model_Contact</related_model>
+            <related_field>n_family</related_field>
             <degree>parent</degree>
         </field>
         <field>
             <source>RESPONSIBLE</source>
             <destination>RESPONSIBLE</destination>
             <relation>1</relation>
-            <findExistingBy>n_family</findExistingBy>
+            <filter>query</filter>
+            <operator>contains</operator>
             <related_model>Addressbook_Model_Contact</related_model>
+            <related_field>n_family</related_field>
             <degree>parent</degree>
         </field>
         <field>
             <source>TASK</source>
             <destination>TASK</destination>
             <relation>1</relation>
-            <findExistingBy>summary</findExistingBy>
+            <filter>summary</filter>
             <related_model>Tasks_Model_Task</related_model>
+            <related_field>summary</related_field>
             <degree>sibling</degree>
         </field>
         <field>
             <source>PRODUCT</source>
             <destination>PRODUCT</destination>
             <relation>1</relation>
-            <findExistingBy>name</findExistingBy>
+            <filter>query</filter>
+            <operator>contains</operator>
             <related_model>Sales_Model_Product</related_model>
+            <related_field>name</related_field>
             <degree>sibling</degree>
             <separator>;</separator>
         </field>
