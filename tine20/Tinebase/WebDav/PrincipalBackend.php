@@ -74,9 +74,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         // any user has to lookup the data at least once
         $cacheId = convertCacheId('getPrincipalByPath' . Tinebase_Core::getUser()->getId() . $path);
         
-        if (Tinebase_Core::getCache()->test($cacheId)) {
-            $principal = Tinebase_Core::getCache()->load($cacheId);
-            
+        $principal = Tinebase_Core::getCache()->load($cacheId);
+        if ($principal !== false) {
             return $principal;
         }
         
@@ -605,9 +604,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         foreach ($containers as $container) {
             $cacheId = convertCacheId('_containerGrantsToPrincipals' . $container->getId() . $container->seq);
             
-            if (Tinebase_Core::getCache()->test($cacheId)) {
-                $containerPrincipals = Tinebase_Core::getCache()->load($cacheId);
-            } else {
+            $containerPrincipals = Tinebase_Core::getCache()->load($cacheId);
+            
+            if ($containerPrincipals === false) {
                 $containerPrincipals = array();
                 
                 $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container);
