@@ -1180,10 +1180,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             . ' account: ' . $accountId . ' / containerId: ' . $containerId . ' / grant:' . implode('/', (array)$_grant));
         
         $classCacheId = Tinebase_Helper::convertCacheId($accountId . $containerId . implode('', (array)$_grant));
-        
-        if (isset($this->_classCache[__FUNCTION__][$classCacheId]) || array_key_exists($classCacheId, $this->_classCache[__FUNCTION__])) {
-            return $this->_classCache[__FUNCTION__][$classCacheId];
-        }
 
         try {
             $allGrants = $this->loadFromClassCache(__FUNCTION__, $classCacheId);
