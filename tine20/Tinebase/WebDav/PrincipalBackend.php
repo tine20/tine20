@@ -316,7 +316,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      * (non-PHPdoc)
      * @see Sabre\DAVACL\IPrincipalBackend::getGroupMembership()
      */
-    public function getGroupMembership($principal) 
+    public function getGroupMembership($principal)
     {
         $result = array();
         
@@ -329,6 +329,28 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
             case self::PREFIX_USERS:
                 if ($contactId !== self::SHARED) {
+                    $classCacheId = $principal;
+                    
+                    try {
+                        return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __FUNCTION__, $classCacheId);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // continue...
+                    }
+                    
+                    $cacheId = __FUNCTION__ . sha1($classCacheId);
+                    
+                    // try to load from cache
+                    $cache  = Tinebase_Core::getCache();
+                    $result = $cache->load($cacheId);
+                    
+                    if ($result !== FALSE) {
+                        Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);
+                        
+                        return $result;
+                    }
+                    
+                    $result = array();
+                    
                     $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('contactId', $contactId);
                     
                     $groupIds = Tinebase_Group::getInstance()->getGroupMemberships($user);
@@ -367,6 +389,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                             $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
                         }
                     }
+                    
+                    Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);
+                    $cache->save($result, $cacheId, array(), 60);
                 }
                 
                 break;
