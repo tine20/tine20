@@ -36,6 +36,7 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
     protected function setUp()
     {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_Cache_PerRequest::getInstance()->resetCache();
         $this->_json = new Crm_Frontend_Json();
         
         $contact = $this->_getContact();
@@ -60,5 +61,6 @@ abstract class Crm_Export_AbstractTest extends Crm_AbstractTest
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_Cache_PerRequest::getInstance()->resetCache();
     }
 }

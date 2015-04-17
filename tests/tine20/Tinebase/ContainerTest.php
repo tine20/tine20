@@ -424,7 +424,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get container by acl
-     *
      */
     public function testGetContainerByAcl()
     {
@@ -437,6 +436,18 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             $this->_validateOwnerId($container);
             $this->_validatePath($container);
         }
+    }
+
+    /**
+     * try to get container by acl with Zend_Cache
+     */
+    public function testGetContainerByAclWithPersistentCaching()
+    {
+        Tinebase_Cache_PerRequest::getInstance()->usePersistentCache(true);
+        $this->testGetContainerByAcl();
+        $oldValue = Tinebase_Cache_PerRequest::getInstance()->usePersistentCache(false);
+
+        $this->assertTrue($oldValue);
     }
     
     /**
@@ -550,7 +561,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $otherUsers->filter('accountId', $user2->accountId)->count());
         
         Tinebase_User::getInstance()->setStatus($user2, 'disabled');
-        
+
+        Tinebase_Cache_PerRequest::getInstance()->resetCache();
+
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user1, 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ
         ));
