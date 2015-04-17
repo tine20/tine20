@@ -25,7 +25,7 @@ class Tinebase_Cache_PerRequest
      * @var array
      */
     protected $_inMemoryCache = array();
-
+    
     /**
      * use Zend_Cache as fallback
      *
@@ -81,7 +81,7 @@ class Tinebase_Cache_PerRequest
         
         return self::$_instance;
     }
-
+    
     /**
      * set/get persistent cache usage
      *
@@ -95,10 +95,10 @@ class Tinebase_Cache_PerRequest
         if ($value !== NULL) {
             $this->_usePersistentCache = $value;
         }
-
+        
         return $currValue;
     }
-
+    
     /**
      * save entry in cache
      * 
@@ -113,9 +113,14 @@ class Tinebase_Cache_PerRequest
         $cacheId = sha1($cacheId);
         
         $this->_inMemoryCache[$class][$method][$cacheId] = $value;
-
+        
         if ($this->_usePersistentCache) {
-            Tinebase_Core::getCache()->save($value, $method . $cacheId);
+            // store in external cache for 60 seconds
+            Tinebase_Core::getCache()->save(
+                $value,
+                $this->_getPersistentCacheId($method, $cacheId),
+                array(),
+                60);
         }
         
         return $this;
@@ -151,9 +156,10 @@ class Tinebase_Cache_PerRequest
 
             if ($this->_usePersistentCache) {
                 // TODO better use Tinebase_Core::getCache()->test() ?
-                $value = Tinebase_Core::getCache()->load($method . $cacheId);
+                $value = Tinebase_Core::getCache()->load($this->_getPersistentCacheId($method, $cacheId));
                 if ($value !== false) {
                     $this->_inMemoryCache[$class][$method][$cacheId] = $value;
+                    
                     return $value;
                 }
 
@@ -161,7 +167,7 @@ class Tinebase_Cache_PerRequest
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in zend cache');
                 }
             }
-
+            
             throw new Tinebase_Exception_NotFound('cacheId not found');
         };
         
@@ -199,7 +205,7 @@ class Tinebase_Cache_PerRequest
         }
 
         if ($this->_usePersistentCache && $method && $cacheId) {
-            Tinebase_Core::getCache()->remove($method . $cacheId);
+            Tinebase_Core::getCache()->remove($this->_getPersistentCacheId($method, $cacheId));
         }
         
         if (isset($this->_inMemoryCache[$class]) &&
@@ -210,5 +216,18 @@ class Tinebase_Cache_PerRequest
         };
         
         return $this;
+    }
+
+    /**
+     * get cache id for persistent cache
+     *
+     * @param $method
+     * @param $cacheId
+     * @return string
+     */
+    protected function _getPersistentCacheId($method, $cacheId)
+    {
+        $userId = (is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : 'NOUSER';
+        return $userId . $method . $cacheId;
     }
 }
