@@ -549,14 +549,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *      <source>RESPONSIBLE</source>
      *      <destination>RESPONSIBLE-n_fn</destination>
      *      <relation>1</relation>
-     *      <findExistingBy>n_fn</findExistingBy>
+     *      <filter>query</filter>
+     *      <operator>contains</operator>
      *      <related_model>Addressbook_Model_Contact</related_model>
+     *      <related_field>n_family</related_field> // map data to this field if no existing record found
      *      <degree>parent</degree>
      * </field>
      */
     protected function _mapRelation($fieldValue, $field)
     {
-        if (! isset($field['related_model']) || ! isset($field['findExistingBy'])) {
+        if (! isset($field['related_model']) || ! isset($field['filter'])) {
             throw new Tinebase_Exception_UnexpectedValue('field config missing');
         }
         
@@ -568,19 +570,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             // check if related record exists
             $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
             $filterModel = $field['related_model'] . 'Filter';
+            $operator = isset($field['operator']) ? isset($field['operator']) : 'equals';
             $filter = new $filterModel(array(
-                array('field' => $field['findExistingBy'], 'operator' => 'equals', 'value' => $value)
+                array('field' => $field['filter'], 'operator' => $operator, 'value' => $value)
             ));
             $result = $controller->search($filter);
-            $record = (count($result) > 0) ? $result->getFirstRecord()->toArray() : array($field['findExistingBy'] => $value);
+            $record = (count($result) > 0) ? $result->getFirstRecord()->toArray()
+                : array((isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value);
             
             $relation = array(
                 'type'  => $field['destination'], 
                 'related_record' => $record
             );
             
-            // TODO add some more relation defintion stuff?
-            
+            // TODO add some more relation definition info?
+
             $relations[] = $relation;
         }
         

@@ -169,7 +169,7 @@ class Tinebase_Tags
      * Return a single record
      *
      * @param string|Tinebase_Model_Tag $_id
-     * @param $_getDeleted get deleted records
+     * @param $_getDeleted boolean get deleted records
      * @return Tinebase_Model_FullTag
      *
      * @todo support $_getDeleted
@@ -208,7 +208,7 @@ class Tinebase_Tags
      * @param   string                                  $_right the required right current user must have on the tags
      * @param   bool                                    $_ignoreAcl
      * @return  Tinebase_Record_RecordSet               Set of Tinebase_Model_Tag
-     * @throws  Tinebase_Exception_NotFound
+     * @throws  Tinebase_Exception_InvalidArgument
      *
      * @todo    check context
      */
@@ -544,7 +544,7 @@ class Tinebase_Tags
     }
 
     /**
-     * sets (attachs and detaches) tags of a record
+     * sets (attaches and detaches) tags of a record
      * NOTE: Only touches tags the user has use right for
      * NOTE: Non existing personal tags will be created on the fly
      *
@@ -553,19 +553,23 @@ class Tinebase_Tags
      */
     public function setTagsOfRecord($_record, $_tagsProperty = 'tags')
     {
-        $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty])->getArrayOfIds();
-        $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT)->getArrayOfIds();
+        $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty]);
+        $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT);
         
         $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
         if (! $this->_userHasPersonalTagRight($appId)) {
             $tagsToSet = $tagsToSet->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
             $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
         }
-        
-        $toAttach = array_diff($tagsToSet, $currentTags);
-        $toDetach = array_diff($currentTags, $tagsToSet);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Attaching tags: ' . print_r($toAttach, true));
+        $tagIdsToSet = $tagsToSet->getArrayOfIds();
+        $currentTagIds = $currentTags->getArrayOfIds();
+
+        $toAttach = array_diff($tagIdsToSet, $currentTagIds);
+        $toDetach = array_diff($currentTagIds, $tagIdsToSet);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Attaching tags: ' . print_r($toAttach, true));
         
         $recordId = $_record->getId();
         foreach ($toAttach as $tagId) {
@@ -593,7 +597,9 @@ class Tinebase_Tags
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param mixed                             $_tag       string|array|Tinebase_Model_Tag with existing and non-existing tag
-     * @return Tinebase_Model_Tag
+     * @return Tinebase_Model_Tag|null
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Exception
      * 
      * @todo maybe this could be done in a more generic way (in Tinebase_Controller_Record_Abstract)
      */
@@ -603,7 +609,7 @@ class Tinebase_Tags
         $tags = $this->_createTagsOnTheFly(array($_tag));
         if (empty($tags) || count($tags) == 0) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No tags created.');
-            return;
+            return null;
         }
         $tag = $tags->getFirstRecord();
         $tagId = $tag->getId();
@@ -618,7 +624,7 @@ class Tinebase_Tags
 
         if (empty($recordIds)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' There are no records we could attach the tag to');
-            return;
+            return null;
         }
         
         if ($tag->type === Tinebase_Model_Tag::TYPE_PERSONAL && ! $this->_userHasPersonalTagRight($appId)) {
@@ -751,7 +757,6 @@ class Tinebase_Tags
             ));
         }
         
-        $recordIds = array_merge($recordIds, $attachedIds);
         $controller->concurrencyManagementAndModlogMultiple(
             $attachedIds,
             array('tags' => array($tag->toArray())),
@@ -804,7 +809,7 @@ class Tinebase_Tags
     /**
      * adds given number to the persistent occurrence property of a given tag
      *
-     * @param  Tinbebase_Tags_Model_Tag|string $_tag
+     * @param  Tinebase_Model_Tag|string $_tag
      * @param  int                             $_toAdd
      * @return void
      */
@@ -816,7 +821,7 @@ class Tinebase_Tags
     /**
      * update tag occurrrence
      * 
-     * @param Tinbebase_Tags_Model_Tag|string $tag
+     * @param Tinebase_Model_Tag|string $tag
      * @param integer $toAddOrRemove
      */
     protected function _updateOccurrence($tag, $toAddOrRemove)
@@ -849,7 +854,7 @@ class Tinebase_Tags
     /**
      * deletes given number from the persistent occurrence property of a given tag
      *
-     * @param  Tinbebase_Tags_Model_Tag|string $_tag
+     * @param  Tinebase_Model_Tag|string $_tag
      * @param  int                             $_toDel
      * @return void
      */
@@ -1139,6 +1144,7 @@ class Tinebase_Tags
         }
         
         if ($ignoreAcl) {
+            /** @noinspection PhpUndefinedVariableInspection */
             $controller->doContainerACLChecks($containerChecks);
         }
     }

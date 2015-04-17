@@ -33,6 +33,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
+        Tinebase_Cache_PerRequest::getInstance()->resetCache();
     }
     
     /**
@@ -79,6 +80,9 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
         )));
         $node = Filemanager_Controller_Node::getInstance()->search($filter)->getFirstRecord();
+        
+        $this->assertInstanceOf('Tinebase_Model_Tree_Node', $node);
+        
         return $node;
     }
     
