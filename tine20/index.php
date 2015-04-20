@@ -22,8 +22,11 @@ Tinebase_Core::dispatchRequest();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 
-
 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') ' .
-        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . formatMicrotimeDiff($time) . ' / ' .Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize());
+    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ')' .
+        ' METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD)
+        . ' / TIME: ' . formatMicrotimeDiff($time)
+        . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+        . ' / PID: ' . getmypid()
+    );
 }
