@@ -5,12 +5,10 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * @todo        add 'getTitleTranslation' function?
- * @todo        use Tinebase_Backend_Sql?
- * @todo        migrate from Zend_Db_Table to plain Zend_Db
  */
 
 /**
@@ -38,21 +36,23 @@ class Tinebase_Application
      *
      * @var string
      */
-    protected $_tableName;
-
+    protected $_tableName = 'applications';
+    
     /**
-     * application objects cache
+     * in class cache
      * 
-     * @var array (id/name => Tinebase_Model_Application)
+     * @var array
      */
-    protected $_applicationCache = array();
+    protected $_classCache = array(
+        'getApplications' => array()
+    );
     
     /**
      * the db adapter
      *
      * @var Zend_Db_Adapter_Abstract
      */
-    protected $_db = '';
+    protected $_db;
     
     /**
      * 
@@ -67,13 +67,6 @@ class Tinebase_Application
      */
     private function __construct() 
     {
-        $this->_tableName = SQL_TABLE_PREFIX . 'applications';
-        $this->_db = Tinebase_Core::getDb();
-        
-        $this->_backend = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Tinebase_Model_Application', 
-            'tableName' => 'applications',
-        ));
     }
     
     /**
@@ -116,46 +109,14 @@ class Tinebase_Application
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        if (isset($this->_applicationCache[$applicationId])) {
-            return $this->_applicationCache[$applicationId];
+        $application = $this->getApplications()->getById($applicationId);
+        
+        if (!$application) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Id: ' . $applicationId);
+            throw new Tinebase_Exception_NotFound("Application $applicationId not found.");
         }
         
-        $cache = Tinebase_Core::getCache();
-        if ($cache instanceof Zend_Cache_Core) {
-            $cacheId = 'getApplicationById_' . $_applicationId;
-            
-            $result = $cache->load($cacheId);
-            
-            if ($result instanceof Tinebase_Model_Application) {
-                $this->_addToClassCache($result);
-                return $result;
-            }
-        }
-        
-        $select = $this->_db->select()
-            ->from($this->_tableName)
-            ->where($this->_db->quoteIdentifier('id') . ' = ?', $applicationId);
-        
-        $stmt = $this->_db->query($select);
-        $row  = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if (!$row) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Application not found. Id: ' . $applicationId);
-            throw new Tinebase_Exception_NotFound('Application not found.');
-        }
-        
-        $result = new Tinebase_Model_Application($row, TRUE);
-        
-        if ($cache instanceof Zend_Cache_Core) {
-            $cache->save($result, $cacheId, array('applications'));
-            $cache->save($result, 'getApplicationByName_' . $result->name, array('applications'));
-        }
-        
-        $this->_addToClassCache($result);
-        
-        return $result;
+        return $application;
     }
 
     /**
@@ -173,47 +134,14 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
         
-        if (isset($this->_applicationCache[$_applicationName])) {
-            return $this->_applicationCache[$_applicationName];
+        $application = $this->getApplications()->find('name', $_applicationName);
+        
+        if (!$application) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Name: ' . $_applicationName);
+            throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
         
-        $cache = Tinebase_Core::getCache();
-        
-        if ($cache instanceof Zend_Cache_Core) {
-            $cacheId = 'getApplicationByName_' . $_applicationName;
-            
-            $result = $cache->load($cacheId);
-            
-            if ($result instanceof Tinebase_Model_Application) {
-                $this->_addToClassCache($result);
-                return $result;
-            }
-        }
-        
-        $select = $this->_db->select()
-            ->from($this->_tableName)
-            ->where($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
-
-        $stmt = $this->_db->query($select);
-        $row  = $stmt->fetch();
-        $stmt->closeCursor();
-        
-        if (!$row) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Application not found. Name: ' . $_applicationName);
-            throw new Tinebase_Exception_NotFound('Application not found.');
-        }
-        
-        $result = new Tinebase_Model_Application($row, TRUE);
-        
-        if ($cache instanceof Zend_Cache_Core) {
-            $cache->save($result, $cacheId, array('applications'));
-            $cache->save($result, 'getApplicationById_' . $result->getId(), array('applications'));
-        }
-        
-        $this->_addToClassCache($result);
-
-        return $result;
+        return $application;
     }
     
     /**
@@ -224,21 +152,54 @@ class Tinebase_Application
      * @param string $_filter optional search parameter
      * @param int $_limit optional how many applications to return
      * @param int $_start optional offset for applications
-     * @return Tinebase_RecordSet_Application
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Application
      */
-    public function getApplications($_filter = NULL, $_sort = 'id', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    public function getApplications($_filter = NULL, $_sort = null, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {
-        $select = $this->_db->select()
-            ->from($this->_tableName);
-        
-        if ($_filter !== NULL) {
-            $select->where($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
+        $filter = null;
+        if ($_filter) {
+            $filter = new Tinebase_Model_ApplicationFilter(array(
+                array('field' => 'name', 'operator' => 'contains', 'value' => $_filter),
+            ));
         }
         
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $pagination = null;
+        if ($_sort) {
+            $pagination = new Tinebase_Model_Pagination(array(
+                'sort'  => $_sort,
+                'dir'   => $_dir,
+                'start' => $_start,
+                'limit' => $_limit
+            ));
+        }
         
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rows, TRUE);
+        if ($filter === null && $pagination === null) {
+            $classCacheId = 'allApplications';
+            
+            if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
+                return $this->_classCache[__FUNCTION__][$classCacheId];
+            }
+            
+            $cache = Tinebase_Core::getCache();
+            if ($cache instanceof Zend_Cache_Core) {
+                $cacheId = __FUNCTION__ . '_' . $classCacheId;
+                
+                $result = $cache->load($cacheId);
+                if ($result instanceof Tinebase_Record_RecordSet) {
+                    return $result;
+                }
+            }
+        }
+        
+        $result = $this->_getBackend()->search($filter, $pagination);
+        
+        if (isset($classCacheId)) {
+            $this->_classCache[__FUNCTION__][$classCacheId] = $result;
+        }
+        
+        if (isset($cacheId)) {
+            $cache->save($result, $cacheId);
+        }
         
         return $result;
     }
@@ -255,32 +216,10 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
         
-        $cache = Tinebase_Core::getCache();
-        if ($cache instanceof Zend_Cache_Core) {
-            $cacheId = 'getApplicationsByState' . $state;
-            
-            $result = $cache->load($cacheId);
-            
-            if ($result instanceof Tinebase_Record_RecordSet) {
-                return $result;
-            }
-        }
-        
-        $select = $this->_db->select()
-            ->from($this->_tableName)
-            ->where($this->_db->quoteIdentifier('status') . ' = ?', $state);
-        
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rows, TRUE);
-        
-        if ($cache instanceof Zend_Cache_Core) {
-            $cache->save($result, $cacheId, array('applications'), /* 1 hour */ 3600);
-        }
+        $result = $this->getApplications()->filter('status', $state);
         
         return $result;
-    }    
+    }
     
     /**
      * return the total number of applications installed
@@ -291,18 +230,17 @@ class Tinebase_Application
      */
     public function getTotalApplicationCount($_filter = NULL)
     {
-        $select = $this->_db->select()
-            ->from($this->_tableName, array('count' => new Zend_Db_Expr('COUNT(' . $this->_db->quoteIdentifier('id') . ')')));
+        $select = $this->_getDb()->select()
+            ->from(SQL_TABLE_PREFIX . $this->_tableName, array('count' => 'COUNT(*)'));
         
-        if ($_filter !== NULL) {
-            $select->where($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
+        if($_filter !== NULL) {
+            $select->where($this->_getDb()->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
         }
         
-        $stmt = $this->_db->query($select);
-        $row = $stmt->fetch();
-        $stmt->closeCursor();
+        $stmt = $this->_getDb()->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
-        return $row['count'];
+        return $result[0];
     }
     
     /**
@@ -348,7 +286,7 @@ class Tinebase_Application
             'status' => $state
         );
         
-        $affectedRows = $this->_backend->updateMultiple($applicationIds, $data);
+        $affectedRows = $this->_getBackend()->updateMultiple($applicationIds, $data);
         
         if ($affectedRows === count($applicationIds)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
@@ -359,22 +297,20 @@ class Tinebase_Application
                 . ' Could not set state for all requested applications: ' . print_r($applicationIds, TRUE));
         }
         
-        foreach ($applicationIds as $applicationId) {
-            $this->_cleanCache($applicationId);
-        }
+        $this->_cleanCache();
     }
     
     /**
      * add new appliaction 
      *
-     * @param Tinebase_Model_Application $_application the new application object
+     * @param Tinebase_Model_Application $application the new application object
      * @return Tinebase_Model_Application the new application with the applicationId set
      */
-    public function addApplication(Tinebase_Model_Application $_application)
+    public function addApplication(Tinebase_Model_Application $application)
     {
-        $application = $this->_backend->create($_application);
+        $application = $this->_getBackend()->create($application);
         
-        $this->_cleanCache($application);
+        $this->_cleanCache();
         
         return $application;
     }
@@ -387,7 +323,7 @@ class Tinebase_Application
      */
     public function getAllRights($_applicationId)
     {
-        $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
+        $application = $this->getApplicationById($_applicationId);
         
         // call getAllApplicationRights for application (if it has specific rights)
         $appAclClassName = $application->name . '_Acl_Rights';
@@ -410,7 +346,7 @@ class Tinebase_Application
      */
     public function getAllRightDescriptions($_applicationId)
     {
-        $application = Tinebase_Application::getInstance()->getApplicationById($_applicationId);
+        $application = $this->getApplicationById($_applicationId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Getting right descriptions for ' . $application->name );
@@ -425,6 +361,7 @@ class Tinebase_Application
         }
         
         $descriptions = call_user_func(array($appAclClassName, $function));
+        
         return $descriptions;
     }
     
@@ -438,23 +375,14 @@ class Tinebase_Application
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $select = $this->_db->select()
+        $select = $this->_getDb()->select()
             ->from(SQL_TABLE_PREFIX . 'application_tables', array('name'))
-            ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $applicationId);
+            ->where($this->_getDb()->quoteIdentifier('application_id') . ' = ?', $applicationId);
             
-        $stmt = $this->_db->query($select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $stmt = $this->_getDb()->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
-        if ($rows === NULL) {
-            return array();
-        }
-        
-        $tables = array();
-        foreach($rows as $row) {
-            $tables[] = $row['name'];
-        }
-        
-        return $tables;
+        return $rows;
     }
     
     /**
@@ -477,11 +405,28 @@ class Tinebase_Application
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $applicationId),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . '= ?', $_tableName)
+            $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('application_id') . '= ?', $applicationId),
+            $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('name') . '= ?', $_tableName)
         );
         
-        $this->_db->delete(SQL_TABLE_PREFIX . 'application_tables', $where);
+        $this->_getDb()->delete(SQL_TABLE_PREFIX . 'application_tables', $where);
+    }
+    
+    /**
+     * reset class cache
+     * 
+     * @param string $key
+     * @return Tinebase_Acl_Roles
+     */
+    public function resetClassCache($key = null)
+    {
+        foreach ($this->_classCache as $cacheKey => $cacheValue) {
+            if ($key === null || $key === $cacheKey) {
+                $this->_classCache[$cacheKey] = array();
+            }
+        }
+        
+        return $this;
     }
     
     /**
@@ -496,9 +441,9 @@ class Tinebase_Application
         
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $this->_cleanCache($applicationId);
+        $this->_cleanCache();
         
-        $result = $this->_backend->delete($applicationId);
+        $this->_getBackend()->delete($applicationId);
     }
     
     /**
@@ -514,12 +459,12 @@ class Tinebase_Application
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $applicationData = array(
-            'application_id'    => $applicationId,
-            'name'              => $_name,
-            'version'           => $_version
+            'application_id' => $applicationId,
+            'name'           => $_name,
+            'version'        => $_version
         );
         
-        $this->_db->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
+        $this->_getDb()->insert(SQL_TABLE_PREFIX . 'application_tables', $applicationData);
     }
     
     /**
@@ -530,9 +475,9 @@ class Tinebase_Application
      */
     public function updateApplication(Tinebase_Model_Application $_application)
     {
-        $result = $this->_backend->update($_application);
+        $result = $this->_getBackend()->update($_application);
         
-        $this->_cleanCache($result);
+        $this->_cleanCache();
         
         return $result;
     }
@@ -560,7 +505,7 @@ class Tinebase_Application
         $countMessage = ' Deleted';
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . '= ?', $_application->getId())
+            $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('application_id') . '= ?', $_application->getId())
         );
         
         foreach ($dataToDelete as $dataType => $info) {
@@ -577,7 +522,7 @@ class Tinebase_Application
                 default:
                     if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
                         try {
-                            $count = $this->_db->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
+                            $count = $this->_getDb()->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
                         } catch (Zend_Db_Statement_Exception $zdse) {
                             Tinebase_Exception::log($zdse);
                             $count = 0;
@@ -592,17 +537,6 @@ class Tinebase_Application
         
         $countMessage .= ' for application ' . $_application->name;
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $countMessage);
-    }            
-    
-    /**
-     * add TMA to "in class" cache and to Zend Cache
-     * 
-     * @param  Tinebase_Model_Application  $_application
-     */
-    protected function _addToClassCache(Tinebase_Model_Application $_application)
-    {
-        $this->_applicationCache[$_application->getId()] = $_application;
-        $this->_applicationCache[$_application->name]    = $_application;
     }
     
     /**
@@ -610,35 +544,43 @@ class Tinebase_Application
      * 
      * @return void
      */
-    protected function _cleanCache($_applicationId)
+    protected function _cleanCache()
     {
         $cache = Tinebase_Core::getCache();
         
         if ($cache instanceof Zend_Cache_Core) {
-            try {
-                $application = $_applicationId instanceof Tinebase_Model_Application 
-                    ? $_applicationId 
-                    : $this->getApplicationById($_applicationId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // application can not be found
-            }
-            
-            if (isset($application)) {
-                Tinebase_Core::getCache()->remove('getApplicationById_'   . $application->getId());
-                Tinebase_Core::getCache()->remove('getApplicationByName_' . $application->name);
-            } else {
-                // something went wrong
-                Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
-            }
-            
-            Tinebase_Core::getCache()->remove('getApplicationsByState' . Tinebase_Application::ENABLED);
-            Tinebase_Core::getCache()->remove('getApplicationsByState' . Tinebase_Application::DISABLED);
+            $cache->remove('getApplications_allApplications');
         }
-        /*
-         *  we always reset the "in class" cache. Otherwise we rum into problems when we 
-         *  try to uninstall and install all applications again
-         *  hint: Tinebase can't be uninstalled because the app tables got droped before 
-         */
-        $this->_applicationCache = array();
+        
+        $this->resetClassCache();
+    }
+    
+    /**
+     * 
+     * @return Tinebase_Backend_Sql
+     */
+    protected function _getBackend()
+    {
+        if (!isset($this->_backend)) {
+            $this->_backend = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_Application', 
+                'tableName' => 'applications'
+            ), $this->_getDb());
+        }
+        
+        return $this->_backend;
+    }
+    
+    /**
+     * 
+     * @return Zend_Db_Adapter_Abstract
+     */
+    protected function _getDb()
+    {
+        if (!isset($this->_db)) {
+            $this->_db = Tinebase_Core::getDb();
+        }
+        
+        return $this->_db;
     }
 }
