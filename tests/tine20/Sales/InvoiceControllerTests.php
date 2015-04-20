@@ -932,7 +932,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'start_date' => $csDate,
             'end_date' => NULL,
             'products' => array(
-                array('start_date' => $csDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 2, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId())
+                array('start_date' => $csDate, 'end_date' => NULL, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'end', 'product_id' => $this->_productRecords->filter('name', 'Hours')->getFirstRecord()->getId())
             )
         )));
     
