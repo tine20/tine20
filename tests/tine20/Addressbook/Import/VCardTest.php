@@ -81,13 +81,14 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_instance->importFile($this->_filename);
         $this->_contactIdsToDelete = array($result['results']->getArrayOfIds());
-        
-        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import all contacts.');
-        $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
-        $this->assertEquals('+49732121258035', $result['results']->getFirstRecord()->tel_home, 'n_fileas not found');
-        $this->assertEquals('mitbewohner', $result['results']->getFirstRecord()->note, 'note not found');
-        $this->assertEquals('Eisenhüttenstraße 723', $result['results']->getFirstRecord()->adr_one_street, 'street not found');
-        $this->assertEquals('http://www.vcard.de', $result['results']->getFirstRecord()->url, 'url not found');
+
+        $this->assertEquals(2, $result['totalcount'], 'Didn\'t import all contacts:' . print_r($result['exceptions']->toArray(), true));
+        $firstContact = $result['results']->getFirstRecord();
+        $this->assertEquals('spass, alex', $firstContact->n_fileas, 'file as not found');
+        $this->assertEquals('+49732121258035', $firstContact->tel_home, 'n_fileas not found');
+        $this->assertEquals('mitbewohner', $firstContact->note, 'note not found');
+        $this->assertEquals('Eisenhüttenstraße 723', $firstContact->adr_one_street, 'street not found');
+        $this->assertEquals('http://www.vcard.de', $firstContact->url, 'url not found');
     }
 
     /**
@@ -183,7 +184,7 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
      */
     public function testImportDuplicate()
     {
-        $contact = $this->testImportWithIconv();
+        $this->testImportWithIconv();
         
         // import again -> should have duplicate
         $result = $this->_instance->importFile($this->_filename);

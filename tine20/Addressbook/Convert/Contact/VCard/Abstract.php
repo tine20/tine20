@@ -158,7 +158,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'PHOTO':
-                    $data['jpegphoto'] = $property->getValue();
+                    $jpegphoto = $property->getValue();
                     break;
                     
                 case 'TEL':
@@ -214,6 +214,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         }
         
         $contact->setFromArray($data);
+
+        if (isset($jpegphoto)) {
+            $contact->setSmallContactImage($jpegphoto);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data ' . print_r($contact->toArray(), true));
@@ -395,15 +399,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * add photo data to VCard
      * 
-     * @param  Tinebase_Record_Abstract  $record
+     * @param  Addressbook_Model_Contact $record
      * @param  \Sabre\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddPhoto(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddPhoto(Addressbook_Model_Contact $record, \Sabre\VObject\Component $card)
     {
-        if (!empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
+        if (! empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             try {
-                $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $record->getId());
-                 $jpegData = $image->getBlob('image/jpeg');      
+                $jpegData = $record->getSmallContactImage();
                 $card->add('PHOTO',  $jpegData, array('TYPE' => 'JPEG', 'ENCODING' => 'b'));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
