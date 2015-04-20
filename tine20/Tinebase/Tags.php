@@ -512,15 +512,12 @@ class Tinebase_Tags
         Tinebase_Model_TagRight::applyAclSql($select, $_right, $this->_db->quoteIdentifier('tagging.tag_id'));
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
-        
-        $queryResult = $this->_db->fetchAll($select);
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
 
-        // argh: Tinebase_Model_Tag has no record_id
-        /*
-        $tagsOfRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Tag', $queryResult);
-        $tagsOfRecords->addIndices(array('record_id'));
-        */
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+
+        $queryResult = $this->_db->fetchAll($select);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
 
         // build array with tags (record_id => array of Tinebase_Model_Tag)
         $tagsOfRecords = array();
@@ -530,10 +527,9 @@ class Tinebase_Tags
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
         foreach($_records as $record) {
-            //$record->{$_tagsProperty} = $tagsOfRecords->filter('record_id', $record->getId());
             $record->{$_tagsProperty} = new Tinebase_Record_RecordSet(
                 'Tinebase_Model_Tag', 
-            (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
+                (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
             );
         }
     }
@@ -1018,11 +1014,17 @@ class Tinebase_Tags
      */
     protected function _getSelect($_recordId, $_applicationId, $_cols = '*')
     {
+        $recordIds = (array) $_recordId;
+        // stringify record ids (we might have a mix of uuids and old integer ids)
+        foreach ($recordIds as $key => $value) {
+            $recordIds[$key] = (string) $value;
+        }
+
         $select = $this->_db->select()
             ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), $_cols)
             ->join(array('tags'    => SQL_TABLE_PREFIX . 'tags'), $this->_db->quoteIdentifier('tagging.tag_id') . ' = ' . $this->_db->quoteIdentifier('tags.id'))
             ->where($this->_db->quoteIdentifier('application_id') . ' = ?', $_applicationId)
-            ->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', (array) $_recordId)
+            ->where($this->_db->quoteIdentifier('record_id') . ' IN (?) ', $recordIds)
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
         return $select;
