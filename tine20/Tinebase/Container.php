@@ -1033,7 +1033,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
                 }
             }
-            $this->deleteContainerContents($container);
+            $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
             
         } catch (Exception $e) {
@@ -1072,13 +1072,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @param Tinebase_Model_Container $container
      */
-    public function deleteContainerContents($container)
+    public function deleteContainerContents($container, $_ignoreAcl = FALSE)
     {
         // set records belonging to this container to deleted
         $model = $container->model;
         if ($model) {
             $controller = Tinebase_Core::getApplicationInstance($model);
             $filterName = $model . 'Filter';
+            if($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+                $acl = $controller->doContainerACLChecks(FALSE);
+            }
             if ($controller && class_exists($filterName)) {
                 $filter = new $filterName(array(
                     array(
@@ -1093,6 +1096,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     )),
                     'AND');
                 $controller::getInstance()->deleteByFilter($filter);
+            }
+            if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+                $controller->doContainerACLChecks($acl);
             }
         }
     }
