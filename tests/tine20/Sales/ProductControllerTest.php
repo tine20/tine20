@@ -29,6 +29,21 @@ class Sales_ProductControllerTest extends TestCase
     }
     
     /**
+     * 
+     * @return Sales_Model_Contract
+     */
+    public function testCreateProduct()
+    {
+        $product = $this->_getUit()->create(new Sales_Model_Product(array(
+            'name' => 'A new product'
+        )));
+        
+        $this->assertNotEmpty($product->number);
+        
+        return $product;
+    }
+    
+    /**
      * testUpdateProductLifespan
      * 
      * @see 0010766: set product lifespan

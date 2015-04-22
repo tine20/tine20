@@ -19,20 +19,27 @@
 class Sales_Controller extends Tinebase_Controller_Abstract
 {
     /**
-     * the constructor
+     * application name (is needed in checkRight())
      *
-     * don't use the constructor. use the singleton 
+     * @var string
      */
-    private function __construct() {
-        $this->_applicationName = 'Sales';
-    }
-
+    protected $_applicationName = 'Sales';
+    
     /**
      * holds the default Model of this application
      * @var string
      */
     protected static $_defaultModel = 'Sales_Model_Contract';
     
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton 
+     */
+    private function __construct()
+    {
+    }
+
     /**
      * don't clone. Use the singleton.
      *
@@ -75,6 +82,7 @@ class Sales_Controller extends Tinebase_Controller_Abstract
   
     /**
      * returns the config for this app
+     * 
      * @return array
      */
     public function getConfig()
@@ -83,11 +91,17 @@ class Sales_Controller extends Tinebase_Controller_Abstract
             throw new Tinebase_Exception_AccessDenied(_('You do not have admin rights on Sales'));
         }
         
-        return array(
-            'contractNumberValidation' => Sales_Config::getInstance()->get('contractNumberValidation', 'string'),
-            'contractNumberGeneration' => Sales_Config::getInstance()->get('contractNumberGeneration', 'auto'),
-            'ownCurrency' => Sales_Config::getInstance()->get('ownCurrency', 'EUR')
-        );
+        $properties = Sales_Config::getProperties();
+        
+        $result = array();
+        
+        foreach ($properties as $propertyName => $propertyOptions) {
+            if (isset($propertyOptions['setByAdminModule'])) {
+                $result[$propertyName] = Sales_Config::getInstance()->get($propertyName, $propertyOptions['default']);
+            }
+        }
+        
+        return $result;
     }
 
     
@@ -95,9 +109,7 @@ class Sales_Controller extends Tinebase_Controller_Abstract
      * save Sales settings
      *
      * @param array config
-     * @return Sales_Model_Config
-     *
-     * @todo generalize this
+     * @return array
      */
     public function setConfig($config)
     {
@@ -107,11 +119,20 @@ class Sales_Controller extends Tinebase_Controller_Abstract
 
         Sales_Controller_Customer::validateCurrencyCode($config['ownCurrency']);
         
-        $ret[] = array(
-            Sales_Config::getInstance()->set('contractNumberGeneration', $config['contractNumberGeneration']),
-            Sales_Config::getInstance()->set('contractNumberValidation', $config['contractNumberValidation']),
-            Sales_Config::getInstance()->set('ownCurrency', $config['ownCurrency'])
-        );
-        return $ret;
+        $properties = Sales_Config::getProperties();
+        
+        foreach ($config as $configName => $configValue) {
+            if (!isset($properties[$configName])) {
+                continue;
+            }
+            
+            if (!isset($properties[$configName]['setByAdminModule'])) {
+                continue;
+            }
+            
+            Sales_Config::getInstance()->set($configName, $configValue);
+        }
+        
+        return $this->getConfig();
     }
 }

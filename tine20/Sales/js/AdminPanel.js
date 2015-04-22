@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -118,11 +118,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
             scope: this,
             params: {
                 method: 'Sales.setConfig',
-                config: {
-                    contractNumberGeneration: this.getForm().findField('contractNumberGeneration').getValue(),
-                    contractNumberValidation: this.getForm().findField('contractNumberValidation').getValue(),
-                    ownCurrency: this.getForm().findField('ownCurrency').getValue()
-                }
+                config: this.getForm().getFieldValues(),
             },
             success : function(_result, _request) {
                 this.loadMask.hide();
@@ -141,12 +137,9 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
      */
     getFormItems: function() {
         var config = Tine.Sales.registry.get('config');
-        var cng = config.contractNumberGeneration,
-            cnv = config.contractNumberValidation,
-            oc  = config.ownCurrency;
 
         var currency = [
-            ['EUR', this.app.i18n._('EUR')]
+            ['EUR', this.app.i18n._('Euro (€)')]
         ];
 
         var currencyStore = new Ext.data.ArrayStore({
@@ -161,57 +154,96 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
 
         return {
             border: false,
-            frame:  false,
+            frame : false,
             layout: 'border',
 
             items: [{
                 region: 'center',
                 border: false,
-                frame:  false,
-                layout : {
-                    align: 'stretch',
-                    type:  'vbox'
-                    },
-                items: [{
-                    layout:  'form',
-                    margins: '10px 10px',
-                    border:  false,
-                    frame:   false,
-                    items: [
+                frame : false,
+                
+                xtype       : 'columnform',
+                labelAlign  : 'top',
+                formDefaults: {
+                    xtype         :'textfield',
+                    anchor        : '100%',
+                    labelSeparator: '',
+                    columnWidth   : 1/3
+                },
+                items: [
+                    [
                         {
-                            fieldLabel: this.app.i18n._(cng.definition.label),
-                            name: 'contractNumberGeneration',
-                            xtype: 'combo',
-                            mode: 'local',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            value: cng.value ? cng.value : cng['default'],
-                            store: cng.definition.options
-                        },
-                        {
-                            fieldLabel: this.app.i18n._(cnv.definition.label),
-                            name: 'contractNumberValidation',
-                            xtype: 'combo',
-                            mode: 'local',
-                            value: cnv.value ? cnv.value : cnv['default'],
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            store: cnv.definition.options
-                        },
-                        {
-                            xtype: 'combo',
-                            name: 'ownCurrency',
-                            fieldLabel: this.app.i18n._(oc.definition.label),
-                            value: oc.value ? oc.value : oc['default'],
-                            mode: 'local',
-                            scope: this,
+                            fieldLabel: this.app.i18n._(config.ownCurrency.definition.label),
+                            name      : 'ownCurrency',
+                            value     : config.ownCurrency.value ? config.ownCurrency.value : config.ownCurrency['default'],
+                            xtype     : 'combo',
+                            mode      : 'local',
+                            scope     : this,
                             valueField: 'currency_id',
                             displayField: 'currency',
-                            store: currencyStore
+                            store     : currencyStore
+                        }
+                    ], [
+                        {
+                            fieldLabel: this.app.i18n._(config.contractNumberGeneration.definition.label),
+                            name      : 'contractNumberGeneration',
+                            value     : config.contractNumberGeneration.value ? config.contractNumberGeneration.value : config.contractNumberGeneration['default'],
+                            xtype     : 'combo',
+                            mode      : 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store     : config.contractNumberGeneration.definition.options
+                        }, {
+                            fieldLabel: this.app.i18n._(config.contractNumberValidation.definition.label),
+                            name      : 'contractNumberValidation',
+                            value     : config.contractNumberValidation.value ? config.contractNumberValidation.value : config.contractNumberValidation['default'],
+                            xtype     : 'combo',
+                            mode      : 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store     : config.contractNumberValidation.definition.options
+                        }
+                    ], [
+                        {
+                            fieldLabel: this.app.i18n._(config.productNumberGeneration.definition.label),
+                            name      : 'productNumberGeneration',
+                            value     : config.productNumberGeneration.value ? config.productNumberGeneration.value : config.productNumberGeneration['default'],
+                            xtype     : 'combo',
+                            mode      : 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store     : config.productNumberGeneration.definition.options
+                        }, {
+                            fieldLabel: this.app.i18n._(config.productNumberValidation.definition.label),
+                            name      : 'productNumberValidation',
+                            value     : config.productNumberValidation.value ? config.productNumberValidation.value : config.productNumberValidation['default'],
+                            xtype     : 'combo',
+                            mode      : 'local',
+                            forceSelection: true,
+                            triggerAction: 'all',
+                            store     : config.productNumberValidation.definition.options
+                        }
+                    ], [
+                        {
+                            fieldLabel: this.app.i18n._(config.productNumberPrefix.definition.label),
+                            name      : 'productNumberPrefix',
+                            value     : config.productNumberPrefix.value ? config.productNumberPrefix.value : config.productNumberPrefix['default'],
+                        }, {
+                            fieldLabel: this.app.i18n._(config.productNumberZeroFill.definition.label),
+                            name      : 'productNumberZeroFill',
+                            value     : config.productNumberZeroFill.value ? config.productNumberZeroFill.value : config.productNumberZeroFill['default'],
+                            xtype     : 'uxspinner',
+                            decimalPrecision: 0,
+                            strategy  : new Ext.ux.form.Spinner.NumberStrategy({
+                                incrementValue: 1,
+                                alternateIncrementValue: 10,
+                                minValue      : 0,
+                                maxValue      : 100,
+                                allowDecimals : 0
+                            })
                         }
                     ]
-                    }]
-
+                ]
             }]
         };
     } 
@@ -219,8 +251,8 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
 
 Tine.Sales.AdminPanel.openWindow = function(config) {
     var window = Tine.WindowFactory.getWindow({
-        modal: true,
-        width : 240,
+        modal  : true,
+        width  : 500,
         height : 250,
         contentPanelConstructor : 'Tine.Sales.AdminPanel',
         contentPanelConstructorConfig : config

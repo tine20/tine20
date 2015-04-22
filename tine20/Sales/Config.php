@@ -45,6 +45,33 @@ class Sales_Config extends Tinebase_Config_Abstract
     const CONTRACT_NUMBER_VALIDATION = 'contractNumberValidation';
     
     /**
+     * How should the contract number be created
+     * @var string
+     */
+    const PRODUCT_NUMBER_GENERATION = 'productNumberGeneration';
+    
+    /**
+     * How should the contract number be validated
+     * 
+     * @var string
+     */
+    const PRODUCT_NUMBER_VALIDATION = 'productNumberValidation';
+    
+    /**
+     * Prefix of the product number
+     * 
+     * @var string
+     */
+    const PRODUCT_NUMBER_PREFIX = 'productNumberPrefix';
+    
+    /**
+     * Fill product number with leading zero's if needed
+     * 
+     * @var string
+     */
+    const PRODUCT_NUMBER_ZEROFILL = 'productNumberZeroFill';
+    
+    /**
      * Invoice Type
      * 
      * @var string
@@ -52,6 +79,13 @@ class Sales_Config extends Tinebase_Config_Abstract
     const INVOICE_TYPE = 'invoiceType';
     
     const PAYMENT_METHODS = 'paymentMethods';
+    
+    /**
+     * Product Category
+     * 
+     * @var string
+     */
+    const PRODUCT_CATEGORY = 'productCategory';
     
     /**
      * Invoice Type
@@ -172,6 +206,62 @@ class Sales_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Sales_Model_InvoiceType'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'INVOICE'
+        ),
+        self::PRODUCT_CATEGORY => array(
+                                   //_('Product Category')
+            'label'                 => 'Product Category',
+                                   //_('Possible Product Categories.')
+            'description'           => 'Possible Product Categories.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Sales_Model_ProductCategory'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'DEFAULT'
+        ),
+        self::PRODUCT_NUMBER_GENERATION => array(
+                                   //_('Product Number Creation')
+            'label'                 => 'Product Number Creation',
+                                   //_('Should the product number be set manually or be auto-created?')
+            'description'           => 'Should the product number be set manually or be auto-created?',
+            'type'                  => 'string',
+                                    // _('automatically')
+                                    // _('manually')
+            'options'               => array(array('auto', 'automatically'), array('manual', 'manually')),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'auto'
+        ),
+        self::PRODUCT_NUMBER_VALIDATION => array(
+                                   //_('Product Number Validation')
+            'label'                 => 'Product Number Validation',
+                                   //_('The Number can be validated as text or number.')
+            'description'           => 'The Number can be validated as text or number.',
+            'type'                  => 'string',
+                                    // _('Number')
+                                    // _('Text')
+            'options'               => array(array('integer', 'Number'), array('string', 'Text')),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'string'
+        ),
+        self::PRODUCT_NUMBER_PREFIX => array(
+                                   //_('Product Number Prefix')
+            'label'                 => 'Product Number Prefix',
+                                   //_('The prefix of the product number.')
+            'description'           => 'The prefix of the product number',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => 'P-'
+        ),
+        self::PRODUCT_NUMBER_ZEROFILL => array(
+                                   //_('Product Number Zero Fill')
+            'label'                 => 'Product Number Zero Fill',
+                                   //_('Fill the number with leading zero's if needed.')
+            'description'           => 'Fill the number with leading zero\'s if needed.',
+            'type'                  => 'number',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => '5'
         ),
         self::PAYMENT_METHODS => array(
                                    //_('Payment Method')

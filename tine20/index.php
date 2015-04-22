@@ -1,13 +1,12 @@
 <?php
 /**
- * this is the general file any request should be routed trough
+ * this is the general file any request should be routed through
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: index.php 5122 2008-10-27 11:53:24Z p.schuele@metaways.de 
- * 
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
 
 $time_start = microtime(true);
@@ -22,8 +21,11 @@ Tinebase_Core::dispatchRequest();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 
-
 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') ' .
-        'METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD) . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time) . ' / ' .Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize());
+    Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ')' .
+        ' METHOD: ' . Tinebase_Core::get(Tinebase_Core::METHOD)
+        . ' / TIME: ' . Tinebase_Helper::formatMicrotimeDiff($time)
+        . ' / ' . Tinebase_Core::logMemoryUsage() . ' / ' . Tinebase_Core::logCacheSize()
+        . ' / PID: ' . getmypid()
+    );
 }

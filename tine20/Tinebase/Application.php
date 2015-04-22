@@ -186,6 +186,8 @@ class Tinebase_Application
                 
                 $result = $cache->load($cacheId);
                 if ($result instanceof Tinebase_Record_RecordSet) {
+                    $this->_classCache[__FUNCTION__][$classCacheId] = $result;
+                    
                     return $result;
                 }
             }
@@ -193,10 +195,13 @@ class Tinebase_Application
         
         $result = $this->_getBackend()->search($filter, $pagination);
         
+        // cache result for this request 
         if (isset($classCacheId)) {
             $this->_classCache[__FUNCTION__][$classCacheId] = $result;
         }
         
+        // cache result in external cache
+        // cache will be cleared, when an application will be added or updated
         if (isset($cacheId)) {
             $cache->save($result, $cacheId);
         }

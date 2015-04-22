@@ -68,6 +68,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_Redis_QueueTest');
         $suite->addTestSuite('Tinebase_Pluggable_ConcreteTest');
         $suite->addTestSuite('Tinebase_TempFileTest');
+        $suite->addTestSuite('Tinebase_Server_AllTests');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
@@ -77,7 +78,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Tree_AllTests::suite());
         $suite->addTest(Tinebase_Scheduler_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
-        $suite->addTest(OpenDocument_AllTests::suite());        
+        $suite->addTest(OpenDocument_AllTests::suite());
         return $suite;
     }
 }

@@ -27,6 +27,7 @@ class Voipmanager_AllTests
         $suite->addTestSuite('Voipmanager_ControllerTest');
         $suite->addTestSuite('Voipmanager_JsonTest');
         $suite->addTestSuite('Voipmanager_SnomTest');
+        $suite->addTestSuite('Voipmanager_Server_PluginTests');
         //$suite->addTestSuite('Voipmanager_Backend_Snom_PhoneTest');
         return $suite;
     }

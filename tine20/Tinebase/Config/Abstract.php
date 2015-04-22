@@ -110,7 +110,14 @@ abstract class Tinebase_Config_Abstract
      * @var array
      */
     protected $_cachedApplicationConfig = NULL;
-    
+
+    /**
+     * server classes
+     *
+     * @var array
+     */
+    protected static $_serverPlugins = array();
+
     /**
      * get properties definitions 
      * 
@@ -542,6 +549,16 @@ abstract class Tinebase_Config_Abstract
         $properties = $this->getProperties();
         
         return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
+    }
+    
+    /**
+     * Get list of server classes
+     *
+     * @return array
+     */
+    public static function getServerPlugins()
+    {
+        return static::$_serverPlugins;
     }
     
     /**
