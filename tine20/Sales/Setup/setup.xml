@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.27</version>
+    <version>8.28</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -170,13 +170,25 @@
         </table>
         <table>
             <name>sales_products</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>gtin</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>name</name>
@@ -202,7 +214,12 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>price</name>
+                    <name>purchaseprice</name>
+                    <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>salesprice</name>
                     <type>float</type>
                     <notnull>false</notnull>
                 </field>

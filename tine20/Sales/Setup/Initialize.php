@@ -102,50 +102,64 @@ class Sales_Setup_Initialize extends Setup_Initialize
         ));
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
         
-        // create type config
+        // create product categories
         $tc = array(
-            'name'    => Sales_Config::INVOICE_TYPE,
+            'name'    => Sales_Config::PRODUCT_CATEGORY,
             'records' => array(
-                array('id' => 'INVOICE',  'value' => 'invoice',   'system' => true), // _('invoice')
-                array('id' => 'REVERSAL', 'value' => 'reversal',  'system' => true), // _('reversal')
-                array('id' => 'CREDIT',   'value' => 'credit',    'system' => true) // _('credit')
+                array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true) // _('Default')
             ),
         );
         
         $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => $appId,
-            'name'              => Sales_Config::INVOICE_TYPE,
-            'value'             => json_encode($tc),
+            'application_id' => $appId,
+            'name'           => Sales_Config::PRODUCT_CATEGORY,
+            'value'          => json_encode($tc),
+        )));
+        
+        // create type config
+        $tc = array(
+            'name'    => Sales_Config::INVOICE_TYPE,
+            'records' => array(
+                array('id' => 'INVOICE',  'value' => 'Invoice',  'system' => true), // _('Invoice')
+                array('id' => 'REVERSAL', 'value' => 'Reversal', 'system' => true), // _('Reversal')
+                array('id' => 'CREDIT',   'value' => 'Credit',   'system' => true)  // _('Credit')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id' => $appId,
+            'name'           => Sales_Config::INVOICE_TYPE,
+            'value'          => json_encode($tc),
         )));
         
         // create cleared state keyfields
         $tc = array(
             'name'    => Sales_Config::INVOICE_CLEARED,
             'records' => array(
-                array('id' => 'TO_CLEAR',  'value' => 'to clear',   'system' => true), // _('to clear')
-                array('id' => 'CLEARED', 'value' => 'cleared',  'system' => true), // _('cleared')
+                array('id' => 'TO_CLEAR', 'value' => 'to clear', 'system' => true), // _('to clear')
+                array('id' => 'CLEARED',  'value' => 'cleared',  'system' => true), // _('cleared')
             ),
         );
         
         $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => $appId,
-            'name'              => Sales_Config::INVOICE_CLEARED,
-            'value'             => json_encode($tc),
+            'application_id' => $appId,
+            'name'           => Sales_Config::INVOICE_CLEARED,
+            'value'          => json_encode($tc),
         )));
         
         // create payment types config
         $tc = array(
             'name'    => Sales_Config::PAYMENT_METHODS,
             'records' => array(
-                array('id' => 'BANK TRANSFER',  'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
-                array('id' => 'DIRECT DEBIT',   'value' => 'Direct debit',  'system' => true)  // _('Direct debit')
+                array('id' => 'BANK TRANSFER', 'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
+                array('id' => 'DIRECT DEBIT',  'value' => 'Direct debit',  'system' => true)  // _('Direct debit')
             ),
         );
         
         $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => $appId,
-            'name'              => Sales_Config::PAYMENT_METHODS,
-            'value'             => json_encode($tc),
+            'application_id' => $appId,
+            'name'           => Sales_Config::PAYMENT_METHODS,
+            'value'          => json_encode($tc),
         )));
         
     }

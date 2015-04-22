@@ -72,29 +72,49 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype:'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 1/3
                     },
                     items: [[{
+                        name: 'number',
+                        fieldLabel: this.app.i18n._('Product Number'),
+                        columnWidth: 1/3
+                    }, {
+                        name: 'gtin',
+                        fieldLabel: this.app.i18n._('GTIN'),
+                        columnWidth: 1/3
+                    }, new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Sales',
+                        keyFieldName: 'productCategory',
+                        fieldLabel: this.app.i18n._('Category'),
+                        name: 'category',
+                        columnWidth: 1/3
+                    })], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Name'),
                         name: 'name',
                         allowBlank: false
                     }], [{
                         columnWidth: 1,
-                        xtype: 'numberfield',
-                        fieldLabel: this.app.i18n._('Price'),
-                        name: 'price',
-                        allowNegative: false,
-                        allowBlank: false
-                        //decimalSeparator: ','
-                    }], [{
-                        columnWidth: 1,
                         fieldLabel: this.app.i18n._('Manufacturer'),
                         name: 'manufacturer'
                     }], [{
-                        columnWidth: .5,
-                        fieldLabel: this.app.i18n._('Category'),
-                        name: 'category'
+                        xtype: 'extuxnumberfield',
+                        fieldLabel: this.app.i18n._('Purchaseprice'),
+                        decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                        decimalPrecision: 2,
+                        suffix: ' €',
+                        name: 'purchaseprice',
+                        allowNegative: false,
+                        allowBlank: true
+                    }, {
+                        xtype: 'extuxnumberfield',
+                        fieldLabel: this.app.i18n._('Salesprice'),
+                        decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                        decimalPrecision: 2,
+                        suffix: ' €',
+                        name: 'salesprice',
+                        allowNegative: false,
+                        allowBlank: true
                     }, this.getAccountableCombo()],
                     [{
                         columnWidth: 0.5,
@@ -175,7 +195,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 displayField: 'modelName',
                 valueField: 'key',
                 name: 'accountable',
-                columnWidth: .5,
+                columnWidth: 1/3,
                 mode: 'local'
             });
 

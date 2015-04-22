@@ -1926,4 +1926,77 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Sales'));
         $this->setApplicationVersion('Sales', '8.27');
     }
+    
+    /**
+     * update to 8.28
+     *
+     *  - add columns
+     */
+    public function update_27()
+    {
+        $this->validateTableVersion('sales_products', 5);
+        
+        // create keyfield config
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+        
+        // create product categories
+        $tc = array(
+            'name'    => Sales_Config::PRODUCT_CATEGORY,
+            'records' => array(
+                array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true)  // _('Default')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Sales_Config::PRODUCT_CATEGORY,
+            'value'             => json_encode($tc),
+        )));
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>number</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('sales_products', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>gtin</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('sales_products', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>purchaseprice</name>
+                <type>float</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('sales_products', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>salesprice</name>
+                <type>float</type>
+                <notnull>false</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('sales_products', $declaration, 'price');
+        
+        $this->setTableVersion('sales_products', 6);
+        
+        $this->setApplicationVersion('Sales', '8.28');
+    }
 }

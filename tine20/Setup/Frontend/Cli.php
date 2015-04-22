@@ -306,6 +306,10 @@ class Setup_Frontend_Cli
             }
         }
         
+        //get set rights
+        $users = Tinebase_Acl_Roles::getInstance()->getRoleByName('user role');
+        $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($users->getId());
+        
         //Uninstall Applications
         try {
             $controller->uninstallApplications($applications->name);
@@ -318,6 +322,21 @@ class Setup_Frontend_Cli
             echo "Successfully installed " . count($applications) . " applications.\n";
         } catch (Tinebase_Exception_NotFound $e) {
         }
+        
+        //set rights
+        foreach ($applications as &$application) {
+            $newApplicationId = Tinebase_Application::getInstance()->getApplicationByName($application->name)->getId();
+            
+            foreach ($rights as &$right) {
+                if ($right['application_id'] == $application->id) {
+                    $right['application_id'] = $newApplicationId;
+                }
+            }
+            
+        }
+        
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($users->getId(), $rights);
+        echo "Successfully restored user rights.\n";
         
         //Clean up addressbooks
         $internalContacts = $userController->getDefaultInternalAddressbook();
