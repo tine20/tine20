@@ -17,10 +17,6 @@
  */
 class Tinebase_Db_Table extends Zend_Db_Table_Abstract
 {
-    protected static $_classCache = array(
-        'getTableDescriptionFromCache' => array()
-    );
-    
     /**
      * wrapper around Zend_Db_Table_Abstract::fetchAll
      *
@@ -97,40 +93,45 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
             $db = Tinebase_Core::getDb();
         }
         
-        $cache = Tinebase_Core::getCache();
         $dbConfig = $db->getConfig();
         
-        $classCacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
+        $cacheId = md5($dbConfig['host'] . $dbConfig['dbname'] . $tableName);
         
-        if (isset(self::$_classCache[__FUNCTION__][$classCacheId])) {
-            return self::$_classCache[__FUNCTION__][$classCacheId];
-        }
-        
-        $cacheId = __FUNCTION__ . $classCacheId;
-        
-        #if ($result = apc_fetch($cacheId)) {
-        #    self::$_classCache[__FUNCTION__][$classCacheId] = $result;
-        #    
-        #    return $result;
-        #}
-        
-        $result = null;
-        
-        // maybe cache has to be initialized yet
-        if ($cache) {
-            $result = $cache->load($cacheId);
-        }
-        
-        if (!$result) {
-            $result = $db->describeTable($tableName);
-            
-            // if table does not exist (yet), $result is an empty array
-            if (count($result) > 0) {
-                if ($cache) {
-                    $cache->save($result, $cacheId);
+        // try to get description from in-memory caches first
+        try {
+            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, false /* ignore persistent cache */);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // try to get description from APC
+            if (function_exists('apc_fetch')) {
+                // prefix with applications hash, as this hash changes if an application got updated
+                $apcCacheId = Tinebase_Application::getInstance()->getApplicationsHash() . $cacheId;
+                
+                if ($result = apc_fetch($apcCacheId)) {
+                    Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, false /* store in in-memory cache only */);
+                    
+                    return $result;
                 }
-                #apc_store($cacheId, $result, 60);
-                self::$_classCache[__FUNCTION__][$classCacheId] = $result;
+            }
+        }
+        
+        // try to get description from persistent cache
+        try {
+            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
+        
+        // read description from database
+        $result = $db->describeTable($tableName);
+        
+        // if table does not exist (yet), $result is an empty array
+        if (count($result) > 0) {
+            // save result for next request
+            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            
+            // if APC extension is installed also store in APC
+            if (function_exists('apc_store')) {
+                apc_store($apcCacheId, $result, 3600);
             }
         }
         

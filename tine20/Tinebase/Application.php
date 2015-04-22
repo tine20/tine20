@@ -203,6 +203,31 @@ class Tinebase_Application
     }
     
     /**
+     * get hash of installed applications
+     *
+     * @param string $_sort optional the column name to sort by
+     * @param string $_dir optional the sort direction can be ASC or DESC only
+     * @param string $_filter optional search parameter
+     * @param int $_limit optional how many applications to return
+     * @param int $_start optional offset for applications
+     * @return string
+     */
+    public function getApplicationsHash($_filter = NULL, $_sort = null, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    {
+        $applications = $this->getApplications($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        // create a hash of installed applications and their versions
+        $applications = array_combine(
+            Tinebase_Application::getInstance()->getApplications()->id,
+            Tinebase_Application::getInstance()->getApplications()->version
+        );
+        
+        ksort($applications);
+        
+        return Tinebase_Helper::arrayHash($applications, true);
+    }
+    
+    /**
      * return the total number of applications installed
      *
      * @param $_filter
@@ -317,7 +342,7 @@ class Tinebase_Application
         
         return $allRights;
     }
-
+    
     /**
      * get right description
      *
