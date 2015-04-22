@@ -80,6 +80,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var string
      */
     const CONTACTTYPE_USER = 'user';
+
+    /**
+     * small contact photo size
+     *
+     * @var integer
+     */
+    const SMALL_PHOTO_SIZE = 36000;
     
     /**
      * key in $_validators/$_properties array for the filed which 
@@ -419,5 +426,43 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         } else {
             unset($_data['jpegphoto']);
         }
+    }
+
+    /**
+     * set small contact image
+     *
+     * @param $newPhotoBlob
+     */
+    public function setSmallContactImage($newPhotoBlob)
+    {
+        if ($this->getId()) {
+            try {
+                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId())->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+            } catch (Exception $e) {
+                // no current photo
+            }
+        }
+
+        if (isset($currentPhoto) && $currentPhoto == $newPhotoBlob) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                . " Photo did not change -> preserving current photo");
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                . " Setting new contact photo (" . strlen($newPhotoBlob) . "KB)");
+            $this->jpegphoto = $newPhotoBlob;
+        }
+    }
+
+    /**
+     * return small contact image for sync
+     *
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getSmallContactImage()
+    {
+        $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId());
+        return $image->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
     }
 }
