@@ -185,10 +185,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      */
     protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL)
     {
-        // find all timesheets for this timeaccount the last year until end of last month
-        $startDate = clone $date;
-        $startDate->subYear(1);
-        
         $endDate = clone $date;
         $endDate->setDate($endDate->format('Y'), $endDate->format('n'), 1);
         $endDate->setTime(0,0,0);
@@ -201,7 +197,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $csdt = clone $contract->start_date;
         
         $csdt->setTimezone('UTC');
-        $startDate->setTimezone('UTC');
         $endDate->setTimezone('UTC');
         
         $border = new Tinebase_DateTime(Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE));
@@ -210,7 +205,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $filter = new Timetracker_Model_TimesheetFilter(array(
             array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $endDate),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $csdt),
-            array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $startDate),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $border),
             array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
             array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
@@ -293,7 +287,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             $this->_billables[$month] = array($this);
             
         } else {
-            $filter = $this->_getBillableTimesheetsFilter($date);
+            if ($productAggregate !== null && $productAggregate->billing_point == 'end') {
+                $enddate = $this->_getEndDate($productAggregate);
+            } else {
+                $enddate = null;
+            }
+            
+            $filter = $this->_getBillableTimesheetsFilter($enddate !== null ? $enddate : $date);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' TS Filter: ' . print_r($filter->toArray(), true));
             $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
@@ -343,8 +343,14 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 return FALSE;
             }
             
+            if ($productAggregate !== null && $productAggregate->billing_point == 'end') {
+                $enddate = $this->_getEndDate($productAggregate);
+            } else {
+                $enddate = null;
+            }
+            
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
-            $filter = $this->_getBillableTimesheetsFilter($date, $contract);
+            $filter = $this->_getBillableTimesheetsFilter($enddate !== null ? $enddate : $date, $contract);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -361,6 +367,30 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         
         // no match, not billable
         return FALSE;
+    }
+    
+    /**
+     * returns the end date to look for timesheets
+     * 
+     * @param Sales_Model_ProductAggregate $productAggregate
+     * 
+     * @return Tinebase_DateTime
+     */
+    protected function _getEndDate(Sales_Model_ProductAggregate $productAggregate)
+    {
+        if ($productAggregate->last_autobill) {
+            $enddate = clone $productAggregate->last_autobill;
+        } else {
+            $enddate = clone ( ($productAggregate->start_date && $productAggregate->start_date->isLaterOrEquals($this->_referenceContract->start_date)) ? $productAggregate->start_date : $this->_referenceContract->start_date );  
+        }
+        while ($enddate->isEarlier($this->_referenceDate)) {
+            $enddate->addMonth($productAggregate->interval);
+        }
+        if ($enddate->isLater($this->_referenceDate)) {
+            $enddate->subMonth($productAggregate->interval);
+        }
+        
+        return $enddate;
     }
     
     /**

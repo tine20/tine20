@@ -61,6 +61,17 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('bar', Tinebase_Helper::array_value('one', $array));
     }
     
+    public function testArrayHash()
+    {
+        $hash = Tinebase_Helper::arrayHash(array('foo' => 'bar'));
+        
+        $this->assertEquals('37b51d194a7513e45b56f6524f2d51f2', $hash);
+        
+        $hash = Tinebase_Helper::arrayHash(array('foo' => 'bar'), true);
+        
+        $this->assertEquals('3858f62230ac3c915f300c664312c63f', $hash);
+    }
+    
     public function testGetDevelopmentRevision()
     {
         $rev = Tinebase_Helper::getDevelopmentRevision();

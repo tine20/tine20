@@ -43,6 +43,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
@@ -75,10 +77,6 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateContact()
     {
-        if (!isset($_SERVER['HTTP_USER_AGENT'])) {
-            $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        }
-        
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
         
         $id = Tinebase_Record_Abstract::generateUID();
@@ -92,7 +90,25 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         
         return $contact;
     }
-    
+
+    /**
+     * test create contact with photo
+     *
+     * @return Addressbook_Frontend_WebDAV_Contact
+     */
+    public function testCreateContactWithPhoto()
+    {
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/jan.vcf', 'r');
+
+        $id = Tinebase_Record_Abstract::generateUID();
+        $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);
+        $record = $contact->getRecord();
+
+        $imgBlob = $record->getSmallContactImage();
+        $this->assertTrue(strlen($imgBlob) > 0);
+        $this->assertTrue(strlen($imgBlob) < Addressbook_Model_Contact::SMALL_PHOTO_SIZE);
+    }
+
     /**
      * test get vcard
      */
@@ -157,8 +173,6 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testPutContactFromGenericClient()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
         $contact = $this->testCreateContact();
     
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
@@ -174,8 +188,6 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNameOfContact()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
         $contact = $this->testCreateContact();
         
         $record = $contact->getRecord();

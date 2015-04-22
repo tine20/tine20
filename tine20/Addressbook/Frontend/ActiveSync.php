@@ -186,8 +186,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                 case 'jpegphoto':
                     try {
-                        $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $entry->getId());
-                        $syncrotonContact->$syncrotonProperty = $image->getBlob('image/jpeg', 36000);
+                        $syncrotonContact->$syncrotonProperty = $entry->getSmallContactImage();
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$entry->getId()} not found or invalid");
                     }
@@ -236,17 +235,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                 case 'jpegphoto':
                     if(!empty($data->$fieldName)) {
                         $devicePhoto = $data->$fieldName;
-                        
-                        try {
-                            $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $contact->getId())->getBlob('image/jpeg', 36000);
-                        } catch (Exception $e) {}
-                        
-                        if (isset($currentPhoto) && $currentPhoto == $devicePhoto) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " photo did not change on device -> preserving server photo");
-                        } else {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " using new contact photo from device (" . strlen($devicePhoto) . "KB)");
-                            $contact->jpegphoto = $devicePhoto;
-                        }
+                        $contact->setSmallContactImage($devicePhoto);
                     } else if ($entry && ! empty($entry->jpegphoto)) {
                         $contact->jpegphoto = '';
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ 
@@ -259,8 +248,8 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     $contact->$value = new Tinebase_DateTime($data->$fieldName);
                     
                     if ($this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800) {
-                        // iOS < 4 & webow < 2.1 send birthdays to the entered date, but the time the birthday got entered on the device
-                        // acutally iOS < 4 somtimes sends the bday at noon but the timezone is not clear
+                        // iOS < 4 & webos < 2.1 send birthdays to the entered date, but the time the birthday got entered on the device
+                        // actually iOS < 4 sometimes sends the bday at noon but the timezone is not clear
                         // -> we don't trust the time part and set the birthdays timezone to the timezone the user has set in tine
                         $userTimezone = Tinebase_Core::getUserTimezone();
                         $contact->$value = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);

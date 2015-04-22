@@ -28,6 +28,28 @@ class Tinebase_Helper
     }
     
     /**
+     * Generates a hash from keys(optional) and values of an array
+     *
+     * @param  array | string  $value
+     * @param  boolean         $includeKeys
+     * @return string
+     */
+    public static function arrayHash($values, $includeKeys = false)
+    {
+        $ctx = hash_init('md5');
+        
+        foreach ((array)$values as $id => $value) {
+            if (is_array($value)) {
+                $value = $this->arrayHash($value, $includeKeys);
+            }
+            
+            hash_update($ctx, ($includeKeys ? $id : null) . (string)$value);
+        }
+        
+        return hash_final($ctx);
+    }
+    
+    /**
      * converts string with M or K to bytes integer
      * - for example: 50M -> 52428800
      *
