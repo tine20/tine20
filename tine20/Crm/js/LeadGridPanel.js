@@ -136,7 +136,6 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true
             },
             columns: [
-                {header: this.app.i18n._('Lead id'), id: 'id', dataIndex: 'id', width: 20, hidden: true},
                 {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
                 {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
                 {header: this.app.i18n._('Responsible'), id: 'lead_responsible', dataIndex: 'relations', width: 175, sortable: false, hidden: true, renderer: this.responsibleRenderer},

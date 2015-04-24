@@ -84,7 +84,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('view', 'Crm')) {
             columns.push({
                 id: 'lead',
-                header: this.app.i18n._('Lead'),
+                header: this.app.i18n._('Lead name'),
                 width: 150,
                 dataIndex: 'relations',
                 renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),

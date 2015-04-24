@@ -61,7 +61,7 @@ msgstr[1] ""
 msgid "Percent"
 msgstr ""
 
-#: Model/Task.php:219 js/TaskGridPanel.js:87
+#: Model/Task.php:219
 msgid "Lead"
 msgstr ""
 
@@ -118,6 +118,10 @@ msgstr[1] ""
 
 #: js/TaskGridPanel.js:82
 msgid "Tags"
+msgstr ""
+
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
 msgstr ""
 
 #: js/TaskGridPanel.js:101
