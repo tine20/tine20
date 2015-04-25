@@ -26,6 +26,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_COLLABORATOR   = 'WebDAVCollaborator';
     const CLIENT_AKONADI        = 'akonadi';
     const CLIENT_TELEFONBUCH    = 'telefonbuch';
+    const CLIENT_DAVDROID       = 'davdroid';
     
     /**
      * cache parsed user-agent strings
@@ -83,6 +84,10 @@ class Addressbook_Convert_Contact_VCard_Factory
                 return new Addressbook_Convert_Contact_VCard_WebDAVCollaborator($_version);
                 break;
 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_DAVDROID:
+                return new Addressbook_Convert_Contact_VCard_DavDroid($_version);
+                break;
+
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
                 return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
         }
@@ -98,7 +103,7 @@ class Addressbook_Convert_Contact_VCard_Factory
         if (isset(self::$_parsedUserAgentCache[$_userAgent])) {
             return self::$_parsedUserAgentCache[$_userAgent];
         }
-        
+
         // MacOS X
         if (preg_match(Addressbook_Convert_Contact_VCard_MacOSX::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_MACOSX;
@@ -133,7 +138,12 @@ class Addressbook_Convert_Contact_VCard_Factory
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR;
             $version = $matches['version'];
-        
+
+        // DavDROID
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_DAVDROID;
+            $version = $matches['version'];
+
         // generic client
         } else {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
