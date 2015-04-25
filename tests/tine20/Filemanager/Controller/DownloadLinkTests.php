@@ -33,7 +33,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
-        Tinebase_Cache_PerRequest::getInstance()->resetCache();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
     }
     
     /**

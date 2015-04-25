@@ -119,7 +119,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
         }
-        Tinebase_Cache_PerRequest::getInstance()->resetCache();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
     }
     
     /**
