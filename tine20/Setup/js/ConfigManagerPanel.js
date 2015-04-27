@@ -484,7 +484,26 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                     value: Tine.Setup.registry.get(this.registryKey)['mapPanel'],
                     store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
                 }, commonComboConfig)
-            ] 
+           ] 
+        },
+        {
+            title: this.app.i18n._('Use Custom Theme'),
+            id: 'setup-theme-group',
+            checkboxToggle: true,
+            collapsed: true,
+            defaults: {
+                width: 300,
+                tabIndex: this.getTabIndex
+            },
+            items: [{
+                name: 'theme_path',
+                fieldLabel: this.app.i18n._('Theme path')
+            }, {
+                name: 'theme_useBlueAsBase',
+                fieldLabel: this.app.i18n._('Use blue theme as base'),
+                xtype: 'checkbox',
+                value: true
+            }]
         }];
     },
     

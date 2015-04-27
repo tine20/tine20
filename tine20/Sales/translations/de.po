@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-02-05 11:57+0100\n"
+"PO-Revision-Date: 2015-04-14 16:06+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
 "de/)\n"
@@ -49,6 +49,12 @@ msgstr ""
 "Die Adresse, die Sie löschen wollten, ist bei einem oder mehreren Verträgen "
 "als Rechnungsadresse gesetzt. Bitte weisen Sie den Verträgen eine andere "
 "Rechnungsadresse zu oder verändern Sie diese, ohne sie zu löschen."
+
+#: Model/PurchaseInvoice.php:76 Model/PurchaseInvoice.php:197
+#: Model/PurchaseInvoice.php:229 js/PurchaseInvoiceEditDialog.js:443
+#: js/PurchaseInvoiceApproverFilterModel.js:30
+msgid "Approver"
+msgstr "Genehmigt von"
 
 #: Exception/DeletePreviousInvoice.php:26
 msgid "Following Invoices Found"

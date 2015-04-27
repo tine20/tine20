@@ -82,6 +82,11 @@ class Sales_Model_Product extends Tinebase_Record_Abstract
                 'type'        => 'keyfield',
                 'name'        => Sales_Config::PRODUCT_CATEGORY
             ),
+            'manufacturer' => array(
+                'lable'       => 'Manufacturer',  // _('Manufacturer')
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type'        => 'string',
+            ),
             'accountable'   => array(
                 'label'       => 'Accountable',  // _('Accountable')
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),

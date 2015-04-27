@@ -70,7 +70,7 @@ Tine.Sales.PurchaseInvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
 
-        var exportButton = Ext.apply(new Ext.SplitButton(this.actions_export), {
+        var exportButton = Ext.apply(new Ext.Button(this.actions_export), {
             scale: 'medium',
             rowspan: 2,
             iconAlign: 'top',
@@ -88,12 +88,10 @@ Tine.Sales.PurchaseInvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getContextMenuItems: function() {
-        var items = [
+        return [
             '-',
             this.actions_export
             ];
-        
-        return items;
     },
     
     /**

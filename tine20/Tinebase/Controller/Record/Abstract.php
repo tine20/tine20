@@ -285,6 +285,16 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * setter for $relatedObjectsToDelete
+     *
+     * @param array $relatedObjectNames
+     */
+    public function setRelatedObjectsToDelete(array $relatedObjectNames)
+    {
+        $this->_relatedObjectsToDelete = $relatedObjectNames;
+    }
+
+    /**
      * set/get purging of record when deleting
      *
      * @param  boolean optional
@@ -699,9 +709,17 @@ abstract class Tinebase_Controller_Record_Abstract
             if (! is_array($group)) {
                 $group = array($group);
             }
-            foreach ($group as $field) {
+            foreach ($group as $key => $field) {
                 if (! empty($_record->{$field})) {
-                    $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                    if ($field === 'relations') {
+                        $relationFilter = $this->_getRelationDuplicateFilter($_record, $key, $field);
+                        if ($relationFilter) {
+                            $addFilter[] = $relationFilter;
+                        }
+                    } else {
+                        $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                    }
+                    
                 } else if (isset($_record->customfields[$field])) {
                     $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($this->_applicationName, $field, $this->_modelName);
                     if ($customFieldConfig) {
@@ -734,6 +752,37 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($filter->toArray(), TRUE));
+        
+        return $filter;
+    }
+    
+    protected function _getRelationDuplicateFilter($record, $key, $field)
+    {
+        $filter = null;
+        $relations = $record->{$field};
+        
+        if (count($relations) === 0) {
+            return $filter;
+        }
+        
+        if (! $relations instanceof Tinebase_Record_RecordSet) {
+            $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $relations, /* $_bypassFilters = */ true);
+        }
+        
+        // check for relation and add relation filter
+        $type = is_string($key) ? $key : '';
+        $relations = $relations->filter('type', $type);
+        if (count($relations) > 0) {
+            $duplicateRelation = $relations->getFirstRecord();
+            if ($duplicateRelation->related_id) {
+                // TODO get field name from definition / relation
+                $filter = array(
+                    'field' => 'contact',
+                    'operator' => 'AND',
+                    'value' => array('field' => ':id', 'operator' => 'equals', 'value' => $duplicateRelation->related_id)
+                );
+            }
+        }
         
         return $filter;
     }
@@ -1514,31 +1563,52 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('notes')) {
             Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
         }
+        
         if ($_record->has('relations')) {
-            $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $_record->getId());
-            if (!empty($relations)) {
-                // remove relations
-                Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $_record->getId(), array());
-
-                // remove related objects
-                if (!empty($this->_relatedObjectsToDelete)) {
-                    foreach ($relations as $relation) {
-                        if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
-                            list($appName, $i, $itemName) = explode('_', $relation->related_model);
-                            $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-
-                            try {
-                                $appController->delete($relation->related_id);
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error deleting: ' . $e->getMessage());
-                            }
-                        }
-                    }
-                }
-            }
+            $this->_deleteLinkedRelations($_record);
         }
+
         if ($_record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
+        }
+    }
+    
+    /**
+     * delete linked relations
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * 
+     * TODO check if this needs to be done, as we might already deleting this "from the other side"
+     */
+    protected function _deleteLinkedRelations(Tinebase_Record_Interface $_record)
+    {
+        $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $_record->getId());
+        if (empty($relations)) {
+            return;
+        }
+
+        // remove relations
+        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $_record->getId(), array());
+
+        if (empty($this->_relatedObjectsToDelete)) {
+            return;
+        }
+        
+        // remove related objects
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting all '
+                . implode(',', $this->_relatedObjectsToDelete) . ' relations.');
+
+        foreach ($relations as $relation) {
+            if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
+                list($appName, $i, $itemName) = explode('_', $relation->related_model);
+                $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+
+                try {
+                    $appController->delete($relation->related_id);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error deleting: ' . $e->getMessage());
+                }
+            }
         }
     }
 

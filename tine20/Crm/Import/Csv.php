@@ -92,7 +92,6 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
         $configSettings = Crm_Controller::getInstance()->getConfigSettings()->toArray();
 
         $requiredFields = array(
-            'lead_name' => 'lead_name',
             'leadstate_id' => 'leadstates',
             'leadtype_id' => 'leadtypes',
             'leadsource_id' => 'leadsources'
@@ -103,10 +102,6 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
 
             switch ($requiredField) {
-                case 'lead_name':
-                    // use CUSTOMER name as lead name
-                    $data['lead_name'] = isset($_data['CUSTOMER']) ? $_data['CUSTOMER'] : 'Imported lead';
-                    break;
                 default:
                     // get default leadstate/source/type OR try to find it by name if given
                     if (! isset($configSettings[$configKey])) {
@@ -120,7 +115,7 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
                     // init with default
                     $data[$requiredField] = isset($configSettings[$configKey][0]['id']) ? $configSettings[$configKey][0]['id'] : 1;
                     foreach ($configSettings[$configKey] as $setting) {
-                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && $setting[$settingField] === $_data[$settingField]) {
+                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && strtolower($setting[$settingField]) === strtolower($_data[$settingField])) {
                             $data[$requiredField] = $setting['id'];
                         }
                     }
