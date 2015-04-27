@@ -709,9 +709,17 @@ abstract class Tinebase_Controller_Record_Abstract
             if (! is_array($group)) {
                 $group = array($group);
             }
-            foreach ($group as $field) {
+            foreach ($group as $key => $field) {
                 if (! empty($_record->{$field})) {
-                    $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                    if ($field === 'relations') {
+                        $relationFilter = $this->_getRelationDuplicateFilter($_record, $key, $field);
+                        if ($relationFilter) {
+                            $addFilter[] = $relationFilter;
+                        }
+                    } else {
+                        $addFilter[] = array('field' => $field, 'operator' => 'equals', 'value' => $_record->{$field});
+                    }
+                    
                 } else if (isset($_record->customfields[$field])) {
                     $customFieldConfig = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($this->_applicationName, $field, $this->_modelName);
                     if ($customFieldConfig) {
