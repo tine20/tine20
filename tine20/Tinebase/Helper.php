@@ -40,7 +40,7 @@ class Tinebase_Helper
         
         foreach ((array)$values as $id => $value) {
             if (is_array($value)) {
-                $value = $this->arrayHash($value, $includeKeys);
+                $value = self::arrayHash($value, $includeKeys);
             }
             
             hash_update($ctx, ($includeKeys ? $id : null) . (string)$value);

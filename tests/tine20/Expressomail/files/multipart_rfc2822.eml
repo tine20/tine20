@@ -1,0 +1,114 @@
+Received: from [10.133.2.101] (laplkneschke.hh.metaways.de [10.133.2.101])
+	by mx02.metaways.net (Postfix) with ESMTPSA id 7E90DC106
+	for <l.kneschke@metaways.de>; Thu,  1 Jul 2010 11:16:51 +0200 (CEST)
+Message-ID: <4C2C5CFC.3050801@metaways.de>
+X-Tine20TestMessage: multipart/rfc2822
+Date: Thu, 01 Jul 2010 11:16:44 +0200
+From: Lars Kneschke <l.kneschke@metaways.de>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.9)
+	Gecko/20100423 Thunderbird/3.0.4
+To: l.kneschke@metaways.de
+Subject: Fwd: [Officespot-cs-svn] r15209 - trunk/tine20/Tinebase
+Return-Path: l.kneschke@metaways.de
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary=------------040506070905080909080505
+
+This is a multi-part message in MIME format.
+--------------040506070905080909080505
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Test for parsing forwarded emails.
+
+-- 
+Lars
+
+--------------040506070905080909080505
+Content-Type: message/rfc822;
+ name="[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase.eml"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase.eml"
+
+Received: from lists.sourceforge.net (lists.sourceforge.net [216.34.181.88])
+	by mx01.metaways.net (Postfix) with ESMTPS id 270C91043E;
+	Wed, 30 Jun 2010 13:20:23 +0200 (CEST)
+Received: from localhost ([127.0.0.1] helo=sfs-ml-1.v29.ch3.sourceforge.com)
+	by sfs-ml-1.v29.ch3.sourceforge.com
+	with esmtp (Exim 4.69)	(envelope-from <officespot-cs-svn-bounces@lists.sourceforge.net>)
+	id 1OTvL3-00025I-Bm; Wed, 30 Jun 2010 11:20:21 +0000
+Received: from sfi-mx-1.v28.ch3.sourceforge.com ([172.29.28.121]	helo=mx.sourceforge.net)
+	by sfs-ml-1.v29.ch3.sourceforge.com
+	with esmtp (Exim 4.69)	(envelope-from <c.weiss@metaways.de>)
+	id 1OTvL2-000255-Fx	for officespot-cs-svn@lists.sourceforge.net;
+	Wed, 30 Jun 2010 11:20:20 +0000
+X-ACL-Warn: 
+Received: from custom1.metaways.net ([193.93.176.249]	helo=publicsvn.hsn.metaways.net)
+	by sfi-mx-1.v28.ch3.sourceforge.com with esmtp (Exim 4.69)
+	id 1OTvKy-0001K7-1f for officespot-cs-svn@lists.sourceforge.net;
+	Wed, 30 Jun 2010 11:20:20 +0000
+Received: by publicsvn.hsn.metaways.net (Postfix, from userid 112)
+	id 06CD21C059; Wed, 30 Jun 2010 13:20:10 +0200 (CEST)
+Date: Wed, 30 Jun 2010 13:20:09 +0200
+To: officespot-cs-svn@lists.sourceforge.net
+From: c.weiss@metaways.de
+Message-Id: <20100630112010.06CD21C059@publicsvn.hsn.metaways.net>
+X-Spam-Score: 0.0 (/)
+X-Headers-End: 1OTvKy-0001K7-1f
+Subject: [Officespot-cs-svn] r15209 - trunk/tine20/Tinebase
+X-BeenThere: officespot-cs-svn@lists.sourceforge.net
+X-Mailman-Version: 2.1.9
+Precedence: list
+List-Id: <officespot-cs-svn.lists.sourceforge.net>
+List-Unsubscribe: <https://lists.sourceforge.net/lists/listinfo/officespot-cs-svn>,
+	<mailto:officespot-cs-svn-request@lists.sourceforge.net?subject=unsubscribe>
+List-Archive: <http://sourceforge.net/mailarchive/forum.php?forum_name=officespot-cs-svn>
+List-Post: <mailto:officespot-cs-svn@lists.sourceforge.net>
+List-Help: <mailto:officespot-cs-svn-request@lists.sourceforge.net?subject=help>
+List-Subscribe: <https://lists.sourceforge.net/lists/listinfo/officespot-cs-svn>,
+	<mailto:officespot-cs-svn-request@lists.sourceforge.net?subject=subscribe>
+Errors-To: officespot-cs-svn-bounces@lists.sourceforge.net
+X-Spam-Status: No, score=-4.0 required=5.0 tests=AWL,RCVD_IN_DNSWL_MED,
+	SPF_HELO_PASS,SPF_PASS autolearn=disabled version=3.2.4
+X-Spam-Checker-Version: SpamAssassin 3.2.4 (2008-01-01) on
+	mail01.metaways.net
+Return-Path: officespot-cs-svn-bounces@lists.sourceforge.net
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+
+Author: c.weiss@metaways.de
+Date: 2010-06-30 13:20:09 +0200 (Wed, 30 Jun 2010)
+New Revision: 15209
+
+Modified:
+   trunk/tine20/Tinebase/Container.php
+Log:
+more verbose logging
+
+Modified: trunk/tine20/Tinebase/Container.php
+===================================================================
+--- trunk/tine20/Tinebase/Container.php	2010-06-30 11:02:25 UTC (rev 15208)
++++ trunk/tine20/Tinebase/Container.php	2010-06-30 11:20:09 UTC (rev 15209)
+@@ -979,7 +979,8 @@
+             }
+         }
+         
+-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
++        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Setting grants for container id ' . $containerId . ' ...');
++        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_grants->toArray(), TRUE));
+         
+         $container = $this->getContainerById($containerId);
+        
+
+
+------------------------------------------------------------------------------
+This SF.net email is sponsored by Sprint
+What will you do first with EVO, the first 4G phone?
+Visit sprint.com/first -- http://p.sf.net/sfu/sprint-com-first
+_______________________________________________
+Officespot-cs-svn mailing list
+Officespot-cs-svn@lists.sourceforge.net
+https://lists.sourceforge.net/lists/listinfo/officespot-cs-svn
+
+--------------040506070905080909080505--

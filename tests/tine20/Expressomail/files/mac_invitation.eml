@@ -1,0 +1,98 @@
+Received: from mail2.cwtech.info (cw120.meta-hosting.net [10.138.5.120])
+	by mx03.metaways.net (Postfix) with ESMTP id B4B9A2108
+	for <unittest@tine20.org>; Thu, 24 Nov 2011 09:21:44 +0100 (CET)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail2.cwtech.info (Postfix) with ESMTP id 8B4EB980AC
+	for <unittest@tine20.org>; Thu, 24 Nov 2011 09:21:44 +0100 (CET)
+Received: from mail2.cwtech.info ([127.0.0.1])
+	by localhost (mail2.cwtech.info [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0bnTlCLdLfit for <unittest@tine20.org>;
+	Thu, 24 Nov 2011 09:21:44 +0100 (CET)
+Received: from [192.168.178.28] (hmbg-5f76513b.pool.mediaWays.net [95.118.81.59])
+	by mail2.cwtech.info (Postfix) with ESMTPSA id F1483980AB
+	for <unittest@tine20.org>; Thu, 24 Nov 2011 09:21:43 +0100 (CET)
+From: Cornelius =?iso-8859-1?b?V2Vp3w==?= <pwulf@tine20.org>
+Subject: Einladung zum iCal-Ereignis: Einladung
+Date: Thu, 24 Nov 2011 09:21:43 +0100
+X-Mail-Calendar-Part: Yes
+To: unittest@tine20.org
+Message-Id: <F11E7413-B709-4E78-85FA-AD723A1BB246@von-und-zu-weiss.de>
+X-Mailer: Apple Mail (2.1251.1)
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,HTML_MESSAGE
+	autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+	mail03.metaways.net
+Return-Path: pwulf@tine20.org
+X-Tine20TestMessage: mac_invitation.eml
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="Apple-Mail=_05621EA3-8686-40C1-91B4-80F1A5EFA531"
+
+
+--Apple-Mail=_05621EA3-8686-40C1-91B4-80F1A5EFA531
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=windows-1252
+
+Cornelius Weiss hat Sie zum iCal-Ereignis =84Einladung=93 eingeladen, =
+geplant f=FCr 29. November 2011 um 07:15 (Mitteleurop=E4ische Zeit). Um =
+die Einladung anzunehmen oder abzulehnen, klicken Sie unten auf den =
+Link.=
+
+--Apple-Mail=_05621EA3-8686-40C1-91B4-80F1A5EFA531
+Content-Type: multipart/mixed;
+	boundary="Apple-Mail=_8F50EC34-937A-4633-A0F2-2089168FA573"
+
+
+--Apple-Mail=_8F50EC34-937A-4633-A0F2-2089168FA573
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/html;
+	charset=windows-1252
+
+<html><head></head><body style=3D"word-wrap: break-word; =
+-webkit-nbsp-mode: space; -webkit-line-break: after-white-space; =
+"><div><div style=3D"margin-top: 0px; margin-right: 0px; margin-bottom: =
+0px; margin-left: 0px; "><font face=3D"Helvetica" size=3D"3" =
+color=3D"#000000" style=3D"font: 12.0px Helvetica; color: =
+#000000">Cornelius Weiss hat Sie zum iCal-Ereignis =84Einladung=93 =
+eingeladen, geplant f=FCr 29. November 2011 um 07:15 (Mitteleurop=E4ische =
+Zeit). Um die Einladung anzunehmen oder abzulehnen, klicken Sie unten =
+auf den Link.</font></div></div></body></html>=
+
+--Apple-Mail=_8F50EC34-937A-4633-A0F2-2089168FA573
+Content-Disposition: attachment;
+	filename=iCal-20111124-092141.ics
+Content-Type: text/calendar;
+	name="iCal-20111124-092141.ics"
+Content-Transfer-Encoding: quoted-printable
+
+BEGIN:VCALENDAR=0D=0ACALSCALE:GREGORIAN=0D=0AVERSION:2.0=0D=0A=
+METHOD:REQUEST=0D=0APRODID:-//Apple=20Inc.//iCal=205.0.1//EN=0D=0A=
+BEGIN:VTIMEZONE=0D=0ATZID:Europe/Berlin=0D=0ABEGIN:DAYLIGHT=0D=0A=
+TZOFFSETFROM:+0100=0D=0ARRULE:FREQ=3DYEARLY;BYMONTH=3D3;BYDAY=3D-1SU=0D=0A=
+DTSTART:19810329T020000=0D=0ATZNAME:CEST=0D=0ATZOFFSETTO:+0200=0D=0A=
+END:DAYLIGHT=0D=0ABEGIN:STANDARD=0D=0ATZOFFSETFROM:+0200=0D=0A=
+RRULE:FREQ=3DYEARLY;BYMONTH=3D10;BYDAY=3D-1SU=0D=0A=
+DTSTART:19961027T030000=0D=0ATZNAME:CET=0D=0ATZOFFSETTO:+0100=0D=0A=
+END:STANDARD=0D=0AEND:VTIMEZONE=0D=0ABEGIN:VEVENT=0D=0A=
+CREATED:20111124T082114Z=0D=0AUID:48560E48-9DE3-41F1-8F03-7607C67F7A8F=0D=
+=0ADTEND;TZID=3DEurope/Berlin:20111129T081500=0D=0A=
+ATTENDEE;CN=3D"Cornelius=20=
+Weiss";CUTYPE=3DINDIVIDUAL;PARTSTAT=3DACCEPTED:mailto=0D=0A=20=
+:pwulf@tine20.org=0D=0A=
+ATTENDEE;CN=3D"unittest@tine20.org";CUTYPE=3DINDIVIDUAL;PARTSTAT=3DNEEDS-A=
+CTIO=0D=0A=20N;RSVP=3DTRUE:mailto:unittest@tine20.org=0D=0ATRANSP:OPAQUE=0D=
+=0ASUMMARY:Einladung=0D=0ADTSTART;TZID=3DEurope/Berlin:20111129T071500=0D=
+=0ADTSTAMP:20111124T082140Z=0D=0AORGANIZER;CN=3D"Cornelius=20=
+Weiss":mailto:pwulf@tine20.org=0D=0ASEQUENCE:3=0D=0AEND:VEVENT=0D=0A=
+END:VCALENDAR=0D=0A=
+
+--Apple-Mail=_8F50EC34-937A-4633-A0F2-2089168FA573
+Content-Transfer-Encoding: 7bit
+Content-Type: text/html;
+	charset=us-ascii
+
+<html><head></head><body style="word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space; "><div><div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; "></div></div></body></html>
+--Apple-Mail=_8F50EC34-937A-4633-A0F2-2089168FA573--
+
+--Apple-Mail=_05621EA3-8686-40C1-91B4-80F1A5EFA531--

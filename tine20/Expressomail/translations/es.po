@@ -1,0 +1,1271 @@
+#
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Expresso Mail\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-04-09 17:14-0300\n"
+"PO-Revision-Date: 2014-11-27 14:45-0300\n"
+"Last-Translator: Daniel Coletti <dcoletti@xtech.com.ar>\n"
+"Language-Team: Expresso Castilian Translators\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: js\n"
+
+#: js/AccountEditDialog.js:181
+msgid "Above the quote"
+msgstr "Por encima de la cita"
+
+#: js/AccountEditDialog.js:147
+msgid "Account"
+msgstr "Cuenta"
+
+#: js/AccountEditDialog.js:154
+msgid "Account Name"
+msgstr "Nombre de la cuenta"
+
+#: js/Expressomail.js:209
+msgid "Active Vacation Message"
+msgstr "Activar mensaje de vacaciones"
+
+#: js/GridDetailsPanel.js:328
+msgid "Add"
+msgstr "Agregar"
+
+#: js/ContactGrid.js:297
+msgid "Add as \"Bcc\""
+msgstr "Agregar como \"Cco\""
+
+#: js/ContactGrid.js:286
+msgid "Add as \"Cc\""
+msgstr "Agrecar como \"Cc\""
+
+#: js/ContactGrid.js:275
+msgid "Add as \"To\""
+msgstr "Agregar como \"Para\""
+
+#: js/GridDetailsPanel.js:329
+msgid "Add contact to addressbook"
+msgstr "Agregar contacto a libreta de direcciones"
+
+#: js/GridDetailsPanel.js:443
+msgid "All attachments"
+msgstr "Todos los adjuntos"
+
+#: js/GridDetailsPanel.js:438
+msgid "Attachments"
+msgstr "Adjuntos"
+
+#: js/AccountEditDialog.js:265
+msgid "Authentication"
+msgstr "Autenticación"
+
+#: js/AccountEditDialog.js:182
+msgid "Below the quote"
+msgstr "Por debajo de la cita"
+
+#: js/GridDetailsPanel.js:784
+msgid "Block Sender"
+msgstr "Bloquear remitente"
+
+#: js/GridDetailsPanel.js:785
+msgid "Block incoming messages from this sender?"
+msgstr "¿Bloquear mensajes entrantes de este remitente?"
+
+#: js/FileUploadGrid.js:166 js/FileUploadGrid.js:169
+msgid "Calculating message size..."
+msgstr "Calculando el tamaño del mensaje"
+
+#: js/ImportEmlDialog.js:56 js/FolderSelectPanel.js:75
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: js/GridDetailsPanel.js:494
+msgid "Click here or press ENTER to decypher this message."
+msgstr "Pinche aquí o presione ENTER para decifrar mensaje."
+
+#: js/AddressbookGridPanelHook.js:33
+msgid "Compose email"
+msgstr "Redactar correo"
+
+#: js/Expressomail.js:1096
+msgid "Could not save script on Sieve server."
+msgstr "No pude guardar script en el server Sieve."
+
+#: js/Expressomail.js:764
+msgid "Credentials"
+msgstr "Credenciales"
+
+#: js/GridDetailsPanel.js:330
+msgid "Date"
+msgstr "Fecha"
+
+#: js/AccountEditDialog.js:366
+msgid "Depending on content type (experimental)"
+msgstr "Dependiendo del tipo de contenido (experimental)"
+
+#: js/GridDetailsPanel.js:464
+msgid "Digital Signature"
+msgstr "Firma digital"
+
+#: js/AccountEditDialog.js:353
+msgid "Display Format"
+msgstr "Formato de visualización"
+
+#: js/GridDetailsPanel.js:443
+msgid "Download all attachments"
+msgstr "Bajar todos los adjuntos"
+
+#: js/GridDetailsPanel.js:459
+msgid "Download attachment"
+msgstr "Bajar adjunto"
+
+#: js/AccountEditDialog.js:341
+msgid "Drafts Folder Name"
+msgstr "Nombre de la carpeta Borradores"
+
+#: js/Expressomail.js:97 js/GridDetailsPanel.js:681
+msgid "Email"
+msgstr "Email"
+
+#: js/Expressomail.js:209
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Cuenta de email \"{0}\" tiene un mensaje de vacaciones activo."
+
+#: js/ImportEmlDialog.js:122 js/AccountEditDialog.js:83
+#: js/AclsEditDialog.js:123
+msgid "Error"
+msgstr "Error"
+
+#: js/Expressomail.js:1389
+msgid "Error Decrypting Message!"
+msgstr "¡Error al desencriptar el mensaje!"
+
+#: js/Expressomail.js:1386
+msgid "Error Encrypting Message!"
+msgstr "¡Error al encriptar el mensaje!"
+
+#: js/Expressomail.js:1382
+msgid "Error Signing Message!"
+msgstr "¡Error firmando el mensaje!"
+
+#: js/ImportEmlDialog.js:123
+msgid "Error import message eml!"
+msgstr "¡Error importando mensaje eml!"
+
+#: js/GridDetailsPanel.js:692
+msgid "Errors"
+msgstr "Errores"
+
+#: js/FileUploadGrid.js:106 js/FileUploadGrid.js:157
+msgid "Failed"
+msgstr "Falló"
+
+#: js/Expressomail.js:1154
+msgid "Failure decrypting the message, please try again."
+msgstr "Falla desencriptando el mensaje, por favor intente nuevamente."
+
+#: js/FileUploadGrid.js:107 js/FileUploadGrid.js:158
+msgid "File size validation step failed."
+msgstr "El paso de la validación por tamaño falló."
+
+#: js/ImportEmlDialog.js:64
+msgid "File to Import"
+msgstr "Archivo a importar"
+
+#: js/FolderFilterModel.js:30
+msgid "Folder"
+msgstr "Carpeta"
+
+#: js/FolderSelectPanel.js:175
+msgid "Folders of account {0}"
+msgstr "Carpetas para cuenta {0}"
+
+#: js/FolderSelectPanel.js:176
+msgid "Folders of all accounts"
+msgstr "Carpetas para todas las cuentas"
+
+#: js/GridDetailsPanel.js:327
+msgid "From"
+msgstr "Desde"
+
+#: js/AccountEditDialog.js:364
+msgid "HTML"
+msgstr "HTML"
+
+#: js/AccountEditDialog.js:197 js/AccountEditDialog.js:241
+#: js/AccountEditDialog.js:297
+msgid "Host"
+msgstr "Servidor"
+
+#: js/AccountEditDialog.js:189
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/Expressomail.js:1104 js/Expressomail.js:1113
+msgid "IMAP Backend Warning"
+msgstr "Aviso de IMAP"
+
+#: js/Expressomail.js:1031
+msgid "IMAP Credentials Error"
+msgstr "Error de credenciales de IMAP"
+
+#: js/Expressomail.js:761
+msgid "IMAP Credentials for {0}"
+msgstr "Credenciales IMAP para {0}"
+
+#: js/Expressomail.js:1014 js/Expressomail.js:1047
+msgid "IMAP Error"
+msgstr "Error de IMAP"
+
+#: js/GridDetailsPanel.js:675
+msgid "Issuer"
+msgstr "Emisor"
+
+#: js/ImportEmlDialog.js:137
+msgid "Loading"
+msgstr "Cargando"
+
+#: js/Expressomail.js:1224
+msgid "Loading Criptography Components..."
+msgstr "Cargando los componentes criptográficos..."
+
+#: js/ContactGrid.js:362
+msgid "Loading Mail Addresses"
+msgstr "Cargando direcciones de mail"
+
+#: js/AccountEditDialog.js:276
+msgid "Login"
+msgstr "Login"
+
+#: js/AdminPanel.js:47
+msgid "Max Results in Search Messages"
+msgstr "Resultados máximos en mensajes buscados"
+
+#: js/FileUploadGrid.js:86 js/FileUploadGrid.js:147
+msgid "Maximum allowed message size is {0} Mb."
+msgstr "El tamaño máximo de mensaje permitido es {0} Mb."
+
+#: js/FileUploadGrid.js:85 js/FileUploadGrid.js:146
+msgid "Message Size Limit Exceeded"
+msgstr "Límite del tamaño del mensaje excedido"
+
+#: js/GridDetailsPanel.js:217
+msgid "Message not available."
+msgstr "El mensaje no está disponible."
+
+#: js/Expressomail.js:640
+msgid "New mails"
+msgstr "Mails nuevos"
+
+#: js/Expressomail.js:1015
+msgid "No connection to IMAP server."
+msgstr "No hay conexión con el servidor IMAP."
+
+#: js/Expressomail.js:1078
+msgid "No connection to SMTP server."
+msgstr "No hay conexión con el servidor SMTP."
+
+#: js/Expressomail.js:1087
+msgid "No connection to Sieve server."
+msgstr "No hay conexión con el servidor Sieve."
+
+#: js/ContactSearchCombo.js:105
+msgid "No result found in yours personal catalogues."
+msgstr "No hubo resultado en sus catálogos personales."
+
+#: js/AccountEditDialog.js:218 js/AccountEditDialog.js:260
+#: js/AccountEditDialog.js:275 js/AccountEditDialog.js:316
+msgid "None"
+msgstr "Ninguno"
+
+#: js/AddressbookGridPanelHook.js:136
+msgid "Number of contacts exceeds the maximum of 50 permitted."
+msgstr "El número de contactos se excede del máximo de 50 permitido."
+
+#: js/FolderSelectPanel.js:84
+msgid "Ok"
+msgstr "Ok"
+
+#: js/Expressomail.js:1048
+msgid ""
+"One of your folders was deleted or renamed by another client. Please update "
+"the folder list of this account."
+msgstr ""
+"Una de sus carpetas fue eliminada o renombrada por otro cliente. Por favor "
+"actualice la lista de carpetas para esta cuenta."
+
+#: js/AccountEditDialog.js:166
+msgid "Organization"
+msgstr "Organización"
+
+#: js/AccountEditDialog.js:321
+msgid "Other Settings"
+msgstr "Otros seteos"
+
+#: js/GridDetailsPanel.js:678
+msgid "Owner"
+msgstr "Dueño"
+
+#: js/AccountEditDialog.js:227
+msgid "Password"
+msgstr "Contraseña"
+
+#: js/AccountEditDialog.js:283
+msgid "Password (optional)"
+msgstr "Contraseña (opcional)"
+
+#: js/AccountEditDialog.js:277
+msgid "Plain"
+msgstr "Plano"
+
+#: js/AccountEditDialog.js:365
+msgid "Plain Text"
+msgstr "Texto plano"
+
+#: js/ImportEmlDialog.js:137 js/AclsEditDialog.js:92 js/Expressomail.js:107
+msgid "Please wait"
+msgstr "Por favor espere"
+
+#: js/Expressomail.js:1224
+msgid "Please wait!"
+msgstr "¡Por favor espere!"
+
+#: js/AccountEditDialog.js:201
+msgid "Port (Default: 143 / SSL: 993)"
+msgstr "Puerto (Default: 143 / SSL: 993)"
+
+#: js/AccountEditDialog.js:301
+msgid "Port (Default: 2000)"
+msgstr "Puerto (Default: 2000)"
+
+#: js/AccountEditDialog.js:244
+msgid "Port (Default: 25)"
+msgstr "Puerto (Default: 25)"
+
+#: js/AclsGrid.js:53
+msgid "Read"
+msgstr "Leer"
+
+#: js/AclsGrid.js:54
+msgid "Read messages from folders"
+msgstr "Leer mensajes de carpetas"
+
+#: js/ContactGrid.js:308
+msgid "Remove from recipients"
+msgstr "Borrar de destinatarios"
+
+#: js/AccountEditDialog.js:233
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/Expressomail.js:1077
+msgid "SMTP Error"
+msgstr "Error de SMTP"
+
+#: js/AccountEditDialog.js:220 js/AccountEditDialog.js:262
+msgid "SSL"
+msgstr "SSL"
+
+#: js/Expressomail.js:1095
+msgid "Save Sieve Script Error"
+msgstr "Guardar error de script sieve"
+
+#: js/AccountEditDialog.js:207 js/AccountEditDialog.js:250
+#: js/AccountEditDialog.js:306
+msgid "Secure Connection"
+msgstr "Conexión segura"
+
+#: js/AclsGrid.js:65
+msgid "Send as"
+msgstr "Enviar como"
+
+#: js/AclsGrid.js:66
+msgid "Send as folder owner"
+msgstr "Enviar como el dueño de la carpeta"
+
+#: js/AccountEditDialog.js:329
+msgid "Sent Folder Name"
+msgstr "Nombre de carpeta enviado"
+
+#: js/GridDetailsPanel.js:672
+msgid "Serial Number"
+msgstr "Número de serie"
+
+#: js/GridDetailsPanel.js:332 js/GridDetailsPanel.js:828
+msgid "Show or hide header information"
+msgstr "Mostrar u ocultar información del encabezado"
+
+#: js/AccountEditDialog.js:289
+msgid "Sieve"
+msgstr "Sieve"
+
+#: js/Expressomail.js:1086
+msgid "Sieve Error"
+msgstr "Error de Sieve"
+
+#: js/AccountEditDialog.js:113
+msgid "Signature"
+msgstr "Firma"
+
+#: js/AccountEditDialog.js:83
+msgid "Signature image size cannot exceed 16384 bytes."
+msgstr "El tamaño de la firma no puede exceder los 16384 bytes."
+
+#: js/AccountEditDialog.js:170
+msgid "Signature position"
+msgstr "Posición de la firma"
+
+#: js/GridDetailsPanel.js:326
+msgid "Subject"
+msgstr "Asunto"
+
+#: js/AccountEditDialog.js:219 js/AccountEditDialog.js:261
+#: js/AccountEditDialog.js:317
+msgid "TLS"
+msgstr "TLS"
+
+#: js/AccountEditDialog.js:347
+msgid "Templates Folder Name"
+msgstr "Nombre de la carpeta de plantillas"
+
+#: js/FileUploadGrid.js:88
+msgid "The last attachment was removed."
+msgstr "El último adjunto fue borrado."
+
+#: js/FileUploadGrid.js:149
+msgid "This message total attachment size is {0} Mb."
+msgstr "El tamaño total del adjunto de este mensaje es de {0} Mb."
+
+#: js/AccountEditDialog.js:335
+msgid "Trash Folder Name"
+msgstr "Nombre de la carpeta de borrados"
+
+#: js/AclsEditDialog.js:92
+msgid "Updating Grants"
+msgstr "Actualizadon derechos"
+
+#: js/AccountEditDialog.js:158
+msgid "User Email"
+msgstr "Email del usuario"
+
+#: js/AccountEditDialog.js:163
+msgid "User Name (From)"
+msgstr "Nombre del usuario (Desde)"
+
+#: js/AccountEditDialog.js:223
+msgid "Username"
+msgstr "Username"
+
+#: js/AccountEditDialog.js:280
+msgid "Username (optional)"
+msgstr "Username (opcional)"
+
+#: js/GridDetailsPanel.js:684
+msgid "Valid From"
+msgstr "Válido Desde"
+
+#: js/GridDetailsPanel.js:687
+msgid "Valid To"
+msgstr "Válido Hacia"
+
+#: js/GridDetailsPanel.js:700
+msgid "Verification Details"
+msgstr "Detalles de verificación"
+
+#: js/GridDetailsPanel.js:473
+msgid "Verification Failed!"
+msgstr "¡Falló la verificación!"
+
+#: js/GridDetailsPanel.js:470
+msgid "Verification Successful!"
+msgstr "¡Verificación exitosa!"
+
+#: js/Expressomail.js:107
+msgid "Verifying trash folder"
+msgstr "Verificando carpeta papelera"
+
+#: js/AclsGrid.js:59
+msgid "Write"
+msgstr "Escribir"
+
+#: js/AclsGrid.js:60
+msgid "Write and delete messages from folders"
+msgstr "Escribir y borrar mensaje de carpetas"
+
+#: js/AclsEditDialog.js:124
+msgid "You are not allowed to remove all admins for this container!"
+msgstr ""
+"¡No tiene permitido borrar todos los administradores de este contenedor!"
+
+#: js/Expressomail.js:641
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "Ud. tiene {0} mensaje(s) nuevo(s) en la carpeta {1} ({2})."
+
+#: js/Expressomail.js:1032
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr ""
+"Sus credenciales de correo no son correctas. Por favor contactese con su "
+"administrador."
+
+#: js/GridDetailsPanel.js:477
+msgid "show details of digitial signature verification"
+msgstr "ver detalles de la verificación de firma digital"
+
+#: js/RecipientPickerFavoritePanel.js:57
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" destinatarios"
+
+#: js/RecipientPickerDialog.js:70
+msgid "(new message)"
+msgstr "(nuevo mensaje)"
+
+#: js/MessageEditDialog.js:296
+msgid "Activate this toggle button to add unknown recipient to contacts."
+msgstr ""
+"Active este botón palanca para agregar destinatarios desconocidos a los "
+"contactos."
+
+#: js/MessageEditDialog.js:259
+msgid "Activate this toggle button to mark this message as important."
+msgstr "Active este botón palanca para marcar este mensaje como importante."
+
+#: js/MessageEditDialog.js:248
+msgid "Activate this toggle button to receive a reading confirmation."
+msgstr "Active este botón palanca para recibir confirmación de lectura."
+
+#: js/MessageEditDialog.js:236
+msgid ""
+"Activate this toggle button to save the email text as a note attached to the "
+"recipient(s) contact(s)."
+msgstr ""
+"Activar este botón palanca para guardar el texto de este correo, adjunto "
+"como nota de estos contactos."
+
+#: js/MessageEditDialog.js:271
+msgid "Activate this toggle button to send the message as text/plain"
+msgstr "Activar este botón palanca para enviar este mensaje en texto plano."
+
+#: js/MessageEditDialog.js:284
+msgid "Activate this toggle button to sign a message on send"
+msgstr "Active este botón palanca para firmar un mensaje al enviarlo"
+
+#: js/GridPanel.js:446
+msgid "Add Account"
+msgstr "Agregar cuenta"
+
+#: js/MessageEditDialog.js:288 js/MessageEditDialog.js:627
+#: js/MessageEditDialog.js:689 js/MessageEditDialog.js:751
+#: js/MessageEditDialog.js:754
+msgid "Add Contacts"
+msgstr "Agregar contacto"
+
+#: js/TreeContextMenu.js:69
+msgid "Add Folder"
+msgstr "Agregar carpeta"
+
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
+msgstr "Agregar destinatarios"
+
+#: js/GridPanel.js:796
+msgid "Apenas Certificados"
+msgstr "Apenas Certificados"
+
+#: js/GridPanel.js:784
+msgid "Assinado"
+msgstr "Asignado"
+
+#: js/Model.js:218
+msgid "Bcc"
+msgstr "Cco"
+
+#: js/RecipientGrid.js:301 js/RecipientGrid.js:321
+msgid "Bcc:"
+msgstr "Cco:"
+
+#: js/MessageEditDialog.js:1791 js/Model.js:213
+msgid "Body"
+msgstr "Cuerpo"
+
+#: js/Model.js:217
+msgid "Cc"
+msgstr "Cc"
+
+#: js/RecipientGrid.js:298 js/RecipientGrid.js:320
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/MessageEditDialog.js:549 js/MessageEditDialog.js:552
+msgid "Checking existance of unknown recipients..."
+msgstr "Revisando la existencia de destinatarios desconocidos..."
+
+#: js/MessageEditDialog.js:877
+msgid "Click here to more results."
+msgstr "Pinche aquí para más resultados."
+
+#: js/RecipientGrid.js:291
+msgid "Click here to set To/CC/BCC."
+msgstr "Pinche aquí para definir Para/Cc/Cco"
+
+#: js/MessageEditDialog.js:314
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr ""
+"Pinche aquí para buscar y agregar destinatarios a la libreta de direcciones."
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:123
+msgid "Close"
+msgstr "Cerrar"
+
+#: js/GridPanel.js:792
+msgid "Compactado"
+msgstr "Comprimido"
+
+#: js/GridPanel.js:267
+msgid "Compose"
+msgstr "Componer"
+
+#: js/GridPanelHook.js:60
+msgid "Compose email (encrypted)"
+msgstr "Componer mensaje (encriptado)"
+
+#: js/MessageEditDialog.js:1535
+msgid "Compose email:"
+msgstr "Componer mensaje:"
+
+#: js/GridPanel.js:975 js/MessageDisplayDialog.js:300
+msgid "Confirm Delete"
+msgstr "Confirmar borrado"
+
+#: js/GridPanel.js:841
+msgid "Confirmação de Leitura"
+msgstr "Confirmación de lectura"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:124
+msgid "Continuar editando"
+msgstr "Continuar editando"
+
+#: js/MessageEditDialog.js:1616
+msgid "Could not send {0}."
+msgstr "No pudo ser enviado {0}."
+
+#: js/TreeContextMenu.js:80
+msgid "Creating {0}..."
+msgstr "Creando {0}..."
+
+#: js/GridPanel.js:788
+msgid "Criptografado"
+msgstr "Encriptado"
+
+#: js/GridPanel.js:435 js/GridPanel.js:436 js/GridPanel.js:438
+#: js/MessageDisplayDialog.js:60
+msgid "Delete"
+msgstr "Borrar"
+
+#: js/TreeContextMenu.js:204
+msgid "Delete Folder"
+msgstr "Borrar carpeta"
+
+#: js/TreeContextMenu.js:209
+msgid "Delete your sub-folders first."
+msgstr "Borre sus subcarpetas primero."
+
+#: js/MessageEditDialog.js:275
+msgid "Digitally Sign Mail"
+msgstr "Mensaje firmado digitalmente"
+
+#: js/MessageEditDialog.js:1897
+msgid "Do you really want to send a message with an empty subject?"
+msgstr "¿Realmente quiere enviar el mensaje con un asunto vacío?"
+
+#: js/TreeContextMenu.js:110
+msgid "Edit Account"
+msgstr "Editar cuenta"
+
+#: js/TreeContextMenu.js:154
+msgid "Edit Filter Rules"
+msgstr "Editar reglas de filtrado"
+
+#: js/TreeContextMenu.js:138
+msgid "Edit Vacation Message"
+msgstr "Editar mensaje de vacaciones"
+
+#: js/TreeContextMenu.js:23
+msgid "Empty Folder"
+msgstr "Vaciar carpeta"
+
+#: js/MessageEditDialog.js:1896
+msgid "Empty subject"
+msgstr "Vaciar asunto"
+
+#: js/GridPanel.js:848
+msgid "Encaminhada"
+msgstr "Remitió"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:971
+msgid "Erro inesperado na verificação ortográfica. Tente novamente mais tarde."
+msgstr ""
+"Error inesperado en la verificación ortográfica. Por favor intente "
+"nuevamente más tarde."
+
+#: js/MessageEditDialog.js:627 js/MessageEditDialog.js:689
+msgid "Error saving unknown contacts."
+msgstr "Error al guardar contactos desconocidos."
+
+#: js/MessageEditDialog.js:1617
+msgid "Error:"
+msgstr "Error:"
+
+#: js/GridPanel.js:455
+msgid "Export"
+msgstr "Exportar"
+
+#: js/TreePanel.js:903
+#, javascript-format
+msgid "Fetching messages... ({0}%% done)"
+msgstr "Recuperando mensajes... ({0}%% terminado)"
+
+#: js/MessageEditDialog.js:1867
+msgid "Files are still uploading."
+msgstr "Los archivos todavía se están subiendo"
+
+#: js/GridPanel.js:700 js/Model.js:219
+msgid "Flags"
+msgstr "Marcas"
+
+#: js/GridPanel.js:371 js/GridPanel.js:380 js/GridPanel.js:388
+#: js/GridPanel.js:402 js/MessageDisplayDialog.js:103
+#: js/MessageDisplayDialog.js:109 js/MessageDisplayDialog.js:131
+msgid "Forward"
+msgstr "Reenviar"
+
+#: js/GridPanel.js:713 js/Model.js:214
+msgid "From (Email)"
+msgstr "Desde (Email)"
+
+#: js/GridPanel.js:719 js/Model.js:215
+msgid "From (Name)"
+msgstr "Desde (Nombre)"
+
+#: js/MessageEditDialog.js:1396
+msgid "Fwd:"
+msgstr "Rnv:"
+
+#: js/GridPanel.js:679
+msgid "Id"
+msgstr "Id"
+
+#: js/TreeContextMenu.js:186
+msgid "Import msg(eml)"
+msgstr "Importar mensaje (eml)"
+
+#: js/TreePanel.js:883
+msgid "Last update:"
+msgstr "Última actualziación:"
+
+#: js/TreeContextMenu.js:217
+msgid "Mark Folder as read"
+msgstr "Marcar carpeta como leída"
+
+#: js/MessageEditDialog.js:251
+msgid "Mark as Important"
+msgstr "Marcar como importante"
+
+#: js/GridPanel.js:425
+msgid "Mark read/unread"
+msgstr "Marcar leído/sin leer"
+
+#: js/MessageEditDialog.js:411
+msgid "Message size validation step failed."
+msgstr "Fallo en el paso de validación por tamaño."
+
+#: js/TreePanel.js:872
+msgid "Name on Server:"
+msgstr "Nombre en el servidor:"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:125
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:628
+msgid "Nenhum erro ortográfico encontrado"
+msgstr "Ningún error ortográfico encontrado"
+
+#: js/MessageEditDialog.js:751
+msgid "New contacts have been added to the folder "
+msgstr "Los nuevos contactos han sido agregados a la carpeta"
+
+#: js/TreeContextMenu.js:74
+msgid "New {0}"
+msgstr "Nuevo {0}"
+
+#: js/GridPanel.js:116
+msgid "No Messages found or the cache is empty."
+msgstr "No se encontraron mensajes o el cache está vacío."
+
+#: js/MessageEditDialog.js:1980
+msgid "No recipients set."
+msgstr "No se definieron los destinatarios."
+
+#: js/MessageEditDialog.js:523 js/MessageEditDialog.js:1720
+#: js/RecipientGrid.js:228
+msgid "No valid certificate found for one or more of these email address."
+msgstr ""
+"No se han encontrado certificados válidos para una o más de estas "
+"direcciones de email."
+
+#: js/TreeContextMenu.js:77
+msgid "No {0} added"
+msgstr "{0} no agregadas"
+
+#: js/MessageEditDialog.js:1101
+msgid "On {0}, {1} wrote"
+msgstr "En {0}, {1} escribió"
+
+#: js/MessageEditDialog.js:754
+msgid "One or more contacts have not been added to the folder "
+msgstr "Uno o más contactos no han sido agregados a la carpeta"
+
+#: js/MessageEditDialog.js:1121
+msgid "Original message"
+msgstr "Mensaje original"
+
+#: js/TreeContextMenu.js:74
+msgid "Please enter the name of the new {0}:"
+msgstr "Por favor ingrese el nombre del nuevo {0}:"
+
+#: js/MessageEditDialog.js:1466
+msgid "Please fix the errors noted."
+msgstr "Por favor arregle el error notificado."
+
+#: js/GridPanel.js:470 js/MessageDisplayDialog.js:145
+msgid "Print Message"
+msgstr "Imprimir mensaje"
+
+#: js/GridPanel.js:462 js/GridPanel.js:1854 js/MessageDisplayDialog.js:151
+msgid "Print Preview"
+msgstr "Vista previa de impresión"
+
+#: js/GridPanel.js:166
+msgid "Quota usage"
+msgstr "Uso de cuota"
+
+#: js/MessageEditDialog.js:240
+msgid "Reading Confirmation"
+msgstr "Confirmación de lectura"
+
+#: js/ReadConfirmationDetailsPanel.js:118
+msgid "Reading Confirmation:"
+msgstr "Confirmación de lectura:"
+
+#: js/GridPanel.js:747 js/Model.js:222
+msgid "Received"
+msgstr "Recibido"
+
+#: js/ReadConfirmationDetailsPanel.js:205
+msgid "Received on"
+msgstr "Recibido el"
+
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
+msgstr "Filtro de destinatario"
+
+#: js/RecipientGrid.js:449
+msgid "Remove"
+msgstr "Borrar"
+
+#: js/GridPanel.js:277 js/GridPanel.js:286 js/GridPanel.js:294
+#: js/GridPanel.js:308 js/MessageDisplayDialog.js:74
+#: js/MessageDisplayDialog.js:79 js/MessageDisplayDialog.js:119
+msgid "Reply"
+msgstr "Responder"
+
+#: js/GridPanel.js:324 js/GridPanel.js:333 js/GridPanel.js:341
+#: js/GridPanel.js:355 js/MessageDisplayDialog.js:88
+#: js/MessageDisplayDialog.js:94 js/MessageDisplayDialog.js:125
+msgid "Reply To All"
+msgstr "Responder a todos"
+
+#: js/GridPanel.js:845
+msgid "Respondida"
+msgstr "Respondida"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:122
+msgid "Reverter para"
+msgstr "Responder para"
+
+#: js/MessageDisplayDialog.js:138
+msgid "Save"
+msgstr "Guardar"
+
+#: js/MessageEditDialog.js:211
+msgid "Save As Draft"
+msgstr "Guardar como borrador"
+
+#: js/MessageEditDialog.js:219
+msgid "Save As Template"
+msgstr "Guardar como Plantilla"
+
+#: js/MessageEditDialog.js:228
+msgid "Save Email Note"
+msgstr "Guardar nota de email"
+
+#: js/MessageEditDialog.js:708 js/MessageEditDialog.js:711
+msgid "Saving unknown recipients to Unknown Contacts folder..."
+msgstr ""
+"Guardando destinatarios desconocidos a la carpeta de Contactos "
+"Desconocidos..."
+
+#: js/MessageEditDialog.js:203
+msgid "Search Recipients"
+msgstr "Buscar destinatarios"
+
+#: js/GridPanel.js:686
+msgid "Security"
+msgstr "Seguridad"
+
+#: js/RecipientPickerDialog.js:71
+msgid "Select recipients for \"{0}\""
+msgstr "Seleccionar destinatarios para \"{0}\""
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:126
+msgid "Sem sugestões"
+msgstr "Sin sugerencias"
+
+#: js/MessageEditDialog.js:195
+msgid "Send"
+msgstr "Enviar"
+
+#: js/MessageEditDialog.js:263
+msgid "Send As Plain"
+msgstr "Enviar como plano"
+
+#: js/GridPanel.js:725
+msgid "Sender"
+msgstr "Remitente"
+
+#: js/GridPanel.js:739
+msgid "Sent"
+msgstr "Enviado"
+
+#: js/TreeContextMenu.js:168 js/TreeContextMenu.js:177
+msgid "Share mailbox"
+msgstr "Compartir casillas de correo"
+
+#: js/GridPanel.js:762
+msgid "Size"
+msgstr "Tamaño"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:628
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:972
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:978
+msgid "Spell Checker"
+msgstr "Revisor ortográfico"
+
+#: js/Model.js:211
+msgid "Subject/From/CC/Body"
+msgstr "Asunto/Para/Cc/Cuerpo"
+
+#: js/MessageEditDialog.js:401
+msgid "This message size is {0} Mb."
+msgstr "El tamaño de este mensaje es de {0} Mb."
+
+#: js/GridPanel.js:732 js/Model.js:216
+msgid "To"
+msgstr "Para"
+
+#: js/RecipientGrid.js:295 js/RecipientGrid.js:319
+msgid "To:"
+msgstr "Para:"
+
+#: js/GridPanel.js:416
+msgid "Toggle highlighting"
+msgstr "Activar destacado"
+
+#: js/TreePanel.js:864
+msgid "Total Messages:"
+msgstr "Mensajes en total:"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:978
+msgid "Um erro ocorreu no servidor. Tente novamente mais tarde."
+msgstr ""
+"Un error ocurrió en el servidor. Por favor intente nuevamente más tarde."
+
+#: js/MessageEditDialog.js:636
+msgid "Unknown Contacts"
+msgstr "Contactos Desconocidos"
+
+#: js/TreePanel.js:868
+msgid "Unread Messages:"
+msgstr "Mensajes Sin leer:"
+
+#: js/TreeContextMenu.js:254
+msgid "Update Folder List"
+msgstr "Actualizar lista de carpetas"
+
+#: js/TreeContextMenu.js:209
+msgid "Warning"
+msgstr "Aviso"
+
+#: js/ReadConfirmationDetailsPanel.js:209
+msgid "Was read by:"
+msgstr "Fue leído por:"
+
+#: js/TreeContextMenu.js:77
+msgid "You have to supply a {0} name!"
+msgstr "¡Ud. tiene que proveer nombre de {0}!"
+
+#: js/ReadConfirmationDetailsPanel.js:201
+msgid "Your message:"
+msgstr "Su mensaje:"
+
+#: js/GridPanel.js:1707 js/TreePanel.js:876
+msgid "Your quota"
+msgstr "Su cuota"
+
+#: js/GridPanel.js:262 js/MessageDisplayDialog.js:69
+#: js/MessageEditDialog.js:178
+msgid "encrypted"
+msgstr "encriptado"
+
+#: js/ReadConfirmationDetailsPanel.js:209
+msgid "on"
+msgstr "en"
+
+#: js/GridPanel.js:800
+msgid "pkcs7-mime"
+msgstr "pkcs7-mime"
+
+#: js/GridPanel.js:1699 js/TreePanel.js:860
+msgid "{0} %"
+msgstr "{0} %"
+
+#: js/MessageEditDialog.js:1399
+msgid "{0} Message"
+msgstr "Mensaje {0}"
+
+#: js/MessageEditDialog.js:1451
+msgid "{0} account setting empty."
+msgstr "seteos de cuenta {0} vacios."
+
+#: js/GridPanel.js:1708 js/TreePanel.js:877
+msgid "{0} available (total: {1})"
+msgstr "{0} disponibles (total: {1})"
+
+#: js/TreePanel.js:919
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} mensaje leído"
+msgstr[1] "{0} mensajes leídos"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.SpellChecker.js:900
+msgid "Área de edição não encontrada."
+msgstr "Área de edición no encontrada."
+
+#: js/sieve/RulesGridPanel.js:221
+msgid "Action"
+msgstr "Acción"
+
+#: js/sieve/VacationEditDialog.js:121
+msgid "Advanced"
+msgstr "Avanzado"
+
+#: js/sieve/RuleEditDialog.js:103 js/sieve/RuleEditDialog.js:108
+msgid "All fields must be filled"
+msgstr "Todos los campos tienen que ser llenados"
+
+#: js/sieve/VacationEditDialog.js:267
+msgid "Choose Template ..."
+msgstr "Elija una plantilla..."
+
+#: js/sieve/VacationEditDialog.js:239
+msgid "Choose first Representative ..."
+msgstr "Elija el primero representante..."
+
+#: js/sieve/VacationEditDialog.js:248
+msgid "Choose second Representative ..."
+msgstr "Elija el segundo representante..."
+
+#: js/sieve/RulesGridPanel.js:213
+msgid "Conditions"
+msgstr "Condiciones"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.Table.js:44
+msgid "Dashed"
+msgstr "tachado"
+
+#: js/sieve/RulesGridPanel.js:102
+msgid "Disable"
+msgstr "Deshabilitar"
+
+#: js/sieve/RuleEditDialog.js:433
+msgid "Discard mail"
+msgstr "Descartar correo"
+
+#: js/sieve/RuleEditDialog.js:333
+msgid "Do this action:"
+msgstr "Hacer esta acción:"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.Table.js:44
+msgid "Dotted"
+msgstr "Punteado"
+
+#: js/sieve/RuleEditDialog.js:155
+msgid "Edit Filter Rule"
+msgstr "Editar la regla de filtrado"
+
+#: js/sieve/RulesGridPanel.js:95
+msgid "Enable"
+msgstr "Habilitar"
+
+#: js/sieve/VacationEditDialog.js:232
+msgid "End Date"
+msgstr "Fecha fin"
+
+#: js/sieve/RuleConditionsPanel.js:71
+msgid "From (Email and Name)"
+msgstr "Desde (email y nombre)"
+
+#: js/sieve/VacationEditDialog.js:109
+msgid "General"
+msgstr "General"
+
+#: js/sieve/RulesGridPanel.js:323
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Encabezado \"{0}\" contiene \"{1}\""
+
+#: js/sieve/RulesGridPanel.js:323
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Encabezado \"{0}\" iguala \"{1}\""
+
+#: js/sieve/RuleConditionsPanel.js:75
+msgid "Header contains"
+msgstr "Encabezado contiene"
+
+#: js/sieve/RuleConditionsPanel.js:76 js/sieve/RuleConditionsPanel.js:78
+msgid "Header name"
+msgstr "Nombre del encabezado"
+
+#: js/sieve/RuleConditionsPanel.js:77
+msgid "Header regex"
+msgstr "Regex del encabezado"
+
+#: js/sieve/RuleConditionsPanel.js:76 js/sieve/RuleConditionsPanel.js:78
+msgid "Header value"
+msgstr "valor del encabezado"
+
+#: js/sieve/VacationEditDialog.js:185
+msgid "I am available (vacation message disabled)"
+msgstr "Estoy disponible (mensaje de vacaciones deshabilitado)"
+
+#: js/sieve/VacationEditDialog.js:186
+msgid "I am not available (vacation message enabled)"
+msgstr "No estoy disponible (mensaje de vacaciones habilitado)"
+
+#: js/sieve/RulesGridPanel.js:206
+msgid "ID"
+msgstr "ID"
+
+#: js/sieve/RuleEditDialog.js:313
+msgid "If all of the following conditions are met:"
+msgstr "Si todas las condiciones se dan:"
+
+#: js/sieve/VacationEditDialog.js:151
+msgid "Incoming mails will be answered with this text:"
+msgstr "Todos los mensajes serán respondidos con este texto:"
+
+#: js/sieve/VacationEditDialog.js:256
+msgid "Message Template"
+msgstr "Plantilla de mensaje"
+
+#: js/sieve/RulesGridPanel.js:88
+msgid "Move down"
+msgstr "Mover abajo"
+
+#: js/sieve/RuleEditDialog.js:430
+msgid "Move mail to folder"
+msgstr "Mover el mensaje a la carpeta"
+
+#: js/sieve/RulesGridPanel.js:81
+msgid "Move up"
+msgstr "Mover arriba"
+
+#: js/sieve/VacationEditDialog.js:132
+msgid "Only send all X days to the same sender"
+msgstr "Sólo enviar todos los X días al mismo remitente"
+
+#: js/sieve/RuleEditDialog.js:431
+msgid "Redirect mail to address"
+msgstr "Redireccionar mensajes a esta dirección"
+
+#: js/sieve/RuleEditDialog.js:432
+msgid "Reject mail with this text"
+msgstr "Rechazar correos con este texto"
+
+#: js/sieve/VacationEditDialog.js:238
+msgid "Representative #1"
+msgstr "Reprensentante #1"
+
+#: js/sieve/VacationEditDialog.js:247
+msgid "Representative #2"
+msgstr "Reprensentante #2"
+
+#: js/sieve/VacationEditDialog.js:233
+msgid "Set vacation end date ..."
+msgstr "Definir la fecha de fin de vacaciones..."
+
+#: js/sieve/VacationEditDialog.js:228
+msgid "Set vacation start date ..."
+msgstr "Definir fecha de comienzo de vacaciones..."
+
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "Reglas de filtrado Sieve"
+
+#: js/sieve/RulesDialog.js:82
+msgid "Sieve Filter Rules for {0}"
+msgstr "Reglas de filtrador sieve para {0}"
+
+#: js/sieve/RuleEditDialog.js:118
+msgid "Size value must not be more than"
+msgstr "El tamaño no debe ser mayor que"
+
+#: js/sieve/RuleEditDialog.js:113
+msgid "Size value should be numeric"
+msgstr "El tamaño debe ser numérico"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.Table.js:44
+msgid "Solid Thick"
+msgstr "Sólido grueso"
+
+#: js/editorplugins/Ext.ux.form.HtmlEditor.Table.js:44
+msgid "Solid Thin"
+msgstr "Sólido delgado"
+
+#: js/sieve/VacationEditDialog.js:227
+msgid "Start Date"
+msgstr "Fecha de comienzo"
+
+#: js/sieve/VacationEditDialog.js:174
+msgid "Status"
+msgstr "Estado"
+
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "To (Email)"
+msgstr "Para (email)"
+
+#: js/sieve/VacationEditDialog.js:77
+msgid "Vacation Message for {0}"
+msgstr "Mensaje de vacaciones para {0}"
+
+#: js/sieve/RulesGridPanel.js:312
+msgid "is greater than"
+msgstr "es mayor que"
+
+#: js/sieve/RulesGridPanel.js:312
+msgid "is less than"
+msgstr "es menor que"
