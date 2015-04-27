@@ -102,7 +102,9 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createGroups()
     {
         $fe = new Admin_Frontend_Json();
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         foreach ($this->_groups as $groupArray) {
+            $groupArray['container_id'] = $internalAddressbook->getId();
             $members = array();
             foreach($groupArray['groupMembers'] as $member) {
                 $members[] = $this->_personas[$member]->getId();

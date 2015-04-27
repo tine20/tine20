@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
@@ -7,17 +7,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-21 11:50+0000\n"
+"PO-Revision-Date: 2015-04-24 15:36+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Controller.php:102
 #, python-format
@@ -67,7 +67,7 @@ msgstr[1] "Status"
 msgid "Percent"
 msgstr "Prozent"
 
-#: Model/Task.php:219 js/TaskGridPanel.js:87
+#: Model/Task.php:219
 msgid "Lead"
 msgstr "Lead"
 
@@ -125,6 +125,10 @@ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 #: js/TaskGridPanel.js:82
 msgid "Tags"
 msgstr "Tags"
+
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
+msgstr "Leadname"
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."
@@ -214,7 +218,10 @@ msgstr "Verfügbare Taskstatus"
 msgid ""
 "Possible tasks status. Please note that additional attendee status might "
 "impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgstr ""
+"Verfügbare Aufgabenstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
+"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
+"werden könnten."
 
 #: Config.php:48
 msgid "Task priorities available"
@@ -224,7 +231,9 @@ msgstr "Verfügbare Aufgabenprioritäten"
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
-msgstr "Verfügbare Aufgabenprioritäten. Please note that additional attendee status might impact other Tasks systems on export or syncronisation."
+msgstr ""
+"Verfügbare Aufgabenprioritäten. Please note that additional attendee status "
+"might impact other Tasks systems on export or syncronisation."
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:74
 msgid "No response"

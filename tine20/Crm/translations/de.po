@@ -9,26 +9,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 18:54+0000\n"
-"Last-Translator: Michael Spahn <michael@spahn.me>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2015-04-27 13:01+0100\n"
+"Last-Translator: Philipp Schüle <p.schuele@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
-#: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
+#: Model/Lead.php:122 js/LeadGridPanel.js:151 js/Contact.js:171
 #: js/Contact.js:355 js/Contact.js:392
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
-#: Model/Lead.php:123 Controller.php:162 js/LeadGridPanel.js:144
+#: Model/Lead.php:123 Controller.php:162 js/LeadGridPanel.js:153
 #: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridDetailsPanel.js:45 Controller/Lead.php:193
+#: js/LeadGridDetailsPanel.js:45 Controller/Lead.php:197
 msgid "Customer"
 msgstr "Kunde"
 
@@ -76,12 +76,28 @@ msgstr "Gemeinsame Lead-Favoriten verwalten"
 msgid "Create or update shared leads favorites"
 msgstr "Gemeinsame Lead-Favoriten erstellen oder bearbeiten"
 
+#: Import/definitions/crm_tine_import_csv.xml:11
+msgid "Lead CSV import"
+msgstr "Lead CSV Import"
+
+#: Import/definitions/crm_tine_import_csv.xml:17
+msgid "Import list (###CURRENTDATE###)"
+msgstr "Importliste (###CURRENTDATE###)"
+
+#: Import/definitions/crm_tine_import_csv.xml:19
+msgid ""
+"Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+"Leads importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
+"###USERFULLNAME###"
+
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr "%ss persönliche Leads"
 
-#: Controller.php:163 js/LeadGridPanel.js:143 js/Contact.js:181
+#: Controller.php:163 js/LeadGridPanel.js:152 js/Contact.js:181
 #: js/Contact.js:357 js/Contact.js:400 js/LeadGridDetailsPanel.js:45
 msgid "Partner"
 msgstr "Partner"
@@ -135,7 +151,7 @@ msgid "Lead Data"
 msgstr "Lead-Daten"
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:372
-#: js/LeadGridPanel.js:145 js/LeadStateFilterModel.js:32
+#: js/LeadGridPanel.js:154 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Status"
 
@@ -145,27 +161,27 @@ msgid "Leadtype"
 msgstr "Typ"
 
 #: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:398
-#: js/LeadGridPanel.js:146 js/LeadGridDetailsPanel.js:468
+#: js/LeadGridPanel.js:155 js/LeadGridDetailsPanel.js:468
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Quelle"
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:111
-#: Controller/Lead.php:200
+#: Export/Pdf.php:87 js/LeadGridPanel.js:157 js/Model.js:111
+#: Controller/Lead.php:204
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Export/Pdf.php:90 js/LeadEditDialog.js:222 js/LeadGridPanel.js:147
-#: js/Model.js:109 Controller/Lead.php:201
+#: Export/Pdf.php:90 js/LeadEditDialog.js:222 js/LeadGridPanel.js:156
+#: js/Model.js:109 Controller/Lead.php:205
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
 #: Export/Pdf.php:93 js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:453
-#: Controller/Lead.php:197
+#: Controller/Lead.php:201
 msgid "Start"
 msgstr "Start"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:199
+#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:203
 msgid "End"
 msgstr "Ende"
 
@@ -241,12 +257,20 @@ msgid "Add a Leadtype..."
 msgstr "Lead-Typ hinzufügen..."
 
 #: js/LeadEditDialog.js:246
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
+msgid ""
+"You do not have the run right for the Tasks application or it is not "
+"activated."
+msgstr ""
+"Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen "
+"oder sie ist deaktiviert."
 
 #: js/LeadEditDialog.js:257
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
+msgid ""
+"You do not have the run right for the Sales application or it is not "
+"activated."
+msgstr ""
+"Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder "
+"sie ist deaktiviert."
 
 #: js/LeadEditDialog.js:303 js/AddToLeadPanel.js:73 js/Model.js:52
 msgid "Lead"
@@ -255,18 +279,18 @@ msgstr[0] "Lead"
 msgstr[1] "Lead"
 
 #: js/LeadEditDialog.js:330
-msgid "Enter short name"
-msgstr "Kurzname eingeben"
+msgid "Enter lead name"
+msgstr "Leadnamen eingeben"
 
 #: js/LeadEditDialog.js:426
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
-#: js/LeadEditDialog.js:435 js/LeadGridPanel.js:152 js/Model.js:119
+#: js/LeadEditDialog.js:435 js/LeadGridPanel.js:161 js/Model.js:119
 msgid "Resubmission Date"
 msgstr "Wiedervorlagedatum"
 
-#: js/LeadEditDialog.js:454 js/LeadGridPanel.js:150 js/Model.js:118
+#: js/LeadEditDialog.js:454 js/LeadGridPanel.js:159 js/Model.js:118
 #: js/LeadGridDetailsPanel.js:458
 msgid "Estimated end"
 msgstr "Geplantes Ende"
@@ -281,7 +305,8 @@ msgstr "Beschreibung eingeben"
 
 #: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"
-msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr ""
+"Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToLeadPanel.js:36
 msgid "Please select the attenders' role"
@@ -291,7 +316,7 @@ msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 msgid "Select Lead"
 msgstr "Lead auswählen"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:195
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:199
 msgid "Role"
 msgstr "Rolle"
 
@@ -312,45 +337,45 @@ msgstr "Kontakt"
 msgid "CRM Role"
 msgstr "CRM Rolle"
 
-#: js/LeadGridPanel.js:139
-msgid "Lead id"
-msgstr "Lead-Bezeichner"
+#: js/LeadGridPanel.js:109
+msgid "Import leads"
+msgstr "Leads importieren"
 
-#: js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:149
 msgid "Tags"
 msgstr "Tags"
 
-#: js/LeadGridPanel.js:141 js/Model.js:107
+#: js/LeadGridPanel.js:150 js/Model.js:107
 msgid "Lead name"
 msgstr "Lead-Name"
 
-#: js/LeadGridPanel.js:151
+#: js/LeadGridPanel.js:160
 msgid "Probable Turnover"
 msgstr "Voraussichtlicher Umsatz"
 
-#: js/LeadGridPanel.js:195
+#: js/LeadGridPanel.js:204
 msgid "Export Lead"
 msgstr "Lead exportieren"
 
-#: js/LeadGridPanel.js:204
+#: js/LeadGridPanel.js:213
 msgid "Export as PDF"
 msgstr "Als PDF exportieren"
 
-#: js/LeadGridPanel.js:211
+#: js/LeadGridPanel.js:220
 msgid "Export as CSV"
 msgstr "Als CSV exportieren"
 
-#: js/LeadGridPanel.js:218
+#: js/LeadGridPanel.js:227
 msgid "Export as ODS"
 msgstr "Als ODS exportieren"
 
-#: js/LeadGridPanel.js:225
+#: js/LeadGridPanel.js:234
 msgid "Export as XLS"
 msgstr "Als XLS exportieren"
 
-#: js/LeadGridPanel.js:232
+#: js/LeadGridPanel.js:241
 msgid "Export as ..."
-msgstr ""
+msgstr "Exportieren als ..."
 
 #: js/Contact.js:162
 msgid "Change type to Customer"
@@ -470,6 +495,10 @@ msgid_plural "Lead States"
 msgstr[0] "Lead Status"
 msgstr[1] "Lead Status"
 
+#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
+msgid "undefined"
+msgstr "undefiniert"
+
 #: js/LeadState.js:166
 msgid "Add a Leadstate..."
 msgstr "Lead-Status hinzufügen..."
@@ -507,15 +536,15 @@ msgstr "Webseite"
 
 #: js/LeadGridDetailsPanel.js:63
 msgid "Street"
-msgstr ""
+msgstr "Straße"
 
 #: js/LeadGridDetailsPanel.js:66
 msgid "Postalcode"
-msgstr ""
+msgstr "Postleitzahl"
 
 #: js/LeadGridDetailsPanel.js:69
 msgid "City"
-msgstr ""
+msgstr "Ort"
 
 #: js/LeadGridDetailsPanel.js:448 js/Task.js:266
 msgid "Status"
@@ -553,43 +582,48 @@ msgstr "Lead-Quelle hinzufügen..."
 
 #: js/LeadSource.js:157
 msgid "archived"
-msgstr ""
+msgstr "archiviert"
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:198
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:200
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:198
+#: Controller/Lead.php:202
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:206
 msgid "Folder"
 msgstr "Ordner"
 
-#: Controller/Lead.php:203
+#: Controller/Lead.php:207
 msgid "Updated by"
 msgstr "Aktualisiert von"
 
-#: Controller/Lead.php:204
+#: Controller/Lead.php:208
 msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
-#: Controller/Lead.php:205
+#: Controller/Lead.php:209
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s wurde von %s auf %s geändert."
 
-#: Controller/Lead.php:211
+#: Controller/Lead.php:215
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s wurde geändert"
 
-#: Controller/Lead.php:213
+#: Controller/Lead.php:217
+#, python-format
+msgid "Lead %s has been deleted"
+msgstr "Lead %s wurde gelöscht"
+
+#: Controller/Lead.php:219
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Lead %s wurde angelegt"
@@ -620,7 +654,8 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:92
 msgid "Get notifications emails for actions you did yourself"
-msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr ""
+"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:95
 msgid "Default Favorite"
@@ -629,3 +664,31 @@ msgstr "Standard Favorit"
 #: Preference.php:96
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Der Standard Favorit der beim öffnen des Crm geladen wird"
+
+#: Config.php:41
+msgid "Enabled Features"
+msgstr "Aktivierte Features"
+
+#: Config.php:43
+msgid "Enabled Features in Crm Application."
+msgstr "Aktivierte Features in CRM Applikation"
+
+#: Config.php:50
+msgid "Lead Import"
+msgstr "Lead Import"
+
+#: Config.php:59
+msgid "Lead duplicate check fields"
+msgstr "Lead-Dublettencheckfelder"
+
+#: Config.php:61
+msgid ""
+"These fields are checked when a new lead is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
+#~ msgid "Enter short name"
+#~ msgstr "Kurzname eingeben"
+
+#~ msgid "Lead id"
+#~ msgstr "Lead-Bezeichner"
