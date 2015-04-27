@@ -54,7 +54,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             scope: this
         });
         
-        this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}, this.downloadAction];
+        this.tbarItems = [this.downloadAction];
         
         Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
     },
@@ -215,12 +215,6 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 maxLength: 255,
                                 requiredGrant: 'editGrant'
                             }]
-                        }),
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Filemanager',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Filemanager',
