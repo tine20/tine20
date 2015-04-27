@@ -328,7 +328,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             xtype: 'textfield',
                             hideLabel: true,
                             id: 'lead_name',
-                            emptyText: this.app.i18n._('Enter short name'),
+                            emptyText: this.app.i18n._('Enter lead name'),
                             name: 'lead_name',
                             allowBlank: false,
                             selectOnFocus: true,

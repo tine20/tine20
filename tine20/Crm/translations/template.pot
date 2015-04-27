@@ -13,14 +13,14 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
+#: Model/Lead.php:122 js/LeadGridPanel.js:151 js/Contact.js:171
 #: js/Contact.js:355 js/Contact.js:392
 msgid "Responsible"
 msgstr ""
 
-#: Model/Lead.php:123 Controller.php:162 js/LeadGridPanel.js:144
+#: Model/Lead.php:123 Controller.php:162 js/LeadGridPanel.js:153
 #: js/Contact.js:161 js/Contact.js:356 js/Contact.js:396
-#: js/LeadGridDetailsPanel.js:45 Controller/Lead.php:193
+#: js/LeadGridDetailsPanel.js:45 Controller/Lead.php:197
 msgid "Customer"
 msgstr ""
 
@@ -68,12 +68,26 @@ msgstr ""
 msgid "Create or update shared leads favorites"
 msgstr ""
 
+#: Import/definitions/crm_tine_import_csv.xml:11
+msgid "Lead CSV import"
+msgstr ""
+
+#: Import/definitions/crm_tine_import_csv.xml:17
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/crm_tine_import_csv.xml:19
+msgid ""
+"Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+
 #: Controller.php:117
 #, python-format
 msgid "%s's personal leads"
 msgstr ""
 
-#: Controller.php:163 js/LeadGridPanel.js:143 js/Contact.js:181
+#: Controller.php:163 js/LeadGridPanel.js:152 js/Contact.js:181
 #: js/Contact.js:357 js/Contact.js:400 js/LeadGridDetailsPanel.js:45
 msgid "Partner"
 msgstr ""
@@ -127,7 +141,7 @@ msgid "Lead Data"
 msgstr ""
 
 #: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:373
-#: js/LeadGridPanel.js:145 js/LeadStateFilterModel.js:32
+#: js/LeadGridPanel.js:154 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr ""
 
@@ -137,27 +151,27 @@ msgid "Leadtype"
 msgstr ""
 
 #: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:399
-#: js/LeadGridPanel.js:146 js/LeadGridDetailsPanel.js:468
+#: js/LeadGridPanel.js:155 js/LeadGridDetailsPanel.js:468
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr ""
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:111
-#: Controller/Lead.php:200
+#: Export/Pdf.php:87 js/LeadGridPanel.js:157 js/Model.js:111
+#: Controller/Lead.php:204
 msgid "Turnover"
 msgstr ""
 
-#: Export/Pdf.php:90 js/LeadEditDialog.js:223 js/LeadGridPanel.js:147
-#: js/Model.js:109 Controller/Lead.php:201
+#: Export/Pdf.php:90 js/LeadEditDialog.js:223 js/LeadGridPanel.js:156
+#: js/Model.js:109 Controller/Lead.php:205
 msgid "Probability"
 msgstr ""
 
 #: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
-#: Controller/Lead.php:197
+#: Controller/Lead.php:201
 msgid "Start"
 msgstr ""
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:199
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:203
 msgid "End"
 msgstr ""
 
@@ -251,18 +265,18 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/LeadEditDialog.js:331
-msgid "Enter short name"
+msgid "Enter lead name"
 msgstr ""
 
 #: js/LeadEditDialog.js:427
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:436 js/LeadGridPanel.js:152 js/Model.js:119
+#: js/LeadEditDialog.js:436 js/LeadGridPanel.js:161 js/Model.js:119
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadEditDialog.js:455 js/LeadGridPanel.js:150 js/Model.js:118
+#: js/LeadEditDialog.js:455 js/LeadGridPanel.js:159 js/Model.js:118
 #: js/LeadGridDetailsPanel.js:458
 msgid "Estimated end"
 msgstr ""
@@ -287,7 +301,7 @@ msgstr ""
 msgid "Select Lead"
 msgstr ""
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:195
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:199
 msgid "Role"
 msgstr ""
 
@@ -308,43 +322,43 @@ msgstr ""
 msgid "CRM Role"
 msgstr ""
 
-#: js/LeadGridPanel.js:139
-msgid "Lead id"
+#: js/LeadGridPanel.js:109
+msgid "Import leads"
 msgstr ""
 
-#: js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:149
 msgid "Tags"
 msgstr ""
 
-#: js/LeadGridPanel.js:141 js/Model.js:107
+#: js/LeadGridPanel.js:150 js/Model.js:107
 msgid "Lead name"
 msgstr ""
 
-#: js/LeadGridPanel.js:151
+#: js/LeadGridPanel.js:160
 msgid "Probable Turnover"
 msgstr ""
 
-#: js/LeadGridPanel.js:195
+#: js/LeadGridPanel.js:204
 msgid "Export Lead"
 msgstr ""
 
-#: js/LeadGridPanel.js:204
+#: js/LeadGridPanel.js:213
 msgid "Export as PDF"
 msgstr ""
 
-#: js/LeadGridPanel.js:211
+#: js/LeadGridPanel.js:220
 msgid "Export as CSV"
 msgstr ""
 
-#: js/LeadGridPanel.js:218
+#: js/LeadGridPanel.js:227
 msgid "Export as ODS"
 msgstr ""
 
-#: js/LeadGridPanel.js:225
+#: js/LeadGridPanel.js:234
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadGridPanel.js:232
+#: js/LeadGridPanel.js:241
 msgid "Export as ..."
 msgstr ""
 
@@ -555,41 +569,46 @@ msgstr ""
 msgid "archived"
 msgstr ""
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:198
 msgid "State"
 msgstr ""
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:200
 msgid "Source"
 msgstr ""
 
-#: Controller/Lead.php:198
+#: Controller/Lead.php:202
 msgid "Scheduled end"
 msgstr ""
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:206
 msgid "Folder"
 msgstr ""
 
-#: Controller/Lead.php:203
+#: Controller/Lead.php:207
 msgid "Updated by"
 msgstr ""
 
-#: Controller/Lead.php:204
+#: Controller/Lead.php:208
 msgid "Updated Fields:"
 msgstr ""
 
-#: Controller/Lead.php:205
+#: Controller/Lead.php:209
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr ""
 
-#: Controller/Lead.php:211
+#: Controller/Lead.php:215
 #, python-format
 msgid "Lead %s has been changed"
 msgstr ""
 
-#: Controller/Lead.php:213
+#: Controller/Lead.php:217
+#, python-format
+msgid "Lead %s has been deleted"
+msgstr ""
+
+#: Controller/Lead.php:219
 #, python-format
 msgid "Lead %s has been created"
 msgstr ""
@@ -628,4 +647,26 @@ msgstr ""
 
 #: Preference.php:96
 msgid "The default favorite which is loaded on crm startup"
+msgstr ""
+
+#: Config.php:41
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:43
+msgid "Enabled Features in Crm Application."
+msgstr ""
+
+#: Config.php:50
+msgid "Lead Import"
+msgstr ""
+
+#: Config.php:59
+msgid "Lead duplicate check fields"
+msgstr ""
+
+#: Config.php:61
+msgid ""
+"These fields are checked when a new lead is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
 msgstr ""

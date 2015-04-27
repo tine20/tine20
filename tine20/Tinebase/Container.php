@@ -1020,7 +1020,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $tm = Tinebase_TransactionManager::getInstance();   
         $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
-        
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Deleting container id ' . $containerId . ' ...');
+
         $deletedContainer = NULL;
         
         try {
@@ -1033,7 +1036,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     throw new Tinebase_Exception_InvalidArgument('Can delete personal or shared containers only.');
                 }
             }
-            $this->deleteContainerContents($container);
+            $this->deleteContainerContents($container, $_ignoreAcl);
             $deletedContainer = $this->_setRecordMetaDataAndUpdate($container, 'delete');
             
         } catch (Exception $e) {
@@ -1072,28 +1075,44 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @param Tinebase_Model_Container $container
      */
-    public function deleteContainerContents($container)
+    public function deleteContainerContents($container, $_ignoreAcl = FALSE)
     {
         // set records belonging to this container to deleted
         $model = $container->model;
-        if ($model) {
-            $controller = Tinebase_Core::getApplicationInstance($model);
-            $filterName = $model . 'Filter';
-            if ($controller && class_exists($filterName)) {
-                $filter = new $filterName(array(
-                    array(
-                        'field'    => 'container_id',
-                        'operator' => 'equals',
-                        'value'    => intval($container->id)
-                    ),
-                    array(
-                        'field'    => 'is_deleted',
-                        'operator' => 'equals',
-                        'value'    => 0
-                    )),
-                    'AND');
-                $controller::getInstance()->deleteByFilter($filter);
-            }
+
+        if (empty($model)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' No container model defined');
+            return;
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Deleting container contents ...');
+
+        $controller = Tinebase_Core::getApplicationInstance($model);
+        $filterName = $model . 'Filter';
+
+        if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+            $acl = $controller->doContainerACLChecks(FALSE);
+        }
+        if ($controller && class_exists($filterName)) {
+            $filter = new $filterName(array(
+                array(
+                    'field'    => 'container_id',
+                    'operator' => 'equals',
+                    'value'    => intval($container->id)
+                ),
+                array(
+                    'field'    => 'is_deleted',
+                    'operator' => 'equals',
+                    'value'    => 0
+                )),
+                'AND');
+            $controller::getInstance()->deleteByFilter($filter);
+        }
+
+        if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
+            $controller->doContainerACLChecks($acl);
         }
     }
     

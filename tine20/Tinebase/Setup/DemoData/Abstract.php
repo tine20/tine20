@@ -93,26 +93,26 @@ abstract class Tinebase_Setup_DemoData_Abstract
     protected $_groups = array(
         array(
             'groupData' => array(
-                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Managers', 'description' => 'Managers of the company'
+                'visibility' => 'displayed', 'name' => 'Managers', 'description' => 'Managers of the company'
             ),
             'groupMembers' => array('pwulf')
         ),
         array(
             'groupData' => array(
-                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'HumanResources', 'description' => 'Human Resources Managment'
+                'visibility' => 'displayed', 'name' => 'HumanResources', 'description' => 'Human Resources Managment'
             ),
             'groupMembers' => 
                 array('sclever', 'pwulf')
             ),
         array(
             'groupData' => array(
-                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Secretary', 'description' => 'Secretarys of the company'
+                'visibility' => 'displayed', 'name' => 'Secretary', 'description' => 'Secretarys of the company'
             ),
             'groupMembers' => array('sclever', 'pwulf')
         ),
         array(
             'groupData' => array(
-                'visibility' => 'displayed', 'container_id' => 1, 'name' => 'Controllers', 'description' => 'Controllers of the company'
+                'visibility' => 'displayed', 'name' => 'Controllers', 'description' => 'Controllers of the company'
             ),
             'groupMembers' => array('rwright', 'pwulf')
         ),

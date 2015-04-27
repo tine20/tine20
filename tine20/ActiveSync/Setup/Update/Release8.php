@@ -32,4 +32,20 @@ class ActiveSync_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('ActiveSync', '8.1');
     }
+
+    /**
+     * update to 8.2
+     *
+     * @see 0010752: update script for android 4.0 / lollipop devices
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $from = SQL_TABLE_PREFIX . 'acsync_device';
+        $where = array($this->_db->quoteIdentifier('useragent') . ' LIKE ?' => 'Android/4%');
+        $this->_db->delete($from, $where);
+
+        $this->setApplicationVersion('ActiveSync', '8.2');
+    }
 }

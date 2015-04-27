@@ -493,7 +493,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if (! isset($data['relations'])) {
                     $data['relations'] = array();
                 }
-                $data['relations'] = array_merge($data['relations'], $this->_mapRelation($_data[$key], $field));
+                $data['relations'] = array_merge($data['relations'], $this->_mapRelation($_data[$key], $field, $data));
             } else if (isset($field['separator'])) {
                 $data[$key] = $this->_splitBySeparator($field['separator'], $_data[$key]);
             } else if (isset($field['fixed'])) {
@@ -543,6 +543,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param array $fieldValue
      * @param array $field definition
+     * @param array $data
      * @return array
      *
      * <field>
@@ -554,9 +555,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *      <related_model>Addressbook_Model_Contact</related_model>
      *      <related_field>n_family</related_field> // map data to this field if no existing record found
      *      <degree>parent</degree>
+     *      <targetField>lead_name</targetField>
+     *      <targetFieldData>n_family, adr_one_locality</targetFieldData>
      * </field>
      */
-    protected function _mapRelation($fieldValue, $field)
+    protected function _mapRelation($fieldValue, $field, &$data)
     {
         if (! isset($field['related_model']) || ! isset($field['filter'])) {
             throw new Tinebase_Exception_UnexpectedValue('field config missing');
@@ -570,7 +573,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             // check if related record exists
             $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
             $filterModel = $field['related_model'] . 'Filter';
-            $operator = isset($field['operator']) ? isset($field['operator']) : 'equals';
+            $operator = isset($field['operator']) ? $field['operator'] : 'equals';
             $filter = new $filterModel(array(
                 array('field' => $field['filter'], 'operator' => $operator, 'value' => $value)
             ));
@@ -586,6 +589,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             // TODO add some more relation definition info?
 
             $relations[] = $relation;
+        }
+
+        if (isset($field['targetField'])&& isset($field['targetFieldData'])) {
+            $targetField = $field['targetFieldData'];
+            foreach ($record as $key => $value) {
+                $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
+            }
+            $data[$field['targetField']] = $targetField;
         }
         
         return $relations;
@@ -611,6 +622,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         $record = new $this->_options['model'](array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Record to import: ' . print_r($record->toArray(), TRUE));
+        }
         
         return $record;
     }
