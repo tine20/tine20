@@ -234,15 +234,17 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * get test container
      * 
      * @param string $applicationName
+     * @param string $model
      */
-    protected function _getTestContainer($applicationName)
+    protected function _getTestContainer($applicationName, $model = null)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'           => 'PHPUnit test container',
+            'name'           => 'PHPUnit ' . $model .' container',
             'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
             'owner_id'       => Tinebase_Core::getUser(),
             'backend'        => 'Sql',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId(),
+            'model'          => $model,
         ), true));
     }
     

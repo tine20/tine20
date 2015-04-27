@@ -1020,7 +1020,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $tm = Tinebase_TransactionManager::getInstance();   
         $myTransactionId = $tm->startTransaction(Tinebase_Core::getDb());
-        
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Deleting container id ' . $containerId . ' ...');
+
         $deletedContainer = NULL;
         
         try {
@@ -1077,6 +1080,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // set records belonging to this container to deleted
         $model = $container->model;
         if ($model) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Deleting container contents ...');
+
             $controller = Tinebase_Core::getApplicationInstance($model);
             $filterName = $model . 'Filter';
             if ($controller && class_exists($filterName)) {
@@ -1094,6 +1100,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     'AND');
                 $controller::getInstance()->deleteByFilter($filter);
             }
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' No container model defined');
         }
     }
     

@@ -109,6 +109,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         )),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'is_deleted'            => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
