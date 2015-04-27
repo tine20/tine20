@@ -115,7 +115,7 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
                     // init with default
                     $data[$requiredField] = isset($configSettings[$configKey][0]['id']) ? $configSettings[$configKey][0]['id'] : 1;
                     foreach ($configSettings[$configKey] as $setting) {
-                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && $setting[$settingField] === $_data[$settingField]) {
+                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && strtolower($setting[$settingField]) === strtolower($_data[$settingField])) {
                             $data[$requiredField] = $setting['id'];
                         }
                     }
