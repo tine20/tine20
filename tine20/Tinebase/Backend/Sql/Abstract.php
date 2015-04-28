@@ -1692,14 +1692,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * save value in in-class cache
      * 
-     * @param string $method
-     * @param string $cacheId
-     * @param string $value
+     * @param  string   $method
+     * @param  string   $cacheId
+     * @param  string   $value
+     * @param  string   $usePersistentCache
+     * @param  integer  $persistantCacheTTL
      * @return Tinebase_Cache_PerRequest
      */
-    public function saveInClassCache($method, $cacheId, $value)
+    public function saveInClassCache($method, $cacheId, $value, $usePersistentCache = false, $persistantCacheTTL = false)
     {
-        return Tinebase_Cache_PerRequest::getInstance()->save($this->_getInClassCacheIdentifier(), $method, $cacheId, $value);
+        return Tinebase_Cache_PerRequest::getInstance()->save($this->_getInClassCacheIdentifier(), $method, $cacheId, $value, $usePersistentCache, $persistantCacheTTL);
     }
     
     /**
@@ -1709,9 +1711,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param string $cacheId
      * @return mixed
      */
-    public function loadFromClassCache($method, $cacheId)
+    public function loadFromClassCache($method, $cacheId, $usePersistentCache = false)
     {
-        return Tinebase_Cache_PerRequest::getInstance()->load($this->_getInClassCacheIdentifier(), $method, $cacheId);
+        return Tinebase_Cache_PerRequest::getInstance()->load($this->_getInClassCacheIdentifier(), $method, $cacheId, $usePersistentCache);
     }
     
     /**
@@ -1722,7 +1724,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function resetClassCache($method = null)
     {
-        Tinebase_Cache_PerRequest::getInstance()->resetCache($this->_getInClassCacheIdentifier(), $method);
+        Tinebase_Cache_PerRequest::getInstance()->reset($this->_getInClassCacheIdentifier(), $method);
         
         return $this;
     }

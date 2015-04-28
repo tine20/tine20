@@ -1,11 +1,11 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -24,101 +24,101 @@ msgstr "%s osobistych plików"
 
 #: Exception/DestinationIsSameNode.php:26
 msgid "Destination has the same Path"
-msgstr ""
+msgstr "Miejsce docelowe ma tę samą ścieżkę"
 
 #: Exception/DestinationIsSameNode.php:31
 msgid ""
 "The destination has the same path the source has. No action has been "
 "performed."
-msgstr ""
+msgstr "Miejsce docelowe ma tę samą ścieżkę co źródło. Nie wykonano żadnej akcji."
 
 #: Exception/DestinationIsOwnChild.php:26
 msgid "Destination is a Subfolder"
-msgstr ""
+msgstr "Miejsce docelowe jest podkatalogiem"
 
 #: Exception/DestinationIsOwnChild.php:31
 msgid ""
 "The destination is a subfolder. It is not allowed to copy or move a folder "
 "into one of its subfolders."
-msgstr ""
+msgstr "Miejsce docelowe jest podkatalogiem. Nie wolno kopiować ani przesuwać katalogu do jego podkatalogów."
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:104
 msgid "manage shared folders"
 msgstr "zarządzanie wspólnymi katalogami"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:105
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
 
-#: Acl/Rights.php:107
-msgid "Manage anonymous download links"
-msgstr ""
-
 #: Acl/Rights.php:108
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
+msgid "Manage anonymous download links"
+msgstr "Zarządzaj anonimowymi adresami pobierania"
 
-#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:339
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr "Zezwól na podgląd, dodawanie i usuwanie adresów pobierania plików i katalogów"
+
+#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
 msgid "Save locally"
 msgstr "Zapisz lokalnie"
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "Edit folder"
-msgstr ""
+msgstr "Edytuj katalog"
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "edit file"
-msgstr ""
+msgstr "edytuj plik"
 
-#: js/NodeEditDialog.js:67 js/Model.js:43 js/NodeGridPanel.js:150
+#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] "Katalog"
 
-#: js/NodeEditDialog.js:67 js/Model.js:40
+#: js/NodeEditDialog.js:68 js/Model.js:40
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "Plik"
 msgstr[1] "pliki"
 msgstr[2] "pliki"
 
-#: js/NodeEditDialog.js:113
+#: js/NodeEditDialog.js:114
 msgid "Public Links"
-msgstr ""
+msgstr "Dowiązania publiczne"
 
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
+#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/NodeEditDialog.js:153 js/Model.js:527
+#: js/NodeEditDialog.js:154 js/Model.js:527
 msgid "Type"
 msgstr "Typ"
 
-#: js/NodeEditDialog.js:161 js/DownloadLinkGridPanel.js:244
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
 #: js/NodeGridPanel.js:182
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/NodeEditDialog.js:164 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
 #: js/NodeGridPanel.js:174
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/NodeEditDialog.js:173
+#: js/NodeEditDialog.js:174
 msgid "Modified By"
 msgstr "Zmieniane przez"
 
-#: js/NodeEditDialog.js:176
+#: js/NodeEditDialog.js:177
 msgid "Last Modified"
 msgstr "Ostatnio zmieniane"
 
-#: js/NodeEditDialog.js:199
+#: js/NodeEditDialog.js:200
 msgid "Description"
 msgstr "Opis"
 
-#: js/NodeEditDialog.js:213
+#: js/NodeEditDialog.js:214
 msgid "Enter description"
 msgstr "Wpisz opis"
 
@@ -131,7 +131,7 @@ msgstr "Przesyłanie zakończone niepowodzeniem"
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size:"
-msgstr ""
+msgstr "Wysłanie pliku było niemożliwe. Możliwe, że rozmiar pliku był zbyt duży. Proszę powiadomić administratora. Maks. rozmiar wysyłanych plików:"
 
 #: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
 msgid "Putting files in this folder is not allowed!"
@@ -139,31 +139,31 @@ msgstr "Wstawianie plików do tego katalogu jest niedozwolone!"
 
 #: js/DownloadLinkGridPanel.js:63
 msgid "Create Public Link"
-msgstr ""
+msgstr "Utwórz dowiązanie publiczne"
 
 #: js/DownloadLinkGridPanel.js:71
 msgid "Remove record"
-msgstr ""
+msgstr "Usuń wiersz"
 
 #: js/DownloadLinkGridPanel.js:133
 msgid "Creating new Download Link..."
-msgstr ""
+msgstr "Tworzenie nowego adresu pobierania..."
 
 #: js/DownloadLinkGridPanel.js:171
 msgid "Deleting Download Links..."
-msgstr ""
+msgstr "Usuwanie adresów pobierania..."
 
 #: js/DownloadLinkGridPanel.js:171
 msgid "Deleting Download Link..."
-msgstr ""
+msgstr "Usuwanie adresu pobierania..."
 
 #: js/DownloadLinkGridPanel.js:228
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
-msgstr ""
+msgstr "Czas wygaśnięcia"
 
 #: js/DownloadLinkGridPanel.js:269 js/NodeGridPanel.js:189
 msgid "Last Modified Time"
@@ -216,7 +216,7 @@ msgstr "Proszę czekać"
 
 #: js/Model.js:526
 msgid "Quick Search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
@@ -258,12 +258,7 @@ msgstr "Obiekt o takiej nazwie już istnieje!"
 
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
-msgstr ""
-
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr ""
+msgstr "Adresy pobierania z węzła"
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"
@@ -304,25 +299,25 @@ msgstr "Usuń"
 
 #: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
 msgid "Publish"
-msgstr ""
+msgstr "Publikuj"
 
 #: js/NodeGridPanel.js:422
 msgid "Folder has been published successfully"
-msgstr ""
+msgstr "Katalog opublikowany"
 
 #: js/NodeGridPanel.js:422
 msgid "File has been published successfully"
-msgstr ""
+msgstr "Plik opublikowany"
 
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Url: {0}"
-msgstr ""
+msgstr "Url: {0}"
 
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Valid Until: {1}"
-msgstr ""
+msgstr "Ważne do: {1}"
 
 #: js/NodeGridPanel.js:543
 msgid "New Folder"

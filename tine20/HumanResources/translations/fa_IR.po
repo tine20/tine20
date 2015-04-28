@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Persian (Iran) (http://www.transifex.com/projects/p/tine20/language/fa_IR/)\n"
 "MIME-Version: 1.0\n"
@@ -98,13 +98,13 @@ msgid ""
 msgstr ""
 
 #: Model/Employee.php:35 Model/Contract.php:49 Model/FreeTime.php:49
-#: Model/CostCenter.php:50 js/EmployeeEditDialog.js:185
-#: js/EmployeeEditDialog.js:198 js/FreeTimeEmployeeFilter.js:31
+#: Model/CostCenter.php:50 js/EmployeeEditDialog.js:184
+#: js/EmployeeEditDialog.js:197 js/FreeTimeEmployeeFilter.js:31
 msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] ""
 
-#: Model/Employee.php:50 js/EmployeeEditDialog.js:383
+#: Model/Employee.php:50 js/EmployeeEditDialog.js:382
 msgid "Banking Information"
 msgstr ""
 
@@ -116,22 +116,22 @@ msgstr ""
 msgid "Is employed"
 msgstr ""
 
-#: Model/Employee.php:71 js/EmployeeEditDialog.js:204
+#: Model/Employee.php:71 js/EmployeeEditDialog.js:203
 msgid "Number"
 msgstr ""
 
-#: Model/Employee.php:77 Model/FreeTime.php:60 js/EmployeeEditDialog.js:216
+#: Model/Employee.php:77 Model/FreeTime.php:60 js/EmployeeEditDialog.js:215
 msgid "Account"
 msgstr ""
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
-#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:153
-#: js/EmployeeEditDialog.js:428 js/FreeTimeEditDialog.js:505
+#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
+#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:519
 #: js/AccountEditDialog.js:161
 msgid "Description"
 msgstr ""
 
-#: Model/Employee.php:87 js/EmployeeEditDialog.js:314
+#: Model/Employee.php:87 js/EmployeeEditDialog.js:313
 msgid "Country"
 msgstr ""
 
@@ -139,19 +139,19 @@ msgstr ""
 msgid "Germany"
 msgstr ""
 
-#: Model/Employee.php:93 js/EmployeeEditDialog.js:317
+#: Model/Employee.php:93 js/EmployeeEditDialog.js:316
 msgid "Locality"
 msgstr ""
 
-#: Model/Employee.php:98 js/EmployeeEditDialog.js:320
+#: Model/Employee.php:98 js/EmployeeEditDialog.js:319
 msgid "Postalcode"
 msgstr ""
 
-#: Model/Employee.php:103 js/EmployeeEditDialog.js:323
+#: Model/Employee.php:103 js/EmployeeEditDialog.js:322
 msgid "Region"
 msgstr ""
 
-#: Model/Employee.php:108 js/EmployeeEditDialog.js:326
+#: Model/Employee.php:108 js/EmployeeEditDialog.js:325
 msgid "Street"
 msgstr ""
 
@@ -159,31 +159,31 @@ msgstr ""
 msgid "Street 2"
 msgstr ""
 
-#: Model/Employee.php:118 js/EmployeeEditDialog.js:332
+#: Model/Employee.php:118 js/EmployeeEditDialog.js:331
 msgid "E-Mail"
 msgstr ""
 
-#: Model/Employee.php:123 js/EmployeeEditDialog.js:335
+#: Model/Employee.php:123 js/EmployeeEditDialog.js:334
 msgid "Telephone Number"
 msgstr ""
 
-#: Model/Employee.php:128 js/EmployeeEditDialog.js:338
+#: Model/Employee.php:128 js/EmployeeEditDialog.js:337
 msgid "Cell Phone Number"
 msgstr ""
 
-#: Model/Employee.php:133 js/EmployeeEditDialog.js:277
+#: Model/Employee.php:133 js/EmployeeEditDialog.js:276
 msgid "Title"
 msgstr ""
 
-#: Model/Employee.php:136 js/EmployeeEditDialog.js:269
+#: Model/Employee.php:136 js/EmployeeEditDialog.js:268
 msgid "Salutation"
 msgstr ""
 
-#: Model/Employee.php:139 js/EmployeeEditDialog.js:290
+#: Model/Employee.php:139 js/EmployeeEditDialog.js:289
 msgid "Last Name"
 msgstr ""
 
-#: Model/Employee.php:142 js/EmployeeEditDialog.js:281
+#: Model/Employee.php:142 js/EmployeeEditDialog.js:280
 msgid "First Name"
 msgstr ""
 
@@ -191,51 +191,51 @@ msgstr ""
 msgid "Employee name"
 msgstr ""
 
-#: Model/Employee.php:150 js/EmployeeEditDialog.js:342
+#: Model/Employee.php:150 js/EmployeeEditDialog.js:341
 msgid "Birthday"
 msgstr ""
 
-#: Model/Employee.php:155 js/EmployeeEditDialog.js:392
+#: Model/Employee.php:155 js/EmployeeEditDialog.js:391
 msgid "Account Holder"
 msgstr ""
 
-#: Model/Employee.php:160 js/EmployeeEditDialog.js:395
+#: Model/Employee.php:160 js/EmployeeEditDialog.js:394
 msgid "Account Number"
 msgstr ""
 
-#: Model/Employee.php:178 js/EmployeeEditDialog.js:398
+#: Model/Employee.php:178 js/EmployeeEditDialog.js:397
 msgid "Bank Name"
 msgstr ""
 
-#: Model/Employee.php:183 js/EmployeeEditDialog.js:401
+#: Model/Employee.php:183 js/EmployeeEditDialog.js:400
 msgid "Code Number"
 msgstr ""
 
-#: Model/Employee.php:189 js/EmployeeEditDialog.js:359
+#: Model/Employee.php:189 js/EmployeeEditDialog.js:358
 msgid "Employment begin"
 msgstr ""
 
-#: Model/Employee.php:194 js/EmployeeEditDialog.js:366
+#: Model/Employee.php:194 js/EmployeeEditDialog.js:365
 msgid "Employment end"
 msgstr ""
 
-#: Model/Employee.php:199 js/EmployeeEditDialog.js:131
+#: Model/Employee.php:199 js/EmployeeEditDialog.js:130
 msgid "Supervisor"
 msgstr ""
 
-#: Model/Employee.php:210 js/EmployeeEditDialog.js:139
+#: Model/Employee.php:210 js/EmployeeEditDialog.js:138
 msgid "Division"
 msgstr ""
 
-#: Model/Employee.php:220 js/EmployeeEditDialog.js:146
+#: Model/Employee.php:220 js/EmployeeEditDialog.js:145
 msgid "Health Insurance"
 msgstr ""
 
-#: Model/Employee.php:224 js/EmployeeEditDialog.js:370
+#: Model/Employee.php:224 js/EmployeeEditDialog.js:369
 msgid "Profession"
 msgstr ""
 
-#: Model/Employee.php:227 js/EmployeeEditDialog.js:374
+#: Model/Employee.php:227 js/EmployeeEditDialog.js:373
 msgid "Position"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgstr ""
 msgid "Sickness"
 msgstr ""
 
-#: Model/Account.php:34 js/FreeTimeEditDialog.js:269
+#: Model/Account.php:34 js/FreeTimeEditDialog.js:271
 msgid "Personal account"
 msgid_plural "Personal accounts"
 msgstr[0] ""
@@ -279,17 +279,17 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
-#: Model/Contract.php:33 js/ContractEditDialog.js:210
-#: js/ContractEditDialog.js:223 js/ContractGridPanel.js:42
+#: Model/Contract.php:33 js/ContractEditDialog.js:212
+#: js/ContractEditDialog.js:225 js/ContractGridPanel.js:42
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 
-#: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:228
+#: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:230
 msgid "Start Date"
 msgstr ""
 
-#: Model/Contract.php:71 js/ContractEditDialog.js:229
+#: Model/Contract.php:71 js/ContractEditDialog.js:231
 msgid "End Date"
 msgstr ""
 
@@ -297,7 +297,7 @@ msgstr ""
 msgid "Vacation Days"
 msgstr ""
 
-#: Model/Contract.php:85 js/ContractEditDialog.js:240
+#: Model/Contract.php:85 js/ContractEditDialog.js:242
 msgid "Feast Calendar"
 msgstr ""
 
@@ -316,11 +316,11 @@ msgid_plural "Free Times"
 msgstr[0] ""
 
 #: Model/FreeTime.php:71 Model/ExtraFreeTime.php:58
-#: js/ExtraFreeTimeEditDialog.js:128
+#: js/ExtraFreeTimeEditDialog.js:127
 msgid "Type"
 msgstr ""
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:354
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:369
 msgid "Status"
 msgstr ""
 
@@ -340,17 +340,17 @@ msgstr ""
 msgid "Free Days"
 msgstr ""
 
-#: Model/ExtraFreeTime.php:33 js/ExtraFreeTimeEditDialog.js:98
-#: js/ExtraFreeTimeEditDialog.js:110 js/AccountEditDialog.js:74
+#: Model/ExtraFreeTime.php:33 js/ExtraFreeTimeEditDialog.js:97
+#: js/ExtraFreeTimeEditDialog.js:109 js/AccountEditDialog.js:74
 msgid "Extra free time"
 msgid_plural "Extra free times"
 msgstr[0] ""
 
-#: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:123
+#: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:122
 msgid "Days"
 msgstr ""
 
-#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:131
+#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:130
 msgid "Expiration date"
 msgstr ""
 
@@ -360,8 +360,8 @@ msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] ""
 
-#: js/ExtraFreeTimeEditDialog.js:167 js/EmployeeEditDialog.js:442
-#: js/FreeTimeEditDialog.js:519
+#: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
+#: js/FreeTimeEditDialog.js:533
 msgid "Enter description"
 msgstr ""
 
@@ -377,11 +377,11 @@ msgstr ""
 msgid "Please use the following format: MM-DD"
 msgstr ""
 
-#: js/AdminPanel.js:219 js/ContractEditDialog.js:233
+#: js/AdminPanel.js:219 js/ContractEditDialog.js:235
 msgid "Calendar"
 msgstr ""
 
-#: js/AdminPanel.js:220 js/ContractEditDialog.js:234
+#: js/AdminPanel.js:220 js/ContractEditDialog.js:236
 msgid "Calendars"
 msgstr ""
 
@@ -435,106 +435,106 @@ msgstr ""
 msgid "Export as XLS"
 msgstr ""
 
-#: js/DatePicker.js:102
+#: js/DatePicker.js:107
 msgid "WK"
 msgstr ""
 
-#: js/DatePicker.js:163
+#: js/DatePicker.js:171
 msgid "Loading calendar data..."
 msgstr ""
 
-#: js/DatePicker.js:392
+#: js/DatePicker.js:406
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:393
+#: js/DatePicker.js:407
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:451
+#: js/DatePicker.js:472
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:452
+#: js/DatePicker.js:473
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
 "from."
 msgstr ""
 
-#: js/ContractEditDialog.js:86
+#: js/ContractEditDialog.js:88
 #, python-brace-format
 msgid "Edit {0}"
 msgstr ""
 
-#: js/ContractEditDialog.js:248 js/AccountEditDialog.js:135 js/Models.js:23
+#: js/ContractEditDialog.js:250 js/AccountEditDialog.js:135 js/Models.js:23
 msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] ""
 
-#: js/ContractEditDialog.js:256
+#: js/ContractEditDialog.js:258
 msgid "Choose the template"
 msgstr ""
 
-#: js/ContractEditDialog.js:266
+#: js/ContractEditDialog.js:268
 msgid "Working Hours per week"
 msgstr ""
 
-#: js/ContractEditDialog.js:274
+#: js/ContractEditDialog.js:276
 msgid "Vacation days of one calendar year"
 msgstr ""
 
-#: js/ContractEditDialog.js:278
+#: js/ContractEditDialog.js:280
 msgid "Mon."
 msgstr ""
 
-#: js/ContractEditDialog.js:281
+#: js/ContractEditDialog.js:283
 msgid "Tue."
 msgstr ""
 
-#: js/ContractEditDialog.js:284
+#: js/ContractEditDialog.js:286
 msgid "Wed."
 msgstr ""
 
-#: js/ContractEditDialog.js:287
+#: js/ContractEditDialog.js:289
 msgid "Thu."
 msgstr ""
 
-#: js/ContractEditDialog.js:290
+#: js/ContractEditDialog.js:292
 msgid "Fri."
 msgstr ""
 
-#: js/ContractEditDialog.js:293
+#: js/ContractEditDialog.js:295
 msgid "Sat."
 msgstr ""
 
-#: js/ContractEditDialog.js:296
+#: js/ContractEditDialog.js:298
 msgid "Sun."
 msgstr ""
 
-#: js/EmployeeEditDialog.js:107
+#: js/EmployeeEditDialog.js:106
 msgid "Account is disabled or deleted!"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:235
+#: js/EmployeeEditDialog.js:234
 msgid "Apply contact data on form"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:264
+#: js/EmployeeEditDialog.js:263
 msgid "Full Name"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:304
+#: js/EmployeeEditDialog.js:303
 msgid "Personal Information"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:329
+#: js/EmployeeEditDialog.js:328
 msgid "Street2"
 msgstr ""
 
-#: js/EmployeeEditDialog.js:350
+#: js/EmployeeEditDialog.js:349
 msgid "Internal Information"
 msgstr ""
 
@@ -572,22 +572,22 @@ msgstr[0] ""
 msgid "Startdate"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:157
+#: js/FreeTimeEditDialog.js:155
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:171
+#: js/FreeTimeEditDialog.js:169
 #, python-brace-format
 msgid "Edit {0} for {1}"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:173
+#: js/FreeTimeEditDialog.js:171
 #, python-brace-format
 msgid "Add {0} for {1}"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:187
+#: js/FreeTimeEditDialog.js:186
 msgid "You have to select at least one day to save this sickness entry."
 msgstr ""
 
@@ -599,12 +599,22 @@ msgstr ""
 msgid "No day selected"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:433
+#: js/FreeTimeEditDialog.js:447
 msgid "Remaining"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:486
+#: js/FreeTimeEditDialog.js:500
 msgid "Select Days"
+msgstr ""
+
+#: js/ContractGridPanel.js:150
+msgid "Vacation in same period"
+msgstr ""
+
+#: js/ContractGridPanel.js:151
+msgid ""
+"There are some vacation days matching the period of the contract you added. "
+"After saving this employee, changing the contract is not possible anymore."
 msgstr ""
 
 #: js/AccountEditDialog.js:52

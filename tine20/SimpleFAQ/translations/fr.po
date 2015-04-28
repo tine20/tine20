@@ -57,7 +57,7 @@ msgstr "Trouver une question"
 msgid "Search question"
 msgstr "Chercher une question"
 
-#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
+#: js/SimpleFAQ.js:46 js/FaqGridPanel.js:105 js/FaqEditDialog.js:106
 #: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "Réponse"
@@ -96,15 +96,15 @@ msgstr "numéro de la FAQ"
 msgid "Tags"
 msgstr "Marqueurs"
 
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
 msgid "Status"
 msgstr "Statut"
 
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
 msgid "Type"
 msgstr "Type"
 
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:99 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "Question"
 
@@ -126,11 +126,11 @@ msgstr "Recherche rapide"
 msgid "Search FAQ"
 msgstr "Chercher dans la FAQ"
 
-#: js/FaqEditDialog.js:111
+#: js/FaqEditDialog.js:100
 msgid "Enter a question..."
 msgstr "Inscrire une question"
 
-#: js/FaqEditDialog.js:118
+#: js/FaqEditDialog.js:107
 msgid "Enter a answer..."
 msgstr "Inscrire une réponse"
 

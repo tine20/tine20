@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-04-27 11:21+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -22,19 +22,19 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "Việc cá nhân của %s"
 
-#: Acl/Rights.php:96
+#: Acl/Rights.php:97
 msgid "manage shared task lists"
 msgstr "Quản lý danh sách công việc dùng chung"
 
-#: Acl/Rights.php:97
+#: Acl/Rights.php:98
 msgid "Create new shared tasks lists"
 msgstr "Tạo danh sách công việc dùng chung"
 
-#: Acl/Rights.php:100
+#: Acl/Rights.php:101
 msgid "manage shared tasks favorites"
 msgstr "Quản lý lối tắt công việc chung"
 
-#: Acl/Rights.php:101
+#: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Tạo/ cập nhật lối tắt công việc chung"
 
@@ -64,7 +64,7 @@ msgstr[0] "one: Trạng thái\nother: Trạng thái"
 msgid "Percent"
 msgstr "Phần trăm"
 
-#: Model/Task.php:219 js/TaskGridPanel.js:87
+#: Model/Task.php:219
 msgid "Lead"
 msgstr "Chủ trì"
 
@@ -121,6 +121,10 @@ msgstr[0] "one: Bạn có muốn xóa công việc đã chọn?\nother: Bạn c�
 #: js/TaskGridPanel.js:82
 msgid "Tags"
 msgstr "Thẻ"
+
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
+msgstr ""
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."

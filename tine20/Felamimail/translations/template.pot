@@ -306,8 +306,8 @@ msgid "Last update:"
 msgstr ""
 
 #: js/TreePanel.js:732
-#, python-format, python-brace-format
-msgid "Fetching messages... ({0}%% done)"
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
 msgstr ""
 
 #: js/TreePanel.js:748

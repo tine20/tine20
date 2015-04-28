@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-04-28 07:43+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Export/Pdf.php:216 js/widgets/tags/TagsPanel.js:57
-#: js/widgets/tags/TagsPanel.js:426
+#: js/widgets/tags/TagsPanel.js:427
 msgid "Tags"
 msgstr "Etiketa"
 
@@ -31,15 +31,15 @@ msgstr "Krijuar nga"
 msgid "Activities"
 msgstr "Aktivitete"
 
-#: Export/Spreadsheet/Ods.php:370
+#: Export/Spreadsheet/Ods.php:400
 msgid "Data"
 msgstr "Të dhëna"
 
-#: Export/Spreadsheet/Xls.php:365
+#: Export/Spreadsheet/Xls.php:370
 msgid "Without company assigned"
 msgstr ""
 
-#: User/Sql.php:1097
+#: User/Sql.php:1093
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
@@ -143,21 +143,29 @@ msgstr "Menaxho gjëndjen e klientëve vetjak"
 msgid "The right to manage the own client state."
 msgstr "E drejta e menaxhimit të gjëndjes së klientëve vetjak "
 
-#: Acl/Rights/Abstract.php:72
+#: Acl/Rights/Abstract.php:79
 msgid "admin"
 msgstr "admin"
 
-#: Acl/Rights/Abstract.php:73
+#: Acl/Rights/Abstract.php:80
 msgid "admin right description"
 msgstr "përshkrim i të drejtave të admin"
 
-#: Acl/Rights/Abstract.php:76
+#: Acl/Rights/Abstract.php:83
 msgid "run"
 msgstr "vepro"
 
-#: Acl/Rights/Abstract.php:77
+#: Acl/Rights/Abstract.php:84
 msgid "run right description"
 msgstr "kryej përshkrimin e të drejtave"
+
+#: Acl/Rights/Abstract.php:87
+msgid "Personal tags"
+msgstr ""
+
+#: Acl/Rights/Abstract.php:88
+msgid "Use and see personal tags"
+msgstr ""
 
 #: Preference/Abstract.php:517
 msgid "default"
@@ -175,11 +183,11 @@ msgstr "Fusha të ndryshuara"
 msgid "enter searchfilter"
 msgstr "vendosni filtrin e kërkimit"
 
-#: js/ux/PopupWindow.js:236
+#: js/ux/PopupWindow.js:242
 msgid "Window can be closed"
 msgstr ""
 
-#: js/ux/PopupWindow.js:237
+#: js/ux/PopupWindow.js:243
 #, python-brace-format
 msgid ""
 "This Window can be closed now. To avoid this message please deactivate your "
@@ -228,33 +236,34 @@ msgstr "në linjë"
 msgid "offline"
 msgstr "jashtë linje"
 
-#: js/ux/form/LayerCombo.js:186 js/PasswordChangeDialog.js:66
+#: js/ux/form/LayerCombo.js:186 js/PasswordChangeDialog.js:65
 #: js/LicenseScreen.js:51 js/widgets/account/ChangeAccountAction.js:78
 #: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:490
-#: js/widgets/ActivitiesPanel.js:340
 #: js/widgets/tags/TagsMassAttachAction.js:84
+#: js/widgets/ActivitiesGridPanel.js:377
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:432
+#: js/widgets/dialog/EditDialog.js:439
 #: js/widgets/dialog/ExceptionHandlerDialog.js:197 js/CreditsScreen.js:53
 #: js/AboutDialog.js:61
 msgid "Ok"
 msgstr "Ok"
 
 #: js/ux/form/LayerCombo.js:193 js/ExceptionDialog.js:109
-#: js/ExceptionDialog.js:119 js/PasswordChangeDialog.js:60
+#: js/ExceptionDialog.js:119 js/PasswordChangeDialog.js:59
 #: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
 #: js/widgets/container/ContainerSelect.js:481
-#: js/widgets/ActivitiesPanel.js:332 js/widgets/tags/TagToggleBox.js:59
+#: js/widgets/tags/TagToggleBox.js:59
 #: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/ActivitiesGridPanel.js:369
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
-#: js/widgets/dialog/WizardPanel.js:187
+#: js/widgets/dialog/WizardPanel.js:189
 #: js/widgets/dialog/DuplicateMergeDialog.js:79
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:452
+#: js/widgets/dialog/EditDialog.js:459
 #: js/widgets/dialog/ExceptionHandlerDialog.js:189
 msgid "Cancel"
 msgstr "Anullo"
@@ -317,7 +326,7 @@ msgstr "zgjidh tjetër {0}..."
 msgid "Software Version"
 msgstr "Versioni i programit"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:432
+#: js/ExceptionDialog.js:62 Frontend/Http.php:435
 msgid "Abnormal End"
 msgstr "Mbyllje e pazakontë"
 
@@ -325,7 +334,7 @@ msgstr "Mbyllje e pazakontë"
 msgid "Send Report"
 msgstr "Dërgo Raport"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:433
+#: js/ExceptionDialog.js:154 Frontend/Http.php:436
 msgid "An error occurred, the program ended abnormal."
 msgstr "Ndodhi një gabim , programi përfundoi në menyrë jo normale"
 
@@ -339,7 +348,7 @@ msgid ""
 "description of what you where doing when the error occurred."
 msgstr "Ju ltem ndihmoni përmirësimin e këtij programi dhe njoftoni shitësin. Përfshini nje përshkrim të shkurtërtë asaj që po bënit kur ndodhi gabimi."
 
-#: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:508
+#: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:509
 #: js/widgets/relation/GenericPickerGridPanel.js:458
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 msgid "Description"
@@ -378,7 +387,7 @@ msgid "Profile Information"
 msgstr "Informacion i Profilit"
 
 #: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:450
 msgid "Apply"
 msgstr "Apliko"
 
@@ -405,7 +414,7 @@ msgstr "Modifiko"
 msgid "The field is editable part of the profile"
 msgstr "Fusha është pjese e modifikueshme e profilit"
 
-#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:203
+#: js/AdminPanel.js:175 js/widgets/dialog/DuplicateResolveGridPanel.js:219
 msgid "Field Name"
 msgstr "Emri i Fushës"
 
@@ -431,7 +440,7 @@ msgid ""
 "administrator."
 msgstr "Nuk ka aplikacione të aktivizuara per ju. Ju lutem kontaktoni administratorin"
 
-#: js/ApplicationStarter.js:545
+#: js/ApplicationStarter.js:551
 msgid "New "
 msgstr ""
 
@@ -460,83 +469,83 @@ msgstr "Imi {0}"
 msgid "Change Password For \"{0}\""
 msgstr "Ndyshoni Fjalëkalimin për \"{0}\""
 
-#: js/PasswordChangeDialog.js:48
+#: js/PasswordChangeDialog.js:47
 msgid "Old Password"
 msgstr "Fjalëkalimi i vjetër"
 
-#: js/PasswordChangeDialog.js:52
+#: js/PasswordChangeDialog.js:51
 msgid "New Password"
 msgstr "Fjalëkalimi i ri"
 
-#: js/PasswordChangeDialog.js:56
+#: js/PasswordChangeDialog.js:55
 msgid "Repeat new Password"
 msgstr "Përsërisni fjalëkalimin e ri"
 
-#: js/PasswordChangeDialog.js:75
+#: js/PasswordChangeDialog.js:74
 msgid "Please Wait!"
 msgstr "Ju lutem prisni"
 
-#: js/PasswordChangeDialog.js:76
+#: js/PasswordChangeDialog.js:75
 msgid "changing password..."
 msgstr "duke ndryshuar fjalëkalimin"
 
-#: js/PasswordChangeDialog.js:87
+#: js/PasswordChangeDialog.js:86
 msgid "Success"
 msgstr "Sukses"
 
-#: js/PasswordChangeDialog.js:88
+#: js/PasswordChangeDialog.js:87
 msgid "Your password has been changed."
 msgstr "Fjalëkalimi juaj u ndryshua"
 
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/PasswordChangeDialog.js:99 js/PasswordChangeDialog.js:109
 #: js/widgets/relation/GenericPickerGridPanel.js:917
 #: js/widgets/relation/GenericPickerGridPanel.js:930
-#: js/widgets/dialog/ImportDialog.js:658
+#: js/widgets/dialog/ImportDialog.js:664
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
 msgid "Failure"
 msgstr "Dështim"
 
-#: js/PasswordChangeDialog.js:111
+#: js/PasswordChangeDialog.js:110
 msgid "The new passwords mismatch, please correct them."
 msgstr "Fjalëkalimet e reja mospërputhen, ju lutem korrigjoini"
 
-#: js/common.js:285
+#: js/common.js:306
 msgid "Usage:&#160;"
 msgstr "Perdorur:&#160;"
 
-#: js/common.js:306 js/common.js:311 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:327 js/common.js:332 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
-#: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:137
+#: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:138
 msgid "personal"
 msgstr "personal"
 
-#: js/common.js:324 js/common.js:362
+#: js/common.js:345 js/common.js:383
 msgid "No Information"
 msgstr "Nuk ka Informacion"
 
-#: js/common.js:411
+#: js/common.js:453
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minutë"
 msgstr[1] "{0} minuta"
 
-#: js/common.js:412
+#: js/common.js:454
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} orë"
 msgstr[1] "{0} orë"
 
-#: js/common.js:413
+#: js/common.js:455
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} ditë punë"
 msgstr[1] "{0} ditë punë"
 
-#: js/common.js:440
+#: js/common.js:482
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
@@ -551,7 +560,7 @@ msgstr "Liçensë"
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Fjalëkalimi juaj skadoi, Ju lutem vendosni nje fjalëkalim të ri:"
 
-#: js/widgets/TimezoneChooser.js:37 Preference.php:142
+#: js/widgets/TimezoneChooser.js:37 Preference.php:148
 msgid "Timezone"
 msgstr "Zonë Kohore"
 
@@ -610,17 +619,17 @@ msgstr ""
 msgid "Changing user account ..."
 msgstr ""
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:500
-#: js/widgets/dialog/EditDialog.js:528
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:507
+#: js/widgets/dialog/EditDialog.js:535
 msgid "Saved in"
 msgstr "Ruajtur në"
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:461
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:468
 msgid "delete"
 msgstr "fshij"
 
-#: js/widgets/tree/ContextMenu.js:35 js/widgets/grid/FileUploadGrid.js:296
-#: js/widgets/grid/GridPanel.js:579
+#: js/widgets/tree/ContextMenu.js:35 js/widgets/ActivitiesGridPanel.js:241
+#: js/widgets/grid/FileUploadGrid.js:296 js/widgets/grid/GridPanel.js:587
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Shto {0}"
@@ -630,8 +639,8 @@ msgstr "Shto {0}"
 msgid "Rename {0}"
 msgstr "Riemëro {0}"
 
-#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:653
-#: js/widgets/grid/GridPanel.js:654 js/widgets/grid/GridPanel.js:656
+#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:661
+#: js/widgets/grid/GridPanel.js:662 js/widgets/grid/GridPanel.js:664
 #, python-brace-format
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -724,9 +733,9 @@ msgstr "{0} e pa riemëruar"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1811
+#: js/widgets/grid/GridPanel.js:1846
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
-#: js/widgets/dialog/EditDialog.js:885 js/MainMenu.js:260
+#: js/widgets/dialog/EditDialog.js:902 js/MainMenu.js:260
 msgid "Confirm"
 msgstr "Konfirmo"
 
@@ -769,7 +778,7 @@ msgid "Properties"
 msgstr "Karakterisitikat"
 
 #: js/widgets/container/PropertiesDialog.js:113
-#: js/widgets/tags/TagsPanel.js:512
+#: js/widgets/tags/TagsPanel.js:513
 msgid "Color"
 msgstr "Ngjyrë"
 
@@ -817,8 +826,7 @@ msgstr "Ju nuk lejoheni të hiqni të gjithë administratorët për këtë konte
 msgid "The grant to read records of this container"
 msgstr "E drejta e leximit të të dhënave të ketij kontenieri"
 
-#: js/widgets/container/GrantsGrid.js:45 js/widgets/ActivitiesPanel.js:168
-#: js/widgets/ActivitiesPanel.js:181
+#: js/widgets/container/GrantsGrid.js:45
 msgid "Add"
 msgstr "Shto"
 
@@ -907,72 +915,49 @@ msgstr "kontenierë"
 msgid "Favorites"
 msgstr "Të preferuarat"
 
-#: js/widgets/ActivitiesPanel.js:153
-msgid "Add a Note..."
-msgstr "Shto një Shënim..."
-
-#: js/widgets/ActivitiesPanel.js:168 js/widgets/ActivitiesPanel.js:491
-msgid "Note"
-msgstr "Shënim"
-
-#: js/widgets/ActivitiesPanel.js:182 js/widgets/ActivitiesPanel.js:413
-msgid "Add new note"
-msgstr "Shto shënim të ri"
-
-#: js/widgets/ActivitiesPanel.js:209 js/widgets/ActivitiesPanel.js:228
-msgid "Notes"
-msgstr "Shënime"
-
-#: js/widgets/ActivitiesPanel.js:311
-msgid "Enter new note:"
-msgstr "Vendosni shënim të ri:"
-
-#: js/widgets/ActivitiesPanel.js:356 js/widgets/ActivitiesPanel.js:412
-msgid "Add Note"
-msgstr "Shto Shënim"
-
-#: js/widgets/ActivitiesPanel.js:399
-#, python-brace-format
-msgid "Add a {0} Note"
-msgstr "Shto një shënim {0}"
-
-#: js/widgets/ActivitiesPanel.js:489 js/widgets/ActivitiesPanel.js:626
+#: js/widgets/ActivitiesPanel.js:76 js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesGridPanel.js:97
 #: js/widgets/relation/GenericPickerGridPanel.js:461
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Tip"
 
-#: js/widgets/ActivitiesPanel.js:492 js/widgets/grid/GridPanel.js:1421
+#: js/widgets/ActivitiesPanel.js:78 js/widgets/ActivitiesGridPanel.js:106
+msgid "Note"
+msgstr "Shënim"
+
+#: js/widgets/ActivitiesPanel.js:79 js/widgets/ActivitiesGridPanel.js:112
+#: js/widgets/grid/GridPanel.js:1456
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr "Krijuar nga"
 
-#: js/widgets/ActivitiesPanel.js:493
+#: js/widgets/ActivitiesPanel.js:80
 msgid "Timestamp"
 msgstr "Vulë Kohore"
 
-#: js/widgets/ActivitiesPanel.js:507
+#: js/widgets/ActivitiesPanel.js:94
 #, python-brace-format
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Duke shfaqur të dhënat e historise {0} - {1} nga {2}"
 
-#: js/widgets/ActivitiesPanel.js:508
+#: js/widgets/ActivitiesPanel.js:95
 msgid "No history to display"
 msgstr "Nuk ka histori për të shfaqur"
 
-#: js/widgets/ActivitiesPanel.js:608
+#: js/widgets/ActivitiesPanel.js:193
 msgid "History"
 msgstr "Histori"
 
-#: js/widgets/ActivitiesPanel.js:620
+#: js/widgets/ActivitiesPanel.js:205
 msgid "Quick Search"
 msgstr "Kërkim i Shpejtë"
 
-#: js/widgets/ActivitiesPanel.js:621 js/widgets/ActivitiesPanel.js:622
+#: js/widgets/ActivitiesPanel.js:206 js/widgets/ActivitiesPanel.js:207
 msgid "Time"
 msgstr "Kohë"
 
-#: js/widgets/ActivitiesPanel.js:624
+#: js/widgets/ActivitiesPanel.js:209
 msgid "User"
 msgstr "Përdorues"
 
@@ -1034,108 +1019,138 @@ msgstr "emri etiketës"
 msgid "Add a new personal tag"
 msgstr "Shto një etiektë vetjake të re"
 
-#: js/widgets/tags/TagsPanel.js:117
+#: js/widgets/tags/TagsPanel.js:118
 msgid "Add New Personal Tag"
 msgstr "Shto Ediketë vetjake të re"
 
-#: js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:119
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Kujdes: Ju krijuat një etiketë vetjake. Mund ta shihni vetëm Ju!"
 
-#: js/widgets/tags/TagsPanel.js:118
+#: js/widgets/tags/TagsPanel.js:119
 msgid "Enter tag name:"
 msgstr "Vendosni emrin e etiketës"
 
-#: js/widgets/tags/TagsPanel.js:159
+#: js/widgets/tags/TagsPanel.js:160
 msgid "No Tags to display"
 msgstr "Nuk ka etiketa për të shfaqur"
 
-#: js/widgets/tags/TagsPanel.js:182
+#: js/widgets/tags/TagsPanel.js:183
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Shqit etiketën"
 msgstr[1] "Shqit etiketat"
 
-#: js/widgets/tags/TagsPanel.js:192
+#: js/widgets/tags/TagsPanel.js:193
 msgid "Edit tag"
 msgstr "Modifiko etiketën"
 
-#: js/widgets/tags/TagsPanel.js:197 js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:198 js/widgets/tags/TagsPanel.js:203
 msgid "Rename Tag"
 msgstr "Riemëro Etiketën"
 
-#: js/widgets/tags/TagsPanel.js:202
+#: js/widgets/tags/TagsPanel.js:203
 msgid "Please enter a new name:"
 msgstr "Ju lutem vendosni një emër të ri:"
 
-#: js/widgets/tags/TagsPanel.js:211
+#: js/widgets/tags/TagsPanel.js:212
 msgid "Edit Description"
 msgstr "Modifiko përshkrimin"
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:217
 msgid "Description for tag"
 msgstr "Përshkrimi për etiketën"
 
-#: js/widgets/tags/TagsPanel.js:216
+#: js/widgets/tags/TagsPanel.js:217
 msgid "Please enter new description:"
 msgstr "Ju lutem vendosni një përshkrim të ri"
 
-#: js/widgets/tags/TagsPanel.js:225
+#: js/widgets/tags/TagsPanel.js:226
 msgid "Change Color"
 msgstr "Ndrysho ngjyrën"
 
-#: js/widgets/tags/TagsPanel.js:254
+#: js/widgets/tags/TagsPanel.js:255
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Fshij Etiketën"
 msgstr[1] "Fshij Etiketat"
 
-#: js/widgets/tags/TagsPanel.js:267
+#: js/widgets/tags/TagsPanel.js:268
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Vërtet të fshini Etiketën e Zgjedhur?"
 msgstr[1] "Vërtet të fshini Etiketat e Zgjedhura?"
 
-#: js/widgets/tags/TagsPanel.js:268
+#: js/widgets/tags/TagsPanel.js:269
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Etiketa e zgjedhur do të fshiet dhe do të zhduket nga të gjithë të dhënat"
 msgstr[1] "Etiketat e zgjedhura do tV fshien dhe do të zhduken nga të gjithë të dhënat"
 
-#: js/widgets/tags/TagsPanel.js:272
+#: js/widgets/tags/TagsPanel.js:273
 msgid "Please wait a moment..."
 msgstr "Ju lutem prisni pak..."
 
-#: js/widgets/tags/TagsPanel.js:272
+#: js/widgets/tags/TagsPanel.js:273
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Duke fshirë Etiketën"
 msgstr[1] "Dike fshirë Etiketat"
 
-#: js/widgets/tags/TagsPanel.js:288 js/widgets/tags/TagsPanel.js:380
-#: js/widgets/tags/TagsPanel.js:413 js/widgets/dialog/EditDialog.js:897
+#: js/widgets/tags/TagsPanel.js:289 js/widgets/tags/TagsPanel.js:381
+#: js/widgets/tags/TagsPanel.js:414 js/widgets/dialog/EditDialog.js:914
 msgid "Failed"
 msgstr "Dështoi"
 
-#: js/widgets/tags/TagsPanel.js:288
+#: js/widgets/tags/TagsPanel.js:289
 msgid "Could not delete Tag(s)."
 msgstr "Nuk mund të fshij Etiketën(at)"
 
-#: js/widgets/tags/TagsPanel.js:332 js/widgets/tags/TagsPanel.js:394
+#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
 msgid "Notice"
 msgstr "Njoftim"
 
-#: js/widgets/tags/TagsPanel.js:333 js/widgets/tags/TagsPanel.js:395
+#: js/widgets/tags/TagsPanel.js:334 js/widgets/tags/TagsPanel.js:396
 msgid "The minimum tag length is three."
 msgstr "Gjatësia minimale e etiketës është tre."
 
-#: js/widgets/tags/TagsPanel.js:380
+#: js/widgets/tags/TagsPanel.js:381
 msgid "Could not create tag."
 msgstr "Nuk mund të krijoj etiketën"
 
-#: js/widgets/tags/TagsPanel.js:413
+#: js/widgets/tags/TagsPanel.js:414
 msgid "Could not update tag."
 msgstr "Nuk mund të përditësoj etiketën"
+
+#: js/widgets/ActivitiesGridPanel.js:58
+msgid "Notes"
+msgstr "Shënime"
+
+#: js/widgets/ActivitiesGridPanel.js:117
+msgid "Creation time"
+msgstr ""
+
+#: js/widgets/ActivitiesGridPanel.js:248 js/widgets/grid/GridPanel.js:334
+#: js/widgets/grid/GridPanel.js:561 js/widgets/grid/GridPanel.js:562
+#: js/widgets/grid/GridPanel.js:563
+#, python-brace-format
+msgid "Edit {0}"
+msgid_plural "Edit {0}"
+msgstr[0] "Modifiko {0}"
+msgstr[1] "Modifiko {0}"
+
+#: js/widgets/ActivitiesGridPanel.js:257 js/widgets/grid/FileUploadGrid.js:179
+#, python-brace-format
+msgid "Remove {0}"
+msgstr "Hiq {0}"
+
+#: js/widgets/ActivitiesGridPanel.js:343
+msgid "Enter new note:"
+msgstr "Vendosni shënim të ri:"
+
+#: js/widgets/ActivitiesGridPanel.js:393
+msgid "Add Note"
+msgstr "Shto Shënim"
 
 #: js/widgets/MainScreen.js:264
 msgid "Save current view as favorite"
@@ -1213,7 +1228,7 @@ msgid ""
 msgstr "E dhëna nuk mund të hapet. Nuk ekziston ndonjë dialog për të modifikuar këtë të dhënë"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/grid/GridPanel.js:1149
+#: js/widgets/grid/GridPanel.js:1184
 msgid "Record"
 msgstr "E dhënë"
 
@@ -1226,7 +1241,7 @@ msgid "Dependency"
 msgstr "Varësi"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:462
-#: js/widgets/grid/GridPanel.js:1420
+#: js/widgets/grid/GridPanel.js:1455
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Koha e kijimit"
@@ -1268,7 +1283,7 @@ msgstr "I përgjithshëm"
 msgid "Custom Fields"
 msgstr "Fusha të personalizuara"
 
-#: js/widgets/LangChooser.js:35 Preference.php:146
+#: js/widgets/LangChooser.js:35 Preference.php:152
 msgid "Language"
 msgstr "Gjuha"
 
@@ -1468,11 +1483,6 @@ msgid ""
 "Administrator. Max upload size:"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:179
-#, python-brace-format
-msgid "Remove {0}"
-msgstr "Hiq {0}"
-
 #: js/widgets/grid/FileUploadGrid.js:338
 msgid "name"
 msgstr "emër"
@@ -1485,98 +1495,90 @@ msgstr "madhësi"
 msgid "type"
 msgstr "tip"
 
-#: js/widgets/grid/GridPanel.js:323
+#: js/widgets/grid/GridPanel.js:331
 #, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
 msgstr "Nuk u gjet ndonjë {0}. Ju lutem provoni të ndryshoni kriteret e fitrave tuaj,opsionet e pamjes ose {1} ju po kërkoni"
 
-#: js/widgets/grid/GridPanel.js:324
+#: js/widgets/grid/GridPanel.js:332
 #, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or change the module you search in."
 msgstr " Nuk u gjet ndonjë {0}. Ju lutem ndryshoni kerkesat e filtrave, opsoniet e pamjes, ose ndryshoni modulin ku po kerkoni"
 
-#: js/widgets/grid/GridPanel.js:326 js/widgets/grid/GridPanel.js:553
-#: js/widgets/grid/GridPanel.js:554 js/widgets/grid/GridPanel.js:555
-#, python-brace-format
-msgid "Edit {0}"
-msgid_plural "Edit {0}"
-msgstr[0] "Modifiko {0}"
-msgstr[1] "Modifiko {0}"
-
-#: js/widgets/grid/GridPanel.js:568 js/widgets/dialog/EditDialog.js:657
+#: js/widgets/grid/GridPanel.js:576 js/widgets/dialog/EditDialog.js:674
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "Kopje {0}"
 
-#: js/widgets/grid/GridPanel.js:587
+#: js/widgets/grid/GridPanel.js:595
 msgid "Print Page"
 msgstr "Printo Faqen"
 
-#: js/widgets/grid/GridPanel.js:617
+#: js/widgets/grid/GridPanel.js:625
 #: js/widgets/dialog/DuplicateMergeDialog.js:220
 #, python-brace-format
 msgid "Merge {0}"
 msgstr "Shkrij {0}"
 
-#: js/widgets/grid/GridPanel.js:1072
+#: js/widgets/grid/GridPanel.js:1107
 msgid "No data to display"
 msgstr "Nuk ka të dhëna për të shfaqur"
 
-#: js/widgets/grid/GridPanel.js:1094
+#: js/widgets/grid/GridPanel.js:1129
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Duke shfaqur të dhënat {0} - {1} nga {2}"
 
-#: js/widgets/grid/GridPanel.js:1095
+#: js/widgets/grid/GridPanel.js:1130
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "Nuk ka {0} për të shfaqur"
 
-#: js/widgets/grid/GridPanel.js:1149
+#: js/widgets/grid/GridPanel.js:1184
 msgid "Records"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1353
+#: js/widgets/grid/GridPanel.js:1388
 msgid "New..."
 msgstr "E re..."
 
-#: js/widgets/grid/GridPanel.js:1372
+#: js/widgets/grid/GridPanel.js:1407
 msgid "Add to..."
 msgstr "Shto tek"
 
-#: js/widgets/grid/GridPanel.js:1422
+#: js/widgets/grid/GridPanel.js:1457
 msgid "Last Modified Time"
 msgstr "Koha e modifikimit të fundit"
 
-#: js/widgets/grid/GridPanel.js:1423
+#: js/widgets/grid/GridPanel.js:1458
 msgid "Last Modified By"
 msgstr "Midifikimi i fundit nga"
 
-#: js/widgets/grid/GridPanel.js:1785
+#: js/widgets/grid/GridPanel.js:1820
 msgid "Not Allowed"
 msgstr "Nuk lejohet"
 
-#: js/widgets/grid/GridPanel.js:1786
+#: js/widgets/grid/GridPanel.js:1821
 msgid "You are not allowed to delete all pages at once"
 msgstr "Ju nuk lejoheni të fshini të gjithë faqet njëherazi"
 
-#: js/widgets/grid/GridPanel.js:1809
+#: js/widgets/grid/GridPanel.js:1844
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Doni vertetë të fshini të dhënën e zgjedhur ({0})?"
 msgstr[1] "Doni vërtetë të fshini të dhënat e zgjedhura ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1854 js/widgets/dialog/EditDialog.js:887
+#: js/widgets/grid/GridPanel.js:1889 js/widgets/dialog/EditDialog.js:904
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Duke fshirë {0}"
 
-#: js/widgets/grid/GridPanel.js:1854
+#: js/widgets/grid/GridPanel.js:1889
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -1716,18 +1718,18 @@ msgstr "Kërko Llogarinë..."
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
-#: js/widgets/grid/FilterPanel.js:261 js/widgets/grid/FilterPanel.js:312
+#: js/widgets/grid/FilterPanel.js:260 js/widgets/grid/FilterPanel.js:337
 msgid "show details"
 msgstr "trego detajet"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-#: js/widgets/grid/FilterPanel.js:262
+#: js/widgets/grid/FilterPanel.js:261
 msgid "Always show advanced filters"
 msgstr "Gjithmonë trego fitrat e përparuar"
 
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:192
 #: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:231
-#: js/widgets/grid/FilterPanel.js:272 js/widgets/grid/FilterPanel.js:312
+#: js/widgets/grid/FilterPanel.js:271 js/widgets/grid/FilterPanel.js:337
 msgid "hide details"
 msgstr ""
 
@@ -1742,15 +1744,19 @@ msgstr[1] "Pamja juaj është e kufizuar nga kriteret {0}"
 msgid "has notes"
 msgstr "ka shënime"
 
-#: js/widgets/grid/RendererManager.js:57
-msgid "has relations"
-msgstr "ka mardhënie"
-
 #: js/widgets/grid/FilterPanel.js:78
 msgid "Attention: There are more filters active!"
 msgstr "Kujdes: Ka flitra të tjerë aktivë"
 
-#: js/widgets/grid/FilterPanel.js:513
+#: js/widgets/grid/FilterPanel.js:289
+msgid "Advanced search"
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:290
+msgid "Search in related records as well."
+msgstr ""
+
+#: js/widgets/grid/FilterPanel.js:539
 #, python-brace-format
 msgid "Criteria {0}"
 msgstr "Kriteret {0}"
@@ -1818,20 +1824,20 @@ msgid "Download example file"
 msgstr "Shkarko skedarin shëmbull"
 
 #: js/widgets/dialog/SimpleImportDialog.js:222
-#: js/widgets/dialog/ImportDialog.js:673
+#: js/widgets/dialog/ImportDialog.js:679
 #, python-brace-format
 msgid "Importing {0}"
 msgstr "Duke importuar {0}"
 
-#: js/widgets/dialog/WizardPanel.js:173
+#: js/widgets/dialog/WizardPanel.js:175
 msgid "Back"
 msgstr "Mbrapa"
 
-#: js/widgets/dialog/WizardPanel.js:180
+#: js/widgets/dialog/WizardPanel.js:182
 msgid "Next"
 msgstr "Tjetra"
 
-#: js/widgets/dialog/WizardPanel.js:194
+#: js/widgets/dialog/WizardPanel.js:196
 msgid "Finish"
 msgstr "Finish"
 
@@ -1877,39 +1883,39 @@ msgstr "Finale {0}"
 msgid "The record you try to add might already exist."
 msgstr "E dhëna që po mundoheni të shtoni mundet të egzistojë"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:196
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:212
 msgid "Field Group"
 msgstr "Fushë Grupi "
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:210
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
 msgid "My Value"
 msgstr "Vlera ime"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:218
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:234
 msgid "Existing Value"
 msgstr "Vlerë egzistuese"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:226
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:242
 msgid "Final Value"
 msgstr "Vlerë finale"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:243
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
 msgid "Action:"
 msgstr "Veprim:"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:259
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:275
 msgid "Merge, keeping existing details"
 msgstr "Shkrij, duke mbajtur detajet ekzistuese"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:260
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:276
 msgid "Merge, keeping my details"
 msgstr "Shkrij, duke mbajtur detajet e mia"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:261
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:277
 msgid "Keep existing record and discard mine"
 msgstr "Mbaj të dhënat ekzistuese dhe hidh të miat"
 
-#: js/widgets/dialog/DuplicateResolveGridPanel.js:262
+#: js/widgets/dialog/DuplicateResolveGridPanel.js:278
 msgid "Keep both records"
 msgstr "Mbaj të dy të dhënat"
 
@@ -1942,14 +1948,14 @@ msgstr "Fusha ka vlera të ndryshme. Modifikimi i kësaj fushë do ti mbivenosej
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:856 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:873 js/LoginPanel.js:508
 msgid "Errors"
 msgstr "Gabime"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 #: js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:878 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:895 js/LoginPanel.js:508
 msgid "Please fix the errors noted."
 msgstr "Ju lutem rregulloni gabimet e vëna në dukje"
 
@@ -1975,111 +1981,111 @@ msgstr "Të paracaktuara"
 msgid "Import description"
 msgstr "Përshkrimi i importit"
 
-#: js/widgets/dialog/ImportDialog.js:400
+#: js/widgets/dialog/ImportDialog.js:406
 msgid "Checking Import"
 msgstr "Duke kontrolluar importin"
 
-#: js/widgets/dialog/ImportDialog.js:429
+#: js/widgets/dialog/ImportDialog.js:435
 msgid "Resolve Conflicts"
 msgstr "Zgjidhni Konfliktet"
 
-#: js/widgets/dialog/ImportDialog.js:438
+#: js/widgets/dialog/ImportDialog.js:444
 #, python-brace-format
 msgid "There are {0} {1} that might already exist."
 msgstr "Ka që mund {0} {1} të ekzistojnë."
 
-#: js/widgets/dialog/ImportDialog.js:445
+#: js/widgets/dialog/ImportDialog.js:451
 msgid "Conflict"
 msgstr "Konflikt"
 
-#: js/widgets/dialog/ImportDialog.js:446
+#: js/widgets/dialog/ImportDialog.js:452
 msgid "First Conflict"
 msgstr "Konflikti i parë"
 
-#: js/widgets/dialog/ImportDialog.js:447
+#: js/widgets/dialog/ImportDialog.js:453
 msgid "Previous Conflict"
 msgstr "Konflikti i më parshëm"
 
-#: js/widgets/dialog/ImportDialog.js:448
+#: js/widgets/dialog/ImportDialog.js:454
 msgid "Next Conflict"
 msgstr "Konflikti tjetër"
 
-#: js/widgets/dialog/ImportDialog.js:449
+#: js/widgets/dialog/ImportDialog.js:455
 msgid "Last Conflict"
 msgstr "Konflikti i fundit"
 
-#: js/widgets/dialog/ImportDialog.js:455
+#: js/widgets/dialog/ImportDialog.js:461
 msgid "Conflict is resolved"
 msgstr "Konflikti u zgjidh"
 
-#: js/widgets/dialog/ImportDialog.js:460
+#: js/widgets/dialog/ImportDialog.js:466
 msgid "Resolve all conflicts"
 msgstr "Zgjidh të gjithë konfliktet"
 
-#: js/widgets/dialog/ImportDialog.js:554
+#: js/widgets/dialog/ImportDialog.js:560
 msgid "Processing Conflict Data"
 msgstr "Duke procesuar të dhënat e konfliktit"
 
-#: js/widgets/dialog/ImportDialog.js:579 js/widgets/dialog/ImportDialog.js:599
+#: js/widgets/dialog/ImportDialog.js:585 js/widgets/dialog/ImportDialog.js:605
 msgid "No conflict to resolve"
 msgstr "Nuk ka konflikte për të zgjidhur"
 
-#: js/widgets/dialog/ImportDialog.js:598
+#: js/widgets/dialog/ImportDialog.js:604
 #, python-brace-format
 msgid "(This is record {0} in your import file)"
 msgstr "(Kjo është e dhëna {0} e skedarit tuaj të importuar)"
 
-#: js/widgets/dialog/ImportDialog.js:623
+#: js/widgets/dialog/ImportDialog.js:629
 msgid "No Detail Informations"
 msgstr "Nuk ka informacion të detajuar"
 
-#: js/widgets/dialog/ImportDialog.js:628
+#: js/widgets/dialog/ImportDialog.js:634
 #: js/widgets/dialog/MultipleEditResultSummary.js:213
 msgid "Summary"
 msgstr "Përmbledhja"
 
-#: js/widgets/dialog/ImportDialog.js:657
+#: js/widgets/dialog/ImportDialog.js:663
 #: js/widgets/dialog/MultipleEditResultSummary.js:192
 msgid "Index"
 msgstr "Indeksi"
 
-#: js/widgets/dialog/ImportDialog.js:704
+#: js/widgets/dialog/ImportDialog.js:710
 #, python-brace-format
 msgid "{0} records had failures and where discarded."
 msgstr "{0} të dhëna patën probleme dhe u skarcuan."
 
-#: js/widgets/dialog/ImportDialog.js:746
+#: js/widgets/dialog/ImportDialog.js:752
 #, python-brace-format
 msgid "In total we found {0} records in your import file."
 msgstr "Në total ne gjetëm {0} të dhëna në skedarin tuaj të importit"
 
-#: js/widgets/dialog/ImportDialog.js:749
+#: js/widgets/dialog/ImportDialog.js:755
 #, python-brace-format
 msgid "{0} of them will be added as new records into: \"{1}\"."
 msgstr "{0} prej tyre do të shtohen si të dhëna të reja në: \"{1}\"."
 
-#: js/widgets/dialog/ImportDialog.js:756
+#: js/widgets/dialog/ImportDialog.js:762
 #, python-brace-format
 msgid "{0} of them where identified as duplicates."
 msgstr "{0} prej tyre u identifikuan si duplikata"
 
-#: js/widgets/dialog/ImportDialog.js:759
+#: js/widgets/dialog/ImportDialog.js:765
 #, python-brace-format
 msgid ""
 "From the identified duplicates {0} will be merged into the existing records."
 msgstr "Nga duplikatat e identifikuara {0} do të shkrihen me të dhënat ekzistuese."
 
-#: js/widgets/dialog/ImportDialog.js:763
+#: js/widgets/dialog/ImportDialog.js:769
 #, python-brace-format
 msgid "From the identified duplicates {0} will be discarded."
 msgstr "Nga duplikatat e gjetura {0} do të skarcohen."
 
-#: js/widgets/dialog/ImportDialog.js:779
+#: js/widgets/dialog/ImportDialog.js:785
 #, python-brace-format
 msgid "All records will be tagged with: \"{0}\" so you can find them easily."
 msgstr "Të gjithë të dhënat do të etiketohen me : \"{0}\" që ju ti gjeni ato më kollaj."
 
-#: js/widgets/dialog/ImportDialog.js:790
+#: js/widgets/dialog/ImportDialog.js:796
 #, python-brace-format
 msgid "{0} records have failures and will be discarded."
 msgstr "{0} të dhëna kane probleme dhe do të skarcohen"
@@ -2236,32 +2242,32 @@ msgstr "Preverencat e përgjithshme"
 msgid "My Profile"
 msgstr "Profili im"
 
-#: js/widgets/dialog/EditDialog.js:660
+#: js/widgets/dialog/EditDialog.js:677
 #, python-brace-format
 msgid "Add New {0}"
 msgstr "Shto {0} të ri"
 
-#: js/widgets/dialog/EditDialog.js:662
+#: js/widgets/dialog/EditDialog.js:679
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr "Modifiko {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:733
+#: js/widgets/dialog/EditDialog.js:750
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr "Duke transferuar {0}..."
 
-#: js/widgets/dialog/EditDialog.js:885
+#: js/widgets/dialog/EditDialog.js:902
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr "Doni vërtetë të fshini këtë {0}?"
 
-#: js/widgets/dialog/EditDialog.js:897
+#: js/widgets/dialog/EditDialog.js:914
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr "Nuk mund të fshiej {0}."
 
-#: js/widgets/dialog/EditDialog.js:952
+#: js/widgets/dialog/EditDialog.js:969
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr "Zbërthe dyshimin e duplikatës {0}"
@@ -2344,11 +2350,11 @@ msgstr "Ruaj konfigurimin"
 msgid "Reload config"
 msgstr "Ringarko konfigurimin"
 
-#: js/Application.js:152
+#: js/Application.js:173
 msgid "Not Supported"
 msgstr ""
 
-#: js/Application.js:153
+#: js/Application.js:174
 msgid "Your request is not supported by this version."
 msgstr ""
 
@@ -2416,7 +2422,7 @@ msgstr "Duke ju nxjerrë ...."
 msgid "Please wait!"
 msgstr "Ju lutem prisni!"
 
-#: js/ExceptionHandler.js:170 Frontend/Http.php:406
+#: js/ExceptionHandler.js:170 Frontend/Http.php:409
 msgid "Authorisation Required"
 msgstr "Kërkohet autorizim"
 
@@ -2738,93 +2744,101 @@ msgid_plural "to do lists"
 msgstr[0] "Lista Për Të Bërë"
 msgstr[1] "Listat Për Të Bërë"
 
-#: Preference.php:122
+#: Preference.php:128
 msgid "Page size"
 msgstr "Madhësia e faqes"
 
-#: Preference.php:123
+#: Preference.php:129
 msgid "Page size in grids"
 msgstr "Madhësia e faqes në rrjeta"
 
-#: Preference.php:126
+#: Preference.php:132
 msgid "Grid stripe rows"
 msgstr "Shiritat e rrjetës"
 
-#: Preference.php:127
+#: Preference.php:133
 msgid "Stripe rows in grids"
 msgstr "Shiritat në rrjetë"
 
-#: Preference.php:130
+#: Preference.php:136
 msgid "Grid load mask"
 msgstr "Maska e ngarkimit të rrjetës"
 
-#: Preference.php:131
+#: Preference.php:137
 msgid "Show load mask in grids"
 msgstr "Shfaq maskën e ngarkimit në rrejta"
 
-#: Preference.php:134
+#: Preference.php:140
 msgid "Dialog buttons order style"
 msgstr "Rradha e stilit të butonave të djalogut"
 
-#: Preference.php:135
+#: Preference.php:141
 msgid "Dialog buttons order style (Windows / Mac)"
 msgstr "Rradha e stilit të butonave të djalogut (Windows/Mac)"
 
-#: Preference.php:138
+#: Preference.php:144
 msgid "Auto search on filter change"
 msgstr "Kërko automatikisht pas ndryshimit të filtrit"
 
-#: Preference.php:139
+#: Preference.php:145
 msgid "Perform auto search when filter is changed"
 msgstr "Kryej kërkimin automatik kur filtri ndryshon"
 
-#: Preference.php:143
+#: Preference.php:149
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr "Zona kohore në të cilën datat shfaqen në Tine dy."
 
-#: Preference.php:147
+#: Preference.php:153
 msgid "The language of the Tine 2.0 GUI."
 msgstr "GUI i gjuhës i Tine dy."
 
-#: Preference.php:150
+#: Preference.php:156
 msgid "Default Application"
 msgstr "Aplikacioni i paracaktuar"
 
-#: Preference.php:151
+#: Preference.php:157
 msgid "The default application to show after login."
 msgstr "Aplikacioni u paracaktuar për tu shfaqur pas hyrjes"
 
-#: Preference.php:154
+#: Preference.php:160
 msgid "Window Type"
 msgstr "Tipi i Dritares"
 
-#: Preference.php:155
+#: Preference.php:161
 msgid "You can choose between modal windows or normal browser popup windows."
 msgstr "Ju mund të zgjidhni ndërmjet dritareve modale ose dritareve kërcuese të zakonshme të shfletuesit"
 
-#: Preference.php:158
+#: Preference.php:164
 msgid "Confirm Logout"
 msgstr "Konfimo Daljen"
 
-#: Preference.php:159
+#: Preference.php:165
 msgid "Show confirmation dialog on logout."
 msgstr "Tredo dialogun e konfirmimit në dalje"
 
-#: Frontend/Cli.php:736
+#: Preference.php:168
+msgid "Enable advanced search"
+msgstr ""
+
+#: Preference.php:169
+msgid "If enabled quickfilter searches through relations as well."
+msgstr ""
+
+#: Frontend/Cli.php:761
 #, python-format
 msgid "%s's personal "
 msgstr ""
 
-#: Frontend/Http.php:407
+#: Frontend/Http.php:410
 msgid "Your session is not valid. You need to login again."
 msgstr "Seksioni juaj nuk është i vlefshëm. Ju duhet të hyni përsëri"
 
-#: Container.php:731
+#: Container.php:746
 #, python-format
 msgid "%s's personal container"
 msgstr "Kontenieri personal i %s"
 
-#: Container.php:1708
+#: Container.php:1755
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
@@ -3132,12 +3146,12 @@ msgstr ""
 msgid "Max username length"
 msgstr ""
 
-#: Import/Csv/Abstract.php:200
+#: Import/Csv/Abstract.php:206
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "Fushat e mëposhtme nuk u impoprtuan: %s"
 
-#: Import/Csv/Abstract.php:201
+#: Import/Csv/Abstract.php:207
 msgid "N/A"
 msgstr "N/A"
 
@@ -3146,7 +3160,7 @@ msgstr "N/A"
 msgid "Exception ({0})"
 msgstr "Përjashtim ({0})"
 
-#: WebDav/PrincipalBackend.php:525
+#: WebDav/PrincipalBackend.php:549
 msgid "Shared folders"
 msgstr ""
 

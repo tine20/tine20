@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Slovenian (http://www.transifex.com/projects/p/tine20/language/sl/)\n"
 "MIME-Version: 1.0\n"
@@ -41,35 +41,35 @@ msgid ""
 "into one of its subfolders."
 msgstr ""
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:104
 msgid "manage shared folders"
 msgstr ""
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:105
 msgid "Create new shared folders"
 msgstr ""
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "Manage anonymous download links"
 msgstr ""
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""
 
-#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:339
+#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
 msgid "Save locally"
 msgstr ""
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "Edit folder"
 msgstr ""
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "edit file"
 msgstr ""
 
-#: js/NodeEditDialog.js:67 js/Model.js:43 js/NodeGridPanel.js:150
+#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -77,7 +77,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/NodeEditDialog.js:67 js/Model.js:40
+#: js/NodeEditDialog.js:68 js/Model.js:40
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
@@ -85,41 +85,41 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/NodeEditDialog.js:113
+#: js/NodeEditDialog.js:114
 msgid "Public Links"
 msgstr ""
 
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
+#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
 msgid "Name"
 msgstr ""
 
-#: js/NodeEditDialog.js:153 js/Model.js:527
+#: js/NodeEditDialog.js:154 js/Model.js:527
 msgid "Type"
 msgstr ""
 
-#: js/NodeEditDialog.js:161 js/DownloadLinkGridPanel.js:244
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
 #: js/NodeGridPanel.js:182
 msgid "Created By"
 msgstr ""
 
-#: js/NodeEditDialog.js:164 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
 #: js/NodeGridPanel.js:174
 msgid "Creation Time"
 msgstr ""
 
-#: js/NodeEditDialog.js:173
+#: js/NodeEditDialog.js:174
 msgid "Modified By"
 msgstr ""
 
-#: js/NodeEditDialog.js:176
+#: js/NodeEditDialog.js:177
 msgid "Last Modified"
 msgstr ""
 
-#: js/NodeEditDialog.js:199
+#: js/NodeEditDialog.js:200
 msgid "Description"
 msgstr ""
 
-#: js/NodeEditDialog.js:213
+#: js/NodeEditDialog.js:214
 msgid "Enter description"
 msgstr ""
 
@@ -260,11 +260,6 @@ msgstr ""
 
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
-msgstr ""
-
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
 #: js/NodeGridPanel.js:120

@@ -39,15 +39,6 @@ class Tinebase_Application
     protected $_tableName = 'applications';
     
     /**
-     * in class cache
-     * 
-     * @var array
-     */
-    protected $_classCache = array(
-        'getApplications' => array()
-    );
-    
-    /**
      * the db adapter
      *
      * @var Zend_Db_Adapter_Abstract
@@ -174,36 +165,21 @@ class Tinebase_Application
         }
         
         if ($filter === null && $pagination === null) {
-            $classCacheId = 'allApplications';
-            
-            if (isset($this->_classCache[__FUNCTION__][$classCacheId])) {
-                return $this->_classCache[__FUNCTION__][$classCacheId];
-            }
-            
-            $cache = Tinebase_Core::getCache();
-            if ($cache instanceof Zend_Cache_Core) {
-                $cacheId = __FUNCTION__ . '_' . $classCacheId;
+            try {
+                $result = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, 'allApplications', Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
                 
-                $result = $cache->load($cacheId);
-                if ($result instanceof Tinebase_Record_RecordSet) {
-                    $this->_classCache[__FUNCTION__][$classCacheId] = $result;
-                    
-                    return $result;
-                }
+                return $result;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // do nothing
             }
         }
         
         $result = $this->_getBackend()->search($filter, $pagination);
         
-        // cache result for this request 
-        if (isset($classCacheId)) {
-            $this->_classCache[__FUNCTION__][$classCacheId] = $result;
-        }
-        
-        // cache result in external cache
-        // cache will be cleared, when an application will be added or updated
-        if (isset($cacheId)) {
-            $cache->save($result, $cacheId);
+        if ($filter === null && $pagination === null) {
+            // cache result in persistent shared cache too
+            // cache will be cleared, when an application will be added or updated
+            Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, 'allApplications', $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         }
         
         return $result;
@@ -224,6 +200,31 @@ class Tinebase_Application
         $result = $this->getApplications()->filter('status', $state);
         
         return $result;
+    }
+    
+    /**
+     * get hash of installed applications
+     *
+     * @param string $_sort optional the column name to sort by
+     * @param string $_dir optional the sort direction can be ASC or DESC only
+     * @param string $_filter optional search parameter
+     * @param int $_limit optional how many applications to return
+     * @param int $_start optional offset for applications
+     * @return string
+     */
+    public function getApplicationsHash($_filter = NULL, $_sort = null, $_dir = 'ASC', $_start = NULL, $_limit = NULL)
+    {
+        $applications = $this->getApplications($_filter, $_sort, $_dir, $_start, $_limit);
+        
+        // create a hash of installed applications and their versions
+        $applications = array_combine(
+            Tinebase_Application::getInstance()->getApplications()->id,
+            Tinebase_Application::getInstance()->getApplications()->version
+        );
+        
+        ksort($applications);
+        
+        return Tinebase_Helper::arrayHash($applications, true);
     }
     
     /**
@@ -302,7 +303,7 @@ class Tinebase_Application
                 . ' Could not set state for all requested applications: ' . print_r($applicationIds, TRUE));
         }
         
-        $this->_cleanCache();
+        $this->resetClassCache();
     }
     
     /**
@@ -315,7 +316,7 @@ class Tinebase_Application
     {
         $application = $this->_getBackend()->create($application);
         
-        $this->_cleanCache();
+        $this->resetClassCache();
         
         return $application;
     }
@@ -341,7 +342,7 @@ class Tinebase_Application
         
         return $allRights;
     }
-
+    
     /**
      * get right description
      *
@@ -420,16 +421,12 @@ class Tinebase_Application
     /**
      * reset class cache
      * 
-     * @param string $key
-     * @return Tinebase_Acl_Roles
+     * @param string $method
+     * @return Tinebase_Application
      */
-    public function resetClassCache($key = null)
+    public function resetClassCache($method = null)
     {
-        foreach ($this->_classCache as $cacheKey => $cacheValue) {
-            if ($key === null || $key === $cacheKey) {
-                $this->_classCache[$cacheKey] = array();
-            }
-        }
+        Tinebase_Cache_PerRequest::getInstance()->reset(__CLASS__, $method);
         
         return $this;
     }
@@ -446,7 +443,7 @@ class Tinebase_Application
         
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $this->_cleanCache();
+        $this->resetClassCache();
         
         $this->_getBackend()->delete($applicationId);
     }
@@ -482,7 +479,7 @@ class Tinebase_Application
     {
         $result = $this->_getBackend()->update($_application);
         
-        $this->_cleanCache();
+        $this->resetClassCache();
         
         return $result;
     }
@@ -542,22 +539,6 @@ class Tinebase_Application
         
         $countMessage .= ' for application ' . $_application->name;
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $countMessage);
-    }
-    
-    /**
-     * remove TMA from "in class" cache and Zend Cache
-     * 
-     * @return void
-     */
-    protected function _cleanCache()
-    {
-        $cache = Tinebase_Core::getCache();
-        
-        if ($cache instanceof Zend_Cache_Core) {
-            $cache->remove('getApplications_allApplications');
-        }
-        
-        $this->resetClassCache();
     }
     
     /**

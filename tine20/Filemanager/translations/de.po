@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-21 11:50+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -46,81 +46,81 @@ msgid ""
 "into one of its subfolders."
 msgstr "Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen seiner Unterordner zu kopieren oder zu verschieben."
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:104
 msgid "manage shared folders"
 msgstr "Gemeinsame Ordner verwalten"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:105
 msgid "Create new shared folders"
 msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "Manage anonymous download links"
 msgstr "anonyme Download Links verwalten"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
 
-#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:339
+#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
 msgid "Save locally"
 msgstr "Lokal speichern"
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "Edit folder"
 msgstr "Ordner bearbeiten"
 
-#: js/NodeEditDialog.js:65
+#: js/NodeEditDialog.js:66
 msgid "edit file"
 msgstr "Datei bearbeiten"
 
-#: js/NodeEditDialog.js:67 js/Model.js:43 js/NodeGridPanel.js:150
+#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
-#: js/NodeEditDialog.js:67 js/Model.js:40
+#: js/NodeEditDialog.js:68 js/Model.js:40
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "Datei"
 msgstr[1] "Dateien"
 
-#: js/NodeEditDialog.js:113
+#: js/NodeEditDialog.js:114
 msgid "Public Links"
 msgstr "Öffentliche Links"
 
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
+#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
 msgid "Name"
 msgstr "Name"
 
-#: js/NodeEditDialog.js:153 js/Model.js:527
+#: js/NodeEditDialog.js:154 js/Model.js:527
 msgid "Type"
 msgstr "Typ"
 
-#: js/NodeEditDialog.js:161 js/DownloadLinkGridPanel.js:244
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
 #: js/NodeGridPanel.js:182
 msgid "Created By"
 msgstr "Erstellt von"
 
-#: js/NodeEditDialog.js:164 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
 #: js/NodeGridPanel.js:174
 msgid "Creation Time"
 msgstr "Erstellt am"
 
-#: js/NodeEditDialog.js:173
+#: js/NodeEditDialog.js:174
 msgid "Modified By"
 msgstr "Zuletzt geändert von"
 
-#: js/NodeEditDialog.js:176
+#: js/NodeEditDialog.js:177
 msgid "Last Modified"
 msgstr "Letzter Änderungszeitpunkt"
 
-#: js/NodeEditDialog.js:199
+#: js/NodeEditDialog.js:200
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/NodeEditDialog.js:213
+#: js/NodeEditDialog.js:214
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
@@ -260,11 +260,6 @@ msgstr "Item(s) mit diesem Namen schon vorhanden!"
 #: js/DownloadLinkDialog.js:52
 msgid "Node Download Links"
 msgstr "Knoten Download Links"
-
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr "Sieve Filterregeln für {0}"
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"

@@ -1,12 +1,12 @@
 # 
 # Translators:
 # Michal Wojcik <sardyna12@gmail.com>, 2013
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -226,7 +226,7 @@ msgstr "Do (e-mail)"
 
 #: js/sieve/RuleConditionsPanel.js:74
 msgid "To (Email CC)"
-msgstr ""
+msgstr "Do (CC e-mail)"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
 #: js/Model.js:155 js/MessageEditDialog.js:974 js/GridPanel.js:482
@@ -260,15 +260,15 @@ msgstr "Edytuj reguły filtrowania"
 
 #: js/sieve/RuleEditDialog.js:263
 msgid "Apply filter if"
-msgstr ""
+msgstr "Zastosuj filtr jeśli"
 
 #: js/sieve/RuleEditDialog.js:267
 msgid "all conditions match"
-msgstr ""
+msgstr "pasują wszystkie warunki"
 
 #: js/sieve/RuleEditDialog.js:268
 msgid "any condition matches"
-msgstr ""
+msgstr "pasuje któryś warunek"
 
 #: js/sieve/RuleEditDialog.js:315
 msgid "Do this action:"
@@ -311,9 +311,9 @@ msgid "Last update:"
 msgstr "Ostatnia aktualizacja:"
 
 #: js/TreePanel.js:732
-#, python-format, python-brace-format
-msgid "Fetching messages... ({0}%% done)"
-msgstr "Pobieranie wiadomości... (pobrano %% {0})"
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
+msgstr ""
 
 #: js/TreePanel.js:748
 #, python-brace-format
@@ -797,7 +797,7 @@ msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
 #: js/Felamimail.js:165
 #, python-brace-format
 msgid "{0} as default mailer"
-msgstr ""
+msgstr "{0} jako domyślny nadawca"
 
 #: js/Felamimail.js:577
 msgid "New mails"
@@ -865,7 +865,7 @@ msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
 
 #: js/AccountEditDialog.js:75
 msgid "Add New Account"
-msgstr ""
+msgstr "Dodaj nowe konto"
 
 #: js/AccountEditDialog.js:88
 msgid "Signature"
@@ -1009,11 +1009,11 @@ msgstr "Odpowiednio do typu treści (eksperymentalnie)"
 #: Controller/Message/Send.php:83
 #, python-format
 msgid "Error: %s"
-msgstr ""
+msgstr "Błąd: %s"
 
 #: Controller/Message/Send.php:85
 msgid "Could not send message"
-msgstr ""
+msgstr "Wysłanie wiadomości było niemożliwe"
 
 #: Controller/Message/Flags.php:25
 msgid "Seen"
@@ -1057,12 +1057,12 @@ msgstr "Jak często program Felamimail powinien sprawdzać czy są nowe wiadomo�
 
 #: Preference.php:114
 msgid "Use for mailto links"
-msgstr ""
+msgstr "Zastosuj dla dowiązań pocztowych."
 
 #: Preference.php:115
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr ""
+msgstr "Zastosuj Felamimail w dowiązaniach pocztowych, w przeciwnym razie stosuj klienta pulpitu."
 
 #: Preference.php:118
 msgid "Use for NOTES"

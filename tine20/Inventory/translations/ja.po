@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:48+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/tine20/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,22 +21,15 @@ msgstr ""
 msgid "%s's personal inventory items"
 msgstr ""
 
-#: Model/InventoryItem.php:34
+#: Model/InventoryItem.php:35
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] ""
 
-#: Model/InventoryItem.php:35
-msgid "Inventory items"
-msgstr ""
-
-#: Model/InventoryItem.php:38
-msgid "Inventory item list"
-msgstr ""
-
 #: Model/InventoryItem.php:39
-msgid "Inventory items lists"
-msgstr ""
+msgid "Inventory item list"
+msgid_plural "Inventory item lists"
+msgstr[0] ""
 
 #: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
@@ -58,20 +51,20 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:283
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:277
 msgid "Invoice date"
 msgstr ""
 
-#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:271
 msgid "Invoice"
 msgstr ""
 
-#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:251
 msgid "Price"
 msgstr ""
 
-#: Model/InventoryItem.php:104 js/InventoryItemEditDialog.js:264
-msgid "Cost centre"
+#: Model/InventoryItem.php:104
+msgid "Cost Center"
 msgstr ""
 
 #: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
@@ -86,7 +79,7 @@ msgstr ""
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:289
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:283
 msgid "Depreciate"
 msgstr ""
 
@@ -142,8 +135,12 @@ msgstr ""
 msgid "Available number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:236
+#: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:258
+msgid "Cost centre"
 msgstr ""
 
 #: Preference.php:60

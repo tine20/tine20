@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Swedish (Sweden) (http://www.transifex.com/projects/p/tine20/language/sv_SE/)\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgid ""
 msgstr "Växla från SQL till LDAP kommer att ta bort alla befintliga användarkonton, grupper och roller. Vill du verkligen byta konto lagring backend till LDAP?"
 
 #: js/AuthenticationPanel.js:204 js/AuthenticationPanel.js:217
-#: js/EmailPanel.js:146 js/ConfigManagerPanel.js:147
+#: js/EmailPanel.js:146 js/EmailPanel.js:451 js/ConfigManagerPanel.js:147
 #: js/ConfigManagerPanel.js:159 js/ConfigManagerPanel.js:171
 #: js/ConfigManagerPanel.js:183
 msgid "Backend"
@@ -106,7 +106,7 @@ msgid "Host"
 msgstr "Host"
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:378
-#: js/EmailPanel.js:195 js/EmailPanel.js:296 js/EmailPanel.js:400
+#: js/EmailPanel.js:195 js/EmailPanel.js:306 js/EmailPanel.js:420
 #: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
 #: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
 #: js/ConfigManagerPanel.js:441
@@ -139,30 +139,30 @@ msgstr "Bas DN"
 msgid "Search filter"
 msgstr "Sök filter"
 
-#: js/AuthenticationPanel.js:375 js/EmailPanel.js:182 js/EmailPanel.js:292
-#: js/EmailPanel.js:396 js/ConfigManagerPanel.js:229
+#: js/AuthenticationPanel.js:375 js/EmailPanel.js:182 js/EmailPanel.js:302
+#: js/EmailPanel.js:416 js/ConfigManagerPanel.js:229
 #: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
 #: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
 msgid "Hostname"
 msgstr "Host namn"
 
-#: js/AuthenticationPanel.js:382 js/EmailPanel.js:199 js/EmailPanel.js:300
-#: js/EmailPanel.js:404
+#: js/AuthenticationPanel.js:382 js/EmailPanel.js:199 js/EmailPanel.js:310
+#: js/EmailPanel.js:424
 msgid "Secure Connection"
 msgstr "Säker Anslutning"
 
-#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:309 js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:313
+#: js/EmailPanel.js:319 js/EmailPanel.js:427
 msgid "None"
 msgstr "Ingen"
 
-#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:313
+#: js/EmailPanel.js:427
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:303
-#: js/EmailPanel.js:407
+#: js/AuthenticationPanel.js:384 js/EmailPanel.js:202 js/EmailPanel.js:313
+#: js/EmailPanel.js:427
 msgid "SSL"
 msgstr "SSL"
 
@@ -370,7 +370,7 @@ msgstr "Bara läsrättighet"
 msgid "Save config and install"
 msgstr "Spara ändring och installera"
 
-#: js/AuthenticationPanel.js:710 js/ConfigManagerPanel.js:499
+#: js/AuthenticationPanel.js:710 js/ConfigManagerPanel.js:518
 msgid "Save config"
 msgstr "Spara ändring"
 
@@ -511,115 +511,115 @@ msgstr "Cyrus Administratörs Lösenord"
 msgid "Use proxy auth"
 msgstr ""
 
-#: js/EmailPanel.js:284
+#: js/EmailPanel.js:294
 msgid "Smtp"
 msgstr "Smtp"
 
-#: js/EmailPanel.js:306
+#: js/EmailPanel.js:316
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: js/EmailPanel.js:309
+#: js/EmailPanel.js:319
 msgid "Login"
 msgstr "Logga in"
 
-#: js/EmailPanel.js:309
+#: js/EmailPanel.js:319
 msgid "Plain"
 msgstr "Vanlig"
 
-#: js/EmailPanel.js:313
+#: js/EmailPanel.js:323
 msgid "Primary Domain"
 msgstr "Primär Domän"
 
-#: js/EmailPanel.js:317
+#: js/EmailPanel.js:327
 msgid "Secondary Domains (comma separated)"
 msgstr "Sekundära Domäner (komma separerade)"
 
-#: js/EmailPanel.js:321
+#: js/EmailPanel.js:331
 msgid "Notifications service address"
 msgstr "Meddelande service adress"
 
-#: js/EmailPanel.js:325
+#: js/EmailPanel.js:335
 msgid "Notification Username"
 msgstr "Meddelande Användarnamn"
 
-#: js/EmailPanel.js:329
+#: js/EmailPanel.js:339
 msgid "Notification Password"
 msgstr "Meddelande Lösenord"
 
-#: js/EmailPanel.js:334
+#: js/EmailPanel.js:344
 msgid "Notifications local client (hostname or IP address)"
 msgstr "Meddelande lokal klient (hostname eller IP adress)"
 
-#: js/EmailPanel.js:390
+#: js/EmailPanel.js:410
 msgid "SIEVE"
 msgstr "SIEVE"
 
-#: js/EmailPanel.js:431
+#: js/EmailPanel.js:479
 msgid "MySql Hostname"
 msgstr "MySql Hostname"
 
-#: js/EmailPanel.js:434
+#: js/EmailPanel.js:482
 msgid "MySql Database"
 msgstr "Mysql Databas"
 
-#: js/EmailPanel.js:437
+#: js/EmailPanel.js:485
 msgid "MySql User"
 msgstr "MySql Användare"
 
-#: js/EmailPanel.js:440
+#: js/EmailPanel.js:488
 msgid "MySql Password"
 msgstr "MySql Lösenord"
 
-#: js/EmailPanel.js:444
+#: js/EmailPanel.js:492
 msgid "MySql Port"
 msgstr "MySql Port"
 
-#: js/EmailPanel.js:460
+#: js/EmailPanel.js:508
 msgid "User or UID"
 msgstr "Användare eller UID"
 
-#: js/EmailPanel.js:463
+#: js/EmailPanel.js:511
 msgid "Group or GID"
 msgstr "Grupp eller GID"
 
-#: js/EmailPanel.js:466
+#: js/EmailPanel.js:514
 msgid "Home Template"
 msgstr "hem-mall"
 
-#: js/EmailPanel.js:468
+#: js/EmailPanel.js:516
 msgid "Password Scheme"
 msgstr "Lösenord ordning"
 
-#: js/EmailPanel.js:479
+#: js/EmailPanel.js:527
 msgid "PLAIN-MD5"
 msgstr "VANLIG-MD5"
 
-#: js/EmailPanel.js:480
+#: js/EmailPanel.js:528
 msgid "MD5-CRYPT"
 msgstr "MD5-CRYPT"
 
-#: js/EmailPanel.js:481
+#: js/EmailPanel.js:529
 msgid "SHA1"
 msgstr "SHA1"
 
-#: js/EmailPanel.js:482
+#: js/EmailPanel.js:530
 msgid "SHA256"
 msgstr "SHA256"
 
-#: js/EmailPanel.js:483
+#: js/EmailPanel.js:531
 msgid "SSHA256"
 msgstr "SSHA256"
 
-#: js/EmailPanel.js:484
+#: js/EmailPanel.js:532
 msgid "SHA512"
 msgstr "SHA512"
 
-#: js/EmailPanel.js:485
+#: js/EmailPanel.js:533
 msgid "SSHA512"
 msgstr "SSHA512"
 
-#: js/EmailPanel.js:486
+#: js/EmailPanel.js:534
 msgid "PLAIN"
 msgstr "VANLIG"
 
@@ -758,10 +758,22 @@ msgstr "Inaktiverad"
 msgid "enabled"
 msgstr "Aktiverad"
 
-#: js/ConfigManagerPanel.js:497
+#: js/ConfigManagerPanel.js:490
+msgid "Use Custom Theme"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:500
+msgid "Theme path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:503
+msgid "Use blue theme as base"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:516
 msgid "Config file is not writable"
 msgstr "Config fil är inte skrivbar"
 
-#: js/ConfigManagerPanel.js:516
+#: js/ConfigManagerPanel.js:535
 msgid "Download config file"
 msgstr "Ladda ner config fil"

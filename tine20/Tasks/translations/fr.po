@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-04-27 11:21+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/tine20/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -24,19 +24,19 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "Tâches personnelles de %s"
 
-#: Acl/Rights.php:96
+#: Acl/Rights.php:97
 msgid "manage shared task lists"
 msgstr "gérer les listes de tâches partagées"
 
-#: Acl/Rights.php:97
+#: Acl/Rights.php:98
 msgid "Create new shared tasks lists"
 msgstr "Ajouter une liste de tâches partagées"
 
-#: Acl/Rights.php:100
+#: Acl/Rights.php:101
 msgid "manage shared tasks favorites"
 msgstr "gérer les favoris des tâches partagées"
 
-#: Acl/Rights.php:101
+#: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Créer ou mettre a jour les favoris des tâches partagées"
 
@@ -67,7 +67,7 @@ msgstr[1] "Statuts"
 msgid "Percent"
 msgstr "Pourcent"
 
-#: Model/Task.php:219 js/TaskGridPanel.js:87
+#: Model/Task.php:219
 msgid "Lead"
 msgstr "Prospect"
 
@@ -125,6 +125,10 @@ msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 #: js/TaskGridPanel.js:82
 msgid "Tags"
 msgstr "Marqueur"
+
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
+msgstr ""
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."

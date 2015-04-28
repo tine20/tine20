@@ -73,6 +73,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, false);
     }
     
     /**
@@ -87,6 +89,21 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['initialContainer']->name, $container->name);
         $this->_validateOwnerId($container);
         $this->_validatePath($container);
+        
+        $cachedContainer = Tinebase_Cache_PerRequest::getInstance()->load('Tinebase_Container', 'getContainerById', $container->getId() . 'd0');
+        $this->assertEquals('Tinebase_Model_Container', get_class($cachedContainer), 'wrong type');
+        $this->assertEquals($cachedContainer->name, $container->name);
+        
+        $persistentCacheId = Tinebase_Cache_PerRequest::getInstance()->getPersistentCacheId(
+            'Tinebase_Container',
+            'getContainerById',
+            sha1($container->getId() . 'd0'),
+            Tinebase_Cache_PerRequest::VISIBILITY_SHARED
+        );
+        
+        $cachedContainer = Tinebase_Core::getCache()->load($persistentCacheId);
+        $this->assertEquals('Tinebase_Model_Container', get_class($cachedContainer), 'wrong type');
+        $this->assertEquals($cachedContainer->name, $container->name);
     }
     
     /**
@@ -437,18 +454,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             $this->_validatePath($container);
         }
     }
-
-    /**
-     * try to get container by acl with Zend_Cache
-     */
-    public function testGetContainerByAclWithPersistentCaching()
-    {
-        Tinebase_Cache_PerRequest::getInstance()->usePersistentCache(true);
-        $this->testGetContainerByAcl();
-        $oldValue = Tinebase_Cache_PerRequest::getInstance()->usePersistentCache(false);
-
-        $this->assertTrue($oldValue);
-    }
     
     /**
      * test getGrantsOfRecords
@@ -562,7 +567,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         Tinebase_User::getInstance()->setStatus($user2, 'disabled');
 
-        Tinebase_Cache_PerRequest::getInstance()->resetCache();
+        Tinebase_Cache_PerRequest::getInstance()->reset();
 
         $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user1, 'Calendar', array(
             Tinebase_Model_Grants::GRANT_READ

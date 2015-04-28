@@ -50,15 +50,15 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:283
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:277
 msgid "Invoice date"
 msgstr ""
 
-#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:271
 msgid "Invoice"
 msgstr ""
 
-#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:257
+#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:251
 msgid "Price"
 msgstr ""
 
@@ -78,7 +78,7 @@ msgstr ""
 msgid "Item removed"
 msgstr ""
 
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:289
+#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:283
 msgid "Depreciate"
 msgstr ""
 
@@ -134,11 +134,11 @@ msgstr ""
 msgid "Available number"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:236
+#: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
 msgstr ""
 
-#: js/InventoryItemEditDialog.js:264
+#: js/InventoryItemEditDialog.js:258
 msgid "Cost centre"
 msgstr ""
 

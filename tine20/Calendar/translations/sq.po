@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-04-28 07:43+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
@@ -31,27 +31,27 @@ msgstr ""
 msgid "The URL you used is invalid. Please use a valid one!"
 msgstr ""
 
-#: Acl/Rights.php:103
+#: Acl/Rights.php:104
 msgid "manage shared calendars"
 msgstr "menaxho kalendarët e ndarë"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:105
 msgid "Create new shared calendars"
 msgstr "Krijo kalendarë të rinj të ndarë"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "manage shared calendars favorites"
 msgstr "menaxho preferencalet e kalendarëve të ndarë"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Create or update shared calendars favorites"
 msgstr "Krijo ose përditëso preferencialet e kalendarëve të ndarë"
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:112
 msgid "manage resources"
 msgstr "menaxho burimet"
 
-#: Acl/Rights.php:112
+#: Acl/Rights.php:113
 msgid "All Rights to administrate resources"
 msgstr "Të gjithë të drejtat për administrimin e burimeve"
 
@@ -60,7 +60,7 @@ msgstr "Të gjithë të drejtat për administrimin e burimeve"
 msgid "Every %s day"
 msgstr "Çdo ditë %s"
 
-#: Model/Rrule.php:344 js/RrulePanel.js:79
+#: Model/Rrule.php:344 js/RrulePanel.js:84
 msgid "Daily"
 msgstr "I Përditshëm"
 
@@ -105,23 +105,23 @@ msgstr "Përvitshëm në %1$s të %2$s"
 msgid "second to last"
 msgstr "sekonda në fund"
 
-#: Model/Rrule.php:431 js/RrulePanel.js:543 js/RrulePanel.js:724
+#: Model/Rrule.php:431 js/RrulePanel.js:569 js/RrulePanel.js:750
 msgid "last"
 msgstr "i fundit"
 
-#: Model/Rrule.php:437 js/RrulePanel.js:539 js/RrulePanel.js:720
+#: Model/Rrule.php:437 js/RrulePanel.js:565 js/RrulePanel.js:746
 msgid "first"
 msgstr "i pari"
 
-#: Model/Rrule.php:440 js/RrulePanel.js:540 js/RrulePanel.js:721
+#: Model/Rrule.php:440 js/RrulePanel.js:566 js/RrulePanel.js:747
 msgid "second"
 msgstr "i dyti"
 
-#: Model/Rrule.php:443 js/RrulePanel.js:541 js/RrulePanel.js:722
+#: Model/Rrule.php:443 js/RrulePanel.js:567 js/RrulePanel.js:748
 msgid "third"
 msgstr "i treti"
 
-#: Model/Rrule.php:446 js/RrulePanel.js:542 js/RrulePanel.js:723
+#: Model/Rrule.php:446 js/RrulePanel.js:568 js/RrulePanel.js:749
 msgid "fourth"
 msgstr "i katërti"
 
@@ -162,7 +162,7 @@ msgstr ""
 msgid "Start"
 msgstr "Fillo"
 
-#: Model/Event.php:367 js/RrulePanel.js:321
+#: Model/Event.php:367 js/RrulePanel.js:326
 msgid "End"
 msgstr "Fund"
 
@@ -174,17 +174,17 @@ msgstr "Bllokim"
 msgid "Classification"
 msgstr "Klasifikimi"
 
-#: Model/Event.php:370 js/ResourceEditDialog.js:84 js/EventEditDialog.js:256
+#: Model/Event.php:370 js/ResourceEditDialog.js:84 js/EventEditDialog.js:262
 #: js/Model.js:285 js/GridView.js:161
 msgid "Description"
 msgstr "Përshkrimi"
 
 #: Model/Event.php:371 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
-#: js/EventEditDialog.js:124 js/Model.js:284 js/GridView.js:148
+#: js/EventEditDialog.js:125 js/Model.js:284 js/GridView.js:148
 msgid "Location"
 msgstr "Vëndi"
 
-#: Model/Event.php:372 js/EventDetailsPanel.js:284 js/EventEditDialog.js:319
+#: Model/Event.php:372 js/EventDetailsPanel.js:284 js/EventEditDialog.js:314
 #: js/Model.js:304 js/GridView.js:154 js/PerspectiveCombo.js:127
 msgid "Organizer"
 msgstr "Organizuesi"
@@ -194,13 +194,13 @@ msgid "Priority"
 msgstr "Prioriteti"
 
 #: Model/Event.php:374 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:178 js/GridView.js:173 js/AttendeeGridPanel.js:212
+#: js/EventEditDialog.js:179 js/GridView.js:173 js/AttendeeGridPanel.js:213
 #: js/AddToEventPanel.js:88
 msgid "Status"
 msgstr "Statusi"
 
 #: Model/Event.php:375 js/ContactEventsGridPanel.js:113
-#: js/EventEditDialog.js:79 js/Model.js:283 js/GridView.js:143
+#: js/EventEditDialog.js:80 js/Model.js:283 js/GridView.js:143
 msgid "Summary"
 msgstr "Përmbledhje"
 
@@ -252,77 +252,82 @@ msgstr "Vijues"
 msgid "Select Attendee"
 msgstr "Zgjidhni Vijues"
 
-#: js/RrulePanel.js:28
+#: js/RrulePanel.js:34
 msgid "Recurrances"
 msgstr "Përsëritje"
 
-#: js/RrulePanel.js:36
+#: js/RrulePanel.js:42
 msgid "No recurring rule defined"
 msgstr "Nuk është përcaktuar një rregull përseritës"
 
-#: js/RrulePanel.js:72
+#: js/RrulePanel.js:77
 msgid "None"
 msgstr "Asnjë"
 
-#: js/RrulePanel.js:86
+#: js/RrulePanel.js:91
 msgid "Weekly"
 msgstr "I Përjavshëm"
 
-#: js/RrulePanel.js:93
+#: js/RrulePanel.js:98
 msgid "Monthly"
 msgstr "I Përmuajshëm"
 
-#: js/RrulePanel.js:100
+#: js/RrulePanel.js:105
 msgid "Yearly"
 msgstr "I Përvitshëm"
 
-#: js/RrulePanel.js:178
+#: js/RrulePanel.js:183
 msgid "Exceptions of reccuring events can't have recurrences themselves."
 msgstr "Përjashtimet e ngjarjeve përsëritëse nuk mund të përsërisin vetvehten"
 
-#: js/RrulePanel.js:240
+#: js/RrulePanel.js:245
 msgid "at"
 msgstr "në"
 
-#: js/RrulePanel.js:252
+#: js/RrulePanel.js:257
 msgid "never"
 msgstr "asnjëherë"
 
-#: js/RrulePanel.js:261
+#: js/RrulePanel.js:266
 #, python-brace-format
 msgid "after {0} occurrences"
 msgstr "pas {0} ndodhive"
 
-#: js/RrulePanel.js:380
+#: js/RrulePanel.js:387
 msgid "Until has to be after event start"
 msgstr "Derisa të jetë pasi ngjarja fillon"
 
-#: js/RrulePanel.js:411
+#: js/RrulePanel.js:397 js/RrulePanel.js:400 js/RrulePanel.js:403
+#: js/RrulePanel.js:406
+msgid "The event is longer than the recurring interval"
+msgstr ""
+
+#: js/RrulePanel.js:437
 #, python-brace-format
 msgid "Every {0}. Day"
 msgstr "Çdo {0}. Ditë"
 
-#: js/RrulePanel.js:444
+#: js/RrulePanel.js:470
 #, python-brace-format
 msgid "Every {0}. Week at"
 msgstr "Çdo {0}. Javë në"
 
-#: js/RrulePanel.js:514
+#: js/RrulePanel.js:540
 #, python-brace-format
 msgid "Every {0}. Month"
 msgstr "Çdo {0}. Muaj"
 
-#: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
-#: js/RrulePanel.js:751
+#: js/RrulePanel.js:546 js/RrulePanel.js:595 js/RrulePanel.js:727
+#: js/RrulePanel.js:777
 msgid "at the"
 msgstr "Në"
 
-#: js/RrulePanel.js:694
+#: js/RrulePanel.js:720
 #, python-brace-format
 msgid "Every {0}. Year"
 msgstr "Çdo {0}. Vit"
 
-#: js/RrulePanel.js:792 js/RrulePanel.js:800
+#: js/RrulePanel.js:818 js/RrulePanel.js:826
 msgid "of"
 msgstr "e"
 
@@ -521,7 +526,7 @@ msgstr "Një vijues i ftuar i është përgjigjur ftesës"
 msgid "Unsupported method"
 msgstr "Metodë e pa mbështetshme"
 
-#: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:105
+#: js/Calendar.js:29 js/MonthView.js:83 js/DaysView.js:115
 msgid "New Event"
 msgstr "Ngjarje e Re"
 
@@ -536,7 +541,7 @@ msgid "Events"
 msgstr "Ngjarje"
 
 #: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:260
-#: js/EventEditDialog.js:130 js/GridView.js:109 Preference.php:103
+#: js/EventEditDialog.js:131 js/GridView.js:109 Preference.php:114
 msgid "Start Time"
 msgstr "Koha e fillimit"
 
@@ -550,7 +555,7 @@ msgid "{0} more..."
 msgstr "{0} më shumë..."
 
 #: js/ResourcesGridPanel.js:43 js/ResourceEditDialog.js:68
-#: js/AttendeeGridPanel.js:204
+#: js/AttendeeGridPanel.js:205
 msgid "Name"
 msgstr "Emri"
 
@@ -566,13 +571,13 @@ msgstr "është një vend"
 msgid "Enter description..."
 msgstr "Vendosni përshkrimin..."
 
-#: js/ResourceEditDialog.js:117
+#: js/ResourceEditDialog.js:110
 msgid "Grants"
 msgstr "Të Drejta"
 
-#: js/EventDetailsPanel.js:28 js/Model.js:468 js/AttendeeGridPanel.js:583
-#: js/AttendeeGridPanel.js:601 js/AttendeeGridPanel.js:618
-#: js/AttendeeGridPanel.js:630
+#: js/EventDetailsPanel.js:28 js/Model.js:468 js/AttendeeGridPanel.js:584
+#: js/AttendeeGridPanel.js:602 js/AttendeeGridPanel.js:619
+#: js/AttendeeGridPanel.js:631
 msgid "No Information"
 msgstr "Nuk ka informacion"
 
@@ -593,71 +598,70 @@ msgstr "ngjarje periodike"
 msgid "recurring event exception"
 msgstr "përjashtim i ngjarjes periodike"
 
-#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:144 js/GridView.js:115
-#: Preference.php:107
+#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:145 js/GridView.js:115
+#: Preference.php:118
 msgid "End Time"
 msgstr "Koha e mbarimit"
 
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:198 js/GridView.js:135
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:199 js/GridView.js:135
 #: Setup/Initialize.php:115 Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr "E paqarte"
 
-#: js/EventEditDialog.js:95
+#: js/EventEditDialog.js:96
 msgid "View"
 msgstr "Shiko"
 
-#: js/EventEditDialog.js:111
+#: js/EventEditDialog.js:112
 msgid "Details"
 msgstr "Detaje"
 
-#: js/EventEditDialog.js:138 js/GridView.js:121 js/SearchCombo.js:201
+#: js/EventEditDialog.js:139 js/GridView.js:121 js/SearchCombo.js:201
 #: js/Printer/Base.js:73
 msgid "whole day"
 msgstr "të gjithë ditën"
 
-#: js/EventEditDialog.js:160
+#: js/EventEditDialog.js:161
 msgid "Saved in"
 msgstr "Ruajtur në"
 
-#: js/EventEditDialog.js:182 js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:183 js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr "jo-bllokuar"
 
-#: js/EventEditDialog.js:212 js/GridView.js:94
+#: js/EventEditDialog.js:213 js/GridView.js:94
 msgid "Private"
 msgstr "Private"
 
-#: js/EventEditDialog.js:270
+#: js/EventEditDialog.js:276
 msgid "Enter description"
 msgstr "Fusni përshkrimin"
 
-#: js/EventEditDialog.js:307
+#: js/EventEditDialog.js:302
 msgid "Mute Notification"
 msgstr ""
 
-#: js/EventEditDialog.js:542
+#: js/EventEditDialog.js:531
 msgid "End date is not valid"
 msgstr "Data e mbarimit nuk është e vlefshme"
 
-#: js/EventEditDialog.js:545
+#: js/EventEditDialog.js:534
 msgid "End date must be after start date"
 msgstr "Data e mbarimit duhet të jetë mbas datës së fillimit"
 
-#: js/EventEditDialog.js:548
-msgid ""
-"End date is not allowed to be be higher than the configured time range."
+#: js/EventEditDialog.js:540
+msgid "End time is not allowed to be after the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:569
+#: js/EventEditDialog.js:576
 msgid "Start date is not valid"
 msgstr "Data e fillimit nuk është e vlefshme"
 
-#: js/EventEditDialog.js:572
-msgid "End date is not allowed to be be lower than the configured time range."
+#: js/EventEditDialog.js:583
+msgid "Start date is not allowed to be before the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:592
+#: js/EventEditDialog.js:603
 msgid "Errors"
 msgstr "Gabime"
 
@@ -701,13 +705,13 @@ msgid_plural "Attendee"
 msgstr[0] "Vijues"
 msgstr[1] "Vijues"
 
-#: js/Model.js:665 js/AttendeeGridPanel.js:196
+#: js/Model.js:671 js/AttendeeGridPanel.js:197
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Burim"
 msgstr[1] "Burime"
 
-#: js/Model.js:665
+#: js/Model.js:671
 msgid "Resources"
 msgstr "Burime"
 
@@ -735,31 +739,31 @@ msgstr "Tipi"
 msgid "Click icon to change"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:194
+#: js/AttendeeGridPanel.js:195
 msgid "User"
 msgstr "Përdorues"
 
-#: js/AttendeeGridPanel.js:195
+#: js/AttendeeGridPanel.js:196
 msgid "Group"
 msgstr "Grup"
 
-#: js/AttendeeGridPanel.js:197
+#: js/AttendeeGridPanel.js:198
 msgid "Member of group"
 msgstr "Pjesëtar i grupit"
 
-#: js/AttendeeGridPanel.js:405
+#: js/AttendeeGridPanel.js:406
 msgid "Remove Attender"
 msgstr "Hiqni Vijuesin"
 
-#: js/AttendeeGridPanel.js:418
+#: js/AttendeeGridPanel.js:419
 msgid "Compose email"
 msgstr "Krijo E-Poste"
 
-#: js/AttendeeGridPanel.js:588
+#: js/AttendeeGridPanel.js:589
 msgid "(as a group member)"
 msgstr "(si pjesëtar i grupit)"
 
-#: js/AttendeeGridPanel.js:679
+#: js/AttendeeGridPanel.js:680
 msgid "External Attendee"
 msgstr "Vijues i Jashtem"
 
@@ -808,24 +812,24 @@ msgstr "ka alarm"
 msgid "has attachments"
 msgstr "ka bashkangjitje"
 
-#: js/DaysView.js:110
+#: js/DaysView.js:120
 #, python-brace-format
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, në {1}. të {2}"
 
-#: js/DaysView.js:709
+#: js/DaysView.js:763
 msgid "The summary must not be longer than 255 characters."
 msgstr "Përmbledhja nuk mund të jetë më e gjatë se 255 karaktere"
 
-#: js/DaysView.js:711
+#: js/DaysView.js:765
 msgid "The summary must have at least 1 character."
 msgstr "Përmbledhja duhet të ketë të paktën 1 karakter"
 
-#: js/DaysView.js:748
+#: js/DaysView.js:802
 msgid "Summary too Long"
 msgstr "Përmbledhja shumë e gjatë"
 
-#: js/DaysView.js:758
+#: js/DaysView.js:812
 msgid "Summary too Short"
 msgstr "Përmbledhja shumë e shkurtër"
 
@@ -833,7 +837,7 @@ msgstr "Përmbledhja shumë e shkurtër"
 msgid "Displayed in"
 msgstr "E shfaqur në"
 
-#: js/Printer/DaysView.js:81
+#: js/Printer/DaysView.js:96
 #, python-brace-format
 msgid "Week {0} :"
 msgstr "Java {0} :"
@@ -847,169 +851,173 @@ msgid "Cut event"
 msgstr ""
 
 #: js/MainScreenCenterPanel.js:159
-msgid "Stop cut & paste"
+msgid "Copy Event to clipboard"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:180
+#: js/MainScreenCenterPanel.js:166
+msgid "Stop cut / copy & paste"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:187
 msgid "Print Page"
 msgstr "Printo Faqen"
 
-#: js/MainScreenCenterPanel.js:189 js/MainScreenCenterPanel.js:253
+#: js/MainScreenCenterPanel.js:196 js/MainScreenCenterPanel.js:260
 msgid "Grid"
 msgstr "Rrjet"
 
-#: js/MainScreenCenterPanel.js:193 js/MainScreenCenterPanel.js:238
+#: js/MainScreenCenterPanel.js:200 js/MainScreenCenterPanel.js:245
 msgid "Sheet"
 msgstr "Tabelë"
 
-#: js/MainScreenCenterPanel.js:206
+#: js/MainScreenCenterPanel.js:213
 msgid "Export Events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:214
+#: js/MainScreenCenterPanel.js:221
 msgid "Export as ODS"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:221
+#: js/MainScreenCenterPanel.js:228
 msgid "Export as ..."
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:263
+#: js/MainScreenCenterPanel.js:270
 msgid "Day"
 msgstr "Ditë"
 
-#: js/MainScreenCenterPanel.js:272 js/PagingToolbar.js:300
+#: js/MainScreenCenterPanel.js:279 js/PagingToolbar.js:300
 msgid "Week"
 msgstr "Javë"
 
-#: js/MainScreenCenterPanel.js:281
+#: js/MainScreenCenterPanel.js:288
 msgid "Month"
 msgstr "Muaj"
 
-#: js/MainScreenCenterPanel.js:291
+#: js/MainScreenCenterPanel.js:298
 msgid "Import Events"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:334
+#: js/MainScreenCenterPanel.js:341
 #, python-brace-format
 msgid "Paste event \"{0}\""
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:650
+#: js/MainScreenCenterPanel.js:658
 msgid "Set my response"
 msgstr "Vendos përgjigjen time"
 
-#: js/MainScreenCenterPanel.js:679
+#: js/MainScreenCenterPanel.js:687
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "Kopje {0}"
 
-#: js/MainScreenCenterPanel.js:695
+#: js/MainScreenCenterPanel.js:703
 msgid "Updating event in the past"
 msgstr "Duke përditësuar ngjarjen në të shkuarën"
 
-#: js/MainScreenCenterPanel.js:696
+#: js/MainScreenCenterPanel.js:704
 msgid "Update this event"
 msgstr "Përditëso këtë ngjarje"
 
-#: js/MainScreenCenterPanel.js:697
+#: js/MainScreenCenterPanel.js:705
 msgid "Do not update this event"
 msgstr "Mos përditëso këtë ngjarje"
 
-#: js/MainScreenCenterPanel.js:701
+#: js/MainScreenCenterPanel.js:709
 msgid "Creating event in the past"
 msgstr "Duke krijuar ngjarje në të shkuarën"
 
-#: js/MainScreenCenterPanel.js:702
+#: js/MainScreenCenterPanel.js:710
 msgid "Create this event"
 msgstr "Krijo këtë ngjarje"
 
-#: js/MainScreenCenterPanel.js:703
+#: js/MainScreenCenterPanel.js:711
 msgid "Do not create this event"
 msgstr "Mos krijo këte ngjarje"
 
-#: js/MainScreenCenterPanel.js:830
+#: js/MainScreenCenterPanel.js:837
 msgid "Update Event"
 msgstr "Përditëso ngjarjen"
 
-#: js/MainScreenCenterPanel.js:834
+#: js/MainScreenCenterPanel.js:841
 msgid "Update this event only"
 msgstr "Përditëso vetëm këtë ngjarje"
 
-#: js/MainScreenCenterPanel.js:835
+#: js/MainScreenCenterPanel.js:842
 msgid "Update this and all future events"
 msgstr "Përditëso këtë dhe të gjithë ngjarjet e ardhshme"
 
-#: js/MainScreenCenterPanel.js:836
+#: js/MainScreenCenterPanel.js:843
 msgid "Update whole series"
 msgstr "Përditëso te gjithë seritë"
 
-#: js/MainScreenCenterPanel.js:837
+#: js/MainScreenCenterPanel.js:844
 msgid "Update nothing"
 msgstr "Mos përditëso asgjë"
 
-#: js/MainScreenCenterPanel.js:981
+#: js/MainScreenCenterPanel.js:988
 msgid "Please Change Selection"
 msgstr "Ju lutemi ndryshoni Zgjedhjet"
 
-#: js/MainScreenCenterPanel.js:982
+#: js/MainScreenCenterPanel.js:989
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr "Zgjedhja juaj përmban ngjarje të përërituar. Ngjarjet e përsëritura duhet të fshihen veçmas"
 
-#: js/MainScreenCenterPanel.js:995
+#: js/MainScreenCenterPanel.js:1002
 msgid "Delete Event"
 msgstr "Fshij ngjaren"
 
-#: js/MainScreenCenterPanel.js:999
+#: js/MainScreenCenterPanel.js:1006
 msgid "Delete this event only"
 msgstr "Fshij vetëm këtë ngjarje"
 
-#: js/MainScreenCenterPanel.js:1000
+#: js/MainScreenCenterPanel.js:1007
 msgid "Delete this and all future events"
 msgstr "Fshij këtë dhe gjithë ngjarjet e ardhshme"
 
-#: js/MainScreenCenterPanel.js:1001
+#: js/MainScreenCenterPanel.js:1008
 msgid "Delete whole series"
 msgstr "Fshij të gjithë serinë"
 
-#: js/MainScreenCenterPanel.js:1002
+#: js/MainScreenCenterPanel.js:1009
 msgid "Delete nothing"
 msgstr "Mos fshij asgjë"
 
-#: js/MainScreenCenterPanel.js:1053
+#: js/MainScreenCenterPanel.js:1060
 #, python-brace-format
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Doni vërtetë të fshini këtë ngjarje?"
 msgstr[1] "Doni vertetë të fshini këto ngjarje"
 
-#: js/MainScreenCenterPanel.js:1268
+#: js/MainScreenCenterPanel.js:1322
 msgid "Could not Print"
 msgstr "Nuk mund të Printohej"
 
-#: js/MainScreenCenterPanel.js:1268
+#: js/MainScreenCenterPanel.js:1322
 msgid "Sorry, your current view does not support printing."
 msgstr "Na falni, pamja juaj e shfaqur aktualisht nuk përmban printimin"
 
-#: js/MainScreenCenterPanel.js:1421
+#: js/MainScreenCenterPanel.js:1475
 msgid "Scheduling Conflict"
 msgstr "Duke planifikuar konfliktin"
 
-#: js/MainScreenCenterPanel.js:1423
+#: js/MainScreenCenterPanel.js:1477
 msgid "The following attendee are busy at the requested time:"
 msgstr "Vijuesit e mëposhtëm janë të zënë në kohën e kërkuar"
 
-#: js/MainScreenCenterPanel.js:1427
+#: js/MainScreenCenterPanel.js:1481
 msgid "Ignore Conflict"
 msgstr "Injoro konfliktin"
 
-#: js/MainScreenCenterPanel.js:1428
+#: js/MainScreenCenterPanel.js:1482
 msgid "Edit Event"
 msgstr "Modifiko ngjarjen"
 
-#: js/MainScreenCenterPanel.js:1429
+#: js/MainScreenCenterPanel.js:1483
 msgid "Cancel this action"
 msgstr "Anullo këtë veprim"
 
@@ -1025,230 +1033,265 @@ msgstr "Rradhit Vijuesit"
 msgid "Check to filter for this attendee"
 msgstr "Kontrollo tek filtri për këtë vijues"
 
-#: Controller/EventNotifications.php:355
+#: Controller/EventNotifications.php:365
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarm për ngjarjen \"%1$s\" në %2$s"
 
-#: Controller/EventNotifications.php:358
+#: Controller/EventNotifications.php:368
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Ftesë për ngjarje  \"%1$s\" në %2$s"
 
-#: Controller/EventNotifications.php:362
+#: Controller/EventNotifications.php:372
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Ngjarja \"%1$s\" në %2$s është anulluar"
 
-#: Controller/EventNotifications.php:370
+#: Controller/EventNotifications.php:380
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Ngjarja \"%1$s\" është riplanifikuar nga %2$s në %3$s"
 
-#: Controller/EventNotifications.php:377
+#: Controller/EventNotifications.php:387
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Ngjarja \"%1$s\" në %2$s është përditësuar"
 
-#: Controller/EventNotifications.php:388
+#: Controller/EventNotifications.php:398
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s ngjarje e pranuar \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:392
+#: Controller/EventNotifications.php:402
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s ngjarje e refuzuar \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:396
+#: Controller/EventNotifications.php:406
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Përgjigje e pa qartë nga %1$s për ngjarjen \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:400
+#: Controller/EventNotifications.php:410
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Nuk ka përgjigje nga %1$s për ngjarjen \"%2$s\" në %3$s"
 
-#: Controller/EventNotifications.php:404
+#: Controller/EventNotifications.php:414
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Ndryshime në vijim për ngjarjen \"%1$s\" në %2$s"
 
-#: Preference.php:36
+#: Preference.php:41
 msgid "All my events"
 msgstr "Të gjitha ngjarjet e mia"
 
-#: Preference.php:104
+#: Preference.php:115
 msgid "Position on the left time axis, day and week view should start with"
 msgstr "Pozicioni i krahut të majte kohor, pamja e ditës dhe javës duhet të fillojë me  "
 
-#: Preference.php:108
+#: Preference.php:119
 msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-#: Preference.php:111
+#: Preference.php:122
+msgid "Default Start Time"
+msgstr ""
+
+#: Preference.php:123
+msgid ""
+"Scroll position on the left time axis, day and week view should start with"
+msgstr ""
+
+#: Preference.php:126
 msgid "Default Calendar"
 msgstr "Kalendari i paracaktuar"
 
-#: Preference.php:112
+#: Preference.php:127
 msgid "The default calendar for invitations and new events"
 msgstr "Kalendari i paracaktuar për ftesa dhe ngjarje të reja"
 
-#: Preference.php:115
+#: Preference.php:130
 msgid "Default Favorite"
 msgstr "Të preferuarat e Paracaktuara"
 
-#: Preference.php:116
+#: Preference.php:131
 msgid "The default favorite which is loaded on calendar startup"
 msgstr "E preferuara e paracaktuar që ngarkohet në nisje të kalendarit"
 
-#: Preference.php:119
+#: Preference.php:134
 msgid "Get Notification Emails"
 msgstr "Merr E-Postë njoftuese"
 
-#: Preference.php:120
+#: Preference.php:135
 msgid ""
 "The level of actions you want to be notified about. Please note that "
 "organizers will get notifications for all updates including attendee answers"
 " unless this preference is set to \"Never\""
 msgstr "Niveli i veprimeve që ju doni të njoftoheni. Ju lutem kini parasysh që organizuesit do të marrin njoftimpër të gjithë përditësimet, përfshirë edhe përgjigjet e vijuesëve, derisa kjo preferncë të jetë vendosur në \"Never\""
 
-#: Preference.php:123
+#: Preference.php:138
 msgid "Send Notifications Emails of own Actions"
 msgstr "Dërgo E-Postë njoftuese për Veprimet vetjake"
 
-#: Preference.php:124
+#: Preference.php:139
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Dërgo E-Postë njoftuese për veprimet që bëre vetë"
 
-#: Preference.php:127
+#: Preference.php:142
 msgid "Enable Standard Alarm"
 msgstr "Aktivizo Alarmin Standart"
 
-#: Preference.php:128
+#: Preference.php:143
 msgid "New events get a standard alarm as defined below"
 msgstr "Ngjarjet e reja marrin një alarm standart siç përcaktohet më poshtë"
 
-#: Preference.php:131
+#: Preference.php:146
 msgid "Standard Alarm Time"
 msgstr "Koha e Alarmit Standart"
 
-#: Preference.php:132
+#: Preference.php:147
 msgid "Minutes before the event starts"
 msgstr "Minuta përpara se ngjarja të fillojë"
 
-#: Preference.php:135
+#: Preference.php:150
 msgid "Default Attendee Strategy"
 msgstr ""
 
-#: Preference.php:136
+#: Preference.php:151
 msgid "Default Attendee Strategy for new events"
 msgstr ""
 
-#: Preference.php:211
+#: Preference.php:230
 msgid "Never"
 msgstr "Asnjëherë"
 
-#: Preference.php:211
+#: Preference.php:230
 msgid "On invitation and cancellation only"
 msgstr "Vetëm në ftesa dhe anullime"
 
-#: Preference.php:211
+#: Preference.php:230
 msgid "On time changes"
 msgstr "Në ndryshime të kohës"
 
-#: Preference.php:211
+#: Preference.php:230
 msgid "On all updates but attendee responses"
 msgstr "Në të gjithë përditësimet e përgjigjeve të vijuesve"
 
-#: Preference.php:211
+#: Preference.php:230
 msgid "On attendee responses too"
 msgstr "Gjithashtu në përgjigje të vijuesve"
 
-#: Config.php:101
+#: Config.php:120
 msgid "Fixed Calendars"
 msgstr "Kalendarë fiks"
 
-#: Config.php:103
+#: Config.php:122
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "Kalendarët zgjidhen gjithmonë në pamvarësi të parametrave të filtrave. Një përdorim i vlefshëmmund të jetë të shfaqet me forcë një kalendar pushimesh"
 
-#: Config.php:111
+#: Config.php:130
 msgid "Crop Days"
 msgstr ""
 
-#: Config.php:113
+#: Config.php:132 Config.php:156
 msgid "Crop calendar view configured start and endtime."
 msgstr ""
 
-#: Config.php:121
+#: Config.php:142
 msgid "Crop Days Limit Override"
 msgstr ""
 
-#: Config.php:123
+#: Config.php:144
 msgid "Allow events outside start and endtime."
 msgstr ""
 
-#: Config.php:131
+#: Config.php:154
+msgid "Week View Mouse Wheel Increment"
+msgstr ""
+
+#: Config.php:167
 msgid "Attendee Status Available"
 msgstr "Statusi Vijuesi i disponueshëm"
 
-#: Config.php:133
+#: Config.php:169
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Nje status vijuesi i mundshëm. Lutemi kujdes, pasi një status vijuesi shtesë, mund tëndikojë sistemet e tjerë kalendarik gjatë eksporit ose sinkronizimit"
 
-#: Config.php:141
+#: Config.php:177
 msgid "Attendee Roles Available"
 msgstr "Role Vijuesi të disponueshëm"
 
-#: Config.php:143
+#: Config.php:179
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or syncronisation."
 msgstr "Një rol vijuesi i mundshëm. Lutemi kujdes pasi një rol vijuesi shtesë, mund tëndikojë sistemet e tjerë kalendarik gjatë eskportit ose sinkronizimit"
 
-#: Config.php:151
+#: Config.php:187
 msgid "Filter timeslot for CalDAV events"
 msgstr "Filtroni intervalet kohore per ngjarjet e CalDAV"
 
-#: Config.php:153
+#: Config.php:189
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
 msgstr "Per sa kohe ne te shkuaren (muaj) duhet te sinkronizohen ngjarjet"
 
-#: Config.php:162
+#: Config.php:198
 msgid "Timeslot for event notifications"
 msgstr ""
 
-#: Config.php:164
+#: Config.php:200
 msgid ""
 "For how long in the past (in weeks) event notifications should be sent."
 msgstr ""
 
-#: Config.php:173
+#: Config.php:209
 msgid "Default filter period (from) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:175
+#: Config.php:211
 msgid "For how long in the past (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:184
+#: Config.php:220
 msgid "Default filter period (until) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:186
+#: Config.php:222
 msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:195 Config.php:197
+#: Config.php:231 Config.php:233
 msgid "Disable iMIP for external organizers"
 msgstr ""
 
-#: Config.php:206
+#: Config.php:242
 msgid "(CalDAV) Skip double events from personal or shared calendar"
 msgstr ""
 
-#: Config.php:208
+#: Config.php:244
 msgid ""
 "(CalDAV) Skip double events from personal or shared calendar (\"personal\" >"
 " Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
+msgstr ""
+
+#: Config.php:253
+msgid ""
+"Send notifications to every user with edit permissions of the added "
+"resources"
+msgstr ""
+
+#: Config.php:263
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:265
+msgid "Enabled Features in Calendar Application."
+msgstr ""
+
+#: Config.php:272
+msgid "Calendar Split View"
+msgstr ""
+
+#: Config.php:273
+msgid "Split day and week views by attendee)"
 msgstr ""
 
 #: Import/definitions/cal_import_ical.xml:12

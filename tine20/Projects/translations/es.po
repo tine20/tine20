@@ -23,15 +23,15 @@ msgstr ""
 msgid "%s's personal Projects"
 msgstr "Proyectos personales de %s"
 
-#: Acl/Rights.php:91
+#: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr "Gestionar proyectos favoritos compartidos"
 
-#: Acl/Rights.php:92
+#: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr "Crear un nuevo proyecto compartido favorito"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Proyecto"
@@ -51,19 +51,19 @@ msgstr "Listas de Proyectos"
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:133 js/ProjectGridPanel.js:128
+#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Título"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:138 js/ProjectGridPanel.js:121
+#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Número"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:174
+#: js/Model.js:77 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr "Descripción"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:144 js/ProjectGridPanel.js:134
+#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Estado"
 
@@ -83,15 +83,15 @@ msgstr "Fecha de Creación"
 msgid "Created By"
 msgstr "Creado por"
 
-#: js/ProjectEditDialog.js:80 js/ProjectAttendeeFilter.js:38
+#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr "Asistentes"
 
-#: js/ProjectEditDialog.js:81 js/AddToProjectPanel.js:81
+#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
 msgid "Role"
 msgstr "Cargo"
 
-#: js/ProjectEditDialog.js:188
+#: js/ProjectEditDialog.js:192
 msgid "Enter description"
 msgstr "Escribir descripción"
 

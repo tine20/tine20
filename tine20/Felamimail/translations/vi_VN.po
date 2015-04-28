@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (Viet Nam) (http://www.transifex.com/projects/p/tine20/language/vi_VN/)\n"
 "MIME-Version: 1.0\n"
@@ -309,8 +309,8 @@ msgid "Last update:"
 msgstr ""
 
 #: js/TreePanel.js:732
-#, python-format, python-brace-format
-msgid "Fetching messages... ({0}%% done)"
+#, python-brace-format
+msgid "Fetching messages... ({0} done)"
 msgstr ""
 
 #: js/TreePanel.js:748

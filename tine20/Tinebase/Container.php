@@ -135,8 +135,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $_container->isValid(TRUE);
         
-        if($_ignoreAcl !== TRUE) {
-            switch($_container->type) {
+        if ($_ignoreAcl !== TRUE) {
+            switch ($_container->type) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     // is the user allowed to create personal container?
                     break;
@@ -374,6 +374,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows, TRUE);
+        
         return $result;
     }
     
@@ -407,7 +408,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             sort($grant);
         }
         
-        $classCacheId = Tinebase_Helper::convertCacheId($accountId . $applicationId . implode('', (array)$grant) . (int)$onlyIds . (int)$ignoreACL);
+        $classCacheId = $accountId . $applicationId . implode('', (array)$grant) . (int)$onlyIds . (int)$ignoreACL;
         
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
@@ -470,25 +471,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
-        $classCacheId = $containerId . 'd' . (int)$_getDeleted;
-        $cacheId      = 'getContainerById' . $classCacheId;
+        $cacheId = $containerId . 'd' . (int)$_getDeleted;
         
         try {
-            return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
+            return $this->loadFromClassCache(__FUNCTION__, $cacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // continue...
         }
         
-        // load from cache
-        $cache = Tinebase_Core::getCache();
-        $result = $cache->load($cacheId);
-
-        if ($result === FALSE) {
-            $result = $this->get($containerId, $_getDeleted);
-            $cache->save($result, $cacheId, array('container'));
-        }
+        $result = $this->get($containerId, $_getDeleted);
         
-        $this->saveInClassCache(__FUNCTION__, $classCacheId, $result);
+        $this->saveInClassCache(__FUNCTION__, $cacheId, $result, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
         
         return $result;
     }
@@ -583,14 +576,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $grant       = $_ignoreACL ? '*' : $_grant;
         $application = Tinebase_Application::getInstance()->getApplicationByName($meta['appName']);
         
-        $classCacheId = Tinebase_Helper::convertCacheId(
-            $accountId .
-            $application->getId() .
-            ($meta['recordClass'] ? $meta['recordClass'] : null) .
-            $ownerId .
-            implode('', (array)$grant) .
-            (int)$_ignoreACL
-        );
+        $classCacheId = $accountId .
+                        $application->getId() .
+                        ($meta['recordClass'] ? $meta['recordClass'] : null) .
+                        $ownerId .
+                        implode('', (array)$grant) .
+                        (int)$_ignoreACL;
         
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
@@ -778,12 +769,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $grant       = $_ignoreACL ? '*' : $_grant;
         
-        $classCacheId = Tinebase_Helper::convertCacheId(
-            $accountId .
-            $application->getId() .
-            implode('', (array)$grant) .
-            (int)$_ignoreACL
-        );
+        $classCacheId = $accountId .
+                        $application->getId() .
+                        implode('', (array)$grant) .
+                        (int)$_ignoreACL;
         
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
@@ -853,7 +842,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         $grant       = $_ignoreACL ? '*' : $_grant;
 
-        $classCacheId = Tinebase_Helper::convertCacheId($accountId . $application->getId() . implode('', (array)$grant) .(int)$_ignoreACL);
+        $classCacheId = $accountId . $application->getId() . implode('', (array)$grant) .(int)$_ignoreACL;
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -943,12 +932,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         $grant       = $_ignoreACL ? '*' : $_grant;
         
-        $classCacheId = Tinebase_Helper::convertCacheId(
-            $accountId .
-            $application->getId() .
-            implode('', (array)$grant) .
-            (int)$_ignoreACL
-        );
+        $classCacheId = $accountId .
+                        $application->getId() .
+                        implode('', (array)$grant) .
+                        (int)$_ignoreACL;
         
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
@@ -1198,8 +1185,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' account: ' . $accountId . ' / containerId: ' . $containerId . ' / grant:' . implode('/', (array)$_grant));
         
-        $classCacheId = Tinebase_Helper::convertCacheId($accountId . $containerId . implode('', (array)$_grant));
-
+        $classCacheId = $accountId . $containerId . implode('', (array)$_grant);
+        
         try {
             $allGrants = $this->loadFromClassCache(__FUNCTION__, $classCacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -1300,23 +1287,28 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         $container          = ($_containerId instanceof Tinebase_Model_Container) ? $_containerId : $this->getContainerById($_containerId);
         
-        $cacheKey = Tinebase_Helper::convertCacheId('getGrantsOfAccount' . $containerId . $accountId . $container->seq);
-        $cache = Tinebase_Core::getCache();
-        $grants = $cache->load($cacheKey);
-        if ($grants === FALSE) {
-            $select = $this->_getAclSelectByContainerId($containerId)
-                ->group('container_acl.account_grant');
+        $classCacheId = $accountId . $containerId . $container->seq . $_grantModel;
+        
+        try {
+            return $this->loadFromClassCache(__FUNCTION__, $classCacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        } catch (Tinebase_Exception_NotFound $tenf) {
             
-            $this->addGrantsSql($select, $accountId, '*');
-            
-            Tinebase_Backend_Sql_Abstract::traitGroup($select);
-            
-            $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
-            $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
-            
-            $cache->save($grants, $cacheKey, array('container'), self::ACL_CACHE_TIMEOUT);
         }
+        
+        $select = $this->_getAclSelectByContainerId($containerId)
+            ->group('container_acl.account_grant');
+        
+        $this->addGrantsSql($select, $accountId, '*');
+        
+        Tinebase_Backend_Sql_Abstract::traitGroup($select);
+        
+        $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
+        
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
+        
+        $this->saveInClassCache(__FUNCTION__, $classCacheId, $grants, Tinebase_Cache_PerRequest::VISIBILITY_SHARED, self::ACL_CACHE_TIMEOUT);
         
         return $grants;
     }
@@ -1693,15 +1685,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getContentHistory($containerId, $lastContentSeq = 0)
     {
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($containerId);
         $filter = new Tinebase_Model_ContainerContentFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals',  'value' => $containerId),
+            array('field' => 'container_id', 'operator' => 'equals',  'value' => Tinebase_Model_Container::convertContainerIdToInt($containerId)),
             array('field' => 'content_seq',  'operator' => 'greater', 'value' => $lastContentSeq),
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'sort' => 'content_seq'
         ));
+        
         $result = $this->_getContentBackend()->search($filter, $pagination);
+        
         return $result;
     }
 
