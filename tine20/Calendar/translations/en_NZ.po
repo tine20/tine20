@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Ingo Ratsdorf <ingo@envirology.co.nz>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2015-04-14 23:00+0000\n"
+"Last-Translator: Ingo Ratsdorf <ingo@envirology.co.nz>\n"
 "Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,7 +52,7 @@ msgstr ""
 
 #: Acl/Rights.php:112
 msgid "All Rights to administrate resources"
-msgstr ""
+msgstr "All rights to administer resources"
 
 #: Model/Rrule.php:343
 #, python-format
@@ -93,11 +94,11 @@ msgstr ""
 
 #: Model/Rrule.php:386
 msgid "Yearly every %1$s %2$s of %3$s"
-msgstr ""
+msgstr "Yearly every %1$s %2$s %3$s"
 
 #: Model/Rrule.php:388
 msgid "Yearly on the %1$s of %2$s"
-msgstr ""
+msgstr "Yearly on the %1$s %2$s"
 
 #: Model/Rrule.php:428
 msgid "second to last"
@@ -150,7 +151,7 @@ msgstr ""
 #: Model/Attender.php:470
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr ""
+msgstr "This contact has been automatically added by the system as an attendee"
 
 #: Model/Attender.php:473
 msgid "The email address has been shortened:"
@@ -248,7 +249,7 @@ msgstr ""
 
 #: js/AttendeeFilterModel.js:100
 msgid "Select Attendee"
-msgstr ""
+msgstr "Select attendee"
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -298,17 +299,17 @@ msgstr ""
 #: js/RrulePanel.js:411
 #, python-brace-format
 msgid "Every {0}. Day"
-msgstr ""
+msgstr "Every {0}. day"
 
 #: js/RrulePanel.js:444
 #, python-brace-format
 msgid "Every {0}. Week at"
-msgstr ""
+msgstr "Every {0}. week at"
 
 #: js/RrulePanel.js:514
 #, python-brace-format
 msgid "Every {0}. Month"
-msgstr ""
+msgstr "Every {0}. month"
 
 #: js/RrulePanel.js:520 js/RrulePanel.js:569 js/RrulePanel.js:701
 #: js/RrulePanel.js:751
@@ -318,7 +319,7 @@ msgstr ""
 #: js/RrulePanel.js:694
 #, python-brace-format
 msgid "Every {0}. Year"
-msgstr ""
+msgstr "Every {0}. year"
 
 #: js/RrulePanel.js:792 js/RrulePanel.js:800
 msgid "of"
@@ -326,7 +327,7 @@ msgstr ""
 
 #: js/AdminPanel.js:45
 msgid "Manage Resources"
-msgstr ""
+msgstr "Manage resources"
 
 #: js/CalendarSelectWidget.js:124
 msgid "Originally"
@@ -334,7 +335,7 @@ msgstr ""
 
 #: js/ImportDialog.js:112
 msgid "Import Definition Success!"
-msgstr ""
+msgstr "Successfully imported definitions!"
 
 #: js/ImportDialog.js:113
 msgid ""
@@ -344,7 +345,7 @@ msgstr ""
 
 #: js/ImportDialog.js:139
 msgid "Choose Import File"
-msgstr ""
+msgstr "Choose import file"
 
 #: js/ImportDialog.js:143
 msgid ""
@@ -374,7 +375,7 @@ msgstr ""
 
 #: js/ImportDialog.js:178
 msgid "Choose Remote Location"
-msgstr ""
+msgstr "Choose remote location"
 
 #: js/ImportDialog.js:182
 msgid "Please choose a remote location you want to add to Tine 2.0"
@@ -394,7 +395,7 @@ msgstr ""
 
 #: js/ImportDialog.js:262
 msgid "General Settings"
-msgstr ""
+msgstr "General settings"
 
 #: js/ImportDialog.js:267
 msgid ""

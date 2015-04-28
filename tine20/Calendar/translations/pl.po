@@ -1,13 +1,13 @@
 # 
 # Translators:
 # Michal Wojcik <sardyna12@gmail.com>, 2013
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2015-02-01 16:11+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,11 +25,11 @@ msgstr "%s's kalendarz osobisty"
 
 #: Exception/InvalidUrl.php:21
 msgid "Invalid URL given"
-msgstr ""
+msgstr "Podano nieprawidłowy URL"
 
 #: Exception/InvalidUrl.php:26
 msgid "The URL you used is invalid. Please use a valid one!"
-msgstr ""
+msgstr "Użyty URL jest nieprawidłowy. Proszę korzystać z prawidłowego adresu!"
 
 #: Acl/Rights.php:103
 msgid "manage shared calendars"
@@ -58,7 +58,7 @@ msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 #: Model/Rrule.php:343
 #, python-format
 msgid "Every %s day"
-msgstr ""
+msgstr "Co %s dzień"
 
 #: Model/Rrule.php:344 js/RrulePanel.js:79
 msgid "Daily"
@@ -67,83 +67,83 @@ msgstr "Codziennie"
 #: Model/Rrule.php:349
 #, python-format
 msgid "Every %s week on"
-msgstr ""
+msgstr "Co %s tydzień"
 
 #: Model/Rrule.php:350
 msgid "Weekly on"
-msgstr ""
+msgstr "Cotygodniowo"
 
 #: Model/Rrule.php:357
 msgid "and"
-msgstr ""
+msgstr "i"
 
 #: Model/Rrule.php:369
 msgid "Every %1$s month on the %2$s %3$s"
-msgstr ""
+msgstr "Każdego %1$s miesiąca o %2$s %3$s"
 
 #: Model/Rrule.php:370
 msgid "Monthly every %1$s %2$s"
-msgstr ""
+msgstr "Co miesiąc, każdego %1$s %2$s"
 
 #: Model/Rrule.php:376
 msgid "Every %1$s month on the %2$s"
-msgstr ""
+msgstr "Każdego %1$s miesiąca o %2$s"
 
 #: Model/Rrule.php:377
 msgid "Monthly on the %1$s"
-msgstr ""
+msgstr "Co miesiąc o %1$s"
 
 #: Model/Rrule.php:386
 msgid "Yearly every %1$s %2$s of %3$s"
-msgstr ""
+msgstr "Co rok, każdego %1$s %2$s %3$s"
 
 #: Model/Rrule.php:388
 msgid "Yearly on the %1$s of %2$s"
-msgstr ""
+msgstr "Co rok, każdego %1$s %2$s"
 
 #: Model/Rrule.php:428
 msgid "second to last"
-msgstr ""
+msgstr "przedostatni"
 
 #: Model/Rrule.php:431 js/RrulePanel.js:543 js/RrulePanel.js:724
 msgid "last"
-msgstr "ostatni(a)"
+msgstr "ostatni"
 
 #: Model/Rrule.php:437 js/RrulePanel.js:539 js/RrulePanel.js:720
 msgid "first"
-msgstr "pierwszy(a)"
+msgstr "pierwszy"
 
 #: Model/Rrule.php:440 js/RrulePanel.js:540 js/RrulePanel.js:721
 msgid "second"
-msgstr "drugi(a)"
+msgstr "drugi"
 
 #: Model/Rrule.php:443 js/RrulePanel.js:541 js/RrulePanel.js:722
 msgid "third"
-msgstr "trzeci(a)"
+msgstr "trzeci"
 
 #: Model/Rrule.php:446 js/RrulePanel.js:542 js/RrulePanel.js:723
 msgid "fourth"
-msgstr "czwarty(a)"
+msgstr "czwarty"
 
 #: Model/Rrule.php:449
 msgid "fifth"
-msgstr ""
+msgstr "piąty"
 
 #: Model/Rrule.php:454
 msgid "st"
-msgstr ""
+msgstr "-wszy"
 
 #: Model/Rrule.php:457
 msgid "nd"
-msgstr ""
+msgstr "-gi"
 
 #: Model/Rrule.php:460
 msgid "rd"
-msgstr ""
+msgstr "-ci"
 
 #: Model/Rrule.php:463
 msgid "th"
-msgstr ""
+msgstr "-ty"
 
 #: Model/Attender.php:163
 msgid "unknown"
@@ -156,7 +156,7 @@ msgstr "Niniejszy kontakt został dodany automatycznie podczas synchronizacji sy
 
 #: Model/Attender.php:473
 msgid "The email address has been shortened:"
-msgstr ""
+msgstr "Adres e-mail został skrócony:"
 
 #: Model/Event.php:366
 msgid "Start"
@@ -336,130 +336,130 @@ msgstr "Pierwotny kalendarz"
 
 #: js/ImportDialog.js:112
 msgid "Import Definition Success!"
-msgstr ""
+msgstr "Definiowanie importu zakończone!"
 
 #: js/ImportDialog.js:113
 msgid ""
 "The Ical Import definition has been created successfully! Please wait some "
 "minutes to get the events synced by the cronjob."
-msgstr ""
+msgstr "Definiowanie importu kalendarza - Ical zakończone pomyślnie! Proszę poczekać kilka minut, aż usługa cronjob zsynchronizuje wydarzenia."
 
 #: js/ImportDialog.js:139
 msgid "Choose Import File"
-msgstr ""
+msgstr "Wybierz plik do zaimportowania"
 
 #: js/ImportDialog.js:143
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr ""
+msgstr "Proszę wybrać plik zawierający wpisy przeznaczone do dodania do Tine 2.0"
 
 #: js/ImportDialog.js:147
 #, python-brace-format
 msgid "Select file containing your {0}"
-msgstr ""
+msgstr "Wybierz plik zawierający {0}"
 
 #: js/ImportDialog.js:162
 msgid "once"
-msgstr ""
+msgstr "jednokrotnie"
 
 #: js/ImportDialog.js:163
 msgid "hourly"
-msgstr ""
+msgstr "co godzinę"
 
 #: js/ImportDialog.js:164
 msgid "daily"
-msgstr ""
+msgstr "codziennie"
 
 #: js/ImportDialog.js:165
 msgid "weekly"
-msgstr ""
+msgstr "co tydzień"
 
 #: js/ImportDialog.js:178
 msgid "Choose Remote Location"
-msgstr ""
+msgstr "Wybierz zdalne położenie"
 
 #: js/ImportDialog.js:182
 msgid "Please choose a remote location you want to add to Tine 2.0"
-msgstr ""
+msgstr "Proszę wybrać zdalne położenie przeznaczone do dodania do Tine 2.0"
 
 #: js/ImportDialog.js:197
 msgid "Username (CalDAV only)"
-msgstr ""
+msgstr "Nazwa użytkownika (dotyczy CalDAV)"
 
 #: js/ImportDialog.js:213
 msgid "Password (CalDAV only)"
-msgstr ""
+msgstr "Hasło (dotyczy CalDAV)"
 
 #: js/ImportDialog.js:230
 msgid "Refresh time"
-msgstr ""
+msgstr "Czas odświeżania"
 
 #: js/ImportDialog.js:262
 msgid "General Settings"
-msgstr ""
+msgstr "Ustawienia ogólne"
 
 #: js/ImportDialog.js:267
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
-msgstr ""
+msgstr "Nazwa kontenera / Nowa albo istniejąca. Należy posiadać uprawnienia do dodawania nazw."
 
 #: js/ImportDialog.js:286
 msgid "or"
-msgstr ""
+msgstr "albo"
 
 #: js/ImportDialog.js:327
 msgid "What should the file you upload look like?"
-msgstr ""
+msgstr "Jak ma wyglądać plik do wysłania?"
 
 #: js/ImportDialog.js:332
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You"
 " will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr ""
+msgstr "Tine 2.0 nie rozumie każdego typu pliku przeznaczonego do wysłania. Plik należy dostosować tak, aby Tine 2.0 mogła go przetworzyć."
 
 #: js/ImportDialog.js:335
 msgid ""
 "Following you find a list of all supported import formats and a sample file,"
 " how Tine 2.0 expects your file to look like."
-msgstr ""
+msgstr "Poniżej znajduje się lista wszystkich obsługiwanych formatów importu i przykładowy plik, który Tine 2.0 potrafi przetworzyć."
 
 #: js/ImportDialog.js:338
 msgid "Please select the import format of the file you want to upload"
-msgstr ""
+msgstr "Proszę wybierz format importu dla pliku przeznaczonego do wysłania."
 
 #: js/ImportDialog.js:359
 msgid "Download example file"
-msgstr ""
+msgstr "Pobierz przykładowy plik."
 
 #: js/ImportDialog.js:381
 msgid "Remote / ICS"
-msgstr ""
+msgstr "Zdalnie / ICS"
 
 #: js/ImportDialog.js:382
 msgid "Remote / CalDAV (BETA)"
-msgstr ""
+msgstr "Zdalnie / CalDAV (BETA)"
 
 #: js/ImportDialog.js:383
 msgid "Upload"
-msgstr ""
+msgstr "Wysyłanie"
 
 #: js/ImportDialog.js:396
 msgid "Choose File and Format"
-msgstr ""
+msgstr "Wybierz plik i format"
 
 #: js/ImportDialog.js:405
 msgid "Select type of source"
-msgstr ""
+msgstr "Wybierz typ źródła"
 
 #: js/ImportDialog.js:409
 msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr ""
+msgstr "Proszę wybrać typ źródła przeznaczony do dodania do Tine 2.0"
 
 #: js/ImportDialog.js:461
 #, python-brace-format
 msgid "Importing {0}"
-msgstr ""
+msgstr "Importowanie {0}"
 
 #: js/iMIPDetailsPanel.js:69
 msgid "Checking Calendar Data..."
@@ -579,7 +579,7 @@ msgstr "Brak informacji"
 
 #: js/EventDetailsPanel.js:66
 msgid "Unknown date"
-msgstr ""
+msgstr "Nieznana data"
 
 #: js/EventDetailsPanel.js:69
 #, python-brace-format
@@ -602,7 +602,7 @@ msgstr "Koniec"
 #: js/EventDetailsPanel.js:275 js/EventEditDialog.js:198 js/GridView.js:135
 #: Setup/Initialize.php:115 Setup/Update/Release5.php:94
 msgid "Tentative"
-msgstr "Brak ostatecznej decyzji"
+msgstr "Brak decyzji"
 
 #: js/EventEditDialog.js:95
 msgid "View"
@@ -635,7 +635,7 @@ msgstr "Wprowadź opis"
 
 #: js/EventEditDialog.js:307
 msgid "Mute Notification"
-msgstr ""
+msgstr "Wycisz powiadomienie"
 
 #: js/EventEditDialog.js:542
 msgid "End date is not valid"
@@ -648,7 +648,7 @@ msgstr "Data zakończenia musi przypadać po dacie rozpoczęcia"
 #: js/EventEditDialog.js:548
 msgid ""
 "End date is not allowed to be be higher than the configured time range."
-msgstr ""
+msgstr "Data zakończenia nie może być późniejsza niż skonfigurowany zakres czasu."
 
 #: js/EventEditDialog.js:569
 msgid "Start date is not valid"
@@ -656,7 +656,7 @@ msgstr "Nieprawidłowa data rozpoczęcia"
 
 #: js/EventEditDialog.js:572
 msgid "End date is not allowed to be be lower than the configured time range."
-msgstr ""
+msgstr "Dada zakończenia nie może być późniejsza niż skonfigurowany zakres czasu."
 
 #: js/EventEditDialog.js:592
 msgid "Errors"
@@ -675,7 +675,7 @@ msgstr "kalendarze"
 
 #: js/Model.js:282
 msgid "Quick Search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:289
 msgid "Attendee Status"
@@ -737,7 +737,7 @@ msgstr "Ikona"
 
 #: js/AttendeeGridPanel.js:187
 msgid "Click icon to change"
-msgstr ""
+msgstr "Klknij ikonę, by zmienić"
 
 #: js/AttendeeGridPanel.js:194
 msgid "User"
@@ -757,7 +757,7 @@ msgstr "Usuń uczestnika"
 
 #: js/AttendeeGridPanel.js:418
 msgid "Compose email"
-msgstr ""
+msgstr "Napisz e-mail"
 
 #: js/AttendeeGridPanel.js:588
 msgid "(as a group member)"
@@ -810,7 +810,7 @@ msgstr "z alarmem"
 
 #: js/EventUI.js:265
 msgid "has attachments"
-msgstr ""
+msgstr "posiada załączniki"
 
 #: js/DaysView.js:110
 #, python-brace-format
@@ -848,11 +848,11 @@ msgstr "Ładowanie terminów, proszę czekać..."
 
 #: js/MainScreenCenterPanel.js:152
 msgid "Cut event"
-msgstr ""
+msgstr "Wytnij wydarzenie"
 
 #: js/MainScreenCenterPanel.js:159
 msgid "Stop cut & paste"
-msgstr ""
+msgstr "Zatrzymaj wycinanie i wklejanie"
 
 #: js/MainScreenCenterPanel.js:180
 msgid "Print Page"
@@ -868,15 +868,15 @@ msgstr "Kratka"
 
 #: js/MainScreenCenterPanel.js:206
 msgid "Export Events"
-msgstr ""
+msgstr "Eksportuj wydarzenia"
 
 #: js/MainScreenCenterPanel.js:214
 msgid "Export as ODS"
-msgstr ""
+msgstr "Eksportuj jako ODS"
 
 #: js/MainScreenCenterPanel.js:221
 msgid "Export as ..."
-msgstr ""
+msgstr "Eksportuj jako ..."
 
 #: js/MainScreenCenterPanel.js:263
 msgid "Day"
@@ -892,12 +892,12 @@ msgstr "Miesiąc"
 
 #: js/MainScreenCenterPanel.js:291
 msgid "Import Events"
-msgstr ""
+msgstr "Importuj wydarzenia"
 
 #: js/MainScreenCenterPanel.js:334
 #, python-brace-format
 msgid "Paste event \"{0}\""
-msgstr ""
+msgstr "Wklej wydarzenie \"{0}\""
 
 #: js/MainScreenCenterPanel.js:650
 msgid "Set my response"
@@ -1024,7 +1024,7 @@ msgstr "Dodaj uczestnika"
 
 #: js/AttendeeFilterGrid.js:47
 msgid "Sort Attendee"
-msgstr ""
+msgstr "Sortuj uczestnika"
 
 #: js/AttendeeFilterGrid.js:60
 msgid "Check to filter for this attendee"
@@ -1080,7 +1080,7 @@ msgstr "Pozycja na lewej osi czasu, niech widok dni i tygodni zaczyna się od"
 
 #: Preference.php:108
 msgid "Position on the left time axis, day and week view should end with"
-msgstr ""
+msgstr "Położenie na lewej osi czasu ograniczającej widok dni i tygodni"
 
 #: Preference.php:111
 msgid "Default Calendar"
@@ -1135,11 +1135,11 @@ msgstr "Ilość minut do rozpoczęcia zdarzenia"
 
 #: Preference.php:135
 msgid "Default Attendee Strategy"
-msgstr ""
+msgstr "Domyślna strategia uczestnika"
 
 #: Preference.php:136
 msgid "Default Attendee Strategy for new events"
-msgstr ""
+msgstr "Domyślna strategia uczestnika dla nowych wydarzeń"
 
 #: Preference.php:211
 msgid "Never"
@@ -1173,19 +1173,19 @@ msgstr "Kalendarze wybrane zawsze, bez względu na wszelkie parametry filtru. Pr
 
 #: Config.php:111
 msgid "Crop Days"
-msgstr ""
+msgstr "Ogranicz dni"
 
 #: Config.php:113
 msgid "Crop calendar view configured start and endtime."
-msgstr ""
+msgstr "Ogranicz datę rozpoczęcia i zakończenia widoku kalendarza"
 
 #: Config.php:121
 msgid "Crop Days Limit Override"
-msgstr ""
+msgstr "Ogranicz nadpisywanie limitu dni"
 
 #: Config.php:123
 msgid "Allow events outside start and endtime."
-msgstr ""
+msgstr "Zezwól na wydarzenia spoza daty rozpoczęcia i zakończenia."
 
 #: Config.php:131
 msgid "Attendee Status Available"
@@ -1209,56 +1209,56 @@ msgstr "Role użytkownika: Możliwe terminy. Zauważ proszę, że dodatkowe role
 
 #: Config.php:151
 msgid "Filter timeslot for CalDAV events"
-msgstr ""
+msgstr "Filtruj przydział czasu dla wydarzeń z CalDAV"
 
 #: Config.php:153
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
-msgstr ""
+msgstr "Jak daleko wstecz (w miesiącach) należy zsynchronizować wydarzenia."
 
 #: Config.php:162
 msgid "Timeslot for event notifications"
-msgstr ""
+msgstr "Przydział czasu dla powiadomień o wydarzeniach"
 
 #: Config.php:164
 msgid ""
 "For how long in the past (in weeks) event notifications should be sent."
-msgstr ""
+msgstr "Jak daleko wstecz (w tygodniach) należy wysyłać powiadomienia o wydarzeniach."
 
 #: Config.php:173
 msgid "Default filter period (from) for events fetched via JSON API"
-msgstr ""
+msgstr "Domyślny zakres czasu filtrowania (od) dla wydarzeń pobranych przez JSON API "
 
 #: Config.php:175
 msgid "For how long in the past (in months) the events should be fetched."
-msgstr ""
+msgstr "Jak daleko wstecz (w miesiącach) należy pobierać wydarzenia."
 
 #: Config.php:184
 msgid "Default filter period (until) for events fetched via JSON API"
-msgstr ""
+msgstr "Domyślny zakres filtrowania (do) dla wydarzeń pobranych przez JSON API"
 
 #: Config.php:186
 msgid "For how long in the future (in months) the events should be fetched."
-msgstr ""
+msgstr "Jak daleko wprzód (w miesiącach) należy pobierać wydarzenia."
 
 #: Config.php:195 Config.php:197
 msgid "Disable iMIP for external organizers"
-msgstr ""
+msgstr "Wyłącz iMIP dla zewnętrznych notesów"
 
 #: Config.php:206
 msgid "(CalDAV) Skip double events from personal or shared calendar"
-msgstr ""
+msgstr "(CalDAV) Pomiń zdublowane wydarzenia z kalendarza osobistego albo współdzielonego"
 
 #: Config.php:208
 msgid ""
 "(CalDAV) Skip double events from personal or shared calendar (\"personal\" >"
 " Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
-msgstr ""
+msgstr "(CalDAV) Pomiń dublujące się wydarzenia z kalendarza osobistego lub współdzielonego (\"osobisty\" > Pomiń wydarzenia z kalendarza osobistego lub \"współdzielonego\" > Pomiń wydarzenia z kalendarza współdzielonego)"
 
 #: Import/definitions/cal_import_ical.xml:12
 msgid "Import iCal-files"
-msgstr ""
+msgstr "Importuj pliki iCal"
 
 #: Setup/Initialize.php:34 Setup/Update/Release3.php:164
 msgid "All events I attend"
@@ -1314,7 +1314,7 @@ msgstr "Aktualizacje"
 
 #: views/eventNotification.php:21
 msgid "This is an event series exception."
-msgstr ""
+msgstr "Wystąpił wyjątek serii wydarzeń."
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""

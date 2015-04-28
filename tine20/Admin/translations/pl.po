@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:10+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2015-02-14 21:34+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -78,11 +78,11 @@ msgstr "dodaj, usuń oraz edytuj kontenery i zarządzaj uprawnieniami do kontene
 
 #: Acl/Rights.php:236
 msgid "manage customfields"
-msgstr ""
+msgstr "zarządzaj polami informacyjnymi"
 
 #: Acl/Rights.php:237
 msgid "add and edit customfields"
-msgstr ""
+msgstr "dodaj i edytuj pola informacyjne"
 
 #: Acl/Rights.php:240
 msgid "view access log"
@@ -134,19 +134,19 @@ msgstr "edytuj osobiste i współdzielone kontenery"
 
 #: Acl/Rights.php:264
 msgid "view customfields"
-msgstr ""
+msgstr "edytuj pola informacyjne"
 
 #: Acl/Rights.php:265
 msgid "view customfields list"
-msgstr ""
+msgstr "edytuj listę pól informacyjnych"
 
 #: Acl/Rights.php:268
 msgid "view serverinfo"
-msgstr ""
+msgstr "edytuj informację o serwerze"
 
 #: Acl/Rights.php:269
 msgid "view serverinfo list"
-msgstr ""
+msgstr "edytuj listę informacji o serwerze"
 
 #: js/Applications.js:45
 #, python-brace-format
@@ -246,7 +246,7 @@ msgstr "Próba nieudana"
 #: js/TagEditDialog.js:85
 #, python-brace-format
 msgid "Could not save tag ({0})"
-msgstr ""
+msgstr "Brak możliwości zapisania znacznika ({0})"
 
 #: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
 #: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
@@ -1003,7 +1003,7 @@ msgid ""
 "primary domain nor set as a secondary domain in the setup. Please add this "
 "domain to the secondary domains in SMTP setup or use another domain which is"
 " configured already."
-msgstr ""
+msgstr "Domena {0} aliasu {1}, którą próbowano dodać, nie jest skonfigurowana w ustawieniach ani jako domena podstawowa ani jako domena wtórna. Proszę dodać tę domenę do domen wtórnych w ustawieniach SMTP albo użyć innej domeny skonfigurowanej wcześniej."
 
 #: js/user/EditDialog.js:628
 msgid "Email Alias"

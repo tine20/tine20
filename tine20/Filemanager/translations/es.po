@@ -18,31 +18,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
-#, python-format
-msgid "%s's personal files"
-msgstr "%s's ficheros personales"
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr ""
-
 #: Acl/Rights.php:103
 msgid "manage shared folders"
 msgstr "gestionar carpetas compartidas"
@@ -59,82 +34,10 @@ msgstr ""
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""
 
-#: js/NodeEditDialog.js:49 js/Filemanager.js:44 js/NodeGridPanel.js:339
-msgid "Save locally"
-msgstr "Guardar localmente"
-
-#: js/NodeEditDialog.js:65
-msgid "Edit folder"
-msgstr ""
-
-#: js/NodeEditDialog.js:65
-msgid "edit file"
-msgstr ""
-
-#: js/NodeEditDialog.js:67 js/Model.js:43 js/NodeGridPanel.js:150
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Carpeta"
-msgstr[1] "Carpetas"
-
-#: js/NodeEditDialog.js:67 js/Model.js:40
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "Fichero"
-msgstr[1] "Ficheros"
-
-#: js/NodeEditDialog.js:113
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
-msgid "Name"
-msgstr "Nombre"
-
-#: js/NodeEditDialog.js:153 js/Model.js:527
-msgid "Type"
-msgstr "Tipo"
-
-#: js/NodeEditDialog.js:161 js/DownloadLinkGridPanel.js:244
-#: js/NodeGridPanel.js:182
-msgid "Created By"
-msgstr "Creado por"
-
-#: js/NodeEditDialog.js:164 js/DownloadLinkGridPanel.js:252 js/Model.js:529
-#: js/NodeGridPanel.js:174
-msgid "Creation Time"
-msgstr "Fecha de Creación"
-
-#: js/NodeEditDialog.js:173
-msgid "Modified By"
-msgstr "Modificado por"
-
-#: js/NodeEditDialog.js:176
-msgid "Last Modified"
-msgstr "Última modificación"
-
-#: js/NodeEditDialog.js:199
-msgid "Description"
-msgstr "Descripción"
-
-#: js/NodeEditDialog.js:213
-msgid "Enter description"
-msgstr "Introducir descripción"
-
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
-#: js/NodeGridPanel.js:847
-msgid "Upload Failed"
-msgstr "Carga Fallida"
-
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
-msgstr ""
-
-#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
-msgid "Putting files in this folder is not allowed!"
-msgstr "No está permitido poner archivos en esta carpeta!"
+#: Controller.php:102
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's ficheros personales"
 
 #: js/DownloadLinkGridPanel.js:63
 msgid "Create Public Link"
@@ -160,6 +63,16 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
+#: js/DownloadLinkGridPanel.js:244 js/NodeEditDialog.js:161
+#: js/NodeGridPanel.js:182
+msgid "Created By"
+msgstr "Creado por"
+
+#: js/DownloadLinkGridPanel.js:252 js/Model.js:529 js/NodeEditDialog.js:164
+#: js/NodeGridPanel.js:174
+msgid "Creation Time"
+msgstr "Fecha de Creación"
+
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
 msgstr ""
@@ -171,6 +84,10 @@ msgstr "Fecha última modificación"
 #: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
 msgid "Last Modified By"
 msgstr "Última modificación por"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "Ruta"
 
 #: js/GridContextMenu.js:34
 #, python-brace-format
@@ -191,13 +108,26 @@ msgstr "¡Ud. debe ingresar {0} nombre!"
 msgid "Do you really want to delete the following files?"
 msgstr "¿Realmente desea borrar los archivos seleccionados?"
 
-#: js/Filemanager.js:36
-msgid "Filemanager"
-msgstr "Gestor de archivos"
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
+msgstr ""
 
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "Ruta"
+#: js/DownloadLinkDialog.js:83
+#, python-brace-format
+msgid "Sieve Filter Rules for {0}"
+msgstr ""
+
+#: js/Model.js:40 js/NodeEditDialog.js:67
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Fichero"
+msgstr[1] "Ficheros"
+
+#: js/Model.js:43 js/NodeEditDialog.js:67 js/NodeGridPanel.js:150
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Carpeta"
+msgstr[1] "Carpetas"
 
 #: js/Model.js:279 js/Model.js:295
 #, python-brace-format
@@ -216,6 +146,10 @@ msgstr "Por favor espere"
 #: js/Model.js:526
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
+
+#: js/Model.js:527 js/NodeEditDialog.js:153
+msgid "Type"
+msgstr "Tipo"
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
@@ -254,14 +188,60 @@ msgstr "Fallo al crear carpeta"
 msgid "Item with this name already exists!"
 msgstr "Existe un item con el mismo nombre!"
 
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr "Gestor de archivos"
+
+#: js/Filemanager.js:44 js/NodeEditDialog.js:49 js/NodeGridPanel.js:339
+msgid "Save locally"
+msgstr "Guardar localmente"
+
+#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
+#: js/NodeGridPanel.js:847
+msgid "Upload Failed"
+msgstr "Carga Fallida"
+
+#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size:"
 msgstr ""
 
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
+#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
+msgid "Putting files in this folder is not allowed!"
+msgstr "No está permitido poner archivos en esta carpeta!"
+
+#: js/NodeEditDialog.js:65
+msgid "Edit folder"
 msgstr ""
+
+#: js/NodeEditDialog.js:65
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:113
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
+msgid "Name"
+msgstr "Nombre"
+
+#: js/NodeEditDialog.js:173
+msgid "Modified By"
+msgstr "Modificado por"
+
+#: js/NodeEditDialog.js:176
+msgid "Last Modified"
+msgstr "Última modificación"
+
+#: js/NodeEditDialog.js:199
+msgid "Description"
+msgstr "Descripción"
+
+#: js/NodeEditDialog.js:213
+msgid "Enter description"
+msgstr "Introducir descripción"
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"
@@ -334,6 +314,26 @@ msgstr "Por favor introduzca el nombre de la nueva carpeta:"
 #, python-brace-format
 msgid "No {0} added"
 msgstr "No {0} agregado"
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
 
 #: Controller/Node.php:318
 msgid "My folders"

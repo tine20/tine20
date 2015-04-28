@@ -1,12 +1,12 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
+"PO-Revision-Date: 2015-02-01 17:19+0000\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,7 +50,7 @@ msgstr "Listy projektów"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Szybkie wyszukiwanie"
 
 #: js/Model.js:75 js/ProjectEditDialog.js:133 js/ProjectGridPanel.js:128
 msgid "Title"
@@ -127,7 +127,7 @@ msgstr "Projekty"
 
 #: js/ProjectGridPanel.js:75
 msgid "Search FAQ"
-msgstr ""
+msgstr "Przeszukiwanie FAQ"
 
 #: js/ProjectGridPanel.js:118
 msgid "Tags"

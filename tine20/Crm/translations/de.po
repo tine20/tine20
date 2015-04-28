@@ -1,25 +1,25 @@
-#
+# 
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012
 # Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014
+# sstamer <s.stamer@metaways.de>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 13:01+0100\n"
-"Last-Translator: Philipp Schüle <p.schuele@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
-"de/)\n"
-"Language: de\n"
+"PO-Revision-Date: 2015-04-27 12:44+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.4\n"
 
 #: Model/Lead.php:122 js/LeadGridPanel.js:151 js/Contact.js:171
 #: js/Contact.js:355 js/Contact.js:392
@@ -78,19 +78,17 @@ msgstr "Gemeinsame Lead-Favoriten erstellen oder bearbeiten"
 
 #: Import/definitions/crm_tine_import_csv.xml:11
 msgid "Lead CSV import"
-msgstr "Lead CSV Import"
+msgstr "Lead CSV import"
 
 #: Import/definitions/crm_tine_import_csv.xml:17
 msgid "Import list (###CURRENTDATE###)"
-msgstr "Importliste (###CURRENTDATE###)"
+msgstr "Importierte Liste (###CURRENTDATE###)"
 
 #: Import/definitions/crm_tine_import_csv.xml:19
 msgid ""
 "Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr ""
-"Leads importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
-"###USERFULLNAME###"
+msgstr "Leads importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
 #: Controller.php:117
 #, python-format
@@ -150,17 +148,17 @@ msgstr "Webseite"
 msgid "Lead Data"
 msgstr "Lead-Daten"
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:372
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:373
 #: js/LeadGridPanel.js:154 js/LeadStateFilterModel.js:32
 msgid "Leadstate"
 msgstr "Status"
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:391
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:392
 #: js/LeadGridDetailsPanel.js:463
 msgid "Leadtype"
 msgstr "Typ"
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:398
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:399
 #: js/LeadGridPanel.js:155 js/LeadGridDetailsPanel.js:468
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
@@ -171,17 +169,17 @@ msgstr "Quelle"
 msgid "Turnover"
 msgstr "Umsatz"
 
-#: Export/Pdf.php:90 js/LeadEditDialog.js:222 js/LeadGridPanel.js:156
+#: Export/Pdf.php:90 js/LeadEditDialog.js:223 js/LeadGridPanel.js:156
 #: js/Model.js:109 Controller/Lead.php:205
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:448 js/LeadGridDetailsPanel.js:453
+#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
 #: Controller/Lead.php:201
 msgid "Start"
 msgstr "Start"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:203
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:203
 msgid "End"
 msgstr "Ende"
 
@@ -197,7 +195,7 @@ msgstr "Kontakte"
 msgid "Address"
 msgstr "Anschrift"
 
-#: Export/Pdf.php:232 js/LeadEditDialog.js:245 js/Task.js:82
+#: Export/Pdf.php:232 js/LeadEditDialog.js:246 js/Task.js:82
 msgid "Tasks"
 msgstr "Aufgaben"
 
@@ -209,7 +207,7 @@ msgstr "Fälligkeitsdatum"
 msgid "Priority"
 msgstr "Priorität"
 
-#: Export/Pdf.php:274 js/LeadEditDialog.js:256 js/Product.js:85
+#: Export/Pdf.php:274 js/LeadEditDialog.js:257 js/Product.js:85
 msgid "Products"
 msgstr "Produkte"
 
@@ -256,57 +254,52 @@ msgstr[1] "Lead Typen"
 msgid "Add a Leadtype..."
 msgstr "Lead-Typ hinzufügen..."
 
-#: js/LeadEditDialog.js:246
+#: js/LeadEditDialog.js:247
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen "
-"oder sie ist deaktiviert."
+msgstr "Sie haben nicht das erforderliche Recht die Aufgaben-Anwendung zu benutzen oder sie ist deaktiviert."
 
-#: js/LeadEditDialog.js:257
+#: js/LeadEditDialog.js:258
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
-msgstr ""
-"Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder "
-"sie ist deaktiviert."
+msgstr "Sie haben nicht das erforderliche Recht die Sales-Anwendung zu benutzen oder sie ist deaktiviert."
 
-#: js/LeadEditDialog.js:303 js/AddToLeadPanel.js:73 js/Model.js:52
+#: js/LeadEditDialog.js:304 js/AddToLeadPanel.js:73 js/Model.js:52
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] "Lead"
 msgstr[1] "Lead"
 
-#: js/LeadEditDialog.js:330
+#: js/LeadEditDialog.js:331
 msgid "Enter lead name"
-msgstr "Leadnamen eingeben"
+msgstr "Leadname eingeben"
 
-#: js/LeadEditDialog.js:426
+#: js/LeadEditDialog.js:427
 msgid "Expected turnover"
 msgstr "Erwarteter Umsatz"
 
-#: js/LeadEditDialog.js:435 js/LeadGridPanel.js:161 js/Model.js:119
+#: js/LeadEditDialog.js:436 js/LeadGridPanel.js:161 js/Model.js:119
 msgid "Resubmission Date"
 msgstr "Wiedervorlagedatum"
 
-#: js/LeadEditDialog.js:454 js/LeadGridPanel.js:159 js/Model.js:118
+#: js/LeadEditDialog.js:455 js/LeadGridPanel.js:159 js/Model.js:118
 #: js/LeadGridDetailsPanel.js:458
 msgid "Estimated end"
 msgstr "Geplantes Ende"
 
-#: js/LeadEditDialog.js:486 js/Product.js:139
+#: js/LeadEditDialog.js:487 js/Product.js:139
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/LeadEditDialog.js:500
+#: js/LeadEditDialog.js:501
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
 #: js/AddToLeadPanel.js:31
 msgid "Please choose the Lead to add the contacts to"
-msgstr ""
-"Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
+msgstr "Bitte wählen Sie den Lead, zu dem die Kontakte hinzugefügt werden sollen"
 
 #: js/AddToLeadPanel.js:36
 msgid "Please select the attenders' role"
@@ -439,7 +432,7 @@ msgstr "Entferne {0}"
 msgid "Unlink selected {0}"
 msgstr "Ausgewählte {0} entfernen"
 
-#: js/Product.js:216
+#: js/Product.js:217
 msgid "Search for Products to add ..."
 msgstr "Produkte zum Hinzufügen suchen..."
 
@@ -497,7 +490,7 @@ msgstr[1] "Lead Status"
 
 #: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
 msgid "undefined"
-msgstr "undefiniert"
+msgstr "nicht definiert"
 
 #: js/LeadState.js:166
 msgid "Add a Leadstate..."
@@ -654,8 +647,7 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:92
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:95
 msgid "Default Favorite"
@@ -667,11 +659,11 @@ msgstr "Der Standard Favorit der beim öffnen des Crm geladen wird"
 
 #: Config.php:41
 msgid "Enabled Features"
-msgstr "Aktivierte Features"
+msgstr "Feature aktivieren"
 
 #: Config.php:43
 msgid "Enabled Features in Crm Application."
-msgstr "Aktivierte Features in CRM Applikation"
+msgstr "Features in der Crm Applikation aktivieren"
 
 #: Config.php:50
 msgid "Lead Import"
@@ -679,16 +671,10 @@ msgstr "Lead Import"
 
 #: Config.php:59
 msgid "Lead duplicate check fields"
-msgstr "Lead-Dublettencheckfelder"
+msgstr "Lead-Dublettencheck Felder"
 
 #: Config.php:61
 msgid ""
 "These fields are checked when a new lead is created. If a record with the "
 "same data in the fields is found, a duplicate exception is thrown."
-msgstr ""
-
-#~ msgid "Enter short name"
-#~ msgstr "Kurzname eingeben"
-
-#~ msgid "Lead id"
-#~ msgstr "Lead-Bezeichner"
+msgstr "Diese Felder werden überprüft, wenn ein neuer Lead angelegt wird. Wenn ein Datensatz mit den selben Daten in diesem Feld gefunden wird, wird eine Dubletten Warnung geworfen."

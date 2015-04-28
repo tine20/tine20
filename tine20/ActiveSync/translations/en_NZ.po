@@ -1,11 +1,11 @@
 # 
 # Translators:
-# Ingo Ratsdorf <ingo@envirology.co.nz>, 2014
+# Ingo Ratsdorf <ingo@envirology.co.nz>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-28 00:24+0000\n"
+"PO-Revision-Date: 2015-04-14 23:02+0000\n"
 "Last-Translator: Ingo Ratsdorf <ingo@envirology.co.nz>\n"
 "Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
@@ -91,7 +91,7 @@ msgstr "Default policy for new devices"
 
 #: Config.php:54
 msgid "Enter the id of the policy to apply to newly created devices."
-msgstr "Enter the id of the policy to apply to newly created devices."
+msgstr "Enter the policy ID to apply to newly created devices."
 
 #: Config.php:62
 msgid "Disable Access Log"
@@ -107,7 +107,7 @@ msgstr "Filter timeslot for emails"
 
 #: Config.php:75
 msgid "For how long in the past the emails should be synchronized."
-msgstr "For how long in the past the emails should be synchronized."
+msgstr "For how long into the past the events should be synchronized for."
 
 #: Config.php:96
 msgid "Filter timeslot for events"
@@ -115,7 +115,7 @@ msgstr "Filter timeslot for events"
 
 #: Config.php:98
 msgid "For how long in the past the events should be synchronized."
-msgstr "For how long in the past the events should be synchronized."
+msgstr "For how long into the past the events should be synchronized for."
 
 #: Setup/setup.xml:546 Setup/Update/Release6.php:290
 msgid "Default Policy"
