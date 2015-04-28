@@ -347,11 +347,15 @@ msgstr ""
 msgid "Server Information"
 msgstr ""
 
-#: js/Admin.js:173
+#: js/Admin.js:153
+msgid "ActiveSync Devices"
+msgstr ""
+
+#: js/Admin.js:191
 msgid "Admin"
 msgstr ""
 
-#: js/Admin.js:257
+#: js/Admin.js:275
 msgid "Refresh"
 msgstr ""
 
