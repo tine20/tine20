@@ -187,7 +187,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
             copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $dest);
             $this->_filenamesToDelete[] = $dest;
 
-            Tinebase_Cache_PerRequest::getInstance()->resetCache('Tinebase_Config_Abstract');
+            Tinebase_Cache_PerRequest::getInstance()->reset('Tinebase_Config_Abstract');
             
             $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
             $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
