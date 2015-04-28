@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -186,6 +186,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         if (! file_exists($dest)) {
             copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $dest);
             $this->_filenamesToDelete[] = $dest;
+
+            Tinebase_Cache_PerRequest::getInstance()->resetCache('Tinebase_Config_Abstract');
             
             $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
             $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
@@ -212,5 +214,27 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
         
         $this->assertTrue($invoicesFeatureEnabled);
+    }
+
+    /**
+     * testComposeConfigDir
+     *
+     * @see 0010988: load additional config from conf.d
+     */
+    public function testComposeConfigDir()
+    {
+        $confdfolder = Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER);
+        if (empty($confdfolder) || ! is_readable($confdfolder)) {
+            $this->markTestSkipped('no confdfolder configured/readable');
+        }
+
+        $configValues = array('config1' => 'value1', 'config2' => 'value2');
+        foreach ($configValues as $configName => $expectedValue) {
+            $configValue = Tinebase_Config::getInstance()->get($configName);
+            $this->assertEquals($expectedValue, $configValue);
+        }
+
+        $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+        $this->assertTrue(file_exists($cachedConfigFilename), 'cached config file does not exist: ' . $cachedConfigFilename);
     }
 }

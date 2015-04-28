@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -304,40 +304,137 @@ abstract class Tinebase_Config_Abstract
     protected function _getConfigFileData()
     {
         if (! self::$_configFileData) {
-            $configData = include('config.inc.php');
+            self::$_configFileData = include('config.inc.php');
             
-            if ($configData === false) {
+            if (self::$_configFileData === false) {
                 die('central configuration file config.inc.php not found in includepath: ' . get_include_path());
             }
             
-            self::$_configFileData = $configData;
+            if (isset(self::$_configFileData['confdfolder'])) {
+                $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
+                $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+
+                if (file_exists($cachedConfigFile)) {
+                    $cachedConfigData = include($cachedConfigFile);
+                } else {
+                    $cachedConfigData = false;
+                }
+                
+                if (false === $cachedConfigData || $cachedConfigData['ttlstamp'] < time()) {
+                    $this->_createCachedConfig($tmpDir);
+                } else {
+                    self::$_configFileData = $cachedConfigData;
+                }
+            }
         }
         
         return self::$_configFileData;
     }
     
     /**
+     * composes config files from conf.d and saves array to tmp file
+     *
+     * @param string $tmpDir
+     */
+    protected function _createCachedConfig($tmpDir)
+    {
+        $confdFolder = self::$_configFileData['confdfolder'];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating new cached config file in ' . $tmpDir);
+
+        if (! is_readable($confdFolder)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' can\'t open conf.d folder "' . $confdFolder . '"');
+            return;
+        }
+
+        $dh = opendir($confdFolder);
+
+        if ($dh === false) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' opendir() failed on folder "' . $confdFolder . '"');
+            return;
+        }
+
+        while (false !== ($direntry = readdir($dh))) {
+            if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
+                // TODO do lint!?! php -l $confdFolder . DIRECTORY_SEPARATOR . $direntry
+                $tmpArray = include($confdFolder . DIRECTORY_SEPARATOR . $direntry);
+                if (false !== $tmpArray) {
+                    foreach ($tmpArray as $key => $value) {
+                        self::$_configFileData[$key] = $value;
+                    }
+                }
+            }
+        }
+        closedir($dh);
+
+        $ttl = 60;
+        if (isset(self::$_configFileData['composeConfigTTL'])) {
+            $ttl = intval(self::$_configFileData['composeConfigTTL']);
+            if ($ttl < 1) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' composeConfigTTL needs to be an integer > 0, current value: "'
+                    . print_r(self::$_configFileData['composeConfigTTL'],true) . '"');
+                $ttl = 60;
+            }
+        }
+        self::$_configFileData['ttlstamp'] = time() + $ttl;
+        
+        $filename = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+        $filenameTmp = $filename . uniqid();
+        $fh = fopen($filenameTmp, 'w');
+        if (false === $fh) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' can\'t create cached composed config file "' .$filename );
+        } else {
+            
+            fputs($fh, "<?php\n\nreturn ");
+            fputs($fh, var_export(self::$_configFileData, true));
+            fputs($fh, ';');
+            fclose($fh);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Wrote config to file ' . $filenameTmp);
+            
+            if (false === rename($filenameTmp, $filename) ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' can\'t rename "' . $filenameTmp . '" to "' . $filename . '"' );
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Renamed to file ' . $filename);
+        }
+    }
+    
+    /**
      * returns data from application specific config.inc.php file
      *
      * @return array
-     * 
-     * @todo cache this
      */
     protected function _getAppDefaultsConfigFileData()
     {
         if (! self::$_appDefaultsConfigFileData) {
-            $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName . DIRECTORY_SEPARATOR . 'config.inc.php';
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Looking for defaults config.inc.php at ' . $configFilename);
-            if (file_exists($configFilename)) {
-                $configData = include($configFilename);
+            $cacheId = $this->_appName;
+            try {
+                $configData = Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $cacheId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+
+                $configFilename = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . $this->_appName . DIRECTORY_SEPARATOR . 'config.inc.php';
+
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Found default config.inc.php for app ' . $this->_appName);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' ' . print_r($configData, true));
-            } else {
-                $configData = array();
+                    . ' Looking for defaults config.inc.php at ' . $configFilename);
+                if (file_exists($configFilename)) {
+                    $configData = include($configFilename);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Found default config.inc.php for app ' . $this->_appName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . print_r($configData, true));
+                } else {
+                    $configData = array();
+                }
+                Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $cacheId, $configData);
             }
             self::$_appDefaultsConfigFileData = $configData;
         }

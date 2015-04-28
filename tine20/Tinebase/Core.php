@@ -598,14 +598,19 @@ class Tinebase_Core
      * figure out temp directory:
      * config.inc.php > sys_get_temp_dir > session_save_path > /tmp
      *
+     * @param array $config
      * @return String
      */
-    public static function guessTempDir()
+    public static function guessTempDir($config = null)
     {
-        $config = self::getConfig();
-        
-        $tmpdir = $config->tmpdir;
-        if ($tmpdir == Tinebase_Model_Config::NOTSET || !@is_writable($tmpdir)) {
+        if ($config === null) {
+            $config = self::getConfig();
+            $tmpdir = $config->tmpdir !== Tinebase_Model_Config::NOTSET ? $config->tmpdir : null;
+        } else {
+            $tmpdir = isset($config['tmpdir']) ? $config['tmpdir'] : null;
+        }
+
+        if (! $tmpdir || !@is_writable($tmpdir)) {
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();
@@ -665,8 +670,8 @@ class Tinebase_Core
         self::set(self::LOGGER, $logger);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized');
-        if (isset($loggerConfig) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
-            .' Logger settings: ' . print_r($loggerConfig->toArray(), TRUE));
+        if (isset($config->logger) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
+            .' Logger settings: ' . print_r($config->logger->toArray(), TRUE));
     }
     
     /**
