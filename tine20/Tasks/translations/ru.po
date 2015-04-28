@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-04-27 11:21+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -25,19 +25,19 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s личные задачи"
 
-#: Acl/Rights.php:96
+#: Acl/Rights.php:97
 msgid "manage shared task lists"
 msgstr "управление списками общих задач"
 
-#: Acl/Rights.php:97
+#: Acl/Rights.php:98
 msgid "Create new shared tasks lists"
 msgstr "Создать новый список общих задач"
 
-#: Acl/Rights.php:100
+#: Acl/Rights.php:101
 msgid "manage shared tasks favorites"
 msgstr "управлять избранным в общих задачах"
 
-#: Acl/Rights.php:101
+#: Acl/Rights.php:102
 msgid "Create or update shared tasks favorites"
 msgstr "Создание или обновление избранных в общих задачах"
 
@@ -69,7 +69,7 @@ msgstr[2] "Состояния"
 msgid "Percent"
 msgstr "Процент"
 
-#: Model/Task.php:219 js/TaskGridPanel.js:87
+#: Model/Task.php:219
 msgid "Lead"
 msgstr "Предложение"
 
@@ -128,6 +128,10 @@ msgstr[2] "Вы действительно хотите удалить выбр�
 #: js/TaskGridPanel.js:82
 msgid "Tags"
 msgstr "Теги"
+
+#: js/TaskGridPanel.js:87
+msgid "Lead name"
+msgstr ""
 
 #: js/TaskGridPanel.js:101
 msgid "Add a task..."

@@ -16,27 +16,27 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "Add new user"
 msgstr ""
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Add new user as member to a course"
 msgstr ""
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:112
 msgid "Add existing user"
 msgstr ""
 
-#: Acl/Rights.php:112
+#: Acl/Rights.php:113
 msgid "Add existing user as member to a course"
 msgstr ""
 
-#: Acl/Rights.php:115
+#: Acl/Rights.php:116
 msgid "Manage shared courses favorites"
 msgstr ""
 
-#: Acl/Rights.php:116
+#: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
 msgstr ""
 
@@ -56,15 +56,15 @@ msgstr ""
 msgid "Some error occured while trying to update the courses."
 msgstr ""
 
-#: js/CourseEditDialog.js:32
+#: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr ""
 
-#: js/CourseEditDialog.js:41
+#: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr ""
 
-#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
@@ -72,39 +72,39 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: js/CourseEditDialog.js:205
+#: js/CourseEditDialog.js:206
 msgid "Course Name"
 msgstr ""
 
-#: js/CourseEditDialog.js:212
+#: js/CourseEditDialog.js:213
 msgid "Course / School Type"
 msgstr ""
 
-#: js/CourseEditDialog.js:222
+#: js/CourseEditDialog.js:223
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
 msgid "Internet Access"
 msgstr ""
 
-#: js/CourseEditDialog.js:238
+#: js/CourseEditDialog.js:239
 msgid "Fileserver Access"
 msgstr ""
 
-#: js/CourseEditDialog.js:270
+#: js/CourseEditDialog.js:271
 msgid "Members"
 msgstr ""
 
-#: js/CourseEditDialog.js:297
+#: js/CourseEditDialog.js:298
 msgid "Login"
 msgstr ""
 
-#: js/CourseEditDialog.js:301
+#: js/CourseEditDialog.js:302
 msgid "unknown"
 msgstr ""
 
-#: js/CourseEditDialog.js:306
+#: js/CourseEditDialog.js:307
 msgid "Reset Password"
 msgstr ""
 

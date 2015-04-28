@@ -18,27 +18,27 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "Add new user"
 msgstr "Aggiungi nuovo utente"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Add new user as member to a course"
 msgstr "Aggiungi nuovo utente come membro di un corso"
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:112
 msgid "Add existing user"
 msgstr "Aggiungi utente esistente"
 
-#: Acl/Rights.php:112
+#: Acl/Rights.php:113
 msgid "Add existing user as member to a course"
 msgstr "Aggiungi utente esistente come membro di un corso"
 
-#: Acl/Rights.php:115
+#: Acl/Rights.php:116
 msgid "Manage shared courses favorites"
 msgstr ""
 
-#: Acl/Rights.php:116
+#: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
 msgstr ""
 
@@ -58,53 +58,53 @@ msgstr "Fallito"
 msgid "Some error occured while trying to update the courses."
 msgstr "Si sono verificati alcuni errori durante il tentativo di aggiornare i corsi."
 
-#: js/CourseEditDialog.js:32
+#: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr "Importa membri del corso"
 
-#: js/CourseEditDialog.js:41
+#: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Aggiungi nuovo membro"
 
-#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Corso"
 msgstr[1] "Corsi"
 
-#: js/CourseEditDialog.js:205
+#: js/CourseEditDialog.js:206
 msgid "Course Name"
 msgstr "Nome Corso"
 
-#: js/CourseEditDialog.js:212
+#: js/CourseEditDialog.js:213
 msgid "Course / School Type"
 msgstr "Corso / Tipo Corso"
 
-#: js/CourseEditDialog.js:222
+#: js/CourseEditDialog.js:223
 msgid "Description"
 msgstr "Descrizione"
 
-#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
 msgid "Internet Access"
 msgstr "Accesso Internet"
 
-#: js/CourseEditDialog.js:238
+#: js/CourseEditDialog.js:239
 msgid "Fileserver Access"
 msgstr "Accesso Fileserver"
 
-#: js/CourseEditDialog.js:270
+#: js/CourseEditDialog.js:271
 msgid "Members"
 msgstr "Membri"
 
-#: js/CourseEditDialog.js:297
+#: js/CourseEditDialog.js:298
 msgid "Login"
 msgstr "Login"
 
-#: js/CourseEditDialog.js:301
+#: js/CourseEditDialog.js:302
 msgid "unknown"
 msgstr "sconosciuto"
 
-#: js/CourseEditDialog.js:306
+#: js/CourseEditDialog.js:307
 msgid "Reset Password"
 msgstr "Ripristina Password"
 

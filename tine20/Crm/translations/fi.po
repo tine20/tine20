@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 14:11+0000\n"
+"PO-Revision-Date: 2015-04-27 11:20+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Finnish (http://www.transifex.com/projects/p/tine20/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -21,38 +21,38 @@ msgstr ""
 msgid "Lead Data"
 msgstr ""
 
-#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadGridPanel.js:145
-#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:343
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadGridPanel.js:154
+#: js/LeadStateFilterModel.js:32 js/LeadEditDialog.js:373
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:362
-#: js/LeadGridDetailsPanel.js:454
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:392
+#: js/LeadGridDetailsPanel.js:463
 msgid "Leadtype"
 msgstr ""
 
-#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:146
-#: js/LeadEditDialog.js:369 js/LeadGridDetailsPanel.js:459
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:155
+#: js/LeadEditDialog.js:399 js/LeadGridDetailsPanel.js:468
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr ""
 
-#: Export/Pdf.php:87 js/LeadGridPanel.js:148 js/Model.js:112
-#: Controller/Lead.php:200
+#: Export/Pdf.php:87 js/LeadGridPanel.js:157 js/Model.js:111
+#: Controller/Lead.php:204
 msgid "Turnover"
 msgstr ""
 
-#: Export/Pdf.php:90 js/LeadGridPanel.js:147 js/Model.js:110
-#: js/LeadEditDialog.js:222 Controller/Lead.php:201
+#: Export/Pdf.php:90 js/LeadGridPanel.js:156 js/Model.js:109
+#: js/LeadEditDialog.js:223 Controller/Lead.php:205
 msgid "Probability"
 msgstr ""
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:408 js/LeadGridDetailsPanel.js:444
-#: Controller/Lead.php:197
+#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
+#: Controller/Lead.php:201
 msgid "Start"
 msgstr "Alku"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:229 Controller/Lead.php:199
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:203
 msgid "End"
 msgstr "Loppu"
 
@@ -76,7 +76,7 @@ msgstr "Puhelin"
 msgid "Email"
 msgstr "Sähköposti"
 
-#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:245
+#: Export/Pdf.php:232 js/Task.js:82 js/LeadEditDialog.js:246
 msgid "Tasks"
 msgstr ""
 
@@ -88,7 +88,7 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:256
+#: Export/Pdf.php:274 js/Product.js:85 js/LeadEditDialog.js:257
 msgid "Products"
 msgstr "Tuotteet"
 
@@ -113,13 +113,13 @@ msgstr "tärkeä"
 msgid "%s's personal leads"
 msgstr ""
 
-#: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:144
+#: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:153
 #: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 Controller/Lead.php:193
+#: js/Contact.js:396 Controller/Lead.php:197
 msgid "Customer"
 msgstr "Asiakas"
 
-#: Controller.php:163 js/LeadGridPanel.js:143 js/LeadGridDetailsPanel.js:45
+#: Controller.php:163 js/LeadGridPanel.js:152 js/LeadGridDetailsPanel.js:45
 #: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 msgid "Partner"
 msgstr "Partneri"
@@ -160,23 +160,23 @@ msgstr ""
 msgid "Website"
 msgstr "Internetsivu"
 
-#: Acl/Rights.php:106
+#: Acl/Rights.php:105
 msgid "manage shared lead folders"
 msgstr "hallitse jaettujen johtajien kansioita"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:106
 msgid "Create new shared lead folders"
 msgstr "Luo uusi jaettu johtajan kansio"
 
-#: Acl/Rights.php:110
+#: Acl/Rights.php:109
 msgid "manage shared leads favorites"
 msgstr "hallitse jaettujen kansioiden suosikeita"
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:110
 msgid "Create or update shared leads favorites"
 msgstr "Luo tai päivitä jaettujen johtajien suosikkeja"
 
-#: Model/Lead.php:122 js/LeadGridPanel.js:142 js/Contact.js:171
+#: Model/Lead.php:122 js/LeadGridPanel.js:151 js/Contact.js:171
 #: js/Contact.js:355 js/Contact.js:392
 msgid "Responsible"
 msgstr ""
@@ -201,7 +201,7 @@ msgstr ""
 msgid "Percent"
 msgstr "Prosenttia"
 
-#: js/Task.js:266 js/LeadGridDetailsPanel.js:439
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:448
 msgid "Status"
 msgstr "Tila"
 
@@ -209,16 +209,16 @@ msgstr "Tila"
 msgid "Organizer"
 msgstr ""
 
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:194
-#: js/LeadGridDetailsPanel.js:227
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:203
+#: js/LeadGridDetailsPanel.js:236
 msgid "Leadstates"
 msgstr ""
 
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:216
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:225
 msgid "Leadtypes"
 msgstr ""
 
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:205
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:214
 msgid "Leadsources"
 msgstr ""
 
@@ -231,6 +231,10 @@ msgid "Lead State"
 msgid_plural "Lead States"
 msgstr[0] ""
 msgstr[1] ""
+
+#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
+msgid "undefined"
+msgstr ""
 
 #: js/LeadState.js:166
 msgid "Add a Leadstate..."
@@ -283,7 +287,7 @@ msgstr "Muokkaa valittuja {0}"
 msgid "Product"
 msgstr "Tuote"
 
-#: js/Product.js:139 js/LeadEditDialog.js:446
+#: js/Product.js:139 js/LeadEditDialog.js:487
 msgid "Description"
 msgstr "Kuvaus"
 
@@ -295,60 +299,64 @@ msgstr "Hinta"
 msgid "Quantity"
 msgstr "Määrä"
 
-#: js/Product.js:216
+#: js/Product.js:217
 msgid "Search for Products to add ..."
 msgstr ""
 
-#: js/LeadGridPanel.js:139
-msgid "Lead id"
+#: js/LeadGridPanel.js:109
+msgid "Import leads"
 msgstr ""
 
-#: js/LeadGridPanel.js:140
+#: js/LeadGridPanel.js:149
 msgid "Tags"
 msgstr ""
 
-#: js/LeadGridPanel.js:141 js/Model.js:108
+#: js/LeadGridPanel.js:150 js/Model.js:107
 msgid "Lead name"
 msgstr ""
 
-#: js/LeadGridPanel.js:150 js/Model.js:119 js/LeadEditDialog.js:414
-#: js/LeadGridDetailsPanel.js:449
+#: js/LeadGridPanel.js:159 js/Model.js:118 js/LeadEditDialog.js:455
+#: js/LeadGridDetailsPanel.js:458
 msgid "Estimated end"
 msgstr ""
 
-#: js/LeadGridPanel.js:151
+#: js/LeadGridPanel.js:160
 msgid "Probable Turnover"
 msgstr ""
 
-#: js/LeadGridPanel.js:152 js/Model.js:120 js/LeadEditDialog.js:395
+#: js/LeadGridPanel.js:161 js/Model.js:119 js/LeadEditDialog.js:436
 msgid "Resubmission Date"
 msgstr ""
 
-#: js/LeadGridPanel.js:195
+#: js/LeadGridPanel.js:204
 msgid "Export Lead"
 msgstr ""
 
-#: js/LeadGridPanel.js:204
+#: js/LeadGridPanel.js:213
 msgid "Export as PDF"
 msgstr ""
 
-#: js/LeadGridPanel.js:211
+#: js/LeadGridPanel.js:220
 msgid "Export as CSV"
 msgstr ""
 
-#: js/LeadGridPanel.js:218
+#: js/LeadGridPanel.js:227
 msgid "Export as ODS"
 msgstr ""
 
-#: js/LeadGridPanel.js:225
+#: js/LeadGridPanel.js:234
 msgid "Export as XLS"
+msgstr ""
+
+#: js/LeadGridPanel.js:241
+msgid "Export as ..."
 msgstr ""
 
 #: js/LeadStateFilterModel.js:37
 msgid "Show closed"
 msgstr ""
 
-#: js/Model.js:52 js/LeadEditDialog.js:274 js/AddToLeadPanel.js:73
+#: js/Model.js:52 js/LeadEditDialog.js:304 js/AddToLeadPanel.js:73
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
@@ -364,59 +372,59 @@ msgstr[1] ""
 msgid "lead lists"
 msgstr ""
 
-#: js/Model.js:106
+#: js/Model.js:105
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:114
+#: js/Model.js:113
 msgid "Last Modified Time"
 msgstr "Muokattu viimeksi"
 
-#: js/Model.js:115
+#: js/Model.js:114
 msgid "Last Modified By"
 msgstr "Muokkasi viimeksi"
 
-#: js/Model.js:116
+#: js/Model.js:115
 msgid "Creation Time"
 msgstr "Luontiaika"
 
-#: js/Model.js:117
+#: js/Model.js:116
 msgid "Created By"
 msgstr "Luonut"
 
-#: js/Model.js:160
+#: js/Model.js:158
 msgid "Settings"
 msgid_plural "Settings"
 msgstr[0] "Asetus"
 msgstr[1] "Asetukset"
 
-#: js/Model.js:163
+#: js/Model.js:161
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/LeadEditDialog.js:246
+#: js/LeadEditDialog.js:247
 msgid ""
 "You do not have the run right for the Tasks application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:257
+#: js/LeadEditDialog.js:258
 msgid ""
 "You do not have the run right for the Sales application or it is not "
 "activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:301
-msgid "Enter short name"
+#: js/LeadEditDialog.js:331
+msgid "Enter lead name"
 msgstr ""
 
-#: js/LeadEditDialog.js:386
+#: js/LeadEditDialog.js:427
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:460
+#: js/LeadEditDialog.js:501
 msgid "Enter description"
 msgstr ""
 
@@ -444,14 +452,30 @@ msgstr "Sähköposti"
 msgid "Web"
 msgstr ""
 
-#: js/LeadSource.js:29
+#: js/LeadGridDetailsPanel.js:63
+msgid "Street"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:66
+msgid "Postalcode"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:69
+msgid "City"
+msgstr ""
+
+#: js/LeadSource.js:30
 msgid "Lead Source"
 msgid_plural "Lead Sources"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/LeadSource.js:153
+#: js/LeadSource.js:154
 msgid "Add a Leadsource..."
+msgstr ""
+
+#: js/LeadSource.js:157
+msgid "archived"
 msgstr ""
 
 #: js/AddToLeadPanel.js:31
@@ -466,7 +490,7 @@ msgstr ""
 msgid "Select Lead"
 msgstr ""
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:195
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:199
 msgid "Role"
 msgstr ""
 
@@ -511,41 +535,46 @@ msgstr "Tiedot"
 msgid "Cellphone"
 msgstr "Matkapuhelin"
 
-#: Controller/Lead.php:194
+#: Controller/Lead.php:198
 msgid "State"
 msgstr ""
 
-#: Controller/Lead.php:196
+#: Controller/Lead.php:200
 msgid "Source"
 msgstr "Lähde"
 
-#: Controller/Lead.php:198
+#: Controller/Lead.php:202
 msgid "Scheduled end"
 msgstr "Arvioitu päättyminen"
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:206
 msgid "Folder"
 msgstr "Kansio"
 
-#: Controller/Lead.php:203
+#: Controller/Lead.php:207
 msgid "Updated by"
 msgstr "Päivitetty"
 
-#: Controller/Lead.php:204
+#: Controller/Lead.php:208
 msgid "Updated Fields:"
 msgstr "Päivitetyt kentät:"
 
-#: Controller/Lead.php:205
+#: Controller/Lead.php:209
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr ""
 
-#: Controller/Lead.php:211
+#: Controller/Lead.php:215
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Johtaja %s on vaihdettu"
 
-#: Controller/Lead.php:213
+#: Controller/Lead.php:217
+#, python-format
+msgid "Lead %s has been deleted"
+msgstr ""
+
+#: Controller/Lead.php:219
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Johtaja %s on luotu"
@@ -584,6 +613,42 @@ msgstr "Oletus suosikki"
 
 #: Preference.php:96
 msgid "The default favorite which is loaded on crm startup"
+msgstr ""
+
+#: Config.php:41
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:43
+msgid "Enabled Features in Crm Application."
+msgstr ""
+
+#: Config.php:50
+msgid "Lead Import"
+msgstr ""
+
+#: Config.php:59
+msgid "Lead duplicate check fields"
+msgstr ""
+
+#: Config.php:61
+msgid ""
+"These fields are checked when a new lead is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
+#: Import/definitions/crm_tine_import_csv.xml:11
+msgid "Lead CSV import"
+msgstr ""
+
+#: Import/definitions/crm_tine_import_csv.xml:17
+msgid "Import list (###CURRENTDATE###)"
+msgstr ""
+
+#: Import/definitions/crm_tine_import_csv.xml:19
+msgid ""
+"Leads imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
 msgstr ""
 
 #: Setup/Initialize.php:36 Setup/Update/Release3.php:37

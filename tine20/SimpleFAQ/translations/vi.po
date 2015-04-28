@@ -55,7 +55,7 @@ msgstr "Tìm câu hỏi"
 msgid "Search question"
 msgstr "Tìm câu hỏi"
 
-#: js/SimpleFAQ.js:44 js/FaqGridPanel.js:105 js/FaqEditDialog.js:117
+#: js/SimpleFAQ.js:46 js/FaqGridPanel.js:105 js/FaqEditDialog.js:106
 #: js/FaqGridDetailsPanel.js:157
 msgid "Answer"
 msgstr "Trả lời"
@@ -92,15 +92,15 @@ msgstr "Mã câu hỏi"
 msgid "Tags"
 msgstr "Thẻ"
 
-#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:138
+#: js/FaqGridPanel.js:86 js/FaqEditDialog.js:127
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:126
+#: js/FaqGridPanel.js:92 js/FaqEditDialog.js:115
 msgid "Type"
 msgstr "Gõ"
 
-#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:110 js/FaqGridDetailsPanel.js:151
+#: js/FaqGridPanel.js:98 js/FaqEditDialog.js:99 js/FaqGridDetailsPanel.js:151
 msgid "Question"
 msgstr "Câu hỏi"
 
@@ -121,11 +121,11 @@ msgstr "Tìm nhanh"
 msgid "Search FAQ"
 msgstr "Tìm câu FAQ"
 
-#: js/FaqEditDialog.js:111
+#: js/FaqEditDialog.js:100
 msgid "Enter a question..."
 msgstr "Nhập 1 câu hỏi..."
 
-#: js/FaqEditDialog.js:118
+#: js/FaqEditDialog.js:107
 msgid "Enter a answer..."
 msgstr "Nhập 1 câu trả lời"
 

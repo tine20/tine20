@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 18:53+0000\n"
-"Last-Translator: Michael Spahn <michael@spahn.me>\n"
+"PO-Revision-Date: 2015-04-28 07:43+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -359,11 +359,15 @@ msgstr "Zusatzfelder"
 msgid "Server Information"
 msgstr "Server Informationen"
 
-#: js/Admin.js:173
+#: js/Admin.js:153
+msgid "ActiveSync Devices"
+msgstr ""
+
+#: js/Admin.js:191
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:257
+#: js/Admin.js:275
 msgid "Refresh"
 msgstr "Aktualisieren"
 

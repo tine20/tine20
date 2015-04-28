@@ -17,27 +17,27 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:107
+#: Acl/Rights.php:108
 msgid "Add new user"
 msgstr "Thêm người dùng mới"
 
-#: Acl/Rights.php:108
+#: Acl/Rights.php:109
 msgid "Add new user as member to a course"
 msgstr "Thêm người dùng mới như là thành viên của 1 khóa học"
 
-#: Acl/Rights.php:111
+#: Acl/Rights.php:112
 msgid "Add existing user"
 msgstr "Thêm người dùng đã tồn tại"
 
-#: Acl/Rights.php:112
+#: Acl/Rights.php:113
 msgid "Add existing user as member to a course"
 msgstr "Thêm người dùng đã tồn tại là thành viên của khóa học"
 
-#: Acl/Rights.php:115
+#: Acl/Rights.php:116
 msgid "Manage shared courses favorites"
 msgstr ""
 
-#: Acl/Rights.php:116
+#: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
 msgstr ""
 
@@ -57,52 +57,52 @@ msgstr "Lỗi"
 msgid "Some error occured while trying to update the courses."
 msgstr "Có lỗi xảy ra khi cập nhật khóa học"
 
-#: js/CourseEditDialog.js:32
+#: js/CourseEditDialog.js:33
 msgid "Import course members"
 msgstr "Nhập học viên"
 
-#: js/CourseEditDialog.js:41
+#: js/CourseEditDialog.js:42
 msgid "Add new member"
 msgstr "Thêm thành viên mới"
 
-#: js/CourseEditDialog.js:189 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "one:Khóa học\nother:Khóa học"
 
-#: js/CourseEditDialog.js:205
+#: js/CourseEditDialog.js:206
 msgid "Course Name"
 msgstr "Tên khóa học"
 
-#: js/CourseEditDialog.js:212
+#: js/CourseEditDialog.js:213
 msgid "Course / School Type"
 msgstr "Loại khóa/ trường"
 
-#: js/CourseEditDialog.js:222
+#: js/CourseEditDialog.js:223
 msgid "Description"
 msgstr "Mô tả"
 
-#: js/CourseEditDialog.js:228 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
 msgid "Internet Access"
 msgstr "Truy cập internet"
 
-#: js/CourseEditDialog.js:238
+#: js/CourseEditDialog.js:239
 msgid "Fileserver Access"
 msgstr "Truy cập máy chủ file"
 
-#: js/CourseEditDialog.js:270
+#: js/CourseEditDialog.js:271
 msgid "Members"
 msgstr "Thành viên"
 
-#: js/CourseEditDialog.js:297
+#: js/CourseEditDialog.js:298
 msgid "Login"
 msgstr "Đăng nhập"
 
-#: js/CourseEditDialog.js:301
+#: js/CourseEditDialog.js:302
 msgid "unknown"
 msgstr "không rõ"
 
-#: js/CourseEditDialog.js:306
+#: js/CourseEditDialog.js:307
 msgid "Reset Password"
 msgstr "Khởi tạo mật khẩu"
 

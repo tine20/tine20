@@ -21,15 +21,15 @@ msgstr ""
 msgid "%s's personal Projects"
 msgstr ""
 
-#: Acl/Rights.php:91
+#: Acl/Rights.php:90
 msgid "Manage shared project favorites"
 msgstr ""
 
-#: Acl/Rights.php:92
+#: Acl/Rights.php:91
 msgid "Create new shared project favorites"
 msgstr ""
 
-#: js/Model.js:35 js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121
+#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
@@ -53,19 +53,19 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:75 js/ProjectEditDialog.js:133 js/ProjectGridPanel.js:128
+#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr ""
 
-#: js/Model.js:76 js/ProjectEditDialog.js:138 js/ProjectGridPanel.js:121
+#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr ""
 
-#: js/Model.js:77 js/ProjectEditDialog.js:174
+#: js/Model.js:77 js/ProjectEditDialog.js:178
 msgid "Description"
 msgstr ""
 
-#: js/Model.js:79 js/ProjectEditDialog.js:144 js/ProjectGridPanel.js:134
+#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr ""
 
@@ -85,15 +85,15 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: js/ProjectEditDialog.js:80 js/ProjectAttendeeFilter.js:38
+#: js/ProjectEditDialog.js:79 js/ProjectAttendeeFilter.js:38
 msgid "Attendee"
 msgstr ""
 
-#: js/ProjectEditDialog.js:81 js/AddToProjectPanel.js:81
+#: js/ProjectEditDialog.js:80 js/AddToProjectPanel.js:81
 msgid "Role"
 msgstr ""
 
-#: js/ProjectEditDialog.js:188
+#: js/ProjectEditDialog.js:192
 msgid "Enter description"
 msgstr ""
 

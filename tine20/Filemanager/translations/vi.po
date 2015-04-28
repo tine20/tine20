@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -17,26 +17,121 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:103
-msgid "manage shared folders"
-msgstr "quản lý thư mục chung"
-
-#: Acl/Rights.php:104
-msgid "Create new shared folders"
-msgstr "Tạo 1 thư mục chung"
-
-#: Acl/Rights.php:107
-msgid "Manage anonymous download links"
-msgstr ""
-
-#: Acl/Rights.php:108
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
-
 #: Controller.php:102
 #, python-format
 msgid "%s's personal files"
 msgstr "File cá nhân của %s"
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr "quản lý thư mục chung"
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr "Tạo 1 thư mục chung"
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr ""
+
+#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
+msgid "Save locally"
+msgstr "Lưu tại máy"
+
+#: js/NodeEditDialog.js:66
+msgid "Edit folder"
+msgstr ""
+
+#: js/NodeEditDialog.js:66
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "one:Thư mục\nother:Thư mục"
+
+#: js/NodeEditDialog.js:68 js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+
+#: js/NodeEditDialog.js:114
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
+msgid "Name"
+msgstr "Tên"
+
+#: js/NodeEditDialog.js:154 js/Model.js:527
+msgid "Type"
+msgstr "Kiểu"
+
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
+#: js/NodeGridPanel.js:182
+msgid "Created By"
+msgstr "Tạo bởi"
+
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeGridPanel.js:174
+msgid "Creation Time"
+msgstr "Thời gian tạo"
+
+#: js/NodeEditDialog.js:174
+msgid "Modified By"
+msgstr "Sửa bởi"
+
+#: js/NodeEditDialog.js:177
+msgid "Last Modified"
+msgstr "Sửa lần cuối"
+
+#: js/NodeEditDialog.js:200
+msgid "Description"
+msgstr "Mô tả"
+
+#: js/NodeEditDialog.js:214
+msgid "Enter description"
+msgstr "Nhập mô tả"
+
+#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
+#: js/NodeGridPanel.js:847
+msgid "Upload Failed"
+msgstr "Lỗi upload"
+
+#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size:"
+msgstr ""
+
+#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
+msgid "Putting files in this folder is not allowed!"
+msgstr "Đặt file vào thư mục này là không được phép!"
 
 #: js/DownloadLinkGridPanel.js:63
 msgid "Create Public Link"
@@ -62,16 +157,6 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:244 js/NodeEditDialog.js:161
-#: js/NodeGridPanel.js:182
-msgid "Created By"
-msgstr "Tạo bởi"
-
-#: js/DownloadLinkGridPanel.js:252 js/Model.js:529 js/NodeEditDialog.js:164
-#: js/NodeGridPanel.js:174
-msgid "Creation Time"
-msgstr "Thời gian tạo"
-
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
 msgstr ""
@@ -83,10 +168,6 @@ msgstr "Thời gian sửa cuối"
 #: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "đường dẫn"
 
 #: js/GridContextMenu.js:34
 #, python-brace-format
@@ -107,24 +188,13 @@ msgstr "Bạn phải nhập 1 tên {0}"
 msgid "Do you really want to delete the following files?"
 msgstr "Bạn có muốn xóa các file sau?"
 
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
-msgstr ""
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr "Quản lý file"
 
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr ""
-
-#: js/Model.js:40 js/NodeEditDialog.js:67
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "File"
-
-#: js/Model.js:43 js/NodeEditDialog.js:67 js/NodeGridPanel.js:150
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "one:Thư mục\nother:Thư mục"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "đường dẫn"
 
 #: js/Model.js:279 js/Model.js:295
 #, python-brace-format
@@ -143,10 +213,6 @@ msgstr "Xin hãy đợi"
 #: js/Model.js:526
 msgid "Quick Search"
 msgstr "Tìm nhanh"
-
-#: js/Model.js:527 js/NodeEditDialog.js:153
-msgid "Type"
-msgstr "Kiểu"
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
@@ -184,60 +250,9 @@ msgstr "Lỗi khi tạo thư mục"
 msgid "Item with this name already exists!"
 msgstr "Mục với tên này đã tồn tại!"
 
-#: js/Filemanager.js:36
-msgid "Filemanager"
-msgstr "Quản lý file"
-
-#: js/Filemanager.js:44 js/NodeEditDialog.js:49 js/NodeGridPanel.js:339
-msgid "Save locally"
-msgstr "Lưu tại máy"
-
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
-#: js/NodeGridPanel.js:847
-msgid "Upload Failed"
-msgstr "Lỗi upload"
-
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
 msgstr ""
-
-#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
-msgid "Putting files in this folder is not allowed!"
-msgstr "Đặt file vào thư mục này là không được phép!"
-
-#: js/NodeEditDialog.js:65
-msgid "Edit folder"
-msgstr ""
-
-#: js/NodeEditDialog.js:65
-msgid "edit file"
-msgstr ""
-
-#: js/NodeEditDialog.js:113
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
-msgid "Name"
-msgstr "Tên"
-
-#: js/NodeEditDialog.js:173
-msgid "Modified By"
-msgstr "Sửa bởi"
-
-#: js/NodeEditDialog.js:176
-msgid "Last Modified"
-msgstr "Sửa lần cuối"
-
-#: js/NodeEditDialog.js:199
-msgid "Description"
-msgstr "Mô tả"
-
-#: js/NodeEditDialog.js:213
-msgid "Enter description"
-msgstr "Nhập mô tả"
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"
@@ -310,26 +325,6 @@ msgstr "Xin nhập vào tên của thư mục mới:"
 #, python-brace-format
 msgid "No {0} added"
 msgstr "Không thêm được {0}"
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr ""
 
 #: Controller/Node.php:318
 msgid "My folders"

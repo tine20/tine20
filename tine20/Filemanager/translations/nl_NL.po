@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
@@ -18,26 +18,123 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:103
-msgid "manage shared folders"
-msgstr "beheer gedeelde folders"
-
-#: Acl/Rights.php:104
-msgid "Create new shared folders"
-msgstr "Maak een nieuwe gedeelde folder"
-
-#: Acl/Rights.php:107
-msgid "Manage anonymous download links"
-msgstr ""
-
-#: Acl/Rights.php:108
-msgid "Allow to see, add and delete download links of files and folders"
-msgstr ""
-
 #: Controller.php:102
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's persoonlijke bestanden"
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr ""
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr ""
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr "beheer gedeelde folders"
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr "Maak een nieuwe gedeelde folder"
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr ""
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr ""
+
+#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
+msgid "Save locally"
+msgstr "Bewaar lokaal"
+
+#: js/NodeEditDialog.js:66
+msgid "Edit folder"
+msgstr ""
+
+#: js/NodeEditDialog.js:66
+msgid "edit file"
+msgstr ""
+
+#: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Folder"
+msgstr[1] "Folders"
+
+#: js/NodeEditDialog.js:68 js/Model.js:40
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Bestand"
+msgstr[1] "Bestanden"
+
+#: js/NodeEditDialog.js:114
+msgid "Public Links"
+msgstr ""
+
+#: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
+msgid "Name"
+msgstr "Naam"
+
+#: js/NodeEditDialog.js:154 js/Model.js:527
+msgid "Type"
+msgstr "Type"
+
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
+#: js/NodeGridPanel.js:182
+msgid "Created By"
+msgstr "Aangemaakt door"
+
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeGridPanel.js:174
+msgid "Creation Time"
+msgstr "Tijdstip aanmaak"
+
+#: js/NodeEditDialog.js:174
+msgid "Modified By"
+msgstr "Gewijzigd door"
+
+#: js/NodeEditDialog.js:177
+msgid "Last Modified"
+msgstr "Laatst gewijzigd"
+
+#: js/NodeEditDialog.js:200
+msgid "Description"
+msgstr "Omschrijving"
+
+#: js/NodeEditDialog.js:214
+msgid "Enter description"
+msgstr "Voer omschrijving in"
+
+#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
+#: js/NodeGridPanel.js:847
+msgid "Upload Failed"
+msgstr "Upload mislukt"
+
+#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
+msgid ""
+"Could not upload file. Filesize could be too big. Please notify your "
+"Administrator. Max upload size:"
+msgstr ""
+
+#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
+msgid "Putting files in this folder is not allowed!"
+msgstr "Plaatsen van bestanden in deze folder is niet toegestaan!"
 
 #: js/DownloadLinkGridPanel.js:63
 msgid "Create Public Link"
@@ -63,16 +160,6 @@ msgstr ""
 msgid "Url"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:244 js/NodeEditDialog.js:161
-#: js/NodeGridPanel.js:182
-msgid "Created By"
-msgstr "Aangemaakt door"
-
-#: js/DownloadLinkGridPanel.js:252 js/Model.js:529 js/NodeEditDialog.js:164
-#: js/NodeGridPanel.js:174
-msgid "Creation Time"
-msgstr "Tijdstip aanmaak"
-
 #: js/DownloadLinkGridPanel.js:260
 msgid "Expiration Time"
 msgstr ""
@@ -84,10 +171,6 @@ msgstr "Laatst gewijzigd op"
 #: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
 msgid "Last Modified By"
 msgstr "Laatst gewijzigd door"
-
-#: js/PathFilterModel.js:50
-msgid "path"
-msgstr "path"
 
 #: js/GridContextMenu.js:34
 #, python-brace-format
@@ -108,26 +191,13 @@ msgstr "Er moet een {0} naam worden opgegeven!"
 msgid "Do you really want to delete the following files?"
 msgstr "Mogewn de volgende bestanden echt worden verwijderd?"
 
-#: js/DownloadLinkDialog.js:52
-msgid "Node Download Links"
-msgstr ""
+#: js/Filemanager.js:36
+msgid "Filemanager"
+msgstr "Bestandsbeheerder"
 
-#: js/DownloadLinkDialog.js:83
-#, python-brace-format
-msgid "Sieve Filter Rules for {0}"
-msgstr ""
-
-#: js/Model.js:40 js/NodeEditDialog.js:67
-msgid "File"
-msgid_plural "Files"
-msgstr[0] "Bestand"
-msgstr[1] "Bestanden"
-
-#: js/Model.js:43 js/NodeEditDialog.js:67 js/NodeGridPanel.js:150
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Folder"
-msgstr[1] "Folders"
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "path"
 
 #: js/Model.js:279 js/Model.js:295
 #, python-brace-format
@@ -146,10 +216,6 @@ msgstr "Moment"
 #: js/Model.js:526
 msgid "Quick Search"
 msgstr "Snel zoeken"
-
-#: js/Model.js:527 js/NodeEditDialog.js:153
-msgid "Type"
-msgstr "Type"
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"
@@ -188,60 +254,9 @@ msgstr "Fout bij aanmaken folder"
 msgid "Item with this name already exists!"
 msgstr "Item met deze naam bestaat al!"
 
-#: js/Filemanager.js:36
-msgid "Filemanager"
-msgstr "Bestandsbeheerder"
-
-#: js/Filemanager.js:44 js/NodeEditDialog.js:49 js/NodeGridPanel.js:339
-msgid "Save locally"
-msgstr "Bewaar lokaal"
-
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
-#: js/NodeGridPanel.js:847
-msgid "Upload Failed"
-msgstr "Upload mislukt"
-
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
-msgid ""
-"Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
 msgstr ""
-
-#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
-msgid "Putting files in this folder is not allowed!"
-msgstr "Plaatsen van bestanden in deze folder is niet toegestaan!"
-
-#: js/NodeEditDialog.js:65
-msgid "Edit folder"
-msgstr ""
-
-#: js/NodeEditDialog.js:65
-msgid "edit file"
-msgstr ""
-
-#: js/NodeEditDialog.js:113
-msgid "Public Links"
-msgstr ""
-
-#: js/NodeEditDialog.js:146 js/NodeGridPanel.js:128
-msgid "Name"
-msgstr "Naam"
-
-#: js/NodeEditDialog.js:173
-msgid "Modified By"
-msgstr "Gewijzigd door"
-
-#: js/NodeEditDialog.js:176
-msgid "Last Modified"
-msgstr "Laatst gewijzigd"
-
-#: js/NodeEditDialog.js:199
-msgid "Description"
-msgstr "Omschrijving"
-
-#: js/NodeEditDialog.js:213
-msgid "Enter description"
-msgstr "Voer omschrijving in"
 
 #: js/NodeGridPanel.js:120
 msgid "Tags"
@@ -314,26 +329,6 @@ msgstr "Geef de naam van de nieuwe folder:"
 #, python-brace-format
 msgid "No {0} added"
 msgstr "Geen {0} toegevoegd"
-
-#: Exception/DestinationIsSameNode.php:26
-msgid "Destination has the same Path"
-msgstr ""
-
-#: Exception/DestinationIsSameNode.php:31
-msgid ""
-"The destination has the same path the source has. No action has been "
-"performed."
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:26
-msgid "Destination is a Subfolder"
-msgstr ""
-
-#: Exception/DestinationIsOwnChild.php:31
-msgid ""
-"The destination is a subfolder. It is not allowed to copy or move a folder "
-"into one of its subfolders."
-msgstr ""
 
 #: Controller/Node.php:318
 msgid "My folders"
