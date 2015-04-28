@@ -169,8 +169,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        
+        $this->_instance->setGeoDataForContacts($this->_geodata);
         $this->_instance->useNotes(true);
         if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
             $this->_instance->delete($this->objects['contact']);
