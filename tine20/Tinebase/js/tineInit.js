@@ -215,8 +215,9 @@ Tine.Tinebase.tineInit = {
         // check if user is already logged in
         if (! Tine.Tinebase.registry.get('currentAccount')) {
             Tine.Tinebase.tineInit.showLoginBox(function(response){
-                // fetch users registry
+                Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
+                    Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
                     Tine.Tinebase.tineInit.initWindowMgr();
                     Tine.Tinebase.tineInit.renderWindow();

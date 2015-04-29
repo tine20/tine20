@@ -351,8 +351,13 @@ class Setup_Frontend_Cli
                 }
             }
         }
-        
         echo "Successfully cleand up containers.\n";
+        
+        //remove state
+        $db = Tinebase_Core::getDb();
+        $statement = "TRUNCATE TABLE " . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'state');
+        $db->query($statement);
+        echo "Successfully truncated state table.\n";
         
         //Get Demodata
         $cli->createAllDemoData();

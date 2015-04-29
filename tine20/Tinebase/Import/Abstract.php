@@ -586,16 +586,17 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 'related_record' => $record
             );
             
-            // TODO add some more relation definition info?
-
             $relations[] = $relation;
         }
 
         if (isset($field['targetField'])&& isset($field['targetFieldData'])) {
-            $targetField = $field['targetFieldData'];
+            $unreplaced = $targetField = $field['targetFieldData'];
             foreach ($record as $key => $value) {
                 $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
+                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
             }
+            // remove unreplaced stuff
+            $targetField = str_replace($unreplaced, '', $targetField);
             $data[$field['targetField']] = $targetField;
         }
         
