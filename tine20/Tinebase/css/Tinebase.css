@@ -868,6 +868,7 @@ span:hover.tinebase-download-link {
 /******** email ***********/
 
 a:hover.tinebase-email-link {
+    cursor: pointer;
     color: #4444ff;
 }
 
