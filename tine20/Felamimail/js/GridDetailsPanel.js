@@ -293,6 +293,7 @@ Ext.ns('Tine.Felamimail');
                 }
                 
                 id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
+                result = '<a id="' + id + '" class="tinebase-email-link">' + result + '</a>'
                 result += ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 return result;
             },
