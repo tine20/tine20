@@ -138,6 +138,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_duplicateCheckFields = NULL;
 
+    protected $_duplicateCheckConfig = array();
+    
     /**
      * holds new relation on update multiple
      * @var array
@@ -709,10 +711,10 @@ abstract class Tinebase_Controller_Record_Abstract
             if (! is_array($group)) {
                 $group = array($group);
             }
-            foreach ($group as $key => $field) {
+            foreach ($group as $field) {
                 if (! empty($_record->{$field})) {
                     if ($field === 'relations') {
-                        $relationFilter = $this->_getRelationDuplicateFilter($_record, $key, $field);
+                        $relationFilter = $this->_getRelationDuplicateFilter($_record);
                         if ($relationFilter) {
                             $addFilter[] = $relationFilter;
                         }
@@ -756,12 +758,12 @@ abstract class Tinebase_Controller_Record_Abstract
         return $filter;
     }
     
-    protected function _getRelationDuplicateFilter($record, $key, $field)
+    protected function _getRelationDuplicateFilter($record)
     {
         $filter = null;
-        $relations = $record->{$field};
+        $relations = $record->relations;
         
-        if (count($relations) === 0) {
+        if (count($relations) === 0 || ! isset($this->_duplicateCheckConfig['relations']['filterField'])) {
             return $filter;
         }
         
@@ -770,16 +772,15 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         // check for relation and add relation filter
-        $type = is_string($key) ? $key : '';
+        $type = isset($this->_duplicateCheckConfig['relations']['type']) ? $this->_duplicateCheckConfig['relations']['type'] : '';
         $relations = $relations->filter('type', $type);
         if (count($relations) > 0) {
             $duplicateRelation = $relations->getFirstRecord();
             if ($duplicateRelation->related_id) {
-                // TODO get field name from definition / relation
                 $filter = array(
-                    'field' => 'contact',
+                    'field' => $this->_duplicateCheckConfig['relations']['filterField'],
                     'operator' => 'AND',
-                    'value' => array('field' => ':id', 'operator' => 'equals', 'value' => $duplicateRelation->related_id)
+                    'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $duplicateRelation->related_id))
                 );
             }
         }
