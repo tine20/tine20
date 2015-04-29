@@ -65,6 +65,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         foreach ($this->_filenamesToDelete as $filename) {
             unlink($filename);
         }
+
+        Tinebase_Config::getInstance()->clearCache();
     }
     
     /**
@@ -104,7 +106,6 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
             return;
         }
         
-        $configFileValue = $configData['Overwrite Test'];
         $overwrittenValue = Tinebase_Record_Abstract::generateUID();
         $this->_instance->{'Overwrite Test'} = $overwrittenValue;
         
@@ -178,25 +179,28 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testApplicationDefaultConfig()
     {
+        $defaultConfigFile = $this->_getSalesCustomDefaultConfig();
+        
+        if (file_exists($defaultConfigFile)) {
+            $this->markTestSkipped('ignore test because Sales default config exists');
+        }
+        
         $ignoreBillablesConfig = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
         $this->assertEquals('2000-01-01 22:00:00', $ignoreBillablesConfig);
         
-        $dest = $this->_getSalesCustomDefaultConfig();
-        
-        if (! file_exists($dest)) {
-            copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $dest);
-            $this->_filenamesToDelete[] = $dest;
+        copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $defaultConfigFile);
+        $this->_filenamesToDelete[] = $defaultConfigFile;
 
-            Tinebase_Cache_PerRequest::getInstance()->reset('Tinebase_Config_Abstract');
-            
-            $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
-            $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
-        }
+        Sales_Config::getInstance()->clearCache();
+        
+        $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
+        $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
     }
     
     protected function _getSalesCustomDefaultConfig()
     {
-        return dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20' . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+        return dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
+            . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
     }
     
     /**

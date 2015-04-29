@@ -583,6 +583,13 @@ abstract class Tinebase_Config_Abstract
             }
             Tinebase_Core::getCache()->remove('cachedAppConfig_' . $appName);
         }
+
+        Tinebase_Cache_PerRequest::getInstance()->reset('Tinebase_Config_Abstract');
+
+        $cachedConfigFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+        if (file_exists($cachedConfigFile)) {
+            unlink($cachedConfigFile);
+        }
     }
     
     /**
