@@ -91,7 +91,6 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $adminGroup   = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($adminGroup->getId());
         
-        
         if (count($groupMembers) > 0) {
             $user = Tinebase_User::getInstance()->getUserById($groupMembers[0]);
             Tinebase_Core::set(Tinebase_Core::USER, $user);
@@ -181,9 +180,14 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
                 }
             }
             
-            foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
-                $contr->description = $updateDescription[$contr->getId()];
-                $controller->update($contr, FALSE);
+            try {
+                foreach ($controller->getMultiple(array_keys($updateDescription)) as $contr) {
+                    $contr->description = $updateDescription[$contr->getId()];
+                    $controller->update($contr, FALSE);
+                }
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // could not update contracts ...
+                Tinebase_Exception::log($tead);
             }
         }
         
