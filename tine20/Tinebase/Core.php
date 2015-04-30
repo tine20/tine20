@@ -1556,7 +1556,7 @@ class Tinebase_Core
                continue;
            }
            
-           if (ctype_upper($entry[0])){
+           if (ctype_upper($entry[0]) && is_dir($entry)) {
                 $applications[] = $entry;
            }
         }
