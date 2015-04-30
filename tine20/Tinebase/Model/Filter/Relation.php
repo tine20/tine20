@@ -193,5 +193,5 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
         );
         
         return $result;
-    }    
+    }
 }
