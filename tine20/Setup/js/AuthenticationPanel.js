@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -332,7 +332,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         Ext.applyIf({
                             name: 'authentication_Ldap_useStartTls',
                             fieldLabel: this.app.i18n._('Start TLS'),
-                            store: [[['0', this.app.i18n._('No'), '1', this.app.i18n._('Yes')]]],
+                            store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                             value: '0'
                         }, commonComboConfig), 
                         {
@@ -599,7 +599,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             Ext.applyIf({
                 name: 'accounts_' + type + 'useStartTls',
                 fieldLabel: this.app.i18n._('Start TLS'),
-                store: [[['0', this.app.i18n._('No'), '1', this.app.i18n._('Yes')]]],
+                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                 value: '0'
             }, commonComboConfig),
             Ext.applyIf({
