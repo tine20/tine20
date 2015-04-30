@@ -94,6 +94,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         
         // TODO: remove this when files can be searched
         this.ignoreRelatedModels = this.ignoreRelatedModels ? this.ignoreRelatedModels.push('Filemanager_Model_Node') : ['Filemanager_Model_Node'];
+        // TODO: remove this when ProductAggregates can be searched (or move this exception to Sales app)
+        this.ignoreRelatedModels.push('Sales_Model_ProductAggregate');
         
         if (this.ownField) {
             this.field = this.ownField;
