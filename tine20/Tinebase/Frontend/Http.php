@@ -797,4 +797,64 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->_downloadFileNode($node, $path);
         exit;
     }
+
+    /**
+     * get resources for caching purposes
+     *
+     * TODO make this OS independent (currently this needs find, grep egrep)
+     */
+    public function getResources()
+    {
+        $tine20path = dirname(dirname(dirname(__FILE__)));
+        $files = array(
+            'Tinebase/css/tine-all.css',
+            'Tinebase/js/tine-all.js',
+            'styles/tine20.css',
+            'library/ExtJS/ext-all.js',
+            'library/ExtJS/adapter/ext/ext-base.js',
+            'library/ExtJS/resources/css/ext-all.css',
+            'images/oxygen/16x16/actions/knewstuff.png' // ???
+        );
+
+        // no subdirs! => solaris does not know find -maxdeps 1
+        exec("cd \"$tine20path\"; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
+        $files = array_merge($files, $baseImages);
+
+        $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
+        preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
+        preg_match_all('/url\(..\/..\/(library.*)\)/U', $tineCSS, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+        preg_match_all('/labelIcon: [\'|"](.*png)/U', $tineJs, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+        preg_match_all('/labelIcon: [\'|"](.*gif)/U', $tineJs, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+        preg_match_all('/src=[\'|"](.*png)/U', $tineJs, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
+        preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
+        $files = array_merge($files, $matches[1]);
+
+        exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
+        $files = array_merge($files, $extImages);
+        exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.png", $extImages);
+        $files = array_merge($files, $extImages);
+
+        exec("cd \"$tine20path\"; find styles -type f", $tine20Styles);
+        $files = array_merge($files, $tine20Styles);
+
+        $files = array_unique($files);
+
+        // return resources as js array
+        echo '["'. implode('", "', $files) . '""]';
+    }
 }
