@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
@@ -37,7 +37,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         switch (this.cfDefinition.type) {
             case 'record':
             case 'keyField':
-                this.operators = ['equals', 'not', 'in', 'notin'];
+                this.operators = ['equals', 'not' /* , 'in', 'notin' */];
                 this.defaultOperator = 'equals';
                 this.valueRenderer = this.cfValueRenderer;
                 break;
@@ -71,15 +71,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
     getValueType: function (filter) {
         var operator  = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
             valueType = 'selectionComboBox';
-        
-        switch (operator) 
-        {
-        case 'in':
-        case 'notin':
-            valueType = 'FilterModelMultipleValueField';
-            break;
-        }
-        
+
         return valueType;
     },
     
@@ -140,58 +132,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 'select': this.onFiltertrigger
             }
         });
-        
-        switch (this.cfDefinition.type)
-        {
-        case 'record':
-            filter.valueFields.FilterModelMultipleValueField = new Tine.Tinebase.FilterModelMultipleValueField({
-                hidden: valueType !== 'FilterModelMultipleValueField',
-                recordClass: eval(this.cfDefinition.recordConfig.value.records),
-                valuesAsArray: true,
-                self: this,
-                filter: filter,
-                width: fieldWidth,
-                value: filter.data.value ? filter.data.value : this.defaultValue,
-                renderTo: el,
-                listeners: {
-                    scope: this,
-                    'specialkey': function (field, e) {
-                        if (e.getKey() === e.ENTER) {
-                            this.onFiltertrigger();
-                        }
-                    },
-                    'select': this.onFiltertrigger
-                }
-            });
-            break;
-            
-        case 'keyField':
-            var valuesArr = [];
-            filter.valueFields.selectionComboBox.store.each(function (rec) {
-                valuesArr.push([rec.get(filter.valueFields.selectionComboBox.valueField), rec.get(filter.valueFields.selectionComboBox.displayField)]);
-            });
-        
-            filter.valueFields.FilterModelMultipleValueField = new Tine.Tinebase.FilterModelSmallMultipleValueField({
-                hidden: valueType !== 'FilterModelMultipleValueField',
-                filter: filter,
-                filterModel: this,
-                width: fieldWidth,
-                store: valuesArr,
-                value: filter.data.value ? filter.data.value : this.defaultValue,
-                renderTo: el,
-                listeners: {
-                    'specialkey': function (field, e) {
-                        if (e.getKey() === e.ENTER) {
-                            this.onFiltertrigger();
-                        }
-                    },
-                    'select': this.onFiltertrigger,
-                    scope: this
-                }
-            });
-            break;
-        }
-        
+
         return filter.valueFields[valueType];
     }
 });
