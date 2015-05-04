@@ -2003,4 +2003,32 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Sales', '8.28');
     }
+
+    /**
+     * Allow negative prices for invoices
+     */
+    public function update_28() {
+        $field = '<field>
+                    <name>price_net</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('sales_sales_invoices', $declaration);
+
+        $field = '<field>
+                    <name>price_gross</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->alterCol('sales_sales_invoices', $declaration);
+
+        $this->setTableVersion('sales_invoices', 5);
+        $this->setApplicationVersion('Sales', '8.29');
+    }
 }

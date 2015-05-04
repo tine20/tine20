@@ -56,12 +56,24 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      * @return {Ext.form.ComboBox}
      */
     setValue: function(v) {
+        // If empty string!
+        if (v == "") {
+            v = "0";
+        }
+
         Ext.ux.form.NumberField.superclass.setValue.call(this, v);
         
         var split = String(this.getValue()).split('.');
-        
+
         var tenString = split[0];
-        
+
+        var prefix = '';
+
+        if (tenString[0] == '-') {
+            tenString = tenString.substr(1);
+            prefix = '-';
+        }
+
         if (split.length == 1) {
             var decimalString = '';
         } else {
@@ -85,7 +97,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
                     tenStringValue += tenString[stringIndex];
                     stringIndex++;
                 }
-                
+
                 tenStringValue += this.thousandSeparator;
             }
             
@@ -102,7 +114,7 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         }
         
         var showValue = (this.prefix ? this.prefix : '') + tenStringValue + this.decimalSeparator + decimalString + (this.suffix ? this.suffix : '');
-        this.setRawValue(showValue);
+        this.setRawValue(prefix + showValue);
         
         return this;
     },
