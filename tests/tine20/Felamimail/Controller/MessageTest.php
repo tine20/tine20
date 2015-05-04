@@ -1686,7 +1686,7 @@ Photographer', $message->body);
     {
         $cachedMessage = $this->messageTestHelper('html_jump_labels.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        $this->assertContains('<a href="#felamimail_inline_test" target="_self">test</a>
+        $this->assertContains('<a href="#felamimail_inline_test" target="_blank">test</a>
 <p>Hello,</p>
 <p id="felamimail_inline_test">Text Content</p>', $message->body);
     }

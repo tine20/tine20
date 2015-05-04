@@ -632,6 +632,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
+            $body = Felamimail_Message::replaceTargets($body);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Adding part ' . $partId . ' to message body.');

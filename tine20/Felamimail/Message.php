@@ -214,7 +214,7 @@ class Felamimail_Message extends Zend_Mail_Message
             
         return $result;
     }
-    
+
     /**
      * replace uris with links
      *
@@ -244,6 +244,21 @@ class Felamimail_Message extends Zend_Mail_Message
         $mailtoPattern = '/<a[="a-z\-0-9 ]*href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*<\/a>/iU';
         $result = preg_replace($mailtoPattern, "\\1", $_content);
         $result = preg_replace(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
+        
+        return $result;
+    }
+
+    /**
+     * replace targets in links
+     *
+     * @param string $_content
+     * @return string
+     */
+    public static function replaceTargets($_content) 
+    {
+        // uris
+        $pattern = "/target=[\'\"][^\'\"]*[\'\"]/";
+        $result = preg_replace($pattern, "target=\"_blank\"", $_content);
         
         return $result;
     }
