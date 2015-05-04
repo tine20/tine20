@@ -20,7 +20,7 @@ sed -i 's/.*backports.*//g' /etc/apt/sources.list
 apt-get update
 
 # Install lamp stack
-apt-get install -y mysql-server apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php5-xdebug php5-curl php-pear php5-xsl phpmyadmin
+apt-get install -y mysql-server apache2 php5 libapache2-mod-php5 php5-mysql php5-gd php5-curl php-pear php5-xdebug php5-xsl phpmyadmin
 
 # run apache as vagrant to ease things
 service apache2 stop
@@ -37,11 +37,6 @@ apt-get install -y zsh language-pack-de
 # Setup composer or if allready installed it would update
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
-
-# Install jslint
-#svn co https://svn.code.sf.net/p/javascriptlint/code/trunk jsl 
-#cd jsl/
-#python setup.py install
 
 #################### USER CONFIG ##########################
 
@@ -90,7 +85,7 @@ sed -i 's/^Alias.*$//' /etc/apache2/conf.d/phpmyadmin.conf
 ###################### XDEBUG SETTINGS ######################
 
 if [ -e /etc/php5/conf.d/xdebug.ini ]; then
-    # don't forget to set export XDEBUG_CONFIG="idekey=eclipse" (TODO add to bashrc)
+    # don't forget to set export XDEBUG_CONFIG="idekey=eclipse"
     echo xdebug.default_enable=1 >> /etc/php5/conf.d/xdebug.ini
     echo xdebug.remote_enable=1 >> /etc/php5/conf.d/xdebug.ini
     echo xdebug.remote_handler=dbgp >> /etc/php5/conf.d/xdebug.ini
@@ -101,9 +96,7 @@ if [ -e /etc/php5/conf.d/xdebug.ini ]; then
     echo xdebug.remote_log=/vagrant/logs/php5-xdebug.log >> /etc/php5/conf.d/xdebug.ini
 fi
 
-
-# Fix mcrypt
-ln -sf /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available/mcrypt.ini
+ln -s /etc/php5/conf.d/mcrypt.ini /etc/php5/mods-available
 php5enmod mcrypt
 
 ###################### INSTALL TINE20 ######################
