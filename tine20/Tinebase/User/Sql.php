@@ -333,9 +333,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     protected function _getUserSelectObject()
     {
         /*
-         * CASE WHEN `status` = 'enabled' THEN (CASE WHEN NOW() > `expires_at` THEN 'expired' 
-         * WHEN (`login_failures` > 5 AND `last_login_failure_at` + INTERVAL 15 MINUTE > NOW()) 
-         * THEN 'blocked' ELSE 'enabled' END) ELSE 'disabled' END
+         * CASE WHEN `status` = 'enabled' THEN (CASE WHEN DATE(NOW()) > `expires_at` THEN 'expired'
+         * WHEN ( `login_failures` > 5 AND DATE(`last_login_failure_at`) + INTERVAL '15' MINUTE > DATE(NOW())) THEN 'blocked'
+         * ELSE 'enabled' END) WHEN `status` = 'expired' THEN 'expired' ELSE 'disabled' END
          */
         
         $maxLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_LOGIN_FAILURES, 5);
@@ -349,11 +349,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $loginFailuresCondition = '';
         }
         
-        $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN (';
-        $statusSQL .= 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires'])
+        $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN ('
+            . 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires'])
             . ' THEN ' . $this->_db->quote('expired')
-            . $loginFailuresCondition
-            . ' ELSE ' . $this->_db->quote('enabled') . ' END) ELSE ' . $this->_db->quote('disabled') . ' END';
+            . ' ' . $loginFailuresCondition
+            . ' ELSE ' . $this->_db->quote('enabled') . ' END)'
+            . ' WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('expired')
+                . ' THEN ' . $this->_db->quote('expired')
+            . ' ELSE ' . $this->_db->quote('disabled') . ' END';
         
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
@@ -396,7 +399,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'container_id'            => 'container_id'
                 )
             );
-        
+
         return $select;
     }
     
