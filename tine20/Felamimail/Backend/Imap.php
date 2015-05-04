@@ -104,7 +104,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         try {
             //TODO: set at account config and use it here????
             $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-            if ($imapConfig->backend === 'cyrus' && isset($imapConfig->cyrus['useProxyAuth']) && $imapConfig->cyrus['useProxyAuth']) {
+            if (is_object($imapConfig) && $imapConfig->backend === 'cyrus' && isset($imapConfig->cyrus['useProxyAuth']) && $imapConfig->cyrus['useProxyAuth']) {
                 $params = array(
                     'authzid'   => $_params->user,
                     'authcid'   => $imapConfig->cyrus['admin'],
