@@ -34,6 +34,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Sales_Model_Contract',
         'Sales_Model_CostCenter',
         'Sales_Model_Customer',
+        'Sales_Model_Offer',
         'Sales_Model_Address',
         'Sales_Model_ProductAggregate',
     );
@@ -49,6 +50,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'Division',
         'CostCenter',
         'Customer',
+        'Offer',
         'Address',
         'ProductAggregate',
     );

@@ -69,8 +69,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-<<<<<<< HEAD
-=======
      * initializes the toolbar
      */
     initToolbar: function() {
@@ -80,8 +78,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
->>>>>>> pu/2013.10-invoices
      * called on multiple edit
+     *
      * @return {Boolean}
      */
     isMultipleValid: function() {
