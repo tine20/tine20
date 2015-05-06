@@ -444,12 +444,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             return;
         }
         
-        // if clicked date is defined as vacation, and we want to define sickness days, handle click (employee my be sick on vacation)
-        // otherwise don't handle (vacation can't be booked on vacation)
-        if (this.freetimeType == 'VACATION' && (Ext.fly(t.parentNode).hasClass('hr-date-vacation'))) {
-            return;
-        }
-        
         var date = new Date(t.dateValue),
             existing = this.store.getByDate(date);
             
