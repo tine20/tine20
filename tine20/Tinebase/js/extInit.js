@@ -170,7 +170,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         }
         v = whole + sub;
         if(v.charAt(0) == '-'){
-            return v.substr(1) + ' -€';
+            return '- ' + v.substr(1) + ' €';
         }
         return v + " €";
     },

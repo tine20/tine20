@@ -343,8 +343,6 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
      */
     getTimestampsFromDays: function(localDays, remoteDays, locallyRemovedDays) {
         
-        var offset = new Date().getTimezoneOffset() * 60 * 1000;
-        
         var dates = [];
         Ext.iterate(localDays, function(accountId, localdates) { 
             for (var index = 0; index < localdates.length; index++) {
@@ -370,7 +368,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 var day = remoteDays[index].date.split(' ')[0];
                 if (remove.indexOf(day) == -1) {
                     var newdate = new Date(remoteDays[index].date.replace(/-/g,'/') + ' AM');
-                    dates.push(newdate.getTime() + offset);
+                    dates.push(newdate.getTime());
                 }
             }
         }
