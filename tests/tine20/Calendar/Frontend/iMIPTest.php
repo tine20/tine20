@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add tests testInvitationCancel and testOrganizerSendBy
@@ -120,6 +120,26 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->assertEquals('test mit extern', $prepared->event->summary);
         
         return $iMIP;
+    }
+
+    /**
+     * testSearchSharedCalendarsForExternalEvents
+     *
+     * @see 0011024: don't show external imip events in shared calendars
+     */
+    public function testSearchSharedCalendarsForExternalEvents()
+    {
+        $iMIP = $this->testExternalInvitationRequestAutoProcess();
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->_eventIdsToDelete[] = $iMIP->event->getId();
+
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => '/shared')
+        ));
+        $eventsInShared = Calendar_Controller_Event::getInstance()->search($filter);
+
+        $this->assertFalse(in_array($iMIP->event->getId(), $eventsInShared->getArrayOfIds()),
+            'found event in shared calendar: ' . print_r($iMIP->event->toArray(), true));
     }
 
     /**

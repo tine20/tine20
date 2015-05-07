@@ -1496,7 +1496,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
-                // move into spechial (external users) container
+                // move into special (external users) container
                 $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->resolveOrganizer());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . $_record->organizer->email);
