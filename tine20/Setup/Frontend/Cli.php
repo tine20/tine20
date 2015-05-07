@@ -362,6 +362,10 @@ class Setup_Frontend_Cli
         //Get Demodata
         $cli->createAllDemoData();
         
+        //clear Cache
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        echo "Successfully cleared Cache.\n";
+        
         echo "Every thing done!\n";
     }
 
