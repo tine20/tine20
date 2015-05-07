@@ -209,7 +209,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                 $data['n_given']  = trim($firstname);
                 
             } else {
-                $data['n_family'] = $data['n_fn'];
+                $data['n_family'] = empty($data['n_fn']) ? 'VCARD (imported)' : $data['n_fn'];
             }
         }
 

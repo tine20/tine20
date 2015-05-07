@@ -30,6 +30,7 @@ Ext.ns('Tine.Inventory');
  */
 Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     multipleEdit: true,
+    copyEditAction: true,
     
     initActions: function() {
         this.actions_exportInventoryItem = new Ext.Action({
