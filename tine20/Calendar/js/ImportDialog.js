@@ -194,7 +194,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }
             }, {
                 xtype: 'label',
-                html: '<p><br />' + this.app.i18n._('Username (CalDAV only)') + '</p><br />'
+                ref: '../../remoteUsernameLabel',
+                html: '<p><br />' + this.app.i18n._('Username') + '</p><br />'
             }, {
                 ref: '../../remoteUsername',
                 xtype: 'textfield',
@@ -210,7 +211,8 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }
             }, {
                 xtype: 'label',
-                html: '<p><br />' + this.app.i18n._('Password (CalDAV only)') + '</p><br />'
+                ref: '../../remotePasswordLabel',
+                html: '<p><br />' + this.app.i18n._('Password') + '</p><br />'
             }, {
                 ref: '../../remotePassword',
                 xtype: 'textfield',
@@ -424,13 +426,21 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                                 Ext.getCmp('definitionPanel').hide();
                                 Ext.getCmp('remotePanel').show();
                                 if (combo.getValue() == 'remote_caldav') {
+                                    this.remoteLocation.emptyText = 'http://example/calendars';
                                     this.remoteUsername.enable();
                                     this.remotePassword.enable();
-                                    this.remoteLocation.emptyText = 'http://example/calendars';
+                                    this.remoteUsername.show();
+                                    this.remotePassword.show();
+                                    this.remoteUsernameLabel.show();
+                                    this.remotePasswordLabel.show();
                                 } else {
+                                    this.remoteLocation.emptyText = 'http://example.ics';
                                     this.remoteUsername.disable();
                                     this.remotePassword.disable();
-                                    this.remoteLocation.emptyText = 'http://example.ics';
+                                    this.remoteUsername.hide();
+                                    this.remotePassword.hide();
+                                    this.remoteUsernameLabel.hide();
+                                    this.remotePasswordLabel.hide();
                                 }
                                 this.remoteLocation.applyEmptyText();
                                 this.remoteLocation.reset();
