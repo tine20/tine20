@@ -426,10 +426,14 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                                 if (combo.getValue() == 'remote_caldav') {
                                     this.remoteUsername.enable();
                                     this.remotePassword.enable();
+                                    this.remoteLocation.emptyText = 'http://example/calendars';
                                 } else {
                                     this.remoteUsername.disable();
                                     this.remotePassword.disable();
+                                    this.remoteLocation.emptyText = 'http://example.ics';
                                 }
+                                this.remoteLocation.applyEmptyText();
+                                this.remoteLocation.reset();
                             }
                             
                             this.doLayout();
