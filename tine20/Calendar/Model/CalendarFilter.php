@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -26,7 +26,7 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
 {
     
     /**
-     * @var array One of theese grants must be given
+     * @var array One of these grants must be given
      */
     protected $_requiredGrants = NULL;
     
@@ -92,10 +92,10 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
      */
     public function getRelatedAttendeeFilter()
     {
-        // allways set currentaccount
+        // always set current account
         $userIds = array(Tinebase_Core::getUser()->getId());
         
-        // rip users from pathes
+        // rip users from paths
         foreach ((array) $this->getValue() as $value) {
             if (preg_match("/^\/personal\/([0-9a-z_\-]+)/i", $value, $matches)) {
                 // transform current user 
@@ -116,5 +116,21 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
         
         $attenderFilter = new Calendar_Model_AttenderFilter('attender', 'in', $attendeeFilterData);
         return $attenderFilter;
+    }
+
+    /**
+     * fetch shared containers
+     *
+     * NOTE: this is needed because we don't want external organizers events to be visible if 'shared' node is requested
+     *
+     * @param $currentAccount
+     * @param $appName
+     * @return mixed
+     */
+    protected function _getSharedContainer($currentAccount, $appName)
+    {
+        return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, array(
+            Tinebase_Model_Grants::GRANT_READ
+        ))->getId();
     }
 }

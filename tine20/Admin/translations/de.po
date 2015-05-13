@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Kay Strobach <info@kay-strobach.de>, 2012
 # Juergen Heine <transifex.com@sysdef.de>, 2013
@@ -11,17 +11,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-10 18:53+0000\n"
-"Last-Translator: Michael Spahn <michael@spahn.me>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"PO-Revision-Date: 2015-05-08 15:37+0100\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
+"de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:208
 msgid "manage access log"
@@ -36,9 +36,10 @@ msgid "manage accounts"
 msgstr "Benutzerkonten verwalten"
 
 #: Acl/Rights.php:213
-msgid ""
-"add and edit users and groups, add group members, change user passwords"
-msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen"
+msgid "add and edit users and groups, add group members, change user passwords"
+msgstr ""
+"Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, "
+"Passwörter zurücksetzen"
 
 #: Acl/Rights.php:216
 msgid "manage applications"
@@ -54,9 +55,10 @@ msgstr "Rollen verwalten"
 
 #: Acl/Rights.php:221
 msgid ""
-"add and edit roles, add new members to roles, add application rights to "
-"roles"
-msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen"
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen "
+"Anwendungs-Rechte zuweisen"
 
 #: Acl/Rights.php:224
 msgid "manage shared tags"
@@ -80,7 +82,8 @@ msgstr "Container verwalten"
 
 #: Acl/Rights.php:233
 msgid "add, delete and edit containers and manage container grants"
-msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
+msgstr ""
+"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
 #: Acl/Rights.php:236
 msgid "manage customfields"
@@ -209,13 +212,13 @@ msgstr "Zeige Anwendung {0} - {1} von {2}"
 msgid "No applications to display"
 msgstr "Keine Anwendungen anzuzeigen"
 
-#: js/Applications.js:281 js/customfield/EditDialog.js:630
+#: js/Applications.js:281 js/customfield/EditDialog.js:611
 msgid "Order"
 msgstr "Sortierung"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:596 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:124 js/AccessLog.js:128 js/Tags.js:227
+#: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
 #: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
@@ -253,8 +256,8 @@ msgstr "Fehlgeschlagen"
 msgid "Could not save tag ({0})"
 msgstr "Konnte Tag ({0}) nicht speichern"
 
-#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:137
-#: js/customfield/EditDialog.js:432 js/RoleEditDialog.js:115
+#: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
+#: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
 #: js/GroupEditDialog.js:78
 msgid "Errors"
 msgstr "Fehler"
@@ -293,7 +296,7 @@ msgstr "Tag Name"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:171 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
 msgid "Color"
 msgstr "Farbe"
 
@@ -333,7 +336,7 @@ msgstr "Rollen"
 msgid "Computers"
 msgstr "Computer"
 
-#: js/Admin.js:74 js/Models.js:127
+#: js/Admin.js:74 js/Models.js:128
 msgid "Applications"
 msgstr "Anwendungen"
 
@@ -359,11 +362,15 @@ msgstr "Zusatzfelder"
 msgid "Server Information"
 msgstr "Server Informationen"
 
-#: js/Admin.js:173
+#: js/Admin.js:153
+msgid "ActiveSync Devices"
+msgstr "ActiveSync Geräte"
+
+#: js/Admin.js:191
 msgid "Admin"
 msgstr "Admin"
 
-#: js/Admin.js:257
+#: js/Admin.js:275
 msgid "Refresh"
 msgstr "Aktualisieren"
 
@@ -371,32 +378,32 @@ msgstr "Aktualisieren"
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
-#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:283
+#: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
 #: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
 #: js/Groups.js:235 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
-#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:602
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:583
 msgid "Label"
 msgstr "Bezeichner"
 
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:584
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:565
 #: js/container/GridPanel.js:68 js/container/GridPanel.js:99
-#: js/container/EditDialog.js:156
+#: js/container/EditDialog.js:175
 msgid "Type"
 msgstr "Typ"
 
-#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:387
-#: js/customfield/EditDialog.js:529 js/container/GridPanel.js:67
-#: js/container/EditDialog.js:136 js/ApplicationFilter.js:33 js/Models.js:127
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:352
+#: js/customfield/EditDialog.js:508 js/container/GridPanel.js:67
+#: js/container/EditDialog.js:143 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Anwendung"
 msgstr[1] "Anwendungen"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:550
-#: js/container/EditDialog.js:149
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:530
+#: js/container/EditDialog.js:164
 msgid "Model"
 msgstr "Modell"
 
@@ -413,121 +420,124 @@ msgstr "Bestätigen"
 
 #: js/customfield/GridPanel.js:128
 msgid "Restart application to apply new customfields?"
-msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
+msgstr ""
+"Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
 
-#: js/customfield/EditDialog.js:137
+#: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr "Bitte konfigurieren Sie einen Datenspeicher für diesen Feldtyp"
 
-#: js/customfield/EditDialog.js:244
+#: js/customfield/EditDialog.js:209
 msgid "Default"
 msgstr "Standard"
 
-#: js/customfield/EditDialog.js:288
+#: js/customfield/EditDialog.js:253
 msgid "Add a New ID..."
 msgstr "Neue ID setzen ..."
 
-#: js/customfield/EditDialog.js:292
+#: js/customfield/EditDialog.js:257
 msgid "Value"
 msgstr "Wert"
 
-#: js/customfield/EditDialog.js:297
+#: js/customfield/EditDialog.js:262
 msgid "Add a New Value..."
 msgstr "Neuen Wert hinzufügen ..."
 
-#: js/customfield/EditDialog.js:307 js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:272 js/customfield/EditDialog.js:278
 msgid "Error"
 msgstr "Fehler"
 
-#: js/customfield/EditDialog.js:307
+#: js/customfield/EditDialog.js:272
 msgid "ID already exists"
 msgstr "ID bereits vorhanden"
 
-#: js/customfield/EditDialog.js:313
+#: js/customfield/EditDialog.js:278
 msgid "Value already exists"
 msgstr "Wert bereits vorhanden"
 
-#: js/customfield/EditDialog.js:407
+#: js/customfield/EditDialog.js:372
 msgid "Record Class"
 msgstr "Datensatz-Klasse"
 
-#: js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:397
 msgid "Given record class not found"
 msgstr "Datensatz-Klasse nicht gefunden"
 
-#: js/customfield/EditDialog.js:465
+#: js/customfield/EditDialog.js:430
 msgid "OK"
 msgstr "OK"
 
-#: js/customfield/EditDialog.js:471 js/user/EditDialog.js:736
+#: js/customfield/EditDialog.js:436 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Abbruch"
 
-#: js/customfield/EditDialog.js:504
+#: js/customfield/EditDialog.js:482
 msgid "Configure store"
 msgstr "Datenspeicher konfigurieren"
 
-#: js/customfield/EditDialog.js:561
+#: js/customfield/EditDialog.js:542
 msgid "Custom field definition"
 msgstr "Zusatzfeld-Definition"
 
-#: js/customfield/EditDialog.js:572
+#: js/customfield/EditDialog.js:553
 msgid "Text"
 msgstr "Text"
 
-#: js/customfield/EditDialog.js:573
+#: js/customfield/EditDialog.js:554
 msgid "Number"
 msgstr "Zahl"
 
-#: js/customfield/EditDialog.js:574
+#: js/customfield/EditDialog.js:555
 msgid "Date"
 msgstr "Datum"
 
-#: js/customfield/EditDialog.js:575
+#: js/customfield/EditDialog.js:556
 msgid "DateTime"
 msgstr "Datum mit Uhrzeit"
 
-#: js/customfield/EditDialog.js:576
+#: js/customfield/EditDialog.js:557
 msgid "Time"
 msgstr "Uhrzeit"
 
-#: js/customfield/EditDialog.js:577
+#: js/customfield/EditDialog.js:558
 msgid "Boolean"
 msgstr "Logischer Term"
 
-#: js/customfield/EditDialog.js:578
+#: js/customfield/EditDialog.js:559
 msgid "Search Combo"
 msgstr "Suchfeld"
 
-#: js/customfield/EditDialog.js:579
+#: js/customfield/EditDialog.js:560
 msgid "Key Field"
 msgstr "Schlüsselfeld"
 
-#: js/customfield/EditDialog.js:580
+#: js/customfield/EditDialog.js:561
 msgid "Record"
 msgstr "Datensatz"
 
-#: js/customfield/EditDialog.js:608
+#: js/customfield/EditDialog.js:589
 msgid "Length"
 msgstr "Länge"
 
-#: js/customfield/EditDialog.js:613
+#: js/customfield/EditDialog.js:594
 msgid "Required"
 msgstr "Erforderlich"
 
-#: js/customfield/EditDialog.js:620
+#: js/customfield/EditDialog.js:601
 msgid "Custom field additional properties"
 msgstr "Zusätzliche Eigenschaft des Zusatzfeldes"
 
-#: js/customfield/EditDialog.js:625 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:606 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Gruppe"
 msgstr[1] "Gruppen"
 
-#: js/customfield/EditDialog.js:653
+#: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
-msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
+msgstr ""
+"Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen "
+"anderen Namen."
 
 #: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
@@ -543,15 +553,15 @@ msgstr[1] "Container"
 msgid "Container Name"
 msgstr "Containername"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "personal"
 msgstr "persönlich"
 
-#: js/container/EditDialog.js:157
+#: js/container/EditDialog.js:176
 msgid "shared"
 msgstr "gemeinsam"
 
-#: js/container/EditDialog.js:176
+#: js/container/EditDialog.js:195
 msgid "Note for Owner"
 msgstr "Notiz für den Besitzer"
 
@@ -867,7 +877,8 @@ msgstr[1] "E-Mail-Benutzer"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+msgstr ""
+"Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:733
@@ -998,9 +1009,13 @@ msgstr "Domäne nicht erlaubt"
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
 "primary domain nor set as a secondary domain in the setup. Please add this "
-"domain to the secondary domains in SMTP setup or use another domain which is"
-" configured already."
-msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits konfiguriert ist."
+"domain to the secondary domains in SMTP setup or use another domain which is "
+"configured already."
+msgstr ""
+"Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre "
+"Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre "
+"Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits "
+"konfiguriert ist."
 
 #: js/user/EditDialog.js:628
 msgid "Email Alias"
@@ -1018,7 +1033,9 @@ msgstr "Weiterleitung zu sich selbst"
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
-msgstr "Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-Adresse oder eines Alias des Benutzers ist."
+msgstr ""
+"Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-"
+"Adresse oder eines Alias des Benutzers ist."
 
 #: js/user/EditDialog.js:662
 msgid "Email Forward"
@@ -1068,7 +1085,10 @@ msgstr "Ungültiger Status"
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
+msgstr ""
+"Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit "
+"falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu "
+"setzten."
 
 #: js/user/EditDialog.js:989 js/user/EditDialog.js:993
 msgid "don't know"

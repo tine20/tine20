@@ -7,7 +7,8 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <description>google adb import</description>
+    <description>Import CSV formated contacts from Google address book</description>
+    <!-- _("Import CSV formated contacts from Google address book") -->
     <label>Contact import from Google address book</label>
     <!-- _("Contact import from Google address book") -->
     <example>Addressbook/Import/examples/adb_google_import.csv</example>
