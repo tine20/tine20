@@ -6,7 +6,8 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <description>Outlook 2007 Deutsch Standardzuordnung</description>
+    <description>Import CSV formated contacts from Outlook 2007 German address book</description>
+    <!-- _("Import CSV formated contacts from Outlook 2007 German address book") -->
     <extension>csv</extension>
     <encoding>WINDOWS-1252</encoding>
     <example>Addressbook/Import/examples/adb_outlook2007_default_de.csv</example>

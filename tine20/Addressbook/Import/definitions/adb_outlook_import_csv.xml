@@ -6,7 +6,8 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <description>exchange / outlook adb import</description>
+    <description>Import CSV formated contacts from Exchange / Outlook address book</description>
+    <!-- _("Import CSV formated contacts from Exchange / Outlook address book") -->
     <extension>csv</extension>
     <encoding>WINDOWS-1252</encoding>
     <label>Contact CSV import from Outlook address book</label>

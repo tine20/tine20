@@ -12,9 +12,6 @@
         <header>{user}</header>
     </headers>
     <columns>
-        <!--column>
-            <identifier>account_id</identifier>
-        </column-->
         <column>
             <identifier>id</identifier>
         </column>
