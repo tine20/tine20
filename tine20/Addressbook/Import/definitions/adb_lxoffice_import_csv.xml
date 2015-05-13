@@ -7,9 +7,10 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <label>Contact CSV import</label>
-    <!-- _("Contact CSV import") -->
-    <description>tine adb import</description>
+    <label>LX-Office CSV Contact import</label>
+    <!-- _("LX-Office CSV Contact import") -->
+    <description>Import CSV formated contacts from LX-Office</description>
+    <!-- _("Import CSV formated contacts from LX-Office") -->
     <example>Addressbook/Import/examples/adb_tine_import.csv</example>
     <extension>csv</extension>
     <duplicateResolveStrategy>mergeMine</duplicateResolveStrategy>

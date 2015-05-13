@@ -5,7 +5,8 @@
     <plugin>Addressbook_Import_VCard</plugin>
     <type>import</type>
     <dryrun>0</dryrun>
-    <description>Import vCard in AdressBook</description>
+    <description>Import vCard formated contacts</description>
+    <!-- _("Import vCard formated contacts") -->
     <urlIsHome>0</urlIsHome>
     <mapNicknameToField></mapNicknameToField>
     <example>Addressbook/Import/examples/adb_vcard_import.vcf</example>

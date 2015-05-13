@@ -8,9 +8,6 @@
     <description>default xls contact export definition</description>
     <header>1</header>
     <columns>
-        <!--column>
-            <identifier>account_id</identifier>
-        </column-->
         <column>
             <identifier>adr_one_countryname</identifier>
         </column>

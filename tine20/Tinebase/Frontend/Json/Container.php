@@ -220,7 +220,7 @@ class Tinebase_Frontend_Json_Container
                     $value['account_name'] = $group->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE:
-                    $value['account_name'] = array('accountDisplayName' => 'Anyone');
+                    $value['account_name'] = array('accountDisplayName' => Tinebase_Translation::getTranslation('Tinebase')->_('Anyone'));
                     break;
                 default:
                     throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');

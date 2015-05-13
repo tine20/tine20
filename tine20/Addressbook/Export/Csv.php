@@ -3,10 +3,10 @@
  * Addressbook csv generation class
  *
  * @package     Addressbook
- * @subpackage    Export
+ * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -14,7 +14,7 @@
  * Addressbook csv generation class
  * 
  * @package     Addressbook
- * @subpackage    Export
+ * @subpackage  Export
  * 
  */
 class Addressbook_Export_Csv extends Tinebase_Export_Csv
@@ -38,6 +38,7 @@ class Addressbook_Export_Csv extends Tinebase_Export_Csv
      */
     protected $_skipFields = array(
         'id'                    ,
+        'account_id'            ,
         'created_by'            ,
         'creation_time'         ,
         'last_modified_by'      ,
