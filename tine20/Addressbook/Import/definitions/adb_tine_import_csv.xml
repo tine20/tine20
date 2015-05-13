@@ -7,9 +7,10 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <label>Contact CSV import</label>
-    <!-- _("Contact CSV import") -->
-    <description>tine adb import</description>
+    <label>Tine 2.0 contact CSV import</label>
+    <!-- _("Tine 2.0 contact CSV import") -->
+    <description>Import CSV formated contacts from Tine 2.0 address book</description>
+    <!-- _("Import CSV formated contacts from Tine 2.0 address book") -->
     <example>Addressbook/Import/examples/adb_tine_import.csv</example>
     <extension>csv</extension>
     <autotags>
