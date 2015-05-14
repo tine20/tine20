@@ -621,7 +621,16 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         
         $folders = $controller->getAllFolders();
         
-        $this->assertGreaterThanOrEqual(1, count($folders));
+        $this->assertGreaterThanOrEqual(5, count($folders));
+        $foundFolderTypes = array();
+        foreach ($folders as $folder) {
+            $foundFolderTypes[] = $folder->type;
+        }
+        $this->assertContains(Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS,       $foundFolderTypes, 'Drafts folder missing:' . print_r($foundFolderTypes, TRUE));
+        $this->assertContains(Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS, $foundFolderTypes, 'Trash folder missing:' .  print_r($foundFolderTypes, TRUE));
+        $this->assertContains(Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL,     $foundFolderTypes, 'Sent folder missing:' .   print_r($foundFolderTypes, TRUE));
+        $this->assertContains(Syncroton_Command_FolderSync::FOLDERTYPE_OUTBOX,       $foundFolderTypes, 'Outbox folder missing:' . print_r($foundFolderTypes, TRUE));
+        
         $this->assertTrue(array_pop($folders) instanceof Syncroton_Model_Folder);
         
         // look for 'INBOX/sub'
@@ -762,6 +771,28 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         
         $this->assertEquals(1, $inbox->cache_timestamp->compare(Tinebase_DateTime::now()->subSecond(15)), 'inbox cache has not been updated: ' . print_r($inbox, TRUE));
+    }
+
+    /**
+     * testGetCountOfChanges for fake folder (outbox)
+     */
+    public function testGetCountOfChangesFakeFolder()
+    {
+        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
+        
+        $numberOfChanges = $controller->getCountOfChanges(
+            Syncroton_Registry::getContentStateBackend(), 
+            new Syncroton_Model_Folder(array(
+                'id'             => Tinebase_Record_Abstract::generateUID(),
+                'serverId'       => 'fake-' . Syncroton_Command_FolderSync::FOLDERTYPE_OUTBOX,
+                'lastfiltertype' => Syncroton_Command_Sync::FILTER_NOTHING
+            )), 
+            new Syncroton_Model_SyncState(array(
+                'lastsync' => Tinebase_DateTime::now()->subHour(1)
+            ))
+        );
+        
+        $this->assertEquals(0, $numberOfChanges);
     }
 
     /**
