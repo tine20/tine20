@@ -85,7 +85,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.enableHdMenu = false;
       
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
-        
+
         this.on('rowcontextmenu', function (grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -94,6 +94,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
+
+        if (! this.record || this.record.id == 0) {
+            this.on('rowdblclick', function (grid, row, e) {
+                e.stopEvent();
+                this.onDownload()
+            }, this);
+        }
     },
     
     /**
@@ -206,9 +213,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.contextMenu = new Ext.menu.Menu({
             items:  [
-                     this.action_remove,
-                     this.action_pause,
-                     this.action_resume
+                 this.action_remove,
+                 this.action_pause,
+                 this.action_resume
             ]
         });
         
@@ -230,7 +237,24 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.loadRecord(this.record);
     },
-    
+
+    /**
+     * On download attached file from panel
+     */
+    onDownload: function() {
+        var selectedRows = this.getSelectionModel().getSelections();
+
+        selectedRows.forEach(function (attachement) {
+            new Ext.ux.file.Download({
+                params: {
+                    requestType: 'HTTP',
+                    method: 'Tinebase.downloadTempfile',
+                    tmpFileId: attachement.get('id')
+                }
+            }).start();
+        });
+    },
+
     /**
      * returns add action
      * 
@@ -252,7 +276,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * populate grid store
-     * 
+     *
      * @param {} record
      */
     loadRecord: function (record) {

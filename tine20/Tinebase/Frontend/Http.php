@@ -790,4 +790,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->_downloadFileNode($node, $path);
         exit;
     }
+
+    /**
+     * Download temp file to review
+     *
+     * @param $tmpfileId
+     */
+    public function downloadTempfile($tmpfileId)
+    {
+        $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($tmpfileId);
+        $this->_downloadFileNode($tmpFile, $tmpFile->path);
+        exit;
+    }
 }
