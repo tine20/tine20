@@ -225,6 +225,7 @@ Ext.namespace('Tine.Tasks');
                             keyFieldName: 'taskStatus',
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'status',
+                            value: 'NEEDS-ACTION',
                             allowBlank: false,
                             listeners: {scope: this, 'change': this.handleCompletedDate}
                         }), 
