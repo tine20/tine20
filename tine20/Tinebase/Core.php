@@ -230,16 +230,12 @@ class Tinebase_Core
      * dispatch request
      * 
      * @param \Zend\Http\Request $request
+     * @return Tinebase_Server_Interface|null
      */
     public static function getDispatchServer(\Zend\Http\Request $request)
     {
-        // TODO think about logging only the headers here
-//         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-//             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $request->toString());
-//         }
-
         // Test server conditions from server plugins
-        foreach(self::_getServerPlugins() as $serverPlugin){
+        foreach (self::_getServerPlugins() as $serverPlugin){
             $server = call_user_func_array(array($serverPlugin,'getServer'), array($request));
             
             if ($server instanceof Tinebase_Server_Interface) {
@@ -248,6 +244,11 @@ class Tinebase_Core
                 return $server;
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Request: " . $request->toString());
+        }
+        throw new Tinebase_Exception('No valid server found for request');
     }
     
     /**
@@ -1556,7 +1557,7 @@ class Tinebase_Core
                continue;
            }
            
-           if (ctype_upper($entry[0]) && is_dir($entry)) {
+           if (ctype_upper($entry[0]) && is_dir($d->path . DIRECTORY_SEPARATOR . $entry)) {
                 $applications[] = $entry;
            }
         }
