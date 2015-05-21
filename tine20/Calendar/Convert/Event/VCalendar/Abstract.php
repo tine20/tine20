@@ -729,6 +729,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'STATUS':
                     if (in_array($property->getValue(), array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
                         $event->status = $property->getValue();
+                    } else if ($property->getValue() == 'CANCELLED'){
+                        $event->status = Calendar_Model_Event::STATUS_CANCELED;
                     } else {
                         $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
                     }
