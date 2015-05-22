@@ -591,6 +591,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * 
      * @param array $_data
      * @param boolean $_adminMode
+     * @return void
      * 
      * @todo use generic savePreference fn
      */
