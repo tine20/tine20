@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
 `userid`        VARCHAR( 40 ) NOT NULL ,
 `domain`        VARCHAR( 80 ) NOT NULL DEFAULT '',
 `username`      VARCHAR( 80 ) NOT NULL ,
-`password`      VARCHAR( 100 ) NOT NULL ,
+`password`      VARCHAR( 256 ) NOT NULL ,
 `quota_bytes`   BIGINT NOT NULL DEFAULT '0',
 `quota_message` INT NOT NULL DEFAULT '0',
 `uid`           VARCHAR( 20 ) DEFAULT NULL ,
