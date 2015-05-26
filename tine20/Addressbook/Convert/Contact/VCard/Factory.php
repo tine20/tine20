@@ -27,6 +27,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_AKONADI        = 'akonadi';
     const CLIENT_TELEFONBUCH    = 'telefonbuch';
     const CLIENT_DAVDROID       = 'davdroid';
+    const CLIENT_CARDDAVSYNC    = 'org.dmfs.carddav.sync';
     
     /**
      * cache parsed user-agent strings
@@ -88,6 +89,10 @@ class Addressbook_Convert_Contact_VCard_Factory
                 return new Addressbook_Convert_Contact_VCard_DavDroid($_version);
                 break;
 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC:
+                return new Addressbook_Convert_Contact_VCard_CardDAVSync($_version);
+		    break;
+
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
                 return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
         }
@@ -144,6 +149,11 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_DAVDROID;
             $version = $matches['version'];
 
+        // DMFS CardDAVSync
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_CardDAVSync::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC;
+            $version = $matches['version'];
+        
         // generic client
         } else {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
