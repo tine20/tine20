@@ -287,9 +287,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             ms = Tine.Tinebase.appMgr.get(app).getMainScreen(),
             recordData = selected.get('related_record'),
             record = new Tine[app].Model[model](recordData);
-
-        ms.activeContentType = model;
-        var cp = ms.getCenterPanel(model);
+            cp = ms.getCenterPanel(model);
         
         if (Ext.isFunction(cp.onEditInNewWindow)) {
             cp.onEditInNewWindow({actionType: 'edit', mode: 'remote'}, record);
