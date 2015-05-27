@@ -74,6 +74,8 @@ class Setup_Frontend_Cli
             $this->_getConfig($_opts);
         } elseif(isset($_opts->reset_demodata)) {
             $this->_resetDemodata($_opts);
+        } elseif(isset($_opts->updateAllImportExportDefinitions)) {
+            $this->_updateAllImportExportDefinitions($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -369,6 +371,18 @@ class Setup_Frontend_Cli
         echo "Every thing done!\n";
     }
 
+    /**
+     * Update Import Export Definitions for all applications
+     */
+    protected function _updateAllImportExportDefinitions(Zend_Console_Getopt $_opts){
+        //get all applications
+        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        foreach ($applications as $application) {
+            Setup_Controller::getInstance()->createImportExportDefinitions($application);
+            echo "Update definitions for " . $application->name . "...\n";
+        }
+    }
+    
     /**
      * list installed apps
      */
