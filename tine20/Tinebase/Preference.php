@@ -100,7 +100,8 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::TIMEZONE,
                 self::LOCALE,
                 self::DEFAULT_APP,
-                self::WINDOW_TYPE,
+                // @see 0011062: restore modal windows functionality
+//                self::WINDOW_TYPE,
                 self::CONFIRM_LOGOUT,
                 self::PAGE_SIZE,
                 self::GRID_STRIPE_ROWS,

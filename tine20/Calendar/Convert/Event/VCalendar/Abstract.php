@@ -411,8 +411,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             $this->_convertVevent($baseVevent, $event, $options);
         }
         
-        // TODO only do this for events with rrule?
-        // if (! empty($event->rrule)) {
         $this->_parseEventExceptions($event, $vcalendar, $baseVevent, $options);
         
         $event->isValid(true);
@@ -453,7 +451,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if (! $event->exdate instanceof Tinebase_Record_RecordSet) {
             $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         }
-        $recurExceptions =  $event->exdate->filter('is_deleted', false);
+        $recurExceptions = $event->exdate->filter('is_deleted', false);
         
         foreach ($vcalendar->VEVENT as $vevent) {
             if (isset($vevent->{'RECURRENCE-ID'}) && $event->uid == $vevent->UID) {
@@ -475,7 +473,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 }
                 
                 // initialize attachments from base event as clients may skip parameters like
-                // name and contentytpe and we can't backward relove them from managedId
+                // name and content type and we can't backward relove them from managedId
                 if ($event->attachments instanceof Tinebase_Record_RecordSet && 
                         ! $recurException->attachments instanceof Tinebase_Record_RecordSet) {
                     $recurException->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
@@ -584,10 +582,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates,Sabre\VObject\Component\VEvent $vevent)
     {
-        $exDate = clone $vevent->{'RECURRENCE-ID'}->getDateTime();
-        $exDate->setTimeZone(new DateTimeZone('UTC'));
+        // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
+        $exDate = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime((string) $vevent->{'RECURRENCE-ID'});
         $exDateString = $exDate->format('Y-m-d H:i:s');
-        
+
         foreach ($oldExdates as $id => $oldExdate) {
             if ($exDateString == substr((string) $oldExdate->recurid, -19)) {
                 return $oldExdate;
@@ -729,6 +727,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'STATUS':
                     if (in_array($property->getValue(), array(Calendar_Model_Event::STATUS_CONFIRMED, Calendar_Model_Event::STATUS_TENTATIVE, Calendar_Model_Event::STATUS_CANCELED))) {
                         $event->status = $property->getValue();
+                    } else if ($property->getValue() == 'CANCELLED'){
+                        $event->status = Calendar_Model_Event::STATUS_CANCELED;
                     } else {
                         $event->status = Calendar_Model_Event::STATUS_CONFIRMED;
                     }
@@ -843,13 +843,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                     // convert date format
                     $rruleString = preg_replace_callback('/UNTIL=([\dTZ]+)(?=;?)/', function($matches) {
-                        if (strlen($matches[1]) < 10) {
-                            $dtUntil = date_create($matches[1], new DateTimeZone ((string) Tinebase_Core::getUserTimezone()));
-                            $dtUntil->setTimezone(new DateTimeZone('UTC'));
-                        } else {
-                            $dtUntil = date_create($matches[1]);
-                        }
-                        
+                        $dtUntil = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime($matches[1]);
                         return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
                     }, $rruleString);
 
@@ -1079,5 +1073,23 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         
         // convert all datetime fields to UTC
         $event->setTimezone('UTC');
+    }
+    
+    /**
+     * get utc datetime from date string and handle dates (ie 20140922) in usertime
+     * 
+     * @param string $dateString
+     * 
+     * TODO maybe this can be replaced with _convertToTinebaseDateTime
+     */
+    static public function getUTCDateFromStringInUsertime($dateString)
+    {
+        if (strlen($dateString) < 10) {
+            $date = date_create($dateString, new DateTimeZone ((string) Tinebase_Core::getUserTimezone()));
+        } else {
+            $date = date_create($dateString);
+        }
+        $date->setTimezone(new DateTimeZone('UTC'));
+        return $date;
     }
 }

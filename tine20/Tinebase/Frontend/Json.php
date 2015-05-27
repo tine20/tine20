@@ -80,7 +80,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Core::setupUserLocale($localeString);
         
-        if ($saveaspreference) {
+        if ($saveaspreference && is_object(Tinebase_Core::getUser())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Saving locale: " . $localeString);
             Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $localeString;
@@ -318,6 +318,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         // NOTE: this function makes a new instance of a class whose name is given by user input.
         //       we need to do some sanitising first!
+        /** @noinspection PhpUnusedLocalVariableInspection */
         list($appName, $modelString, $filterGroupName) = explode('_', $_filterName);
         if ($modelString !== 'Model') {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' spoofing attempt detected, affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), TRUE));
@@ -805,9 +806,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+                /** @noinspection PhpUndefinedFieldInspection */
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                . ' User applications to fetch registry for: ' . print_r($userApplications->name, TRUE));
 
+            /** @noinspection PhpUndefinedFieldInspection */
             if (! in_array('Tinebase', $userApplications->name)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' User has no permissions to run Tinebase.');
                 $this->logout();
@@ -985,7 +988,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $backend = Tinebase_Core::getPreference($applicationName);
                 if ($backend !== NULL) {
                     if ($adminMode) {
-                        $result = $backend->saveAdminPreferences($data);
+                        $backend->saveAdminPreferences($data);
+                        // TODO return preference values?
+                        $result = array();
                     } else {
                         // set user prefs
                         foreach ($data as $name => $value) {
