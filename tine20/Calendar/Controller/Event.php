@@ -1285,6 +1285,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // compute remaining exdates
         $deletedInstanceDtStarts = array_diff(array_unique((array) $baseEvent->exdate), $exceptions->getOriginalDtStart());
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Faking ' . count($deletedInstanceDtStarts) . ' deleted exceptions');
+
         foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
             $fakeEvent = clone $baseEvent;
             $fakeEvent->setId(NULL);
