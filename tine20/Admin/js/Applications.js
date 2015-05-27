@@ -147,7 +147,7 @@ Tine.Admin.Applications.Main = function() {
         
         _action_enable.setText(this.translation.gettext('enable application'));
         _action_disable.setText(this.translation.gettext('disable application'));
-        //_action_settings.setText(this.translation.gettext('settings'));
+        _action_settings.setText(this.translation.gettext('settings'));
     
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',

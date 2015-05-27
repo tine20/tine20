@@ -102,7 +102,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
             
             // modify/correct user name
             // set emailUsername to Tine 2.0 account login name and append domain for login purposes if set
-            if (empty($user->emailUsername)) {
+            if (is_object($user) && empty($user->emailUsername)) {
                 $user->emailUsername = $this->_getEmailUserName($_user);
             }
             

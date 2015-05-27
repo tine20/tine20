@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -163,7 +163,19 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
-    
+
+    /**
+     * test converting vcard from lighting to Calendar_Model_Event (with exotic timezone: Asia/Tehran)
+     */
+    public function testConvertToTine20ModelWithTehranTZ()
+    {
+        $vcalendarStream = Calendar_Frontend_WebDAV_EventTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/lightning_TehranTZ.ics', 'r');
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $event = $this->_converter->toTine20Model($vcalendarStream);
+
+        $this->assertEquals('Asia/Tehran', $event->originator_tz);
+    }
+
     /**
      * test converting vcard from lighting to Calendar_Model_Event
      *

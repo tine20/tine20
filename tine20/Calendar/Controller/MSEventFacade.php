@@ -373,8 +373,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
         }
-        
+
+        $updatedExceptions = array();
         foreach ($migration['toUpdate'] as $exception) {
+
+            if (in_array($exception->getId(),$updatedExceptions )) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                    . ' Exdate ' . $exception->getId() . ' already updated');
+                continue;
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                 . ' Update exdate ' . $exception->getId() . ' at ' . $exception->dtstart->toString());
             
@@ -389,6 +397,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Updating exception: ' . print_r($exception->toArray(), TRUE));
             $this->_eventController->update($exception, $_checkBusyConflicts);
+            $updatedExceptions[] = $exception->getId();
         }
         
         // NOTE: we need to refetch here, otherwise eTag fail's as exception updates change baseEvents seq

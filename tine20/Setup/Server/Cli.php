@@ -51,8 +51,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 
                           setup.php --egw14import /path/to/config.ini',
-                'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)'
-                    
+                'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
+                'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications'
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -71,6 +71,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->egw14import) && 
             empty($opts->check_requirements) && 
             empty($opts->reset_demodata) &&
+            empty($opts->updateAllImportExportDefinitions) &&
             empty($opts->create_admin) && 
             empty($opts->setconfig) && 
             empty($opts->getconfig))) 

@@ -71,7 +71,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }, this);
         }
-        if (! this.copyRecord && ! this.record.id) {
+        if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
         }
     },    

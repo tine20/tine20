@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Filemanager');
@@ -15,18 +15,6 @@ Ext.ns('Tine.Filemanager');
  * @extends Tine.Tinebase.Application
  */
 Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
-    /**
-     * @return {Boolean}
-     */
-    init: function () {
-        Tine.log.info('Initialize Filemanager');
-
-        if (! Tine.Tinebase.common.hasRight('run', 'Filemanager', 'main_screen')) {
-            Tine.log.debug('No mainscreen right for Filemanager');
-            this.hasMainScreen = false;
-        }
-    },
-
     /**
      * Get translated application title of this application
      *

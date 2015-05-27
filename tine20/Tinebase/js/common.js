@@ -698,10 +698,12 @@ Tine.Tinebase.common = {
         var userRights = [];
         
         if (! (Tine && Tine[application] && Tine[application].registry && Tine[application].registry.get('rights'))) {
-            if (! Tine.Tinebase.appMgr) {
+            if (Tine.Tinebase.tineInit.isReloading) {
+                Tine.log.info('Tine 2.0 is reloading ...');
+            } else if (! Tine.Tinebase.appMgr) {
                 console.error('Tine.Tinebase.appMgr not yet available');
             } else if (Tine.Tinebase.appMgr.get(application)) {
-                console.error('Tine.' + application + '.rights is not available, initialisation Error!');
+                console.error('Tine.' + application + '.rights is not available, initialisation Error! Reloading app.');
                 // reload registry/mainscreen - registry problem?
                 Tine.Tinebase.common.reload({});
             }

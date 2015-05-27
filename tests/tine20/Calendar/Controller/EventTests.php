@@ -386,7 +386,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertFalse(in_array($persistentEvent->getId(), $events->getId()), 'event in deleted (display) container shuld not be found');
     }
     
-    public function testCreateEventWithConfict()
+    public function testCreateEventWithConflict()
     {
         $this->_testNeedsTransaction();
         
@@ -419,7 +419,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         return $persitentConflictEvent;
     }
     
-    public function testCreateEventWithConfictFromGroupMember()
+    public function testCreateEventWithConflictFromGroupMember()
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getAttendee();
@@ -491,7 +491,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateWithConflictNoTimechange()
     {
-        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent = $this->testCreateEventWithConflict();
         $persitentConflictEvent->summary = 'only time updates should recheck free/busy';
         
         $this->_controller->update($persitentConflictEvent, TRUE);
@@ -499,7 +499,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateWithConflictAttendeeChange()
     {
-        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent = $this->testCreateEventWithConflict();
         $persitentConflictEvent->summary = 'attendee adds should recheck free/busy';
         
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
@@ -515,7 +515,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateWithConflictWithTimechange()
     {
-        $persitentConflictEvent = $this->testCreateEventWithConfict();
+        $persitentConflictEvent = $this->testCreateEventWithConflict();
         $persitentConflictEvent->summary = 'time updates should recheck free/busy';
         $persitentConflictEvent->dtend->addHour(1);
         
@@ -1352,11 +1352,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
     
         try {
-            $cf = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+            Tinebase_CustomField::getInstance()->addCustomField($cfData);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            // customfield already exists
-            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Calendar');
-            $cf = $cfs->filter('name', $name)->getFirstRecord();
+            // custom field already exists
         }
     
         $event = new Calendar_Model_Event(array(
