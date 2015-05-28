@@ -144,14 +144,20 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     /**
      * Downloads file to memory
      * 
-     * @param String $source
-     * @return String
+     * @param string $source
+     * @return string|null
      */
     protected function _getFileToImport($source)
     {
         if (strpos($source, 'http') === 0) {
             $client = new Zend_Http_Client($source);
-            return $client->request()->getBody();
+            try {
+                $requestBody = $client->request()->getBody();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $requestBody = null;
+            }
+            return $requestBody;
         } else {
             return file_get_contents($source);
         }
@@ -187,16 +193,23 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             );
         }
         
-        $importer = new $importer($options);
-        
         if ($toImport) {
-            // do import
-            $importer->import($toImport);
-            
-            if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || ! $record->timestamp instanceof Tinebase_DateTime) {
+            try {
+                $importer = new $importer($options);
+                $importer->import($toImport);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                        . ' Import failed.');
+                }
+                // TODO log failure message in import record
+                Tinebase_Exception::log($e);
+            }
+
+            if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || !$record->timestamp instanceof Tinebase_DateTime) {
                 $record->timestamp = Tinebase_DateTime::now();
             }
-            
+
             switch ($record->interval) {
                 case Tinebase_Model_Import::INTERVAL_DAILY:
                     $record->timestamp->addDay(1);
@@ -208,13 +221,13 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                     $record->timestamp->addHour(1);
                     break;
             }
-            
+
             // update record
             $record = $this->update($record);
             
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' The source could not be loaded: "' . $record->source . '"');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__ . ' The source could not be loaded: "' . $record->source . '"');
             }
         }
         

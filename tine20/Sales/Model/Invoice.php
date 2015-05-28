@@ -42,7 +42,9 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'createModule'      => TRUE,
         'containerProperty' => NULL,
         'defaultFilter'     => 'description',
-        'titleProperty'     => 'description',
+
+        'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
+
         'appName'           => 'Sales',
         'modelName'         => 'Invoice',
         
@@ -202,9 +204,26 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     )
                 )
             ),
+            'fulltext' => array(
+                'type' => 'string',
+            )
         )
     );
-    
+
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     **/
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        $this->fulltext = $this->number . ' - ' . $this->description;
+    }
+
     /**
      * @see Tinebase_Record_Abstract
      */

@@ -39,8 +39,8 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-    
-        'titleProperty'     => 'title',
+
+        'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
         'appName'           => 'Sales',
         'modelName'         => 'OrderConfirmation',
         'filterModel' => array(
@@ -85,10 +85,27 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
                         'type' => 'CONTRACT'
                     )
                 )
+            ),
+            'fulltext' => array(
+                'type' => 'string',
             )
         )
     );
-    
+
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     **/
+    public function setFromArray(array $_data)
+    {
+        parent::setFromArray($_data);
+        $this->fulltext = $this->number . ' - ' . $this->title;
+    }
+
     /**
      * @see Tinebase_Record_Abstract
      */

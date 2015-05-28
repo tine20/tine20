@@ -28,6 +28,14 @@
           "path": "js/"
         },
         {
+          "text": "OfferSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "InvoiceSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "SupplierSearchCombo.js",
           "path": "js/"
         },
@@ -169,6 +177,10 @@
         },
         {
           "text": "AddressSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "OrderConfirmationSearchCombo.js",
           "path": "js/"
         },
         {

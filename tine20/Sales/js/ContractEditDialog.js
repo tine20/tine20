@@ -65,11 +65,23 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
 
+        this.initToolbar();
+        
         Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
     },
     
     /**
+     * initializes the toolbar
+     */
+    initToolbar: function() {
+        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
+
+        Tine.Sales.ContractEditDialog.superclass.initToolbar.call(this);
+    },
+    
+    /**
      * called on multiple edit
+     *
      * @return {Boolean}
      */
     isMultipleValid: function() {
