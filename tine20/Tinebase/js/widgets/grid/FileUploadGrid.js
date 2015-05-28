@@ -85,7 +85,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.enableHdMenu = false;
       
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
-        
+
         this.on('rowcontextmenu', function (grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -94,6 +94,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
+
+        if (! this.record || this.record.id == 0) {
+            this.on('rowdblclick', function (grid, row, e) {
+                e.stopEvent();
+                this.onDownload()
+            }, this);
+        }
     },
     
     /**
@@ -206,9 +213,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.contextMenu = new Ext.menu.Menu({
             items:  [
-                     this.action_remove,
-                     this.action_pause,
-                     this.action_resume
+                 this.action_remove,
+                 this.action_pause,
+                 this.action_resume
             ]
         });
         
@@ -234,7 +241,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     onStoreAdd: function(store, records, idx) {
-        Ext.each(records, function(attachment) {
+        Ext.each(records, function (attachment) {
             if (attachment.get('url')) {
                 // we can't use Ext.data.connection here as we can't control xhr obj. directly :-(
                 var me = this,
@@ -250,13 +257,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 attachment.set('type', name.split('.').pop());
                 store.resumeEvents();
 
-                xhr.onprogress = function(e) {
-                    var progress = Math.floor(100 * e.loaded/e.total) + '% loaded';
+                xhr.onprogress = function (e) {
+                    var progress = Math.floor(100 * e.loaded / e.total) + '% loaded';
                     console.log(e);
                 }
 
 
-                xhr.onload = function(e) {
+                xhr.onload = function (e) {
 //                    attachment.set('type', xhr.response.type);
 //                    attachment.set('size', xhr.response.size);
 
@@ -287,6 +294,23 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     /**
+     * On download attached file from panel
+     */
+    onDownload: function() {
+        var selectedRows = this.getSelectionModel().getSelections();
+
+        selectedRows.forEach(function (attachement) {
+            new Ext.ux.file.Download({
+                params: {
+                    requestType: 'HTTP',
+                    method: 'Tinebase.downloadTempfile',
+                    tmpFileId: attachement.get('id')
+                }
+            }).start();
+        });
+    },
+
+    /**
      * returns add action
      * 
      * @return {Object} add action config
@@ -307,7 +331,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     
     /**
      * populate grid store
-     * 
+     *
      * @param {} record
      */
     loadRecord: function (record) {

@@ -72,7 +72,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
     processResponse: function(response, node, callback, scope) {
         // convert tine search response into usual treeLoader structure
         var o = response.responseData || Ext.decode(response.responseText);
-        response.responseData = o.totalcount ? o.results : o;
+        response.responseData = o.hasOwnProperty('totalcount') ? o.results : o;
         
         // processed nodes / structures
         var newResponse = [];
