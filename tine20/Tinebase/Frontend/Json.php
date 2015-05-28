@@ -833,7 +833,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     } catch (Exception $e) {
                         Tinebase_Exception::log($e);
-                        if (! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
+                        if (! $e instanceof Tinebase_Exception_AccessDenied && ! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
                             Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
                         }

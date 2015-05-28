@@ -201,6 +201,7 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      * testLongEmailAddress
      * 
      * @see 0009066: iCal .ics file import fails
+     * @see 0011000: Cannot accept invitation to meeting when organiser email is too long
      */
     public function testLongEmailAddress()
     {
@@ -211,6 +212,6 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
         );
         
         $contact = Calendar_Model_Attender::resolveEmailToContact($attenderData);
-        $this->assertEquals(strtolower('CMT_Marsta@corpmx01.external.atlascopco.com'), $contact->email);
+        $this->assertEquals(strtolower($attenderData['email']), $contact->email);
     }
 }

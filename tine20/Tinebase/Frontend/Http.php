@@ -53,8 +53,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         header('Content-type: application/xrds+xml');
         
-        echo '
-            <?xml version="1.0"?>
+        echo '<?xml version="1.0"?>
             <xrds:XRDS xmlns="xri://$xrd*($v*2.0)" xmlns:xrds="xri://$xrds">
               <XRD>
                 <Service priority="0">
@@ -855,6 +854,18 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $files = array_unique($files);
 
         // return resources as js array
-        echo '["'. implode('", "', $files) . '""]';
+        echo '["' . implode('", "', $files) . '""]';
+    }
+
+    /**
+     * Download temp file to review
+     *
+     * @param $tmpfileId
+     */
+    public function downloadTempfile($tmpfileId)
+    {
+        $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($tmpfileId);
+        $this->_downloadFileNode($tmpFile, $tmpFile->path);
+        exit;
     }
 }

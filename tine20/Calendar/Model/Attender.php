@@ -145,7 +145,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->email;
                 break;
             default:
-                throw new Exception("type $type not yet supported");
+                throw new Exception("type " . $this->user_type . " not yet supported");
                 break;
         }
     }
@@ -173,7 +173,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->name ?: $resolvedUser->n_fileas;
                 break;
             default:
-                throw new Exception("type $type not yet supported");
+                throw new Exception("type " . $this->user_type . " not yet supported");
                 break;
         }
     }
@@ -268,7 +268,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * converts an array of emails to a recordSet of attendee for given record
      * 
      * @param  Calendar_Model_Event $_event
-     * @param  iteratable           $_emails
+     * @param  array                $_emails
      * @param  bool                 $_implicitAddMissingContacts
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_implicitAddMissingContacts = TRUE)
@@ -447,7 +447,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             throw new Tinebase_Exception_InvalidArgument('email address is needed to resolve contact');
         }
         
-        $email = self::_sanitizeEmail($_attenderData['email']);
+        $email = $_attenderData['email'];
         
         $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
             array('condition' => 'OR', 'filters' => array(
@@ -484,44 +484,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $result = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
         } else {
             $result = NULL;
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * sanitize email address
-     * 
-     * @param string $email
-     * @return string
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    protected static function _sanitizeEmail($email)
-    {
-        // TODO should be generalized OR increase size of email field(s)
-        $result = $email;
-        if (strlen($email) > 64) {
-            // try to find '/' for splitting
-            $lastSlash = strrpos($email, '/');
-            if ($lastSlash !== false) {
-                $result = substr($email, $lastSlash + 1);
-            }
-            
-            if (strlen($result) > 64) {
-                // try to find first valid email
-                if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $result, $matches)) {
-                    $result = $matches[0];
-                }
-                
-                if (strlen($result) > 64) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                        . ' Email address could not be sanitized: ' . $email . '(length: ' . strlen($email) . ')');
-                    throw new Tinebase_Exception_Record_Validation('email string too long');
-                }
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Email address has been sanitized: ' . $email . ' -> ' . $result);
-            }
         }
         
         return $result;
@@ -804,11 +766,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @param Tinebase_Record_RecordSet|array   $eventAttendees 
      * @param bool                              $resolveDisplayContainers
+     * @return Tinebase_Record_RecordSet
      */
     public static function getResolvedAttendees($eventAttendees, $resolveDisplayContainers = TRUE)
     {
         if (empty($eventAttendees)) {
-            return;
+            return null;
         }
         
         self::fillResolvedAttendeesCache($eventAttendees);
@@ -945,16 +908,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 }
                 
-                $idx = false;
-                
                 if ($attender->user_type == self::USERTYPE_GROUP) {
                     $attendeeTypeSet = $typeMap[$attender->user_type];
                     $idx = $attendeeTypeSet->getIndexById($attender->user_id);
                     if ($idx !== false) {
                         $group = $attendeeTypeSet[$idx];
-                        
-                        $idx = false;
-                        
                         $attendeeTypeSet = $typeMap[self::USERTYPE_LIST];
                         $idx = $attendeeTypeSet->getIndexById($group->list_id);
                     }
