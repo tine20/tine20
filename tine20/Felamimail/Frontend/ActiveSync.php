@@ -955,7 +955,9 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         switch (strtoupper($folder->localname)) {
             case 'INBOX':
-                if ($personalNameSpaceSuffix . 'INBOX' === $folder->globalname) {
+                if (($personalNameSpaceSuffix . 'INBOX' === $folder->globalname) ||
+                    (substr($personalNameSpaceSuffix, 0, 5) === 'INBOX' && $folder->globalname === 'INBOX') // Cyrus Prvate Namespace == 'INBOX.'
+                ) {
                     return Syncroton_Command_FolderSync::FOLDERTYPE_INBOX;
                 }
                 
