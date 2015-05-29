@@ -100,8 +100,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::TIMEZONE,
                 self::LOCALE,
                 self::DEFAULT_APP,
-                // @see 0011062: restore modal windows functionality
-//                self::WINDOW_TYPE,
+                self::WINDOW_TYPE,
                 self::CONFIRM_LOGOUT,
                 self::PAGE_SIZE,
                 self::GRID_STRIPE_ROWS,
@@ -262,10 +261,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 $preference->value      = 'Browser';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
-                        <option>
-                            <label>Modal windows (experimental)</label>
-                            <value>Ext</value>
-                        </option>
                         <option>
                             <label>Browser windows</label>
                             <value>Browser</value>

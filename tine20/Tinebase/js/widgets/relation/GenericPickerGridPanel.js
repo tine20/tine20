@@ -286,7 +286,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             model = selected.get('related_model').split('_Model_')[1],
             ms = Tine.Tinebase.appMgr.get(app).getMainScreen(),
             recordData = selected.get('related_record'),
-            record = new Tine[app].Model[model](recordData);
+            record = new Tine[app].Model[model](recordData),
             cp = ms.getCenterPanel(model);
         
         if (Ext.isFunction(cp.onEditInNewWindow)) {
