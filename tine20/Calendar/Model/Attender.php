@@ -790,7 +790,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             foreach ($eventAttendee as $attendee) {
                 if (   $resolveDisplayContainers
                     && ! $foundDisplayContainers
-                    && is_string($attendee->displaycontainer_id)
+                    && (is_int($attendee->displaycontainer_id) || is_string($attendee->displaycontainer_id))
                 ) {
                         $foundDisplayContainers = true;
                 }
