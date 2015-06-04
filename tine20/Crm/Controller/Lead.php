@@ -41,7 +41,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $this->_resolveCustomFields     = TRUE;
 
         $this->_duplicateCheckFields = Crm_Config::getInstance()->get(Crm_Config::LEAD_DUP_FIELDS, array(
-            array('relations')
+            array('relations', 'lead_name')
         ));
         $this->_duplicateCheckConfig = array(
             'relations' => array(
