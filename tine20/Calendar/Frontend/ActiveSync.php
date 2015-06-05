@@ -123,7 +123,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         'endTime'           => 'dtend',
         'location'          => 'location',
         'reminder'          => 'alarms',
-        //'Sensitivity'       => 'class',
+        'sensitivity'       => 'class',
         'subject'           => 'summary',
         'body'              => 'description',
         'startTime'         => 'dtstart',
@@ -310,14 +310,19 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                     break;
                     
+                case 'class':
+                    $syncrotonEvent->$syncrotonProperty = $entry->$tine20Property == Calendar_Model_Event::CLASS_PRIVATE ? 2 : 0;
+                    
+                    break;
+                    
                 case 'description':
                     $syncrotonEvent->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
                         'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
                         'data' => $entry->$tine20Property
                     ));
-                
+                    
                     break;
-                
+                    
                 case 'dtend':
                     if($entry->$tine20Property instanceof DateTime) {
                         if ($entry->is_all_day_event == true) {
@@ -463,7 +468,6 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         $syncrotonEvent->timezone = $timeZoneConverter->encodeTimezone(Tinebase_Core::getUserTimezone());
         
         $syncrotonEvent->meetingStatus = 1;
-        $syncrotonEvent->sensitivity = 0;
         $syncrotonEvent->dtStamp = $entry->creation_time;
         $syncrotonEvent->uID = $entry->uid;
         
@@ -605,7 +609,12 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
                     
                     break;
-
+                    
+                case 'class':
+                    $event->$tine20Property = $data->$syncrotonProperty == 2 ? Calendar_Model_Event::CLASS_PRIVATE : Calendar_Model_Event::CLASS_PUBLIC;
+                    
+                    break;
+                    
                 case 'exdate':
                     // handle exceptions from recurrence
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
