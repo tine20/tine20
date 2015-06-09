@@ -704,6 +704,38 @@ class Addressbook_JsonTest extends TestCase
     }
     
     /**
+     * testExportXlsWithTranslation
+     *
+     */
+    public function testExportXlsWithTranslation()
+    {
+        $instance = new Tinebase_Frontend_Json();
+        $instance->setLocale('de', FALSE, FALSE);
+        
+        $filter = new Addressbook_Model_ContactFilter(array(array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+        )));
+        
+        $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $ownContact->salutation = 'MR';
+        Addressbook_Controller_Contact::getInstance()->update($ownContact);
+        
+        $definition = dirname(__FILE__) . '/Export/definitions/adb_translation_xls_test.xml';
+        $exporter = new Addressbook_Export_Xls($filter, Addressbook_Controller_Contact::getInstance(), array('definitionFilename' => $definition));
+        $doc = $exporter->generate();
+        
+        $xlswriter = PHPExcel_IOFactory::createWriter($doc, 'CSV');
+        ob_start();
+        $xlswriter->save('php://output');
+        $out = ob_get_clean();
+        
+        $this->assertContains(Tinebase_Core::getUser()->accountDisplayName, $out, 'display name not found.');
+        $this->assertContains('Herr', $out, 'no translated salutation found.');
+    }
+    
+    /**
      * each tag should have an own column
      */
     public function testExportOdsWithTagMatrix()

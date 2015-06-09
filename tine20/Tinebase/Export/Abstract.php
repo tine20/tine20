@@ -447,6 +447,22 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
+     * return translated Keyfield string
+     *
+     * @param String $_property
+     * @param String $_keyfield
+     * @param String $_application
+     * @return string
+     */
+    protected function _getResolvedKeyfield($_property, $_keyfield, $_application)
+    {
+         $i18nApplication = Tinebase_Translation::getTranslation($_application);
+         $config = Tinebase_Config::getAppConfig($_application);
+         $result = $config::getInstance()->get($_keyfield)->records->getById($_property);
+         return isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
+    }
+    
+    /**
      * 
      * return container name (or other field)
      * 
