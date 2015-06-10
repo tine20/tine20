@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        add tests testInvitationCancel and testOrganizerSendBy
+ * @todo        add test testOrganizerSendBy
  * @todo extend Calendar_TestCase
  */
 
@@ -90,7 +90,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         
         if (! empty($this->_eventIdsToDelete)) {
-            Calendar_Controller_Event::getInstance()->delete($this->_eventIdsToDelete);
+            $this->_deleteEvents(TRUE);
         }
         
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
@@ -298,6 +298,24 @@ class Calendar_Frontend_iMIPTest extends TestCase
         ));
     }
     
+    /**
+     * delete events
+     *
+     * @return NULL
+     * @param boolean $purgeRecords true database delete or use is_deleted = 1
+     */
+    protected function _deleteEvents($purgeRecords = FALSE)
+    {
+        if ($purgeRecords) {
+            $be = new Calendar_Backend_Sql();
+            foreach ($this->_eventIdsToDelete as $idToDelete) {
+                $be->delete($idToDelete);
+            }
+        } else {
+            Calendar_Controller_Event::getInstance()->delete($this->_eventIdsToDelete);
+        }
+    }
+
     /**
      * testExternalInvitationRequestProcess
      */
@@ -572,15 +590,72 @@ class Calendar_Frontend_iMIPTest extends TestCase
     }
 
     /**
-     * testInvitationCancel
-     * 
-      * @todo implement
-      */
-     public function testInvitationCancel()
-     {
-        $this->markTestIncomplete('implement me');
-     }
-    
+     * testExternalInvitationCancelProcessEvent
+     *
+     */
+    public function testExternalInvitationCancelProcessEvent()
+    {
+        $iMIP = $this->testExternalInvitationRequestAutoProcess();
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->_eventIdsToDelete[] = $iMIP->event->getId();
+
+        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_cancel.ics' );
+
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => $ics,
+            'method'         => 'CANCEL',
+            'originator'     => 'l.kneschke@caldav.org',
+        ));
+
+        // TEST CANCEL
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST NORMAL CANCEL autoProcess throws Exception: ' . $e);
+        }
+        unset($iMIP->existing_event);
+
+        $existingEvent = $iMIP->getExistingEvent(true);
+        $this->assertNull($existingEvent, 'event must be deleted');
+
+        $existingEvent = $iMIP->getExistingEvent(true, true);
+        $this->assertEquals($existingEvent->is_deleted, 1, 'event must be deleted');
+    }
+
+    /**
+     * testExternalInvitationCancelProcessAttendee
+     *
+     */
+    public function testExternalInvitationCancelProcessAttendee()
+    {
+        $iMIP = $this->testExternalInvitationRequestAutoProcess();
+        $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $this->_eventIdsToDelete[] = $eventId = $iMIP->event->getId();
+
+        $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_cancel.ics' );
+        // set status to not cancelled, so that only attendees are removed from the event
+        $ics = preg_replace('#STATUS:CANCELLED#', 'STATUS:CONFIRMED', $ics);
+
+        $iMIP = new Calendar_Model_iMIP(array(
+            'id'             => Tinebase_Record_Abstract::generateUID(),
+            'ics'            => $ics,
+            'method'         => 'CANCEL',
+            'originator'     => 'l.kneschke@caldav.org',
+        ));
+
+        // TEST CANCEL
+        try {
+            $this->_iMIPFrontend->autoProcess($iMIP);
+        } catch (Exception $e) {
+            $this->fail('TEST NORMAL CANCEL autoProcess throws Exception: ' . $e);
+        }
+        unset($iMIP->existing_event);
+
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($eventId);
+        $this->assertEquals(3, count($updatedEvent->attendee), 'attendee count must be 3');
+    }
+
     /**
       * testInvitationCancel
       * 

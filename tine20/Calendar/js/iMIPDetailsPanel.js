@@ -211,7 +211,15 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             else if (preconditions.hasOwnProperty('ATTENDEE')) {
                 // party crush button?
                 this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
-            } 
+            }
+
+            else if (preconditions.hasOwnProperty('NOTDELETED')) {
+                this.iMIPclause.setText(this.app.i18n._("This event has been deleted by the organizer"));
+            }
+
+            else if (preconditions.hasOwnProperty('NOTCANCELLED')) {
+                this.iMIPclause.setText(this.app.i18n._("This event has been canceled."));
+            }
             
             else {
                 this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
@@ -239,6 +247,10 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                     this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
                     break;
                     
+                case 'CANCEL':
+                    this.iMIPclause.setText(this.app.i18n._('This event has been canceled.'));
+                    break;
+
                 default:
                     this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
                     break;

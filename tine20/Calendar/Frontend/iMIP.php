@@ -31,7 +31,7 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        if (! $_iMIP->getExistingEvent(TRUE)) {
+        if (! $_iMIP->getExistingEvent(TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
@@ -207,6 +207,18 @@ class Calendar_Frontend_iMIP
                 $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
                 $result = FALSE;
             }
+        } else {
+            try {
+                if ($_iMIP->getExistingEvent(TRUE, TRUE)) {
+                    // Event was deleted/cancelled
+                    $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_NOTDELETED, "old iMIP message is deleted");
+                    $result = FALSE;
+                }
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                // attendee was removed from the event, continue ...
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_NOTCANCELLED, "event or attendee was cancelled from this event");
+                $result = FALSE;
+            }
         }
         
         return $result;
@@ -349,15 +361,22 @@ class Calendar_Frontend_iMIP
         // external organizer:
         else {
             $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(false);
+            $event = $_iMIP->getEvent();
             if (! $existingEvent) {
-                $event = $_iMIP->getEvent();
                 if (! $event->container_id) {
                     $event->container_id = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
                 }
                 
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
-                $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                if ($event->external_seq > $existingEvent->external_seq && !$_status) {
+                    // no buttons pressed (just reading/updating)
+                    // updates event with .ics
+                    $event->id = $existingEvent->id;
+                    $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
+                } else {
+                    $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                }
             }
             
             Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
@@ -488,28 +507,56 @@ class Calendar_Frontend_iMIP
     *
     * @param  Calendar_Model_iMIP   $_iMIP
     * @return boolean
-    *
-    * @todo implement
     */
     protected function _checkCancelPreconditions($_iMIP)
     {
-        $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_SUPPORTED, 'processing CANCEL is not supported yet');
-    
-        return FALSE;
+        $existingEvent = $_iMIP->getExistingEvent(FALSE, TRUE);
+        $result = TRUE;
+
+        if ($existingEvent) {
+            if ($existingEvent->is_deleted) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_NOTDELETED, "old iMIP message is deleted");
+                $result = FALSE;
+            } else if (! $existingEvent->hasExternalOrganizer()) {
+                $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $result = FALSE;
+            }
+        }
+        return $result;
     }
     
     /**
     * process cancel
     *
     * @param  Calendar_Model_iMIP   $_iMIP
-    * @param  Calendar_Model_Event  $_existingEvent
-    * 
-    * @todo implement
+    * @param  string                $_status
     */
-    protected function _processCancel($_iMIP, $_existingEvent)
+    protected function _processCancel($_iMIP, $_status)
     {
         // organizer cancelled meeting/recurrence of an existing event -> update event
         // the iMIP is already the notification mail!
+        $existingEvent = $_iMIP->getExistingEvent(FALSE, TRUE);
+        $event = $_iMIP->getEvent();
+
+        if ($existingEvent) {
+            if (! $existingEvent->is_deleted) {
+                if ($event->status == Calendar_Model_Event::STATUS_CANCELED) {
+                    // Event cancelled
+                    Calendar_Controller_MSEventFacade::getInstance()->delete($existingEvent->getId());
+                } else {
+                    // Attendees cancelled
+                    Calendar_Controller_MSEventFacade::getInstance()->deleteAttendees($existingEvent, $event);
+                }
+            }
+        } else {
+            // create a deleted/cancelled event
+            $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
+
+            $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+            Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
+
+            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
+        }
     }
     
     /**
