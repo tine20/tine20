@@ -1,40 +1,194 @@
 <?php
+// GLOBAL CONFIGURATION FILE
 // NOTE: You can either:
 //  - copy this file to config.inc.php and add change config values
 //  - create an empty config.inc.php, make it writeable to the webserver and edit config via the setup.php interface
 //  - make this directory temporary writeable to the webserver and edit config via the setup.php interface
 
-// minimal configuration
 return array(
-    // set 'count' equal zero to disable captcha, or set to number of invalid logins before request captcha.
-    'captcha' => array('count'=>0), 
-    'database' => array(
-        'host'          => 'ENTER DATABASE HOSTNAME',
-        'dbname'        => 'ENTER DATABASE NAME',
-        'username'      => 'ENTER DATABASE USERNAME',
-        'password'      => 'ENTER DATABASE PASSWORD',
-        'adapter'       => 'pdo_mysql',
-        'tableprefix'   => 'tine20_',
-    ),
-    'setupuser' => array(
-        'username'      => 'SETUP USERNAME',
-        'password'      => 'SETUP PASSWORD' 
-    ),
+    /*************************************************************************
+     /*----------------------- DATABASE  -----------------------------------*/
+    /************************************************************************/
 
-    /* // optional cache (recommended)
-    'caching' => array (
-        'active' => true,
-        'path' => 'PATH TO CACHE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
-        'lifetime' => 3600,
-    ),
-    */
+    //CONECTIVITY WITH DOMAIN DATABASE
+    'database' =>
+        array (
+            'username' => '[USERNAME]',
+            'password' => '[PASSWORD]',
+            'host' => '[HOST]',
+            'dbname' => '[DBNAME]',
+            'port' => 0,
+            'adapter' => 'pdo_[VENDOR]',
+            'tableprefix' => 'tine20_',
+            'profiler' => false
+        ),
+    /*************************************************************************
+    /*------------------------- GENERAL CONFIGURATION-----------------------*/
+    /************************************************************************/
 
-    /* // optional logger
-    'logger' => array (
-        'active' => true,
-        'filename' => 'LOG FILE (NEEDS TO BE WRITEABLE BY WEBSERVER)',
-        'priority' => '7',
-    ),
+    //APPLICATION ADMINISTRATOR ACCOUNT (SETUP ACCESS)
+    'setupuser' =>
+        array (
+            'username' => '[USERNAME]',
+            'password' => '[PASSWORD]',
+        ),
+
+    //TEMPORARY FILES
+    'tmpdir' => '',
+
+    //TEMPORARY UPLOAD FILES
+    'filesdir' => '',
+
+    //SESSIONS
+    'session' =>
+        array (
+            'lifetime' => 86400,
+            'backend' => 'File',
+            'path' => ''
+        ),
+
+    //DATA CACHE
+    'caching' =>
+        array (
+            'customexpirable' => false,
+            'active' => true,
+            'backend' => 'File',
+            'lifetime' => 900,
+            'path' => '',
+
+            //REDIS
+            'redis' =>
+            array (
+                    'host' => 'localhost',
+                    'port' => 6379,
+                ),
+
+            //MEMCACHED
+            'memcached' =>
+                array (
+                    'host' => 'localhost',
+                    'port' => 11211,
+                ),
+        ),
+
+    /*************************************************************************
+    /*------------------------------ ADDRESSBOOK ----------------------------*/
+    /************************************************************************/
+
+    /* AVAILABILITY MAP
+     * 'mapPanel': used in several files (among them,
+     * "ContactEditDialog.js", enables support to availability
+     * contact map.
     */
+    'mapPanel' => 0,
+
+    /*************************************************************************
+    /*--------------------------- DEVELOPMENT ------------------------------*/
+    /************************************************************************/
+    //APPLICATION LOG RESOURCE
+    /* 'active': if resource is enabled(booleano);
+     * 'priority': captured event detail level. How high
+     *             the level, more details (and data) will be inserted as
+     *             content of log file. Levels are:
+     *
+     *               0=EMERGENCY
+     *               1=ALERT
+     *               2=CRITICAL
+     *               3=ERROR
+     *               4=WARN
+     *               5=NOTICE
+     *               6=INFO
+     *               7=DEBUG
+     *               8=TRACE
+     *
+     * 'filename': where log file is.*/
+
+    'logger' =>
+        array (
+            'active' => true,
+            'priority' => 7,
+            'filename' => '',
+        ),
+
+    //PROFILER RESOURCE SUPPORT
+    'profiler' =>
+        array (
+            'xhprof' => false,
+            'queryProfiles' => false,
+            'queryProfilesDetails' => false
+        ),
+    /*************************************************************************
+    /*---------------------------- MESSAGES --------------------------------*/
+    /************************************************************************/
+
+    //MESSAGE QUEUE VIA REDIS
+    'actionqueue' =>
+        array (
+            'active' => false,
+            'backend' => 'Redis',
+            'host' => 'localhost',
+            'port' => 6379,
+        ),
+
+    /*************************************************************************
+    /*------------------------------ SECURITY ------------------------------*/
+    /************************************************************************/
+
+    //MAXIMUM NUMBER OF USEFUL LOGIN TRIALS BEFORE LOCKING USER
+    'maxLoginFailures' => 20,
+
+    //CAPTCHA (ANTI ROBOT TOOL FOR AUTHENTICATION SCREEN)
+    'captcha' =>
+        array (
+            'count' => 3,
+        ),
+
+    /* CORS REQUEST COMPATIBILITY
+     * 'allowedJsonOrigins': used into "Config.php" e "Json.php".
+     * Define URLs/IPs that allow exchange of JSON in out of HTTP
+     * headers requests for complaining CORS.
+    */
+    'allowedJsonOrigins' =>
+        array (
+            0 => '',
+            1 => '',
+        ),
+
+    /* SESSION IP VALIDATION
+     * 'sessionIpValidation': used into some scripts, is
+     * responsible for validating user session by IP (access
+     * constraint to a logon).
+    */
+    'sessionIpValidation' =>
+        array (
+            'active' => false,
+            'source' => 'ip',
+        ),
+
+    /* DIGITAL CERTIFICATE
+     * 'certificate': used to definition of digital certificate.
+    */
+    'certificate' =>
+        array (
+            'active' => false,
+            'useKeyEscrow' => false,
+            'masterCertificate' => '',
+        ),
+    'modssl' =>
+        array (
+            'username_callback' => '',
+            'casfile' => '',
+            'crlspath' => '',
+        ),
+
+    /*************************************************************************
+    /*-------------------------- VISUALIZATION -----------------------------*/
+    /************************************************************************/
+
+    // USED THEME CONFIGURATIONS
+    'theme' => array(
+                'load' => true,
+                'path' => '',
+                'useBlueAsBase' => true
+        ),
 );
-
