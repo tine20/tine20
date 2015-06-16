@@ -235,7 +235,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 foreach ($recordDataToImport as $idx => $processedRecordData) {
                     $recordToImport = $this->_createRecordToImport($processedRecordData);
                     if ($resolveStrategy !== 'discard') {
-                        $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
+                        $importedRecord = $this->_importRecord($recordToImport, $resolveStrategy, $processedRecordData);
+                        $this->_inspectAfterImport($importedRecord);
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                                 . ' Discarding record ' . $recordIndex);
@@ -253,6 +254,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
             $recordIndex++;
         }
+    }
+
+    /**
+     * do something with the imported record
+     *
+     * @param $importedRecord
+     */
+    protected function _inspectAfterImport($importedRecord)
+    {
+
     }
     
     /**
@@ -637,7 +648,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param Tinebase_Record_Abstract $_record
      * @param string $_resolveStrategy
      * @param array $_recordData not needed here but in other import classes (i.a. Admin_Import_Csv)
-     * @return void
+     * @return Tinebase_Record_Abstract the imported record
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _importRecord($_record, $_resolveStrategy = NULL, $_recordData = array())
@@ -664,6 +675,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $this->_importResult['totalcount']++;
+
+        return $importedRecord;
     }
     
     /**

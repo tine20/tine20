@@ -236,9 +236,10 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
         
         $recipients = $this->_getNotificationRecipients($_lead);
-        // send notificaton to updater in any case!
-        if (! in_array($_updater->accountId, $recipients)) {
-            $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->getId();
+        // send notification to updater in any case!
+        if (! in_array($_updater->contact_id, $recipients->getArrayOfIds())) {
+            $updaterContact = Addressbook_Controller_Contact::getInstance()->get($_updater->contact_id);
+            $recipients->addRecord($updaterContact);
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
         
@@ -256,23 +257,17 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * returns recipients for a lead notification
      *
      * @param  Crm_Model_Lead $_lead
-     * @return array          array of int|Addressbook_Model_Contact
+     * @return Tinebase_Record_RecordSet of Addressbook_Model_Contact
      */
     protected function _getNotificationRecipients(Crm_Model_Lead $_lead) 
     {
-        $recipients = array();
-        
         if (! $_lead->relations instanceof Tinebase_Record_RecordSet) {
             $_lead->relations = Tinebase_Relations::getInstance()->getRelations('Crm_Model_Lead', 'Sql', $_lead->getId(), true);
         }
-        foreach ($_lead->relations as $relation) {
-            if ($relation->related_model == 'Addressbook_Model_Contact' && $relation->type == 'RESPONSIBLE') {
-                $recipients[] = $relation->related_record;
-            }
-        }
-        
+        $recipients = $_lead->getResponsibles();
+
         // if no responsibles are defined, send message to all readers of container
-        if (empty($recipients)) {
+        if (count($recipients) === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' no responsibles found for lead: ' . 
                 $_lead->getId() . ' sending notification to all people having read access to container ' . $_lead->container_id);
                 
@@ -281,7 +276,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::GRANT_READ] == 1) {
                     try {
-                        $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE)->getId();
+                        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE);
+                        $recipients->addRecord($contact);
                     } catch (Addressbook_Exception_NotFound $aenf) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ 
                             . ' Do not send notification to non-existant user: ' . $aenf->getMessage());

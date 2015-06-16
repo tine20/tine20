@@ -125,4 +125,85 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
         return $data;
     }
 
+    /**
+     * do something with the imported record
+     *
+     * @param $importedRecord
+     */
+    protected function _inspectAfterImport($importedRecord)
+    {
+        if (Crm_Config::getInstance()->get(Crm_Config::LEAD_IMPORT_AUTOTASK) && ! $this->_options['dryrun']) {
+            $this->_addLeadAutoTaskForResponsibles($importedRecord);
+        }
+    }
+
+    /**
+     * add auto tasks if config option is set and lead has responsible person
+     *
+     * @param Crm_Model_Lead $lead
+     */
+    protected function _addLeadAutoTaskForResponsibles(Crm_Model_Lead $lead)
+    {
+        $responsibles = $lead->getResponsibles();
+
+        if (count($responsibles) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' No responsibles found');
+            return;
+        }
+
+        $translate = Tinebase_Translation::getTranslation('Crm');
+
+        // create task (if current user has edit grant for other users default tasks container)
+        $autoTask = new Tasks_Model_Task(array(
+            'summary'   => $translate->_('Edit new lead'),
+            'due'       => Tinebase_DateTime::now()->addHour(2),
+            'status'    => 'IN-PROCESS',
+            'relations' => array(array(
+                'own_model'              => 'Tasks_Model_Task',
+                'own_backend'            => 'Sql',
+                'own_id'                 => 0,
+                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type'                   => 'TASK',
+                'related_record'         => $lead,
+                'related_id'             => $lead->getId(),
+                'related_model'          => 'Crm_Model_Lead',
+                'related_backend'        => 'Sql'
+            )),
+        ));
+
+        foreach ($responsibles as $responsible) {
+            if ($responsible->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Responsible is no user');
+                continue;
+            }
+            try {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $responsible->account_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Could not find user');
+                continue;
+            }
+
+            $autoTaskForResponsible = clone($autoTask);
+            $responsiblePersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
+                Tinebase_Core::getUser(),
+                'Tasks_Model_Task',
+                $user->getId(),
+                Tinebase_Model_Grants::GRANT_ADD
+            )->getFirstRecord();
+            if (! $responsiblePersonalContainer) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Could not find personal container of user with ADD grant');
+                continue;
+            }
+            $autoTaskForResponsible->container_id = $responsiblePersonalContainer->getId();
+            $autoTaskForResponsible->organizer = $responsible->account_id;
+            Tasks_Controller_Task::getInstance()->create($autoTaskForResponsible);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Created auto task for user ' . $user->getId() . ' in container ' . $responsiblePersonalContainer->name);
+        }
+    }
 }

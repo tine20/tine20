@@ -422,13 +422,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * set grants for a persona
+     * set grants for a persona and the current user
      * 
      * @param integer $containerId
      * @param string $persona
      * @param string $adminGrant
      */
-    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $adminGrant = false)
+    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true)
     {
         $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
             'account_id'    => $this->_personas[$persona]->getId(),
@@ -437,7 +437,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_ADMIN    => $adminGrant,
+            Tinebase_Model_Grants::GRANT_ADMIN    => $personaAdminGrant,
         ), array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
@@ -445,7 +445,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_ADMIN    => $userAdminGrant,
         )));
         
         Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);

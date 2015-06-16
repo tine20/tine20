@@ -1700,7 +1700,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $aclFilters = $_filter->getAclFilters();
 
         if (! $aclFilters) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Force a standard containerFilter (specialNode = all) as ACL filter.');
             
             $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all', array('applicationName' => $_filter->getApplicationName()));
