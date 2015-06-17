@@ -162,7 +162,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_pagination = new Tinebase_Model_Pagination();
         }
 
-        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+        $getDeleted = is_object($_filter) && $_filter->getFilter('is_deleted');
         $select = parent::_getSelect('*', $getDeleted);
         
         $select->joinLeft(
