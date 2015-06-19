@@ -285,7 +285,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
      */
     protected function _rawDataToRecord(array $_rawdata)
     {
-        $data = array();
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' raw data: ' . print_r($_rawdata, true));
@@ -295,6 +295,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
             if ($keyMapping !== FALSE) {
                 switch ($keyMapping) {
                     case 'emailPassword':
+                    case 'emailUsername':
                         // do nothing
                         break;
                     

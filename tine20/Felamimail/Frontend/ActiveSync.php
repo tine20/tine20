@@ -104,6 +104,13 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     protected $_contentController;
     
     /**
+     * prefix for faked folders
+     * 
+     * @var string
+     */
+    protected $_fakePrefix = 'fake-';
+    
+    /**
      * (non-PHPdoc)
      * @see Syncroton_Data_IDataEmail::forwardEmail()
      */
@@ -183,6 +190,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function getChangedEntries($folderId, DateTime $_startTimeStamp, DateTime $_endTimeStamp = NULL, $filterType = NULL)
     {
+        if (strpos($folderId, $this->_fakePrefix) === 0) {
+            return array();
+        }
+        
         $filter = $this->_getContentFilter(0);
         
         $this->_addContainerFilter($filter, $folderId);
@@ -671,7 +682,9 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     protected function _inspectGetCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
-        Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder->serverId, 10);
+        if (strpos($folder->serverId, $this->_fakePrefix) === false) {
+            Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder->serverId, 10);
+        }
     }
     
     /**
@@ -751,6 +764,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {
+        if (strpos($folderId, $this->_fakePrefix) === 0) {
+            return $folder;
+        }
+        
         $fmailFolder = Felamimail_Controller_Folder::getInstance()->get($folder->serverId);
         Felamimail_Controller_Folder::getInstance()->rename($fmailFolder->account_id, $folder->displayName, $fmailFolder->globalname);
         return $folder;
@@ -791,6 +808,8 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         $this->_updateFolderCache();
         $result = $this->_getFolders();
+        
+        $this->_addFakeFolders($result);
         
         return $result;
     }
@@ -885,10 +904,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         
         foreach ($folders as $folder) {
             $result[$folder->getId()] = new Syncroton_Model_Folder(array(
-                'serverId'      => $folder->getId(),
-                'parentId'      => ($parentFolder) ? $parentFolder->getId() : 0,
-                'displayName'   => $folder->localname,
-                'type'          => $this->_getFolderType($folder)
+                'serverId'    => $folder->getId(),
+                'parentId'    => ($parentFolder) ? $parentFolder->getId() : 0,
+                'displayName' => $folder->localname,
+                'type'        => $this->_getFolderType($folder)
             ));
             
             if ($folder->has_children) {
@@ -992,6 +1011,14 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
                 }
                 
                 break;
+                
+            case 'OUTBOX':
+                // detect by name
+                if ($personalNameSpaceSuffix . $folder->localname === $folder->globalname) {
+                    return Syncroton_Command_FolderSync::FOLDERTYPE_OUTBOX;
+                }
+                
+                break;
         }
         
         return Syncroton_Command_FolderSync::FOLDERTYPE_MAIL_USER_CREATED;
@@ -1069,7 +1096,44 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             $_containerId
         ));
     }
-
+    
+    /**
+     * It creates faked folders that is required by Android 5 (Lollipop),
+     * when it doesn't exists in IMAP
+     *
+     * @param array $folders
+     */
+    protected function _addFakeFolders(&$folders)
+    {
+        $requiredFolderTypes = array(
+            Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS       => 'Drafts',
+            Syncroton_Command_FolderSync::FOLDERTYPE_DELETEDITEMS => 'Trash',
+            Syncroton_Command_FolderSync::FOLDERTYPE_SENTMAIL     => 'Sent',
+            Syncroton_Command_FolderSync::FOLDERTYPE_OUTBOX       => 'Outbox'
+        );
+        
+        $foundFolderTypes = array();
+        
+        foreach ($folders as $folder) {
+            if ($folder->type >= Syncroton_Command_FolderSync::FOLDERTYPE_DRAFTS && $folder->type <= Syncroton_Command_FolderSync::FOLDERTYPE_OUTBOX) {
+                $foundFolderTypes[] = $folder->type;
+            }
+        }
+        
+        $missingFolderTypes = array_diff(array_keys($requiredFolderTypes), $foundFolderTypes);
+        
+        foreach ($missingFolderTypes as $folderType) {
+           $fakedServerId = $this->_fakePrefix . $folderType;
+           
+           $folders[$fakedServerId] = new Syncroton_Model_Folder(array(
+                'serverId'      => $fakedServerId,
+                'parentId'      => 0,
+                'displayName'   => $requiredFolderTypes[$folderType],
+                'type'          => $folderType
+            ));
+        }
+    }
+    
     /**
      * 
      * @return int     Syncroton_Command_Sync::FILTER...

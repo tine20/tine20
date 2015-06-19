@@ -15,7 +15,7 @@
  * @package    Tinebase
  * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql
+class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql implements Tinebase_EmailUser_Imap_Interface
 {
     /**
      * quotas table name with prefix
@@ -81,17 +81,6 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql
      * @var string
      */
     protected $_subconfigKey = 'dovecotcombined';
-    
-    /**
-     * the constructor
-     */
-    public function __construct(array $_options = array())
-    {
-        parent::__construct($_options);
-        
-        // set domain from imap config
-        $this->_config['domain'] = !empty($emailConfig['domain']) ? $emailConfig['domain'] : null;
-    }
     
     /**
      * interceptor before add
@@ -183,7 +172,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql
      */
     protected function _rawDataToRecord(array $_rawdata)
     {
-        $data = array();
+        $data = array_merge($this->_defaults, $this->_getConfiguredSystemDefaults());
         
         foreach ($_rawdata as $key => $value) {
             $keyMapping = array_search($key, $this->_propertyMapping);
@@ -194,6 +183,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql
                     case 'emailForwards':
                     case 'emailForwardOnly':
                     case 'emailAddress':
+                    case 'emailUsername':
                         // do nothing
                         break;
                     case 'emailMailQuota':
