@@ -37,7 +37,7 @@
     "autoload": {
         "files": [],
         "psr-0": {
-            "": ["", "library", "../tests/tine20", "../tests/setup"],
+            "": ["", "library"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",
             "Zend": ["", "library"],
             "qCal": "library/qCal/lib"
