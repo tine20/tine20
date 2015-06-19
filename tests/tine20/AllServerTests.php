@@ -8,6 +8,9 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
+// needed for bootstrap / autoloader
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ServerTestHelper.php';
+
 /**
  * all server tests
  * 

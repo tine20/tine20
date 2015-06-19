@@ -19,9 +19,15 @@ error_reporting( E_ALL | E_STRICT );
 /*
  * Set include path
  */
-define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
-define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
-define('PATH_TO_TEST_DIR', dirname(__FILE__));
+if (! defined('PATH_TO_REAL_DIR')) {
+    define('PATH_TO_REAL_DIR', dirname(__FILE__) . '/../../tine20');
+}
+if (! defined('PATH_TO_TINE_LIBRARY')) {
+    define('PATH_TO_TINE_LIBRARY', dirname(__FILE__) . '/../../tine20/library');
+}
+if (! defined('PATH_TO_TEST_DIR')) {
+    define('PATH_TO_TEST_DIR', dirname(__FILE__));
+}
 
 $path = array(
     PATH_TO_REAL_DIR,
@@ -34,6 +40,22 @@ $path = array(
 set_include_path(implode(PATH_SEPARATOR, $path));
 
 require_once 'bootstrap.php';
+
+// add test paths to autoloader
+$autoloader = require PATH_TO_REAL_DIR . '/vendor/autoload.php';
+//$autoloader->set('', $path);
+$autoloader->set('', array(
+    PATH_TO_REAL_DIR,
+    PATH_TO_TEST_DIR,
+    PATH_TO_TINE_LIBRARY
+));
+//$autoloader->register(true);
+//echo "setting autoloader path: " . implode(', ', $path);
+//echo "setting autoloader path: " . implode(', ', array(
+//        PATH_TO_REAL_DIR,
+//        PATH_TO_TEST_DIR,
+//        PATH_TO_TINE_LIBRARY
+//    ));
 
 // phpunit wants to handle the errors / report all errors + restore the default error handler
 error_reporting(E_ALL | E_STRICT);
