@@ -8,6 +8,9 @@
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
+// needed for bootstrap / autoloader
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
 /**
  * @package     Tinebase
  */

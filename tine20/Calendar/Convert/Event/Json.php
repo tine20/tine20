@@ -43,6 +43,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Attender::resolveAttendee($_record->attendee, TRUE, $_record);
         self::resolveRrule($_record);
         self::resolveOrganizer($_record);
+        self::resolveGrantsOfExternalOrganizers($_record);
     }
     
     /**
@@ -80,6 +81,28 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
     }
     
     /**
+     * resolves grants of external organizers events
+     * NOTE: disable editGrant when organizer is external
+     *
+     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
+     */
+    static public function resolveGrantsOfExternalOrganizers($_events)
+    {
+        $events = $_events instanceof Tinebase_Record_RecordSet || is_array($_events) ? $_events : array($_events);
+    
+        foreach ($events as &$event) {
+            if ($event->organizer
+                && (!$event->organizer->has('account_id') || !$event->organizer->account_id)
+                && $event->{Tinebase_Model_Grants::GRANT_EDIT} 
+            ) {
+                $event->{Tinebase_Model_Grants::GRANT_EDIT} = FALSE;
+                $event->{Tinebase_Model_Grants::GRANT_READ} = TRUE;
+            }
+        }
+    
+    }
+    
+    /**
      * converts Tinebase_Record_RecordSet to external format
      * 
      * @param Tinebase_Record_RecordSet         $_records
@@ -111,7 +134,8 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
             ),
             'recursive' => array('attachments' => 'Tinebase_Model_Tree_Node')
         ));
-        
+
+        Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
         $_records->sortByPagination($_pagination);
         
