@@ -313,7 +313,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $customersCount = $customers->count();
         $ccIndex = 0;
         
-        while ($i < 12) {
+        while ($i < $customersCount) {
             $costcenter = $ccs[$i%2];
             $i++;
             
