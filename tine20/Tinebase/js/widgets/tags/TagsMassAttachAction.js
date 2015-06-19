@@ -15,10 +15,18 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tags');
  * @extends     Ext.Action
  */
 Tine.widgets.tags.TagsMassAttachAction = function(config) {
-    config.text = config.text ? config.text : _('Add Tag');
+    config.text = config.text ? config.text : _('Add Tags');
     config.iconCls = 'action_tag';
-    config.handler = this.handleClick.createDelegate(this);
+    config.handler = config.handler ? config.handler : this.handleClick.createDelegate(this);
+    config.scope = config.scope ? config.scope : this.handleClick.createDelegate(this);
     Ext.apply(this, config);
+    
+    this.store = new Ext.data.SimpleStore({
+        fields: Tine.Tinebase.Model.Tag
+    });
+    
+    this.store.on('add', this.manageOkBtn, this);
+    this.store.on('remove', this.manageOkBtn, this);
     
     Tine.widgets.tags.TagsMassAttachAction.superclass.constructor.call(this, config);
 };
@@ -56,50 +64,39 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     recordClass: null,
     
     getFormItems: function() {
-        this.tagSelect = new Tine.widgets.tags.TagCombo({
-            hideLabel: true,
-            anchor: '100%',
-            onlyUsableTags: true,
-            app: this.app,
-            forceSelection: true,
-            listeners: {
-                scope: this,
-                render: function(field){field.focus(false, 500);},
-                select: function() {
-                    this.onOk();
-                }
-            }
+        return new Tine.widgets.grid.PickerGridPanel({
+            height: 'auto',
+            searchComboClass: Tine.widgets.tags.TagCombo,
+            searchComboConfig: {app: this.app},
+            recordClass: Tine.Tinebase.Model.Tag,
+            store: this.store,
+            labelRenderer: Tine.Tinebase.common.tagRenderer
         });
-        
-        return [{
-            xtype: 'label',
-            text: _('Attach the following tag to all selected items:')
-        }, this.tagSelect
-        ];
+    },
+    
+    manageOkBtn: function() {
+        if (this.win && this.win.okButton) {
+            this.win.okButton.setDisabled(! this.store.getCount());
+        }
     },
     
     handleClick: function() {
-        
-        this.okButton = new Ext.Button({
-            text: _('Ok'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onOk,
-            disabled: true,
-            iconCls: 'action_saveAndClose'
-        });
+        // NOTE: in gridPanels ctxMenu (and so this action) is only created once
+        this.store.removeAll();
         
         this.win = Tine.WindowFactory.getWindow({
             layout: 'fit',
             width: 300,
-            height: 150,
+            height: 300,
             padding: '5px',
             modal: true,
-            title: _('Select Tag'),
+            closeAction: 'hide', // mhh not working :-(
+            title: _('Select Tags'),
             items: [{
                 xtype: 'form',
                 buttonAlign: 'right',
-                padding: '5px',
+                border: false,
+                layout: 'fit',
                 items: this.getFormItems(),
                 buttons: [{
                     text: _('Cancel'),
@@ -107,7 +104,15 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                     scope: this,
                     handler: this.onCancel,
                     iconCls: 'action_cancel'
-                }, this.okButton]
+                }, {
+                    text: _('Ok'),
+                    ref: '../../../okButton',
+                    disabled: this.store ? !this.store.getCount() : true,
+                    minWidth: 70,
+                    scope: this,
+                    handler: this.onOk,
+                    iconCls: 'action_saveAndClose'
+                }]
             }]
         });
     },
@@ -117,13 +122,15 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     },
     
     onOk: function() {
-        var tag = this.tagSelect.getValue();
+        var tags = [];
+        this.store.each(function(r) {
+            tags.push(r.data);
+        }, this);
         
-        if(! tag) {
+        if (! tags) {
+            this.win.close();
             return;
         }
-        
-        this.okButton.enable();
         
         this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Attaching Tag')});
         this.loadMask.show();
@@ -138,10 +145,10 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             timeout: 1800000, // 30 minutes
             success: this.onSuccess.createDelegate(this),
             params: {
-                method: 'Tinebase.attachTagToMultipleRecords',
+                method: 'Tinebase.attachMultipleTagsToMultipleRecords',
                 filterData: filter,
                 filterName: filterModel,
-                tag: tag
+                tags: tags
             },
             failure: function(response, options) {
                 this.loadMask.hide();

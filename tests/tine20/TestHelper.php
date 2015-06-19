@@ -29,6 +29,10 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 
 require_once 'bootstrap.php';
 
+// add test paths to autoloader
+$autoloader = require 'vendor/autoload.php';
+$autoloader->set('', $path);
+
 // phpunit wants to handle the errors / report all errors + restore the default error handler
 error_reporting(E_ALL | E_STRICT);
 restore_error_handler();

@@ -359,6 +359,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * attach multiple tags to multiple records identified by a filter
+     *
+     * @param array  $filterData
+     * @param string $filterName
+     * @param mixed  $tags         array of existing and non-existing tags
+     * @return void
+     */
+    public function attachMultipleTagsToMultipleRecords($filterData, $filterName, $tags)
+    {
+        $this->_longRunningRequest();
+        $filter = $this->_getFilterGroup($filterData, $filterName);
+
+        foreach ($tags as $tag) {
+            Tinebase_Tags::getInstance()->attachTagToMultipleRecords(clone $filter, $tag);
+        }
+
+        return array('success' => true);
+    }
+
+    /**
      * detach tags to multiple records identified by a filter
      *
      * @param array  $filterData

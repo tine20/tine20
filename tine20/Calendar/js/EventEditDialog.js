@@ -298,14 +298,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     initComponent: function() {
+        this.addEvents(
+            /**
+             * @event dtStartChange
+             * @desc  Fired when dtstart chages in UI
+             * @param {Json String} oldValue, newValue
+             */
+            'dtStartChange'
+        );
+
         this.tbarItems = new Ext.Button(new Ext.Action({
-                    text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
-                    handler: this.onMuteNotificationOnce,
-                    iconCls: 'notes_noteIcon',
-                    disabled: false,
-                    scope: this,
-                    enableToggle: true
-                }));
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
+            handler: this.onMuteNotificationOnce,
+            iconCls: 'notes_noteIcon',
+            disabled: false,
+            scope: this,
+            enableToggle: true
+        }));
 
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
@@ -451,6 +460,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.validateDtEnd();
             }
         }
+
+        this.fireEvent('dtStartChange', Ext.util.JSON.encode({newValue: newValue, oldValue: oldValue}));
     },
     
     /**

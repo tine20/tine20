@@ -1693,4 +1693,27 @@ Steuernummer 33/111/32212";
         $result = $this->_instance->searchLists($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'should not find hidden list: ' . print_r($result, TRUE));
     }
+
+    public function testAttachMultipleTagsToMultipleRecords()
+    {
+        $contact1 = $this->_addContact('contact1');
+        $contact2 = $this->_addContact('contact2');
+        $tag1 = Tinebase_Tags::getInstance()->create($this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL, 'tag1'));
+        $tag2 = Tinebase_Tags::getInstance()->create($this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL, 'tag2'));
+
+        $filter = array(array('field' => 'id','operator' => 'in', 'value' => array($contact1['id'], $contact2['id'])));
+        $json = new Tinebase_Frontend_Json();
+
+        $json->attachMultipleTagsToMultipleRecords($filter,'Addressbook_Model_ContactFilter',array(
+            $tag1->toArray(),
+            $tag2->toArray(),
+        ));
+
+        $result = $this->_instance->searchContacts($filter, array());
+        $this->assertCount(2, $result['results'], 'search count failed');
+
+        foreach($result['results'] as $contactData) {
+            $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
+        }
+    }
 }

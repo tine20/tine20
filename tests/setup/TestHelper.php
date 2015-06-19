@@ -39,6 +39,10 @@ define('CONFIGURATION', PATH_TO_TEST_DIR."/conf.xml");
  */
 require_once 'bootstrap.php';
 
+// add test paths to autoloader
+$autoloader = require 'vendor/autoload.php';
+$autoloader->set('', $path);
+
 /*
  * Set white / black lists
  */

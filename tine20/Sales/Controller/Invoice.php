@@ -1007,7 +1007,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                                 $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
                                 $this->_cachedProducts->addRecord($product);
                             }
-                            if ($product->accountable == 'Sales_Model_ProductAggregate')
+                            if ($product->accountable == 'Sales_Model_Product')
                                 continue;
                             
                             $productAggregate->last_autobill->subMonth($productAggregate->interval);

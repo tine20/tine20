@@ -110,10 +110,39 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.items = [
             this.ruleCards
         ];
-        
+
+        this.eventEditDialog.on('dtStartChange', function(jsonData) {
+            var data = Ext.decode(jsonData),
+                dtstart = Date.parseDate(data.newValue, Date.patterns.ISO8601Long);
+
+            this.initRrule(dtstart);
+        }, this);
         Tine.Calendar.RrulePanel.superclass.initComponent.call(this);
     },
-    
+
+    initRrule: function(dtstart) {
+        if (Ext.isDate(dtstart)) {
+            var byday      = Tine.Calendar.RrulePanel.prototype.wkdays[dtstart.format('w')];
+            var bymonthday = dtstart.format('j');
+            var bymonth    = dtstart.format('n');
+
+            this.WEEKLYcard.setRule({
+                interval: 1,
+                byday: byday
+            });
+            this.MONTHLYcard.setRule({
+                interval: 1,
+                byday: '1' + byday,
+                bymonthday: bymonthday
+            });
+            this.YEARLYcard.setRule({
+                byday: '1' + byday,
+                bymonthday: bymonthday,
+                bymonth: bymonth
+            });
+        }
+    },
+
     isValid: function() {
         return this.activeRuleCard.isValid(this.record);
     },
@@ -141,28 +170,8 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         }
         
         this.rrule = this.record.get('rrule');
-        
-        var dtstart = this.record.get('dtstart');
-        if (Ext.isDate(dtstart)) {
-            var byday      = Tine.Calendar.RrulePanel.prototype.wkdays[dtstart.format('w')];
-            var bymonthday = dtstart.format('j');
-            var bymonth    = dtstart.format('n');
-            
-            this.WEEKLYcard.setRule({
-                interval: 1,
-                byday: byday
-            });
-            this.MONTHLYcard.setRule({
-                interval: 1,
-                byday: '1' + byday,
-                bymonthday: bymonthday
-            });
-            this.YEARLYcard.setRule({
-                byday: '1' + byday,
-                bymonthday: bymonthday,
-                bymonth: bymonth
-            });
-        }
+
+        this.initRrule(this.record.get('dtstart'));
         
         var freq = this.rrule && this.rrule.freq ? this.rrule.freq : 'NONE';
         
@@ -502,16 +511,12 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
             if (Ext.isArray(this.byday.items)) {
                 // on initialisation items are not renderd
                 Ext.each(this.byday.items, function(cb) {
-                    if (bydayArray.indexOf(cb.name) != -1) {
-                        cb.checked = true;
-                    }
+                    cb.checked = bydayArray.indexOf(cb.name) != -1
                 }, this);
             } else {
                 // after items are rendered
                 this.byday.items.each(function(cb) {
-                    if (bydayArray.indexOf(cb.name) != -1) {
-                        cb.setValue(true);
-                    }
+                    cb.setValue(bydayArray.indexOf(cb.name) != -1);
                 }, this);
             }
         }

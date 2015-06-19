@@ -51,7 +51,7 @@ class Calendar_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerT
                             <Calendar:BusyStatus>2</Calendar:BusyStatus>
                             <Calendar:DtStamp>20121125T150537Z</Calendar:DtStamp>
                             <Calendar:EndTime>20121123T160000Z</Calendar:EndTime>
-                            <Calendar:Sensitivity>0</Calendar:Sensitivity>
+                            <Calendar:Sensitivity>2</Calendar:Sensitivity>
                             <Calendar:Subject>Repeat</Calendar:Subject>
                             <Calendar:StartTime>20121123T130000Z</Calendar:StartTime>
                             <Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID>
@@ -541,6 +541,7 @@ Zeile 3</AirSyncBase:Data>
         $this->assertEquals(2,         $syncrotonEvent->busyStatus);
         $this->assertEquals('Repeat',  $syncrotonEvent->subject);
         $this->assertEquals(15,        $syncrotonEvent->reminder);
+        $this->assertEquals(2,         $syncrotonEvent->sensitivity);
         $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
         $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
         $this->assertEquals($thisYear . '1123T160000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));
@@ -618,6 +619,7 @@ Zeile 3</AirSyncBase:Data>
         #echo '----------------' . PHP_EOL; foreach ($syncrotonEvent as $key => $value) {echo "$key => "; var_dump($value);}
         
         $this->assertEquals(0, $syncrotonEvent->allDayEvent);
+        $this->assertEquals(0, $syncrotonEvent->sensitivity);
         $this->assertTrue($syncrotonEvent->endTime instanceof DateTime);
         $this->assertTrue($syncrotonEvent->startTime instanceof DateTime);
         $this->assertEquals('20101220T100000Z', $syncrotonEvent->endTime->format('Ymd\THis\Z'));

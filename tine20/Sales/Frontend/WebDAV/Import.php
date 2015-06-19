@@ -69,6 +69,15 @@ class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sab
      */
     public function createFile($name, $data = null)
     {
+        if (is_resource($data)) {
+            $fstat = fstat($data);
+            
+            // ignore empty files
+            if ($fstat['size'] == 0) {
+                return '"emptyetag"';
+            }
+        }
+        
         $invoice = Sales_Controller_PurchaseInvoice::getInstance()->importPurchaseInvoice($name, $data);
         
         return '"' . $invoice->seq . '"';

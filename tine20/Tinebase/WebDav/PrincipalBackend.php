@@ -361,31 +361,33 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         }
                     }
                     
-                    // return user only, if the containers have the sync AND read grant set
-                    $otherUsersSync = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
-                    
-                    if ($otherUsersSync->count() > 0) {
-                        $otherUsersRead = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
+                    if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
+                        // return user only, if the containers have the sync AND read grant set
+                        $otherUsersSync = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
                         
-                        $otherUsersIds = array_intersect($otherUsersSync->getArrayOfIds(), $otherUsersRead->getArrayOfIds());
-                        
-                        foreach ($otherUsersIds as $userId) {
-                            if ($otherUsersSync->getById($userId)->contact_id && $otherUsersSync->getById($userId)->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
-                                $result[] = self::PREFIX_USERS . '/' . $otherUsersSync->getById($userId)->contact_id . '/calendar-proxy-write';
+                        if ($otherUsersSync->count() > 0) {
+                            $otherUsersRead = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
+                            
+                            $otherUsersIds = array_intersect($otherUsersSync->getArrayOfIds(), $otherUsersRead->getArrayOfIds());
+                            
+                            foreach ($otherUsersIds as $userId) {
+                                if ($otherUsersSync->getById($userId)->contact_id && $otherUsersSync->getById($userId)->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+                                    $result[] = self::PREFIX_USERS . '/' . $otherUsersSync->getById($userId)->contact_id . '/calendar-proxy-write';
+                                }
                             }
                         }
-                    }
-                    
-                    // return user only, if the containers have the sync AND read grant set
-                    $sharedContainersSync = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
-                    
-                    if ($sharedContainersSync->count() > 0) {
-                        $sharedContainersRead = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
                         
-                        $sharedContainerIds = array_intersect($sharedContainersSync->getArrayOfIds(), $sharedContainersRead->getArrayOfIds());
+                        // return user only, if the containers have the sync AND read grant set
+                        $sharedContainersSync = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
                         
-                        if (count($sharedContainerIds) > 0) {
-                            $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
+                        if ($sharedContainersSync->count() > 0) {
+                            $sharedContainersRead = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
+                            
+                            $sharedContainerIds = array_intersect($sharedContainersSync->getArrayOfIds(), $sharedContainersRead->getArrayOfIds());
+                            
+                            if (count($sharedContainerIds) > 0) {
+                                $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
+                            }
                         }
                     }
                     

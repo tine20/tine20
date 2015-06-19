@@ -652,7 +652,15 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         }
         
         foreach ($groupIds as $groupId) {
-            $dn = $this->_getDn($groupId);
+            try {
+                $dn = $this->_getDn($groupId);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // group does not exist in LDAP backend any more
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Did not found group with id ' . $groupId . ' in LDAP. Delete skipped!');
+                continue;
+            }
+            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Deleting group ' . $dn . ' from LDAP');
             $this->getLdap()->delete($dn);
