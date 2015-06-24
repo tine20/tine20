@@ -80,6 +80,14 @@
           "path": "js/"
         },
         {
+          "text": "EventContextTagsItem.js",
+          "path": "js/"
+        },
+        {
+          "text": "EventContextAttendeesItem.js",
+          "path": "js/"
+        },
+        {
           "text": "WestPanel.js",
           "path": "js/"
         },

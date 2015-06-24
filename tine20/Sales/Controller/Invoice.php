@@ -546,13 +546,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
         }
         
+        $_addMonth = true;
         if ( null == $this->_currentMonthToBill ) {
             $this->_currentMonthToBill = clone $contract->start_date;
+            $_addMonth = false;
         }
         $this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
         $this->_currentMonthToBill->setDate($this->_currentMonthToBill->format('Y'), $this->_currentMonthToBill->format('m'), 1);
         $this->_currentMonthToBill->setTime(0,0,0);
-        $this->_currentMonthToBill->addMonth(1);
+        if ($_addMonth) {
+            $this->_currentMonthToBill->addMonth(1);
+        }
         
         $doSleep = false;
         
@@ -601,7 +605,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'start_date'    => $earliestStartDate,
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),
-                    'date'          => NULL,
+                    'date'          => clone $this->_currentMonthToBill,
                     'sales_tax'     => 19
                 ));
                 
@@ -1007,8 +1011,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                                 $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
                                 $this->_cachedProducts->addRecord($product);
                             }
-                            if ($product->accountable == 'Sales_Model_Product')
+                            if ($product->accountable == 'Sales_Model_Product' || ($record->date != null && $record->date->isLater($productAggregate->last_autobill))) {
                                 continue;
+                            }
                             
                             $productAggregate->last_autobill->subMonth($productAggregate->interval);
                         } else {

@@ -639,7 +639,14 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
     var attendeeRecord = false;
     
     attendeeStore.each(function(r) {
-        if (r.get('user_type') == attendee.get('user_type') && r.getUserId() == attendee.getUserId()) {
+        var attendeeType = [attendee.get('user_type')];
+
+        // add groupmember for user
+        if (attendeeType[0] == 'user') {
+            attendeeType.push('groupmember');
+        }
+
+        if (attendeeType.indexOf(r.get('user_type') >= 0) && r.getUserId() == attendee.getUserId()) {
             attendeeRecord = r;
             return false;
         }

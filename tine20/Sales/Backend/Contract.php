@@ -56,13 +56,19 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
     {
         $date = clone $date;
         $date->setTimezone('UTC');
-    
+        $date->setDate($date->format('Y'), $date->format('m'), 1);
+        $date->setTime(0,0,0);
+        $date->submonth(12);
+
         $be = new Sales_Backend_Contract();
         $db = $be->getAdapter();
-    
+
         $sql = 'SELECT ' . $db->quoteIdentifier('id') . ' FROM ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_contracts') .
-        ' WHERE (' . $db->quoteInto($db->quoteIdentifier('end_date') . ' >= ?', $date) . ' OR ' . $db->quoteIdentifier('end_date') . ' IS NULL ) ' .
-        ' AND '   . $db->quoteInto($db->quoteIdentifier('start_date') . ' <= ?', $date);
+        ' WHERE (' . $db->quoteInto($db->quoteIdentifier('end_date') . ' >= ?', $date) . ' OR ' . $db->quoteIdentifier('end_date') . ' IS NULL ) ';
+        
+        $date->addMonth(13);
+        $date->subSecond(1);
+        $sql .= ' AND '   . $db->quoteInto($db->quoteIdentifier('start_date') . ' <= ?', $date);
     
         return array_keys($db->fetchAssoc($sql));
     }
