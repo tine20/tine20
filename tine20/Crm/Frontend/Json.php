@@ -96,11 +96,12 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * creates/updates a record
      *
      * @param  array $recordData
+     * @param  boolean $duplicateCheck
      * @return array created/updated record
      */
-    public function saveLead($recordData)
+    public function saveLead($recordData, $duplicateCheck = true)
     {
-        return $this->_save($recordData, $this->_controller, 'Lead');
+        return $this->_save($recordData, $this->_controller, 'Lead', 'id' , array($duplicateCheck));
     }
     
     /**

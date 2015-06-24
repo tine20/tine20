@@ -112,19 +112,25 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_SPLIT_VIEW = 'featureSplitView';
 
     /**
+     * FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS
+     *
+     * @var string
+     */
+    const FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS = 'featureExtendedEventContextActions';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
         self::FIXED_CALENDARS => array(
-                                   //_('Fixed Calendars')
+            //_('Fixed Calendars')
             'label'                 => 'Fixed Calendars',
-                                   //_('Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.')
+            //_('Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.')
             'description'           => 'Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar.',
             'type'                  => 'array',
             'contents'              => 'string', // in fact this are ids of Tinebase_Model_Container of app Calendar and we might what to have te ui to autocreate pickers panel here? x-type? -> later
             'clientRegistryInclude' => TRUE
-        
         ),
         self::CROP_DAYS_VIEW => array(
                                    //_('Crop Days')
@@ -162,7 +168,6 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'default'               => 50
 
         ),
-
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')
             'label'                 => 'Attendee Status Available',
@@ -270,14 +275,18 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'content'               => array(
                 self::FEATURE_SPLIT_VIEW => array(
                     'label'         => 'Calendar Split View', //_('Calendar Split View')
-                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee)
+                    'description'   => 'Split day and week views by attendee', //_('Split day and week views by attendee')
+                ),
+                self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS => array(
+                    'label'         => 'Calendar Extended Context Menu Actions', //_('Calendar Extended Context Menu Actions')
+                    'description'   => 'Adds extended actions to event context menus', //_('Adds extended actions to event context menus')
                 ),
             ),
             'default'               => array(
-                self::FEATURE_SPLIT_VIEW           => true,
+                self::FEATURE_SPLIT_VIEW                        => true,
+                self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => false,
             ),
         ),
-
     );
     
     /**
