@@ -300,7 +300,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
 
         $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
-        $this->assertEquals(8, $allInvoices->count(), print_r($allInvoices->toArray(), 1));
+        $this->assertEquals(9, $allInvoices->count(), print_r($allInvoices->toArray(), 1));
         
         foreach($allInvoices as $invoice) {
             $this->_invoiceController->delete($invoice);
@@ -1010,7 +1010,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     
         $result = $this->_invoiceController->createAutoInvoices($date);
     
-        $this->assertEquals(5, count($result['created']));
+        $this->assertEquals(6, count($result['created']));
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
     
@@ -1133,7 +1133,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     
         $result = $this->_invoiceController->createAutoInvoices($date);
     
-        $this->assertEquals(5, count($result['created']));
+        $this->assertEquals(6, count($result['created']));
         
         $invoice = $this->_invoiceController->get($result['created'][0]);
         $invoice->cleared = 'CLEARED';
