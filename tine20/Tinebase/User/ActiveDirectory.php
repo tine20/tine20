@@ -120,7 +120,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $this->_domainSidPlain  = Tinebase_Ldap::decodeSid($this->_domainConfig['objectsid'][0]);
         
         $domanNameParts    = array();
-        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $fooBar, $domanNameParts);
+        $keys = null; // not really needed
+        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $keys, $domanNameParts);
         $this->_domainName = implode('.', $domanNameParts);
     }
     
@@ -443,12 +444,12 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                         if ($value === '0' || $value[0] === '9223372036854775807') {
                             $accountArray[$keyMapping] = null;
                         } else {
-                            $accountArray[$keyMapping] = new Tinebase_DateTime(bcsub(bcdiv($value[0], '10000000'), '11644473600'));
+                            $accountArray[$keyMapping] = self::convertADTimestamp($value[0]);
                         }
                         break;
                         
                     case 'accountLastPasswordChange':
-                        $accountArray[$keyMapping] = new Tinebase_DateTime(bcsub(bcdiv($value[0], '10000000'), '11644473600'));
+                        $accountArray[$keyMapping] = self::convertADTimestamp($value[0]);
                         break;
                         
                     case 'accountId':
@@ -495,6 +496,22 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
         
         return $accountObject;
+    }
+
+    /**
+     * convert windows nt timestamp
+     *
+     * The timestamp is the number of 100-nanoseconds intervals (1 nanosecond = one billionth of a second)
+     *  since Jan 1, 1601 UTC.
+     *
+     * @param $timestamp
+     * @return Tinebase_DateTime
+     *
+     * @see http://www.epochconverter.com/epoch/ldap-timestamp.php
+     */
+    public static function convertADTimestamp($timestamp)
+    {
+        return new Tinebase_DateTime(bcsub(bcdiv($timestamp, '10000000'), '11644473600'));
     }
     
     /**
