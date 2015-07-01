@@ -95,7 +95,7 @@ class Tinebase_DateTime extends DateTime
             
             $time = $_time->format("Y-m-d H:i:s");
         } else {
-            $time = (is_numeric($_time)) ? "@" . $_time : $_time;
+            $time = (is_numeric($_time)) ? "@" . floor($_time) : $_time;
         }
         
         if ($_timezone) {

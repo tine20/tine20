@@ -849,7 +849,7 @@ class Tinebase_Core
                     }
                 }
                 
-                // @todo set chartse to utf8mb4 / @see 0008708: switch to mysql utf8mb4
+                // @todo set charset to utf8mb4 / @see 0008708: switch to mysql utf8mb4
                 
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(
@@ -858,10 +858,9 @@ class Tinebase_Core
                 $dbConfigArray['options']['init_commands'] = array(
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
-                    "SET SESSION group_concat_max_len = 81920"
+                    "SET SESSION group_concat_max_len = 4294967295"
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
-                
                 break;
                 
             case self::PDO_OCI:

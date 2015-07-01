@@ -52,8 +52,8 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.title = 'Tine 2.0<small>org</small>';
-Tine.weburl = 'http://www.tine20.org';
-Tine.helpUrl = 'http://wiki.tine20.org';
+Tine.weburl = 'https://www.tine20.org/en/the-project/contribute.html';
+Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
 
 /**
  * quiet logging in release mode
@@ -673,6 +673,9 @@ Tine.Tinebase.tineInit = {
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
+            if (! windowType) {
+                windowType = 'Browser';
+            }
         }
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({

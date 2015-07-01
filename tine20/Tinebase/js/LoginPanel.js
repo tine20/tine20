@@ -235,7 +235,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }, {
                     html: '<br/><ul>' +
                         '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + String.format(_('{0} Translation Howto'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/langStats/"' + (Ext.isArray(version) ? '?v=' + version[0] : '') +' border="0">' + _('Detailed Language Statistics') + '</a></li>'
+                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + _('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
             });

@@ -31,29 +31,20 @@ class Tinebase_User_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
     protected $userBaseFilter  = 'objectclass=user';
     
     /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    protected function setUp()
-    {
-        $this->markTestIncomplete('group backend breaks mocking');
-        
-        $this->_userAD = new Tinebase_User_ActiveDirectory(array(
-            'userDn'   => $this->userDN,
-            'groupsDn' => $this->groupsDN,
-            'ldap'     => $this->_getTinebaseLdapStub(),
-            'useRfc2307' => true
-        )); 
-    }
-
-    /**
      * try to add a group
      *
      */
     public function testAddUserToSyncBackend()
     {
+        $this->markTestIncomplete('group backend breaks mocking');
+
+        $this->_userAD = new Tinebase_User_ActiveDirectory(array(
+            'userDn'   => $this->userDN,
+            'groupsDn' => $this->groupsDN,
+            'ldap'     => $this->_getTinebaseLdapStub(),
+            'useRfc2307' => true
+        ));
+
         $addedUser = $this->_userAD->addUserToSyncBackend(new Tinebase_Model_FullUser(array(
             'accountLoginName'    => 'larskneschke',
             'accountPrimaryGroup' => $this->groupSid,
@@ -94,7 +85,7 @@ class Tinebase_User_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
     {
         switch ($dn) {
             default:
-                $this->fail("unkown dn $filter in " . __METHOD__);
+                $this->fail("unkown dn $dn in " . __METHOD__);
                 
                 break;
         }
@@ -142,5 +133,28 @@ class Tinebase_User_ActiveDirectoryTest extends PHPUnit_Framework_TestCase
              ->will($this->returnValue($data));
         
         return $stub;
+    }
+
+    /**
+     * testConvertADTimestamp
+     *
+     * @see 0011074: Active Directory as User Backend
+     */
+    public function testConvertADTimestamp()
+    {
+        $timestamps = array(
+            '130764553441237094'  => '2015-05-18 20:42:24',
+            '130791798699200155'  => '2015-06-19 09:31:09',
+            '9223372036854775807' => '30828-09-14 02:48:05',
+        );
+
+        foreach ($timestamps as $timestamp => $expected) {
+            $this->assertEquals($expected, Tinebase_User_ActiveDirectory::convertADTimestamp($timestamp)->toString());
+        }
+
+        // sometimes the ad timestamp is a float. i could not reproduce this case
+        // let's create a value like this and pass it directly to Tinebase_DateTime
+        $date = new Tinebase_DateTime('1391776840.7434058000');
+        $this->assertEquals('2014-02-07 12:40:40', $date->toString());
     }
 }
