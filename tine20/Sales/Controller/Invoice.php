@@ -307,15 +307,33 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             // is null, if this is the first time to bill the product aggregate
             $lastBilled = $productAggregate->last_autobill == NULL ? NULL : clone $productAggregate->last_autobill;
             $productEnded = false;
+            $endDate = NULL;
+            
+            if (NULL != $productAggregate->end_date)
+                $endDate = clone $productAggregate->end_date;
+            if ($this->_currentBillingContract->end_date != NULL && (NULL === $endDate || $endDate->isLater($this->_currentBillingContract->end_date)))
+                $endDate = clone $this->_currentBillingContract->end_date;
             
             // if the product has been billed already, add the interval
             if ($lastBilled) {
-                if (NULL != $productAggregate->end_date && $lastBilled->isLaterOrEquals($productAggregate->end_date)) {
-                    $productEnded = true;
-                } else {
-                    $nextBill = $lastBilled;
-                    $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
-                    $nextBill->addMonth($productAggregate->interval);
+                $nextBill = $lastBilled;
+                $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
+                $nextBill->addMonth($productAggregate->interval);
+                if (NULL !== $endDate && $endDate->isEarlier($nextBill)) {
+                    if ($productAggregate->billing_point == 'end') {
+                        if ($productAggregate->last_autobill->isEarlier($endDate)) {
+                            // ok, fix nextBill to be close to endDate
+                            $nextBill = $endDate;
+                            $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
+                            $nextBill->addMonth(1);
+                        } else {
+                            // not ok, ignore
+                            $productEnded = true;
+                        }
+                    } else {
+                        // not ok, ignore
+                        $productEnded = true;
+                    }
                 }
             } else {
                 // it hasn't been billed already
@@ -329,27 +347,22 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 // add interval, if the billing point is at the end of the interval
                 if ($productAggregate->billing_point == 'end') {
                     $nextBill->addMonth($productAggregate->interval);
+                    if (NULL !== $endDate && $endDate->isEarlier($nextBill))
+                    {
+                        // ok, fix nextBill to be close to endDate
+                        $nextBill = $endDate;
+                        $nextBill->setDate($nextBill->format('Y'), $nextBill->format('m'), 1);
+                        $nextBill->addMonth(1);
+                    }
                 }
             }
             
-            $product = $this->_cachedProducts->getById($productAggregate->product_id);
+            $nextBill->setTime(0,0,0);
             
+            $product = $this->_cachedProducts->getById($productAggregate->product_id);
             if (! $product) {
                 $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
                 $this->_cachedProducts->addRecord($product);
-            }
-            
-            if (!$productEnded) {
-                if (NULL != $productAggregate->end_date && $nextBill->isLater($productAggregate->end_date)) {
-                    $nextBill = clone $productAggregate->end_date;
-                }
-                
-                // assure creating the last bill if a contract has been terminated
-                if (($this->_currentBillingContract->end_date !== NULL) && $nextBill->isLater($this->_currentBillingContract->end_date)) {
-                    $nextBill = clone $this->_currentBillingContract->end_date;
-                }
-                
-                $nextBill->setTime(0,0,0);
             }
             
             // find out if this model has to be billed or skipped
