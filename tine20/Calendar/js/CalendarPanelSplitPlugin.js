@@ -27,6 +27,11 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     mainStore: null,
     
     init: function(calPanel) {
+
+        if (! Tine.Tinebase.appMgr.get('Calendar').featureEnabled('featureSplitView')) {
+            return;
+        }
+
         this.calPanel = calPanel;
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.attendeeViews = new Ext.util.MixedCollection();
@@ -307,6 +312,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         }, this);
         
         this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this);
+
+        if (this.calPanel.mainScreen) {
+            this.calPanel.mainScreen.updateEventActions.call(this.calPanel.mainScreen);
+        }
     },
     
     setActiveAttendeeView: function(view) {
