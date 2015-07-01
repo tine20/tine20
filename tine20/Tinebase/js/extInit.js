@@ -39,11 +39,6 @@ Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
 Ext.SSL_SECURE_URL = "library/ExtJS/resources/images/default/s.gif";
 
 /**
- * don't fill yahoo stats
- */
-Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
-
-/**
  * use native json implementation because we had problems with utf8 linebreaks (\u2028 for example)
  * @see 0003356: Special characters in telephone numbers makes addressbook stop responding
  * @see 0009416: IE9: js error in (new) lead edit dialog

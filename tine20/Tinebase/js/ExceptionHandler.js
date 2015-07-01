@@ -60,12 +60,6 @@ Tine.Tinebase.ExceptionHandler = function() {
             return true;
         }
         
-        // really bad thing: fix exists only in close source version
-        // http://www.extjs.com/forum/showthread.php?t=76860
-        if (traceHtml.match(/swf\.setDataProvider/)) {
-            return true;
-        }
-        
         // let exception bubble to browser
         return false;
     };

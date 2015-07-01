@@ -4,7 +4,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -93,20 +93,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         }
         
         return a.join("\n");
-        
-        /*
-        getMailLink: function(email, felamimail) {
-                    if (! email) {
-                        return '';
-                    }
-                    
-                    var link = (felamimail) ? '#' : 'mailto:' + email;
-                    var id = Ext.id() + ':' + email;
-                    
-                    return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
-                        + Ext.util.Format.ellipsis(email, 18); + '</a>';
-                }
-         */
     },
     
     /**
@@ -146,25 +132,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             id: 'id'
         });
         
-        /*
-        this.defaultPanel = this.getDefaultPanel();
-        this.leadDetailsPanel = this.getLeadGridDetailsPanel();
-        
-        this.cardPanel = new Ext.Panel({
-            layout: 'card',
-            border: false,
-            activeItem: 0,
-            items: [
-                this.defaultPanel,
-                this.leadDetailsPanel
-            ]
-        });
-        
-        this.items = [
-            this.cardPanel
-        ];
-        */
-        
         this.supr().initComponent.call(this);
     },
     
@@ -173,210 +140,20 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * 
      * @return {Ext.ux.display.DisplayPanel}
      * 
-     * TODO add legend?
+     * TODO add something useful here
      */
     getDefaultInfosPanel: function() {
         if (! this.defaultInfosPanel) {
             this.defaultInfosPanel = new Ext.ux.display.DisplayPanel({
                 layout: 'fit',
                 border: false,
-                items: [{
-                    layout: 'hbox',
-                    border: false,
-                    defaults:{
-                        margins:'0 5 0 0',
-                        padding: 2,
-                        style: {
-                            cursor: 'crosshair'
-                        },
-                        flex: 1,
-                        layout: 'ux.display',
-                        border: false
-                    },
-                    layoutConfig: {
-                        padding:'5',
-                        align:'stretch'
-                    },
-                    items: [{
-                        layoutConfig: {
-                            background: 'border',
-                            declaration: this.app.i18n._('Leadstates')
-                        },
-                        items: [{
-                            store: this.leadstatePiechartStore,
-                            xtype: 'piechart',
-                            dataField: 'total',
-                            categoryField: 'label'
-                        }]
-                    }, {
-                        layoutConfig: {
-                            background: 'border',
-                            declaration: this.app.i18n._('Leadsources')
-                        },
-                        items: [{
-                            store: this.leadsourcePiechartStore,
-                            xtype: 'piechart',
-                            dataField: 'total',
-                            categoryField: 'label'
-                        }]
-                    }, {
-                        layoutConfig: {
-                            background: 'border',
-                            declaration: this.app.i18n._('Leadtypes')
-                        },
-                        items: [{
-                            store: this.leadtypePiechartStore,
-                            xtype: 'piechart',
-                            dataField: 'total',
-                            categoryField: 'label'
-                        }]
-                    }]
-                }]
-                /*
-                    fieldLabel: this.app.i18n._('Leadstates'), // ??
-                    xtype: 'piechart',
-                    store: this.leadstatePiechartStore,
-                    dataField: 'total',
-                    categoryField: 'label',
-                    backgroundColor: '#eeeeee' // ??
-                    //extra styles get applied to the chart defaults
-                    extraStyle: {
-                        legend: {
-                            //display: 'right',
-                            display: 'top',
-                            padding: 5,
-                            font: {
-                                family: 'Tahoma',
-                                size: 8
-                            }
-                        }
-                    } 
-                */               
+                items: []
             });
         }
         
         return this.defaultInfosPanel;
     },
-    
-    /**
-     * fill the piechart stores (calls loadPiechartStore() for all piecharts)
-     */
-    setPiechartStores: function(getFromRequest) {
-        
-        if (! this.getDefaultInfosPanel().isVisible()) {
-            return;
-        }
-        
-        if (getFromRequest === false) {
-            var data = this.getCountFromSelection();
-        } else {
-            var data = {
-                leadstate: this.grid.store.proxy.jsonReader.jsonData.totalleadstates,
-                leadsource: this.grid.store.proxy.jsonReader.jsonData.totalleadsources,
-                leadtype: this.grid.store.proxy.jsonReader.jsonData.totalleadtypes
-            };
-        }
-        
-        //console.log(data);
-        
-        var storesConfig = [{
-            store: this.leadstatePiechartStore,
-            data: data.leadstate,
-            definitionsStore: Tine.Crm.LeadState.getStore(),
-            definitionsLabel: 'leadstate'
-        }, {
-            store: this.leadsourcePiechartStore,
-            data: data.leadsource,
-            definitionsStore: Tine.Crm.LeadSource.getStore(),
-            definitionsLabel: 'leadsource'
-        }, {
-            store: this.leadtypePiechartStore,
-            data: data.leadtype,
-            definitionsStore: Tine.Crm.LeadType.getStore(),
-            definitionsLabel: 'leadtype'
-        }];
-        
-        for (var i = 0; i < storesConfig.length; i++) {
-            this.loadPiechartStore(storesConfig[i]);
-        }
-    },
-    
-    /**
-     * get leadstzate/source/type count for charts from selection
-     * 
-     * @return {}
-     */
-    getCountFromSelection: function() {
-      
-        var result = {
-            leadstate: {},
-            leadsource: {},
-            leadtype: {}
-        };
-        
-        var selectedRows = this.grid.getSelectionModel().getSelections();
-        for (var i = 0; i < selectedRows.length; ++i) {
-            //console.log(selectedRows[i]);
-            if (! result.leadstate[selectedRows[i].get('leadstate_id')]) {
-                result.leadstate[selectedRows[i].get('leadstate_id')] = 1;
-            } else {
-                result.leadstate[selectedRows[i].get('leadstate_id')]++;
-            }
 
-            if (! result.leadsource[selectedRows[i].get('leadsource_id')]) {
-                result.leadsource[selectedRows[i].get('leadsource_id')] = 1;
-            } else {
-                result.leadsource[selectedRows[i].get('leadsource_id')]++;
-            }
-
-            if (! result.leadtype[selectedRows[i].get('leadtype_id')]) {
-                result.leadtype[selectedRows[i].get('leadtype_id')] = 1;
-            } else {
-                result.leadtype[selectedRows[i].get('leadtype_id')]++;
-            }
-        }
-        
-        return result;
-    },
-    
-    /**
-     * load data into piechart store
-     * 
-     * @param {} config
-     */
-    loadPiechartStore: function(config) {
-        try {
-            if (config.store.getCount() > 0) {
-                config.store.removeAll();
-            }
-            
-            // get records from defintion / grid store request
-            var records = [];
-            if (config.data) {
-                config.definitionsStore.each(function(definition) {
-                    if (config.data[definition.id]) {
-                        records.push(new config.store.recordType({
-                            id: definition.id,
-                            label: definition.get(config.definitionsLabel),
-                            total: config.data[definition.id]
-                        }, definition.id));
-                    }
-                }, this);
-            }
-            
-            // add new records
-            if (records.length > 0) {
-                config.store.add(records);
-            }
-        } catch (e) {
-            //console.log('error while setting ' + config.definitionsLabel + ' piechart data');
-            //console.log(e);
-            
-            // some error with the piechart occurred, try it again ...
-            this.loadPiechartStore.defer(500, this, [config]);
-        }
-    },
-    
     /**
      * get panel for multi selection aggregates/information
      * 
@@ -397,7 +174,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
             this.singleRecordPanel = new Ext.ux.display.DisplayPanel ({
-                //xtype: 'displaypanel',
                 layout: 'fit',
                 border: false,
                 items: [{
@@ -532,7 +308,6 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        this.setPiechartStores.defer(500, this, [true]);
     },
     
     /**
@@ -542,6 +317,5 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @param {Mixed} body
      */
     showMulti: function(sm, body) {
-        this.setPiechartStores.defer(1000, this, [false]);
     }
 });
