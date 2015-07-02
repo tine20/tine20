@@ -30,16 +30,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * @private
      */
-    tbarItems: null,
     evalGrants: false,
     
     windowWidth: 900,
     windowHeight: 700,
-    
-    initComponent: function() {
-        this.tbarItems = [{xtype: 'widget-activitiesaddbutton'}];
-        Tine.Sales.PurchaseInvoiceEditDialog.superclass.initComponent.call(this);
-    },
+    displayNotes: true,
     
     /**
      * is form valid?
@@ -319,7 +314,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             name: 'discount',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Discount (%)'),
-            columnWidth: 1/4,
+            columnWidth: 1/4
             //listeners: {
             //    scope: this,
             //    spin: this.calcGross.createDelegate(this),
@@ -351,7 +346,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 name: 'number',
                                 fieldLabel: this.app.i18n._('Invoice Number'),
                                 columnWidth: 1/4,
-                                allowBlank: false,
+                                allowBlank: false
                                 //readOnly: ! Tine.Tinebase.common.hasRight('set_invoice_number', 'Sales'),
                                 //emptyText: this.app.i18n._('automatically set...')
                             }, {
@@ -376,7 +371,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'extuxclearabledatefield',
                                     name: 'overdue_at',
                                     fieldLabel: this.app.i18n._('Overdue date'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                             }], [
                                 this.priceNetField,
@@ -390,7 +385,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     name: 'discount_until',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Discount until'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 }
                             ]
@@ -411,13 +406,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'extuxclearabledatefield',
                                     name: 'dunned_at',
                                     fieldLabel: this.app.i18n._('Dun date'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                 }, {
                                     xtype: 'extuxclearabledatefield',
                                     name: 'payed_at',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Payed at'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 },
                                 // is_payed
@@ -495,12 +490,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             emptyText: this.app.i18n._('Enter description'),
                             requiredGrant: 'editGrant'
                         }]
-                    }),
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Sales',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'Sales',

@@ -32,6 +32,7 @@ Ext.namespace('Tine.Sales');
 Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 800,
     windowHeight: 600,
+    displayNotes: true,
 
     /**
      * autoset
@@ -65,18 +66,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.autoGenerateNumber = (Tine.Sales.registry.get('config').contractNumberGeneration.value == 'auto') ? true : false;
         this.validateNumber = Tine.Sales.registry.get('config').contractNumberValidation.value;
 
-        this.initToolbar();
-        
         Tine.Sales.ContractEditDialog.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * initializes the toolbar
-     */
-    initToolbar: function() {
-        var addNoteButton = new Tine.widgets.activities.ActivitiesAddButton({});
-
-        Tine.Sales.ContractEditDialog.superclass.initToolbar.call(this);
     },
     
     /**
@@ -348,11 +338,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, this.productGridPanel, new Tine.widgets.activities.ActivitiesTabPanel({
-                app: this.appName,
-                record_id: this.record.id,
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })]
+            }]
         };
     }
 });
