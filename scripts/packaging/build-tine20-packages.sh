@@ -11,11 +11,11 @@ BASEDIR=`readlink -f ./tine20build`
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Koriander"
+CODENAME="Elena"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
-GITBRANCH="2014.09"
+GITBRANCH="2015.07"
 PACKAGEDIR=""
 
 PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
