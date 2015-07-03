@@ -248,4 +248,68 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', '9');
         $this->setApplicationVersion('Calendar', '8.7');
     }
+
+    /**
+     * repair missing displaycontainer_id
+     */
+    public function update_7()
+    {
+        $allUser = $this->_db->query(
+            "SELECT " . $this->_db->quoteIdentifier('id') . "," .  $this->_db->quoteIdentifier('contact_id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "accounts") .
+            " WHERE " . $this->_db->quoteIdentifier("contact_id") . " IS NOT NULL"
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $contactUserMap = array();
+        foreach ($allUser as $id => $user) {
+            $contactUserMap[$user['contact_id']] = $user['id'];
+        }
+
+        // find all user/groupmember attendees with missing displaycontainer
+        $attendees = $this->_db->query(
+            "SELECT DISTINCT" . $this->_db->quoteIdentifier('user_type') . "," . $this->_db->quoteIdentifier('user_id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
+            " WHERE " . $this->_db->quoteIdentifier("displaycontainer_id") . " IS  NULL" .
+            "  AND " . $this->_db->quoteIdentifier("user_type")  . $this->_db->quoteInto(" IN (?)", array('user', 'groupmemeber')) .
+            "  AND " . $this->_db->quoteIdentifier("user_id")  . $this->_db->quoteInto(" IN (?)", array_keys($contactUserMap))
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        // find all user/groupmember attendees with missing displaycontainer
+        $attendees = array_merge($attendees, $this->_db->query(
+            "SELECT DISTINCT" . $this->_db->quoteIdentifier('user_type') . "," . $this->_db->quoteIdentifier('user_id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
+            " WHERE " . $this->_db->quoteIdentifier("displaycontainer_id") . " IS  NULL" .
+            "  AND " . $this->_db->quoteIdentifier("user_type")  . $this->_db->quoteInto(" IN (?)", array('resource'))
+        )->fetchAll(Zend_Db::FETCH_ASSOC));
+
+        $resources = $this->_db->query(
+            "SELECT " . $this->_db->quoteIdentifier('id') . "," . $this->_db->quoteIdentifier('container_id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_resources")
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $resourceContainerMap = array();
+        foreach($resources as $resource) {
+            $resourceContainerMap[$resource['id']] = $resource['container_id'];
+        }
+
+        foreach ($attendees as $attendee) {
+            //find out displaycontainer
+            if ($attendee['user_type'] != 'resource') {
+                $userAccountId = $contactUserMap[$attendee['user_id']];
+                $attendee['displaycontainerId'] = Calendar_Controller_Event::getDefaultDisplayContainerId($userAccountId);
+            } else {
+                $attendee['displaycontainerId'] = $resourceContainerMap[$attendee['user_id']];
+            }
+
+            // update displaycontainer
+            $this->_db->query(
+                "UPDATE" . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
+                " SET " . $this->_db->quoteIdentifier("displaycontainer_id") . " = " . $this->_db->quote($attendee['displaycontainerId']) .
+                " WHERE " . $this->_db->quoteIdentifier("user_type") . " = " . $this->_db->quote($attendee['user_type']) .
+                "  AND " . $this->_db->quoteIdentifier("user_id") . " = " . $this->_db->quote($attendee['user_id'])
+            );
+        }
+
+        $this->setApplicationVersion('Calendar', '8.8');
+    }
 }

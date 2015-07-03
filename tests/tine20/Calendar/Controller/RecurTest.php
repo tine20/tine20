@@ -677,15 +677,19 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
-        
-        $recurSet[5]->attendee->addRecord(new Calendar_Model_Attender(array(
+
+        $pwulf = new Calendar_Model_Attender(array(
             'user_type'   => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'     => $this->_getPersonasContacts('pwulf')->getId()
-        )));
+        ));
+        $recurSet[5]->attendee->addRecord($pwulf);
         
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
         
         $this->assertEquals(3, count($updatedPersistentEvent->attendee));
+
+        $persistentPwulf = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $pwulf);
+        $this->assertNotNull($persistentPwulf->displaycontainer_id);
     }
     
     /**
