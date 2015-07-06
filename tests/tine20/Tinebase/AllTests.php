@@ -46,6 +46,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_GroupTest');
         $suite->addTestSuite('Tinebase_ZendFilterTest');
         $suite->addTestSuite('Tinebase_ContainerTest');
+        $suite->addTestSuite('Tinebase_ContainerPersistentCacheTest');
         $suite->addTestSuite('Tinebase_ImageHelperTest');
         $suite->addTestSuite('Tinebase_ConfigTest');
         $suite->addTestSuite('Tinebase_CustomFieldTest');

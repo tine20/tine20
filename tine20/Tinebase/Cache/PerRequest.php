@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
+ *
+ * TODO refactor persistent cache visiblity handling as this is not quite easy to read/understand
  */
 
 /**
@@ -19,7 +21,14 @@
  */
 class Tinebase_Cache_PerRequest 
 {
+    /**
+     * persistent cache entry only visible for one user
+     */
     const VISIBILITY_PRIVATE = 'private';
+
+    /**
+     * persistent cache entry visible for all users
+     */
     const VISIBILITY_SHARED  = 'shared';
     
     /**
@@ -28,6 +37,20 @@ class Tinebase_Cache_PerRequest
      * @var array
      */
     protected $_inMemoryCache = array();
+    
+    /**
+     * use Zend_Cache as fallback
+     *
+     * @var bool
+     */
+    protected $_usePersistentCache = false;
+
+    /**
+     * methods which should use persistent caching (by class)
+     * 
+     * @var array
+     */
+    protected $_persistentCacheMethods = array();
     
     /**
      * verbose log
@@ -77,31 +100,61 @@ class Tinebase_Cache_PerRequest
     }
     
     /**
+     * set/get persistent cache usage
+     *
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function usePersistentCache()
+    {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        $currValue = $this->_usePersistentCache;
+        if ($value !== NULL) {
+            $this->_usePersistentCache = $value;
+        }
+        
+        return $currValue;
+    }
+
+    /**
+     * configure which methods should use persistent caching
+     * 
+     * @param string $class
+     * @param array $methods
+     */
+    public function setPersistentCacheMethods($class, $methods)
+    {
+        $this->_persistentCacheMethods[$class] = $methods;
+    }
+    
+    /**
      * save entry in cache
      * 
      * @param  string   $class
      * @param  string   $method
      * @param  string   $cacheId
      * @param  string   $value
-     * @param  string   $usePersistentCache
-     * @param  integer  $persistantCacheTTL
+     * @param  string|boolean   $usePersistentCache
+     * @param  integer|boolean  $persistentCacheTTL
      * @return Tinebase_Cache_PerRequest
      */
-    public function save($class, $method, $cacheId, $value, $usePersistentCache = false, $persistantCacheTTL = false)
+    public function save($class, $method, $cacheId, $value, $usePersistentCache = false, $persistentCacheTTL = false)
     {
         $cacheId = sha1($cacheId);
-        
+
+        if (! $usePersistentCache) {
+            $usePersistentCache = $this->_usePersistentCaching($class, $method);
+        }
+
         // store in in-memory cache
         $this->_inMemoryCache[$class][$method][$cacheId] = array('value' => $value, 'usePersistentCache' => $usePersistentCache);
-        
-        // store in persistent cache too?
+
         if ($usePersistentCache !== false) {
             $persistentCache = Tinebase_Core::getCache();
             
             if ($persistentCache instanceof Zend_Cache_Core) {
-                $persistentCacheId = $this->getPersistentCacheId($class, $method, $cacheId, $usePersistentCache);
-                
-                $persistentCache->save($value, $persistentCacheId, array(), $persistantCacheTTL);
+                $persistentCacheId = $this->getPersistentCacheId($class, $method, $cacheId, /* visibility = */ $usePersistentCache);
+                $persistentCache->save($value, $persistentCacheId, array(), $persistentCacheTTL);
             }
         }
         
@@ -135,23 +188,29 @@ class Tinebase_Cache_PerRequest
         ) {
             return $this->_inMemoryCache[$class][$method][$cacheId]['value'];
         };
-        
-        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ... not found in in-memory cache');
-        
-        // lookup in persistent cache too?
+
+        if ($this->_verboseLog) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in class cache');
+        }
+
+        if (! $usePersistentCache) {
+            $usePersistentCache = $this->_usePersistentCaching($class, $method);
+        }
+
         if ($usePersistentCache !== false) {
             $persistentCache = Tinebase_Core::getCache();
             
             if ($persistentCache instanceof Zend_Cache_Core) {
-                $persistentCacheId = $this->getPersistentCacheId($class, $method, $cacheId, $usePersistentCache);
-            
+                $persistentCacheId = $this->getPersistentCacheId($class, $method, $cacheId, /* visibility = */ $usePersistentCache);
                 $value = $persistentCache->load($persistentCacheId);
                 
                 // false means no value found or the value of the cache entry is false
                 // lets make an additional round trip to the cache to test for existence of cacheId
                 if ($value === false) {
                     if (!$persistentCache->test($persistentCacheId)) {
-                        //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ... not found in persistent cache');
+                        if ($this->_verboseLog) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ... not found in zend cache');
+                        }
                         
                         throw new Tinebase_Exception_NotFound('cacheId not found');
                     }
@@ -191,7 +250,6 @@ class Tinebase_Cache_PerRequest
                 }
             }
             $this->_inMemoryCache = array();
-            
             return $this;
         }
         
@@ -206,7 +264,6 @@ class Tinebase_Cache_PerRequest
             }
             
             $this->_inMemoryCache[$class] = array();
-            
             return $this;
         }
         
@@ -219,10 +276,9 @@ class Tinebase_Cache_PerRequest
             }
             
             $this->_inMemoryCache[$class][$method] = array();
-            
             return $this;
         }
-        
+
         // reset single cache entry
         if (isset($this->_inMemoryCache[$class]) &&
             isset($this->_inMemoryCache[$class][$method]) &&
@@ -234,7 +290,7 @@ class Tinebase_Cache_PerRequest
             
             unset($this->_inMemoryCache[$class][$method][$cacheId]);
         };
-        
+
         return $this;
     }
     
@@ -255,6 +311,30 @@ class Tinebase_Cache_PerRequest
     }
     
     /**
+     * check if persistent caching should be used for class/method
+     *
+     * -> returns false or visibility if persistent caching should be used
+     * 
+     * @param $class
+     * @param $method
+     * @return bool|string
+     *
+     * TODO allow to configure visibility in _persistentCacheMethods
+     */
+    protected function _usePersistentCaching($class, $method)
+    {
+        if ($this->_usePersistentCache) {
+            return self::VISIBILITY_PRIVATE;
+        }
+        
+        if (isset($this->_persistentCacheMethods[$class]) && in_array($method, $this->_persistentCacheMethods[$class])) {
+            return self::VISIBILITY_PRIVATE;
+        }
+        
+        return false;
+    }
+
+    /**
      * get cache id for persistent cache
      *
      * @param string $class
@@ -263,10 +343,10 @@ class Tinebase_Cache_PerRequest
      * @param string $visibilty
      * @return string
      */
-    public function getPersistentCacheId($class, $method, $cacheId, $visibilty)
+    public function getPersistentCacheId($class, $method, $cacheId, $visibilty = self::VISIBILITY_PRIVATE)
     {
         if (!in_array($visibilty, array(self::VISIBILITY_PRIVATE, self::VISIBILITY_SHARED))) {
-            throw new Tinebase_Exception_InvalidArgument();
+            $visibilty = self::VISIBILITY_PRIVATE;
         }
         
         $userId = null;
