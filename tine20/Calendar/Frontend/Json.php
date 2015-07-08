@@ -229,7 +229,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'default'               => ($defaultDefinition) ? $definitionConverter->fromTine20Model($defaultDefinition) : array(),
             );
         } catch (Exception $e) {
-            Tinebase_Exception::log($zce);
+            Tinebase_Exception::log($e);
             $result = array(
                 array(
                     'results'               => array(),

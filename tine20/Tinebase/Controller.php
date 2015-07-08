@@ -73,10 +73,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param   string                           $password
      * @param   Zend_Controller_Request_Abstract $request
      * @param   string                           $clientIdString
-     * @param   string                           $securitycode   the security code(captcha)
+     *
      * @return  bool
+     *
+     * TODO what happened to the $securitycode parameter?
+     *  ->  @param   string                           $securitycode   the security code(captcha)
      */
-    public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL, $securitycode = NULL)
+    public function login($loginName, $password, \Zend\Http\Request $request, $clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
@@ -91,7 +94,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
         
-        $this->_setSessionId($user, $accessLog, $clientIdString);
+        $this->_setSessionId($accessLog);
         
         $this->initUser($user);
         
@@ -158,20 +161,30 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($_accessLog->result == Tinebase_Auth::SUCCESS && $_user->accountStatus !== Tinebase_User::STATUS_ENABLED) {
             // is the account enabled?
             if ($_user->accountStatus == Tinebase_User::STATUS_DISABLED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' is disabled');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' Account: '. $_user->accountLoginName . ' is disabled');
                 $_accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
             }
             
             // is the account expired?
             else if ($_user->accountStatus == Tinebase_User::STATUS_EXPIRED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' password is expired');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' Account: '. $_user->accountLoginName . ' password is expired');
                 $_accessLog->result = Tinebase_Auth::FAILURE_PASSWORD_EXPIRED;
             }
             
             // too many login failures?
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
+            }
+
+            // Tinebase run permission
+            else if (! $_user->hasRight('Tinebase', Tinebase_Acl_Rights_Abstract::RUN)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . ' Account: '. $_user->accountLoginName . ' has not permissions for Tinebase');
+                $_accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
             }
         }
     }
@@ -604,10 +617,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * set session for current request
      * 
-     * @param Tinebase_Model_FullUser $user
      * @param Tinebase_Model_AccessLog $accessLog
      */
-    protected function _setSessionId(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog &$accessLog)
+    protected function _setSessionId(Tinebase_Model_AccessLog &$accessLog)
     {
         if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
             try {

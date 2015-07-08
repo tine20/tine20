@@ -445,7 +445,7 @@ class Tinebase_Relations
     }
     
     /**
-     * resolved app records and filles the related_record property with the corresponding record
+     * resolved app records and fills the related_record property with the corresponding record
      * 
      * NOTE: With this, READ ACL is implicitly checked as non readable records won't get retuned!
      * 
@@ -457,7 +457,7 @@ class Tinebase_Relations
      */
     protected function resolveAppRecords($_relations, $_ignoreACL = FALSE)
     {
-        // seperate relations by model
+        // separate relations by model
         $modelMap = array();
         foreach ($_relations as $relation) {
             if (!(isset($modelMap[$relation->related_model]) || array_key_exists($relation->related_model, $modelMap))) {
@@ -489,12 +489,12 @@ class Tinebase_Relations
                 }
             }
             
-            
             $getMultipleMethod = 'getMultiple';
             
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
+
                 $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
                 $records = $appController->$getMultipleMethod($relations->related_id);
             } else {
@@ -517,7 +517,10 @@ class Tinebase_Relations
                     continue;
                 }
             }
-            
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                " Resolving " . count($relations) . " relations");
+
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
                 $relationIndex  = $_relations->getIndexById($relation->getId());

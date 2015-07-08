@@ -1111,17 +1111,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $note = $_event->notes; unset($_event->notes);
                 $persistentExceptionEvent = $this->create($_event, $_checkBusyConflicts && $dtStartHasDiff);
                 
-                // we save attendee seperatly to preserve their attributes
+                // we save attendee separately to preserve their attributes
                 if ($attendees instanceof Tinebase_Record_RecordSet) {
-                    $attendees->cal_event_id = $persistentExceptionEvent->getId();
-                    
                     foreach($attendees as $attendee) {
-                        if (! $attendee->status_authkey) {
-                            // new invitations
-                            $attendee->status_authkey = Tinebase_Record_Abstract::generateUID();
-                        }
-                        $this->_backend->createAttendee($attendee);
-                        $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent, Tinebase_Model_ContainerContent::ACTION_CREATE);
+                        $this->_createAttender($attendee, $persistentExceptionEvent, true);
                     }
                 }
                 
@@ -1978,6 +1971,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         // apply defaults
         $attender->user_type         = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
+        $attender->cal_event_id      =  $event->getId();
         $calendar = ($calendar) ? $calendar : Tinebase_Container::getInstance()->getContainerById($event->container_id);
         
         $userAccountId = $attender->getUserAccountId();

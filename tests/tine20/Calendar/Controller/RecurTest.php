@@ -677,15 +677,49 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
-        
-        $recurSet[5]->attendee->addRecord(new Calendar_Model_Attender(array(
+
+        $pwulf = new Calendar_Model_Attender(array(
             'user_type'   => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'     => $this->_getPersonasContacts('pwulf')->getId()
-        )));
+        ));
+        $recurSet[5]->attendee->addRecord($pwulf);
         
         $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
         
         $this->assertEquals(3, count($updatedPersistentEvent->attendee));
+
+        $persistentPwulf = Calendar_Model_Attender::getAttendee($updatedPersistentEvent->attendee, $pwulf);
+        $this->assertNotNull($persistentPwulf->displaycontainer_id);
+    }
+    
+    /**
+     * Events don't show up in attendees personal calendar
+     */
+    public function testCreateRecurExceptionAllFollowingAttendeeAdd2()
+    {
+        $from = new Tinebase_DateTime('2014-04-01 00:00:00');
+        $until = new Tinebase_DateTime('2014-04-29 23:59:59');
+        
+        $persistentEvent = $this->_getDailyEvent(new Tinebase_DateTime('2014-04-03 09:00:00'));
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $recurSet[5]->attendee->addRecord(new Calendar_Model_Attender(array(
+                'user_type'   => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'     => $this->_getPersonasContacts('pwulf')->getId()
+        )));
+        
+        $updatedPersistentEvent = $this->_controller->createRecurException($recurSet[5], FALSE, TRUE);
+        $this->assertEquals(3, count($updatedPersistentEvent->attendee));
+        
+        $filter = new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id',             'operator' => 'equals', 'value' => $this->_personasDefaultCals['pwulf']->id),
+                array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
+        ));
+        
+        $events = $this->_controller->search($filter);
+        $this->assertEquals(1, count($events), 'event should be found, but is not');
     }
     
     /**
