@@ -80,7 +80,7 @@ class Tinebase_Auth
     const FAILURE_PASSWORD_EXPIRED      = -101;
     
     /**
-     * Failure due the account is temporarly blocked
+     * Failure due the account is temporarily blocked
      */
     const FAILURE_BLOCKED               = -102;
         
