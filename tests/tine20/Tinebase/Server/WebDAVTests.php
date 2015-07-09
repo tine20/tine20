@@ -8,9 +8,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
-// needed for bootstrap / autoloader
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'ServerTestHelper.php';
-
 /**
  * Test class for Tinebase_Server_WebDAV
  * 

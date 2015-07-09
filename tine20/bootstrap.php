@@ -26,7 +26,7 @@ if (extension_loaded('iconv')) {
 }
 
 // intialize composers autoloader
-require 'vendor/autoload.php';
+$autoloader = require __DIR__ . '/vendor/autoload.php';
 
 // initialize plugins
 require 'init_plugins.php';
