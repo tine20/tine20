@@ -32,7 +32,7 @@ if (PHP_VERSION_ID > 50600) {
 }
 
 // intialize composers autoloader
-require 'vendor/autoload.php';
+$autoloader = require __DIR__ . '/vendor/autoload.php';
 
 // initialize plugins
 require 'init_plugins.php';

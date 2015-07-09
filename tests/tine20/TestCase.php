@@ -11,7 +11,7 @@
 /**
  * Test helper
  */
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Backend_Sql
