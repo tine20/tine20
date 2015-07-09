@@ -291,7 +291,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName'),
+                getRecordId: (function() {
+                    return this.record.isRecurInstance() ? this.record.get('base_event_id') : this.record.get('id');
+                }).createDelegate(this)
             })]
         };
     },
@@ -323,7 +326,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     enableToggle: true
                 })));
-
+        
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
             bbar: [{
