@@ -1487,4 +1487,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $ownAttender = Calendar_Model_Attender::getOwnAttender($repairedEvent->attendee);
         $this->assertTrue($ownAttender !== null);
     }
+
+    /**
+     * @see 0011130: handle bad originator timzone in VCALENDAR converter
+     */
+    public function testBrokenTimezoneInEvent()
+    {
+        $event = $this->_getEvent(true);
+        $event->originator_tz = 'AWST';
+        try {
+            $event = $this->_controller->create($event);
+            $this->fail('should throw Tinebase_Exception_Record_Validation because of bad TZ: ' . print_r($event->toArray(), true));
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            $this->assertEquals('Bad Timezone: AWST', $terv->getMessage());
+        }
+    }
 }

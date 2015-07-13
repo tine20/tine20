@@ -758,4 +758,22 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         
         $this->assertEquals('Telko axel', $savedEvent->summary);
     }
+
+    /**
+     * @see 0011130: handle bad originator timzone in VCALENDAR converter
+     */
+    public function testBrokenTimezoneInTineEvent()
+    {
+        $event = $this->testConvertRepeatingAllDayDailyEventToTine20Model();
+        $event->originator_tz = 'AWST'; // Australian Western Standard Time
+
+        $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+
+        try {
+            $vevent = $this->_converter->fromTine20Model($event)->serialize();
+            $this->fail('should throw Tinebase_Exception_Record_Validation because of bad TZ');
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            $this->assertEquals('Bad Timezone: AWST', $terv->getMessage());
+        }
+    }
 }

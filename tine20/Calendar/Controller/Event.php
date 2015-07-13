@@ -1468,10 +1468,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _inspectEvent($_record)
     {
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->originator_tz = $_record->originator_tz ? $_record->originator_tz : Tinebase_Core::getUserTimezone();
         $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
-        
+
+        $this->_inspectOriginatorTZ($_record);
+
         if ($_record->hasExternalOrganizer()) {
             // assert calendarUser as attendee. This is important to keep the event in the loop via its displaycontianer(s)
             try {
@@ -1523,6 +1524,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Removing invalid rrule from recur exception: ' . $_record->rrule);
             $_record->rrule = NULL;
+        }
+    }
+
+    /**
+     * checks/sets originator timezone
+     *
+     * @param $record
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _inspectOriginatorTZ($record)
+    {
+        $record->originator_tz = $record->originator_tz ? $record->originator_tz : Tinebase_Core::getUserTimezone();
+
+        try {
+            new DateTimeZone($record->originator_tz);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $record->originator_tz);
         }
     }
     
