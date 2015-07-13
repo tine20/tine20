@@ -256,6 +256,16 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             
             $this->_currentBillingContract = NULL;
         }
+
+        if(! $contract->start_date) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                $failure = 'Could not create auto invoice for contract "' . $contract->number . '", because no start date is set!';
+                $this->_autoInvoiceIterationFailures[] = $failure;
+                Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $failure, Zend_Log::INFO);
+            }
+
+            $this->_currentBillingContract = NULL;
+        }
         
         return ($this->_currentBillingContract != NULL);
     }
