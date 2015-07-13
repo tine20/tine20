@@ -47,8 +47,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @return {Boolean}
      */
     isValid: function() {
-        var isValid = Tine.Sales.PurchaseInvoiceEditDialog.superclass.isValid.call(this);
-        return isValid;
+        return Tine.Sales.PurchaseInvoiceEditDialog.superclass.isValid.call(this);
     },
     
     /**
@@ -172,19 +171,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
-     * calculates price gross by price net and tax
-     */
-    calcGrossOld: function() {
-        var net = parseFloat(this.priceNetField.getValue());
-        var tax = parseFloat(this.salesTaxField.getValue());
-        var gross = net + (net * (tax / 100));
-        
-        var grosscent = Math.ceil(gross * 100);
-        
-        this.priceGrossField.setValue(grosscent / 100);
-    },
-    
-    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -299,6 +285,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
+            regex: /^[0-9]+\.?[0-9]*$/,
             listeners: {
                 scope: this,
                 spin: this.onUpdateSalesTax.createDelegate(this),
@@ -311,20 +298,16 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             decimalPrecision: 2,
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
-                alternateIncrementValue: 0.1,
                 minValue: 0,
                 maxValue: 100,
-                allowDecimals: 2
+                allowDecimals: 0
             }),
             name: 'discount',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Discount (%)'),
             columnWidth: 1/4,
-            //listeners: {
-            //    scope: this,
-            //    spin: this.calcGross.createDelegate(this),
-            //    blur: this.calcGross.createDelegate(this)
-            //}
+            value: 0,
+            regex: /^[0-9]+\.?[0-9]*$/
         });
         
         var items = [{
@@ -351,7 +334,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 name: 'number',
                                 fieldLabel: this.app.i18n._('Invoice Number'),
                                 columnWidth: 1/4,
-                                allowBlank: false,
+                                allowBlank: false
                                 //readOnly: ! Tine.Tinebase.common.hasRight('set_invoice_number', 'Sales'),
                                 //emptyText: this.app.i18n._('automatically set...')
                             }, {
@@ -376,7 +359,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'extuxclearabledatefield',
                                     name: 'overdue_at',
                                     fieldLabel: this.app.i18n._('Overdue date'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                             }], [
                                 this.priceNetField,
@@ -390,7 +373,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     name: 'discount_until',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Discount until'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 }
                             ]
@@ -411,13 +394,13 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     xtype: 'extuxclearabledatefield',
                                     name: 'dunned_at',
                                     fieldLabel: this.app.i18n._('Dun date'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                 }, {
                                     xtype: 'extuxclearabledatefield',
                                     name: 'payed_at',
                                     //allowBlank: false,
                                     fieldLabel: this.app.i18n._('Payed at'),
-                                    columnWidth: 1/4,
+                                    columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 },
                                 // is_payed
