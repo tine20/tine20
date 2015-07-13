@@ -81,8 +81,13 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if (empty($originatorTz)) {
             throw new Tinebase_Exception_Record_Validation('originator_tz needed for conversion to Sabre\VObject\Component');
         }
-        
-        $vcalendar->add(new Sabre_VObject_Component_VTimezone($originatorTz));
+
+        try {
+            $vcalendar->add(new Sabre_VObject_Component_VTimezone($originatorTz));
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            throw new Tinebase_Exception_Record_Validation('Bad Timezone: ' . $originatorTz);
+        }
         
         foreach ($_records as $_record) {
             $this->_convertCalendarModelEvent($vcalendar, $_record);

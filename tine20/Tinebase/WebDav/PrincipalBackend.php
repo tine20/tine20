@@ -347,7 +347,6 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         
                         return $result;
                     }
-                    
                     $result = array();
                     
                     $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('contactId', $contactId);
@@ -390,9 +389,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                             }
                         }
                     }
-                    
                     Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);
-                    $cache->save($result, $cacheId, array(), 60);
+                    $cache->save($result, $cacheId, array(), 60 * 3);
                 }
                 
                 break;
@@ -524,8 +522,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     )));
                 }
                 
-                #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                #    __METHOD__ . '::' . __LINE__ . ' path: ' . $prefixPath . ' properties: ' . print_r($filter->toArray(), true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                    ' path: ' . $prefixPath . ' properties: ' . print_r($filter->toArray(), true));
                 
                 $result = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, true);
                 

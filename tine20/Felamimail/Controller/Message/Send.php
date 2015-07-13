@@ -108,7 +108,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             list($originalMessageId, $partId) = explode('_', $originalMessageId);
         } else if (is_array($originalMessageId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Something strange happened. original_id is an array: ' . print_($originalMessageId, true));
+                    . ' Something strange happened. original_id is an array: ' . print_r($originalMessageId, true));
             return;
         } else {
             $partId = NULL;
