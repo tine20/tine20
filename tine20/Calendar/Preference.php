@@ -67,7 +67,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     const DEFAULTATTENDEE_STRATEGY = 'defaultAttendeeStrategy';
 
-
+    /**
+     * default set events to privat
+     */
+    const DEFAULT_EVENTS_RRIVATE = 'defaultSetEventsToPrivat';
+    
     /**
      * timeIncrement
      */
@@ -77,7 +81,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * @var string application
      */
     protected $_application = 'Calendar';
-
+        
     /**
      * get all possible application prefs
      *
@@ -97,7 +101,9 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
             self::DEFAULTATTENDEE_STRATEGY,
-            self::DEFAULT_TIMEINCREMENT
+            self::DEFAULT_TIMEINCREMENT,
+            self::DEFAULTATTENDEE_STRATEGY,
+            self::DEFAULT_EVENTS_RRIVATE
         );
         
         if ($cropDays) {
@@ -161,6 +167,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Time Increment'),
                 'description'   => $translate->_('Increment of event time steps'),
             ),
+            self::DEFAULT_EVENTS_RRIVATE => array(
+                'label'         => $translate->_('Default set Events to privat'),
+                'description'   => $translate->_('If enabled every created event is always privat.'),
+            )
         );
         
         return $prefDescriptions;
@@ -332,6 +342,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                             <label>60</label>
                             <value>60</value>
                         </option>
+                    </options>';
+                break;
+            case self::DEFAULT_EVENTS_RRIVATE:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
             default:
