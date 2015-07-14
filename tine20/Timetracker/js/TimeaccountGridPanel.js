@@ -190,5 +190,48 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 iconAlign: 'top'
             })
         ];
-    }    
+    },
+
+    /**
+     * add custom items to context menu
+     *
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = [
+            '-', {
+                text: Tine.Tinebase.appMgr.get('Timetracker').i18n._('Close Timeaccount'),
+                iconCls: 'action_edit',
+                scope: this,
+                disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
+                itemId: 'closeAccount',
+                handler: this.onCloseTimeaccount.createDelegate(this)
+            }
+        ];
+
+        return items;
+    },
+
+    /**
+     * Closes selected timeaccount
+     */
+    onCloseTimeaccount: function () {
+        var grid = this,
+            recordProxy = this.recordProxy,
+            selectionModel = grid.selectionModel;
+
+        Ext.each(selectionModel.getSelections(), function (record) {
+            recordProxy.loadRecord(record, {
+                success: function (record) {
+                    record.set('is_open', false);
+                    recordProxy.saveRecord(record, {
+                        success: function () {
+                            grid.store.reload();
+                            grid.store.remove(record);
+                        }
+                    });
+                }
+            });
+        });
+    }
 });
