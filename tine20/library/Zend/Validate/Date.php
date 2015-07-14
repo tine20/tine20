@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Validate
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Date.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -27,14 +27,13 @@ require_once 'Zend/Validate/Abstract.php';
 /**
  * @category   Zend
  * @package    Zend_Validate
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_Date extends Zend_Validate_Abstract
 {
     const INVALID        = 'dateInvalid';
-    const NOT_YYYY_MM_DD = 'dateNotYYYY-MM-DD';
-    const INVALID_DATE    = 'dateInvalidDate';
+    const INVALID_DATE   = 'dateInvalidDate';
     const FALSEFORMAT    = 'dateFalseFormat';
 
     /**
@@ -43,10 +42,16 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageTemplates = array(
-        self::INVALID        => "Invalid type given, value should be string, or integer",
-        self::NOT_YYYY_MM_DD => "'%value%' is not of the format YYYY-MM-DD",
+        self::INVALID        => "Invalid type given. String, integer, array or Zend_Date expected",
         self::INVALID_DATE   => "'%value%' does not appear to be a valid date",
-        self::FALSEFORMAT    => "'%value%' does not fit given date format"
+        self::FALSEFORMAT    => "'%value%' does not fit the date format '%format%'",
+    );
+
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'format'  => '_format'
     );
 
     /**
@@ -66,22 +71,35 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  string             $format OPTIONAL
-     * @param  string|Zend_Locale $locale OPTIONAL
-     * @return void
+     * @param string|array|Zend_Config $options OPTIONAL
      */
-    public function __construct($format = null, $locale = null)
+    public function __construct($options = array())
     {
-        $this->setFormat($format);
-        if ($locale === null) {
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        } else if (!is_array($options)) {
+            $options = func_get_args();
+            $temp['format'] = array_shift($options);
+            if (!empty($options)) {
+                $temp['locale'] = array_shift($options);
+            }
+
+            $options = $temp;
+        }
+
+        if (array_key_exists('format', $options)) {
+            $this->setFormat($options['format']);
+        }
+
+        if (!array_key_exists('locale', $options)) {
             require_once 'Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Locale')) {
-                $locale = Zend_Registry::get('Zend_Locale');
+                $options['locale'] = Zend_Registry::get('Zend_Locale');
             }
         }
 
-        if ($locale !== null) {
-            $this->setLocale($locale);
+        if (array_key_exists('locale', $options)) {
+            $this->setLocale($options['locale']);
         }
     }
 
@@ -137,19 +155,21 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
      * If optional $format or $locale is set the date format is checked
      * according to Zend_Date, see Zend_Date::isDate()
      *
-     * @param  string $value
+     * @param  string|array|Zend_Date $value
      * @return boolean
      */
     public function isValid($value)
     {
-        if (!is_string($value) && !is_int($value) && !is_float($value)) {
+        if (!is_string($value) && !is_int($value) && !is_float($value) &&
+            !is_array($value) && !($value instanceof Zend_Date)) {
             $this->_error(self::INVALID);
             return false;
         }
 
         $this->_setValue($value);
 
-        if (($this->_format !== null) or ($this->_locale !== null)) {
+        if (($this->_format !== null) || ($this->_locale !== null) || is_array($value) ||
+             $value instanceof Zend_Date) {
             require_once 'Zend/Date.php';
             if (!Zend_Date::isDate($value, $this->_format, $this->_locale)) {
                 if ($this->_checkFormat($value) === false) {
@@ -161,7 +181,9 @@ class Zend_Validate_Date extends Zend_Validate_Abstract
             }
         } else {
             if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-                $this->_error(self::NOT_YYYY_MM_DD);
+                $this->_format = 'yyyy-MM-dd';
+                $this->_error(self::FALSEFORMAT);
+                $this->_format = null;
                 return false;
             }
 

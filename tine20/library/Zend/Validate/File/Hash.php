@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Hash.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version   $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Validate/Abstract.php';
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_File_Hash extends Zend_Validate_Abstract
@@ -45,9 +45,9 @@ class Zend_Validate_File_Hash extends Zend_Validate_Abstract
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::DOES_NOT_MATCH => "The file '%value%' does not match the given hashes",
-        self::NOT_DETECTED   => "There was no hash detected for the given file",
-        self::NOT_FOUND      => "The file '%value%' could not be found"
+        self::DOES_NOT_MATCH => "File '%value%' does not match the given hashes",
+        self::NOT_DETECTED   => "A hash could not be evaluated for the given file",
+        self::NOT_FOUND      => "File '%value%' is not readable or does not exist"
     );
 
     /**
@@ -61,7 +61,7 @@ class Zend_Validate_File_Hash extends Zend_Validate_Abstract
      * Sets validator options
      *
      * @param  string|array $options
-     * @return void
+     * @throws Zend_Validate_Exception
      */
     public function __construct($options)
     {
@@ -75,7 +75,6 @@ class Zend_Validate_File_Hash extends Zend_Validate_Abstract
         }
 
         if (1 < func_num_args()) {
-            trigger_error('Multiple constructor options are deprecated in favor of a single options array', E_USER_NOTICE);
             $options['algorithm'] = func_get_arg(1);
         }
 
@@ -110,6 +109,7 @@ class Zend_Validate_File_Hash extends Zend_Validate_Abstract
      * Adds the hash for one or multiple files
      *
      * @param  string|array $options
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_File_Hash Provides a fluent interface
      */
     public function addHash($options)

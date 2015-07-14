@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Upload.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version   $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Validate/Abstract.php';
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_File_Upload extends Zend_Validate_Abstract
@@ -53,16 +53,16 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::INI_SIZE       => "The file '%value%' exceeds the defined ini size",
-        self::FORM_SIZE      => "The file '%value%' exceeds the defined form size",
-        self::PARTIAL        => "The file '%value%' was only partially uploaded",
-        self::NO_FILE        => "The file '%value%' was not uploaded",
-        self::NO_TMP_DIR     => "No temporary directory was found for the file '%value%'",
-        self::CANT_WRITE     => "The file '%value%' can't be written",
-        self::EXTENSION      => "The extension returned an error while uploading the file '%value%'",
-        self::ATTACK         => "The file '%value%' was illegal uploaded, possible attack",
-        self::FILE_NOT_FOUND => "The file '%value%' was not found",
-        self::UNKNOWN        => "Unknown error while uploading the file '%value%'"
+        self::INI_SIZE       => "File '%value%' exceeds the defined ini size",
+        self::FORM_SIZE      => "File '%value%' exceeds the defined form size",
+        self::PARTIAL        => "File '%value%' was only partially uploaded",
+        self::NO_FILE        => "File '%value%' was not uploaded",
+        self::NO_TMP_DIR     => "No temporary directory was found for file '%value%'",
+        self::CANT_WRITE     => "File '%value%' can't be written",
+        self::EXTENSION      => "A PHP extension returned an error while uploading the file '%value%'",
+        self::ATTACK         => "File '%value%' was illegally uploaded. This could be a possible attack",
+        self::FILE_NOT_FOUND => "File '%value%' was not found",
+        self::UNKNOWN        => "Unknown error while uploading file '%value%'"
     );
 
     /**
@@ -78,18 +78,21 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
      * If no files are given the $_FILES array will be used automatically.
      * NOTE: This validator will only work with HTTP POST uploads!
      *
-     * @param  array $files Array of files in syntax of Zend_File_Transfer
-     * @return void
+     * @param array|Zend_Config $files Array of files in syntax of Zend_File_Transfer
      */
     public function __construct($files = array())
     {
+        if ($files instanceof Zend_Config) {
+            $files = $files->toArray();
+        }
+
         $this->setFiles($files);
     }
 
     /**
      * Returns the array of set files
      *
-     * @param  string $files (Optional) The file to return in detail
+     * @param  string $file (Optional) The file to return in detail
      * @return array
      * @throws Zend_Validate_Exception If file is not found
      */
@@ -132,6 +135,11 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
             $this->_files = $files;
         }
 
+        // see ZF-10738
+        if (is_null($this->_files)) {
+            $this->_files = array();
+        }
+
         foreach($this->_files as $file => $content) {
             if (!isset($content['error'])) {
                 unset($this->_files[$file]);
@@ -148,10 +156,12 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
      *
      * @param  string $value Single file to check for upload errors, when giving null the $_FILES array
      *                       from initialization will be used
+     * @param  string|null   $file
      * @return boolean
      */
     public function isValid($value, $file = null)
     {
+        $this->_messages = null;
         if (array_key_exists($value, $this->_files)) {
             $files[$value] = $this->_files[$value];
         } else {
@@ -175,40 +185,40 @@ class Zend_Validate_File_Upload extends Zend_Validate_Abstract
             switch($content['error']) {
                 case 0:
                     if (!is_uploaded_file($content['tmp_name'])) {
-                        $this->_throw($file, self::ATTACK);
+                        $this->_throw($content, self::ATTACK);
                     }
                     break;
 
                 case 1:
-                    $this->_throw($file, self::INI_SIZE);
+                    $this->_throw($content, self::INI_SIZE);
                     break;
 
                 case 2:
-                    $this->_throw($file, self::FORM_SIZE);
+                    $this->_throw($content, self::FORM_SIZE);
                     break;
 
                 case 3:
-                    $this->_throw($file, self::PARTIAL);
+                    $this->_throw($content, self::PARTIAL);
                     break;
 
                 case 4:
-                    $this->_throw($file, self::NO_FILE);
+                    $this->_throw($content, self::NO_FILE);
                     break;
 
                 case 6:
-                    $this->_throw($file, self::NO_TMP_DIR);
+                    $this->_throw($content, self::NO_TMP_DIR);
                     break;
 
                 case 7:
-                    $this->_throw($file, self::CANT_WRITE);
+                    $this->_throw($content, self::CANT_WRITE);
                     break;
 
                 case 8:
-                    $this->_throw($file, self::EXTENSION);
+                    $this->_throw($content, self::EXTENSION);
                     break;
 
                 default:
-                    $this->_throw($file, self::UNKNOWN);
+                    $this->_throw($content, self::UNKNOWN);
                     break;
             }
         }

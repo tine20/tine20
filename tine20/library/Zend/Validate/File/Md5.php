@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Md5.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version   $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Validate/File/Hash.php';
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
@@ -45,9 +45,9 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::DOES_NOT_MATCH => "The file '%value%' does not match the given md5 hashes",
-        self::NOT_DETECTED   => "There was no md5 hash detected for the given file",
-        self::NOT_FOUND      => "The file '%value%' could not be found"
+        self::DOES_NOT_MATCH => "File '%value%' does not match the given md5 hashes",
+        self::NOT_DETECTED   => "A md5 hash could not be evaluated for the given file",
+        self::NOT_FOUND      => "File '%value%' is not readable or does not exist",
     );
 
     /**
@@ -63,7 +63,8 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * $hash is the hash we accept for the file $file
      *
      * @param  string|array $options
-     * @return void
+     * @throws Zend_Validate_Exception
+     * @return Zend_Validate_File_Md5
      */
     public function __construct($options)
     {
@@ -93,7 +94,6 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * Sets the md5 hash for one or multiple files
      *
      * @param  string|array $options
-     * @param  string       $algorithm (Deprecated) Algorithm to use, fixed to md5
      * @return Zend_Validate_File_Hash Provides a fluent interface
      */
     public function setHash($options)
@@ -123,7 +123,6 @@ class Zend_Validate_File_Md5 extends Zend_Validate_File_Hash
      * Adds the md5 hash for one or multiple files
      *
      * @param  string|array $options
-     * @param  string       $algorithm (Depreciated) Algorithm to use, fixed to md5
      * @return Zend_Validate_File_Hash Provides a fluent interface
      */
     public function addHash($options)
