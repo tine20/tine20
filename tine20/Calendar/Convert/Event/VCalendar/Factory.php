@@ -24,6 +24,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
     const CLIENT_TINE        = 'tine';
+    const CLIENT_DAVDROID    = 'davdroid';
     
     /**
      * cache parsed user-agent strings
@@ -64,6 +65,10 @@ class Calendar_Convert_Event_VCalendar_Factory
  
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Calendar_Convert_Event_VCalendar_EMClient($_version);
+                break;
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID:
+                return new Calendar_Convert_Event_VCalendar_DavDroid($_version);
                 break;
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE:
@@ -112,6 +117,10 @@ class Calendar_Convert_Event_VCalendar_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE;
             $version = $matches['version'];
 
+        // DavDroid
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE;
+            $version = $matches['version'];
 
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
