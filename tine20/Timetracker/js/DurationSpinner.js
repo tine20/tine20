@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -30,56 +30,73 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
         });
         this.format = this.strategy.format;
     },
-    
+
     setValue: function(value) {
         if(! value || value == '00:00') {
             value = this.emptyOnZero ? '' : '00:00';
         } else if(! value.toString().match(/:/)) {
-            var time = new Date(0);
-            var hours = Math.floor(value / 60);
-            var minutes = value - hours * 60;
-            
-            time.setHours(hours);
-            time.setMinutes(minutes);
-            
-            value = Ext.util.Format.date(time, this.format);
+            var hours = Math.floor(value / 60),
+                minutes = value - hours * 60;
+
+            if (hours < 10) {
+               hours = '0' + hours;
+            }
+
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+
+            if (minutes !== 0) {
+                value = hours + ':' + minutes;
+            } else {
+                value = hours + ':00';
+            }
         }
         
         Tine.Timetracker.DurationSpinner.superclass.setValue.call(this, value);
     },
     
     validateValue: function(value) {
-        var time = Date.parseDate(value, this.format);
-        return Ext.isDate(time);
+        if (value.search(/:/) != -1) {
+            var parts = value.split(':'),
+                hours = parseInt(parts[0]),
+                minutes = parseInt(parts[1]);
+
+            return 'NaN' != hours && 'NaN' != minutes;
+        }
     },
-    
+
     getValue: function() {
         var value = Tine.Timetracker.DurationSpinner.superclass.getValue.call(this);
         value = value.replace(',', '.');
-        
+
         if(value && typeof value == 'string') {
             if (value.search(/:/) != -1) {
-                var parts = value.split(':');
-                parts[0] = parts[0].length == 1 ? '0' + parts[0] : parts[0];
-                parts[1] = parts[1].length == 1 ? '0' + parts[1] : parts[1];
-                value = parts.join(':');
-                
-                var time = Date.parseDate(value, this.format);
-                if (! time) {
-                    this.markInvalid(_('Not a valid time'));
-                    return;
+                var parts = value.split(':'),
+                    hours = parseInt(parts[0]),
+                    minutes = parseInt(parts[1]);
+
+                if (0 > hours) {
+                    hours = 0;
+                }
+
+                if (0 > minutes) {
+                    minutes = 0;
+                }
+
+                if (minutes > 0) {
+                    value = hours * 60 + minutes;
                 } else {
-                    value = time.getHours() * 60 + time.getMinutes();
+                    value = hours * 60;
                 }
             } else if (value > 0) {
-                if (value < 24) {
                     value = value * 60;
-                }
             } else {
                 this.markInvalid(_('Not a valid time'));
                 return;
             }
         }
+
         this.setValue(value);
         return value;
     }
