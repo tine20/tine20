@@ -30,7 +30,7 @@ class Tinebase_Helper
     /**
      * Generates a hash from keys(optional) and values of an array
      *
-     * @param  array | string  $value
+     * @param  array | string  $values
      * @param  boolean         $includeKeys
      * @return string
      */
@@ -48,13 +48,14 @@ class Tinebase_Helper
         
         return hash_final($ctx);
     }
-    
+
     /**
      * converts string with M or K to bytes integer
      * - for example: 50M -> 52428800
      *
      * @param mixed $_value
-     * @return integer
+     * @return int
+     * @throws Exception
      */
     public static function convertToBytes($_value)
     {
