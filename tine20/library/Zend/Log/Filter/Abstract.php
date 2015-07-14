@@ -14,48 +14,47 @@
  *
  * @category   Zend
  * @package    Zend_Log
- * @subpackage Formatter
+ * @subpackage Writer
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
-/** Zend_Log_Formatter_Abstract */
-require_once 'Zend/Log/Formatter/Abstract.php';
+/** @see Zend_Log_Filter_Interface */
+require_once 'Zend/Log/Filter/Interface.php';
+
+/** @see Zend_Log_FactoryInterface */
+require_once 'Zend/Log/FactoryInterface.php';
 
 /**
  * @category   Zend
  * @package    Zend_Log
- * @subpackage Formatter
+ * @subpackage Filter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
-class Zend_Log_Formatter_Firebug extends Zend_Log_Formatter_Abstract
+abstract class Zend_Log_Filter_Abstract
+    implements Zend_Log_Filter_Interface, Zend_Log_FactoryInterface
 {
     /**
-	 * Factory for Zend_Log_Formatter_Firebug classe
-	 *
-     * @param array|Zend_Config $options useless
-	 * @return Zend_Log_Formatter_Firebug
+     * Validate and optionally convert the config to array
+     *
+     * @param  array|Zend_Config $config Zend_Config or Array
+     * @return array
+     * @throws Zend_Log_Exception
      */
-    public static function factory($options)
+    static protected function _parseConfig($config)
     {
-        return new self;
-    }
+        if ($config instanceof Zend_Config) {
+            $config = $config->toArray();
+        }
 
-    /**
-     * This method formats the event for the firebug writer.
-     *
-     * The default is to just send the message parameter, but through
-     * extension of this class and calling the
-     * {@see Zend_Log_Writer_Firebug::setFormatter()} method you can
-     * pass as much of the event data as you are interested in.
-     *
-     * @param  array    $event    event data
-     * @return mixed              event message
-     */
-    public function format($event)
-    {
-        return $event['message'];
+        if (!is_array($config)) {
+            require_once 'Zend/Log/Exception.php';
+            throw new Zend_Log_Exception('Configuration must be an array or instance of Zend_Config');
+        }
+
+        return $config;
     }
 }

@@ -15,23 +15,23 @@
  * @category   Zend
  * @package    Zend_Log
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Suppress.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /** Zend_Log_Filter_Interface */
-require_once 'Zend/Log/Filter/Interface.php';
+require_once 'Zend/Log/Filter/Abstract.php';
 
 /**
  * @category   Zend
  * @package    Zend_Log
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Suppress.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
-class Zend_Log_Filter_Suppress implements Zend_Log_Filter_Interface
+class Zend_Log_Filter_Suppress extends Zend_Log_Filter_Abstract
 {
     /**
      * @var boolean
@@ -63,4 +63,15 @@ class Zend_Log_Filter_Suppress implements Zend_Log_Filter_Interface
         return $this->_accept;
     }
 
+    /**
+     * Create a new instance of Zend_Log_Filter_Suppress
+     *
+     * @param  array|Zend_Config $config
+     * @return Zend_Log_Filter_Suppress
+     * @throws Zend_Log_Exception
+     */
+    static public function factory($config)
+    {
+        return new self();
+    }
 }

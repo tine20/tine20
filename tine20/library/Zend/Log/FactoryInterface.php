@@ -14,48 +14,25 @@
  *
  * @category   Zend
  * @package    Zend_Log
- * @subpackage Formatter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
 
-/** Zend_Log_Formatter_Abstract */
-require_once 'Zend/Log/Formatter/Abstract.php';
-
 /**
  * @category   Zend
  * @package    Zend_Log
- * @subpackage Formatter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
-class Zend_Log_Formatter_Firebug extends Zend_Log_Formatter_Abstract
+interface Zend_Log_FactoryInterface
 {
     /**
-	 * Factory for Zend_Log_Formatter_Firebug classe
-	 *
-     * @param array|Zend_Config $options useless
-	 * @return Zend_Log_Formatter_Firebug
-     */
-    public static function factory($options)
-    {
-        return new self;
-    }
-
-    /**
-     * This method formats the event for the firebug writer.
+     * Construct a Zend_Log driver
      *
-     * The default is to just send the message parameter, but through
-     * extension of this class and calling the
-     * {@see Zend_Log_Writer_Firebug::setFormatter()} method you can
-     * pass as much of the event data as you are interested in.
-     *
-     * @param  array    $event    event data
-     * @return mixed              event message
+     * @param  array|Zend_Config $config
+     * @return Zend_Log_FactoryInterface
      */
-    public function format($event)
-    {
-        return $event['message'];
-    }
+    static public function factory($config);
 }
