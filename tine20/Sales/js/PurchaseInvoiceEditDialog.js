@@ -42,8 +42,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
      * @return {Boolean}
      */
     isValid: function() {
-        var isValid = Tine.Sales.PurchaseInvoiceEditDialog.superclass.isValid.call(this);
-        return isValid;
+        return Tine.Sales.PurchaseInvoiceEditDialog.superclass.isValid.call(this);
     },
     
     /**
@@ -167,19 +166,6 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
-     * calculates price gross by price net and tax
-     */
-    calcGrossOld: function() {
-        var net = parseFloat(this.priceNetField.getValue());
-        var tax = parseFloat(this.salesTaxField.getValue());
-        var gross = net + (net * (tax / 100));
-        
-        var grosscent = Math.ceil(gross * 100);
-        
-        this.priceGrossField.setValue(grosscent / 100);
-    },
-    
-    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initalisation is done.
@@ -294,6 +280,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
+            regex: /^[0-9]+\.?[0-9]*$/,
             listeners: {
                 scope: this,
                 spin: this.onUpdateSalesTax.createDelegate(this),
@@ -306,20 +293,16 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             decimalPrecision: 2,
             strategy: new Ext.ux.form.Spinner.NumberStrategy({
                 incrementValue : 1,
-                alternateIncrementValue: 0.1,
                 minValue: 0,
                 maxValue: 100,
-                allowDecimals: 2
+                allowDecimals: 0
             }),
             name: 'discount',
             decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
             fieldLabel: this.app.i18n._('Discount (%)'),
-            columnWidth: 1/4
-            //listeners: {
-            //    scope: this,
-            //    spin: this.calcGross.createDelegate(this),
-            //    blur: this.calcGross.createDelegate(this)
-            //}
+            columnWidth: 1/4,
+            value: 0,
+            regex: /^[0-9]+\.?[0-9]*$/
         });
         
         var items = [{
