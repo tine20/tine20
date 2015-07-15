@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Schema
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: ActiveDirectory.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -40,7 +40,7 @@ require_once 'Zend/Ldap/Node/Schema/ObjectClass/ActiveDirectory.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Schema
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Ldap_Node_Schema_ActiveDirectory extends Zend_Ldap_Node_Schema
@@ -62,8 +62,8 @@ class Zend_Ldap_Node_Schema_ActiveDirectory extends Zend_Ldap_Node_Schema
      * Parses the schema
      *
      * @param  Zend_Ldap_Dn $dn
-     * @param  Zend_Ldap $ldap
-     * @return Zend_Ldap_Node_Schema *Provides a fluid interface*
+     * @param  Zend_Ldap    $ldap
+     * @return Zend_Ldap_Node_Schema Provides a fluent interface
      */
     protected function _parseSchema(Zend_Ldap_Dn $dn, Zend_Ldap $ldap)
     {

@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Schema
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: OpenLdap.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -40,7 +40,7 @@ require_once 'Zend/Ldap/Node/Schema/ObjectClass/OpenLdap.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Schema
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
@@ -80,8 +80,8 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
      * Parses the schema
      *
      * @param  Zend_Ldap_Dn $dn
-     * @param  Zend_Ldap $ldap
-     * @return Zend_Ldap_Node_Schema *Provides a fluid interface*
+     * @param  Zend_Ldap    $ldap
+     * @return Zend_Ldap_Node_Schema Provides a fluent interface
      */
     protected function _parseSchema(Zend_Ldap_Dn $dn, Zend_Ldap $ldap)
     {
@@ -172,7 +172,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
      * Parses an attributeType value
      *
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     protected function _parseAttributeType($value)
@@ -271,7 +271,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
      * Resolves inheritance in objectClasses and attributes
      *
      * @param Zend_Ldap_Node_Schema_Item $node
-     * @param array $repository
+     * @param array                      $repository
      */
     protected function _resolveInheritance(Zend_Ldap_Node_Schema_Item $node, array $repository)
     {
@@ -306,7 +306,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
      * Parses an ldapSyntaxes value
      *
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     protected function _parseLdapSyntax($value)
@@ -341,7 +341,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
      * Parses an matchingRules value
      *
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     protected function _parseMatchingRule($value)
@@ -381,7 +381,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
      * Parses an matchingRuleUse value
      *
-     * @param string $value
+     * @param  string $value
      * @return array
      */
     protected function _parseMatchingRuleUse($value)
@@ -427,8 +427,8 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
      * Parse the given tokens into a data structure
      *
-     * @param array $data
-     * @param array $tokens
+     * @param  array $data
+     * @param  array $tokens
      * @return void
      */
     protected function _parseLdapSchemaSyntax(array &$data, array $tokens)
@@ -475,7 +475,7 @@ class Zend_Ldap_Node_Schema_OpenLdap extends Zend_Ldap_Node_Schema
     /**
     * Tokenizes the given value into an array
     *
-    * @param string $value string
+    * @param  string $value
     * @return array tokens
     */
     protected function _tokenizeString($value)

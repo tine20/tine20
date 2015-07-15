@@ -15,12 +15,12 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: String.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
-/** 
+/**
  * @see Zend_Ldap_Filter_Abstract
  */
 require_once 'Zend/Ldap/Filter/Abstract.php';
@@ -31,10 +31,10 @@ require_once 'Zend/Ldap/Filter/Abstract.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Ldap_Filter_String extends Zend_Ldap_Filter_Abstract  
+class Zend_Ldap_Filter_String extends Zend_Ldap_Filter_Abstract
 {
     /**
      * The filter.
@@ -42,7 +42,7 @@ class Zend_Ldap_Filter_String extends Zend_Ldap_Filter_Abstract
      * @var string
      */
     protected $_filter;
-    
+
     /**
      * Creates a Zend_Ldap_Filter_String.
      *
@@ -52,7 +52,7 @@ class Zend_Ldap_Filter_String extends Zend_Ldap_Filter_Abstract
     {
         $this->_filter = $filter;
     }
-    
+
     /**
      * Returns a string representation of the filter.
      *
