@@ -318,6 +318,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * @see Tinebase_Application_Json_Abstract
      * 
      * @return mixed array 'variable name' => 'data'
+     *
+     * TODO DRY: most of this already is part of Tinebase_Frontend_Json::_getAnonymousRegistryData
      */
     public function getAllRegistryData()
     {
@@ -340,6 +342,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'packageString' => TINE20SETUP_PACKAGESTRING,
                 'releaseTime'   => TINE20SETUP_RELEASETIME
             ),
+            'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
+            'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
         );
         
         return $registryData;
