@@ -15,23 +15,23 @@
  * @category   Zend
  * @package    Zend_Log
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Message.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
-/** Zend_Log_Filter_Interface */
-require_once 'Zend/Log/Filter/Interface.php';
+/** Zend_Log_Filter_Abstract */
+require_once 'Zend/Log/Filter/Abstract.php';
 
 /**
  * @category   Zend
  * @package    Zend_Log
  * @subpackage Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Message.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
-class Zend_Log_Filter_Message implements Zend_Log_Filter_Interface
+class Zend_Log_Filter_Message extends Zend_Log_Filter_Abstract
 {
     /**
      * @var string
@@ -42,6 +42,7 @@ class Zend_Log_Filter_Message implements Zend_Log_Filter_Interface
      * Filter out any log messages not matching $regexp.
      *
      * @param  string  $regexp     Regular expression to test the log message
+     * @return void
      * @throws Zend_Log_Exception
      */
     public function __construct($regexp)
@@ -54,6 +55,24 @@ class Zend_Log_Filter_Message implements Zend_Log_Filter_Interface
     }
 
     /**
+     * Create a new instance of Zend_Log_Filter_Message
+     *
+     * @param  array|Zend_Config $config
+     * @return Zend_Log_Filter_Message
+     */
+    static public function factory($config)
+    {
+        $config = self::_parseConfig($config);
+        $config = array_merge(array(
+            'regexp' => null
+        ), $config);
+
+        return new self(
+            $config['regexp']
+        );
+    }
+
+    /**
      * Returns TRUE to accept the message, FALSE to block it.
      *
      * @param  array    $event    event data
@@ -63,5 +82,4 @@ class Zend_Log_Filter_Message implements Zend_Log_Filter_Interface
     {
         return preg_match($this->_regexp, $event['message']) > 0;
     }
-
 }

@@ -14,9 +14,9 @@
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Exists.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version   $Id$
  */
 
 /**
@@ -29,7 +29,7 @@ require_once 'Zend/Validate/Abstract.php';
  *
  * @category  Zend
  * @package   Zend_Validate
- * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_File_Exists extends Zend_Validate_Abstract
@@ -43,7 +43,7 @@ class Zend_Validate_File_Exists extends Zend_Validate_Abstract
      * @var array Error message templates
      */
     protected $_messageTemplates = array(
-        self::DOES_NOT_EXIST => "The file '%value%' does not exist"
+        self::DOES_NOT_EXIST => "File '%value%' does not exist",
     );
 
     /**
@@ -62,8 +62,8 @@ class Zend_Validate_File_Exists extends Zend_Validate_Abstract
     /**
      * Sets validator options
      *
-     * @param  string|array $directory
-     * @return void
+     * @param  string|array|Zend_Config $directory
+     * @throws Zend_Validate_Exception
      */
     public function __construct($directory = array())
     {
@@ -113,6 +113,7 @@ class Zend_Validate_File_Exists extends Zend_Validate_Abstract
      * Adds the file directory which will be checked
      *
      * @param  string|array $directory The directory to add for validation
+     * @throws Zend_Validate_Exception
      * @return Zend_Validate_File_Extension Provides a fluent interface
      */
     public function addDirectory($directory)

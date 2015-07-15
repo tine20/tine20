@@ -114,6 +114,16 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     const PRECONDITION_EVENTEXISTS  = 'EVENTEXISTS';
     
     /**
+     * precondition that event is not deleted
+     */
+    const PRECONDITION_NOTDELETED     = 'NOTDELETED';
+
+    /**
+     * precondition that event is not cancelled
+     */
+    const PRECONDITION_NOTCANCELLED     = 'NOTCANCELLED';
+
+    /**
      * (non-PHPdoc)
      * @see Tinebase_Record_Abstract::_identifier
      */
@@ -190,12 +200,13 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     * get existing event record
     *
     * @param boolean $_refetch the event
+    * @param boolean $_getDeleted
     * @return Calendar_Model_Event
     */
-    public function getExistingEvent($_refetch = FALSE)
+    public function getExistingEvent($_refetch = FALSE, $_getDeleted = FALSE)
     {
         if ($_refetch || ! $this->existing_event instanceof Calendar_Model_Event) {
-            $this->existing_event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($this->getEvent());
+            $this->existing_event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($this->getEvent(), $_getDeleted);
             Calendar_Model_Attender::resolveAttendee($this->existing_event['attendee']);
         }
         

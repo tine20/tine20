@@ -1171,13 +1171,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * (non-PHPdoc)
      * @see Tinebase_Controller_Record_Abstract::get()
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         if (preg_match('/^fakeid/', $_id)) {
             // get base event when trying to fetch a non-persistent recur instance
             return $this->getRecurBaseEvent(new Calendar_Model_Event(array('uid' => substr(str_replace('fakeid', '', $_id), 0, 40))), TRUE);
         } else {
-            return parent::get($_id, $_containerId, $_getRelatedData);
+            return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
         }
     }
     
@@ -1217,17 +1217,28 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     * @todo also add more criteria for lookup (recurid, ...)
     * @todo sophisticated reccurring event handling
     */
-    public function lookupExistingEvent($_event)
+    public function lookupExistingEvent($_event, $_getDeleted = FALSE)
     {
-        $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
+        $filters = new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $_event->uid),
             //array('field' => 'recurid', 'operator' => 'isnull', 'value' => NULL)
-        )));
-        
-        $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
-    
+        ));
+        if ($_getDeleted) {
+            $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
+            $filters->addFilter($deletedFilter);
+        }
+        $events = $this->_backend->search($filters);
+
+        // NOTE: cancelled attendees from ext. organizers don't have read grant
+        // find a better way to check grants
+        if (!$_getDeleted) {
+            $events = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE);
+        }
+        $event = $events->getFirstRecord();
+
         // make sure we have a 'fully featured' event
-        return ($event !== NULL) ? $this->get($event->getId()) : NULL;
+        return ($event !== NULL) ? $this->get($event->getId(), NULL, TRUE, $_getDeleted) : NULL;
+
     }
     
     /**

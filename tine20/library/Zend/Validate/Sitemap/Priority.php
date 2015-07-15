@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage Sitemap
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Priority.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -33,7 +33,7 @@ require_once 'Zend/Validate/Abstract.php';
  * @category   Zend
  * @package    Zend_Validate
  * @subpackage Sitemap
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_Sitemap_Priority extends Zend_Validate_Abstract
@@ -42,7 +42,8 @@ class Zend_Validate_Sitemap_Priority extends Zend_Validate_Abstract
      * Validation key for not valid
      *
      */
-    const NOT_VALID = 'invalidSitemapPriority';
+    const NOT_VALID = 'sitemapPriorityNotValid';
+    const INVALID   = 'sitemapPriorityInvalid';
 
     /**
      * Validation failure message template definitions
@@ -51,6 +52,7 @@ class Zend_Validate_Sitemap_Priority extends Zend_Validate_Abstract
      */
     protected $_messageTemplates = array(
         self::NOT_VALID => "'%value%' is not a valid sitemap priority",
+        self::INVALID   => "Invalid type given. Numeric string, integer or float expected",
     );
 
     /**
@@ -63,13 +65,18 @@ class Zend_Validate_Sitemap_Priority extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $this->_setValue($value);
-
         if (!is_numeric($value)) {
+            $this->_error(self::INVALID);
             return false;
         }
 
-        $value = (float)$value;
-        return $value >= 0 && $value <= 1;
+        $this->_setValue($value);
+        $value = (float) $value;
+        if ($value < 0 || $value > 1) {
+            $this->_error(self::NOT_VALID);
+            return false;
+        }
+
+        return true;
     }
 }

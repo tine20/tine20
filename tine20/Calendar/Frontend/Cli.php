@@ -98,6 +98,8 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function exportICS($_opts)
     {
+        Tinebase_Core::set('HOSTNAME', 'localhost');
+        
         $opts = $_opts->getRemainingArgs();
         $container_id = $opts[0];
         $filter = new Calendar_Model_EventFilter(array(

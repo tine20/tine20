@@ -425,10 +425,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_id
      * @param int $_containerId
      * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      */
-    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE)
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
     {
         $this->_checkRight('get');
         
@@ -445,7 +446,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
         } else {
-            $record = $this->_backend->get($_id);
+            $record = $this->_backend->get($_id, $_getDeleted);
             $this->_checkGrant($record, 'get');
             
             // get related data only on request (defaults to TRUE)

@@ -280,9 +280,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * (non-PHPdoc)
      * @see Calendar_Controller_Event::lookupExistingEvent()
      */
-    public function lookupExistingEvent($_event)
+    public function lookupExistingEvent($_event, $_getDeleted = FALSE)
     {
-        $event = $this->_eventController->lookupExistingEvent($_event);
+        $event = $this->_eventController->lookupExistingEvent($_event, $_getDeleted);
 
         if ($event) {
             $this->_resolveData($event);
@@ -558,6 +558,26 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         return $events;
     }
     
+    /**
+     * Delete Attendees from event
+     *
+     * @param Calendar_Model_Event $_event
+     * @param Calendar_Model_Event $_iMIP
+     *
+     */
+    public function deleteAttendees($_event, $_iMIP) {
+
+        foreach ($_iMIP->attendee as $attendeeToDelete) {
+            $attenderToRemove = Calendar_Model_Attender::getAttendee($_event->attendee, $attendeeToDelete);
+            if ($attenderToRemove) {
+                $_event->attendee->removeRecord($attenderToRemove);
+            }
+        }
+        $_event->last_modified_time = $_iMIP->last_modified_time;
+        $this->update($_event);
+        return $_event;
+    }
+
     /**
      * get and resolve all alarms of given record(s)
      * 
