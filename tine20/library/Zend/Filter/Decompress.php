@@ -20,28 +20,30 @@
  */
 
 /**
- * Encryption interface
+ * @see Zend_Filter_Compress
+ */
+require_once 'Zend/Filter/Compress.php';
+
+/**
+ * Decompresses a given string
  *
  * @category   Zend
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-interface Zend_Filter_Encrypt_Interface
+class Zend_Filter_Decompress extends Zend_Filter_Compress
 {
     /**
-     * Encrypts $value with the defined settings
+     * Defined by Zend_Filter_Interface
      *
-     * @param  string $value Data to encrypt
-     * @return string The encrypted data
-     */
-    public function encrypt($value);
-
-    /**
-     * Decrypts $value with the defined settings
+     * Decompresses the content $value with the defined settings
      *
-     * @param  string $value Data to decrypt
-     * @return string The decrypted data
+     * @param  string $value Content to decompress
+     * @return string The decompressed content
      */
-    public function decrypt($value);
+    public function filter($value)
+    {
+        return $this->getAdapter()->decompress($value);
+    }
 }

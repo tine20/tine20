@@ -14,9 +14,9 @@
  *
  * @category   Zend
  * @package    Zend_Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Alnum.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -31,7 +31,7 @@ require_once 'Zend/Locale.php';
 /**
  * @category   Zend
  * @package    Zend_Filter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Filter_Alnum implements Zend_Filter_Interface
@@ -73,6 +73,16 @@ class Zend_Filter_Alnum implements Zend_Filter_Interface
      */
     public function __construct($allowWhiteSpace = false)
     {
+        if ($allowWhiteSpace instanceof Zend_Config) {
+            $allowWhiteSpace = $allowWhiteSpace->toArray();
+        } else if (is_array($allowWhiteSpace)) {
+            if (array_key_exists('allowwhitespace', $allowWhiteSpace)) {
+                $allowWhiteSpace = $allowWhiteSpace['allowwhitespace'];
+            } else {
+                $allowWhiteSpace = false;
+            }
+        }
+
         $this->allowWhiteSpace = (boolean) $allowWhiteSpace;
         if (null === self::$_unicodeEnabled) {
             self::$_unicodeEnabled = (@preg_match('/\pL/u', 'a')) ? true : false;
