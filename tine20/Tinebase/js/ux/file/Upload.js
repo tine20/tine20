@@ -223,44 +223,31 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         ) && this.file) {
      
             // free browse plugin
-//            this.getInput();
+            this.getInput();
             
             if (this.isHtml5ChunkedUpload()) {
-
-//                if(this.fileSize > this.maxAllowedFileSize) { // admin confgured max file size (nothing technically)
-//                    this.createFileRecord(true);
-//                    this.fileRecord.beginEdit();
-//                    this.fileRecord.set('status', 'failure');
-//                    this.fileRecord.endEdit();
-//                    this.fireEvent('uploadfailure', this, this.fileRecord);
-//                    return this.fileRecord;
-//                }
-                
-                // calculate optimal maxChunkSize       
+                // calculate optimal maxChunkSize
                 // TODO: own method for chunked upload
                 
                 var chunkMax = this.maxChunkSize;
                 var chunkMin = this.minChunkSize;
                 var actualChunkSize = this.maxChunkSize;
 
-                if(this.fileSize > 5 * chunkMax) {
+                if (this.fileSize > 5 * chunkMax) {
                     actualChunkSize = chunkMax;
-                }
-                else {
+                } else {
                     actualChunkSize = Math.max(chunkMin, this.fileSize / 5);
                 }       
                 this.maxChunkSize = actualChunkSize;
                 
-                if(Tine.Tinebase.uploadManager && Tine.Tinebase.uploadManager.isBusy()) {
+                if (Tine.Tinebase.uploadManager && Tine.Tinebase.uploadManager.isBusy()) {
                     this.createFileRecord(true);
                     this.setQueued(true);
-                }
-                else {
+                } else {
                     this.createFileRecord(false);
                     this.fireEvent('uploadstart', this);
                     this.fireEvent('update', 'uploadstart', this, this.fileRecord);
                     this.html5ChunkedUpload();
-                    
                 }
                 
                 return this.fileRecord;
