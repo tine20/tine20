@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_TempFileTest
  */
-class Tinebase_TempFileTest extends PHPUnit_Framework_TestCase
+class Tinebase_TempFileTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -32,19 +32,8 @@ class Tinebase_TempFileTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $this->_instance = Tinebase_TempFile::getInstance();
-    }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::setUp();
     }
     
     /**
@@ -59,5 +48,25 @@ class Tinebase_TempFileTest extends PHPUnit_Framework_TestCase
         
         $tempFile = $this->_instance->createTempFile($path, $filename);
         $this->assertEquals("_tüt", $tempFile->name);
+    }
+
+    /**
+     * @see 0011156: big files can't be uploaded
+     */
+    public function testCreateTempFileWithBigSize()
+    {
+        $size = (double) (3.8 * 1024.0 * 1024.0 * 1024.0);
+        $tempFile = new Tinebase_Model_TempFile(array(
+            'id'          => '123',
+            'session_id'  => 'abc',
+            'time'        => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'path'        => '/tmp/tmpfile',
+            'name'        => 'tmpfile',
+            'type'        => 'unknown',
+            'error'       => 0,
+            'size'        => $size, // 3.8 GB
+        ));
+        $createdTempFile = $this->_instance->create($tempFile);
+        $this->assertEquals(4080218931, $createdTempFile->size);
     }
 }
