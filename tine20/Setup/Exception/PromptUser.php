@@ -18,7 +18,7 @@
  */
 class Setup_Exception_PromptUser extends Setup_Exception
 {
-    public function __construct($_message, $_code) {
-        parent::__construct('This update could be run from cli only!', 901);
+    public function __construct($_message, $_code = 901) {
+        parent::__construct('This update could be run from cli only!', $_code);
     }
 }

@@ -68,7 +68,9 @@ class Sales_Backend_Contract extends Tinebase_Backend_Sql_Abstract
         
         $date->addMonth(7);
         $date->subSecond(1);
-        $sql .= ' AND '   . $db->quoteInto($db->quoteIdentifier('start_date') . ' <= ?', $date);
+        $sql .= ' AND ' . $db->quoteInto($db->quoteIdentifier('start_date') . ' <= ?', $date)
+              . ' AND ' . $db->quoteIdentifier('start_date') . ' IS NOT NULL'
+              . ' AND ' . $db->quoteIdentifier('start_date') . ' <> "0000-00-00 00:00:00"';
     
         return array_keys($db->fetchAssoc($sql));
     }

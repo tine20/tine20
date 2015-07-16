@@ -87,11 +87,12 @@ class Setup_Update_Abstract
                 ->where(    $this->_db->quoteIdentifier('name') . ' = ?', $_tableName)
                 ->orwhere(  $this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName);
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' ' . $select->__toString());
+
         $stmt = $select->query();
         $rows = $stmt->fetchAll();
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
+
         $result = (count($rows) > 0 && isset($rows[0]['version'])) ? $rows[0]['version'] : 0;
         
         return $result;
@@ -233,7 +234,7 @@ class Setup_Update_Abstract
                 try {
                     if ($userFound === FALSE) {
                         echo PHP_EOL;
-                        echo 'The user "' . $user . '" could not be found!' . PHP_EOL . PHP_EOL;
+                        echo 'The user could not be found!' . PHP_EOL . PHP_EOL;
                     }
                     
                     $user = Tinebase_Server_Cli::promptInput('Please enter an admin username to perform updates ');
@@ -255,7 +256,7 @@ class Setup_Update_Abstract
             } while (! $userFound);
             
         } else {
-            throw new Setup_Exception_PromptUser();
+            throw new Setup_Exception_PromptUser('no CLI call');
         }
         
         return $userAccount;
