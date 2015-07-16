@@ -231,33 +231,38 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             }
             $this->_addColumnStyle('co0', $defaultStyles);
         }
-        
-        foreach($this->_config->columns->column as $column) {
 
-            if ($column->style) {
-                if (! $defaultStyles) {
-                    $msg = 'If a column contains style, the "defaultColumnStyle" has to be defined!';
-                    
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' ' . $msg . ' Definition Name: ' . (string) $this->_config->name);
+        if (isset($this->_config->columns)) {
+            foreach ($this->_config->columns->column as $column) {
+
+                if ($column->style) {
+                    if (!$defaultStyles) {
+                        $msg = 'If a column contains style, the "defaultColumnStyle" has to be defined!';
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $msg . ' Definition Name: ' . (string)$this->_config->name);
+                        }
+
+                        throw new Tinebase_Exception_UnexpectedValue($msg);
                     }
-                    
-                    throw new Tinebase_Exception_UnexpectedValue($msg);
+
+                    $columnStyles = array();
+                    foreach ($column->style as $name => $style) {
+                        $columnStyles[$name] = (string)$style;
+                    }
+
+                    $this->_addColumnStyle($classPrefix . $index, $columnStyles);
+
+                    $this->_columnStyles[$index] = $classPrefix . $index;
+                } else {
+                    $this->_columnStyles[$index] = 'co0';
                 }
-                
-                $columnStyles = array();
-                foreach($column->style as $name => $style) {
-                    $columnStyles[$name] = (string) $style;
-                }
-                
-                $this->_addColumnStyle($classPrefix . $index, $columnStyles);
-                
-                $this->_columnStyles[$index] = $classPrefix . $index;
-            } else {
-                $this->_columnStyles[$index] = 'co0';
+
+                $index++;
             }
-            
-            $index++;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                ' No column config found');
         }
         
         foreach($this->_columnStyles as $key => $style) {
