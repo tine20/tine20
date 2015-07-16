@@ -15,11 +15,12 @@
  * @category   Zend
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  * 
  * NOTE: overwritten to always clear the cache even if a CLEANING_MODE_TAG_* mode is used (-> @see clean())
+ * @todo check if still needed / clearing by tag should not be used any more
  */
 
 
@@ -37,7 +38,7 @@ require_once 'Zend/Cache/Backend.php';
 /**
  * @package    Zend_Cache
  * @subpackage Zend_Cache_Backend
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Cache_Backend_ExtendedInterface
@@ -135,25 +136,25 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
         }
         $this->_memcache = new Memcache;
         foreach ($this->_options['servers'] as $server) {
-            if (!(isset($server['port']) || array_key_exists('port', $server))) {
+            if (!array_key_exists('port', $server)) {
                 $server['port'] = self::DEFAULT_PORT;
             }
-            if (!(isset($server['persistent']) || array_key_exists('persistent', $server))) {
+            if (!array_key_exists('persistent', $server)) {
                 $server['persistent'] = self::DEFAULT_PERSISTENT;
             }
-            if (!(isset($server['weight']) || array_key_exists('weight', $server))) {
+            if (!array_key_exists('weight', $server)) {
                 $server['weight'] = self::DEFAULT_WEIGHT;
             }
-            if (!(isset($server['timeout']) || array_key_exists('timeout', $server))) {
+            if (!array_key_exists('timeout', $server)) {
                 $server['timeout'] = self::DEFAULT_TIMEOUT;
             }
-            if (!(isset($server['retry_interval']) || array_key_exists('retry_interval', $server))) {
+            if (!array_key_exists('retry_interval', $server)) {
                 $server['retry_interval'] = self::DEFAULT_RETRY_INTERVAL;
             }
-            if (!(isset($server['status']) || array_key_exists('status', $server))) {
+            if (!array_key_exists('status', $server)) {
                 $server['status'] = self::DEFAULT_STATUS;
             }
-            if (!(isset($server['failure_callback']) || array_key_exists('failure_callback', $server))) {
+            if (!array_key_exists('failure_callback', $server)) {
                 $server['failure_callback'] = self::DEFAULT_FAILURE_CALLBACK;
             }
             if ($this->_options['compatibility']) {
@@ -180,7 +181,7 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
     public function load($id, $doNotTestCacheValidity = false)
     {
         $tmp = $this->_memcache->get($id);
-        if (is_array($tmp)) {
+        if (is_array($tmp) && isset($tmp[0])) {
             return $tmp[0];
         }
         return false;
@@ -221,13 +222,14 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
         } else {
             $flag = 0;
         }
-        // #ZF-5702 : we try add() first becase set() seems to be slower
-        if (!($result = $this->_memcache->add($id, array($data, time(), $lifetime), $flag, $lifetime))) {
-            $result = $this->_memcache->set($id, array($data, time(), $lifetime), $flag, $lifetime);
-        }
+
+        // ZF-8856: using set because add needs a second request if item already exists
+        $result = @$this->_memcache->set($id, array($data, time(), $lifetime), $flag, $lifetime);
+
         if (count($tags) > 0) {
-            $this->_log("Zend_Cache_Backend_Memcached::save() : tags are unsupported by the Memcached backend");
+            $this->_log(self::TAGS_UNSUPPORTED_BY_SAVE_OF_MEMCACHED_BACKEND);
         }
+
         return $result;
     }
 
@@ -239,13 +241,11 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
      */
     public function remove($id)
     {
-        return $this->_memcache->delete($id);
+        return $this->_memcache->delete($id, 0);
     }
 
     /**
      * Clean some cache records
-     * 
-     * NOTE: we always clear the cache even if a CLEANING_MODE_TAG_* mode is used
      *
      * Available modes are :
      * 'all' (default)  => remove all cache entries ($tags is not used)
@@ -266,6 +266,7 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
             case Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
             case Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
                 $this->_log(self::TAGS_UNSUPPORTED_BY_CLEAN_OF_MEMCACHED_BACKEND);
+                // fall through / clear all entries
             case Zend_Cache::CLEANING_MODE_ALL:
                 return $this->_memcache->flush();
                 break;
@@ -383,25 +384,31 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
     {
         $mems = $this->_memcache->getExtendedStats();
 
-        $memSize = 0;
-        $memUsed = 0;
+        $memSize = null;
+        $memUsed = null;
         foreach ($mems as $key => $mem) {
             if ($mem === false) {
-                Zend_Cache::throwException('can\'t get stat from ' . $key);
-            } else {
-                $eachSize = $mem['limit_maxbytes'];
-                if ($eachSize == 0) {
-                    Zend_Cache::throwException('can\'t get memory size from ' . $key);
-                }
-
-                $eachUsed = $mem['bytes'];
-                if ($eachUsed > $eachSize) {
-                    $eachUsed = $eachSize;
-                }
-
-                $memSize += $eachSize;
-                $memUsed += $eachUsed;
+                $this->_log('can\'t get stat from ' . $key);
+                continue;
             }
+
+            $eachSize = $mem['limit_maxbytes'];
+
+            /**
+             * Couchbase 1.x uses 'mem_used' instead of 'bytes'
+             * @see https://www.couchbase.com/issues/browse/MB-3466
+             */
+            $eachUsed = isset($mem['bytes']) ? $mem['bytes'] : $mem['mem_used'];
+            if ($eachUsed > $eachSize) {
+                $eachUsed = $eachSize;
+            }
+
+            $memSize += $eachSize;
+            $memUsed += $eachUsed;
+        }
+
+        if ($memSize === null || $memUsed === null) {
+            Zend_Cache::throwException('Can\'t get filling percentage');
         }
 
         return ((int) (100. * ($memUsed / $memSize)));

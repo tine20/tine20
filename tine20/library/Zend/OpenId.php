@@ -15,9 +15,9 @@
  *
  * @category   Zend
  * @package    Zend_OpenId
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: OpenId.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -35,7 +35,7 @@ require_once "Zend/Controller/Response/Abstract.php";
  *
  * @category   Zend
  * @package    Zend_OpenId
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_OpenId
@@ -124,7 +124,11 @@ class Zend_OpenId
         }
 
         $url .= $port;
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+        if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) { 
+            // IIS with Microsoft Rewrite Module
+            $url .= $_SERVER['HTTP_X_ORIGINAL_URL'];
+        } elseif (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+            // IIS with ISAPI_Rewrite 
             $url .= $_SERVER['HTTP_X_REWRITE_URL'];
         } elseif (isset($_SERVER['REQUEST_URI'])) {
             $query = strpos($_SERVER['REQUEST_URI'], '?');
@@ -285,7 +289,7 @@ class Zend_OpenId
         $port = $reg[4];
         $path = $reg[5];
         $query = $reg[6];
-        $fragment = $reg[7]; /* strip it */
+        $fragment = $reg[7]; /* strip it */ /* ZF-4358 Fragment retained under OpenID 2.0 */
 
         if (empty($scheme) || empty($host)) {
             return false;
@@ -350,7 +354,8 @@ class Zend_OpenId
             . $host
             . (empty($port) ? '' : (':' . $port))
             . $path
-            . $query;
+            . $query
+            . $fragment;
         return true;
     }
 
@@ -524,7 +529,7 @@ class Zend_OpenId
 //        require_once "Zend/Crypt/Hmac.php";
 //        return Zend_Crypt_Hmac::compute($secret, $macFunc, $data, Zend_Crypt_Hmac::BINARY);
         if (function_exists('hash_hmac')) {
-            return hash_hmac($macFunc, $data, $secret, 1);
+            return hash_hmac($macFunc, $data, $secret, true);
         } else {
             if (Zend_OpenId::strlen($secret) > 64) {
                 $secret = self::digest($macFunc, $secret);
@@ -585,7 +590,7 @@ class Zend_OpenId
         } else if (extension_loaded('bcmath')) {
             $cmp = bccomp($bn, 0);
             if ($cmp == 0) {
-                return (chr(0));
+                return "\0";
             } else if ($cmp < 0) {
                 require_once "Zend/OpenId/Exception.php";
                 throw new Zend_OpenId_Exception(
@@ -598,7 +603,7 @@ class Zend_OpenId
                 $bn = bcdiv($bn, 256);
             }
             if (ord($bin[0]) > 127) {
-                $bin = chr(0) . $bin;
+                $bin = "\0" . $bin;
             }
             return $bin;
         }
@@ -693,7 +698,7 @@ class Zend_OpenId
         if (function_exists('openssl_dh_compute_key')) {
             $ret = openssl_dh_compute_key($pub_key, $dh);
             if (ord($ret[0]) > 127) {
-                $ret = chr(0) . $ret;
+                $ret = "\0" . $ret;
             }
             return $ret;
         } else if (extension_loaded('gmp')) {
@@ -729,7 +734,7 @@ class Zend_OpenId
     static public function btwoc($str)
     {
         if (ord($str[0]) > 127) {
-            return chr(0) . $str;
+            return "\0" . $str;
         }
         return $str;
     }
