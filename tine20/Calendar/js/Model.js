@@ -168,6 +168,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',
+        interval = prefs.get('interval') || 15,
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
         westPanel = mainScreen.getWestPanel(),
