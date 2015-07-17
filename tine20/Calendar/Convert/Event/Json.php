@@ -91,7 +91,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         $events = $_events instanceof Tinebase_Record_RecordSet || is_array($_events) ? $_events : array($_events);
     
         foreach ($events as &$event) {
-            if ($event->organizer
+            if ($event->organizer && $event->organizer instanceof Tinebase_Record_Abstract
                 && (!$event->organizer->has('account_id') || !$event->organizer->account_id)
                 && $event->{Tinebase_Model_Grants::GRANT_EDIT} 
             ) {
