@@ -372,7 +372,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
                     } else if (event.get('is_all_day_event') && !targetDate.is_all_day_event) {
                         // draged from allDay -> droped to scroller will be resetted to hone hour
-                        event.set('dtend', targetDate.add(Date.HOUR, 1));
+                        event.set('dtend', targetDate.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')));
                     } else {
                         event.set('dtend', targetDate.add(Date.MINUTE, originalDuration));
                     }
@@ -891,7 +891,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             this.fireEvent('dblclick', event, e);
         } else if (dtStart && !this.editing) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var dtend = dtStart.add(Date.HOUR, 1);
+            var dtend = dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration'));
             if (dtStart.is_all_day_event) {
                 dtend = dtend.add(Date.HOUR, 23).add(Date.SECOND, -1);
             }
@@ -955,7 +955,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, 2*this.timeGranularity/2),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;

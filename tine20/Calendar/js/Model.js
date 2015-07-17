@@ -80,6 +80,11 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * @type Boolean
      */
     outOfFilter: false,
+
+    /**
+     * default duration for new events
+     */
+    defaultEventDuration: 60,
     
     /**
      * returns displaycontainer with orignialcontainer as fallback
@@ -179,7 +184,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     var data = {
         summary: '',
         dtstart: dtstart,
-        dtend: dtstart.add(Date.HOUR, 1),
+        dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,

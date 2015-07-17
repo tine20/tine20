@@ -1241,7 +1241,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
-                event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
+                event.set('dtend', defaults.dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')));
             }
         }
         
