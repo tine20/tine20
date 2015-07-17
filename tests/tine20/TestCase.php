@@ -142,7 +142,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
         }
-        
+
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
         }
@@ -367,7 +367,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * 
      * @return Object
      * @throws Exception
-     * 
+     *
      * @todo fix ide object class detection for completions
      */
     protected function _getUit()
@@ -732,18 +732,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $name
      * @param string $model
      * @param string $type
+     * @param array $definition
      * @return Tinebase_Model_CustomField_Config
      *
      * TODO use a single array as param that is merged with the defaults
      */
-    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string')
+    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact', $type = 'string', $definition = null)
     {
-        $application = substr($model, 0, strpos($model, '_'));
-        $cfData = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
-            'name'              => $name,
-            'model'             => $model,
-            'definition'        => array(
+        if ($definition === null) {
+            $definition = array(
                 'label' => Tinebase_Record_Abstract::generateUID(),
                 'type'  => $type,
                 'recordConfig' => $type === 'record'
@@ -755,7 +752,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                     'group'  => 'unittest',
                     'order'  => 100,
                 )
-            )
+            );
+        }
+
+        $application = substr($model, 0, strpos($model, '_'));
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'name'              => $name,
+            'model'             => $model,
+            'definition'        => $definition,
         ));
 
         try {
