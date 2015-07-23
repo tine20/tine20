@@ -33,38 +33,42 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
      * @var string
      */
     protected $_backendType = Tinebase_Config::SMTP;
+
+    /**
+     * keep the addresses of unmanaged domains
+     * 
+     * @var array
+     */
+    protected $_unmanagedMailAdresses = array();
     
     /**
     * Returns a user object with raw data from ldap
     *
-    * @param array $_userData
-    * @param string $_accountClass
+    * @param Tinebase_Model_User $_user
+    * @param array $_ldapEntry
     * @return Tinebase_Record_Abstract
     */
     protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
-        if ($this->_backendType == Tinebase_Config::SMTP) {
-            $accountArray = array(
-                'emailAliases'     => array()
-            );
-        } else {
-            $accountArray = array();
-        }
+        $smtpUser = parent::_ldap2User($_user, $_ldapEntry);
+        $emailAliases = array();
+        $allowedDomains = explode(',', Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP)['secondarydomains']);
         
-        if (isset($_ldapEntry['mail'])) {
-            if (is_array($_ldapEntry['mail'])) {
-                $email = array_shift($_ldapEntry['mail']);
-                $accountArray['emailAliases'] = $_ldapEntry['mail'];
-            } else {
-                $email = $_ldapEntry['mail'];
+        if (isset($_ldapEntry['mail'])) foreach ($_ldapEntry['mail'] as $mail) {
+            if (isset($_user['accountEmailAddress']) && ($_user['accountEmailAddress'] != $mail)) {
+                in_array(substr(strrchr($mail, "@"), 1), $allowedDomains)
+                    ? $emailAliases[] = $mail
+                    : $this->_unmanagedMailAdresses[] = $mail;
             }
-            $accountArray['emailAddress'] = $email;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountArray, true));
+        $smtpUser['emailAliases'] = $emailAliases;
+        $smtpUser['emailForwardOnly'] = null;
+        $smtpUser['emailForwards'] = array();
         
-        $_user->smtpUser  = new Tinebase_Model_EmailUser($accountArray);
-        $_user->emailUser = Tinebase_EmailUser::merge(isset($_user->emailUser) ? $_user->emailUser : null, $_user->smtpUser);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($smtpUser, true));
+        
+        return $smtpUser;
     }
     
     /**
@@ -81,9 +85,12 @@ class Tinebase_EmailUser_Smtp_LdapMailSchema extends Tinebase_EmailUser_Ldap imp
         } else {
             $mail = $_user->accountEmailAddress;
         }
+        $mail = array_merge($mail, $this->_unmanagedMailAdresses);
         $_ldapData['mail'] = $mail;
         
         parent::_user2Ldap($_user, $_ldapData, $_ldapEntry);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
     }
 }
+
