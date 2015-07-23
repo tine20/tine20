@@ -76,14 +76,14 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
-        
+        $smtpConfig = ($this->_manageSmtpEmailUser) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
-            'primarydomain'                 => ((isset($smtpConfig['primarydomain']) || array_key_exists('primarydomain', $smtpConfig)))     ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'              => ((isset($smtpConfig['secondarydomains']) || array_key_exists('secondarydomains', $smtpConfig)))  ? $smtpConfig['secondarydomains'] : '',
+            'primarydomain'                 => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains'              => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 

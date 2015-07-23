@@ -1128,19 +1128,16 @@ class Admin_JsonTest extends TestCase
      */
     public function testRegistryForSMTP()
     {
-        Tinebase_Config::getInstance()->set(
-            Tinebase_Config::SMTP,
-            new Tinebase_Config_Struct(
-                array(
-                    'primarydomain' => 'localhost',
-                    'secondarydomains' => 'example.com')
-            )
-        );
+        $smtpConfig = Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP);
+        $primaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['primarydomain'])
+            ? $smtpConfig['primarydomain'] : '';
+        $secondaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['secondarydomains'])
+            ? $smtpConfig['secondarydomains'] : '';
 
         $afj = new Admin_Frontend_Json();
         $registryData = $afj->getRegistryData();
 
-        $this->assertEquals($registryData['primarydomain'], 'localhost');
-        $this->assertEquals($registryData['secondarydomains'], 'example.com');
+        $this->assertEquals($registryData['primarydomain'],  $primaryDomainConfig);
+        $this->assertEquals($registryData['secondarydomains'], $secondaryDomainConfig);
     }
 }
