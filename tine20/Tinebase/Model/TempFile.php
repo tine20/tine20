@@ -48,7 +48,7 @@ class Tinebase_Model_TempFile extends Tinebase_Record_Abstract
         'name'       => array('allowEmpty' => false),
         'type'       => array('allowEmpty' => false),
         'error'      => array('presence' => 'required', 'allowEmpty' => TRUE, 'Int'),
-        'size'       => array('allowEmpty' => true, 'Int')
+        'size'       => array('allowEmpty' => true)
     );
     
     /**
