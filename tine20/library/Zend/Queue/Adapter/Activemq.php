@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Queue
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Activemq.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -41,7 +41,7 @@ require_once 'Zend/Queue/Stomp/Frame.php';
  * @category   Zend
  * @package    Zend_Queue
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Queue_Adapter_Activemq extends Zend_Queue_Adapter_AdapterAbstract
@@ -54,6 +54,11 @@ class Zend_Queue_Adapter_Activemq extends Zend_Queue_Adapter_AdapterAbstract
      * @var Zend_Queue_Adapter_Stomp_client
      */
     private $_client = null;
+
+    /**
+     * @var array
+     */
+    private $_subscribed = array();
 
     /**
      * Constructor
@@ -95,7 +100,7 @@ class Zend_Queue_Adapter_Activemq extends Zend_Queue_Adapter_AdapterAbstract
 
         $response = $this->_client->send($connect)->receive();
 
-        if ((false !== $response) 
+        if ((false !== $response)
             && ($response->getCommand() != 'CONNECTED')
         ) {
             require_once 'Zend/Queue/Exception.php';
@@ -177,6 +182,33 @@ class Zend_Queue_Adapter_Activemq extends Zend_Queue_Adapter_AdapterAbstract
     }
 
     /**
+     * Checks if the client is subscribed to the queue
+     *
+     * @param  Zend_Queue $queue
+     * @return boolean
+     */
+    protected function _isSubscribed(Zend_Queue $queue)
+    {
+        return isset($this->_subscribed[$queue->getName()]);
+    }
+
+    /**
+      * Subscribes the client to the queue.
+      *
+      * @param  Zend_Queue $queue
+      * @return void
+      */
+    protected function _subscribe(Zend_Queue $queue)
+    {
+        $frame = $this->_client->createFrame();
+        $frame->setCommand('SUBSCRIBE');
+        $frame->setHeader('destination', $queue->getName());
+        $frame->setHeader('ack', 'client');
+        $this->_client->send($frame);
+        $this->_subscribed[$queue->getName()] = true;
+    }
+
+    /**
      * Return the first element in the queue
      *
      * @param  integer    $maxMessages
@@ -196,33 +228,34 @@ class Zend_Queue_Adapter_Activemq extends Zend_Queue_Adapter_AdapterAbstract
             $queue = $this->_queue;
         }
 
-        // signal that we are reading
-        $frame = $this->_client->createFrame();
-        $frame->setCommand('SUBSCRIBE');
-        $frame->setHeader('destination', $queue->getName());
-        $frame->setHeader('ack','client');
-        $this->_client->send($frame);
-
         // read
         $data = array();
-        if ($this->_client->canRead()) {
-            for ($i = 0; $i < $maxMessages; $i++) {
-                $response = $this->_client->receive();
 
-                switch ($response->getCommand()) {
-                    case 'MESSAGE':
-                        $datum = array(
-                            'message_id' => $response->getHeader('message-id'),
-                            'handle'     => $response->getHeader('message-id'),
-                            'body'       => $response->getBody(),
-                            'md5'        => md5($response->getBody())
-                        );
-                        $data[] = $datum;
-                        break;
-                    default:
-                        $block = print_r($response, true);
-                        require_once 'Zend/Queue/Exception.php';
-                        throw new Zend_Queue_Exception('Invalid response received: ' . $block);
+        // signal that we are reading
+        if (!$this->_isSubscribed($queue)){
+            $this->_subscribe($queue);
+        }
+
+        if ($maxMessages > 0) {
+            if ($this->_client->canRead()) {
+                for ($i = 0; $i < $maxMessages; $i++) {
+                    $response = $this->_client->receive();
+
+                    switch ($response->getCommand()) {
+                        case 'MESSAGE':
+                            $datum = array(
+                                'message_id' => $response->getHeader('message-id'),
+                                'handle'     => $response->getHeader('message-id'),
+                                'body'       => $response->getBody(),
+                                'md5'        => md5($response->getBody())
+                            );
+                            $data[] = $datum;
+                            break;
+                        default:
+                            $block = print_r($response, true);
+                            require_once 'Zend/Queue/Exception.php';
+                            throw new Zend_Queue_Exception('Invalid response received: ' . $block);
+                    }
                 }
             }
         }
