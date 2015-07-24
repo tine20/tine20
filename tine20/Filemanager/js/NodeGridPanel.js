@@ -694,8 +694,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onUploadFail: function () {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' 
-            + Tine.Tinebase.common.byteRenderer(Tine.Tinebase.registry.get('maxFileUploadSize')) 
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator.') 
         ).setIcon(Ext.MessageBox.ERROR);
         
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
