@@ -128,7 +128,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " XMLHttpRequest style upload to path " . $path);
             
             $name =       base64_decode($_SERVER['HTTP_X_FILE_NAME']);
-            $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
+            $size =       (double) $_SERVER['HTTP_X_FILE_SIZE'];
             $type =       $_SERVER['HTTP_X_FILE_TYPE'];
             $error =      0;
             
@@ -147,7 +147,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 if (! $tempfileHandle) {
                     throw new Tinebase_Exception('Could not open tempfile while uploading! ');
                 }
-                $size = stream_copy_to_stream($input, $tempfileHandle);
+                $size = (double) stream_copy_to_stream($input, $tempfileHandle);
                 fclose($input);
                 fclose($tempfileHandle);
             }
@@ -159,7 +159,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             $uploadedFile = $_FILES['file'];
             
             $name  = $uploadedFile['name'];
-            $size  = $uploadedFile['size'];
+            $size  = (double) $uploadedFile['size'];
             $type  = $uploadedFile['type'];
             $error = $uploadedFile['error'];
             
@@ -195,7 +195,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @param string $_path
      * @param string $_name
      * @param string $_type
-     * @param integer $_size
+     * @param double $_size
      * @param integer $_error
      * @return Tinebase_Model_TempFile
      */
@@ -213,7 +213,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
            'name'        => $filename,
            'type'        => ! empty($_type)  ? $_type  : 'unknown',
            'error'       => ! empty($_error) ? $_error : 0,
-           'size'        => ! empty($_size)  ? $_size  : filesize($_path),
+           'size'        => ! empty($_size)  ? (double) $_size  : (double) filesize($_path),
         ));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -235,6 +235,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
         $name = preg_replace('/\.\d+\.chunk$/', '', $_tempFiles->getFirstRecord()->name);
         $type = $_tempFiles->getFirstRecord()->type;
+        $size = 0.0;
         
         $fJoin = fopen($path, 'w+b');
         foreach ($_tempFiles as $tempFile) {
@@ -244,13 +245,16 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             }
             
             // NOTE: stream_copy_to_stream is about 15% slower
-            while (!feof($fChunk)) fwrite($fJoin, fread($fChunk, 2097152 /* 2 MB */));
+            while (!feof($fChunk)) {
+                $bytesWritten = fwrite($fJoin, fread($fChunk, 2097152 /* 2 MB */));
+                $size += (double) $bytesWritten;
+            }
             fclose($fChunk);
         }
         
         fclose($fJoin);
         
-        return $this->createTempFile($path, $name, $type);
+        return $this->createTempFile($path, $name, $type, $size);
     }
     
     /**
