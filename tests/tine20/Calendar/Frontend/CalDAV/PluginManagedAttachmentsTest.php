@@ -265,7 +265,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $exception->rrule = NULL;
         $exception->dtstart->addDay(5)->addHour(1);
         $exception->dtend->addDay(5)->addHour(1);
-        $exception->setRecurId();
+        $exception->setRecurId($event->getRecord()->getId());
 
         $event->put($eventWithExdate->get());
         

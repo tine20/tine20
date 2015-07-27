@@ -61,6 +61,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'transp'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'base_event_id'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),

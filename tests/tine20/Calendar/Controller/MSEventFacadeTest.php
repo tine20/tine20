@@ -366,6 +366,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
     {
         $newException = clone $event;
         $newException->id = NULL;
+        $newException->base_event_id = $event->getId();
         $newException->recurid = clone $newException->dtstart;
         $newException->recurid->addDay(3);
         $newException->dtstart->addDay(3)->addHour(2);

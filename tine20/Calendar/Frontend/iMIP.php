@@ -31,7 +31,7 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        if (! $_iMIP->getExistingEvent(TRUE)) {
+        if (! $this->getExistingEvent($_iMIP, TRUE)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
@@ -67,7 +67,7 @@ class Calendar_Frontend_iMIP
         
         Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainerOfRecord($_iMIP->event);
-        Tinebase_Model_Container::resolveContainerOfRecord($_iMIP->getExistingEvent());
+        Tinebase_Model_Container::resolveContainerOfRecord($this->getExistingEvent($_iMIP));
         
         return $_iMIP;
     }
@@ -189,7 +189,7 @@ class Calendar_Frontend_iMIP
         $result  = $this->_assertOwnAttender($_iMIP, TRUE, FALSE);
         $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE);
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         if ($existingEvent) {
             $iMIPEvent = $_iMIP->getEvent();
             $isObsoleted = false;
@@ -224,7 +224,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
         if ($_assertExistence && ! $ownAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ATTENDEE, "processing {$_iMIP->method} for non attendee is not supported");
@@ -281,7 +281,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
         if ($_assertExistence && ! $organizer) {
@@ -311,7 +311,34 @@ class Calendar_Frontend_iMIP
         
         return $result;
     }
-    
+
+    /**
+     * find existing event by uid
+     *
+     * @param $_iMIP
+     * @param bool $_refetch
+     * @return NULL|Tinebase_Record_Abstract
+     * @throws Exception
+     */
+    public function getExistingEvent($_iMIP, $_refetch = FALSE)
+    {
+        if ($_refetch || ! $_iMIP->existing_event instanceof Calendar_Model_Event) {
+
+            $iMIPEvent = $_iMIP->getEvent();
+
+            $events = Calendar_Controller_MSEventFacade::getInstance()->search(new Calendar_Model_EventFilter(array(
+                array('field' => 'uid',          'operator' => 'equals', 'value' => $iMIPEvent->uid),
+            )));
+
+            $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+            Calendar_Model_Attender::resolveAttendee($event['attendee']);
+
+            $_iMIP->existing_event = $event;
+        }
+
+        return $_iMIP->existing_event;
+    }
+
     /**
      * process request
      * 
@@ -320,7 +347,7 @@ class Calendar_Frontend_iMIP
      */
     protected function _processRequest($_iMIP, $_status)
     {
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
@@ -385,7 +412,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
             $result = FALSE;
@@ -443,7 +470,7 @@ class Calendar_Frontend_iMIP
     protected function _processReply(Calendar_Model_iMIP $_iMIP)
     {
         // merge ics into existing event
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $event = $_iMIP->mergeEvent($existingEvent);
         $attendee = $event->attendee[array_search($_iMIP->originator, $existingEvent->attendee->getEmail())];
         

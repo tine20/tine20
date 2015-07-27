@@ -43,6 +43,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     // scheduleable interface fields
     { name: 'dtstart', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'recurid' },
+    { name: 'base_event_id' },
     // scheduleable interface fields with multiple appearance
     { name: 'exdate' },
     //{ name: 'exrule' },
