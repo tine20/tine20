@@ -26,10 +26,9 @@ class Phone_Backend_Snom_Webserver
     {
         $_config = array(
             'useragent' => 'PHP snom remote client (rev: 0.1)',
-            'keepalive' => TRUE
+            'keepalive' => false,
         );
-        
-        
+
         $client = new Zend_Http_Client('http://' . $_phoneAddress . '/command.htm', $_config);
         $client->setAuth($_user, $_pass, Zend_Http_Client::AUTH_BASIC);
         $client->setParameterGet($_params);
