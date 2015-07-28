@@ -9,7 +9,7 @@
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -144,6 +144,11 @@
                     <length>255</length>
                 </field>
                 <field>
+                    <name>base_event_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
                     <name>rrule</name>
                     <type>text</type>
                     <length>255</length>
@@ -202,6 +207,12 @@
                     <name>uid</name>
                     <field>
                         <name>uid</name>
+                    </field>
+                </index>
+                <index>
+                    <name>base_event_id</name>
+                    <field>
+                        <name>base_event_id</name>
                     </field>
                 </index>
                 <index>

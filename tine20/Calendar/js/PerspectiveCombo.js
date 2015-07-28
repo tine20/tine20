@@ -254,9 +254,14 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             this.syncStores();
             
             var myAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(this.store),
-                imOrganizer = this.editDialog.record.get('organizer').id == Tine.Tinebase.registry.get('currentAccount').contact_id;
+                imOrganizer = this.editDialog.record.get('organizer').id == Tine.Tinebase.registry.get('currentAccount').contact_id,
+                eventView = Tine.Tinebase.configManager.get('eventView', 'Calendar');
                 
-            perspective = imOrganizer || ! myAttendee ? 'origin' : myAttendee.id;
+            if (eventView == 'organizer') {
+                perspective = 'origin';
+            } else {
+                perspective = imOrganizer || ! myAttendee ? 'origin' : myAttendee.id;
+            }
             this.perspectiveIsInitialized = true;
             this.setValue(perspective);
         }

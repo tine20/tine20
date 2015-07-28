@@ -197,23 +197,6 @@ class Calendar_Model_iMIP extends Tinebase_Record_Abstract
     }
 
     /**
-    * get existing event record
-    *
-    * @param boolean $_refetch the event
-    * @param boolean $_getDeleted
-    * @return Calendar_Model_Event
-    */
-    public function getExistingEvent($_refetch = FALSE, $_getDeleted = FALSE)
-    {
-        if ($_refetch || ! $this->existing_event instanceof Calendar_Model_Event) {
-            $this->existing_event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($this->getEvent(), $_getDeleted);
-            Calendar_Model_Attender::resolveAttendee($this->existing_event['attendee']);
-        }
-        
-        return $this->existing_event;
-    }
-    
-    /**
      * merge ics data into given event
      * 
      * @param Calendar_Model_Event $_event

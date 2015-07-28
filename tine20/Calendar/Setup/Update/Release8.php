@@ -255,7 +255,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     public function update_7()
     {
         $allUser = $this->_db->query(
-            "SELECT " . $this->_db->quoteIdentifier('id') . "," .  $this->_db->quoteIdentifier('contact_id') .
+            "SELECT " . $this->_db->quoteIdentifier('id') . "," . $this->_db->quoteIdentifier('contact_id') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "accounts") .
             " WHERE " . $this->_db->quoteIdentifier("contact_id") . " IS NOT NULL"
         )->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -270,8 +270,8 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             "SELECT DISTINCT" . $this->_db->quoteIdentifier('user_type') . "," . $this->_db->quoteIdentifier('user_id') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
             " WHERE " . $this->_db->quoteIdentifier("displaycontainer_id") . " IS  NULL" .
-            "  AND " . $this->_db->quoteIdentifier("user_type")  . $this->_db->quoteInto(" IN (?)", array('user', 'groupmemeber')) .
-            "  AND " . $this->_db->quoteIdentifier("user_id")  . $this->_db->quoteInto(" IN (?)", array_keys($contactUserMap))
+            "  AND " . $this->_db->quoteIdentifier("user_type") . $this->_db->quoteInto(" IN (?)", array('user', 'groupmemeber')) .
+            "  AND " . $this->_db->quoteIdentifier("user_id") . $this->_db->quoteInto(" IN (?)", array_keys($contactUserMap))
         )->fetchAll(Zend_Db::FETCH_ASSOC);
 
         // find all user/groupmember attendees with missing displaycontainer
@@ -279,7 +279,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             "SELECT DISTINCT" . $this->_db->quoteIdentifier('user_type') . "," . $this->_db->quoteIdentifier('user_id') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
             " WHERE " . $this->_db->quoteIdentifier("displaycontainer_id") . " IS  NULL" .
-            "  AND " . $this->_db->quoteIdentifier("user_type")  . $this->_db->quoteInto(" IN (?)", array('resource'))
+            "  AND " . $this->_db->quoteIdentifier("user_type") . $this->_db->quoteInto(" IN (?)", array('resource'))
         )->fetchAll(Zend_Db::FETCH_ASSOC));
 
         $resources = $this->_db->query(
@@ -288,7 +288,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         )->fetchAll(Zend_Db::FETCH_ASSOC);
 
         $resourceContainerMap = array();
-        foreach($resources as $resource) {
+        foreach ($resources as $resource) {
             $resourceContainerMap[$resource['id']] = $resource['container_id'];
         }
 
@@ -314,11 +314,117 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     }
 
     /**
+     * identify base event via new base_event_id field instead of UID
+     */
+    public function update_8()
+    {
+        /* find possibly broken events
+         SELECT group_concat(id), uid, count(id) as cnt from tine20_cal_events
+             WHERE rrule IS NOT NULL
+             GROUP BY uid
+             HAVING cnt > 1;
+         */
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>base_event_id</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->addCol('cal_events', $declaration);
+
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>base_event_id</name>
+                <field>
+                    <name>base_event_id</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('cal_events', $declaration);
+
+        // find all events with rrule
+        $events = $this->_db->query(
+            "SELECT " . $this->_db->quoteIdentifier('id') .
+                 ', ' . $this->_db->quoteIdentifier('uid') .
+                 ', ' . $this->_db->quoteIdentifier('container_id') .
+                 ', ' . $this->_db->quoteIdentifier('created_by') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+            " WHERE " . $this->_db->quoteIdentifier("rrule") . " IS NOT NULL" .
+              " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        // update all exdates in same container
+        foreach($events as $event) {
+            $this->_db->query(
+                "UPDATE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+                  " SET " . $this->_db->quoteIdentifier('base_event_id') . ' = ' . $this->_db->quote($event['id']) .
+                " WHERE " . $this->_db->quoteIdentifier('uid') . ' = ' . $this->_db->quote($event['uid']) .
+                  " AND " . $this->_db->quoteIdentifier("container_id") . ' = ' . $this->_db->quote($event['container_id']) .
+                  " AND " . $this->_db->quoteIdentifier("recurid") . " IS NOT NULL" .
+                  " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+            );
+        }
+
+        // find all container move exdates
+        $danglingExdates = $this->_db->query(
+            "SELECT " . $this->_db->quoteIdentifier('uid') .
+                ', ' . $this->_db->quoteIdentifier('id') .
+                ', ' . $this->_db->quoteIdentifier('created_by') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+            " WHERE " . $this->_db->quoteIdentifier("recurid") . " IS NOT NULL" .
+              " AND " . $this->_db->quoteIdentifier("base_event_id") . " IS NULL" .
+              " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        // try to match by creator
+        foreach ($danglingExdates as $exdate) {
+            $possibleBaseEvents = array();
+            $matches = array_filter($events, function ($event) use ($exdate, $possibleBaseEvents) {
+                if ($event['uid'] == $exdate['uid']) {
+                    $possibleBaseEvents[] = $event;
+                    return $event['created_by'] == $exdate['created_by'];
+                }
+                return false;
+            });
+
+            switch(count($matches)) {
+                case 0:
+                    // no match :-(
+                    if (count($possibleBaseEvents) == 0) {
+                        // garbage? exdate without any base event
+                        Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " dangling exdate with id {$exdate['id']}");
+                        continue 2;
+                    }
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " no match for exdate with id {$exdate['id']}");
+                    $baseEvent = current($possibleBaseEvents);
+                    break;
+                case 1:
+                    // exact match :-)
+                    $baseEvent = current($matches);
+                    break;
+                default:
+                    // to much matches :-(
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " multiple matches for exdate with id {$exdate['id']}");
+                    $baseEvent = current($matches);
+            }
+
+            $this->_db->query(
+                "UPDATE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+                " SET " . $this->_db->quoteIdentifier('base_event_id') . ' = ' . $this->_db->quote($baseEvent['id']) .
+                " WHERE " . $this->_db->quoteIdentifier('id') . ' = ' . $this->_db->quote($exdate['id'])
+            );
+        }
+
+        $this->setTableVersion('cal_events', '10');
+        $this->setApplicationVersion('Calendar', '8.9');
+    }
+
+    /**
      * update to 9.0
      *
      * @return void
      */
-    public function update_8()
+    public function update_9()
     {
         $this->setApplicationVersion('Calendar', '9.0');
     }

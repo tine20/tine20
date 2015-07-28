@@ -234,62 +234,48 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // if an id filter is set, we need to fetch exceptions in a second query
         if ($_filter->getFilter('id', true, true)) {
             $events->merge($this->_eventController->search(new Calendar_Model_EventFilter(array(
-                array('field' => 'uid',     'operator' => 'in',      'value' => $events->uid),
-                array('field' => 'id',      'operator' => 'notin',   'value' => $events->id),
-                array('field' => 'recurid', 'operator' => 'notnull', 'value' => null)
+                array('field' => 'base_event_id', 'operator' => 'in',      'value' => $events->id),
+                array('field' => 'id',            'operator' => 'notin',   'value' => $events->id),
+                array('field' => 'recurid',       'operator' => 'notnull', 'value' => null),
             )), NULL, FALSE, FALSE, $_action));
         }
 
         $this->_eventController->getAlarms($events);
         Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($events);
 
-        $baseEventMap = array(); // uid => baseEvent
-        $exceptionSets = array(); // uid => exceptions
+        $baseEventMap = array(); // id => baseEvent
+        $exceptionSets = array(); // id => exceptions
         $exceptionMap = array(); // idx => event
 
         foreach($events as $event) {
             if ($event->rrule) {
-                $eventUid = $event->uid;
-                $baseEventMap[$eventUid] = $event;
-                $exceptionSets[$eventUid] = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                $eventId = $event->id;
+                $baseEventMap[$eventId] = $event;
+                $exceptionSets[$eventId] = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             } else if ($event->recurid) {
                 $exceptionMap[] = $event;
             }
         }
 
         foreach($exceptionMap as $exception) {
-            $exceptionUid = $exception->uid;
-            $baseEvent = array_key_exists($exceptionUid, $baseEventMap) ? $baseEventMap[$exceptionUid] : false;
+            $baseEventId = $exception->base_event_id;
+            $baseEvent = array_key_exists($baseEventId, $baseEventMap) ? $baseEventMap[$baseEventId] : false;
             if ($baseEvent) {
-                $exceptionSet = $exceptionSets[$exceptionUid];
+                $exceptionSet = $exceptionSets[$baseEventId];
                 $exceptionSet->addRecord($exception);
                 $events->removeRecord($exception);
             }
         }
 
-        foreach($baseEventMap as $uid => $baseEvent) {
-            $exceptionSet = $exceptionSets[$uid];
+        foreach($baseEventMap as $id => $baseEvent) {
+            $exceptionSet = $exceptionSets[$id];
             $this->_eventController->fakeDeletedExceptions($baseEvent, $exceptionSet);
             $baseEvent->exdate = $exceptionSet;
         }
 
         return $events;
     }
-    
-   /**
-     * (non-PHPdoc)
-     * @see Calendar_Controller_Event::lookupExistingEvent()
-     */
-    public function lookupExistingEvent($_event, $_getDeleted = FALSE)
-    {
-        $event = $this->_eventController->lookupExistingEvent($_event, $_getDeleted);
 
-        if ($event) {
-            $this->_resolveData($event);
-            return $this->_toiTIP($event);
-        }
-    }
-    
     /*************** add / update / delete *****************/    
 
     /**
@@ -325,8 +311,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
 
-        $this->_resolveData($savedEvent);
-        return $this->_toiTIP($savedEvent);
+        // NOTE: exdate creation changes baseEvent, so we need to refetch it here
+        return $this->get($savedEvent->getId());
     }
     
     /**
@@ -358,7 +344,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $newPersistentExceptions = $exceptions->filter('is_deleted', 0);
         
         $migration = $this->_getExceptionsMigration($currentPersistentExceptions, $newPersistentExceptions);
-        
+
         $this->_eventController->delete($migration['toDelete']->getId());
         
         // NOTE: we need to exclude the toCreate exdates here to not confuse computations in createRecurException!
@@ -1000,6 +986,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             $_exception->container_id = $_baseEvent->container_id;
         }
         $_exception->uid = $_baseEvent->uid;
+        $_exception->base_event_id = $_baseEvent->getId();
         $_exception->recurid = $_baseEvent->uid . '-' . $_exception->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG);
         
         // NOTE: we always refetch the base event as it might be touched in the meantime

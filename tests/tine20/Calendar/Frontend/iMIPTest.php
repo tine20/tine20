@@ -241,8 +241,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $event->dtstart->addHour(2);
         $event->dtend->addHour(2);
         Calendar_Controller_Event::getInstance()->update($event, false);
-        
-        $iMIP->getExistingEvent(true);
+
+        $this->_iMIPFrontend->getExistingEvent($iMIP, true);
         $iMIP->preconditionsChecked = false;
         $prepared = $this->_iMIPFrontend->prepareComponent($iMIP);
         
@@ -445,7 +445,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $iMIP = $this->_getiMIP('REQUEST');
         $result = $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         
-        $event = Calendar_Controller_MSEventFacade::getInstance()->lookupExistingEvent($iMIP->getEvent());
+        $event = $this->_iMIPFrontend->getExistingEvent($iMIP, true);
         
         $attender = Calendar_Model_Attender::getOwnAttender($event->attendee);
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
@@ -575,7 +575,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $updatedExternalAttendee->status, 'status not updated');
         
         // check if attendee are resolved
-        $existingEvent = $iMIP->getExistingEvent();
+        $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP);
         $this->assertTrue($iMIP->existing_event->attendee instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(3, count($iMIP->existing_event->attendee));
         

@@ -707,7 +707,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return copyAction
     },
     
-    checkPastEvent: function(event, checkBusyConflicts, actionType) {
+    checkPastEvent: function(event, checkBusyConflicts, actionType, oldEvent) {
         var start = event.get('dtstart').getTime();
         var morning = new Date().clearTime().getTime();
 
@@ -738,7 +738,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     try {
                         switch (option) {
                             case 'yes':
-                                if (actionType == 'update') this.onUpdateEvent(event, true);
+                                if (actionType == 'update') this.onUpdateEvent(event, true, oldEvent);
                                 else this.onAddEvent(event, checkBusyConflicts, true);
                                 break;
                             case 'no':
@@ -780,7 +780,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }             
             });
         } else {
-            if (actionType == 'update') this.onUpdateEvent(event, true);
+            if (actionType == 'update') this.onUpdateEvent(event, true, oldEvent);
             else this.onAddEvent(event, checkBusyConflicts, true);
         }
     },
@@ -833,11 +833,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
     },
     
-    onUpdateEvent: function(event, pastChecked) {
+    onUpdateEvent: function(event, pastChecked, oldEvent) {
         this.setLoading(true);
         
         if(!pastChecked) {
-            this.checkPastEvent(event, null, 'update');
+            this.checkPastEvent(event, null, 'update', oldEvent);
             return;
         }
         
@@ -846,17 +846,23 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (event.id && (event.isRecurInstance() || event.isRecurException() || (event.isRecurBase() && ! event.get('rrule').newrule))) {
+            
+            var options = [];
+            
+            // the container has changed - force update whole series
+//            if (! oldEvent || event.get('container_id') == oldEvent.get('container_id')) {
+                options.push({text: this.app.i18n._('Update this event only'), name: 'this'});
+                options.push({text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'});
+//            }
+            
+            options.push({text: this.app.i18n._('Update whole series'), name: 'series'});
+            options.push({text: this.app.i18n._('Update nothing'), name: 'cancel'});
+            
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Update Event'),
                 height: 170,
                 scope: this,
-                options: [
-                    {text: this.app.i18n._('Update this event only'), name: 'this'},
-                    {text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'},
-                    {text: this.app.i18n._('Update whole series'), name: 'series'},
-                    {text: this.app.i18n._('Update nothing'), name: 'cancel'}
-                    
-                ],
+                options: options,
                 handler: function(option) {
                     var store = event.store;
 
@@ -1254,7 +1260,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), defaults), 0);
             if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
-                event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
+                event.set('dtend', defaults.dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')));
             }
         }
         
@@ -1283,7 +1289,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         store.add(updatedEvent);
                     }
                     
-                    this.onUpdateEvent(updatedEvent, false);
+                    this.onUpdateEvent(updatedEvent, false, event);
                 }
             }
         });

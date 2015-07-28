@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Calendar');
@@ -126,6 +126,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     timeGranularity: 30,
     /**
+     * @cfg {Number} timeIncrement
+     * time increment for range adds/edits
+     */
+    timeIncrement: 15,
+    /**
      * @cfg {Number} granularityUnitHeights
      * heights in px of a granularity unit
      */
@@ -213,7 +218,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.parallelScrollerEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
         this.parallelWholeDayEventsRegistry = new Tine.Calendar.ParallelEventsRegistry({dtStart: this.startDate, dtEnd: this.endDate});
-        
+
+        this.timeIncrement = parseInt(this.app.getRegistry().get('preferences').get('timeIncrement')) || this.timeIncrement;
+
         this.initData(this.store);
         
         this.initTimeScale();
@@ -254,9 +261,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         }
 
         this.wheelIncrement = Tine.Tinebase.configManager.get('daysviewwheelincrement', 'Calendar') || this.wheelIncrement;
-        
-        this.wheelIncrement = Tine.Tinebase.configManager.get('daysviewwheelincrement', 'Calendar') || this.wheelIncrement;
-        
+
         Tine.Calendar.DaysView.superclass.initComponent.apply(this, arguments);
     },
     
@@ -340,7 +345,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             notifyDrop : function(dd, e, data) {
                 var v = data.scope,
                     targetDate = v.getTargetDateTime(e);
-                
+
                 if (targetDate) {
                     var event = data.event,
                         originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
@@ -372,7 +377,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         event.set('dtend', targetDate.add(Date.DAY, 1).add(Date.SECOND, -1));
                     } else if (event.get('is_all_day_event') && !targetDate.is_all_day_event) {
                         // draged from allDay -> droped to scroller will be resetted to hone hour
-                        event.set('dtend', targetDate.add(Date.HOUR, 1));
+                        event.set('dtend', targetDate.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')));
                     } else {
                         event.set('dtend', targetDate.add(Date.MINUTE, originalDuration));
                     }
@@ -716,7 +721,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 if (event.get('is_all_day_event')) {
                     var keep = true;
                 } else {
-                    var keep = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE >= this.timeGranularity;
+                    var keep = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE >= this.timeIncrement;
                 }
                 
                 if (keep) {
@@ -891,7 +896,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             this.fireEvent('dblclick', event, e);
         } else if (dtStart && !this.editing) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
-            var dtend = dtStart.add(Date.HOUR, 1);
+            var dtend = dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration'));
             if (dtStart.is_all_day_event) {
                 dtend = dtend.add(Date.HOUR, 23).add(Date.SECOND, -1);
             }
@@ -954,8 +959,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
-                dtstart: dtStart, 
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, 2*this.timeGranularity/2),
+                dtstart: dtStart,
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;
@@ -1468,11 +1473,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var html = '';
         this.timeScale.each(function(time){
             var index = time.get('index');
+
             html += this.templates.timeRow.applyTemplate({
-                cls: index%2 ? 'cal-daysviewpanel-timeRow-off' : 'cal-daysviewpanel-timeRow-on',
+                cls: time.get('minutes')%60 ? 'cal-daysviewpanel-timeRow-off' : 'cal-daysviewpanel-timeRow-on',
                 height: this.granularityUnitHeights + 'px',
                 top: index * this.granularityUnitHeights + 'px',
-                time: index%2 ? '' : time.get('time')
+                time: time.get('minutes')%60 ? '' : time.get('time')
             });
         }, this);
         
@@ -1508,7 +1514,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             var index = time.get('index');
             html += this.templates.overRow.applyTemplate({
                 id: baseId + ':' + dayIndex + ':' + index,
-                cls: 'cal-daysviewpanel-daycolumn-row-' + (index%2 ? 'off' : 'on'),
+                cls: 'cal-daysviewpanel-daycolumn-row-' + (time.get('minutes')%60 ? 'off' : 'on'),
                 height: this.granularityUnitHeights + 'px',
                 time: time.get('time')
             });

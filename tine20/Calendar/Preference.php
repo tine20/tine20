@@ -66,12 +66,18 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * default alarm time in minutes before
      */
     const DEFAULTATTENDEE_STRATEGY = 'defaultAttendeeStrategy';
-    
+
+
     /**
+     * timeIncrement
+     */
+    const DEFAULT_TIMEINCREMENT = 'timeIncrement';
+
+        /**
      * @var string application
      */
     protected $_application = 'Calendar';
-        
+
     /**
      * get all possible application prefs
      *
@@ -90,7 +96,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
-            self::DEFAULTATTENDEE_STRATEGY
+            self::DEFAULTATTENDEE_STRATEGY,
+            self::DEFAULT_TIMEINCREMENT
         );
         
         if ($cropDays) {
@@ -149,6 +156,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTATTENDEE_STRATEGY => array(
                     'label'         => $translate->_('Default Attendee Strategy'),
                     'description'   => $translate->_('Default Attendee Strategy for new events'),
+            ),
+            self::DEFAULT_TIMEINCREMENT => array(
+                'label'         => $translate->_('Time Increment'),
+                'description'   => $translate->_('Increment of event time steps'),
             ),
         );
         
@@ -290,6 +301,36 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <option>
                             <label>Filtered attendee</label>
                             <value>filteredAttendee</value>
+                        </option>
+                    </options>';
+                break;
+            case self::DEFAULT_TIMEINCREMENT:
+                $preference->value      = 15;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>5</label>
+                            <value>5</value>
+                        </option>
+                        <option>
+                            <label>10</label>
+                            <value>10</value>
+                        </option>
+                        <option>
+                            <label>15</label>
+                            <value>15</value>
+                        </option>
+                        <option>
+                            <label>20</label>
+                            <value>20</value>
+                        </option>
+                        <option>
+                            <label>30</label>
+                            <value>30</value>
+                        </option>
+                        <option>
+                            <label>60</label>
+                            <value>60</value>
                         </option>
                     </options>';
                 break;

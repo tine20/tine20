@@ -31,7 +31,7 @@ class Calendar_Frontend_iMIP
             return;
         }
         
-        if (! $_iMIP->getExistingEvent(TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
+        if (! $this->getExistingEvent($_iMIP, TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
             return;
         }
@@ -67,7 +67,7 @@ class Calendar_Frontend_iMIP
         
         Calendar_Convert_Event_Json::resolveRelatedData($_iMIP->event);
         Tinebase_Model_Container::resolveContainerOfRecord($_iMIP->event);
-        Tinebase_Model_Container::resolveContainerOfRecord($_iMIP->getExistingEvent());
+        Tinebase_Model_Container::resolveContainerOfRecord($this->getExistingEvent($_iMIP));
         
         return $_iMIP;
     }
@@ -189,7 +189,7 @@ class Calendar_Frontend_iMIP
         $result  = $this->_assertOwnAttender($_iMIP, TRUE, FALSE);
         $result &= $this->_assertOrganizer($_iMIP, TRUE, TRUE);
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         if ($existingEvent) {
             $iMIPEvent = $_iMIP->getEvent();
             $isObsoleted = false;
@@ -209,7 +209,7 @@ class Calendar_Frontend_iMIP
             }
         } else {
             try {
-                if ($_iMIP->getExistingEvent(TRUE, TRUE)) {
+                if ($this->getExistingEvent($_iMIP, TRUE, TRUE)) {
                     // Event was deleted/cancelled
                     $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_NOTDELETED, "old iMIP message is deleted");
                     $result = FALSE;
@@ -236,7 +236,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
         if ($_assertExistence && ! $ownAttender) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ATTENDEE, "processing {$_iMIP->method} for non attendee is not supported");
@@ -293,7 +293,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
         if ($_assertExistence && ! $organizer) {
@@ -323,7 +323,44 @@ class Calendar_Frontend_iMIP
         
         return $result;
     }
-    
+
+    /**
+     * find existing event by uid
+     *
+     * @param $_iMIP
+     * @param bool $_refetch
+     * @param bool $_getDeleted
+     * @return NULL|Tinebase_Record_Abstract
+     * @throws Exception
+     */
+    public function getExistingEvent($_iMIP, $_refetch = FALSE, $_getDeleted = FALSE)
+    {
+        if ($_refetch || ! $_iMIP->existing_event instanceof Calendar_Model_Event) {
+
+            $iMIPEvent = $_iMIP->getEvent();
+
+            $filters = new Calendar_Model_EventFilter(array(
+                array('field' => 'uid',          'operator' => 'equals', 'value' => $iMIPEvent->uid),
+            ));
+            if ($_getDeleted) {
+                $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
+                $filters->addFilter($deletedFilter);
+            }
+            $events = $this->_backend->search($filters);
+
+            // NOTE: cancelled attendees from ext. organizers don't have read grant
+            // find a better way to check grants
+            if (! $_getDeleted) {
+                $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+            }
+            Calendar_Model_Attender::resolveAttendee($event['attendee']);
+
+            $_iMIP->existing_event = $event;
+        }
+
+        return $_iMIP->existing_event;
+    }
+
     /**
      * process request
      * 
@@ -332,7 +369,7 @@ class Calendar_Frontend_iMIP
      */
     protected function _processRequest($_iMIP, $_status)
     {
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent ? $existingEvent->attendee : $_iMIP->getEvent()->attendee);
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
@@ -404,7 +441,7 @@ class Calendar_Frontend_iMIP
     {
         $result = TRUE;
         
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
             $result = FALSE;
@@ -462,7 +499,7 @@ class Calendar_Frontend_iMIP
     protected function _processReply(Calendar_Model_iMIP $_iMIP)
     {
         // merge ics into existing event
-        $existingEvent = $_iMIP->getExistingEvent();
+        $existingEvent = $this->getExistingEvent($_iMIP);
         $event = $_iMIP->mergeEvent($existingEvent);
         $attendee = $event->attendee[array_search($_iMIP->originator, $existingEvent->attendee->getEmail())];
         
@@ -510,7 +547,7 @@ class Calendar_Frontend_iMIP
     */
     protected function _checkCancelPreconditions($_iMIP)
     {
-        $existingEvent = $_iMIP->getExistingEvent(FALSE, TRUE);
+        $existingEvent = $this->getExistingEvent($_iMIP, FALSE, TRUE);
         $result = TRUE;
 
         if ($existingEvent) {
@@ -535,7 +572,7 @@ class Calendar_Frontend_iMIP
     {
         // organizer cancelled meeting/recurrence of an existing event -> update event
         // the iMIP is already the notification mail!
-        $existingEvent = $_iMIP->getExistingEvent(FALSE, TRUE);
+        $existingEvent = $this->getExistingEvent($_iMIP, FALSE, TRUE);
         $event = $_iMIP->getEvent();
 
         if ($existingEvent) {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3c4e37f33be203c3651e09e77ec6e7ac",
+    "hash": "cafad787e54abed7906e7020890d054b",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -103,11 +103,11 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "dev-master",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/opendocument",
-                "reference": "b9e14b4cf343a549eeefe3e83712d02dd8a0c1e7"
+                "reference": "65e8d1907f32b18b301711dc46049928d9f14bb0"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -131,7 +131,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2015-03-19 09:35:16"
+            "time": "2015-01-29 12:15:38"
         },
         {
             "name": "metaways/timezoneconvert",
@@ -263,8 +263,8 @@
             "authors": [
                 {
                     "name": "Evert Pot",
-                    "email": "evert@rooftopsolutions.nl",
-                    "homepage": "http://www.rooftopsolutions.nl/",
+                    "email": "me@evertpot.com",
+                    "homepage": "http://evertpot.com/",
                     "role": "Developer"
                 }
             ],
@@ -3429,8 +3429,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpword/phpword": 20,
-        "metaways/opendocument": 20
+        "phpword/phpword": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

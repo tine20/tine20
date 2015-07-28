@@ -160,7 +160,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             var filter = filterToolbar ? filterToolbar.getValue() : [];
             filter.push(
                 {field: 'record_model', operator: 'equals', value: this.record_model },
-                {field: 'record_id', operator: 'equals', value: (this.record_id) ? this.record_id : 0 },
+                {field: 'record_id', operator: 'equals', value: this.getRecordId() },
                 {field: 'record_backend', operator: 'equals', value: 'Sql' }
             );
                         
@@ -178,6 +178,15 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                 });
             }
         }, this);
+    },
+
+    /**
+     * @public
+     *
+     * @returns {string}
+     */
+    getRecordId: function() {
+        return (this.record_id) ? this.record_id : 0;
     },
 
     /**

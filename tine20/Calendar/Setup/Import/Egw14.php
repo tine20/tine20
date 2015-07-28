@@ -146,7 +146,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                         $exception['rrule'] = NULL;
                         
                         $exception->uid = $event->uid;
-                        $exception->setRecurId();
+                        $exception->setRecurId($event->getId());
                         
                         $exdateKey = array_search($exception->dtstart, $event->exdate);
                         if ($exdateKey !== FALSE) {

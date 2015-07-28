@@ -50,6 +50,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Object} components this.itmes definition
      */
     getFormItems: function() {
+        var timeIncrement = parseInt(this.app.getRegistry().get('preferences').get('timeIncrement'));
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -131,6 +133,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Start Time'),
                                     listeners: {scope: this, change: this.onDtStartChange},
                                     name: 'dtstart',
+                                    increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
                                     columnWidth: .19,
@@ -145,6 +148,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('End Time'),
                                     listeners: {scope: this, change: this.onDtEndChange},
                                     name: 'dtend',
+                                    increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
                                     columnWidth: .3,
@@ -282,7 +286,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (this.record) ? this.record.id : '',
-                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName'),
+                getRecordId: (function() {
+                    return this.record.isRecurInstance() ? this.record.get('base_event_id') : this.record.get('id');
+                }).createDelegate(this)
             })]
         };
     },

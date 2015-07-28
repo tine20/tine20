@@ -43,6 +43,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     // scheduleable interface fields
     { name: 'dtstart', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'recurid' },
+    { name: 'base_event_id' },
     // scheduleable interface fields with multiple appearance
     { name: 'exdate' },
     //{ name: 'exrule' },
@@ -80,6 +81,11 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * @type Boolean
      */
     outOfFilter: false,
+
+    /**
+     * default duration for new events
+     */
+    defaultEventDuration: 60,
     
     /**
      * returns displaycontainer with orignialcontainer as fallback
@@ -163,6 +169,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',
+        interval = prefs.get('interval') || 15,
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
         westPanel = mainScreen.getWestPanel(),
@@ -179,7 +186,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     var data = {
         summary: '',
         dtstart: dtstart,
-        dtend: dtstart.add(Date.HOUR, 1),
+        dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,

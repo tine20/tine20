@@ -126,6 +126,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS = 'featureExtendedEventContextActions';
 
     /**
+     * EVENT_VIEW
+     *
+     * @var string
+     */
+    const EVENT_VIEW = 'eventView';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -174,6 +181,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
             'default'               => 50
 
+        ),
+        self::EVENT_VIEW => array(
+                //_('Default View for Events')
+                'label'                 => 'Default View for Events',
+                //_('Default View for Events')
+                'description'           => 'Default View for Events ("organizer" or "attendee")',
+                'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+                'clientRegistryInclude' => true,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+                'default'               => 'attendee',
         ),
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')

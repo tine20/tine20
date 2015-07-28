@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @note: lot to do here, i just started to move stuff from views here
  */
@@ -169,7 +169,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         } else {
             rzInfo.diff = Math.round((height - rz.originalHeight) * (view.timeGranularity / view.granularityUnitHeights));
             // neglegt diffs due to borders etc.
-            rzInfo.diff = Math.round(rzInfo.diff/15) * 15;
+            rzInfo.diff = Math.round(rzInfo.diff/view.timeIncrement) * view.timeIncrement;
         }
         rzInfo.duration = originalDuration + rzInfo.diff;
         
@@ -445,7 +445,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                     disableTrackOver: true,
                     dynamic: true,
                     //dynamic: !!this.event.isRangeAdd,
-                    heightIncrement: view.granularityUnitHeights/2,
+                    heightIncrement: view.granularityUnitHeights / view.timeGranularity * view.timeIncrement,
                     maxHeight: maxHeight,
                     listeners: {
                         scope: view,
