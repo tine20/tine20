@@ -616,10 +616,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
         }
         unset($iMIP->existing_event);
 
-        $existingEvent = $iMIP->getExistingEvent(true);
+        $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP,true);
         $this->assertNull($existingEvent, 'event must be deleted');
 
-        $existingEvent = $iMIP->getExistingEvent(true, true);
+        $existingEvent =  $this->_iMIPFrontend->getExistingEvent($iMIP, true, true);
         $this->assertEquals($existingEvent->is_deleted, 1, 'event must be deleted');
     }
 

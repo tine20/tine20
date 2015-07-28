@@ -331,7 +331,6 @@ class Calendar_Frontend_iMIP
      * @param bool $_refetch
      * @param bool $_getDeleted
      * @return NULL|Tinebase_Record_Abstract
-     * @throws Exception
      */
     public function getExistingEvent($_iMIP, $_refetch = FALSE, $_getDeleted = FALSE)
     {
@@ -346,13 +345,14 @@ class Calendar_Frontend_iMIP
                 $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
                 $filters->addFilter($deletedFilter);
             }
-            $events = $this->_backend->search($filters);
+            $events = Calendar_Controller_MSEventFacade::getInstance()->search($filters);
 
             // NOTE: cancelled attendees from ext. organizers don't have read grant
             // find a better way to check grants
             if (! $_getDeleted) {
-                $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+                $events = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE);
             }
+            $event = $events->getFirstRecord();
             Calendar_Model_Attender::resolveAttendee($event['attendee']);
 
             $_iMIP->existing_event = $event;
