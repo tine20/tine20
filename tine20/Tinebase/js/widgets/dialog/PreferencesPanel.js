@@ -164,7 +164,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     // disable personal only fields (not quite sure why we get a string here in personal_only field)
                     fieldDef.disabled = (pref.get('personal_only') === '1' || pref.get('personal_only') === true);
                 } else {
-                    fieldDef.disabled = (pref.get('type') == 'forced');
+                    fieldDef.disabled = (pref.get('type') == 'forced' || pref.get('locked') == true);
                 }
                 
                 try {
