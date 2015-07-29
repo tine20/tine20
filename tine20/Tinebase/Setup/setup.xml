@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>9.0</version>
+    <version>9.1</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1872,7 +1872,7 @@
         </table>
         <table>
             <name>preferences</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1921,6 +1921,10 @@
                 </field>
                 <field>
                     <name>personal_only</name>
+                    <type>boolean</type>
+                </field>
+                <field>
+                    <name>locked</name>
                     <type>boolean</type>
                 </field>
                 <index>

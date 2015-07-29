@@ -259,7 +259,37 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Model_Preference::TYPE_FORCED, $pref->type);
         $this->assertEquals(0, $pref->value);
     }
-    
+
+    /**
+     * testSetLockedPref
+     *
+     * @see 0011178: allow to lock preferences for individual users
+     */
+    public function testSetLockedPref()
+    {
+        $tzPref = $this->_instance->getApplicationPreferenceDefaults(Tinebase_Preference::TIMEZONE);
+        $tzPref->type = Tinebase_Model_Preference::TYPE_USER;
+        $tzPref->locked = true;
+        $tzPref->id = null;
+        $tzPref->account_id = Tinebase_Core::getUser()->getId();
+        $tzPref->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        $tzPref = $this->_instance->create($tzPref);
+
+        $result = $this->_instance->search();
+        $pref = $result->filter('name', Tinebase_Preference::TIMEZONE)->getFirstRecord();
+
+        $this->assertTrue($pref !== null);
+        $this->assertEquals(Tinebase_Model_Preference::TYPE_USER, $pref->type);
+        $this->assertEquals(true, $pref->locked);
+
+        try {
+            $this->_instance->setValue(Tinebase_Preference::TIMEZONE, 'Europe/Berlin');
+            $this->fail('it is not allowed to set locked preference: ' . print_r($tzPref->toArray(), true));
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $this->assertEquals('You are not allowed to change the locked preference.', $tead->getMessage());
+        }
+    }
+
     /******************** protected helper funcs ************************/
     
     /**

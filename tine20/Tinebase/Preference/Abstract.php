@@ -415,8 +415,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE)
     {
         // check acl first
+        $userId = $this->_getAccountId();
         if(!$_ignoreAcl){
-            $userId = $this->_getAccountId();
             if (
                 $_accountId !== $userId
                 && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
@@ -454,6 +454,17 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         } else {
             $preference = $this->_rawDataToRecord($prefArray);
+
+            if ($preference->locked && ! $_ignoreAcl
+                // TODO allow this for admins?
+                /* && !Tinebase_Acl_Roles::getInstance()->hasRight(
+                    $this->_application,
+                    $userId,
+                    Tinebase_Acl_Rights_Abstract::ADMIN
+                ) */) {
+                throw new Tinebase_Exception_AccessDenied('You are not allowed to change the locked preference.');
+            }
+
             if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // delete if new value = use default
                 $this->delete($preference->getId());

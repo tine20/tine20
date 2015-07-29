@@ -524,13 +524,31 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '8.11');
     }
-    
+
+    /**
+     * update 11
+     *
+     * @see 0011178: allow to lock preferences for individual users
+     */
+    public function update_11()
+    {
+        if ($this->getTableVersion('preferences') != 8) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                        <name>locked</name>
+                        <type>boolean</type>
+                    </field>');
+            $this->_backend->addCol('preferences', $declaration);
+            $this->setTableVersion('preferences', '8');
+        }
+        $this->setApplicationVersion('Tinebase', '8.12');
+    }
+
     /**
      * update to 9.0
      *
      * @return void
      */
-    public function update_11()
+    public function update_12()
     {
         $this->setApplicationVersion('Tinebase', '9.0');
     }

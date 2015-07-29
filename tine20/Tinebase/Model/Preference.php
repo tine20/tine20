@@ -89,5 +89,7 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         'options'            => array('allowEmpty' => TRUE),
     // don't allow to set this preference in admin mode
         'personal_only'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    // don't allow user to change value
+        'locked'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     );
 }

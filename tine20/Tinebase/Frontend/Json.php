@@ -1014,9 +1014,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     } else {
                         // set user prefs
                         foreach ($data as $name => $value) {
-                            $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
-                            $backend->$name = $value['value'];
-                            $result[$applicationName][] = array('name' => $name, 'value' => $backend->$name);
+                            try {
+                                $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
+                                $backend->$name = $value['value'];
+                                $result[$applicationName][] = array('name' => $name, 'value' => $backend->$name);
+                            } catch (Exception $e) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                                        . 'Could not save preference '. $name . ' -> ' . $e->getMessage());
+                            }
                         }
                     }
                 }
