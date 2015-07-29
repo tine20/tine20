@@ -653,9 +653,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param  String            $_accountId
      * @param  Array|String      $_grant
      * @param  String            $_aclTableName
+     * @param  bool              $_andGrants
      * @return void
      */
-    public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
+    public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl', $_andGrants = FALSE)
     {
         $accountId = $_accountId instanceof Tinebase_Record_Abstract
             ? $_accountId->getId()
@@ -665,10 +666,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $grants = is_array($_grant) ? $_grant : array($_grant);
         
-        // admin grant includes all other grants
-        if (! in_array(Tinebase_Model_Grants::GRANT_ADMIN, $grants)) {
-            $grants[] = Tinebase_Model_Grants::GRANT_ADMIN;
-        }
+
 
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
@@ -694,8 +692,18 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
             foreach ($grants as $grant) {
-                $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
+                if ($_andGrants) {
+                    $grantsSelect->where("{$quotedGrant} LIKE ?", $grant);
+                } else {
+                    $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
+                }
             }
+
+            // admin grant includes all other grants
+            if (! in_array(Tinebase_Model_Grants::GRANT_ADMIN, $grants)) {
+                $grantsSelect->orWhere("{$quotedGrant} LIKE ?", Tinebase_Model_Grants::GRANT_ADMIN);
+            }
+
             $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
         }
     }
@@ -767,10 +775,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
+     * @param   bool                                $_andGrants
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getSharedContainer($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
+    public function getSharedContainer($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
     {
         // legacy handling
         $meta = $this->_resolveRecordClassArgument($recordClass);
@@ -782,7 +791,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $accountId .
             $application->getId() .
             implode('', (array)$grant) .
-            (int)$_ignoreACL
+            (int)$_ignoreACL .
+            (int)$_andGrants
         );
         
         try {
@@ -804,7 +814,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             ->order('container.name');
         
-        $this->addGrantsSql($select, $accountId, $grant);
+        $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants);
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         
@@ -826,12 +836,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string|Tinebase_Model_Application   $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
+     * @param   bool                                $_andGrants
      * @return  Tinebase_Record_RecordSet set of Tinebase_Model_User
      */
-    public function getOtherUsers($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE)
+    public function getOtherUsers($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
     {
         $meta = $this->_resolveRecordClassArgument($recordClass);
-        $userIds = $this->_getOtherAccountIds($_accountId, $meta['appName'], $_grant, $_ignoreACL);
+        $userIds = $this->_getOtherAccountIds($_accountId, $meta['appName'], $_grant, $_ignoreACL, $_andGrants);
         
         $users = Tinebase_User::getInstance()->getMultiple($userIds);
         $users->sort('accountDisplayName');
@@ -846,15 +857,16 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   string|Tinebase_Model_Application   $_application
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
+     * @param   bool                                $_andGrants
      * @return  array of array of containerData
      */
-    protected function _getOtherAccountIds($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    protected function _getOtherAccountIds($_accountId, $_application, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
     {
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         $grant       = $_ignoreACL ? '*' : $_grant;
 
-        $classCacheId = Tinebase_Helper::convertCacheId($accountId . $application->getId() . implode('', (array)$grant) .(int)$_ignoreACL);
+        $classCacheId = Tinebase_Helper::convertCacheId($accountId . $application->getId() . implode('', (array)$grant) . (int)$_ignoreACL . (int)$_andGrants);
         try {
             return $this->loadFromClassCache(__FUNCTION__, $classCacheId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -873,9 +885,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL)
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE);
-            
-        $this->addGrantsSql($select, $accountId, $grant);
-        
+
+        $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants);
+
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $containerIds = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
