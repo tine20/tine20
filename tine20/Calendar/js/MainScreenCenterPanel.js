@@ -1689,7 +1689,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
                 this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                     tbar: tbar,
-                    view: view
+                    view: view,
+                    mainScreen: this
                 });
             } else if (whichParts.presentation.match(/grid/i)) {
                 this.calendarPanels[which] = new Tine.Calendar.GridView({
