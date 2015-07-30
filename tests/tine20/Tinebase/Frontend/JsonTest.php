@@ -11,6 +11,11 @@
  */
 
 /**
+ * Test helper
+ */
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
+/**
  * Test class for Tinebase_Frontend_Json
  */
 class Tinebase_Frontend_JsonTest extends TestCase
@@ -495,6 +500,12 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $locale = Tinebase_Core::getLocale();
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         $this->assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
+
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $configuredSalesModels = array_keys($registryData['Sales']['models']);
+            $this->assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
+                . print_r($configuredSalesModels, true));
+        }
     }
 
     /**
