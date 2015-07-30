@@ -33,7 +33,8 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var salesApp = Tine.Tinebase.appMgr.get('Sales');
         this.useInvoice = salesApp
             && salesApp.featureEnabled('invoicesModule')
-            && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices');
+            && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices')
+            && Tine.Sales.Model.Invoice;
         Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
     
