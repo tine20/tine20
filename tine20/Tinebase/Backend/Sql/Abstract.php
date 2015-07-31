@@ -1048,6 +1048,25 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         [PRIMARY_POSITION] => 1
         [IDENTITY] => 1
      * )
+     *
+     * Oracle
+     *
+     * Array (
+        [SCHEMA_NAME] => public
+        [TABLE_NAME] => tine20_container
+        [COLUMN_NAME] => id
+        [COLUMN_POSITION] => 1
+        [DATA_TYPE] => NUMBER
+        [DEFAULT] =>
+        [NULLABLE] =>
+        [LENGTH] => 0
+        [SCALE] => 0
+        [PRECISION] => 11
+        [UNSIGNED] =>
+        [PRIMARY] => 1
+        [PRIMARY_POSITION] => 1
+        [IDENTITY] =>
+        )
      * 
      * @return boolean
      */
@@ -1055,19 +1074,31 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         $identifier = $this->_getRecordIdentifier();
         $schema     = $this->getSchema();
-        
+
         if (!isset($schema[$identifier])) {
             // should never happen
             return false;
         }
-        
+
         $column = $schema[$identifier];
-        
-        if (!in_array($column['DATA_TYPE'], array('int', 'int4'))) {
+
+        if (!in_array($column['DATA_TYPE'], array('int', 'int4', 'NUMBER'))) {
             return false;
         }
+
+        if ($this->_db instanceof Zend_Db_Adapter_Oracle) {
+            // @see https://forge.tine20.org/view.php?id=10820#c16318
+            $result = (
+                $column['PRIMARY'] == 1
+                && empty($column['IDENTITY'])
+                && empty($column['NULLABLE'])
+                && empty($column['DEFAULT'])
+            );
+        } else {
+            $result = !!$column['IDENTITY'];
+        }
         
-        return !!$column['IDENTITY'];
+        return $result;
     }
     
     /**
