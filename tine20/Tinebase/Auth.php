@@ -129,6 +129,7 @@ class Tinebase_Auth
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
+            'useStartTls' => false,
             'baseDn' => '',
             'accountFilterFormat' => NULL,
             'accountCanonicalForm' => '2',

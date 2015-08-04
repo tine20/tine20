@@ -597,7 +597,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 value: '1'
             }, commonComboConfig),
             Ext.applyIf({
-                name: 'accounts_' + type + 'useStartTls',
+                name: 'accounts_' + type + '_useStartTls',
                 fieldLabel: this.app.i18n._('Start TLS'),
                 store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                 value: '0'

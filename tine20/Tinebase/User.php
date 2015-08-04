@@ -113,6 +113,7 @@ class Tinebase_User
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
+            'useStartTls' => false,
             'useRfc2307bis' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=posixaccount',
