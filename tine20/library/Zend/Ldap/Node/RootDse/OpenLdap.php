@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage RootDSE
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: OpenLdap.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -32,7 +32,7 @@ require_once 'Zend/Ldap/Node/RootDse.php';
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage RootDSE
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Ldap_Node_RootDse_OpenLdap extends Zend_Ldap_Node_RootDse
@@ -60,7 +60,7 @@ class Zend_Ldap_Node_RootDse_OpenLdap extends Zend_Ldap_Node_RootDse
     /**
      * Determines if the control is supported
      *
-     * @param string|array $oids control oid(s) to check
+     * @param  string|array $oids control oid(s) to check
      * @return boolean
      */
     public function supportsControl($oids)
@@ -71,7 +71,7 @@ class Zend_Ldap_Node_RootDse_OpenLdap extends Zend_Ldap_Node_RootDse
     /**
      * Determines if the extension is supported
      *
-     * @param string|array $oids oid(s) to check
+     * @param  string|array $oids oid(s) to check
      * @return boolean
      */
     public function supportsExtension($oids)
@@ -82,7 +82,7 @@ class Zend_Ldap_Node_RootDse_OpenLdap extends Zend_Ldap_Node_RootDse
     /**
      * Determines if the feature is supported
      *
-     * @param string|array $oids feature oid(s) to check
+     * @param  string|array $oids feature oid(s) to check
      * @return boolean
      */
     public function supportsFeature($oids)

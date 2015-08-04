@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Ldif
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Encoder.php 10020 2009-08-18 14:34:09Z j.fischer@metaways.de $
+ * @version    $Id$
  */
 
 /**
@@ -26,7 +26,7 @@
  * @category   Zend
  * @package    Zend_Ldap
  * @subpackage Ldif
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Ldap_Ldif_Encoder
@@ -42,12 +42,15 @@ class Zend_Ldap_Ldif_Encoder
         'wrap'    => 78
     );
 
+    /**
+     * @var boolean
+     */
     protected $_versionWritten = false;
 
     /**
      * Constructor.
      *
-     * @param array $options Additional options used during encoding
+     * @param  array $options Additional options used during encoding
      * @return void
      */
     protected function __construct(array $options = array())
@@ -58,7 +61,7 @@ class Zend_Ldap_Ldif_Encoder
     /**
      * Decodes the string $string into an array of LDIF items
      *
-     * @param string $string
+     * @param  string $string
      * @return array
      */
     public static function decode($string)
@@ -70,7 +73,7 @@ class Zend_Ldap_Ldif_Encoder
     /**
      * Decodes the string $string into an array of LDIF items
      *
-     * @param string $string
+     * @param  string $string
      * @return array
      */
     protected function _decode($string)
@@ -137,8 +140,8 @@ class Zend_Ldap_Ldif_Encoder
     /**
      * Encode $value into a LDIF representation
      *
-     * @param mixed $value The value to be encoded
-     * @param array $options Additional options used during encoding
+     * @param  mixed $value   The value to be encoded
+     * @param  array $options Additional options used during encoding
      * @return string The encoded value
      */
     public static function encode($value, array $options = array())
@@ -151,7 +154,7 @@ class Zend_Ldap_Ldif_Encoder
      * Recursive driver which determines the type of value to be encoded
      * and then dispatches to the appropriate method.
      *
-     * @param $value mixed The value to be encoded
+     * @param  mixed $value The value to be encoded
      * @return string Encoded value
      */
     protected function _encode($value)
@@ -171,14 +174,14 @@ class Zend_Ldap_Ldif_Encoder
      *
      * @link http://www.faqs.org/rfcs/rfc2849.html
      *
-     * @param string $string
-     * @param boolen $base64
+     * @param  string $string
+     * @param  boolen $base64
      * @return string
      */
     protected function _encodeString($string, &$base64 = null)
     {
         $string = (string)$string;
-        if (empty($string)) {
+        if (!is_numeric($string) && empty($string)) {
             return '';
         }
 
@@ -229,8 +232,8 @@ class Zend_Ldap_Ldif_Encoder
      *
      * @link http://www.faqs.org/rfcs/rfc2849.html
      *
-     * @param string $name
-     * @param array|string $value
+     * @param  string       $name
+     * @param  array|string $value
      * @return string
      */
     protected function _encodeAttribute($name, $value)
@@ -267,7 +270,7 @@ class Zend_Ldap_Ldif_Encoder
      *
      * @link http://www.faqs.org/rfcs/rfc2849.html
      *
-     * @param array $attributes
+     * @param  array $attributes
      * @return string
      */
     protected function _encodeAttributes(array $attributes)

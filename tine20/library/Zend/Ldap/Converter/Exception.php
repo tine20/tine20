@@ -14,35 +14,22 @@
  *
  * @category   Zend
  * @package    Zend_Ldap
- * @subpackage Filter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id$
+ * @version    $Id: Exception.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
 /**
- * @see Zend_Ldap_Filter_Logical
+ * @see Zend_Exception
  */
-require_once 'Zend/Ldap/Filter/Logical.php';
+require_once 'Zend/Exception.php';
 
 /**
- * Zend_Ldap_Filter_Or provides an 'or' filter.
- *
  * @category   Zend
  * @package    Zend_Ldap
- * @subpackage Filter
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Ldap_Filter_Or extends Zend_Ldap_Filter_Logical
+class Zend_Ldap_Converter_Exception extends Zend_Exception
 {
-    /**
-     * Creates an 'or' grouping filter.
-     *
-     * @param array $subfilters
-     */
-    public function __construct(array $subfilters)
-    {
-        parent::__construct($subfilters, self::TYPE_OR);
-    }
 }
