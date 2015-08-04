@@ -50,6 +50,9 @@ class Tinebase_Ldap extends Zend_Ldap
         ));
         
         $returnValue = parent::__construct($options);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' LDAP options: ' . print_r($options, true));
         
         return $returnValue;
     }
