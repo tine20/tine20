@@ -24,6 +24,7 @@ class Tinebase_Group_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All Group Tests');
         $suite->addTestSuite('Tinebase_Group_SqlTest');
+        $suite->addTestSuite('Tinebase_Group_LdapTest');
 
         if (TestServer::getInstance()->isPhpunitVersionGreaterOrEquals("3.5.0")) {
             // getMockBuilder() is only supported in phpunit 3.5 and higher 
