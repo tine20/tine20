@@ -183,7 +183,7 @@ class Tinebase_Core
      * 
      * @var int
      */
-    protected static $logLevel;
+    protected static $logLevel = null;
     
     /******************************* DISPATCH *********************************/
     
@@ -1364,12 +1364,11 @@ class Tinebase_Core
      */
     public static function isLogLevel($_prio)
     {
-        if (!isset(self::$logLevel)) {
-            $config = self::getConfig();
-            
-            self::$logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
+        if (! isset(self::$logLevel) || self::$logLevel === 0 ) {
+            self::$logLevel = self::getLogLevel();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting loglevel to ' . self::$logLevel);
         }
-        
+
         return self::$logLevel >= $_prio;
     }
     
