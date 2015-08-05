@@ -10,29 +10,18 @@
  */
 
 /**
- * Test class for Tinebase_Group
- * @depricated, some fns might be moved to other testclasses
+ * Test class for Tinebase_User
+ * @deprecated, some fns might be moved to other testclasses
  */
 class Tinebase_AccountTest extends TestCase
 {
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_AccountTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
     /**
      * try to add an account
      * @return Tinebase_Model_FullUser
      */
     public function testAddAccount()
     {
+        $this->_usernamesToDelete[] = 'tine20phpunit';
         $account = Tinebase_User::getInstance()->addUser(new Tinebase_Model_FullUser(
             array(
                 'accountLoginName'    => 'tine20phpunit',
@@ -247,14 +236,14 @@ class Tinebase_AccountTest extends TestCase
     public function testDeleteAccount()
     {
         $account = $this->testAddAccount();
-        
+
         Tinebase_User::getInstance()->deleteUser($account);
-        
+
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        
+
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
     }
-    
+
     /**
      * try to delete multiple accounts
      *
@@ -262,16 +251,16 @@ class Tinebase_AccountTest extends TestCase
     public function testDeleteAccounts()
     {
         $account = $this->testAddAccount();
-        
+
         $todelete = array($account->accountId);
-        
+
         Tinebase_User::getInstance()->deleteUsers($todelete);
-        
+
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        
+
         $account = Tinebase_User::getInstance()->getUserById($account, 'Tinebase_Model_FullUser');
     }
-    
+
     /**
      * try to convert account id and check if correct exceptions are thrown 
      *
@@ -281,7 +270,6 @@ class Tinebase_AccountTest extends TestCase
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
         Tinebase_Model_User::convertUserIdToInt(0);
-        
     }
     
     /**

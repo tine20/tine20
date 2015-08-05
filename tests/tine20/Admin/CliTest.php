@@ -52,23 +52,23 @@ class Admin_CliTest extends TestCase
     {
         parent::setUp();
         
-        
         $this->_cli = new Admin_Frontend_Cli();
         
         $this->_usernamesToDelete = array('hmaster', 'hmeister', 'hmoster', 'irmeli', 'testuser', 'm.muster');
-        
+
         $this->_groupsToDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
-        $this->_testGroup['domainuser'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'domainuser'
-        )));
-        $this->_testGroup['teacher'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'teacher'
-        )));
-        $this->_testGroup['student'] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
-            'name'   => 'student'
-        )));
-        $this->_groupsToDelete->addRecord($this->_testGroup['teacher']);
-        
+        $testGroups = array('domainuser', 'teacher', 'student');
+        foreach ($testGroups as $group) {
+            try {
+                $this->_testGroup[$group] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
+                    'name' => $group
+                )));
+            } catch (Exception $e) {
+                $this->_testGroup[$group] = Tinebase_Group::getInstance()->getGroupByName($group);
+            }
+            $this->_groupsToDelete->addRecord($this->_testGroup[$group]);
+        }
+
         $this->objects['config'] = '<?xml version="1.0" encoding="UTF-8"?>
         <config>
             <dryrun>0</dryrun>
