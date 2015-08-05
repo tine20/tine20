@@ -3,7 +3,9 @@
  * Tine 2.0
  *
  * @package     Sync
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -33,23 +35,49 @@ class Sync
      * @var Zend_Ldap
      */
     protected $_ldap = NULL;
-    
-    /**
+
+   /**
     * the basic group ldap filter (for example the objectclass)
-     *
-    * @var string
-    */
-    protected $_groupBaseFilter = 'objectclass=posixgroup';
-    
-    /**
-     * the basic user ldap filter (for example the objectclass)
+    *
+    * default LDAP:  'objectclass=posixgroup'
+    * Samba:         'objectclass=group'
     *
     * @var string
     */
-    protected $_userBaseFilter = 'objectclass=posixaccount';
+    protected $_groupBaseFilter = 'objectclass=group';
     
+   /**
+    * the basic user ldap filter (for example the objectclass)
+    *
+    * default LDAP:  'objectclass=posixaccount'
+    * Samba:         'objectclass=user'
+    *
+    * @var string
+    */
+    protected $_userBaseFilter = 'objectclass=user';
+
     /**
-     * the tine user backend
+     * username property
+     *
+     * default LDAP: 'uid'
+     * Samba:        'samaccountname'
+     *
+     * @var string
+     */
+    protected $_usernameProperty = 'samaccountname';
+
+    /**
+     * uuid property
+     *
+     * default LDAP: 'entryuuid'
+     * Samba:        'objectguid'
+     *
+     * @var string
+     */
+    protected $_uuidProperty = 'objectguid';
+
+    /**
+    * the tine user backend
     *
     * @var Tinebase_User_Sql
     */
@@ -206,8 +234,11 @@ class Sync
         $mapping = array();
         $ldapUsers = $this->_ldap->search($filter, $this->_config->ldap->baseDn, $this->_userSearchScope, array('*', '+'));
         foreach ($ldapUsers as $user) {
-            $username = $user['uid'][0];
-            $ldapUuid = $user['entryuuid'][0];
+            $username = $user[$this->_usernameProperty][0];
+            $ldapUuid = ($this->_uuidProperty === 'objectguid')
+                ? Tinebase_Ldap::decodeGuid($user['objectguid'][0])
+                : $user[$this->_uuidProperty][0];
+
             try {
                 $tineUser = $this->_tineUserBackend->getFullUserByLoginName($username);
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' User ' . $username . ': ' . $tineUser->getId() . ' -> ' . $ldapUuid);
@@ -241,7 +272,10 @@ class Sync
         $ldapGroups = $this->_ldap->search($filter, $this->_config->ldap->baseDn, $this->_groupSearchScope, array('*', '+'));
         foreach ($ldapGroups as $group) {
             $groupname = (isset($groupNameMapping[$group['cn'][0]])) ? $groupNameMapping[$group['cn'][0]] : $group['cn'][0];
-            $ldapUuid = $group['entryuuid'][0];
+            $ldapUuid = ($this->_uuidProperty === 'objectguid')
+                ? Tinebase_Ldap::decodeGuid($group['objectguid'][0])
+                : $group[$this->_uuidProperty][0];
+
             try {
                 $tineGroup = $this->_tineGroupBackend->getGroupByName($groupname);
                 $this->_logger->debug(__METHOD__ . '::' . __LINE__ . ' Group ' . $groupname . ' (' .$group['cn'][0] . '): ' . $tineGroup->getId() . ' -> ' . $ldapUuid);

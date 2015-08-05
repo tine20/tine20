@@ -15,7 +15,7 @@
  */
 
 // set include path to find all needed classes
-set_include_path('./lib' . PATH_SEPARATOR . '/var/www/tine20' . PATH_SEPARATOR . '/var/www/tine20/library' .   PATH_SEPARATOR . get_include_path());
+set_include_path('./lib' . PATH_SEPARATOR . '/usr/share/tine20' . PATH_SEPARATOR . '/usr/share/tine20/library' . PATH_SEPARATOR . '/etc/tine20' .   PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();

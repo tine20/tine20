@@ -296,7 +296,12 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             //find out displaycontainer
             if ($attendee['user_type'] != 'resource') {
                 $userAccountId = $contactUserMap[$attendee['user_id']];
-                $attendee['displaycontainerId'] = Calendar_Controller_Event::getDefaultDisplayContainerId($userAccountId);
+                try {
+                    $attendee['displaycontainerId'] = Calendar_Controller_Event::getDefaultDisplayContainerId($userAccountId);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " Could not find user with id " . $attendee['user_id']);
+                    continue;
+                }
             } else {
                 $attendee['displaycontainerId'] = $resourceContainerMap[$attendee['user_id']];
             }

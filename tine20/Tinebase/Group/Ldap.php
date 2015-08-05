@@ -625,7 +625,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $this->getLdap()->update($dn, $ldapData);
         
-        if ($metaData['cn'] != $ldapData['cn']) {
+        if (isset($metaData['cn']) && $metaData['cn'] != $ldapData['cn']) {
             $newDn = "cn={$ldapData['cn']},{$this->_options['groupsDn']}";
             $this->_ldap->rename($dn, $newDn);
         }

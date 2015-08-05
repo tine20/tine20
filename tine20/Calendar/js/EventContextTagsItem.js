@@ -12,13 +12,14 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
     datetime: null,
 
     initComponent: function() {
-        this.hidden = ! (
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
+        this.hidden = this.app.getMainScreen().getCenterPanel().isActiveView('Grid') || ! (
             this.event
             && this.event.get('editGrant')
             && Tine.Tinebase.appMgr.get('Calendar').featureEnabled('featureExtendedEventContextActions')
         );
 
-        this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.recentsManager = new Tine.Tinebase.RecentsManager({
             recordClass: Tine.Tinebase.Model.Tag,
             domain: this.app.appName,

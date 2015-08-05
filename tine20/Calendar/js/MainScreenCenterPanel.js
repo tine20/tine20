@@ -236,7 +236,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
 
         this.showSheetView = new Ext.Button({
-            pressed: String(this.activeView).match(/sheet$/i),
+            pressed: this.isActiveView('Sheet'),
             scale: 'medium',
             minWidth: 60,
             rowspan: 2,
@@ -251,7 +251,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         
         this.showGridView = new Ext.Button({
-            pressed: String(this.activeView).match(/grid$/i),
+            pressed: this.isActiveView('Grid'),
             scale: 'medium',
             minWidth: 60,
             rowspan: 2,
@@ -266,7 +266,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         
         this.showDayView = new Ext.Toolbar.Button({
-            pressed: String(this.activeView).match(/^day/i),
+            pressed: this.isActiveView('Day'),
             text: this.app.i18n._('Day'),
             iconCls: 'cal-day-view',
             xtype: 'tbbtnlockedtoggle',
@@ -275,7 +275,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
         this.showWeekView = new Ext.Toolbar.Button({
-            pressed: String(this.activeView).match(/^week/i),
+            pressed: this.isActiveView('Week'),
             text: this.app.i18n._('Week'),
             iconCls: 'cal-week-view',
             xtype: 'tbbtnlockedtoggle',
@@ -284,7 +284,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
         this.showMonthView = new Ext.Toolbar.Button({
-            pressed: String(this.activeView).match(/^month/i),
+            pressed: this.isActiveView('Month'),
             text: this.app.i18n._('Month'),
             iconCls: 'cal-month-view',
             xtype: 'tbbtnlockedtoggle',
@@ -339,6 +339,35 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             grantsProperty: false,
             containerProperty: false
         });
+    },
+
+    /**
+     * get current view type (Grid/Day/Week/...)
+     *
+     * @param {String} view
+     * @returns {Boolean}
+     */
+    isActiveView: function(view)
+    {
+        switch (view) {
+            case 'Grid':
+                return String(this.activeView).match(/grid$/i);
+                break;
+            case 'Day':
+                return String(this.activeView).match(/day/i);
+                break;
+            case 'Week':
+                return String(this.activeView).match(/week/i);
+                break;
+            case 'Month':
+                return String(this.activeView).match(/month/i);
+                break;
+            case 'Sheet':
+                return String(this.activeView).match(/sheet/i);
+                break;
+            default:
+                return false;
+        }
     },
     
     /**

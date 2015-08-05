@@ -52,6 +52,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         ));
         
         // add account for group / role member tests
+        $this->_usernamesToDelete[] =$this->objects['user']->accountLoginName;
         $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
         Tinebase_Group::getInstance()->addGroupMember($this->objects['user']->accountPrimaryGroup, $this->objects['user']);
         
@@ -66,7 +67,6 @@ class Tinebase_Acl_RolesTest extends TestCase
      */
     protected function tearDown()
     {
-        Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
         Tinebase_Acl_Roles::getInstance()->resetClassCache();
         
         // cleanup for testHasRight/test disabled app
@@ -147,7 +147,7 @@ class Tinebase_Acl_RolesTest extends TestCase
         $this->testCreateRole();
         
         // create role 2 for test
-        $role2 = Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role_2']);
+        Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role_2']);
         
         // remove role members
         Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());
