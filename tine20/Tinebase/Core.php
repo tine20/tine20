@@ -183,7 +183,7 @@ class Tinebase_Core
      * 
      * @var int
      */
-    protected static $logLevel;
+    protected static $logLevel = null;
     
     /******************************* DISPATCH *********************************/
     
@@ -723,8 +723,10 @@ class Tinebase_Core
                         break;
                         
                     case 'Memcached':
-                        $host = $config->caching->host ? $config->caching->host : ($config->caching->memcached->host ? $config->caching->memcached->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port : ($config->caching->memcached->port ? $config->caching->memcached->port : 11211);
+                        $host = $config->caching->host ? $config->caching->host : (isset($config->caching->memcached->host)
+                            ? $config->caching->memcached->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port : (isset($config->caching->memcached->port)
+                            ? $config->caching->memcached->port : 11211);
                         $backendOptions = array(
                             'servers' => array(
                                 'host' => $host,
@@ -1364,12 +1366,11 @@ class Tinebase_Core
      */
     public static function isLogLevel($_prio)
     {
-        if (!isset(self::$logLevel)) {
-            $config = self::getConfig();
-            
-            self::$logLevel = Tinebase_Log::getMaxLogLevel(isset($config->logger) ? $config->logger : NULL);
+        if (! isset(self::$logLevel) || self::$logLevel === 0 ) {
+            self::$logLevel = self::getLogLevel();
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting loglevel to ' . self::$logLevel);
         }
-        
+
         return self::$logLevel >= $_prio;
     }
     

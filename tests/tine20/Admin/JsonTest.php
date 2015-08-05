@@ -135,9 +135,9 @@ class Admin_JsonTest extends TestCase
         if ($data === null) {
             $data = $this->objects['user']->toArray();
         }
+        $this->_usernamesToDelete[] = $data['accountLoginName'];
         $user = $this->_json->saveUser($data);
-        $this->_usernamesToDelete[] = $user['accountLoginName'];
-        
+
         return $user;
     }
     
@@ -170,11 +170,11 @@ class Admin_JsonTest extends TestCase
      */
     public function testGetNonExistentAccountById()
     {
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        Tinebase_Translation::getTranslation('Tinebase');
         $id = 12334567;
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $user = Tinebase_User::getInstance()->getUserById($id);
+        Tinebase_User::getInstance()->getUserById($id);
     }
 
     /**
