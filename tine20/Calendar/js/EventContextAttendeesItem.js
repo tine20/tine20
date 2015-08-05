@@ -13,13 +13,14 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
     datetime: null,
 
     initComponent: function() {
-        this.hidden = ! (
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
+        this.hidden = this.app.getMainScreen().getCenterPanel().isActiveView('Grid') || ! (
             this.event
             && this.event.get('editGrant')
             && Tine.Tinebase.appMgr.get('Calendar').featureEnabled('featureExtendedEventContextActions')
         );
 
-        this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.menu = [];
         this.view = this.app.getMainScreen().getCenterPanel().getCalendarPanel(this.app.getMainScreen().getCenterPanel().activeView).getView();
 
