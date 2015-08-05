@@ -1038,4 +1038,20 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $result;
     }
+
+    /**
+     * fetch all user ids from accounts table
+     *
+     * @return array
+     */
+    public function getAllUserIdsFromSqlBackend()
+    {
+        $sqlbackend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_FullUser',
+            'tableName' => $this->_tableName,
+        ));
+
+        $userIds = $sqlbackend->search(null, null, Tinebase_Backend_Sql_Abstract::IDCOL);
+        return $userIds;
+    }
 }

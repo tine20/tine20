@@ -700,7 +700,7 @@ class Tinebase_User
     public static function syncUsers($options)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            .' Start synchronizing users ...');
+            .' Start synchronizing users with options ' . print_r($options, true));
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
@@ -715,11 +715,33 @@ class Tinebase_User
                     . $ten->getMessage());
             }
         }
+
+        if (isset($options['deleteUsers']) && $options['deleteUsers']) {
+            self::_syncDeletedUsers($users);
+        }
         
         // @todo this should be improved: only the cache of synced users + group memberships should be cleaned
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Finished synchronizing users. Clearing cache after user sync ...');
         Tinebase_Core::getCache()->clean();
+    }
+
+    /**
+     * deletes user in tine20 db that no longer exist in sync backend
+     *
+     * @param Tinebase_Record_RecordSet $usersInSyncBackend
+     */
+    protected static function _syncDeletedUsers(Tinebase_Record_RecordSet $usersInSyncBackend)
+    {
+        $userIdsInSqlBackend = Tinebase_User::getInstance()->getAllUserIdsFromSqlBackend();
+        $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' About to delete ' . count($deletedInSyncBackend) . ' users in SQL backend...');
+
+        foreach ($deletedInSyncBackend as $userToDelete) {
+            Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+        }
     }
 
     /**
@@ -771,6 +793,7 @@ class Tinebase_User
      *
      * @param array $_options [hash that may contain override values for admin user name and password]
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function createInitialAccounts($_options)
     {
