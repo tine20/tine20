@@ -723,8 +723,10 @@ class Tinebase_Core
                         break;
                         
                     case 'Memcached':
-                        $host = $config->caching->host ? $config->caching->host : ($config->caching->memcached->host ? $config->caching->memcached->host : 'localhost');
-                        $port = $config->caching->port ? $config->caching->port : ($config->caching->memcached->port ? $config->caching->memcached->port : 11211);
+                        $host = $config->caching->host ? $config->caching->host : (isset($config->caching->memcached->host)
+                            ? $config->caching->memcached->host : 'localhost');
+                        $port = $config->caching->port ? $config->caching->port : (isset($config->caching->memcached->port)
+                            ? $config->caching->memcached->port : 11211);
                         $backendOptions = array(
                             'servers' => array(
                                 'host' => $host,
