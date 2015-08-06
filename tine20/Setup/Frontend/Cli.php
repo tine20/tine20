@@ -426,6 +426,11 @@ class Setup_Frontend_Cli
                 new Tinebase_EmailUser_Smtp_LdapDbmailSchema()
             );
         }
+
+        if ($_opts->syncdeletedusers) {
+            $options['deleteUsers'] = true;
+        }
+
         Tinebase_User::syncUsers($options);
     }
     
