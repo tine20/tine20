@@ -1063,7 +1063,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-<<<<<<< HEAD
      * send deactivation email to user
      * 
      * @param mixed $accountId
