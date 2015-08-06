@@ -47,6 +47,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
                     'dbmailldap'            => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
                     'onlyusers'             => 'Only usable with sync_accounts_from_ldap. Fetches only users and no groups from LDAP.',
+                    'syncdeletedusers'      => 'Only usable with sync_accounts_from_ldap. Removes users from Tine 2.0 DB that no longer exist in LDAP',
                 'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
                 'egw14import'               => 'Import user and groups from egw14
                          Examples: 

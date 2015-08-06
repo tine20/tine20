@@ -1063,6 +1063,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
+<<<<<<< HEAD
      * send deactivation email to user
      * 
      * @param mixed $accountId
@@ -1127,7 +1128,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
         $fallback = new Tinebase_DateTime('2014-12-01');
-        if (! isset($schema['creation_time'])) {
+        if (!isset($schema['creation_time'])) {
             return $fallback;
         }
 
@@ -1139,7 +1140,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ->limit(1);
         $creationTime = $this->_db->fetchOne($select);
 
-        $result = (! empty($creationTime)) ? new Tinebase_DateTime($creationTime) : $fallback;
+        $result = (!empty($creationTime)) ? new Tinebase_DateTime($creationTime) : $fallback;
         return $result;
+    }
+
+    /**
+     * fetch all user ids from accounts table
+     *
+     * @return array
+     */
+    public function getAllUserIdsFromSqlBackend()
+    {
+        $sqlbackend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_FullUser',
+            'tableName' => $this->_tableName,
+        ));
+
+        $userIds = $sqlbackend->search(null, null, Tinebase_Backend_Sql_Abstract::IDCOL);
+        return $userIds;
     }
 }
