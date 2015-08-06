@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_User_Ldap
  */
-class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_LdapTest extends TestCase
 {
     /**
      * ldap group backend
@@ -26,11 +26,6 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     protected $_backend = NULL;
         
-    /**
-     * @var array test objects
-     */
-    protected $objects = array();
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -43,21 +38,6 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('LDAP backend not enabled');
         }
         $this->_backend = Tinebase_User::factory(Tinebase_User::LDAP);
-        
-        $this->objects['users'] = array();
-    }
-    
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        foreach ($this->objects['users'] as $user) {
-            $this->_backend->deleteUser($user);
-        }
     }
     
     /**
@@ -68,10 +48,10 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     public function testAddUser()
     {
         $user = $this->getTestRecord();
-        
+
+        $this->_usernamesToDelete[] = $user->accountLoginName;
         $testUser = $this->_backend->addUser($user);
-        $this->objects['users']['testUser'] = $testUser;
-        
+
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
         $this->assertEquals('Tinebase_Model_FullUser', get_class($testUser), 'wrong type');
         
@@ -262,5 +242,32 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         ));
         
         return $user;
+    }
+
+    /**
+     * @see 0011192: LDAP sync should delete contacts
+     */
+    public function testSyncDeleted()
+    {
+        $user = $this->testAddUser();
+
+        // delete user in ldap
+        Tinebase_User::getInstance()->deleteUserInSyncBackend($user->getId());
+
+        // check if still in tine20 db
+        $sqlUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId());
+        $this->assertEquals($user->getId(), $sqlUser->getId());
+
+        // set sync config/option + start user sync
+        $syncOptions = array('deleteUsers' => true);
+        Tinebase_User::syncUsers($syncOptions);
+
+        // check if user is deleted in tine, too
+        try {
+            Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId());
+            $this->fail('user should be deleted from tine20 db');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertContains('User with accountId = ' . $sqlUser->getId(), $tenf->getMessage());
+        }
     }
 }

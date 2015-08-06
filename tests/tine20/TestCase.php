@@ -113,8 +113,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
-        
-        Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+
+        if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_originalTestUser);
+        }
         
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
@@ -199,12 +201,17 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteUsers()
     {
+
+
         foreach ($this->_usernamesToDelete as $username) {
             try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Trying to delete user: ' . $username);
+
                 Tinebase_User::getInstance()->deleteUser(Tinebase_User::getInstance()->getUserByLoginName($username));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' error while deleting user: ' . $e->getMessage());
+                    . ' Error while deleting user: ' . $e->getMessage());
             }
         }
     }

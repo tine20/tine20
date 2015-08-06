@@ -171,22 +171,24 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_3()
     {
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>etag</name>
-                <type>text</type>
-                <length>60</length>
-            </field>');
-        $this->_backend->addCol('cal_events', $declaration);
-        
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>etag</name>
+        if (! $this->_backend->columnExists('etag', 'cal_events')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>etag</name>
-                </field>
-            </index>');
-        $this->_backend->addIndex('cal_events', $declaration);
+                    <type>text</type>
+                    <length>60</length>
+                </field>');
+            $this->_backend->addCol('cal_events', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>etag</name>
+                    <field>
+                        <name>etag</name>
+                    </field>
+                </index>');
+            $this->_backend->addIndex('cal_events', $declaration);
+        }
         
         $this->setTableVersion('cal_events', 7);
         $this->setApplicationVersion('Calendar', '8.4');
@@ -221,7 +223,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
             $this->_backend->addCol('cal_events', $declaration);
         }
         
-        $this->setTableVersion('cal_events', 8);
+        $this->setTableVersion('cal_events', '8');
         $this->setApplicationVersion('Calendar', '8.6');
     }
     
@@ -229,21 +231,24 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
      * add rrule index
      * 
      * @see 0010214: improve calendar performance / yearly base events
+     *
+     * TODO re-enable this when it is fixed for postgresql
+     * @see 0011194: only drop index if it exists
      */
     public function update_6()
     {
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>rrule</name>
-                <field>
-                    <name>rrule</name>
-                </field>
-            </index>');
-        try {
-            $this->_backend->addIndex('cal_events', $declaration);
-        } catch (Zend_Db_Statement_Exception $e) {
-            Tinebase_Exception::log($e);
-        }
+//        $declaration = new Setup_Backend_Schema_Index_Xml('
+//            <index>
+//                <name>rrule</name>
+//                <field>
+//                    <name>rrule</name>
+//                </field>
+//            </index>');
+//        try {
+//            $this->_backend->addIndex('cal_events', $declaration);
+//        } catch (Zend_Db_Statement_Exception $e) {
+//            Tinebase_Exception::log($e);
+//        }
         
         $this->setTableVersion('cal_events', '9');
         $this->setApplicationVersion('Calendar', '8.7');
