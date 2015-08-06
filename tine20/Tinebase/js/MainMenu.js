@@ -274,7 +274,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         Ext.MessageBox.wait(_('Logging you out...'), _('Please wait!'));
         Ext.Ajax.request( {
             params : {
-                method : 'Tinebase.logout'
+                method : Ext.isObject(Tine.Setup) ? 'Setup.logout' : 'Tinebase.logout'
             },
             callback : function(options, success, response) {
                 // clear the authenticated mod_ssl session
