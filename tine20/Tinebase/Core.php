@@ -1368,7 +1368,6 @@ class Tinebase_Core
     {
         if (! isset(self::$logLevel) || self::$logLevel === 0 ) {
             self::$logLevel = self::getLogLevel();
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting loglevel to ' . self::$logLevel);
         }
 
         return self::$logLevel >= $_prio;
