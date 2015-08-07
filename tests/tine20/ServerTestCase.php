@@ -63,6 +63,20 @@ abstract class ServerTestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * Performs custom preparations on the process isolation template.
+     *
+     * @param Text_Template $template
+     * @since Method available since Release 3.4.0
+     */
+    protected function prepareTemplate(Text_Template $template)
+    {
+        // needed to get bootstrap file included in separate process again
+        $template->setVar(array(
+            'globals' => sprintf("\$GLOBALS['__PHPUNIT_BOOTSTRAP'] = '%s/bootstrap.php';", __DIR__)
+        ));
+    }
+    
+    /**
      * fetch test user credentials
      * 
      * @return array
