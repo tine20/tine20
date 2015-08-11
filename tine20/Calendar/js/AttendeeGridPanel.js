@@ -223,7 +223,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     onAfterAttenderEdit: function(o) {
         switch (o.field) {
-            case 'user_id':
+            case 'user_id' :
                 // detect duplicate entry
                 // TODO detect duplicate emails, too 
                 var isDuplicate = false;
@@ -254,14 +254,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     o.record.explicitlyAdded = true;
                     o.record.set('checked', true);
                     
-                    var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
-
+                    var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
                     this.store.add([newAttender]);
                     this.startEditing(o.row +1, o.column);
                 }
                 break;
                 
-            case 'user_type':
+            case 'user_type' :
                 this.startEditing(o.row, o.column +1);
                 break;
             
@@ -489,8 +488,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(attendee, function(attender) {
 
             var record = new Tine.Calendar.Model.Attender(attender, attender.id);
-            record.set('status_authkey', 1);
-
             this.store.addSorted(record);
             
             if (attender.displaycontainer_id  && this.record.get('container_id') && attender.displaycontainer_id.id == this.record.get('container_id').id) {
@@ -500,8 +497,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (record.get('editGrant')) {
             // Add new attendee
-            var record = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id());
-            this.store.add([record]);
+            this.store.add([new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() )]);
         }
     },
     
