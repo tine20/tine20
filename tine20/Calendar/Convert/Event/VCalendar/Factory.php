@@ -125,4 +125,22 @@ class Calendar_Convert_Event_VCalendar_Factory
         
         return array($backend, $version);
     }
+
+    /**
+     * parse useragent and return backend and version
+     *
+     * @return array
+     */
+    static public function supportsSyncToken($_userAgent)
+    {
+        list($backend, $version) = self::parseUserAgent($_userAgent);
+        switch($backend)
+        {
+            case self::CLIENT_MACOSX:
+                if (version_compare($version, '10.9', '>='))
+                    return true;
+                break;
+        }
+        return false;
+    }
 }
