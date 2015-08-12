@@ -1,0 +1,88 @@
+X-Account-Key: account4
+X-UIDL: AAq2ktkAAMtgThx7vQQ8/mw10kA
+X-Mozilla-Status: 0000
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Received: from pop3.freenet.de by web27805.mail.ukl.yahoo.com with YMEXTPOP; Tue, 12 Jul 2011 17:52:13 BST
+Delivery-date: Tue, 12 Jul 2011 02:16:28 +0200
+Received: from [195.4.92.22] (helo=12.mx.freenet.de)
+	by 2.mbox0.freenet.de with esmtpa (ID exim) (Exim 4.76 #5)
+	id 1QgQeK-0005HB-F9
+	for gwinews@01019freenet.de; Tue, 12 Jul 2011 02:16:28 +0200
+Received: from mail-gy0-f199.google.com ([209.85.160.199]:33796)
+	by 12.mx.freenet.de with esmtps (TLSv1:RC4-SHA:128) (port 25) (Exim 4.72 #5)
+	id 1QgQeK-0002Um-3l
+	for mail@maiul.de; Tue, 12 Jul 2011 02:16:28 +0200
+Received: by gya6 with SMTP id 6so5197717gya.6
+        for <mail@maiul.de>; Mon, 11 Jul 2011 17:16:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=beta;
+        h=from:to:cc:subject:reply-to:x-google-ads-sender:message-id
+         :x-trak-extra-language:mime-version:content-type
+         :content-transfer-encoding;
+        bh=wchDaY1ouBs/AjehTB++nDbTaalfEZ4+KJUvXaf1voA=;
+        b=UOqgFPV6RtNoelvIOdQ6QcqLd42jWkkjkFsOqU92tw/4ivb2eK2GkqbHLOgFGlk+Jn
+         RvTwx3VtXlhZ5Nczyorg==
+Received: by 10.236.189.147 with SMTP id c19mr2368470yhn.125.1310429787023;
+        Mon, 11 Jul 2011 17:16:27 -0700 (PDT)
+From: Google Shopping <shopping-noreply@google.com>
+To: mail@maiul.de
+Cc: 
+Subject: =?utf-8?q?Google_Produktsuche=3A_Wichtige_=C3=84nderungen_an_Feed-Spezifi?=
+ =?utf-8?q?kationen_und_Programmrichtlinien?=
+Reply-To: shopping-noreply@google.com
+X-Google-Ads-Sender: auto_adsense_emails
+Message-ID: <11f7ecba.1310429787.000000.9927.1.DE.5ab3d53a@google.com>
+X-Trak-Extra-Language: DE
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+X-purgate-ID: 149285::1310429788-000006FD-2C960556/0-0/0-0
+Delivered-To: mail@maiul.de
+Envelope-to: mail@maiul.de
+X-Tine20TestMessage: yahoo.eml
+Delivered-To: gwinews@01019freenet.de
+Status: RO
+
+SGFsbG8sDQoNCnZpZWxlbiBEYW5rIGbDvHIgSWhyZSBUZWlsbmFobWUgYW4gR29vZ2xlIFNob3Bw
+aW5nLiDCoEhpZXJtaXQgbcO2Y2h0ZW4gd2lyIFNpZSDDvGJlciB3aWNodGlnZSDDhG5kZXJ1bmdl
+biBhbiBkZW4gZXJmb3JkZXJsaWNoZW4gQXR0cmlidXRlbiB1bmQgYW4gZGVuIFByb2dyYW1tcmlj
+aHRsaW5pZW4gZsO8ciBHb29nbGUgU2hvcHBpbmcgaW5mb3JtaWVyZW4uIFZvbiBkaWVzZW4gw4Ru
+ZGVydW5nZW4gc2luZCBhbGxlIEjDpG5kbGVyIGJldHJvZmZlbi4gDQoNCkluIFp1a3VuZnQgc2lu
+ZCBuZXVlIGFsbGdlbWVpbmUgQXR0cmlidXRlIHNvd2llIEF0dHJpYnV0ZSBmw7xyIGJlc3RpbW10
+ZSBQcm9kdWt0a2F0ZWdvcmllbiB1bmQgWmllbGzDpG5kZXIgZXJmb3JkZXJsaWNoLiBCaXR0ZSBs
+ZXNlbiBTaWUgZGllIG5ldWVuIEZlZWQtU3BlemlmaWthdGlvbmVuIHVudGVyIGh0dHA6Ly93d3cu
+Z29vZ2xlLmNvbS9zdXBwb3J0L21lcmNoYW50cy9iaW4vYW5zd2VyLnB5P2Fuc3dlcj0xODg0OTQg
+c29yZ2bDpGx0aWcgZHVyY2ggdW5kIHByw7xmZW4gU2llLCB3ZWxjaGUgw4RuZGVydW5nZW4gYW4g
+SWhyZW0gRGF0ZW4tRmVlZCBub3R3ZW5kaWcgc2luZC4NCg0KRWluZSBadXNhbW1lbmZhc3N1bmcg
+ZGVyIG5ldWVuIEFuZm9yZGVydW5nZW4gaW4gVGFiZWxsZW5mb3JtIGZpbmRlbiBTaWUgdW50ZXIg
+aHR0cDovL3d3dy5nb29nbGUuY29tL3N1cHBvcnQvbWVyY2hhbnRzL2Jpbi9hbnN3ZXIucHk/YW5z
+d2VyPTEzNDQwNTcuDQoNCkFiIGRlbSAyMi7CoFNlcHRlbWJlciB3ZXJkZW4gYWxsZSBLb250ZW4g
+Z2VzcGVycnQsIGRpZSBkZW4gbmV1ZW4gQW5mb3JkZXJ1bmdlbiBuaWNodCBlbnRzcHJlY2hlbi4g
+V2VpdGVyZSBJbmZvcm1hdGlvbmVuIHp1ciBVbXNldHp1bmcgZGVyIG5ldWVuIFJpY2h0bGluaWVu
+IGZpbmRlbiBTaWUgaW4gZGVyIEdvb2dsZSBNZXJjaGFudCBDZW50ZXItSGlsZmUgdW50ZXIgaHR0
+cDovL3d3dy5nb29nbGUuY29tL3N1cHBvcnQvbWVyY2hhbnRzL2Jpbi9hbnN3ZXIucHk/YW5zd2Vy
+PTE4ODQ4NC4NCg0KQml0dGUgYWt0dWFsaXNpZXJlbiBTaWUgSWhyZSBLb250b2VpbnN0ZWxsdW5n
+ZW4gYnp3LiBEYXRlbi1GZWVkcyBzbyBzY2huZWxsIHdpZSBtw7ZnbGljaCwgZGFtaXQgU2llIGRp
+ZSBuZXVlbiBBbmZvcmRlcnVuZ2VuIGJpcyB6dW0gb2JlbiBnZW5hbm50ZW4gVGVybWluIGVyZsO8
+bGxlbi4gwqBXZWl0ZXJlIEluZm9ybWF0aW9uZW4genUgZGllc2VuIMOEbmRlcnVuZ2VuIGZpbmRl
+biBTaWUgaW0gR29vZ2xlIE1lcmNoYW50IENlbnRlci1CbG9nIHVudGVyIGh0dHA6Ly9nb29nbGVo
+YWVuZGxlcmJsb2cuYmxvZ3Nwb3QuY29tLzIwMTEvMDcvZnVyLW1lcmNoYW50LWNlbnRlci1udXR6
+ZXItd2ljaHRpZ2UuaHRtbC4NCg0KTWl0IGZyZXVuZGxpY2hlbiBHcsO8w59lbg0KDQpJaHIgR29v
+Z2xlIFNob3BwaW5nLVRlYW0NCg0KwqkgMjAxMSBHb29nbGUgSXJlbGFuZCBMdGQsIEdvcmRvbiBI
+b3VzZSwgQmFycm93IFN0cmVldCwgRHVibGluIDQsIElyZWxhbmQuDQoNCkUtTWFpbC1FaW5zdGVs
+bHVuZ2VuOiBTaWUgaGFiZW4gZGllc2UgRS1NYWlsIGVyaGFsdGVuLCB3ZWlsIFNpZSBhbmdlZ2Vi
+ZW4gaGFiZW4sIGRhc3MgU2llIGFrdHVlbGxlIFRpcHBzLCBiZXfDpGhydGUgVm9yZ2VoZW5zd2Vp
+c2VuIHNvd2llIFZvcnNjaGzDpGdlIHp1ciBLb250b3ZlcndhbHR1bmcgZsO8ciBHb29nbGUgTWVy
+Y2hhbnQgQ2VudGVyIGVyaGFsdGVuIG3DtmNodGVuLiBXZW5uIFNpZSBkZXJhcnRpZ2UgRS1NYWls
+cyBrw7xuZnRpZyBuaWNodCBtZWhyIGVyaGFsdGVuIG3DtmNodGVuLCBkZWFrdGl2aWVyZW4gU2ll
+IGF1ZiBkZXIgU2VpdGUgZsO8ciBJaHJlIEVpbnN0ZWxsdW5nZW4gKHd3dy5nb29nbGUuY29tL21l
+cmNoYW50cy9zZXR0aW5ncyDigJMgR29vZ2xlIE1lcmNoYW50IENlbnRlci1Bbm1lbGR1bmcgZXJm
+b3JkZXJsaWNoKSBkYXMgS29udHJvbGxrw6RzdGNoZW4gbmViZW4gIkljaCBtw7ZjaHRlIGluIEJl
+enVnIGF1ZiBBa3R1YWxpc2llcnVuZ2VuIHNvd2llIFRpcHBzIHVuZCBiZXfDpGhydGUgVm9yZ2Vo
+ZW5zd2Vpc2VuLCBWb3JzY2hsw6RnZSB6dXIgS29udG92ZXJ3YWx0dW5nIG9kZXIgVW1mcmFnZW4g
+w7xiZXIgbWVpbmUgcHJpbcOkcmUgRS1NYWlsLUFkcmVzc2UgYmVuYWNocmljaHRpZ3Qgd2VyZGVu
+IiB1bmQga2xpY2tlbiBTaWUgYXVmICLDhG5kZXJ1bmdlbiBzcGVpY2hlcm4iLg==
+
+1Q
+

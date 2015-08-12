@@ -1,0 +1,121 @@
+Return-Path: <tine20admin@caldav.net>
+Delivered-To: <tine20admin@caldav.org>
+Received: from laptoplk.home.kneschke.de
+	by laptoplk (Dovecot) with LMTP id YGWaAwtAyk4ORwAAfHVL7A
+	for <tine20admin@caldav.org>; Mon, 21 Nov 2011 13:11:55 +0100
+Received: from [127.0.0.1] (localhost.localdomain [127.0.0.1])
+	by laptoplk.home.kneschke.de (Postfix) with ESMTP id E6B047D34
+	for <l.kneschke@caldav.org>; Mon, 21 Nov 2011 13:11:54 +0100 (CET)
+MIME-version: 1.0
+From: tine20admin@caldav.net
+To: l.kneschke@caldav.org
+Date: Mon, 21 Nov 2011 12:11:54 GMT
+Subject: Antwort Termineinladung: test mit extern
+Content-type: multipart/mixed; boundary="Boundary_(ID_qyG4ZdjoAsiZ+Jo19dCbWQ)"
+Message-Id: <20111121121154.E6B047D34@laptoplk.home.kneschke.de>
+
+
+--Boundary_(ID_qyG4ZdjoAsiZ+Jo19dCbWQ)
+Content-type: multipart/alternative;
+ boundary="Boundary_(ID_ryU4ZdJoASiZ+Jo21dCbwA)"
+
+
+--Boundary_(ID_ryU4ZdJoASiZ+Jo21dCbwA)
+Content-type: text/plain; charset=UTF-8
+Content-transfer-encoding: 8BIT
+
+External, Caldav <tine20admin@caldav.net> hat Ihre Termineinladung abgelehnt.
+
+
+--Boundary_(ID_ryU4ZdJoASiZ+Jo21dCbwA)
+Content-type: text/calendar; method=REPLY; charset=UTF-8
+Content-transfer-encoding: 8BIT
+
+BEGIN:VCALENDAR
+PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
+VERSION:2.0
+METHOD:REPLY
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+CREATED:20111121T115908Z
+LAST-MODIFIED:20111121T121154Z
+DTSTAMP:20111121T121154Z
+UID:4f0162146d61cb2c06cbe2abf94636f4526abe16
+SUMMARY:test mit extern
+ORGANIZER;CN="Admin Account, Tine 2.0":mailto:l.kneschke@caldav.org
+ATTENDEE;CN="External, Caldav";PARTSTAT=DECLINED;CUTYPE=INDIVIDUAL;ROLE=RE
+ Q-PARTICIPANT;EMAIL=tine20admin@caldav.net:mailto:tine20admin@caldav.net
+DTSTART;TZID=Europe/Berlin:20111121T130000
+DTEND;TZID=Europe/Berlin:20111121T140000
+SEQUENCE:0
+CLASS:PUBLIC
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
+
+
+--Boundary_(ID_ryU4ZdJoASiZ+Jo21dCbwA)--
+
+--Boundary_(ID_qyG4ZdjoAsiZ+Jo19dCbWQ)
+Content-type: application/ics; name=invite.ics
+Content-transfer-encoding: 8BIT
+Content-disposition: attachment; filename=invite.ics
+
+BEGIN:VCALENDAR
+PRODID:-//Mozilla.org/NONSGML Mozilla Calendar V1.1//EN
+VERSION:2.0
+METHOD:REPLY
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+CREATED:20111121T115908Z
+LAST-MODIFIED:20111121T121154Z
+DTSTAMP:20111121T121154Z
+UID:4f0162146d61cb2c06cbe2abf94636f4526abe16
+SUMMARY:test mit extern
+ORGANIZER;CN="Admin Account, Tine 2.0":mailto:l.kneschke@caldav.org
+ATTENDEE;CN="External, Caldav";PARTSTAT=DECLINED;CUTYPE=INDIVIDUAL;ROLE=RE
+ Q-PARTICIPANT;EMAIL=tine20admin@caldav.net:mailto:tine20admin@caldav.net
+DTSTART;TZID=Europe/Berlin:20111121T130000
+DTEND;TZID=Europe/Berlin:20111121T140000
+SEQUENCE:0
+CLASS:PUBLIC
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
+
+
+--Boundary_(ID_qyG4ZdjoAsiZ+Jo19dCbWQ)--

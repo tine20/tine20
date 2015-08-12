@@ -1,0 +1,439 @@
+Return-Path: <git@tine20.org>
+Delivered-To: <pschuele@metaways.de>
+Received: from mail04.metaways.net ([10.129.3.200])
+	by mail03.metaways.net (Dovecot) with LMTP id loKrM4BAxk8DNgAA8j6Pxg
+	for <pschuele@metaways.de>; Wed, 30 May 2012 17:49:08 +0200
+Return-Path: <git@tine20.org>
+Received: from mx04.metaways.net ([127.0.0.1])
+	by mail04.metaways.net (Dovecot) with LMTP id 3BZeByNBxk9lbwAAUavrWA
+	; Wed, 30 May 2012 17:49:08 +0200
+Received: from tine20-git.metaways.net (tine20-git.metaways.net [10.129.1.187])
+	by mx04.metaways.net (Postfix) with ESMTP id 6F93AA0CE
+	for <tine20@metaways.de>; Wed, 30 May 2012 17:49:07 +0200 (CEST)
+Received: by tine20-git.metaways.net (Postfix, from userid 33)
+	id 822F4416A2; Wed, 30 May 2012 17:49:06 +0200 (CEST)
+To: tine20@metaways.de
+From: Philipp Schüle <p.schuele@metaways.de>
+Subject: [tine20] branch, 2012-03, updated. 2012-03-3-14-g647a986
+Content-Type: text/plain; charset=utf-8
+X-Git-Refname: refs/heads/2012-03
+X-Git-Reftype: branch
+X-Git-Oldrev: 07cc55dcbdbffc876336e48557760c63f357dcfd
+X-Git-Newrev: 647a986a8efd86b5063ba24041d129c82025818b
+Message-Id: <20120530154906.822F4416A2@tine20-git.metaways.net>
+Date: Wed, 30 May 2012 17:49:05 +0200 (CEST)
+X-Tine20TestMessage: UTF8inFrom.eml
+X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED,AWL
+	autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on mail04.metaways.net
+
+The branch, 2012-03 has been updated
+       via  647a986a8efd86b5063ba24041d129c82025818b (commit)
+       via  1148b054816e22d42eb4629a3753a34865f02d7c (commit)
+       via  8e9a0f80cbe0122a5530065ba855761e71193a79 (commit)
+       via  d416c9863a2cb39af29242bd0143ee3f6b138a76 (commit)
+       via  a8bd47fd9985a1b2348d7ae8e503b16a4201bc0c (commit)
+       via  987dbc9778717745a13c348d1ab04128154b1dd2 (commit)
+      from  07cc55dcbdbffc876336e48557760c63f357dcfd (commit)
+
+Those revisions listed above that are new to this repository have
+not appeared on any other notification email; so we list those
+revisions in full, below.
+
+- Log -----------------------------------------------------------------
+http://git.tine20.org/git/tine20/?id=647a986a8efd86b5063ba24041d129c82025818b
+
+commit 647a986a8efd86b5063ba24041d129c82025818b
+Author: Philipp Schüle <p.schuele@metaways.de>
+Date:   Wed May 30 17:17:35 2012 +0200
+
+    updated documentation
+    
+    Change-Id: I287d8a6b9a63d9e291251ee86e8e1e5fadb1c922
+    Reviewed-on: https://gerrit.tine20.org/tine20/686
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+    Tested-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tine20/Tinebase/EmailUser/Smtp/Postfix.php b/tine20/Tinebase/EmailUser/Smtp/Postfix.php
+index 479ec8d..86494cc 100644
+--- a/tine20/Tinebase/EmailUser/Smtp/Postfix.php
++++ b/tine20/Tinebase/EmailUser/Smtp/Postfix.php
+@@ -53,7 +53,7 @@ user     = smtpUser
+ password = smtpPass
+ hosts    = 127.0.0.1
+ dbname   = smtp
+-query    = SELECT DISTINCT 1 FROM smtp_aliases WHERE SUBSTRING_INDEX(source, '@', -1) = '%s';
++query    = SELECT DISTINCT 1 FROM smtp_destinations WHERE SUBSTRING_INDEX(source, '@', -1) = '%s';
+ -- ----------------------------------------------------
+ 
+ --
+@@ -75,7 +75,7 @@ user     = smtpUser
+ password = smtpPass
+ hosts    = 127.0.0.1
+ dbname   = smtp
+-query = SELECT destination FROM smtp_aliases WHERE source='%s'
++query = SELECT destination FROM smtp_destinations WHERE source='%s'
+ 
+ -- -----------------------------------------------------
+  */
+
+http://git.tine20.org/git/tine20/?id=1148b054816e22d42eb4629a3753a34865f02d7c
+
+commit 1148b054816e22d42eb4629a3753a34865f02d7c
+Author: Philipp Schüle <p.schuele@metaways.de>
+Date:   Wed May 30 15:55:38 2012 +0200
+
+     #6534: import with umlaut as first char fails
+    
+    - use stream filter to convert from one charset to another
+    - added test
+    
+    https://forge.tine20.org/mantisbt/view.php?id=6534
+    
+    Change-Id: I39d5dbafa6c414247e1a86a5bb7183a3f1996887
+    Reviewed-on: https://gerrit.tine20.org/tine20/684
+    Tested-by: jenkins user
+    Tested-by: Philipp Schüle <p.schuele@metaways.de>
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tests/tine20/Addressbook/Import/CsvTest.php b/tests/tine20/Addressbook/Import/CsvTest.php
+index 30be42b..d2715ee 100644
+--- a/tests/tine20/Addressbook/Import/CsvTest.php
++++ b/tests/tine20/Addressbook/Import/CsvTest.php
+@@ -202,6 +202,27 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
+     }
+     
+     /**
++     * testImportWithUmlautsWin1252
++     * 
++     * @see 0006534: import of contacts with umlaut as first char fails
++     */
++    public function testImportWithUmlautsWin1252()
++    {
++        $filename = dirname(__FILE__) . '/files/adb_import_csv_win1252.xml';
++        $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
++        $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
++        
++        $this->_filename = dirname(__FILE__) . '/files/importtest_win1252.csv';
++        $this->_deleteImportFile = FALSE;
++        
++        $result = $this->_doImport(array(), $definition);
++        $this->_deletePersonalContacts = TRUE;
++        
++        $this->assertEquals(4, $result['totalcount']);
++        $this->assertEquals('Üglü, ÖzdemirÖ', $result['results'][2]->n_fileas, 'Umlauts were not imported correctly: ' . print_r($result['results'][2]->toArray(), TRUE));
++    }
++    
++    /**
+      * import helper
+      * 
+      * @param array $_options
+diff --git a/tests/tine20/Addressbook/Import/files/adb_import_csv_win1252.xml b/tests/tine20/Addressbook/Import/files/adb_import_csv_win1252.xml
+new file mode 100644
+index 0000000..6b4a101
+--- /dev/null
++++ b/tests/tine20/Addressbook/Import/files/adb_import_csv_win1252.xml
+@@ -0,0 +1,28 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<config>
++<name>adb_simple_csv</name>
++<model>Addressbook_Model_Contact</model>
++<plugin>Addressbook_Import_Csv</plugin>
++<type>import</type>
++<headline>1</headline>
++<dryrun>0</dryrun>
++<delimiter>;</delimiter>
++<encoding>WINDOWS-1252</encoding>
++<label>Simple CSV import</label>
++<description>simple import</description>
++<extension>csv</extension>
++<mapping>
++<field>
++<source>First Name</source>
++<destination>n_given</destination>
++</field>
++<field>
++<source>Last Name</source>
++<destination>n_family</destination>
++</field>
++<field>
++<source>E-Mail</source>
++<destination>email</destination>
++</field>
++</mapping>
++</config>
+\ No newline at end of file
+diff --git a/tests/tine20/Addressbook/Import/files/importtest_win1252.csv b/tests/tine20/Addressbook/Import/files/importtest_win1252.csv
+new file mode 100644
+index 0000000..9d75a3b
+--- /dev/null
++++ b/tests/tine20/Addressbook/Import/files/importtest_win1252.csv
+@@ -0,0 +1,5 @@
++First Name;Last Name;E-Mail
++Peter;Pan;peter.pan@ecologic.eu
++Maja;Biene;maja.biene@bienenstock.de
++�zdemir�;�gl�;oezdemir@ueglue.tu
++Weiss;Cornelius;c.weiss@metaways.de
+diff --git a/tine20/Tinebase/Import/Abstract.php b/tine20/Tinebase/Import/Abstract.php
+index e17b045..e0a4c4f 100644
+--- a/tine20/Tinebase/Import/Abstract.php
++++ b/tine20/Tinebase/Import/Abstract.php
+@@ -6,7 +6,7 @@
+  * @subpackage  Import
+  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+  * @author      Cornelius Weiss <c.weiss@metaways.de>
+- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
++ * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+  */
+ 
+ /**
+@@ -42,6 +42,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
+         'model'             => '',
+         'shared_tags'       => 'create', //'onlyexisting',
+         'autotags'          => array(),
++        'encodingTo'        => 'UTF-8',
+     );
+     
+     /**
+@@ -169,6 +170,13 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
+     {
+         $clientRecordData = $this->_sortClientRecordsByIndex($_clientRecordData);
+         
++        if (isset($this->_options['encoding']) && $this->_options['encoding'] !== $this->_options['encodingTo']) {
++            $filter = 'convert.iconv.' . $this->_options['encoding'] . '/' . $this->_options['encodingTo'];
++            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
++                . ' Add convert stream filter: ' . $filter);
++            stream_filter_append($_resource, $filter);
++        }
++        
+         $recordIndex = 0;
+         while (($recordData = $this->_getRawData($_resource)) !== FALSE) {
+             
+@@ -296,10 +304,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
+             $data = $_data;
+         }
+ 
+-        foreach ($data as $key => $value) {
+-            $data[$key] = $this->_encode($value);
+-        }
+-                
+         return $data;
+     }
+     
+@@ -336,30 +340,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
+         
+         return $data;
+     }
+-    
+-    /**
+-     * encode values
+-     * 
+-     * @param string|array $_value
+-     * @return string|array
+-     */
+-    protected function _encode($_value)
+-    {
+-        if (! isset($this->_options['encoding']) || ! isset($this->_options['encodingTo']) || $this->_options['encoding'] === $this->_options['encodingTo']) {
+-            return $_value;
+-        }
+-        
+-        if (is_array($_value)) {
+-            $result = array();
+-            foreach ($_value as $singleValue) {
+-                $result[] = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $singleValue);
+-            }
+-        } else {
+-            $result = @iconv($this->_options['encoding'], $this->_options['encodingTo'], $_value);
+-        }
+-        
+-        return $result;
+-    }
+ 
+     /**
+      * add some more values (overwrite that if you need some special/dynamic fields)
+diff --git a/tine20/Tinebase/Import/Csv/Abstract.php b/tine20/Tinebase/Import/Csv/Abstract.php
+index 0a9605c..48dfc19 100644
+--- a/tine20/Tinebase/Import/Csv/Abstract.php
++++ b/tine20/Tinebase/Import/Csv/Abstract.php
+@@ -5,7 +5,7 @@
+  * @package     Tinebase
+  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+  * @author      Philipp Schüle <p.schuele@metaways.de>
+- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
++ * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+  *
+  * @todo        add tests for notes
+  * @todo        add more documentation
+@@ -97,7 +97,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
+             // $this->_options['escape']
+         );
+         
+-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
+         if (is_array($lineData) && count($lineData) == 1) {
+             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Only got 1 field in line. Wrong delimiter?');
+         }
+
+http://git.tine20.org/git/tine20/?id=8e9a0f80cbe0122a5530065ba855761e71193a79
+
+commit 8e9a0f80cbe0122a5530065ba855761e71193a79
+Author: Cornelius Weiß <mail@corneliusweiss.de>
+Date:   Wed May 30 17:44:18 2012 +0200
+
+    change operator/value on select by blur
+    
+    @2012-03
+    
+    Change-Id: Icd8ca511194bb4762d9dcdcdc7153e4d34457d46
+    Reviewed-on: https://gerrit.tine20.org/tine20/682
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+    Tested-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tine20/Tinebase/js/widgets/grid/FilterModel.js b/tine20/Tinebase/js/widgets/grid/FilterModel.js
+index e60ad26..5b2fa46 100644
+--- a/tine20/Tinebase/js/widgets/grid/FilterModel.js
++++ b/tine20/Tinebase/js/widgets/grid/FilterModel.js
+@@ -241,6 +241,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
+                     this.onOperatorChange(combo.filter, combo.value);
+                 }
+             }, this);
++            
++            operator.on('blur', function(combo) {
++                if (combo.value != combo.filter.get('operator')) {
++                    this.onOperatorChange(combo.filter, combo.value);
++                }
++            }, this);
++            
+         } else if (this.operators[0] == 'freeform') {
+             var operator = new Ext.form.TextField({
+                 filter: filter,
+diff --git a/tine20/Tinebase/js/widgets/grid/FilterToolbar.js b/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
+index 558a67b..f3c1c71 100644
+--- a/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
++++ b/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
+@@ -377,6 +377,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
+             }
+         }, this);
+         
++        filter.formFields.field.on('blur', function(combo) {
++            if (combo.value != combo.filter.get('field')) {
++                this.onFieldChange(combo.filter, combo.value);
++            }
++        }, this);
++        
+         // operator
+         filter.formFields.operator = filterModel.operatorRenderer(filter, fRow.child('td[class^=tw-ftb-frow-operator]'));
+         
+
+http://git.tine20.org/git/tine20/?id=d416c9863a2cb39af29242bd0143ee3f6b138a76
+
+commit d416c9863a2cb39af29242bd0143ee3f6b138a76
+Author: Cornelius Weiß <mail@corneliusweiss.de>
+Date:   Tue May 29 20:29:13 2012 +0200
+
+    not able to drop token to typeAhead fields
+    
+    @2012-03
+    
+    Change-Id: I1b7863560674dfefdb08604e0f76f51979f65038
+    Reviewed-on: https://gerrit.tine20.org/tine20/683
+    Tested-by: jenkins user
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tine20/Tinebase/js/widgets/dialog/TokenModeEditDialogPlugin.js b/tine20/Tinebase/js/widgets/dialog/TokenModeEditDialogPlugin.js
+index cb07070..7cc23f8 100644
+--- a/tine20/Tinebase/js/widgets/dialog/TokenModeEditDialogPlugin.js
++++ b/tine20/Tinebase/js/widgets/dialog/TokenModeEditDialogPlugin.js
+@@ -98,7 +98,7 @@ Tine.widgets.dialog.TokenModeEditDialogPlugin.prototype = {
+         this.selection = [];
+         
+         this.form.items.each(function(item) {
+-            if (item instanceof Ext.form.TextField && ! item.disabled && ! Ext.isFunction(item.expand)) {
++            if (item instanceof Ext.form.TextField && ! item.disabled && ! item.forceSelection) {
+                 if (item.rendered) {
+                     this.tokenizeField(item);
+                 } else {
+
+http://git.tine20.org/git/tine20/?id=a8bd47fd9985a1b2348d7ae8e503b16a4201bc0c
+
+commit a8bd47fd9985a1b2348d7ae8e503b16a4201bc0c
+Author: Cornelius Weiß <mail@corneliusweiss.de>
+Date:   Tue May 29 19:42:06 2012 +0200
+
+    #6204 tag filter breaks filter toolbar
+    
+    @2012-03
+    
+    Change-Id: I7db0607d4393fb7dee750e6d199c994ad149a621
+    Reviewed-on: https://gerrit.tine20.org/tine20/681
+    Tested-by: jenkins user
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+    Tested-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tine20/Tinebase/js/widgets/grid/FilterToolbar.js b/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
+index e0666aa..558a67b 100644
+--- a/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
++++ b/tine20/Tinebase/js/widgets/grid/FilterToolbar.js
+@@ -365,6 +365,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
+             validator: this.validateFilter.createDelegate(this),
+             tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>'
+         });
++        filter.formFields.field.setValue = filter.formFields.field.setValue.createInterceptor(function() {
++            // NOTE: as this.fieldStore is a shared store we need to clear the filter before we use it,
++            //       otherwise the record (e.g. query) might not be in the store
++            this.fieldStore.clearFilter();
++        }, this);
++        
+         filter.formFields.field.on('select', function(combo, newRecord, newKey) {
+             if (combo.value != combo.filter.get('field')) {
+                 this.onFieldChange(combo.filter, combo.value);
+
+http://git.tine20.org/git/tine20/?id=987dbc9778717745a13c348d1ab04128154b1dd2
+
+commit 987dbc9778717745a13c348d1ab04128154b1dd2
+Author: Cornelius Weiß <mail@corneliusweiss.de>
+Date:   Wed May 30 12:35:41 2012 +0200
+
+    playbook suppots multiple folders
+    
+    @2012-03
+    
+    Change-Id: I7b36755b949cbf476e1a354de2aed5e1d378f00f
+    Reviewed-on: https://gerrit.tine20.org/tine20/679
+    Tested-by: jenkins user
+    Reviewed-by: Philipp Schüle <p.schuele@metaways.de>
+
+diff --git a/tine20/ActiveSync/Controller/Abstract.php b/tine20/ActiveSync/Controller/Abstract.php
+index a8285a9..bdb2583 100644
+--- a/tine20/ActiveSync/Controller/Abstract.php
++++ b/tine20/ActiveSync/Controller/Abstract.php
+@@ -165,7 +165,7 @@ abstract class ActiveSync_Controller_Abstract implements Syncope_Data_IData
+     public function getAllFolders()
+     {
+         // device supports multiple folders ?
+-        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone'))) {
++        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine', 'windowsphone', 'playbook'))) {
+         
+             // get the folders the user has access to
+             $allowedFolders = $this->_getSyncableFolders();
+
+-----------------------------------------------------------------------
+
+Summary of changes:
+ tests/tine20/Addressbook/Import/CsvTest.php        |   21 +++++++++++
+ .../Import/files/adb_import_csv_win1252.xml        |   28 ++++++++++++++
+ .../Import/files/importtest_win1252.csv            |    5 +++
+ tine20/ActiveSync/Controller/Abstract.php          |    2 +-
+ tine20/Tinebase/EmailUser/Smtp/Postfix.php         |    4 +-
+ tine20/Tinebase/Import/Abstract.php                |   38 +++++---------------
+ tine20/Tinebase/Import/Csv/Abstract.php            |    3 +-
+ .../js/widgets/dialog/TokenModeEditDialogPlugin.js |    2 +-
+ tine20/Tinebase/js/widgets/grid/FilterModel.js     |    7 ++++
+ tine20/Tinebase/js/widgets/grid/FilterToolbar.js   |   12 ++++++
+ 10 files changed, 87 insertions(+), 35 deletions(-)
+ create mode 100644 tests/tine20/Addressbook/Import/files/adb_import_csv_win1252.xml
+ create mode 100644 tests/tine20/Addressbook/Import/files/importtest_win1252.csv
+
+
+hooks/post-receive
+-- 
+GroupWare & CRM

@@ -1,0 +1,103 @@
+<?php
+/**
+ * class to hold Sieve Rule data
+ * 
+ * @package     Expressomail
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ */
+
+/**
+ * class to hold Rule data
+ * 
+ * @property    integer id
+ * @property    array   action       array('type', 'argument')
+ * @property    array   conditions   array( 0 => array('test', 'comperator', 'header', 'key'), 1 => (...))
+ * @property    boolean enabled
+ * 
+ * @package     Expressomail
+ */
+class Expressomail_Model_Sieve_Rule extends Tinebase_Record_Abstract
+{
+    /**
+     * key in $_validators/$_properties array for the field which 
+     * represents the identifier
+     * 
+     * @var string
+     */    
+    protected $_identifier = 'id';
+    
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Expressomail';
+
+    /**
+     * list of zend validator
+     * 
+     * this validators get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
+    protected $_validators = array(
+        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'action_type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'action_argument'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'conditions'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+        'enabled'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+    );
+    
+    /**
+     * set from sieve rule object
+     * 
+     * @param Expressomail_Sieve_Rule $fsr
+     */
+    public function setFromFSR(Expressomail_Sieve_Rule $fsr)
+    {
+        $arrayFsr=$fsr->toArray();
+        foreach($arrayFsr['conditions'] as &$condition){
+            //Converts from KB to MB
+            if($condition['test']=='size'){
+                $condition['key'] = round($condition['key'] / 1024, 2, PHP_ROUND_HALF_UP);
+            }
+        }
+        $this->setFromArray($arrayFsr);
+    }
+    
+    /**
+     * get sieve rule object
+     * 
+     * @return Expressomail_Sieve_Rule
+     */
+    public function getFSR()
+    {
+        $fsr = new Expressomail_Sieve_Rule();
+        $fsr->setEnabled($this->enabled)
+            ->setId($this->id);
+
+        $fsra = new Expressomail_Sieve_Rule_Action();
+        $fsra->setType($this->action_type)
+             ->setArgument($this->action_argument);
+        $fsr->setAction($fsra);
+        
+        foreach ($this->conditions as $condition) {
+            $value= $condition['key'];
+            if($condition['test']=='size'){
+                //Converts back from MB to KB
+                $value= floor($value * 1024);
+            }
+            $fsrc = new Expressomail_Sieve_Rule_Condition();
+            $fsrc->setTest($condition['test'])
+                 ->setComperator($condition['comperator'])
+                 ->setHeader($condition['header'])
+                 ->setKey($value);
+            $fsr->addCondition($fsrc);
+        } 
+        return $fsr;
+    }
+}

@@ -1,0 +1,53 @@
+Return-Path: <spambox1@lala.de>
+X-Original-To: it-abteilung@irgendwo.de
+Delivered-To: xyzserver.com
+Received: from xyzserver.com (xyzserver.com [77.77.77.203])
+	by dd1006.kasserver.com (Postfix) with ESMTP id 46BD7413DE8
+	for <it-abteilung@irgendwo.de>; Mon, 23 Aug 2010 20:33:37 +0200 (CEST)
+Received: from nobody by xyzserver.com running ExIM with local
+	id 1Onbpx-0004Wz-3i; Mon, 23 Aug 2010 20:33:37 +0200
+Date: Mon, 23 Aug 2010 20:33:37 +0200
+Message-Id: <E1Onbpx-0004Wz-3i@xyzserver.com>
+To: it-abteilung@irgendwo.de
+Subject: Angebotsformular
+X-PHP-Script: lala.de/scripts/form/v23/formmail.php for 77.77.77.203, 77.77.77.204
+From: it-abteilung@irgendwo.de
+MIME-Version: 1.0
+X-bounce-key: lallala;1282588417;b190ba10;
+X-KasLoop: m01740c5
+X-Antivirus: avast! (VPS 100825-0, 25.08.2010), Inbound message
+X-Antivirus-Status: Clean
+X-Tine20TestMessage: text/angebot
+
+
+*Formular-Weiterleitungs-Service*
+-----------------------------------------------------------------
+
+
+
+
+email:  it-abteilung@irgendwo.de
+
+Name:  aaaaa
+
+Vorname:  bbbbbb.
+
+Strasse:  DORT 4
+
+Ort:  33333 DA
+
+Telefon:  323232/841117229
+
+Email:  
+
+Artikel:  Fahrrad-Ki-Anhänger
+
+Artikelbeschreibung:  Fahrrad-Kinder-Anhänger, kann auch als Lastenanhänger umgebaut werden.
+
+Preis:  40,00
+
+-----------------------------
+Monday 23rd 2010f August 2010 08:33:37 PM
+212.6.123.204
+Mozilla/5.0 (Windows; U; Windows NT 6.1; de; rv:1.9.2.8) Gecko/20100722 Firefox/3.6.8
+

@@ -1,0 +1,81 @@
+Received-SPF: pass (mail-6.metaways.net: domain of
+	gentoo-dev+bounces-35437-lars=kneschke.de@lists.gentoo.org designates
+	208.92.234.80 as permitted sender)
+Received: from lists.gentoo.org (pigeon.gentoo.org [208.92.234.80])
+	by mail9.metaways.net (Postfix) with ESMTPS id E7D40BDF
+	for <lars@kneschke.de>; Sun, 12 Apr 2009 22:06:11 +0200 (MEST)
+Received: from pigeon.gentoo.org (localhost [127.0.0.1])
+	by pigeon.gentoo.org (Postfix) with SMTP id 209BDE03AC;
+	Sun, 12 Apr 2009 19:33:03 +0000 (UTC)
+X-Original-To: gentoo-dev@lists.gentoo.org
+Delivered-To: gentoo-dev@lists.gentoo.org
+Received: from srv.hoffie.info (hoffie.info [217.20.118.221])
+	by pigeon.gentoo.org (Postfix) with ESMTP id E8DB0E03AC;
+	Sun, 12 Apr 2009 19:33:02 +0000 (UTC)
+Received: from [192.168.1.2] (p5494CB3E.dip.t-dialin.net [84.148.203.62])	(using TLSv1
+	with cipher DHE-RSA-AES256-SHA (256/256 bits))	(No client certificate requested)
+	by srv.hoffie.info (Postfix) with ESMTPSA id 01FEE580D5;
+	Sun, 12 Apr 2009 21:33:01 +0200 (CEST)
+Message-ID: <49E241EC.2020102@gentoo.org>
+Date: Sun, 12 Apr 2009 21:33:00 +0200
+From: Christian Hoffmann <hoffie@gentoo.org>
+User-Agent: Thunderbird 2.0.0.21 (X11/20090322)
+Precedence: bulk
+X-Tine20TestMessage: multipart/signed
+List-Post: <mailto:gentoo-dev@lists.gentoo.org>
+List-Help: <mailto:gentoo-dev+help@lists.gentoo.org>
+List-Unsubscribe: <mailto:gentoo-dev+unsubscribe@lists.gentoo.org>
+List-Subscribe: <mailto:gentoo-dev+subscribe@lists.gentoo.org>
+List-Id: Gentoo Linux mail <gentoo-dev.gentoo.org>
+X-BeenThere: gentoo-dev@lists.gentoo.org
+Reply-to: gentoo-dev@lists.gentoo.org
+To: gentoo-dev-announce@lists.gentoo.org, gentoo-dev@lists.gentoo.org
+Subject: [gentoo-dev] Last rites: dev-php5/pecl-zip
+X-Enigmail-Version: 0.95.7
+OpenPGP: id=800DDCDE
+X-Antispam: No, score=0.3/5.0, scanned in 6.702sec at (mail9.metaways.net
+	[127.0.0.1])
+	by smf-spamd v1.3.1 - http://smfs.sf.net/
+X-Virus-Scanned: ClamAV version 0.92.1, clamav-milter version 0.92.1 on
+	mail-6.metaways.net
+X-Virus-Status: Clean
+Return-Path: gentoo-dev+bounces-35437-lars=kneschke.de@lists.gentoo.org
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;
+	protocol="application/pgp-signature";
+	boundary=------------enig43E7BAD372988B39EC5ECE0B
+
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig43E7BAD372988B39EC5ECE0B
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: quoted-printable
+
+# Christian Hoffmann <hoffie@gentoo.org> (12 Apr 2009)
+# Masked for security (bug 265756), unmaintained upstream (last release
+# two years ago), will be removed in 30 days. Use dev-lang/php with
+# USE=3Dzip as a replacement, which is actively maintained and has more
+# features.
+dev-php5/pecl-zip
+
+http://bugs.gentoo.org/show_bug.cgi?id=3D265756
+
+--=20
+Christian Hoffmann
+
+
+--------------enig43E7BAD372988B39EC5ECE0B
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2.0.11 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iEYEARECAAYFAkniQewACgkQSamB34AN3N7QFgCZAeYWUI9gdR8X3U7x4pgcAv2S
+RK8AoNbYcH09+WrLYXxoPrmPo1eI1Wgv
+=4OuW
+-----END PGP SIGNATURE-----
+
+--------------enig43E7BAD372988B39EC5ECE0B--
+
