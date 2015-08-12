@@ -328,10 +328,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
 
         this.recordActions = [
-            this.action_import,
             this.action_editInNewWindow,
             this.action_deleteRecord
-            
         ];
         
         this.actionUpdater = new  Tine.widgets.ActionUpdater({
@@ -389,16 +387,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     getActionToolbar: Tine.widgets.grid.GridPanel.prototype.getActionToolbar,
     
     getActionToolbarItems: function() {
-        return [/*{
+        return [{
             xtype: 'buttongroup',
             columns: 1,
             rows: 2,
             frame: false,
             items: [
-                this.actions_exportEvents
-                // @TODO move import btn here
+                this.action_import
             ]
-        }, */{
+        }, {
             xtype: 'buttongroup',
             plugins: [{
                 ptype: 'ux.itemregistry',
@@ -407,7 +404,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             items: [
                 this.showSheetView,
                 this.showGridView,
-                this.action_import
             ]
         }];
     },
