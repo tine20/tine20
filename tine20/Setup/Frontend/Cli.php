@@ -574,7 +574,7 @@ class Setup_Frontend_Cli
         }
         
         echo "Please enter a username. If the user already exists, he is reactivated and you can reset the password.\n";
-        $username = Tinebase_Server_Cli::promptInput('Username');
+        $username = strtolower(Tinebase_Server_Cli::promptInput('Username'));
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
         
         try {
@@ -641,22 +641,27 @@ class Setup_Frontend_Cli
     {
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->getId());
         $adminRoleFound = FALSE;
+        // TODO allow to configure this / pass it as param
+        $adminRoleName = 'admin role';
+
         foreach ($roleMemberships as $roleId) {
             $role = Tinebase_Acl_Roles::getInstance()->getRoleById($roleId);
-            if ($role->name === 'admin role') {
+            if ($role->name === $adminRoleName) {
                 $adminRoleFound = TRUE;
-                //print_r(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()));
+                print_r(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()));
                 break;
             }
         }
-        
+
         if (! $adminRoleFound || ! Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $user->getId(), Tinebase_Acl_Rights::ADMIN)) {
             echo "Admin role not found for user " . $user->accountLoginName . ".\n";
-            $adminRole = new Tinebase_Model_Role(array(
-                'name'                  => 'admin role',
-                'description'           => 'admin role for tine. this role has all rights per default.',
-            ));
-            $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
+
+            try {
+                $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($adminRoleName);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $adminRole = $this->_createNewAdminRoleForAdmin($adminRoleName);
+            }
+
             Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
                 array(
                     'id'    => $user->getId(),
@@ -664,23 +669,34 @@ class Setup_Frontend_Cli
                 )
             ));
             
-            // add all rights for all apps
-            $enabledApps = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-            $roleRights = array();
-            foreach ($enabledApps as $application) {
-                $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
-                foreach ($allRights as $right) {
-                    $roleRights[] = array(
-                        'application_id' => $application->getId(),
-                        'right'          => $right,
-                    );
-                }
-            }
-            Tinebase_Acl_Roles::getInstance()->setRoleRights($adminRole->getId(), $roleRights);
-            
-            echo "Created admin role for user " . $user->accountLoginName . ".\n";
+            echo "Added user " . $user->accountLoginName . " to role '$adminRoleName''.\n";
             // @todo clear roles/groups cache
         }
+    }
+
+    protected function _createNewAdminRoleForAdmin($adminRoleName)
+    {
+        $adminRole = new Tinebase_Model_Role(array(
+            'name'                  => $adminRoleName,
+            'description'           => 'admin role for tine. this role has all rights per default.',
+        ));
+
+        $adminRole = Tinebase_Acl_Roles::getInstance()->createRole($adminRole);
+        // add all rights for all apps
+        $enabledApps = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $roleRights = array();
+        foreach ($enabledApps as $application) {
+            $allRights = Tinebase_Application::getInstance()->getAllRights($application->getId());
+            foreach ($allRights as $right) {
+                $roleRights[] = array(
+                    'application_id' => $application->getId(),
+                    'right'          => $right,
+                );
+            }
+        }
+        Tinebase_Acl_Roles::getInstance()->setRoleRights($adminRole->getId(), $roleRights);
+
+        return $adminRole;
     }
     
     /**

@@ -46,7 +46,7 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             var viewCount = this.attendeeViews.getCount(),
                 availableWidth = this.calPanel.getWidth(),
                 minViewWidth = this.calPanel.view.boxMinWidth;
-                
+
             var width = availableWidth/viewCount < minViewWidth ? minViewWidth * viewCount : availableWidth;
             this.calPanel.body.setWidth(width);
             this.calPanel.body.setStyle('overflow-x', width > availableWidth ? 'scroll' : 'hidden');
@@ -145,7 +145,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 this.attendeeViews.add('main', view);
                 
                 this.calPanel.add({
-                    id: 'main',
                     border: false,
                     flex: 1,
                     items: view
@@ -155,8 +154,12 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 this.attendeeViews.get('main').onLoad();
             }
         } else {
+            var main = this.attendeeViews.get('main');
+            if (main && main.ownerCt) {
+                this.calPanel.remove(main.ownerCt);
+            }
+            
             this.attendeeViews.removeKey('main');
-            this.calPanel.remove('main');
         }
         
         this.calPanel.doLayout();

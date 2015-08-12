@@ -312,7 +312,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 ),
             ),
             'default'               => array(
-                self::FEATURE_SPLIT_VIEW                        => false,
+                self::FEATURE_SPLIT_VIEW                        => true,
                 self::FEATURE_YEAR_VIEW                         => true,
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
             ),
