@@ -532,6 +532,8 @@ Tine.Tinebase.tineInit = {
             || userApplications.length < 2;
 
         if (forceReload || reloadNeeded) {
+            Tine.Tinebase.tineInit.clearRegistry();
+
             Ext.Ajax.request({
                 timeout: 120000, // 2 minutes
                 params: {
