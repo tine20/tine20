@@ -130,11 +130,13 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
      */
     applyRegistryState: function() {
         var termsChecks  = Tine.Setup.registry.get('acceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
-        var setupChecks  = Tine.Setup.registry.get('setupChecks').success;
+        var setupChecks  = Tine.Setup.registry.get('setupChecks');
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
-        
+
+        setupChecks = (setupChecks.success) ? setupChecks.success : false;
+
         this.setNodeIcon('TermsPanel', termsChecks);
         this.setNodeIcon('EnvCheckGridPanel', setupChecks);
         
