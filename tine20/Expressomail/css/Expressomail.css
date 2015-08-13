@@ -1,0 +1,676 @@
+.action_email_flag {
+    background-image:url(../../images/oxygen/16x16/actions/flag-red.png) !important;
+}
+.x-btn-medium .action_email_flag {
+    background-image:url(../../images/oxygen/22x22/actions/flag-red.png) !important;
+}
+.x-btn-large .action_email_flag {
+    background-image:url(../../images/oxygen/32x32/actions/flag-red.png) !important;
+}
+
+
+.action_email_reply {
+    background-image:url(../../images/oxygen/16x16/actions/mail-reply-sender.png) !important;
+}
+.x-btn-medium .action_email_reply {
+    background-image:url(../../images/oxygen/22x22/actions/mail-reply-sender.png) !important;
+}
+.x-btn-large .action_email_reply {
+    background-image:url(../../images/oxygen/32x32/actions/mail-reply-sender.png) !important;
+}
+
+
+.action_email_replyAll {
+    background-image:url(../../images/oxygen/16x16/actions/mail-reply-all.png) !important;
+}
+.x-btn-medium .action_email_replyAll {
+    background-image:url(../../images/oxygen/22x22/actions/mail-reply-all.png) !important;
+}
+.x-btn-large .action_email_replyAll {
+    background-image:url(../../images/oxygen/32x32/actions/mail-reply-all.png) !important;
+}
+
+
+.action_email_forward {
+    background-image:url(../../images/oxygen/16x16/actions/mail-forward.png) !important;
+}
+.x-btn-medium .action_email_forward {
+    background-image:url(../../images/oxygen/22x22/actions/mail-forward.png) !important;
+}
+.x-btn-large .action_email_forward {
+    background-image:url(../../images/oxygen/32x32/actions/mail-forward.png) !important;
+}
+
+
+.action_update_cache {
+	background-image:url(../../images/oxygen/16x16/actions/mail-receive.png) !important;
+}
+.x-btn-medium .action_update_cache {
+    background-image:url(../../images/oxygen/22x22/actions/mail-receive.png) !important;
+}
+.x-btn-large .action_update_cache {
+    background-image:url(../../images/oxygen/32x32/actions/mail-receive.png) !important;
+}
+
+
+.action_mark_read {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-read.png) !important;
+}
+.x-btn-medium .action_mark_read {
+    background-image:url(../../images/oxygen/22x22/actions/mail-mark-read.png) !important;
+}
+.x-btn-large .action_mark_read {
+    background-image:url(../../images/oxygen/32x32/actions/mail-mark-read.png) !important;
+}
+
+
+.ExpressomailIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
+}
+.x-btn-medium .ExpressomailIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/kmail.png) !important;
+}
+.x-btn-large .ExpressomailIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/kmail.png) !important;
+}
+
+.expressomail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-task.png) !important;
+}
+.x-btn-medium .expressomail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/22x22/actions/mail-mark-task.png) !important;
+}
+.x-btn-large .expressomail-action-reading-confirmation {
+    background-image:url(../../images/oxygen/32x32/actions/mail-mark-task.png) !important;
+}
+
+
+.action_folder_emptytrash {
+    background-image:url(../../images/oxygen/16x16/actions/emptytrash.png) !important;
+}
+.x-btn-medium .action_folder_emptytrash {
+    background-image:url(../../images/oxygen/22x22/actions/emptytrash.png) !important;
+}
+.x-btn-large .action_folder_emptytrash {
+    background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
+}
+
+.x-btn .action_saveAsDraft {
+    background-image:url(../../images/oxygen/16x16/places/folder-txt.png);
+}
+.x-btn-medium .action_saveAsDraft {
+    background-image:url(../../images/oxygen/22x22/places/folder-txt.png);
+}
+.x-btn-large .action_saveAsDraft {
+    background-image:url(../../images/oxygen/32x32/places/folder-txt.png);
+}
+
+.x-btn .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
+}
+.x-btn-medium .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/22x22/places/folder-tar.png);
+}
+.x-btn-large .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
+}
+
+.x-btn .action_email_download {
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png);
+}
+.x-btn-medium .action_email_download {
+    background-image:url(../../images/oxygen/22x22/actions/document-save.png);
+}
+.x-btn-large .action_email_download {
+    background-image:url(../../images/oxygen/32x32/actions/document-save.png);
+}
+
+/* rule grid actions */
+
+.action_new_rule {
+    background-image:url(../../images/oxygen/16x16/actions/plus.png) !important;
+}
+.x-btn-medium .action_new_rule {
+    background-image:url(../../images/oxygen/22x22/actions/plus.png) !important;
+}
+.x-btn-large .action_new_rule {
+    background-image:url(../../images/oxygen/32x32/actions/plus.png) !important;
+}
+
+.action_move_up {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-up.png) !important;
+}
+.x-btn-medium .action_move_up {
+    background-image:url(../../images/oxygen/22x22/actions/arrow-up.png) !important;
+}
+.x-btn-large .action_move_up {
+    background-image:url(../../images/oxygen/32x32/actions/arrow-up.png) !important;
+}
+
+.action_move_down {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-down.png) !important;
+}
+.x-btn-medium .action_move_down {
+    background-image:url(../../images/oxygen/22x22/actions/arrow-down.png) !important;
+}
+.x-btn-large .action_move_down {
+    background-image:url(../../images/oxygen/32x32/actions/arrow-down.png) !important;
+}
+
+/***** flag classes ******/
+
+.flag_unread td{
+    font-weight: bold;
+}
+
+.flag_flagged {
+    color: #ff0000;
+}
+
+.flag_deleted td {
+    text-decoration: line-through;
+    color: #aaaaaa;
+}
+
+.ExpressomailFlagIcon {
+    width: 12px;
+    height: 12px;
+}
+
+/**** preview *****/
+
+.preview-panel-expressomail {
+    padding: 5px;
+    overflow: hidden;
+}
+
+.preview-panel-expressomail-headers {
+    background-color: #dddddd;
+    overflow: hidden;
+}
+
+.preview-panel-expressomail-attachments {
+    margin-top: 5px;
+    background-color: #e8e8e8;
+    width: 100%;
+}
+
+.preview-panel-felamimail-signature {
+    margin-top: 5px;
+    background-color: #e8e8e8;
+    width: 100%;
+}
+
+.preview-panel-error-message {
+    padding: 5px;
+    overflow: hidden;
+    color: #f00;
+    text-align: center;
+}
+
+/* note: el tyle of html areas underling textarea are copied to iframe*/
+.expressomail-message-body-html,
+.preview-panel-expressomail-body {
+    overflow: 'auto';
+    font-size: 13px;
+}
+
+.preview-panel-expressomail-body ul {
+    list-style: circle outside;
+    margin-left: 20px;
+}
+.preview-panel-expressomail-body ol {
+    list-style: decimal outside;
+    margin-left: 20px;
+}
+
+
+/* note: htmlarea has textarea as its basis, so when we support text composing
+         this need to be restructured e.g. by having a expressomail-message-body-text cls
+*/
+.preview-panel-expressomail-body .x-form-textarea {
+    margin-top: 5px;
+    font: normal 13px courier;
+    border: 0px;
+}
+
+/***** node classes ******/
+
+.expressomail-node-unread span {
+    font-weight: bold;
+}
+
+
+.expressomail-node-trash img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/user-trash.png);
+}
+.x-btn-medium .expressomail-node-trash img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/user-trash.png);
+}
+.x-btn-large .expressomail-node-trash img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/user-trash.png);
+}
+
+
+.expressomail-node-trash-full img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/user-trash-full.png);
+}
+.x-btn-medium .expressomail-node-trash-full img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/user-trash-full.png);
+}
+.x-btn-large .expressomail-node-trash-full img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/user-trash-full.png);
+}
+
+
+.expressomail-node-sent img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png);
+}
+.x-btn-medium .expressomail-node-sent img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/mail-folder-sent.png);
+}
+.x-btn-large .expressomail-node-sent img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/mail-folder-sent.png);
+}
+
+
+.expressomail-node-inbox img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/mail-folder-inbox.png);
+}
+.x-btn-medium .expressomail-node-inbox img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/mail-folder-inbox.png);
+}
+.x-btn-large .expressomail-node-inbox img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/mail-folder-inbox.png);
+}
+
+
+.expressomail-node-drafts img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-txt.png);
+}
+.x-btn-medium .expressomail-node-drafts img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder-txt.png);
+}
+.x-btn-large .expressomail-node-drafts img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder-txt.png);
+}
+
+
+.expressomail-node-templates img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
+}
+.x-btn-medium .expressomail-node-templates img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder-tar.png);
+}
+.x-btn-large .expressomail-node-templates img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
+}
+
+
+.expressomail-node-junk img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/trashcan-empty-alt.png);
+}
+.x-btn-medium .expressomail-node-junk img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/trashcan-empty-alt.png);
+}
+.x-btn-large .expressomail-node-junk img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/trashcan-empty-alt.png);
+}
+
+
+.expressomail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder.png);
+    opacity: 0.5;
+}
+.x-btn-medium .expressomail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder.png);
+    opacity: 0.5;
+}
+.x-btn-large .expressomail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder.png);
+    opacity: 0.5;
+}
+
+
+.expressomail-node-intelligent-marked img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-important.png);
+}
+.x-btn-medium .expressomail-node-intelligent-marked img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder-important.png);
+}
+.x-btn-large .expressomail-node-intelligent-marked img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder-important.png);
+}
+
+
+.expressomail-node-intelligent-unread img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-bookmarks.png);
+    /* background-image:url(../../images/oxygen/16x16/places/mail-folder-sent.png); */
+}
+.x-btn-medium .expressomail-node-intelligent-unread img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder-bookmarks.png);
+    /* background-image:url(../../images/oxygen/22x22/places/mail-folder-sent.png); */
+}
+.x-btn-large .expressomail-node-intelligent-unread img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder-bookmarks.png);
+    /* background-image:url(../../images/oxygen/32x32/places/mail-folder-sent.png); */
+}
+
+
+.expressomail-node-account img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/user-home.png);
+}
+.x-btn-medium .expressomail-node-account img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/user-home.png);
+}
+.x-btn-large .expressomail-node-account img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/user-home.png);
+}
+
+
+.expressomail-node-remote img.x-tree-node-icon {
+    background-image:url(../../images/remote-folder.gif);
+}
+.expressomail-node-remote-open img.x-tree-node-icon {
+    background-image:url(../../images/remote-folder-open.gif);
+}
+
+
+.expressomail-node-statusbox {
+	padding-right: 5px;
+	position: absolute;
+	right: 0px;
+}
+
+.expressomail-node-statusbox-progress {
+	width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    background-repeat: no-repeat;
+    vertical-align: top;
+    margin-right: 5px;
+}
+
+.expressomail-node-statusbox-progress-pie {
+    background-image:url(../../images/progress-pie.gif);
+}
+
+.expressomail-node-statusbox-progress-loading {
+    background-image:url(../../library/ExtJS/resources/images/default/tree/loading.gif);
+}
+
+.ext-gecko .expressomail-node-statusbox-unread {
+    -moz-border-radius: 8px;
+}
+
+.expressomail-node-statusbox-unread {
+    border-radius: 8px;
+    background-color: #D9E8FB;
+    color: black;
+	line-height: 16px;
+	margin-top: 1px;
+	padding: 0px 5px;
+}
+
+.x-tree-selected .expressomail-node-statusbox-unread {
+	background-color: #FFFFFF;
+}
+
+.expressomail-node-accountfailure {
+    position: absolute;
+    right: 5px;
+	width: 16px;
+    height: 16px;
+    background-image:url(../../images/warning.gif);
+    margin-right: 10px;
+}
+
+/***** email composing dialog ******/
+
+/* disable grid headers */
+.expressomail-recipient-grid .x-grid3-hd-row, #expressomail-attachment-grid .x-grid3-hd-row {
+    display:none;
+}
+
+.expressomail-recipient-grid .x-grid3 {
+    background-color: #DFE8F6;
+}
+
+.expressomail-recipient-grid tr {
+    border-color: #DFE8F6;
+}
+
+.expressomail-body-blockquote {
+    margin: 5px 10px 0 3px;
+    padding-left: 10px;
+    border-left: 2px solid #000088;
+}
+
+.x-fmail-uploadrow .x-grid3-cell-inner {
+    background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.expressomail-recipient-grid .x-grid3-td-type {
+    background-color: #DFE8F6;
+}
+
+.expressomail-recipient-grid .x-grid3-td-address {
+    background-color: white;
+    border: 1px solid #B5B8C8;
+}
+
+.expressomail-recipient-grid .x-grid3-td-address-editing {
+    background-color: transparent;
+    border: 0;
+}
+
+.expressomail-no-email {
+    color: #999999;
+}
+
+.expressomail-action-add-unknown-contacts {
+    background-image:url(../../images/add-contacts.png) !important;
+}
+
+/***** sieve rules ******/
+
+.expressomail-sieverule-disabled {
+    color: #aaaaaa;
+}
+
+.expressomail-addsievefilter-link{
+    cursor: pointer;
+    color: red;
+}
+
+span:hover.expressomail-addsievefilter-link {
+    color: #ff4444;
+}
+
+.x-edit-image {
+    background: url(../../images/oxygen/16x16/actions/insert-image.png) 0 0 no-repeat !important;
+}
+
+.x-edit-table {
+    background: url(../../images/oxygen/16x16/actions/insert-table.png) 0 0 no-repeat !important;
+}
+.importance_high {
+    color: #f00;
+}
+
+.x-btn .emblems_emblemImportant {
+    background-image: url(../../images/oxygen/16x16/emblems/emblem-important.png) !important;
+}
+.x-btn-medium .emblems_emblemImportant {
+    background-image: url(../../images/oxygen/22x22/emblems/emblem-important.png) !important;
+}
+.x-btn-large .emblems_emblemImportant {
+    background-image: url(../../images/oxygen/32x32/emblems/emblem-important.png) !important;
+}
+.flag_flagged {
+    color: #93f;
+}
+
+.x-grid3-hd-row td, .x-grid3-row td, .x-grid3-summary-row td
+{
+font-size: 12px;
+}
+
+.preview-panel-expressomail-body {
+    font-size: 14px;
+}
+
+.x-edit-spellchecker {
+    background: url(../../images/oxygen/16x16/actions/ok.png) 0 0 no-repeat !important;
+}
+
+.expressomail-smime-details{
+    cursor: pointer;
+    color: blue;
+}
+
+a:hover.expressomail-smime-details {
+    color: #4444ff;
+}
+
+/*------------ ExtJS clears the following default browser's styles -----------*/
+strong { 
+    font-weight: bold; 
+    font-style: inherit;
+}
+em { 
+    font-style: italic; 
+    font-weight: inherit;
+}
+
+.x-html-editor-tb .loading-indicator {
+    background-image: url("../../images/indicator.gif") !important;
+}
+
+.x-html-editor-decrypted {
+/*    background-image: url('../images/decrypted.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: right center !important;*/
+}
+
+.x-html-editor-encrypted {
+/*    background: #ffc url('../images/encrypted.png') no-repeat right center !important;*/
+    background: #ffc url('../../images/oxygen/16x16/actions/encrypted.png') no-repeat right center !important;
+}
+
+.x-html-editor-encrypted-noicon {
+    background-color: #ffc !important;
+}
+
+.message-viewer {
+    white-space: pre-wrap;
+}
+
+.x-html-editor-tb .x-edit-justifyleft, .x-menu-item img.x-edit-justifyleft,
+.x-html-editor-tb .x-edit-justifycenter, .x-menu-item img.x-edit-justifycenter,
+.x-html-editor-tb .x-edit-justifyright, .x-menu-item img.x-edit-justifyright,
+.x-html-editor-tb .x-edit-justifyfull, .x-menu-item img.x-edit-justifyfull {
+    background-image: url("../../images/tb-sprite.gif");
+}
+
+.x-html-editor-tb .x-btn-text {
+    background-image: url("../../images/tb-sprite.gif");
+}
+
+.x-html-editor-tb .x-edit-justifyfull, .x-menu-item img.x-edit-justifyfull {
+    background-position: -224px 0;
+}
+
+.x-menu-item-selected {
+    background-color: #cbccce;
+    background-repeat: repeat-x;
+    background-position: left bottom;
+    border-color: #abb4bd;
+    border-style: solid;
+    border-width: 1px;
+    margin: -1px;
+    padding: 0;
+}
+
+.x-menu-layout-fontsize {
+    background-position-x: 16px;
+    text-align: center;
+}
+.x-html-editor-tb button.x-menu-fontfamily-hideicon {
+    background-image: none;
+    font-size: 12px;
+    font-weight: bold;
+    width: 128px !important;
+}
+.x-html-editor-tb button.x-menu-fontsize-hideicon {
+    background-image: none;
+    font-size: 12px;
+    font-weight: bold;
+}
+a.x-menu-fontfamily-noicon,
+a.x-menu-fontsize-noicon {
+    padding: 2px 10px 0px 1px;
+}
+a.x-menu-fontsize-noicon {
+    width: 64px;
+}
+a.x-menu-fontsize-noicon span {
+    float: left;
+    width: 24px;
+}
+.x-edit-fontfamily-text { width: 128px; }
+.x-edit-fontsize-text { float: right; width: 16px; padding-left: 10px; vertical-align: middle; font-size: 13px; }
+
+.x-edit-fontsize8 { font-size: 8px; }
+.x-edit-fontsize9 { font-size: 9px; }
+.x-edit-fontsize10 { font-size: 10px; }
+.x-edit-fontsize11 { font-size: 11px; }
+.x-edit-fontsize12 { font-size: 12px; }
+.x-edit-fontsize13 { font-size: 13px; }
+.x-edit-fontsize14 { font-size: 14px; }
+.x-edit-fontsize16 { font-size: 16px; }
+.x-edit-fontsize18 { font-size: 18px; }
+.x-edit-fontsize20 { font-size: 20px; }
+.x-edit-fontsize22 { font-size: 22px; }
+.x-edit-fontsize24 { font-size: 24px; }
+.x-edit-fontsize28 { font-size: 28px; }
+.x-edit-fontsize32 { font-size: 32px; }
+.x-edit-fontsize40 { font-size: 40px; }
+.x-edit-fontsize48 { font-size: 48px; }
+
+.separator { visibility: hidden; clear: both; height: 0px; }
+
+.x-tool-notify {
+    font-size: 0.9em;
+    color: #33c;
+    background-color: #fff;
+    background-position: 0 -0;
+    background-image: none !important;
+    border: 1px solid #000;
+    border-radius: 4px !important;
+    height: 13px !important;
+    width: auto;
+    padding-left: 5px;
+    padding-right: 5px;
+    display: none;
+}
+.x-tool-notify-default {
+    color: #33c;
+    display: block !important;
+}
+.x-tool-notify-clear {
+}
+.x-tool-notify-error {
+    color: #f00;
+    display: block !important;
+}
+
+.x-grid-outdated-row {
+    color: #c00;
+    background-color: #ffeff7 !important;
+}
+.x-grid-outdated-row * {
+    text-decoration: line-through;
+}

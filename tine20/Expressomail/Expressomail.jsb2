@@ -1,0 +1,204 @@
+{
+  "projectName": "Tine 2.0 - Expressomail",
+  "deployDir": "Expressomail",
+  "licenseText": "Tine 2.0 - Expressomail \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+
+  ],
+  "pkgs": [
+    {
+      "name": "Expressomail FAT Client",
+      "file": "js/Expressomail-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridPanelHook.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderStore.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderSelect.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderSelectPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "VacationEditDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RuleEditDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RulesGridPanel.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RulesDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RuleConditionsPanel.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "TreeContextMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreeLoader.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreeLoaderSieve.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MimeDisplayManager.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MessageDisplayDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "FileUploadGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "MessageEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ImportEmlDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AclsEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AclsGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccountEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "../Addressbook/js/"
+        },
+        {
+          "text": "ContactSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecipientGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "Expressomail.js",
+          "path": "js/"
+        },
+        {
+          "text": "HtmlEditor.js",
+          "path": "js/editorplugins/"
+        },
+        {
+          "text": "ComposeEditor.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactGrid.js",
+          "path": "../Addressbook/js/"
+        },
+        {
+          "text": "ContactGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecipientPickerFavoritePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecipientPickerDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "SignatureAppletPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "Ext.ux.form.HtmlEditor.Table.js",
+          "path": "js/editorplugins/"
+        },
+        {
+          "text": "Ext.ux.form.HtmlEditor.UploadImage.js",
+          "path": "js/editorplugins/"
+        },
+        {
+          "text": "Ext.ux.form.HtmlEditor.SpellChecker.js",
+          "path": "js/editorplugins/"
+        },
+        {
+          "text": "Ext.ux.form.HtmlEditor.TextAlign.js",
+          "path": "js/editorplugins/"
+        },
+        {
+          "text": "ReadConfirmationDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MultiWindow.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Expressomail FAT Client",
+      "file": "css/Expressomail-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "googiespell.css",
+          "path": "css/editorplugins/"
+        },
+        {
+          "text": "Expressomail.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

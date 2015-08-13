@@ -1,0 +1,1142 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Expressomail\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2013-11-06 16:35-0300\n"
+"Last-Translator: Lucas Alberto Souza Santos <lucas-alberto.santos@serpro.gov.br>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
+"X-Generator: Launchpad (build 14886)\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Acl/Rights.php:106
+msgid "manage email accounts"
+msgstr "manage email accounts"
+
+#: Acl/Rights.php:107
+msgid "Edit and delete email accounts"
+msgstr "Edit and delete email accounts"
+
+#: Acl/Rights.php:110
+msgid "Add email accounts"
+msgstr "Add email accounts"
+
+#: Acl/Rights.php:111
+msgid "Create new email accounts"
+msgstr "Create new email accounts"
+
+#: Controller/Message/Flags.php:24
+#: js/GridPanel.js:577
+msgid "Answered"
+msgstr "Answered"
+
+#: Controller/Message/Flags.php:25
+msgid "Seen"
+msgstr "Seen"
+
+#: Controller/Message/Flags.php:26
+msgid "Deleted"
+msgstr "Deleted"
+
+#: Controller/Message/Flags.php:27
+msgid "Draft"
+msgstr "Draft"
+
+#: Controller/Message/Flags.php:28
+msgid "Flagged"
+msgstr "Flagged"
+
+#: Controller/Message/Send.php:236
+#: js/GridDetailsPanel.js:233
+#: js/GridPanel.js:482
+#: js/MessageEditDialog.js:921
+#: js/Model.js:141
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "Subject"
+msgstr "Subject"
+
+#: Controller/Message/Send.php:236
+#: js/MessageEditDialog.js:896
+msgid "Body"
+msgstr "Body"
+
+#: Controller/Sieve.php:299
+msgid "Out of Office reply from %1$s"
+msgstr "Out of Office reply from %1$s"
+
+#: js/AccountEditDialog.js:84
+msgid "Signature"
+msgstr "Signature"
+
+#: js/AccountEditDialog.js:111
+#: js/Model.js:350
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "Account"
+msgstr[1] "Accounts"
+
+#: js/AccountEditDialog.js:118
+msgid "Account Name"
+msgstr "Account Name"
+
+#: js/AccountEditDialog.js:122
+msgid "User Email"
+msgstr "User Email"
+
+#: js/AccountEditDialog.js:127
+msgid "User Name (From)"
+msgstr "User Name (From)"
+
+#: js/AccountEditDialog.js:130
+msgid "Organization"
+msgstr "Organization"
+
+#: js/AccountEditDialog.js:134
+msgid "Signature position"
+msgstr "Signature position"
+
+#: js/AccountEditDialog.js:145
+msgid "Above the quote"
+msgstr "Above the quote"
+
+#: js/AccountEditDialog.js:146
+msgid "Below the quote"
+msgstr "Below the quote"
+
+#: js/AccountEditDialog.js:151
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/AccountEditDialog.js:158
+#: js/AccountEditDialog.js:201
+#: js/AccountEditDialog.js:256
+msgid "Host"
+msgstr "Host"
+
+#: js/AccountEditDialog.js:162
+msgid "Port (Default: 143 / SSL: 993)"
+msgstr "Port (Default: 143 / SSL: 993)"
+
+#: js/AccountEditDialog.js:168
+#: js/AccountEditDialog.js:210
+#: js/AccountEditDialog.js:265
+msgid "Secure Connection"
+msgstr "Secure Connection"
+
+#: js/AccountEditDialog.js:179
+#: js/AccountEditDialog.js:220
+#: js/AccountEditDialog.js:235
+#: js/AccountEditDialog.js:275
+#: js/ContactGrid.js:110
+msgid "None"
+msgstr "None"
+
+#: js/AccountEditDialog.js:180
+#: js/AccountEditDialog.js:221
+#: js/AccountEditDialog.js:276
+msgid "TLS"
+msgstr "TLS"
+
+#: js/AccountEditDialog.js:181
+#: js/AccountEditDialog.js:222
+msgid "SSL"
+msgstr "SSL"
+
+#: js/AccountEditDialog.js:184
+msgid "Username"
+msgstr "Username"
+
+#: js/AccountEditDialog.js:188
+msgid "Password"
+msgstr "Password"
+
+#: js/AccountEditDialog.js:194
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/AccountEditDialog.js:204
+msgid "Port (Default: 25)"
+msgstr "Port (Default: 25)"
+
+#: js/AccountEditDialog.js:225
+msgid "Authentication"
+msgstr "Authentication"
+
+#: js/AccountEditDialog.js:236
+msgid "Login"
+msgstr "Login"
+
+#: js/AccountEditDialog.js:237
+msgid "Plain"
+msgstr "Plain"
+
+#: js/AccountEditDialog.js:240
+msgid "Username (optional)"
+msgstr "Username (optional)"
+
+#: js/AccountEditDialog.js:243
+msgid "Password (optional)"
+msgstr "Password (optional)"
+
+#: js/AccountEditDialog.js:249
+msgid "Sieve"
+msgstr "Sieve"
+
+#: js/AccountEditDialog.js:260
+msgid "Port (Default: 2000)"
+msgstr "Port (Default: 2000)"
+
+#: js/AccountEditDialog.js:280
+msgid "Other Settings"
+msgstr "Other Settings"
+
+#: js/AccountEditDialog.js:287
+msgid "Sent Folder Name"
+msgstr "Sent Folder Name"
+
+#: js/AccountEditDialog.js:293
+msgid "Trash Folder Name"
+msgstr "Trash Folder Name"
+
+#: js/AccountEditDialog.js:299
+msgid "Drafts Folder Name"
+msgstr "Drafts Folder Name"
+
+#: js/AccountEditDialog.js:305
+msgid "Templates Folder Name"
+msgstr "Templates Folder Name"
+
+#: js/AccountEditDialog.js:311
+msgid "Display Format"
+msgstr "Display Format"
+
+#: js/AccountEditDialog.js:322
+msgid "HTML"
+msgstr "HTML"
+
+#: js/AccountEditDialog.js:323
+msgid "Plain Text"
+msgstr "Plain Text"
+
+#: js/AccountEditDialog.js:324
+msgid "Depending on content type (experimental)"
+msgstr "Depending on content type (experimental)"
+
+#: js/AddressbookGridPanelHook.js:33
+msgid "Compose email"
+msgstr "Compose email"
+
+#: js/ContactGrid.js:254
+msgid "Add as \"To\""
+msgstr "Add as \"To\""
+
+#: js/ContactGrid.js:265
+msgid "Add as \"Cc\""
+msgstr "Add as \"Cc\""
+
+#: js/ContactGrid.js:276
+msgid "Add as \"Bcc\""
+msgstr "Add as \"Bcc\""
+
+#: js/ContactGrid.js:287
+msgid "Remove from recipients"
+msgstr "Remove from recipients"
+
+#: js/ContactGrid.js:341
+#: js/MessageEditDialog.js:505
+msgid "Loading Mail Addresses"
+msgstr "Loading Mail Addresses"
+
+#: js/Expressomail.js:33
+msgid "New Mail"
+msgstr "New Mail"
+
+#: js/Expressomail.js:85
+msgid "Email"
+msgstr "Email"
+
+#: js/Expressomail.js:120
+msgid "Active Vacation Message"
+msgstr "Active Vacation Message"
+
+#: js/Expressomail.js:121
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Email account \"{0}\" has an active vacation message."
+
+#: js/Expressomail.js:507
+msgid "New mails"
+msgstr "New mails"
+
+#: js/Expressomail.js:508
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "You got {0} new mail(s) in folder {1} ({2})."
+
+#: js/Expressomail.js:629
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP Credentials for {0}"
+
+#: js/Expressomail.js:632
+msgid "Credentials"
+msgstr "Credentials"
+
+#: js/Expressomail.js:784
+#: js/Expressomail.js:817
+msgid "IMAP Error"
+msgstr "IMAP Error"
+
+#: js/Expressomail.js:785
+msgid "No connection to IMAP server."
+msgstr "No connection to IMAP server."
+
+#: js/Expressomail.js:801
+msgid "IMAP Credentials Error"
+msgstr "IMAP Credentials Error"
+
+#: js/Expressomail.js:802
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Your email credentials are wrong. Please contact your administrator"
+
+#: js/Expressomail.js:818
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+
+#: js/Expressomail.js:847
+msgid "SMTP Error"
+msgstr "SMTP Error"
+
+#: js/Expressomail.js:848
+msgid "No connection to SMTP server."
+msgstr "No connection to SMTP server."
+
+#: js/Expressomail.js:856
+msgid "Sieve Error"
+msgstr "Sieve Error"
+
+#: js/Expressomail.js:857
+msgid "No connection to Sieve server."
+msgstr "No connection to Sieve server."
+
+#: js/Expressomail.js:865
+msgid "Save Sieve Script Error"
+msgstr "Save Sieve Script Error"
+
+#: js/Expressomail.js:866
+msgid "Could not save script on Sieve server."
+msgstr "Could not save script on Sieve server."
+
+#: js/FolderFilterModel.js:30
+#: js/GridPanel.js:529
+#: js/Model.js:53
+#: js/Model.js:496
+#: js/TreeContextMenu.js:45
+#: js/TreeContextMenu.js:100
+#: js/TreeContextMenu.js:103
+#: js/TreeContextMenu.js:106
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Folder"
+msgstr[1] "Folders"
+
+#: js/FolderSelectPanel.js:75
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/FolderSelectPanel.js:84
+msgid "Ok"
+msgstr "Ok"
+
+#: js/FolderSelectPanel.js:175
+msgid "Folders of account {0}"
+msgstr "Folders of account {0}"
+
+#: js/FolderSelectPanel.js:176
+msgid "Folders of all accounts"
+msgstr "Folders of all accounts"
+
+#: js/GridDetailsPanel.js:234
+#: js/MessageEditDialog.js:827
+msgid "From"
+msgstr "From"
+
+#: js/GridDetailsPanel.js:235
+msgid "Add"
+msgstr "Add"
+
+#: js/GridDetailsPanel.js:236
+msgid "Add contact to addressbook"
+msgstr "Add contact to addressbook"
+
+#: js/GridDetailsPanel.js:237
+msgid "Date"
+msgstr "Date"
+
+#: js/GridDetailsPanel.js:239
+#: js/GridDetailsPanel.js:464
+msgid "Show or hide header information"
+msgstr "Show or hide header information"
+
+#: js/GridDetailsPanel.js:330
+#: js/GridPanel.js:468
+#: js/MessageEditDialog.js:761
+msgid "Attachments"
+msgstr "Attachments"
+
+#: js/GridPanel.js:110
+msgid "No Messages found or the cache is empty."
+msgstr "No Messages found or the cache is empty."
+
+#: js/GridPanel.js:144
+msgid "Quota usage"
+msgstr "Quota usage"
+
+#: js/GridPanel.js:241
+msgid "Compose"
+msgstr "Compose"
+
+#: js/GridPanel.js:250
+#: js/MessageDisplayDialog.js:47
+msgid "Reply"
+msgstr "Reply"
+
+#: js/GridPanel.js:259
+#: js/MessageDisplayDialog.js:53
+msgid "Reply To All"
+msgstr "Reply To All"
+
+#: js/GridPanel.js:268
+#: js/MessageDisplayDialog.js:59
+msgid "Forward"
+msgstr "Forward"
+
+#: js/GridPanel.js:276
+msgid "Toggle highlighting"
+msgstr "Toggle highlighting"
+
+#: js/GridPanel.js:285
+msgid "Mark read/unread"
+msgstr "Mark read/unread"
+
+#: js/GridPanel.js:295
+#: js/GridPanel.js:296
+#: js/GridPanel.js:298
+#: js/MessageDisplayDialog.js:40
+msgid "Delete"
+msgstr "Delete"
+
+#: js/GridPanel.js:306
+msgid "Add Account"
+msgstr "Add Account"
+
+#: js/GridPanel.js:314
+#: js/GridPanel.js:1275
+#: js/GridPanel.js:1291
+#: js/MessageDisplayDialog.js:78
+msgid "Print Preview"
+msgstr "Print Preview"
+
+#: js/GridPanel.js:322
+#: js/MessageDisplayDialog.js:72
+msgid "Print Message"
+msgstr "Print Message"
+
+#: js/GridPanel.js:461
+msgid "Id"
+msgstr "Id"
+
+#: js/GridPanel.js:475
+#: js/Model.js:147
+msgid "Flags"
+msgstr "Flags"
+
+#: js/GridPanel.js:488
+#: js/Model.js:142
+#: js/sieve/RuleConditionsPanel.js:69
+msgid "From (Email)"
+msgstr "From (Email)"
+
+#: js/GridPanel.js:494
+#: js/Model.js:143
+msgid "From (Name)"
+msgstr "From (Name)"
+
+#: js/GridPanel.js:500
+msgid "Sender"
+msgstr "Sender"
+
+#: js/GridPanel.js:507
+#: js/Model.js:144
+msgid "To"
+msgstr "To"
+
+#: js/GridPanel.js:514
+#: js/Model.js:490
+msgid "Sent"
+msgstr "Sent"
+
+#: js/GridPanel.js:522
+#: js/Model.js:150
+msgid "Received"
+msgstr "Received"
+
+#: js/GridPanel.js:537
+#: js/sieve/RuleConditionsPanel.js:73
+msgid "Size"
+msgstr "Size"
+
+#: js/GridPanel.js:580
+msgid "Forwarded"
+msgstr "Forwarded"
+
+#: js/GridPanel.js:583
+msgid "Recent"
+msgstr "Recent"
+
+#: js/GridPanel.js:1120
+msgid "{0} %"
+msgstr "{0} %"
+
+#: js/GridPanel.js:1128
+msgid "Your quota"
+msgstr "Your quota"
+
+#: js/GridPanel.js:1129
+msgid "{0} available (total: {1})"
+msgstr "{0} available (total: {1})"
+
+#: js/MessageDisplayDialog.js:65
+msgid "Save"
+msgstr "Save"
+
+#: js/MessageEditDialog.js:133
+msgid "Send"
+msgstr "Send"
+
+#: js/MessageEditDialog.js:141
+msgid "Search Recipients"
+msgstr "Search Recipients"
+
+#: js/MessageEditDialog.js:149
+msgid "Save As Draft"
+msgstr "Save As Draft"
+
+#: js/MessageEditDialog.js:157
+msgid "Save As Template"
+msgstr "Save As Template"
+
+#: js/MessageEditDialog.js:166
+msgid "Save Email Note"
+msgstr "Save Email Note"
+
+#: js/MessageEditDialog.js:174
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgstr "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+
+#: js/MessageEditDialog.js:192
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr "Click to search for and add recipients from the Addressbook."
+
+#: js/MessageEditDialog.js:286
+msgid "Calculating message size..."
+msgstr "Calculating message size..."
+
+#: js/MessageEditDialog.js:304
+msgid "On {0}, {1} wrote"
+msgstr "On {0}, {1} wrote"
+
+#: js/MessageEditDialog.js:324
+msgid "Original message"
+msgstr "Original message"
+
+#: js/MessageEditDialog.js:342
+#: js/FileUpload.js:76
+msgid "Message Size Limit Exceeded"
+msgstr "Message Size Limit Exceeded"
+
+#: js/MessageEditDialog.js:343
+msgid "Maximum allowed message size is {0} Mb."
+msgstr "Maximum allowed message size is {0} Mb."
+
+#: js/MessageEditDialog.js:365
+msgid "Message size validation step failed."
+msgstr "Message size validation step failed."
+
+msgid "This message size is {0} Mb."
+msgstr "This message size is {0} Mb."
+
+#: js/FileUpload.js:78
+msgid "This message total attachment size is {0} Mb."
+msgstr "This message total attachment size is {0} Mb."
+
+#: js/FileUpload.js:89
+msgid "The last attachment was removed."
+msgstr "The last attachment was removed."
+
+#: js/FileUpload.js:101
+msgid "File size validation step failed."
+msgstr "File size validation step failed."
+
+#: js/MessageEditDialog.js:556
+msgid "Fwd:"
+msgstr "Fwd:"
+
+#: js/MessageEditDialog.js:559
+msgid "{0} Message"
+msgstr "{0} Message"
+
+#: js/MessageEditDialog.js:611
+#: js/MessageEditDialog.js:746
+msgid "Failed"
+msgstr "Failed"
+
+#: js/MessageEditDialog.js:612
+msgid "{0} account setting empty."
+msgstr "{0} account setting empty."
+
+#: js/MessageEditDialog.js:627
+msgid "Errors"
+msgstr "Errors"
+
+#: js/MessageEditDialog.js:627
+msgid "Please fix the errors noted."
+msgstr "Please fix the errors noted."
+
+#: js/MessageEditDialog.js:669
+#: js/MessageEditDialog.js:931
+msgid "Compose email:"
+msgstr "Compose email:"
+
+#: js/MessageEditDialog.js:719
+msgid "Add Note"
+msgstr "Add Note"
+
+#: js/MessageEditDialog.js:720
+msgid "Edit Email Note Text:"
+msgstr "Edit Email Note Text:"
+
+#: js/MessageEditDialog.js:747
+msgid "Could not send {0}."
+msgstr "Could not send {0}."
+
+#: js/MessageEditDialog.js:748
+msgid "Error:"
+msgstr "Error:"
+
+#: js/MessageEditDialog.js:955
+msgid "Files are still uploading."
+msgstr "Files are still uploading."
+
+#: js/MessageEditDialog.js:975
+msgid "No recipients set."
+msgstr "No recipients set."
+
+#: js/Model.js:49
+#: js/TreeContextMenu.js:24
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Message"
+msgstr[1] "Messages"
+
+#: js/Model.js:140
+msgid "Subject/From"
+msgstr "Subject/From"
+
+#: js/Model.js:145
+msgid "Cc"
+msgstr "Cc"
+
+#: js/Model.js:146
+msgid "Bcc"
+msgstr "Bcc"
+
+#: js/Model.js:354
+msgid "Email Accounts"
+msgid_plural "Email Accounts"
+msgstr[0] "Email Accounts"
+msgstr[1] "Email Accounts"
+
+#: js/Model.js:490
+msgid "INBOX"
+msgstr "INBOX"
+
+#: js/Model.js:490
+msgid "Drafts"
+msgstr "Drafts"
+
+#: js/Model.js:490
+msgid "Templates"
+msgstr "Templates"
+
+#: js/Model.js:490
+msgid "Trash"
+msgstr "Trash"
+
+#: js/Model.js:499
+#: js/Model.js:616
+#: js/Model.js:681
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "record list"
+msgstr[1] "record lists"
+
+#: js/Model.js:612
+msgid "Vacation"
+msgid_plural "Vacations"
+msgstr[0] "Vacation"
+msgstr[1] "Vacations"
+
+#: js/Model.js:678
+msgid "Rule"
+msgid_plural "Rules"
+msgstr[0] "Rule"
+msgstr[1] "Rules"
+
+#: js/Model.js:804
+msgid "Flag"
+msgid_plural "Flags"
+msgstr[0] "Flag"
+msgstr[1] "Flags"
+
+#: js/Model.js:807
+msgid "Flag list"
+msgid_plural "Flag lists"
+msgstr[0] "Flag list"
+msgstr[1] "Flag lists"
+
+#: js/RecipientGrid.js:204
+msgid "Click here to set To/CC/BCC."
+msgstr "Click here to set To/CC/BCC."
+
+#: js/RecipientGrid.js:208
+#: js/RecipientGrid.js:232
+msgid "To:"
+msgstr "To:"
+
+#: js/RecipientGrid.js:211
+#: js/RecipientGrid.js:233
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/RecipientGrid.js:214
+#: js/RecipientGrid.js:234
+msgid "Bcc:"
+msgstr "Bcc:"
+
+#: js/RecipientGrid.js:337
+msgid "Remove"
+msgstr "Remove"
+
+#: js/RecipientPickerDialog.js:62
+msgid "(new message)"
+msgstr "(new message)"
+
+#: js/RecipientPickerDialog.js:63
+msgid "Select recipients for \"{0}\""
+msgstr "Select recipients for \"{0}\""
+
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
+msgstr "Recipient filter"
+
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
+msgstr "All recipients"
+
+#: js/RecipientPickerFavoritePanel.js:57
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" recipients"
+
+#: js/sieve/RuleConditionsPanel.js:70
+msgid "From (Email and Name)"
+msgstr "From (Email and Name)"
+
+#: js/sieve/RuleConditionsPanel.js:71
+msgid "To (Email)"
+msgstr "To (Email)"
+
+#: js/sieve/RuleConditionsPanel.js:74
+msgid "Header contains"
+msgstr "Header contains"
+
+#: js/sieve/RuleConditionsPanel.js:75
+#: js/sieve/RuleConditionsPanel.js:77
+msgid "Header name"
+msgstr "Header name"
+
+#: js/sieve/RuleConditionsPanel.js:75
+#: js/sieve/RuleConditionsPanel.js:77
+msgid "Header value"
+msgstr "Header value"
+
+#: js/sieve/RuleConditionsPanel.js:76
+msgid "Header regex"
+msgstr "Header regex"
+
+#: js/sieve/RuleEditDialog.js:96
+msgid "Edit Filter Rule"
+msgstr "Edit Filter Rule"
+
+#: js/sieve/RuleEditDialog.js:254
+msgid "If all of the following conditions are met:"
+msgstr "If all of the following conditions are met:"
+
+#: js/sieve/RuleEditDialog.js:274
+msgid "Do this action:"
+msgstr "Do this action:"
+
+#: js/sieve/RuleEditDialog.js:364
+msgid "Move mail to folder"
+msgstr "Move mail to folder"
+
+#: js/sieve/RuleEditDialog.js:365
+msgid "Redirect mail to address"
+msgstr "Redirect mail to address"
+
+#: js/sieve/RuleEditDialog.js:366
+msgid "Reject mail with this text"
+msgstr "Reject mail with this text"
+
+#: js/sieve/RuleEditDialog.js:367
+msgid "Discard mail"
+msgstr "Discard mail"
+
+#: js/sieve/RuleEditDialog.js:368
+msgid "Keep mail"
+msgstr "Keep mail"
+
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "Sieve Filter Rules"
+
+#: js/sieve/RulesDialog.js:82
+msgid "Sieve Filter Rules for {0}"
+msgstr "Sieve Filter Rules for {0}"
+
+#: js/sieve/RulesGridPanel.js:77
+msgid "Move up"
+msgstr "Move up"
+
+#: js/sieve/RulesGridPanel.js:84
+msgid "Move down"
+msgstr "Move down"
+
+#: js/sieve/RulesGridPanel.js:91
+msgid "Enable"
+msgstr "Enable"
+
+#: js/sieve/RulesGridPanel.js:98
+msgid "Disable"
+msgstr "Disable"
+
+#: js/sieve/RulesGridPanel.js:199
+msgid "ID"
+msgstr "ID"
+
+#: js/sieve/RulesGridPanel.js:206
+msgid "Conditions"
+msgstr "Conditions"
+
+#: js/sieve/RulesGridPanel.js:214
+msgid "Action"
+msgstr "Action"
+
+#: js/sieve/RulesGridPanel.js:304
+msgid "is greater than"
+msgstr "is greater than"
+
+#: js/sieve/RulesGridPanel.js:304
+msgid "is less than"
+msgstr "is less than"
+
+#: js/sieve/RulesGridPanel.js:315
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Header \"{0}\" contains \"{1}\""
+
+#: js/sieve/RulesGridPanel.js:315
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Header \"{0}\" matches \"{1}\""
+
+#: js/sieve/VacationEditDialog.js:76
+msgid "Vacation Message for {0}"
+msgstr "Vacation Message for {0}"
+
+#: js/sieve/VacationEditDialog.js:94
+msgid "Incoming mails will be answered with this text:"
+msgstr "Incoming mails will be answered with this text:"
+
+#: js/sieve/VacationEditDialog.js:114
+msgid "General"
+msgstr "General"
+
+#: js/sieve/VacationEditDialog.js:133
+#: js/sieve/VacationEditDialog.js:167
+msgid "I am available (vacation message disabled)"
+msgstr "I am available (vacation message disabled)"
+
+#: js/sieve/VacationEditDialog.js:140
+#: js/sieve/VacationEditDialog.js:168
+msgid "I am not available (vacation message enabled)"
+msgstr "I am not available (vacation message enabled)"
+
+#: js/sieve/VacationEditDialog.js:156
+msgid "Status"
+msgstr "Status"
+
+#: js/sieve/VacationEditDialog.js:180
+msgid "Advanced"
+msgstr "Advanced"
+
+#: js/sieve/VacationEditDialog.js:191
+msgid "Only send all X days to the same sender"
+msgstr "Only send all X days to the same sender"
+
+#: js/TreeContextMenu.js:24
+msgid "Update {0} Cache"
+msgstr "Update {0} Cache"
+
+#: js/TreeContextMenu.js:45
+msgid "Reload {0}"
+msgstr "Reload {0}"
+
+#: js/TreeContextMenu.js:59
+msgid "Empty Folder"
+msgstr "Empty Folder"
+
+#: js/TreeContextMenu.js:95
+msgid "Add Folder"
+msgstr "Add Folder"
+
+#: js/TreeContextMenu.js:100
+msgid "New {0}"
+msgstr "New {0}"
+
+#: js/TreeContextMenu.js:100
+msgid "Please enter the name of the new {0}:"
+msgstr "Please enter the name of the new {0}:"
+
+#: js/TreeContextMenu.js:103
+msgid "No {0} added"
+msgstr "No {0} added"
+
+#: js/TreeContextMenu.js:103
+msgid "You have to supply a {0} name!"
+msgstr "You have to supply a {0} name!"
+
+#: js/TreeContextMenu.js:106
+msgid "Please wait"
+msgstr "Please wait"
+
+#: js/TreeContextMenu.js:106
+msgid "Creating {0}..."
+msgstr "Creating {0}..."
+
+#: js/TreeContextMenu.js:136
+msgid "Edit Account"
+msgstr "Edit Account"
+
+#: js/TreeContextMenu.js:164
+msgid "Set Vacation Message"
+msgstr "Set Vacation Message"
+
+#: js/TreeContextMenu.js:180
+msgid "Set Filter Rules"
+msgstr "Set Filter Rules"
+
+#: js/TreeContextMenu.js:194
+msgid "Mark Folder as read"
+msgstr "Mark Folder as read"
+
+#: js/TreeContextMenu.js:231
+msgid "Update Folder List"
+msgstr "Update Folder List"
+
+#: js/TreePanel.js:700
+msgid "Total Messages:"
+msgstr "Total Messages:"
+
+#: js/TreePanel.js:704
+msgid "Unread Messages:"
+msgstr "Unread Messages:"
+
+#: js/TreePanel.js:708
+msgid "Name on Server:"
+msgstr "Name on Server:"
+
+#: js/TreePanel.js:712
+msgid "Last update:"
+msgstr "Last update:"
+
+#: js/TreePanel.js:732
+#, python-format
+msgid "Fetching messages... ({0}%% done)"
+msgstr "Fetching messages... ({0}%% done)"
+
+#: js/TreePanel.js:748
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} unread message"
+msgstr[1] "{0} unread messages"
+
+#: Preference.php:59
+msgid "All inboxes"
+msgstr "All inboxes"
+
+#: Preference.php:106
+msgid "Default Email Account"
+msgstr "Default Email Account"
+
+#: Preference.php:107
+msgid "The default email account to use when sending mails."
+msgstr "The default email account to use when sending mails."
+
+#: Preference.php:110
+msgid "Email Update Interval"
+msgstr "Email Update Interval"
+
+#: Preference.php:111
+msgid "How often should Expressomail check for new Emails (in minutes). \"0\" means never."
+msgstr "How often should Expressomail check for new Emails (in minutes). \"0\" means never."
+
+#: Preference.php:114
+msgid "Use in Addressbook"
+msgstr "Use in Addressbook"
+
+#: Preference.php:115
+msgid "Compose Emails from the Addressbook with Expressomail."
+msgstr "Compose Emails from the Addressbook with Expressomail."
+
+#: Preference.php:118
+msgid "Use for NOTES"
+msgstr "Use for NOTES"
+
+#: Preference.php:119
+msgid "Save Note default Value."
+msgstr "Save Note default Value."
+
+#: Preference.php:122
+msgid "Confirm Delete"
+msgstr "Confirm Delete"
+
+#: Preference.php:123
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Show confirmation dialog when deleting mails."
+
+#: Setup/Initialize.php:44
+msgid "All inboxes of my email accounts"
+msgstr "All inboxes of my email accounts"
+
+#: Setup/Initialize.php:51
+msgid "All unread mail"
+msgstr "All unread mail"
+
+#: Setup/Initialize.php:52
+msgid "All unread mail of my email accounts"
+msgstr "All unread mail of my email accounts"
+
+#: Setup/Initialize.php:59
+msgid "All highlighted mail"
+msgstr "All highlighted mail"
+
+#: Setup/Initialize.php:60
+msgid "All highlighted mail of my email accounts"
+msgstr "All highlighted mail of my email accounts"
+
+#: Setup/Initialize.php:67
+msgid "All drafts"
+msgstr "All drafts"
+
+#: Setup/Initialize.php:68
+msgid "All mails with the draft flag"
+msgstr "All mails with the draft flag"
+
+#: js/GridDetailsPanel.js:
+#: 255
+msgid "Verification Failed!"
+msgstr "Verification Failed!"
+
+#: js/GridDetailsPanel.js:
+#: 251
+msgid "Verification Successful!"
+msgstr "Verification Successful!"
+
+#: js/GridDetailsPanel.js:
+#: 245
+msgid "Digital Signature"
+msgstr "Digital Signature"
+
+#: js/GridDetailsPanel.js:
+#: 547
+msgid "Verification Details"
+msgstr "Verification Details"
+
+#: js/GridDetailsPanel.js:
+#: 542
+msgid "Serial Number"
+msgstr "Serial Number"
+
+#: js/GridDetailsPanel.js:
+#: 542
+msgid "Issuer"
+msgstr "Issuer"
+
+#: js/GridDetailsPanel.js:
+#: 542
+msgid "Owner"
+msgstr "Owner"
+
+#: js/GridDetailsPanel.js:
+#: 542
+msgid "Valid From"
+msgstr "Valid From"
+
+#: js/GridDetailsPanel.js:
+#: 542
+msgid "Valid To"
+msgstr "Valid To"
+
+#: Smime.php:
+#: 129
+msgid "Message Integrity Verification Failure"
+msgstr "Message Integrity Verification Failure"
+
+#: js/GridDetailsPanel.js:
+#: 561
+msgid "Sender's email is different from Digital Certificate's email"
+msgstr "Sender's email is different from Digital Certificate's email"
+
+#: js/GridDetailsPanel.js:
+#: 392
+msgid "show details of digitial signature verification"
+msgstr "show details of digitial signature verification"
+
+#: Preference.php:
+#: 166
+msgid "Sign messages by default when sending mail"
+msgstr "Sign messages by default when sending mail"
+
+#: Preference.php:
+#: 166
+msgid "Choose yes, to open message editor with toggle button \"Sign Message\" pressed"
+msgstr "Choose yes, to open message editor with toggle button \"Sign Message\" pressed"
+
+#: js/TreeContextMenu.js:
+#: 199
+msgid "Digitally Sign Mail"
+msgstr "Digitally Sign Mail"
+
+#: js/TreeContextMenu.js:
+#: 199
+msgid "Activate this toggle button to sign a message on send"
+msgstr "Activate this toggle button to sign a message on send"
+
+#: js/sieve/RuleEditDialog.js:103
+msgid "All fields must be filled"
+msgstr "All fields must be filled"
+

@@ -814,8 +814,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $this->saveInClassCache(__FUNCTION__, $classCacheId, $containers);
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Found ' . count($containers) . ' shared container(s) in application ' . $application->name
-            . ' with grant(s): ' . implode(',', (array)$grant));
+            . ' Found ' . count($containers) . ' shared container(s) in application ' . $application->name);
         
         return $containers;
     }

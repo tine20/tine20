@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>9.0</version>
+    <version>9.1</version>
     <order>15</order>
     <status>enabled</status>
     <tables>

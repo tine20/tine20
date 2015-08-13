@@ -1,0 +1,39 @@
+Return-Path: <abc@host.domain>
+X-Original-To: abc@host.domain
+Delivered-To: abc@host.domain
+Received: from [122.122.122.22] (xxxxx [122.122.122.22])
+	by xxxxx (Postfix) with ESMTPSA id 2AA7F26057
+	for <abc@host.domain>; Fri,  3 Sep 2010 09:33:26 +0200 (CEST)
+Message-ID: <4C80A503.5040505@abc.com>
+Date: Fri, 03 Sep 2010 09:34:27 +0200
+From: xxx aaaaa <abc@host.domain>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; de; rv:1.9.2.8) Gecko/20100802 SUSE/3.1.2 Lightning/1.0b2 Thunderbird/3.1.2
+MIME-Version: 1.0
+To: xxx aaa <abc@host.domain>
+Subject: Umlaute UTF8 Text + ISO-8859-15 Signatur
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: 2AA7F26057.AC395
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-SpamCheck: not spam, SpamAssassin (not cached,
+	score=-1.44, required 6, autolearn=not spam, ALL_TRUSTED -1.44)
+X-yoursite-MailScanner-From: abc@host.domain
+X-Spam-Status: No
+X-Tine20TestMessage: text/different
+
+   A Ä
+a ä
+U Ü
+u ü
+O Ö
+o ö
+ss ß
+
+_______________________________________________________
+Registergericht / Court of jurisdiction: Amtsgericht Gie�en HRB 5708
+Gesch�ftsf�hrer / Managing Director: lalala, J�rgen LLOOOO
+USt.-Id: DE 122 222 7229
+Ust.-Nr: 0122 222 22 FA daaaaa
+
+

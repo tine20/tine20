@@ -1,0 +1,271 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     Expressomail
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+ 
+Ext.namespace('Tine.Expressomail');
+
+/**
+ * @namespace   Tine.Expressomail
+ * @class       Tine.Expressomail.FolderStore
+ * @extends     Ext.data.Store
+ * 
+ * <p>Expressomail folder store</p>
+ * <p>
+ * </p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * 
+ * @param       {Object} config
+ * 
+ * @constructor
+ * Create a new  Tine.Expressomail.FolderStore
+ */
+Tine.Expressomail.FolderStore = function(config) {
+    config = config || {};
+    Ext.apply(this, config);
+    
+    this.reader = Tine.Expressomail.folderBackend.getReader();
+    this.queriesPending = [];
+    this.queriesDone = [];
+
+    Tine.Expressomail.FolderStore.superclass.constructor.call(this);
+    
+    this.on('load', this.onStoreLoad, this);
+    this.on('add', this.onStoreAdd, this);
+    this.on('loadexception', this.onStoreLoadException, this);
+};
+
+Ext.extend(Tine.Expressomail.FolderStore, Ext.data.Store, {
+    
+    fields: Tine.Expressomail.Model.Folder,
+    proxy: Tine.Expressomail.folderBackend,
+    
+    /**
+     * @property queriesDone
+     * @type Array
+     */
+    queriesDone: null,
+    
+    /**
+     * @property queriesPending
+     * @type Array
+     */
+    queriesPending: null,
+    
+    /**
+     * async query
+     */
+    asyncQuery: function(field, value, callback, args, scope, store) {
+        var result = null,
+            key = store.getKey(field, value);
+        
+        Tine.log.info('Tine.Expressomail.FolderStore.asyncQuery: ' + key);
+        
+        if (store.queriesDone.indexOf(key) >= 0) {
+            Tine.log.debug('result already loaded -> directly query store');
+            // we need regexp here because query returns all records with path that begins with the value string otherwise
+            var valueReg = new RegExp(value + '$');
+            result = store.query(field, valueReg);
+            args.push(result);
+            callback.apply(scope, args);
+        } else if (store.queriesPending.indexOf(key) >= 0) {
+            Tine.log.debug('result not in store yet, but async query already running -> wait a bit');
+            this.asyncQuery.defer(2500, this, [field, value, callback, args, scope, store]);
+        } else {
+            Tine.log.debug('result is requested the first time -> fetch from server');
+            var accountId = value.match(/^\/([a-z0-9]*)/i)[1],
+                folderIdMatch = value.match(/[a-z0-9]+\/([a-z0-9]*)$/i),
+                folderId = (folderIdMatch) ? folderIdMatch[1] : null,
+                folder = folderId ? store.getById(folderId) : null;
+            
+            if (folderId && ! folder) {
+                Tine.log.warn('folder ' + folderId + ' not found -> performing no query at all');
+                callback.apply(scope, args);
+                return;
+            }
+            
+            store.queriesPending.push(key);
+            store.load({
+                path: value,
+                params: {filter: [
+                    {field: 'account_id', operator: 'equals', value: accountId},
+                    {field: 'globalname', operator: 'equals', value: (folder !== null) ? folder.get('globalname') : ''}
+                ]},
+                callback: function () {
+                    store.queriesDone.push(key);
+                    store.queriesPending.remove(key);
+                    
+                    // query store again (it should have the new folders now) and call callback function to add nodes
+                    result = store.query(field, value);
+                    args.push(result);
+                    callback.apply(scope, args);
+                },
+                add: true
+            });
+        }
+    },
+    
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     * 
+     * TODO remove loading class / remove from queriesDone?
+     */
+    onStoreLoadException: function(proxy, type, error, options) {
+        //var node = options.params.path
+        //node.getUI().removeClass("x-tree-node-loading");
+
+        // Remove failed queries from queriesPending
+        var key = this.getKey('parent_path', options.path);
+        this.queriesPending.remove(key);
+        Tine.Expressomail.handleRequestException(error);
+    },
+    
+    
+    /**
+     * check if query has already loaded or is loading
+     * 
+     * @param {String} field
+     * @param {String} value
+     * @return {boolean}
+     */
+    isLoadedOrLoading: function(field, value) {
+        var key = this.getKey(field, value),
+            result = false;
+        
+        result = (this.queriesDone.indexOf(key) >= 0 || this.queriesPending.indexOf(key) >= 0);
+        
+        return result;
+    },
+    
+    /**
+     * get key to store query 
+     * 
+     * @param  {string} field
+     * @param  {mixed} value
+     * @return {string}
+     */
+    getKey: function(field, value) {
+        return field + ' -> ' + value;
+    },
+    
+    /**
+     * load event handler
+     * 
+     * @param {Tine.Expressomail.FolderStore} store
+     * @param {Tine.Expressomail.Model.Folder} records
+     * @param {Object} options
+     */
+    onStoreLoad: function(store, records, options) {
+        this.computePaths(records, options.path);
+    },
+    
+    /**
+     * add event handler
+     * 
+     * @param {Tine.Expressomail.FolderStore} store
+     * @param {Tine.Expressomail.Model.Folder} records
+     * @param {Integer} index
+     */
+    onStoreAdd: function(store, records, index) {
+        this.computePaths(records, null);
+    },
+
+    /**
+     * compute paths for folder records
+     * 
+     * @param {Tine.Expressomail.Model.Folder} records
+     * @param {String|null} parentPath
+     */
+    computePaths: function(records, givenParentPath) {
+        var parentPath, path;
+        Ext.each(records, function(record) {
+            if (givenParentPath === null) {
+                var parent = this.getParent(record);
+                parentPath = (parent) ? parent.get('path') : '/' + record.get('account_id');
+            } else {
+                parentPath = givenParentPath;
+            }
+            path = parentPath + '/' + record.id;
+            
+            if (record.get('parent_path') != parentPath || record.get('path') != path) {
+                record.beginEdit();
+                record.set('parent_path', parentPath);
+                record.set('path', path);
+                record.endEdit();
+            }
+        }, this);
+    },
+    
+    /**
+     * resets the query and removes all records that match it
+     * 
+     * @param {String} field
+     * @param {String} value
+     */
+    resetQueryAndRemoveRecords: function(field, value) {
+        this.queriesPending.remove(this.getKey(field, value));
+        var toRemove = this.query(field, value);
+        toRemove.each(function(record) {
+            this.remove(record);
+            this.queriesDone.remove(this.getKey(field, record.get(field)));
+        }, this);
+    },
+    
+    /**
+     * update folder in this store
+     * 
+     * NOTE: parent_path and path are computed onLoad and must be preserved
+     * 
+     * @param {Array/Tine.Expressomail.Model.Folder} update
+     * @return {Tine.Expressomail.Model.Folder}
+     */
+    updateFolder: function(update) {
+        if (Ext.isArray(update)) {
+            Ext.each(update, function(u) {this.updateFolder.call(this, u)}, this);
+            return;
+        }
+        
+        var folder = this.getById(update.id);
+        
+        if (folder) {
+            folder.beginEdit();
+            Ext.each(Tine.Expressomail.Model.Folder.getFieldNames(), function(f) {
+                if (! f.match('path')) {
+                    folder.set(f, update.get(f));
+                }
+            }, this);
+            folder.endEdit();
+            folder.commit();
+            return folder;
+        }
+    },
+    
+    /**
+     * get parent folder
+     * 
+     * @param {Tine.Expressomail.Model.Folder} folder
+     * @return {Tine.Expressomail.Model.Folder|null}
+     */
+    getParent: function(folder) {
+        var result = this.queryBy(function(record, id) {
+            if (record.get('account_id') == folder.get('account_id') && record.get('globalname') == folder.get('parent')) {
+                return true;
+            }
+        });
+        
+        return result.first() || null;
+    }    
+});
+
