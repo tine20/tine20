@@ -47,7 +47,7 @@ class ActiveSync_Command_SyncTests extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        
+
         Syncroton_Registry::setDatabase(Tinebase_Core::getDb());
         Syncroton_Registry::setTransactionManager(Tinebase_TransactionManager::getInstance());
         
@@ -66,6 +66,18 @@ class ActiveSync_Command_SyncTests extends TestCase
         $this->_device = Syncroton_Registry::getDeviceBackend()->create(
             ActiveSync_TestCase::getTestDevice()
         );
+    }
+
+    /**
+     * tear down tests
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        if (! $this->_transactionId) {
+            Syncroton_Registry::getDeviceBackend()->delete($this->_device->id);
+        }
     }
 
     /**
@@ -254,6 +266,20 @@ class ActiveSync_Command_SyncTests extends TestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         $this->assertEquals(Syncroton_Command_Sync::STATUS_SUCCESS, $nodes->item(0)->nodeValue, $syncDoc->saveXML());
     }
+
+    /**
+     * tests xml encoding/decoding
+     */
+    public function testWbXmlEncodeDecode()
+    {
+        $xmlFile = file_get_contents(dirname(__FILE__) . '/ibernard.xml');
+        $doc = new DOMDocument();
+        $doc->preserveWhiteSpace = false;
+        $doc->loadXML($xmlFile, LIBXML_NOWARNING);
+
+        $output = Felamimail_Frontend_ActiveSyncTest::encodeXml($doc);
+        $this->assertContains(' Mein Kopf ist gerade zu voll... 😃', $output);
+    }
     
     /**
      * test sync of existing events folder
@@ -280,9 +306,8 @@ class ActiveSync_Command_SyncTests extends TestCase
             ))
         ));
         
-        $event = Calendar_Controller_Event::getInstance()->create($event);
-        
-        
+        Calendar_Controller_Event::getInstance()->create($event);
+
         // first do a foldersync
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -361,8 +386,12 @@ class ActiveSync_Command_SyncTests extends TestCase
     
     /**
      * test sync of existing imap folder
+     *
+     * @param string $filename
+     * @param string $testHeaderValue
+     * @return string output
      */
-    public function testSyncOfEmails()
+    public function testSyncOfEmails($filename = 'multipart_mixed.eml', $testHeaderValue = 'multipart/mixed')
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         if (! $imapConfig || ! isset($imapConfig->useSystemAccount) || $imapConfig->useSystemAccount != TRUE) {
@@ -373,18 +402,23 @@ class ActiveSync_Command_SyncTests extends TestCase
         $emailTest = new Felamimail_Controller_MessageTest();
         $emailTest->setUp();
         $inbox = $emailTest->getFolder('INBOX');
-        $emailTest->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $inbox);
+        $emailTest->messageTestHelper($filename, $testHeaderValue, $inbox);
         
         $emailController = new Felamimail_Frontend_ActiveSync($this->_device, new Tinebase_DateTime(null, null, 'de_DE'));
 
         $folders = $emailController->getAllFolders();
-        
+
+
         foreach ($folders as $folder) {
             if (strtoupper($folder->displayName) == 'INBOX') {
                 break;
             }
         }
-        
+
+        if (! isset($folder)) {
+            $this->fail('should have an INBOX');
+        }
+
         // first do a foldersync
         $doc = new DOMDocument();
         $doc->loadXML('<?xml version="1.0" encoding="utf-8"?>
@@ -452,6 +486,8 @@ class ActiveSync_Command_SyncTests extends TestCase
         $sync->handle();
         
         $syncDoc = $sync->getResponse();
+
+        // activate for xml output
         #$syncDoc->formatOutput = true; echo $syncDoc->saveXML();
         
         $xpath = new DomXPath($syncDoc);
@@ -473,10 +509,22 @@ class ActiveSync_Command_SyncTests extends TestCase
         $this->assertEquals(1, $nodes->length, $syncDoc->saveXML());
         
         $this->assertEquals("uri:Email", $syncDoc->lookupNamespaceURI('Email'), $syncDoc->saveXML());
-        
+
+        $output = Felamimail_Frontend_ActiveSyncTest::encodeXml($syncDoc);
+
         $emailTest->tearDown();
+
+        return $output;
     }
 
+    public function testSyncOfGarbledEmail()
+    {
+        $this->_testNeedsTransaction();
+
+        $output = $this->testSyncOfEmails('emoji.eml', 'emoji.eml');
+
+        $this->assertContains('Mein Kopf ist gerade zu voll...?', $output, 'emoji should be replaced with "?"');
+    }
     
     /**
      * testResetSync
@@ -499,8 +547,8 @@ class ActiveSync_Command_SyncTests extends TestCase
         
         foreach ($folderState as $folder) {
             try {
-               $syncState = Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device->id, $folder->id);
-               $this->fail('should not find sync state for folder');
+                Syncroton_Registry::getSyncStateBackend()->getSyncState($this->_device->id, $folder->id);
+                $this->fail('should not find sync state for folder');
             } catch (Exception $e) {
                 $this->assertEquals('id not found', $e->getMessage());
             }
