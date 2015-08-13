@@ -350,7 +350,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         $currentOriginEvent = $this->_eventController->get($_event->getId());
         $this->_fromiTIP($_event, $currentOriginEvent);
-        
+
+        // NOTE:  create an update must be handled equally as apple devices do not fetch events after creation.
+        //        an update from the creating device would change defaults otherwise
+        // NOTE2: Being organizer without attending is not possible when sync is in use as every update
+        //        from a sync device of the organizer adds the organizer as attendee :-(
+        //        -> in the sync world this is scenario is called delegation and handled differently
+        //        -> it might be consequent to have the same behavior (organizer is always attendee with role chair)
+        //           in tine20 in general. This is how Thunderbird handles it as well
         $_event->assertAttendee($this->getCalendarUser());
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
