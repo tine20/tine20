@@ -648,7 +648,6 @@ class Setup_Frontend_Cli
             $role = Tinebase_Acl_Roles::getInstance()->getRoleById($roleId);
             if ($role->name === $adminRoleName) {
                 $adminRoleFound = TRUE;
-                print_r(Tinebase_Acl_Roles::getInstance()->getRoleRights($role->getId()));
                 break;
             }
         }
