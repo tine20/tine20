@@ -915,7 +915,7 @@ msgstr ""
 
 #: js/InvoiceEditDialog.js:346 js/PurchaseInvoiceEditDialog.js:300
 msgid "Sales Tax (percent)"
-msgstr "Mehrwertsteuer in Prozent"
+msgstr "MwSt. in Prozent"
 
 #: js/InvoiceEditDialog.js:380 js/InvoiceEditDialog.js:386
 #: js/PurchaseInvoiceEditDialog.js:356 js/PurchaseInvoiceEditDialog.js:380
@@ -1408,3 +1408,9 @@ msgstr "Sie haben kein Adminrecht in der Sales-Applikation"
 #~ msgid_plural "Costcenters"
 #~ msgstr[0] "Kostenstelle"
 #~ msgstr[1] "Kostenstellen"
+
+msgid "Additional Price Gross"
+msgstr "Zusätzlicher Brutto Preis"
+
+msgid "Total Price"
+msgstr "Gesamtpreis"

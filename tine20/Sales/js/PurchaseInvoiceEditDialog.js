@@ -96,16 +96,19 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     onUpdatePriceNet: function() {
         this.calcTax();
         this.calcGross();
+        this.calcTotal();
     },
     
     onUpdateSalesTax: function() {
         this.calcTax();
         this.calcGross();
+        this.calcTotal();
     },
     
     onUpdatePriceTax: function() {
         this.calcTaxPercent();
         this.calcGross();
+        this.calcTotal();
     },
     
     onUpdateDateOfInvoice: function() {
@@ -133,7 +136,29 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         
         this.dueInDaysField.setValue(diffDays);
     },
-    
+
+    /**
+     * calculates total prices by price gross, additional price gross, discount
+     */
+    calcTotal: function() {
+        var priceGross      = parseFloat(this.priceGrossField.getValue());
+        var priceGross2     = parseFloat(this.priceGross2Field.getValue());
+        var discount        = parseFloat(this.discountField.getValue());
+
+        var total = (priceGross + priceGross2) * (1 - discount/100) * 100;
+        var negative = false;
+        if (total < 0) {
+            negative = true;
+            total = Math.abs(total);
+        }
+        total = Math.round( total ) / 100;
+        if ( negative ) {
+            total = 0 - total;
+        }
+
+        this.priceTotalField.setValue( total );
+    },
+
     /**
      * calculates price gross by price net and tax
      */
@@ -152,7 +177,15 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var taxPercent = parseFloat(this.salesTaxField.getValue());
         
         var tax        = netPrice * (taxPercent / 100);
+        var negative = false;
+        if (tax < 0) {
+            tax = Math.abs(tax);
+            negative = true;
+        }
         var roundedTax = Math.round(tax * 100) / 100;
+        if ( negative ) {
+            roundedTax = 0 - roundedTax;
+        }
         
         this.priceTaxField.setValue(roundedTax);
     },
@@ -165,8 +198,9 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var tax      = parseFloat(this.priceTaxField.getValue());
         
         var taxPercent = tax / netPrice * 100;
-        var roundedPercent = Math.round(taxPercent * 100) / 100;
-        
+
+        var roundedPercent = Math.round(Math.abs(taxPercent) * 100) / 100;
+
         this.salesTaxField.setValue(roundedPercent);
     },
     
@@ -256,6 +290,34 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 blur: this.calcGross.createDelegate(this)
             }
         });
+
+        this.priceGross2Field = new Ext.ux.form.NumberField({
+            decimalPrecision: 2,
+            name: 'price_gross2',
+            xtype: 'numberfield',
+            suffix: ' €',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            fieldLabel: this.app.i18n._('Additional Price Gross'),
+            columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.calcTotal.createDelegate(this)
+            }
+        });
+
+        this.priceTotalField = new Ext.ux.form.NumberField({
+            decimalPrecision: 2,
+            name: 'price_total',
+            xtype: 'numberfield',
+            suffix: ' €',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            fieldLabel: this.app.i18n._('Total Price'),
+            columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.calcTotal.createDelegate(this)
+            }
+        });
         
         this.priceTaxField = new Ext.ux.form.NumberField({
             decimalPrecision: 2,
@@ -307,7 +369,12 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             fieldLabel: this.app.i18n._('Discount (%)'),
             columnWidth: 1/4,
             value: 0,
-            regex: /^[0-9]+\.?[0-9]*$/
+            regex: /^[0-9]+\.?[0-9]*$/,
+            listeners: {
+                scope: this,
+                spin: this.calcTotal.createDelegate(this),
+                blur: this.calcTotal.createDelegate(this)
+            }
         });
         
         var items = [{
@@ -355,18 +422,19 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 this.dateOfInvoiceField,
                                 this.dueInDaysField,
                                 this.dueAtField,
-                                {
+                                /*{
                                     xtype: 'extuxclearabledatefield',
                                     name: 'overdue_at',
                                     fieldLabel: this.app.i18n._('Overdue date'),
                                     columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
-                            }], [
+                            }*/], [
                                 this.priceNetField,
                                 this.salesTaxField,
                                 this.priceTaxField,
                                 this.priceGrossField
                             ], [
+                                this.priceGross2Field,
                                 this.discountField,
                                 {
                                     xtype: 'extuxclearabledatefield',
@@ -376,6 +444,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     columnWidth: 1/4
                                     //emptyText: (this.record.get('is_auto') == 1) ? this.app.i18n._('automatically set...') : ''
                                 }
+                            ], [
+                                this.priceTotalField
                             ]
                         ]
                     }]

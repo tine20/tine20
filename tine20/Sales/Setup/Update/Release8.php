@@ -2070,4 +2070,57 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('sales_purchase_invoices', 2);
         $this->setApplicationVersion('Sales', '8.30');
     }
+
+    /**
+     * Add price_gross2 and price_total to pruchase invoice
+     */
+    public function update_30()
+    {
+        $field = '<field>
+                    <name>price_gross2</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('sales_purchase_invoices', $declaration, 16);
+
+        $field = '<field>
+                    <name>price_total</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('sales_purchase_invoices', $declaration, 19);
+
+        // update existing purchase invoices, set total price to price_gross
+        $db = $this->_backend->getDb();
+        $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_purchase_invoices') . ' SET ' . $db->quoteIdentifier('price_total') . ' = ( ' . $db->quoteIdentifier('price_gross') . ' * (1 - discount/100))';
+        $db->query($sql);
+
+        $field = '<field>
+                    <name>price_tax</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('sales_sales_invoices', $declaration, 8);
+
+        // TODO fix this for pgsql/oracle. currently we only update the invoices for mysql db adapters
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_sales_invoices') . ' SET ' . $db->quoteIdentifier('price_tax') . ' = TRUNCATE( ' . $db->quoteIdentifier('price_net') . ' * ' . $db->quoteIdentifier('sales_tax') . ' / 100 + 0.005, 2) WHERE ' . $db->quoteIdentifier('price_net') . ' > 0';
+            $db->query($sql);
+
+            $sql = 'UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'sales_sales_invoices') . ' SET ' . $db->quoteIdentifier('price_tax') . ' = TRUNCATE( ' . $db->quoteIdentifier('price_net') . ' * ' . $db->quoteIdentifier('sales_tax') . ' / 100 - 0.005, 2) WHERE ' . $db->quoteIdentifier('price_net') . ' < 0';
+            $db->query($sql);
+        }
+
+        $this->setTableVersion('sales_purchase_invoices', 3);
+        $this->setApplicationVersion('Sales', '8.31');
+    }
 }
