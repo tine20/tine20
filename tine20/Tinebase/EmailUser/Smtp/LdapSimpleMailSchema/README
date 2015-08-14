@@ -1,0 +1,152 @@
+
+                                                                  Johannes Nohl
+                                                             Berlin, 2015-08-10
+
+
+## Tine 2.0 simpleMail SMTP-Backend (LDAP) ##
+
+
+ABSTRACT
+
+The simpleMail backend for SMTP keeps up Tine 2.0 with one advanced LDAP
+capability of mail transfer agents like Postfix's, “special_result_attribute”.
+This parameter is used to link mail related settings outside of user's LDAP
+entry to its DN (e.g. link mail address to user's mailbox). 
+
+
+PURPOSE AND OVERVIEW
+
+Tine 2.0 can handle user specific smtp settings in LDAP directories; additional
+information for mail aliases, mail forwarding addresses and an option to
+“forward only” (no local delivery) can be managed within the Admin App.
+
+While already existing backends for SMTP were limited to information stored as
+attributes in user's LDAP-node (DN:uid), simpleMail can read attributes from
+DNs anywhere else in the LDAP-tree. In addition simpleMail can write DNs below
+a predefined path outside the uid entry. To keep the relationship between
+simplMail's DN and user's account settings one attribute (to be named) holds
+the DN of the user's node. Mail transfer agents will follow this attribute to
+account settings in LDAP. 
+
+Additionally the linked mail information is needed for Felamimail's “out of
+office” assistant which will respond only to known aliases. 
+
+
+CONFIGURATION
+
+Currently there's no possibility to use GUI, therefore you need to configure
+simpleMail backend manually. You may select the pattern “simpleMail” within
+Tine 2.0 Setup (setup.php) but to make it fly you need to add options to the
+configuration key “smtp” which is an javascript object (json) and can be
+accessed by the command line interface (cli) or directly in SQL-DB table
+tine20_config. 
+
+simpleMail settings are stored within the json being themselves such an json
+object:
+
+“smtp” => { 
+            [ SMTP SETTINGS like host, port, etc. ], 
+            "active":true,
+            "backend":"ldap_simplemail", 
+            "simplemail":{ 
+              [ YOUR simpleMail CONFIG GOES HERE] 
+            } 
+          }
+
+To see current SMTP settings from cli: 
+#> php git/setup.php --getconfig – configkey=smtp
+
+To set new SMTP config by cli: 
+#> php setup.php --setconfig – configkey=smtp configvalue='{[ JSON ]}'
+
+
+OPTIONS - All available options for JSON
+
+[madatory] base:
+Search base in ldap for mail information (default search in subtree) and
+default branch to store new entries (see storage_base)
+
+
+[optional] scope: 
+1 = (subtree; default), 2 = (one level), 3 (base entry).
+
+
+[optional] skeleton: 
+Attributes used to search related DN and at the same time template for newly 
+created DN. The wildcard %s will be substituted by user's DN at search time. 
+
+  Default:  "skeleton":{ 
+              "objectclass":["simplemail","mailrouting"],
+              "mailUserDN":"%s" 
+            },
+
+  Note: The wildcard %s will be filled at runtime (by inserting user's DN)
+
+
+[optional] readonly: 
+On saving changes request will be ignored silently. 
+
+        
+[optional] storage_base: 
+Base in LDAP-tree for writing new entries, defaults to base (see above). 
+
+
+[optional] storage_rdn: 
+Template for newly created entries - relative DN (RDN). 
+
+  Default:  "storage_rdn:":"cn=%u{tine20}", 
+
+  Note: The wildcard %u will be filled at runtime (by inserting user's 
+  account_name)
+
+
+[optional] property_mapping: 
+If you use different LDAP attributes than below you need to provide a 
+parameterized mapping table. 
+
+  Default:  "property_mapping":{ 
+              "emailAliases":"mailalternateaddress",
+              "emailForwards":"mailforwardingaddress",
+              "emailForwardOnly":"maildiscard:boolean" 
+            },
+
+  Please note: You can define a property (attribute) as an singular option
+  (instead of a set of attributes) by adding :boolean to its LDAP equivalent.
+
+
+EXAMPLES
+
+Below you may find three common but minimal configurations (only the specific
+part of json is shown) 
+ 
+
+1) Get information readonly from anywhere below a specific part of the
+LDAP-tree (default entries fit to LDAP scheme called “simpleMail”):
+
+	    "simplemail":{ 
+              "base":"ou=mail,ou=config,dc=example,dc=com",
+              "readonly":false 
+            }
+
+2) Read entries from subtree and write them below specified place, provide the
+necessary information about your DN structure needed by proper search and safe
+actions. Be aware of the mailUserDN attribute which holds the link to user's
+DN:
+
+            "simplemail":{ 
+              "base":"ou=mail,ou=config,dc=example,dc=com", 
+              "skeleton":{
+                "objectclass":["simplemail","mailrouting"], 
+                "mailUserDN":"%s" 
+              } 
+            }
+
+
+FURTHER READINGS
+
+- Postfix' special_result_attribute http://www.postfix.org/ldap_table.5.html
+
+- Tine 2.0 cli functions https://wiki.tine20.org/CLI_Functions
+
+
+

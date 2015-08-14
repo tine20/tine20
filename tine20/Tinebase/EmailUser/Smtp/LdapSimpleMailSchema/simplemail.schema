@@ -1,0 +1,80 @@
+attributetype ( 1.3.6.1.4.1.45765.1.2.1 
+	NAME 'mailUserDN' 
+	DESC 'Link to entry which holds the user information' 
+	EQUALITY distinguishedNameMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 
+	SINGLE-VALUE 
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.2.2 
+	NAME 'mailAlternateAddress' 
+	DESC 'Additional address to postbox (mail alias)' 
+	EQUALITY caseIgnoreIA5Match 
+	SUBSTR caseIgnoreIA5SubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.2.4 
+	NAME 'mailForwardingAddress' 
+	DESC 'Reroute mail (do not discard), keep copy by forwarding to original address again' 
+	EQUALITY caseIgnoreIA5Match 
+	SUBSTR caseExactSubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.2.3 
+	NAME 'mailDiscard' 
+	DESC 'Do not deliver original mail (not necessary if forwarded before)' 
+	EQUALITY booleanMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
+        SINGLE-VALUE
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.2.5 
+	NAME 'mailInternalOnly' 
+	DESC 'Make given mail address unreachable from outside' 
+	EQUALITY booleanMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
+        SINGLE-VALUE
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.1.1 
+	NAME 'sharedMailbox' 
+	DESC 'Shared cyrus imap boxes' 
+	EQUALITY caseIgnoreMatch 
+	SUBSTR caseIgnoreSubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{256} 
+ )
+
+attributetype ( 1.3.6.1.4.1.45765.1.2.6 
+	NAME 'mailRewritePattern' 
+	DESC 'Target for rewrite rule (e.g. pattern will be rewritten to mail attribute)' 
+	EQUALITY caseIgnoreIA5Match 
+	SUBSTR caseExactSubstringsMatch 
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{256} 
+ )
+
+objectclass ( 1.3.6.1.4.1.45765.1.0.0 
+	NAME 'simpleMail' 
+	DESC 'Attributes with prefix mail to store MTA related settings' 
+	SUP top 
+	STRUCTURAL 
+	MUST cn 
+ )
+
+objectclass ( 1.3.6.1.4.1.45765.1.1.0 
+	NAME 'mailAccount' 
+	DESC 'Link attributes to real accounts for delivery' 
+	SUP top 
+	AUXILIARY 
+	MAY ( uid $ userPassword $ mail $ sharedMailbox ) 
+ )
+
+objectclass ( 1.3.6.1.4.1.45765.1.2.0 
+	NAME 'mailRouting' 
+	DESC 'Reroute incoming mails' 
+	SUP top 
+	AUXILIARY 
+	MAY ( mailAlternateAddress $ mailDiscard $ mailForwardingAddress $ mailInternalOnly $ mailUserDN $ mailRewritePattern ) 
+ )
+

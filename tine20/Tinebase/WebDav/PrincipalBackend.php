@@ -361,19 +361,32 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     }
                     
                     if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
-                        // return users only, if they have the sync AND read grant set
-                        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
-                        foreach ($otherUsers as $u) {
-                            if ($u->contact_id && $u->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
-                                $result[] = self::PREFIX_USERS . '/' . $u->contact_id . '/calendar-proxy-write';
+                        // return user only, if the containers have the sync AND read grant set
+                        $otherUsersSync = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
+                        
+                        if ($otherUsersSync->count() > 0) {
+                            $otherUsersRead = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
+                            
+                            $otherUsersIds = array_intersect($otherUsersSync->getArrayOfIds(), $otherUsersRead->getArrayOfIds());
+                            
+                            foreach ($otherUsersIds as $userId) {
+                                if ($otherUsersSync->getById($userId)->contact_id && $otherUsersSync->getById($userId)->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+                                    $result[] = self::PREFIX_USERS . '/' . $otherUsersSync->getById($userId)->contact_id . '/calendar-proxy-write';
+                                }
                             }
                         }
                         
-                        // return containers only, if the user has the sync AND read grant set
-                        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
+                        // return user only, if the containers have the sync AND read grant set
+                        $sharedContainersSync = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_SYNC);
                         
-                        if ($sharedContainers->count() > 0) {
-                            $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
+                        if ($sharedContainersSync->count() > 0) {
+                            $sharedContainersRead = Tinebase_Container::getInstance()->getSharedContainer($user, 'Calendar', Tinebase_Model_Grants::GRANT_READ);
+                            
+                            $sharedContainerIds = array_intersect($sharedContainersSync->getArrayOfIds(), $sharedContainersRead->getArrayOfIds());
+                            
+                            if (count($sharedContainerIds) > 0) {
+                                $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';
+                            }
                         }
                     }
                     Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __FUNCTION__, $classCacheId, $result);

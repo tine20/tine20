@@ -113,6 +113,13 @@ class Tinebase_EmailUser
     const IMAP_LDAP_UNIVENTION  = 'Imap_Ldap_univention';
 
     /**
+     * simpleMail smtp ldap backend const
+     *
+     * @staticvar string
+     */
+    const SMTP_LDAP_SIMPLEMAIL  = 'Smtp_Ldap_simplemail';
+
+    /**
      * Smtp standard backend const
      * 
      * @staticvar string
@@ -136,6 +143,7 @@ class Tinebase_EmailUser
         self::SMTP_LDAP_MAIL        => 'Tinebase_EmailUser_Smtp_LdapMailSchema',
         self::SMTP_LDAP_QMAIL       => 'Tinebase_EmailUser_Smtp_LdapQmailSchema',
         self::SMTP_LDAP_UNIVENTION  => 'Tinebase_EmailUser_Smtp_LdapUniventionMailSchema',
+        self::SMTP_LDAP_SIMPLEMAIL  => 'Tinebase_EmailUser_Smtp_LdapSimpleMailSchema',
         self::SMTP_POSTFIX          => 'Tinebase_EmailUser_Smtp_Postfix',
         self::SMTP_POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
         self::SMTP_STANDARD         => 'Tinebase_EmailUser_Smtp_Standard',

@@ -54,14 +54,19 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
      */
     protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
     {
-        
         $newAttendee = parent::_getAttendee($calAddress);
-        
-        // beginning with mavericks iCal adds organiser as attedee without role
-        // so we remove attendee without role 
-        // @TODO check if this attendee is currentuser & organizer?
-        if (version_compare($this->_version, '10.9', '>=')) {
-            if (! isset($calAddress['ROLE'])) {
+
+        // skip implicit organizer attendee.
+        // NOTE: when the organizer edits the event he becomes attendee anyway, see comments in MSEventFacade::update
+
+        // in mavericks iCal adds organiser as attendee without role
+        if (version_compare($this->_version, '10.9', '>=') && version_compare($this->_version, '10.10', '<')) {
+            if (!isset($calAddress['ROLE'])) {
+                return NULL;
+            }
+        // in yosemite iCal adds organiser with role "chair" but has no roles for other attendee
+        } else if (version_compare($this->_version, '10.10', '>=')) {
+            if (isset($calAddress['ROLE']) && $calAddress['ROLE'] == 'CHAIR') {
                 return NULL;
             }
         }
@@ -69,6 +74,52 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         return $newAttendee;
     }
 
+    /**
+     * add event attendee to VEVENT object
+     *
+     * @param \Sabre\VObject\Component\VEvent $vevent
+     * @param Calendar_Model_Event            $event
+     */
+    protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
+    {
+        parent::_addEventAttendee($vevent, $event);
+
+        if (empty($event->attendee)) {
+            return;
+        }
+
+        // add organizer as CHAIR Attendee if he's no organizer, otherwise yosemite would add an attendee
+        // when editing the event again.
+        // NOTE: when the organizer edits the event he becomes attendee anyway, see comments in MSEventFacade::update
+        if (version_compare($this->_version, '10.10', '>=')) {
+            if (!empty($event->organizer)) {
+                $organizerContact = $event->resolveOrganizer();
+
+                if ($organizerContact instanceof Addressbook_Model_Contact) {
+
+                    $organizerAttendee = Calendar_Model_Attender::getAttendee($event->attendee, new Calendar_Model_Attender(array(
+                        'user_id' => $organizerContact->getId(),
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER
+                    )));
+
+                    if (! $organizerAttendee) {
+                        $parameters = array(
+                            'CN'       => $organizerContact->n_fileas,
+                            'CUTYPE'   => 'INDIVIDUAL',
+                            'PARTSTAT' => 'ACCEPTED',
+                            'ROLE'     => 'CHAIR',
+                        );
+                        $organizerEmail = $organizerContact->email;
+                        if (strpos($organizerEmail, '@') !== false) {
+                            $parameters['EMAIL'] = $organizerEmail;
+                        }
+                        $vevent->add('ATTENDEE', (strpos($organizerEmail, '@') !== false ? 'mailto:' : 'urn:uuid:') . $organizerEmail, $parameters);
+                    }
+                }
+            }
+        }
+
+    }
     /**
      * do version specific magic here
      *
