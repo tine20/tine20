@@ -1,5 +1,5 @@
 <?php
-require_once '../../tine20/bootstrap.php';
+require_once __DIR__ . '/../../tine20/bootstrap.php';
 
 // add path the local directory
 $autoloader->add('', array(__DIR__));
