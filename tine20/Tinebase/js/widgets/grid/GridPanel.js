@@ -1088,21 +1088,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initGrid: function() {
-        if (Tine.Tinebase.registry.containsKey('preferences')) {
+        var preferences = Tine.Tinebase.registry.get('preferences');
+
+        if (preferences) {
             this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
-                stripeRows: Tine.Tinebase.registry.get('preferences').containsKey('gridStripeRows') ? Tine.Tinebase.registry.get('preferences').get('gridStripeRows') : false,
-                loadMask: Tine.Tinebase.registry.get('preferences').containsKey('gridLoadMask') ? Tine.Tinebase.registry.get('preferences').get('gridLoadMask') : false
+                stripeRows: preferences.get('gridStripeRows') ? preferences.get('gridStripeRows') : false,
+                loadMask: preferences.get('gridLoadMask') ? preferences.get('gridLoadMask') : false
             });
             
             // added paging number of result read from settings
-            if (Tine.Tinebase.registry.get('preferences').containsKey('pageSize')) {
+            if (preferences.get('pageSize') != null) {
                 this.defaultPaging = {
                     start: 0,
-                    limit: parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10)
+                    limit: parseInt(preferences.get('pageSize'), 10)
                 };
             }
         }
-        
+
         // generic empty text
         this.i18nEmptyText = Tine.Tinebase.translation.gettext('No data to display');
         
@@ -1827,8 +1829,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         var records = sm.getSelections();
 
-        if (Tine[this.app.appName].registry.containsKey('preferences') 
-            && Tine[this.app.appName].registry.get('preferences').containsKey('confirmDelete')
+        if (Tine[this.app.appName].registry.get('preferences')
+            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
             && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0
         ) {
             // don't show confirmation question for record deletion
