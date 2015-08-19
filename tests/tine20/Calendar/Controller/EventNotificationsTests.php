@@ -1327,7 +1327,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     /**
      * Enable by a preference which sends mails to every user who got permissions to edit the resource
      */
-    public function testResourceNotificationForGrantedUsers()
+    public function testResourceNotificationForGrantedUsers($userIsAttendee = true)
     {
         // Enable feature, disabled by default!
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
@@ -1338,6 +1338,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         $event = $this->_getEvent(/*now = */ true);
         $event->attendee->addRecord($this->_createAttender($persistentResource->getId(), Calendar_Model_Attender::USERTYPE_RESOURCE));
+
+        if (! $userIsAttendee) {
+            // remove organizer attendee
+            foreach ($event->attendee as $idx => $attender) {
+                if ($attender->user_id === $event->organizer) {
+                    $event->attendee->removeRecord($attender);
+                }
+            }
+        }
+
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($resource->container_id);
 
         $newGrants = array(
@@ -1358,7 +1368,16 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants);
 
         $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
-        $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody whos allowed to edit this resource)');
-        $this->assertEquals(3, count($persistentEvent->attendee));
+
+        $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+        $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
+    }
+
+    /**
+     * @see 0011272: ressource invitation: organizer receives no mail if he is no attendee
+     */
+    public function testResourceNotificationForNonAttendeeOrganizer()
+    {
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false);
     }
 }

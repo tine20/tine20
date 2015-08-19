@@ -280,6 +280,21 @@
                 $sendOnOwnActions = false;
             }
             
+            // Add additional recipients for ressources
+            $recipients = array($attendee);
+            if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE
+                    && Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)
+            ) {
+                // Consider all notification level (Ressource Users have a send level of 30)
+                $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                $recipients = array_merge($recipients,
+                        Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
+                                Calendar_Controller_Resource::getInstance()->get($_attender->user_id),
+                                $_notificationLevel
+                        )
+                );
+            }
+            
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organzier for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
@@ -324,17 +339,7 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
 
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
-
-            $recipients = array($attendee);
-            if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE
-                && Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)
-            ) {
-                $recipients = array_merge($recipients,
-                    Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
-                        Calendar_Controller_Resource::getInstance()->get($_attender->user_id)
-                    )
-                );
-            }
+            
             Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
