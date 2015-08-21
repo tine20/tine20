@@ -176,6 +176,7 @@
                     }
                 }
                 break;
+            case 'booked':
             case 'created':
             case 'deleted':
                 foreach($_event->attendee as $attender) {
@@ -246,6 +247,8 @@
      * @param string                     $_notificationLevel
      * @param array                      $_updates
      * @return void
+     *
+     * TODO this needs major refactoring
      */
     public function sendNotificationToAttender(Calendar_Model_Attender $_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates = NULL)
     {
@@ -279,22 +282,11 @@
                 $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
             }
-            
-            // Add additional recipients for ressources
+
             $recipients = array($attendee);
-            if ($_attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE
-                    && Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)
-            ) {
-                // Consider all notification level (Ressource Users have a send level of 30)
-                $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
-                $recipients = array_merge($recipients,
-                        Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
-                                Calendar_Controller_Resource::getInstance()->get($_attender->user_id),
-                                $_notificationLevel
-                        )
-                );
-            }
-            
+
+            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel);
+
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organzier for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
@@ -308,17 +300,17 @@
                     . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
-            
+
             $method = NULL; // NOTE $method gets set in _getSubject as referenced param
-            $messageSubject = $this->_getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, $method);
-            
+            $messageSubject = $this->_getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, $method, $_attender);
+
             // we don't send iMIP parts to external attendee if config is active
             if (Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_IMIP) && ! $attendeeAccountId) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . " External iMIP is disabled.");
                 $method = NULL;
             }
-            
+
             $view = new Zend_View();
             $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
             
@@ -339,13 +331,42 @@
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
 
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
-            
             Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             return;
         }
     }
+
+     /**
+      * @param $attender
+      * @param $_notificationLevel
+      * @param $recipients
+      * @param $action
+      * @param $sendLevel
+      * @return bool
+      */
+     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel)
+     {
+         // Add additional recipients for resources
+         if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE
+         || ! Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)) {
+             return true;
+         }
+
+         if ($action == 'created') {
+             $action = 'booked';
+         }
+
+         // Consider all notification level (Resource Users have a send level of 30)
+         $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+         $recipients = array_merge($recipients,
+             Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
+                 Calendar_Controller_Resource::getInstance()->get($attender->user_id),
+                 $_notificationLevel
+             )
+         );
+     }
     
     /**
      * get notification subject and method
@@ -358,9 +379,11 @@
      * @param Zend_Locale $locale
      * @param Zend_Translate $translate
      * @param atring $method
+     * @param Calendar_Model_Attender
      * @return string
+     * @throws Tinebase_Exception_UnexpectedValue
      */
-    protected function _getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, &$method)
+    protected function _getSubject($_event, $_notificationLevel, $_action, $_updates, $timezone, $locale, $translate, &$method, Calendar_Model_Attender $attender)
     {
         $startDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtstart, $timezone, $locale);
         $endDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_event->dtend, $timezone, $locale);
@@ -371,6 +394,19 @@
                 break;
             case 'created':
                 $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_REQUEST;
+                break;
+            case 'booked':
+                if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                    throw new Tinebase_Exception_UnexpectedValue('not a resource');
+                }
+                $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+                $messageSubject = sprintf(
+                    $translate->_('Resource "%1$s" was booked for "%2$s" at %3$s'),
+                    $resource->name,
+                    $_event->summary,
+                    $startDateString
+                );
                 $method = Calendar_Model_iMIP::METHOD_REQUEST;
                 break;
             case 'deleted':
@@ -467,7 +503,7 @@
         $attachments = array($attachment);
         
         // add other attachments (only on invitation)
-        if ($_action == 'created') {
+        if ($_action == 'created' || $_action == 'booked') {
             $eventAttachments = $this->_getEventAttachments($event);
             $attachments = array_merge($attachments, $eventAttachments);
         }

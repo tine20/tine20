@@ -1367,6 +1367,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
         Tinebase_Container::getInstance()->setGrants($resource->container_id, $grants);
 
+        $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
         $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
 
         $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
