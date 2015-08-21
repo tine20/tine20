@@ -281,8 +281,8 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
-        
-        $result = (!empty($config['backend']) && ($config['backend']!='standard') && isset($config['active']) && $config['active'] == true);
+
+        $result = (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
         
         return $result;
     }
