@@ -114,6 +114,6 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends Calendar_TestCase
         $updateEvent2 = $converter->toTine20Model($vcalendarStream2, $eventWithExdateOnBaseEvent);
 
         $this->assertEquals(1, count($updateEvent2->exdate), print_r($updateEvent2->toArray(), true));
-        $this->assertEquals('2015-04-27 21:59:59', $updateEvent2->rrule_until);
+        $this->assertEquals('2015-04-27 22:00:00', $updateEvent2->rrule_until);
     }
 }

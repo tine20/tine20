@@ -549,7 +549,41 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             new Tinebase_DateTime('2011-04-27 12:00:00'),
         )), 'dtstart of new series');
     }
-    
+
+    public function testCreateRecurExceptionAllFollowingAllDay()
+    {
+        $from = new Tinebase_DateTime('2015-07-01 00:00:00');
+        $until = new Tinebase_DateTime('2015-09-29 23:59:59');
+
+        $event = new Calendar_Model_Event(array(
+            'summary'           => 'Mettwoch',
+            'dtstart'           => '2015-02-10 23:00:00',
+            'dtend'             => '2015-02-11 22:59:59',
+            'is_all_day_event'  => 1,
+            'description'       => '2 Pfund Mett. 15 Brotchen. 1ne Zwiebel',
+            'rrule'             => 'FREQ=MONTHLY;INTERVAL=1;BYDAY=2WE',
+            'container_id'      => method_exists($this, '_getTestCalendar') ?
+                $this->_getTestCalendar()->getId() :
+                $this->_testCalendar->getId(),
+            'attendee'          => $this->_getAttendee(),
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+
+        $recurSet[1]->description = '4 Pfund Mett. 15 Brotchen. 2 Zwiebeln';
+        $newBaseEvent = $this->_controller->createRecurException($recurSet[1], FALSE, TRUE);
+
+        $oldBaseEvent = $this->_controller->get($persistentEvent->getId());
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $oldRecurSet = Calendar_Model_Rrule::computeRecurrenceSet($oldBaseEvent, $exceptions, $from, $until);
+
+        $this->assertCount(1, $oldRecurSet, 'one event should be left in given period ');
+        $this->assertEquals('2015-07-07 22:00:00', $oldRecurSet[0]->dtstart);
+    }
+
     /**
      * if not resheduled, attendee status must be preserved
      */
