@@ -1302,12 +1302,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * checks if notification mail is sent to configured mail address of a resource
      * 
      * @see 0009954: resource manager and email handling
+     *
+     * @param boolean $suppress_notification
      */
-    public function testResourceNotification()
+    public function testResourceNotification($suppress_notification = false)
     {
         // create resource with email address of unittest user
         $resource = $this->_getResource();
         $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
+        $resource->suppress_notification = $suppress_notification;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
         
         // create event with this resource as attender
@@ -1320,8 +1323,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(3, count($persistentEvent->attendee));
 
         $messages = self::getMessages();
-        
-        $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
+
+        if ($suppress_notification) {
+            $this->assertEquals(1, count($messages), 'one mails should be send to current user (only attender)');
+        } else {
+            $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
+        }
     }
 
     /**
@@ -1380,5 +1387,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testResourceNotificationForNonAttendeeOrganizer()
     {
         $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false);
+    }
+
+    /**
+     * testResourceNotificationMuteForEditors
+     *
+     * @see 0011312: Make resource notification handling and default status configurable
+     */
+    public function testResourceNotificationMuteForEditors()
+    {
+        $this->testResourceNotification(/* $suppress_notification = */ false);
     }
 }

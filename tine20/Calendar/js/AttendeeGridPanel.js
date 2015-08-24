@@ -254,6 +254,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     o.record.explicitlyAdded = true;
                     o.record.set('checked', true);
                     
+                    // Set status if the resource has a specific default status
+                    if (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').status) {
+                        o.record.set('status', o.record.get('user_id').status);
+                    }
+                    
                     var newAttender = new Tine.Calendar.Model.Attender(Tine.Calendar.Model.Attender.getDefaultData(), 'new-' + Ext.id() );
                     this.store.add([newAttender]);
                     this.startEditing(o.row +1, o.column);

@@ -1437,3 +1437,9 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+msgid "Default attendee status"
+msgstr "Standard Teilnehmerstatus"
+
+msgid "Suppress notification"
+msgstr "Benachrichtigungen unterdrücken"

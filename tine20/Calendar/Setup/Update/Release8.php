@@ -450,4 +450,49 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 11);
         $this->setApplicationVersion('Calendar', '8.10');
     }
+    
+    /**
+     * 
+     */
+    public function update_10()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>status</name>
+                <type>text</type>
+                <length>32</length>
+                <default>NEEDS-ACTION</default>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->addCol('cal_resources', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>status</name>
+                <field>
+                    <name>status</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('cal_resources', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>suppress_notification</name>
+                <type>boolean</type>
+                <default>false</default>
+            </field>');
+        $this->_backend->addCol('cal_resources', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>suppress_notification</name>
+                <field>
+                    <name>suppress_notification</name>
+                </field>
+            </index>');
+        $this->_backend->addIndex('cal_resources', $declaration);
+        
+        $this->setTableVersion('cal_resources', '3');
+        $this->setApplicationVersion('Calendar', '8.11');
+    }
 }
