@@ -27,7 +27,7 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
     {
         $this->_uit = new Tinebase_Frontend_Http;
     }
-    
+
     public function testMainScreen()
     {
         if (version_compare(PHPUnit_Runner_Version::id(), '3.3.0', '<')) {

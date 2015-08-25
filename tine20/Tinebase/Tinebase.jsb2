@@ -90,6 +90,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "Cookie.js",
+          "path": "js/ux/util/"
+        },
+        {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
         },
