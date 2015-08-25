@@ -303,7 +303,9 @@ Tine.Tinebase.tineInit = {
         };
         
         Ext.Ajax.transactions = {};
-        
+
+        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie();
+
         /**
          * inspect all requests done via the ajax singleton
          * 
@@ -315,8 +317,16 @@ Tine.Tinebase.tineInit = {
          *       through generic response inspectors as defined below
          */
         Ext.Ajax.on('beforerequest', function (connection, options) {
+
+            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
+            if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY')) {
+                jsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY');
+                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear('TINE20JSONKEY');
+                Tine.Tinebase.registry.set('jsonKey', jsonKey);
+            }
+
             options.headers = options.headers || {};
-            options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
+            options.headers['X-Tine20-JsonKey'] = jsonKey;
             options.headers['X-Tine20-TransactionId'] = Tine.Tinebase.data.Record.generateUID();
             
             options.url = Ext.urlAppend((options.url ? options.url : Tine.Tinebase.tineInit.requestUrl),  'transactionid=' + options.headers['X-Tine20-TransactionId']);
@@ -770,8 +780,7 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initLibs();
 
-    // FIXME: we now always load the registry because otherwise loginFromPost would not work
-    Tine.Tinebase.tineInit.initRegistry(window.isMainWindow, function() {
+    Tine.Tinebase.tineInit.initRegistry(false, function() {
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });

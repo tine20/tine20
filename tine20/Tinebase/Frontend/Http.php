@@ -115,6 +115,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (isset($_POST['openid_action']) && $_POST['openid_action'] === 'login') {
             $server->login($_POST['openid_identifier'], $_POST['password'], $_POST['username']);
             unset($_GET['openid_action']);
+            $this->_setJsonKeyCookie();
             Zend_OpenId::redirect(dirname(Zend_OpenId::selfUrl()) . '/index.php', $_GET);
 
         // display openId login form
@@ -319,7 +320,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         echo $view->render('update.php');
         exit();
     }
-    
+
     /**
      * login from HTTP post 
      * 
@@ -343,6 +344,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         if ($success === TRUE) {
+            $this->_setJsonKeyCookie();
+
             $ccAdapter = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter();
             if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
                 $ccAdapter->setCache(Tinebase_Core::getUserCredentialCache());
@@ -370,14 +373,36 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         $this->_renderMainScreen();
     }
-    
+
+    /**
+     * put jsonKey into separate cookie
+     *
+     * this is needed if login is not done by the client itself
+     */
+    protected function _setJsonKeyCookie()
+    {
+        // SSO Login
+        $cookie_params = session_get_cookie_params();
+
+        // don't issue errors in unit tests
+        @setcookie(
+            'TINE20JSONKEY',
+            Tinebase_Core::get('jsonKey'),
+            0,
+            $cookie_params['path'],
+            $cookie_params['domain'],
+            $cookie_params['secure']
+        );
+    }
+
     /**
      * checks authentication and display Tine 2.0 main screen 
      */
     public function mainScreen()
     {
         $this->checkAuth();
-        
+
+        $this->_setJsonKeyCookie();
         $this->_renderMainScreen();
     }
     
