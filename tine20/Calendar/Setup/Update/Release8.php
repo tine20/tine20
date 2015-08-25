@@ -428,4 +428,26 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', '10');
         $this->setApplicationVersion('Calendar', '8.9');
     }
+
+    /**
+     * @see 0011266: increase size of event fields summary and location
+     */
+    public function update_6()
+    {
+        $fieldsToChange = array('location', 'summary');
+
+        foreach ($fieldsToChange as $name) {
+            $seqCol = '<field>
+                <name>' . $name . '</name>
+                <type>text</type>
+                <length>1024</length>
+            </field>';
+
+            $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
+            $this->_backend->alterCol('cal_events', $declaration);
+        }
+
+        $this->setTableVersion('cal_events', 9);
+        $this->setApplicationVersion('Calendar', '8.7');
+    }
 }
