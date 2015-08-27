@@ -155,11 +155,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         this.initDropZone();
         
         this.updatePeriod({from: this.period.from});
-        
-        if (this.store.getCount()) {
-            this.onLoad.apply(this);
-        }
-        
+
+        // NOTE: store.getCount == 0 is no indicator for an unloaded store
+        //       as the view just might be empty. If an unloded store is
+        //       a problem here we have to find a smart solution
+        this.onLoad.apply(this);
+
         this.rendered = true;
     },
     
