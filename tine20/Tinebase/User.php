@@ -163,8 +163,6 @@ class Tinebase_User
      */
     public static function getInstance() 
     {
-        $backendType = self::getConfiguredBackend();
-        
         if (self::$_instance === NULL) {
             $backendType = self::getConfiguredBackend();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' accounts backend: ' . $backendType);
@@ -436,8 +434,6 @@ class Tinebase_User
     {
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;
-        } else {
-            $username = $username;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
@@ -462,8 +458,8 @@ class Tinebase_User
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
             . print_r($user->toArray(), TRUE));
         
-        $group = self::getPrimaryGroupForUser($user);
-        
+        self::getPrimaryGroupForUser($user);
+
         try {
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
         
@@ -538,17 +534,22 @@ class Tinebase_User
         }
         
         $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        
+
         try {
             $contact = $addressbook->getByUserId($syncedUser->getId());
             $originalContact = clone $contact;
-            
+
             Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
             $contact = self::_user2Contact($syncedUser, $contact);
-            
-            // TODO allow to diff jpegphoto, too
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . print_r($syncedUser->toArray(), true)
+                . ' new: ' . print_r($contact->toArray(), true)
+                . ' orig:' . print_r($originalContact->toArray(), true));
+
+            // TODO allow to diff jpegphoto, too / maybe this should only be done when called via CLI/cronjob
             $diff = $contact->diff($originalContact, array('jpegphoto'));
-            if (! $diff->isEmpty()) {
+            if (! $diff->isEmpty() || ($originalContact->jpegphoto == 0 && ! empty($contact->jpegphoto))) {
                 // add modlog info
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
                 if ($contact->container_id !== null) {
@@ -559,7 +560,7 @@ class Tinebase_User
                     . ' Updating contact data for user ' . $syncedUser->accountLoginName);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Diff: ' . print_r($diff->toArray(), true));
-                
+
                 $addressbook->update($contact);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -596,7 +597,7 @@ class Tinebase_User
                     throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
                 }
                 try {
-                    $sqlGgroup = $groupBackend->getGroupByName($group->name);
+                    $groupBackend->getGroupByName($group->name);
                     throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
         
                 } catch (Tinebase_Exception_Record_NotDefined $tern) {

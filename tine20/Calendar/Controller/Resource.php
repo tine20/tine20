@@ -174,7 +174,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      * @param  Calendar_Model_Resource $_lead
      * @return array          array of int|Addressbook_Model_Contact
      */
-    public function getNotificationRecipients(Calendar_Model_Resource $resource)
+    public function getNotificationRecipients(Calendar_Model_Resource $resource, $_notificationLevel)
     {
         $recipients = array();
 
@@ -195,7 +195,12 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::GRANT_EDIT] == 1) {
                     try {
-                        $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE);
+                        $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE);
+                        $sendLevel = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $grant['account_id']);
+                        // only add recipients that want that kind of notification (consider the send Level)
+                        if ($sendLevel >= $_notificationLevel) {
+                            $recipients[] = $recipient;
+                        }
                     } catch (Addressbook_Exception_NotFound $aenf) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__
                             . ' Do not send notification to non-existant user: ' . $aenf->getMessage());
@@ -203,7 +208,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
-
         return $recipients;
     }
 }
