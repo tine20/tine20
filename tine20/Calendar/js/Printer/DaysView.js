@@ -33,7 +33,15 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
     },
 
     onBeforePrint: function(document, view) {
+
         //if (this.printMode == 'sheet') {
+        //    // scroll to dayStart if crop is disabled
+        //    if (! view.cropDayTime) {
+        //        var scroller = document.getElementsByClassName('cal-daysviewpanel-scroller')[0],
+        //            dayStartPx = view.getTimeOffset(view.dayStart);
+        //
+        //        scroller.scrollTop = dayStartPx;
+        //    }
         //    // FF has scale to page option but scrambles everything after the first page
         //    // @TODO downscale to fit one page
         //
@@ -50,11 +58,15 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
         var node = view.el.dom.cloneNode(true),
             header = node.getElementsByClassName('cal-daysviewpanel-wholedayheader-scroller')[0],
             scroller = node.getElementsByClassName('cal-daysviewpanel-scroller')[0],
-            fullHeight = view.dayEndPx - view.getTimeOffset(view.dayStart) + 20;
-        
+            dayStartPx = view.getTimeOffset(view.dayStart),
+            fullHeight = view.getTimeOffset(view.startDate.add(Date.DAY, 1).add(Date.MINUTE, -1)),
+            cropHeight = view.dayEndPx - dayStartPx + 20,
+            scrollerHeight = view.cropDayTime ? cropHeight : fullHeight;
+
+
         // resize header/scroller to fullsize
         header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
-        scroller.style.height =  fullHeight + 'px';
+        scroller.style.height =  scrollerHeight + 'px';
         scroller.style.width = null;
 
         return this.generateTitle(view) + node.innerHTML;

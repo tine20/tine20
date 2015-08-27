@@ -78,6 +78,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
             Tinebase_Container::getInstance()->deleteContainer($this->_container);
         } catch (Tinebase_Exception_AccessDenied $tead) {
             throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
+        } catch (Tinebase_Exception_Record_SystemContainer $ters) {
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete system container');
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' failed to delete container ' .$this->_container->getId() . "\n$e" );
+
+            throw new \Sabre\DAV\Exception($e->getMessage());
         }
     }
     

@@ -1009,6 +1009,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   boolean $_ignoreAcl
      * @param   boolean $_tryAgain
      * @throws  Tinebase_Exception_AccessDenied
+     * @throws  Tinebase_Exception_Record_SystemContainer
      * @throws  Tinebase_Exception_InvalidArgument
      * 
      * @todo move records in deleted container to personal container?
