@@ -161,7 +161,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($_accessLog->result == Tinebase_Auth::SUCCESS && $_user->accountStatus !== Tinebase_User::STATUS_ENABLED) {
             // is the account enabled?
             if ($_user->accountStatus == Tinebase_User::STATUS_DISABLED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                     . __LINE__ . ' Account: '. $_user->accountLoginName . ' is disabled');
                 $_accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
             }
@@ -175,7 +175,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             // too many login failures?
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                     . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
             }
