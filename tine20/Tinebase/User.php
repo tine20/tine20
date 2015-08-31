@@ -745,7 +745,16 @@ class Tinebase_User
             . ' About to delete ' . count($deletedInSyncBackend) . ' users in SQL backend...');
 
         foreach ($deletedInSyncBackend as $userToDelete) {
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
             Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Deleting user contact of ' . $user->accountLoginName);
+
+                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                $contactsBackend->delete($user->contact_id);
+            }
         }
     }
 
