@@ -747,7 +747,35 @@ class Tinebase_User
             . ' About to delete ' . count($deletedInSyncBackend) . ' users in SQL backend...');
 
         foreach ($deletedInSyncBackend as $userToDelete) {
-            Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
+
+            // at first, we expire the user
+            $now = Tinebase_DateTime::now();
+            if (! $user->accountExpires) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Set expiry date to ' . $now);
+                $user->accountExpires = $now;
+                Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User already expired ' . print_r($user->toArray(), true));
+
+                // TODO make time span configurable?
+                if ($user->accountExpires->isEarlier($now->subYear(1))) {
+                    // if he or she is already expired longer than configured expiry, we remove them!
+                    Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+
+                    if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Deleting user contact of ' . $user->accountLoginName);
+
+                        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                        $contactsBackend->delete($user->contact_id);
+                    }
+                } else {
+                    // keep user in expiry state
+                }
+            }
         }
     }
 
