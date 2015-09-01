@@ -140,6 +140,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             case 'tags':
                 $result = $this->_getTags($_record);
                 break;
+            case 'keyfield':
+                $result = $this->_getResolvedKeyfield($_record->{$_field->identifier}, $_field->keyfield, $_field->application);
+                break;
             case 'currency':
                 $currency = ($_field->currency) ? $_field->currency : 'EUR';
                 $result = ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';

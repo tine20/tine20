@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <model>Addressbook_Model_Contact</model>
-    <name>adb_default_xls</name>
+    <name>adb_translation_xls_test</name>
     <type>export</type>
     <plugin>Addressbook_Export_Xls</plugin>
     <label>Default Excel Export</label>

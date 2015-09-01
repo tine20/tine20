@@ -23,6 +23,13 @@ class Crm_Config extends Tinebase_Config_Abstract
     const FEATURE_LEAD_IMPORT = 'featureLeadImport';
 
     /**
+     * lead import auto task
+     *
+     * @var string
+     */
+    const LEAD_IMPORT_AUTOTASK = 'leadImportAutoTask';
+
+    /**
      * fields for lead record duplicate check
      *
      * @var string
@@ -54,6 +61,15 @@ class Crm_Config extends Tinebase_Config_Abstract
             'default'               => array(
                 self::FEATURE_LEAD_IMPORT => true,
             ),
+        ),
+        self::LEAD_IMPORT_AUTOTASK => array(
+            //_('Add new task on lead import')
+            'label'                 => 'Add new task on lead import',
+            //_('Automatically creates a task for the responsible person if a new lead is imported'.)
+            'description'           => 'Automatically creates a task for the responsible person if a new lead is imported.',
+            'type'                  => 'boolean',
+            'clientRegistryInclude' => true,
+            'default'               => false,
         ),
         self::LEAD_DUP_FIELDS => array(
             //_('Lead duplicate check fields')
