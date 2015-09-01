@@ -55,7 +55,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     private static $_instance = NULL;
     
     protected static $_attendeeEmailCache = array();
-    
+
+    protected $_currentEventFacadeContainer;
+
     /**
      * the constructor
      *
@@ -411,11 +413,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($ownAttender) {
             $currentEvent = $this->_eventController->get($event->id);
             $currentAttender = Calendar_Model_Attender::getAttendee($currentEvent->attendee, $ownAttender);
-            $ownAttender->status_authkey = $currentAttender->status_authkey;
+            if ($currentAttender) {
+                $ownAttender->status_authkey = $currentAttender->status_authkey;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' currentAttender not found in currentEvent: ' . print_r($currentEvent->toArray(), true));
+            }
         }
     }
-    
-    protected $_currentEventFacadeContainer;
     
     /**
      * asserts correct event filter and calendar user in MSEventFacade

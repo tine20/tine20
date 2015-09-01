@@ -567,7 +567,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getPersonalContainer($_accountId, $_recordClass, $_owner, $_grant, $_ignoreACL = false)
+    public function getPersonalContainer($_accountId, $_recordClass, $_owner, $_grant = Tinebase_Model_Grants::GRANT_READ, $_ignoreACL = false)
     {
         $meta = $this->_resolveRecordClassArgument($_recordClass);
         
