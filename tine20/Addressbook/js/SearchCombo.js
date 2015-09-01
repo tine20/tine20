@@ -104,7 +104,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                     '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
                         '<tr>',
                             '<td style="min-width: 20px;">{[this.getIcon(values)]}</td>',
-                            '<td width="30%"><b>{[this.encode(values.n_fileas)]}</b><br/>{[this.encode(values.org_name)]}</td>',
+                            '<td width="30%"><b>{[this.encode(values.n_fileas, "fileas")]}</b><br/>{[this.encode(values.org_name)]}</td>',
                             '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
                                 '{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',
                             '<td width="25%">{[this.encode(values.tel_work)]}<br/>{[this.encode(values.tel_cell)]}</td>',
@@ -118,11 +118,13 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                     getIcon: function(contactData) {
                         return Tine.Addressbook.ContactGridPanel.prototype.contactTypeRenderer.call(this, null, null, contactData);
                     },
-                    encode: function(value) {
-                         if (value) {
+                    encode: function(value, field) {
+                        if (value) {
                             return Ext.util.Format.htmlEncode(value);
                         } else {
-                            return '';
+                            return field == 'fileas' ?
+                                Tine.Addressbook.ContactGridPanel.prototype.displayNameRenderer(value) :
+                                '';
                         }
                     }
                 }

@@ -396,15 +396,12 @@ class Addressbook_JsonTest extends TestCase
         
         // check invalid data
         $changes = array(
-            array('name' => 'n_fileas', 'value' => ''),
-            array('name' => 'n_family', 'value' => ''),
-            array('name' => 'n_given',  'value' => ''),
-            array('name' => 'org_name', 'value' => '')
+            array('name' => 'type', 'value' => 'Z'),
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
-        
-        $this->assertEquals($result['failcount'], 3, 'failcount does not show the correct number');
-        $this->assertEquals($result['totalcount'], 0, 'totalcount does not show the correct number');
+
+        $this->assertEquals(3, $result['failcount'], 'failcount does not show the correct number');
+        $this->assertEquals(0, $result['totalcount'], 'totalcount does not show the correct number');
     }
     
     /**
