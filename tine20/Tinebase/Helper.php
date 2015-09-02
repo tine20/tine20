@@ -48,7 +48,7 @@ class Tinebase_Helper
         
         return hash_final($ctx);
     }
-    
+
     /**
      * converts string with M or K to bytes integer
      * - for example: 50M -> 52428800
@@ -56,28 +56,17 @@ class Tinebase_Helper
      * @param mixed $_value
      * @return integer
      */
-    public static function convertToBytes($_value)
+    public static function convertToBytes($value)
     {
-        if (is_int($_value) || ! $_value) {
-            $bytes = $_value;
-        } else {
-            if (preg_match("/M/", $_value)) {
-                $value = substr($_value, 0, strpos($_value, 'M'));
-                $factor = 1024 * 1024;
-            } elseif (preg_match("/K/", $_value)) {
-                $value = substr($_value, 0, strpos($_value, 'K'));
-                $factor = 1024;
-            } elseif (is_string($_value)) {
-                $value = $_value;
-                $factor = 1;
-            } else {
-                throw new Exception('Argument type not supported:' . gettype($_value));
-            }
-            
-            $bytes = intval($value) * $factor;
+        $powers = 'KMGTPEZY';
+        $power = 0;
+
+        if (preg_match('/(\d+)\s*([' . $powers . '])/', $value, $matches)) {
+            $value = $matches[1];
+            $power = strpos($powers, $matches[2]) + 1;
         }
-        
-        return $bytes;
+
+        return (int)$value * pow(1024, $power);
     }
     
     /**
