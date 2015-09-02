@@ -35,7 +35,8 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
         1 => 'in',           // value is expected to be an array of container representations
         2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (deprecated please use equals with path instead)
         3 => 'personalNode', // value is expected to be a user id (deprecated please use equals with path instead)
-        //4 => 'not',        // value is expected to be a single container id
+        4 => 'not',         // value is expected to be a single container id
+        5 => 'notin',       // value is expected to be an array of container representations
     );
     
     /**
@@ -146,8 +147,12 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     public function appendFilterSql($_select, $_backend)
     {
         $this->_resolve();
-        
-        $_select->where($this->_getQuotedFieldName($_backend) .  ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
+
+        if ($this->_operator === 'notin' || $this->_operator === 'not') {
+            $_select->where($this->_getQuotedFieldName($_backend) . ' NOT IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
+        } else {
+            $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
+        }
     }
     
     /**
@@ -224,7 +229,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             return;
         }
         
-        if (! in_array($this->_operator, array('equals', 'in'))) {
+        if (! in_array($this->_operator, array('equals', 'in', 'notin', 'not'))) {
             throw new Tinebase_Exception_UnexpectedValue("Operator '{$this->_operator}' not supported.");
         }
         
