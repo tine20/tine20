@@ -301,7 +301,17 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         
         return Tinebase_DateTime::now()->getTimestamp();
     }
-    
+
+    /**
+     * Returns the id of the node
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_container->getId();
+    }
+
     /**
      * Returns the name of the node
      *
@@ -593,5 +603,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         }
 
         return $result;
+    }
+
+    /**
+     * @return Tinebase_Model_Container
+     */
+    public function getContainer()
+    {
+        return $this->_container;
     }
 }

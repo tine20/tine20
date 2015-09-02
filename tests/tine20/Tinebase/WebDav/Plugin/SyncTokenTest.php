@@ -118,7 +118,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
-            'HTTP_DEPTH'     => '1',
+            'HTTP_DEPTH'     => '0',
         ));
         $request->setBody($body);
 

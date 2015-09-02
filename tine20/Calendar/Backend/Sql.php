@@ -947,10 +947,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function getUidOfBaseEvents(array $eventIds)
     {
-        if (count($eventIds) == 0) {
+        if (count($eventIds) === 0) {
             return array();
         }
 
+        // we might want to return is_deleted = true here! so no condition to filter deleted events!
         $select = $this->_db->select()
             ->from($this->_tablePrefix . $this->_tableName, 'uid')
             ->where($this->_db->quoteIdentifier('id') . ' IN (?) AND ' . $this->_db->quoteIdentifier('recurid') . ' IS NULL', $eventIds);
@@ -958,5 +959,35 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
 
         return $stmt->fetchAll(Zend_Db::FETCH_NUM);
+    }
+
+    /**
+     * returns the seq of one event
+     *
+     * @param string $eventId
+     * @return string
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getIdSeq($eventId, $containerId)
+    {
+        $select = $this->_db->select()
+            ->from(array('ev' => $this->_tablePrefix . $this->_tableName), array('id', 'seq'))
+            ->joinLeft(array('at' => $this->_tablePrefix . 'cal_attendee'), 'ev.id = at.cal_event_id', NULL)
+            ->where($this->_db->quoteInto('(' . $this->_db->quoteIdentifier('ev.id') . ' = ? OR ', $eventId) .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('ev.uid') . ' = ? ) AND ev.is_deleted = 0 AND ' .
+                    $this->_db->quoteIdentifier('ev.recurid') . ' IS NULL AND (', $eventId) .
+                $this->_db->quoteIdentifier('ev.container_id') . ' = ? OR ' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('at.displaycontainer_id') . ' = ? )', $containerId), $containerId);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " sql: " . $select->assemble());
+
+        $stmt = $this->_db->query($select);
+
+        if (($row = $stmt->fetch(Zend_Db::FETCH_NUM)) === false) {
+            throw new Tinebase_Exception_NotFound('event not found');
+        }
+
+        return $row;
     }
 }

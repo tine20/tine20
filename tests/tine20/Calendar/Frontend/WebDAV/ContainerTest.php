@@ -273,7 +273,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
             'time-range'     => null
         ));
         
-        $this->assertContains($event->getId(), $urls);
+        $this->assertContains($event->getId() . '.ics', $urls);
     }
     
     /**
@@ -342,8 +342,8 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
             'time-range'     => null
         ));
         
-        $this->assertContains($event1->getId(), $urls);
-        $this->assertContains($event2->getId(), $urls);
+        $this->assertContains($event1->getId() . '.ics', $urls);
+        $this->assertContains($event2->getId() . '.ics', $urls);
         $this->assertEquals(2, count($urls));
     }
     /**
