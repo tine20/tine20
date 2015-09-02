@@ -695,8 +695,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $savedEvent = $this->_saveIcsEvent('iphone_longsummary.ics');
         
-        $this->assertEquals('Finanz-IT anrufen, xxxxxxxxxxxh', $savedEvent->summary, print_r($savedEvent->toArray(), true));
-        $this->assertContains("Finanz-IT anrufen, xxxxxxxxxxxh\nFestgelegt für 25. Juli 2012", $savedEvent->description, print_r($savedEvent->toArray(), true));
+        $this->assertContains("immer im Voraus vereinbart.\nBezahlt haben sie letztes mal",
+            $savedEvent->summary, print_r($savedEvent->toArray(), true));
+        $this->assertTrue(empty($savedEvent->description), print_r($savedEvent->toArray(), true));
     }
     
     /**
@@ -725,8 +726,10 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     {
         $savedEvent = $this->_saveIcsEvent('iphone_longlocation.ics');
         
-        $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.', $savedEvent->location, print_r($savedEvent->toArray(), true));
-        $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx", $savedEvent->description, print_r($savedEvent->toArray(), true));
+        $this->assertContains('1. Rufen Sie folgende Seite auf: https://xxxxxxxxxxxxxx.webex.',
+            $savedEvent->location, print_r($savedEvent->toArray(), true));
+        $this->assertContains("und Ihre E-Mail-Adresse ein.; geben Sie das Meeting-Passwort ein: xxxx",
+            $savedEvent->location, print_r($savedEvent->toArray(), true));
     }
 
     /**

@@ -122,6 +122,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
         }
         Tinebase_Cache_PerRequest::getInstance()->resetCache();
+
+
+    }
+
+    /**
+     * tear down after test class
+     */
+    public static function tearDownAfterClass()
+    {
+        Tinebase_Core::getDbProfiling();
     }
     
     /**
