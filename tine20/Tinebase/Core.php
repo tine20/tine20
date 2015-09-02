@@ -174,6 +174,13 @@ class Tinebase_Core
     const TINEBASE_SERVER_PLUGINS = 'Tinebase_Server_Plugins';
 
     /**
+     * name of frontend server class
+     *
+     * @var string
+     */
+    const SERVER_CLASS_NAME = 'serverclassname';
+
+    /**
      * Application Instance Cache
      * @var array
      */

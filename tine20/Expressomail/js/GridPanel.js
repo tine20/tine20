@@ -67,6 +67,8 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     fetchtry: 0,
 
+    saveOnDestroy: {},
+
     /**
      * @private grid cfg
      */
@@ -136,6 +138,8 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
 
         this.initPagingToolbar();
+
+        this.saveOnDestroy = {};
     },
     
     /**
@@ -478,6 +482,15 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ]
             }
         });
+        this.action_reportPhishing = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Report phishing'),
+            handler: this.onReportPhishing,
+            iconCls: 'action_reportPhishing',
+            allowMultiple: true,
+            disabled: true,
+            scope: this
+        });
         this.actionUpdater.addActions([
 //            this.action_write,
             this.action_deleteRecord,
@@ -488,7 +501,8 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_markUnread,
             this.action_addAccount,
             this.action_print,
-            this.action_printPreview
+            this.action_printPreview,
+            this.action_reportPhishing
         ]);
 
         if (Tine.Expressomail.registry.get('preferences').get('enableEncryptedMessage') == '1'
@@ -532,9 +546,98 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ];
         }
 
+        if (Tine.Expressomail.registry.get("reportPhishingEmail") && Tine.Expressomail.registry.get("reportPhishingEmail") != '') {
+            // just show this menu item if report phishing email is configured
+            menu_items.push(this.action_reportPhishing);
+        }
+
         this.contextMenu = new Ext.menu.Menu({
             items: menu_items
         });
+
+    },
+
+    /**
+     * delete messages handler
+     *
+     * @return {void}
+     */
+    onReportPhishing: function() {
+        var email = Tine.Expressomail.registry.get("reportPhishingEmail");
+        var subjects = [];
+        var msgs = this.selectionModel.getSelections();
+        var msgsIds = [];
+        Ext.each(msgs, function(item) {
+            subjects.push(item.get('subject'));
+            msgsIds.push(item.id);
+        });
+        var title = this.app.i18n._('Report phishing');
+        var text_init = this.app.i18n._("Phishing are messages with the intention of getting personal data like:<br/>passwords, finantial data like credit card numbers and so on.");
+        var text_end = this.app.i18n._("Report listed messages as phishing?");
+        var text = text_init
+                 + "<ul class='mail-phishing-subjects-list'>"
+                 + "<li class='mail-phishing-subject-item'>"
+                 + subjects.join("</li><li class='mail-phishing-subject-item'>")
+                 + "</li>"
+                 + "</ul>"
+                 + text_end;
+
+        Ext.MessageBox.confirm(title, text, function(btn) {
+            Ext.MessageBox.updateText(""); // this is a workaround to the MessageBox width issue in Chrome
+            if(btn === 'yes') {
+                this.reportPhishingMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Sending phishing report...')});
+                this.reportPhishingMask.show();
+                var account = this.app.getActiveAccount(),
+                    accountId = account ? account.id : null;
+                var message = new Tine.Expressomail.Model.Message(Tine.Expressomail.Model.Message.getDefaultData());
+                message.set('account_id', accountId);
+                message.set('to', [email]);
+                message.set('cc', []);
+                message.set('bcc', []);
+                var subject_string = 'Phishing - {0} message',
+                    subject_string_plural = 'Phishing - {0} messages',
+                    subject = String.format(this.app.i18n.ngettext(subject_string, subject_string_plural, subjects.length), subjects.length);
+                message.set('subject', subject);
+                var body_string = "At {0}, user {1} reported attached message as phishing:",
+                    body_string_plural = "At {0}, user {1} reported attached messages as phishing:";
+                // the first param of the translated string is not replaced in js, the php will replace it with server datetime
+                var body = String.format(this.app.i18n.ngettext(body_string, body_string_plural, subjects.length), "{0}", account.get('from'));
+                message.set("body",
+                            "<p>" + body + "</p>"
+                          + "<ul class='mail-phishing-subjects-list'>"
+                          + "<li class='mail-phishing-subject-item'>"
+                          + subjects.join("</li><li class='mail-phishing-subject-item'>")
+                          + "</li>"
+                          + "</ul>");
+                Tine.Expressomail.messageBackend.reportPhishing(message, msgsIds, {
+                    scope: this,
+                    success: function(record){
+                        var account = this.app.getActiveAccount(),
+                            trashId = (account) ? account.getTrashFolderId() : null,
+                            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
+                            trashConfigured = (account.get('trash_folder'));
+
+                        if ( (Tine.Expressomail.registry.get('preferences').get('confirmUseTrash') == '1' && trash && ! trash.isCurrentSelection())
+                           || (! trash && trashConfigured) ) {
+                            this.moveSelectedMessages(trash, true);
+                        } else {
+                            this.deleteSelectedMessages();
+                        }
+                        this.reportPhishingMask.hide();
+                    },
+                    failure: function(record){
+                        Ext.MessageBox.show({
+                            title: this.app.i18n._('Failed to send phishing report!'),
+                            msg: this.app.i18n._('Your phishing report could not be send.'),
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.WARNING
+                        });
+                        this.reportPhishingMask.hide();
+                    },
+                    timeout: 300000 // 5 minutes
+                });
+            }
+        }, this);
 
     },
 
@@ -1442,10 +1545,10 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 mailStoreData: Tine.Expressomail.getMailStoreData(Tine.Expressomail.getMailStore()),
                 replyTo : Ext.encode(msg.data),
                 replyToAll: toAll,
-                listeners: [
-                    {update: this.onAfterCompose.createDelegate(this, ['reply', [msg]], 1)},
-                    {addcontact: this.onEditClose.createDelegate(this)}
-                ]
+                listeners: {
+                    update: this.onAfterCompose.createDelegate(this, ['reply', [msg]], 1),
+                    addcontact: this.onEditClose.createDelegate(this)
+                }
             });
         }
         this.getLoadMask().hide();
@@ -1587,20 +1690,22 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onMessageEditWindowDestroy: function() {
         this.saveDraftsInterval = 0; // prevent more save draft calls
         this.unloading = true;
+        var grid = this.window.ref.getMainScreen().getCenterPanel();
         if (!this.saving) { // just check and save draft if it is not already doing it
             if (this.autoSaveDraftsEnabled) {
                 this.checkDraftChanges();
             }
             else {
-                this.checkDraftChanges();
-                this.window.ref.getMainScreen().getCenterPanel().confirmSaveDraft();
+                if (this.checkDraftChanges(grid.saveOnDestroy.forced)) {
+                    grid.confirmSaveDraft();
+                }
             }
         }
     },
 
     confirmSaveDraft: function() {
         this.saveOnDestroy.confirm = true;
-        Ext.MessageBox.confirm('', this.app.i18n._('Save as a draft?'),
+        Ext.MessageBox.confirm('', this.app.i18n._('Keep as a draft?'),
             function(btn) {
                 if(btn === 'yes') {
                     if (this.isDraftFolderSelected && this.saveOnDestroy.record) {
@@ -1633,15 +1738,17 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Tine.Tinebase.data.Record} record
      * @param {String} folderName
      * @param {Tine.Expressomail.MessageEditDialog} editwindow
+     * @param {Boolean} forced
      */
-    callSaveDraft: function(record, folderName, editwindow) {
+    callSaveDraft: function(record, folderName, editwindow, forced) {
         // this is in GridPanel instead of MessageEditWindow
         // because of 'Browser' style window related issues in IE
         this.saveOnDestroy = {
             confirm: false, // true if confirmSaveDraft is in progress
             started: false, // true if either confirmSaveDraft or onSaveDraftSuccess are completed
             save: false, // true if user selected YES on confirmSaveDraft
-            error: false, // true if onSaveDraftFailure has been called
+            error: false, // true if onSaveDraftFailure has been called,
+            forced: forced || false, // true if draft saving was called by clicking 'Save Draft' button
             record: null // message record
         };
         if (editwindow.isDraftFolderSelected) {
@@ -1666,8 +1773,14 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Tine.Expressomail.MessageEditDialog} editwindow
      */
     onSaveDraftSuccess: function(record, editwindow) {
+        var unloading;
+        try { // because editwindow could be closed yet
+            unloading = editwindow.unloading;
+        } catch (e) { // editwindow already closed, unloading must be true
+            unloading = true;
+        }
         if (this.isDraftFolderSelected) {
-            if (this.autoSaveDraftsEnabled || this.saveOnDestroy.save) {
+            if (this.autoSaveDraftsEnabled || this.saveOnDestroy.save || (this.saveOnDestroy.forced && !unloading)) {
                 this.updateGridPanel(record);
             }
             else {
@@ -1684,14 +1797,12 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         try { // because editwindow could be closed yet
             editwindow.record.commit(true);
-            editwindow.record.set('original_id', record.get('original_id'));
-            editwindow.record.set('draft_id', editwindow.record.get('original_id'));
+            editwindow.record.set('draft_id', record.get('original_id'));
             editwindow.setMessageOnTitle(editwindow.notifyClear);
             editwindow.setSaveDraftsDelayedTask();
             editwindow.saving = false;
         }
-        catch (e) {
-        }
+        catch (e) { } // editwindow already closed, ignore and go on
     },
 
     /**
@@ -1712,8 +1823,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             editwindow.setSaveDraftsDelayedTask();
             editwindow.saving = false;
         }
-        catch (e) {
-        }
+        catch (e) { } // editwindow already closed, ignore and go on
     },
 
     showSaveDraftErrorMessage: function() {
@@ -1741,6 +1851,10 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     this.movingOrDeleting = false;
                 }
             });
+            if (this.saveOnDestroy.forced) {
+                // draft in grid is outdated
+                id = record.get('draft_id');
+            }
             var msg = this.getStore().getById(id);
             this.getStore().remove(msg);
         }

@@ -44,6 +44,13 @@ class Expressomail_Config extends Tinebase_Config_Abstract
     const AUTOSAVEDRAFTSINTERVAL = 'autoSaveDraftsInterval';
 
     /**
+     * Email to send reports of phishings
+     *
+     * @var string
+     */
+    const REPORTPHISHINGEMAIL = 'reportPhishingEmail';
+
+    /**
      * id to use at cache and '_config' database table
      * @var string
      */
@@ -98,6 +105,15 @@ class Expressomail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
             'default'               => 15,
+        ),
+        self::REPORTPHISHINGEMAIL => array(
+            'label'                 => 'Report Phishing Email',
+            'description'           => 'Email to which to report phishing',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => '',
         ),
         self::MAX_CONTACT_ADD_TO_UNKNOWN => array(
             'label'                 => 'Unknown Contacts Maximum Import',
@@ -165,7 +181,8 @@ class Expressomail_Config extends Tinebase_Config_Abstract
      * (non-PHPdoc)
      * @see Tinebase_Config_Abstract::clearCache()
      */
-    public function clearCache($appFilter = null) {
+    public function clearCache($appFilter = null)
+    {
     	parent::clearCache();
 	    $cache = Tinebase_Core::getCache();
 	    $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(Expressomail_Config::EXPRESSOMAIL_SETTINGS));

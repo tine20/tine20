@@ -153,14 +153,7 @@ Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
                 foreignAppName: 'Addressbook',
                 recordTypeName: 'List'
             });
-            var crmHook = new Tine.Expressomail.GridPanelHook({
-                app: this,
-                foreignAppName: 'Crm',
-                contactInRelation: true,
-                recordTypeName: 'Lead',
-                relationType: 'CUSTOMER'
-            });
-            
+
             this.mailStore = Tine.Expressomail.getMailStore();
             this.mailStore.load();
         }

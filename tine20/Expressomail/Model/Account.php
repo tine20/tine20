@@ -281,7 +281,7 @@ class Expressomail_Model_Account extends Tinebase_Record_Abstract
     public function getUsername($_username = NULL)
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        $useUsernameAsLoginName = !$imapConfig['useEmailAsLoginName'];
+        $useUsernameAsLoginName = isset($imapConfig['useEmailAsLoginName']) ? !$imapConfig['useEmailAsLoginName'] : TRUE;
 
         $result = $this->email;
 

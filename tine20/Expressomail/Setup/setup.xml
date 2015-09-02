@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Expressomail</name>
-    <version>0.4</version>
+    <version>0.5</version>
     <order>50</order>
     <status>enabled</status>
     <tables>

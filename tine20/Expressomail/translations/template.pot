@@ -1191,7 +1191,7 @@ msgid "Failed to save draft!"
 msgstr ""
 
 #: Expressomail/js/GridPanel.js:1591
-msgid "Save as a draft?"
+msgid "Keep as a draft?"
 msgstr ""
 
 #: Expressomail/js/GridPanel.js:1710
@@ -1200,4 +1200,89 @@ msgstr ""
 
 #: js/AdminPanel.js:61
 msgid "Interval (in seconds) for Auto Saving Drafts (0 to disable)"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:365
+msgid "Delivery Status Notification Message"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:371
+msgid "Recipient"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:394
+msgid "Cause"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:383
+msgid "Permanent Failure"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:380
+msgid "Persistent Transient Failure"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:386
+msgid "Successful Delivery"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:274
+msgid "Domain Not Found"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:270
+msgid "Recipient Address Not Found"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:277
+msgid "Mailbox Full"
+msgstr ""
+
+#: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:263
+msgid "Unknown Status"
+msgstr ""
+
+#: js/AdminPanel.js:65
+msgid "Email to which to report phishing"
+msgstr ""
+
+#: js/GridPanel.js:578
+#: js/GridPanel.js:662
+msgid "Report phishing"
+msgstr ""
+
+#: js/GridPanel.js:663
+msgid "Phishing are messages with the intention of getting personal data like:<br/>passwords, finantial data like credit card numbers and so on."
+msgstr ""
+
+#: js/GridPanel.js:669
+msgid "Report listed messages as phishing?"
+msgstr ""
+
+#: js/GridPanel.js:674
+msgid "Sending phishing report..."
+msgstr ""
+
+#: js/GridPanel.js:683
+msgid "Phishing - {0} message"
+msgid_plural "Phishing - {0} messages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridPanel.js:687
+msgid "At {0}, user {1} reported attached message as phishing:"
+msgid_plural "At {0}, user {1} reported attached messages as phishing:"
+msgstr[0] ""
+msgstr[1] ""
+
+#:js/GridPanel.js:715
+msgid "Failed to send phishing report!"
+msgstr ""
+
+#: js/MessageEditDialog.js:587
+msgid "Network problem."
+msgstr ""
+
+#:js/GridPanel.js:716
+msgid "Your phishing report could not be send."
 msgstr ""

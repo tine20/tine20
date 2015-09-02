@@ -44,7 +44,7 @@ class Expressomail_Setup_Update_Release0 extends Setup_Update_Abstract
     /**
      * update to 0.3
      *
-     * change index name conflicting with Felamimail
+     * change index name conflicting with Expressomail
      */
     public function update_2()
     {
@@ -93,5 +93,29 @@ class Expressomail_Setup_Update_Release0 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Expressomail', '0.4');
+    }
+
+    /**
+     * update to 0.5
+     * add Expressomail config parameter AUTOSAVEDRAFTSINTERVAL
+     *
+     * @return void
+     */
+    public function update_4()
+    {
+        $settings = Expressomail_Config::getInstance()->get(Expressomail_Config::EXPRESSOMAIL_SETTINGS);
+        if (! array_key_exists(Expressomail_Config::REPORTPHISHINGEMAIL, $settings)) {
+            try {
+                $properties = Expressomail_Config::getProperties();
+                $property = $properties[Expressomail_Config::REPORTPHISHINGEMAIL];
+                $default_value = $property['default'];
+                $settings[Expressomail_Config::REPORTPHISHINGEMAIL] = $default_value;
+                Expressomail_Controller::getInstance()->saveConfigSettings($settings);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // do nothing
+            }
+        }
+
+        $this->setApplicationVersion('Expressomail', '0.5');
     }
 }

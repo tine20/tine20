@@ -115,6 +115,9 @@ class Expressomail_Setup_Initialize extends Setup_Initialize
         $property_autoSaveDraftsInterval = $properties[Expressomail_Config::AUTOSAVEDRAFTSINTERVAL];
         $default_value_autoSaveDraftsInterval = $property_autoSaveDraftsInterval['default'];
         $config[Expressomail_Config::AUTOSAVEDRAFTSINTERVAL] = $default_value_autoSaveDraftsInterval;
+        $property_reportPhishingEmail = $properties[Expressomail_Config::REPORTPHISHINGEMAIL];
+        $default_value_reportPhishingEmail = $property_reportPhishingEmail['default'];
+        $config[Expressomail_Config::REPORTPHISHINGEMAIL] = $default_value_reportPhishingEmail;
     	Expressomail_Controller::getInstance()->saveConfigSettings($config);
     }
 

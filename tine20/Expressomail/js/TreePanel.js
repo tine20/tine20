@@ -249,7 +249,9 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
     onSelectionChange: function(sm, nodes) {
 
         //Ignore non-selectable node
-        if(!nodes[0].attributes.is_selectable){
+        if((typeof(nodes[0]) !== 'undefined')
+            && !nodes[0].attributes.is_selectable
+        ){
             return;
         }
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {

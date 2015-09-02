@@ -286,7 +286,7 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
           /**
      * get Raw message
      *
-     * @param string|Felamimail_Model_Message $_id
+     * @param string|Expressomail_Model_Message $_id
      * @return String
      */
     public function getRawMessage($_id)
@@ -717,6 +717,43 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
             }
 
     /**
+     * Process a multipart/report message and returns an user friendly Html formatted body
+     *
+     * @param Expressomail_Model_Message $_message
+     * @param type $_partId
+     * @param type $_contentType
+     * @param type $_account
+     * @return string processed message body
+     */
+    protected function _getMultipartReportMessageBody(Expressomail_Model_Message $_message,
+        $_partId, $_contentType, $_account = NULL)
+    {
+        $structure = $_message->getPartStructure($_partId);
+        $bodyParts = $_message->getBodyParts($structure, $_contentType);
+
+        // test if we have all the parts
+        if (empty($bodyParts)
+            || count($bodyParts) < 2 || count($bodyParts) > 3
+            || (!isset($bodyParts[2]['contentType'])
+                && $bodyParts[2]['contentType'] !== Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS
+            )
+        ){
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Malformed DSN Message.');
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Message Model Dump:.' . print_r($_message->toArray(), true));
+            return '';
+        }
+
+        // delivery status parts are always partId 2
+        $bodyPart = $this->getMessagePart($_message, 2, TRUE, $structure);
+
+        $dsn = new Expressomail_Model_DeliveryStatusNotificationMessagePart(
+                $this->_getDecodedBodyContent($bodyPart, $structure));
+        return $dsn->getHTMLFormatted();
+    }
+
+    /**
      * get message body
      *
      * @param string|Expressomail_Model_Message $_messageId
@@ -732,7 +769,11 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Get Message body (part: ' . $_partId . ') of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
 
-        $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
+        if ($_partId == NULL && $message->content_type === Expressomail_Model_Message::CONTENT_TYPE_MULTIPART_REPORT) {
+            $messageBody = $this->_getMultipartReportMessageBody($message, $_partId, $_contentType, $_account);
+        } else {
+            $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
+        }
 
         return $messageBody;
     }
@@ -821,7 +862,7 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
                     . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
 
-            // Use only Felamimail to send e-mails
+            // Use only Expressomail to send e-mails
             $body = Expressomail_Message::replaceEmails($body);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -867,6 +908,7 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
                 // '=0A' is a invalid UTF8 character so we need to remove ir defore the quoted_printable_decode
                 $body = str_ireplace('=0A', '', $rawBody);
                 $body = quoted_printable_decode($body);
+                $body = mb_convert_encoding($body, $charset, 'UTF-8');
                 $body = iconv($charset, 'utf-8', $body);
             } else {
                 unset($rawBody);
@@ -1221,9 +1263,14 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
             if ($part['type'] == 'multipart') {
                 $attachments = $attachments + $this->getAttachments($message, $part['partId']);
             } else {
-                if ($part['type'] == 'text' &&
-                    (!is_array($part['disposition']) || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE && !array_key_exists("parameters", $part['disposition'])))
-                ) {
+                if ($part['type'] == 'text'
+                    && $structure['contentType'] != Expressomail_Model_Message::CONTENT_TYPE_MULTIPART_REPORT
+                    && (!is_array($part['disposition'])
+                        || ($part['disposition']['type'] == Zend_Mime::DISPOSITION_INLINE
+                            && !array_key_exists("parameters", $part['disposition'])
+                        )
+                    )
+                ){
                     continue;
                 }
 
@@ -1577,6 +1624,88 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
             throw $zmpe;
         }
+    }
+
+    /**
+     * parse phishing notification
+     *
+     * @param Object $message
+     * @param Object $zipFile
+     * @return Object
+     */
+    public function parsePhishingNotification($message, $zipFile)
+    {
+        $body = str_replace("{0}", $this->getFormattedGmtDateTime(), $message->body);
+        $message->body = $body;
+
+        $message->attachments = array(
+            array(
+              'tempFile'  => array(
+                  'id'          => $zipFile['id'],
+                  'session_id'  => $zipFile['session_id'],
+                  'time'        => $zipFile['time'],
+                  'path'        => $zipFile['path'],
+                  'name'        => $zipFile['name'],
+                  'type'        => $zipFile['type'],
+                  'error'       => $zipFile['error'],
+                  'size'        => $zipFile['size'],
+              ),
+              'name'      => $zipFile['name'],
+              'size'      => $zipFile['size'],
+              'path'      => $zipFile['path'],
+            )
+        );
+
+        return $message;
+    }
+
+    /**
+     * zip message(s)
+     *
+     * @param  array $msgIds
+     * @return Object
+     */
+    public function zipMessages($msgIds)
+    {
+        $zipArchive = new ZipArchive();
+        $tmpFile = tempnam(Tinebase_Core::getTempDir(), 'tine20_');
+        if ($zipArchive->open($tmpFile) === TRUE) {
+            foreach($msgIds as $msgId){
+                $part = Expressomail_Controller_Message::getInstance()->getRawMessage($msgId);
+                $filename = $msgId . '.eml';
+                $zipArchive->addFromString($filename, $part);
+            }
+            $zipArchive->close();
+        }
+
+        $zipFile = Tinebase_TempFile::getInstance()->createTempFile($tmpFile, "mensagem.zip");
+
+        return $zipFile;
+    }
+
+    /**
+     * get formatted gmt date and time
+     *
+     * @return String
+     */
+    private function getFormattedGmtDateTime()
+    {
+        // calculate timezone in "GMT-HH:MM" format
+        $dtz = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $time = new DateTime('now', $dtz);
+        $offset = $dtz->getOffset( $time );
+        $sign = ($offset < 0 ) ? "-" : "+";
+        $offset = abs($offset);
+        $hours = floor($offset / 3600);
+        $hours = $hours < 10 ? '0' . $hours : $hours;
+        $minutes = offset % 60;
+        $minutes = $minutes < 10 ? '0' . $minutes : $minutes;
+        $gmt =  '(GMT'.$sign . $hours . ":" . $minutes . ')';
+
+        $dateTime = date('Y-m-d H:i:s');
+        $formattedDateTime = Tinebase_Translation::dateToStringInTzAndLocaleFormat(Expressomail_Message::convertDate($dateTime));
+
+        return $formattedDateTime . ' ' . $gmt;
     }
 
 }

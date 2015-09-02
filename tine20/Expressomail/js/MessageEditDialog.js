@@ -128,6 +128,11 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * @type Boolean
      */
     sending: false,
+    /**
+     * dialog is currently checking email size
+     * @type Boolean
+     */
+    checking: false,
     
     /**
      * @private
@@ -189,17 +194,23 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 this.on('removed', this.window.ref.getMainScreen().getCenterPanel().onMessageEditWindowDestroy, this);
             }
         }
-        if (Tine.Expressomail.registry.get("autoSaveDraftsInterval")) {
-            // autosave is enabled (interval>0)
-            this.saveDraftsInterval = Tine.Expressomail.registry.get("autoSaveDraftsInterval") * 1000; // convert s to ms
-            this.autoSaveDraftsEnabled = true;
-            this.window.ref.getMainScreen().getCenterPanel().autoSaveDraftsEnabled = true;
-            this.saveDraftsIntervaledTask = new Ext.util.DelayedTask(this.checkDraftChanges, this);
-            this.setSaveDraftsDelayedTask();
-        } else {
-            // autosave is enabled (interval=0)
-            this.saveDraftsInterval = 0;
+        //Disable autosave for encrypted messages
+        if(this.encrypted){
             this.autoSaveDraftsEnabled = false;
+        }
+        else{
+            if (Tine.Expressomail.registry.get("autoSaveDraftsInterval")) {
+                // autosave is enabled (interval>0)
+                this.saveDraftsInterval = Tine.Expressomail.registry.get("autoSaveDraftsInterval") * 1000; // convert s to ms
+                this.autoSaveDraftsEnabled = true;
+                this.window.ref.getMainScreen().getCenterPanel().autoSaveDraftsEnabled = true;
+                this.saveDraftsIntervaledTask = new Ext.util.DelayedTask(this.checkDraftChanges, this);
+                this.setSaveDraftsDelayedTask();
+            } else {
+                // autosave is enabled (interval=0)
+                this.saveDraftsInterval = 0;
+                this.autoSaveDraftsEnabled = false;
+            }
         }
     },
 
@@ -290,10 +301,11 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
 
     /**
      * check changes to save draft in autosave
+     * @param {Boolean} forced
      *
      * @private
      */
-    checkDraftChanges: function() {
+    checkDraftChanges: function(forced) {
         if (this.autoSaveDraftsEnabled) {
             this.saveDraftsIntervaledTask.cancel();
         }
@@ -307,30 +319,38 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         var modified = this.record.modified;
         var wasModified = (modified && (modified.to!==undefined || modified.cc!==undefined || modified.cco!==undefined || modified.subject!==undefined || modified.body!==undefined || modified.attachments!==undefined));
 
-        if (!this.sending && !this.attachmentGrid.isUploading() && wasModified && (hasRecipient || hasSubject || hasContent || hasAttachment)) {
+        if (wasModified
+            && !this.sending
+            && !this.checking
+            && !this.attachmentGrid.isUploading()
+            && (hasRecipient || hasSubject || hasContent || hasAttachment)
+        ) {
             if (this.isDraftFolderSelected) {
                 this.window.ref.getMainScreen().getCenterPanel().markRowOutdated(this.record.get('draft_id'));
             }
-            this.callSaveDraft();
+            this.callSaveDraft(forced);
+            return true;
         }
         else {
             this.setSaveDraftsDelayedTask();
+            return false;
         }
     },
 
     /**
      * call save draft in gridpanel for autosave
+     * @param {Boolean} forced
      *
      * @private
      */
-    callSaveDraft: function() {
+    callSaveDraft: function(forced) {
         var account = Tine.Tinebase.appMgr.get('Expressomail').getAccountStore().getById(this.record.get('account_id')),
             folderName = account.get('drafts_folder');
         this.saving = true; // this will reset at GridPanel.callSaveDraft callbacks (success, failure)
         this.setMessageOnTitle(this.notifySaveDraftOperation);
         try {
             // draft saving must be executed in main window grid panel due to IE issues in browser window mode
-            this.window.ref.getMainScreen().getCenterPanel().callSaveDraft(this.record, folderName, this);
+            this.window.ref.getMainScreen().getCenterPanel().callSaveDraft(this.record, folderName, this, forced);
         }
         catch(e) {
             this.setMessageOnTitle(this.notifySaveDraftFailure);
@@ -480,6 +500,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
     },
     
     checkMessageSize: function() {
+        this.checking = true;
         try {
             this.contactsCheckMask = new Ext.LoadMask(this.ownerCt.body, {msg: this.app.i18n._('Calculating message size...')});
         }
@@ -532,6 +553,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                     // parameter maxMessageSize is not defined in config.inc.php
                     that.contactsCheckMask.hide();
                     that.onSaveAndClose();
+                    that.checking = false;
                     return;
                 }
                 
@@ -558,11 +580,13 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 } else {
                     that.onSaveAndClose();
                 }
+                that.checking = false;
             },
             failure: function (err, details) {
                 Ext.MessageBox.alert(that.app.i18n._('Failed'),
-                    that.app.i18n._('Message size validation step failed.'));
-                this.contactsCheckMask.hide();
+                    that.app.i18n._('Network problem.'));
+                that.contactsCheckMask.hide();
+                that.checking = false;
             }
         });
     },
@@ -571,8 +595,8 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * onSaveAndClose
      */
     onSaveAndClose: function() {
-        this.fireEvent('saveAndClose');
         this.sending = true;
+        this.fireEvent('saveAndClose');
         //to clean temporary editor classes
         var editor_content = this.htmlEditor.getValue();
         editor_content = editor_content.replace(/editor-wysiwyg-[^'"]*/gi, "");
@@ -833,7 +857,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             this.record.set('flags', 'Passed');
             this.record.set('original_id', this.forwardMsgs[0].id);
         } else if (this.draftOrTemplate) {
-            this.record.set('original_id', this.draftOrTemplate.id);
+            this.record.set('draft_id', this.draftOrTemplate.id);
         }
         this.record.set('add_contacts', true);
 
@@ -1450,17 +1474,20 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 String.format(this.app.i18n._('{0} account setting empty.'), folderField)
             );
         } else if (this.isValid()) {
-            this.loadMask.show();
-            this.recordProxy.saveInFolder(this.record, folderName, {
-                scope: this,
-                success: function(record) {
-                    this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-                    this.purgeListeners();
-                    this.loadMask.hide();
-                },
-                failure: this.onRequestFailed,
-                timeout: 150000 // 3 minutes
-            });
+            if (folderField == 'drafts_folder') {
+                this.callSaveDraft(true);
+            } else {
+                this.loadMask.show();
+                this.recordProxy.saveInFolder(this.record, folderName, {
+                    scope: this,
+                    success: function(record) {
+                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                        this.loadMask.hide();
+                    },
+                    failure: this.onRequestFailed,
+                    timeout: 150000 // 3 minutes
+                });
+            }
         } else {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
         }

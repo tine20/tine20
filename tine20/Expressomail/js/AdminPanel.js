@@ -59,6 +59,14 @@ Tine.Expressomail.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
                 minValue: 0,
                 maxValue: 9999,
                 allowBlank: false
+            },
+            {
+                name: 'reportPhishingEmail',
+                fieldLabel: this.app.i18n._('Email to which to report phishing'),
+                xtype: 'textfield',
+                value: null,
+                maxLength: 64,
+                allowBlank: true
             }
         ]];
     }

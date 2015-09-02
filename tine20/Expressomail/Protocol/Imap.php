@@ -343,7 +343,7 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                     }
             }
         }
-
+        sleep(3);
         return true;
 
     }
@@ -569,6 +569,10 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
     protected function _useUidAsLogin()
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
-        return $imapConfig['useEmailAsLoginName'] === '1'?FALSE:TRUE;
+        if (isset($imapConfig['useEmailAsLoginName'])){
+            return $imapConfig['useEmailAsLoginName'] === '1' ? FALSE : TRUE;
+        } else {
+            return TRUE;
+        }
     }
 }

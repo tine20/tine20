@@ -224,6 +224,10 @@
     margin-left: 20px;
 }
 
+.preview-panel-expressomail-body blockquote {
+    margin: 5px 10px 0 3px !important;
+    padding-left: 10px !important;
+}
 
 /* note: htmlarea has textarea as its basis, so when we support text composing
          this need to be restructured e.g. by having a expressomail-message-body-text cls
@@ -673,4 +677,18 @@ a.x-menu-fontsize-noicon span {
 }
 .x-grid-outdated-row * {
     text-decoration: line-through;
+}
+.action_reportPhishing {
+    background-image: url(/images/oxygen/16x16/actions/dialog-warning.png);
+}
+ul.mail-phishing-subjects-list {
+    padding: 10px 0;
+}
+li.mail-phishing-subject-item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 440px;
+    white-space: nowrap;
+    list-style-type: disc;
+    list-style-position: inside;
 }
