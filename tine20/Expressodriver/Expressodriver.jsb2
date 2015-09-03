@@ -1,0 +1,80 @@
+{
+  "projectName": "Tine 2.0 - Expressodriver",
+  "deployDir": "Expressodriver",
+  "licenseText": "Tine 2.0 - Expressodriver \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+
+  ],
+  "pkgs": [
+    {
+      "name": "Expressodriver FAT Client",
+      "file": "js/Expressodriver-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridContextMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterPlugin.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeTreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "Expressodriver.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExternalAdapter.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExternalAdapterEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Expressodriver FAT Client",
+      "file": "css/Expressodriver-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Expressodriver.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
