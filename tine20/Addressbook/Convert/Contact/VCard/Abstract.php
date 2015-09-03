@@ -140,7 +140,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     $parts = $property->getParts();
                     
                     $data['n_family'] = $parts[0];
-                    $data['n_given']  = $parts[1];
+                    $data['n_given']  = isset($parts[1]) ? $parts[1] : null;
                     $data['n_middle'] = isset($parts[2]) ? $parts[2] : null;
                     $data['n_prefix'] = isset($parts[3]) ? $parts[3] : null;
                     $data['n_suffix'] = isset($parts[4]) ? $parts[4] : null;
