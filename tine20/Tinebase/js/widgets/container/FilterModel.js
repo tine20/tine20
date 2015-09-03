@@ -38,7 +38,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @cfg {Array} operators allowed operators
      */
-    operators: ['equals', 'in'],
+    operators: ['equals', 'in', 'not', 'notin'],
     
     /**
      * @cfg {String} field container field (defaults to container_id)
@@ -101,6 +101,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         
         var valueType = 'selectionComboBox';
         switch (operator) {
+            case 'notin':
             case 'in':
                 valueType = 'FilterModelMultipleValueField';
                 break;
@@ -156,7 +157,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                 return this.selectedContainer ? this.selectedContainer.path : null;
             },
             setValue: function(value) {
-                if (this.filter.get('operator') !== 'in') {
+                if (this.filter.get('operator') == 'specialNode' || this.filter.get('operator') == 'personalNode' ) {
                     var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
                     
                     // use equals for node 'My containers'

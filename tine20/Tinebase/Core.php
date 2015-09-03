@@ -958,6 +958,7 @@ class Tinebase_Core
                         $data['longestQuery'] = $profile->getQuery();
                     }
                 }
+                $profiler->clear();
             }
         }
         

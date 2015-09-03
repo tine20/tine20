@@ -685,7 +685,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vevent ' . $vevent->serialize());
         
         $newAttendees = array();
-        $shortenedFields = array();
         $attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
         $skipFieldsIfOnlyBasicData = array('ATTENDEE', 'UID', 'ORGANIZER', 'VALARM', 'ATTACH', 'CATEGORIES');
@@ -785,22 +784,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $value = $property->getValue();
-                    switch ($key) {
-                        case 'summary':
-                        case 'location':
-                            if (strlen($value) > 255) {
-                                $shortenedFields[$key] = $value;
-                                $endPos = strpos($value, "\n") !== false && strpos($value, "\n") < 255 
-                                    ? strpos($value, "\n") 
-                                    : 255;
-                                if (extension_loaded('mbstring')) {
-                                    $value = mb_substr($value, 0, $endPos, 'UTF-8');
-                                } else {
-                                    $value = Tinebase_Core::filterInputForDatabase(substr($value, 0, $endPos));
-                                }
-                            }
-                            break;
-                    }
                     $event->$key = $value;
                     
                     break;
@@ -1036,10 +1019,6 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 Calendar_Model_Event::CLASS_PRIVATE;
         }
 
-        foreach ($shortenedFields as $key => $value) {
-            $event->description = "--------\n$key: $value";
-        }
-        
         if (isset($lastAck)) {
             Calendar_Controller_Alarm::setAcknowledgeTime($event->alarms, $lastAck);
         }

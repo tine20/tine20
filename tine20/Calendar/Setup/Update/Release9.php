@@ -22,4 +22,18 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Calendar', '9.1');
     }
+
+    /**
+     * update to 9.2
+     *
+     * @see 0011266: increase size of event fields summary and location
+     */
+    public function update_1()
+    {
+        if ($this->getTableVersion('cal_events') < 11) {
+            $release8 = new Calendar_Setup_Update_Release8($this->_backend);
+            $release8->update_9();
+        }
+        $this->setApplicationVersion('Calendar', '9.2');
+    }
 }

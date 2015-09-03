@@ -118,6 +118,12 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'due_in' => 10,
                 'date' => '2015-03-17 00:00:00',
                 'due_at' => '2015-03-27 00:00:00',
+                'price_net' => 10,
+                'sales_tax' => 19,
+                'price_tax' => 1.9,
+                'price_gross' => 11.9,
+                'price_gross2' => 1,
+                'price_total' => 12.9,
                 'relations' => array(array(
                         'own_model' => 'Sales_Model_PurchaseInvoice',
                         'own_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -141,6 +147,13 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $this->assertEquals('Worldwide Electronics International', $purchase['supplier']['name']);
         $this->assertEquals('2015-03-17 00:00:00', $purchase['date']);
         $this->assertEquals('2015-03-27 00:00:00', $purchase['due_at']);
+
+        $this->assertEquals(10, $purchase['price_net']);
+        $this->assertEquals(19, $purchase['sales_tax']);
+        $this->assertEquals(1.9, $purchase['price_tax']);
+        $this->assertEquals(11.9, $purchase['price_gross']);
+        $this->assertEquals(1, $purchase['price_gross2']);
+        $this->assertEquals(12.9, $purchase['price_total']);
     }
     
     /**

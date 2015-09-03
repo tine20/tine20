@@ -100,7 +100,9 @@ Tine.Admin.Groups.Main = {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
-        this.pageSize = Tine.Tinebase.registry.get('preferences').containsKey('pageSize') ? parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) : 50;
+        this.pageSize = Tine.Tinebase.registry.get('preferences').get('pageSize')
+            ? parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10)
+            : 50;
         
         this.actions.addGroup = new Ext.Action({
             text: this.translation.gettext('Add Group'),

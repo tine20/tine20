@@ -160,6 +160,15 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'specialType' => 'euMoney',
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
+            ),
+            'price_gross2' => array(
+                'label' => 'Additional Price Gross', // _('Additional Price Gross')
+                'type'  => 'float',
+                'specialType' => 'euMoney',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'shy' => TRUE,
             ),
             'price_tax' => array(
                 'label' => 'Price Tax', // _('Price Tax')
@@ -176,6 +185,13 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'default' => 19,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
+            ),
+            'price_total' => array(
+                'label' => 'Total Price', // _('Total Price')
+                'type'  => 'float',
+                'specialType' => 'euMoney',
+                'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
             ),
             'costcenter' => array(
                 'type'   => 'virtual',
