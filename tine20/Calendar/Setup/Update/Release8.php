@@ -19,25 +19,25 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         // find all events with ack or snooze times set
         $eventIds = $this->_db->query(
             "SELECT DISTINCT " . $this->_db->quoteIdentifier('cal_event_id') .
-                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
-                " WHERE " . $this->_db->quoteIdentifier("alarm_ack_time") . " IS NOT NULL OR ". $this->_db->quoteIdentifier("alarm_snooze_time") . " IS NOT NULL"
-            )->fetchAll(Zend_Db::FETCH_ASSOC);
-        
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") .
+            " WHERE " . $this->_db->quoteIdentifier("alarm_ack_time") . " IS NOT NULL OR " . $this->_db->quoteIdentifier("alarm_snooze_time") . " IS NOT NULL"
+        )->fetchAll(Zend_Db::FETCH_ASSOC);
+
         $attendeeBE = new Calendar_Backend_Sql_Attendee();
         $alarmBE = Tinebase_Alarm::getInstance();
-        
+
         foreach ($eventIds as $eventId) {
             $eventId = $eventId['cal_event_id'];
-            
+
             $attendeeFilter = new Tinebase_Model_Filter_FilterGroup();
             $attendeeFilter->addFilter(new Tinebase_Model_Filter_Text('cal_event_id', 'equals', $eventId));
             $attendees = $attendeeBE->search($attendeeFilter);
-            
+
             $alarms = $alarmBE->search(new Tinebase_Model_AlarmFilter(array(
-                array('field' => 'model',     'operator' => 'equals', 'value' =>'Calendar_Model_Event'),
+                array('field' => 'model', 'operator' => 'equals', 'value' => 'Calendar_Model_Event'),
                 array('field' => 'record_id', 'operator' => 'equals', 'value' => $eventId)
             )));
-            
+
             foreach ($alarms as $alarm) {
                 foreach ($attendees as $attendee) {
                     if ($attendee->alarm_ack_time instanceof Tinebase_DateTime) {
@@ -46,47 +46,47 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                     if ($attendee->alarm_snooze_time instanceof Tinebase_DateTime) {
                         $alarm->setOption("snoozed-{$attendee->user_id}", $attendee->alarm_snooze_time->format(Tinebase_Record_Abstract::ISO8601LONG));
                     }
-                    
+
                 }
                 $alarmBE->update($alarm);
             }
         }
-        
+
         // delte ack & snooze from attendee
         $this->_backend->dropCol('cal_attendee', 'alarm_ack_time');
         $this->_backend->dropCol('cal_attendee', 'alarm_snooze_time');
-        
+
         $this->setTableVersion('cal_attendee', 5);
         $this->setApplicationVersion('Calendar', '8.1');
     }
-    
+
     /**
      * update to 8.2
-     * 
+     *
      */
     public function update_1()
     {
         $eventBE = new Tinebase_Backend_Sql(array(
-                'modelName'    => 'Calendar_Model_Event',
-                'tableName'    => 'cal_events',
-                'modlogActive' => false
+            'modelName' => 'Calendar_Model_Event',
+            'tableName' => 'cal_events',
+            'modlogActive' => false
         ));
         // find all events without organizer
         $eventIds = $this->_db->query(
-                "SELECT " . $this->_db->quoteIdentifier('id') .
-                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
-                " WHERE " . $this->_db->quoteIdentifier("organizer") . " IS NULL OR " .
-                            $this->_db->quoteIdentifier("organizer") . " = ''"
+            "SELECT " . $this->_db->quoteIdentifier('id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+            " WHERE " . $this->_db->quoteIdentifier("organizer") . " IS NULL OR " .
+            $this->_db->quoteIdentifier("organizer") . " = ''"
         )->fetchAll(Zend_Db::FETCH_ASSOC);
-        
+
         foreach ($eventIds as $eventId) {
             $event = $eventBE->get($eventId['id']);
-            $event->organizer = (string) Tinebase_User::getInstance()->getFullUserById($event->created_by)->contact_id;
-            
-            $where  = array(
+            $event->organizer = (string)Tinebase_User::getInstance()->getFullUserById($event->created_by)->contact_id;
+
+            $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $eventId),
             );
-            
+
             try {
                 $this->_db->update(SQL_TABLE_PREFIX . "cal_events", $event->toArray(), $where);
             } catch (Tinebase_Exception_Record_Validation $terv) {
@@ -95,23 +95,23 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 Tinebase_Exception::log($terv);
             }
         }
-        
+
         // find all events CONFIDENTIAL class
         $eventIds = $this->_db->query(
-                "SELECT " . $this->_db->quoteIdentifier('id') .
-                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
-                " WHERE " . $this->_db->quoteIdentifier("class") . " = 'CONFIDENTIAL'"
+            "SELECT " . $this->_db->quoteIdentifier('id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+            " WHERE " . $this->_db->quoteIdentifier("class") . " = 'CONFIDENTIAL'"
         )->fetchAll(Zend_Db::FETCH_ASSOC);
-        
+
         foreach ($eventIds as $eventId) {
             $event = $eventBE->get($eventId['id']);
             $class = Calendar_Model_Event::CLASS_PRIVATE;
-            $event->class = (string) $class;
-            
-            $where  = array(
+            $event->class = (string)$class;
+
+            $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $eventId),
             );
-            
+
             try {
                 $this->_db->update(SQL_TABLE_PREFIX . "cal_events", $event->toArray(), $where);
             } catch (Tinebase_Exception_Record_Validation $terv) {
@@ -120,9 +120,9 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 Tinebase_Exception::log($terv);
             }
         }
-         $this->setApplicationVersion('Calendar', '8.2');
+        $this->setApplicationVersion('Calendar', '8.2');
     }
-    
+
     /**
      * update to 8.3
      * - normalize all rrules
@@ -131,26 +131,26 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     {
         // find all events with rrule
         $eventIds = $this->_db->query(
-                "SELECT " . $this->_db->quoteIdentifier('id') .
-                " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
-                " WHERE " . $this->_db->quoteIdentifier("rrule") . " IS NOT NULL"
+            "SELECT " . $this->_db->quoteIdentifier('id') .
+            " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
+            " WHERE " . $this->_db->quoteIdentifier("rrule") . " IS NOT NULL"
         )->fetchAll(Zend_Db::FETCH_ASSOC);
-        
+
         // NOTE: we need a generic sql BE to circumvent calendar specific acl issues
         $eventBE = new Tinebase_Backend_Sql(array(
-                'modelName'    => 'Calendar_Model_Event',
-                'tableName'    => 'cal_events',
-                'modlogActive' => false
+            'modelName' => 'Calendar_Model_Event',
+            'tableName' => 'cal_events',
+            'modlogActive' => false
         ));
-        
+
         foreach ($eventIds as $eventId) {
             $event = $eventBE->get($eventId['id']);
-            $oldRruleString = (string) $event->rrule;
+            $oldRruleString = (string)$event->rrule;
             $rrule = Calendar_Model_Rrule::getRruleFromString($oldRruleString);
             $rrule->normalize($event);
-            
-            if ($oldRruleString != (string) $rrule) {
-                $event->rrule = (string) $rrule;
+
+            if ($oldRruleString != (string)$rrule) {
+                $event->rrule = (string)$rrule;
                 try {
                     $eventBE->update($event);
                 } catch (Tinebase_Exception_Record_Validation $terv) {
@@ -160,18 +160,18 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 }
             }
         }
-        
+
         $this->setApplicationVersion('Calendar', '8.3');
     }
-    
+
     /**
      * update to 8.4
-     * 
+     *
      * - adds etag column
      */
     public function update_3()
     {
-        if (! $this->_backend->columnExists('etag', 'cal_events')) {
+        if (!$this->_backend->columnExists('etag', 'cal_events')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>etag</name>
@@ -189,11 +189,11 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 </index>');
             $this->_backend->addIndex('cal_events', $declaration);
         }
-        
+
         $this->setTableVersion('cal_events', 7);
         $this->setApplicationVersion('Calendar', '8.4');
     }
-    
+
     /**
      * - update import / export
      */
@@ -203,33 +203,33 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 7);
         $this->setApplicationVersion('Calendar', '8.5');
     }
-    
+
     /**
      * adds external_seq col
-     * 
+     *
      * @see 0009890: improve external event invitation support
      */
     public function update_5()
     {
-        if (! $this->_backend->columnExists('external_seq', 'cal_events')) {
+        if (!$this->_backend->columnExists('external_seq', 'cal_events')) {
             $seqCol = '<field>
                 <name>external_seq</name>
                 <type>integer</type>
                 <notnull>true</notnull>
                 <default>0</default>
             </field>';
-            
+
             $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
             $this->_backend->addCol('cal_events', $declaration);
         }
-        
+
         $this->setTableVersion('cal_events', '8');
         $this->setApplicationVersion('Calendar', '8.6');
     }
-    
+
     /**
      * add rrule index
-     * 
+     *
      * @see 0010214: improve calendar performance / yearly base events
      *
      * TODO re-enable this when it is fixed for postgresql
@@ -249,7 +249,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
 //        } catch (Zend_Db_Statement_Exception $e) {
 //            Tinebase_Exception::log($e);
 //        }
-        
+
         $this->setTableVersion('cal_events', '9');
         $this->setApplicationVersion('Calendar', '8.7');
     }
@@ -355,35 +355,35 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         // find all events with rrule
         $events = $this->_db->query(
             "SELECT " . $this->_db->quoteIdentifier('id') .
-                 ', ' . $this->_db->quoteIdentifier('uid') .
-                 ', ' . $this->_db->quoteIdentifier('container_id') .
-                 ', ' . $this->_db->quoteIdentifier('created_by') .
+            ', ' . $this->_db->quoteIdentifier('uid') .
+            ', ' . $this->_db->quoteIdentifier('container_id') .
+            ', ' . $this->_db->quoteIdentifier('created_by') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
             " WHERE " . $this->_db->quoteIdentifier("rrule") . " IS NOT NULL" .
-              " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+            " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
         )->fetchAll(Zend_Db::FETCH_ASSOC);
 
         // update all exdates in same container
-        foreach($events as $event) {
+        foreach ($events as $event) {
             $this->_db->query(
                 "UPDATE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
-                  " SET " . $this->_db->quoteIdentifier('base_event_id') . ' = ' . $this->_db->quote($event['id']) .
+                " SET " . $this->_db->quoteIdentifier('base_event_id') . ' = ' . $this->_db->quote($event['id']) .
                 " WHERE " . $this->_db->quoteIdentifier('uid') . ' = ' . $this->_db->quote($event['uid']) .
-                  " AND " . $this->_db->quoteIdentifier("container_id") . ' = ' . $this->_db->quote($event['container_id']) .
-                  " AND " . $this->_db->quoteIdentifier("recurid") . " IS NOT NULL" .
-                  " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+                " AND " . $this->_db->quoteIdentifier("container_id") . ' = ' . $this->_db->quote($event['container_id']) .
+                " AND " . $this->_db->quoteIdentifier("recurid") . " IS NOT NULL" .
+                " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
             );
         }
 
         // find all container move exdates
         $danglingExdates = $this->_db->query(
             "SELECT " . $this->_db->quoteIdentifier('uid') .
-                ', ' . $this->_db->quoteIdentifier('id') .
-                ', ' . $this->_db->quoteIdentifier('created_by') .
+            ', ' . $this->_db->quoteIdentifier('id') .
+            ', ' . $this->_db->quoteIdentifier('created_by') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") .
             " WHERE " . $this->_db->quoteIdentifier("recurid") . " IS NOT NULL" .
-              " AND " . $this->_db->quoteIdentifier("base_event_id") . " IS NULL" .
-              " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
+            " AND " . $this->_db->quoteIdentifier("base_event_id") . " IS NULL" .
+            " AND " . $this->_db->quoteIdentifier("is_deleted") . " = " . $this->_db->quote(0, Zend_Db::INT_TYPE)
         )->fetchAll(Zend_Db::FETCH_ASSOC);
 
         // try to match by creator
@@ -397,7 +397,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 return false;
             });
 
-            switch(count($matches)) {
+            switch (count($matches)) {
                 case 0:
                     // no match :-(
                     if (count($possibleBaseEvents) == 0) {
@@ -430,11 +430,31 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 9.0
-     *
-     * @return void
+     * @see 0011266: increase size of event fields summary and location
      */
     public function update_9()
+    {
+        $fieldsToChange = array('location', 'summary');
+
+        foreach ($fieldsToChange as $name) {
+            $seqCol = '<field>
+                <name>' . $name . '</name>
+                <type>text</type>
+                <length>1024</length>
+            </field>';
+
+            $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
+            $this->_backend->alterCol('cal_events', $declaration);
+        }
+
+        $this->setTableVersion('cal_events', 11);
+        $this->setApplicationVersion('Calendar', '8.10');
+    }
+
+    /**
+     * update to 9.0
+     */
+    public function update_10()
     {
         $this->setApplicationVersion('Calendar', '9.0');
     }

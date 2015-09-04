@@ -43,6 +43,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
      * set options 
      *
      * @param  array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _setOptions(array $_options)
     {
@@ -91,6 +92,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         /* select */  array());
         
         $_select->where($db->quoteIdentifier("{$correlationName}.tag_id") .  $this->_opSqlMap[$this->_operator]['sqlop']);
+        $_select->group($this->_options['idProperty']);
     }
     
     /**

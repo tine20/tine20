@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# post-checkout hook that executes composor dumpautoload 
+#
+
+`cd tine20; composer dumpautoload`

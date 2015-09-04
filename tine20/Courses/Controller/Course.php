@@ -494,7 +494,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
             'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
             'userNameSchema'                => $this->_config->get(Courses_Config::STUDENTS_USERNAME_SCHEMA, 1),
-            'password'                      => strtolower($course->name) . $this->_config->get(Courses_Config::STUDENT_PASSWORD_SUFFIX, ''),
+            'password'                      => $this->getStudentPassword($course->name),
             'course'                        => $course,
             'accountLoginShell'             => '/bin/false',
             'samba'                         => (isset($this->_config->samba)) ? array(
@@ -506,6 +506,18 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                 'pwdMustChange' => new Tinebase_DateTime('@1')
             ) : array(),
         );
+    }
+    
+    
+    /**
+     * Returns default student password
+     * 
+     * @param string $courseName
+     * @return string
+     */
+    public function getStudentPassword($courseName)
+    {
+        return strtolower($courseName) . $this->_config->get(Courses_Config::STUDENT_PASSWORD_SUFFIX, '');
     }
     
     /**

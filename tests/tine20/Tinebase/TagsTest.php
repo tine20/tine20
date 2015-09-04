@@ -273,6 +273,8 @@ class Tinebase_TagsTest extends TestCase
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 0, 3))
         ));
         $sharedTag1 = Tinebase_Tags::getInstance()->attachTagToMultipleRecords($contactFilter, $sharedTag1);
+        $this->assertEquals(3, $sharedTag1->occurrence);
+
         $contactFilter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'in', 'value' => array_slice($contactIds, 3, 3))
         ));

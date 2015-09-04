@@ -323,7 +323,7 @@ Tine.Sales.renderAccountable = function(values) {
     var ret = '';
     var app = Tine.Tinebase.appMgr.get(split[0]);
     
-    return app.i18n._(split[0] + split[1]);
+    return app ? app.i18n._(split[0] + split[1]) : null;
 };
 
 /**

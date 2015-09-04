@@ -92,7 +92,9 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.plugins = this.plugins ? this.plugins : [];
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-        this.stripeRows = Tine.Tinebase.registry.get('preferences').containsKey('gridStripeRows') ? Tine.Tinebase.registry.get('preferences').get('gridStripeRows') : false,
+        this.stripeRows = Tine.Tinebase.registry.get('preferences').get('gridStripeRows')
+            ? Tine.Tinebase.registry.get('preferences').get('gridStripeRows')
+            : false,
         
         // on selectionchange handler
         this.sm.on('selectionchange', function(sm) {

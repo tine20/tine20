@@ -123,6 +123,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
         Tinebase_Cache_PerRequest::getInstance()->reset();
     }
+
+    /**
+     * tear down after test class
+     */
+    public static function tearDownAfterClass()
+    {
+        Tinebase_Core::getDbProfiling();
+    }
     
     /**
      * test needs transaction

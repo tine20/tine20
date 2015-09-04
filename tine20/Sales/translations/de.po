@@ -739,7 +739,7 @@ msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worde
 
 #: js/InvoiceEditDialog.js:347 js/PurchaseInvoiceEditDialog.js:300
 msgid "Sales Tax (percent)"
-msgstr "Mehrwertsteuer in Prozent"
+msgstr "MwSt. in Prozent"
 
 #: js/InvoiceEditDialog.js:381 js/InvoiceEditDialog.js:387
 #: js/PurchaseInvoiceEditDialog.js:356 js/PurchaseInvoiceEditDialog.js:380
@@ -1327,3 +1327,9 @@ msgstr "Alle Auftragsbestätigungsdatensätze"
 #: Setup/Update/Release5.php:64
 msgid "Products created by myself"
 msgstr "Von mir erstellte Produkte"
+
+msgid "Additional Price Gross"
+msgstr "Zusätzlicher Brutto Preis"
+
+msgid "Total Price"
+msgstr "Gesamtpreis"
