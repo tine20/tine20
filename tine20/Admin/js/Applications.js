@@ -48,7 +48,7 @@ Tine.Admin.Applications.Main = function() {
                 'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
             }
         });
-    }
+    };
 
     var _enableDisableButtonHandler = function(state) {
         var applicationIds = new Array();
@@ -336,8 +336,8 @@ Tine.Admin.Applications.Main = function() {
                  * Return CSS class to apply to rows depending upon flags
                  * - checks Flagged, Deleted and Seen
                  * 
-                 * @param {} record
-                 * @param {} index
+                 * @param {Object} record
+                 * @param {Integer} index
                  * @return {String}
                  */
                 getRowClass: function(record, index) {
@@ -378,12 +378,10 @@ Tine.Admin.Applications.Main = function() {
         
         grid_applications.on('rowdblclick', function(grid, index, e) {
             var record = grid.getStore().getAt(index);
-            if (Tine[record.data.name].AdminPanel && record.data.status == 'enabled') {
+            if (record.data.status == 'enabled' && Tine[record.data.name] && Tine[record.data.name].AdminPanel) {
                 _openSettingsWindow(record.data.name);
             }
         }, this);
-          
-        return;
     };
     
     // public functions and variables
