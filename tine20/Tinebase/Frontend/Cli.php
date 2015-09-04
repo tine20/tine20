@@ -103,7 +103,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function triggerAsyncEvents($_opts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Triggering async events from CLI.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Triggering async events from CLI.');
+
+        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__);
+        if (! $freeLock) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                .' Job already running.');
+            return false;
+        }
         
         $userController = Tinebase_User::getInstance();
         
@@ -125,7 +133,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
         echo "Tine 2.0 scheduler run (" . $responseString . ") complete.\n";
         
-        return TRUE;
+        return true;
     }
     
     /**
