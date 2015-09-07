@@ -20,14 +20,16 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     config.app = Ext.isString(config.app) ? Tine.Tinebase.appMgr.get(config.app) : config.app;
     
     // get keyField config
-    config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
-    
-    // init data / translate values
-    var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];
-    Ext.each(data, function(d) {
-        d.i18nValue = d.value ? config.app.i18n._hidden(d.value) : "";
-    });
-    config.data = data;
+    if (config.app.getRegistry()) {
+        config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
+
+        // init data / translate values
+        var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];
+        Ext.each(data, function (d) {
+            d.i18nValue = d.value ? config.app.i18n._hidden(d.value) : "";
+        });
+        config.data = data;
+    }
     
     if (! config.keyFieldConfig) {
         throw ('No keyfield config found for ' + config.keyFieldName + ' in ' + config.app.appName + ' registry.');
