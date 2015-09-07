@@ -664,6 +664,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $this->_rowNameMapping['accountId'], $userId
         );
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' fetch meta data - filter: ' . $filter);
+
         $result = $this->_ldap->search(
             $filter,
             $this->_baseDn,
