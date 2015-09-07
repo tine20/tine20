@@ -1182,7 +1182,7 @@ class Tinebase_Core
      * set php execution life (max) time
      *
      * @param int $_seconds
-     * @return int old max exexcution time in seconds
+     * @return int old max execution time in seconds
      */
     public static function setExecutionLifeTime($_seconds)
     {
@@ -1197,8 +1197,8 @@ class Tinebase_Core
                         . $_seconds . ' because of safe mode restrictions. safe_mode = ' . $safeModeSetting);
                 }
             } else {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
                 }
                 set_time_limit($_seconds);
             }
