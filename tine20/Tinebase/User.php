@@ -238,7 +238,7 @@ class Tinebase_User
                 throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Created user backend of type ' . $backendType);
         
         return $result;
@@ -277,7 +277,7 @@ class Tinebase_User
         }
         
         $newBackendType = ucfirst($backendType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Setting backend type to ' . $newBackendType);
         
         self::$_backendType = $newBackendType;

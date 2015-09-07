@@ -518,11 +518,13 @@ class Tinebase_Tags
 
         Tinebase_Backend_Sql_Abstract::traitGroup($select);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . $select);
 
         $queryResult = $this->_db->fetchAll($select);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($queryResult, TRUE));
 
         // build array with tags (record_id => array of Tinebase_Model_Tag)
         $tagsOfRecords = array();
@@ -530,8 +532,10 @@ class Tinebase_Tags
             $tagsOfRecords[$result['record_id']][] = new Tinebase_Model_Tag($result, true);
         }
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
-        foreach($_records as $record) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Getting ' . count($tagsOfRecords) . ' tags for ' . count($_records) . ' records.');
+
+        foreach ($_records as $record) {
             $record->{$_tagsProperty} = new Tinebase_Record_RecordSet(
                 'Tinebase_Model_Tag', 
                 (isset($tagsOfRecords[$record->getId()])) ? $tagsOfRecords[$record->getId()] : array()
