@@ -238,7 +238,7 @@ class Tinebase_User
                 throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Created user backend of type ' . $backendType);
         
         return $result;
@@ -277,7 +277,7 @@ class Tinebase_User
         }
         
         $newBackendType = ucfirst($backendType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Setting backend type to ' . $newBackendType);
         
         self::$_backendType = $newBackendType;
@@ -539,13 +539,15 @@ class Tinebase_User
             $contact = $addressbook->getByUserId($syncedUser->getId());
             $originalContact = clone $contact;
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' user: ' .print_r($syncedUser->toArray(), true));
+
             Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
             $contact = self::_user2Contact($syncedUser, $contact);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . print_r($syncedUser->toArray(), true)
-                . ' new: ' . print_r($contact->toArray(), true)
-                . ' orig:' . print_r($originalContact->toArray(), true));
+                . ' new contact: ' . print_r($contact->toArray(), true)
+                . ' orig contact:' . print_r($originalContact->toArray(), true));
 
             // TODO allow to diff jpegphoto, too / maybe this should only be done when called via CLI/cronjob
             $diff = $contact->diff($originalContact, array('jpegphoto'));
@@ -569,6 +571,10 @@ class Tinebase_User
         } catch (Addressbook_Exception_NotFound $aenf) {
             self::createContactForSyncedUser($syncedUser);
             $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Contact information seems to be missing in sync backend');
+            Tinebase_Exception::log($tenf);
         }
     }
     

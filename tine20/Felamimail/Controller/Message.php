@@ -660,7 +660,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
             ? $config->caching->path : Tinebase_Core::getTempDir();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Purifying html body. (cache path: ' . $path .')');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Current mem usage before purify: ' . memory_get_usage()/1024/1024);
@@ -1083,7 +1083,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function getPunycodeConverter()
     {
         if ($this->_punycodeConverter === NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating idna convert class for punycode conversion.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Creating idna convert class for punycode conversion.');
             $this->_punycodeConverter = new idna_convert();
         }
         

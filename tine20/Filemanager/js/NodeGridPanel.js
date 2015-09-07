@@ -421,6 +421,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Ext.MessageBox.show({
                 title: selections[0].data.type == 'folder' ? this.app.i18n._('Folder has been published successfully') : this.app.i18n._('File has been published successfully'), 
                 msg: String.format(this.app.i18n._("Url: {0}") + '<br />' + this.app.i18n._("Valid Until: {1}"), record.get('url'), record.get('expiry_time')), 
+                width:900,
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
                 scope: this

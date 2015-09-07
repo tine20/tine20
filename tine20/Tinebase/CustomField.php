@@ -526,7 +526,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Before resolving - MEMORY: ' . memory_get_usage(TRUE)/1024/1024 . ' MBytes');
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Resolving custom fields for ' . count($_records) . ' ' . $_records->getRecordClassName() . ' records.');
         
         $configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_records->getFirstRecord()->getApplication()));
