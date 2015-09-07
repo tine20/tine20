@@ -40,9 +40,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     private function __construct()
     {
-        $this->_writeAccessLog = Setup_Controller::getInstance()->isInstalled('Tinebase')
+        $this->_writeAccessLog = Tinebase_Application::getInstance()->isInstalled('Tinebase')
             && (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' 
-                || (Setup_Controller::getInstance()->isInstalled('ActiveSync')
+                || (Tinebase_Application::getInstance()->isInstalled('ActiveSync')
                         && !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))));
     }
 

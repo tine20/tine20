@@ -324,7 +324,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if ($fr->has('customfields')) {
                     Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($foreignRecords);
                 }
-                if ($fr->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+                if ($fr->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
                     Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($foreignRecords);
                 }
             }

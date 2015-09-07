@@ -500,7 +500,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->resolveCustomfields()) {
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
         }
-        if ($record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+        if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
         }
     }
@@ -1039,7 +1039,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($record->has('alarms') && isset($record->alarms)) {
             $this->_saveAlarms($record);
         }
-        if ($record->has('attachments') && isset($record->attachments) && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+        if ($record->has('attachments') && isset($record->attachments) && Tinebase_Core::isFilesystemAvailable()) {
             $updatedRecord->attachments = $record->attachments;
             Tinebase_FileSystem_RecordAttachments::getInstance()->setRecordAttachments($updatedRecord);
         }
@@ -1569,7 +1569,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_deleteLinkedRelations($_record);
         }
 
-        if ($_record->has('attachments') && Setup_Controller::getInstance()->isFilesystemAvailable()) {
+        if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
         }
     }

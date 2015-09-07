@@ -184,7 +184,7 @@ class Tinebase_Core
      * @var int
      */
     protected static $logLevel = null;
-    
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -1625,5 +1625,46 @@ class Tinebase_Core
     public static function callSystemCommand($cmd)
     {
         return shell_exec(escapeshellcmd($cmd));
+    }
+
+    /**
+     * returns TRUE if filesystem is available
+     *
+     *  - value is stored in session and registry for caching
+     *
+     * @return boolean
+     */
+    public static function isFilesystemAvailable()
+    {
+        $isFileSystemAvailable = self::get('FILESYSTEM');
+        if ($isFileSystemAvailable === null) {
+            try {
+                $session = Tinebase_Session::getSessionNamespace();
+
+                if (isset($session->filesystemAvailable)) {
+                    $isFileSystemAvailable = $session->filesystemAvailable;
+
+                    self::set('FILESYSTEM', $isFileSystemAvailable);
+                    return $isFileSystemAvailable;
+                }
+            } catch (Zend_Session_Exception $zse) {
+                $session = null;
+            }
+
+            $isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+
+            if ($session instanceof Zend_Session_Namespace) {
+                if (Tinebase_Session::isWritable()) {
+                    $session->filesystemAvailable = $isFileSystemAvailable;
+                }
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Filesystem available: ' . ($isFileSystemAvailable ? 'yes' : 'no'));
+
+            self::set('FILESYSTEM', $isFileSystemAvailable);
+        }
+
+        return $isFileSystemAvailable;
     }
 }

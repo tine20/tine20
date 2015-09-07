@@ -245,14 +245,14 @@ class Tinebase_User
     }
     
     /**
-     * returns the configured rs backend
+     * returns the configured backend
      * 
      * @return string
      */
     public static function getConfiguredBackend()
     {
-        if (!isset(self::$_backendType)) {
-            if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+        if (! isset(self::$_backendType)) {
+            if (Tinebase_Application::getInstance()->isInstalled('Tinebase')) {
                 self::setBackendType(Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKENDTYPE, self::SQL));
             } else {
                 self::setBackendType(self::SQL);
@@ -361,7 +361,7 @@ class Tinebase_User
     {
         //lazy loading for $_backendConfiguration
         if (!isset(self::$_backendConfiguration)) {
-            if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            if (Tinebase_Application::getInstance()->isInstalled('Tinebase')) {
                 $rawBackendConfiguration = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND, new Tinebase_Config_Struct())->toArray();
             } else {
                 $rawBackendConfiguration = array();
