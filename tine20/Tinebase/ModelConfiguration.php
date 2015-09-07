@@ -611,7 +611,7 @@ class Tinebase_ModelConfiguration {
         'text'     => 'Tinebase_Model_Filter_Text',
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
-        'float'    => 'Tinebase_Model_Filter_Int',
+        'float'    => 'Tinebase_Model_Filter_Float',
         'record'   => 'Tinebase_Model_Filter_ForeignId',
         'relation' => 'Tinebase_Model_Filter_Relation',
 
