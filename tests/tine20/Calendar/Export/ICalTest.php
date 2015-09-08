@@ -191,7 +191,7 @@ class Calendar_Export_ICalTest extends Calendar_TestCase
     {
         $eventData = $this->_getEvent(TRUE)->toArray();
         $this->_uit = new Calendar_Frontend_Json();
-         $this->_uit->saveEvent($eventData);
+        $this->_uit->saveEvent($eventData);
         
         $this->_testNeedsTransaction();
         $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportICS ' .

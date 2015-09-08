@@ -84,7 +84,12 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 .' Is cli request. method: ' . $method);
         }
-        
+
+        // prevents problems with missing request uri (@see Sabre\HTTP\Request->getUri())
+        if (! isset($_SERVER['REQUEST_URI'])) {
+            $_SERVER['REQUEST_URI'] = '';
+        }
+
         $tinebaseServer = new Tinebase_Frontend_Cli();
         
         $opts = Tinebase_Core::get('opts');
@@ -94,7 +99,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         $result = $tinebaseServer->handle($opts);
         
         //@todo remove cli session path
-        
+
         // convert function result to shell return code
         if ($result === NULL || $result === TRUE || ! is_int($result)) {
             $result = 0;
