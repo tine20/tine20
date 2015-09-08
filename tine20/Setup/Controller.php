@@ -235,7 +235,7 @@ class Setup_Controller
         if (! isset($config->caching) || !$config->caching->active) {
             $result = TRUE;
             
-        } else if (ucfirst($config->caching->backend) === 'File') {
+        } else if (! isset($config->caching->backend) || ucfirst($config->caching->backend) === 'File') {
             $result = $this->checkDir('path', 'caching', FALSE);
             
         } else if (ucfirst($config->caching->backend) === 'Redis') {
