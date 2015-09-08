@@ -132,6 +132,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
+        if (empty($_userId)) {
+            throw new Tinebase_Exception_InvalidArgument('Empty user id');
+        }
+
         $contact = $this->_backend->getByUserId($_userId);
         
         if ($_ignoreACL === FALSE) {
