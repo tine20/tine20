@@ -42,12 +42,20 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *   - contract=CONTRACT_ID or contract=NUMBER
      *
      * @param Zend_Console_Getopt $_opts
+     * @return boolean
      */
     public function create_auto_invoices($_opts)
     {
         $executionLifeTime = Tinebase_Core::setExecutionLifeTime(3600*8);
         
         $this->_addOutputLogWriter();
+
+        $freeLock = $this->_aquireMultiServerLock(__CLASS__ . '::' . __FUNCTION__);
+        if (! $freeLock) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                .' Job already running - ' . __CLASS__ . '::' . __FUNCTION__);
+            return false;
+        }
         
         $date = NULL;
         $args = $this->_parseArgs($_opts, array());
@@ -120,6 +128,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         Tinebase_Core::setExecutionLifeTime($executionLifeTime);
+
+        return true;
     }
     
     /**
