@@ -55,4 +55,39 @@ class Tinebase_Lock
             return null;
         }
     }
+
+    /**
+     * @param string $id
+     * @return bool|null bool on success / failure, null if not supported
+     */
+    public static function releaseDBSessionLock($id)
+    {
+        $id = 'tine20_' . $id;
+        $db = Tinebase_Core::getDb();
+
+        if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+            if (    ($stmt = $db->query('SELECT RELEASE_LOCK("' . $id . '")')) &&
+                    $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
+                    ($row = $stmt->fetch()) &&
+                    $row[0] == 1) {
+                return true;
+            }
+            return false;
+
+        } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $id = sha1($id, true);
+            $intId = unpack('q', $id);
+            if (    ($stmt = $db->query('SELECT pg_advisory_unlock(' . $intId . ')')) &&
+                $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
+                ($row = $stmt->fetch()) &&
+                $row[0] == 1) {
+                return true;
+            }
+            return false;
+
+        } else {
+            // not implemented / supported
+            return null;
+        }
+    }
 }
