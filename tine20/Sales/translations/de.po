@@ -1414,3 +1414,15 @@ msgstr "Zusätzlicher Brutto Preis"
 
 msgid "Total Price"
 msgstr "Gesamtpreis"
+
+msgid "Cancellation"
+msgstr "Storno"
+
+msgid "Credit"
+msgstr "Gutschrift"
+
+msgid "Credit card"
+msgstr "Kreditkarte"
+
+msgid "Paypal"
+msgstr "Paypal"
