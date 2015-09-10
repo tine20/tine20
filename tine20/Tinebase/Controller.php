@@ -352,7 +352,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function authenticate($loginName, $password, $remoteInfo, $clientIdString = NULL)
     {
-        $result = $this->login($loginName, $password, $remoteInfo, $clientIdString);
+        $result = $this->login($loginName, $password, Tinebase_Core::get(Tinebase_Core::REQUEST), $clientIdString);
         
         /**
          * we unset the Zend_Auth session variable. This way we keep the session,

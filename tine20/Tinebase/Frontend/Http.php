@@ -104,6 +104,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function openId()
     {
+        Tinebase_Core::startCoreSession();
         $server = new Tinebase_OpenId_Provider(
             null,
             null,
