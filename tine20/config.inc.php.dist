@@ -6,8 +6,12 @@
 
 // minimal configuration
 return array(
+    // in maintenanceMode only users of the defaultAdminGroup can login and operate
+    'maintenanceMode'   => false,
+
     // set 'count' equal zero to disable captcha, or set to number of invalid logins before request captcha.
-    'captcha' => array('count'=>0), 
+    'captcha' => array('count'=>0),
+
     'database' => array(
         'host'          => 'ENTER DATABASE HOSTNAME',
         'dbname'        => 'ENTER DATABASE NAME',
@@ -16,6 +20,7 @@ return array(
         'adapter'       => 'pdo_mysql',
         'tableprefix'   => 'tine20_',
     ),
+
     'setupuser' => array(
         'username'      => 'SETUP USERNAME',
         'password'      => 'SETUP PASSWORD' 

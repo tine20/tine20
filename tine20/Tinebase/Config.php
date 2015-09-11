@@ -322,6 +322,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const CONFD_FOLDER = 'confdfolder';
 
     /**
+     * maintenance mode
+     *
+     * @var bool
+     */
+    const MAINTENANCE_MODE = 'maintenanceMode';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -733,6 +740,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::MAINTENANCE_MODE => array(
+            //_('Maintenance mode enabled')
+            'label'                 => 'Maintenance mode enabled',
+            //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
+            'description'           => 'Installation is in maintenance mode. With this only users having the maintenance right can login',
+            'type'                  => 'bool',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
         ),
     );
     

@@ -17,6 +17,9 @@
     }, {
         "type": "git",
         "url": "https://github.com/lkneschke/Component_ZendHttp"
+    }, {
+        "type": "git",
+        "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
         "syncroton/syncroton": "1.1.*",

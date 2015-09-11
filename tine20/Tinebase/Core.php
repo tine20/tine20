@@ -1626,4 +1626,15 @@ class Tinebase_Core
     {
         return shell_exec(escapeshellcmd($cmd));
     }
+
+    /**
+     * returns true if installation is in maintenance mode
+     *
+     * @return bool
+     */
+    public static function inMaintenanceMode()
+    {
+        $config = self::getConfig();
+        return !! $config->maintenanceMode;
+    }
 }
