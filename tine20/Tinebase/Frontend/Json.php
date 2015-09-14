@@ -748,7 +748,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
             'thousandSeparator' => $symbols['group'],
             'decimalSeparator'  => $symbols['decimal'],
-            'filesystemAvailable' => Setup_Controller::getInstance()->isFilesystemAvailable(),
+            'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

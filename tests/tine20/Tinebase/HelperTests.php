@@ -83,6 +83,7 @@ class Tinebase_HelperTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(1024, Tinebase_Helper::convertToBytes('1024'));
         $this->assertEquals(1024, Tinebase_Helper::convertToBytes('1K'));
         $this->assertEquals(1024*1024, Tinebase_Helper::convertToBytes('1M'));
+        $this->assertEquals(1024*1024*1024, Tinebase_Helper::convertToBytes('1G'));
         
     }
 

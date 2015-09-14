@@ -251,7 +251,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     public function updateCache($_folder, $_time = 10, $_updateFlagFactor = 10)
     {
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
@@ -285,9 +285,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Folder status of ' . $folder->globalname . ' after updateCache(): ' . $folder->cache_status);
-        
-        // reset max execution time to old value
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $folder;
     }

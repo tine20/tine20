@@ -60,13 +60,6 @@ class Setup_Controller
     protected $_updatedApplications = 0;
     
     /**
-     * is filesystem available
-     * 
-     * @var boolean
-     */
-    protected $_isFileSystemAvailable = null;
-    
-    /**
      * don't clone. Use the singleton.
      *
      */
@@ -242,7 +235,7 @@ class Setup_Controller
         if (! isset($config->caching) || !$config->caching->active) {
             $result = TRUE;
             
-        } else if (ucfirst($config->caching->backend) === 'File') {
+        } else if (! isset($config->caching->backend) || ucfirst($config->caching->backend) === 'File') {
             $result = $this->checkDir('path', 'caching', FALSE);
             
         } else if (ucfirst($config->caching->backend) === 'Redis') {
@@ -1810,40 +1803,5 @@ class Setup_Controller
         
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
-    }
-    
-    /**
-     * returns TRUE if filesystem is available
-     * 
-     * @return boolean
-     */
-    public function isFilesystemAvailable()
-    {
-        if ($this->_isFileSystemAvailable === null) {
-            try {
-                $session = Tinebase_Session::getSessionNamespace();
-                
-                if (isset($session->filesystemAvailable)) {
-                    $this->_isFileSystemAvailable = $session->filesystemAvailable;
-                    
-                    return $this->_isFileSystemAvailable;
-                }
-            } catch (Zend_Session_Exception $zse) {
-                $session = null;
-            }
-            
-            $this->_isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-            
-            if ($session instanceof Zend_Session_Namespace) {
-                if (Tinebase_Session::isWritable()) {
-                    $session->filesystemAvailable = $this->_isFileSystemAvailable;
-                }
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
-        }
-        
-        return $this->_isFileSystemAvailable;
     }
 }

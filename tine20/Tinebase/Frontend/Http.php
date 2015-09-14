@@ -103,6 +103,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function openId()
     {
+        Tinebase_Core::startCoreSession();
         $server = new Tinebase_OpenId_Provider(
             null,
             null,
@@ -324,7 +325,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * login from HTTP post 
      * 
-     * renders the tine main screen if authentication is successfull
+     * redirects the tine main screen if authentication is successful
      * otherwise redirects back to login url 
      */
     public function loginFromPost($username, $password)
@@ -357,21 +358,20 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         }
 
+        $request = new Sabre\HTTP\Request();
+        $redirectUrl = str_replace('index.php', '', $request->getAbsoluteUri());
+
         // authentication failed
         if ($success !== TRUE) {
             $_SESSION = array();
             Tinebase_Session::destroyAndRemoveCookie();
             
             // redirect back to loginurl if needed
-            $defaultUrl = ((isset($_SERVER['HTTP_REFERER']) || array_key_exists('HTTP_REFERER', $_SERVER))) ? $_SERVER['HTTP_REFERER'] : '';
-            $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, $defaultUrl);
-            if (! empty($redirectUrl)) {
-                header('Location: ' . $redirectUrl);
-            }
-            return;
+            $redirectUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL, $redirectUrl);
         }
 
-        $this->_renderMainScreen();
+        // load the client with GET
+        header('Location: ' . $redirectUrl);
     }
 
     /**

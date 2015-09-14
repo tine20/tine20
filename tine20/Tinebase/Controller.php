@@ -40,9 +40,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     private function __construct()
     {
-        $this->_writeAccessLog = Setup_Controller::getInstance()->isInstalled('Tinebase')
+        $this->_writeAccessLog = Tinebase_Application::getInstance()->isInstalled('Tinebase')
             && (Tinebase_Core::get('serverclassname') !== 'ActiveSync_Server_Http' 
-                || (Setup_Controller::getInstance()->isInstalled('ActiveSync')
+                || (Tinebase_Application::getInstance()->isInstalled('ActiveSync')
                         && !(ActiveSync_Config::getInstance()->get(ActiveSync_Config::DISABLE_ACCESS_LOG))));
     }
 
@@ -352,7 +352,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function authenticate($loginName, $password, $remoteInfo, $clientIdString = NULL)
     {
-        $result = $this->login($loginName, $password, $remoteInfo, $clientIdString);
+        $result = $this->login($loginName, $password, Tinebase_Core::get(Tinebase_Core::REQUEST), $clientIdString);
         
         /**
          * we unset the Zend_Auth session variable. This way we keep the session,

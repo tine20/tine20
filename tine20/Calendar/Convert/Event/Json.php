@@ -119,7 +119,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        if (Setup_Controller::getInstance()->isFilesystemAvailable()) {
+        if (Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
         }
         

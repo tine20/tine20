@@ -30,7 +30,22 @@ class Tinebase_Frontend_Cli_Abstract
      * help array with function names and param descriptions
      */
     protected $_help = array();
-    
+
+    /**
+     * aquire a lock to prevent parallel execution in a multi server environment
+     *
+     * @param string $id
+     * @return bool
+     */
+    protected function _aquireMultiServerLock($id)
+    {
+        $result = Tinebase_Lock::aquireDBSessionLock($id);
+        if ( true === $result || null === $result ) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * echos usage information
      *
@@ -439,7 +454,7 @@ class Tinebase_Frontend_Cli_Abstract
         $class_name = $this->_applicationName . '_Setup_Import_Egw14';
         if (! class_exists($class_name)) {
             $logger->ERR(__METHOD__ . '::' . __LINE__ . " no import for {$this->_applicationName} available");
-            continue;
+            return;
         }
         
         try {
