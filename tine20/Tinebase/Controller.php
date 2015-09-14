@@ -504,7 +504,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         if (strtolower($backendType) == 'file') {
             $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400;
-            $path = ini_get('session.save_path');
+            $path = Tinebase_Session_Abstract::getSessionDir();
             
             $unlinked = 0;
             try {
