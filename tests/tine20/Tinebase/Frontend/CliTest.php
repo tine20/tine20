@@ -217,7 +217,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $out = ob_get_clean();
         
         $userPlugins = Tinebase_User::getInstance()->getPlugins();
-        $this->assertEquals(0, count($userPlugins));
+        $this->assertEquals(0, count($userPlugins), 'got user plugins: ' . print_r($userPlugins, true));
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
