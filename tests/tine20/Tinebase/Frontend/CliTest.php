@@ -209,6 +209,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals(0, count($userPlugins));
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
+        $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         $this->assertEquals('cronuser', $cronuser->accountLoginName);
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
