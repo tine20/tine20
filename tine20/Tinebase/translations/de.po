@@ -3340,8 +3340,6 @@ msgstr "Maximale Benutzernamen Länge"
 #~ msgid "- The last filter I used -"
 #~ msgstr "- Der zuletzt benutzte Filter -"
 
-#~ msgid "Install web app"
-#~ msgstr "Installiere Web-Applikation"
+msgid "and"
+msgstr "und"
 
-#~ msgid "Install Tine 2.0 as web app in your browser."
-#~ msgstr "Tine 2.0 als Web-Applikation im Browser installieren."

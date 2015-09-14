@@ -66,7 +66,11 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Tinebase_User::getInstance()->resolveUsers($_record, 'account_id');
 
                 if (Tinebase_Core::getUser()->hasRight('Sales', 'manage_invoices') && ! empty($_record['invoice_id'])) {
-                    $_record['invoice_id'] = Sales_Controller_Invoice::getInstance()->get($_record['invoice_id']);
+                    try {
+                        $_record['invoice_id'] = Sales_Controller_Invoice::getInstance()->get($_record['invoice_id']);
+                    } catch (Tinebase_Exception_NotFound $nfe) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not resolve invoice with id ' . $_record['invoice_id']);
+                    }
                 }
                 
                 $recordArray = parent::_recordToJson($_record);
