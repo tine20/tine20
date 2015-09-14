@@ -659,7 +659,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $path = ($config->caching && $config->caching->active && $config->caching->path) 
             ? $config->caching->path : Tinebase_Core::getTempDir();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Purifying html body. (cache path: ' . $path .')');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Current mem usage before purify: ' . memory_get_usage()/1024/1024);
@@ -872,14 +872,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $expanded = array();
                 
                 // if a winmail.dat exists, try to expand it
-                if (strtolower($filename) == 'winmail.dat' && Tinebase_Core::systemCommandExists('tnef') && $part['contentType'] == 'application/ms-tnef') {
-                    
-                    $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
-                    
-                    if (! empty($expanded)) {
-                        $attachments = array_merge($attachments, $expanded);
+                if (preg_match('/^winmail[.]*\.dat/i', $filename) && Tinebase_Core::systemCommandExists('tnef')) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
+
+                    if ($part['contentType'] == 'application/ms-tnef' || $part['contentType'] == 'text/plain') {
+                        $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Extracted ' . count($expanded) . ' files from ' . $filename);
+
+                        if (!empty($expanded)) {
+                            $attachments = array_merge($attachments, $expanded);
+                        }
                     }
-                
                 }
                 
                 // if its not a winmail.dat, or the winmail.dat couldn't be expanded 
@@ -1082,7 +1089,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function getPunycodeConverter()
     {
         if ($this->_punycodeConverter === NULL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating idna convert class for punycode conversion.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Creating idna convert class for punycode conversion.');
             $this->_punycodeConverter = new idna_convert();
         }
         
