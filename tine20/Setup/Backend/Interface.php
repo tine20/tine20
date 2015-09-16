@@ -180,4 +180,19 @@ interface Setup_Backend_Interface
      * @return String
      */
     public function getIndexDeclarations(Setup_Backend_Schema_Index_Abstract $_index, $_tableName = '');
+
+    /**
+     * Backup Database
+     *
+     * @param $options
+     */
+    public function backup($options);
+
+    /**
+     * Restore Database
+     *
+     * @param $options
+     */
+    public function restore($options);
+
 }

@@ -457,7 +457,29 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         $dbTable = $this->getExistingSchema($_table->name);
         return $dbTable->equals($_table);
     }
-    
+
+    /**
+     * Backup Database
+     *
+     * @param $options
+     * @throws Setup_Backend_Exception_NotImplemented
+     */
+    public function backup($options)
+    {
+        throw new Setup_Backend_Exception_NotImplemented('backup not yet implemented');
+    }
+
+    /**
+     * Restore Database
+     *
+     * @param $options
+     * @throws Setup_Backend_Exception_NotImplemented
+     */
+    public function restore($options)
+    {
+        throw new Setup_Backend_Exception_NotImplemented('restore not yet implemented');
+    }
+
     /**
      * create the right mysql-statement-snippet for columns/fields
      *

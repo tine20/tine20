@@ -1811,7 +1811,7 @@ class Setup_Controller
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
     }
-    
+
     /**
      * returns TRUE if filesystem is available
      * 
@@ -1822,28 +1822,132 @@ class Setup_Controller
         if ($this->_isFileSystemAvailable === null) {
             try {
                 $session = Tinebase_Session::getSessionNamespace();
-                
+
                 if (isset($session->filesystemAvailable)) {
                     $this->_isFileSystemAvailable = $session->filesystemAvailable;
-                    
+
                     return $this->_isFileSystemAvailable;
                 }
             } catch (Zend_Session_Exception $zse) {
                 $session = null;
             }
-            
+
             $this->_isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
-            
+
             if ($session instanceof Zend_Session_Namespace) {
                 if (Tinebase_Session::isWritable()) {
                     $session->filesystemAvailable = $this->_isFileSystemAvailable;
                 }
             }
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Filesystem available: ' . ($this->_isFileSystemAvailable ? 'yes' : 'no'));
         }
-        
+
         return $this->_isFileSystemAvailable;
+    }
+
+    /**
+     * backup
+     *
+     * @param $options array(
+     *      'backupDir'  => string // where to store the backup
+     *      'noTimestamp => bool   // don't append timestamp to backup dir
+     *      'config'     => bool   // backup config
+     *      'db'         => bool   // backup database
+     *      'files'      => bool   // backup files
+     *    )
+     */
+    public function backup($options)
+    {
+        $config = Setup_Core::getConfig();
+
+        $backupDir = isset($options['backupDir']) ? $options['backupDir'] : $config->backupDir;
+        if (! $backupDir) {
+            throw new Exception('backupDir not configured');
+        }
+
+        if (! isset($options['noTimestamp'])) {
+            $backupDir .= '/' . date_create('now', new DateTimeZone('UTC'))->format('Y-m-d-H-i-s');
+        }
+
+        if (!is_dir($backupDir) && !mkdir($backupDir, 0700, true)) {
+            throw new Exception("$backupDir could  not be created");
+        }
+
+        if ($options['config']) {
+            $configFile = stream_resolve_include_path('config.inc.php');
+            $configDir = dirname($configFile);
+
+            $files = file_exists("$configDir/index.php") ? 'config.inc.php' : '.';
+            `cd $configDir; tar cjf $backupDir/tine20_config.tar.bz2 $files`;
+        }
+
+        if ($options['db']) {
+            if (! $this->_backend) {
+                throw new Exception('db not configured, cannot backup');
+            }
+            $this->_backend->backup($backupDir);
+        }
+
+        $filesDir = isset($config->filesdir) ? $config->filesdir : false;
+        if ($options['files'] && $filesDir) {
+            `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
+        }
+    }
+
+    /**
+     * restore
+     *
+     * @param $options array(
+     *      'backupDir'  => string // location of backup to restore
+     *      'config'     => bool   // restore config
+     *      'db'         => bool   // restore database
+     *      'files'      => bool   // restore files
+     *    )
+     *
+     * @param $options
+     * @throws Exception
+     */
+    public function restore($options)
+    {
+        if (! isset($options['backupDir'])) {
+            throw new Exception("you need to specify the backupDir");
+        }
+
+        if ($options['config']) {
+            $configBackupFile = $options['backupDir']. '/tine20_config.tar.bz2';
+            if (! file_exists($configBackupFile)) {
+                throw new Exception("$configBackupFile not found");
+            }
+
+            $configDir = isset($options['configDir']) ? $options['configDir'] : false;
+            if (!$configDir) {
+                $configFile = stream_resolve_include_path('config.inc.php');
+                if (!$configFile) {
+                    throw new Exception("can't detect configDir, please use configDir option");
+                }
+                $configDir = dirname($configFile);
+            }
+
+            `cd $configDir; tar xf $configBackupFile`;
+        }
+
+        Setup_Core::setupConfig();
+        $config = Setup_Core::getConfig();
+
+        if ($options['db']) {
+            $this->_backend->restore($options['backupDir']);
+        }
+
+        $filesDir = isset($config->filesdir) ? $config->filesdir : false;
+        if ($options['files']) {
+            $filesBackupFile = $options['backupDir'] . '/tine20_files.tar.bz2';
+            if (! file_exists($filesBackupFile)) {
+                throw new Exception("$filesBackupFile not found");
+            }
+
+            `cd $filesDir; tar xf $filesBackupFile`;
+        }
     }
 }

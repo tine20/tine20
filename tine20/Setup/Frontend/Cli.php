@@ -76,6 +76,10 @@ class Setup_Frontend_Cli
             $this->_resetDemodata($_opts);
         } elseif(isset($_opts->updateAllImportExportDefinitions)) {
             $this->_updateAllImportExportDefinitions($_opts);
+        } elseif(isset($_opts->backup)) {
+            $this->_backup($_opts);
+        } elseif(isset($_opts->restore)) {
+            $this->_restore($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -697,7 +701,19 @@ class Setup_Frontend_Cli
 
         return $adminRole;
     }
-    
+
+    protected function _backup(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        Setup_Controller::getInstance()->backup($options);
+    }
+
+    protected function _restore(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        Setup_Controller::getInstance()->restore($options);
+    }
+
     /**
      * parse options
      * 
