@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Felamimail
+ * @package     Expressomail
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,7 +13,7 @@
 /**
  * General IMAP Exception
  *
- * @package     Felamimail
+ * @package     Expressomail
  * @subpackage  Exception
  */
 class Expressomail_Exception_IMAPCacheTooMuchResults extends Expressomail_Exception

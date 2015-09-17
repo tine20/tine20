@@ -75,6 +75,11 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
     const CONTENT_TYPE_MULTIPART_REPORT = 'multipart/report';
 
     /**
+     * content type message/delivery-status
+     */
+    const CONTENT_TYPE_MESSAGE_DELIVERYSTATUS = 'message/delivery-status';
+
+    /**
      * content type text/calendar
      */
     const CONTENT_TYPE_CALENDAR = 'text/calendar';
@@ -292,6 +297,16 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
     }
 
     /**
+     * check if message has \DRAFT flag
+     *
+     * @return boolean
+     */
+    public function hasDraftFlag()
+    {
+        return (is_array($this->flags) && in_array(Zend_Mail_Storage::FLAG_DRAFT, $this->flags));
+    }
+
+    /**
      * Send the reading confirmation in a message who has the correct header and is not seen yet
      *
      * @return void
@@ -302,7 +317,12 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
             $this->headers = Expressomail_Controller_Message::getInstance()->getMessageHeaders($this->getId(), NULL, TRUE);
         }
 
-        if (array_key_exists('disposition-notification-to', $this->headers) && $this->headers['disposition-notification-to'] && !$this->hasSeenFlag() && !$this->hasReadFlag() ) {
+        if (array_key_exists('disposition-notification-to', $this->headers)
+            && $this->headers['disposition-notification-to']
+            && !$this->hasSeenFlag() 
+            && !$this->hasReadFlag() 
+            && !$this->hasDraftFlag()
+        ) {
             $translate = Tinebase_Translation::getTranslation($this->_application);
             $from = Expressomail_Controller_Account::getInstance()->get($this->account_id);
 
@@ -683,11 +703,13 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
                 // found the alternative body part
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
             }
-            // If related get message/rfc822 part
-            if ($_structure['subType'] == 'report' &&
-                    array_key_exists(self::CONTENT_TYPE_MESSAGE_RFC822, $foundParts)){
+            // Add CONTENT_TYPE_MESSAGE_RFC822 and CONTENT_TYPE_MESSAGE_DELIVERYSTATUS
+            // parts if Content-Type == message/report
+            if ($_structure['subType'] == 'report') {
                 $result[$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]] =
-                        $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]];
+                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]];
+                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]] =
+                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]];
             }
 
         } else {

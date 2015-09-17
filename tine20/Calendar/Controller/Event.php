@@ -2119,9 +2119,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
 
-        // reset all status but calUser on reschedule
+        // reset all status but calUser on reschedule except resources (Resources might have a configured default value)
         if ($isRescheduled && !$attender->isSame($this->getCalendarUser())) {
-            $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+                $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
+            } else {
+                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
             $attender->transp = null;
         }
 

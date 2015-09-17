@@ -139,7 +139,7 @@ Tine.Tinebase.common = {
         }
 
         window.setTimeout(function(){
-            window.location.reload(window.location, [!! options.clearCache]);
+            window.location.reload(!! options.clearCache);
         }, 500);
     },
 

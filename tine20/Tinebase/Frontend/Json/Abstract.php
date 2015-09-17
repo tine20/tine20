@@ -322,8 +322,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _longRunningRequest($executionTime = 0)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Close session to allow other requests and set max execution time to ' . $executionTime);
+
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime($executionTime);
-        // close session to allow other requests
         Tinebase_Session::writeClose(true);
         
         return $oldMaxExcecutionTime;

@@ -259,6 +259,7 @@ Tine.Expressomail.MessageDisplayDialog = Ext.extend(Tine.Expressomail.GridDetail
      */
     onAfterCompose: function(composedMsg, action, affectedMsgs) {
         this.fireEvent('update', composedMsg, action, affectedMsgs);
+        this.app.mainScreen.GridPanel.onAfterCompose(composedMsg, action, affectedMsgs);
     },
 
     /**

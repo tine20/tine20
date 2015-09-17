@@ -382,7 +382,12 @@ Tine.Tinebase.ApplicationStarter = {
                         if (modelConfig.fields[key].label) {
                             // register grid renderer
                             if (initial) {
-                                var renderer = this.getGridRenderer(modelConfig.fields[key], key, appName, modelName);
+                                try {
+                                    var renderer = this.getGridRenderer(modelConfig.fields[key], key, appName, modelName);
+                                } catch (e) {
+                                    Tine.log.err(e);
+                                    var renderer = null;
+                                }
                                 
                                 if (Ext.isFunction(renderer)) {
                                     if (! Tine.widgets.grid.RendererManager.has(appName, modelName, key)) {

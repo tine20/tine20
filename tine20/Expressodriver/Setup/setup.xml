@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>Expressodriver</name>
+    <version>1.0</version>
+    <order>11</order>
+    <depends>
+        <application>Admin</application>
+    </depends>
+</application>

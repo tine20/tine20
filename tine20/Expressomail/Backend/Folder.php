@@ -440,7 +440,12 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                 $quota = $imap->getQuota($folderDecoded['globalName']);
                 $expressomailSession->quota[$folderDecoded['globalName']] = $quota;
             }else {
-                $globalNameFolder = $arrDecodedFolder[0];
+                if($arrDecodedFolder[0] === 'INBOX' && isset($arrDecodedFolder[1]) && $arrDecodedFolder[1] === 'Arquivo Remoto'){
+                    $globalNameFolder = $arrDecodedFolder[0] . self::IMAPDELIMITER . $arrDecodedFolder[1];
+                }else{
+                    $globalNameFolder = $arrDecodedFolder[0];
+                }
+
                 if ($arrDecodedFolder[0] !== 'INBOX'){
                     $globalNameFolder .= (isset($arrDecodedFolder[1]))?self::IMAPDELIMITER . $arrDecodedFolder[1]:'';
                 }

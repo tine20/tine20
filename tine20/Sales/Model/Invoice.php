@@ -153,7 +153,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'shy' => TRUE,
             ),
             'price_tax' => array(
-                'label' => 'Price Net', // _('Price Tax')
+                'label' => 'Price Tax', // _('Price Tax')
                 'type'  => 'float',
                 'specialType' => 'euMoney',
                 'default' => 0,

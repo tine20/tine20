@@ -454,9 +454,14 @@ class Expressomail_Controller_Message_Send extends Expressomail_Controller_Messa
     protected function _selectSentFolder($_message, $_account)
     {
         if (!(is_null($_message))){
+            $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
             $sendFolder = Expressomail_Controller_Account::getInstance()->getSystemFolder($_message->account_id, Expressomail_Model_Folder::FOLDER_SENT);
             if($_message->sender_account){
-                $this->_sentFolder = 'user/'.$_message->sender_account.substr($sendFolder->globalname, 5);
+                if(isset($imapConfig['useEmailAsLoginName']) && $imapConfig['useEmailAsLoginName'] === '1'){
+                    $this->_sentFolder = 'user/'.str_ireplace('@','/'.$sendFolder->localname.'@', $_message->from_email);
+                }else{
+                    $this->_sentFolder = 'user/'.$_message->sender_account.substr($sendFolder->globalname, 5);
+                }
             }else {
                 $this->_sentFolder = $sendFolder->globalname;
             }
@@ -666,7 +671,7 @@ class Expressomail_Controller_Message_Send extends Expressomail_Controller_Messa
      */
     public function processEmbeddedImagesInHtmlBody($html)
     {
-        //todo find everything in the format <img style="....." alt="'+data.name+'" src="index.php?method=Felamimail.showTempImage&tempImageId='+data.url+'"/>
+        //todo find everything in the format <img style="....." alt="'+data.name+'" src="index.php?method=Expressomail.showTempImage&tempImageId='+data.url+'"/>
         //     create multipart/related parts and replace src with CID:cid
         $expImages = '/<img .?[^>]*?alt="([^\"]+)" src="index.php\?method=Expressomail\.showTempImage&amp;tempImageId=([a-z0-9A-Z]+)"(?: \w+=".+?")*>/i';
         preg_match_all($expImages, $html, $result);
@@ -687,7 +692,7 @@ class Expressomail_Controller_Message_Send extends Expressomail_Controller_Messa
      */
     public function processEmbeddedImagesInHtmlBodyForReply($html)
     {
-   //todo achar tudo no formato <img alt="'+data.name+'" src="index.php?method=Felamimail.showTempImage&tempImageId='+data.url+'"/>, criar as partes multipart/related e substituir o src por CID:cid
+   //todo achar tudo no formato <img alt="'+data.name+'" src="index.php?method=Expressomail.showTempImage&tempImageId='+data.url+'"/>, criar as partes multipart/related e substituir o src por CID:cid
         $exp = "/src=['\"]index.php\?method=Expressomail\.downloadAttachment&amp;messageId=([a-z0-9A-Z]+)&amp;partId=([0-9\.]+)(?:&amp;[^?&\\=;'\"]+=[^?&\\=;'\"]+)*['\"]/i";
        //a-z0-9A-Z. _-
         preg_match_all($exp, $html, $result);

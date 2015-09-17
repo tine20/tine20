@@ -85,25 +85,27 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
     /**
      * get folder status/values from imap server and update folder cache record in database
      *
-     * @param Expressomail_Model_Folder $_folder
-     * @param Expressomail_Backend_Imap|boolean $_imap
+     * @param string $_folderID
      * @return Expressomail_Model_Folder
      *
      * @todo It should'nt access Imap Backend directly. Method should be at Expressomail_Backend_Folder
      */
-    public function getIMAPFolderCounter(Expressomail_Model_Folder $_folder)
+    public function getIMAPFolderCounter($_folderID)
     {
-        $folder = ($_folder instanceof Expressomail_Model_Folder) ? $_folder : Expressomail_Controller_Folder::getInstance()->get($_folder);
-
-        $imap = Expressomail_Backend_ImapFactory::factory($folder->account_id);
-
+        $folderData = Expressomail_Backend_Folder::decodeFolderUid($_folderID);
+        $imap = Expressomail_Backend_ImapFactory::factory($folderData['accountId']);
         // get folder values / status from imap server
-        $counter = $imap->examineFolder(Expressomail_Model_Folder::encodeFolderName($folder->globalname));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  ' ' . print_r($counter, TRUE));
-
+        $counter = $imap->examineFolder($folderData['globalName']);
+        if($counter['recent'] > 0){
+            $imap->selectFolder($folderData['globalName']);
+            $idsInFolder = $imap->sort(array('DATE'), array('RECENT'));
+        }
+        if(Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  ' ' . print_r($counter, TRUE));
+        $folder = new Expressomail_Model_Folder();
         // check validity
-        $folder->cache_uidvalidity = $folder->imap_uidvalidity;
+        $folder->id = $_folderID;
+        $folder->globalname = $folderData['globalName'];
+        $folder->cache_recentcount = $counter['recent'];
         $folder->imap_uidvalidity  = $counter['uidvalidity'];
         $folder->imap_totalcount   = $counter['exists'];
         $folder->imap_status       = Expressomail_Model_Folder::IMAP_STATUS_OK;
@@ -409,7 +411,7 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
      * @param  mixed   $_accountId
      * @param  string  $_folderName global name
      * @param  boolean $_recursive 
-     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * @return Tinebase_Record_RecordSet of Expressomail_Model_Folder
      */
     public function updateFolderCache($_accountId, $_folderName = '', $_recursive = FALSE)
     {
@@ -941,12 +943,15 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
     public function getFolderStatus(Expressomail_Model_FolderFilter $_filter)
     {
 
-        // add user account ids to filter and use the folder backend to search as the folder controller has some special handling in its search function
-        $_filter->createFilter(array('field' => 'account_id', 'operator' => 'in', 'value' => Expressomail_Controller_Account::getInstance()->search()->getArrayOfIds()));
-        $folders = $this->_backend->search($_filter, FALSE);
-
+        $filters = $_filter->getFilterObjects();
+        foreach($filters as $filter) {
+            if($filter->getField() === 'id') {
+                $ids = $filter->getValue();
+                break;
+            }
+        }
         $result = new Tinebase_Record_RecordSet('Expressomail_Model_Folder');
-        foreach ($folders as $folder) {
+        foreach ($ids as $folder) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  ' Checking folder ' . $folder->globalname);
 
             $folder = $this->getIMAPFolderCounter($folder);

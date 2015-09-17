@@ -198,7 +198,6 @@ Tine.Expressomail.setTreeContextMenus = function() {
         handler:function() {
                 if (this.ctxNode) {
                     var window = Tine.Expressomail.ImportEmlDialog.openWindow({
-                        title: String.format(_(this.ctxNode.attributes.globalname)),
                         account: this.ctxNode.attributes.account_id,
                         textName: this.ctxNode.text,
                         folderId: this.ctxNode.attributes.folder_id,

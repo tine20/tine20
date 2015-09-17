@@ -873,14 +873,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $expanded = array();
                 
                 // if a winmail.dat exists, try to expand it
-                if (strtolower($filename) == 'winmail.dat' && Tinebase_Core::systemCommandExists('tnef') && $part['contentType'] == 'application/ms-tnef') {
-                    
-                    $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
-                    
-                    if (! empty($expanded)) {
-                        $attachments = array_merge($attachments, $expanded);
+                if (preg_match('/^winmail[.]*\.dat/i', $filename) && Tinebase_Core::systemCommandExists('tnef')) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Got winmail.dat attachment (contentType=' . $part['contentType'] . '). Trying to extract files ...');
+
+                    if ($part['contentType'] == 'application/ms-tnef' || $part['contentType'] == 'text/plain') {
+                        $expanded = $this->_expandWinMailDat($_messageId, $part['partId']);
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Extracted ' . count($expanded) . ' files from ' . $filename);
+
+                        if (!empty($expanded)) {
+                            $attachments = array_merge($attachments, $expanded);
+                        }
                     }
-                
                 }
                 
                 // if its not a winmail.dat, or the winmail.dat couldn't be expanded 

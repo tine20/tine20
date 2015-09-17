@@ -141,6 +141,19 @@ Tine.Expressomail.ImportEmlDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
     },
             
+    /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+
+        this.window.setTitle(this.app.i18n._('Import msg(eml)'));
+    },
+
     getFormItems: function() {
 
         this.southPanel = new Ext.Panel({

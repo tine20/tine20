@@ -3,7 +3,7 @@
 /**
  * Tine 2.0
  *
- * @package     Felamimail
+ * @package     Expressomail
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>

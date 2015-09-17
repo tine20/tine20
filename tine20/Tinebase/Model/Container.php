@@ -188,7 +188,9 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      */
     public function getOwner()
     {
-        if ($this->type == self::TYPE_SHARED) return NULL;
+        if ($this->type == self::TYPE_SHARED) {
+            return NULL;
+        }
         
         if (! $this->owner_id) {
             // we need to find out who has admin grant

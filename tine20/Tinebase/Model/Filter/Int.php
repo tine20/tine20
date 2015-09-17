@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -19,6 +19,11 @@
  */
 class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
 {
+    /**
+     * @var integer value type to use in zend db where
+     */
+    protected $valueType = Zend_Db::INT_TYPE;
+
     /**
      * @var array list of allowed operators
      */
@@ -77,7 +82,7 @@ class Tinebase_Model_Filter_Int extends Tinebase_Model_Filter_Abstract
                 $_select->where($field . 'IS NULL');
             } else {
                 // finally append query to select object
-                $_select->where($field . $action['sqlop'], $value, Zend_Db::INT_TYPE);
+                $_select->where($field . $action['sqlop'], $value, $this->valueType);
             }
         } else {
             // finally append query to select object

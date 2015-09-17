@@ -174,6 +174,13 @@ class Tinebase_Core
     const TINEBASE_SERVER_PLUGINS = 'Tinebase_Server_Plugins';
 
     /**
+     * name of frontend server class
+     *
+     * @var string
+     */
+    const SERVER_CLASS_NAME = 'serverclassname';
+
+    /**
      * Application Instance Cache
      * @var array
      */
@@ -1088,7 +1095,7 @@ class Tinebase_Core
      * set php execution life (max) time
      *
      * @param int $_seconds
-     * @return int old max exexcution time in seconds
+     * @return int old max execution time in seconds
      */
     public static function setExecutionLifeTime($_seconds)
     {
@@ -1103,8 +1110,8 @@ class Tinebase_Core
                         . $_seconds . ' because of safe mode restrictions. safe_mode = ' . $safeModeSetting);
                 }
             } else {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
+                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
                 }
                 set_time_limit($_seconds);
             }
@@ -1606,9 +1613,50 @@ class Tinebase_Core
     protected static function _getServerPlugins()
     {
         if (empty(self::$_serverPlugins)) {
-           self::$_serverPlugins = self::_searchServerPlugins();
+            self::$_serverPlugins = self::_searchServerPlugins();
         }
-        
+
         return self::$_serverPlugins;
+    }
+
+    /**
+     * returns TRUE if filesystem is available
+     *
+     *  - value is stored in session and registry for caching
+     *
+     * @return boolean
+     */
+    public static function isFilesystemAvailable()
+    {
+        $isFileSystemAvailable = self::get('FILESYSTEM');
+        if ($isFileSystemAvailable === null) {
+            try {
+                $session = Tinebase_Session::getSessionNamespace();
+
+                if (isset($session->filesystemAvailable)) {
+                    $isFileSystemAvailable = $session->filesystemAvailable;
+
+                    self::set('FILESYSTEM', $isFileSystemAvailable);
+                    return $isFileSystemAvailable;
+                }
+            } catch (Zend_Session_Exception $zse) {
+                $session = null;
+            }
+
+            $isFileSystemAvailable = (!empty(Tinebase_Core::getConfig()->filesdir) && is_writeable(Tinebase_Core::getConfig()->filesdir));
+
+            if ($session instanceof Zend_Session_Namespace) {
+                if (Tinebase_Session::isWritable()) {
+                    $session->filesystemAvailable = $isFileSystemAvailable;
+                }
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Filesystem available: ' . ($isFileSystemAvailable ? 'yes' : 'no'));
+
+            self::set('FILESYSTEM', $isFileSystemAvailable);
+        }
+
+        return $isFileSystemAvailable;
     }
 }

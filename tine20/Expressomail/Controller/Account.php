@@ -172,7 +172,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
     {
         Tinebase_Core::setupCache();
         $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Core::createCacheId(array(Tinebase_Core::getUser()->accountId,$_id));
+        $cacheId = Tinebase_Helper::arrayHash(array(Tinebase_Core::getUser()->accountId,$_id));
         $record = $cache->load($cacheId);
         if ($record === FALSE){
             $record = parent::get($_id, $_containerId);

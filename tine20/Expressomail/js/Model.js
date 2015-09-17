@@ -413,6 +413,32 @@ Tine.Expressomail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     },
 
     /**
+     * report message(s) as phishing
+     *
+     * @param   {Ext.data.Record} record
+     * @param  {Array} msgIds
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success {Ext.data.Record}
+     */
+    reportPhishing: function(record, msgIds, options)
+    {
+        var options = options || {};
+        options.params = options.params || {};
+
+        var p = options.params;
+
+        p.method = this.appName + '.reportPhishing';
+        p.recordData = record.data;
+        p.msgIds = msgIds;
+
+        // increase timeout as this can take a longer (5 minutes)
+        options.timeout = 300000;
+
+        return this.doXHTTPRequest(options);
+    },
+
+    /**
      * add given flags to given messages
      *
      * @param  {String/Array} ids

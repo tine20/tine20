@@ -423,6 +423,28 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * report message(s) as phishing
+     *
+     * @param  array $msgIds
+     * @param  array $recordData
+     * @return array
+     */
+    public function reportPhishing($msgIds, $recordData)
+    {
+        $message = new Expressomail_Model_Message();
+        $message->setFromJsonInUsersTimezone($recordData);
+
+        $zipFile = Expressomail_Controller_Message::getInstance()->zipMessages($msgIds);
+
+        $message = Expressomail_Controller_Message::getInstance()->parsePhishingNotification($message, $zipFile);
+
+        $message = Expressomail_Controller_Message_Send::getInstance()->sendMessage($message);
+        $result = $this->_recordToJson($message);
+
+        return $result;
+    }
+
+    /**
      * get draft message data
      *
      * @param  string $id
@@ -875,9 +897,11 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $config = Tinebase_Core::getConfig();
         $result['useKeyEscrow'] = $config->certificate->active && $config->certificate->useKeyEscrow;
 
-        // add autoSaveDraftsInterval to client registry
         $config = Expressomail_Controller::getInstance()->getConfigSettings(false);
+        // add autoSaveDraftsInterval to client registry
         $result['autoSaveDraftsInterval'] = $config->autoSaveDraftsInterval;
+        // add reportPhishingEmail to client registry
+        $result['reportPhishingEmail'] = $config->reportPhishingEmail;
 
         return $result;
     }
