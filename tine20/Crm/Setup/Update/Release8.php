@@ -17,12 +17,14 @@ class Crm_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
-            <name>resubmission_date</name>
-            <type>datetime</type>
-        </field>');
-        
-        $this->_backend->addCol('metacrm_lead', $declaration);
+        if (!$this->_backend->columnExists('resubmission_date', 'metacrm_lead')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>resubmission_date</name>
+                    <type>datetime</type>
+                </field>');
+
+            $this->_backend->addCol('metacrm_lead', $declaration);
+        }
 
         $this->setTableVersion('metacrm_lead', 8);
         
