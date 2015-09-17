@@ -351,6 +351,14 @@
          // Add additional recipients for resources
          if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE
          || ! Calendar_Config::getInstance()->get(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS)) {
+             
+             return true;
+         }
+         
+         $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
+         if ($resource->suppress_notification) {
+             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                     . " Do not send Notifications for this resource: ". $resource->name);
              return true;
          }
 

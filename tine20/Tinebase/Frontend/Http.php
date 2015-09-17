@@ -401,8 +401,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function mainScreen()
     {
         $this->checkAuth();
-
-        $this->_setJsonKeyCookie();
         $this->_renderMainScreen();
     }
     

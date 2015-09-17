@@ -655,7 +655,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     
     // private
     getInput: function() {
-        if (! this.input) {
+        // NOTE: when a file got downloaded via url (CORS/xhr2) we don't have a input here
+        if (! this.input && this.fileSelector && Ext.isFunction(this.fileSelector.detachInputFile)) {
             this.input = this.fileSelector.detachInputFile();
         }
         

@@ -79,6 +79,17 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Is a location'),
                         //boxLabel: this.app.i18n._('Is a location'),
                         name: 'is_location'
+                    }], [
+                        new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                app: 'Calendar',
+                                keyFieldName: 'attendeeStatus',
+                                fieldLabel: this.app.i18n._('Default attendee status'),
+                                name: 'status',
+                                value: 'NEEDS-ACTION'
+                    }), {
+                        xtype: 'checkbox',
+                        fieldLabel: this.app.i18n._('Suppress notification'),
+                        name: 'suppress_notification'
                     }], [{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Description'),

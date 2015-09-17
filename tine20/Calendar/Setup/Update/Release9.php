@@ -36,4 +36,18 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Calendar', '9.2');
     }
+
+    /**
+     * update to 9.3
+     *
+     * @see 0011312: Make resource notification handling and default status configurable
+     */
+    public function update_2()
+    {
+        if ($this->getTableVersion('cal_resources') < 3) {
+            $release8 = new Calendar_Setup_Update_Release8($this->_backend);
+            $release8->update_10();
+        }
+        $this->setApplicationVersion('Calendar', '9.3');
+    }
 }
