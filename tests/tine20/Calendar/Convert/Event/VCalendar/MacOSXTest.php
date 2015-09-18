@@ -116,4 +116,14 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends Calendar_TestCase
         $this->assertEquals(1, count($updateEvent2->exdate), print_r($updateEvent2->toArray(), true));
         $this->assertEquals('2015-04-27 22:00:00', $updateEvent2->rrule_until);
     }
+
+    public function testConvertToTine20ModelYosemiteRecurringAllDayWithUntil()
+    {
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.10.5');
+
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_10.10_birthday02-PUT-quit-old.ics', 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+
+        $this->assertEquals('FREQ=YEARLY;INTERVAL=1;UNTIL=2016-09-17 22:00:00', $event->rrule);
+    }
 }

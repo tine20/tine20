@@ -98,6 +98,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
      */
     protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
     {
+
         $return = parent::_convertVevent($vevent, $event, $options);
 
         // NOTE: 10.7 sometimes uses (internal?) int's
@@ -107,6 +108,15 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
                 Calendar_Model_Event::CLASS_PRIVATE;
         }
 
+        // 10.10 sends UNTIL in wrong timezone for all day events
+        if ($event->is_all_day_event && version_compare($this->_version, '10.10', '>=')) {
+            $event->rrule = preg_replace_callback('/UNTIL=([\d :-]{19})(?=;?)/', function($matches) use ($vevent) {
+                // refetch UNTIL from vevent and drop timepart
+                preg_match('/UNTIL=([\dTZ]+)(?=;?)/', $vevent->RRULE, $matches);
+                $dtUntil = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime(substr($matches[1], 0, 8));
+                return 'UNTIL=' . $dtUntil->format(Tinebase_Record_Abstract::ISO8601LONG);
+            }, $event->rrule);
+        }
         return $return;
     }
 
