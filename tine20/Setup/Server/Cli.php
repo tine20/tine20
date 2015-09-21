@@ -53,7 +53,13 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                          Examples: 
                           setup.php --egw14import /path/to/config.ini',
                 'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
-                'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications'
+                'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications',
+                'backup'                    => 'backup config and data
+                         Examples:
+                           setup.php --backup -- config=1 db=1 files=1 backupDir=/backup/tine20 noTimestamp=1',
+                'restore'                   => 'restore config and data
+                         Examples:
+                           setup.php --restore -- config=1 db=1 files=1 backupDir=/backup/tine20',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -75,7 +81,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->updateAllImportExportDefinitions) &&
             empty($opts->create_admin) && 
             empty($opts->setconfig) && 
-            empty($opts->getconfig))) 
+            empty($opts->backup) &&
+            empty($opts->restore) &&
+            empty($opts->getconfig)))
         {
             echo $opts->getUsageMessage();
             exit;
