@@ -320,4 +320,67 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $this->_db->query("SET FOREIGN_KEY_CHECKS=" . $_value);
         }
     }
+
+    /**
+     * Backup Database
+     *
+     * @param $backupDir
+     */
+    public function backup($backupDir)
+    {
+        // hide password from shell via my.cnf
+        $mycnf = $backupDir . '/my.cnf';
+        $this->_createMyConf($mycnf, $this->_config->database);
+
+        $cmd = "mysqldump --defaults-extra-file=$mycnf "
+              ."--single-transaction "
+              ."--opt "
+              . escapeshellarg($this->_config->database->dbname)
+              ." | bzip2 > $backupDir/tine20_mysql.sql.bz2";
+
+        exec($cmd);
+        unlink($mycnf);
+    }
+
+    /**
+     * Restore Database
+     *
+     * @param $backupDir
+     */
+    public function restore($backupDir)
+    {
+        $mysqlBackupFile = $backupDir . '/tine20_mysql.sql.bz2';
+        if (! file_exists($mysqlBackupFile)) {
+            throw new Exception("$mysqlBackupFile not found");
+        }
+
+        // hide password from shell via my.cnf
+        $mycnf = $backupDir . '/my.cnf';
+        $this->_createMyConf($mycnf, $this->_config->database);
+
+        $cmd = "bzcat $mysqlBackupFile"
+             . " | mysql --defaults-extra-file=$mycnf "
+             . escapeshellarg($this->_config->database->dbname);
+
+        exec($cmd);
+        unlink($mycnf);
+    }
+
+    /**
+     * create my.cnf
+     *
+     * @param $path
+     * @param $config
+     */
+    protected function _createMyConf($path, $config)
+    {
+        $mycnfData = <<<EOT
+[client]
+host = {$config->host}
+port = {$config->port}
+user = {$config->username}
+password = {$config->password}
+EOT;
+        file_put_contents($path, $mycnfData);
+    }
 }
