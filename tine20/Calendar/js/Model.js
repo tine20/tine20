@@ -176,15 +176,22 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         container = westPanel.getContainerTreePanel().getDefaultContainer(),
         organizer = (defaultAttendeeStrategy != 'me' && container.ownerContact) ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
+        makeEventsPrivate = prefs.get('defaultSetEventsToPrivat'),
+        eventClass = null;
         period = centerPanel.getCalendarPanel(centerPanel.activeView).getView().getPeriod();
         
     // if dtstart is out of current period, take start of current period
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
     }
-    
+
+    if (makeEventsPrivate == 1) {
+        eventClass =  'PRIVATE';
+    }
+
     var data = {
         summary: '',
+        class: eventClass,
         dtstart: dtstart,
         dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
         container_id: container,
