@@ -136,18 +136,26 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     initGridPanelHooks: function() {
         var adbHook = new Tine.Felamimail.GridPanelHook({
             app: this,
-            foreignAppName: 'Addressbook'
+            foreignAppName: 'Addressbook',
+            modelName: 'Contact'
+        });
+        var adbHook = new Tine.Felamimail.GridPanelHook({
+            app: this,
+            foreignAppName: 'Addressbook',
+            modelName: 'List'
         });
         var crmHook = new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Crm',
             contactInRelation: true,
             relationType: 'CUSTOMER',
+            modelName: 'Lead',
             subjectField: 'lead_name'
         });
         var calHook = new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Calendar',
+            modelName: 'Event',
             subjectField: 'summary',
             addMailFromRecord: function(mailAddresses, record) {
                 Ext.each(record.get('attendee'), function(attender) {

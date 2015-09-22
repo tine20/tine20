@@ -35,24 +35,46 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     
     /**
      * @private
+     */ 
+    valueIsList: false,
+
+    /**
+     * @private
      */
     initComponent: function() {
+        // Search Lists and Contacts
+        this.recordClass = Tine.Addressbook.Model.EmailAddress;
+        this.recordProxy = Tine.Addressbook.emailAddressBackend;
+
         // add additional filter to show only contacts with email addresses
         this.additionalFilters = [{field: 'email_query', operator: 'contains', value: '@' }];
         
         this.tpl = new Ext.XTemplate(
             '<tpl for="."><div class="search-item">',
                 '{[this.encode(values.n_fileas)]}',
-                ' (<b>{[this.encode(values.email, values.email_home)]}</b>)',
+                ' (<b>{[this.shorten(this.encode(values.email, values.email_home, values.emails))]}</b>)',
             '</div></tpl>',
             {
-                encode: function(email, email_home) {
+                encode: function(email, email_home, emails) {
                     if (email) {
                         return Ext.util.Format.htmlEncode(email);
                     } else if (email_home) {
                         return Ext.util.Format.htmlEncode(email_home);
+                    } else if (emails) {
+                        return Ext.util.Format.htmlEncode(emails);
                     } else {
                         return '';
+                    }
+                },
+                shorten: function(text) {
+                    if (text) {
+                        if (text.length < 50) {
+                            return text;
+                        } else {
+                            return text.substr(0,50) + "...";
+                        }
+                    } else {
+                        return "";
                     }
                 }
             }
@@ -71,8 +93,14 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @private
      */
     onSelect: function(record, index) {
-        var value = Tine.Felamimail.getEmailStringFromContact(record);
-        this.setValue(value);
+        if (!record.get("emails")) {
+            var value = Tine.Felamimail.getEmailStringFromContact(record);
+            this.setValue(value);
+            this.valueIsList = false;
+        } else {
+            this.setValue(record.get("emails"));
+            this.valueIsList = true;
+        }
         
         this.collapse();
         this.fireEvent('blur', this);
@@ -87,6 +115,23 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     getValue: function() {
         return this.getRawValue();
     },
+
+    /** 
+     * @return bool
+     */
+    getValueIsList: function() {
+        return this.valueIsList;
+    },
+
+    /**
+     * always set valueIsList to false
+     *
+     * @param String value
+     */
+    setValue: function(value) {
+       this.valueIsList = false;
+       Tine.Felamimail.ContactSearchCombo.superclass.setValue.call(this, value); 
+    }, 
     
     /**
      * on load handler of combo store

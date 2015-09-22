@@ -37,10 +37,36 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
     
     /**
-     * (non-PHPdoc)
+     * FEATURE_LIST_VIEW 
+     *
+     * @var string
+     */
+    const FEATURE_LIST_VIEW = 'featureListView';
+
+    /**
+     * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::ENABLED_FEATURES => array(
+           //_('Enabled Features')
+           'label'                 => 'Enabled Features',
+           //_('Enabled Features in Calendar Application.')
+           'description'           => 'Enabled Features in Addressbook Application.',
+           'type'                  => 'object',
+           'class'                 => 'Tinebase_Config_Struct',
+           'clientRegistryInclude' => TRUE,
+           'content'               => array(
+               self::FEATURE_LIST_VIEW => array(
+                   'label'         => 'Addressbook List View', //_('Calendar Split View')
+                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Split day and week views by attendee)
+               ),
+           ),
+           'default'               => array(
+               self::FEATURE_LIST_VIEW => false,
+           ),
+        ),
+
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')
             'label'                 => 'Contact duplicate check fields',

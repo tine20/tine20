@@ -44,6 +44,22 @@
           "path": "js/"
         },
         {
+          "text": "ListGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListGridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListMemberGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "SearchCombo.js",
           "path": "js/"
         },
