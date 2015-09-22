@@ -176,7 +176,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                     hideLabel: true,
                     anchor: '100%',
                     name: 'contact',
-                    value: this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress
+                    value: (this.currentAccount) ? this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress : 'unknown'
                 }]
             }, {
                 xtype: 'panel',

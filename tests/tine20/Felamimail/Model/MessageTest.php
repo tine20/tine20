@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -108,13 +108,19 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
      * 
      * @see 0008020: link did not get an anchor in html mail
      */
-    public function testReplaceUris()
+    public function testReplaceUrisAndMails()
     {
         $message = new Felamimail_Model_Message(array(
             'body'  =>  'http://www.facebook.com/media/set/?set=a.164136103742229.1073741825.100004375207149&type=1&l=692e495b17'
+                . " Klicken Sie bitte noch auf den folgenden Link, um Ihre Teilnahme zu bestätigen:\n"
+                . 'http://www.kieler-linuxtage.de/vortragsplaner/wsAnmeldung.php?fkt=best&wsID=111&code=xxxx&eMail=abc@efh.com'
         ));
         
         $result = Felamimail_Message::replaceUris($message->body);
-        $this->assertContains('a href=', $result);
+        $result = Felamimail_Message::replaceEmails($result);
+
+        $this->assertContains('a href="http://www.facebook.com/media/set/', $result);
+        $this->assertContains('a href="http://www.kieler-linuxtage.de/', $result);
+        $this->assertContains('eMail=abc@efh.com', $result);
     }
 }

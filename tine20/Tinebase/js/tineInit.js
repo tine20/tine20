@@ -320,9 +320,13 @@ Tine.Tinebase.tineInit = {
 
             var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY')) {
-                jsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY');
+                var cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY');
                 Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear('TINE20JSONKEY');
-                Tine.Tinebase.registry.set('jsonKey', jsonKey);
+                // NOTE cookie reset is not always working in IE, so we need to check jsonKey again
+                if (cookieJsonKey && cookieJsonKey != "null") {
+                    jsonKey = cookieJsonKey;
+                    Tine.Tinebase.registry.set('jsonKey', jsonKey);
+                }
             }
 
             options.headers = options.headers || {};
