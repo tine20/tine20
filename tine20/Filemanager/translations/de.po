@@ -132,8 +132,8 @@ msgstr "Hochladen fehlgeschlagen"
 #: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
-msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
+"Administrator."
+msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator."
 
 #: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
 msgid "Putting files in this folder is not allowed!"
