@@ -31,12 +31,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * @var string
      */
     protected $_modelName = 'Addressbook_Model_List';
-
-    
-    /**
-     * @todo why is this needed???
-     */
-    protected $_omitModLog = true;
     
     /**
      * the constructor

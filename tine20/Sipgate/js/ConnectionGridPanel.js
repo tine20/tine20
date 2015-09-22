@@ -142,7 +142,7 @@ Tine.Sipgate.ConnectionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 items: items,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-GridPanel-ContextMenu'
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
                 }]
             });
             

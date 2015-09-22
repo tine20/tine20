@@ -35,12 +35,13 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Only query visible lists.');
             
-            $_select->join(
+            $_select->joinLeft(
                 /* table  */ array('groupvisibility' => $db->table_prefix . 'groups'), 
                 /* on     */ $db->quoteIdentifier('groupvisibility.list_id') . ' = ' . $db->quoteIdentifier('addressbook_lists.id'),
                 /* select */ array()
             );
             $_select->where($db->quoteIdentifier('groupvisibility.visibility').' = ?', 'displayed');
+            $_select->orWhere($db->quoteIdentifier('groupvisibility.visibility').' IS NULL');
         }
     }
 }

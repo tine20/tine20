@@ -110,7 +110,7 @@ Tine.Phone.CallGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     xtype: 'buttongroup',
                     plugins: [{
                         ptype: 'ux.itemregistry',
-                        key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
+                        key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ActionToolbar-leftbtngrp'
                     }],
                     items: [
                         Ext.apply(new Ext.Button(this.action_editPhoneSettings), {
