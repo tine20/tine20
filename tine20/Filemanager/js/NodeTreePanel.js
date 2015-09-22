@@ -690,7 +690,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
     onUploadFail: function () {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + Tine.Tinebase.registry.get('maxFileUploadSize')
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator.')
         ).setIcon(Ext.MessageBox.ERROR);
     },
     

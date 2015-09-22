@@ -235,15 +235,16 @@ class Felamimail_Message extends Zend_Mail_Message
      *
      * @param string $_content
      * @return string
-     * 
-     * @todo try to skip email address that are already embedded in an url (such as unsubscription links with ?email=blabla@aha.com) 
      */
     public static function replaceEmails($_content) 
     {
         // add anchor to email addresses (remove mailto hrefs first)
         $mailtoPattern = '/<a[="a-z\-0-9 ]*href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*<\/a>/iU';
         $result = preg_replace($mailtoPattern, "\\1", $_content);
-        $result = preg_replace(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
+        $emailRegex = Tinebase_Mail::EMAIL_ADDRESS_REGEXP;
+        // don't match emails with '=' as used in subscription uris (?email=blabla@aha.com)
+        $emailRegex = str_replace('/(', '/^=(', $emailRegex);
+        $result = preg_replace($emailRegex, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);
         
         return $result;
     }

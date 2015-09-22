@@ -126,4 +126,14 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends Calendar_TestCase
 
         $this->assertCount(2, $event->attendee, 'CHAIR should be skipped, Attendee should be recognised');
     }
+
+    public function testConvertToTine20ModelYosemiteRecurringAllDayWithUntil()
+    {
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.10.5');
+
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_10.10_birthday02-PUT-quit-old.ics', 'r');
+        $event = $converter->toTine20Model($vcalendarStream);
+
+        $this->assertEquals('FREQ=YEARLY;INTERVAL=1;UNTIL=2016-09-17 22:00:00', $event->rrule);
+    }
 }
