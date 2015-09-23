@@ -229,8 +229,13 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Addressbook.ContactGridPanel.superclass.initActions.call(this);
     },
 
+    /**
+     * get default / selected addressbook container
+     *
+     * @returns {Object|Tine.Tinebase.Model.Container}
+     */
     getDefaultContainer: function() {
-        this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook');
+        return this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook');
     },
     
     /**
