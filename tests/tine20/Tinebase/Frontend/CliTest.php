@@ -208,6 +208,9 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testTriggerAsyncEvents()
     {
+        // TODO remove DB locks after each run of triggerAsyncEvents in tests
+        $this->markTestSkipped('test is currently flaky.');
+
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
         $this->_usernamesToDelete[] = 'cronuser';
