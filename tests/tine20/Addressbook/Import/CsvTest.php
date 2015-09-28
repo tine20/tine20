@@ -20,18 +20,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     protected $_modelName = 'Addressbook_Model_Contact';
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Csv Import Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -108,7 +96,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             }
         }
         
-        $this->assertTrue($found);
+        $this->assertTrue($found, 'did not find user record in import exceptions: ' . print_r($result['exceptions']->toArray(), true));
     }
 
     /**
@@ -352,5 +340,21 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->assertEquals('Weixdorf DD', $result['results'][0]['adr_one_locality'], 'locality should persist');
         $this->assertEquals('Gartencenter Röhr & Vater', $result['results'][4]['n_fileas']);
         $this->assertEquals('Straßback', $result['results'][5]['adr_one_locality']);
+    }
+
+    public function testSplitField()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_split.xml');
+
+        $this->_filename = dirname(__FILE__) . '/files/import_split.csv';
+        $this->_deleteImportFile = FALSE;
+
+        $result = $this->_doImport(array('dryrun' => true), $definition);
+
+        $this->assertEquals(1, $result['totalcount'], print_r($result, true));
+        $importedRecord = $result['results']->getFirstRecord();
+
+        $this->assertEquals('21222', $importedRecord->adr_one_postalcode, print_r($importedRecord->toArray(), true));
+        $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
     }
 }
