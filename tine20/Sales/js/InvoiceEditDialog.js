@@ -175,9 +175,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onAddressLoad: function(combo, record) {
         if (Ext.isEmpty(this.record.get('number'))) {
-            var ba = record ? record : new Tine.Sales.Model.Address(this.record.get('address_id'));
-            if (ba) {
-                this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(ba));
+            var billingAddress = record;
+            if (! billingAddress && this.record.get('address_id')) {
+                billingAddress = new Tine.Sales.Model.Address(this.record.get('address_id'));
+            }
+            if (billingAddress) {
+                var companyName = this.record.get('customer') ? this.record.get('customer').name : null;
+                this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(billingAddress, companyName));
             }
         }
     },
@@ -226,7 +230,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         }
-        
+
+        // set description to contract title if empty
+        var descriptionField = this.getForm().findField('description');
+        if (descriptionField.getValue() == '') {
+            descriptionField.setValue(record.get('title'));
+        }
+
         if (foundCustomer) {
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
@@ -250,6 +260,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ];
             
             this.getForm().findField('credit_term').setValue(foundCustomer.credit_term);
+
         } else {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
