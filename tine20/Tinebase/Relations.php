@@ -391,6 +391,10 @@ class Tinebase_Relations
         }
         
         foreach ($_relations as $relation) {
+            if (! is_string($relation->related_model)) {
+                throw new Tinebase_Exception_InvalidArgument('missing relation model');
+            }
+
             if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
                 continue;
             }

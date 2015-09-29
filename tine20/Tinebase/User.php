@@ -237,10 +237,10 @@ class Tinebase_User
             default:
                 throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
         }
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Created user backend of type ' . $backendType);
-        
+            . ' Created user backend of type ' . get_class($result));
+
         return $result;
     }
     
@@ -508,14 +508,13 @@ class Tinebase_User
         
         self::syncContactData($syncedUser, $options);
         
-        // sync group memberships
         Tinebase_Group::syncMemberships($syncedUser);
-        
+
         return $syncedUser;
     }
-    
+
     /**
-     * import contactdata(phone, address, fax, birthday. photo)
+     * import contact data(phone, address, fax, birthday. photo)
      * 
      * @param Tinebase_Model_FullUser $syncedUser
      * @param array $options
@@ -571,6 +570,7 @@ class Tinebase_User
         } catch (Addressbook_Exception_NotFound $aenf) {
             self::createContactForSyncedUser($syncedUser);
             $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
+
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ' Contact information seems to be missing in sync backend');
@@ -731,10 +731,8 @@ class Tinebase_User
             self::_syncDeletedUsers($users);
         }
         
-        // @todo this should be improved: only the cache of synced users + group memberships should be cleaned
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Finished synchronizing users. Clearing cache after user sync ...');
-        Tinebase_Core::getCache()->clean();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Finished synchronizing users.');
     }
 
     /**

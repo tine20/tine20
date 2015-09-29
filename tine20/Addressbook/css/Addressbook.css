@@ -38,3 +38,8 @@
     background-repeat: no-repeat;
     background-position: 2px 2px;
 }
+
+.renderer_displayNameRenderer_noName {
+    font-style: italic;
+    /*color: #808080;*/
+}

@@ -419,51 +419,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     },
 
     /**
-     * checks if form data is valid
-     *
-     * @return {Boolean}
-     */
-    isValid: function () {
-        var form = this.getForm();
-        var isValid = true;
-
-        // you need to fill in one of: n_given n_family org_name
-        // @todo required fields should depend on salutation ('company' -> org_name, etc.)
-        //       and not required fields should be disabled (n_given, n_family, etc.)
-        if (form.findField('n_family').getValue() === '' && form.findField('org_name').getValue() === '') {
-            var invalidString = String.format(this.app.i18n._('Either {0} or {1} must be given'), this.app.i18n._('Last Name'), this.app.i18n._('Company'));
-
-            form.findField('n_family').markInvalid(invalidString);
-            form.findField('org_name').markInvalid(invalidString);
-
-            isValid = false;
-        }
-        else {
-            form.findField('n_family').clearInvalid();
-            form.findField('org_name').clearInvalid();
-        }
-
-        return isValid && Tine.Addressbook.ContactEditDialog.superclass.isValid.apply(this, arguments);
-    },
-
-    /**
-     * overwrites the isValid method on multipleEdit
-     */
-    isMultipleValid: function() {
-        var isValid = true;
-        if (((this.getForm().findField('n_family').getValue() === '') && (this.getForm().findField('n_family').edited))
-            && ((this.getForm().findField('org_name').getValue() === '') && (this.getForm().findField('org_name').edited))) {
-            var invalidString = String.format(this.app.i18n._('Either {0} or {1} must be given'), this.app.i18n._('Last Name'), this.app.i18n._('Company'));
-            this.getForm().findField('n_family').markInvalid(invalidString);
-            this.getForm().findField('org_name').markInvalid(invalidString);
-
-            isValid = false;
-        }
-
-        return isValid;
-    },
-
-    /**
      * export pdf handler
      */
     onExportContact: function () {

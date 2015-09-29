@@ -175,8 +175,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_family'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_fileas'              => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'n_fn'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'n_fileas'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_fn'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -347,50 +347,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         
         parent::__set($_name, $_value);
     }
-
-    /**
-     * additional validation
-     *
-     * @param $_throwExceptionOnInvalidData
-     * @return bool
-     * @throws Tinebase_Exception_Record_Validation
-     * @see Tinebase_Record_Abstract::isValid()
-     */
-    function isValid($_throwExceptionOnInvalidData = false) {
-        
-        if ((!$this->__get('org_name')) && (!$this->__get('n_family'))) {
-            array_push($this->_validationErrors, array('id' => 'org_name', 'msg' => 'either "org_name" or "n_family" must be given!'));
-            array_push($this->_validationErrors, array('id' => 'n_family', 'msg' => 'either "org_name" or "n_family" must be given!'));
-            
-            $valid = false;
-        } else {
-            $valid = true;
-        }
-        
-        $parentException = false;
-        $parentValid = false;
-        
-        try {
-            $parentValid = parent::isValid($_throwExceptionOnInvalidData);
-        } catch (Tinebase_Exception_Record_Validation $e) {
-            $parentException = $e;
-        }
-        
-        if ($_throwExceptionOnInvalidData && (!$valid || !$parentValid)) {
-
-            $message = (!$valid) ? 'either "org_name" or "n_family" must be given!' : '';
-            if ($parentException) {
-                $message .= ', ' . $parentException->getMessage();
-            }
-            $e = new Tinebase_Exception_Record_Validation($message);
-            if (!$valid) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ":\n" . print_r($this->_validationErrors, true) . $e);
-            }
-            throw $e;
-        }
-        
-        return $parentValid && $valid;
-    }    
 
     /**
      * fills a contact from json data

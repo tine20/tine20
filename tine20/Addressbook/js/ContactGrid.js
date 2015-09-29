@@ -112,8 +112,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { id: 'n_middle', header: this.app.i18n._('Middle Name'), dataIndex: 'n_middle', width: 80 },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
             { id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80 },
-            { id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn' },
-            { id: 'n_fileas', header: this.app.i18n._('Display Name'), dataIndex: 'n_fileas', hidden: false},
+            { id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn', renderer: this.displayNameRenderer },
+            { id: 'n_fileas', header: this.app.i18n._('Display Name'), dataIndex: 'n_fileas', hidden: false, renderer: this.displayNameRenderer},
             { id: 'org_name', header: this.app.i18n._('Company'), dataIndex: 'org_name', width: 120, hidden: false },
             { id: 'org_unit', header: this.app.i18n._('Unit'), dataIndex: 'org_unit'  },
             { id: 'title', header: this.app.i18n._('Job Title'), dataIndex: 'title' },
@@ -286,7 +286,12 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
     },
-    
+
+    displayNameRenderer: function(data) {
+        var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+        return data ? data : ('<div class="renderer_displayNameRenderer_noName">' + i18n._('No name') + '</div>');
+    },
+
     /**
      * returns details panel
      * 
