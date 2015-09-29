@@ -79,7 +79,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * the mailer
      * 
-     * @var Zend_Mail_Transport_Array
+     * @var Zend_Mail_Transport_Abstract
      */
     protected static $_mailer = null;
 
