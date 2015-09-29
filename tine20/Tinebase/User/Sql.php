@@ -974,6 +974,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         } else {
             $user = $this->getFullUserById($_userId);
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting user' . $user->accountLoginName);
         
         $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
@@ -1015,7 +1018,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function deleteUsers(array $_accountIds)
     {
-        foreach ( $_accountIds as $accountId ) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting ' . count($_accountIds) .' users');
+
+        foreach ($_accountIds as $accountId) {
             $this->deleteUser($accountId);
         }
     }

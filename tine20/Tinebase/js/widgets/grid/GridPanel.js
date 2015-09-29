@@ -1036,7 +1036,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             appName: this.app.appName,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: Ext.isFunction(this.getDefaultContainer)
-                ? this.getDefaultContainer
+                ? this.getDefaultContainer()
                 : this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
             // update grid after import
             listeners: {

@@ -605,7 +605,7 @@ class Tinebase_ModelConfiguration {
      */
     protected $_filterModelMapping = array(
         'date'     => 'Tinebase_Model_Filter_Date',
-        'datetime' => 'Tinebase_Model_Filter_Date',
+        'datetime' => 'Tinebase_Model_Filter_DateTime',
         'time'     => 'Tinebase_Model_Filter_Date',
         'string'   => 'Tinebase_Model_Filter_Text',
         'text'     => 'Tinebase_Model_Filter_Text',

@@ -2125,12 +2125,55 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     }
 
     /**
+     * update payment methods
+     */
+    public function update_31()
+    {
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
+
+        $idToDelete = $cb->search( new Tinebase_Model_ConfigFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $appId),
+            array('field' => 'name', 'operator' => 'equals', 'value' => Sales_Config::PAYMENT_METHODS),
+        ), 'AND'), null, true );
+
+        if (isset($idToDelete[0])) {
+            $cb->delete($idToDelete[0]);
+        }
+
+        // create payment types config
+        $tc = array(
+            'name'    => Sales_Config::PAYMENT_METHODS,
+            'records' => array(
+                array('id' => 'BANK TRANSFER', 'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
+                array('id' => 'DIRECT DEBIT',  'value' => 'Direct debit',  'system' => true),  // _('Direct debit')
+                array('id' => 'CANCELLATION',  'value' => 'Cancellation',  'system' => true),  // _('Cancellation')
+                array('id' => 'CREDIT',  'value' => 'Credit',  'system' => true),  // _('Credit')
+                array('id' => 'CREDIT CARD',  'value' => 'Credit card',  'system' => true),  // _('Credit card')
+                array('id' => 'PAYPAL',  'value' => 'Paypal',  'system' => true),  // _('Paypal')
+            ),
+        );
+
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id' => $appId,
+            'name'           => Sales_Config::PAYMENT_METHODS,
+            'value'          => json_encode($tc),
+        )));
+
+        $this->setApplicationVersion('Sales', '8.32');
+    }
+
+    /**
      * update to 9.0
      *
      * @return void
      */
-    public function update_31()
+    public function update_32()
     {
         $this->setApplicationVersion('Sales', '9.0');
+
     }
 }

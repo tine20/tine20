@@ -351,7 +351,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             
             $pagination = new Tinebase_Model_Pagination(array('limit' => 1));
             $filter = $this->_getBillableTimesheetsFilter($enddate !== null ? $enddate : $date, $contract);
-            
+
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Use filter in "isBillable"-Method of Timetracker_Model_Timeaccount: '
