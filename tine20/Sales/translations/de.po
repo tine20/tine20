@@ -1337,9 +1337,6 @@ msgstr "Gesamtpreis"
 msgid "Cancellation"
 msgstr "Storno"
 
-msgid "Credit"
-msgstr "Gutschrift"
-
 msgid "Credit card"
 msgstr "Kreditkarte"
 
