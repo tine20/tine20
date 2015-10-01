@@ -75,7 +75,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         //var_dump($principal);
         
         $this->assertEquals(Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS . '/' . $list->list_id, $principal['uri']);
-        $this->assertEquals($list->name . ' (Group)', $principal['{DAV:}displayname']);
+        $this->assertEquals($list->name . ' ('. Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')', $principal['{DAV:}displayname']);
     }
     
     public function testGetPrincipalByUserPath()

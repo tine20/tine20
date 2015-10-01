@@ -19,6 +19,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
 {
     const PREFIX_USERS  = 'principals/users';
     const PREFIX_GROUPS = 'principals/groups';
+    const PREFIX_INTELLIGROUPS = 'principals/intelligroups';
     const SHARED        = 'shared';
     
     /**
@@ -31,6 +32,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         switch ($prefixPath) {
             case self::PREFIX_GROUPS:
+            case self::PREFIX_INTELLIGROUPS:
                 $filter = new Addressbook_Model_ListFilter(array(
                     array(
                         'field'     => 'type',
@@ -42,7 +44,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 $lists = Addressbook_Controller_List::getInstance()->search($filter);
                 
                 foreach ($lists as $list) {
-                    $principals[] = $this->_listToPrincipal($list);
+                    $principals[] = $this->_listToPrincipal($list, $prefixPath);
                 }
                 
                 break;
@@ -119,6 +121,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 break;
                 
             case self::PREFIX_GROUPS:
+            case self::PREFIX_INTELLIGROUPS:
                 $filter = new Addressbook_Model_ListFilter(array(
                     array(
                         'field'     => 'type',
@@ -140,7 +143,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     return null;
                 }
                 
-                $principal = $this->_listToPrincipal($list);
+                $principal = $this->_listToPrincipal($list, $prefix);
                 
                 break;
                 
@@ -282,6 +285,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 break;
                 
             case self::PREFIX_GROUPS:
+            case self::PREFIX_INTELLIGROUPS:
                 $filter = new Addressbook_Model_ListFilter(array(
                     array(
                         'field'     => 'type',
@@ -434,6 +438,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         switch ($prefixPath) {
             case self::PREFIX_GROUPS:
+            case self::PREFIX_INTELLIGROUPS:
                 $filter = new Addressbook_Model_ListFilter(array(
                     array(
                         'field'     => 'type',
@@ -637,22 +642,30 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
      * convert list model to principal array
      * 
      * @param Addressbook_Model_List $list
+     * @param string $prefix
      * @return array
      */
-    protected function _listToPrincipal(Addressbook_Model_List $list)
+    protected function _listToPrincipal(Addressbook_Model_List $list, $prefix)
     {
+        $calUserType = $prefix == self::PREFIX_INTELLIGROUPS ? 'INTELLIGROUP' : 'GROUP';
+
         $principal = array(
-            'uri'                     => self::PREFIX_GROUPS . '/' . $list->getId(),
-            '{DAV:}displayname'       => $list->name . ' (Group)',
-            '{DAV:}alternate-URI-set' => array('urn:uuid:' . $list->getId()),
+            'uri'                     => $prefix . '/' . $list->getId(),
+            '{DAV:}displayname'       => $list->name . ' (' . $translation = Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')',
+            '{DAV:}alternate-URI-set' => array('urn:uuid:' . $prefix . '/' . $list->getId()),
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'GROUP',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
             
             '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => 'Group',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
             '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $list->name,
         );
-        
+
+        if ($calUserType == 'INTELLIGROUP') {
+            // OSX needs an email adress to send the attendee
+            $principal['{http://sabredav.org/ns}email-address'] = 'urn:uuid:' . $prefix . '/' . $list->getId();
+        }
+
         return $principal;
     }
 }

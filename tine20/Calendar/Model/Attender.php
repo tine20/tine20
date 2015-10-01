@@ -220,7 +220,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 break;
             case self::USERTYPE_GROUP:
             case self::USERTYPE_RESOURCE:
-                return $resolvedUser->name ?: $resolvedUser->n_fileas;
+                $translation = Tinebase_Translation::getTranslation('Calendar');
+                $name = $resolvedUser->name ?: $resolvedUser->n_fileas;
+                if ($this->user_type == self::USERTYPE_GROUP) {
+                    $name . ' (' . $translation->_('Group') . ')';
+                }
+                return $name;
                 break;
             default:
                 throw new Exception("type " . $this->user_type . " not yet supported");
@@ -323,8 +328,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public static function emailsToAttendee(Calendar_Model_Event $_event, $_emails, $_implicitAddMissingContacts = TRUE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " list of new attendees " . print_r($_emails, true));
         
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             $_event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
@@ -393,14 +398,22 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
+                // list from groupmember expand
+                if ( ! $attendeeId &&
+                    preg_match('#^urn:uuid:principals/intelligroups/([a-z0-9]+)#', $newAttendee['email'], $matches)
+                ) {
+                    $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
+                    $attendeeId = $matches[1];
+                }
+
                 // does a contact with this email address exist?
-                if ($contact = self::resolveEmailToContact($newAttendee, false)) {
+                if (! $attendeeId && $contact = self::resolveEmailToContact($newAttendee, false)) {
                     $attendeeId = $contact->getId();
                     
                 }
                 
                 // does a resouce with this email address exist?
-                if ( ! $attendeeId) {
+                if (! $attendeeId) {
                     $resources = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
                         array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
                     )));
@@ -428,8 +441,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
                         $attendeeId = $lists->getFirstRecord()->group_id;
                     }
-                } 
-                
+                }
+
                 if (! $attendeeId) {
                     // autocreate a contact if allowed
                     $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
@@ -437,6 +450,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         $attendeeId = $contact->getId();
                     }
                 }
+
             } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                     array('field' => 'name',       'operator' => 'equals', 'value' => $newAttendee['displayName']),
@@ -450,7 +464,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $attendeeId = $lists->getFirstRecord()->group_id;
                 }
             }
-            
+
             if ($attendeeId !== NULL) {
                 // finally add to attendee
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
