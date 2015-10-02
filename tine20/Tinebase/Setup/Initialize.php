@@ -19,6 +19,18 @@
 class Tinebase_Setup_Initialize extends Setup_Initialize
 {
     /**
+     * array with user role rights, overwrite this in your app to add more rights to user role
+     *
+     * @var array
+     */
+    protected $_userRoleRights = array(
+        Tinebase_Acl_Rights::RUN,
+        Tinebase_Acl_Rights::REPORT_BUGS,
+        Tinebase_Acl_Rights::MANAGE_OWN_STATE,
+        Tinebase_Acl_Rights::MANAGE_OWN_PROFILE,
+    );
+
+    /**
      * Override method: Tinebase needs additional initialisation
      *
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
@@ -126,35 +138,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         } else {
             Tinebase_Group::createInitialGroups();
         }
-    }
-
-    /**
-     * Override method because this app requires special rights
-     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
-     *
-     * @todo make hard coded role name ('user role') configurable
-     */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
-    {
-        parent::_createInitialRights($_application);
-
-        $roles = Tinebase_Acl_Roles::getInstance();
-        $userRole = $roles->getRoleByName('user role');
-        $roles->addSingleRight(
-            $userRole->getId(),
-            $_application->getId(),
-            Tinebase_Acl_Rights::CHECK_VERSION
-        );
-        $roles->addSingleRight(
-            $userRole->getId(),
-            $_application->getId(),
-            Tinebase_Acl_Rights::REPORT_BUGS
-        );
-        $roles->addSingleRight(
-            $userRole->getId(),
-            $_application->getId(),
-            Tinebase_Acl_Rights::MANAGE_OWN_STATE
-        );
     }
 
     /**
