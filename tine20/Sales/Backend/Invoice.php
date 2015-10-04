@@ -56,16 +56,16 @@ class Sales_Backend_Invoice extends Tinebase_Backend_Sql_Abstract
         $select = $this->getAdapter()->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array($this->_tableName . '.' . 'id'));
         $select->join(
-        /* table  */ array('tr' => 'tine20_relations'),
+        /* table  */ array('tr' => $this->_tablePrefix . 'relations'),
         /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . 'id') . ' = ' . $this->_db->quoteIdentifier('tr.related_id') . ' AND ' . $this->_db->quoteIdentifier('tr.own_model') . ' = \'Sales_Model_Contract\'' . (null!==$contractId?' AND ' . $this->_db->quoteIdentifier('tr.own_id') . ' = ' . $this->_db->quote($contractId):''),
         /* select */ array('tr.own_id')
         );
         $select->join(
-        /* table  */ array('tsc' => 'tine20_sales_contracts'),
+        /* table  */ array('tsc' => $this->_tablePrefix . 'sales_contracts'),
         /* on     */ $this->_db->quoteIdentifier('tr.own_id') . ' = ' . $this->_db->quoteIdentifier('tsc.id') . ' AND tsc.last_modified_time is NOT NULL',
         /* select */ array()
         );
-        $select->where($this->_tableName . '.creation_time < tsc.last_modified_time AND ' . $this->_tableName . '.cleared <> \'CLEARED\'');
+        $select->where($this->_tableName . '.creation_time < tsc.last_modified_time AND ' . $this->_tableName . '.cleared <> \'CLEARED\' AND ' . $this->_tableName . '.is_deleted = 0');
         $select->order($this->_tableName . '.creation_time DESC');
 
         $result = array();

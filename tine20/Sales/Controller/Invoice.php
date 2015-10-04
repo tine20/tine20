@@ -505,12 +505,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (! $latestEndDate) {
                 $latestEndDate = $endDate;
             } elseif ($endDate > $latestEndDate) {
-                $latestEndDate = clone $endDate;
+                $latestEndDate = $endDate;
             }
             if (! $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             } elseif ($startDate < $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             }
         }
         
