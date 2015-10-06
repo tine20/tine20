@@ -55,7 +55,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     
     /**
      * test import duplicate data
-     * 
+     *
      * @return array
      */
     public function testImportDuplicates()
@@ -67,10 +67,10 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $result = $this->_doImport($options, 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $internalContainer->getId()),
         )));
-        
+
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
         $this->assertTrue($result['exceptions'] instanceof Tinebase_Record_RecordSet);
-        
+
         return $result;
     }
     
@@ -220,7 +220,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     }
     
     /**
-     * returns import defintion from file
+     * returns import definition from file
      * 
      * @param string $filename
      * @return Tinebase_Model_ImportExportDefinition
@@ -356,5 +356,22 @@ class Addressbook_Import_CsvTest extends ImportTestCase
 
         $this->assertEquals('21222', $importedRecord->adr_one_postalcode, print_r($importedRecord->toArray(), true));
         $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+    }
+
+    /**
+     * @see 0011354: keep both records if duplicates are within current import file
+     */
+    public function testImportDuplicateInImport()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_split.xml');
+
+        $this->_filename = dirname(__FILE__) . '/files/import_split_duplicate.csv';
+        $this->_deletePersonalContacts = TRUE;
+        $this->_deleteImportFile = FALSE;
+
+        $result = $this->_doImport(array('dryrun' => false), $definition);
+
+        $this->assertEquals(2, $result['totalcount'], print_r($result, true));
+        $this->assertEquals(2, count(array_unique($result['results']->getArrayOfIds())));
     }
 }
