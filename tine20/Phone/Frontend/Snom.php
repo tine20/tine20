@@ -105,7 +105,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
         
         # get the asterisk line
-        $sipPeer = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($phone->lines->find('linenumber', $activeLine)->asteriskline_id);
+        Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($phone->lines->find('linenumber', $activeLine)->asteriskline_id);
         
         $baseUrl = $this->_getBaseUrl($phone);
 
@@ -382,7 +382,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         };
         
         $call = new Phone_Model_Call(array(
-            'id'            => $callId,
+            'id'            => substr($callId, 0, 40),
             'phone_id'      => $phone->getId(),
             'line_id'       => $local
         ));
