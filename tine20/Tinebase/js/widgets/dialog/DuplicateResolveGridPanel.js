@@ -524,9 +524,8 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             }
 
             // special merge for tags
-            // TODO generalize me
             if (resolveRecord.get('fieldName') == 'tags') {
-                resolveRecord.set('finalValue', Tine.Tinebase.common.assertComparable([].concat(this.resolveStrategy != 'discard' ? mine : []).concat(this.resolveStrategy != 'keep' ? theirs : [])));
+                resolveRecord.set('finalValue', this.mergeTags(mine, theirs));
             } else {
                 resolveRecord.set('finalValue', location === 'mine' ? mine : theirs);
             }
@@ -536,6 +535,30 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         }, this);
         
         this.commitChanges();
+    },
+
+    /**
+     * merge tags
+     *
+     * @param {Array} mine
+     * @param {Array} theirs
+     *
+     * TODO generalize me for "merge-able" values
+     */
+    mergeTags: function(mine, theirs) {
+        var result = [],
+            records = Tine.Tinebase.common.assertComparable([].concat(this.resolveStrategy != 'discard' ? mine : []).concat(this.resolveStrategy != 'keep' ? theirs : [])),
+            recordIds = [];
+
+        // remove duplicates (TODO should be simplified)
+        Ext.each(records, function(value) {
+            if (recordIds.indexOf(value['id']) < 0) {
+                result.push(value);
+                recordIds.push(value['id']);
+            }
+        });
+
+        return result;
     },
     
     checkEditGrant: function() {

@@ -35,18 +35,6 @@ class Tinebase_Frontend_CliTest extends TestCase
     protected $_userPlugins = array();
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase Cli Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -208,13 +196,11 @@ class Tinebase_Frontend_CliTest extends TestCase
      */
     public function testTriggerAsyncEvents()
     {
-        // TODO remove DB locks after each run of triggerAsyncEvents in tests
-        $this->markTestSkipped('test is currently flaky.');
-
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array());
         $this->_usernamesToDelete[] = 'cronuser';
-        
+        $this->_releaseDBLockIds[] = 'Tinebase_Frontend_Cli::triggerAsyncEvents';
+
         ob_start();
         $this->_cli->triggerAsyncEvents($opts);
         $out = ob_get_clean();
@@ -223,6 +209,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals(0, count($userPlugins), 'got user plugins: ' . print_r($userPlugins, true));
         
         $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
+        $this->assertTrue(! empty($cronuserId), 'got empty cronuser id');
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         $this->assertEquals('cronuser', $cronuser->accountLoginName);
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();

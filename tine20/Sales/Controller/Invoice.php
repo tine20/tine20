@@ -495,7 +495,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 continue;
             } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' billables: ' . print_r($billables, true) . ' found for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' billables: ' . count($billables, true) . ' found for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
             }
         
             $invoicePositions = $invoicePositions->merge($this->_getInvoicePositionsFromBillables($billables, $ba['ac']));
@@ -505,12 +505,12 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (! $latestEndDate) {
                 $latestEndDate = $endDate;
             } elseif ($endDate > $latestEndDate) {
-                $latestEndDate = clone $endDate;
+                $latestEndDate = $endDate;
             }
             if (! $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             } elseif ($startDate < $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             }
         }
         

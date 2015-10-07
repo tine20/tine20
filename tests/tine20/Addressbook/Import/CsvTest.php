@@ -20,18 +20,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     protected $_modelName = 'Addressbook_Model_Contact';
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Csv Import Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -67,7 +55,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     
     /**
      * test import duplicate data
-     * 
+     *
      * @return array
      */
     public function testImportDuplicates()
@@ -79,10 +67,10 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $result = $this->_doImport($options, 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $internalContainer->getId()),
         )));
-        
+
         $this->assertGreaterThan(0, $result['duplicatecount'], 'no duplicates.');
         $this->assertTrue($result['exceptions'] instanceof Tinebase_Record_RecordSet);
-        
+
         return $result;
     }
     
@@ -108,7 +96,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             }
         }
         
-        $this->assertTrue($found);
+        $this->assertTrue($found, 'did not find user record in import exceptions: ' . print_r($result['exceptions']->toArray(), true));
     }
 
     /**
@@ -232,7 +220,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     }
     
     /**
-     * returns import defintion from file
+     * returns import definition from file
      * 
      * @param string $filename
      * @return Tinebase_Model_ImportExportDefinition
@@ -352,5 +340,38 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->assertEquals('Weixdorf DD', $result['results'][0]['adr_one_locality'], 'locality should persist');
         $this->assertEquals('Gartencenter Röhr & Vater', $result['results'][4]['n_fileas']);
         $this->assertEquals('Straßback', $result['results'][5]['adr_one_locality']);
+    }
+
+    public function testSplitField()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_split.xml');
+
+        $this->_filename = dirname(__FILE__) . '/files/import_split.csv';
+        $this->_deleteImportFile = FALSE;
+
+        $result = $this->_doImport(array('dryrun' => true), $definition);
+
+        $this->assertEquals(1, $result['totalcount'], print_r($result, true));
+        $importedRecord = $result['results']->getFirstRecord();
+
+        $this->assertEquals('21222', $importedRecord->adr_one_postalcode, print_r($importedRecord->toArray(), true));
+        $this->assertEquals('Käln', $importedRecord->adr_one_locality, print_r($importedRecord->toArray(), true));
+    }
+
+    /**
+     * @see 0011354: keep both records if duplicates are within current import file
+     */
+    public function testImportDuplicateInImport()
+    {
+        $definition = $this->_getDefinitionFromFile('adb_import_csv_split.xml');
+
+        $this->_filename = dirname(__FILE__) . '/files/import_split_duplicate.csv';
+        $this->_deletePersonalContacts = TRUE;
+        $this->_deleteImportFile = FALSE;
+
+        $result = $this->_doImport(array('dryrun' => false), $definition);
+
+        $this->assertEquals(2, $result['totalcount'], print_r($result, true));
+        $this->assertEquals(2, count(array_unique($result['results']->getArrayOfIds())));
     }
 }

@@ -150,22 +150,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             throw new Tinebase_Exception_UnexpectedValue('No field mapping defined');
         }
 
-        foreach ($this->_options['mapping']['field'] as $index => $field) {
-            if (empty($_data_indexed)) {
-                // use import definition order
-                if (! (isset($field['destination']) || array_key_exists('destination', $field)) || $field['destination'] == '' || ! isset($_data[$index])) {
-                    continue;
-                }
-                $data[$field['destination']] = $_data[$index];
-            } else {
-                // use order defined by headline
-                if ($field['destination'] == '' || ! isset($field['source']) || ! isset($_data_indexed[$field['source']])) {
-                    continue;
-                }
-                $data[$field['destination']] = $_data_indexed[$field['source']];
-            }
-        }
-        
+        $this->_mapValuesToDestination($_data_indexed, $_data, $data);
+
         if ($this->_options['mapUndefinedFieldsEnable'] == 1) {
             $undefinedFieldsText = $this->_createInfoTextForUnmappedFields($_data_indexed);
             if (! $undefinedFieldsText === false) {
@@ -181,6 +167,50 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             . ' Mapped data: ' . print_r($data, true));
         
         return $data;
+    }
+
+    /**
+     * map values to destination fields
+     *
+     * @param $_data_indexed
+     * @param $_data
+     * @param $data
+     */
+    protected function _mapValuesToDestination($_data_indexed, $_data, &$data)
+    {
+        foreach ($this->_options['mapping']['field'] as $index => $field) {
+            if (empty($_data_indexed) && isset($_data[$index])) {
+                $value = $_data[$index];
+            } else if (isset($field['source']) && isset($_data_indexed[$field['source']])) {
+                $value = $_data_indexed[$field['source']];
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' No value found for field ' . (isset($field['source']) ? $field['source'] : print_r($field, true)));
+                continue;
+            }
+
+            if ((! isset($field['destination']) || empty($field['destination'])) && ! isset($field['destinations'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' No destination in definition for field ' . $field['source']);
+                continue;
+            }
+
+            if (isset($field['destinations']) && isset($field['destinations']['destination'])) {
+                $destinations = $field['destinations']['destination'];
+                $delimiter = isset($field['$separator']) && ! empty($field['$separator']) ? $field['$separator'] : ' ';
+                $values = explode($delimiter, $value, count($destinations));
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' values: ' . print_r($values, true));
+                $i = 0;
+                foreach ($destinations as $destination) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' destination ' . $destination);
+                    $data[$destination] = $values[$i++];
+                }
+            } else {
+                $data[$field['destination']] = $value;
+            }
+        }
     }
     
     /**

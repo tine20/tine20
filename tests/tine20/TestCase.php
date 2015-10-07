@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -82,7 +82,14 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @var Zend_Mail_Transport_Array
      */
     protected static $_mailer = null;
-    
+
+    /**
+     * db lock ids to be released
+     *
+     * @var array
+     */
+    protected $_releaseDBLockIds = array();
+
     /**
      * set up tests
      */
@@ -121,7 +128,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         if ($this->_invalidateRolesCache) {
             Tinebase_Acl_Roles::getInstance()->resetClassCache();
         }
+
         Tinebase_Cache_PerRequest::getInstance()->reset();
+
+        $this->_releaseDBLocks();
+    }
+
+    /**
+     * release db locks
+     */
+    protected function _releaseDBLocks()
+    {
+        foreach ($this->_releaseDBLockIds as $lockId) {
+            Tinebase_Lock::releaseDBSessionLock($lockId);
+        }
+
+        $this->_releaseDBLockIds = array();
     }
 
     /**

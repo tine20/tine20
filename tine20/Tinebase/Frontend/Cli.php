@@ -26,6 +26,69 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_applicationName = 'Tinebase';
 
     /**
+     * clean relations, set relation to deleted if at least one of the ends has been set to deleted or pruned
+     */
+    public function cleanRelations()
+    {
+        $relations = Tinebase_Relations::getInstance();
+        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $pagination = new Tinebase_Model_Pagination();
+        $pagination->limit = 10000;
+        $pagination->sort = 'id';
+
+        $totalCount = 0;
+
+        while ( ($recordSet = $relations->search($filter, $pagination)) && $recordSet->count() > 0 ) {
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $pagination->start += $pagination->limit;
+            $models = array();
+
+            foreach($recordSet as $relation) {
+                $models[$relation->own_model][$relation->own_id] = true;
+                $models[$relation->related_model][$relation->related_id] = true;
+            }
+            foreach ($models as $model => &$ids) {
+                $app = Tinebase_Core::getApplicationInstance($model, '', true);
+                $backend = $app->getBackend();
+                if ( !$backend instanceof Tinebase_Controller_Record_Abstract ) {
+                    continue;
+                }
+                $record = new $model(null, true);
+
+                $modelFilter = $model . 'Filter';
+                $idFilter = new $modelFilter(array(), '', array('ignoreAcl'=>true));
+                $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
+                    'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
+                )));
+
+
+                $existingIds = $backend->search($idFilter, null, true);
+
+                if ( !is_array($existingIds) ) {
+                    throw new Exception('search for model: ' . $model . ' returned not an array!');
+                }
+                foreach($existingIds as $id) {
+                    unset($ids[$id]);
+                }
+                $toDelete = array_keys($ids);
+                $date = Tinebase_DateTime::now()->subYear(1);
+                foreach($toDelete as $id) {
+                    if ( $recordSet->getById($id)->creation_time && $recordSet->getById($id)->creation_time->isAfter($date) ) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' relation is about to get deleted that is younger than 1 year: ' . print_r($recordSet->getById($id)->toArray(false), true));
+                    }
+                }
+                if ( count($toDelete) > 0 ) {
+                    $relations->delete($toDelete);
+                    $totalCount += count($toDelete);
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' deleted ' . $totalCount . ' relations in total');
+    }
+
+    /**
      * authentication
      *
      * @param string $_username
