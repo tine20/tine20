@@ -127,6 +127,20 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'group', $group->getId(), $this->_userGrants, true);
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
 
+        // create some resorces as well
+        $this->_ressources = array();
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => static::$_de ? 'Besprechnungsraum Mars (1.OG)' : 'Meeting Room Mars (first floor)',
+            'description'          => static::$_de ? 'Bis zu 10 Personen' : 'Up to 10 people',
+            'email'                => 'mars@tin20.com',
+            'is_location'          => TRUE,
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => static::$_de ? 'Besprechnungsraum Venus (2.OG)' : 'Meeting Room Venus (second floor)',
+            'description'          => static::$_de ? 'Bis zu 14 Personen' : 'Up to 14 people',
+            'email'                => 'venus@tin20.com',
+            'is_location'          => TRUE,
+        )));
     }
     
     /**
