@@ -263,6 +263,10 @@ class Tinebase_Application
             return ($checkEnabled) ? ($app->status === self::ENABLED) : TRUE;
         } catch (Tinebase_Exception_NotFound $tenf) {
             return FALSE;
+        } catch (Zend_Db_Statement_Exception $tenf) {
+            // database tables might be not available yet
+            // @see 0011338: First Configuration fails after Installation
+            return FALSE;
         }
     }
     

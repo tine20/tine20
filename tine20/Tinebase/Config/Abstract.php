@@ -472,6 +472,11 @@ abstract class Tinebase_Config_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' appName not set');
             $this->_cachedApplicationConfig = array();
         }
+
+        if (! Tinebase_Application::getInstance()->getInstance()->isInstalled('Tinebase')) {
+            $this->_cachedApplicationConfig = array();
+            return;
+        }
         
         $cache = Tinebase_Core::getCache();
         if (!is_object($cache)) {
@@ -488,20 +493,19 @@ abstract class Tinebase_Config_Abstract
         
         try {
             $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($this->_appName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
+
+            $filter = new Tinebase_Model_ConfigFilter(array(
+                array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
+            ));
+            $allConfigs = $this->_getBackend()->search($filter);
         } catch (Zend_Db_Exception $zdae) {
             // DB might not exist or tables are not created, yet
             Tinebase_Exception::log($zdae);
             $this->_cachedApplicationConfig = array();
             return;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Loading all configs for app ' . $this->_appName);
-        
-        $filter = new Tinebase_Model_ConfigFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-        ));
-        $allConfigs = $this->_getBackend()->search($filter);
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found ' . count($allConfigs) . ' configs.');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allConfigs->toArray(), TRUE));
         
