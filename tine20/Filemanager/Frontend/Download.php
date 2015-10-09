@@ -84,7 +84,8 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
                 $nodeController = Filemanager_Controller_Node::getInstance();
                 $nodeController->resolveMultipleTreeNodesPath($node);
                 $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($node->path));
-                
+
+                Filemanager_Controller_DownloadLink::getInstance()->increaseAccessCount($download);
                 $this->_downloadFileNode($node, $pathRecord->streamwrapperpath);
             }
             
