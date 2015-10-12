@@ -457,8 +457,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckCron()
     {
         $message = 'CRON FAIL';
-        $result  = 2;
-        
+
         try {
             $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
             
@@ -637,6 +636,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach($this->_applicationsToWorkOn as $app => $cfg) {
             $this->_createDemoDataRecursive($app, $cfg, $_opts);
         }
+
+        return 0;
     }
     
     /**
@@ -684,6 +685,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_addOutputLogWriter();
         
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+
+        return 0;
     }
     
     /**
@@ -815,5 +818,48 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' The operation has been terminated successfully.');
         }
+
+        return 0;
+    }
+
+    /**
+     * repair function for persistent filters (favorites) without grants: this adds default grants for those filters.
+     *
+     * @return int
+     */
+    public function setDefaultGrantsOfPersistentFilters()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $this->_addOutputLogWriter(6);
+
+        // get all persistent filters without grants
+        // TODO this could be enhanced by allowing to set default grants for other filters, too
+
+        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter());
+        $filtersWithoutGrants = 0;
+
+        foreach ($filters as $filter) {
+            if (count($filter->grants) == 0) {
+                // update to set default grants
+                $filter = Tinebase_PersistentFilter::getInstance()->update($filter);
+                $filtersWithoutGrants++;
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Updated filter: ' . print_r($filter->toArray(), true));
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Set default grants for ' . $filtersWithoutGrants . ' filters'
+                . ' (checked ' . count($filters) . ' in total).');
+        }
+
+        return 0;
     }
 }

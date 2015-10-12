@@ -122,7 +122,6 @@ class Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $_opts
      * @param boolean $checkDependencies
      */
-    
     public function createDemoData($_opts = NULL, $checkDependencies = TRUE)
     {
         // just admins can perform this action
@@ -192,6 +191,8 @@ class Tinebase_Frontend_Cli_Abstract
             echo 'Creating Demo Data is not implemented yet for this Application!' . chr(10);
             echo chr(10);
         }
+
+        return true;
     }
     
     /**
@@ -439,7 +440,7 @@ class Tinebase_Frontend_Cli_Abstract
         $class_name = $this->_applicationName . '_Setup_Import_Egw14';
         if (! class_exists($class_name)) {
             $logger->ERR(__METHOD__ . '::' . __LINE__ . " no import for {$this->_applicationName} available");
-            continue;
+            exit(1);
         }
         
         try {

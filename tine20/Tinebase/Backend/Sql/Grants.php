@@ -54,10 +54,16 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
             unset($recordGrant->account_grant);
             
             $record = $records->getById($recordGrant->record_id);
+            $records->removeRecord($record);
             if (! $record->grants instanceof Tinebase_Record_RecordSet) {
                 $record->grants = new Tinebase_Record_RecordSet($this->_modelName);
             }
             $record->grants->addRecord($recordGrant);
+
+            // NOTICE: this is strange - we have to remove the record and add it
+            //   again to make sure that grants are updated ...
+            //   maybe we should add a "replace" method?
+            $records->addRecord($record);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
