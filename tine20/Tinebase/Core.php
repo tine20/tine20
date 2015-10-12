@@ -798,7 +798,7 @@ class Tinebase_Core
         $config = self::getConfig();
         
         if (!isset($config->database)) {
-            die ('database section not found in central configuration file');
+            die ("Database section not found in central configuration file.\n");
         }
         
         $dbConfig = $config->database;
