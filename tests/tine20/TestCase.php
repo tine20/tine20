@@ -258,12 +258,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $user = Tinebase_Core::getUser();
         }
         
-        return Tinebase_Container::getInstance()->getPersonalContainer(
+        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             $user,
             $applicationName, 
             $user,
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
+
+        if (! $personalContainer) {
+            throw new Tinebase_Exception_UnexpectedValue('no personal container found!');
+        }
+
+        return $personalContainer;
     }
     
     /**

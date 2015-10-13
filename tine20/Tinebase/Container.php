@@ -628,22 +628,65 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
         $containersData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
+
         // if no containers where found, maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
-        if (empty($containersData) and $accountId === $ownerId) {
-            $application = Tinebase_Core::getApplicationInstance($application->name);
-            
-            if ($application instanceof Tinebase_Container_Interface) {
+        if (empty($containersData) && $accountId === $ownerId) {
+            $application = Tinebase_Core::getApplicationInstance($meta['appName']);
+
+            if ($application instanceof Tinebase_Container_Interface && method_exists($application, 'createPersonalFolder')) {
                 return $application->createPersonalFolder($accountId);
+            } else if ($meta['recordClass']) {
+                $containersData = array($this->createDefaultContainer($meta['recordClass'], $meta['appName'], $accountId));
             }
         }
 
         $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containersData, TRUE);
-        
+
         $this->saveInClassCache(__FUNCTION__, $classCacheId, $containers);
 
         return $containers;
+    }
+
+    /**
+     * create default container for a user
+     *
+     * @param string $recordClass
+     * @param string $applicationName
+     * @param Tinebase_Model_User|string $account
+     * @param string $containerName
+     * @return Tinebase_Model_Container
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     *
+     * @todo add record name to container name?
+     */
+    public function createDefaultContainer($recordClass, $applicationName, $account, $containerName = null)
+    {
+        if (! $account instanceof Tinebase_Model_User) {
+            $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $account);
+        }
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Creating new default container ' . $containerName . ' for '
+            . $account->accountFullName . ' for model ' . $recordClass);
+
+        if (! $containerName) {
+            $translation = Tinebase_Translation::getTranslation('Tinebase');
+            $containerName = sprintf($translation->_("%s's personal container"), $account->accountFullName);
+        }
+
+        $container = $this->addContainer(new Tinebase_Model_Container(array(
+            'name'              => $containerName,
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'owner_id'          => $account->getId(),
+            'backend'           => 'Sql',
+            'model'             => $recordClass,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId()
+        )));
+
+        return $container;
     }
     
     /**
@@ -665,8 +708,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $db = $_select->getAdapter();
         
         $grants = is_array($_grant) ? $_grant : array($_grant);
-        
-
 
         $groupMemberships   = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
         
@@ -742,29 +783,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             } catch (Tinebase_Exception $te) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Default container not found (' . $te->getMessage() . ')');
                 // default may be gone -> remove default adb pref
-                $appPref = Tinebase_Core::getPreference($this->_applicationName);
+                $appPref = Tinebase_Core::getPreference($meta['appName']);
                 if ($appPref) {
                     $appPref->deleteUserPref($defaultContainerPreferenceName);
                 }
             }
         }
         
-        $account = ($accountId !== NULL) ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId) : Tinebase_Core::getUser();
+        $account = ($accountId !== NULL)
+            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId)
+            : Tinebase_Core::getUser();
         $result = $this->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
         
         if ($result === NULL) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Creating new default container for ' . $account->accountFullName . ' in application ' . $meta['appName']);
-            
-            $translation = Tinebase_Translation::getTranslation($meta['appName']);
-            $result = $this->addContainer(new Tinebase_Model_Container(array(
-                'name'              => sprintf($translation->_("%s's personal container"), $account->accountFullName),
-                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'owner_id'          => $account->getId(),
-                'backend'           => 'Sql',
-                'model'             => $meta['recordClass'],
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($meta['appName'])->getId() 
-            )));
+            $result = $this->createDefaultContainer($recordClass, $meta['appName'], $accountId);
         }
         
         if ($defaultContainerPreferenceName !== NULL) {

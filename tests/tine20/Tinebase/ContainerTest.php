@@ -521,6 +521,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         Tinebase_User::getInstance()->setStatus($user2, 'enabled');
         
         $container = Tinebase_Container::getInstance()->getPersonalContainer($user1, 'Calendar', $user1, Tinebase_Model_Grants::GRANT_READ);
+
+        $this->assertGreaterThan(0, count($container));
         
         $oldGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($container->getFirstRecord()->id, TRUE);
         
@@ -664,7 +666,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::ANYONE_ACCOUNT_DISABLED, TRUE);
         Tinebase_Core::getCache()->clean();
         $readGrant = $this->_instance->resetClassCache('hasGrant')->hasGrant(Tinebase_Core::getUser(), $sharedContainer, Tinebase_Model_Grants::GRANT_READ);
-        $this->assertFalse($readGrant);
+        $this->assertFalse($readGrant, 'user should not have read grant');
     }
     
     /**
