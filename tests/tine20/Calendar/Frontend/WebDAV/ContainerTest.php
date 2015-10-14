@@ -53,7 +53,10 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         )));
         
         Tinebase_Container::getInstance()->addGrants($this->objects['initialContainer'], Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Core::getUser()->accountPrimaryGroup, array(Tinebase_Model_Grants::GRANT_READ));
-        
+
+        // rw cal agent
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
         // must be defined for Calendar/Frontend/WebDAV/Event.php
         $_SERVER['REQUEST_URI'] = 'foobar';
     }
@@ -164,8 +167,6 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreateFile()
     {
-        $GLOBALS['_SERVER']['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
         $vcalendarStream = $this->_getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics');
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);

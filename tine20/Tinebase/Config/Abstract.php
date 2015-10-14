@@ -300,7 +300,7 @@ abstract class Tinebase_Config_Abstract
             self::$_configFileData = include('config.inc.php');
             
             if (self::$_configFileData === false) {
-                die('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+                die('Central configuration file config.inc.php not found in includepath: ' . get_include_path() . "\n");
             }
             
             if (isset(self::$_configFileData['confdfolder'])) {
@@ -443,6 +443,8 @@ abstract class Tinebase_Config_Abstract
         $configFileData = $this->_getConfigFileData();
         
         // appName section overwrites global section in config file
+        // TODO: this needs improvement -> it is currently not allowed to have configs with the same names in
+        //       an Application and Tinebase as this leads to strange/unpredictable results here ...
         return (isset($configFileData[$this->_appName]) || array_key_exists($this->_appName, $configFileData)) && (isset($configFileData[$this->_appName][$_name]) || array_key_exists($_name, $configFileData[$this->_appName])) ? $configFileData[$this->_appName] :
               ((isset($configFileData[$_name]) || array_key_exists($_name, $configFileData)) ? $configFileData : NULL);
     }
@@ -616,7 +618,10 @@ abstract class Tinebase_Config_Abstract
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
-            case self::TYPE_KEYFIELD:   return Tinebase_Config_KeyField::create($_rawData, (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array());
+            case self::TYPE_KEYFIELD:   return Tinebase_Config_KeyField::create(
+                $_rawData,
+                (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array()
+            );
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
