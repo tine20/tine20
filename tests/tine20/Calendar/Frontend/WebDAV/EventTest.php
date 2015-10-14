@@ -559,25 +559,50 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertEquals(1, $record->attachments->count());
         $this->assertEquals('agenda2.html', $record->attachments->getFirstRecord()->name);
     }
-    
+
     /**
-     * test updating existing event
+     * test create event from unknown client
+     */
+    public function testCreateEventFromGenericClient()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+
+        $event = $this->testCreateEventWithInternalOrganizer();
+    }
+
+    /**
+     * test update event from unknown client
      */
     public function testPutEventFromGenericClient()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
-        
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         $event = $this->testCreateEventWithInternalOrganizer();
-        
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
-        
+
         $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
-        
-        $event->put($vcalendarStream);
-        
-        $record = $event->getRecord();
-        
-        $this->assertEquals('New Event', $record->summary);
+
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "{$event->getRecord()->getId()}.ics");
+
+        $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $loadedEvent->put($vcalendarStream);
+    }
+
+    /**
+     * test delete event from unknown client
+     */
+    public function testDeleteEventFromGenericClient()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+        $event = $this->testCreateEventWithInternalOrganizer();
+
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+
+        $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "{$event->getRecord()->getId()}.ics");
+
+        $loadedEvent->delete();
     }
     
     public function testPutEventMultipleAlarms()

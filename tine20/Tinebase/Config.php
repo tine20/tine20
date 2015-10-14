@@ -807,7 +807,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     {
         // get all config names to be included in registry
         $clientProperties = new Tinebase_Config_Struct(array());
-        $filters = array();
         $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
         foreach ($userApplications as $application) {
             $config = Tinebase_Config_Abstract::factory($application->name);
@@ -819,15 +818,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' ' . print_r($definition, TRUE));
                     
-                    if ((isset($definition['clientRegistryInclude']) || array_key_exists('clientRegistryInclude', $definition)) && $definition['clientRegistryInclude'] === TRUE) {
+                    if ((isset($definition['clientRegistryInclude']) || array_key_exists('clientRegistryInclude', $definition))
+                        && $definition['clientRegistryInclude'] === TRUE)
+                    {
                         // add definition here till we have a better place
-                        $configRegistryItem = new Tinebase_Config_Struct(array(
-                            'value'         => $config->{$name},
-                            'definition'    => new Tinebase_Config_Struct($definition),
-                        ));
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                            . ' ' . print_r($configRegistryItem->toArray(), TRUE));
-                        $clientProperties[$application->name][$name] = $configRegistryItem;
+                        try {
+                            $configRegistryItem = new Tinebase_Config_Struct(array(
+                                'value' => $config->{$name},
+                                'definition' => new Tinebase_Config_Struct($definition),
+                            ));
+                            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                                . ' ' . print_r($configRegistryItem->toArray(), TRUE));
+                            $clientProperties[$application->name][$name] = $configRegistryItem;
+                        } catch (Exception $e) {
+                            Tinebase_Exception::log($e);
+                        }
                     }
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
