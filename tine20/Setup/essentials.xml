@@ -16,5 +16,6 @@
         <extension name="zip" />
         <extension name="xml" />
         <extension name="hash" />
+        <extension name="mbstring" />
     </extensions>
 </essential>
