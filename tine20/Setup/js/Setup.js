@@ -135,7 +135,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
 
-        setupChecks = (setupChecks.success) ? setupChecks.success : false;
+        setupChecks = (setupChecks && setupChecks.success) ? setupChecks.success : false;
 
         this.setNodeIcon('TermsPanel', termsChecks);
         this.setNodeIcon('EnvCheckGridPanel', setupChecks);
