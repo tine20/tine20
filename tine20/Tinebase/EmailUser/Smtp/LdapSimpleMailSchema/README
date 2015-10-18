@@ -1,6 +1,6 @@
 
                                                                   Johannes Nohl
-                                                             Berlin, 2015-08-10
+                                                             Berlin, 2015-10-18
 
 
 ## Tine 2.0 simpleMail SMTP-Backend (LDAP) ##
@@ -8,17 +8,19 @@
 
 ABSTRACT
 
-The simpleMail backend for SMTP keeps up Tine 2.0 with one advanced LDAP
-capability of mail transfer agents like Postfix's, “special_result_attribute”.
-This parameter is used to link mail related settings outside of user's LDAP
-entry to its DN (e.g. link mail address to user's mailbox). 
+When storing additional mail attributes outside user's Distinguished Name (DN) 
+you can link to user's LDAP branch and mail transfer agents like Postfix will 
+follow the target DN provided as i.e. “special_result_attribute”. With Tine 2.0 
+those external mail config is readable and - as required - writable through the 
+simpleMail backend for SMTP. You may use the provided LDAP scheme or configure 
+all by yourself (e.g. how to link mail addresses to user's DN). 
 
 
 PURPOSE AND OVERVIEW
 
 Tine 2.0 can handle user specific smtp settings in LDAP directories; additional
-information for mail aliases, mail forwarding addresses and an option to
-“forward only” (no local delivery) can be managed within the Admin App.
+information for *mail aliases*, *mail forwarding addresses* and an option to
+*forward only* (no local delivery) can be managed within the Admin module.
 
 While already existing backends for SMTP were limited to information stored as
 attributes in user's LDAP-node (DN:uid), simpleMail can read attributes from
@@ -30,6 +32,10 @@ account settings in LDAP.
 
 Additionally the linked mail information is needed for Felamimail's “out of
 office” assistant which will respond only to known aliases. 
+
+LIMITATION: You need to store Tine 2.0's accounts and your mail settings in
+            the same LDAP (probably on different subtrees) - the backend uses
+            your already existing connection.
 
 
 CONFIGURATION
@@ -54,16 +60,16 @@ object:
           }
 
 To see current SMTP settings from cli: 
-#> php git/setup.php --getconfig – configkey=smtp
+#> php setup.php --getconfig -- configkey=smtp
 
 To set new SMTP config by cli: 
-#> php setup.php --setconfig – configkey=smtp configvalue='{[ JSON ]}'
+#> php setup.php --setconfig -- configkey=smtp configvalue='{[ JSON ]}'
 
 
 OPTIONS - All available options for JSON
 
 [madatory] base:
-Search base in ldap for mail information (default search in subtree) and
+Search base in LDAP for mail information (default search in subtree) and
 default branch to store new entries (see storage_base)
 
 
@@ -72,27 +78,30 @@ default branch to store new entries (see storage_base)
 
 
 [optional] skeleton: 
-Attributes used to search related DN and at the same time template for newly 
-created DN. The wildcard %s will be substituted by user's DN at search time. 
+Attributes used as search filter for user related DNs and at the same time a
+template for newly created DNs. You must not provide objectClass top which is
+added programmatically. The attribute holding the wildcard %s represents the 
+link to user's DN ("special_result_attribute"). 
 
   Default:  "skeleton":{ 
               "objectclass":["simplemail","mailrouting"],
               "mailUserDN":"%s" 
             },
 
-  Note: The wildcard %s will be filled at runtime (by inserting user's DN)
+  Note: The wildcard %s will be substituted at runtime (by inserting user's DN)
 
 
 [optional] readonly: 
-On saving changes request will be ignored silently. 
+On saving changes request will be ignored silently. Default is false. 
 
         
 [optional] storage_base: 
-Base in LDAP-tree for writing new entries, defaults to base (see above). 
+Base in LDAP-tree for writing new entries, defaults to base (see above). If 
+given and different to base new config-DNs will be stored beneath. 
 
 
 [optional] storage_rdn: 
-Template for newly created entries - relative DN (RDN). 
+Name giving attribute for newly created entries - relative DN (RDN). 
 
   Default:  "storage_rdn:":"cn=%u{tine20}", 
 
@@ -110,28 +119,31 @@ parameterized mapping table.
               "emailForwardOnly":"maildiscard:boolean" 
             },
 
-  Please note: You can define a property (attribute) as an singular option
-  (instead of a set of attributes) by adding :boolean to its LDAP equivalent.
+  Note: You can define a property (attribute) as on/off-option (instead of a 
+        set of attributes) by adding :boolean to its LDAP equivalent.
 
 
 EXAMPLES
 
-Below you may find three common but minimal configurations (only the specific
-part of json is shown) 
+Below you may find three common but minimal configurations (only the backend 
+specific part of json is shown) 
  
 
 1) Get information readonly from anywhere below a specific part of the
-LDAP-tree (default entries fit to LDAP scheme called “simpleMail”):
+LDAP-tree (default entries here match the LDAP scheme “simpleMail”):
 
 	    "simplemail":{ 
               "base":"ou=mail,ou=config,dc=example,dc=com",
-              "readonly":false 
+              "readonly":true 
             }
 
+  Hint: If you manage mail settings aside Tine 2.0 this is how you get your
+        aliases known to Felamimail. 
+
 2) Read entries from subtree and write them below specified place, provide the
-necessary information about your DN structure needed by proper search and safe
-actions. Be aware of the mailUserDN attribute which holds the link to user's
-DN:
+necessary information about your DN structure needed for proper searches and 
+for saving new. Be aware of the mailUserDN attribute which holds the link to 
+user's DN:
 
             "simplemail":{ 
               "base":"ou=mail,ou=config,dc=example,dc=com", 
@@ -140,6 +152,25 @@ DN:
                 "mailUserDN":"%s" 
               } 
             }
+
+3) Non-simpleMail-schema exemplified: Tine 2.0 serves the primary domain all 
+other mail options are set by a fantasy-admin-tool... 
+
+            "simplemail":{ 
+              "base":"ou=postfixAdmin,dc=example,dc=com", 
+              "scope":1,
+              "skeleton":{
+                "objectclass":["postfixAdmin"], 
+                "tine20userDN":"%s" 
+              },
+              "property_mapping":{ 
+                "emailAliases":"virtualMailAccount",
+                "emailForwards":"forwardMail",
+                "emailForwardOnly":"doNotDeliver" 
+              },
+              "storage_base":"ou=userSettings,ou=postfixAdmin,dc=example,dc=com",
+              "storage_rdn:":"cn=mailconfig-%u"
+            } 
 
 
 FURTHER READINGS

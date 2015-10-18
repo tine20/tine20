@@ -157,7 +157,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         this.imapBackendCombo = new Ext.form.ComboBox(backendComboConfig);
         
         // smtp combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['postfixcombined', 'Postfix SQL (combined schema)'], ['Ldapsmtpmail', 'Ldap (only mail attribute)'], ['ldapSmtp', 'Postfix Ldap (dbmail schema)'], ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)'], ['ldap_univention', 'Univention']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard SMTP')], ['postfix', 'Postfix MySQL'], ['postfixcombined', 'Postfix SQL (combined schema)'], ['Ldapsmtpmail', 'Ldap (only mail attribute)'], ['ldapSmtp', 'Postfix Ldap (dbmail schema)'], ['ldapSmtpQmail', 'Postfix Ldap (qmail schema)'], ['ldap_univention', 'Univention'], ['ldap_simplemail', 'SimpleMail or custom Ldap (BETA)']];
         backendComboConfig.name = 'smtp_backend';
         backendComboConfig.listeners = {
             scope: this,
