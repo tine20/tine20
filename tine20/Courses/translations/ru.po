@@ -1,19 +1,20 @@
 # 
 # Translators:
 # Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
+# Nikolay Parukhin <parukhin@gmail.com>, 2015
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -36,11 +37,11 @@ msgstr "Добавить существующего пользователя к�
 
 #: Acl/Rights.php:116
 msgid "Manage shared courses favorites"
-msgstr ""
+msgstr "Управление избранными в общих курсах"
 
 #: Acl/Rights.php:117
 msgid "Create or update shared courses favorites"
-msgstr ""
+msgstr "Создание или обновление избранных в общих курсах"
 
 #: js/CourseGridPanel.js:44 js/Models.js:72
 msgid "Name"
@@ -72,6 +73,7 @@ msgid_plural "Courses"
 msgstr[0] "Курс"
 msgstr[1] "Курса"
 msgstr[2] "Курсов"
+msgstr[3] "Курсов"
 
 #: js/CourseEditDialog.js:206
 msgid "Course Name"
@@ -85,7 +87,7 @@ msgstr "Тип курсов/школы"
 msgid "Description"
 msgstr "Описание"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr "Доступ в интернет"
 
@@ -115,6 +117,7 @@ msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
+msgstr[3] "списков записей"
 
 #: js/Models.js:71
 msgid "Quick Search"
@@ -126,6 +129,7 @@ msgid_plural "Course Types"
 msgstr[0] "Тип курсов"
 msgstr[1] "Типа курсов"
 msgstr[2] "Типов курсов"
+msgstr[3] "Типов курсов"
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -168,51 +172,55 @@ msgstr "Все курсы"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Будет загружено по-умолчанию при загрузке Классов"
 
-#: Config.php:91
+#: Config.php:98
 msgid "Internet access options."
-msgstr "Опции доступа из сети"
+msgstr "Опции доступа в интернет."
 
-#: Config.php:98 Config.php:100
+#: Config.php:105 Config.php:107
 msgid "Internet Access Group (ON)"
-msgstr "Группа доступа из сети (вкл)"
+msgstr "Группа доступа  в интернет (ВКЛ)"
 
-#: Config.php:106 Config.php:108
+#: Config.php:113 Config.php:115
 msgid "Internet Access Group (FILTERED)"
-msgstr ""
+msgstr "Группа доступа  в интернет (ФИЛЬТРУЕМЫЙ)"
 
-#: Config.php:114 Config.php:116
+#: Config.php:121 Config.php:123
 msgid "Students Group"
 msgstr "Студенческая группа"
 
-#: Config.php:122 Config.php:124
+#: Config.php:129 Config.php:131
 msgid "Students Import Definition"
-msgstr ""
+msgstr "Определение импорта студентов"
 
-#: Config.php:130
+#: Config.php:137
 msgid "Students login name prefix"
 msgstr "Префикс для имени студента"
 
-#: Config.php:137
-msgid "Student username schema"
+#: Config.php:144
+msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:139
+#: Config.php:151
+msgid "Student username schema"
+msgstr "Схема имени пользователя студента"
+
+#: Config.php:153
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
-msgstr "Схема имён студентов (0 = только фамилии (10 chars), 1 = фамилия + 2 буква от имени"
+msgstr "Схема имён студентов (0 = только фамилии (10 букв), 1 = фамилия + 2 буквы от имени"
 
-#: Config.php:146 Config.php:148
+#: Config.php:160 Config.php:162
 msgid "Samba user settings"
-msgstr "Пользовательские настройка для SAMBA"
+msgstr "Пользовательские настройки для SAMBA"
 
-#: Config.php:157
+#: Config.php:171
 msgid "Default department"
 msgstr "Отдел по-умолчанию"
 
-#: Config.php:159
+#: Config.php:173
 msgid "The default department for new Courses"
-msgstr ""
+msgstr "Отдел по-умолчанию для новых курсов"
 
 #: Setup/setup.xml:4
 msgid "Courses"
@@ -232,8 +240,8 @@ msgstr "Отфильтровано"
 
 #: Setup/Initialize.php:91
 msgid "School"
-msgstr ""
+msgstr "Школа"
 
 #: Setup/Initialize.php:92
 msgid "Defaul school for Courses application"
-msgstr ""
+msgstr "Школа по-умолчанию для приложения Курсы"

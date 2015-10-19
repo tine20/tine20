@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2015
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -266,11 +266,11 @@ msgstr "Применить фильтр, если"
 
 #: js/sieve/RuleEditDialog.js:267
 msgid "all conditions match"
-msgstr ""
+msgstr "все условия верны"
 
 #: js/sieve/RuleEditDialog.js:268
 msgid "any condition matches"
-msgstr ""
+msgstr "любое условие верно"
 
 #: js/sieve/RuleEditDialog.js:315
 msgid "Do this action:"
@@ -315,7 +315,7 @@ msgstr "Последнее обновление:"
 #: js/TreePanel.js:732
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
-msgstr ""
+msgstr "Получаем сообщения, подождать бы.... ({0} завершено)"
 
 #: js/TreePanel.js:748
 #, python-brace-format
@@ -324,6 +324,7 @@ msgid_plural "{0} unread messages"
 msgstr[0] "{0} непрочитанное сообщение"
 msgstr[1] "{0} непрочитанных сообщения"
 msgstr[2] "{0} непрочитанных сообщений"
+msgstr[3] "{0} непрочитанных сообщений"
 
 #: js/GridDetailsPanel.js:158
 msgid "Message not available."
@@ -345,17 +346,29 @@ msgstr "Добавить контакт в адресную книгу"
 msgid "Date"
 msgstr "Дата"
 
-#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:481
+#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:482
 msgid "Show or hide header information"
 msgstr "Показать или скрыть заголовки"
 
-#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:814 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:814 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Вложения"
 
 #: js/GridPanelHook.js:34
 msgid "Compose email"
 msgstr "Написать письмо"
+
+#: js/GridPanelHook.js:49 js/Model.js:158 js/GridPanel.js:507
+msgid "To"
+msgstr "To"
+
+#: js/GridPanelHook.js:62
+msgid "CC"
+msgstr ""
+
+#: js/GridPanelHook.js:75
+msgid "BCC"
+msgstr ""
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -378,6 +391,7 @@ msgid_plural "Folders"
 msgstr[0] "Папка"
 msgstr[1] "Папки"
 msgstr[2] "Папки"
+msgstr[3] "Папки"
 
 #: js/TreeContextMenu.js:23
 msgid "Empty Folder"
@@ -442,6 +456,7 @@ msgid_plural "Messages"
 msgstr[0] "Сообщение"
 msgstr[1] "Сообщения"
 msgstr[2] "Сообщений"
+msgstr[3] "Сообщений"
 
 #: js/Model.js:154
 msgid "Subject/From"
@@ -450,10 +465,6 @@ msgstr "Тема/От"
 #: js/Model.js:157 js/GridPanel.js:494
 msgid "From (Name)"
 msgstr "От (имя)"
-
-#: js/Model.js:158 js/GridPanel.js:507
-msgid "To"
-msgstr "To"
 
 #: js/Model.js:159
 msgid "Cc"
@@ -477,6 +488,7 @@ msgid_plural "Accounts"
 msgstr[0] "Учетная запись"
 msgstr[1] "Учетные записи"
 msgstr[2] "Учетных записей"
+msgstr[3] "Учетных записей"
 
 #: js/Model.js:377
 msgid "Email Accounts"
@@ -484,6 +496,7 @@ msgid_plural "Email Accounts"
 msgstr[0] "Учётные записи электронной почты"
 msgstr[1] "Учётные записи электронной почты"
 msgstr[2] "Учетная запись электронной почты"
+msgstr[3] "Учетная запись электронной почты"
 
 #: js/Model.js:508
 msgid "INBOX"
@@ -515,6 +528,7 @@ msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
+msgstr[3] "списков записей"
 
 #: js/Model.js:634
 msgid "Vacation"
@@ -522,6 +536,7 @@ msgid_plural "Vacations"
 msgstr[0] "Отдых"
 msgstr[1] "Отдых"
 msgstr[2] "Отдых"
+msgstr[3] "Отдых"
 
 #: js/Model.js:700
 msgid "Rule"
@@ -529,6 +544,7 @@ msgid_plural "Rules"
 msgstr[0] "Правило"
 msgstr[1] "Правила"
 msgstr[2] "Правила"
+msgstr[3] "Правила"
 
 #: js/Model.js:827
 msgid "Flag"
@@ -536,6 +552,7 @@ msgid_plural "Flags"
 msgstr[0] "Флаг"
 msgstr[1] "Флаги"
 msgstr[2] "Флаги"
+msgstr[3] "Флаги"
 
 #: js/Model.js:830
 msgid "Flag list"
@@ -543,6 +560,7 @@ msgid_plural "Flag lists"
 msgstr[0] "Список флагов"
 msgstr[1] "Списки флагов"
 msgstr[2] "Списки флагов"
+msgstr[3] "Списки флагов"
 
 #: js/MessageEditDialog.js:144
 msgid "Send"
@@ -799,7 +817,7 @@ msgstr "Почта \"{0}\" активировала автоответ."
 #: js/Felamimail.js:165
 #, python-brace-format
 msgid "{0} as default mailer"
-msgstr ""
+msgstr "{0} как адрес отправки по-умолчанию"
 
 #: js/Felamimail.js:577
 msgid "New mails"
@@ -867,7 +885,7 @@ msgstr "Скрипт не сохранён на сервере Sieve."
 
 #: js/AccountEditDialog.js:75
 msgid "Add New Account"
-msgstr ""
+msgstr "Добавить новый аккаунт"
 
 #: js/AccountEditDialog.js:88
 msgid "Signature"
@@ -1059,12 +1077,12 @@ msgstr "Как часто почтовая служба будет провер�
 
 #: Preference.php:114
 msgid "Use for mailto links"
-msgstr ""
+msgstr "Использовать линки типа mailto"
 
 #: Preference.php:115
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr ""
+msgstr "Использовать Felamimail для ссылок типа mailto вместо десктопных приложений"
 
 #: Preference.php:118
 msgid "Use for NOTES"

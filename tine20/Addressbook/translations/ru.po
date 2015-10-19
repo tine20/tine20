@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2015
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:20+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -167,12 +167,13 @@ msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
 #: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Контакт"
 msgstr[1] "Контакта"
 msgstr[2] "Контактов"
+msgstr[3] "Контактов"
 
 #: js/ContactEditDialog.js:42 js/ContactEditDialog.js:51 js/MapPanel.js:40
 msgid "Map"
@@ -201,14 +202,12 @@ msgstr "Имя"
 msgid "Middle Name"
 msgstr "Второе имя"
 
-#: js/ContactEditDialog.js:123 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:19 js/Model.js:142
+#: js/ContactEditDialog.js:123 js/Model.js:19 js/Model.js:142
 #: js/ContactGrid.js:113
 msgid "Last Name"
 msgstr "Фамилия"
 
-#: js/ContactEditDialog.js:129 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:27 js/Model.js:144
+#: js/ContactEditDialog.js:129 js/Model.js:27 js/Model.js:144
 #: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:117
 #: Setup/Initialize.php:70 Setup/Update/Release5.php:196
 msgid "Company"
@@ -327,32 +326,27 @@ msgstr "Введите описание"
 msgid "Export as pdf"
 msgstr "Экспорт в PDF"
 
-#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:448
 msgid "Parse address"
 msgstr "Синтаксический анализ адреса"
 
-#: js/ContactEditDialog.js:428 js/ContactEditDialog.js:450
-#, python-brace-format
-msgid "Either {0} or {1} must be given"
-msgstr "Должны быть заданы {0} или {1}"
-
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Paste address"
 msgstr "Вставит адрес"
 
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
+msgstr "Пожалуйста, укажите адрес или URI для vcard, который можно разобрать:"
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "Failed to parse address!"
-msgstr ""
+msgstr "Невозможно разобрать адрес"
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "The address could not be read."
-msgstr ""
+msgstr "Адрес нечитаем"
 
-#: js/ContactEditDialog.js:528
+#: js/ContactEditDialog.js:483
 msgid "End token mode"
 msgstr "Окончание действия символьного отпечатка"
 
@@ -366,6 +360,7 @@ msgid_plural "Addressbooks"
 msgstr[0] "Адресная книга"
 msgstr[1] "Адресные книги"
 msgstr[2] "Адресные книги"
+msgstr[3] "Адресные книги"
 
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
@@ -477,6 +472,7 @@ msgid_plural "Lists"
 msgstr[0] "Список"
 msgstr[1] "Списки"
 msgstr[2] "Списки"
+msgstr[3] "Списки"
 
 #: js/Model.js:204
 msgid "Lists"
@@ -577,6 +573,7 @@ msgid_plural "Export {0}"
 msgstr[0] "Экспорт {0}"
 msgstr[1] "Экспорт {0}"
 msgstr[2] "Экспорт {0}"
+msgstr[3] "Экспорт {0}"
 
 #: js/ContactGrid.js:168
 msgid "Export as PDF"
@@ -606,11 +603,15 @@ msgstr "Экспорт в..."
 msgid "Import contacts"
 msgstr "Импорт контактов"
 
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact of a user account"
 msgstr "Контакт пользователя"
 
-#: Controller/Contact.php:330
+#: js/ContactGrid.js:292
+msgid "No name"
+msgstr ""
+
+#: Controller/Contact.php:334
 msgid "Uploaded new contact image."
 msgstr "Добавлено новое изображение контакта."
 
@@ -691,30 +692,53 @@ msgstr "Синтаксический анализ правил для адрес
 msgid "Path to a XML file with address parsing rules."
 msgstr "Путь к XML файлу с правилами разбора адреса."
 
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
 msgstr "CSV Outlook 2007 (немецкий)"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "Импорт контактов CSV"
+msgid "LX-Office CSV Contact import"
+msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:19
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Импорт списка (###CURRENTDATE###)"
 
-#: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_csv.xml:21
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
 msgstr "Контакты импортированы ###CURRENTDATE### в ###CURRENTTIME### ###USERFULLNAME###"
 
-#: Import/definitions/adb_outlook_import_csv.xml:13
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
 msgstr "Импорт контактов CSV из адресной книги Outlook"
 
-#: Import/definitions/adb_google_import_csv.xml:12
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:13
 msgid "Contact import from Google address book"
 msgstr "Импорт контактов CSV из адресной книги Google"
 
@@ -722,7 +746,11 @@ msgstr "Импорт контактов CSV из адресной книги Goo
 msgid "Contact CSV import from mac address book"
 msgstr "Импорт контактов CSV из адресной книги mac"
 
-#: Import/definitions/adb_import_vcard.xml:14
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:15
 msgid "Contact VCARD import"
 msgstr "Импорт контактов VCARD"
 

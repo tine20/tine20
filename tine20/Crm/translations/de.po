@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 12:44+0000\n"
+"PO-Revision-Date: 2015-10-19 10:22+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,32 +31,32 @@ msgid "Leadstate"
 msgstr "Status"
 
 #: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:392
-#: js/LeadGridDetailsPanel.js:463
+#: js/LeadGridDetailsPanel.js:239
 msgid "Leadtype"
 msgstr "Typ"
 
 #: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:155
-#: js/LeadEditDialog.js:399 js/LeadGridDetailsPanel.js:468
+#: js/LeadEditDialog.js:399 js/LeadGridDetailsPanel.js:244
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Quelle"
 
 #: Export/Pdf.php:87 js/LeadGridPanel.js:157 js/Model.js:111
-#: Controller/Lead.php:204
+#: Controller/Lead.php:210
 msgid "Turnover"
 msgstr "Umsatz"
 
 #: Export/Pdf.php:90 js/LeadGridPanel.js:156 js/Model.js:109
-#: js/LeadEditDialog.js:223 Controller/Lead.php:205
+#: js/LeadEditDialog.js:223 Controller/Lead.php:211
 msgid "Probability"
 msgstr "Wahrscheinlichkeit"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
-#: Controller/Lead.php:201
+#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:229
+#: Controller/Lead.php:207
 msgid "Start"
 msgstr "Start"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:203
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:209
 msgid "End"
 msgstr "Ende"
 
@@ -119,7 +119,7 @@ msgstr "%ss persönliche Leads"
 
 #: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:153
 #: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 Controller/Lead.php:197
+#: js/Contact.js:396 Controller/Lead.php:203
 msgid "Customer"
 msgstr "Kunde"
 
@@ -205,7 +205,7 @@ msgstr "Aufgabe hinzufügen..."
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/Task.js:266 js/LeadGridDetailsPanel.js:448
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:224
 msgid "Status"
 msgstr "Status"
 
@@ -213,16 +213,15 @@ msgstr "Status"
 msgid "Organizer"
 msgstr "Organisator"
 
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:203
-#: js/LeadGridDetailsPanel.js:236
+#: js/AdminPanel.js:122
 msgid "Leadstates"
 msgstr "Lead-Status"
 
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:225
+#: js/AdminPanel.js:126
 msgid "Leadtypes"
 msgstr "Lead-Typen"
 
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:214
+#: js/AdminPanel.js:130
 msgid "Leadsources"
 msgstr "Lead-Quellen"
 
@@ -236,7 +235,7 @@ msgid_plural "Lead States"
 msgstr[0] "Lead Status"
 msgstr[1] "Lead Status"
 
-#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
+#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:111 js/LeadSource.js:65
 msgid "undefined"
 msgstr "nicht definiert"
 
@@ -320,7 +319,7 @@ msgid "Lead name"
 msgstr "Lead-Name"
 
 #: js/LeadGridPanel.js:159 js/Model.js:118 js/LeadEditDialog.js:455
-#: js/LeadGridDetailsPanel.js:458
+#: js/LeadGridDetailsPanel.js:234
 msgid "Estimated end"
 msgstr "Geplantes Ende"
 
@@ -494,7 +493,7 @@ msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
 msgid "Select Lead"
 msgstr "Lead auswählen"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:199
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:205
 msgid "Role"
 msgstr "Rolle"
 
@@ -539,46 +538,46 @@ msgstr "Daten"
 msgid "Cellphone"
 msgstr "Telefon (Mobil)"
 
-#: Controller/Lead.php:198
+#: Controller/Lead.php:204
 msgid "State"
 msgstr "Status"
 
-#: Controller/Lead.php:200
+#: Controller/Lead.php:206
 msgid "Source"
 msgstr "Quelle"
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:208
 msgid "Scheduled end"
 msgstr "geplantes Ende"
 
-#: Controller/Lead.php:206
+#: Controller/Lead.php:212
 msgid "Folder"
 msgstr "Ordner"
 
-#: Controller/Lead.php:207
+#: Controller/Lead.php:213
 msgid "Updated by"
 msgstr "Aktualisiert von"
 
-#: Controller/Lead.php:208
+#: Controller/Lead.php:214
 msgid "Updated Fields:"
 msgstr "Geänderte Felder:"
 
-#: Controller/Lead.php:209
+#: Controller/Lead.php:215
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s wurde von %s auf %s geändert."
 
-#: Controller/Lead.php:215
+#: Controller/Lead.php:221
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Lead %s wurde geändert"
 
-#: Controller/Lead.php:217
+#: Controller/Lead.php:223
 #, python-format
 msgid "Lead %s has been deleted"
 msgstr "Lead %s wurde gelöscht"
 
-#: Controller/Lead.php:219
+#: Controller/Lead.php:225
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Lead %s wurde angelegt"
@@ -619,27 +618,41 @@ msgstr "Standard Favorit"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Der Standard Favorit der beim öffnen des Crm geladen wird"
 
-#: Config.php:41
+#: Config.php:48
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
-#: Config.php:43
+#: Config.php:50
 msgid "Enabled Features in Crm Application."
 msgstr "Features in der Crm Applikation aktivieren"
 
-#: Config.php:50
+#: Config.php:57
 msgid "Lead Import"
 msgstr "Lead Import"
 
-#: Config.php:59
+#: Config.php:66
+msgid "Add new task on lead import"
+msgstr "Füge eine neue Aufgabe beim Lead Import hinzu"
+
+#: Config.php:68
+msgid ""
+"Automatically creates a task for the responsible person if a new lead is "
+"imported"
+msgstr "Lege automatisch eine neue Aufgabe für die verantwortliche Person an, wenn ein neuer Lead importiert wird"
+
+#: Config.php:75
 msgid "Lead duplicate check fields"
 msgstr "Lead-Dublettencheck Felder"
 
-#: Config.php:61
+#: Config.php:77
 msgid ""
 "These fields are checked when a new lead is created. If a record with the "
 "same data in the fields is found, a duplicate exception is thrown."
 msgstr "Diese Felder werden überprüft, wenn ein neuer Lead angelegt wird. Wenn ein Datensatz mit den selben Daten in diesem Feld gefunden wird, wird eine Dubletten Warnung geworfen."
+
+#: Import/Csv.php:159
+msgid "Edit new lead"
+msgstr "Neuen Lead bearbeiten"
 
 #: Import/definitions/crm_tine_import_csv.xml:11
 msgid "Lead CSV import"
