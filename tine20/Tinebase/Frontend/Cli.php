@@ -37,6 +37,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $pagination->sort = 'id';
 
         $totalCount = 0;
+        $date = Tinebase_DateTime::now()->subYear(1);
 
         while ( ($recordSet = $relations->search($filter, $pagination)) && $recordSet->count() > 0 ) {
             $filter = new Tinebase_Model_Filter_FilterGroup();
@@ -44,13 +45,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $models = array();
 
             foreach($recordSet as $relation) {
-                $models[$relation->own_model][$relation->own_id] = true;
-                $models[$relation->related_model][$relation->related_id] = true;
+                $models[$relation->own_model][$relation->own_id][] = $relation->id;
+                $models[$relation->related_model][$relation->related_id][] = $relation->id;
             }
             foreach ($models as $model => &$ids) {
                 $app = Tinebase_Core::getApplicationInstance($model, '', true);
                 $backend = $app->getBackend();
-                if ( !$backend instanceof Tinebase_Controller_Record_Abstract ) {
+
+                if ( !$app instanceof Tinebase_Controller_Record_Abstract ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                    continue;
+                }
+                if ( !$backend instanceof Tinebase_Backend_Interface ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
                     continue;
                 }
                 $record = new $model(null, true);
@@ -70,14 +79,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 foreach($existingIds as $id) {
                     unset($ids[$id]);
                 }
-                $toDelete = array_keys($ids);
-                $date = Tinebase_DateTime::now()->subYear(1);
-                foreach($toDelete as $id) {
-                    if ( $recordSet->getById($id)->creation_time && $recordSet->getById($id)->creation_time->isAfter($date) ) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' relation is about to get deleted that is younger than 1 year: ' . print_r($recordSet->getById($id)->toArray(false), true));
+
+                if ( count($ids) > 0 ) {
+                    $toDelete = array();
+                    foreach ($ids as $idArrays) {
+                        foreach ($idArrays as $id) {
+                            $toDelete[$id] = true;
+                        }
                     }
-                }
-                if ( count($toDelete) > 0 ) {
+
+                    $toDelete = array_keys($toDelete);
+
+                    foreach($toDelete as $id) {
+                        if ( $recordSet->getById($id)->creation_time && $recordSet->getById($id)->creation_time->isAfter($date) ) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' relation is about to get deleted that is younger than 1 year: ' . print_r($recordSet->getById($id)->toArray(false), true));
+                        }
+                    }
+
                     $relations->delete($toDelete);
                     $totalCount += count($toDelete);
                 }
@@ -528,8 +546,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function monitoringCheckCron()
     {
         $message = 'CRON FAIL';
-        $result  = 2;
-        
+
         try {
             $lastJob = Tinebase_AsyncJob::getInstance()->getLastJob('Tinebase_Event_Async_Minutely');
             
@@ -708,6 +725,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach($this->_applicationsToWorkOn as $app => $cfg) {
             $this->_createDemoDataRecursive($app, $cfg, $_opts);
         }
+
+        return 0;
     }
     
     /**
@@ -755,6 +774,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $this->_addOutputLogWriter();
         
         Tinebase_FileSystem::getInstance()->clearDeletedFiles();
+
+        return 0;
     }
     
     /**
@@ -886,5 +907,48 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' The operation has been terminated successfully.');
         }
+
+        return 0;
+    }
+
+    /**
+     * repair function for persistent filters (favorites) without grants: this adds default grants for those filters.
+     *
+     * @return int
+     */
+    public function setDefaultGrantsOfPersistentFilters()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $this->_addOutputLogWriter(6);
+
+        // get all persistent filters without grants
+        // TODO this could be enhanced by allowing to set default grants for other filters, too
+
+        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter());
+        $filtersWithoutGrants = 0;
+
+        foreach ($filters as $filter) {
+            if (count($filter->grants) == 0) {
+                // update to set default grants
+                $filter = Tinebase_PersistentFilter::getInstance()->update($filter);
+                $filtersWithoutGrants++;
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Updated filter: ' . print_r($filter->toArray(), true));
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Set default grants for ' . $filtersWithoutGrants . ' filters'
+                . ' (checked ' . count($filters) . ' in total).');
+        }
+
+        return 0;
     }
 }
