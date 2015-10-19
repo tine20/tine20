@@ -291,13 +291,28 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                 continue;
             }
             
+            $keepEntryThreshold = 0;
+            foreach ($this->_propertyMapping as $property => $ldapName) {
+                if (substr($ldapName, -8) == ':boolean') {
+                    $ldapName = substr($ldapName, 0, -8);
+                }
+                if (!isset($dn[$ldapName])) {
+                    $dn[$ldapName] = null;
+                    $keepEntryThreshold++;
+                }
+                elseif ($dn[$ldapName] === null) {
+                    $keepEntryThreshold++;
+                }
+            }
+            
             // check for any values of worth to be saved (compared to minimal entry)
+            $dn = array_change_key_case($dn);
             $skeleton = array_change_key_case($this->_simpleMailConfig['skeleton']);
-            $skeleton['dn'] = true;
             $skeleton = array_merge($skeleton, Zend_Ldap_Dn::fromString($this->_simpleMailConfig['storage_rdn'])->getRdn() );
+            $skeleton['dn'] = true; // Zend_Ldap_Dn always carries the DN
             
             try {
-                if (count(array_diff_key($dn, $skeleton)) > 1) {
+                if (count(array_diff_key($dn, $skeleton)) > $keepEntryThreshold) {
                     $this->_ldap->save(Zend_Ldap_Dn::fromString($dn['dn']), $dn);
                 }
                 else {
