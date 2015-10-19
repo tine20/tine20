@@ -105,7 +105,7 @@ msgstr ""
 msgid "Percentage"
 msgstr ""
 
-#: js/TaskEditDialog.js:234 js/TaskGridPanel.js:171 Setup/Initialize.php:35
+#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Setup/Initialize.php:35
 #: Setup/Update/Release5.php:75
 msgid "Completed"
 msgstr ""

@@ -82,23 +82,23 @@ msgstr ""
 msgid "Depreciate"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:36
+#: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:45
+#: js/InventoryItemGridPanel.js:46
 msgid "Export as ODS"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:52
+#: js/InventoryItemGridPanel.js:53
 msgid "Export as CSV"
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:59
+#: js/InventoryItemGridPanel.js:60
 msgid "Export as ..."
 msgstr ""
 
-#: js/InventoryItemGridPanel.js:71
+#: js/InventoryItemGridPanel.js:72
 msgid "Import items"
 msgstr ""
 
