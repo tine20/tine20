@@ -26,7 +26,6 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
      */
     public function setUp()
     {
-        // enable courses app
         Tinebase_Application::getInstance()->setApplicationState(array(
             Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId()
         ), Tinebase_Application::ENABLED);
@@ -79,7 +78,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $searchDefaultFilter = $this->_getFilter();
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
         
-        $returned = $this->_json->searchExampleRecords($searchDefaultFilter, $this->_getPaging());
+        $returned = $this->_json->searchExampleRecords($mergedSearchFilter, $this->_getPaging());
         
         $this->assertEquals($returned['totalcount'], 1);
         
@@ -104,7 +103,8 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     public function testSearchExampleRecordsTags()
     {
         $exampleRecordWithTag = $this->testCreateExampleRecord();
-        $exampleRecordWithoutTag = $this->testCreateExampleRecord();
+        // create a second record with no tag
+        $this->testCreateExampleRecord();
         
         $exampleRecordWithTag['tags'] = array(array(
             'name'    => 'supi',
@@ -132,7 +132,6 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->assertEquals($returnValueDeletion['status'], 'success');
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $returnValueGet = $this->_json->getExampleRecord($exampleRecordID);
+        $this->_json->getExampleRecord($exampleRecordID);
     }
-    
 }
