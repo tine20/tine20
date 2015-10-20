@@ -126,6 +126,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS = 'featureExtendedEventContextActions';
 
     /**
+     * FEATURE_COLOR_BY
+     *
+     * @var string
+     */
+    const FEATURE_COLOR_BY = 'featureColorBy';
+
+    /**
      * EVENT_VIEW
      *
      * @var string
@@ -310,11 +317,16 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     'label'         => 'Calendar Extended Context Menu Actions', //_('Calendar Extended Context Menu Actions')
                     'description'   => 'Adds extended actions to event context menus', //_('Adds extended actions to event context menus')
                 ),
+                self::FEATURE_COLOR_BY => array(
+                    'label'         => 'Color Events By', //_('Color Events By')
+                    'description'   => 'Choose event color by different criteria', //_('Choose event color by different criteria')
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SPLIT_VIEW                        => true,
                 self::FEATURE_YEAR_VIEW                         => true,
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
+                self::FEATURE_COLOR_BY    => true,
             ),
         ),
     );

@@ -616,6 +616,9 @@ td.x-date-mp-sel a {
 .x-menu-item-checked .x-menu-group-item .x-menu-item-icon{
     background-image:url(../images/tine20/menu/group-checked.gif);
 }
+.x-menu-group-item .x-menu-item-icon{
+    background-image:none;
+}
 .x-cycle-menu .x-menu-item-checked {
     border-color:#a3bae9 !important;
     background-color:#def8f6;
