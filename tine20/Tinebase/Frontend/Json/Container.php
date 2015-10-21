@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Container
  */
-class Tinebase_Frontend_Json_Container
+class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
 {
    /**
      * gets container / container folder
@@ -263,6 +263,8 @@ class Tinebase_Frontend_Json_Container
         $filterModel = $applicationName . '_Model_' . $model . 'Filter';
         $filter = new $filterModel(array());
         $filter->setFromArrayInUsersTimezone($filterData);
+
+        $this->_longRunningRequest();
         
         $recordController = Tinebase_Core::getApplicationInstance($applicationName, $model);
         $result = $recordController->move($filter, $targetContainerId);
