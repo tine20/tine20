@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Albanian (http://www.transifex.com/projects/p/tine20/language/sq/)\n"
+"Language-Team: Albanian (http://www.transifex.com/tine20/tine20/language/sq/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,11 +49,11 @@ msgstr "Krijo ose përditëso preferencialet e tabelave kohore të ndara"
 msgid "hour"
 msgstr ""
 
-#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:141
+#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:144
 msgid "Cost Center"
 msgstr "Qëndra e kostove"
 
-#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:156
+#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:159
 msgid "Responsible Person"
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "New Timesheet"
 msgstr "Tabelë Kohore e re"
 
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+#: js/DurationSpinner.js:95
 msgid "Not a valid time"
 msgstr "Kohë jo e vlefshme"
 
@@ -81,22 +81,22 @@ msgstr "pa marrëveshje"
 msgid "Tags"
 msgstr "Etiketa"
 
-#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:207
+#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:210
 #: js/Models.js:179
 msgid "Number"
 msgstr "Numër"
 
-#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:213
+#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:216
 #: js/Models.js:180
 msgid "Title"
 msgstr "Titull"
 
-#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:93
+#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:96
 #: js/Models.js:182
 msgid "Billed"
 msgstr "Faturuar"
 
-#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:82
+#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:83
 msgid "Budget"
 msgstr "Buxhet"
 
@@ -106,36 +106,36 @@ msgid "Cleared in"
 msgstr "Pastruar në"
 
 #: js/TimeaccountGridPanel.js:108 js/TimesheetGridPanel.js:92
-#: js/TimeaccountEditDialog.js:175 js/TimesheetEditDialog.js:166
+#: js/TimeaccountEditDialog.js:178 js/TimesheetEditDialog.js:167
 msgid "Invoice"
 msgstr ""
 
-#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:119
+#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:122
 #: js/Models.js:189
 msgid "Booking deadline"
 msgstr "Afati i fundit i rezervimit"
 
-#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:135
+#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:138
 #: js/Models.js:184
 msgid "Cleared at"
 msgstr "Pastruar në"
 
-#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:85
+#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:88
 #: js/Models.js:183
 msgid "Status"
 msgstr "Staus"
 
 #: js/TimeaccountGridPanel.js:137 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountEditDialog.js:91
+#: js/TimeaccountEditDialog.js:94
 msgid "open"
 msgstr "hapur"
 
 #: js/TimeaccountGridPanel.js:138 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountEditDialog.js:91 js/Models.js:161
+#: js/TimeaccountEditDialog.js:94 js/Models.js:161
 msgid "closed"
 msgstr "mbyllur"
 
-#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:291
+#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:294
 msgid "Export"
 msgstr "Eksport"
 
@@ -147,7 +147,11 @@ msgstr "Eksporto si ODS"
 msgid "Export as CSV"
 msgstr "Eksporto si CSV"
 
-#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:222 js/Models.js:93
+#: js/TimeaccountGridPanel.js:203
+msgid "Close Timeaccount"
+msgstr ""
+
+#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:223 js/Models.js:93
 msgid "Date"
 msgstr "Datë"
 
@@ -164,26 +168,26 @@ msgid "Time Account closed"
 msgstr "Llogari Kohore e mbyllur"
 
 #: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:244
-#: js/TimeaccountEditDialog.js:219 js/TimesheetEditDialog.js:233
+#: js/TimeaccountEditDialog.js:222 js/TimesheetEditDialog.js:234
 #: js/Models.js:94 js/Models.js:181
 msgid "Description"
 msgstr "Përshkrim"
 
 #: js/TimesheetGridPanel.js:87 js/TimesheetGridPanel.js:385
-#: js/TimesheetEditDialog.js:142 js/Models.js:95
+#: js/TimesheetEditDialog.js:143 js/Models.js:95
 msgid "Billable"
 msgstr "E faturueshme"
 
 #: js/TimesheetGridPanel.js:89 js/TimesheetGridPanel.js:390
-#: js/TimesheetEditDialog.js:148 js/Models.js:96
+#: js/TimesheetEditDialog.js:149 js/Models.js:96
 msgid "Cleared"
 msgstr "E pastruar"
 
-#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:137 js/Models.js:92
+#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:138 js/Models.js:92
 msgid "Account"
 msgstr "Llogari"
 
-#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:217
+#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:218
 msgid "Duration"
 msgstr "Kohëzgjatja"
 
@@ -239,140 +243,140 @@ msgstr "Llogari kohore - Status"
 msgid "Time Account - Billed"
 msgstr "Llogari kohore - Faturuar"
 
-#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:101
+#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:104
 #: Setup/setup.xml:87
 msgid "not yet billed"
 msgstr "e pafaturuar akoma"
 
-#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:102
+#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:105
 #: Setup/setup.xml:88
 msgid "to bill"
 msgstr "për tu faturuar"
 
-#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:103
+#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:106
 #: Setup/setup.xml:89
 msgid "billed"
 msgstr "faturuar"
 
-#: js/TimeaccountEditDialog.js:49
+#: js/TimeaccountEditDialog.js:50
 msgid "Add New Timeaccount"
 msgstr ""
 
-#: js/TimeaccountEditDialog.js:73
+#: js/TimeaccountEditDialog.js:74
 msgid "Unit"
 msgstr "Njësi"
 
-#: js/TimeaccountEditDialog.js:77
+#: js/TimeaccountEditDialog.js:78
 msgid "Unit Price"
 msgstr "Çmim njësie"
 
-#: js/TimeaccountEditDialog.js:114 js/TimesheetEditDialog.js:158
+#: js/TimeaccountEditDialog.js:117 js/TimesheetEditDialog.js:159
 msgid "Cleared In"
 msgstr "Pastruar në"
 
-#: js/TimeaccountEditDialog.js:127
+#: js/TimeaccountEditDialog.js:130
 msgid "none"
 msgstr "askush"
 
-#: js/TimeaccountEditDialog.js:128
+#: js/TimeaccountEditDialog.js:131
 msgid "last week"
 msgstr "javën e shkuar"
 
-#: js/TimeaccountEditDialog.js:165
+#: js/TimeaccountEditDialog.js:168
 msgid "Timesheets are billable"
 msgstr "Tabelat kohore janë të faturueshme"
 
-#: js/TimeaccountEditDialog.js:191 js/TimesheetEditDialog.js:202
+#: js/TimeaccountEditDialog.js:194 js/TimesheetEditDialog.js:203
 #: js/Models.js:149
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] "Llogaria kohore"
 msgstr[1] "Llogaritë kohore"
 
-#: js/TimeaccountEditDialog.js:244
+#: js/TimeaccountEditDialog.js:247
 msgid "Access"
 msgstr "Hyrje"
 
-#: js/TimeaccountEditDialog.js:267
+#: js/TimeaccountEditDialog.js:270
 msgid "Book Own"
 msgstr "Rezervo tënden"
 
-#: js/TimeaccountEditDialog.js:269
+#: js/TimeaccountEditDialog.js:272
 msgid "The grant to add Timesheets to this Timeaccount"
 msgstr "E drejta për të shtuar Tabela Kohore tek kjo Llogari kohore "
 
-#: js/TimeaccountEditDialog.js:273
+#: js/TimeaccountEditDialog.js:276
 msgid "View All"
 msgstr "Shiko të gjitha"
 
-#: js/TimeaccountEditDialog.js:274
+#: js/TimeaccountEditDialog.js:277
 msgid "The grant to view Timesheets of other users"
 msgstr "E drejta për të parë Tabelat Kohore të përdoruesve të tjerë"
 
-#: js/TimeaccountEditDialog.js:279
+#: js/TimeaccountEditDialog.js:282
 msgid "Book All"
 msgstr "Rezervo të gjitha"
 
-#: js/TimeaccountEditDialog.js:280
+#: js/TimeaccountEditDialog.js:283
 msgid "The grant to add Timesheets for other users"
 msgstr "E drejta për të shtuar Tabela Kohore për përdoruesit e tjerë"
 
-#: js/TimeaccountEditDialog.js:285
+#: js/TimeaccountEditDialog.js:288
 msgid "Manage Clearing"
 msgstr "Menaxho Pastrimin"
 
-#: js/TimeaccountEditDialog.js:286
+#: js/TimeaccountEditDialog.js:289
 msgid "The grant to manage clearing of Timesheets"
 msgstr "E drejta për të menaxhuar pastrimin e Tabelave Kohore"
 
-#: js/TimeaccountEditDialog.js:292
+#: js/TimeaccountEditDialog.js:295
 msgid "The grant to export Timesheets of Timeaccount"
 msgstr "E drejta për të eksportuar Tabela Kohore të Llogarive kohore"
 
-#: js/TimeaccountEditDialog.js:297
+#: js/TimeaccountEditDialog.js:300
 msgid "Manage All"
 msgstr "Menaxho të gjitha"
 
-#: js/TimeaccountEditDialog.js:298
+#: js/TimeaccountEditDialog.js:301
 msgid "Includes all other grants"
 msgstr "Përfshin të gjithë të drejtat e tjera"
 
-#: js/TimeaccountEditDialog.js:306
+#: js/TimeaccountEditDialog.js:309
 msgid "Permissions"
 msgstr "Autorizime"
 
-#: js/TimesheetEditDialog.js:185 js/Models.js:51
+#: js/TimesheetEditDialog.js:186 js/Models.js:51
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Tabelë kohore"
 msgstr[1] "Tabela Kohore"
 
-#: js/TimesheetEditDialog.js:203
+#: js/TimesheetEditDialog.js:204
 msgid "Select Time Account..."
 msgstr "Zgjidh Llogarine kohore"
 
-#: js/TimesheetEditDialog.js:227
+#: js/TimesheetEditDialog.js:228
 msgid "Start"
 msgstr "Fillo"
 
-#: js/TimesheetEditDialog.js:228
+#: js/TimesheetEditDialog.js:229
 msgid "not set"
 msgstr "e pa caktuar"
 
-#: js/TimesheetEditDialog.js:234
+#: js/TimesheetEditDialog.js:235
 msgid "Enter description..."
 msgstr "Vendosni përshkrimin"
 
-#: js/TimesheetEditDialog.js:281
+#: js/TimesheetEditDialog.js:282
 msgid "Failed"
 msgstr "Dështoi"
 
-#: js/TimesheetEditDialog.js:282
+#: js/TimesheetEditDialog.js:283
 #, python-brace-format
 msgid "Could not save {0}."
 msgstr "Nuk mund të ruhej {0}."
 
-#: js/TimesheetEditDialog.js:283
+#: js/TimesheetEditDialog.js:284
 msgid "Booking deadline for this Timeaccount has been exceeded."
 msgstr "Afati i rezervimit për këtë Llogari kohore është tejkaluar"
 

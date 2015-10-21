@@ -756,7 +756,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
         }
         // sanitize product_id
-        if (is_array($recordData['positions'])) {
+        if (isset($recordData['positions']) && is_array($recordData['positions'])) {
             for ($i = 0; $i < count($recordData['positions']); $i++) {
                 if (isset($recordData['positions'][$i]['product_id']) && is_array($recordData['positions'][$i]['product_id'])) {
                     $recordData['positions'][$i]['product_id'] = $recordData['positions'][$i]['product_id']['id'];

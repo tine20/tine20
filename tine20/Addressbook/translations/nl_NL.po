@@ -2,13 +2,14 @@
 # Translators:
 # Bastiën Zittema <b_zittema@hotmail.com>, 2014
 # Pascal Zittema <p_zittema@hotmail.com>, 2013
+# Whatsek <Whatsek@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:20+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,7 +45,7 @@ msgstr "Mobiel"
 
 #: Export/Pdf.php:61
 msgid "Telephone Car"
-msgstr "Telefoon auto"
+msgstr "Auto telefoon"
 
 #: Export/Pdf.php:64
 msgid "Telephone Fax"
@@ -121,23 +122,23 @@ msgstr "Titel werk"
 
 #: Export/Doc.php:69
 msgid "Dear Mister"
-msgstr ""
+msgstr "Geachte Heer"
 
 #: Export/Doc.php:71
 msgid "Dear Miss"
-msgstr ""
+msgstr "Geachte Mevrouw"
 
 #: Export/Doc.php:73
 msgid "Dear"
-msgstr ""
+msgstr "Beste"
 
 #: Export/Doc.php:89
 msgid "Mister"
-msgstr ""
+msgstr "Meneer"
 
 #: Export/Doc.php:91
 msgid "Misses"
-msgstr ""
+msgstr "Mevrouw"
 
 #: Controller.php:105
 #, python-format
@@ -165,7 +166,7 @@ msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
 #: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Contact"
@@ -198,14 +199,12 @@ msgstr "Voornaam"
 msgid "Middle Name"
 msgstr "Tussenvoegsel"
 
-#: js/ContactEditDialog.js:123 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:19 js/Model.js:142
+#: js/ContactEditDialog.js:123 js/Model.js:19 js/Model.js:142
 #: js/ContactGrid.js:113
 msgid "Last Name"
 msgstr "Achternaam"
 
-#: js/ContactEditDialog.js:129 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:27 js/Model.js:144
+#: js/ContactEditDialog.js:129 js/Model.js:27 js/Model.js:144
 #: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:117
 #: Setup/Initialize.php:70 Setup/Update/Release5.php:196
 msgid "Company"
@@ -324,32 +323,27 @@ msgstr "Voer omschrijving in"
 msgid "Export as pdf"
 msgstr "Exporteer als pdf"
 
-#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:448
 msgid "Parse address"
 msgstr "ontleden adres"
 
-#: js/ContactEditDialog.js:428 js/ContactEditDialog.js:450
-#, python-brace-format
-msgid "Either {0} or {1} must be given"
-msgstr "Ofwel {0} of {1} worden gegeven"
-
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Paste address"
 msgstr "Plak adres"
 
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr ""
+msgstr "Plak een adres of een URI naar een Vcard dat verwerkt moet worden:"
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "Failed to parse address!"
-msgstr ""
+msgstr "Adres verwerken mislukt!"
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "The address could not be read."
-msgstr ""
+msgstr "Het adres kon niet gelezen worden"
 
-#: js/ContactEditDialog.js:528
+#: js/ContactEditDialog.js:483
 msgid "End token mode"
 msgstr "Einde token mode"
 
@@ -590,7 +584,7 @@ msgstr "Exporteer als XLS"
 
 #: js/ContactGrid.js:196
 msgid "Export as DOC"
-msgstr ""
+msgstr "Exporteer als DOC"
 
 #: js/ContactGrid.js:203
 msgid "Export as ..."
@@ -600,11 +594,15 @@ msgstr "Exporteer als ..."
 msgid "Import contacts"
 msgstr "Importeer contacten"
 
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact of a user account"
 msgstr "Contact van gebruikersaccount"
 
-#: Controller/Contact.php:330
+#: js/ContactGrid.js:292
+msgid "No name"
+msgstr ""
+
+#: Controller/Contact.php:334
 msgid "Uploaded new contact image."
 msgstr "Nieuw contact afbeelding geupload"
 
@@ -630,28 +628,28 @@ msgstr "Standaard favoriet bij opstarten adresboek"
 
 #: Preference.php:89
 msgid "Contacts ODS export configuration"
-msgstr ""
+msgstr "Contacten ODS export configuratie"
 
 #: Preference.php:90
 msgid "Use this configuration for the contact ODS export."
-msgstr ""
+msgstr "Gebruik deze configuratie voor de contactpersoon ODS export."
 
 #: Preference.php:93
 msgid "Contacts XLS export configuration"
-msgstr ""
+msgstr "Contacten XLS export configuratie"
 
 #: Preference.php:94
 msgid "Use this configuration for the contact XLS export."
-msgstr ""
+msgstr "Gebruik deze configuratie voor de contactpersoon XLS export."
 
 #: Preference.php:165
 msgid "default"
-msgstr ""
+msgstr "standaard"
 
 #: Frontend/Cli.php:166
 msgid ""
 "This contact has been automatically added by the system as an event attender"
-msgstr ""
+msgstr "Dit contact is automatisch toegevoegd door het systeem als een gebeurtenis genodigde "
 
 #: Frontend/CardDAV/AllContacts.php:41
 msgid "All Contacts"
@@ -685,30 +683,53 @@ msgstr "parsingregels voor adressen"
 msgid "Path to a XML file with address parsing rules."
 msgstr "Pad naar een XML-bestand met adres parsingregels."
 
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
 msgstr "CSV Outlook 2007 Nederlands"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "Contact CSV importeren"
+msgid "LX-Office CSV Contact import"
+msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:19
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Import lijst(###CURRENTDATE###)"
 
-#: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_csv.xml:21
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
 msgstr "Geïmporteerd op ###CURRENTDATE### op ###CURRENTTIME### door ###USERFULLNAME###"
 
-#: Import/definitions/adb_outlook_import_csv.xml:13
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
 msgstr "Contact CSV importeren uit Outlook adresboek"
 
-#: Import/definitions/adb_google_import_csv.xml:12
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:13
 msgid "Contact import from Google address book"
 msgstr "Contact importeren van Google adresboek"
 
@@ -716,7 +737,11 @@ msgstr "Contact importeren van Google adresboek"
 msgid "Contact CSV import from mac address book"
 msgstr "Contact CSV importeren van Apple adresboek"
 
-#: Import/definitions/adb_import_vcard.xml:14
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:15
 msgid "Contact VCARD import"
 msgstr "Contact VCARD importeren"
 

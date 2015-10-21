@@ -115,6 +115,10 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if ($this->_ignoreAcl) {
+            return;
+        }
+
         if (Timetracker_Controller_Timesheet::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE, FALSE)) {
             return;
         }

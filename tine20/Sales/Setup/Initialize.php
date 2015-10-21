@@ -152,7 +152,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
             'name'    => Sales_Config::PAYMENT_METHODS,
             'records' => array(
                 array('id' => 'BANK TRANSFER', 'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
-                array('id' => 'DIRECT DEBIT',  'value' => 'Direct debit',  'system' => true)  // _('Direct debit')
+                array('id' => 'DIRECT DEBIT',  'value' => 'Direct debit',  'system' => true),  // _('Direct debit')
+                array('id' => 'CANCELLATION',  'value' => 'Cancellation',  'system' => true),  // _('Cancellation')
+                array('id' => 'CREDIT',  'value' => 'Credit',  'system' => true),  // _('Credit')
+                array('id' => 'CREDIT CARD',  'value' => 'Credit card',  'system' => true),  // _('Credit card')
+                array('id' => 'PAYPAL',  'value' => 'Paypal',  'system' => true),  // _('Paypal')
             ),
         );
         

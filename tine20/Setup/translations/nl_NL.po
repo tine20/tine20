@@ -1,13 +1,14 @@
 # 
 # Translators:
 # skippy8472 <skippy8472@hotmail.com>, 2014
+# Whatsek <Whatsek@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
+"PO-Revision-Date: 2015-08-25 21:54+0000\n"
+"Last-Translator: Whatsek <Whatsek@gmail.com>\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,7 +20,7 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:127
 msgid "Delete all existing users and groups"
-msgstr ""
+msgstr "Verwijder alle bestaande gebruikers en groepen"
 
 #: js/AuthenticationPanel.js:127
 msgid ""
@@ -407,7 +408,7 @@ msgstr "Email"
 msgid "Application Manager"
 msgstr ""
 
-#: js/Setup.js:185
+#: js/Setup.js:187
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Toepassing"

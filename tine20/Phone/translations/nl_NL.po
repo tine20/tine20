@@ -1,13 +1,14 @@
 # 
 # Translators:
 # Bastiën Zittema <b_zittema@hotmail.com>, 2014
+# Whatsek <Whatsek@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
-"Last-Translator: pschuele <p.schuele@metaways.de>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
+"PO-Revision-Date: 2015-08-25 18:51+0000\n"
+"Last-Translator: Whatsek <Whatsek@gmail.com>\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,19 +20,19 @@ msgstr ""
 
 #: Model/Call.php:43
 msgid "Call"
-msgstr ""
+msgstr "Bel"
 
 #: Model/Call.php:44
 msgid "Calls"
-msgstr ""
+msgstr "Gesprekken"
 
 #: Model/Call.php:60 js/DialerPanel.js:76
 msgid "Line"
-msgstr ""
+msgstr "Lijn"
 
 #: Model/Call.php:80
 msgid "Caller Id"
-msgstr "Gegevens beller"
+msgstr "Beller ID"
 
 #: Model/Call.php:86
 msgid "Start"
@@ -43,31 +44,31 @@ msgstr "Verbonden"
 
 #: Model/Call.php:95
 msgid "Disconnected"
-msgstr ""
+msgstr "Verbroken"
 
 #: Model/Call.php:100
 msgid "Duration"
-msgstr ""
+msgstr "Duur"
 
 #: Model/Call.php:106
 msgid "Ringing"
-msgstr ""
+msgstr "Gaat over"
 
 #: Model/Call.php:112
 msgid "Direction"
-msgstr ""
+msgstr "Richting"
 
 #: Model/Call.php:115
 msgid "Source"
-msgstr ""
+msgstr "Bron"
 
 #: Model/Call.php:120
 msgid "Destination"
-msgstr ""
+msgstr "Bestemming"
 
 #: Model/MyPhone.php:32 js/DialerPanel.js:53
 msgid "Phone"
-msgstr ""
+msgstr "Telefoon"
 
 #: Model/MyPhone.php:33 js/CallGridPanel.js:167
 msgid "Phones"
@@ -75,11 +76,11 @@ msgstr "Telefoons"
 
 #: Model/MyPhone.php:61
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: Model/MyPhone.php:66
 msgid "Lines"
-msgstr ""
+msgstr "Lijnen"
 
 #: Model/MyPhone.php:69
 msgid "Description"
@@ -127,15 +128,15 @@ msgstr "Bel nummer"
 
 #: js/CallGridPanel.js:69
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "Nieuw uitgaand gesprek"
 
 #: js/CallGridPanel.js:216
 msgid "No phone selected"
-msgstr ""
+msgstr "Geen telefoon geselecteerd "
 
 #: js/CallGridPanel.js:217
 msgid "Please select the desired phone in the tree!"
-msgstr ""
+msgstr "Selecteer de gewenste telefoon in de lijst! "
 
 #: js/DialerPanel.js:85
 msgid "Number"
@@ -159,32 +160,32 @@ msgstr "Bellen niet mogelijk"
 
 #: Setup/Initialize.php:33 Setup/Update/Release7.php:30
 msgid "Calls this week"
-msgstr ""
+msgstr "Bel deze week"
 
 #: Setup/Initialize.php:34
 msgid "Incoming and outgoing calls of this week"
-msgstr ""
+msgstr "Inkomende en uitgaande gesprekken van deze week"
 
 #: Setup/Initialize.php:43 Setup/Update/Release7.php:40
 msgid "Calls last week"
-msgstr ""
+msgstr "Gesprekken vorige week"
 
 #: Setup/Initialize.php:44
 msgid "Incoming and outgoing calls of last week"
-msgstr ""
+msgstr "Inkomende en uitgaande gesprekken van vorige week"
 
 #: Setup/Initialize.php:53 Setup/Update/Release7.php:50
 msgid "Calls this month"
-msgstr ""
+msgstr "Gesprekken deze maand"
 
 #: Setup/Initialize.php:54
 msgid "Incoming and outgoing calls of this month"
-msgstr ""
+msgstr "Inkomende en uitgaande gesprekken van deze maand"
 
 #: Setup/Initialize.php:63 Setup/Update/Release7.php:60
 msgid "Calls last month"
-msgstr ""
+msgstr "Gesprekken vorige maand"
 
 #: Setup/Initialize.php:64
 msgid "Incoming and outgoing calls of last month"
-msgstr ""
+msgstr "Inkomende en uitgaande gesprekken van vorige maand"

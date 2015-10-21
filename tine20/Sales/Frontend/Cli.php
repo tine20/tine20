@@ -119,6 +119,10 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (array_key_exists('remove_unbilled', $args) && $args['remove_unbilled'] == 1) {
             $this->removeUnbilledAutoInvoices($contract);
         }
+
+        if (array_key_exists('check_updates', $args) && $args['check_updates'] == 1) {
+            Sales_Controller_Invoice::getInstance()->checkForContractOrInvoiceUpdates($contract);
+        }
         
         $result = Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract);
         
@@ -294,13 +298,13 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         $p = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC'));
-        
+
         $invoiceIds = $c->search($f, $p, /* $_getRelations = */ false, /* only ids */ true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' About to delete ' . count($invoiceIds) .' uncleared invoices ...');
         }
-        
+
         foreach ($invoiceIds as $invoiceId) {
             try {
                 $c->delete(array($invoiceId));

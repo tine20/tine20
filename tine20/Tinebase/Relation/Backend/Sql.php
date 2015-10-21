@@ -42,6 +42,13 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @var Tinebase_Db_Table
      */
     protected $_dbTable;
+
+    /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'relations';
     
     /**
      * constructor
@@ -50,12 +57,14 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $this->_db = Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
+        $this->_tablePrefix = $this->_db->table_prefix;
         
         // temporary on the fly creation of table
         $this->_dbTable = new Tinebase_Db_Table(array(
-            'name' => SQL_TABLE_PREFIX . 'relations',
+            'name' => $this->_tablePrefix . 'relations',
             'primary' => 'id'
         ));
+
     }
     
     /**

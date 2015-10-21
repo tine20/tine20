@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
+"Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -83,7 +83,7 @@ msgstr "Curso / Tipo de Escuela"
 msgid "Description"
 msgstr "Descripción"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr "Acceso a Internet"
 
@@ -164,49 +164,53 @@ msgstr "Todos los cursos"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Favorito por defecto que se carga al iniciar las clases"
 
-#: Config.php:91
+#: Config.php:98
 msgid "Internet access options."
 msgstr "Opciones de acceso a Internet"
 
-#: Config.php:98 Config.php:100
+#: Config.php:105 Config.php:107
 msgid "Internet Access Group (ON)"
 msgstr "Grupo de acceso a Internet (ENCENDIDO)"
 
-#: Config.php:106 Config.php:108
+#: Config.php:113 Config.php:115
 msgid "Internet Access Group (FILTERED)"
 msgstr "Grupo de acceso a Grupo (FILTRADO)"
 
-#: Config.php:114 Config.php:116
+#: Config.php:121 Config.php:123
 msgid "Students Group"
 msgstr "Grupo de Estudiantes"
 
-#: Config.php:122 Config.php:124
+#: Config.php:129 Config.php:131
 msgid "Students Import Definition"
 msgstr "Definición de inportación de Estudiantes"
 
-#: Config.php:130
+#: Config.php:137
 msgid "Students login name prefix"
 msgstr "Prefijo del usuario de estudiante"
 
-#: Config.php:137
+#: Config.php:144
+msgid "Students password suffix"
+msgstr ""
+
+#: Config.php:151
 msgid "Student username schema"
 msgstr "Esquema del usuario del estudiante"
 
-#: Config.php:139
+#: Config.php:153
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Esquema del usuario del estudiante (0= solo apellido (10 caracteres), 1= apellido +2 caracteres apra el nombre."
 
-#: Config.php:146 Config.php:148
+#: Config.php:160 Config.php:162
 msgid "Samba user settings"
 msgstr "Configuracion de usuarios Samba"
 
-#: Config.php:157
+#: Config.php:171
 msgid "Default department"
 msgstr ""
 
-#: Config.php:159
+#: Config.php:173
 msgid "The default department for new Courses"
 msgstr ""
 

@@ -403,7 +403,7 @@ msgstr ""
 msgid "Application Manager"
 msgstr ""
 
-#: js/Setup.js:185
+#: js/Setup.js:187
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] ""

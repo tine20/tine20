@@ -1,19 +1,19 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2015
 # Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2015-04-28 14:52+0000\n"
+"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -29,13 +29,15 @@ msgid_plural "Inventory items"
 msgstr[0] "предметы из инвентаризации"
 msgstr[1] "предметы из инвентаризации"
 msgstr[2] "предметы из инвентаризации"
+msgstr[3] "предметы из инвентаризации"
 
 #: Model/InventoryItem.php:39
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "лист инвентаризации"
+msgstr[1] "листы инвентаризации"
 msgstr[2] ""
+msgstr[3] "листы инвентаризации"
 
 #: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
@@ -71,7 +73,7 @@ msgstr "Цена"
 
 #: Model/InventoryItem.php:104
 msgid "Cost Center"
-msgstr ""
+msgstr "Затраты"
 
 #: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
@@ -89,23 +91,23 @@ msgstr "пункт удалён"
 msgid "Depreciate"
 msgstr "Не используется"
 
-#: js/InventoryItemGridPanel.js:36
+#: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
 msgstr "Экспорт инвентаризации"
 
-#: js/InventoryItemGridPanel.js:45
+#: js/InventoryItemGridPanel.js:46
 msgid "Export as ODS"
 msgstr "Экспортировать как ODS"
 
-#: js/InventoryItemGridPanel.js:52
+#: js/InventoryItemGridPanel.js:53
 msgid "Export as CSV"
 msgstr "Экспортировать как CSV"
 
-#: js/InventoryItemGridPanel.js:59
+#: js/InventoryItemGridPanel.js:60
 msgid "Export as ..."
 msgstr "Экспортировать как..."
 
-#: js/InventoryItemGridPanel.js:71
+#: js/InventoryItemGridPanel.js:72
 msgid "Import items"
 msgstr "Добавить предметы"
 

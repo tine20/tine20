@@ -182,6 +182,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @var string holds condition between this filters
      */
     protected $_concatenationCondition = NULL;
+
+    /**
+     * @var boolean whether to check ACLs
+     */
+    protected $_ignoreAcl = false;
     
     /******************************** functions ********************************/
     
@@ -199,6 +204,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $this->_setOptions($_options);
         
         $this->_concatenationCondition = $_condition == self::CONDITION_OR ? self::CONDITION_OR : self::CONDITION_AND;
+
+        $this->_ignoreAcl = isset($this->_options['ignoreAcl']) ? (bool)$this->_options['ignoreAcl'] : false;
         
         $this->setFromArray($_data);
     }

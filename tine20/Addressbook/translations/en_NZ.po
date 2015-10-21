@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Ingo Ratsdorf, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:20+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/tine20/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,152 +19,152 @@ msgstr ""
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
-msgstr ""
+msgstr "Business contact data"
 
 #: Export/Pdf.php:39
 msgid "Organisation / Unit"
-msgstr ""
+msgstr "Organisation / Unit"
 
 #: Export/Pdf.php:44
 msgid "Business Address"
-msgstr ""
+msgstr "Business address"
 
 #: Export/Pdf.php:52 js/ContactGrid.js:132
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: Export/Pdf.php:55
 msgid "Telephone Work"
-msgstr ""
+msgstr "Telephone work"
 
 #: Export/Pdf.php:58
 msgid "Telephone Cellphone"
-msgstr ""
+msgstr "Cellphone"
 
 #: Export/Pdf.php:61
 msgid "Telephone Car"
-msgstr ""
+msgstr "Car phone"
 
 #: Export/Pdf.php:64
 msgid "Telephone Fax"
-msgstr ""
+msgstr "Fax"
 
 #: Export/Pdf.php:67
 msgid "Telephone Page"
-msgstr ""
+msgstr "Telephone Page"
 
 #: Export/Pdf.php:70
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: Export/Pdf.php:73
 msgid "Role"
-msgstr ""
+msgstr "Role"
 
 #: Export/Pdf.php:76 js/ContactEditDialog.js:147 js/Model.js:33
 #: js/ContactGrid.js:121
 msgid "Room"
-msgstr ""
+msgstr "Room"
 
 #: Export/Pdf.php:79
 msgid "Assistant"
-msgstr ""
+msgstr "Assistant"
 
 #: Export/Pdf.php:82
 msgid "Assistant Telephone"
-msgstr ""
+msgstr "Assistant telephone"
 
 #: Export/Pdf.php:86
 msgid "Private Contact Data"
-msgstr ""
+msgstr "Private contact data"
 
 #: Export/Pdf.php:88 js/ContactEditDialog.js:300 js/Model.js:43
 #: js/Model.js:158 js/Model.js:159 js/Model.js:160 js/Model.js:161
 #: js/Model.js:162
 msgid "Private Address"
-msgstr ""
+msgstr "Private address"
 
 #: Export/Pdf.php:96
 msgid "Email Home"
-msgstr ""
+msgstr "Email home"
 
 #: Export/Pdf.php:99
 msgid "Telephone Home"
-msgstr ""
+msgstr "Telephone home"
 
 #: Export/Pdf.php:102
 msgid "Telephone Cellphone Private"
-msgstr ""
+msgstr "Private cellphone"
 
 #: Export/Pdf.php:105
 msgid "Telephone Fax Home"
-msgstr ""
+msgstr "Fax home"
 
 #: Export/Pdf.php:108
 msgid "URL Home"
-msgstr ""
+msgstr "URL home"
 
 #: Export/Pdf.php:112
 msgid "Other Data"
-msgstr ""
+msgstr "Other data"
 
 #: Export/Pdf.php:114 js/ContactEditDialog.js:174 js/Model.js:26
 #: js/Model.js:152 js/ContactGrid.js:147
 msgid "Birthday"
-msgstr ""
+msgstr "Birthday"
 
 #: Export/Pdf.php:117 js/ContactEditDialog.js:168 js/Model.js:30
 #: js/Model.js:147 js/ContactGrid.js:119
 msgid "Job Title"
-msgstr ""
+msgstr "Job title"
 
 #: Export/Doc.php:69
 msgid "Dear Mister"
-msgstr ""
+msgstr "Dear Mr"
 
 #: Export/Doc.php:71
 msgid "Dear Miss"
-msgstr ""
+msgstr "Dear Mss"
 
 #: Export/Doc.php:73
 msgid "Dear"
-msgstr ""
+msgstr "Dear"
 
 #: Export/Doc.php:89
 msgid "Mister"
-msgstr ""
+msgstr "Mister"
 
 #: Export/Doc.php:91
 msgid "Misses"
-msgstr ""
+msgstr "Misses"
 
 #: Controller.php:105
 #, python-format
 msgid "%s's personal addressbook"
-msgstr ""
+msgstr "%s's personal addressbook"
 
 #: Acl/Rights.php:106
 msgid "manage shared addressbooks"
-msgstr ""
+msgstr "manage shared addressbooks"
 
 #: Acl/Rights.php:107
 msgid "Create new shared addressbook folders"
-msgstr ""
+msgstr "Create new shared addressbook folders"
 
 #: Acl/Rights.php:110
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "manage shared addressbook favorites"
 
 #: Acl/Rights.php:111
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Create or update shared addressbook favorites"
 
 #: js/CardDAVContainerPropertiesHookField.js:35
 msgid "CardDAV URL"
-msgstr ""
+msgstr "CardDAV URL"
 
 #: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] ""
@@ -171,7 +172,7 @@ msgstr[1] ""
 
 #: js/ContactEditDialog.js:42 js/ContactEditDialog.js:51 js/MapPanel.js:40
 msgid "Map"
-msgstr ""
+msgstr "Map"
 
 #: js/ContactEditDialog.js:80
 msgid "Personal Information"
@@ -196,14 +197,12 @@ msgstr ""
 msgid "Middle Name"
 msgstr ""
 
-#: js/ContactEditDialog.js:123 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:19 js/Model.js:142
+#: js/ContactEditDialog.js:123 js/Model.js:19 js/Model.js:142
 #: js/ContactGrid.js:113
 msgid "Last Name"
 msgstr ""
 
-#: js/ContactEditDialog.js:129 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:27 js/Model.js:144
+#: js/ContactEditDialog.js:129 js/Model.js:27 js/Model.js:144
 #: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:117
 #: Setup/Initialize.php:70 Setup/Update/Release5.php:196
 msgid "Company"
@@ -322,32 +321,27 @@ msgstr ""
 msgid "Export as pdf"
 msgstr ""
 
-#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:448
 msgid "Parse address"
 msgstr ""
 
-#: js/ContactEditDialog.js:428 js/ContactEditDialog.js:450
-#, python-brace-format
-msgid "Either {0} or {1} must be given"
-msgstr ""
-
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Paste address"
 msgstr ""
 
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Please paste an address or a URI to a vcard that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "Failed to parse address!"
 msgstr ""
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "The address could not be read."
 msgstr ""
 
-#: js/ContactEditDialog.js:528
+#: js/ContactEditDialog.js:483
 msgid "End token mode"
 msgstr ""
 
@@ -598,11 +592,15 @@ msgstr ""
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact of a user account"
 msgstr ""
 
-#: Controller/Contact.php:330
+#: js/ContactGrid.js:292
+msgid "No name"
+msgstr ""
+
+#: Controller/Contact.php:334
 msgid "Uploaded new contact image."
 msgstr ""
 
@@ -683,30 +681,53 @@ msgstr ""
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
 msgstr ""
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
+msgid "LX-Office CSV Contact import"
 msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:19
 msgid "Import list (###CURRENTDATE###)"
 msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_csv.xml:21
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
 msgstr ""
 
-#: Import/definitions/adb_outlook_import_csv.xml:13
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
 msgstr ""
 
-#: Import/definitions/adb_google_import_csv.xml:12
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:13
 msgid "Contact import from Google address book"
 msgstr ""
 
@@ -714,7 +735,11 @@ msgstr ""
 msgid "Contact CSV import from mac address book"
 msgstr ""
 
-#: Import/definitions/adb_import_vcard.xml:14
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:15
 msgid "Contact VCARD import"
 msgstr ""
 

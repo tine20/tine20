@@ -447,21 +447,21 @@ msgstr ""
 msgid "Loading calendar data..."
 msgstr ""
 
-#: js/DatePicker.js:406
+#: js/DatePicker.js:404
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:407
+#: js/DatePicker.js:405
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:472
+#: js/DatePicker.js:464
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:473
+#: js/DatePicker.js:465
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a "
 "new vacation and use another personal account the vacation should be taken "

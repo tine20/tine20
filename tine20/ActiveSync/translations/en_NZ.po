@@ -1,13 +1,13 @@
 # 
 # Translators:
-# Ingo Ratsdorf <ingo@envirology.co.nz>, 2014-2015
+# Ingo Ratsdorf, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: English (New Zealand) (http://www.transifex.com/projects/p/tine20/language/en_NZ/)\n"
+"PO-Revision-Date: 2015-05-29 11:07+0000\n"
+"Last-Translator: Ingo Ratsdorf\n"
+"Language-Team: English (New Zealand) (http://www.transifex.com/tine20/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,104 +19,104 @@ msgstr ""
 
 #: Acl/Rights.php:104
 msgid "Manage ActiveSync devices"
-msgstr ""
+msgstr "Manage ActiveSync devices"
 
 #: Acl/Rights.php:105
 msgid "See, edit and delete ActiveSync devices"
-msgstr ""
+msgstr "Show, edit and delete ActiveSync devices"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
-msgstr ""
+msgstr "Sync Devices"
 
 #: js/SyncDevicesGridPanel.js:68
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: js/SyncDevicesGridPanel.js:69 js/SyncDevicesGridPanel.js:98
 #: js/EditDialog.js:72
 msgid "Device ID"
-msgstr ""
+msgstr "Device ID"
 
 #: js/SyncDevicesGridPanel.js:70 js/EditDialog.js:79
 msgid "Devicetype"
-msgstr ""
+msgstr "Device ype"
 
 #: js/SyncDevicesGridPanel.js:71 js/EditDialog.js:86
 msgid "Owner"
-msgstr ""
+msgstr "Owner"
 
 #: js/SyncDevicesGridPanel.js:72 js/EditDialog.js:98
 msgid "Policy"
-msgstr ""
+msgstr "Policy"
 
 #: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:104
 msgid "AS Version"
-msgstr ""
+msgstr "AS Version"
 
 #: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:110
 msgid "Useragent"
-msgstr ""
+msgstr "Useragent"
 
 #: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:116
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: js/SyncDevicesGridPanel.js:76 js/EditDialog.js:122
 msgid "IMEI"
-msgstr ""
+msgstr "IMEI"
 
 #: js/SyncDevicesGridPanel.js:77 js/EditDialog.js:128
 msgid "Friendly Name"
-msgstr ""
+msgstr "Friendly name"
 
 #: js/SyncDevicesGridPanel.js:78 js/EditDialog.js:134
 msgid "OS"
-msgstr ""
+msgstr "OS"
 
 #: js/SyncDevicesGridPanel.js:79 js/EditDialog.js:140
 msgid "OS Language"
-msgstr ""
+msgstr "OS language"
 
 #: js/SyncDevicesGridPanel.js:80 js/EditDialog.js:146
 msgid "Phonenumber"
-msgstr ""
+msgstr "Phone number"
 
 #: js/SyncDevicesGridPanel.js:81
 msgid "Ping Lifetime"
-msgstr ""
+msgstr "Ping lifetime"
 
 #: js/SyncDevicesGridPanel.js:82
 msgid "Ping Folder"
-msgstr ""
+msgstr "Ping folder"
 
 #: js/SyncDevicesGridPanel.js:83
 msgid "Remote Wipe"
-msgstr ""
+msgstr "Remote wipe"
 
 #: js/SyncDevicesGridPanel.js:84
 msgid "Calendarfilter"
-msgstr ""
+msgstr "Calendar filter"
 
 #: js/SyncDevicesGridPanel.js:85
 msgid "Contactsfilter"
-msgstr ""
+msgstr "Contact filter"
 
 #: js/SyncDevicesGridPanel.js:86
 msgid "Emailfilter"
-msgstr ""
+msgstr "Email filter"
 
 #: js/SyncDevicesGridPanel.js:87
 msgid "Tasksfilter"
-msgstr ""
+msgstr "Task filter"
 
 #: js/SyncDevicesGridPanel.js:88
 msgid "Last Ping"
-msgstr ""
+msgstr "Last ping"
 
 #: js/SyncDevicesGridPanel.js:97
 msgid "Quicksearch"
-msgstr ""
+msgstr "Quicksearch"
 
 #: js/Model.js:42
 msgid "Device"
@@ -165,8 +165,8 @@ msgstr "Set sync filter"
 #: js/SyncDevices.js:70
 msgid "SyncDevice"
 msgid_plural "SyncDevices"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SyncDevice"
+msgstr[1] "SyncDevices"
 
 #: Preference.php:75
 msgid "Default Addressbook"
