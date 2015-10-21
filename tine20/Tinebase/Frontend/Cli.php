@@ -69,12 +69,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $doAll = true;
                 }
                 if (!$doAll) {
-                    $backend = $app->getBackend();
+                    if ($app instanceof Tinebase_Container)
+                    {
+                        $backend = $app;
+                    } else {
+                        if (!$app instanceof Tinebase_Controller_Record_Abstract) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                            continue;
+                        }
 
-                    if (!$app instanceof Tinebase_Controller_Record_Abstract) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
-                        continue;
+                        $backend = $app->getBackend();
                     }
                     if (!$backend instanceof Tinebase_Backend_Interface) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
