@@ -499,4 +499,28 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('groups', '5');
         $this->setApplicationVersion('Tinebase', '8.10');
     }
+
+    /**
+     * update 10 -> adds index to relations
+     */
+    public function update_10()
+    {
+        $tableVersion = $this->getTableVersion('relations');
+
+        if ($tableVersion < 8) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>own_id</name>
+                        <field>
+                            <name>own_id</name>
+                        </field>
+                    </index>
+                ');
+
+            $this->_backend->addIndex('relations', $declaration);
+            $this->setTableVersion('relations', '8');
+        }
+
+        $this->setApplicationVersion('Tinebase', '8.11');
+    }
 }
