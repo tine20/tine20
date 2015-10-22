@@ -499,7 +499,7 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('groups', '5');
         $this->setApplicationVersion('Tinebase', '8.10');
     }
-    
+
     /**
      * update 10 -> adds "use personal tags" role right to all installed apps
      * 
@@ -539,5 +539,29 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->_backend->addCol('preferences', $declaration);
         $this->setTableVersion('preferences', '8');
         $this->setApplicationVersion('Tinebase', '8.12');
+    }
+
+    /**
+     * update 10 -> adds index to relations
+     */
+    public function update_12()
+    {
+        $tableVersion = $this->getTableVersion('relations');
+
+        if ($tableVersion < 8) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>own_id</name>
+                        <field>
+                            <name>own_id</name>
+                        </field>
+                    </index>
+                ');
+
+            $this->_backend->addIndex('relations', $declaration);
+            $this->setTableVersion('relations', '8');
+        }
+
+        $this->setApplicationVersion('Tinebase', '8.13');
     }
 }
