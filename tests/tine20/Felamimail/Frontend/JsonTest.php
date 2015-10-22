@@ -1705,6 +1705,9 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $regData = $this->_json->getRegistryData();
 
         $this->assertFalse(isset($regData['defaults']));
-        $this->assertEquals(5, $regData['supportedFlags']['totalcount']);
+        $supportedFlags = Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)
+            ? 6
+            : 5;
+        $this->assertEquals($supportedFlags, $regData['supportedFlags']['totalcount']);
     }
 }

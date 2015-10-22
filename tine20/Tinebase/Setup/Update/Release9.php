@@ -21,4 +21,16 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         $update8->update_11();
         $this->setApplicationVersion('Tinebase', '9.1');
     }
+
+    /**
+     * update to 9.2
+     *
+     * adds index to relations
+     */
+    public function update_1()
+    {
+        $update8 = new Tinebase_Setup_Update_Release8($this->_backend);
+        $update8->update_12();
+        $this->setApplicationVersion('Tinebase', '9.2');
+    }
 }

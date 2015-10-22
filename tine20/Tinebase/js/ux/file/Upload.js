@@ -711,7 +711,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     },
     
     /**
-     * indicates whethe this upload is queued
+     * indicates whether this upload is queued
      * 
      * @returns {Boolean}
      */
@@ -742,5 +742,5 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
 ]);
 
 Ext.ux.file.Upload.file.getFileData = function(file) {
-    return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type']);
+    return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type', 'id']);
 };

@@ -21,11 +21,13 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * imap flags to constants translation
      * @var array
      */
-    protected static $_allowedFlags = array('\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,    // _("Answered")
-                                            '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,        // _("Seen")
-                                            '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,     // _("Deleted")
-                                            '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,       // _("Draft")
-                                            '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);    // _("Flagged")
+    protected static $_allowedFlags = array(
+        '\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,    // _("Answered")
+        '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,        // _("Seen")
+        '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,     // _("Deleted")
+        '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,       // _("Draft")
+        '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED,     // _("Flagged")
+    );
     
     /**
      * holds the instance of the singleton
@@ -43,6 +45,10 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     {
         $this->_modelName = 'Felamimail_Model_Message';
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
+            self::$_allowedFlags['Tine20'] = '\Tine20';
+        }
     }
     
     /**
@@ -337,5 +343,37 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             $this->addFlags($_message, Zend_Mail_Storage::FLAG_SEEN);
             $_message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
         }        
+    }
+
+    /**
+     * tine20FlagEnabled
+     *
+     * @param array|Felamimail_Model_Message $message
+     * @return bool
+     */
+    public function tine20FlagEnabled($message = null)
+    {
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
+            if ($message) {
+                return (isset($message['header']['user-agent']) && strpos( (string) $message['header']['user-agent'], "Tine 2.0") !== false);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * set tine20 flag of message
+     *
+     * @param Felamimail_Model_Message $_message
+     */
+    public function setTine20Flag(Felamimail_Model_Message $_message)
+    {
+        if (! in_array("Tine20", $_message->flags)) {
+            $this->addFlags($_message->id, "Tine20");
+            $_message->flags = array("Tine20");
+        }
     }
 }

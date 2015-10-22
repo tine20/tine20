@@ -223,4 +223,23 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
         
         return $files;
     }
+
+    /**
+     * increase access count
+     *
+     * @param Filemanager_Model_DownloadLink $download
+     */
+    public function increaseAccessCount(Filemanager_Model_DownloadLink $download)
+    {
+        $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+        $currentRecord = $this->_backend->get($download->getId());
+        $currentRecord->access_count++;
+
+        // yes, no history etc.
+        $this->_backend->update($currentRecord);
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+    }
 }

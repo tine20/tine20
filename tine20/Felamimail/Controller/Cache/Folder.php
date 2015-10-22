@@ -186,6 +186,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         if (empty($_folderName)) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' checking parent folder of: ' . $_folderName);
         
         $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
         if ($_hasChildren != $parentFolder->has_children) {
@@ -210,6 +213,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             } else {
                 $this->_removeFromCache($_account, $folder->globalname);
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' about to update folder ' . $folder->globalname);
             $this->_backend->update($folder);
         }
     }
@@ -473,6 +478,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _removeFromCache(Felamimail_Model_Account $_account, $_parentFolder = NULL, $_imapFolderIds = array())
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '');
+        
         $filterData = array(array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()));
         if ($_parentFolder !== NULL) {
             $filterData[] = array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder);

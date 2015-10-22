@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -63,33 +63,26 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
         }
         return self::$_instance;
     }
-    
+
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
      * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        $translation = Tinebase_Translation::getTranslation('Inventory');
-        $account = Tinebase_User::getInstance()->getUserById($_accountId);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal inventory items"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_accountId,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            'Inventory_Model_InventoryItem',
+            'Inventory',
+            $_accountId
+        );
+
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
+
         return $container;
     }
-    
+
     /**
      * event handler function
      * 
@@ -105,11 +98,6 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            /* 
-             * deletePersonalFolder does not exists
-             * *case 'Admin_Event_DeleteAccount':
-                #$this->deletePersonalFolder($_eventObject->account);
-                break;*/
         }
     }
 }

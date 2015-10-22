@@ -70,7 +70,47 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         
         return NULL;
     }
-    
+
+    public function getScheduledImportFilter()
+    {
+        $timestampBefore = null;
+
+        $now = new Tinebase_DateTime();
+
+        $anHourAgo = clone $now;
+        $anHourAgo->subHour(1);
+
+        $aDayAgo = clone $now;
+        $aDayAgo->subDay(1);
+
+        $aWeekAgo = clone $now;
+        $aWeekAgo->subWeek(1);
+
+        $filter = new Tinebase_Model_ImportFilter(array(array(
+            'condition' => 'OR', 'filters' => array(
+                array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
+                array('condition' => 'AND', 'filters' => array(
+                    array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_HOURLY),
+                    array('field' => 'timestamp', 'operator' => 'before', 'value' => $anHourAgo),
+                )),
+                array('condition' => 'AND', 'filters' => array(
+                    array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_DAILY),
+                    array('field' => 'timestamp', 'operator' => 'before', 'value' => $aDayAgo),
+                )),
+                array('condition' => 'AND', 'filters' => array(
+                    array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_WEEKLY),
+                    array('field' => 'timestamp', 'operator' => 'before', 'value' => $aWeekAgo),
+                )),
+            )
+        )));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' Filter used: ' . print_r($filter->toArray(), true));
+        }
+
+        return $filter;
+    }
+
     /**
      * Get the next scheduled import
      * 
@@ -80,62 +120,22 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
      */
     protected function _getNextScheduledImport()
     {
-        $timestampBefore = null;
-        
-        $now = new Tinebase_DateTime();
-        
-        $anHourAgo = clone $now;
-        $anHourAgo->subHour(1);
-        
-        $aDayAgo = clone $now;
-        $aDayAgo->subDay(1);
-        
-        $aWeekAgo = clone $now;
-        $aWeekAgo->subWeek(1);
-        
-        $filter = new Tinebase_Model_ImportFilter(array(), 'OR');
-        
-        $filter0 = new Tinebase_Model_ImportFilter(array(
-                array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
-        ), 'AND');
-        
-        $filter1 = new Tinebase_Model_ImportFilter(array(
-            array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_HOURLY),
-            array('field' => 'timestamp', 'operator' => 'before', 'value' => $anHourAgo),
-        ), 'AND');
-        
-        $filter2 = new Tinebase_Model_ImportFilter(array(
-                array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_DAILY),
-                array('field' => 'timestamp', 'operator' => 'before', 'value' => $aDayAgo),
-        ), 'AND');
-        
-        $filter3 = new Tinebase_Model_ImportFilter(array(
-                array('field' => 'interval', 'operator' => 'equals', 'value' => Tinebase_Model_Import::INTERVAL_WEEKLY),
-                array('field' => 'timestamp', 'operator' => 'before', 'value' => $aWeekAgo),
-        ), 'AND');
-        
-        $filter->addFilterGroup($filter0);
-        $filter->addFilterGroup($filter1);
-        $filter->addFilterGroup($filter2);
-        $filter->addFilterGroup($filter3);
-        
-        // Always sort by creation timestamp to ensure first in first out
+        $filter = $this->getScheduledImportFilter();
+
+        // Always sort by timestamp to ensure first in first out
         $pagination = new Tinebase_Model_Pagination(array(
             'limit'     => 1,
             'sort'      => 'timestamp',
-            'dir'       => 'DESC'
+            'dir'       => 'ASC'
         ));
-        
+
         $record = $this->search($filter, $pagination)->getFirstRecord();
         
         if (! $record) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' No ScheduledImport could be found.');
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' Filter used: ' . print_r($filter->toArray(), true));
-            }
-            
+
             return NULL;
         }
         return $record;

@@ -998,14 +998,17 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->searchNodes($filter, array());
         
         $this->assertEquals(2, $result['totalcount']);
+        $initialNode = $result['results'][0];
         
-        $node = $this->_json->getNode($result['results'][0]['id']);
+        $node = $this->_json->getNode($initialNode['id']);
         $this->assertEquals('file', $node['type']);
         
         $node['description'] = 'UNITTEST';
         $node = $this->_json->saveNode($node);
         
         $this->assertEquals('UNITTEST', $node['description']);
+        $this->assertEquals($initialNode['contenttype'], $node['contenttype'], 'contenttype  not preserved');
+
         
         return $node;
     }

@@ -35,7 +35,15 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CACHE_EMAIL_BODY = 'cacheEmailBody';
-    
+
+    /**
+     * Tine 2.0 flag feature
+     *
+     * @var string
+     * @see 0010576: show a tine20 icon on each message which was written in tine20
+     */
+    const FEATURE_TINE20_FLAG = 'tine20Flag';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -71,6 +79,24 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => 1,
+        ),
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            //_('Enabled features in Felamimail application.')
+            'description'           => 'Enabled features in Felamimail application.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_TINE20_FLAG => array(
+                    'label'         => 'Tine 2.0 Flag', //_('Tine 2.0 Flag')
+                    'description'   => 'Add a Tine 2.0 flag to sent messages', //_('Add a Tine 2.0 flag to sent messages')
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_TINE20_FLAG => true,
+            ),
         ),
     );
     

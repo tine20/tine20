@@ -203,7 +203,11 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     render: function(view) {
         this.event.view = view;
 
-        this.colorSet = Tine.Calendar.colorMgr.getColor(this.event);
+        this.attendeeRecord = view.ownerCt && view.ownerCt.attendee ?
+            Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.event.getAttendeeStore(), view.ownerCt.attendee) :
+            this.event.getMyAttenderRecord();
+
+        this.colorSet = Tine.Calendar.colorMgr.getColor(this.event, this.attendeeRecord);
         this.event.colorSet = this.colorSet;
         
         this.dtStart = this.event.get('dtstart');
@@ -266,13 +270,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             });
         }
         
-        var myAttenderRecord = this.event.getMyAttenderRecord(),
-            myAttenderStatusRecord = myAttenderRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(myAttenderRecord.get('status')) : null;
+        var attenderStatusRecord = this.attendeeRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(this.attendeeRecord.get('status')) : null;
             
-        if (myAttenderStatusRecord && myAttenderStatusRecord.get('system')) {
+        if (attenderStatusRecord && attenderStatusRecord.get('system')) {
             this.statusIcons.push({
-                status: myAttenderRecord.get('status'),
-                text: myAttenderStatusRecord.get('i18nValue')
+                status: this.attendeeRecord.get('status'),
+                text: attenderStatusRecord.get('i18nValue')
             });
         }
         

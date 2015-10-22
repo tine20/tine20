@@ -151,13 +151,56 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
         ), $where);
         $this->setApplicationVersion('Felamimail', '8.4');
     }
-    
+
+    /**
+     * update to 8.5
+     * - add account_id-folder_id index to felamimail_cache_message
+     *
+     */
+    public function update_4()
+    {
+        $tableVersion = $this->getTableVersion('felamimail_cache_message');
+
+        if ($tableVersion < 10) {
+            $backend = new Felamimail_Backend_Cache_Sql_Message();
+            $db = $backend->getAdapter();
+            $skip = false;
+
+            if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
+                if (!($stmt = $db->query('select @@innodb_version')) ||
+                    !$stmt->setFetchMode(Zend_Db::FETCH_NUM) ||
+                    !($row = $stmt->fetchAll())
+                ) {
+                    $skip = true;
+                }
+            }
+
+            if (!$skip) {
+                $declaration = new Setup_Backend_Schema_Index_Xml(
+                    '<index>
+                         <name>account_id-folder_id</name>
+                         <field>
+                             <name>account_id</name>
+                         </field>
+                         <field>
+                             <name>folder_id</name>
+                         </field>
+                    </index>'
+                );
+                $this->_backend->addIndex('felamimail_cache_message', $declaration);
+            }
+
+            $this->setTableVersion('felamimail_cache_message', '10');
+        }
+        $this->setApplicationVersion('Felamimail', '8.5');
+    }
+
     /**
      * update to 9.0
      *
      * @return void
      */
-    public function update_4()
+    public function update_5()
     {
         $this->setApplicationVersion('Felamimail', '9.0');
     }
