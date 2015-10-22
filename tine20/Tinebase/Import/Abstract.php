@@ -143,6 +143,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_beforeImport($_resource);
         $this->_doImport($_resource, $_clientRecordData);
         $this->_logImportResult();
+        $this->_afterImport();
         
         return $this->_importResult;
     }
@@ -202,7 +203,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _beforeImport($_resource = NULL)
     {
     }
-    
+
+    /**
+     * do something after the import
+     */
+    protected function _afterImport()
+    {
+    }
+
     /**
      * do import: loop data -> convert to records -> import records
      * 

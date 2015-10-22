@@ -109,13 +109,15 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
         
         Tine.log.debug('Tine.widgets.dialog.DuplicateMergeDialog::onUpdate() - allRecords:');
         Tine.log.debug(allRecords);
-        
+
         if (strategy === 'mergeTheirs') {
-            // we need to use the first id in update record
+            // we need to use the first id and seq in update record
             updateRecord.id = allRecords[0].id;
+            updateRecord.set('seq', allRecords[0].get('seq'));
         } else {
-            // we need to use the second id (clientRecord) in update record
+            // we need to use the second id + seq (from clientRecord) in update record
             updateRecord.id = allRecords[1].id;
+            updateRecord.set('seq', allRecords[1].get('seq'));
         }
         updateRecord.data.id = updateRecord.id;
 

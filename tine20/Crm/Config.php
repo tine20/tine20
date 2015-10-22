@@ -30,6 +30,13 @@ class Crm_Config extends Tinebase_Config_Abstract
     const LEAD_IMPORT_AUTOTASK = 'leadImportAutoTask';
 
     /**
+     * lead import notification mail
+     *
+     * @var string
+     */
+    const LEAD_IMPORT_NOTIFICATION = 'leadImportNotification';
+
+    /**
      * fields for lead record duplicate check
      *
      * @var string
@@ -65,10 +72,19 @@ class Crm_Config extends Tinebase_Config_Abstract
         self::LEAD_IMPORT_AUTOTASK => array(
             //_('Add new task on lead import')
             'label'                 => 'Add new task on lead import',
-            //_('Automatically creates a task for the responsible person if a new lead is imported'.)
+            //_('Automatically creates a task for the responsible person if a new lead is imported.')
             'description'           => 'Automatically creates a task for the responsible person if a new lead is imported.',
             'type'                  => 'boolean',
-            'clientRegistryInclude' => true,
+            'clientRegistryInclude' => false,
+            'default'               => false,
+        ),
+        self::LEAD_IMPORT_NOTIFICATION => array(
+            //_('Send notification email on lead import')
+            'label'                 => 'Send notification email on lead import',
+            //_('Sends an email to all responsible persons for the imported leads.')
+            'description'           => 'Sends an email to all responsible persons for the imported leads.',
+            'type'                  => 'boolean',
+            'clientRegistryInclude' => false,
             'default'               => false,
         ),
         self::LEAD_DUP_FIELDS => array(

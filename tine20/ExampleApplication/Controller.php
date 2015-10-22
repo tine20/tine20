@@ -62,31 +62,23 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
         }
         return self::$_instance;
     }
-    
+
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
+     * @return Tinebase_Record_RecordSet  of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        $translation = Tinebase_Translation::getTranslation('ExampleApplication');
-        
-        $account = Tinebase_User::getInstance()->getUserById($_accountId);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal example records"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_accountId,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('ExampleApplication')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            'ExampleApplication_Model_ExampleRecord',
+            'ExampleApplication',
+            $_accountId
+        );
+
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
+
         return $container;
     }
 
@@ -99,14 +91,12 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' handle event of type ' . get_class($_eventObject));
         
         switch(get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
-                break;
-            case 'Admin_Event_DeleteAccount':
-                #$this->deletePersonalFolder($_eventObject->account);
                 break;
         }
     }

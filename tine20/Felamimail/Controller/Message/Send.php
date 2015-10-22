@@ -579,56 +579,41 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         $maxAttachmentSize = $this->_getMaxAttachmentSize();
-        $size = 0;
-        $tempFileBackend = Tinebase_TempFile::getInstance();
+        $totalSize = 0;
+
         foreach ($_message->attachments as $attachment) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), TRUE) : print_r($attachment, TRUE)));
-            
-            if (isset($attachment['type']) && $attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
-                $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL);
-                $part->decodeContent();
-                
-                $name = $attachment['name'] . '.eml';
-                $type = $attachment['type'];
-                if (! empty($attachment['size'])) {
-                    $size += $attachment['size'];
-                }
-                
+
+            if (isset($attachment['type'])
+                && $attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
+                && $_message->original_id instanceof Felamimail_Model_Message
+            ) {
+                $part = $this->_getRfc822Attachment($attachment, $_message);
+
+            } else if ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
+                $part = $this->_getTempFileAttachment($attachment);
+
             } else {
-                $tempFile = ($attachment instanceof Tinebase_Model_TempFile) 
-                    ? $attachment 
-                    : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
-                
-                if ($tempFile === NULL) {
-                    continue;
-                }
-                
-                if (! $tempFile->path) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
-                    continue;
-                }
-                
-                // get contents from uploaded file
-                $stream = fopen($tempFile->path, 'r');
-                $part = new Zend_Mime_Part($stream);
-                
-                // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
-                $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
-                
-                $name = $tempFile->name;
-                $type = $tempFile->type;
-                
-                if (! empty($tempFile->size)) {
-                    $size += $tempFile->size;
-                }
+                $part = $this->_getMessagePartAttachment($attachment);
+            }
+
+            if (! $part || empty($attachment['type'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Skipping attachment ' . print_r($attachment, true));
+                continue;
             }
             
-            $part->setTypeAndDispositionForAttachment($type, $name);
+            $part->setTypeAndDispositionForAttachment($attachment['type'], $attachment['name']);
+
+            if (! empty($attachment['size'])) {
+                $totalSize += $attachment['size'];
+            }
             
-            if ($size > $maxAttachmentSize) {
+            if ($totalSize > $maxAttachmentSize) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Current attachment size: ' . Tinebase_Helper::convertToMegabytes($size) . ' MB / allowed size: ' . Tinebase_Helper::convertToMegabytes($maxAttachmentSize) . ' MB');
+                    . ' Current attachment size: ' . Tinebase_Helper::convertToMegabytes($totalSize) . ' MB / allowed size: '
+                    . Tinebase_Helper::convertToMegabytes($maxAttachmentSize) . ' MB');
                 throw new Felamimail_Exception_IMAP('Maximum attachment size exceeded. Please remove one or more attachments.');
             }
             
@@ -637,6 +622,84 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             $_mail->addAttachment($part);
         }
+    }
+
+    /**
+     * get attachment of type CONTENT_TYPE_MESSAGE_RFC822
+     *
+     * @param $attachment
+     * @param $message
+     * @return Zend_Mime_Part
+     */
+    protected function _getRfc822Attachment(&$attachment, $message)
+    {
+        $part = $this->getMessagePart($message->original_id, ($message->original_part_id) ? $message->original_part_id : NULL);
+        $part->decodeContent();
+
+        $attachment['name'] = $attachment['name'] . '.eml';
+
+        return $part;
+    }
+
+    /**
+     * get attachment defined by temp file
+     *
+     * @param $attachment
+     * @return null|Zend_Mime_Part
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getTempFileAttachment(&$attachment)
+    {
+        $tempFileBackend = Tinebase_TempFile::getInstance();
+        $tempFile = ($attachment instanceof Tinebase_Model_TempFile)
+            ? $attachment
+            : (((isset($attachment['tempFile']) || array_key_exists('tempFile', $attachment))) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
+
+        if ($tempFile === null) {
+            return null;
+        }
+
+        if (! $tempFile->path) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
+            return null;
+        }
+
+        // get contents from uploaded file
+        $stream = fopen($tempFile->path, 'r');
+        $part = new Zend_Mime_Part($stream);
+
+        // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
+        $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
+
+        $attachment['name'] = $tempFile->name;
+        $attachment['type'] = $tempFile->type;
+
+        if (! empty($tempFile->size)) {
+            $attachment['size'] = $tempFile->size;
+        }
+
+        return $part;
+    }
+
+    /**
+     * get attachment part defined by message id + part id
+     *
+     * @param $attachment
+     * @return null|Zend_Mime_Part
+     */
+    protected function _getMessagePartAttachment(&$attachment)
+    {
+        if (! isset($attachment['id']) || strpos($attachment['id'], '_') === false) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No valid message id/part id');
+            return null;
+        }
+
+        // might be an attachment defined by message id + part id -> fetch this and attach
+        list($messageId, $partId) = explode('_', $attachment['id']);
+        $part = $this->getMessagePart($messageId, $partId);
+        $part->decodeContent();
+
+        return $part;
     }
     
     /**

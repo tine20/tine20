@@ -30,6 +30,7 @@ class Crm_Import_CsvTest extends ImportTestCase
         Tasks_Controller_Task::getInstance()->delete($this->_tasksToDelete);
 
         Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_AUTOTASK, false);
+        Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_NOTIFICATION, false);
     }
     /**
      * test import
@@ -98,18 +99,64 @@ class Crm_Import_CsvTest extends ImportTestCase
             }
         }
 
-        $translate = Tinebase_Translation::getTranslation('Crm');
-        $tasksFilter = new Tasks_Model_TaskFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $personalContainerOfSClever->getId()),
-            array('field' => 'summary', 'operator' => 'equals', 'value' => $translate->_('Edit new lead')),
-        ));
-        $tasks = Tasks_Controller_Task::getInstance()->search($tasksFilter);
-        $this->_tasksToDelete = array_merge($this->_tasksToDelete, $tasks->getArrayOfIds());
-
+        $tasks = $this->_searchTestTasks($personalContainerOfSClever->getId());
         $this->assertEquals(1, count($tasks), 'could not find task in sclevers container: '
             . print_r($personalContainerOfSClever->toArray(), true));
         $task = $tasks->getFirstRecord();
         $this->assertEquals($this->_personas['sclever']['accountId'], $task->organizer);
         $this->assertEquals('IN-PROCESS', $task->status);
+    }
+
+    /**
+     * search tasks
+     *
+     * @param      $containerId
+     * @param null $summary
+     * @return array|Tinebase_Record_RecordSet
+     */
+    protected function _searchTestTasks($containerId, $summary = null)
+    {
+        if (! $summary) {
+            $translate = Tinebase_Translation::getTranslation('Crm');
+            $summary = $translate->_('Edit new lead');
+        }
+        $tasksFilter = new Tasks_Model_TaskFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $containerId),
+            array('field' => 'summary', 'operator' => 'contains', 'value' => $summary),
+        ));
+        $tasks = Tasks_Controller_Task::getInstance()->search($tasksFilter);
+        $this->_tasksToDelete = array_merge($this->_tasksToDelete, $tasks->getArrayOfIds());
+        return $tasks;
+    }
+
+    /**
+     * @see 0011376: send mail on lead import to responsibles
+     */
+    public function testEmailNotification()
+    {
+        Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_NOTIFICATION, true);
+        $this->testImport(/* dry run = */ false);
+        // mark tasks for deletion
+        $this->_searchTestTasks(Tinebase_Container::getInstance()->getDefaultContainer('Tasks_Model_Task')->getId(), 'task');
+
+        // assert emails for responsibles
+        $messages = self::getMessages();
+        $this->assertGreaterThan(1, count($messages));
+
+        $translate = Tinebase_Translation::getTranslation('Crm');
+        $importNotifications = array();
+        $subjectToMatch = sprintf($translate->_('%s new leads have been imported'), 1);
+        foreach ($messages as $message) {
+            if ($message->getSubject() == $subjectToMatch) {
+                $importNotifications[] = $message;
+            }
+        }
+
+        $this->assertGreaterThan(2, count($importNotifications),
+            'expecting 2 mails (for unittest + sclever) / messages:'
+            . print_r($messages, true));
+        $firstMessage = $importNotifications[0];
+        $this->assertContains('neuer lead 2', $firstMessage->getBodyText()->getContent(), 'lead name missing');
+        $this->assertContains('PHPUnit', $firstMessage->getBodyText()->getContent(), 'container name missing');
     }
 }

@@ -21,11 +21,6 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     protected $_leadController;
     
     /**
-     * @var Zend_Mail_Transport_Array
-     */
-    protected static $_mailer = NULL;
-    
-    /**
      * (non-PHPdoc)
      * @see tests/tine20/Crm/AbstractTest::setUp()
      */

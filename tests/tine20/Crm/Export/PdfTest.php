@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
+class Crm_Export_PdfTest extends TestCase
 {
     /**
      * @var array test objects
@@ -26,16 +26,9 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
+     * @var Tinebase_Model_Container
      */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Crm_Export_PdfTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+    protected $_testContainer = null;
 
     /**
      * Sets up the fixture.
@@ -45,27 +38,15 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Crm', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        
-        if($personalContainer->count() === 0) {
-            $this->testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
-        } else {
-            $this->testContainer = $personalContainer[0];
-        }
-        
+        parent::setUp();
+        $this->_testContainer = $this->_getPersonalContainer('Crm');
+
         $this->objects['lead'] = new Crm_Model_Lead(array(
             'lead_name'     => 'PHPUnit',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'     => $this->testContainer->id,
+            'container_id'  => $this->_testContainer->id,
             'start'         => new Tinebase_DateTime( "2007-12-12" ),
             'description'   => 'Lead Description',
             'end'           => Tinebase_DateTime::now(),
@@ -79,7 +60,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'     => $this->testContainer->id,
+            'container_id'  => $this->_testContainer->id,
             'start'         => new Tinebase_DateTime( "2007-12-24" ),
             'description'   => 'Lead Description',
             'end'           => Tinebase_DateTime::now(),
@@ -133,21 +114,10 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'summary'               => 'task test',
         ));
         
-        $lead = Crm_Controller_Lead::getInstance()->create($this->objects['leadWithLink']);
+        Crm_Controller_Lead::getInstance()->create($this->objects['leadWithLink']);
         $this->objects['linkedContact'] = Addressbook_Controller_Contact::getInstance()->create($this->objects['linkedContact'], FALSE);
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
     /**
      * try to create a pdf
      *

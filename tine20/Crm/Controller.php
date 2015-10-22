@@ -102,31 +102,19 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
     /**
      * creates the initial folder for new accounts
      *
-     * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
-     * @return Tinebase_Record_RecordSet                            of subtype Tinebase_Model_Container
-     * 
-     * @todo generalize this
+     * @param mixed[int|Tinebase_Model_User] $_account   the account object
+     * @return Tinebase_Record_RecordSet                 of subtype Tinebase_Model_Container
      */
     public function createPersonalFolder($_accountId)
     {
-        $translation = Tinebase_Translation::getTranslation('Crm');
-        
-        $account = Tinebase_User::getInstance()->getUserById($_accountId);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal leads"), $account->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_accountId,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new personal folder for account id ' . $_accountId);
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            static::$_defaultModel,
+            'Crm',
+            $_accountId
+        );
+
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
-        
+
         return $container;
     }
 

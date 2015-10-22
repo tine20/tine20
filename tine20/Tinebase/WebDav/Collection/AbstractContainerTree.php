@@ -337,7 +337,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 
                 foreach ($containers as $container) {
                     try {
-                        $children[] = $this->getChild($container);
+                        $children[] = $this->getChild($this->_useIdAsName ? $container->getId() : $container->name);
                     } catch (\Sabre\DAV\Exception\NotFound $sdavenf) {
                         // ignore containers not found
                     }

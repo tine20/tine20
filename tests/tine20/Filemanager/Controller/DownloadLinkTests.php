@@ -141,4 +141,20 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             $this->assertEquals('Download link has expired', $tead->getMessage());
         }
     }
+
+    /**
+     * testDownloadLinkAccessCount
+     */
+    public function testDownloadLinkAccessCount()
+    {
+        $initialDownloadLink = $this->testCreateDownloadLink();
+
+        // simulate two concurrent downloads
+        $this->_getUit()->increaseAccessCount($initialDownloadLink);
+        $this->_getUit()->increaseAccessCount($initialDownloadLink);
+
+        $downloadLink = $this->_getUit()->get($initialDownloadLink->getId());
+
+        $this->assertEquals(2, $downloadLink->access_count);
+    }
 }

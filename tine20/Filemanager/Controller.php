@@ -29,7 +29,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     /**
      * holds the instance of the singleton
      *
-     * @var Filemamager_Controller
+     * @var Filemanager_Controller
      */
     private static $_instance = NULL;
 
@@ -74,7 +74,7 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
-        switch(get_class($_eventObject)) {
+        switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
@@ -95,21 +95,20 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
     public function createPersonalFolder($_account)
     {
         $translation = Tinebase_Translation::getTranslation('Filemanager');
-        
-        $user    = Tinebase_User::getInstance()->getUserById($_account);
-        
-        $newContainer = new Tinebase_Model_Container(array(
-            'name'              => sprintf($translation->_("%s's personal files"), $user->accountFullName),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'            => $_account,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId(),
-            'model'             => static::$_defaultModel
-        ));
-        
-        $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer);
-        
-        mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() . '/folders/personal/' . $user->getId() . '/' . $personalContainer->getId(), 0777, true);
+        $account = (! $_account instanceof Tinebase_Model_User)
+            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $_account)
+            : $_account;
+        $containerName = sprintf($translation->_("%s's personal files"), $account->accountFullName);
+
+        $personalContainer = Tinebase_Container::getInstance()->createDefaultContainer(
+            'Filemanager_Model_Node',
+            'Filemanager',
+            $account,
+            $containerName
+        );
+
+        mkdir('tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId()
+            . '/folders/personal/' . $account->getId() . '/' . $personalContainer->getId(), 0777, true);
         
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
