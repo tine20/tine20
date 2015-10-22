@@ -612,4 +612,16 @@ class Tinebase_Relations
         
         return $this->_backend->transferRelations($sourceId, $destinationId, $model);
     }
+
+    /**
+     * remove all relations for application
+     *
+     * @param string $applicationName
+     *
+     * @return void
+     */
+    public function removeApplication($applicationName)
+    {
+        $this->_backend->removeApplication($applicationName);
+    }
 }
