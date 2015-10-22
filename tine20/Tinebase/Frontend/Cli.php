@@ -837,8 +837,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         // get all persistent filters without grants
         // TODO this could be enhanced by allowing to set default grants for other filters, too
-
-        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter());
+        Tinebase_PersistentFilter::getInstance()->doContainerACLChecks(false);
+        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(),'', array('ignoreAcl' => true)));
         $filtersWithoutGrants = 0;
 
         foreach ($filters as $filter) {

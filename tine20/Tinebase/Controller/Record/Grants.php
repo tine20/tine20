@@ -56,11 +56,13 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param Tinebase_Record_Interface $oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
-     * 
-     * @todo allow to skip this (ignoreACL)
      */
     protected function _checkGrant($record, $action, $throw = true, $errorMessage = 'No Permission.', $oldRecord = null)
     {
+        if (! $this->_doContainerACLChecks) {
+            return TRUE;
+        }
+
         $hasGrant = parent::_checkGrant($record, $action, $throw, $errorMessage, $oldRecord);
         
         if (! $record->getId() || $action === 'create') {
