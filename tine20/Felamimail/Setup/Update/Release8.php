@@ -164,9 +164,15 @@ class Felamimail_Setup_Update_Release8 extends Setup_Update_Abstract
         $skip = false;
 
         if ($db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            if ( !($stmt = $db->query('select @@innodb_version')) ||
-                 ! $stmt->setFetchMode(Zend_Db::FETCH_NUM) ||
-                 !($row = $stmt->fetchAll())) {
+            try {
+                if (!($stmt = $db->query('select @@innodb_version')) ||
+                    !$stmt->setFetchMode(Zend_Db::FETCH_NUM) ||
+                    !($row = $stmt->fetchAll())
+                ) {
+                    $skip = true;
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
                 $skip = true;
             }
         }
