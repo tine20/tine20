@@ -211,6 +211,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         if (value !== null && this.activeEditor.record.get('address') != value) {
                             this.activeEditor.record.set('address', value);
                         }
+                        if (!this.searchCombo.getValueIsList()) {
+                            this.onSearchComboSelect(combo);
+                        }
                     }
                     this.stopEditing();
                 }
@@ -291,7 +294,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             if (this.activeEditor && value !== null && this.activeEditor.record.get('address') != value) {
                 this.activeEditor.record.set('address', value);
             }
-            this.onSearchComboSelect(combo);
+            if (!combo.getValueIsList()) {
+                this.onSearchComboSelect(combo);
+            }
         } else if (this.activeEditor && e.getKey() == e.BACKSPACE) {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSpecialkey() -> BACKSPACE');
             // remove row on backspace if we have more than 1 rows in grid
@@ -330,8 +335,18 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::onSearchComboSelect()');
         
         var value = combo.getValue();
-        if (value !== '') {
+        if (combo.getValueIsList()) {
+            var emails = value.split(",");
+            emails.sort();
+            this._addRecipients(emails, this.activeEditor ? this.activeEditor.record.data.type : this.lastActiveEditor.record.data.type);
+            this.setFixedHeight(false);
+            this.ownerCt.doLayout();
+            this.store.remove(this.activeEditor ? this.activeEditor.record : this.lastEditedRecord);
             this.addRowAndDoLayout(this.activeEditor ? this.activeEditor.record : this.lastEditedRecord);
+        } else {
+            if (value !== '') {
+                this.addRowAndDoLayout(this.activeEditor ? this.activeEditor.record : this.lastEditedRecord);
+            }
         }
     },
     

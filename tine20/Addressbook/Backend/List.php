@@ -109,7 +109,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
 
         return $result;
     }
-    
+
     /**
      * add new members to list
      * 

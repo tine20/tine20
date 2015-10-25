@@ -54,8 +54,8 @@ Tine.Addressbook.GenericContactGridPanelHook = function(config) {
         }
     });
     
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-Add', this.addRecordAction, 100);
-    Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu-New', this.newRecordAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-Add', this.addRecordAction, 100);
+    Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-GridPanel-ContextMenu-New', this.newRecordAction, 100);
 };
 
 Ext.apply(Tine.Addressbook.GenericContactGridPanelHook.prototype, {

@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Shigeki Mimura <shigeki@mimura.bz>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Japanese (http://www.transifex.com/projects/p/tine20/language/ja/)\n"
+"PO-Revision-Date: 2015-08-26 01:22+0000\n"
+"Last-Translator: Shigeki Mimura <shigeki@mimura.bz>\n"
+"Language-Team: Japanese (http://www.transifex.com/tine20/tine20/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,27 +62,27 @@ msgstr "共有タグの追加、削除と編集"
 
 #: Acl/Rights.php:228
 msgid "manage computers"
-msgstr ""
+msgstr "コンピュータの管理"
 
 #: Acl/Rights.php:229
 msgid "add, delete and edit (samba) computers"
-msgstr ""
+msgstr "コンピュータの追加、削除、編集(samba)"
 
 #: Acl/Rights.php:232
 msgid "manage containers"
-msgstr ""
+msgstr "コンテナの管理"
 
 #: Acl/Rights.php:233
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
+msgstr "コンテナの追加、削除、編集及び権限の管理"
 
 #: Acl/Rights.php:236
 msgid "manage customfields"
-msgstr ""
+msgstr "カスタムフィールドの管理"
 
 #: Acl/Rights.php:237
 msgid "add and edit customfields"
-msgstr ""
+msgstr "カスタムフィールドの追加/編集"
 
 #: Acl/Rights.php:240
 msgid "view access log"
@@ -121,62 +122,62 @@ msgstr ""
 
 #: Acl/Rights.php:257
 msgid "view computers list and details"
-msgstr ""
+msgstr "コンピュータの一覧と詳細"
 
 #: Acl/Rights.php:260
 msgid "view containers"
-msgstr ""
+msgstr "コンテナを見る"
 
 #: Acl/Rights.php:261
 msgid "view personal and shared containers"
-msgstr ""
+msgstr "個人と共有のコンテナを見る"
 
 #: Acl/Rights.php:264
 msgid "view customfields"
-msgstr ""
+msgstr "カスタムフィールドを見る"
 
 #: Acl/Rights.php:265
 msgid "view customfields list"
-msgstr ""
+msgstr "カスタムフィールドの一覧を見る"
 
 #: Acl/Rights.php:268
 msgid "view serverinfo"
-msgstr ""
+msgstr "サーバ情報を見る"
 
 #: Acl/Rights.php:269
 msgid "view serverinfo list"
-msgstr ""
+msgstr "サーバ情報の一覧を見る"
 
 #: js/Applications.js:45
 #, python-brace-format
 msgid "{0} Settings"
-msgstr ""
+msgstr "{0}の設定"
 
 #: js/Applications.js:85
 msgid "Enable Application"
-msgstr ""
+msgstr "アプリケーションを有効にする"
 
 #: js/Applications.js:92
 msgid "Disable Application"
-msgstr ""
+msgstr "アプリケーションを無効にする"
 
 #: js/Applications.js:99
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: js/Applications.js:148
 msgid "enable application"
-msgstr "有効なアプリケーション"
+msgstr "アプリケーションを有効にする"
 
 #: js/Applications.js:149
 msgid "disable application"
-msgstr "無効なアプリケーション"
+msgstr "アプリケーションを無効にする"
 
 #: js/Applications.js:150
 msgid "settings"
 msgstr "設定"
 
-#: js/Applications.js:187 js/Tags.js:171 js/Roles.js:177 js/Groups.js:177
+#: js/Applications.js:187 js/Tags.js:173 js/Roles.js:179 js/Groups.js:179
 msgid "Search:"
 msgstr "検索："
 
@@ -204,12 +205,12 @@ msgstr "表示するアプリケーションがありません"
 
 #: js/Applications.js:281 js/customfield/EditDialog.js:611
 msgid "Order"
-msgstr ""
+msgstr "並び順"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
 #: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
-#: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:229
+#: js/Roles.js:241 js/Groups.js:238 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
 msgstr "名前"
@@ -220,7 +221,7 @@ msgstr "ステータス"
 
 #: js/Applications.js:284
 msgid "Version"
-msgstr ""
+msgstr "バージョン"
 
 #: js/SambaMachineModel.js:39
 msgid "Computer"
@@ -243,7 +244,7 @@ msgstr "失敗"
 #: js/TagEditDialog.js:85
 #, python-brace-format
 msgid "Could not save tag ({0})"
-msgstr ""
+msgstr "タグ({0})は保存できませんでした"
 
 #: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
 #: js/customfield/EditDialog.js:397 js/RoleEditDialog.js:115
@@ -280,23 +281,23 @@ msgid "Tag Name"
 msgstr "タグ名"
 
 #: js/TagEditDialog.js:229 js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
-#: js/RoleEditDialog.js:294 js/Tags.js:228 js/GroupEditDialog.js:129
-#: js/Roles.js:240 js/Groups.js:237 js/user/GridPanel.js:93
+#: js/RoleEditDialog.js:294 js/Tags.js:230 js/GroupEditDialog.js:129
+#: js/Roles.js:242 js/Groups.js:239 js/user/GridPanel.js:93
 msgid "Description"
 msgstr "説明"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:226
 msgid "Color"
 msgstr "色"
 
 #: js/TagEditDialog.js:293 js/RoleEditDialog.js:361 js/GroupEditDialog.js:222
 #, python-brace-format
 msgid "Transferring {0}..."
-msgstr ""
+msgstr "{0}の転送中..."
 
 #: js/TagEditDialog.js:293
 msgid "Tag"
-msgstr ""
+msgstr "タグ"
 
 #: js/TagEditDialog.js:303
 msgid "Add New Tag"
@@ -310,7 +311,7 @@ msgstr "タグの編集 \"{0}\""
 #: js/Admin.js:23 js/AccessLog.js:102 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
-msgstr[0] ""
+msgstr[0] "ユーザー"
 
 #: js/Admin.js:36 js/Models.js:87
 msgid "Groups"
@@ -331,7 +332,7 @@ msgstr "アプリケーション"
 #: js/Admin.js:87 js/AccessLog.js:100 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
-msgstr[0] ""
+msgstr[0] "アクセスログ"
 
 #: js/Admin.js:100
 msgid "Shared Tags"
@@ -366,8 +367,8 @@ msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
 #: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
-#: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
-#: js/Groups.js:235 js/user/GridPanel.js:171
+#: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:240
+#: js/Groups.js:237 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
@@ -413,31 +414,31 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:209
 msgid "Default"
-msgstr ""
+msgstr "初期設定"
 
 #: js/customfield/EditDialog.js:253
 msgid "Add a New ID..."
-msgstr ""
+msgstr "IDの追加"
 
 #: js/customfield/EditDialog.js:257
 msgid "Value"
-msgstr ""
+msgstr "値"
 
 #: js/customfield/EditDialog.js:262
 msgid "Add a New Value..."
-msgstr ""
+msgstr "値の追加"
 
 #: js/customfield/EditDialog.js:272 js/customfield/EditDialog.js:278
 msgid "Error"
-msgstr ""
+msgstr "エラー"
 
 #: js/customfield/EditDialog.js:272
 msgid "ID already exists"
-msgstr ""
+msgstr "IDは既に登録済みです"
 
 #: js/customfield/EditDialog.js:278
 msgid "Value already exists"
-msgstr ""
+msgstr "値は既に登録済みです"
 
 #: js/customfield/EditDialog.js:372
 msgid "Record Class"
@@ -453,39 +454,39 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:436 js/user/EditDialog.js:736
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: js/customfield/EditDialog.js:482
 msgid "Configure store"
-msgstr ""
+msgstr "ストアの設定"
 
 #: js/customfield/EditDialog.js:542
 msgid "Custom field definition"
-msgstr ""
+msgstr "カスタムフィールドの定義"
 
 #: js/customfield/EditDialog.js:553
 msgid "Text"
-msgstr ""
+msgstr "テキスト"
 
 #: js/customfield/EditDialog.js:554
 msgid "Number"
-msgstr ""
+msgstr "数値"
 
 #: js/customfield/EditDialog.js:555
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: js/customfield/EditDialog.js:556
 msgid "DateTime"
-msgstr ""
+msgstr "日付時刻"
 
 #: js/customfield/EditDialog.js:557
 msgid "Time"
-msgstr ""
+msgstr "時刻"
 
 #: js/customfield/EditDialog.js:558
 msgid "Boolean"
-msgstr ""
+msgstr "真偽値"
 
 #: js/customfield/EditDialog.js:559
 msgid "Search Combo"
@@ -493,53 +494,53 @@ msgstr ""
 
 #: js/customfield/EditDialog.js:560
 msgid "Key Field"
-msgstr ""
+msgstr "キーフィールド"
 
 #: js/customfield/EditDialog.js:561
 msgid "Record"
-msgstr ""
+msgstr "レコード"
 
 #: js/customfield/EditDialog.js:589
 msgid "Length"
-msgstr ""
+msgstr "長さ"
 
 #: js/customfield/EditDialog.js:594
 msgid "Required"
-msgstr ""
+msgstr "必須項目"
 
 #: js/customfield/EditDialog.js:601
 msgid "Custom field additional properties"
-msgstr ""
+msgstr "カスタムフィールドの追加属性"
 
 #: js/customfield/EditDialog.js:606 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
-msgstr[0] ""
+msgstr[0] "グループ"
 
 #: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
-msgstr ""
+msgstr "カスタムフィールドは既に登録されています。別の名前を使用してください。"
 
 #: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
-msgstr ""
+msgstr "コンピューター名"
 
 #: js/container/Container.js:46 js/container/GridPanel.js:98
 msgid "Container"
 msgid_plural "Containers"
-msgstr[0] ""
+msgstr[0] "コンテナ"
 
 #: js/container/GridPanel.js:66
 msgid "Container Name"
-msgstr ""
+msgstr "コンテナ名"
 
 #: js/container/EditDialog.js:176
 msgid "personal"
-msgstr ""
+msgstr "個人用"
 
 #: js/container/EditDialog.js:176
 msgid "shared"
-msgstr ""
+msgstr "共有"
 
 #: js/container/EditDialog.js:195
 msgid "Note for Owner"
@@ -575,15 +576,15 @@ msgstr "結果"
 
 #: js/AccessLog.js:153
 msgid "user blocked"
-msgstr ""
+msgstr "ユーザーはブロックされています"
 
 #: js/AccessLog.js:157
 msgid "password expired"
-msgstr ""
+msgstr "パスワードの有効期限が切れました"
 
 #: js/AccessLog.js:161
 msgid "user disabled"
-msgstr ""
+msgstr "ユーザーは無効になっています"
 
 #: js/AccessLog.js:165
 msgid "invalid password"
@@ -603,7 +604,7 @@ msgstr "失敗"
 
 #: js/AccessLog.js:181
 msgid "success"
-msgstr "性向"
+msgstr "成功"
 
 #: js/RoleEditDialog.js:70 js/GroupEditDialog.js:38
 msgid "Updating Memberships"
@@ -631,7 +632,7 @@ msgstr "メンバー"
 
 #: js/RoleEditDialog.js:286
 msgid "Role Name"
-msgstr "ロール名"
+msgstr "役割名"
 
 #: js/RoleEditDialog.js:361
 msgid "Role"
@@ -639,12 +640,12 @@ msgstr ""
 
 #: js/RoleEditDialog.js:371
 msgid "Add New Role"
-msgstr "新規ロールの追加"
+msgstr "役割の追加"
 
 #: js/RoleEditDialog.js:373
 #, python-brace-format
 msgid "Edit Role \"{0}\""
-msgstr "ロールの編集 \"{0}\""
+msgstr "役割の編集 \"{0}\""
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
@@ -654,28 +655,28 @@ msgstr "選択されたタグを本当に削除しますか？"
 msgid "Deleting tag(s)..."
 msgstr "タグを削除しています..."
 
-#: js/Tags.js:99
+#: js/Tags.js:101
 msgid "Add Tag"
-msgstr ""
+msgstr "タグの追加"
 
-#: js/Tags.js:107
+#: js/Tags.js:109
 msgid "Edit Tag"
-msgstr ""
+msgstr "タグの編集"
 
-#: js/Tags.js:115
+#: js/Tags.js:117
 msgid "Delete Tag"
-msgstr ""
+msgstr "タグの削除"
 
-#: js/Tags.js:213
+#: js/Tags.js:215
 #, python-brace-format
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "タグの表示 {0} - {1} 件中 {2}"
 
-#: js/Tags.js:214 js/Tags.js:270
+#: js/Tags.js:216 js/Tags.js:272
 msgid "No tags to display"
 msgstr "表示するタグがありません"
 
-#: js/Tags.js:225
+#: js/Tags.js:227
 msgid "Usage:&#160;"
 msgstr ""
 
@@ -693,15 +694,15 @@ msgstr ""
 
 #: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Display in addressbook"
-msgstr ""
+msgstr "アドレス帳に表示する"
 
 #: js/GroupEditDialog.js:143 js/user/EditDialog.js:933
 msgid "Hide from addressbook"
-msgstr ""
+msgstr "アドレス帳に表示しない"
 
 #: js/GroupEditDialog.js:159 js/user/EditDialog.js:947
 msgid "Saved in Addressbook"
-msgstr ""
+msgstr "アドレス帳に保存"
 
 #: js/GroupEditDialog.js:170
 msgid "Group Members"
@@ -724,24 +725,24 @@ msgstr "選択されたロールを本当に削除しますか？"
 msgid "Deleting role(s)..."
 msgstr "ロールを削除しています..."
 
-#: js/Roles.js:104
+#: js/Roles.js:106
 msgid "Add Role"
 msgstr ""
 
-#: js/Roles.js:112
+#: js/Roles.js:114
 msgid "Edit Role"
 msgstr ""
 
-#: js/Roles.js:120
+#: js/Roles.js:122
 msgid "Delete Role"
 msgstr ""
 
-#: js/Roles.js:227
+#: js/Roles.js:229
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "ロールの表示 {0} - {1} 件中 {2}"
 
-#: js/Roles.js:228 js/Roles.js:282
+#: js/Roles.js:230 js/Roles.js:284
 msgid "No roles to display"
 msgstr "表示するロールがありません"
 
@@ -757,24 +758,24 @@ msgstr "グループを削除しています..."
 msgid "Some error occurred while trying to delete the group."
 msgstr "グループの削除中にエラーが発生しました"
 
-#: js/Groups.js:106
+#: js/Groups.js:108
 msgid "Add Group"
 msgstr ""
 
-#: js/Groups.js:114
+#: js/Groups.js:116
 msgid "Edit Group"
 msgstr ""
 
-#: js/Groups.js:122
+#: js/Groups.js:124
 msgid "Delete Group"
 msgstr ""
 
-#: js/Groups.js:224
+#: js/Groups.js:226
 #, python-brace-format
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "グループの表示 {0} - {1} 件中 {2}"
 
-#: js/Groups.js:225 js/Groups.js:279
+#: js/Groups.js:227 js/Groups.js:281
 msgid "No groups to display"
 msgstr "表示するグループがありません"
 

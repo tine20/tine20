@@ -1,4 +1,4 @@
-#
+# 
 # Translators:
 # Kay Strobach <info@kay-strobach.de>, 2012
 # Juergen Heine <transifex.com@sysdef.de>, 2013
@@ -6,22 +6,22 @@
 # Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014
+# sstamer <s.stamer@metaways.de>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-05-08 15:37+0100\n"
+"PO-Revision-Date: 2015-10-19 10:01+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
-"de/)\n"
-"Language: de\n"
+"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:208
 msgid "manage access log"
@@ -36,10 +36,9 @@ msgid "manage accounts"
 msgstr "Benutzerkonten verwalten"
 
 #: Acl/Rights.php:213
-msgid "add and edit users and groups, add group members, change user passwords"
-msgstr ""
-"Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, "
-"Passwörter zurücksetzen"
+msgid ""
+"add and edit users and groups, add group members, change user passwords"
+msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen"
 
 #: Acl/Rights.php:216
 msgid "manage applications"
@@ -55,10 +54,9 @@ msgstr "Rollen verwalten"
 
 #: Acl/Rights.php:221
 msgid ""
-"add and edit roles, add new members to roles, add application rights to roles"
-msgstr ""
-"Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen "
-"Anwendungs-Rechte zuweisen"
+"add and edit roles, add new members to roles, add application rights to "
+"roles"
+msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen"
 
 #: Acl/Rights.php:224
 msgid "manage shared tags"
@@ -82,8 +80,7 @@ msgstr "Container verwalten"
 
 #: Acl/Rights.php:233
 msgid "add, delete and edit containers and manage container grants"
-msgstr ""
-"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
+msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen."
 
 #: Acl/Rights.php:236
 msgid "manage customfields"
@@ -186,7 +183,7 @@ msgstr "Anwendung deaktivieren"
 msgid "settings"
 msgstr "Einstellungen"
 
-#: js/Applications.js:187 js/Tags.js:171 js/Roles.js:177 js/Groups.js:177
+#: js/Applications.js:187 js/Tags.js:173 js/Roles.js:179 js/Groups.js:179
 msgid "Search:"
 msgstr "Suche:"
 
@@ -218,8 +215,8 @@ msgstr "Sortierung"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
 #: js/customfield/EditDialog.js:577 js/SambaMachineGrid.js:83
-#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:227
-#: js/Roles.js:239 js/Groups.js:236 js/user/EditDialog.js:285
+#: js/container/EditDialog.js:131 js/AccessLog.js:128 js/Tags.js:229
+#: js/Roles.js:241 js/Groups.js:238 js/user/EditDialog.js:285
 #: js/user/EditDialog.js:321
 msgid "Name"
 msgstr "Name"
@@ -291,12 +288,12 @@ msgid "Tag Name"
 msgstr "Tag Name"
 
 #: js/TagEditDialog.js:229 js/SambaMachineGrid.js:57 js/SambaMachineGrid.js:89
-#: js/RoleEditDialog.js:294 js/Tags.js:228 js/GroupEditDialog.js:129
-#: js/Roles.js:240 js/Groups.js:237 js/user/GridPanel.js:93
+#: js/RoleEditDialog.js:294 js/Tags.js:230 js/GroupEditDialog.js:129
+#: js/Roles.js:242 js/Groups.js:239 js/user/GridPanel.js:93
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:224
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:226
 msgid "Color"
 msgstr "Farbe"
 
@@ -379,8 +376,8 @@ msgid "Default Addressbook for new contacts and groups"
 msgstr "Standard-Adressbuch für neue Kontakte und Gruppen"
 
 #: js/customfield/GridPanel.js:65 js/customfield/EditDialog.js:248
-#: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:238
-#: js/Groups.js:235 js/user/GridPanel.js:171
+#: js/SambaMachineGrid.js:76 js/container/GridPanel.js:65 js/Roles.js:240
+#: js/Groups.js:237 js/user/GridPanel.js:171
 msgid "ID"
 msgstr "ID"
 
@@ -420,8 +417,7 @@ msgstr "Bestätigen"
 
 #: js/customfield/GridPanel.js:128
 msgid "Restart application to apply new customfields?"
-msgstr ""
-"Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
+msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
 
 #: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
@@ -535,9 +531,7 @@ msgstr[1] "Gruppen"
 
 #: js/customfield/EditDialog.js:634
 msgid "Customfield already exists. Please choose another name."
-msgstr ""
-"Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen "
-"anderen Namen."
+msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
 
 #: js/SambaMachineGrid.js:56 js/SambaMachineEditDialog.js:42
 msgid "Computer Name"
@@ -674,28 +668,28 @@ msgstr "Möchten Sie den/die markierten Tag/s wirklich löschen?"
 msgid "Deleting tag(s)..."
 msgstr "Tag(s) löschen..."
 
-#: js/Tags.js:99
+#: js/Tags.js:101
 msgid "Add Tag"
 msgstr "Tag hinzufügen"
 
-#: js/Tags.js:107
+#: js/Tags.js:109
 msgid "Edit Tag"
 msgstr "Tag bearbeiten"
 
-#: js/Tags.js:115
+#: js/Tags.js:117
 msgid "Delete Tag"
 msgstr "Tags löschen"
 
-#: js/Tags.js:213
+#: js/Tags.js:215
 #, python-brace-format
 msgid "Displaying tags {0} - {1} of {2}"
 msgstr "Zeige Tag {0} - {1} von {2}"
 
-#: js/Tags.js:214 js/Tags.js:270
+#: js/Tags.js:216 js/Tags.js:272
 msgid "No tags to display"
 msgstr "Keine Tags anzuzeigen"
 
-#: js/Tags.js:225
+#: js/Tags.js:227
 msgid "Usage:&#160;"
 msgstr "Verwendung:&#160;"
 
@@ -744,24 +738,24 @@ msgstr "Möchten Sie die ausgewählten Rollen wirklich löschen?"
 msgid "Deleting role(s)..."
 msgstr "Lösche Rolle(n)..."
 
-#: js/Roles.js:104
+#: js/Roles.js:106
 msgid "Add Role"
 msgstr "Rolle hinzufügen"
 
-#: js/Roles.js:112
+#: js/Roles.js:114
 msgid "Edit Role"
 msgstr "Rolle bearbeiten"
 
-#: js/Roles.js:120
+#: js/Roles.js:122
 msgid "Delete Role"
 msgstr "Rolle löschen"
 
-#: js/Roles.js:227
+#: js/Roles.js:229
 #, python-brace-format
 msgid "Displaying roles {0} - {1} of {2}"
 msgstr "Zeige Rollen {0} - {1} von {2}"
 
-#: js/Roles.js:228 js/Roles.js:282
+#: js/Roles.js:230 js/Roles.js:284
 msgid "No roles to display"
 msgstr "Keine Rollen zum Anziegen"
 
@@ -777,24 +771,24 @@ msgstr "Lösche Gruppe(n)..."
 msgid "Some error occurred while trying to delete the group."
 msgstr "Beim Löschen der Gruppe trat ein Fehler auf."
 
-#: js/Groups.js:106
+#: js/Groups.js:108
 msgid "Add Group"
 msgstr "Gruppe hinzufügen"
 
-#: js/Groups.js:114
+#: js/Groups.js:116
 msgid "Edit Group"
 msgstr "Gruppe bearbeiten"
 
-#: js/Groups.js:122
+#: js/Groups.js:124
 msgid "Delete Group"
 msgstr "Gruppe löschen"
 
-#: js/Groups.js:224
+#: js/Groups.js:226
 #, python-brace-format
 msgid "Displaying groups {0} - {1} of {2}"
 msgstr "Zeige Gruppen {0} - {1} von {2}"
 
-#: js/Groups.js:225 js/Groups.js:279
+#: js/Groups.js:227 js/Groups.js:281
 msgid "No groups to display"
 msgstr "Keine Gruppen anzuzeigen"
 
@@ -877,8 +871,7 @@ msgstr[1] "E-Mail-Benutzer"
 
 #: js/user/EditDialog.js:187
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-"Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
 #: js/user/EditDialog.js:234 js/user/EditDialog.js:237
 #: js/user/EditDialog.js:733
@@ -1009,13 +1002,9 @@ msgstr "Domäne nicht erlaubt"
 msgid ""
 "The domain {0} of the alias {1} you tried to add is neither configured as "
 "primary domain nor set as a secondary domain in the setup. Please add this "
-"domain to the secondary domains in SMTP setup or use another domain which is "
-"configured already."
-msgstr ""
-"Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre "
-"Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre "
-"Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits "
-"konfiguriert ist."
+"domain to the secondary domains in SMTP setup or use another domain which is"
+" configured already."
+msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits konfiguriert ist."
 
 #: js/user/EditDialog.js:628
 msgid "Email Alias"
@@ -1033,9 +1022,7 @@ msgstr "Weiterleitung zu sich selbst"
 msgid ""
 "You are not allowed to set a forward email address that is identical to the "
 "users primary email or one of his aliases."
-msgstr ""
-"Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-"
-"Adresse oder eines Alias des Benutzers ist."
+msgstr "Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-Adresse oder eines Alias des Benutzers ist."
 
 #: js/user/EditDialog.js:662
 msgid "Email Forward"
@@ -1085,10 +1072,7 @@ msgstr "Ungültiger Status"
 msgid ""
 "Blocked status is only valid if the user tried to login with a wrong "
 "password to often. It is not possible to set this status here."
-msgstr ""
-"Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit "
-"falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu "
-"setzten."
+msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
 
 #: js/user/EditDialog.js:989 js/user/EditDialog.js:993
 msgid "don't know"

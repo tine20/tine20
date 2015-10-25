@@ -1,12 +1,13 @@
 # 
 # Translators:
+# Whatsek <Whatsek@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Dutch (Netherlands) (http://www.transifex.com/projects/p/tine20/language/nl_NL/)\n"
+"Language-Team: Dutch (Netherlands) (http://www.transifex.com/tine20/tine20/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,367 +19,371 @@ msgstr ""
 
 #: Acl/Rights.php:121
 msgid "Manage timeaccounts"
-msgstr ""
+msgstr "Beheer tijdaccounts"
 
 #: Acl/Rights.php:122
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr ""
+msgstr "Voeg toe, bewerk of verwijder urenstaten (inclusief alle rechten)"
 
 #: Acl/Rights.php:125 Acl/Rights.php:126
 msgid "Add timeaccounts"
-msgstr ""
+msgstr "Urenstaat toevoegen"
 
 #: Acl/Rights.php:129
 msgid "Manage shared timeaccount favorites"
-msgstr ""
+msgstr "Beheer gedeelde favoriete urenaccounts"
 
 #: Acl/Rights.php:130
 msgid "Create or update shared timeaccount favorites"
-msgstr ""
+msgstr "Maak of update gedeelde favoriete urenaccounts"
 
 #: Acl/Rights.php:133
 msgid "Manage shared timesheet favorites"
-msgstr ""
+msgstr "Beheer gedeelde favoriete urenstaten"
 
 #: Acl/Rights.php:134
 msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgstr "Maak of update gedeelde favoriete urenstaten"
 
 #: Model/Timesheet.php:164 Model/Timeaccount.php:500
 msgid "hour"
-msgstr ""
+msgstr "uur"
 
-#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:141
+#: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:144
 msgid "Cost Center"
-msgstr ""
+msgstr "Kostenplaats"
 
-#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:156
+#: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:159
 msgid "Responsible Person"
-msgstr ""
+msgstr "Verantwoordelijke persoon"
 
 #: js/Timetracker.js:25
 msgid "New Timesheet"
-msgstr ""
+msgstr "Nieuwe urenstaat"
 
-#: js/DurationSpinner.js:69 js/DurationSpinner.js:79
+#: js/DurationSpinner.js:95
 msgid "Not a valid time"
-msgstr ""
+msgstr "Geen geldige tijd"
 
 #: js/TimeaccountPickerCombo.js:46
 msgid "Show closed"
-msgstr ""
+msgstr "Zet gesloten"
 
 #: js/TimeAccountContractFilterModel.js:30
 msgid "Contract"
-msgstr ""
+msgstr "Contract"
 
 #: js/TimeAccountContractFilterModel.js:32
 msgid "without contract"
-msgstr ""
+msgstr "zonder contract"
 
 #: js/TimeaccountGridPanel.js:78 js/TimesheetGridPanel.js:76
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
-#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:207
+#: js/TimeaccountGridPanel.js:81 js/TimeaccountEditDialog.js:210
 #: js/Models.js:179
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
-#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:213
+#: js/TimeaccountGridPanel.js:86 js/TimeaccountEditDialog.js:216
 #: js/Models.js:180
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
-#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:93
+#: js/TimeaccountGridPanel.js:91 js/TimeaccountEditDialog.js:96
 #: js/Models.js:182
 msgid "Billed"
-msgstr ""
+msgstr "Gefactureerd"
 
-#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:82
+#: js/TimeaccountGridPanel.js:97 js/TimeaccountEditDialog.js:83
 msgid "Budget"
-msgstr ""
+msgstr "Budget"
 
 #: js/TimeaccountGridPanel.js:103 js/TimesheetGridPanel.js:91
 #: js/TimesheetGridPanel.js:395
 msgid "Cleared in"
-msgstr ""
+msgstr "Afgemaakt in"
 
 #: js/TimeaccountGridPanel.js:108 js/TimesheetGridPanel.js:92
-#: js/TimeaccountEditDialog.js:175 js/TimesheetEditDialog.js:166
+#: js/TimeaccountEditDialog.js:178 js/TimesheetEditDialog.js:167
 msgid "Invoice"
-msgstr ""
+msgstr "Factuur"
 
-#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:119
+#: js/TimeaccountGridPanel.js:123 js/TimeaccountEditDialog.js:122
 #: js/Models.js:189
 msgid "Booking deadline"
-msgstr ""
+msgstr "Reserverings deadline"
 
-#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:135
+#: js/TimeaccountGridPanel.js:128 js/TimeaccountEditDialog.js:138
 #: js/Models.js:184
 msgid "Cleared at"
-msgstr ""
+msgstr "Afgemaakt op"
 
-#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:85
+#: js/TimeaccountGridPanel.js:133 js/TimeaccountEditDialog.js:88
 #: js/Models.js:183
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/TimeaccountGridPanel.js:137 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountEditDialog.js:91
+#: js/TimeaccountEditDialog.js:94
 msgid "open"
-msgstr ""
+msgstr "open"
 
 #: js/TimeaccountGridPanel.js:138 js/TimeAccountStatusFilterModel.js:46
-#: js/TimeaccountEditDialog.js:91 js/Models.js:161
+#: js/TimeaccountEditDialog.js:94 js/Models.js:161
 msgid "closed"
-msgstr ""
+msgstr "gesloten"
 
-#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:291
+#: js/TimeaccountGridPanel.js:160 js/TimeaccountEditDialog.js:294
 msgid "Export"
-msgstr ""
+msgstr "Exporteer"
 
 #: js/TimeaccountGridPanel.js:169 js/TimesheetGridPanel.js:320
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exporteer als ODS"
 
 #: js/TimeaccountGridPanel.js:176 js/TimesheetGridPanel.js:327
 msgid "Export as CSV"
+msgstr "Exporteer als CSV"
+
+#: js/TimeaccountGridPanel.js:203
+msgid "Close Timeaccount"
 msgstr ""
 
-#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:222 js/Models.js:93
+#: js/TimesheetGridPanel.js:78 js/TimesheetEditDialog.js:223 js/Models.js:93
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: js/TimesheetGridPanel.js:80
 msgid "Start time"
-msgstr ""
+msgstr "Start tijd"
 
 #: js/TimesheetGridPanel.js:82
 msgid "Time Account (Number - Title)"
-msgstr ""
+msgstr "Tijd Account (Nummer - Titel)"
 
 #: js/TimesheetGridPanel.js:84
 msgid "Time Account closed"
-msgstr ""
+msgstr "Tijd Account gesloten"
 
 #: js/TimesheetGridPanel.js:86 js/TimesheetGridPanel.js:244
-#: js/TimeaccountEditDialog.js:219 js/TimesheetEditDialog.js:233
+#: js/TimeaccountEditDialog.js:222 js/TimesheetEditDialog.js:234
 #: js/Models.js:94 js/Models.js:181
 msgid "Description"
-msgstr ""
+msgstr "Beschrijving"
 
 #: js/TimesheetGridPanel.js:87 js/TimesheetGridPanel.js:385
-#: js/TimesheetEditDialog.js:142 js/Models.js:95
+#: js/TimesheetEditDialog.js:143 js/Models.js:95
 msgid "Billable"
-msgstr ""
+msgstr "Facturabel"
 
 #: js/TimesheetGridPanel.js:89 js/TimesheetGridPanel.js:390
-#: js/TimesheetEditDialog.js:148 js/Models.js:96
+#: js/TimesheetEditDialog.js:149 js/Models.js:96
 msgid "Cleared"
-msgstr ""
+msgstr "Afgemaakt"
 
-#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:137 js/Models.js:92
+#: js/TimesheetGridPanel.js:102 js/TimesheetEditDialog.js:138 js/Models.js:92
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
-#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:217
+#: js/TimesheetGridPanel.js:104 js/TimesheetEditDialog.js:218
 msgid "Duration"
-msgstr ""
+msgstr "Duur"
 
 #: js/TimesheetGridPanel.js:157
 msgid "timeframe"
-msgstr ""
+msgstr "Tijdframe"
 
 #: js/TimesheetGridPanel.js:181
 msgid "summary"
-msgstr ""
+msgstr "samenvatting"
 
 #: js/TimesheetGridPanel.js:184
 msgid "Total Timesheets"
-msgstr ""
+msgstr "Alle urenstaten"
 
 #: js/TimesheetGridPanel.js:185
 msgid "Billable Timesheets"
-msgstr ""
+msgstr "Facturabele urenstaten"
 
 #: js/TimesheetGridPanel.js:186
 msgid "Total Time"
-msgstr ""
+msgstr "Totale tijd"
 
 #: js/TimesheetGridPanel.js:187
 msgid "Time of Billable Timesheets"
-msgstr ""
+msgstr "Tijd van facturabele urenstaten"
 
 #: js/TimesheetGridPanel.js:258
 msgid "Detail"
-msgstr ""
+msgstr "Details"
 
 #: js/TimesheetGridPanel.js:311
 msgid "Export Timesheets"
-msgstr ""
+msgstr "Exporteer urenstaten"
 
 #: js/TimesheetGridPanel.js:334
 msgid "Export as ..."
-msgstr ""
+msgstr "Exporteer als ..."
 
 #: js/TimesheetGridPanel.js:377
 msgid "Mass Update"
-msgstr ""
+msgstr "Alles updaten"
 
 #: js/TimesheetGridPanel.js:383
 msgid "Update field:"
-msgstr ""
+msgstr "Update veld:"
 
 #: js/TimeAccountStatusFilterModel.js:24
 msgid "Time Account - Status"
-msgstr ""
+msgstr "Urenaccount - Status"
 
 #: js/TimeAccountBilledFilterModel.js:24
 msgid "Time Account - Billed"
-msgstr ""
+msgstr "Urenaccount - Gefactureerd"
 
-#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:101
+#: js/TimeAccountBilledFilterModel.js:47 js/TimeaccountEditDialog.js:104
 #: Setup/setup.xml:87
 msgid "not yet billed"
-msgstr ""
+msgstr "Nog niet gefactureerd"
 
-#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:102
+#: js/TimeAccountBilledFilterModel.js:48 js/TimeaccountEditDialog.js:105
 #: Setup/setup.xml:88
 msgid "to bill"
-msgstr ""
+msgstr "Factureren"
 
-#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:103
+#: js/TimeAccountBilledFilterModel.js:49 js/TimeaccountEditDialog.js:106
 #: Setup/setup.xml:89
 msgid "billed"
-msgstr ""
+msgstr "Gefactureerd"
 
-#: js/TimeaccountEditDialog.js:49
+#: js/TimeaccountEditDialog.js:50
 msgid "Add New Timeaccount"
-msgstr ""
+msgstr "Nieuw urenaccount toevoegen"
 
-#: js/TimeaccountEditDialog.js:73
+#: js/TimeaccountEditDialog.js:74
 msgid "Unit"
-msgstr ""
+msgstr "Eenheid"
 
-#: js/TimeaccountEditDialog.js:77
+#: js/TimeaccountEditDialog.js:78
 msgid "Unit Price"
-msgstr ""
+msgstr "Eenheidsprijs"
 
-#: js/TimeaccountEditDialog.js:114 js/TimesheetEditDialog.js:158
+#: js/TimeaccountEditDialog.js:117 js/TimesheetEditDialog.js:159
 msgid "Cleared In"
-msgstr ""
+msgstr "Afgemaakt in"
 
-#: js/TimeaccountEditDialog.js:127
+#: js/TimeaccountEditDialog.js:130
 msgid "none"
-msgstr ""
+msgstr "Geen"
 
-#: js/TimeaccountEditDialog.js:128
+#: js/TimeaccountEditDialog.js:131
 msgid "last week"
-msgstr ""
+msgstr "vorige week"
 
-#: js/TimeaccountEditDialog.js:165
+#: js/TimeaccountEditDialog.js:168
 msgid "Timesheets are billable"
-msgstr ""
+msgstr "Urenstaten zijn facturabel"
 
-#: js/TimeaccountEditDialog.js:191 js/TimesheetEditDialog.js:202
+#: js/TimeaccountEditDialog.js:194 js/TimesheetEditDialog.js:203
 #: js/Models.js:149
 msgid "Time Account"
 msgid_plural "Time Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimeaccountEditDialog.js:244
+#: js/TimeaccountEditDialog.js:247
 msgid "Access"
-msgstr ""
+msgstr "Toegang"
 
-#: js/TimeaccountEditDialog.js:267
+#: js/TimeaccountEditDialog.js:270
 msgid "Book Own"
-msgstr ""
+msgstr "Boek eigen"
 
-#: js/TimeaccountEditDialog.js:269
+#: js/TimeaccountEditDialog.js:272
 msgid "The grant to add Timesheets to this Timeaccount"
-msgstr ""
+msgstr "Het recht om urenstaten aan dit Urenaccount toe te voegen"
 
-#: js/TimeaccountEditDialog.js:273
+#: js/TimeaccountEditDialog.js:276
 msgid "View All"
-msgstr ""
+msgstr "Bekijk alle"
 
-#: js/TimeaccountEditDialog.js:274
+#: js/TimeaccountEditDialog.js:277
 msgid "The grant to view Timesheets of other users"
-msgstr ""
+msgstr "Het recht om urenstaten van andere gebruikers in te zien"
 
-#: js/TimeaccountEditDialog.js:279
+#: js/TimeaccountEditDialog.js:282
 msgid "Book All"
-msgstr ""
+msgstr "Boek alle"
 
-#: js/TimeaccountEditDialog.js:280
+#: js/TimeaccountEditDialog.js:283
 msgid "The grant to add Timesheets for other users"
-msgstr ""
+msgstr "Het recht om urenstaten voor andere gebruikers toe te voegen"
 
-#: js/TimeaccountEditDialog.js:285
+#: js/TimeaccountEditDialog.js:288
 msgid "Manage Clearing"
-msgstr ""
+msgstr "Beheer opschonen"
 
-#: js/TimeaccountEditDialog.js:286
+#: js/TimeaccountEditDialog.js:289
 msgid "The grant to manage clearing of Timesheets"
-msgstr ""
+msgstr "Het recht om urenstaten op te schonen"
 
-#: js/TimeaccountEditDialog.js:292
+#: js/TimeaccountEditDialog.js:295
 msgid "The grant to export Timesheets of Timeaccount"
-msgstr ""
+msgstr "Het recht om urenstaten van Urenaccounts te exporteren"
 
-#: js/TimeaccountEditDialog.js:297
+#: js/TimeaccountEditDialog.js:300
 msgid "Manage All"
-msgstr ""
+msgstr "Beheer alle"
 
-#: js/TimeaccountEditDialog.js:298
+#: js/TimeaccountEditDialog.js:301
 msgid "Includes all other grants"
-msgstr ""
+msgstr "Inclusief alle andere rechten"
 
-#: js/TimeaccountEditDialog.js:306
+#: js/TimeaccountEditDialog.js:309
 msgid "Permissions"
-msgstr ""
+msgstr "Permissies"
 
-#: js/TimesheetEditDialog.js:185 js/Models.js:51
+#: js/TimesheetEditDialog.js:186 js/Models.js:51
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/TimesheetEditDialog.js:203
+#: js/TimesheetEditDialog.js:204
 msgid "Select Time Account..."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:227
-msgid "Start"
-msgstr ""
+msgstr "Selecteer Tijdaccount"
 
 #: js/TimesheetEditDialog.js:228
+msgid "Start"
+msgstr "Start"
+
+#: js/TimesheetEditDialog.js:229
 msgid "not set"
-msgstr ""
+msgstr "niet ingesteld"
 
-#: js/TimesheetEditDialog.js:234
+#: js/TimesheetEditDialog.js:235
 msgid "Enter description..."
-msgstr ""
-
-#: js/TimesheetEditDialog.js:281
-msgid "Failed"
-msgstr ""
+msgstr "Vul omschrijving in..."
 
 #: js/TimesheetEditDialog.js:282
-#, python-brace-format
-msgid "Could not save {0}."
-msgstr ""
+msgid "Failed"
+msgstr "Niet gelukt"
 
 #: js/TimesheetEditDialog.js:283
+#, python-brace-format
+msgid "Could not save {0}."
+msgstr "Opslaan mislukt {0}."
+
+#: js/TimesheetEditDialog.js:284
 msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr ""
+msgstr "Booking deadline voor dit tijdaccount is verlopen."
 
 #: js/DurationSlider.js:94
 #, python-brace-format
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #: js/Models.js:55
 msgid "timesheets list"
@@ -388,23 +393,23 @@ msgstr[1] ""
 
 #: js/Models.js:91 js/Models.js:178
 msgid "Quick Search"
-msgstr ""
+msgstr "Snel zoeken"
 
 #: js/Models.js:97 js/Models.js:185
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Laatste aanpassingstijd"
 
 #: js/Models.js:98 js/Models.js:186
 msgid "Last Modified By"
-msgstr ""
+msgstr "Laatst aangepast door"
 
 #: js/Models.js:99 js/Models.js:187
 msgid "Creation Time"
-msgstr ""
+msgstr "Aanmaaktijd"
 
 #: js/Models.js:100 js/Models.js:188
 msgid "Created By"
-msgstr ""
+msgstr "Aangemaakt door"
 
 #: js/Models.js:154
 msgid "timeaccount list"
@@ -414,48 +419,48 @@ msgstr[1] ""
 
 #: Preference.php:64
 msgid "Timesheets ODS export configuration"
-msgstr ""
+msgstr "Urenstaten export in ODS configureren "
 
 #: Preference.php:65
 msgid "Use this configuration for the timesheet ODS export."
-msgstr ""
+msgstr "Gebruik deze configuratie voor de export naar ODS"
 
 #: Preference.php:116
 msgid "default"
-msgstr ""
+msgstr "standaard"
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
-msgstr ""
+msgstr "Tijdregistratie"
 
 #: Setup/Initialize.php:33
 msgid "My Timesheets today"
-msgstr ""
+msgstr "Mijn urenstaten van vandaag"
 
 #: Setup/Initialize.php:47
 msgid "My Timesheets this week"
-msgstr ""
+msgstr "Mijn urenstaten van deze week"
 
 #: Setup/Initialize.php:61
 msgid "My Timesheets last week"
-msgstr ""
+msgstr "Mijn urenstaten van vorige week"
 
 #: Setup/Initialize.php:75
 msgid "My Timesheets this month"
-msgstr ""
+msgstr "Mijn urenstaten van deze maand"
 
 #: Setup/Initialize.php:89
 msgid "My Timesheets last month"
-msgstr ""
+msgstr "Mijn urenstaten van vorige maand"
 
 #: Setup/Initialize.php:112 Setup/Update/Release5.php:81
 msgid "Timeaccounts to bill"
-msgstr ""
+msgstr "Te factureren tijdaccounts"
 
 #: Setup/Initialize.php:126 Setup/Update/Release5.php:95
 msgid "Timeaccounts not yet billed"
-msgstr ""
+msgstr "Tijdaccounts nog niet gefactureerd"
 
 #: Setup/Initialize.php:141 Setup/Update/Release5.php:109
 msgid "Timeaccounts already billed"
-msgstr ""
+msgstr "Tijdaccounts al gefactureerd"

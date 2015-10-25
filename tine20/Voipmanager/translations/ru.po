@@ -6,14 +6,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-09-27 10:25+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -258,6 +258,7 @@ msgid_plural "Locations"
 msgstr[0] "Местоположение"
 msgstr[1] "Местоположения"
 msgstr[2] "Местоположений"
+msgstr[3] "Местоположений"
 
 #: js/Snom/PhoneGridPanel.js:87 js/Models.js:174
 msgid "Template"
@@ -265,6 +266,7 @@ msgid_plural "Templates"
 msgstr[0] "Шаблон"
 msgstr[1] "Шаблона"
 msgstr[2] "Шаблонов"
+msgstr[3] "Шаблонов"
 
 #: js/Snom/PhoneGridPanel.js:96
 msgid "IP Address"
@@ -276,6 +278,7 @@ msgid_plural "Softwares"
 msgstr[0] "Программы"
 msgstr[1] "Программы"
 msgstr[2] "Программы"
+msgstr[3] "Программы"
 
 #: js/Snom/PhoneGridPanel.js:108
 msgid "current model"
@@ -387,6 +390,7 @@ msgid_plural "Phones"
 msgstr[0] "Телефон"
 msgstr[1] "Телефона"
 msgstr[2] "Телефонов"
+msgstr[3] "Телефонов"
 
 #: js/Snom/PhoneEditDialog.js:279
 msgid "Phone Model"
@@ -440,6 +444,7 @@ msgid_plural "Lines"
 msgstr[0] "Линия"
 msgstr[1] "Линии"
 msgstr[2] "Линий"
+msgstr[3] "Линий"
 
 #: js/Snom/LineGridPanel.js:257
 msgid "Idle Text"
@@ -455,6 +460,7 @@ msgid_plural "SipPeers"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Voipmanager.js:39
 msgid "Dialplan"
@@ -467,6 +473,7 @@ msgid_plural "Contexts"
 msgstr[0] "Контекст"
 msgstr[1] "Контекста"
 msgstr[2] "Контекстов"
+msgstr[3] "Контекстов"
 
 #: js/Voipmanager.js:60 js/Models.js:560
 msgid "Voicemail"
@@ -474,6 +481,7 @@ msgid_plural "Voicemails"
 msgstr[0] "Голосовая почта"
 msgstr[1] "Голосовые почты"
 msgstr[2] "Голосовые почты"
+msgstr[3] "Голосовые почты"
 
 #: js/Voipmanager.js:70 js/Models.js:598
 msgid "Meetme"
@@ -481,6 +489,7 @@ msgid_plural "Meetmes"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Voipmanager.js:80
 msgid "Queues"
@@ -504,6 +513,7 @@ msgid_plural "Settings"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Asterisk/MeetmeEditDialog.js:40 js/Asterisk/MeetmeGridPanel.js:49
 msgid "confno"
@@ -886,6 +896,7 @@ msgid_plural "phones lists"
 msgstr[0] "список телефонов"
 msgstr[1] "списка телефонов"
 msgstr[2] "списков телефонов"
+msgstr[3] "списков телефонов"
 
 #: js/Models.js:137
 msgid "locations list"
@@ -893,6 +904,7 @@ msgid_plural "locations lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:178
 msgid "templates list"
@@ -900,6 +912,7 @@ msgid_plural "templates lists"
 msgstr[0] "список шаблонов"
 msgstr[1] "списка шаблонов"
 msgstr[2] "списков шаблонов"
+msgstr[3] "списков шаблонов"
 
 #: js/Models.js:220
 msgid "softwares list"
@@ -907,6 +920,7 @@ msgid_plural "softwares lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:253
 msgid "SoftwareImage"
@@ -914,6 +928,7 @@ msgid_plural "SoftwareImages"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:257
 msgid "softwareImages list"
@@ -921,6 +936,7 @@ msgid_plural "softwareImages lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:298
 msgid "lines list"
@@ -928,6 +944,7 @@ msgid_plural "lines lists"
 msgstr[0] "список линий"
 msgstr[1] "списка линий"
 msgstr[2] "списков линий"
+msgstr[3] "списков линий"
 
 #: js/Models.js:361
 msgid "setting list"
@@ -935,6 +952,7 @@ msgid_plural "settings lists"
 msgstr[0] "настройки"
 msgstr[1] "настройки"
 msgstr[2] "настройки"
+msgstr[3] "настройки"
 
 #: js/Models.js:462
 msgid "sipPeers list"
@@ -942,6 +960,7 @@ msgid_plural "sipPeers lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:504
 msgid "contexts list"
@@ -949,6 +968,7 @@ msgid_plural "contexts lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:564
 msgid "voicemails list"
@@ -956,6 +976,7 @@ msgid_plural "voicemails lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/Models.js:602
 msgid "meetmes list"
@@ -963,3 +984,4 @@ msgid_plural "meetmes lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""

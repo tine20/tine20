@@ -206,4 +206,78 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
                 . ' Created auto task for user ' . $user->getId() . ' in container ' . $responsiblePersonalContainer->name);
         }
     }
+
+    /**
+     * do something after the import
+     */
+    protected function _afterImport()
+    {
+        if (Crm_Config::getInstance()->get(Crm_Config::LEAD_IMPORT_NOTIFICATION) && ! $this->_options['dryrun']) {
+            $this->_sendNotificationToResponsibles();
+        }
+    }
+
+    /**
+     * sends a notification email to all responsibles of imported leads
+     *
+     * @throws Tinebase_Exception_Record_NotAllowed
+     *
+     * @see TODO add issue
+     */
+    protected function _sendNotificationToResponsibles()
+    {
+        $responsibles = new Tinebase_Record_RecordSet('Addressbook_Model_Contact');
+        $leadsByResponsibleId = array();
+        foreach ($this->_importResult['results'] as $importedRecord) {
+            // add responsibles if not already in record set and add lead to $leadsByResponsibleId
+            $responsiblesForImportedLead = $importedRecord->getResponsibles();
+            foreach ($responsiblesForImportedLead as $responsible) {
+                if (! $responsibles->getById($responsible->getId())) {
+                    $responsibles->addRecord($responsible);
+                    $leadsByResponsibleId[$responsible->getId()] = new Tinebase_Record_RecordSet('Crm_Model_Lead');
+                }
+                $leadsByResponsibleId[$responsible->getId()]->addRecord($importedRecord);
+            }
+        }
+
+        foreach ($responsibles as $responsible) {
+            if (isset($leadsByResponsibleId[$responsible->getId()]))
+            $this->_sendNotificationToResponsible($responsible, $leadsByResponsibleId[$responsible->getId()]);
+        }
+    }
+
+    /**
+     * send mail with related (imported) leads for responsibles
+     *
+     * @param Addressbook_Model_Contact $responsible
+     * @param Tinebase_Record_RecordSet
+     */
+    protected function _sendNotificationToResponsible($responsible, $leads)
+    {
+        if (count($leads) === 0) {
+            // do nothing
+            return;
+        }
+
+        $view = new Zend_View();
+        $view->setScriptPath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'views');
+
+        $translate = Tinebase_Translation::getTranslation('Crm');
+
+        $containerName = Tinebase_Container::getInstance()->get($leads->getFirstRecord()->container_id)->name;
+        $view->lang_importedLeads = sprintf($translate->_('The following leads have just been imported into lead list %s'), $containerName);
+        $view->importedLeads = $leads;
+
+        $plain = $view->render('importNotificationPlain.php');
+
+        $subject = sprintf($translate->_('%s new leads have been imported'), count($leads));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
+
+        try {
+            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $responsible, $subject, $plain);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+        }
+    }
 }

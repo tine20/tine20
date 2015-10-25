@@ -203,10 +203,14 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     public static function setSessionBackend()
     {
         $config = Tinebase_Core::getConfig();
-        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
+        $defaultSessionSaveHandler = ucfirst(ini_get('session.save_handler'));
+        $defaultSessionSavePath = ini_get('session.save_path');
+
+        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : $defaultSessionSaveHandler;
         $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
         
         switch ($backendType) {
+            case 'Files': // this is the default for the ini setting session.save_handler
             case 'File':
                 if ($config->gc_maxlifetime) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'gc_maxlifetime' should be renamed to 'lifetime' and moved to 'session' group.");
@@ -230,31 +234,41 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                         'gc_probability' => 0,
                         'gc_divisor'     => 100
                     ));
-                } else if (@opendir(ini_get('session.save_path')) !== FALSE) {
+                } else if (@opendir($defaultSessionSavePath) !== FALSE) {
                     Zend_Session::setOptions(array(
                         'gc_probability' => 1,
                         'gc_divisor'     => 100
                     ));
                 } else {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " Unable to initialize automatic session cleanup. Check permissions to " . ini_get('session.save_path'));
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " Unable to initialize automatic session cleanup. Check permissions to " . ini_get('session.save_path'));
                 }
                 
                 break;
                 
             case 'Redis':
-                $host   = ($config->session->host) ? $config->session->host : 'localhost';
-                $port   = ($config->session->port) ? $config->session->port : 6379;
-                if ($config->session && $config->session->prefix) {
-                    $prefix = $config->session->prefix;
+                if ($config->session) {
+                    $host = ($config->session->host) ? $config->session->host : 'localhost';
+                    $port = ($config->session->port) ? $config->session->port : 6379;
+                    if ($config->session && $config->session->prefix) {
+                        $prefix = $config->session->prefix;
+                    } else {
+                        $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                    }
+                    $prefix = $prefix . '_SESSION_';
+                    $savePath = "tcp://$host:$port?prefix=$prefix";
+                } else if ($defaultSessionSavePath) {
+                    $savePath = $defaultSessionSavePath;
                 } else {
-                    $prefix = ($config->database && $config->database->tableprefix) ? $config->database->tableprefix : 'tine20';
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " Unable to setup redis session backend - config missing");
+                    return;
                 }
-                $prefix = $prefix . '_SESSION_';
-                
+
                 Zend_Session::setOptions(array(
                     'gc_maxlifetime' => $maxLifeTime,
                     'save_handler'   => 'redis',
-                    'save_path'      => "tcp://$host:$port?prefix=$prefix"
+                    'save_path'      => $savePath
                 ));
                 
                 break;
@@ -292,6 +306,10 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         
         if (isset($_SERVER['REQUEST_URI'])) {
             $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
+
+            // fallback to request uri
+            $baseUri = $_SERVER['REQUEST_URI'];
+
             if ($request) {
                 if ($request->getHeaders()->has('X-FORWARDED-HOST')) {
                     /************** Apache 2.4 with mod_proxy ****************
@@ -320,11 +338,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                 } else {
                     $baseUri = $request->getBasePath();
                 }
-            } else {
-                // fallback to request uri
-                $baseUri = $_SERVER['REQUEST_URI'];
             }
-            
+
             // strip of index.php
             if (substr($baseUri, -9) === 'index.php') {
                 $baseUri = dirname($baseUri);

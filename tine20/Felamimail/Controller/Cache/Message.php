@@ -848,7 +848,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
         $cachedMessage = $this->_addMessageToCache($messageToCache);
-        
+
+        if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
+            Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($cachedMessage);
+        }
         if ($cachedMessage !== FALSE) {
             $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             

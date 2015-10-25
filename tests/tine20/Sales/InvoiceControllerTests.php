@@ -9,6 +9,7 @@
  * 
  */
 
+
 /**
  * Test class for Sales Invoice Controller
  */
@@ -319,7 +320,227 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->assertTrue($ts->invoice_id == NULL, print_r($ts->toArray(), 1));
         }
     }
-    
+
+    protected function _createInvoiceUpdateRecreationFixtures($createTimesheet = true)
+    {
+        $this->_createFullFixtures();
+
+        // we dont want this contract 1 to be part of the runs below, move it out of the way
+        $this->_contractRecords->getByIndex(0)->start_date->addMonth(12);
+        Sales_Controller_Contract::getInstance()->update($this->_contractRecords->getByIndex(0));
+
+        $date = clone $this->_referenceDate;
+        $customer4Timeaccount = $this->_timeaccountRecords->filter('title', 'TA-for-Customer4')->getFirstRecord();
+        $customer4Timeaccount->status = 'to bill';
+        $customer4Timeaccount->budget = NULL;
+
+        if (null === $this->_timesheetController)
+            $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        if (null === $this->_timeaccountController)
+            $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
+        $this->_timeaccountController->update($customer4Timeaccount);
+
+        // this is a ts on 20xx-03-18
+        $this->sharedTimesheet = new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $customer4Timeaccount->getId(),
+            'start_date' => $date->addMonth(2)->addDay(17),
+            'duration' => 120,
+            'description' => 'ts from ' . (string) $date,
+        ));
+        if (true === $createTimesheet)
+            $this->_timesheetController->create($this->sharedTimesheet);
+
+        //run autoinvoicing with 20xx-04-01
+        $date = clone $this->_referenceDate;
+        $date->addMonth(3);
+        $result = $this->_invoiceController->createAutoInvoices($date);
+        $this->assertEquals(2, count($result['created']));
+
+        return $result;
+    }
+
+    public function testInvoiceRecreation()
+    {
+        $result = $this->_createInvoiceUpdateRecreationFixtures();
+
+        $oldInvoiceId0 = $result['created'][0];
+        $ipc = Sales_Controller_InvoicePosition::getInstance();
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $oldInvoiceId0),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(9, $positions->count());
+
+        $oldInvoiceId1 = $result['created'][1];
+        $ipc = Sales_Controller_InvoicePosition::getInstance();
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $oldInvoiceId1),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(4, $positions->count());
+
+        $contract4 = $this->_contractRecords->getByIndex(3);
+        $filter = new Sales_Model_ProductAggregateFilter(
+            array(
+                array('field' => 'interval', 'operator' => 'equals', 'value' => 3),
+                //array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->_contractRecords->getByIndex(3)->getId()),
+            ), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_ForeignId(//ExplicitRelatedRecord(
+            array('field' => 'contract_id', 'operator' => 'AND', 'value' =>
+                array(
+                    array(
+                        'field' =>  ':id', 'operator' => 'equals', 'value' => $contract4->getId()
+                    )
+                ),
+                'options' => array(
+                    'controller'        => 'Sales_Controller_Contract',
+                    'filtergroup'       => 'Sales_Model_ContractFilter',
+                    //'own_filtergroup'   => 'Sales_Model_ProductAggregateFilter',
+                    //'own_controller'    => 'Sales_Controller_ProductAggregate',
+                    //'related_model'     => 'Sales_Model_Contract',
+                    'modelName' => 'Sales_Model_Contract',
+                ),
+            )
+        ));
+
+        $pA = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        $this->assertEquals(1, $pA->count());
+        $pA = $pA->getFirstRecord();
+        $pA->interval = 4;
+        Sales_Controller_ProductAggregate::getInstance()->update($pA);
+        $contract4->title = $contract4->getTitle() . ' changed';
+        sleep(1);
+        $this->_contractController->update($contract4);
+
+        $this->sharedTimesheet->id = NULL;
+        $this->_timesheetController->create($this->sharedTimesheet);
+
+        $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
+        $this->assertEquals(2, count($result));
+        $this->assertNotEquals($oldInvoiceId0, $result[0]);
+        $this->assertNotEquals($oldInvoiceId1, $result[1]);
+
+        $this->_checkInvoiceUpdateExistingTimeaccount($result[1]);
+
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $result[0]),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(10, $positions->count());
+
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $result[1]),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(1, $positions->count());
+    }
+
+    /**
+     *
+     */
+    public function testInvoiceUpdateExistingTimeaccount()
+    {
+        $result = $this->_createInvoiceUpdateRecreationFixtures();
+
+        $this->sharedTimesheet->id = NULL;
+        $this->_timesheetController->create($this->sharedTimesheet);
+
+        $this->_invoiceController->checkForUpdate($result['created'][1]);
+
+        $this->_checkInvoiceUpdateExistingTimeaccount($result['created'][1]);
+
+        //check that the same update run doesnt do anything anymore
+        $this->_invoiceController->checkForUpdate($result['created'][1]);
+
+        $this->_checkInvoiceUpdateExistingTimeaccount($result['created'][1]);
+    }
+
+    public function testCheckForContractOrInvoiceUpdatesExistingTimeaccount()
+    {
+        $result = $this->_createInvoiceUpdateRecreationFixtures();
+
+        $this->sharedTimesheet->id = NULL;
+        $this->_timesheetController->create($this->sharedTimesheet);
+
+        $this->_invoiceController->checkForContractOrInvoiceUpdates();
+
+        $this->_checkInvoiceUpdateExistingTimeaccount($result['created'][1]);
+
+        $this->_invoiceController->checkForContractOrInvoiceUpdates();
+
+        $this->_checkInvoiceUpdateExistingTimeaccount($result['created'][1]);
+    }
+
+    protected function _checkInvoiceUpdateExistingTimeaccount($invoiceId)
+    {
+        $ipc = Sales_Controller_InvoicePosition::getInstance();
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'model', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount'),
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $invoiceId),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(1, $positions->count());
+        $this->assertEquals(4, $positions->getFirstRecord()->quantity);
+    }
+
+    protected function _checkInvoiceUpdateWithNewTimeaccount($invoiceId)
+    {
+        $ipc = Sales_Controller_InvoicePosition::getInstance();
+        $f = new Sales_Model_InvoicePositionFilter(array(
+            array('field' => 'model', 'operator' => 'equals', 'value' => 'Timetracker_Model_Timeaccount'),
+            array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                array('field' => 'id', 'operator' => 'equals', 'value' => $invoiceId),
+            )),
+        ));
+        $positions = $ipc->search($f);
+        $this->assertEquals(1, $positions->count());
+        $this->assertEquals(2, $positions->getFirstRecord()->quantity);
+    }
+    /**
+     *
+     */
+    public function testInvoiceUpdateWithNewTimeaccount()
+    {
+        $result = $this->_createInvoiceUpdateRecreationFixtures(false);
+
+        $this->_timesheetController->create($this->sharedTimesheet);
+
+        $this->_invoiceController->checkForUpdate($result['created'][1]);
+
+        $this->_checkInvoiceUpdateWithNewTimeaccount($result['created'][1]);
+
+        //check that the same update run doesnt do anything anymore
+        $this->_invoiceController->checkForUpdate($result['created'][1]);
+
+        $this->_checkInvoiceUpdateWithNewTimeaccount($result['created'][1]);
+    }
+
+    public function testCheckForContractOrInvoiceUpdatesWithNewTimeaccount()
+    {
+        $result = $this->_createInvoiceUpdateRecreationFixtures(false);
+
+        $this->_timesheetController->create($this->sharedTimesheet);
+
+        $this->_invoiceController->checkForContractOrInvoiceUpdates();
+
+        $this->_checkInvoiceUpdateWithNewTimeaccount($result['created'][1]);
+
+        $this->_invoiceController->checkForContractOrInvoiceUpdates();
+
+        $this->_checkInvoiceUpdateWithNewTimeaccount($result['created'][1]);
+    }
+
     /**
      * @see: rt127444
      * 
@@ -340,7 +561,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $taController = Timetracker_Controller_Timeaccount::getInstance();
         $taController->update($customer1Timeaccount);
         
-        // this is a ts on 20xx-01-17
+        // this is a ts on 20xx-01-18
         $timesheet = new Timetracker_Model_Timesheet(array(
             'account_id' => Tinebase_Core::getUser()->getId(),
             'timeaccount_id' => $customer1Timeaccount->getId(),

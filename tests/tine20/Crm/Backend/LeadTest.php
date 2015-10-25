@@ -16,7 +16,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Crm_Backend_Lead
  */
-class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
+class Crm_Backend_LeadTest extends TestCase
 {
     /**
      * Testcontainer
@@ -48,33 +48,12 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         $this->_backend = new Crm_Backend_Lead();
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            'Crm', 
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        
-        if ($personalContainer->count() === 0) {
-            $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
-        } else {
-            $this->_testContainer = $personalContainer[0];
-        }
+
+        $this->_testContainer = $this->_getPersonalContainer('Crm');
     }
-    
-    /**
-     * Tears down the fixture
-     * 
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
+
     /**
      * try to add a lead
      * 

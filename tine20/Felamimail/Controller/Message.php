@@ -161,7 +161,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_checkMessageAccount($message, $account);
         
         $message = $this->_getCompleteMessageContent($message, $account, $_partId);
-        
+
+        if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
+            Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
+        }
+
         if ($_setSeen) {
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }

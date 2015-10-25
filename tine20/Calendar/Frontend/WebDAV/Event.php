@@ -120,9 +120,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         #Sabre\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
 
         try {
-            $event = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+            $event = $converter->toTine20Model($vobjectData);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -169,6 +170,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
+            if (get_class($converter) == 'Calendar_Convert_Event_VCalendar_Generic') {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
+                throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
+            }
             try {
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
                 
@@ -231,6 +237,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public function delete() 
     {
+        if (get_class($this->_getConverter()) == 'Calendar_Convert_Event_VCalendar_Generic') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
+            throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
+        }
+
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
         sleep(5);
@@ -245,7 +257,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " deleting events in the past is not allowed via CalDAV");
             return;
         }
-        
+
         // allow delete only if deleted in origin calendar
         if ($event->container_id == $this->_container->getId()) {
             if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
@@ -417,7 +429,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (get_class($this->_getConverter()) == 'Calendar_Convert_Event_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.");
-            throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
+            throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
         }
 
         $this->_vevent = null;

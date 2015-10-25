@@ -87,14 +87,15 @@ Tine.Felamimail.GridPanelHook = function(config) {
       }
     });
     this.composeMailBtn = Ext.apply(new Ext.Button(this.composeMailActionTO), {
+        text: this.app.i18n._('Compose email'),
         scale: 'medium',
         rowspan: 2,
         iconAlign: 'top'
     });
     
     // register in toolbar + contextmenu
-    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-GridPanel-ActionToolbar-leftbtngrp', this.composeMailBtn, 30);
-    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-GridPanel-ContextMenu', this.composeMailAction, 80);
+    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-' + this.modelName + '-GridPanel-ActionToolbar-leftbtngrp', this.composeMailBtn, 30);
+    Ext.ux.ItemRegistry.registerItem(this.foreignAppName + '-' + this.modelName + '-GridPanel-ContextMenu', this.composeMailAction, 80);
 };
 
 Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
@@ -180,14 +181,14 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             if (this.contactInRelation && record.get('relations')) {
                 Ext.each(record.get('relations'), function(relation) {
                     if (relation.type === this.relationType) {
-                       this.addMailFromContact(mailAddresses, relation.related_record);
+                       this.addMailFromAddressBook(mailAddresses, relation.related_record);
                     }
                 }, this);
             } else if (Ext.isFunction(this.addMailFromRecord)){
                 // addMailFromRecord can be defined in config
                 this.addMailFromRecord(mailAddresses, record);
             } else {
-                this.addMailFromContact(mailAddresses, record);
+                this.addMailFromAddressBook(mailAddresses, record);
             }
             
         }, this);
@@ -198,16 +199,16 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             this.mailAddresses = mailAddresses;
         }
         
-        return mailAddresses;
+        return mailAddresses.unique();
     },
     
     /**
-     * add mail address from contact (if available) and add it to mailAddresses array
+     * add mail address from addressbook (if available) and add it to mailAddresses array
      * 
      * @param {Array} mailAddresses
      * @param {Tine.Addressbook.Model.Contact|Object} contact
      */
-    addMailFromContact: function(mailAddresses, contact) {
+    addMailFromAddressBook: function(mailAddresses, contact) {
         if (! contact) {
             return;
         }
@@ -215,10 +216,14 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             contact = new Tine.Addressbook.Model.Contact(contact);
         }
         
-        var mailAddress = (contact.getPreferedEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
-        
-        if (mailAddress) {
-            mailAddresses.push(mailAddress);
+        if (!contact.get("members")) {
+            var mailAddress = (contact.getPreferedEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
+            if (mailAddress)
+                mailAddresses.push(mailAddress);
+        } else {
+            Ext.each(contact.get("emails").split(","), function(mail) {
+                mailAddresses.push(mail);
+            });
         }
     },
     

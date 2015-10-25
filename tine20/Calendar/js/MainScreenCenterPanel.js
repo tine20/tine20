@@ -264,7 +264,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             toggleGroup: 'Calendar_Toolbar_tgViewTypes',
             scope: this
         });
-        
+
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.isActiveView('Day'),
             text: this.app.i18n._('Day'),
@@ -403,7 +403,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }],
             items: [
                 this.showSheetView,
-                this.showGridView,
+                this.showGridView
             ]
         }];
     },
@@ -576,7 +576,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         this.fireEvent('changeview', this, view);
     },
-    
+
     /**
      * returns all filter data for current view
      */

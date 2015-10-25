@@ -112,9 +112,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        // protect against file object spoofing
         foreach (array_keys($_record->toArray()) as $property) {
-            if (! in_array($property, array('id', 'name', 'description', 'relations', 'customfields', 'tags', 'notes', 'object_id'))) {
-                unset($_record->{$property});
+            if (! in_array($property, array('name', 'description', 'relations', 'customfields', 'tags', 'notes'))) {
+                $_record->{$property} = $_oldRecord->{$property};
             }
         }
     }

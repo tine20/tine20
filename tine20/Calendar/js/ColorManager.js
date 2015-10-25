@@ -25,11 +25,7 @@ Tine.Calendar.ColorManager = function(config) {
 };
 
 Ext.apply(Tine.Calendar.ColorManager.prototype, {
-    /**
-     * @type String
-     */
-    strategy: 'container',
-    
+
     /**
      * gray color set
      * 
@@ -89,7 +85,8 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
     },
     
     getStrategy: function() {
-        return Tine.Calendar.colorStrategies[this.strategy];
+        var name = Tine.Calendar.ColorManager.colorStrategyBtn.colorStrategy;
+        return Tine.Calendar.colorStrategies[name];
     },
     
     /**
@@ -98,8 +95,8 @@ Ext.apply(Tine.Calendar.ColorManager.prototype, {
      * @param {Tine.Calendar.Model.Evnet} event
      * @return {Object} colorset
      */
-    getColor: function(event) {
-        var color = this.getStrategy().getColor(event);
+    getColor: function(event, attendeeRecord) {
+        var color = this.getStrategy().getColor(event, attendeeRecord);
         
         color = String(color).replace('#', '');
         if (! color.match(/[0-9a-fA-F]{6}/)) {
@@ -148,6 +145,66 @@ Tine.Calendar.ColorManager.compare = function(color1, color2, abs) {
     return abs ? (Math.abs(diff[0]) + Math.abs(diff[1]) + Math.abs(diff[2])) : diff;
 };
 
+Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
+    scale: 'medium',
+    minWidth: 60,
+    rowspan: 2,
+    iconAlign: 'top',
+    requiredGrant: 'readGrant',
+    iconCls:'cal-grid-view-color',
+    colorStrategy: 'container',
+    stateful: true,
+    stateId: 'cal-calpanel-color-strategy-btn',
+    stateEvents: [],
+
+    initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
+        if (! this.app.featureEnabled('featureColorBy')) {
+            // hide button and make sure it isn't pressed
+            Tine.log.info('ColorStrategy feature is deactivated');
+            this.hidden = true;
+            this.stateful = false;
+        }
+
+        // init state now to render menu with state applied
+        this.initState();
+
+        this.text = this.app.i18n._('Colors');
+        this.menu = {
+            items: [
+                {
+                    text: this.app.i18n._('Color by Calendar'),
+                    checked: this.colorStrategy == 'container',
+                    group: 'colorStrategy',
+                    checkHandler: this.changeColorStrategy.createDelegate(this, ['container'])
+                }, {
+                    text: this.app.i18n._('Color by Attendee Role'),
+                    checked: this.colorStrategy == 'requiredAttendee',
+                    group: 'colorStrategy',
+                    checkHandler: this.changeColorStrategy.createDelegate(this, ['requiredAttendee'])
+                }
+            ]
+        };
+
+        Tine.Calendar.ColorManager.colorStrategyBtn.superclass.initComponent.apply(this, arguments);
+        Tine.Calendar.ColorManager.colorStrategyBtn = this;
+    },
+
+    changeColorStrategy: function(strategy) {
+        this.colorStrategy = strategy;
+        this.saveState();
+        this.app.getMainScreen().getCenterPanel().refresh();
+    },
+
+    getState: function() {
+        return {colorStrategy: this.colorStrategy}
+    }
+});
+
+Ext.ux.ItemRegistry.registerItem('Calendar-MainScreenPanel-ViewBtnGrp', Tine.Calendar.ColorManager.colorStrategyBtn, 30);
+
+
 /**
  * Color Strategies Registry
  * 
@@ -155,7 +212,7 @@ Tine.Calendar.ColorManager.compare = function(color1, color2, abs) {
  */
 Tine.Calendar.colorStrategies = {};
 Tine.Calendar.colorStrategies['container'] = {
-    getColor: function(event) {
+    getColor: function(event, attendeeRecord) {
         var container = null,
             color = null,
             schema = null;
@@ -177,4 +234,19 @@ Tine.Calendar.colorStrategies['container'] = {
     }
 };
 
+Tine.Calendar.colorStrategies['requiredAttendee'] = {
+    getColor: function(event, attendeeRecord) {
+        var color, role;
+
+        if (attendeeRecord) {
+            role = attendeeRecord.get('role');
+
+            color = role == 'REQ' ? 'FF0000' : '00FF00'
+        } else {
+            color = 'C0C0C0' // light gray
+        }
+
+        return color;
+    }
+};
 

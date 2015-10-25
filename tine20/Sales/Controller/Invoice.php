@@ -81,7 +81,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @var array
      */
     protected $_autoInvoiceIterationResults = NULL;
-    
+
+    /**
+     * holds the records of all created invoices
+     *
+     * @var array
+     */
+    protected $_autoInvoiceIterationDetailResults = NULL;
+
     /**
      * holds the failures caught on a run
      * 
@@ -380,8 +387,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 if (($product->accountable == 'Sales_Model_Product') || ($product->accountable == '')) {
                     $simpleProductsToBill[] = array('pa' => $productAggregate, 'ac' => $productAggregate);
                 } else {
-                    $modelsToBill[$product->accountable] = array();
-                    $modelsToBill[$product->accountable]['pa'] = $productAggregate;
+                    $modelsToBill[$product->accountable] = $productAggregate;
                 }
             } else {
                 $modelsToSkip[] = $product->accountable;
@@ -395,15 +401,17 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
             // use productaggregate definition, if it has been found
-            if (array_key_exists($relation->related_model, $modelsToBill) && (! in_array($relation->related_model, $modelsToSkip))) {
+            if (isset($modelsToBill[$relation->related_model]) && (! in_array($relation->related_model, $modelsToSkip))) {
                 $relations[] = array_merge(array(
                     'related_model'  => get_class($relation->related_record),
                     'related_id'     => $relation->related_id,
                     'related_record' => $relation->related_record->toArray(),
                 ), $this->_getRelationDefaults());
-        
-        
-                $billableAccountables[] = array('ac' => $relation->related_record, 'pa' => $modelsToBill[$relation->related_model]['pa']);
+
+                $billableAccountables[] = array(
+                    'ac' => $relation->related_record,
+                    'pa' => $modelsToBill[$relation->related_model]
+                );
         
             } elseif ((! in_array($relation->related_model, $modelsToSkip)) && in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_model))) {
                 // no product aggregate definition has been found -> use default values
@@ -472,6 +480,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         
         foreach ($billableAccountables as $ba) {
             if (! $ba['ac']->isBillable($this->_currentMonthToBill, $this->_currentBillingContract, $ba['pa'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' isBillable failed for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
+                }
                 continue;
             }
         
@@ -483,6 +494,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' No efforts for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '" could be found.', Zend_Log::INFO);
                 }
                 continue;
+            } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' billables: ' . count($billables, true) . ' found for the accountable ' . $ba['ac']->getId() . ' of contract "' . $this->_currentBillingContract->number . '"');
             }
         
             $invoicePositions = $invoicePositions->merge($this->_getInvoicePositionsFromBillables($billables, $ba['ac']));
@@ -492,18 +505,331 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             if (! $latestEndDate) {
                 $latestEndDate = $endDate;
             } elseif ($endDate > $latestEndDate) {
-                $latestEndDate = clone $endDate;
+                $latestEndDate = $endDate;
             }
             if (! $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             } elseif ($startDate < $earliestStartDate) {
-                $earliestStartDate = clone $startDate;
+                $earliestStartDate = $startDate;
             }
         }
         
         return array($invoicePositions, $earliestStartDate, $latestEndDate);
     }
-    
+
+    public function checkForContractOrInvoiceUpdates(Sales_Model_Contract $contract = null)
+    {
+        $contractController = Sales_Controller_Contract::getInstance();
+
+        //get ids of invoices of which the contract was changed
+        $ids = $this->getInvoicesWithChangedContract((null!==$contract?$contract->getId():null));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($ids) . ' invoices with a contract change after creation time');
+        }
+        $excludeIds = array();
+        $contracts = array();
+        $result = array();
+        foreach ($ids as $row)
+        {
+            $excludeIds[$row[0]] = true;
+            if (!isset($contracts[$row[1]])) $contracts[$row[1]] = array($row[0]);
+            else $contracts[$row[1]][] = $row[0];
+        }
+        foreach($contracts as $contractId => $ids)
+        {
+            $tmpContract = $contractController->get($contractId);
+            if (!$tmpContract) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not get contract with id: ' . $contractId);
+                continue;
+            }
+            $this->checkForRecreation($ids, $tmpContract);
+            $result = array_merge($result, $this->_autoInvoiceIterationResults);
+        }
+
+
+        //get ids of invoices that are not billed and which are not part of the above list
+        $tmp = array(
+            array('field' => 'is_auto', 'operator' => 'equals', 'value' => TRUE),
+            array('field' => 'cleared', 'operator' => 'not', 'value' => 'CLEARED'),
+        );
+        if ($contract && $contract->last_modified_time) {
+            $tmp[] = array('field' => 'creation_time', 'operator' => 'after', 'value' => $contract->last_modified_time);
+        }
+        $f = new Sales_Model_InvoiceFilter($tmp, 'AND');
+
+        if ($contract) {
+            $subf = new Tinebase_Model_Filter_ExplicitRelatedRecord(array('field' => 'contract', 'operator' => 'AND', 'value' => array(array(
+                'field' =>  ':id', 'operator' => 'equals', 'value' => $contract->getId()
+            )), 'options' => array(
+                'controller'        => 'Sales_Controller_Contract',
+                'filtergroup'       => 'Sales_Model_ContractFilter',
+                'own_filtergroup'   => 'Sales_Model_InvoiceFilter',
+                'own_controller'    => 'Sales_Controller_Invoice',
+                'related_model'     => 'Sales_Model_Contract',
+            )));
+            $f->addFilter($subf);
+        }
+
+        // ASC is important, we want to update the oldest invoice first! otherwise a newer invoice might take away data from an older one! Though not severely bad, we want to maintain order, do we?
+        $p = new Tinebase_Model_Pagination(array('sort' => 'creation_time', 'dir' => 'ASC'));
+
+        $invoices = $this->search($f, $p, /* $_getRelations = */ false, /* only ids */ true);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($invoices) . ' invoices which are not yet cleared');
+        }
+
+        foreach($invoices as $id)
+        {
+            if (!isset($excludeIds[$id])) {
+                $this->checkForUpdate($id);
+            }
+        }
+
+        return $result;
+    }
+
+    public function getInvoicesWithChangedContract($contractId = NULL)
+    {
+        return $this->_backend->getInvoicesWithChangedContract($contractId);
+    }
+
+    public function checkForUpdate($id)
+    {
+        $invoice = $this->get($id);
+        if (!$invoice) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can not ::get invoice with id: ' . $id);
+            return;
+        }
+
+        $this->_currentBillingContract = NULL;
+        foreach($invoice->relations as $relation) {
+            if ('Sales_Model_Contract' === $relation->related_model) {
+                $this->_currentBillingContract = Sales_Controller_Contract::getInstance()->get($relation->related_id);
+                break;
+            }
+        }
+        if (NULL === $this->_currentBillingContract) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can not find contract for invoice with id: ' . $id);
+            return;
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found contract ' . $this->_currentBillingContract->getId() . ' for: ' . $id);
+        }
+
+        $invoice->setTimezone(Tinebase_Core::getUserTimezone());
+        $this->_currentBillingContract->setTimezone(Tinebase_Core::getUserTimezone());
+        // date seems not to have a tz, so after the clone, the tz is UTC!! we need to reset it
+        $this->_currentMonthToBill = clone $invoice->date;
+        $this->_currentMonthToBill->setTimezone(Tinebase_Core::getUserTimezone());
+
+
+        //find billableAccountables that need to be checked for update
+        $productAggregates = $this->_findProductAggregates();
+        $billableAccountables = array();
+        $modelsToBill = array();
+
+        foreach ($productAggregates as $productAggregate) {
+            $product = $this->_cachedProducts->getById($productAggregate->product_id);
+            if (! $product) {
+                $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+                $this->_cachedProducts->addRecord($product);
+            }
+
+            if (($product->accountable != 'Sales_Model_Product') && ($product->accountable != '')) {
+                $modelsToBill[$product->accountable] = $productAggregate;
+            }
+        }
+
+        // iterate relations, look for accountables
+        foreach ($this->_currentBillingContract->relations as $relation) {
+            // use productaggregate definition, if it has been found
+            if (isset($modelsToBill[$relation->related_model])) {
+                $billableAccountables[] = array(
+                    'ac' => $relation->related_record,
+                    'pa' => $modelsToBill[$relation->related_model]
+                );
+
+            } elseif (in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_model))) {
+                // no product aggregate definition has been found -> use default values
+                $billableAccountables[] = array(
+                    'ac' => $relation->related_record,
+                    'pa' => $relation->related_record->getDefaultProductAggregate($this->_currentBillingContract)
+                );
+            }
+        }
+
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($billableAccountables) . ' accountables that need to be checked for: ' . $id);
+        }
+
+        // this function should not return positions
+        // if it does, the positions will only contain what is not contained in the current existing invoice
+        // we cant just replace the positions, we have to join them
+        list($invoicePositions, $earliestStartDate, $latestEndDate) = $this->_findInvoicePositionsAndInvoiceInterval($billableAccountables);
+
+        if ($invoicePositions->count() > 0 ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . $invoicePositions->count() . ' updates for: ' . $id);
+            }
+            if ($invoice->start_date->isLater($earliestStartDate)) {
+                $invoice->start_date = $earliestStartDate;
+            }
+            if ($invoice->end_date->isEarlier($latestEndDate)) {
+                $invoice->end_date = $latestEndDate;
+            }
+
+            // get the existing invoice positions
+            $ipc = Sales_Controller_InvoicePosition::getInstance();
+            $f = new Sales_Model_InvoicePositionFilter(array(
+                array('field' => 'invoice_id', 'operator' => 'AND', 'value' => array(
+                    array('field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()),
+                )),
+            ));
+            $positions = $ipc->search($f);
+            $positions->setTimezone(Tinebase_Core::getUserTimezone());
+
+            foreach ($invoicePositions as $position)
+            {
+                $found = false;
+                //find existing position in invoice to merge into
+                foreach($positions as $oldPosition)
+                {
+                    if ($oldPosition->accountable_id == $position->accountable_id && $oldPosition->month == $position->month)
+                    {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' updating invoice position: ' . $oldPosition->id . ' with model: ' . $oldPosition->model . ' and accountable_id: ' . $oldPosition->accountable_id . ' in month: ' . $oldPosition->month . ' for invoice: ' . $id);
+                        }
+                        //update the $invoice->price_net, price_gross too?!?
+                        $oldPosition->quantity += $position->quantity;
+                        $ipc->update($oldPosition);
+                        $found = true;
+                        break;
+                    }
+                }
+                // add a new invoice position
+                if (false===$found) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' adding invoice position with model: ' . $position->model . ' and accountable_id: ' . $position->accountable_id . ' in month: ' . $position->month . ' for invoice: ' . $id);
+                    }
+                    $position->invoice_id = $invoice->getId();
+                    $ipc->create($position);
+                }
+            }
+
+            $this->update($invoice);
+
+            // mark the invoiced accountables as accounted / invoiced
+            foreach($billableAccountables as $ba) {
+                $ba['ac']->conjunctInvoiceWithBillables($invoice);
+            }
+
+        } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' no updates found for: ' . $id);
+        }
+    }
+
+    public function checkForRecreation(array $ids, $contract)
+    {
+        //we should delete from recent to old
+        //we should create from old to recent
+        //then compare correctly...
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            $forTrace = $contract->id . ' ' . print_r($ids, true);
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' for: ' . $forTrace);
+        }
+
+        $oldInvoices = array();
+        $somethingChanged = false;
+        $failed = false;
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        foreach ($ids as $id) {
+            $invoice = $this->get($id);
+            if (!$invoice) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can not ::get invoice with id: ' . $id);
+                continue;
+            }
+
+            $invoice->setTimezone(Tinebase_Core::getUserTimezone());
+            $oldInvoices[] = $invoice;
+
+            try {
+                $this->delete(array($invoice));
+            } catch (Sales_Exception_DeletePreviousInvoice $sedpi) {
+                $failed = true;
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete invoice with id: ' . $id);
+                break;
+            }
+            //is $invoice still valid?!?!?
+        }
+
+        if (true === $failed) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            return;
+        }
+
+        // reload relations as they may have changed as we deleted the invoices above
+        // TODO: could be made more efficient as we just need to reload releationsa actually and not the whole contract.
+        $contract = Sales_Controller_Contract::getInstance()->get($contract->getId());
+
+        $this->_currentBillingContract = $contract;
+        $this->_currentBillingContract->setTimezone(Tinebase_Core::getUserTimezone());
+        $this->_autoInvoiceIterationDetailResults = array();
+        $this->_autoInvoiceIterationResults = array();
+        // the newest invoice!
+        $date = clone $oldInvoices[0]->date;
+        // date seems not to have a tz, so after the clone, the tz is UTC!! we need to reset it
+        $date->setTimezone(Tinebase_Core::getUserTimezone());
+
+
+        $this->_createAutoInvoicesForContract($this->_currentBillingContract, $date);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' deleted ' . count($oldInvoices) . ' and recreated ' . count($this->_autoInvoiceIterationDetailResults) . ' invoices for: ' . $forTrace);
+        }
+
+        if (count($oldInvoices) !== count($this->_autoInvoiceIterationDetailResults)) {
+            // something changed for sure. fine, commit => done
+            $somethingChanged = true;
+        } else {
+
+            // WE NEED TO DIFF POSITIONS TOO! diff on invoice does not do a diff on the positions!
+            // if diff on invoice is negative, then check the positions
+
+            foreach ($this->_autoInvoiceIterationDetailResults as $newInvoice) {
+                $diff = null;
+                foreach ($oldInvoices as $oldInvoice) {
+                    if ($newInvoice->date->equals($oldInvoice->date)) {
+                        $diff = $newInvoice->diff($oldInvoice, array('description', 'id', 'relations', 'contract', 'customer', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time'));
+                        break;
+                    }
+                }
+                // null === $diff means that we could not match the new Invoice to the old one, though the count of invoices seems not to have changed
+                if (null === $diff || !$diff->isEmpty()) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' something changed with $diff = ' . (null===$diff?'null':print_r($diff->toArray(),true)) . ' for: ' . $forTrace);
+                    }
+                    $somethingChanged = true;
+                    break;
+                }
+            }
+        }
+
+        if (true === $somethingChanged) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' something changed for: ' . $forTrace);
+            }
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' nothing changed for: ' . $forTrace);
+            }
+            Tinebase_TransactionManager::getInstance()->rollBack();
+        }
+    }
+
     /**
      * create auto invoices for one contract
      * 
@@ -639,6 +965,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 // create invoice
                 $invoice = $this->create($invoice);
                 $this->_autoInvoiceIterationResults[] = $invoice->getId();
+                $this->_autoInvoiceIterationDetailResults[] = $invoice;
                 
                 $paToUpdate = array();
                 
@@ -702,6 +1029,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL)
     {
         $this->_autoInvoiceIterationResults  = array();
+        $this->_autoInvoiceIterationDetailResults = array();
         $this->_autoInvoiceIterationFailures = array();
         
         $contractBackend = new Sales_Backend_Contract();
@@ -722,7 +1050,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         ));
         
         $iterator->iterate($currentDate);
-        
+
+        unset($this->_autoInvoiceIterationDetailResults);
+
         $result = array(
             'failures'       => $this->_autoInvoiceIterationFailures,
             'failures_count' => count($this->_autoInvoiceIterationFailures),
@@ -764,7 +1094,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 );
             
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1), Zend_Log::DEBUG);
+                    Tinebase_Core::getLogger()->log(__METHOD__ . '::' . __LINE__ . ' Create invoice position ' . print_r($pos, 1) . ' for contract: ' . $this->_currentBillingContract->getId(), Zend_Log::DEBUG);
                 }
                 
                 $invoicePositions->addRecord(new Sales_Model_InvoicePosition($pos));

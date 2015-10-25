@@ -8,7 +8,7 @@ msgstr ""
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
 "PO-Revision-Date: 2015-04-28 07:44+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/tine20/language/it/)\n"
+"Language-Team: Italian (http://www.transifex.com/tine20/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -87,23 +87,23 @@ msgstr "Voce rimossa"
 msgid "Depreciate"
 msgstr "Svalutato"
 
-#: js/InventoryItemGridPanel.js:36
+#: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
 msgstr "Esporta Inventario"
 
-#: js/InventoryItemGridPanel.js:45
+#: js/InventoryItemGridPanel.js:46
 msgid "Export as ODS"
 msgstr "Esporta come ODS"
 
-#: js/InventoryItemGridPanel.js:52
+#: js/InventoryItemGridPanel.js:53
 msgid "Export as CSV"
 msgstr "Esporta come CSV"
 
-#: js/InventoryItemGridPanel.js:59
+#: js/InventoryItemGridPanel.js:60
 msgid "Export as ..."
 msgstr "Esporta come ..."
 
-#: js/InventoryItemGridPanel.js:71
+#: js/InventoryItemGridPanel.js:72
 msgid "Import items"
 msgstr "Importa articoli"
 

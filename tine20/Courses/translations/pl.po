@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-01-08 11:11+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Polish (http://www.transifex.com/projects/p/tine20/language/pl/)\n"
+"Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -84,7 +84,7 @@ msgstr "Kurs / Typ szkoły"
 msgid "Description"
 msgstr "Opis"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:89
+#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr "Internet"
 
@@ -167,49 +167,53 @@ msgstr "Wszystkie kursy"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Domyślny ulubiony, wczytywany podczas uruchamiania klas"
 
-#: Config.php:91
+#: Config.php:98
 msgid "Internet access options."
 msgstr "Opcje dostępu do Internetu."
 
-#: Config.php:98 Config.php:100
+#: Config.php:105 Config.php:107
 msgid "Internet Access Group (ON)"
 msgstr "Grupa dostępu do Internetu (ON)"
 
-#: Config.php:106 Config.php:108
+#: Config.php:113 Config.php:115
 msgid "Internet Access Group (FILTERED)"
 msgstr "Grupa dostępu do Internetu (FILTERED)"
 
-#: Config.php:114 Config.php:116
+#: Config.php:121 Config.php:123
 msgid "Students Group"
 msgstr "Grupa studentów"
 
-#: Config.php:122 Config.php:124
+#: Config.php:129 Config.php:131
 msgid "Students Import Definition"
 msgstr "Definicja importu studentów"
 
-#: Config.php:130
+#: Config.php:137
 msgid "Students login name prefix"
 msgstr "Prefiks loginu studentów"
 
-#: Config.php:137
+#: Config.php:144
+msgid "Students password suffix"
+msgstr ""
+
+#: Config.php:151
 msgid "Student username schema"
 msgstr ""
 
-#: Config.php:139
+#: Config.php:153
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr ""
 
-#: Config.php:146 Config.php:148
+#: Config.php:160 Config.php:162
 msgid "Samba user settings"
 msgstr "Ustawienia użytkownika Samby"
 
-#: Config.php:157
+#: Config.php:171
 msgid "Default department"
 msgstr ""
 
-#: Config.php:159
+#: Config.php:173
 msgid "The default department for new Courses"
 msgstr ""
 

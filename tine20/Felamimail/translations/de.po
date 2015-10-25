@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 10:14+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/de/)\n"
+"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -320,7 +320,7 @@ msgstr "Zuletzt aktualisiert:"
 #: js/TreePanel.js:732
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
-msgstr ""
+msgstr "Lade Nachrichten … ({0} erledigt)"
 
 #: js/TreePanel.js:748
 #, python-brace-format
@@ -349,17 +349,29 @@ msgstr "Kontakt zum Adressbuch hinzufügen"
 msgid "Date"
 msgstr "Datum"
 
-#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:481
+#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:482
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der E-Mail-Header"
 
-#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:814 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:814 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Anhänge"
 
 #: js/GridPanelHook.js:34
 msgid "Compose email"
 msgstr "E-Mail verfassen"
+
+#: js/GridPanelHook.js:49 js/Model.js:158 js/GridPanel.js:507
+msgid "To"
+msgstr "An"
+
+#: js/GridPanelHook.js:62
+msgid "CC"
+msgstr "CC"
+
+#: js/GridPanelHook.js:75
+msgid "BCC"
+msgstr "BCC"
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -452,10 +464,6 @@ msgstr "Betreff/Von"
 #: js/Model.js:157 js/GridPanel.js:494
 msgid "From (Name)"
 msgstr "Von (Name)"
-
-#: js/Model.js:158 js/GridPanel.js:507
-msgid "To"
-msgstr "An"
 
 #: js/Model.js:159
 msgid "Cc"

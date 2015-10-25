@@ -267,6 +267,13 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 renderer: Tine.Tinebase.common.dateTimeRenderer,
                 editor: new Ext.ux.form.ClearableDateField()
             }, {
+                id: 'access_count',
+                header: this.app.i18n._("Access Count"),
+                width: 70,
+                sortable: true,
+                dataIndex: 'access_count',
+                hidden: false
+            }, {
                 id: 'last_modified_time',
                 header: this.app.i18n._("Last Modified Time"),
                 width: 100,

@@ -476,11 +476,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
             return;
         }
         
-        var pos = this.parallelEventsRegistry.getPosition(event);
-        
+        var pos = this.parallelEventsRegistry.getPosition(event),
+            attendeeRecord = this.ownerCt && this.ownerCt.attendee ?
+                Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(event.getAttendeeStore(), this.ownerCt.attendee) :
+                event.getMyAttenderRecord();
+
         // save some layout info
         event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
-        event.ui.colorSet = event.colorSet = Tine.Calendar.colorMgr.getColor(event);
+        event.ui.colorSet = event.colorSet = Tine.Calendar.colorMgr.getColor(event, attendeeRecord);
         event.ui.color = event.ui.colorSet.color;
         event.ui.bgColor = event.ui.colorSet.light;
         

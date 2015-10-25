@@ -82,7 +82,8 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
             'sales_tax'   => 0
         ));
         
-        $invoice = $this->create($purchaseInvoice);
+        // Don't use duplicate check for this import. The default data makes them duplicate by default.
+        $invoice = $this->create($purchaseInvoice, /* duplicateCheck = */ false);
         
         // attach invoice file (aka a pdf)
         $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, TRUE);

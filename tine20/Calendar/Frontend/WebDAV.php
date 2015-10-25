@@ -45,6 +45,10 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
      */
     public function getChild($name)
     {
+        if (! is_string($name)) {
+            throw new Tinebase_Exception_UnexpectedValue('name should be a string');
+        }
+
         // do this only for caldav requests
         if ($this->_useIdAsName && count($this->_getPathParts()) == 2 && in_array($name, array('inbox', 'outbox', 'dropbox'))) {
             switch ($name) {

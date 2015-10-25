@@ -148,30 +148,34 @@ Tine.Sales.InvoicePositionPanel = Ext.extend(Ext.Panel, {
             var pseudoEditDialog = {record: pseudoRecord, app: this.app};
             
             var split = this.modelsOfAccountable[this.accountables[index]].split('_Model_');
-            var model = Tine[split[0]].Model[split[1]];
-            var accountableApplication = Tine.Tinebase.appMgr.get(split[0]);
-            var renderedSum = Tine.Sales.renderInvoicePositionQuantity(this.sumsPerAccountable[this.accountables[index]], null, pseudoRecord2);
-            var grid = new Tine.Sales.InvoicePositionGridPanel({
-                collapsible: true,
-                collapsed: true,
-                editDialog: pseudoEditDialog,
-                height: (mymonths.length > 1) ? 350 : 250, // if grid will be grouped, make it bigger
-                title: accountableApplication.i18n._(model.getRecordsName()) +
-                       ' (' + mypositions.length + ')' + ' - ' +
-                       accountableApplication.i18n._(mypositions[0]['unit']) + ': ' + renderedSum,
-                app: this.app,
-                i18nModelsName: accountableApplication.i18n._(model.getRecordsName()),
-                i18nUnitName: accountableApplication.i18n._(mypositions[0]['unit']), 
-                accountable: this.modelsOfAccountable[this.accountables[index]],
-                accountableApplication: accountableApplication,
-                invoiceId: this.invoiceId,
-                renderedSum: renderedSum,
-                renderedSumsPerMonth: renderedSumsPerMonth,
-                unitName: mypositions[0]['unit'],
-                groupField: (mymonths.length > 1) ? 'month' : null
-            });
-            
-            this.add(grid);
+            if (Tine[split[0]]) {
+                var model = Tine[split[0]].Model[split[1]];
+                var accountableApplication = Tine.Tinebase.appMgr.get(split[0]);
+                var renderedSum = Tine.Sales.renderInvoicePositionQuantity(this.sumsPerAccountable[this.accountables[index]], null, pseudoRecord2);
+                var grid = new Tine.Sales.InvoicePositionGridPanel({
+                    collapsible: true,
+                    collapsed: true,
+                    editDialog: pseudoEditDialog,
+                    height: (mymonths.length > 1) ? 350 : 250, // if grid will be grouped, make it bigger
+                    title: accountableApplication.i18n._(model.getRecordsName()) +
+                    ' (' + mypositions.length + ')' + ' - ' +
+                    accountableApplication.i18n._(mypositions[0]['unit']) + ': ' + renderedSum,
+                    app: this.app,
+                    i18nModelsName: accountableApplication.i18n._(model.getRecordsName()),
+                    i18nUnitName: accountableApplication.i18n._(mypositions[0]['unit']),
+                    accountable: this.modelsOfAccountable[this.accountables[index]],
+                    accountableApplication: accountableApplication,
+                    invoiceId: this.invoiceId,
+                    renderedSum: renderedSum,
+                    renderedSumsPerMonth: renderedSumsPerMonth,
+                    unitName: mypositions[0]['unit'],
+                    groupField: (mymonths.length > 1) ? 'month' : null
+                });
+
+                this.add(grid);
+            } else {
+                Tine.log.warn('Application for accountable ' + this.accountables[index] + ' not found!');
+            }
         }
     }
 });

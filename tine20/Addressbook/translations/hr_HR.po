@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:20+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
+"Language-Team: Croatian (Croatia) (http://www.transifex.com/tine20/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -168,7 +168,7 @@ msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
 #: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kontakt"
@@ -202,14 +202,12 @@ msgstr "Ime"
 msgid "Middle Name"
 msgstr "Srednje ime"
 
-#: js/ContactEditDialog.js:123 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:19 js/Model.js:142
+#: js/ContactEditDialog.js:123 js/Model.js:19 js/Model.js:142
 #: js/ContactGrid.js:113
 msgid "Last Name"
 msgstr "Prezime"
 
-#: js/ContactEditDialog.js:129 js/ContactEditDialog.js:428
-#: js/ContactEditDialog.js:450 js/Model.js:27 js/Model.js:144
+#: js/ContactEditDialog.js:129 js/Model.js:27 js/Model.js:144
 #: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:117
 #: Setup/Initialize.php:70 Setup/Update/Release5.php:196
 msgid "Company"
@@ -328,32 +326,27 @@ msgstr "Unesi opis"
 msgid "Export as pdf"
 msgstr "Izvezi kao PDF"
 
-#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:493
+#: js/ContactEditDialog.js:404 js/ContactEditDialog.js:448
 msgid "Parse address"
 msgstr "Raščlanjena adresa"
 
-#: js/ContactEditDialog.js:428 js/ContactEditDialog.js:450
-#, python-brace-format
-msgid "Either {0} or {1} must be given"
-msgstr "Mora biti dodijeljen ili {0} ili {1}"
-
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Paste address"
 msgstr "Unesi adresu"
 
-#: js/ContactEditDialog.js:485
+#: js/ContactEditDialog.js:440
 msgid "Please paste an address or a URI to a vcard that should be parsed:"
 msgstr ""
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "Failed to parse address!"
 msgstr ""
 
-#: js/ContactEditDialog.js:511
+#: js/ContactEditDialog.js:466
 msgid "The address could not be read."
 msgstr ""
 
-#: js/ContactEditDialog.js:528
+#: js/ContactEditDialog.js:483
 msgid "End token mode"
 msgstr "Kraj tokena"
 
@@ -607,11 +600,15 @@ msgstr "Izvezi kao ..."
 msgid "Import contacts"
 msgstr "Uvezi kontakte"
 
-#: js/ContactGrid.js:280
+#: js/ContactGrid.js:285
 msgid "Contact of a user account"
 msgstr "Kontakt za korisnika računa"
 
-#: Controller/Contact.php:330
+#: js/ContactGrid.js:292
+msgid "No name"
+msgstr ""
+
+#: Controller/Contact.php:334
 msgid "Uploaded new contact image."
 msgstr "Učitaj novu sliku kontakta."
 
@@ -692,30 +689,53 @@ msgstr "Pravila za raščlanjivanje adresa"
 msgid "Path to a XML file with address parsing rules."
 msgstr "Putanja do XML datoteke sa pravilima za raščlanjivanje adrese."
 
-#: Import/definitions/adb_outlook2007_de_import_csv.xml:14
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:10
+msgid "Import CSV formated contacts from Outlook 2007 German address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
 msgstr "CSV Outlook 2007 German"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Contact CSV import"
-msgstr "Učitavanje kontakata CSV datotekom"
+msgid "LX-Office CSV Contact import"
+msgstr ""
 
-#: Import/definitions/adb_tine_import_csv.xml:18
+#: Import/definitions/adb_lxoffice_import_csv.xml:13
+msgid "Import CSV formated contacts from LX-Office"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine 2.0 contact CSV import"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr ""
+
+#: Import/definitions/adb_tine_import_csv.xml:19
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Lista za učitavanje (###CURRENTDATE###)"
 
-#: Import/definitions/adb_tine_import_csv.xml:20
+#: Import/definitions/adb_tine_import_csv.xml:21
 msgid ""
 "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
 msgstr "Kontakti učitani ###CURRENTDATE### u ###CURRENTTIME### sa ###USERFULLNAME###"
 
-#: Import/definitions/adb_outlook_import_csv.xml:13
+#: Import/definitions/adb_outlook_import_csv.xml:10
+msgid "Import CSV formated contacts from Exchange / Outlook address book"
+msgstr ""
+
+#: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
 msgstr "Učitavanje kontakta CSV datotekom iz Outlook adresara"
 
-#: Import/definitions/adb_google_import_csv.xml:12
+#: Import/definitions/adb_google_import_csv.xml:11
+msgid "Import CSV formated contacts from Google address book"
+msgstr ""
+
+#: Import/definitions/adb_google_import_csv.xml:13
 msgid "Contact import from Google address book"
 msgstr "Učitavanje kontakta iz Google adresara"
 
@@ -723,7 +743,11 @@ msgstr "Učitavanje kontakta iz Google adresara"
 msgid "Contact CSV import from mac address book"
 msgstr "Učitavanje kontakta CSV datotekom iz mac adresara"
 
-#: Import/definitions/adb_import_vcard.xml:14
+#: Import/definitions/adb_import_vcard.xml:9
+msgid "Import vCard formated contacts"
+msgstr ""
+
+#: Import/definitions/adb_import_vcard.xml:15
 msgid "Contact VCARD import"
 msgstr "Učitavanje VCARD Kontakta"
 

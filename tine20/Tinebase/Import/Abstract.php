@@ -143,6 +143,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $this->_beforeImport($_resource);
         $this->_doImport($_resource, $_clientRecordData);
         $this->_logImportResult();
+        $this->_afterImport();
         
         return $this->_importResult;
     }
@@ -202,7 +203,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected function _beforeImport($_resource = NULL)
     {
     }
-    
+
+    /**
+     * do something after the import
+     */
+    protected function _afterImport()
+    {
+    }
+
     /**
      * do import: loop data -> convert to records -> import records
      * 
@@ -600,7 +608,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $relations[] = $relation;
         }
 
-        if (isset($field['targetField'])&& isset($field['targetFieldData'])) {
+        if (isset($field['targetField'])&& isset($field['targetFieldData']) && isset($record)) {
             $unreplaced = $targetField = $field['targetFieldData'];
             foreach ($record as $key => $value) {
                 $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
@@ -1049,13 +1057,27 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _handleDuplicateExceptions(Tinebase_Exception_Duplicate $ted, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
-        if (! empty($this->_options['duplicateResolveStrategy']) && $allowToResolveDuplicates) {
+        $firstDuplicateRecord = $ted->getData()->getFirstRecord();
+        $resolveStrategy = isset($this->_options['duplicateResolveStrategy']) ? $this->_options['duplicateResolveStrategy'] : null;
+
+        // switch to keep strategy for records of current import run
+        if (in_array($firstDuplicateRecord->getId(), $this->_importResult['results']->getArrayOfIds())) {
+            $allowToResolveDuplicates = true;
+            $resolveStrategy = 'keep';
+        }
+
+        if ($resolveStrategy && $allowToResolveDuplicates) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Trying to resolve with configured strategy: ' . $this->_options['duplicateResolveStrategy']);
+                . ' Trying to resolve with configured strategy: ' . $resolveStrategy);
             
             try {
-                $updatedRecord = $this->_importAndResolveConflict($ted->getData()->getFirstRecord(), $this->_options['duplicateResolveStrategy'], $ted->getClientRecord());
-                $this->_importResult['updatecount']++;
+                if ($resolveStrategy === 'keep') {
+                    $updatedRecord = $this->_importAndResolveConflict($ted->getClientRecord(), $resolveStrategy);
+                    $this->_importResult['totalcount']++;
+                } else {
+                    $updatedRecord = $this->_importAndResolveConflict($firstDuplicateRecord, $resolveStrategy, $ted->getClientRecord());
+                    $this->_importResult['updatecount']++;
+                }
                 $this->_importResult['results']->addRecord($updatedRecord);
             } catch (Exception $newException) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 

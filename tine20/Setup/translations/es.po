@@ -2,13 +2,14 @@
 # Translators:
 # Jose Maria Muntane <munta@muntane.es>, 2013
 # Juan Fortuna <jfortuna@antel.com.uy>, 2014
+# Lionel Guerreiro Neves, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/tine20/language/es/)\n"
+"PO-Revision-Date: 2015-09-24 00:03+0000\n"
+"Last-Translator: Lionel Guerreiro Neves\n"
+"Language-Team: Spanish (http://www.transifex.com/tine20/tine20/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -408,7 +409,7 @@ msgstr "Email"
 msgid "Application Manager"
 msgstr "Administrador de Aplicaciones"
 
-#: js/Setup.js:185
+#: js/Setup.js:187
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplicación"
@@ -760,15 +761,15 @@ msgstr "habilitado"
 
 #: js/ConfigManagerPanel.js:490
 msgid "Use Custom Theme"
-msgstr ""
+msgstr "Usar Tema Personalizado"
 
 #: js/ConfigManagerPanel.js:500
 msgid "Theme path"
-msgstr ""
+msgstr "Ruta del tema"
 
 #: js/ConfigManagerPanel.js:503
 msgid "Use blue theme as base"
-msgstr ""
+msgstr "Usar tema azul como base"
 
 #: js/ConfigManagerPanel.js:516
 msgid "Config file is not writable"

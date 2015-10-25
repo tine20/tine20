@@ -125,6 +125,98 @@ class Tinebase_Timemachine_ModificationLog
             'tableName' => 'timemachine_modlog',
         ));
     }
+
+    /**
+     * clean timemachine_modlog for records that have been pruned (not deleted!)
+     */
+    public function clean()
+    {
+        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $pagination = new Tinebase_Model_Pagination();
+        $pagination->limit = 10000;
+        $pagination->sort = 'id';
+
+        $totalCount = 0;
+
+        while ( ($recordSet = $this->_backend->search($filter, $pagination)) && $recordSet->count() > 0 ) {
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $pagination->start += $pagination->limit;
+            $models = array();
+
+            foreach($recordSet as $modlog) {
+                $models[$modlog->record_type][$modlog->record_id][] = $modlog->id;
+            }
+
+            foreach($models as $model => &$ids) {
+                $appNotFound = false;
+
+                try {
+                    $app = Tinebase_Core::getApplicationInstance($model, '', true);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $appNotFound = true;
+                }
+
+                if (!$appNotFound) {
+
+                    if ($app instanceof Tinebase_Container)
+                    {
+                        $backend = $app;
+
+                    } else {
+                        if (!$app instanceof Tinebase_Controller_Record_Abstract) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                            continue;
+                        }
+
+                        $backend = $app->getBackend();
+                    }
+
+                    if (!$backend instanceof Tinebase_Backend_Interface) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
+                        continue;
+                    }
+                    $record = new $model(null, true);
+
+                    $modelFilter = $model . 'Filter';
+                    $idFilter = new $modelFilter(array(), '', array('ignoreAcl' => true));
+                    $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
+                        'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
+                    )));
+
+
+                    $existingIds = $backend->search($idFilter, null, true);
+
+                    if (!is_array($existingIds)) {
+                        throw new Exception('search for model: ' . $model . ' returned not an array!');
+                    }
+                    foreach ($existingIds as $id) {
+                        unset($ids[$id]);
+                    }
+                }
+
+                if ( count($ids) > 0 ) {
+                    $toDelete = array();
+                    foreach ($ids as $idArrays) {
+                        foreach ($idArrays as $id) {
+                            $toDelete[$id] = true;
+                        }
+                    }
+
+                    $toDelete = array_keys($toDelete);
+
+                    $this->_backend->delete($toDelete);
+                    $totalCount += count($toDelete);
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' deleted ' . $totalCount . ' modlogs records');
+
+        return $totalCount;
+    }
     
     /**
      * Returns modification of a given record in a given timespan

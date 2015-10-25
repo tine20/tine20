@@ -5,9 +5,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/projects/p/tine20/language/vi/)\n"
+"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,7 +30,7 @@ msgstr "Tạo bởi"
 msgid "Activities"
 msgstr "Hoạt động"
 
-#: Export/Spreadsheet/Ods.php:400
+#: Export/Spreadsheet/Ods.php:405
 msgid "Data"
 msgstr "Dữ liệu"
 
@@ -38,7 +38,7 @@ msgstr "Dữ liệu"
 msgid "Without company assigned"
 msgstr ""
 
-#: User/Sql.php:1093
+#: User/Sql.php:1102
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
@@ -165,7 +165,7 @@ msgstr ""
 msgid "Use and see personal tags"
 msgstr ""
 
-#: Preference/Abstract.php:517
+#: Preference/Abstract.php:528
 msgid "default"
 msgstr "mặc định"
 
@@ -181,11 +181,11 @@ msgstr "Thay đổi trường:"
 msgid "enter searchfilter"
 msgstr "nhập bộ lọc tìm kiếm"
 
-#: js/ux/PopupWindow.js:242
+#: js/ux/PopupWindow.js:244
 msgid "Window can be closed"
 msgstr ""
 
-#: js/ux/PopupWindow.js:243
+#: js/ux/PopupWindow.js:245
 #, python-brace-format
 msgid ""
 "This Window can be closed now. To avoid this message please deactivate your "
@@ -237,7 +237,7 @@ msgstr "đoạn tuyến"
 #: js/ux/form/LayerCombo.js:186 js/PasswordChangeDialog.js:65
 #: js/LicenseScreen.js:51 js/widgets/account/ChangeAccountAction.js:78
 #: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:490
-#: js/widgets/tags/TagsMassAttachAction.js:84
+#: js/widgets/tags/TagsMassAttachAction.js:108
 #: js/widgets/ActivitiesGridPanel.js:377
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -253,7 +253,7 @@ msgstr "OK"
 #: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
 #: js/widgets/container/ContainerSelect.js:481
 #: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagsMassAttachAction.js:102
 #: js/widgets/ActivitiesGridPanel.js:369
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/dialog/WizardPanel.js:189
@@ -290,7 +290,7 @@ msgstr "Không phải là ảnh"
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Xin chọn 1 file ảnh (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:114
+#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:121
 msgid "Upload Failed"
 msgstr "Upload không thành công"
 
@@ -324,7 +324,7 @@ msgstr "chọn {0} khác ..."
 msgid "Software Version"
 msgstr "Phiên bản phần mềm"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:435
+#: js/ExceptionDialog.js:62 Frontend/Http.php:459
 msgid "Abnormal End"
 msgstr "Abnormal End"
 
@@ -332,7 +332,7 @@ msgstr "Abnormal End"
 msgid "Send Report"
 msgstr "Gửi báo cáo"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:436
+#: js/ExceptionDialog.js:154 Frontend/Http.php:460
 msgid "An error occurred, the program ended abnormal."
 msgstr "An error occurred, the program ended abnormal."
 
@@ -347,7 +347,7 @@ msgid ""
 msgstr "Xin hãy giúp nâng cao chất lượng phần mềm này và thông báo với nhà cung cấp. Bao gồm mô tả ngắn gọn bạn làm gì ở đâu khi có lỗi xảy ra"
 
 #: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:509
-#: js/widgets/relation/GenericPickerGridPanel.js:458
+#: js/widgets/relation/GenericPickerGridPanel.js:456
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 msgid "Description"
 msgstr "Mô tả"
@@ -438,7 +438,7 @@ msgid ""
 "administrator."
 msgstr "Không có ựng dụng nào được mở cho bạn. Xin hãy liên hệ với quản trị hệ thống."
 
-#: js/ApplicationStarter.js:551
+#: js/ApplicationStarter.js:556
 msgid "New "
 msgstr ""
 
@@ -496,8 +496,8 @@ msgid "Your password has been changed."
 msgstr "Mật khẩu của bạn đã được thay đổi."
 
 #: js/PasswordChangeDialog.js:99 js/PasswordChangeDialog.js:109
-#: js/widgets/relation/GenericPickerGridPanel.js:917
-#: js/widgets/relation/GenericPickerGridPanel.js:930
+#: js/widgets/relation/GenericPickerGridPanel.js:915
+#: js/widgets/relation/GenericPickerGridPanel.js:928
 #: js/widgets/dialog/ImportDialog.js:664
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
@@ -574,7 +574,7 @@ msgstr "Tìm nhóm"
 msgid "Add Anyone"
 msgstr "Thêm bất kỳ ai"
 
-#: js/widgets/account/PickerGridPanel.js:213
+#: js/widgets/account/PickerGridPanel.js:213 Frontend/Json/Container.php:223
 msgid "Anyone"
 msgstr "Bất kỳ ai"
 
@@ -589,7 +589,7 @@ msgstr "Tìm nhóm người dùng ..."
 #: js/widgets/account/PickerGridPanel.js:267
 #: js/widgets/container/PropertiesDialog.js:107
 #: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/dialog/AttachmentsGridPanel.js:86 js/Models.js:430
+#: js/widgets/dialog/AttachmentsGridPanel.js:86 js/Models.js:431
 msgid "Name"
 msgstr "Tên"
 
@@ -623,7 +623,7 @@ msgid "delete"
 msgstr "xóa"
 
 #: js/widgets/tree/ContextMenu.js:35 js/widgets/ActivitiesGridPanel.js:241
-#: js/widgets/grid/FileUploadGrid.js:296 js/widgets/grid/GridPanel.js:587
+#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:587
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Thêm {0}"
@@ -660,7 +660,7 @@ msgstr "Đặt màu {0}"
 msgid "Reload {0}"
 msgstr "Nạp lại {0}"
 
-#: js/widgets/tree/ContextMenu.js:100 js/widgets/grid/FileUploadGrid.js:195
+#: js/widgets/tree/ContextMenu.js:100 js/widgets/grid/FileUploadGrid.js:202
 msgid "Resume upload"
 msgstr "Tiếp tục upload"
 
@@ -668,7 +668,7 @@ msgstr "Tiếp tục upload"
 msgid "Edit Properties"
 msgstr "Sửa thuộc tính"
 
-#: js/widgets/tree/ContextMenu.js:116 js/widgets/grid/FileUploadGrid.js:187
+#: js/widgets/tree/ContextMenu.js:116 js/widgets/grid/FileUploadGrid.js:194
 msgid "Pause upload"
 msgstr "Tạm dừng upload"
 
@@ -726,7 +726,7 @@ msgstr "Chưa đổi tên {0}"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1846
+#: js/widgets/grid/GridPanel.js:1848
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 #: js/widgets/dialog/EditDialog.js:902 js/MainMenu.js:260
 msgid "Confirm"
@@ -840,7 +840,7 @@ msgid "The grant to delete records in this container"
 msgstr "Quyền xóa biểu ghi trong bộ chứa này"
 
 #: js/widgets/container/GrantsGrid.js:51 js/widgets/dialog/ExportDialog.js:48
-#: js/Models.js:338
+#: js/Models.js:339
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "one: Xuất dữ liệu\nother: Xuất dữ liệu"
@@ -881,16 +881,16 @@ msgstr "Riêng tư"
 msgid "The grant to access records marked as private in this container"
 msgstr "Quyền truy cập biểu ghi được đánh dấu riêng tư trong bộ chứa."
 
-#: js/widgets/container/FilterModel.js:160
+#: js/widgets/container/FilterModel.js:161
 msgid "is personal of"
 msgstr "là cá nhân của"
 
-#: js/widgets/container/FilterModel.js:160
-#: js/widgets/container/FilterModel.js:164 js/widgets/grid/FilterModel.js:226
+#: js/widgets/container/FilterModel.js:161
+#: js/widgets/container/FilterModel.js:165 js/widgets/grid/FilterModel.js:226
 msgid "is equal to"
 msgstr "bằng"
 
-#: js/widgets/container/FilterModel.js:267
+#: js/widgets/container/FilterModel.js:268
 #: js/widgets/grid/PickerGridPanel.js:260
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/grid/PickerFilter.js:310
@@ -906,9 +906,9 @@ msgstr "bộ chứa"
 msgid "Favorites"
 msgstr "Lối tắt"
 
-#: js/widgets/ActivitiesPanel.js:76 js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesPanel.js:76 js/widgets/ActivitiesPanel.js:220
 #: js/widgets/ActivitiesGridPanel.js:97
-#: js/widgets/relation/GenericPickerGridPanel.js:461
+#: js/widgets/relation/GenericPickerGridPanel.js:459
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Loại"
@@ -918,7 +918,7 @@ msgid "Note"
 msgstr "Ghi chép"
 
 #: js/widgets/ActivitiesPanel.js:79 js/widgets/ActivitiesGridPanel.js:112
-#: js/widgets/grid/GridPanel.js:1456
+#: js/widgets/grid/GridPanel.js:1458
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr "Tạo bởi"
@@ -936,19 +936,19 @@ msgstr "Hiển thị lịch sử, biểu ghi {0}-{1) của {2}"
 msgid "No history to display"
 msgstr "Không có lịch sử nào"
 
-#: js/widgets/ActivitiesPanel.js:193
+#: js/widgets/ActivitiesPanel.js:202
 msgid "History"
 msgstr "Lịch sử"
 
-#: js/widgets/ActivitiesPanel.js:205
+#: js/widgets/ActivitiesPanel.js:214
 msgid "Quick Search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:206 js/widgets/ActivitiesPanel.js:207
+#: js/widgets/ActivitiesPanel.js:215 js/widgets/ActivitiesPanel.js:216
 msgid "Time"
 msgstr "Thời gian"
 
-#: js/widgets/ActivitiesPanel.js:209
+#: js/widgets/ActivitiesPanel.js:218
 msgid "User"
 msgstr "Người dùng"
 
@@ -986,18 +986,14 @@ msgid_plural "Tags"
 msgstr[0] "one: Thẻ\nother: Thẻ"
 
 #: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Thêm từ khóa"
+msgid "Add Tags"
+msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
-msgstr "Gắn từ khóa sau với mọi mục được chọn:"
+#: js/widgets/tags/TagsMassAttachAction.js:94
+msgid "Select Tags"
+msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr "Chọn th"
-
-#: js/widgets/tags/TagsMassAttachAction.js:128
+#: js/widgets/tags/TagsMassAttachAction.js:135
 msgid "Attaching Tag"
 msgstr "Đang gắn từ khóa"
 
@@ -1123,7 +1119,7 @@ msgid "Edit {0}"
 msgid_plural "Edit {0}"
 msgstr[0] "one:Sửa {0}\nother:Sửa {0}"
 
-#: js/widgets/ActivitiesGridPanel.js:257 js/widgets/grid/FileUploadGrid.js:179
+#: js/widgets/ActivitiesGridPanel.js:257 js/widgets/grid/FileUploadGrid.js:186
 #, python-brace-format
 msgid "Remove {0}"
 msgstr ""
@@ -1169,7 +1165,7 @@ msgid "Edit record"
 msgstr "Sửa biểu ghi"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:134
-#: js/widgets/relation/FilterModel.js:32 js/Models.js:402
+#: js/widgets/relation/FilterModel.js:32 js/Models.js:403
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "one:Quan hệ\nother:Quan hệ"
@@ -1200,42 +1196,42 @@ msgid ""
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:300
+#: js/widgets/relation/GenericPickerGridPanel.js:298
 msgid "No Dialog"
 msgstr "Không hộp thoại"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:301
+#: js/widgets/relation/GenericPickerGridPanel.js:299
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/grid/GridPanel.js:1184
+#: js/widgets/relation/GenericPickerGridPanel.js:455
+#: js/widgets/grid/GridPanel.js:1186
 msgid "Record"
 msgstr "Biểu ghi"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:459
+#: js/widgets/relation/GenericPickerGridPanel.js:457
 msgid "Remark"
 msgstr "Nhận xét"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/relation/GenericPickerGridPanel.js:458
 msgid "Dependency"
 msgstr "Phần phụ thuộc"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:462
-#: js/widgets/grid/GridPanel.js:1455
+#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/grid/GridPanel.js:1457
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Thời gian tạo"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:918
+#: js/widgets/relation/GenericPickerGridPanel.js:916
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "Biểu ghi bạn có liên kết đã được liên kết. Xin sửa liên kết đã tồn tại."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:931
+#: js/widgets/relation/GenericPickerGridPanel.js:929
 #: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Bạn cố liên kết 1 biểu ghi với chính nó. Việc này không được phép!"
@@ -1245,7 +1241,7 @@ msgid "Defined by ..."
 msgstr "Định nghĩa bởi ..."
 
 #: js/widgets/relation/FilterModel.js:92
-#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/grid/ForeignRecordFilter.js:408
 #: js/widgets/grid/FilterModel.js:285
 msgid "select a operator"
 msgstr "chọn toán tử"
@@ -1374,6 +1370,10 @@ msgstr ""
 msgid "Show"
 msgstr "Hiển thị"
 
+#: js/widgets/grid/FilterToolbar.js:113
+msgid "and"
+msgstr ""
+
 #: js/widgets/grid/FilterToolbar.js:178
 msgid "add new filter"
 msgstr "thêm bộ lọc mới"
@@ -1414,7 +1414,7 @@ msgstr "Sửa định nghĩa"
 msgid "Start definition"
 msgstr "Bắt đầu định nghĩa"
 
-#: js/widgets/grid/ForeignRecordFilter.js:111
+#: js/widgets/grid/ForeignRecordFilter.js:113
 msgid "Related to"
 msgstr "Liên quan tới"
 
@@ -1454,26 +1454,26 @@ msgstr "Xóa biểu ghi"
 msgid "Search for records ..."
 msgstr "Tìm biểu ghi..."
 
-#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:477
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:478
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
 
-#: js/widgets/grid/FileUploadGrid.js:115
+#: js/widgets/grid/FileUploadGrid.js:122
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size:"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:338
+#: js/widgets/grid/FileUploadGrid.js:362
 msgid "name"
 msgstr "Tên"
 
-#: js/widgets/grid/FileUploadGrid.js:345
+#: js/widgets/grid/FileUploadGrid.js:369
 msgid "size"
 msgstr "dung lượng"
 
-#: js/widgets/grid/FileUploadGrid.js:352
+#: js/widgets/grid/FileUploadGrid.js:376
 msgid "type"
 msgstr "kiểu"
 
@@ -1506,60 +1506,60 @@ msgstr "Trang in"
 msgid "Merge {0}"
 msgstr "Gộp {0}"
 
-#: js/widgets/grid/GridPanel.js:1107
+#: js/widgets/grid/GridPanel.js:1109
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1129
+#: js/widgets/grid/GridPanel.js:1131
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Hiển thị biểu ghi {0} - {1} của {2}"
 
-#: js/widgets/grid/GridPanel.js:1130
+#: js/widgets/grid/GridPanel.js:1132
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "Không {0} để hiển thị"
 
-#: js/widgets/grid/GridPanel.js:1184
+#: js/widgets/grid/GridPanel.js:1186
 msgid "Records"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1388
+#: js/widgets/grid/GridPanel.js:1390
 msgid "New..."
 msgstr "Mới..."
 
-#: js/widgets/grid/GridPanel.js:1407
+#: js/widgets/grid/GridPanel.js:1409
 msgid "Add to..."
 msgstr "Thêm vào..."
 
-#: js/widgets/grid/GridPanel.js:1457
+#: js/widgets/grid/GridPanel.js:1459
 msgid "Last Modified Time"
 msgstr "Thời gian sửa cuối"
 
-#: js/widgets/grid/GridPanel.js:1458
+#: js/widgets/grid/GridPanel.js:1460
 msgid "Last Modified By"
 msgstr "Sửa cuối bởi"
 
-#: js/widgets/grid/GridPanel.js:1820
+#: js/widgets/grid/GridPanel.js:1822
 msgid "Not Allowed"
 msgstr "Không được phép"
 
-#: js/widgets/grid/GridPanel.js:1821
+#: js/widgets/grid/GridPanel.js:1823
 msgid "You are not allowed to delete all pages at once"
 msgstr "Bạn không được phép xóa mọi trang cùng 1 lúc"
 
-#: js/widgets/grid/GridPanel.js:1844
+#: js/widgets/grid/GridPanel.js:1846
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "one: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?\nother: Bạn có thực sự muốn xóa các biểu ghi đã chọn ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1889 js/widgets/dialog/EditDialog.js:904
+#: js/widgets/grid/GridPanel.js:1891 js/widgets/dialog/EditDialog.js:904
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Đang xóa {0}"
 
-#: js/widgets/grid/GridPanel.js:1889
+#: js/widgets/grid/GridPanel.js:1891
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -2402,115 +2402,115 @@ msgstr "Thoát khỏi hệ thống"
 msgid "Please wait!"
 msgstr "Xin hãy đợi"
 
-#: js/ExceptionHandler.js:170 Frontend/Http.php:409
+#: js/ExceptionHandler.js:164 Frontend/Http.php:433
 msgid "Authorisation Required"
 msgstr "Yêu cầu chứng thực"
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:165
 msgid "Your session timed out. You need to login again."
 msgstr "Phiên làm việc quá thời gian. Bạn cần đăng nhập lại."
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:197
 msgid "Insufficient Rights"
 msgstr "Thiếu quyền"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:198
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Rất tiếc, bạn không được phép thực hiện hành động này."
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:206
 msgid "Not Found"
 msgstr "Không thấy"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:207
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Rất tiếc, yêu cầu của bạn không được hoàn thành vì không tìm thây dữ liệu. Điều này phần lớn là do ai đó đã xóa dữ liệu. Xin hãy làm mới màn hình hiện tại của bạn."
 
-#: js/ExceptionHandler.js:221
+#: js/ExceptionHandler.js:215
 msgid "Concurrent Updates"
 msgstr "Cập nhật đồng thời"
 
-#: js/ExceptionHandler.js:222
+#: js/ExceptionHandler.js:216
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "Ai đó đã lưu biểu ghi này trong khi bạn sửa dữ liệu. Bạn cần nạp lại và thực hiện thay đổi lại lần nữa."
 
-#: js/ExceptionHandler.js:230
+#: js/ExceptionHandler.js:224
 msgid "Service Unavailable"
 msgstr "Dịch vụ không sẵn sàng"
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:225
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Máy chủ đang không thể đáp ứng yêu cầu của bạn vì tạm thời quá tải, ở chế độ duy trì hoặc bị cấu hình sai. Xin hãy thử lại hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:237
+#: js/ExceptionHandler.js:231
 msgid "Server Message:"
 msgstr "Lời nhắn máy chủ:"
 
-#: js/ExceptionHandler.js:239
+#: js/ExceptionHandler.js:233
 msgid "Invalid Data"
 msgstr "Dữ liệu không hợp lệ"
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:234
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Dữ liệu nhập vào của bạn không hợp lệ. Xin hãy cung cấp dữ liệu chính xác."
 
-#: js/ExceptionHandler.js:252 js/LoginPanel.js:482
+#: js/ExceptionHandler.js:246 js/LoginPanel.js:482
 msgid "Connection lost, please check your network!"
 msgstr "Mất kết nối, xin hãy kiểm tra mạng của bạn!"
 
-#: js/ExceptionHandler.js:258
+#: js/ExceptionHandler.js:252
 msgid "Timeout"
 msgstr "Quá thời gian"
 
-#: js/ExceptionHandler.js:259
+#: js/ExceptionHandler.js:253
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Rất tiếc, việc truy cập của bạn đã vượt quá thời gian quy định. Xin hãy nạp lại từ trình duyệt của bạn và thử lại, hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:267
+#: js/ExceptionHandler.js:261
 msgid "No Response"
 msgstr "Không trả lời"
 
-#: js/ExceptionHandler.js:268
+#: js/ExceptionHandler.js:262
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Rất tiếc, máy chủ không trả lời bất kỳ dữ liệu nào. Xin hãy nạp lại trình duyệt, thử lại hoặc liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:275
+#: js/ExceptionHandler.js:269
 msgid "Out of Resources"
 msgstr "Hết tài nguyên"
 
-#: js/ExceptionHandler.js:276
+#: js/ExceptionHandler.js:270
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Rất tiếc, máy chủ đã hết bộ nhớ. Xin liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:292
+#: js/ExceptionHandler.js:286
 msgid "No Role Memberships"
 msgstr "Không có vai trò thành viên"
 
-#: js/ExceptionHandler.js:293
+#: js/ExceptionHandler.js:287
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Tài khoản người dùng của bạn không có vai trò thành viên. Xin liên hệ với quản trị hệ thống."
 
-#: js/ExceptionHandler.js:308
+#: js/ExceptionHandler.js:302
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:309
+#: js/ExceptionHandler.js:303
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2520,32 +2520,32 @@ msgstr ""
 msgid "Credits"
 msgstr "Credits"
 
-#: js/Models.js:274
+#: js/Models.js:275
 msgid "Alarm"
 msgid_plural "Alarms"
 msgstr[0] "one: Báo thức\nother: Báo thức"
 
-#: js/Models.js:312
+#: js/Models.js:313
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "one: Nhập dữ liệu\nother: Nhập dữ liệu"
 
-#: js/Models.js:375
+#: js/Models.js:376
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "one:Chi tiết\nother:Chi tiết"
 
-#: js/Models.js:423
+#: js/Models.js:424
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "one:Bộ phận\none:Bộ phận"
 
-#: js/Models.js:449
+#: js/Models.js:450
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "one: Cấu hình\nother: Cấu hình"
 
-#: js/Models.js:449
+#: js/Models.js:450
 msgid "Configs"
 msgstr "Cấu hình"
 
@@ -2692,12 +2692,12 @@ msgid "Login successful. Loading {0}..."
 msgstr "Đăng nhập thành công. Đang tải {0}..."
 
 #: js/LoginPanel.js:486
-msgid "There was an error verifying your certificate!!!"
+msgid "There was an error verifying your certificate!"
 msgstr ""
 
 #: js/LoginPanel.js:487
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Tên truy cập của bạn và/hoặc mật khẩu của bạn bị sai!"
+msgid "Your username and/or your password are wrong!"
+msgstr ""
 
 #: js/LoginPanel.js:489
 msgid "Login failure"
@@ -2797,334 +2797,344 @@ msgstr ""
 msgid "If enabled quickfilter searches through relations as well."
 msgstr ""
 
-#: Frontend/Cli.php:761
+#: Frontend/Cli.php:832
 #, python-format
 msgid "%s's personal "
 msgstr ""
 
-#: Frontend/Http.php:410
+#: Frontend/Http.php:434
 msgid "Your session is not valid. You need to login again."
 msgstr "Phiên làm việc của bạn không hợp lệ. Bạn cần đăng nhập lại."
 
-#: Container.php:746
+#: Container.php:752
 #, python-format
 msgid "%s's personal container"
 msgstr "Bộ chứa cá nhân của %s"
 
-#: Container.php:1755
+#: Container.php:1788
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr "Bạn không được phép xóa bộ chứa này. Xin hãy định nghĩa một bộ chứa khác là sổ địa chỉ mặc định cho các liên hệ nội bộ!"
 
-#: Config.php:323
+#: Config.php:330
 msgid "System IMAP"
 msgstr "Hệ thống IMAP"
 
-#: Config.php:325
+#: Config.php:332
 msgid "System IMAP server configuration."
 msgstr "Cấu hình máy chủ hệ thống IMAP"
 
-#: Config.php:334
+#: Config.php:341
 msgid "System SMTP"
 msgstr "Hệ thống SMTP"
 
-#: Config.php:336
+#: Config.php:343
 msgid "System SMTP server configuration."
 msgstr "Cấu hình máy chủ hệ thống SMTP"
 
-#: Config.php:345
+#: Config.php:352
 msgid "System SIEVE"
 msgstr "Hệ thống SIEVE"
 
-#: Config.php:347
+#: Config.php:354
 msgid "System SIEVE server configuration."
 msgstr "Cấu hình máy chủ hệ thống SIEVE"
 
-#: Config.php:356
+#: Config.php:363
 msgid "Authentication Backend"
 msgstr "Hệ thống xác thực"
 
-#: Config.php:358
+#: Config.php:365
 msgid "Backend adapter for user authentication."
 msgstr "Bộ cung cấp nền tảng xác thực người sử dụng"
 
-#: Config.php:366
+#: Config.php:373
 msgid "Authentication Configuration"
 msgstr "Cấu hình xác thực"
 
-#: Config.php:368
+#: Config.php:375
 msgid "Authentication backend configuration."
 msgstr "Cấu hình nền tảng xác thực"
 
-#: Config.php:377
+#: Config.php:384
 msgid "User Backend"
 msgstr "Nền tảng người dùng"
 
-#: Config.php:379
+#: Config.php:386
 msgid "Backend adapter for user data."
 msgstr "Bộ cung cấp nền tảng dữ liệu người dùng"
 
-#: Config.php:387
+#: Config.php:394
 msgid "User Configuration"
 msgstr "Cấu hình người dùng"
 
-#: Config.php:389
+#: Config.php:396
 msgid "User backend configuration."
 msgstr "Cấu hình nền tảng người dùng"
 
-#: Config.php:398
+#: Config.php:405
 msgid "Cronuser ID"
 msgstr "Cronuser ID"
 
-#: Config.php:400
+#: Config.php:407
 msgid "User ID of the cron user."
 msgstr "Mã người dùng cho phần chạy tự động"
 
-#: Config.php:408
+#: Config.php:415
 msgid "Title Postfix"
 msgstr "Hậu tố tiêu đề"
 
-#: Config.php:410
+#: Config.php:417
 msgid "Postfix string appended to the title of this installation."
 msgstr "Chuỗi hậu tố  được ghép vào tiêu đề của phần cài đặt"
 
-#: Config.php:418
+#: Config.php:425
 msgid "Redirect URL"
 msgstr "URL chuyển hướng"
 
-#: Config.php:420
+#: Config.php:427
 msgid "Redirect to this URL after logout."
 msgstr "Chuyển tới URL này sau khi thoát"
 
-#: Config.php:428
+#: Config.php:435
 msgid "Redirect to Referrer"
 msgstr "Chuyển hướng tới trang hiện tại"
 
-#: Config.php:430
+#: Config.php:437
 msgid "Redirect to referrer after logout."
 msgstr "Chuyển hướng tới trang hiện tại sau khi thoát"
 
-#: Config.php:438
+#: Config.php:445
 msgid "Redirect Always"
 msgstr "Luôn chuyển hướng"
 
-#: Config.php:440
+#: Config.php:447
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Chuyển hướng tới URL được cấu hình sau khi đăng nhập"
 
-#: Config.php:448
+#: Config.php:455
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:450
+#: Config.php:457
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:458
+#: Config.php:465
 msgid "Accepted Terms Version"
 msgstr "Phiên bản chấp nhận điều khoản"
 
-#: Config.php:460
+#: Config.php:467
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Số phiên bản chấp nhận tài liệu điều kiện sử dụng"
 
-#: Config.php:468
+#: Config.php:475
 msgid "Use Geolocation Services"
 msgstr "Sử dụng dịch vụ Geolocation"
 
-#: Config.php:470
+#: Config.php:477
 msgid "Use of external Geolocation services is allowed."
 msgstr "Sử dụng dịch vụ Geolocation bên ngoài là được phép"
 
-#: Config.php:478
+#: Config.php:485
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:480
+#: Config.php:487
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:489
+#: Config.php:496
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:491
+#: Config.php:498
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:499
+#: Config.php:506
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:501
+#: Config.php:508
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:510
+#: Config.php:517
 msgid "IP Session Validator"
 msgstr "Bộ xác thực sự hợp lệ của phiên làm việc IP"
 
-#: Config.php:512
+#: Config.php:519
 msgid "Destroy session if the users IP changes."
 msgstr "Hủy phiên làm việc nếu IP của người dùng bị đổi"
 
-#: Config.php:520
+#: Config.php:527
 msgid "UA Session Validator"
 msgstr "Bộ xác thực phiên làm việc UA"
 
-#: Config.php:522
+#: Config.php:529
 msgid "Destroy session if the users user agent string changes."
 msgstr "Xóa phiên làm việc nếu người dùng thay đổi chuỗi hiện hữu"
 
-#: Config.php:530
+#: Config.php:537
 msgid "Files Directory"
 msgstr "Thư mục file"
 
-#: Config.php:532
+#: Config.php:539
 msgid "Directory with web server write access for user files."
 msgstr "Thư mục với quyền ghi trên máy chủ cho file của người dùng"
 
-#: Config.php:540 Config.php:542
+#: Config.php:547 Config.php:549
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:550 Config.php:552
+#: Config.php:557 Config.php:559
 msgid "User may change password"
 msgstr "Người dùng có thể đổi mật khẩu"
 
-#: Config.php:561 Config.php:563
+#: Config.php:568 Config.php:570
 msgid "Enable password policy"
 msgstr "Mở chính sách mật khẩu"
 
-#: Config.php:571
+#: Config.php:578
 msgid "Only ASCII"
 msgstr "Chỉ ASCII"
 
-#: Config.php:573
+#: Config.php:580
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Chỉ ký tự ASCII được phép sử dụng trong mật khẩu"
 
-#: Config.php:581
+#: Config.php:588
 msgid "Minimum length"
 msgstr "Độ dài tối thi"
 
-#: Config.php:583
+#: Config.php:590
 msgid "Minimum password length"
 msgstr "Độ dài tối thiểu mật khẩu"
 
-#: Config.php:591
+#: Config.php:598
 msgid "Minimum word chars"
 msgstr "Độ dài chữ tối thiểu"
 
-#: Config.php:593
+#: Config.php:600
 msgid "Minimum word chars in password"
 msgstr "Độ dài chữ tối thiểu trong mật khẩu"
 
-#: Config.php:601
+#: Config.php:608
 msgid "Minimum uppercase chars"
 msgstr "Ký tự in hoa tối tiểu"
 
-#: Config.php:603
+#: Config.php:610
 msgid "Minimum uppercase chars in password"
 msgstr "Độ dài ký tự in hoa tối thiểu"
 
-#: Config.php:611
+#: Config.php:618
 msgid "Minimum special chars"
 msgstr "Ký tự đặc biệt tối thi"
 
-#: Config.php:613
+#: Config.php:620
 msgid "Minimum special chars in password"
 msgstr "Ký tự đặc biệt tối tiểu trong mật khẩu"
 
-#: Config.php:621
+#: Config.php:628
 msgid "Minimum numbers"
 msgstr "Số tối thiểu"
 
-#: Config.php:623
+#: Config.php:630
 msgid "Minimum numbers in password"
 msgstr "Chữ số tối tiểu trong mật khẩu"
 
-#: Config.php:631
+#: Config.php:638
 msgid "Forbid part of username"
 msgstr "Cấm 1 phần của tên đăng nhập"
 
-#: Config.php:633
+#: Config.php:640
 msgid "Forbid part of username in password"
 msgstr "Cấm 1 phần tên đăng nhập trong mật khẩu"
 
-#: Config.php:641
+#: Config.php:648
 msgid "Automatic bugreports"
 msgstr "Tự động báo cáo lỗi"
 
-#: Config.php:643
+#: Config.php:650
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Luôn gửi báo cáo lỗi, thậm chí quá thời gian và các lỗi khác."
 
-#: Config.php:651
+#: Config.php:658
 msgid "Last sessions cleanup run"
 msgstr "Chạy dọn dẹp phiên làm việc lần cuối"
 
-#: Config.php:653
+#: Config.php:660
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Lưu định dạng thời gian của việc chạy dọn dẹp phiên làm việc cuối cùng."
 
-#: Config.php:661
+#: Config.php:668
 msgid "Maximum login failures"
 msgstr "Số lần đăng nhập sai tối đa"
 
-#: Config.php:663
+#: Config.php:670
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Số lần đăng nhập lỗi tối đa trước khi phong tỏa tài khoản"
 
-#: Config.php:671
+#: Config.php:678
 msgid "Disable Anyone Account"
 msgstr "Cấm bất kỳ tài khoản nào"
 
-#: Config.php:673
+#: Config.php:680
 msgid "Disallow anyone account in grant configurations"
 msgstr "Cấm mọi tài khoản trong việc cấu hình phân quyền"
 
-#: Config.php:681
+#: Config.php:688
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:683
+#: Config.php:690
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of"
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:691
+#: Config.php:698
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:693
+#: Config.php:700
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login"
 " with deactivated account"
 msgstr ""
 
-#: Config.php:701
+#: Config.php:708
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:703
+#: Config.php:710
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:711 Config.php:713
+#: Config.php:718 Config.php:720
 msgid "Max username length"
 msgstr ""
 
-#: Import/Csv/Abstract.php:206
+#: Config.php:727
+msgid "conf.d folder name"
+msgstr ""
+
+#: Config.php:729
+msgid ""
+"Folder for additional config files (conf.d) - NOTE: this is only used if set"
+" in config.inc.php!"
+msgstr ""
+
+#: Import/Csv/Abstract.php:236
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "Trường sau không được phép nhập vào: %s"
 
-#: Import/Csv/Abstract.php:207
+#: Import/Csv/Abstract.php:237
 msgid "N/A"
 msgstr "N/A"
 
@@ -3133,47 +3143,47 @@ msgstr "N/A"
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:549
+#: WebDav/PrincipalBackend.php:536
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3421
+#: Setup/setup.xml:3425
 msgid "note"
 msgstr "ghi chép"
 
-#: Setup/setup.xml:3426
+#: Setup/setup.xml:3430
 msgid "default note type"
 msgstr "loại ghi chép mặc đ"
 
-#: Setup/setup.xml:3452
+#: Setup/setup.xml:3456
 msgid "telephone"
 msgstr "điện thoại"
 
-#: Setup/setup.xml:3457
+#: Setup/setup.xml:3461
 msgid "telephone call"
 msgstr "cuộc gọi điện thoại"
 
-#: Setup/setup.xml:3483
+#: Setup/setup.xml:3487
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3488
+#: Setup/setup.xml:3492
 msgid "email contact"
 msgstr "liên hệ email"
 
-#: Setup/setup.xml:3514
+#: Setup/setup.xml:3518
 msgid "created"
 msgstr "đã tạo"
 
-#: Setup/setup.xml:3519
+#: Setup/setup.xml:3523
 msgid "record created"
 msgstr "biểu ghi đã được tạo"
 
-#: Setup/setup.xml:3545
+#: Setup/setup.xml:3549
 msgid "changed"
 msgstr "đã đổi"
 
-#: Setup/setup.xml:3550
+#: Setup/setup.xml:3554
 msgid "record changed"
 msgstr "biểu ghi đã thay đổi"
 

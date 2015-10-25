@@ -1,19 +1,19 @@
 # 
 # Translators:
 # Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
-# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"PO-Revision-Date: 2015-10-04 01:31+0000\n"
+"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -107,6 +107,7 @@ msgid_plural "Employees"
 msgstr[0] "Сотрудник"
 msgstr[1] "Сотрудника"
 msgstr[2] "Сотрудников"
+msgstr[3] "Сотрудников"
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:382
 msgid "Banking Information"
@@ -268,6 +269,7 @@ msgid_plural "Personal accounts"
 msgstr[0] "Личная учётная запись"
 msgstr[1] "Личная учётная запись"
 msgstr[2] "Личные учётные записи"
+msgstr[3] "Личные учётные записи"
 
 #: Model/Account.php:52
 msgid "Quick search"
@@ -292,6 +294,7 @@ msgid_plural "Contracts"
 msgstr[0] "Контракт"
 msgstr[1] "Контракты"
 msgstr[2] "Контракты"
+msgstr[3] "Контракты"
 
 #: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:230
 msgid "Start Date"
@@ -319,6 +322,7 @@ msgid_plural "Free Days"
 msgstr[0] "Свободные дни"
 msgstr[1] "Свободные дни"
 msgstr[2] "Свободные дни"
+msgstr[3] "Свободные дни"
 
 #: Model/FreeTime.php:34
 msgid "Free Time"
@@ -326,6 +330,7 @@ msgid_plural "Free Times"
 msgstr[0] "Свободное время"
 msgstr[1] "Свободное время"
 msgstr[2] "Свободное время"
+msgstr[3] "Свободное время"
 
 #: Model/FreeTime.php:71 Model/ExtraFreeTime.php:58
 #: js/ExtraFreeTimeEditDialog.js:127
@@ -359,6 +364,7 @@ msgid_plural "Extra free times"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:122
 msgid "Days"
@@ -375,6 +381,7 @@ msgid_plural "Cost Centers"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] "Затраты"
+msgstr[3] "Затраты"
 
 #: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
 #: js/FreeTimeEditDialog.js:533
@@ -444,6 +451,7 @@ msgid_plural "Export {0}"
 msgstr[0] "Экспорт {0}"
 msgstr[1] "Экспорт {0}"
 msgstr[2] "Экспорт {0}"
+msgstr[3] "Экспорт {0}"
 
 #: js/EmployeeGridPanel.js:54
 msgid "Export as ODS"
@@ -461,21 +469,21 @@ msgstr "НЕД"
 msgid "Loading calendar data..."
 msgstr "Загрузка данных календаря..."
 
-#: js/DatePicker.js:406
+#: js/DatePicker.js:404
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:407
+#: js/DatePicker.js:405
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:472
+#: js/DatePicker.js:464
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:473
+#: js/DatePicker.js:465
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -493,6 +501,7 @@ msgid_plural "Working Times"
 msgstr[0] "Рабочее время"
 msgstr[1] "Рабочее время"
 msgstr[2] "Рабочее время"
+msgstr[3] "Рабочее время"
 
 #: js/ContractEditDialog.js:258
 msgid "Choose the template"
@@ -589,6 +598,7 @@ msgid_plural "CostCenters"
 msgstr[0] "Траты"
 msgstr[1] "Траты"
 msgstr[2] "Траты"
+msgstr[3] "Траты"
 
 #: js/CostCenterGridPanel.js:128
 msgid "Startdate"
@@ -597,17 +607,17 @@ msgstr "Первый день"
 #: js/FreeTimeEditDialog.js:155
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
-msgstr ""
+msgstr "Редактировать {0} \"{1}\""
 
 #: js/FreeTimeEditDialog.js:169
 #, python-brace-format
 msgid "Edit {0} for {1}"
-msgstr ""
+msgstr "Редактировать {0} для {1}"
 
 #: js/FreeTimeEditDialog.js:171
 #, python-brace-format
 msgid "Add {0} for {1}"
-msgstr ""
+msgstr "Добавить {0} для {1}"
 
 #: js/FreeTimeEditDialog.js:186
 msgid "You have to select at least one day to save this sickness entry."
@@ -810,15 +820,15 @@ msgstr ""
 
 #: Setup/Initialize.php:141
 msgid "Full-time 40 hours"
-msgstr ""
+msgstr "Полная занятость 40 часов"
 
 #: Setup/Initialize.php:148
 msgid "Full-time 37.5 hours"
-msgstr ""
+msgstr "Полная занятость 37,5часов"
 
 #: Setup/Initialize.php:155
 msgid "Part-time 20 hours"
-msgstr ""
+msgstr "Частичная занятость 20 часов"
 
 #: Setup/Update/Release6.php:330
 msgid "Currently employed"

@@ -1,6 +1,6 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
+# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2015
 # артур Мудрых <arturmon82@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
 # Nikolay Parukhin <parukhin@gmail.com>, 2012
@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -61,17 +61,17 @@ msgstr ""
 msgid "Allow to see, add and delete download links of files and folders"
 msgstr ""
 
-#: js/NodeEditDialog.js:50 js/Filemanager.js:44 js/NodeGridPanel.js:339
+#: js/NodeEditDialog.js:50 js/Filemanager.js:32 js/NodeGridPanel.js:339
 msgid "Save locally"
 msgstr "Сохранить локально"
 
 #: js/NodeEditDialog.js:66
 msgid "Edit folder"
-msgstr ""
+msgstr "Редактировать папку"
 
 #: js/NodeEditDialog.js:66
 msgid "edit file"
-msgstr ""
+msgstr "редактировать файл"
 
 #: js/NodeEditDialog.js:68 js/Model.js:43 js/NodeGridPanel.js:150
 msgid "Folder"
@@ -79,6 +79,7 @@ msgid_plural "Folders"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] "Папка"
+msgstr[3] "Папка"
 
 #: js/NodeEditDialog.js:68 js/Model.js:40
 msgid "File"
@@ -86,10 +87,11 @@ msgid_plural "Files"
 msgstr[0] "Файл"
 msgstr[1] "Файла"
 msgstr[2] "Файлов"
+msgstr[3] "Файлов"
 
 #: js/NodeEditDialog.js:114
 msgid "Public Links"
-msgstr ""
+msgstr "Внешняя ссылка"
 
 #: js/NodeEditDialog.js:147 js/NodeGridPanel.js:128
 msgid "Name"
@@ -99,12 +101,12 @@ msgstr "Имя"
 msgid "Type"
 msgstr "Тип"
 
-#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:244
+#: js/NodeEditDialog.js:162 js/DownloadLinkGridPanel.js:246
 #: js/NodeGridPanel.js:182
 msgid "Created By"
 msgstr "Создана"
 
-#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:252 js/Model.js:529
+#: js/NodeEditDialog.js:165 js/DownloadLinkGridPanel.js:254 js/Model.js:529
 #: js/NodeGridPanel.js:174
 msgid "Creation Time"
 msgstr "Время создания"
@@ -125,15 +127,15 @@ msgstr "Описание"
 msgid "Enter description"
 msgstr "Введите описание"
 
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:695
+#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:696
 #: js/NodeGridPanel.js:847
 msgid "Upload Failed"
 msgstr "Сбой загрузки"
 
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:696
+#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:697
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
-"Administrator. Max upload size:"
+"Administrator."
 msgstr ""
 
 #: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
@@ -146,33 +148,33 @@ msgstr ""
 
 #: js/DownloadLinkGridPanel.js:71
 msgid "Remove record"
-msgstr ""
+msgstr "Удалить запись"
 
-#: js/DownloadLinkGridPanel.js:133
+#: js/DownloadLinkGridPanel.js:135
 msgid "Creating new Download Link..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:171
+#: js/DownloadLinkGridPanel.js:173
 msgid "Deleting Download Links..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:171
+#: js/DownloadLinkGridPanel.js:173
 msgid "Deleting Download Link..."
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:228
+#: js/DownloadLinkGridPanel.js:230
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
-#: js/DownloadLinkGridPanel.js:260
+#: js/DownloadLinkGridPanel.js:262
 msgid "Expiration Time"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:269 js/NodeGridPanel.js:189
+#: js/DownloadLinkGridPanel.js:271 js/NodeGridPanel.js:189
 msgid "Last Modified Time"
 msgstr "Время последнего изменения"
 
-#: js/DownloadLinkGridPanel.js:277 js/NodeGridPanel.js:196
+#: js/DownloadLinkGridPanel.js:279 js/NodeGridPanel.js:196
 msgid "Last Modified By"
 msgstr "Последнее изменение:"
 
@@ -186,16 +188,16 @@ msgstr "Введите новое имя для {0}:"
 msgid "Not renamed {0}"
 msgstr "Не переименовано {0}"
 
-#: js/GridContextMenu.js:40 js/NodeGridPanel.js:547
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:548
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr "Вы должны указать имя {0}!"
 
-#: js/GridContextMenu.js:144 js/NodeGridPanel.js:588
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:589
 msgid "Do you really want to delete the following files?"
 msgstr "Вы действительно хотите удалить следующие файлы?"
 
-#: js/Filemanager.js:36
+#: js/Filemanager.js:24
 msgid "Filemanager"
 msgstr "Менеджер файлов"
 
@@ -231,6 +233,7 @@ msgid_plural "Download Links"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+msgstr[3] ""
 
 #: js/ExceptionHandler.js:32
 msgid "Service Unavailable"
@@ -302,7 +305,7 @@ msgstr "Удалить"
 
 #: js/NodeGridPanel.js:361 js/NodeGridPanel.js:362 js/NodeGridPanel.js:364
 msgid "Publish"
-msgstr ""
+msgstr "Опубликовать"
 
 #: js/NodeGridPanel.js:422
 msgid "Folder has been published successfully"
@@ -315,22 +318,22 @@ msgstr ""
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Url: {0}"
-msgstr ""
+msgstr "URL: {0}"
 
 #: js/NodeGridPanel.js:423
 #, python-brace-format
 msgid "Valid Until: {1}"
-msgstr ""
+msgstr "Годен до: {1}"
 
-#: js/NodeGridPanel.js:543
+#: js/NodeGridPanel.js:544
 msgid "New Folder"
 msgstr "Новая папка"
 
-#: js/NodeGridPanel.js:543
+#: js/NodeGridPanel.js:544
 msgid "Please enter the name of the new folder:"
 msgstr "Введите имя новой папки:"
 
-#: js/NodeGridPanel.js:547
+#: js/NodeGridPanel.js:548
 #, python-brace-format
 msgid "No {0} added"
 msgstr "{0} не добавлен"

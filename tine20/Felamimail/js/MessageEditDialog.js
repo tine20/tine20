@@ -273,19 +273,42 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * attaches message when forwarding mails
+     * handle attachments: attaches message when forwarding mails or
+     *  keeps attachments as they are (if preference is set or draft/template)
      *
      * @param {Tine.Felamimail.Model.Message} message
      */
-    attachForwardedMessage: function(message) {
-        if (message.get('attachments').length > 0) {
-            this.record.set('attachments', [{
+    handleAttachmentsOfExistingMessage: function(message) {
+        if (message.get('attachments').length == 0) {
+            return;
+        }
+
+        var attachments = [];
+        if ((Tine[this.app.appName].registry.get('preferences').get('emlForward')
+                && Tine[this.app.appName].registry.get('preferences').get('emlForward') == 0)
+            || this.draftOrTemplate
+        ) {
+
+            Ext.each(message.get('attachments'), function(attachment) {
+                attachment = {
+                    name: attachment['filename'],
+                    type: attachment['content-type'],
+                    size: attachment['size'],
+                    id: message.id + '_' + attachment['partId']
+                };
+                attachments.push(attachment);
+            },this);
+
+        } else {
+            attachments = [{
                 name: message.get('subject'),
                 type: 'message/rfc822',
                 size: message.get('size'),
                 id: message.id
-            }]);
+            }];
         }
+
+        this.record.set('attachments', attachments);
     },
     
     /**
@@ -306,7 +329,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.setMessageBody(message, account);
                     
                     if (this.isForwardedMessage() || this.draftOrTemplate) {
-                        this.attachForwardedMessage(message);
+                        this.handleAttachmentsOfExistingMessage(message);
                     }
                 }
             } 
@@ -316,26 +339,36 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (this.attachments) {
-            this.attachments = Ext.isArray(this.attachments) ? this.attachments : [this.attachments];
-            var attachments = [];
-            Ext.each(this.attachments, function(attachment) {
-
-                // external URL with COSR header enabled
-                if (Ext.isString(attachment)) {
-                    attachment = {
-                        url: attachment
-                    };
-                }
-
-                attachments.push(attachment);
-            }, this);
-
-            this.record.set('attachments', attachments);
+            this.handleExternalAttachments();
         }
         
         delete this.msgBody;
-        delete this.attachments;
+
         this.onRecordLoad();
+    },
+
+    /**
+     * handle attachments like external URLs (COSR)
+     *
+     * TODO: check if this overwrites existing attachments in some cases
+     */
+    handleExternalAttachments: function() {
+        this.attachments = Ext.isArray(this.attachments) ? this.attachments : [this.attachments];
+        var attachments = [];
+        Ext.each(this.attachments, function(attachment) {
+
+            // external URL with COSR header enabled
+            if (Ext.isString(attachment)) {
+                attachment = {
+                    url: attachment
+                };
+            }
+
+            attachments.push(attachment);
+        }, this);
+
+        this.record.set('attachments', attachments);
+        delete this.attachments;
     },
     
     /**

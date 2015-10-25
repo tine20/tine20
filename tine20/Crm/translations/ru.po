@@ -8,14 +8,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:20+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/tine20/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -30,32 +30,32 @@ msgid "Leadstate"
 msgstr "Состояние предложения"
 
 #: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:392
-#: js/LeadGridDetailsPanel.js:463
+#: js/LeadGridDetailsPanel.js:239
 msgid "Leadtype"
 msgstr "Тип предложения"
 
 #: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadGridPanel.js:155
-#: js/LeadEditDialog.js:399 js/LeadGridDetailsPanel.js:468
+#: js/LeadEditDialog.js:399 js/LeadGridDetailsPanel.js:244
 #: js/LeadSourceFilterModel.js:28
 msgid "Leadsource"
 msgstr "Источник предложения"
 
 #: Export/Pdf.php:87 js/LeadGridPanel.js:157 js/Model.js:111
-#: Controller/Lead.php:204
+#: Controller/Lead.php:210
 msgid "Turnover"
 msgstr "Оборот"
 
 #: Export/Pdf.php:90 js/LeadGridPanel.js:156 js/Model.js:109
-#: js/LeadEditDialog.js:223 Controller/Lead.php:205
+#: js/LeadEditDialog.js:223 Controller/Lead.php:211
 msgid "Probability"
 msgstr "Вероятность"
 
-#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:453
-#: Controller/Lead.php:201
+#: Export/Pdf.php:93 js/LeadEditDialog.js:449 js/LeadGridDetailsPanel.js:229
+#: Controller/Lead.php:207
 msgid "Start"
 msgstr "Начать"
 
-#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:203
+#: Export/Pdf.php:96 js/LeadEditDialog.js:230 Controller/Lead.php:209
 msgid "End"
 msgstr "Конец"
 
@@ -118,7 +118,7 @@ msgstr "%s личные предложения"
 
 #: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:153
 #: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
-#: js/Contact.js:396 Controller/Lead.php:197
+#: js/Contact.js:396 Controller/Lead.php:203
 msgid "Customer"
 msgstr "Клиент"
 
@@ -204,7 +204,7 @@ msgstr "Добавить задание..."
 msgid "Percent"
 msgstr "Процент"
 
-#: js/Task.js:266 js/LeadGridDetailsPanel.js:448
+#: js/Task.js:266 js/LeadGridDetailsPanel.js:224
 msgid "Status"
 msgstr "Статус"
 
@@ -212,16 +212,15 @@ msgstr "Статус"
 msgid "Organizer"
 msgstr "Организатор"
 
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:203
-#: js/LeadGridDetailsPanel.js:236
+#: js/AdminPanel.js:122
 msgid "Leadstates"
 msgstr "Статус предложения"
 
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:225
+#: js/AdminPanel.js:126
 msgid "Leadtypes"
 msgstr "Типы предложений"
 
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:214
+#: js/AdminPanel.js:130
 msgid "Leadsources"
 msgstr "Источники предложений"
 
@@ -235,8 +234,9 @@ msgid_plural "Lead States"
 msgstr[0] "Статус предложения"
 msgstr[1] "Статус предложения"
 msgstr[2] "Статусы предложений"
+msgstr[3] "Статусы предложений"
 
-#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:125 js/LeadSource.js:65
+#: js/LeadState.js:111 js/LeadGridDetailsPanel.js:111 js/LeadSource.js:65
 msgid "undefined"
 msgstr ""
 
@@ -258,6 +258,7 @@ msgid_plural "Lead Types"
 msgstr[0] "Типы предложений"
 msgstr[1] "Типы предложений"
 msgstr[2] "Типы предложений"
+msgstr[3] "Типы предложений"
 
 #: js/LeadType.js:134
 msgid "Add a Leadtype..."
@@ -321,7 +322,7 @@ msgid "Lead name"
 msgstr "Название предложения"
 
 #: js/LeadGridPanel.js:159 js/Model.js:118 js/LeadEditDialog.js:455
-#: js/LeadGridDetailsPanel.js:458
+#: js/LeadGridDetailsPanel.js:234
 msgid "Estimated end"
 msgstr "Предполагаемый конец"
 
@@ -367,6 +368,7 @@ msgid_plural "Leads"
 msgstr[0] "Предложения"
 msgstr[1] "Предложения"
 msgstr[2] "Предложения"
+msgstr[3] "Предложения"
 
 #: js/Model.js:56
 msgid "lead list"
@@ -374,6 +376,7 @@ msgid_plural "lead lists"
 msgstr[0] "Лист предложений"
 msgstr[1] "Лист предложений"
 msgstr[2] "Листы предложений"
+msgstr[3] "Листы предложений"
 
 #: js/Model.js:56
 msgid "lead lists"
@@ -405,6 +408,7 @@ msgid_plural "Settings"
 msgstr[0] "Настройка"
 msgstr[1] "Настройки"
 msgstr[2] "Настройки"
+msgstr[3] "Настройки"
 
 #: js/Model.js:161
 msgid "record list"
@@ -412,6 +416,7 @@ msgid_plural "record lists"
 msgstr[0] "список записей"
 msgstr[1] "списка записей"
 msgstr[2] "списков записей"
+msgstr[3] "списков записей"
 
 #: js/LeadEditDialog.js:247
 msgid ""
@@ -463,11 +468,11 @@ msgstr "Интернет"
 
 #: js/LeadGridDetailsPanel.js:63
 msgid "Street"
-msgstr ""
+msgstr "Улица"
 
 #: js/LeadGridDetailsPanel.js:66
 msgid "Postalcode"
-msgstr ""
+msgstr "Почтовый индекс"
 
 #: js/LeadGridDetailsPanel.js:69
 msgid "City"
@@ -479,6 +484,7 @@ msgid_plural "Lead Sources"
 msgstr[0] "Источник предложения"
 msgstr[1] "Источник предложения"
 msgstr[2] "Источники предложения"
+msgstr[3] "Источники предложения"
 
 #: js/LeadSource.js:154
 msgid "Add a Leadsource..."
@@ -500,7 +506,7 @@ msgstr "Пожалуйста, выберите роль участника"
 msgid "Select Lead"
 msgstr "Выберите предложение"
 
-#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:199
+#: js/AddToLeadPanel.js:78 js/Contact.js:252 Controller/Lead.php:205
 msgid "Role"
 msgstr "Роль"
 
@@ -545,46 +551,46 @@ msgstr "Данные"
 msgid "Cellphone"
 msgstr "Сотовый телефон"
 
-#: Controller/Lead.php:198
+#: Controller/Lead.php:204
 msgid "State"
 msgstr "Состояние"
 
-#: Controller/Lead.php:200
+#: Controller/Lead.php:206
 msgid "Source"
 msgstr "Источник"
 
-#: Controller/Lead.php:202
+#: Controller/Lead.php:208
 msgid "Scheduled end"
 msgstr "Запланированный конец"
 
-#: Controller/Lead.php:206
+#: Controller/Lead.php:212
 msgid "Folder"
 msgstr "Папка"
 
-#: Controller/Lead.php:207
+#: Controller/Lead.php:213
 msgid "Updated by"
 msgstr "Обновлено"
 
-#: Controller/Lead.php:208
+#: Controller/Lead.php:214
 msgid "Updated Fields:"
 msgstr "Обновлённые поля:"
 
-#: Controller/Lead.php:209
+#: Controller/Lead.php:215
 #, python-format
 msgid "%s changed from %s to %s."
 msgstr "%s изменен с %s на %s."
 
-#: Controller/Lead.php:215
+#: Controller/Lead.php:221
 #, python-format
 msgid "Lead %s has been changed"
 msgstr "Предложение %s было изменено"
 
-#: Controller/Lead.php:217
+#: Controller/Lead.php:223
 #, python-format
 msgid "Lead %s has been deleted"
 msgstr ""
 
-#: Controller/Lead.php:219
+#: Controller/Lead.php:225
 #, python-format
 msgid "Lead %s has been created"
 msgstr "Ведущим %s было создано"
@@ -625,26 +631,40 @@ msgstr "Избранный по умолчанию"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Будет загружено по-умолчанию при загрузке CRM"
 
-#: Config.php:41
+#: Config.php:48
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:43
+#: Config.php:50
 msgid "Enabled Features in Crm Application."
 msgstr ""
 
-#: Config.php:50
+#: Config.php:57
 msgid "Lead Import"
 msgstr ""
 
-#: Config.php:59
+#: Config.php:66
+msgid "Add new task on lead import"
+msgstr ""
+
+#: Config.php:68
+msgid ""
+"Automatically creates a task for the responsible person if a new lead is "
+"imported"
+msgstr ""
+
+#: Config.php:75
 msgid "Lead duplicate check fields"
 msgstr ""
 
-#: Config.php:61
+#: Config.php:77
 msgid ""
 "These fields are checked when a new lead is created. If a record with the "
 "same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+
+#: Import/Csv.php:159
+msgid "Edit new lead"
 msgstr ""
 
 #: Import/definitions/crm_tine_import_csv.xml:11

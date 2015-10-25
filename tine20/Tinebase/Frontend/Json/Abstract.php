@@ -49,6 +49,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected $_defaultImportDefinitionName = null;
 
     /**
+     * Configured plugins for filter model
+     * @var array
+     */
+    protected static $_filterPlugins = array();
+
+    /**
      * Returns registry data of the application.
      *
      * Each application has its own registry to supply static data to the client.
@@ -83,7 +89,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     
     /**
      * returns model configurations for application starter
-     * 
+     *
      * @return array
      */
     public function getModelsConfiguration()
@@ -101,7 +107,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     
     /**
      * returns the default model or null if it does not exist
-     * 
+     *
      * @return string
      */
     public function getDefaultModel()
@@ -210,17 +216,18 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = FALSE)
     {
+        $filterModel = $this->_getPluginForFilterModel($_filterModel);
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
 
         if (is_array($decodedFilter)) {
-            $filter = new $_filterModel(array());
+            $filter = new $filterModel(array());
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
             $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
         } else if ($_throwExceptionIfEmpty) {
             throw new Tinebase_Exception_InvalidArgument('Filter must not be empty!');
         } else {
-            $filter = new $_filterModel(array());
+            $filter = new $filterModel(array());
         }
 
         return $filter;
@@ -255,7 +262,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * creates recordsets for depedent records or records instead of arrays for records on record fields
      * and sets timezone of these records to utc
-     * 
+     *
      * @param Tinebase_Record_Abstract $record
      */
     protected function _dependentRecordsFromJson(&$record)
@@ -316,7 +323,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * prepare long running request
      * - execution time
      * - session write close
-     * 
+     *
      * @param integer $executionTime
      * @return integer old max execution time
      */
@@ -463,7 +470,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     /**
      * get available templates by containerId
-     * 
+     *
      * @param integer $containerId
      * @return array
      */
@@ -578,5 +585,31 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         return $defaultDefinition;
+    }
+
+    /**
+     * get configured plugin for filter model
+     * @param string $filterModel
+     * @return string
+     */
+    protected function _getPluginForFilterModel($filterModel)
+    {
+        if(isset(self::$_filterPlugins[$filterModel])) {
+            return self::$_filterPlugins[$filterModel];
+        }
+        return $filterModel;
+    }
+
+    /**
+     * Add a plugin for a former filter
+     * @param string $formerFilter
+     * @param string $plugin
+     */
+    public static function addFilterModelPlugin($formerFilter, $plugin) {
+        if (class_exists($plugin)) {
+            self::$_filterPlugins[$formerFilter] = $plugin;
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__."::".__LINE__.":: Filter model plugin \"$plugin\" doesn't exists");
+        }
     }
 }

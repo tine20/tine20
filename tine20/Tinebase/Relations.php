@@ -391,6 +391,10 @@ class Tinebase_Relations
         }
         
         foreach ($_relations as $relation) {
+            if (! is_string($relation->related_model)) {
+                throw new Tinebase_Exception_InvalidArgument('missing relation model');
+            }
+
             if (empty($relation->related_record) || $relation->related_record instanceof $relation->related_model) {
                 continue;
             }
@@ -604,5 +608,16 @@ class Tinebase_Relations
         }
         
         return $this->_backend->transferRelations($sourceId, $destinationId, $model);
+    }
+
+    /**
+     * Deletes entries
+     *
+     * @param string|integer|Tinebase_Record_Interface|array $_id
+     * @return void
+     * @return int The number of affected rows.
+     */
+    public function delete($_id) {
+        return $this->_backend->delete($_id);
     }
 }

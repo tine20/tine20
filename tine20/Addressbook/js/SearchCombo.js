@@ -57,8 +57,11 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     
     //private
     initComponent: function(){
-        this.recordClass = Tine.Addressbook.Model.Contact;
-        this.recordProxy = Tine.Addressbook.contactBackend;
+        
+        if (this.recordClass === null) {
+            this.recordClass = Tine.Addressbook.Model.Contact;
+            this.recordProxy = Tine.Addressbook.contactBackend;
+        }
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
@@ -116,7 +119,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                 '</div></tpl>',
                 {
                     getIcon: function(contactData) {
-                        return Tine.Addressbook.ContactGridPanel.prototype.contactTypeRenderer.call(this, null, null, contactData);
+                        return Tine.Addressbook.ContactGridPanel.contactTypeRenderer.call(this, null, null, contactData);
                     },
                     encode: function(value, field) {
                         if (value) {

@@ -123,6 +123,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_defaultCountCol = '*';
     
     /**
+     * Additional columns _getSelect()
+     */
+    protected $_additionalColumns = array();
+
+    /**
      * the constructor
      * 
      * allowed options:
@@ -145,6 +150,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
         $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
         
+        foreach ($this->_additionalColumns as $name => $query) {
+            $this->_additionalColumns[$name] = str_replace("{prefix}", $this->_tablePrefix, $query);
+        }
+
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend_Database('modelName and tableName must be configured or given.');
         }
@@ -777,7 +786,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
         } else {
-            $cols = '*';
+            $cols = array('*');
+        }
+
+        foreach ($this->_additionalColumns as $name => $column) {
+            $cols[$name] = $column;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, TRUE));

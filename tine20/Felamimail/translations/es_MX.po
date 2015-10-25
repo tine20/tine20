@@ -4,9 +4,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-10-19 09:55+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/tine20/language/es_MX/)\n"
+"Language-Team: Spanish (Mexico) (http://www.transifex.com/tine20/tine20/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -340,16 +340,28 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:481
+#: js/GridDetailsPanel.js:251 js/GridDetailsPanel.js:482
 msgid "Show or hide header information"
 msgstr ""
 
-#: js/GridDetailsPanel.js:347 js/MessageEditDialog.js:814 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:814 js/GridPanel.js:468
 msgid "Attachments"
 msgstr ""
 
 #: js/GridPanelHook.js:34
 msgid "Compose email"
+msgstr ""
+
+#: js/GridPanelHook.js:49 js/Model.js:158 js/GridPanel.js:507
+msgid "To"
+msgstr ""
+
+#: js/GridPanelHook.js:62
+msgid "CC"
+msgstr ""
+
+#: js/GridPanelHook.js:75
+msgid "BCC"
 msgstr ""
 
 #: js/RecipientPickerFavoritePanel.js:43
@@ -442,10 +454,6 @@ msgstr ""
 
 #: js/Model.js:157 js/GridPanel.js:494
 msgid "From (Name)"
-msgstr ""
-
-#: js/Model.js:158 js/GridPanel.js:507
-msgid "To"
 msgstr ""
 
 #: js/Model.js:159

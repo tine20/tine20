@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:43+0000\n"
+"PO-Revision-Date: 2015-10-19 09:54+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
-"Language-Team: Croatian (Croatia) (http://www.transifex.com/projects/p/tine20/language/hr_HR/)\n"
+"Language-Team: Croatian (Croatia) (http://www.transifex.com/tine20/tine20/language/hr_HR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,7 +34,7 @@ msgstr "Kreirao"
 msgid "Activities"
 msgstr "Aktivnosti"
 
-#: Export/Spreadsheet/Ods.php:400
+#: Export/Spreadsheet/Ods.php:405
 msgid "Data"
 msgstr "Podaci"
 
@@ -42,7 +42,7 @@ msgstr "Podaci"
 msgid "Without company assigned"
 msgstr ""
 
-#: User/Sql.php:1093
+#: User/Sql.php:1102
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgstr ""
 msgid "Use and see personal tags"
 msgstr ""
 
-#: Preference/Abstract.php:517
+#: Preference/Abstract.php:528
 msgid "default"
 msgstr "zadana vrijednost"
 
@@ -187,11 +187,11 @@ msgstr "Izmijenjena polja:"
 msgid "enter searchfilter"
 msgstr "unesite pojam za pretragu"
 
-#: js/ux/PopupWindow.js:242
+#: js/ux/PopupWindow.js:244
 msgid "Window can be closed"
 msgstr ""
 
-#: js/ux/PopupWindow.js:243
+#: js/ux/PopupWindow.js:245
 #, python-brace-format
 msgid ""
 "This Window can be closed now. To avoid this message please deactivate your "
@@ -243,7 +243,7 @@ msgstr "odspojen"
 #: js/ux/form/LayerCombo.js:186 js/PasswordChangeDialog.js:65
 #: js/LicenseScreen.js:51 js/widgets/account/ChangeAccountAction.js:78
 #: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:490
-#: js/widgets/tags/TagsMassAttachAction.js:84
+#: js/widgets/tags/TagsMassAttachAction.js:108
 #: js/widgets/ActivitiesGridPanel.js:377
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
@@ -259,7 +259,7 @@ msgstr "U redu"
 #: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
 #: js/widgets/container/ContainerSelect.js:481
 #: js/widgets/tags/TagToggleBox.js:59
-#: js/widgets/tags/TagsMassAttachAction.js:105
+#: js/widgets/tags/TagsMassAttachAction.js:102
 #: js/widgets/ActivitiesGridPanel.js:369
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:76
 #: js/widgets/dialog/WizardPanel.js:189
@@ -296,7 +296,7 @@ msgstr "Nije slika"
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Označite datoteku slike (gif/png/jpeg)"
 
-#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:114
+#: js/ux/form/ImageField.js:211 js/widgets/grid/FileUploadGrid.js:121
 msgid "Upload Failed"
 msgstr "Učitavanje nije uspjelo"
 
@@ -330,7 +330,7 @@ msgstr "odaberi ostalih {0}..."
 msgid "Software Version"
 msgstr "Verzija aplikacije"
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:435
+#: js/ExceptionDialog.js:62 Frontend/Http.php:459
 msgid "Abnormal End"
 msgstr "Neispravan završetak"
 
@@ -338,7 +338,7 @@ msgstr "Neispravan završetak"
 msgid "Send Report"
 msgstr "Pošalji izvještaj"
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:436
+#: js/ExceptionDialog.js:154 Frontend/Http.php:460
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo je do pogreške, aplikacija je neispravno prekinuta."
 
@@ -353,7 +353,7 @@ msgid ""
 msgstr "U cilju poboljšanja aplikacije molimo Vas da nam pošaljete kratak opis radnje koja je dovela do pogreške."
 
 #: js/ExceptionDialog.js:162 js/widgets/tags/TagsPanel.js:509
-#: js/widgets/relation/GenericPickerGridPanel.js:458
+#: js/widgets/relation/GenericPickerGridPanel.js:456
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 msgid "Description"
 msgstr "Opis"
@@ -444,7 +444,7 @@ msgid ""
 "administrator."
 msgstr "Nije omogućeno korištenje aplikacija. Molimo Vas da kontaktirate administratora."
 
-#: js/ApplicationStarter.js:551
+#: js/ApplicationStarter.js:556
 msgid "New "
 msgstr ""
 
@@ -502,8 +502,8 @@ msgid "Your password has been changed."
 msgstr "Vaša zaporka je izmijenjena."
 
 #: js/PasswordChangeDialog.js:99 js/PasswordChangeDialog.js:109
-#: js/widgets/relation/GenericPickerGridPanel.js:917
-#: js/widgets/relation/GenericPickerGridPanel.js:930
+#: js/widgets/relation/GenericPickerGridPanel.js:915
+#: js/widgets/relation/GenericPickerGridPanel.js:928
 #: js/widgets/dialog/ImportDialog.js:664
 #: js/widgets/dialog/MultipleEditResultSummary.js:196
 #: js/widgets/form/RecordPickerComboBox.js:294
@@ -588,7 +588,7 @@ msgstr "Traži grupu"
 msgid "Add Anyone"
 msgstr "Dodaj bilo koga"
 
-#: js/widgets/account/PickerGridPanel.js:213
+#: js/widgets/account/PickerGridPanel.js:213 Frontend/Json/Container.php:223
 msgid "Anyone"
 msgstr "Bilo tko"
 
@@ -603,7 +603,7 @@ msgstr "Traženje grupa..."
 #: js/widgets/account/PickerGridPanel.js:267
 #: js/widgets/container/PropertiesDialog.js:107
 #: js/widgets/grid/LinkGridPanel.js:103
-#: js/widgets/dialog/AttachmentsGridPanel.js:86 js/Models.js:430
+#: js/widgets/dialog/AttachmentsGridPanel.js:86 js/Models.js:431
 msgid "Name"
 msgstr "Naziv"
 
@@ -637,7 +637,7 @@ msgid "delete"
 msgstr "izbriši"
 
 #: js/widgets/tree/ContextMenu.js:35 js/widgets/ActivitiesGridPanel.js:241
-#: js/widgets/grid/FileUploadGrid.js:296 js/widgets/grid/GridPanel.js:587
+#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:587
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Dodaj {0}"
@@ -676,7 +676,7 @@ msgstr "Postavi {0} boju"
 msgid "Reload {0}"
 msgstr "Ponovno učitavanje {0}"
 
-#: js/widgets/tree/ContextMenu.js:100 js/widgets/grid/FileUploadGrid.js:195
+#: js/widgets/tree/ContextMenu.js:100 js/widgets/grid/FileUploadGrid.js:202
 msgid "Resume upload"
 msgstr "Nastavi upload"
 
@@ -684,7 +684,7 @@ msgstr "Nastavi upload"
 msgid "Edit Properties"
 msgstr "Uredi Postavke"
 
-#: js/widgets/tree/ContextMenu.js:116 js/widgets/grid/FileUploadGrid.js:187
+#: js/widgets/tree/ContextMenu.js:116 js/widgets/grid/FileUploadGrid.js:194
 msgid "Pause upload"
 msgstr "Pauziraj učitavanje"
 
@@ -742,7 +742,7 @@ msgstr "Nije preimenovano {0}"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1846
+#: js/widgets/grid/GridPanel.js:1848
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 #: js/widgets/dialog/EditDialog.js:902 js/MainMenu.js:260
 msgid "Confirm"
@@ -858,7 +858,7 @@ msgid "The grant to delete records in this container"
 msgstr "Pravo za brisanje zapisa ovog spremnika"
 
 #: js/widgets/container/GrantsGrid.js:51 js/widgets/dialog/ExportDialog.js:48
-#: js/Models.js:338
+#: js/Models.js:339
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "Izvoz"
@@ -901,16 +901,16 @@ msgstr "Osobno"
 msgid "The grant to access records marked as private in this container"
 msgstr "Pravo za pristup privatnim zapisima ovog spremnika"
 
-#: js/widgets/container/FilterModel.js:160
+#: js/widgets/container/FilterModel.js:161
 msgid "is personal of"
 msgstr "je osobno od"
 
-#: js/widgets/container/FilterModel.js:160
-#: js/widgets/container/FilterModel.js:164 js/widgets/grid/FilterModel.js:226
+#: js/widgets/container/FilterModel.js:161
+#: js/widgets/container/FilterModel.js:165 js/widgets/grid/FilterModel.js:226
 msgid "is equal to"
 msgstr "jednako"
 
-#: js/widgets/container/FilterModel.js:267
+#: js/widgets/container/FilterModel.js:268
 #: js/widgets/grid/PickerGridPanel.js:260
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/grid/PickerFilter.js:310
@@ -926,9 +926,9 @@ msgstr "spremnici"
 msgid "Favorites"
 msgstr "Favoriti"
 
-#: js/widgets/ActivitiesPanel.js:76 js/widgets/ActivitiesPanel.js:211
+#: js/widgets/ActivitiesPanel.js:76 js/widgets/ActivitiesPanel.js:220
 #: js/widgets/ActivitiesGridPanel.js:97
-#: js/widgets/relation/GenericPickerGridPanel.js:461
+#: js/widgets/relation/GenericPickerGridPanel.js:459
 #: js/widgets/grid/LinkGridPanel.js:105
 msgid "Type"
 msgstr "Tip"
@@ -938,7 +938,7 @@ msgid "Note"
 msgstr "Bilješka"
 
 #: js/widgets/ActivitiesPanel.js:79 js/widgets/ActivitiesGridPanel.js:112
-#: js/widgets/grid/GridPanel.js:1456
+#: js/widgets/grid/GridPanel.js:1458
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr "Kreirao"
@@ -956,19 +956,19 @@ msgstr "Prikaz povijesti {0} - {1} of {2}"
 msgid "No history to display"
 msgstr "Nema povijesti za prikaz"
 
-#: js/widgets/ActivitiesPanel.js:193
+#: js/widgets/ActivitiesPanel.js:202
 msgid "History"
 msgstr "Povijest"
 
-#: js/widgets/ActivitiesPanel.js:205
+#: js/widgets/ActivitiesPanel.js:214
 msgid "Quick Search"
 msgstr ""
 
-#: js/widgets/ActivitiesPanel.js:206 js/widgets/ActivitiesPanel.js:207
+#: js/widgets/ActivitiesPanel.js:215 js/widgets/ActivitiesPanel.js:216
 msgid "Time"
 msgstr "Vrijeme"
 
-#: js/widgets/ActivitiesPanel.js:209
+#: js/widgets/ActivitiesPanel.js:218
 msgid "User"
 msgstr "Korisnik"
 
@@ -1008,18 +1008,14 @@ msgstr[1] "Oznake"
 msgstr[2] "Oznaka"
 
 #: js/widgets/tags/TagsMassAttachAction.js:18
-msgid "Add Tag"
-msgstr "Dodaj oznaku"
+msgid "Add Tags"
+msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:76
-msgid "Attach the following tag to all selected items:"
-msgstr "Dodijeli oznaku odabranim stavkama:"
+#: js/widgets/tags/TagsMassAttachAction.js:94
+msgid "Select Tags"
+msgstr ""
 
-#: js/widgets/tags/TagsMassAttachAction.js:98
-msgid "Select Tag"
-msgstr "Odaberi oznaku"
-
-#: js/widgets/tags/TagsMassAttachAction.js:128
+#: js/widgets/tags/TagsMassAttachAction.js:135
 msgid "Attaching Tag"
 msgstr "Dodavanje Oznake"
 
@@ -1157,7 +1153,7 @@ msgstr[0] "Uredi {0}"
 msgstr[1] "Uredi {0}"
 msgstr[2] "Uredi {0}"
 
-#: js/widgets/ActivitiesGridPanel.js:257 js/widgets/grid/FileUploadGrid.js:179
+#: js/widgets/ActivitiesGridPanel.js:257 js/widgets/grid/FileUploadGrid.js:186
 #, python-brace-format
 msgid "Remove {0}"
 msgstr ""
@@ -1203,7 +1199,7 @@ msgid "Edit record"
 msgstr "Uredi zapis"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:134
-#: js/widgets/relation/FilterModel.js:32 js/Models.js:402
+#: js/widgets/relation/FilterModel.js:32 js/Models.js:403
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Veza"
@@ -1236,42 +1232,42 @@ msgid ""
 "added. Please change the type of this relation or edit the {2}"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:300
+#: js/widgets/relation/GenericPickerGridPanel.js:298
 msgid "No Dialog"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:301
+#: js/widgets/relation/GenericPickerGridPanel.js:299
 msgid ""
 "The Record can't be opened. There doesn't exist any dialog for editing this "
 "Record!"
 msgstr ""
 
-#: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/grid/GridPanel.js:1184
+#: js/widgets/relation/GenericPickerGridPanel.js:455
+#: js/widgets/grid/GridPanel.js:1186
 msgid "Record"
 msgstr "Zapis"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:459
+#: js/widgets/relation/GenericPickerGridPanel.js:457
 msgid "Remark"
 msgstr "Opaska"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/relation/GenericPickerGridPanel.js:458
 msgid "Dependency"
 msgstr "Zavisnost"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:462
-#: js/widgets/grid/GridPanel.js:1455
+#: js/widgets/relation/GenericPickerGridPanel.js:460
+#: js/widgets/grid/GridPanel.js:1457
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Datum kreiranja"
 
-#: js/widgets/relation/GenericPickerGridPanel.js:918
+#: js/widgets/relation/GenericPickerGridPanel.js:916
 msgid ""
 "The record you tried to link is already linked. Please edit the existing "
 "link."
 msgstr "Zapis koji pokušavate povezati je već povezan. Molimo uredite postojeću poveznicu."
 
-#: js/widgets/relation/GenericPickerGridPanel.js:931
+#: js/widgets/relation/GenericPickerGridPanel.js:929
 #: js/widgets/form/RecordPickerComboBox.js:295
 msgid "You tried to link a record with itself. This is not allowed!"
 msgstr "Pokušavate povezati zapisa sa samim sobom. Ovo nije dozvoljeno!"
@@ -1281,7 +1277,7 @@ msgid "Defined by ..."
 msgstr "Definiran sa ..."
 
 #: js/widgets/relation/FilterModel.js:92
-#: js/widgets/grid/ForeignRecordFilter.js:406
+#: js/widgets/grid/ForeignRecordFilter.js:408
 #: js/widgets/grid/FilterModel.js:285
 msgid "select a operator"
 msgstr "odabir operatora"
@@ -1410,6 +1406,10 @@ msgstr ""
 msgid "Show"
 msgstr "Prikaži"
 
+#: js/widgets/grid/FilterToolbar.js:113
+msgid "and"
+msgstr ""
+
 #: js/widgets/grid/FilterToolbar.js:178
 msgid "add new filter"
 msgstr "dodaj novi filter"
@@ -1450,7 +1450,7 @@ msgstr "Uredi definiciju"
 msgid "Start definition"
 msgstr "Početna definicija"
 
-#: js/widgets/grid/ForeignRecordFilter.js:111
+#: js/widgets/grid/ForeignRecordFilter.js:113
 msgid "Related to"
 msgstr "Povezan s"
 
@@ -1490,28 +1490,28 @@ msgstr "Ukloni zapis"
 msgid "Search for records ..."
 msgstr "Traži zapise..."
 
-#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:477
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:478
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/grid/FileUploadGrid.js:115
+#: js/widgets/grid/FileUploadGrid.js:122
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size:"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:338
+#: js/widgets/grid/FileUploadGrid.js:362
 msgid "name"
 msgstr "Naziv"
 
-#: js/widgets/grid/FileUploadGrid.js:345
+#: js/widgets/grid/FileUploadGrid.js:369
 msgid "size"
 msgstr "Veličina"
 
-#: js/widgets/grid/FileUploadGrid.js:352
+#: js/widgets/grid/FileUploadGrid.js:376
 msgid "type"
 msgstr "Tip"
 
@@ -1544,49 +1544,49 @@ msgstr "Ispiši stranicu"
 msgid "Merge {0}"
 msgstr "Spoji {0}"
 
-#: js/widgets/grid/GridPanel.js:1107
+#: js/widgets/grid/GridPanel.js:1109
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1129
+#: js/widgets/grid/GridPanel.js:1131
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Prikazivanje zapisa {0} - {1} od {2}"
 
-#: js/widgets/grid/GridPanel.js:1130
+#: js/widgets/grid/GridPanel.js:1132
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "Nema {0} za prikaz"
 
-#: js/widgets/grid/GridPanel.js:1184
+#: js/widgets/grid/GridPanel.js:1186
 msgid "Records"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1388
+#: js/widgets/grid/GridPanel.js:1390
 msgid "New..."
 msgstr "Novi..."
 
-#: js/widgets/grid/GridPanel.js:1407
+#: js/widgets/grid/GridPanel.js:1409
 msgid "Add to..."
 msgstr "Dodati..."
 
-#: js/widgets/grid/GridPanel.js:1457
+#: js/widgets/grid/GridPanel.js:1459
 msgid "Last Modified Time"
 msgstr "Datum zadnje izmjene"
 
-#: js/widgets/grid/GridPanel.js:1458
+#: js/widgets/grid/GridPanel.js:1460
 msgid "Last Modified By"
 msgstr "Zadnji ažurirao"
 
-#: js/widgets/grid/GridPanel.js:1820
+#: js/widgets/grid/GridPanel.js:1822
 msgid "Not Allowed"
 msgstr "Nije dopušteno"
 
-#: js/widgets/grid/GridPanel.js:1821
+#: js/widgets/grid/GridPanel.js:1823
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nije Vam dozvoljeno brisanje svih stranica od jednom"
 
-#: js/widgets/grid/GridPanel.js:1844
+#: js/widgets/grid/GridPanel.js:1846
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
@@ -1594,12 +1594,12 @@ msgstr[0] "Da li stvarno želite izbrisati odabrani zapis  ({0})?"
 msgstr[1] "Da li stvarno želite izbrisati odabrane zapise  ({0})?"
 msgstr[2] "Da li stvarno želite izbrisati odabrane zapise ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1889 js/widgets/dialog/EditDialog.js:904
+#: js/widgets/grid/GridPanel.js:1891 js/widgets/dialog/EditDialog.js:904
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Brisanje {0}"
 
-#: js/widgets/grid/GridPanel.js:1889
+#: js/widgets/grid/GridPanel.js:1891
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -2444,115 +2444,115 @@ msgstr "Odjava u tijeku..."
 msgid "Please wait!"
 msgstr "Molimo pričekajte!"
 
-#: js/ExceptionHandler.js:170 Frontend/Http.php:409
+#: js/ExceptionHandler.js:164 Frontend/Http.php:433
 msgid "Authorisation Required"
 msgstr "Potrebna je autorizacija"
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:165
 msgid "Your session timed out. You need to login again."
 msgstr "Vaša sesija je istekla. Molimo Vas da se ponovno prijavite."
 
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:197
 msgid "Insufficient Rights"
 msgstr "Nedovoljna prava"
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:198
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Nije Vam dozvoljeno izvršenje ove akcije"
 
-#: js/ExceptionHandler.js:212
+#: js/ExceptionHandler.js:206
 msgid "Not Found"
 msgstr "Nije pronađeno"
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:207
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr "Nažalost, Vaš zahtjev se ne može izvršiti jer potrebni podaci nisu pronađeni. Molimo Vas da osvježite trenutni pregled."
 
-#: js/ExceptionHandler.js:221
+#: js/ExceptionHandler.js:215
 msgid "Concurrent Updates"
 msgstr "Simultano ažuriranje"
 
-#: js/ExceptionHandler.js:222
+#: js/ExceptionHandler.js:216
 msgid ""
 "Someone else saved this record while you where editing the data. You need to"
 " reload and make your changes again."
 msgstr "U međuvremenu je netko spremio ovaj zapis dok ste uređivali podatke. Morate ponovno učitati stranicu i unijeti izmjene."
 
-#: js/ExceptionHandler.js:230
+#: js/ExceptionHandler.js:224
 msgid "Service Unavailable"
 msgstr "Servis nije dostupan"
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:225
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again"
 " or contact your administrator."
 msgstr "Server trenutno nije u mogućnosti procesirati zahtjev zbog trenutne preopterećenosti, održavanja ili neispravne konfiguracije. Molimo pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:237
+#: js/ExceptionHandler.js:231
 msgid "Server Message:"
 msgstr "Poruka Servera:"
 
-#: js/ExceptionHandler.js:239
+#: js/ExceptionHandler.js:233
 msgid "Invalid Data"
 msgstr "Pogrešan Podatak"
 
-#: js/ExceptionHandler.js:240
+#: js/ExceptionHandler.js:234
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "Podatak koji unosite nije dobar. Molimo unesite ispravan podatak."
 
-#: js/ExceptionHandler.js:252 js/LoginPanel.js:482
+#: js/ExceptionHandler.js:246 js/LoginPanel.js:482
 msgid "Connection lost, please check your network!"
 msgstr "Veza je izgubljena, molimo Vas da provjerite mrežu!"
 
-#: js/ExceptionHandler.js:258
+#: js/ExceptionHandler.js:252
 msgid "Timeout"
 msgstr "Vremensko ograničenje"
 
-#: js/ExceptionHandler.js:259
+#: js/ExceptionHandler.js:253
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr "Nažalost, tijekom obrade zahtjeva je došlo do prekida veze. Učitajte vaš preglednik, pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:267
+#: js/ExceptionHandler.js:261
 msgid "No Response"
 msgstr "Nema odgovora"
 
-#: js/ExceptionHandler.js:268
+#: js/ExceptionHandler.js:262
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr "Nažalost, server nije vratio nikakve podatke. Učitajte vaš preglednik, pokušajte ponovo ili kontaktirajte svog administratora."
 
-#: js/ExceptionHandler.js:275
+#: js/ExceptionHandler.js:269
 msgid "Out of Resources"
 msgstr "Nedostatak resursa"
 
-#: js/ExceptionHandler.js:276
+#: js/ExceptionHandler.js:270
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr "Nažalost, memorija Servera je skoro iskorištena. Molimo kontaktirajte svog administraora."
 
-#: js/ExceptionHandler.js:292
+#: js/ExceptionHandler.js:286
 msgid "No Role Memberships"
 msgstr "Nije pripadnik niti jedne role"
 
-#: js/ExceptionHandler.js:293
+#: js/ExceptionHandler.js:287
 msgid ""
 "Your user account has no role memberships. Please contact your "
 "administrator."
 msgstr "Vaš korisnički račun nema potrebnu ulogu. Molimo Vas da kontaktirate svog administratora."
 
-#: js/ExceptionHandler.js:308
+#: js/ExceptionHandler.js:302
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:309
+#: js/ExceptionHandler.js:303
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2562,42 +2562,42 @@ msgstr ""
 msgid "Credits"
 msgstr "Zasluge"
 
-#: js/Models.js:274
+#: js/Models.js:275
 msgid "Alarm"
 msgid_plural "Alarms"
 msgstr[0] "Podsjetnik"
 msgstr[1] "Podsjetnici"
 msgstr[2] "Podsjetnika"
 
-#: js/Models.js:312
+#: js/Models.js:313
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Unos"
 msgstr[1] "Unosa"
 msgstr[2] "Unosa"
 
-#: js/Models.js:375
+#: js/Models.js:376
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Pravo"
 msgstr[1] "Prava"
 msgstr[2] "Prava"
 
-#: js/Models.js:423
+#: js/Models.js:424
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "Odjel"
 msgstr[1] "Odjela"
 msgstr[2] "Odjela"
 
-#: js/Models.js:449
+#: js/Models.js:450
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "Postavka"
 msgstr[1] "Postavke"
 msgstr[2] "Postavki"
 
-#: js/Models.js:449
+#: js/Models.js:450
 msgid "Configs"
 msgstr "Postavke"
 
@@ -2744,12 +2744,12 @@ msgid "Login successful. Loading {0}..."
 msgstr "Prijava uspješna. Učitavanje {0}..."
 
 #: js/LoginPanel.js:486
-msgid "There was an error verifying your certificate!!!"
+msgid "There was an error verifying your certificate!"
 msgstr ""
 
 #: js/LoginPanel.js:487
-msgid "Your username and/or your password are wrong!!!"
-msgstr "Vaše korisničko ime i/ili zaporka nisu ispravni!"
+msgid "Your username and/or your password are wrong!"
+msgstr ""
 
 #: js/LoginPanel.js:489
 msgid "Login failure"
@@ -2853,334 +2853,344 @@ msgstr ""
 msgid "If enabled quickfilter searches through relations as well."
 msgstr ""
 
-#: Frontend/Cli.php:761
+#: Frontend/Cli.php:832
 #, python-format
 msgid "%s's personal "
 msgstr ""
 
-#: Frontend/Http.php:410
+#: Frontend/Http.php:434
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaša sesija nije važeća. Morate se ponovno prijaviti."
 
-#: Container.php:746
+#: Container.php:752
 #, python-format
 msgid "%s's personal container"
 msgstr "%s osobni kontejner"
 
-#: Container.php:1755
+#: Container.php:1788
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr "Nemate prava obrisati ovaj Spremnik. Molimo odredite drugi spremnik kao zadani spremnik za spremanje internih kontakata u adresar!"
 
-#: Config.php:323
+#: Config.php:330
 msgid "System IMAP"
 msgstr "Sistemski IMAP"
 
-#: Config.php:325
+#: Config.php:332
 msgid "System IMAP server configuration."
 msgstr "Konfiguracija sistemskog IMAP servera."
 
-#: Config.php:334
+#: Config.php:341
 msgid "System SMTP"
 msgstr "Sistemski SMTP"
 
-#: Config.php:336
+#: Config.php:343
 msgid "System SMTP server configuration."
 msgstr "Konfiguracija sistemskog SMTP servera."
 
-#: Config.php:345
+#: Config.php:352
 msgid "System SIEVE"
 msgstr "Sistemski SIEVE"
 
-#: Config.php:347
+#: Config.php:354
 msgid "System SIEVE server configuration."
 msgstr "Konfiguracija sistemskog SIEVE servera."
 
-#: Config.php:356
+#: Config.php:363
 msgid "Authentication Backend"
 msgstr "Pozadinska provjera autentičnosti"
 
-#: Config.php:358
+#: Config.php:365
 msgid "Backend adapter for user authentication."
 msgstr "Pozadinska prilagodba za autentifikaciju korisnka."
 
-#: Config.php:366
+#: Config.php:373
 msgid "Authentication Configuration"
 msgstr "Konfiguracija provjere autentičnosti"
 
-#: Config.php:368
+#: Config.php:375
 msgid "Authentication backend configuration."
 msgstr "Konfiguracija pozadinske provjere autentičnosti."
 
-#: Config.php:377
+#: Config.php:384
 msgid "User Backend"
 msgstr "Korisnička Pozadina"
 
-#: Config.php:379
+#: Config.php:386
 msgid "Backend adapter for user data."
 msgstr "Pozadinska prilagodba za korisničke podatke."
 
-#: Config.php:387
+#: Config.php:394
 msgid "User Configuration"
 msgstr "Konfiguracija Korisnika"
 
-#: Config.php:389
+#: Config.php:396
 msgid "User backend configuration."
 msgstr "Kofiguracija korisničke pozadine"
 
-#: Config.php:398
+#: Config.php:405
 msgid "Cronuser ID"
 msgstr "ID kron korisnika "
 
-#: Config.php:400
+#: Config.php:407
 msgid "User ID of the cron user."
 msgstr "ID od kron korisnika."
 
-#: Config.php:408
+#: Config.php:415
 msgid "Title Postfix"
 msgstr "Dodatak naslovu"
 
-#: Config.php:410
+#: Config.php:417
 msgid "Postfix string appended to the title of this installation."
 msgstr "Dodatak znakova na kraj naslova ove instalacije"
 
-#: Config.php:418
+#: Config.php:425
 msgid "Redirect URL"
 msgstr "Preusmjeni URL"
 
-#: Config.php:420
+#: Config.php:427
 msgid "Redirect to this URL after logout."
 msgstr "Preusmjeri na ovaj URL nakon odjave"
 
-#: Config.php:428
+#: Config.php:435
 msgid "Redirect to Referrer"
 msgstr "Preusmjeri na stranicu s koje smo došli"
 
-#: Config.php:430
+#: Config.php:437
 msgid "Redirect to referrer after logout."
 msgstr "Preusmjeri na stranicu s koje smo došli nakon odjave"
 
-#: Config.php:438
+#: Config.php:445
 msgid "Redirect Always"
 msgstr "Uvijek preusmjeri"
 
-#: Config.php:440
+#: Config.php:447
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Preusmjeri za  potvrdu preusmjeravanja URLa također kroz prijavu."
 
-#: Config.php:448
+#: Config.php:455
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:450
+#: Config.php:457
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:458
+#: Config.php:465
 msgid "Accepted Terms Version"
 msgstr "Prihvaćeni Uvjeti Verzije"
 
-#: Config.php:460
+#: Config.php:467
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Prihvati broj verzije uslova i uvjeta dokumenta"
 
-#: Config.php:468
+#: Config.php:475
 msgid "Use Geolocation Services"
 msgstr "Koristi geolokacijski servis"
 
-#: Config.php:470
+#: Config.php:477
 msgid "Use of external Geolocation services is allowed."
 msgstr "Koristi uvijek vanjski geolokacijski servis."
 
-#: Config.php:478
+#: Config.php:485
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:480
+#: Config.php:487
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:489
+#: Config.php:496
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:491
+#: Config.php:498
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:499
+#: Config.php:506
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:501
+#: Config.php:508
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:510
+#: Config.php:517
 msgid "IP Session Validator"
 msgstr "Validacija IP sesije"
 
-#: Config.php:512
+#: Config.php:519
 msgid "Destroy session if the users IP changes."
 msgstr "Poništi sesiju ukoliko se promijeni korisnički IP."
 
-#: Config.php:520
+#: Config.php:527
 msgid "UA Session Validator"
 msgstr "UA Session Validator"
 
-#: Config.php:522
+#: Config.php:529
 msgid "Destroy session if the users user agent string changes."
 msgstr "Poništi sesiju ukoliko se promijeni korisnički string."
 
-#: Config.php:530
+#: Config.php:537
 msgid "Files Directory"
 msgstr "Direktorij Datoteka"
 
-#: Config.php:532
+#: Config.php:539
 msgid "Directory with web server write access for user files."
 msgstr "Direktorij web servera s pravima pisanja za korisničke datoteke."
 
-#: Config.php:540 Config.php:542
+#: Config.php:547 Config.php:549
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:550 Config.php:552
+#: Config.php:557 Config.php:559
 msgid "User may change password"
 msgstr "Korisnik može promijeniti lozinku"
 
-#: Config.php:561 Config.php:563
+#: Config.php:568 Config.php:570
 msgid "Enable password policy"
 msgstr "Omogućite politiku lozinki"
 
-#: Config.php:571
+#: Config.php:578
 msgid "Only ASCII"
 msgstr "Samo ASCII"
 
-#: Config.php:573
+#: Config.php:580
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Samo su ASCII karakteri dozvoljeni u lozinkama."
 
-#: Config.php:581
+#: Config.php:588
 msgid "Minimum length"
 msgstr "Minimalna duljina"
 
-#: Config.php:583
+#: Config.php:590
 msgid "Minimum password length"
 msgstr "Minimalna duljina lozinke"
 
-#: Config.php:591
+#: Config.php:598
 msgid "Minimum word chars"
 msgstr "Minimalan broj znakova u riječi"
 
-#: Config.php:593
+#: Config.php:600
 msgid "Minimum word chars in password"
 msgstr "Minimalan broj znakova u lozinci"
 
-#: Config.php:601
+#: Config.php:608
 msgid "Minimum uppercase chars"
 msgstr "Minimalan broj velikih slova"
 
-#: Config.php:603
+#: Config.php:610
 msgid "Minimum uppercase chars in password"
 msgstr "Minimalan broj velikih slova u lozinci"
 
-#: Config.php:611
+#: Config.php:618
 msgid "Minimum special chars"
 msgstr "Minimalan broj posebnih znakova"
 
-#: Config.php:613
+#: Config.php:620
 msgid "Minimum special chars in password"
 msgstr "Minimalan broj posebnih znakova u lozinci"
 
-#: Config.php:621
+#: Config.php:628
 msgid "Minimum numbers"
 msgstr "Minimalan broj znamenki"
 
-#: Config.php:623
+#: Config.php:630
 msgid "Minimum numbers in password"
 msgstr "Minimalan broj znamenki u lozinci"
 
-#: Config.php:631
+#: Config.php:638
 msgid "Forbid part of username"
 msgstr "Zabranjen dio u korisničkom imenu"
 
-#: Config.php:633
+#: Config.php:640
 msgid "Forbid part of username in password"
 msgstr "Zabranjen dio imena u lozinci"
 
-#: Config.php:641
+#: Config.php:648
 msgid "Automatic bugreports"
 msgstr "Automatska prijava grešaka"
 
-#: Config.php:643
+#: Config.php:650
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Uvijek pošalji izvještaj greške, čak i kad istekne tajm-out i druge iznimke / nedostatak."
 
-#: Config.php:651
+#: Config.php:658
 msgid "Last sessions cleanup run"
 msgstr "Posljednja sesija pokretanje počistilo sesija "
 
-#: Config.php:653
+#: Config.php:660
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Sprema vrijeme zadnjeg uspješnog pokretanja"
 
-#: Config.php:661
+#: Config.php:668
 msgid "Maximum login failures"
 msgstr "Ukupan broj grešaka u prijavi"
 
-#: Config.php:663
+#: Config.php:670
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Ukupan broj dozvoljenih grešaka u prijavi prije blokiranja računa"
 
-#: Config.php:671
+#: Config.php:678
 msgid "Disable Anyone Account"
 msgstr "Onemogući svačiji račun"
 
-#: Config.php:673
+#: Config.php:680
 msgid "Disallow anyone account in grant configurations"
 msgstr "Onemogući svačiji račun u konfiguraciji dozvola"
 
-#: Config.php:681
+#: Config.php:688
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:683
+#: Config.php:690
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of"
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:691
+#: Config.php:698
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:693
+#: Config.php:700
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login"
 " with deactivated account"
 msgstr ""
 
-#: Config.php:701
+#: Config.php:708
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:703
+#: Config.php:710
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:711 Config.php:713
+#: Config.php:718 Config.php:720
 msgid "Max username length"
 msgstr ""
 
-#: Import/Csv/Abstract.php:206
+#: Config.php:727
+msgid "conf.d folder name"
+msgstr ""
+
+#: Config.php:729
+msgid ""
+"Folder for additional config files (conf.d) - NOTE: this is only used if set"
+" in config.inc.php!"
+msgstr ""
+
+#: Import/Csv/Abstract.php:236
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr "Sljedeća polja nisu importovana:%s"
 
-#: Import/Csv/Abstract.php:207
+#: Import/Csv/Abstract.php:237
 msgid "N/A"
 msgstr "ništa"
 
@@ -3189,47 +3199,47 @@ msgstr "ništa"
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:549
+#: WebDav/PrincipalBackend.php:536
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3421
+#: Setup/setup.xml:3425
 msgid "note"
 msgstr "bilješka"
 
-#: Setup/setup.xml:3426
+#: Setup/setup.xml:3430
 msgid "default note type"
 msgstr "standardni tip bilješke"
 
-#: Setup/setup.xml:3452
+#: Setup/setup.xml:3456
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3457
+#: Setup/setup.xml:3461
 msgid "telephone call"
 msgstr "telefonski poziv"
 
-#: Setup/setup.xml:3483
+#: Setup/setup.xml:3487
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3488
+#: Setup/setup.xml:3492
 msgid "email contact"
 msgstr "e-mail kontakt"
 
-#: Setup/setup.xml:3514
+#: Setup/setup.xml:3518
 msgid "created"
 msgstr "kreirano"
 
-#: Setup/setup.xml:3519
+#: Setup/setup.xml:3523
 msgid "record created"
 msgstr "kreirani zapis"
 
-#: Setup/setup.xml:3545
+#: Setup/setup.xml:3549
 msgid "changed"
 msgstr "izmijenjen"
 
-#: Setup/setup.xml:3550
+#: Setup/setup.xml:3554
 msgid "record changed"
 msgstr "izmijenjeni zapis"
 
