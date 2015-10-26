@@ -191,13 +191,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         transp: 'OPAQUE',
         editGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer) /*[
-            Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                user_type: 'user',
-                user_id: Tine.Tinebase.registry.get('userContact'),
-                status: 'ACCEPTED'
-            })
-        ]*/
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer)
     };
     
     if (prefs.get('defaultalarmenabled')) {
