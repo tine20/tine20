@@ -2165,4 +2165,22 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Sales', '8.32');
     }
+
+
+    /**
+     * Add price_gross2 and price_total to pruchase invoice
+     */
+    public function update_32()
+    {
+        $field = '<field>
+                    <name>json_attributes</name>
+                    <type>text</type>
+                </field>';
+
+        $declaration = new Setup_Backend_Schema_Field_Xml($field);
+        $this->_backend->addCol('sales_product_agg', $declaration);
+
+        $this->setTableVersion('sales_product_agg', 5);
+        $this->setApplicationVersion('Sales', '8.33');
+    }
 }

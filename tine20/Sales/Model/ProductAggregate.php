@@ -109,6 +109,10 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
                 'type' => 'datetime',
                 'label'      => 'End Date',    // _('End Date')
             ),
+            'json_attributes'   => array(
+                'type'          => 'json',
+                'default'       => NULL,
+            )
         )
     );
 

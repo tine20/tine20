@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>8.32</version>
+    <version>8.33</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -1091,7 +1091,7 @@
         </table>
         <table>
             <name>sales_product_agg</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1180,6 +1180,10 @@
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>
+                </field>
+                <field>
+                    <name>json_attributes</name>
+                    <type>text</type>
                 </field>
                 <index>
                     <name>id</name>
