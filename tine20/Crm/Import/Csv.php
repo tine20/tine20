@@ -275,9 +275,9 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
 
         try {
-            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $responsible, $subject, $plain);
+            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), array($responsible), $subject, $plain);
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            Tinebase_Exception::log($e, /* $suppressTrace = */ false);
         }
     }
 }

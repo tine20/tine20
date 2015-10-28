@@ -134,6 +134,11 @@ class Crm_Import_CsvTest extends ImportTestCase
      */
     public function testEmailNotification()
     {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (empty($smtpConfig)) {
+            $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+
         Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_NOTIFICATION, true);
         $this->testImport(/* dry run = */ false);
         // mark tasks for deletion
