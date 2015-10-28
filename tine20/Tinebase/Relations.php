@@ -617,7 +617,20 @@ class Tinebase_Relations
      * @return void
      * @return int The number of affected rows.
      */
-    public function delete($_id) {
+    public function delete($_id)
+    {
         return $this->_backend->delete($_id);
+    }
+
+    /**
+     * remove all relations for application
+     *
+     * @param string $applicationName
+     *
+     * @return void
+     */
+    public function removeApplication($applicationName)
+    {
+        $this->_backend->removeApplication($applicationName);
     }
 }
