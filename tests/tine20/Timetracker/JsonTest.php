@@ -1255,4 +1255,30 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $tsData = $this->_json->getTimesheet($tsData['id']);
         $this->assertSame(NULL,  $tsData['invoice_id']);
     }
+    
+    /**
+     * try to update a Timesheet with a closed TimeAccount
+     *
+     */
+    public function testUpdateClosedTimeaccount()
+    {
+        $timeaccountData = $this->_saveTimeaccountWithGrants();
+        $timeaccountData['is_open'] = 0;
+        $timeaccount = $this->_json->saveTimeaccount($timeaccountData);
+        
+        $timesheet = $this->_getTimesheet(array(
+             'timeaccount_id'    => $timeaccount['id'],
+        ));
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        
+        Timetracker_ControllerTest::removeManageAllRight();
+        
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        
+        // update Timesheet
+        $timesheetData['description'] = "blubbblubb";
+        $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
+        $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
+        $timesheetUpdated = $this->_json->saveTimesheet($timesheetData);
+    }
 }
