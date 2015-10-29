@@ -483,7 +483,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function removeApplication($applicationName)
     {
-        $tableName = $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'relations');
+        $tableName = SQL_TABLE_PREFIX . 'relations';
 
         $select = $this->_db->select()->from($tableName)->columns('rel_id')
             ->where($this->_db->quoteIdentifier('own_model') . ' LIKE ?', $applicationName . '_%');
