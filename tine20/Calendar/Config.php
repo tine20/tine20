@@ -189,8 +189,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')
             'label'                 => 'Attendee Status Available',
-                                   //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.')
-            'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.',
+                                   //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
             'clientRegistryInclude' => TRUE,
@@ -199,8 +199,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
         self::ATTENDEE_ROLES => array(
                                    //_('Attendee Roles Available')
             'label'                 => 'Attendee Roles Available',
-                                   //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.')
-            'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.',
+                                   //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
