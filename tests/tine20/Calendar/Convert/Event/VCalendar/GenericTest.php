@@ -183,7 +183,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
      */
     public function testConvertToTine20ModelWithGroupInvitation()
     {
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Model_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         if (!isset($smtpConfig['primarydomain'])) {
             $this->markTestSkipped('no primary smtp domain configured');
         }

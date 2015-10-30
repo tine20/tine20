@@ -138,7 +138,11 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * @param {Mixed} body
      */
     updateDetails: function(record, body) {
-        this.tpl.overwrite(body, record.data);
+        if (this.tpl) {
+            this.tpl.overwrite(body, record.data);
+        } else {
+            this.getSingleRecordPanel().loadRecord.defer(100, this.getSingleRecordPanel(), [record]);
+        }
     },
     
     /**

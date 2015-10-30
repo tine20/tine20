@@ -26,6 +26,10 @@
         {
           "text": "ExampleDetailsPanel.js",
           "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
         }
       ]
     },

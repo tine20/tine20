@@ -34,8 +34,17 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
             'description'           => 'Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'ExampleApplication_Model_Status'),
-            'clientRegistryInclude' => TRUE,
-            'default'               => 'IN-PROCESS'
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => false,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
+                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
+                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
+                ),
+                'default' => 'IN-PROCESS'
+            )
         ),
     );
     

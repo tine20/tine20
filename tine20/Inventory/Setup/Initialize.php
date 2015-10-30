@@ -17,38 +17,6 @@
 class Inventory_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * init key fields
-     */
-    protected function _initializeKeyFields()
-    {
-        // create status config
-        $cb = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Tinebase_Model_Config', 
-            'tableName' => 'config',
-        ));
-        
-        $typeConfig = array(
-            'name'    => Inventory_Config::INVENTORY_STATUS,
-            'records' => array(
-                array('id' => 'ORDERED',    'value' => 'ordered'                       ), //_('ordered')
-                array('id' => 'AVAILABLE',  'value' => 'available'                     ), //_('available')
-                array('id' => 'DEFECT',     'value' => 'defect'                        ), //_('defect')
-                array('id' => 'MISSING',    'value' => 'missing'                       ), //_('missing')
-                array('id' => 'REMOVED',    'value' => 'removed'                       ), //_('removed')
-                array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unknown')
-            ),
-            'default' => 'AVAILABLE',
-        );
-        
-        $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Inventory')->getId(),
-            'name'              => Inventory_Config::INVENTORY_STATUS,
-            'value'             => json_encode($typeConfig),
-        )));
-        
-    }
-    
-    /**
      * init the default persistentfilters
      */
     protected function _initializeFavorites()

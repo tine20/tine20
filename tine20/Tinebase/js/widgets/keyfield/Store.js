@@ -21,7 +21,9 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     
     // get keyField config
     if (config.app.getRegistry()) {
-        config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
+        if (! config.keyFieldConfig) {
+            config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
+        }
 
         // init data / translate values
         var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];

@@ -503,15 +503,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
         ),
         self::SYNC_USER_CONTACT_DATA => array(
-                //_('Sync contact data from sync backend')
-                'label'                 => 'Sync contact data from sync backend',
-                //_('Sync user contact data from sync backend')
-                'description'           => 'Sync user contact data from sync backend',
-                'type'                  => 'bool',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-                'default'               => TRUE
+            //_('Sync contact data from sync backend')
+            'label'                 => 'Sync contact data from sync backend',
+            //_('Sync user contact data from sync backend')
+            'description'           => 'Sync user contact data from sync backend',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
@@ -715,13 +715,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         self::MAX_USERNAME_LENGTH => array(
-                //_('Max username length')
-                'label'                 => 'Max username length',
-                //_('Max username length')
-                'description'           => 'Max username length',
-                'type'                  => 'int',
-                'default'               => NULL,
-                'clientRegistryInclude' => FALSE,
+            //_('Max username length')
+            'label'                 => 'Max username length',
+            //_('Max username length')
+            'description'           => 'Max username length',
+            'type'                  => 'int',
+            'default'               => NULL,
+            'clientRegistryInclude' => FALSE,
         ),
         self::CONFD_FOLDER => array(
             //_('conf.d folder name')
@@ -835,15 +835,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * get application config
      *
      * @param  string  $applicationName Application name
-     * @return string  $configClassName
-     * 
-     * @todo shouldn't this return a config object??
+     * @return Tinebase_Config_Abstract  $configClass
      */
     public static function getAppConfig($applicationName)
     {
         $configClassName = $applicationName . '_Config';
         if (@class_exists($configClassName)) {
-            return $configClassName;
+            return $configClassName::getInstance();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Application ' . $applicationName . ' has no config.');

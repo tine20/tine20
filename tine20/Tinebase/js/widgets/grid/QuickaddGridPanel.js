@@ -201,9 +201,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
                 var recordData = {};
                 recordData[this.dataField] = data[i];
             }
-            
+
             this.store.insert(0, new this.recordClass(recordData));
-        }        
+        }
     },
     
     /**

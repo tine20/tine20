@@ -40,8 +40,22 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
              */
             'select'
         );
+
+        this.on('afterrender', this.onAfterRender, this, {buffer: 500});
     },
-    
+
+    onAfterRender: function() {
+        // if used as gridEditor
+        if (this.inEditor) {
+            var editorWrapEl = this.el.up('.x-grid-editor', 5);
+            if (editorWrapEl) {
+                this.editor = Ext.getCmp(editorWrapEl.id);
+                this.editor.allowBlur = true;
+                this.onTriggerClick();
+            }
+        }
+    },
+
     // private
     onDestroy : function(){
         Ext.destroy(this.menu);
@@ -67,10 +81,11 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
     setValue : function(color){
         color = color || '#FFFFFF';
-        Ext.ux.form.ColorField.superclass.setValue.call(this, color);
-        
+
         this.el.setStyle('background', color);
         this.el.setStyle('color', color);
+
+        return Ext.ux.form.ColorField.superclass.setValue.call(this, color);
     },
     
     //private
@@ -84,6 +99,11 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     onSelect: function(m, d){
         this.setValue('#'+d);
         this.fireEvent('select', this, '#'+d);
+
+        if (this.inEditor && this.editor) {
+            this.editor.completeEdit();
+        }
+
         this.menu.hide();
     },
     
@@ -91,6 +111,10 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     onMenuHide: function(){
         this.focus(false, 60);
         this.menuEvents('un');
+
+        if (this.inEditor && this.editor) {
+            this.editor.cancelEdit();
+        }
     }
 });
 

@@ -1143,4 +1143,88 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals($registryData['primarydomain'], 'localhost');
         $this->assertEquals($registryData['secondarydomains'], 'example.com');
     }
+
+//    public function testGetConfig()
+//    {
+//        $afj = new Admin_Frontend_Json();
+//        $config = $afj->getConfig('Calendar');
+//
+//        $this->assertGreaterThanOrEqual(2, count($config));
+//        $this->assertArrayHasKey('attendeeRoles', $config);
+//        $this->assertArrayHasKey('records', $config['attendeeRoles']);
+//        $this->assertGreaterThanOrEqual(1, $config['attendeeRoles']['records']);
+//    }
+//
+//    public function testSetConfig()
+//    {
+//        $afj = new Admin_Frontend_Json();
+//        $config = $afj->getConfig('Calendar');
+//
+//        $attendeeRoles = $config['attendeeRoles'];
+//        $attendeeRoles['records'][] = array(
+//            'id'    => 'CHAIR',
+//            'value' => 'Chair'
+//        );
+//
+//        $afj->setConfig('Calendar', 'attendeeRoles', $attendeeRoles);
+//
+//        $updatedConfig = $afj->getConfig('Calendar');
+//        $this->assertEquals(count($attendeeRoles['records']), count($updatedConfig['attendeeRoles']['records']));
+//    }
+
+    public function testSearchConfigs()
+    {
+        $afj = new Admin_Frontend_Json();
+
+        $result = $afj->searchConfigs(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+        ), array());
+
+        $this->assertGreaterThanOrEqual(2, $result['totalcount']);
+
+        $attendeeRoles = NULL;
+        foreach($result['results'] as $configData) {
+            if ($configData['name'] == 'attendeeRoles') {
+                $attendeeRoles = $configData;
+                break;
+            }
+        }
+
+        $this->assertNotNull($attendeeRoles);
+        $this->assertContains('{', $attendeeRoles);
+
+        return $attendeeRoles;
+    }
+
+    public function testGetConfig()
+    {
+        $attendeeRoles = $this->testUpdateConfig();
+
+        $afj = new Admin_Frontend_Json();
+        $fetchedAttendeeRoles = $afj->getConfig($attendeeRoles['id']);
+
+        $this->assertEquals($attendeeRoles['value'], $fetchedAttendeeRoles['value']);
+    }
+
+    public function testUpdateConfig()
+    {
+        $attendeeRoles = $this->testSearchConfigs();
+
+        $keyFieldConfig = json_decode($attendeeRoles['value'], true);
+        $keyFieldConfig['records'][] = array(
+            'id'    => 'CHAIR',
+            'value' => 'Chair'
+        );
+        $attendeeRoles['value'] = json_encode($keyFieldConfig);
+        $attendeeRoles['id'] = '';
+
+
+        $afj = new Admin_Frontend_Json();
+        $afj->saveConfig($attendeeRoles);
+
+        $updatedAttendeeRoles = $this->testSearchConfigs();
+
+        $this->assertEquals($attendeeRoles['value'], $updatedAttendeeRoles['value']);
+        return $updatedAttendeeRoles;
+    }
 }

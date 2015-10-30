@@ -440,13 +440,24 @@ Tine.Tinebase.Model.Department.getFilterModel = function() {
  * Model of a application config settings
  */
 Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
-    {name: 'id'}, // application name
-    {name: 'settings'}
+    {name: 'id'},
+    {name: 'application_id'},
+    {name: 'name'},
+    {name: 'value'},
+    {name: 'label'},
+    {name: 'description'},
+    {name: 'type'},
+    {name: 'clientRegistryInclude'},
+    {name: 'setByAdminModule'},
+    {name: 'setBySetupModule'},
+    {name: 'default'},
+    {name: 'source'}
+    //{name: 'settings'}
 ], {
     appName: 'Tinebase',
     modelName: 'Config',
     idProperty: 'id',
-    titleProperty: 'id',
+    titleProperty: 'name',
     // ngettext('Config', 'Configs', n); gettext('Configs');
     recordName: 'Config',
     recordsName: 'Configs'

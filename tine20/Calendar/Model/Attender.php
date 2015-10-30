@@ -327,7 +327,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $attendeesToAdd    = array_diff_key($emailsOfNewAttendees,     $emailsOfCurrentAttendees);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " attendees to add " . print_r(array_keys($attendeesToAdd), true));
         
-        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Model_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         
         // add attendee identified by their emailAdress
         foreach ($attendeesToAdd as $newAttendee) {

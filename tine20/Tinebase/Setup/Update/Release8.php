@@ -691,4 +691,58 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '8.14');
     }
+
+    /**
+     * update to 8.15
+     *
+     * move keyFieldConfig defaults to config files
+     */
+    public function update_14()
+    {
+        // either put default to DB or delete form DB
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $configRecords = $cb->getAll();
+
+        // iterate installed apps
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            try {
+                // get config
+                $config = Tinebase_Config::getAppConfig($application->name);
+                if (! method_exists($config, 'getProperties'))  {
+                    continue;
+                }
+                foreach($config->getProperties() as $name => $property) {
+                    if ($property['type'] == Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG) {
+                        $dbConfig = $config->get($name);
+                        $dbConfigRecords = $dbConfig['records']->toArray();
+                        $defaultRecords = $property['default']['records'];
+                        if (json_encode($dbConfigRecords) != json_encode($defaultRecords)) {
+                            // set default value
+                            if (array_key_exists('default', $property['default'])) {
+                                $dbConfig->default = $property['default']['default'];
+                                $config->set($name, $dbConfig->toArray());
+                            }
+                        } else {
+                            // delete default config
+                            $configRecord = $configRecords
+                                ->filter('application_id', $application->getId())
+                                ->filter('name', $name)
+                                ->getFirstRecord();
+                            if ($configRecord) {
+                                $cb->delete($configRecord->getId());
+                            }
+                        }
+                    }
+                }
+            } catch(Exception $e) {
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not migrate keyFieldConfig ' . $e);
+            }
+
+
+        }
+        $this->setApplicationVersion('Tinebase', '8.15');
+    }
 }

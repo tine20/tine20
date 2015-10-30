@@ -176,35 +176,57 @@ class Calendar_Config extends Tinebase_Config_Abstract
 
         ),
         self::EVENT_VIEW => array(
-                //_('Default View for Events')
-                'label'                 => 'Default View for Events',
-                //_('Default View for Events')
-                'description'           => 'Default View for Events ("organizer" or "attendee")',
-                'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-                'clientRegistryInclude' => true,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-                'default'               => 'attendee',
+            //_('Default View for Events')
+            'label'                 => 'Default View for Events',
+            //_('Default View for Events')
+            'description'           => 'Default View for Events ("organizer" or "attendee")',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD,
+            'options'               => array(
+                'records' => array(
+                    array('id' => 'attendee',  'value' => 'Attendee'), //_('Attendee')
+                    array('id' => 'organizer', 'value' => 'Organizer'), //_('Organizer')
+                ),
+            ),
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 'attendee',
         ),
         self::ATTENDEE_STATUS => array(
                                    //_('Attendee Status Available')
             'label'                 => 'Attendee Status Available',
                                    //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation.',
-            'type'                  => 'keyFieldConfig',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'NEEDS-ACTION'
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
+                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Accepted')
+                    array('id' => 'DECLINED',     'value' => 'Declined',    'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Declined')
+                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/calendar-response-tentative.png',               'system' => true), //_('Tentative')
+                ),
+                'default' => 'NEEDS-ACTION'
+            )
         ),
         self::ATTENDEE_ROLES => array(
                                    //_('Attendee Roles Available')
             'label'                 => 'Attendee Roles Available',
                                    //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.')
             'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation.',
-            'type'                  => 'keyFieldConfig',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'REQ'
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'REQ', 'value' => 'Required', 'system' => true), //_('Required')
+                    array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
+                ),
+                'default' => 'REQ'
+            )
         ),
         self::MAX_FILTER_PERIOD_CALDAV => array(
         //_('Filter timeslot for CalDAV events')
@@ -257,20 +279,20 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'description'           => 'Disable iMIP for external organizers',
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => false,
         ),
         self::SKIP_DOUBLE_EVENTS => array(
-                //_('(CalDAV) Skip double events from personal or shared calendar')
-                'label'                 => '(CalDAV) Skip double events from personal or shared calendar',
-                //_('(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)')
-                'description'           => '(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)',
-                'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-                'default'               => '',
+            //_('(CalDAV) Skip double events from personal or shared calendar')
+            'label'                 => '(CalDAV) Skip double events from personal or shared calendar',
+            //_('(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)')
+            'description'           => '(CalDAV) Skip double events from personal or shared calendar ("personal" > Skip events from personal calendar or "shared" > Skip events from shared calendar)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => '',
         ),
         self::RESOURCE_MAIL_FOR_EDITORS => array(
             //_('Send notifications to every user with edit permissions of the added resources')
@@ -279,7 +301,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
             'clientRegistryInclude' => false,
             'setBySetupModule'      => false,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'default'               => false
         ),
         self::ENABLED_FEATURES => array(
