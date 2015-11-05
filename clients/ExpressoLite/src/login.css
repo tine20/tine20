@@ -1,0 +1,67 @@
+/*!
+ * Expresso Lite
+ * Structural and decoration CSS styles of login page.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2014 Serpro (http://www.serpro.gov.br)
+ */
+
+#templates { display:none; }
+
+#universalAccess { position:absolute; top:20px; left:16px; z-index:1;
+    width:130px; height:24px; text-align:right; line-height:24px;
+    background:url("img/universal-access.png") no-repeat; }
+@media (max-width:1024px) { #universalAccess { display:none; } } /* mobile */
+
+@media (max-width:1024px) { /* mobile */
+    #topgray { display:none; }
+    #thebg { display:none; }
+}
+@media (min-width:1025px) { /* desktop */
+    #topgray { position:absolute; top:0; height:70%; width:100%; background-color:#DADADA; }
+    #thebg { position:absolute; top:30%; height:40%; width:100%;
+        background-image:url("img/fondo.jpg"); border-top:1px solid #CDCDCD;
+        background-position:50% 40%; background-size:100%; }
+}
+
+#credent { background:url("img/logo-expressobr-bottom.png") no-repeat bottom; }
+#unsupportedMsg { margin-top:65px; color:#333; }
+@media (max-width:1024px) { /* mobile */
+    #credent { width:100%; height:100%; text-align:center; min-height:500px; }
+    #logo-top { margin-top:16px; }
+}
+@media (min-width:1025px) { /* desktop */
+    #credent { position:absolute; right:20%; top:18%; width:320px; height:490px;
+        border-radius:12px; background-color:white; text-align:center; box-shadow:2px 2px 6px #999; }
+    #logo-top { margin-top:20px; }
+}
+
+#frmLogin { margin:18px 20px 60px 20px; padding-top:30px; border-top:1px solid #E8E8E8; }
+input[type=text],input[type=password] { height:2.2em; margin:6px; width:240px; }
+input[type=text]:focus, input[type=password]:focus { box-shadow:0 0 6px #6EA2DE; border:1px solid #6EA2DE; }
+input[type=submit] { margin:8px 0; }
+.throbber { display:none; margin:6px 0; }
+.throbber > span { font-style:italic; color:#666; -moz-user-select:none; -webkit-user-select:none; }
+
+#captchaDiv { margin:6px; width:180px; display:inline-block; }
+#captchaImg { width:100px; height:32px; }
+#captcha { width:76px; margin:2px 0px; vertical-align:top; }
+
+@media (max-width:1024px) { /* mobile */
+    #externalLinks { position:absolute; top:75%; width:100%; z-index:-1; font-size:90%; text-align:center; }
+    #classicHref { display:none; }
+}
+@media (min-width:1025px) { /* desktop */
+    #externalLinks { position:absolute; bottom:20px; left:12px; font-size:90%; }
+    #classicHref { }
+}
+
+#versionInfo { position:absolute; font-size:80%; text-align:right; color:#AAA; }
+@media (max-height:350px) { /* if screen doesn't have enough height */
+    #versionInfo { top:-500px; } /* not display:none because of eventual JS fadeIn() */
+}
+@media (min-height:351px) {
+    #versionInfo { bottom:10px; right:8px; }
+}

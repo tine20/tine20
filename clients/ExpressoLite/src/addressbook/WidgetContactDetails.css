@@ -1,0 +1,170 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetContactDetails object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#WidgetContactDetails_templates {
+    display: none;
+}
+
+@media (min-width:1025px) { /* desktop */
+    #WidgetContactDetails_mainDiv {
+        padding: 20px;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #WidgetContactDetails_mainDiv {
+        padding: 20px 10px;
+    }
+}
+
+#WidgetContactDetails_contentTop > * {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#WidgetContactDetails_mugshotDiv {
+    position: relative;
+    width: 100px;
+    text-align: center;
+    padding: 0x;
+}
+
+#WidgetContactDetails_mugshotThrobber {
+    position: absolute;
+    top: 48px;
+    left: 42px;
+}
+
+@media (min-width:1025px) { /* desktop */
+    #WidgetContactDetails_mainInfoDiv {
+        margin-left: 20px;
+        width: 280px;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #WidgetContactDetails_mainInfoDiv {
+        margin-left: 10px;
+        width: calc(100% - 130px);
+    }
+}
+
+.WidgetContactDetails_name {
+    width: 100%;
+    font-size: large;
+    font-weight: bold;
+}
+
+@media (max-width:1024px) { /* mobile */
+    .WidgetContactDetails_name {
+        padding-bottom: 16px;
+    }
+}
+
+.WidgetContactDetails_email {
+    font-style: italic;
+    background: url("../img/e_mail.png") no-repeat;
+    padding-left: 20px;
+    font-size: small;
+}
+
+@media (min-width:1025px) { /* desktop */
+    .WidgetContactDetails_email {
+        padding-bottom: 12px;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    .WidgetContactDetails_email {
+        padding-bottom:8px;
+    }
+}
+
+.WidgetContactDetails_phonesDiv {
+    display: block;
+}
+
+a.phoneNumber:hover, a.phoneNumber:visited, a.phoneNumber:link, a.phoneNumber:active {
+    text-decoration: none;
+    color: #1a1a1a;
+}
+
+.WidgetContactDetails_phonesDiv * {
+    display: inline-block;
+    padding-right: 20px;
+}
+
+.WidgetContactDetails_phone {
+    background: url("../img/phone.png") no-repeat;
+    padding-left: 20px;
+}
+
+.WidgetContactDetails_phone:empty {
+    display: none;
+}
+
+@media (max-width:1024px) { /* mobile */
+    .WidgetContactDetails_phone {
+        padding-bottom:8px;
+    }
+}
+
+.WidgetContactDetails_mobile {
+    background: url("../img/mobile.png") no-repeat;
+    padding-left: 20px;
+}
+
+#WidgetContactDetails_mainDiv hr{
+    margin: 20px;
+    border: 1px solid #DDD;
+}
+
+#WidgetContactDetails_throbberDiv {
+    width: 100%;
+    text-align: center;
+}
+
+@media (min-width:1025px) { /* desktop */
+    #WidgetContactDetails_otherFieldsDiv {
+        display: block;
+        width: 100%;
+        max-height: calc(100% - 180px);
+        overflow-y: auto;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #WidgetContactDetails_otherFieldsDiv {
+        display: table;
+        width: 100%;
+    }
+}
+
+#WidgetContactDetails_otherFieldsDiv > div{
+    display: table-row;
+}
+
+#WidgetContactDetails_otherFieldsDiv > div > *{
+    display: table-cell;
+}
+
+.WidgetContactDetails_otherFieldLabel {
+    width: 35%;
+    padding-right: 12px;
+    text-align: right;
+    font-weight: bold;
+    color: #555;
+}
+
+.WidgetContactDetails_otherFieldValue {
+    width: 100%;
+    border: none;
+    background: transparent;
+}

@@ -1,0 +1,37 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetEvents object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Events_template { display:none; }
+
+.Events_dayTitle { margin:12px 12px 0 12px; padding:5px; color:#777; font-size:115%; }
+
+.Events_canvas { overflow-y:auto; }
+.Events_unit { margin:14px 4px; border-top:1px solid #CCC; }
+.Events_label { font-weight:bold; }
+.Events_summary { padding:5px; width:calc(100% - 42px); }
+.Events_topContainer { background-color:#F4F4F4; padding:3px; }
+.Events_dropdown { float:right; cursor:pointer; }
+.Events_content { margin:4px; padding:5px; }
+.Events_time { font-weight:bold; }
+.Events_declined { text-decoration:line-through; }
+.Events_showPeopleWrapper { padding:12px; }
+.Events_peopleList { }
+
+.Events_person { }
+.Events_personFlag { }
+.Events_personName { }
+.Events_personOrg { font-size:75%; color:#AAA; margin-left:4px; white-space:nowrap; }
+
+.Events_icoWaiting,.Events_icoAccepted,.Events_icoDeclined,.Events_icoTentative
+    { width:16px; height:16px; display:inline-block; background-image:url(../img/attendee-status.png); }
+.Events_icoWaiting   { background-position:0 0; }
+.Events_icoAccepted  { background-position:0 -16px; }
+.Events_icoDeclined  { background-position:0 -32px; }
+.Events_icoTentative { background-position:0 -48px; }

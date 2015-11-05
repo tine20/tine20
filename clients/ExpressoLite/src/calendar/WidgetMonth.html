@@ -1,0 +1,46 @@
+<!--
+ * Expresso Lite
+ * WidgetMonth template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+-->
+
+<section id="Month_template">
+    <section class="Month_container">
+        <section class="Month_buttons">
+            <input type="button" class="Month_prev" value="anterior"/> &nbsp;
+            <input type="button" class="Month_next" value="próximo"/>
+        </section>
+        <!-- These funky linebreaks avoid gaps with display:inline-block. -->
+        <header class="Month_weekLabels"
+            ><div class="Month_labelWeek Month_labelFull">domingo</div
+            ><div class="Month_labelWeek Month_labelFull">segunda</div
+            ><div class="Month_labelWeek Month_labelFull">terça</div
+            ><div class="Month_labelWeek Month_labelFull">quarta</div
+            ><div class="Month_labelWeek Month_labelFull">quinta</div
+            ><div class="Month_labelWeek Month_labelFull">sexta</div
+            ><div class="Month_labelWeek Month_labelFull">sábado</div
+            ><div class="Month_labelWeek Month_labelShort">dom</div
+            ><div class="Month_labelWeek Month_labelShort">seg</div
+            ><div class="Month_labelWeek Month_labelShort">ter</div
+            ><div class="Month_labelWeek Month_labelShort">qua</div
+            ><div class="Month_labelWeek Month_labelShort">qui</div
+            ><div class="Month_labelWeek Month_labelShort">sex</div
+            ><div class="Month_labelWeek Month_labelShort">sáb</div>
+        </header>
+        <section class="Month_canvas"><!-- grid renders here --></section>
+    </section>
+    <div class="Month_week"></div>
+    <div class="Month_day">
+        <div class="Month_dayDisplay"></div>
+        <div class="Month_dayContent"></div>
+    </div>
+    <div class="Month_event" title="">
+        <span class="Month_eventHour"></span>
+        <span class="Month_eventName"></span>
+    </div>
+    <div class="Month_loading">Carregando... <img src="../img/chromiumthrobber.svg"></div>
+</section>

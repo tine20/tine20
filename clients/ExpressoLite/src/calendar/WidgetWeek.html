@@ -1,0 +1,38 @@
+<!--
+ * Expresso Lite
+ * WidgetWeek template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+-->
+
+<section id="Week_template">
+    <section class="Week_container">
+        <section class="Week_buttons">
+            <input type="button" class="Week_prev" value="anterior"/> &nbsp;
+            <input type="button" class="Week_next" value="próxima"/>
+        </section>
+        <!-- These funky linebreaks avoid gaps with display:inline-block. -->
+        <header class="Week_weekLabels"
+            ><div class="Week_labelWeek">dom<br/><span class="Week_labelWeekDay0"></span></div
+            ><div class="Week_labelWeek">seg<br/><span class="Week_labelWeekDay1"></span></div
+            ><div class="Week_labelWeek">ter<br/><span class="Week_labelWeekDay2"></span></div
+            ><div class="Week_labelWeek">qua<br/><span class="Week_labelWeekDay3"></span></div
+            ><div class="Week_labelWeek">qui<br/><span class="Week_labelWeekDay4"></span></div
+            ><div class="Week_labelWeek">sex<br/><span class="Week_labelWeekDay5"></span></div
+            ><div class="Week_labelWeek">sáb<br/><span class="Week_labelWeekDay6"></span></div>
+        </header>
+        <section class="Week_grid">
+            <aside class="Week_hourLabelsPhone"><!-- 0 to 23 --></aside>
+            <aside class="Week_hourLabelsDesktop"><!-- 0:00 to 23:00 --></aside>
+            <section class="Week_gridHours"><!-- days go here --></section>
+        </section>
+    </section>
+    <div class="Week_eachHour"></div>
+    <div class="Week_colDay"></div>
+    <div class="Week_cellHour">&nbsp;</div>
+    <div class="Week_event"></div>
+    <div class="Week_loading">Carregando... <img src="../img/chromiumthrobber.svg"></div>
+</section>

@@ -1,0 +1,99 @@
+/*!
+ * Expresso Lite
+ * CSS for general templates.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Diogo Dantas <diogo.santos@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+body { font:12pt Arial,sans-serif; color:#1A1A1A; overflow-y:scroll; margin:0 auto; margin-bottom:30px; }
+
+/* --- Layout --- */
+#top {
+    background-image:url("../../../../img/logo-expressobr-internal.png");
+    background-repeat:no-repeat;
+    background-position:20px 30px;
+    min-height:90px;
+    text-align:right;
+}
+
+.contentAlign { margin-left:10px; margin-right:10px; }
+
+.onlyForScreenReaders {
+    position: absolute !important;
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* --- Headers --- */
+.anchorsTitle { font-weight:400; font-size:130%; background-color:#003852; color:#FFF; padding:7px 10px; text-decoration:none; }
+
+hr { border:0; height:1px; background-image:linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 56, 82, 1), rgba(0, 0, 0, 0)); }
+
+/* --- Form fields --- */
+label { color:#003852; }
+
+table ,input[type=button], input[type=text], input[type=email],
+input[type=password], input[type=submit], select, button, textarea {
+    font:11pt Arial,sans-serif; color:#1A1A1A;
+}
+input[type=text], input[type=password], input[type=email], textarea {
+    padding:8px;
+    width:calc(100% - 8px); /*-8px to account for left and right padding*/
+    border:1px solid #CCC;
+    display:block;
+    margin-bottom:15px;
+}
+textarea { height:250px; resize:none; overflow-y:scroll; }
+input[type=file] { width:100%; border:1px solid #CCC; box-shadow:2px 2px 2px rgba(0,0,0,0.2); }
+
+     /* Form fields behavior */
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus,
+input[type=file]:focus, input[type=file]:hover, textarea:focus {
+    box-shadow:0 0 4px #6EA2DE;
+    border:1px solid #6EA2DE;
+}
+
+     /* Form submit/buttons behavior */
+input[type=submit], input[type=button], button {
+    -moz-user-select:none;
+    background-color:#4479BA;
+    border: 1px solid #4272B2;
+    border-radius:1px;
+    color:#FFF;
+    cursor:pointer;
+    padding:5px 10px;
+}
+input[type=submit]:hover, input[type=button]:hover, button:hover{ background-color:#FFDB79; color:#000; }
+input[type=submit]:focus, input[type=button]:focus, button:focus { background-color:#FF6536; color:#FFF; }
+
+/* --- Links --- */
+
+.links li { list-style:none; }
+.links a { color:#000; text-decoration:none; }
+.links li a:hover { background-color:#FFDB79; color:#1B2026; }
+.links li a:focus { background-color:#FF6536; color:#FFF; text-decoration:underline; }
+
+    /* Pagination and Email actions */
+.linkAsButton li { display:inline; }
+.linkAsButton a {
+    -moz-user-select:none;
+    background-color:#4479BA;
+    border:1px solid #4272B2;
+    border-radius:1px;
+    color:#FFF;
+    cursor:pointer;
+    padding:5px 10px;
+}
+
+    /* Anchors for headers */
+.systemLinks ul { display:inline-block; text-align:left; }
+.systemLinks a { display:block; padding:5px 10px; border:1px solid #FFF; background-color:#F4F4F4; }
+
+/* --- Tables behavior--- */
+.clickableCell tr:hover td { background-color:#FFDB79; color:black; }
+
+.clickableCell a { text-decoration:none; color:#1B2026; display:block; padding:5px 10px; }
+.clickableCell a:focus { background-color:#FF6536; color:white; text-decoration:underline; }

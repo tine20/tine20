@@ -1,0 +1,62 @@
+<!--
+ * Expresso Lite
+ * WidgetEvents template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+-->
+
+<section id="Events_template">
+    <section class="Events_panel">
+        <header class="Events_dayTitle"></header>
+        <section class="Events_canvas"></section>
+    </section>
+    <section class="Events_unit">
+        <header class="Events_topContainer">
+            <div class="Events_dropdown Layout_icon32 Layout_icon3Dots"></div>
+            <div class="Events_summary">
+                <span class="Events_time"></span>
+                <span class="Events_text"></span>
+                <span class="Events_userFlag"></span>
+            </div>
+        </header>
+        <section class="Events_content">
+            <div class="Events_description">
+                <span class="Events_label">Descrição:</span>
+                <span class="Events_text"></span>
+            </div>
+            <div class="Events_when">
+                <span class="Events_label">Horário:</span>
+                <span class="Events_text"></span>
+            </div>
+            <div class="Events_location">
+                <span class="Events_label">Local:</span>
+                <span class="Events_text"></span>
+            </div>
+            <div class="Events_organizer">
+                <span class="Events_label">Organizador:</span>
+                <span class="Events_text"></span>
+                <span class="Events_personOrg"></span>
+            </div>
+            <div class="Events_people">
+                <div class="Events_showPeopleWrapper">
+                    <input class="Events_showPeople" type="button"
+                        value="participantes" title="Ver participantes do evento"/>
+                </div>
+                <section class="Events_peopleList"></section>
+            </div>
+        </section>
+    </section>
+    <div class="Events_person">
+        <span class="Events_personFlag"></span>
+        <span class="Events_personName"></span>
+        <span class="Events_personOrg"></span>
+    </div>
+    <div class="Events_icoWaiting" title="Aguardando resposta"></div>
+    <div class="Events_icoAccepted" title="Participação confirmada"></div>
+    <div class="Events_icoDeclined" title="Participação recusada"></div>
+    <div class="Events_icoTentative" title="Tentará participar"></div>
+    <img class="Events_throbber" src="../img/chromiumthrobber.svg"/>
+</section>

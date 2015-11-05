@@ -1,0 +1,36 @@
+/*!
+ * Expresso Lite
+ * CSS for ShowFeedbackTemplate.php.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Fatima Tonon <fatima.tonon@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#feedback {
+    display:table;
+    margin:0 auto;
+    margin-top:50px;
+    padding:40px 50px 20px 50px;
+    border:2px solid #2C353E;
+    border-radius:10px;
+    background-repeat:no-repeat;
+    background-position:10px 40px;
+}
+
+#feedbackMessage {
+    display:block;
+    padding:0px 10px 50px 70px;
+    font-size:140%;
+    color:#2C353E;
+    font-weight:600;
+}
+
+#buttons { text-align:center;}
+#buttons ul { padding-top: 15px; }
+
+.feedbackMessageSuccess { background-image:url("../../../../img/72px_ok.png"); }
+.feedbackMessageError { background-image:url("../../../../img/48px_error.png"); }
+.feedbackMessageAlert { background-image:url("../../../../img/72px_Alert.png"); }
+.feedbackMessageConfirm { background-image:url("../../../../img/72px_confirm.png"); }

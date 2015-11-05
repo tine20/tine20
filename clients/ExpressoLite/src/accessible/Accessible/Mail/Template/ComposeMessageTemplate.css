@@ -1,0 +1,51 @@
+/*!
+ * Expresso Lite
+ * CSS for ComposeMessageTemplate.php template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Fatima Tonon <fatima.tonon@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+blockquote { margin:2px 0 4px 15px; padding-left:5px; border-left:1px solid #BFD2E1; }
+
+.dialogEmail { border:none; padding:0px; margin-right:20px; }
+
+.attach {
+    display:block;
+    padding:5px 10px 12px;
+    border:1px solid #FFF;
+    background-color:#F4F4F4;
+    list-style:none;
+    margin-bottom:-0.8em;
+}
+
+.composeSign {
+    color:#003852;
+    background-color:#F4F4F4;
+    font-size:80%;
+    padding:20px 25px;
+    margin:10px 0px 20px 0px;
+}
+
+.messageText {
+    border:1px solid #CCC;
+    box-shadow:2px 2px 2px rgba(0,0,0,0.2);
+    height:250px;
+    overflow-y:auto;
+    padding:6px 6px;
+    width:calc(100% - 8px);
+}
+
+.messageText pre {
+    overflow-x:auto;
+    white-space:pre-wrap; /* css-3 */
+    white-space:-moz-pre-wrap !important; /* Mozilla, since 1999 */
+}
+
+.existingAttachsForExhibition { display: table }
+.existingAttachsForExhibition li { float: left }
+.existingAttachsForExhibition p { float: right; margin-top: 5px; font-size: 80%; }
+
+.composeFooter { margin-top:5px; display:inline-block; padding:0px; color:#003852; }
