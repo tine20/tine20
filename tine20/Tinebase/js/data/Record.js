@@ -150,7 +150,16 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
     getId: function() {
         return this.get(this.idProperty ? this.idProperty : 'id');
     },
-    
+
+    /**
+     * sets the id of the record
+     *
+     * @param {String} id
+     */
+    setId: function(id) {
+        return this.set(this.idProperty ? this.idProperty : 'id', id);
+    },
+
     /**
      * converts data to String
      * 
@@ -363,3 +372,31 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     }
 });
 Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);
+
+/**
+ * create record from json string
+ *
+ * @param {String} json
+ * @param {Tine.Tinebase.data.Record} recordClass
+ * @returns {Tine.Tinebase.data.Record}
+ */
+Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
+    if (! Ext.isString(json)) {
+        throw new Ext.Error('not a string');
+    }
+
+    var jsonReader = new Ext.data.JsonReader({
+        id: recordClass.idProperty,
+        root: 'results',
+        totalProperty: 'totalcount'
+    }, recordClass);
+
+    var recordData = Ext.util.JSON.decode('{"results": [' + json + ']}'),
+        data = jsonReader.readRecords(recordData),
+        record = data.records[0],
+        recordId = record.get(record.idProperty);
+
+    record.id = recordId ? recordId : 0;
+
+    return record;
+};
