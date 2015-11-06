@@ -964,4 +964,16 @@ class Tinebase_Timemachine_ModificationLog
 
         return array($currentAccountId, $currentTime);
     }
+
+    /**
+     * removes modlog entries for that application
+     *
+     * @param Tinebase_Model_Application $applicationName
+     *
+     * @return void
+     */
+    public function removeApplication(Tinebase_Model_Application $_application)
+    {
+        $this->_backend->deleteByProperty($_application->getId(), 'application_id');
+    }
 }

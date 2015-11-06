@@ -1826,6 +1826,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * create a new system container
      * - by default user group gets READ grant
      * - by default admin group gets all grants
+     *
+     * NOTE: this should never be called in user land and only in admin/setup contexts
      * 
      * @param Tinebase_Model_Application|string $application app record, app id or app name
      * @param string $name
@@ -1838,7 +1840,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
         if ($model === null) {
-            $controller = Tinebase_Core::getApplicationInstance($application->name);
+            $controller = Tinebase_Core::getApplicationInstance($application->name, /* $_modelName = */ '', /* $_ignoreACL = */ true);
             $model = $controller->getDefaultModel();
         }
         
