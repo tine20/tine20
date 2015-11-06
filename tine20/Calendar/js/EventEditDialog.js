@@ -25,7 +25,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     containerId: -1,
     
     labelAlign: 'side',
-    windowNamePrefix: 'EventEditWindow_',
+    windowNamePrefix: 'CalEventEditWindow_',
     appName: 'Calendar',
     recordClass: Tine.Calendar.Model.Event,
     recordProxy: Tine.Calendar.backend,
