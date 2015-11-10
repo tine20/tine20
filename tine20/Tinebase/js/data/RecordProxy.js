@@ -370,21 +370,13 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     /**
      * reads a single 'fully featured' record from json data
      * 
-     * NOTE: You might want to overwride this method if you have a more complex record
+     * NOTE: You might want to override this method if you have a more complex record
      * 
      * @param  XHR response
      * @return {Ext.data.Record}
      */
     recordReader: function(response) {
-        var recordData = Ext.util.JSON.decode('{"results": [' + response.responseText + ']}');
-        var data = this.jsonReader.readRecords(recordData);
-        
-        var record = data.records[0];
-        var recordId = record.get(record.idProperty);
-        
-        record.id = recordId ? recordId : 0;
-        
-        return record;
+        return Tine.Tinebase.data.Record.setFromJson(response.responseText, this.recordClass);
     },
     
     /**

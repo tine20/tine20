@@ -197,7 +197,7 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$status can be only Tinebase_Application::ENABLED or Tinebase_Application::DISABLED');
         }
         
-        $result = $this->getApplications()->filter('status', $state);
+        $result = $this->getApplications(null, /* sort = */ 'order')->filter('status', $state);
         
         return $result;
     }

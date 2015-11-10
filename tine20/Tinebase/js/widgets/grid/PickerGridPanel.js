@@ -137,20 +137,22 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         // focus+select new record
-        this.store.on('add', function(store, records, index) {
-            (function() {
-                if (this.rendered) {
-                    if (this.selectRowAfterAdd) {
-                        this.getView().focusRow(index);
-                        this.getSelectionModel().selectRow(index);
-                    } else if (this.highlightRowAfterAdd && records.length === 1){
-                        // some eyecandy
-                        var row = this.getView().getRow(index);
-                        Ext.fly(row).highlight();
-                    }
+        this.store.on('add', this.focusAndSelect, this);
+    },
+
+    focusAndSelect: function(store, records, index) {
+        (function() {
+            if (this.rendered) {
+                if (this.selectRowAfterAdd) {
+                    this.getView().focusRow(index);
+                    this.getSelectionModel().selectRow(index);
+                } else if (this.highlightRowAfterAdd && records.length === 1){
+                    // some eyecandy
+                    var row = this.getView().getRow(index);
+                    Ext.fly(row).highlight();
                 }
-            }).defer(300, this);
-        }, this);
+            }
+        }).defer(300, this);
     },
 
     /**
@@ -171,7 +173,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             items: contextItems.concat(this.contextMenuItems)
         });
         
-        // removes temporarly added items
+        // removes temporarily added items
         this.contextMenu.on('hide', function() {
             if(this.contextMenu.hasOwnProperty('tempItems') && this.contextMenu.tempItems.length) {
                 Ext.each(this.contextMenu.tempItems, function(item) {

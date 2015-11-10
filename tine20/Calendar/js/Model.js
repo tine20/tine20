@@ -136,7 +136,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * @return {Boolean}
      */
     isRecurInstance: function() {
-        return this.id && this.id.match(/^fakeid/);
+        return this.id && Ext.isFunction(this.id.match) && this.id.match(/^fakeid/);
     },
     
     /**
