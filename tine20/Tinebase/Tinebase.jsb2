@@ -639,6 +639,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "BbarGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "Filter.js",
           "path": "js/widgets/keyfield/"
         },
