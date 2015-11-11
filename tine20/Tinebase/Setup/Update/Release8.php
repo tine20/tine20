@@ -508,17 +508,22 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $tableVersion = $this->getTableVersion('relations');
 
         if ($tableVersion < 8) {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>own_id</name>
-                        <field>
+            try {
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                        <index>
                             <name>own_id</name>
-                        </field>
-                    </index>
-                ');
-
-            $this->_backend->addIndex('relations', $declaration);
-            $this->setTableVersion('relations', '8');
+                            <field>
+                                <name>own_id</name>
+                            </field>
+                        </index>
+                    ');
+    
+                $this->_backend->addIndex('relations', $declaration);
+                $this->setTableVersion('relations', '8');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Index own_id already exists.');
+            }
         }
 
         $this->setApplicationVersion('Tinebase', '8.11');
