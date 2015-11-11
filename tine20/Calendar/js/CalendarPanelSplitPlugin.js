@@ -347,8 +347,12 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     resizeWholeDayArea: function(onupdate) {
         if (this.attendeeViews.items.length > 1) {
             var maxWholeDayAreaSize = 10;
-            var scrollerSize = this.getActiveView().scroller.getHeight();
+            var scrollerSize = this.getActiveView().scroller ? this.getActiveView().scroller.getHeight() : 0;
             this.attendeeViews.each(function(view) {
+                if (! view.wholeDayArea) {
+                    return;
+                }
+
                 if (onupdate) {
                     view.wholeDayArea.heightIsCalculated = false;
                 }
@@ -369,6 +373,9 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                 }
             });
             this.attendeeViews.each(function(view) {
+                if (! view.wholeDayArea) {
+                    return;
+                }
                 var wholeDayAreaEl = Ext.get(view.wholeDayArea);
                 if (wholeDayAreaEl.getHeight() != maxWholeDayAreaSize) {
                     wholeDayAreaEl.setHeight(maxWholeDayAreaSize);

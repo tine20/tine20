@@ -22,4 +22,17 @@ class Sales_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Sales', '9.1');
     }
+
+    /**
+     * update to 9.2
+     * - Add json attributes to product aggregate
+     */
+    public function update_1()
+    {
+        if ($this->getTableVersion('sales_product_agg') < 5) {
+            $release8 = new Sales_Setup_Update_Release8($this->_backend);
+            $release8->update_32();
+        }
+        $this->setApplicationVersion('Sales', '9.2');
+    }
 }
