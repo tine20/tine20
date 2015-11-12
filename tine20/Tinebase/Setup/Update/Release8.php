@@ -569,4 +569,126 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '8.13');
     }
+
+    /**
+     * adds ondelete cascade to some indices (tags + roles)
+     *
+     * @see 0010249: Tinebase.purgeDeletedRecords fails
+     */
+    public function update_13()
+    {
+        $indexToChange = array(array(
+            'table'         => 'tags_acl',
+            'tableversion'  => 3,
+            'name'          => 'tags_acl::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tags_acl::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>'
+        ), array(
+            'table'         => 'tags_context',
+            'tableversion'  => 2,
+            'name'          => 'tags_context::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tags_context::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'tagging',
+            'tableversion'  => 2,
+            'name'          => 'tagging::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tagging::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'role_rights',
+            'tableversion'  => 2,
+            'name'          => 'role_rights::role_id--roles::id',
+            'xml'           => '
+                <index>
+                    <name>role_rights::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'role_accounts',
+            'tableversion'  => 3,
+            'name'          => 'role_accounts::role_id--roles::id',
+            'xml'           => '
+                 <index>
+                    <name>role_accounts::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ));
+
+        foreach ($indexToChange as $index) {
+            if ($this->getTableVersion($index['table']) < $index['tableversion']) {
+                try {
+                    $this->_backend->dropIndex($index['table'], $index['name']);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $zdse->getMessage());
+                }
+
+                try {
+                    $declaration = new Setup_Backend_Schema_Index_Xml($index['xml']);
+
+                    $this->_backend->addIndex($index['table'], $declaration);
+                    $this->setTableVersion($index['table'], $index['tableversion']);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Index ' . $index['name'] . ' already exists.');
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '8.14');
+    }
 }

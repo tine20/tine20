@@ -267,7 +267,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
         }
         
-        foreach ($_key->field as $keyfield) {
+        foreach ((array)$_key->field as $keyfield) {
             $key = '`' . (string)$keyfield . '`';
             if ($_key->length !== NULL) {
                 $key .= ' (' . $_key->length . ')';
