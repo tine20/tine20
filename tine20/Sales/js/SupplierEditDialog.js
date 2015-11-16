@@ -40,10 +40,10 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         isValid = Tine.Sales.SupplierEditDialog.superclass.isValid.call(this)
             
-        if (Ext.isEmpty(form.findField('adr_street').getValue()) && Ext.isEmpty(form.findField('adr_pobox').getValue())) {
+        if (Ext.isEmpty(form.findField('adr_postalcode').getValue()) && Ext.isEmpty(form.findField('adr_pobox').getValue())) {
             isValid = false;
-            var msg = this.app.i18n._('Either street or postbox is required!');
-            form.markInvalid( {'adr_street': msg, 'adr_pobox': msg});
+            var msg = this.app.i18n._('Either postalcode or postbox is required!');
+            form.markInvalid( {'adr_postalcode': msg, 'adr_pobox': msg});
         }
 
         return isValid;
@@ -281,7 +281,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 columnWidth: 47/100
                             }, {
                                 name: 'adr_locality',
-                                allowBlank: false,
+                                allowBlank: true,
                                 fieldLabel: this.app.i18n._('Locality'),
                                 columnWidth: 47/100
                             }], [{
