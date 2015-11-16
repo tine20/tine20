@@ -681,7 +681,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                     foreach ($attendeeDiff['removed'] as $attenderToRemove) {
                         $attenderInCurrentSet = Calendar_Model_Attender::getAttendee($event->attendee, $attenderToRemove);
-                        $event->attendee->removeRecord($attenderInCurrentSet);
+                        if ($attenderInCurrentSet) {
+                            $event->attendee->removeRecord($attenderInCurrentSet);
+                        }
                     }
                 } else {
                     // remove ids of new attendee
