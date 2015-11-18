@@ -46,4 +46,9 @@ class Tinebase_Session extends Tinebase_Session_Abstract
     {
         Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
     }
+
+    public static function registerValidatorMaintenanceMode()
+    {
+        Zend_Session::registerValidator(new Tinebase_Session_Validator_MaintenanceMode());
+    }
 }

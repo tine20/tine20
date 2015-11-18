@@ -1667,4 +1667,15 @@ class Tinebase_Core
 
         return $isFileSystemAvailable;
     }
+
+    /**
+     * returns true if installation is in maintenance mode
+     *
+     * @return bool
+     */
+    public static function inMaintenanceMode()
+    {
+        $config = self::getConfig();
+        return !! $config->maintenanceMode;
+    }
 }
