@@ -16,6 +16,12 @@ Ext.ns('Tine.Tinebase.widgets.keyfield');
  * @extends     Tine.widgets.grid.LayerCombo
  */
 Tine.Tinebase.widgets.keyfield.ConfigField = Ext.extend(Ext.ux.form.LayerCombo, {
+
+    /**
+     * @cfg {Admin.Model.Config} ConfigRecord
+     */
+    configRecord: null,
+
     hideButtons: false,
     layerAlign: 'tr-br?',
     minLayerWidth: 400,
@@ -46,6 +52,7 @@ Tine.Tinebase.widgets.keyfield.ConfigField = Ext.extend(Ext.ux.form.LayerCombo, 
         this.configGrid = new Tine.Tinebase.widgets.keyfield.ConfigGrid({
             title: _('Key Field Records'),
             height: this.layerHeight - 40 || 'auto',
+            configRecord: this.configRecord,
             onStoreChange: Ext.emptyFn
         });
 

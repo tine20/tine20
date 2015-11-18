@@ -24,6 +24,13 @@ Ext.ns('Tine.Tinebase.widgets.keyfield');
  */
 Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
+    /**
+     * @cfg {record} (optional) configRecord keyFieldConfig record
+     */
+    configRecord: null,
+
+    keyFieldOptions: null,
+
     autoExpandColumn: 'value',
     quickaddMandatory: 'id',
     resetAllOnNew: true,
@@ -34,6 +41,16 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
      * @private
      */
     initComponent: function() {
+        if (this.configRecord) {
+            // used withing config system
+            this.keyFieldOptions = this.configRecord.get('options') || {};
+        } else {
+            // defaults
+            this.keyFieldOptions = {
+                recordModel : 'Tinebase_Config_KeyFieldRecord'
+            }
+        }
+
         this.defaultCheck = new Ext.ux.grid.CheckColumn({
             id: 'default',
             header: _('Default'),
@@ -81,8 +98,11 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
 
                     // be sure that only one default is checked
                     if (rec.get('default')) {
+                        // reset other default of same parentId
+                        var parentId = this.getParentId(rec);
+
                         store.each(function (r) {
-                            if (r.id !== rec.id) {
+                            if (this.getParentId(r) == parentId && r.id !== rec.id) {
                                 r.set('default', false);
                                 r.commit(true);
                             }
@@ -91,6 +111,13 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
                 }
             }
         });
+    },
+
+    getParentId: function(r) {
+        var parts = String(r.get('id')).split(':'),
+            parentId = parts.length > 1 ? parts[0] : '';
+
+        return parentId;
     },
 
     /**
@@ -150,9 +177,8 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
             return false;
         }
 
-        // check if value exists in grid
-        if (this.store.findExact('value', recordData.value) !== -1) {
-            Ext.Msg.alert(_('Error'), _('Value already exists'));
+        if (this.keyFieldOptions.parentField && ! String(recordData.id).match(/^.+:.+$/)) {
+            Ext.Msg.alert(_('Error'), _('ID needs to follow the syntax PARENTID:ID'));
             return false;
         }
 
@@ -174,10 +200,14 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
 
         // if there is default value check it
         if (value['default']) {
-            var defaultRecIdx = this.store.findExact('id', value['default']);
-            if (defaultRecIdx !== -1) {
-                this.store.getAt(defaultRecIdx).set('default', true);
-            }
+            // there might be multiple defaults in case of dependend keyFields
+            var defaults = Ext.isArray(value['default']) ? value['default'] : [value['default']];
+            Ext.each(defaults, function(def) {
+                var defaultRecIdx = this.store.findExact('id', def);
+                if (defaultRecIdx !== -1) {
+                    this.store.getAt(defaultRecIdx).set('default', true);
+                }
+            }, this);
         }
     },
 
@@ -188,19 +218,23 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
         // don't touch other configs than records & default
         var value = Ext.decode(Ext.encode(this.keyFieldConfig)) || {};
 
-        var records = [];
+        var records = [],
+            defaults = [];
+
         this.store.each(function (rec) {
             var data = Ext.apply({}, rec.data);
             if (data['default'] == true) {
-                value['default'] = data.id;
+                defaults.push(data.id);
             }
             delete(data['default']);
             records.push(data);
 
         });
-        value['records'] = records;
 
+        value['records'] = records;
+        value['default'] = Ext.isArray(value['default']) ? defaults : defaults[0];
         Tine.Tinebase.common.assertComparable(value);
+
         return value;
     },
 
