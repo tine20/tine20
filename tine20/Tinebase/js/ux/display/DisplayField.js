@@ -54,7 +54,23 @@ Ext.reg('ux.displayfield', Ext.ux.display.DisplayField);
  */
 Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
     readOnly: true,
-    cls: 'x-ux-display-textarea'
+    cls: 'x-ux-display-textarea',
+
+    renderer: Ext.ux.display.DisplayField.prototype.renderer,
+
+    setValue : function(value) {
+        var v = this.renderer(value);
+
+        if(this.htmlEncode){
+            v = Ext.util.Format.htmlEncode(v);
+        }
+
+        if (this.nl2br) {
+            v = Ext.util.Format.nl2br(v);
+        }
+
+        return this.supr().setValue.call(this, v);
+    }
 });
 
 Ext.reg('ux.displaytextarea', Ext.ux.display.DisplayTextArea);

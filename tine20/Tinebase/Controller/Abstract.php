@@ -127,7 +127,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     {
         $appConfig = Tinebase_Config::getAppConfig($this->_applicationName);
         if ($appConfig != NULL) {
-            $settings = $appConfig::getInstance()->get(
+            $settings = $appConfig->get(
                 Tinebase_Config::APPDEFAULTS, 
                 new Tinebase_Config_Struct($this->_defaultsSettings)
             )->toArray();
@@ -161,7 +161,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         $appConfig = Tinebase_Config::getAppConfig($this->_applicationName);
         
         if ($appConfig !== NULL) {
-            $appConfig::getInstance()->set(Tinebase_Config::APPDEFAULTS, $_settings);
+            $appConfig->set(Tinebase_Config::APPDEFAULTS, $_settings);
         }
     }
     

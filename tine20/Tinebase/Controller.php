@@ -75,6 +75,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param   string                           $clientIdString
      *
      * @return  bool
+     * @throws  Tinebase_Exception_MaintenanceMode
      *
      * TODO what happened to the $securitycode parameter?
      *  ->  @param   string                           $securitycode   the security code(captcha)
@@ -93,7 +94,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
-        
+
+        if (Tinebase_Core::inMaintenanceMode()) {
+            if (! $user->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
+                throw new Tinebase_Exception_MaintenanceMode();
+            }
+        }
+
         $this->_setSessionId($accessLog);
         
         $this->initUser($user);
@@ -222,6 +229,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         // FIXME 0010508: Session_Validator_AccountStatus causes problems
         //Tinebase_Session::registerValidatorAccountStatus();
+
+        Tinebase_Session::registerValidatorMaintenanceMode();
         
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();

@@ -238,7 +238,7 @@ class Tinebase_User_LdapTest extends TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
-            'accountEmailAddress'   => 'phpunit@' . $emailDomain
+            'accountEmailAddress'   => 'phpunit@' . $emailDomain,
         ));
         
         return $user;
@@ -251,6 +251,11 @@ class Tinebase_User_LdapTest extends TestCase
     {
         $user = $this->testAddUser();
 
+        // add user contact
+        $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($user);
+        $user->contact_id = $contact->getId();
+        Tinebase_User::getInstance()->updateUser($user);
+
         // delete user in ldap
         Tinebase_User::getInstance()->deleteUserInSyncBackend($user->getId());
 
@@ -262,12 +267,37 @@ class Tinebase_User_LdapTest extends TestCase
         $syncOptions = array('deleteUsers' => true);
         Tinebase_User::syncUsers($syncOptions);
 
+        $now = Tinebase_DateTime::now();
+        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId(), 'Tinebase_Model_FullUser');
+        $this->assertEquals($now->toString(), $user->accountExpires->toString(), 'user should be expired');
+
+        sleep(1);
+        Tinebase_User::syncUsers($syncOptions);
+        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId(), 'Tinebase_Model_FullUser');
+        $this->assertEquals($now->toString(), $user->accountExpires->toString(), 'expiry date should still be the same');
+
+        // set expired to -1 year -> user should be deleted
+        $user->accountExpires = $now->subYear(1);
+        Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+
+        // sync again
+        sleep(1);
+        Tinebase_User::syncUsers($syncOptions);
+
         // check if user is deleted in tine, too
         try {
             Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId());
             $this->fail('user should be deleted from tine20 db');
         } catch (Tinebase_Exception_NotFound $tenf) {
             $this->assertContains('User with accountId = ' . $sqlUser->getId(), $tenf->getMessage());
+        }
+
+        // check if user contact is deleted, too
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($sqlUser->contact_id);
+            $this->fail('user contact should be deleted from tine20 db');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertContains('Addressbook_Model_Contact record with id = ' . $sqlUser->contact_id, $tenf->getMessage());
         }
     }
 }

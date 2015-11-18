@@ -167,14 +167,6 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     records: this[this.fieldType + 'Store'].getValue()      
                 }
             };
-            
-            // set default if defined for keyField
-            if (this.fieldType === 'keyField') {
-                var defaultRecIdx = this[this.fieldType + 'Store'].store.findExact('default', true);
-                if (defaultRecIdx !== -1) {
-                    this[this.fieldType + 'Config'].value['default'] = this[this.fieldType + 'Store'].store.getAt(defaultRecIdx).get('id');
-                }
-            }
              
             this.onStoreWindowClose();
         }
@@ -189,141 +181,22 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * Create store for keyField
+     * Create store/grid for keyFields
      * 
-     * @returns {Tine.widgets.grid.QuickaddGridPanel}
+     * @returns {Tine.widgets.grid.KeyFieldGridPanel}
      */
     initKeyFieldStore: function () {
-        Tine.log.info('Initialize keyField store config');
-        
-        var self = this,
-            
-            storeEntry = Ext.data.Record.create([
-                {name: 'default'},
-                {name: 'id'},
-                {name: 'value'}
-            ]),
-        
-            defaultCheck = new Ext.ux.grid.CheckColumn({
-                id: 'default', 
-                header: self.app.i18n._('Default'),
-                dataIndex: 'default',
-                sortable: false,
-                align: 'center',
-                width: 55
-            });
-            
-        this[this.fieldType + 'Store'] = new Tine.widgets.grid.QuickaddGridPanel({
-            autoExpandColumn: 'value',
-            quickaddMandatory: 'id',
-            resetAllOnNew: true,
-            useBBar: true,
-            border: false,
-            recordClass: storeEntry,
-            store: new Ext.data.Store({
-                reader: new Ext.data.ArrayReader({idIndex: 0}, storeEntry),
-                listeners: {
-                    scope: this,
-                    'update': function (store, rec, operation) {
-                        rec.commit(true);
-                        
-                        // be sure that only one default is checked
-                        if (rec.get('default')) {
-                            store.each(function (r) {
-                                if (r.id !== rec.id) {
-                                    r.set('default', false);
-                                    r.commit(true);
-                                }
-                            }, this);
-                        }                       
-                    }
-                }
-            }),
-            plugins: [defaultCheck],
-            getColumnModel: function () {
-                return new Ext.grid.ColumnModel([
-                defaultCheck,
-                {
-                    id: 'id', 
-                    header: self.app.i18n._('ID'), 
-                    dataIndex: 'id', 
-                    hideable: false, 
-                    sortable: false, 
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: self.app.i18n._('Add a New ID...')
-                    })
-                }, {
-                    id: 'value', 
-                    header: self.app.i18n._('Value'), 
-                    dataIndex: 'value', 
-                    hideable: false, 
-                    sortable: false, 
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: self.app.i18n._('Add a New Value...')
-                    })
-                }]);
-            },
-            /**
-             * Do some checking on new entry add
-             */
-            onNewentry: function (recordData) {
-                // check if id exists in grid
-                if (this.store.findExact('id', recordData.id) !== -1) {
-                    Ext.Msg.alert(self.app.i18n._('Error'), self.app.i18n._('ID already exists'));
-                    return false;
-                }
-                    
-                // check if value exists in grid
-                if (this.store.findExact('value', recordData.value) !== -1) {
-                    Ext.Msg.alert(self.app.i18n._('Error'), self.app.i18n._('Value already exists'));
-                    return false;
-                }
-                
-                // if value is empty, set it to ID
-                if (Ext.isEmpty(recordData.value)) {
-                    recordData.value = recordData.id;
-                }
-                
-                Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.apply(this, arguments);
-            },
-            setValue: function (data) {
-                this.setStoreFromArray(data);
-            },
-            getValue: function () {
-                var data = [];
-                this.store.each(function (rec) {
-                    data.push({
-                        id: rec.get('id'),
-                        value: rec.get('value')
-                    });
-                });
-                
-                return data;
-            },
-            isValid: function () {
-                return true;
-            }
-        });
-        
-        /**
-         * Load values if exists in field definition
-         */
-        var configValue = ! Ext.isEmpty(this.record.get('definition')) && this.record.get('definition')[this.fieldType + 'Config'] 
-            ? this.record.get('definition')[this.fieldType + 'Config'].value 
+
+        this[this.fieldType + 'Store'] =  new Tine.Tinebase.widgets.keyfield.ConfigGrid({});
+
+        var configValue = ! Ext.isEmpty(this.record.get('definition')) && this.record.get('definition')[this.fieldType + 'Config']
+            ? this.record.get('definition')[this.fieldType + 'Config'].value
             : null;
-            
+
         if (this.record.id != 0 && configValue) {
-            this[this.fieldType + 'Store'].setValue(configValue.records);
-            
-            // if there is default value check it
-            if (configValue['default']) {
-                var defaultRecIdx = this[this.fieldType + 'Store'].store.findExact('id', configValue['default']);
-                if (defaultRecIdx !== -1) {
-                    this[this.fieldType + 'Store'].store.getAt(defaultRecIdx).set('default', true);
-                }
-            }
+            this[this.fieldType + 'Store'].setValue(configValue);
         }
-        
+
         return this[this.fieldType + 'Store'];
     },
     

@@ -42,7 +42,15 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'NEEDS-ACTION'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
+                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0,  'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')
+                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0,  'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Cancelled')
+                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1,  'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true), //_('In process')
+                ),
+                'default' => 'NEEDS-ACTION'
+            )
         ),
         self::TASK_PRIORITY => array(
                                    //_('Task priorities available')
@@ -52,7 +60,15 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Priority'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'NORMAL'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'LOW',     'value' => 'low',        'icon' => 'images/oxygen/16x16/actions/go-down.png', 'system' => true), //_('low')
+                    array('id' => 'NORMAL', 'value' => 'normal',   'icon' => 'images/oxygen/16x16/actions/go-next.png', 'system' => true), //_('normal')
+                    array('id' => 'HIGH',   'value' => 'high',     'icon' => 'images/oxygen/16x16/actions/go-up.png',   'system' => true), //_('high')
+                    array('id' => 'URGENT', 'value' => 'urgent',   'icon' => 'images/oxygen/16x16/emblems/emblem-important.png', 'system' => true), //_('urgent')
+                ),
+                'default' => 'NORMAL'
+            )
         ),
     );
     

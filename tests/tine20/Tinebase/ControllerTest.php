@@ -59,6 +59,7 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        Tinebase_Config::getInstance()->maintenanceMode = 0;
     }
     
     /**
@@ -84,6 +85,21 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
 //        
 //        $this->assertEquals('', session_id());
 //    }
+
+    /**
+     * testMaintenanceModeLoginFail
+     */
+    public function testMaintenanceModeLoginFail()
+    {
+        Tinebase_Config::getInstance()->maintenanceMode = 1;
+        $this->setExpectedException('Tinebase_Exception_MaintenanceMode');
+
+        $this->_instance->login(
+            'sclever',
+            Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
+            new \Zend\Http\PhpEnvironment\Request()
+        );
+    }
 
     /**
      * testCleanupCache

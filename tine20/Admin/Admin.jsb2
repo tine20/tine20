@@ -106,6 +106,14 @@
         {
           "text": "GridPanel.js",
           "path": "js/customfield/"
+        },
+        {
+          "text": "FieldManager.js",
+          "path": "js/config/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/config/"
         }
       ]
     },

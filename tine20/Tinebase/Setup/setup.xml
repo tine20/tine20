@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>9.2</version>
+    <version>9.4</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1376,7 +1376,7 @@
 
         <table>
             <name>tags_acl</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>tag_id</name>
@@ -1440,6 +1440,7 @@
                     <reference>
                         <table>tags</table>
                         <field>id</field>
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -1447,7 +1448,7 @@
 
         <table>
             <name>tags_context</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>tag_id</name>
@@ -1486,7 +1487,7 @@
                     <reference>
                         <table>tags</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
 
@@ -1495,7 +1496,7 @@
 
         <table>
             <name>tagging</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>tag_id</name>
@@ -1559,7 +1560,7 @@
                     <reference>
                         <table>tags</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>
@@ -1624,7 +1625,7 @@
 
         <table>
             <name>role_rights</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1649,7 +1650,6 @@
                     <length>64</length>
                     <notnull>true</notnull>
                 </field>
-
                 <index>
                     <name>id</name>
                     <primary>true</primary>
@@ -1678,7 +1678,7 @@
                     <reference>
                         <table>applications</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
                 <index>
@@ -1690,17 +1690,15 @@
                     <reference>
                         <table>roles</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
-
-
             </declaration>
         </table>
 
         <table>
             <name>role_accounts</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1756,7 +1754,7 @@
                     <reference>
                         <table>roles</table>
                         <field>id</field>
-                        <!-- add onupdate/ondelete? -->
+                        <ondelete>cascade</ondelete>
                     </reference>
                 </index>
             </declaration>

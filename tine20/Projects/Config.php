@@ -42,7 +42,15 @@ class Projects_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Projects_Model_Status'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'IN-PROCESS'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'NEEDS-ACTION', 'value' => 'On hold',     'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true),  //_('On hold')
+                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true),  //_('Completed')
+                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true),  //_('Cancelled')
+                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true),  //_('In process')
+                ),
+                'default' => 'IN-PROCESS'
+            )
         ),
         self::PROJECT_ATTENDEE_ROLE => array(
                                    //_('Project Attendee Role Available')
@@ -52,7 +60,13 @@ class Projects_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Projects_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'COWORKER'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'COWORKER',    'value' => 'Coworker',    'icon' => 'images/oxygen/16x16/apps/system-users.png',               'system' => true), //_('Coworker')
+                    array('id' => 'RESPONSIBLE', 'value' => 'Responsible', 'icon' => 'images/oxygen/16x16/apps/preferences-desktop-user.png',   'system' => true), //_('Responsible')
+                ),
+                'default' => 'COWORKER'
+            )
         ),
     );
     

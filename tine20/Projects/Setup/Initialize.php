@@ -17,49 +17,6 @@
 class Projects_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * init key fields
-     */
-    protected function _initializeKeyFields()
-    {
-        // create status config
-        $cb = new Tinebase_Backend_Sql(array(
-            'modelName' => 'Tinebase_Model_Config', 
-            'tableName' => 'config',
-        ));
-        $appId = Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId();
-        
-        $projectsStatusConfig = array(
-            'name'    => Projects_Config::PROJECT_STATUS,
-            'records' => array(
-                array('id' => 'NEEDS-ACTION', 'value' => 'On hold',     'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true),  //_('On hold')
-                array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true),  //_('Completed')
-                array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true),  //_('Cancelled')
-                array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => true),  //_('In process')
-            ),
-        );
-        
-        $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => $appId,
-            'name'              => Projects_Config::PROJECT_STATUS,
-            'value'             => json_encode($projectsStatusConfig),
-        )));
-
-        $projectsAttendeeRoleConfig = array(
-            'name'    => Projects_Config::PROJECT_ATTENDEE_ROLE,
-            'records' => array(
-                array('id' => 'COWORKER',    'value' => 'Coworker',    'icon' => 'images/oxygen/16x16/apps/system-users.png',               'system' => true), //_('Coworker')
-                array('id' => 'RESPONSIBLE', 'value' => 'Responsible', 'icon' => 'images/oxygen/16x16/apps/preferences-desktop-user.png',   'system' => true), //_('Responsible')
-            ),
-        );
-        
-        $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => $appId,
-            'name'              => Projects_Config::PROJECT_ATTENDEE_ROLE,
-            'value'             => json_encode($projectsAttendeeRoleConfig),
-        )));
-    }
-    
-    /**
      * init favorites
      */
     protected function _initializeFavorites()
@@ -71,7 +28,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId(),
             'model'             => 'Projects_Model_ProjectFilter',
         );
-        
+
         $closedStatus = Projects_Config::getInstance()->get(Projects_Config::PROJECT_STATUS)->records->filter('is_open', 0);
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(

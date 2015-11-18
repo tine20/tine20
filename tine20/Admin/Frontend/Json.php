@@ -1130,7 +1130,121 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteCustomfields($ids)
     {
         return $this->_delete($ids, Admin_Controller_Customfield::getInstance());
-    }   
+    }
+
+    /****************************** Config ******************************/
+//
+//    /**
+//     * gets all config which is available via admin module
+//     *
+//     * @param string $appname
+//     * @return array
+//     */
+//    public function getConfig($appname)
+//    {
+//        if (! Tinebase_Core::getUser()->hasRight($appname, 'admin')) {
+//            throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $appname");
+//        }
+//
+//        $config = Tinebase_Config::getAppConfig($appname);
+//        $properties = $config->getProperties();
+//
+//        $result = array();
+//
+//        foreach ($properties as $name => $definition) {
+//            if (array_key_exists('setByAdminModule', $definition) && $definition['setByAdminModule']) {
+//                $value = $config::getInstance()->get($name);
+//                if (is_object($value) && method_exists($value, 'toArray')) {
+//                    $value = $value->toArray();
+//                }
+//                if (is_object($value) && method_exists($value, 'toString')) {
+//                    $value = $value->toString();
+//                }
+//
+//                $result[$name] = $value;
+//            }
+//        }
+//
+//        return $result;
+//    }
+//
+//    /**
+//     * sets given config.
+//     *
+//     * NOTE: configs which got overwritten per config file have no effect here
+//     *
+//     * @param   string $appname
+//     * @param   string $key
+//     * @param   string $value
+//     * @return  array
+//     */
+//    public function setConfig($appname, $key, $value)
+//    {
+//        if (! Tinebase_Core::getUser()->hasRight($appname, 'admin')) {
+//            throw new Tinebase_Exception_AccessDenied("You do not have admin rights for $appname");
+//        }
+//
+//        $config = Tinebase_Config::getAppConfig($appname);
+//        $definition = $config->getDefinition($key);
+//
+//        if (! $definition) {
+//            throw new Tinebase_Exception_InvalidArgument('no such config setting');
+//        }
+//
+//        if (! array_key_exists('setByAdminModule', $definition) || $definition['setByAdminModule'] !== TRUE) {
+//            throw new Tinebase_Exception_InvalidArgument("setting of $key via admin module is not allowed");
+//        }
+//
+//        $config->set($key, $value);
+//    }
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter
+     * @param array $paging
+     * @return array
+     */
+    public function searchConfigs($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_Config::getInstance(), 'Tinebase_Model_ConfigFilter', false, self::TOTALCOUNT_COUNTRESULT);
+
+        return $result;
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getConfig($id)
+    {
+        return $this->_get($id, Admin_Controller_Config::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveConfig($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_Config::getInstance(), 'Tinebase_Model_Config', 'id');
+    }
+
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids
+     * @return array
+     */
+    public function deleteConfigs($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_Config::getInstance());
+    }
+
 
     /****************************** other *******************************/
     

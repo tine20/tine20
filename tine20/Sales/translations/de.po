@@ -776,9 +776,9 @@ msgstr "Lade ..."
 msgid "Euro (€)"
 msgstr "Euro (€)"
 
-#: js/CustomerEditDialog.js:45 js/SupplierEditDialog.js:41
-msgid "Either street or postbox is required!"
-msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
+#: js/CustomerEditDialog.js:45 js/SupplierEditDialog.js:45
+msgid "Either postalcode or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Postleitzahl oder ein Postfach an!"
 
 #: js/CustomerEditDialog.js:66
 msgid "Copy Customer"

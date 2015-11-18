@@ -358,7 +358,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
         
         $keys = array();
         
-        foreach ($_key->field as $keyfield) {
+        foreach ((array) $_key->field as $keyfield) {
             $keys[] = $this->_db->quoteIdentifier((string) $keyfield);
         }
 
