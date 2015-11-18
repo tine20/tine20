@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal inventory items"
-msgstr ""
-
 #: Model/InventoryItem.php:35
 msgid "Inventory item"
 msgid_plural "Inventory items"
@@ -158,6 +153,30 @@ msgstr ""
 msgid "Possible status."
 msgstr ""
 
+#: Config.php:40
+msgid "ordered"
+msgstr ""
+
+#: Config.php:41
+msgid "available"
+msgstr ""
+
+#: Config.php:42
+msgid "defect"
+msgstr ""
+
+#: Config.php:43
+msgid "missing"
+msgstr ""
+
+#: Config.php:44
+msgid "removed"
+msgstr ""
+
+#: Config.php:45
+msgid "unknown"
+msgstr ""
+
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
 msgstr ""
@@ -176,34 +195,10 @@ msgstr ""
 msgid "Inventory"
 msgstr ""
 
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr ""
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr ""
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr ""
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr ""
-
-#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
 msgid "All Inventory Items"
 msgstr ""
 
-#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
 msgid "All existing Inventory Items"
 msgstr ""

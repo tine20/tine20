@@ -245,13 +245,12 @@ msgid "Cost Centers"
 msgstr ""
 
 #: Model/Employee.php:258 js/FreeTimeGridPanel.js:77
-#: js/FreeTimeGridPanel.js:275 Setup/Initialize.php:74
+#: js/FreeTimeGridPanel.js:275 Config.php:79
 msgid "Vacation"
 msgstr ""
 
 #: Model/Employee.php:271 js/FreeTimeGridPanel.js:73
-#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121
-#: Setup/Initialize.php:73
+#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121 Config.php:78
 msgid "Sickness"
 msgstr ""
 
@@ -388,7 +387,7 @@ msgstr ""
 msgid "Calendars"
 msgstr ""
 
-#: js/AdminPanel.js:230 Config.php:118
+#: js/AdminPanel.js:230 Config.php:146
 msgid "Vacation expires"
 msgstr ""
 
@@ -692,47 +691,79 @@ msgstr ""
 msgid "Possible free time definitions"
 msgstr ""
 
-#: Config.php:79
+#: Config.php:85
 msgid "Vacation Status"
 msgstr ""
 
-#: Config.php:81
+#: Config.php:87
 msgid "Possible vacation status definitions"
 msgstr ""
 
-#: Config.php:89
+#: Config.php:94
+msgid "Requested"
+msgstr ""
+
+#: Config.php:95
+msgid "In process"
+msgstr ""
+
+#: Config.php:96
+msgid "Accepted"
+msgstr ""
+
+#: Config.php:97
+msgid "Declined"
+msgstr ""
+
+#: Config.php:104
 msgid "Sickness Status"
 msgstr ""
 
-#: Config.php:91
+#: Config.php:106
 msgid "Possible sickness status definitions"
 msgstr ""
 
-#: Config.php:99
+#: Config.php:113 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr ""
+
+#: Config.php:114 Setup/Update/Release6.php:300
+msgid "Unexcused"
+msgstr ""
+
+#: Config.php:121
 msgid "Default Feast Calendar"
 msgstr ""
 
-#: Config.php:101
+#: Config.php:123
 msgid ""
 "Here you can define the default feast calendar used to set feast days and "
 "other free days in datepicker"
 msgstr ""
 
-#: Config.php:108
+#: Config.php:130
 msgid "Extra freetime type"
 msgstr ""
 
-#: Config.php:110
+#: Config.php:132
 msgid "Possible extra free time definitions"
 msgstr ""
 
-#: Config.php:120
+#: Config.php:139 Setup/Update/Release7.php:373
+msgid "Payed"
+msgstr ""
+
+#: Config.php:140 Setup/Update/Release7.php:374
+msgid "Not payed"
+msgstr ""
+
+#: Config.php:148
 msgid ""
 "Here you can define the day, when the vacation days taken from last year "
 "expires, the format is MM-DD."
 msgstr ""
 
-#: Config.php:128
+#: Config.php:156
 msgid "Report Templates Container ID"
 msgstr ""
 
@@ -760,47 +791,15 @@ msgstr ""
 msgid "All available accounts"
 msgstr ""
 
-#: Setup/Initialize.php:88 Setup/Update/Release7.php:373
-msgid "Payed"
-msgstr ""
-
-#: Setup/Initialize.php:89 Setup/Update/Release7.php:374
-msgid "Not payed"
-msgstr ""
-
-#: Setup/Initialize.php:103
-msgid "Requested"
-msgstr ""
-
-#: Setup/Initialize.php:104
-msgid "In process"
-msgstr ""
-
-#: Setup/Initialize.php:105
-msgid "Accepted"
-msgstr ""
-
-#: Setup/Initialize.php:106
-msgid "Declined"
-msgstr ""
-
-#: Setup/Initialize.php:121 Setup/Update/Release6.php:299
-msgid "Excused"
-msgstr ""
-
-#: Setup/Initialize.php:122 Setup/Update/Release6.php:300
-msgid "Unexcused"
-msgstr ""
-
-#: Setup/Initialize.php:141
+#: Setup/Initialize.php:65
 msgid "Full-time 40 hours"
 msgstr ""
 
-#: Setup/Initialize.php:148
+#: Setup/Initialize.php:72
 msgid "Full-time 37.5 hours"
 msgstr ""
 
-#: Setup/Initialize.php:155
+#: Setup/Initialize.php:79
 msgid "Part-time 20 hours"
 msgstr ""
 

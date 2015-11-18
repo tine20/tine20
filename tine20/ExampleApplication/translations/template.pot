@@ -13,11 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:79
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
-
 #: Model/ExampleRecord.php:34
 msgid "example record"
 msgid_plural "example records"
@@ -76,18 +71,18 @@ msgid ""
 "ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr ""
-
-#: Setup/Initialize.php:33
+#: Config.php:42
 msgid "Completed"
 msgstr ""
 
-#: Setup/Initialize.php:34
+#: Config.php:43
 msgid "Cancelled"
 msgstr ""
 
-#: Setup/Initialize.php:35
+#: Config.php:44
 msgid "In process"
+msgstr ""
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr ""
