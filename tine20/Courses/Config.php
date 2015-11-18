@@ -100,6 +100,13 @@ class Courses_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tinebase_Config_KeyFieldRecord'),
             'clientRegistryInclude' => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'ON',       'value' => 'On',       'image' => 'images/oxygen/16x16/actions/dialog-apply.png',   'system' => true), //_('On')
+                    array('id' => 'OFF',      'value' => 'Off',      'image' => 'images/oxygen/16x16/actions/dialog-cancel.png',  'system' => true), //_('Off')
+                    array('id' => 'FILTERED', 'value' => 'Filtered', 'image' => 'images/oxygen/16x16/actions/view-choose.png',    'system' => true), //_('Filtered')
+                ),
+            )
         ),
         self::INTERNET_ACCESS_GROUP_ON => array(
         //_('Internet Access Group (ON)')

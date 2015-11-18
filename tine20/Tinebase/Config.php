@@ -322,6 +322,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const CONFD_FOLDER = 'confdfolder';
 
     /**
+     * maintenance mode
+     *
+     * @var bool
+     */
+    const MAINTENANCE_MODE = 'maintenanceMode';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -503,15 +510,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
         ),
         self::SYNC_USER_CONTACT_DATA => array(
-                //_('Sync contact data from sync backend')
-                'label'                 => 'Sync contact data from sync backend',
-                //_('Sync user contact data from sync backend')
-                'description'           => 'Sync user contact data from sync backend',
-                'type'                  => 'bool',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-                'default'               => TRUE
+            //_('Sync contact data from sync backend')
+            'label'                 => 'Sync contact data from sync backend',
+            //_('Sync user contact data from sync backend')
+            'description'           => 'Sync user contact data from sync backend',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
@@ -715,13 +722,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         self::MAX_USERNAME_LENGTH => array(
-                //_('Max username length')
-                'label'                 => 'Max username length',
-                //_('Max username length')
-                'description'           => 'Max username length',
-                'type'                  => 'int',
-                'default'               => NULL,
-                'clientRegistryInclude' => FALSE,
+            //_('Max username length')
+            'label'                 => 'Max username length',
+            //_('Max username length')
+            'description'           => 'Max username length',
+            'type'                  => 'int',
+            'default'               => NULL,
+            'clientRegistryInclude' => FALSE,
         ),
         self::CONFD_FOLDER => array(
             //_('conf.d folder name')
@@ -733,6 +740,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::MAINTENANCE_MODE => array(
+            //_('Maintenance mode enabled')
+            'label'                 => 'Maintenance mode enabled',
+            //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
+            'description'           => 'Installation is in maintenance mode. With this only users having the maintenance right can login',
+            'type'                  => 'bool',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
         ),
     );
     
@@ -847,15 +865,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * get application config
      *
      * @param  string  $applicationName Application name
-     * @return string  $configClassName
-     * 
-     * @todo shouldn't this return a config object??
+     * @return Tinebase_Config_Abstract  $configClass
      */
     public static function getAppConfig($applicationName)
     {
         $configClassName = $applicationName . '_Config';
         if (@class_exists($configClassName)) {
-            return $configClassName;
+            return $configClassName::getInstance();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Application ' . $applicationName . ' has no config.');

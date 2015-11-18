@@ -1,0 +1,56 @@
+/*!
+ * Expresso Lite
+ * Master CSS styles to be applied everywhere.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ */
+
+* { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }
+table { border-collapse:collapse; }
+input::-moz-focus-inner, button::-moz-focus-inner { border:0; padding:0; }
+
+::-moz-placeholder { font-style:italic; color:#555; }
+::-webkit-input-placeholder { font-style:italic; color:#949494; }
+
+html { height:100%; }
+body { height:100%; margin:0; }
+
+@media (max-width:1024px) { /* mobile */
+    body, table, input[type=button], input[type=text], input[type=email], input[type=password], input[type=submit], select, button, textarea
+    { font:11pt Arial,sans-serif; color:#1A1A1A; }
+}
+@media (min-width:1025px) { /* desktop */
+    body, table, input[type=button], input[type=text], input[type=email], input[type=password], input[type=submit], select, button, textarea
+    { font:10pt Arial,sans-serif; color:#1A1A1A; }
+}
+
+a
+{ color:#1B41D8 }
+
+input[type=text], input[type=email], input[type=password], textarea
+{ border:1px solid #BBB; background-color:white; resize:none; }
+
+/*select, option
+{ color:white; background-color:#4479BA; border:1px solid #4272B2; line-height:1; }*/
+
+button, input[type=button], input[type=submit]
+{ padding:5px 10px; background-color:#4479BA; color:white; border:1px solid #4272B2; border-radius:1px;
+    cursor:pointer; -moz-user-select:none; -webkit-user-select:none; }
+button:focus, input[type=button]:focus, input[type=submit]:focus
+{ background-color:#87A6D2; }
+
+button:hover, input[type=button]:hover, input[type=submit]:hover
+{ background-color:#87A6D2; }
+
+button:active, input[type=button]:active, input[type=submit]:active
+{ background-color:#ADC2E1; }
+
+blockquote
+{ margin:2px 0 4px 4px; padding-left:5px; border-left:1px solid #BFD2E1; }
+
+/*input[type=text]:focus,input[type=password]:focus { box-shadow:0 0 4px #6EA2DE; }*/
+
+.hidden { display: none; }

@@ -1,0 +1,68 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetMonth object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Month_template { display:none; }
+.Month_container { height:100%; }
+
+.Month_buttons { position:absolute; width:100%; height:38px; text-align:center;
+    padding-top:6px; }
+
+.Month_weekLabels { position:absolute; top:38px; width:100%; height:20px; }
+.Month_labelWeek { display:inline-block; width:14.2857%; color:#AAA; padding:4px 0 0 4px; }
+@media (max-width:1024px) { .Month_labelWeek { font-size:80%; } } /* mobile */
+@media (min-width:1025px) { .Month_labelWeek { font-size:90%; } } /* desktop */
+
+@media (max-width:1024px) { /* mobile */
+    .Month_labelShort { }
+    .Month_labelFull { display:none; }
+}
+@media (min-width:1025px) { /* desktop */
+    .Month_labelShort { display:none; }
+    .Month_labelFull { }
+}
+
+.Month_canvas { position:absolute; top:calc(38px + 20px); width:100%;
+    height:calc(100% - 38px - 20px); } /* 100% - buttons - weekLabels */
+
+.Month_week { }
+.Month_4weeks { height:25%; }
+.Month_5weeks { height:20%; }
+.Month_6weeks { height:16.6666%; }
+
+.Month_day { display:inline-block; width:14.2857%; height:100%; overflow:hidden;
+    padding:0 2px; border-left:1px solid #DDD; border-top:1px solid #DDD; }
+@media (max-width:1024px) { .Month_day { cursor:pointer; } } /* mobile */
+
+.Month_dayDisplay, .Month_dayContent { display:inline-block; width:100%; }
+.Month_dayDisplay { color:#777; height:1em; }
+@media (max-width:1024px) { .Month_dayDisplay { font-size:80%; } } /* mobile */
+@media (min-width:1025px) { .Month_dayDisplay { font-size:90%; } } /* desktop */
+
+.Month_dayContent { height:calc(100% - 1em); overflow-x:hidden; overflow-y:auto; }
+@media (max-width:1024px) { .Month_dayContent { font-size:80%; } } /* mobile */
+@media (min-width:1025px) { .Month_dayContent { } } /* desktop */
+
+.Month_dayOutside { background-color:#F9F9F9; }
+.Month_dayOutside .Month_dayDisplay { color:#BBB; }
+.Month_dayToday { background-color:#EEF5FF; }
+.Month_dayToday .Month_dayDisplay { font-weight:bold; }
+
+.Month_event { display:inline-block; margin-bottom:2px; white-space:nowrap; cursor:pointer; }
+@media (max-width:1024px) { /* mobile */
+    .Month_eventHour { display:none; }
+    .Month_eventName { }
+}
+@media (min-width:1025px) { /* desktop */
+    .Month_eventHour { }
+    .Month_eventName { }
+}
+.Month_eventDeclined { text-decoration:line-through; }
+
+.Month_loading { text-align:center; margin:10px; color:#888; font-style:italic; }

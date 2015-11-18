@@ -1,0 +1,27 @@
+/*!
+ * Expresso Lite
+ * Styles for TextBadges object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#TextBadges_template { display:none; }
+
+.TextBadges_ul { display:inline-block; vertical-align:middle; list-style:outside none none;
+    padding:0; margin:0; }
+.TextBadges_inputLi { display:inline-block; vertical-align:middle; }
+.TextBadges_inputLi > input { border:none !important; margin-left:4px; }
+.TextBadges_inputLi > input:focus { outline:0; }
+.TextBadges_badgeLi { display:inline-block; vertical-align:middle; font-size:90%; color:#222;
+    background-color:#F4F4F4; border:1px solid #DDD; border-radius:3px; cursor:pointer; }
+@media (max-width:1024px) { /* mobile */
+    .TextBadges_inputLi { padding:2px; }
+    .TextBadges_badgeLi { padding:5px 7px; margin:3px; }
+}
+@media (min-width:1025px) { /* desktop */
+    .TextBadges_badgeLi { padding:2px 5px; margin:1px; }
+}
+.TextBadges_badgeLi:hover { border-color:#F88; }

@@ -52,7 +52,14 @@ class Sipgate_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sipgate_Model_ConnectionStatus'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'accepted'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'accepted', 'value' => 'accepted', 'icon' => "../../images/../Sipgate/res/call_accepted.png", 'system' => true),  //_('accepted')
+                    array('id' => 'outgoing', 'value' => 'outgoing', 'icon' => "../../images/../Sipgate/res/call_outgoing.png", 'system' => true),  //_('outgoing')
+                    array('id' => 'missed',   'value' => 'missed',   'icon' => "../../images/../Sipgate/res/call_missed.png", 'system' => true),  //_('missed')
+                ),
+                'default' => 'accepted'
+            )
         ),
         self::CONNECTION_TOS => array(
             //_('Connection TOS')
@@ -62,7 +69,14 @@ class Sipgate_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sipgate_Model_ConnectionTos'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'voice'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'voice', 'value' => 'Telephone Call',  'icon' => "../../images/oxygen/16x16/apps/kcall.png",   'system' => true),  //_('Telephone Call')
+                    array('id' => 'fax',   'value' => 'Facsimile',       'icon' => "../../images/../Sipgate/res/16x16/kfax.png", 'system' => true),  //_('Facsimile')
+
+                ),
+                'default' => 'voice'
+            )
         ),
         self::ACCOUNT_TYPE => array(
             //_('Account Type')
@@ -72,7 +86,13 @@ class Sipgate_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sipgate_Model_AccountType'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'shared'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'plus', 'value' => 'basic/plus', 'icon' => "../../images/oxygen/16x16/places/user-identity.png", 'system' => true),  //_('basic/plus')
+                    array('id' => 'team', 'value' => 'team',       'icon' => "../../images/oxygen/16x16/apps/system-users.png",    'system' => true),  //_('team')
+                ),
+                'default' => 'shared'
+            )
         ),
         self::ACCOUNT_ACCOUNT_TYPE => array(
             //_('Sipgate Account Type')
@@ -82,7 +102,14 @@ class Sipgate_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sipgate_Model_AccountAccountType'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'plus'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'private', 'value' => 'private', 'icon' => "../../images/oxygen/16x16/places/user-identity.png", 'system' => true),  //_('private')
+                    array('id' => 'shared',     'value' => 'shared',   'icon' => "../../images/oxygen/16x16/apps/system-users.png",    'system' => true),  //_('shared')
+
+                ),
+                'default' => 'plus'
+            )
         ),
     );
 

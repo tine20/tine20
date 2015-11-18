@@ -89,7 +89,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Addressbook_Model_Salutation'),
             'clientRegistryInclude' => TRUE,
-        //            'default'               => 'MR'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'MR',      'value' => 'Mr',      'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
+                    array('id' => 'MS',      'value' => 'Ms',      'gender' => Addressbook_Model_Salutation::GENDER_FEMALE, 'image' => 'images/empty_photo_female.png',  'system' => true), //_('Ms')
+                    array('id' => 'COMPANY', 'value' => 'Company', 'gender' => Addressbook_Model_Salutation::GENDER_OTHER,  'image' => 'images/empty_photo_company.png', 'system' => true), //_('Company')
+                ),
+//                'default' => 'MR'
+            )
         ),
         self::CONTACT_ADDRESS_PARSE_RULES_FILE => array(
         //_('Parsing rules for addresses')

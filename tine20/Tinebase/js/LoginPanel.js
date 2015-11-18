@@ -458,7 +458,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             
         if (form.isValid()) {
             Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
-            
+
             Ext.Ajax.request({
                 scope: this,
                 params : {
@@ -468,39 +468,31 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     securitycode: values.securitycode
                 },
                 timeout: 60000, // 1 minute
-                callback: function (request, httpStatus, response) {
+                success:function(response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.title), _('Please wait!'));
                         window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope, response);
                     } else {
-                        if (responseData.data && responseData.data.code === 510) {
-                            // NOTE: when communication is lost, we can't create a nice ext window.
-                            (function() {
-                                Ext.MessageBox.hide();
-                                alert(_('Connection lost, please check your network!'));
-                            }).defer(1000);
-                        } else {
-                            var modSsl = Tine.Tinebase.registry.get('modSsl');
-                            var resultMsg = modSsl ? _('There was an error verifying your certificate!') :
-                                _('Your username and/or your password are wrong!');
-                            Ext.MessageBox.show({
-                                title: _('Login failure'),
-                                msg: resultMsg,
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR,
-                                fn: function () {
-                                    this.getLoginPanel().getForm().findField('password').focus(true);
-                                    if(document.getElementById('useCaptcha')) {
-                                        if(typeof responseData.c1 != 'undefined') {
-                                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
-                                            document.getElementById('contImgCaptcha').style.visibility = 'visible';  
-                                        }
+                        var modSsl = Tine.Tinebase.registry.get('modSsl');
+                        var resultMsg = modSsl ? _('There was an error verifying your certificate!!!') :
+                            _('Your username and/or your password are wrong!!!');
+                        Ext.MessageBox.show({
+                            title: _('Login failure'),
+                            msg: resultMsg,
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR,
+                            fn: function () {
+                                this.getLoginPanel().getForm().findField('password').focus(true);
+                                if(document.getElementById('useCaptcha')) {
+                                    if(typeof responseData.c1 != 'undefined') {
+                                        document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
+                                        document.getElementById('contImgCaptcha').style.visibility = 'visible';
                                     }
-                                }.createDelegate(this)
-                            });
-                        }
+                                }
+                            }.createDelegate(this)
+                        });
                     }
                 }
             });

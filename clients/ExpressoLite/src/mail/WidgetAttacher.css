@@ -1,0 +1,19 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetAttacher object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Attacher_template { display:none; }
+
+.Attacher_unit { border:1px solid #BBB; margin-bottom:2px; background:rgba(192,192,192,.15); }
+.Attacher_unit > table { width:100%; }
+.Attacher_tdContent { text-align:right; }
+.Attacher_text { color:#222; }
+.Attacher_fileNameDisplay { }
+.Attacher_fileTitle { }
+.Attacher_fileSize { font-size:90%; color:#777; }

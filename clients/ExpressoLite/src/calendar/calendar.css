@@ -1,0 +1,30 @@
+/*!
+ * Expresso Lite
+ * Structural and decoration CSS styles of email module.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#sections { display:none; }
+#middleBody,#rightBody { position:absolute; width:100%; height:100%; overflow:hidden; }
+#rightBody { border-left:1px solid #EEE; overflow-y:auto; }
+
+#btnRefresh,#txtRefresh { margin-bottom:16px; }
+#btnRefresh { }
+#txtRefresh { display:none; font-style:italic; color:#888; padding:4px 0 5px 0; }
+
+/* -- Month or week rendering. */
+#renderOptions li, #navMonth li { -moz-user-select:none; -webkit-user-select:none; }
+
+#renderOptions { margin:0 8px 0 0; padding:8px 0; }
+#renderOptions > li { list-style:none; cursor:pointer; margin:0; padding:8px; }
+#renderOptions > li:hover { background:#F5F5F5; }
+.renderOptionCurrent { background:#D9E8FB; }
+
+/* -- Month navigation -- */
+#navMonth { margin:0 8px 0 0; padding:8px 0; border-top:1px solid #EEE; }
+#navMonth > li { list-style:none; cursor:pointer; margin:0; padding:8px; }
+#navMonth > li:hover { background:#F5F5F5; }

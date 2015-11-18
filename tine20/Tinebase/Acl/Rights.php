@@ -49,6 +49,12 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_OWN_STATE = 'manage_own_state';
+
+    /**
+     * the right to use the installation in maintenance mode
+     * @staticvar string
+     */
+    const MAINTENANCE = 'maintenance';
     
     /**
      * account type anyone
@@ -123,6 +129,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::CHECK_VERSION,
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
+                self::MAINTENANCE,
             );
         } else {
             $addRights = array();
@@ -158,6 +165,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_OWN_STATE  => array(
                 'text'          => $translate->_('Manage own client state'),
                 'description'   => $translate->_('The right to manage the own client state.'),
+            ),
+            self::MAINTENANCE       => array(
+                'text'          => $translate->_('Maintenance'),
+                'description'   => $translate->_('The right to use the installation in maintenance mode.'),
             ),
         );
         

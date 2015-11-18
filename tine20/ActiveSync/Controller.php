@@ -120,6 +120,9 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         Syncroton_Registry::set(Syncroton_Registry::SYNCSTATEBACKEND,    new Syncroton_Backend_SyncState(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::CONTENTSTATEBACKEND, new Syncroton_Backend_Content(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
         Syncroton_Registry::set(Syncroton_Registry::POLICYBACKEND,       new Syncroton_Backend_Policy(Tinebase_Core::getDb(), SQL_TABLE_PREFIX . 'acsync_'));
-        Syncroton_Registry::set('loggerBackend',       Tinebase_Core::getLogger());
+        Syncroton_Registry::set(Syncroton_Registry::LOGGERBACKEND,       Tinebase_Core::getLogger());
+        Syncroton_Registry::set(Syncroton_Registry::SESSION_VALIDATOR,   function() {
+            return ! Tinebase_Core::inMaintenanceMode();
+        });
     }
 }

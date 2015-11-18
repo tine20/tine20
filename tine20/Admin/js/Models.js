@@ -129,3 +129,35 @@ Tine.Admin.Model.Application = Tine.Tinebase.data.Record.create([
     recordName: 'Application',
     recordsName: 'Applications'
 });
+
+/**
+ * @namespace Tine.Admin.Model
+ * @class     Tine.Admin.Model.Config
+ * @extends   Tine.Admin.data.Record
+ *
+ * Model of a application config settings
+ */
+Tine.Admin.Model.Config = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'application_id'},
+    {name: 'name'},
+    {name: 'value'},
+    {name: 'label'},
+    {name: 'description'},
+    {name: 'type'},
+    {name: 'options'},
+    {name: 'clientRegistryInclude'},
+    {name: 'setByAdminModule'},
+    {name: 'setBySetupModule'},
+    {name: 'default'},
+    {name: 'source'}
+    //{name: 'settings'}
+], {
+    appName: 'Admin',
+    modelName: 'Config',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Config', 'Configs', n); gettext('Configs');
+    recordName: 'Config',
+    recordsName: 'Configs'
+});

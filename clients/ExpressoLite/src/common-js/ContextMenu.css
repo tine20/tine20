@@ -1,0 +1,20 @@
+/*!
+ * Expresso Lite
+ * CSS styles for ContextMenu.js class.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
+ */
+
+.ContextMenu_ul { position:absolute; margin:0; overflow-y:auto; background:white;
+    box-shadow:3px 3px 18px #666; padding:3px; }
+.ContextMenu_ul > li { list-style:none; margin:0; padding:4px 10px; white-space:nowrap; }
+@media (max-width:1024px) { .ContextMenu_ul > li { padding:12px 10px; } } /* mobile */
+.ContextMenu_liOption { cursor:pointer; }
+.ContextMenu_liOption:hover { background:#E8F1FD; }
+.ContextMenu_liHeader { color:#8A8A8A; font-style:italic; border-top:1px solid #E8E8E8; }
+.ContextMenu_hoverBtn { background-color:black; opacity:.075; }
+@media (max-width:1024px) { .ContextMenu_darkCover { width:100%; height:100%;
+    display:inline-block; position:absolute; background-color:black; opacity:.4; } } /* mobile */

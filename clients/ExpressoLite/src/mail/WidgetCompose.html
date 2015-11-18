@@ -1,0 +1,41 @@
+<!--
+ * Expresso Lite
+ * WidgetMessages template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+-->
+
+<section id="Compose_template">
+    <section class="Compose_panel"><!-- will be shown into a non-modal window -->
+        <div class="Compose_fields">
+            <div class="Compose_toBlock">
+                <div class="Compose_fieldLabel">Para:</div><div class="Compose_fieldAddr Compose_to"></div>
+            </div>
+            <div class="Compose_ccBlock">
+                <div class="Compose_fieldLabel">Cc:</div><div class="Compose_fieldAddr Compose_cc"></div>
+            </div>
+            <div class="Compose_toggleFields">
+                <input type="button" class="Compose_ccToggle" value="Cc..."/>
+                <input type="button" class="Compose_bccToggle" value="Bcc..."/>
+            </div>
+            <div class="Compose_bccBlock">
+                <div class="Compose_fieldLabel">Bcc:</div><div class="Compose_fieldAddr Compose_bcc"></div>
+            </div>
+        </div>
+        <div><div class="Compose_fieldLabel Compose_fieldLabelSubject">Assunto:</div><input
+            type="text" placeholder="Assunto..." class="Compose_subject"/></div>
+        <div contentEditable="true" class="Compose_body"></div>
+        <div class="Compose_attacher"></div>
+        <div>
+            <input type="button" class="Compose_send" value="&nbsp; enviar &nbsp;" title="Enviar este email"/> &nbsp;
+            <input type="button" class="Compose_draft" value="salvar rascunho" title="Salvar na pasta Rascunhos"/> &nbsp;
+            <input type="button" class="Compose_attachNew" title="Anexar arquivo" value="anexar..."/> &nbsp; &nbsp;
+            <label title="Marcar esta mensagem como importante"><input type="checkbox" class="Compose_important"/><div
+                class="icoImportant" title="Marcar esta mensagem como importante"></div></label>
+        </div>
+    </section>
+    <img class="Compose_throbber" src="../img/chromiumthrobber.svg"/>
+</section>

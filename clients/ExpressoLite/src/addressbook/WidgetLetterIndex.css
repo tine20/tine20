@@ -1,0 +1,68 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetLetterIndex object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+@media (min-width:1025px) { /* desktop */
+    #letterIndexAside {
+        display: none;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #letterIndexAside {
+        top: 0px;
+        right: 0px;
+        position: absolute;
+        height: 100%;
+        width: 20px;
+        background-color: white;
+        z-index: 1;
+        display: table;
+        padding: 0px;
+    }
+
+    #letterIndexTable {
+        height: 100%;
+        width: 100%;
+        border-collapse: collapse;
+        border: none;
+    }
+
+    #letterIndexTable tr td {
+        border-top: 1px solid #FFF;
+        font-size: x-small;
+        padding: 1px;
+        vertical-align: middle;
+        text-align: center;
+        background-color: #999;
+        color: #EEE;
+        cursor: pointer;
+    }
+
+    #letterIndexTable tr:first-child td {
+        border-top: none;
+    }
+
+    #highlightedLetterDiv {
+        position: fixed;
+        right: 0px;
+        top: 50px;
+        width: 24px;
+        height: 32px;
+        border-top: 1px solid #FFF;
+        border-bottom: 1px solid #FFF;
+        background-color: #999;
+        color: #EEE;
+        font-weight: bold;
+        line-height: 32px;
+        padding: 0px;
+        text-align: center;
+        cursor: pointer;
+    }
+}

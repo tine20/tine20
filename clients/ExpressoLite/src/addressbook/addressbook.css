@@ -1,0 +1,45 @@
+/*!
+ * Expresso Lite
+ * Structural and decoration CSS styles of addressbook module.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
+ */
+
+#mainContent {
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width:1024px) { /* mobile */
+    #mainContent {
+        overflow-y: hidden;
+    }
+}
+
+.message {
+    height: 50px;
+    padding: 10px; color : #888;
+    font-style: italic;
+    margin: 10px;
+    text-align: center;
+    color: #888;
+}
+
+#contactListSection {
+    height: 100%;
+}
+
+@media (min-width:1025px) { /* desktop */
+    #contactListSection {
+        overflow-y: scroll;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #contactListSection {
+        overflow-y: hidden;
+    }
+}

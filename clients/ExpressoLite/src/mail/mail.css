@@ -1,0 +1,53 @@
+/*!
+ * Expresso Lite
+ * Structural and decoration CSS styles of email module.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#info,#icons,#sections { display:none; }
+
+#btnUpdateFolders,#txtUpdateFolders,#btnCompose { margin-bottom:16px; }
+#btnUpdateFolders { }
+#txtUpdateFolders { display:none; font-style:italic; color:#888; padding:4px 0 5px 0; }
+#btnCompose       { margin-left:6px }
+
+/* --- Page content --- */
+
+#middleBody,#rightBody { position:absolute; width:100%; height:100%; overflow-y:auto; }
+#headlinesArea { }
+#headlinesFooter { text-align:center; padding:12px 0 20px 0; }
+#loadedCount { color:#888; }
+
+#subject { position:absolute; width:100%; height:62px; }
+#subjectText { display:inline-block; width:calc(100% - 55px); vertical-align:top;
+    font-size:115%; color:#777; padding:12px 8px; }
+#subjectMenu { display:inline-block; width:32px; height:32px; margin-top:10px;
+    background-image:url('../img/layout-icons32.png'); background-position:0 -32px; cursor:pointer; }
+#messagesArea { position:absolute; width:100%; top:62px; }
+
+
+/* --- Icon templates --- */
+
+.icoAttach,.icoImportant,.icoReplied,.icoForwarded,.icoConfirm,.icoSigned,.icoHigh0,.icoHigh1
+    { width:16px; height:16px; display:inline-block; background-image:url(../img/flags.png); }
+.icoAttach    { background-position:0 0; opacity:.65; }
+.icoImportant { background-position:0 -16px; opacity:.65; }
+.icoReplied   { background-position:0 -32px; opacity:.65; }
+.icoForwarded { background-position:0 -48px; opacity:.65; }
+.icoConfirm   { background-position:0 -64px; opacity:.65; }
+.icoSigned    { background-position:0 -80px; opacity:.65; }
+.icoHigh0     { background-position:0 -96px; }
+.icoHigh1     { background-position:0 -112px; }
+.icoCheck0,.icoCheck1 { background:no-repeat center; display:inline-block; }
+@media (max-width:1024px) { /* mobile */
+    .icoCheck0,.icoCheck1 { background-size:80%; width:34px; height:32px; }
+}
+@media (min-width:1025px) { /* desktop */
+    .icoCheck0,.icoCheck1 { width:32px; height:32px; }
+}
+.icoCheck0 { background-image:url(../img/check0.png); }
+.icoCheck1 { background-image:url(../img/check1.png); }

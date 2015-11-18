@@ -466,7 +466,7 @@ abstract class Tinebase_Export_Abstract
     {
          $i18nApplication = Tinebase_Translation::getTranslation($_application);
          $config = Tinebase_Config::getAppConfig($_application);
-         $result = $config::getInstance()->get($_keyfield)->records->getById($_property);
+         $result = $config->get($_keyfield)->records->getById($_property);
          return isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
     }
     

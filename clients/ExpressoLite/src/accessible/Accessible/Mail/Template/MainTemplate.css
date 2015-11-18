@@ -1,0 +1,58 @@
+/*!
+ * Expresso Lite
+ * CSS for MainTemplate.php template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Fatima Tonon <fatima.tonon@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+/* --- MAIN MENU --- */
+#menu ul { margin-left:-30px; margin-right:10px; }
+
+/* --- HEADLINES --- */
+#headlinesTable { width:calc(100% - 20px); }
+#headlinesTable { border:1px solid #FFF; border-collapse:collapse; }
+#headlinesTable caption { padding:5px 10px; font-weight:bold; }
+
+#headlinesTable th, td { border:2px solid #FFF; background-color:#F4F4F4; }
+#headlinesTable th { font-weight:400; font-size:110%; padding:5px; background-color:#005076; color:#FFF; }
+#headlinesTable th:first-of-type { border-top-left-radius:6px; }
+#headlinesTable th:last-of-type { border-top-right-radius:6px; }
+
+.markUnread { font-weight:600; }
+.alignCenter { text-align:center; }
+.alignLeft { padding:0px 10px; }
+.emptyHeadlines { font-size:150%; }
+
+/* --- ICONS --- */
+
+.flags {
+    background:url("../../../../img/flags.png") no-repeat;
+    display:inline-block;
+    width:16px;
+    height:16px;
+}
+.flag-important { background-position:0px -17px; }
+.flag-attach { background-position:0px 0px; }
+
+.icoAttach, .icoImportant, .icoReplied, .icoForwarded, .icoConfirm,
+    .icoSigned, .icoHigh0, .icoHigh1 {
+    width:16px;
+    height:16px;
+    display:inline-block;
+    background-image:url(../../../../img/flags.png);
+}
+
+.icoAttach { background-position:0 0; opacity:.65; }
+.icoImportant { background-position:0 -16px; opacity:.65; }
+.icoReplied { background-position:0 -32px; opacity:.65; }
+.icoForwarded { background-position:0 -48px; opacity:.65; }
+.icoConfirm { background-position:0 -64px; opacity:.65; }
+.icoSigned { background-position:0 -80px; opacity:.65; }
+.icoHigh0 { background-position:0 -96px; }
+.icoHigh1 { background-position:0 -112px; }
+
+#actions { margin-bottom: 35px }
+#pagination ul { margin-left:-30px; margin-top: 25px }

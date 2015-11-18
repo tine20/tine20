@@ -117,6 +117,10 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     collapseIf : function(e){
         if(!e.within(this.wrap) && !e.within(this.layer)){
             this.collapse();
+
+            if (this.inEditor && this.editor) {
+                this.onCancel();
+            }
         }
     },
     
@@ -147,7 +151,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         });
         this.fireEvent('expand', this);
     },
-    
+
     /**
      * get values from form
      * 
@@ -230,11 +234,25 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @return {String} value The selected value
      */
     getValue: function() {
-        return this.currentValue;
+        return Ext.decode(Ext.encode(this.currentValue));
     },
     
     initComponent: function() {
         Ext.ux.form.LayerCombo.superclass.initComponent.apply(this, arguments);
+
+        this.on('afterrender', this.onAfterRender, this, {buffer: 500});
+    },
+
+    onAfterRender: function() {
+        // if used as gridEditor
+        if (this.inEditor) {
+            var editorWrapEl = this.el.up('.x-grid-editor', 5);
+            if (editorWrapEl) {
+                this.editor = Ext.getCmp(editorWrapEl.id);
+                this.editor.allowBlur = true;
+                this.expand();
+            }
+        }
     },
 
     /**
@@ -300,6 +318,10 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     onCancel: function() {
         this.setValue(this.currentValue);
         this.collapse();
+
+        if (this.inEditor && this.editor) {
+            this.editor.cancelEdit();
+        }
     },
     
     /**
@@ -329,7 +351,11 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         this.setValue(v);
         
         this.fireEvent('select', this, v);
-        this.startValue = v;
+        //this.startValue = v;
+
+        if (this.inEditor && this.editor) {
+            this.editor.completeEdit();
+        }
     },
     
     /**

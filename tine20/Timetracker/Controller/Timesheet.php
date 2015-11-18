@@ -253,6 +253,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         if ($_action != 'get') {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
             if (! $timeaccount->is_open) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' This Timeaccount is already closed!');
+                if ($_throw) {
+                    throw new Tinebase_Exception_AccessDenied('This Timeaccount is already closed!');
+                }
                 return FALSE;
             }
             

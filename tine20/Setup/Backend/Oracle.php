@@ -623,7 +623,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             $snippet = '  CREATE INDEX ' . $this->_db->quoteIdentifier($name) . ' ON ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
         }        
 
-        foreach ($_key->field as $keyfield) {
+        foreach ((array) $_key->field as $keyfield) {
             $key = '"' . (string)$keyfield . '"';
             if (!empty($keyfield->length)) {
                 $key .= ' (' . $keyfield->length . ')';

@@ -1,0 +1,11 @@
+/*!
+ * Expresso Lite
+ * CSS for OpenFolderTemplate.css template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Fatima Tonon <fatima.tonon@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#folders ul { margin-left:-30px; margin-right:10px; }

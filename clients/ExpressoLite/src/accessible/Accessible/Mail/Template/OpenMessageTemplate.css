@@ -1,0 +1,25 @@
+/*!
+ * Expresso Lite
+ * CSS for OpenMessageTemplate.php template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Fatima Tonon <fatima.tonon@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+blockquote { margin:2px 0 4px 14px; padding-left:5px; border-left:1px solid #BFD2E1; }
+
+.fieldName { font-weight:bold; }
+.attachName { font-weight:600; }
+
+#composePanelBody { border:1px solid #CCC; padding:6px 6px; }
+#composePanelBody pre {
+    overflow-x:auto;
+    white-space:pre-wrap; /* css-3 */
+    white-space:-moz-pre-wrap !important; /* Mozilla, since 1999 */
+}
+
+#emailActions ul { margin-left:-30px; }
+
+#emailAttachments ul { margin-left:-30px; }

@@ -1,0 +1,126 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetContactList object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#WidgetContactList_templates {
+    display: none;
+}
+
+.WidgetContactList_letterSeparator {
+    font-size: x-large;
+    font-weight: bolder;
+    color: #005A97;
+    padding: 8px 24px 8px 8px;
+    text-align: left;
+    border-bottom: 1px solid #CCC;
+}
+
+@media (max-width:1024px) { /* mobile */
+    .WidgetContactList_letterSeparator {
+        background-color: #F0F0F0;
+    }
+}
+
+@media (min-width:1025px) { /* desktop */
+    .WidgetContactList_letterSeparator {
+        margin: 20px 0px 4px 0px;
+    }
+}
+
+@media (max-width:1024px) { /* mobile */
+    #WidgetContactList_mainSection {
+        height: 100%;
+        overflow-y: auto;
+        padding-bottom: 30px;
+    }
+
+    .WidgetContactList_item {
+        padding: 12px 6px;
+        border-bottom: 1px solid #DDD;
+        cursor: pointer;
+    }
+
+    .WidgetContactList_name {
+        font-size: large;
+    }
+
+    .WidgetContactList_email {
+        display: none;
+    }
+
+    .WidgetContactList_phonesDiv {
+        display: none;
+    }
+}
+
+@media (min-width:1025px) { /* desktop */
+    #WidgetContactList_mainSection {
+        padding-bottom: 30px;
+    }
+
+    .WidgetContactList_item {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 0px;
+        width: 320px;
+        background-color: #E9E9E9;
+        border: 30px solid transparent;
+        border-image: url("../img/page_ear.png") 30 / 30px repeat;
+        background-clip: padding-box;
+        cursor: pointer;
+    }
+
+    .WidgetContactList_itemSelected {
+        background-color: #d9e8fb !important;
+        border-image: url("../img/page_ear_selected.png") 30 / 30px repeat;
+    }
+
+    .WidgetContactList_name {
+        width: 100%;
+        font-weight: bold;
+        padding-bottom: 6px;
+    }
+
+    .WidgetContactList_email {
+        font-style: italic;
+        background: url("../img/e_mail.png") no-repeat;
+        padding-bottom: 3px;
+        padding-left: 20px;
+        font-size: small;
+    }
+
+    .WidgetContactList_phonesDiv {
+        display: block;
+    }
+
+    .WidgetContactList_phonesDiv * {
+        display: inline-block;
+        padding-right: 20px;
+    }
+
+    .WidgetContactList_phone {
+        background: url("../img/phone.png") no-repeat;
+        padding-left: 20px;
+    }
+
+    .WidgetContactList_mobile {
+        background: url("../img/mobile.png") no-repeat;
+        padding-left: 20px;
+    }
+}
+
+#WidgetContactList_footer {
+    text-align: center;
+    padding: 12px 0;
+}
+
+#WidgetContactList_loadedCountSpan{
+    color: #888;
+    padding-bottom: 10px;
+}

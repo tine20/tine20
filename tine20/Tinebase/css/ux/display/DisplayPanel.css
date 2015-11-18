@@ -67,3 +67,11 @@
     left:5px;
     bottom:6px;
 }
+
+.tw-editdialog .x-form-item .x-form-display-field {
+    border: 1px solid #b5b8c8;
+    padding: 3px;
+    height: 11px;
+    background-color:#fff;
+    background-image:url(../../../../themes/tine20/resources/images/tine20/form/text-bg.gif);
+}
