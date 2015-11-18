@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:102
+#: Controller.php:101
 #, python-format
 msgid "%s's personal files"
 msgstr "Личные файлы %s"
@@ -170,11 +170,15 @@ msgstr "URL"
 msgid "Expiration Time"
 msgstr ""
 
-#: js/DownloadLinkGridPanel.js:271 js/NodeGridPanel.js:189
+#: js/DownloadLinkGridPanel.js:271
+msgid "Access Count"
+msgstr ""
+
+#: js/DownloadLinkGridPanel.js:278 js/NodeGridPanel.js:189
 msgid "Last Modified Time"
 msgstr "Время последнего изменения"
 
-#: js/DownloadLinkGridPanel.js:279 js/NodeGridPanel.js:196
+#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:196
 msgid "Last Modified By"
 msgstr "Последнее изменение:"
 
@@ -338,14 +342,14 @@ msgstr "Введите имя новой папки:"
 msgid "No {0} added"
 msgstr "{0} не добавлен"
 
-#: Controller/Node.php:318
+#: Controller/Node.php:319
 msgid "My folders"
 msgstr "Мои папки"
 
-#: Controller/Node.php:325
+#: Controller/Node.php:326
 msgid "Shared folders"
 msgstr "Общие папки"
 
-#: Controller/Node.php:332
+#: Controller/Node.php:333
 msgid "Other users folders"
 msgstr "Папки других пользователей"

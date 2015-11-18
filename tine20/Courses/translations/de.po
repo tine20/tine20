@@ -171,49 +171,61 @@ msgstr "Standardfilter, der beim Starten der Klassenverwaltung geladen wird"
 msgid "Internet access options."
 msgstr "Internet Zugangsoptionen"
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "An"
+
+#: Config.php:106
+msgid "Off"
+msgstr "Aus"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Gefiltert"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Internet Zugangsgruppe (AN)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Zugangsgruppe (GEFILTERT)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Studentengruppe"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr "Schülerimportdefinition"
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr "Studenten-Loginnamen Prefix"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr "Schüler Passwort Suffix"
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr "Benutzernamensschema für Schüler"
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Samba-Benutzereinstellungen"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr "Standard Abteilung"
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr "Die standard Abteilung für neue Kurse"
 
@@ -221,22 +233,10 @@ msgstr "Die standard Abteilung für neue Kurse"
 msgid "Courses"
 msgstr "Klassen"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "An"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Aus"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Gefiltert"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr "Schule"
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr "Default Schule für Klassen Applikation "

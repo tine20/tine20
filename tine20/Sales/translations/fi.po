@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Finnish (http://www.transifex.com/tine20/tine20/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -389,7 +389,7 @@ msgstr[1] "Sopimukset"
 #: Model/Product.php:48 Model/CostCenter.php:50 js/OfferEditDialog.js:102
 #: js/CostCenterEditDialog.js:108 js/ContractEditDialog.js:203
 #: js/CostCenterGridPanel.js:56 js/ExceptionHandler.js:91
-#: js/OrderConfirmationEditDialog.js:102 Config.php:183 Config.php:239
+#: js/OrderConfirmationEditDialog.js:102 Config.php:183 Config.php:251
 msgid "Number"
 msgstr "Numero"
 
@@ -518,7 +518,8 @@ msgid "Price Net"
 msgstr ""
 
 #: Model/PurchaseInvoice.php:158 Model/Invoice.php:164
-#: js/InvoiceEditDialog.js:364 js/PurchaseInvoiceEditDialog.js:281
+#: js/InvoiceEditDialog.js:364 js/InvoiceDetailsPanel.js:132
+#: js/PurchaseInvoiceEditDialog.js:281
 msgid "Price Gross"
 msgstr ""
 
@@ -535,7 +536,8 @@ msgstr ""
 msgid "Sales Tax"
 msgstr ""
 
-#: Model/PurchaseInvoice.php:190 js/PurchaseInvoiceEditDialog.js:309
+#: Model/PurchaseInvoice.php:190 js/PurchaseInvoiceDetailsPanel.js:132
+#: js/PurchaseInvoiceEditDialog.js:309
 msgid "Total Price"
 msgstr ""
 
@@ -609,20 +611,20 @@ msgstr ""
 msgid "Billing Point"
 msgstr ""
 
-#: Model/ProductAggregate.php:120 Model/Invoice.php:252 Model/Invoice.php:256
+#: Model/ProductAggregate.php:124 Model/Invoice.php:252 Model/Invoice.php:256
 #: Model/Invoice.php:260 Model/Invoice.php:264 Model/Invoice.php:268
 #: Model/Invoice.php:272 Model/Invoice.php:276
 msgid "Invoice Item"
 msgstr ""
 
-#: Model/ProductAggregate.php:284
+#: Model/ProductAggregate.php:288
 msgid "Piece"
 msgstr ""
 
 #: Model/Invoice.php:35 js/InvoiceEditDialog.js:391
 #: js/InvoiceEditDialog.js:404 js/InvoiceDetailsPanel.js:98
 #: js/PurchaseInvoiceDetailsPanel.js:98 js/PurchaseInvoiceEditDialog.js:389
-#: Setup/Initialize.php:123
+#: Config.php:210
 msgid "Invoice"
 msgid_plural "Invoices"
 msgstr[0] ""
@@ -648,7 +650,7 @@ msgstr ""
 
 #: Model/Invoice.php:132 js/InvoiceEditDialog.js:519
 #: js/InvoiceDetailsPanel.js:131 js/PurchaseInvoiceDetailsPanel.js:131
-#: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:151
+#: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:152
 msgid "Cleared"
 msgstr ""
 
@@ -685,18 +687,11 @@ msgstr ""
 msgid "Unit"
 msgstr ""
 
-#: js/AddressGridPanel.js:53
-#, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
-msgstr ""
-
-#: js/AddressGridPanel.js:56
+#: js/AddressGridPanel.js:46
 msgid "Clipboard"
 msgstr ""
 
-#: js/AddressGridPanel.js:61 js/CustomerEditDialog.js:126
+#: js/AddressGridPanel.js:51 js/CustomerEditDialog.js:126
 #: js/SupplierEditDialog.js:122 js/Sales.js:60
 msgid "Copy address to the clipboard"
 msgstr ""
@@ -768,7 +763,7 @@ msgstr "Ladataan..."
 msgid "Euro (€)"
 msgstr ""
 
-#: js/CustomerEditDialog.js:45 js/SupplierEditDialog.js:41
+#: js/CustomerEditDialog.js:45
 msgid "Either street or postbox is required!"
 msgstr ""
 
@@ -897,6 +892,10 @@ msgstr "Lisää kuvaus..."
 #: js/ContractEditDialog.js:94
 msgid "Please use a decimal number here!"
 msgstr "Käytä desimaalinumeroita tässä!."
+
+#: js/SupplierEditDialog.js:41
+msgid "Either postalcode or postbox is required!"
+msgstr ""
 
 #: js/SupplierEditDialog.js:62
 msgid "Copy Supplier"
@@ -1075,11 +1074,11 @@ msgstr "Sopimusnumero"
 msgid "Should the contract number be set manually or be auto-created?"
 msgstr "Luodaanko sopimusnumero automaattisesti?"
 
-#: Config.php:170 Config.php:226
+#: Config.php:170 Config.php:238
 msgid "automatically"
 msgstr "automaattisesti"
 
-#: Config.php:171 Config.php:227
+#: Config.php:171 Config.php:239
 msgid "manually"
 msgstr "käsin"
 
@@ -1087,11 +1086,11 @@ msgstr "käsin"
 msgid "Contract Number Validation"
 msgstr "Sopimusnumeron vahvistaminen"
 
-#: Config.php:180 Config.php:236
+#: Config.php:180 Config.php:248
 msgid "The Number can be validated as text or number."
 msgstr "Numero voi olla tekstiä tai numeroita"
 
-#: Config.php:184 Config.php:240
+#: Config.php:184 Config.php:252
 msgid "Text"
 msgstr "Teksti"
 
@@ -1114,82 +1113,124 @@ msgid "Possible Invoice Types."
 msgstr ""
 
 #: Config.php:211
+msgid "Reversal"
+msgstr ""
+
+#: Config.php:212 Config.php:291 Setup/Update/Release8.php:2155
+msgid "Credit"
+msgstr ""
+
+#: Config.php:218
 msgid "Product Category"
 msgstr ""
 
-#: Config.php:213
+#: Config.php:220
 msgid "Possible Product Categories."
 msgstr ""
 
-#: Config.php:221
+#: Config.php:227 Setup/Update/Release8.php:1953
+msgid "Default"
+msgstr ""
+
+#: Config.php:233
 msgid "Product Number Creation"
 msgstr ""
 
-#: Config.php:223
+#: Config.php:235
 msgid "Should the product number be set manually or be auto-created?"
 msgstr ""
 
-#: Config.php:234
+#: Config.php:246
 msgid "Product Number Validation"
 msgstr ""
 
-#: Config.php:247
+#: Config.php:259
 msgid "Product Number Prefix"
 msgstr ""
 
-#: Config.php:249
+#: Config.php:261
 msgid "The prefix of the product number."
 msgstr ""
 
-#: Config.php:257
+#: Config.php:269
 msgid "Product Number Zero Fill"
 msgstr ""
 
-#: Config.php:259
+#: Config.php:271
 msgid "Fill the number with leading zero"
 msgstr ""
 
-#: Config.php:267
+#: Config.php:279
 msgid "Payment Method"
 msgstr ""
 
-#: Config.php:269
+#: Config.php:281
 msgid "Possible Payment Methods."
 msgstr ""
 
-#: Config.php:277
+#: Config.php:288 Setup/Update/Release8.php:1904
+#: Setup/Update/Release8.php:2152
+msgid "Bank transfer"
+msgstr ""
+
+#: Config.php:289 Setup/Update/Release8.php:1905
+#: Setup/Update/Release8.php:2153
+msgid "Direct debit"
+msgstr ""
+
+#: Config.php:290 Setup/Update/Release8.php:2154
+msgid "Cancellation"
+msgstr ""
+
+#: Config.php:292 Setup/Update/Release8.php:2156
+msgid "Credit card"
+msgstr ""
+
+#: Config.php:293 Setup/Update/Release8.php:2157
+msgid "Paypal"
+msgstr ""
+
+#: Config.php:299
 msgid "Invoice Cleared"
 msgstr ""
 
-#: Config.php:279
+#: Config.php:301
 msgid "Possible Invoice Cleared States."
 msgstr ""
 
-#: Config.php:302
+#: Config.php:308
+msgid "to clear"
+msgstr ""
+
+#: Config.php:309
+msgid "cleared"
+msgstr ""
+
+#: Config.php:330
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:304
+#: Config.php:332
 msgid "Enabled Features in Sales Application."
 msgstr ""
 
-#: Config.php:311
+#: Config.php:339
 msgid "Invoices Module"
 msgstr ""
 
-#: Config.php:315
+#: Config.php:343
 msgid "Offers Module"
 msgstr ""
 
-#: Config.php:319
+#: Config.php:347
 msgid "Order Confirmations Module"
 msgstr ""
 
-#: Config.php:323
+#: Config.php:351
 msgid "Suppliers Module"
 msgstr ""
 
-#: Config.php:327
+#: Config.php:355
 msgid "Purchase Invoice Module"
 msgstr ""
 
@@ -1209,78 +1250,35 @@ msgstr "Omat sopimukset"
 msgid "Contracts created by myself"
 msgstr "Omat sopimukseni"
 
-#: Setup/Initialize.php:68 Setup/Update/Release8.php:514
+#: Setup/Initialize.php:68 Setup/Update/Release8.php:515
 msgid "All Customers"
 msgstr ""
 
-#: Setup/Initialize.php:69 Setup/Update/Release8.php:515
+#: Setup/Initialize.php:69 Setup/Update/Release8.php:516
 msgid "All customer records"
 msgstr ""
 
-#: Setup/Initialize.php:80 Setup/Update/Release8.php:1335
+#: Setup/Initialize.php:80 Setup/Update/Release8.php:1337
 msgid "All Offers"
 msgstr ""
 
-#: Setup/Initialize.php:81 Setup/Update/Release8.php:1336
+#: Setup/Initialize.php:81 Setup/Update/Release8.php:1338
 msgid "All offer records"
 msgstr ""
 
-#: Setup/Initialize.php:109 Setup/Update/Release8.php:1954
-msgid "Default"
-msgstr ""
-
-#: Setup/Initialize.php:124
-msgid "Reversal"
-msgstr ""
-
-#: Setup/Initialize.php:125 Setup/Initialize.php:157
-#: Setup/Update/Release8.php:2154
-msgid "Credit"
-msgstr ""
-
-#: Setup/Initialize.php:139
-msgid "to clear"
-msgstr ""
-
-#: Setup/Initialize.php:140
-msgid "cleared"
-msgstr ""
-
-#: Setup/Initialize.php:154 Setup/Update/Release8.php:1905
-#: Setup/Update/Release8.php:2151
-msgid "Bank transfer"
-msgstr ""
-
-#: Setup/Initialize.php:155 Setup/Update/Release8.php:1906
-#: Setup/Update/Release8.php:2152
-msgid "Direct debit"
-msgstr ""
-
-#: Setup/Initialize.php:156 Setup/Update/Release8.php:2153
-msgid "Cancellation"
-msgstr ""
-
-#: Setup/Initialize.php:158 Setup/Update/Release8.php:2155
-msgid "Credit card"
-msgstr ""
-
-#: Setup/Initialize.php:159 Setup/Update/Release8.php:2156
-msgid "Paypal"
-msgstr ""
-
-#: Setup/Update/Release8.php:145
+#: Setup/Update/Release8.php:146
 msgid "Status"
 msgstr "Tila"
 
-#: Setup/Update/Release8.php:157
+#: Setup/Update/Release8.php:158
 msgid "Cleared In"
 msgstr ""
 
-#: Setup/Update/Release8.php:1396
+#: Setup/Update/Release8.php:1397
 msgid "All Suppliers"
 msgstr ""
 
-#: Setup/Update/Release8.php:1397
+#: Setup/Update/Release8.php:1398
 msgid "All supllier records"
 msgstr ""
 
@@ -1292,51 +1290,51 @@ msgstr ""
 msgid "All purchase invoices"
 msgstr ""
 
-#: Setup/Update/Release8.php:1446
+#: Setup/Update/Release8.php:1445
 msgid "All Products"
 msgstr ""
 
-#: Setup/Update/Release8.php:1447
+#: Setup/Update/Release8.php:1446
 msgid "All product records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1457
+#: Setup/Update/Release8.php:1456
 msgid "All Contracts"
 msgstr ""
 
-#: Setup/Update/Release8.php:1458
+#: Setup/Update/Release8.php:1457
 msgid "All contract records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1468
+#: Setup/Update/Release8.php:1467
 msgid "All Invoices"
 msgstr ""
 
-#: Setup/Update/Release8.php:1469
+#: Setup/Update/Release8.php:1468
 msgid "All invoice records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1479
+#: Setup/Update/Release8.php:1478
 msgid "All Cost Centers"
 msgstr ""
 
-#: Setup/Update/Release8.php:1480
+#: Setup/Update/Release8.php:1479
 msgid "All costcenter records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1490
+#: Setup/Update/Release8.php:1489
 msgid "All Divisions"
 msgstr ""
 
-#: Setup/Update/Release8.php:1491
+#: Setup/Update/Release8.php:1490
 msgid "All division records"
 msgstr ""
 
-#: Setup/Update/Release8.php:1501
+#: Setup/Update/Release8.php:1500
 msgid "All Order Confirmations"
 msgstr ""
 
-#: Setup/Update/Release8.php:1502
+#: Setup/Update/Release8.php:1501
 msgid "All order confirmation records"
 msgstr ""
 

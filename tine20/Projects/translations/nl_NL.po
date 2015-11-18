@@ -153,57 +153,57 @@ msgid ""
 "impact other Projects systems on export or syncronisation."
 msgstr "Mogelijke projecten status. Houd er rekening mee dat de extra status van het project andere projecten kan beïnvloeden op de uitvoer en synchronisatie."
 
+#: Config.php:47
+msgid "On hold"
+msgstr "In de wacht"
+
 #: Config.php:48
+msgid "Completed"
+msgstr "Afgerond"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "Geannuleerd"
+
+#: Config.php:50
+msgid "In process"
+msgstr "In behandeling"
+
+#: Config.php:56
 msgid "Project Attendee Role Available"
 msgstr ""
 
-#: Config.php:50
+#: Config.php:58
 msgid ""
 "Possible Project attendee roles. Please note that additional project "
 "attendee roles might impact other Projects systems on export or "
 "syncronisation."
 msgstr ""
 
-#: Setup/Initialize.php:34
-msgid "On hold"
-msgstr "In de wacht"
-
-#: Setup/Initialize.php:35
-msgid "Completed"
-msgstr "Afgerond"
-
-#: Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Geannuleerd"
-
-#: Setup/Initialize.php:37
-msgid "In process"
-msgstr "In behandeling"
-
-#: Setup/Initialize.php:50
+#: Config.php:65
 msgid "Coworker"
 msgstr "Mede werknemer"
 
-#: Setup/Initialize.php:51
+#: Config.php:66
 msgid "Responsible"
 msgstr "Verantwoordelijk"
 
-#: Setup/Initialize.php:79
+#: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Al mijn open projecten"
 
-#: Setup/Initialize.php:99
+#: Setup/Initialize.php:56
 msgid "My projects that I'm responsible for"
 msgstr "Mijn projecten waar ik verantwoordelijk voor ben"
 
-#: Setup/Initialize.php:100
+#: Setup/Initialize.php:57
 msgid "All my open projects that I am responsible for"
 msgstr "Alle open projecten waar ik verantwoordelijk voor ben"
 
-#: Setup/Initialize.php:120
+#: Setup/Initialize.php:77
 msgid "My waiting projects"
 msgstr "Mijn wachtende projecten"
 
-#: Setup/Initialize.php:121
+#: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "Mijn projecten in de wacht"

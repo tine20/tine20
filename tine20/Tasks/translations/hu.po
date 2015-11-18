@@ -109,7 +109,7 @@ msgstr "Leírás megadása..."
 msgid "Percentage"
 msgstr "Százalék"
 
-#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Setup/Initialize.php:35
+#: js/TaskEditDialog.js:235 js/TaskGridPanel.js:171 Config.php:48
 #: Setup/Update/Release5.php:75
 msgid "Completed"
 msgstr "Teljesítve"
@@ -218,72 +218,72 @@ msgid ""
 "impact other Tasks systems on export or syncronisation."
 msgstr "Lehetséges feladat állapot. Kérlek jegyezd meg, hogy a további résztvevő állapot hatással lehet másik Feladat rendszerre exportáláskor vagy szinkronizáláskor."
 
-#: Config.php:48
+#: Config.php:47 Setup/Update/Release5.php:74
+msgid "No response"
+msgstr "Nincs válasz"
+
+#: Config.php:49 Setup/Update/Release5.php:76
+msgid "Cancelled"
+msgstr "Lemondva"
+
+#: Config.php:50 Setup/Update/Release5.php:77
+msgid "In process"
+msgstr "Folyamatban"
+
+#: Config.php:56
 msgid "Task priorities available"
 msgstr "Feladat sürgősség elérhető"
 
-#: Config.php:50
+#: Config.php:58
 msgid ""
 "Possible task priorities. Please note that additional priorities might "
 "impact other Tasks systems on export or syncronisation."
 msgstr "Lehetséges feladat sürgősség. Kérlek jegyezd meg, hogy a további sürgősségek hatással lehetnek más Feladat rendszerekre exportálás vagy szinkronizálás esetén."
 
-#: Setup/Initialize.php:34 Setup/Update/Release5.php:74
-msgid "No response"
-msgstr "Nincs válasz"
-
-#: Setup/Initialize.php:36 Setup/Update/Release5.php:76
-msgid "Cancelled"
-msgstr "Lemondva"
-
-#: Setup/Initialize.php:37 Setup/Update/Release5.php:77
-msgid "In process"
-msgstr "Folyamatban"
-
-#: Setup/Initialize.php:50 Setup/Update/Release5.php:167
+#: Config.php:65 Setup/Update/Release5.php:167
 msgid "low"
 msgstr "alacsony"
 
-#: Setup/Initialize.php:51 Setup/Update/Release5.php:168
+#: Config.php:66 Setup/Update/Release5.php:168
 msgid "normal"
 msgstr "normál"
 
-#: Setup/Initialize.php:52 Setup/Update/Release5.php:169
+#: Config.php:67 Setup/Update/Release5.php:169
 msgid "high"
 msgstr "magas"
 
-#: Setup/Initialize.php:53 Setup/Update/Release5.php:170
+#: Config.php:68 Setup/Update/Release5.php:170
 msgid "urgent"
 msgstr "sürgős"
 
-#: Setup/Initialize.php:81 Setup/Update/Release3.php:65
+#: Setup/Initialize.php:38 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
 msgstr "Minden feladat a feladatlistámon"
 
-#: Setup/Initialize.php:90
+#: Setup/Initialize.php:47
 msgid "My open tasks"
 msgstr "Nyitott feladataim"
 
-#: Setup/Initialize.php:99
+#: Setup/Initialize.php:56
 msgid "My open tasks this week"
 msgstr "Nyitott feladataim erre a hétre"
 
-#: Setup/Initialize.php:108
+#: Setup/Initialize.php:65
 msgid "All tasks for me"
 msgstr "Minden feladataim"
 
-#: Setup/Initialize.php:109
+#: Setup/Initialize.php:66
 msgid "All tasks that I am responsible for"
 msgstr "Minden feladat amiért felelős vagyok"
 
-#: Setup/Initialize.php:116
+#: Setup/Initialize.php:73
 msgid "Last modified by me"
 msgstr "Utoljára módosítottam"
 
-#: Setup/Initialize.php:117
+#: Setup/Initialize.php:74
 msgid "All tasks that I have last modified"
 msgstr "Minden feladat amit utoljára én módosítottam"
 
-#: Setup/Initialize.php:126
+#: Setup/Initialize.php:83
 msgid "Tasks without responsible"
 msgstr "Feladatok felelős nélkül"

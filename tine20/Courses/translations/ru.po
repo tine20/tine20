@@ -176,49 +176,61 @@ msgstr "Будет загружено по-умолчанию при загру�
 msgid "Internet access options."
 msgstr "Опции доступа в интернет."
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "Вкл"
+
+#: Config.php:106
+msgid "Off"
+msgstr "выкл"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Отфильтровано"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Группа доступа  в интернет (ВКЛ)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Группа доступа  в интернет (ФИЛЬТРУЕМЫЙ)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Студенческая группа"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr "Определение импорта студентов"
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr "Префикс для имени студента"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr "Схема имени пользователя студента"
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Схема имён студентов (0 = только фамилии (10 букв), 1 = фамилия + 2 буквы от имени"
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Пользовательские настройки для SAMBA"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr "Отдел по-умолчанию"
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr "Отдел по-умолчанию для новых курсов"
 
@@ -226,22 +238,10 @@ msgstr "Отдел по-умолчанию для новых курсов"
 msgid "Courses"
 msgstr "Курсы"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Вкл"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "выкл"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Отфильтровано"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr "Школа"
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr "Школа по-умолчанию для приложения Курсы"

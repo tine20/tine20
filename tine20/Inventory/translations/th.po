@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 07:44+0000\n"
+"PO-Revision-Date: 2015-11-18 13:16+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal inventory items"
-msgstr "%s's ของรายการส่วนตัว"
 
 #: Model/InventoryItem.php:35
 msgid "Inventory item"
@@ -160,6 +155,30 @@ msgstr ""
 msgid "Possible status."
 msgstr "สถานะเป็นไปได้"
 
+#: Config.php:40
+msgid "ordered"
+msgstr "สั่งแล้ว"
+
+#: Config.php:41
+msgid "available"
+msgstr "มีอยู่"
+
+#: Config.php:42
+msgid "defect"
+msgstr "ชำรุด"
+
+#: Config.php:43
+msgid "missing"
+msgstr "หาย"
+
+#: Config.php:44
+msgid "removed"
+msgstr "ได้เอาออก"
+
+#: Config.php:45
+msgid "unknown"
+msgstr "ไม่รู้จัก"
+
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
 msgstr ""
@@ -178,34 +197,10 @@ msgstr "สิ่งของถูกนำเข้าเมื่อ ###ว�
 msgid "Inventory"
 msgstr ""
 
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "สั่งแล้ว"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "มีอยู่"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "ชำรุด"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "หาย"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "ได้เอาออก"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "ไม่รู้จัก"
-
-#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
 msgid "All Inventory Items"
 msgstr ""
 
-#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
 msgid "All existing Inventory Items"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:54+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/tine20/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -68,7 +68,8 @@ msgstr ""
 msgid "Every %s day"
 msgstr ""
 
-#: Model/Rrule.php:344 js/RrulePanel.js:84
+#: Model/Rrule.php:344 js/RrulePanel.js:84 js/Calendar-FAT-debug.js:10696
+#: js/Calendar-FAT.js:6
 msgid "Daily"
 msgstr "每日"
 
@@ -114,22 +115,32 @@ msgid "second to last"
 msgstr ""
 
 #: Model/Rrule.php:431 js/RrulePanel.js:574 js/RrulePanel.js:755
+#: js/Calendar-FAT-debug.js:11186 js/Calendar-FAT-debug.js:11367
+#: js/Calendar-FAT.js:6
 msgid "last"
 msgstr "最后"
 
 #: Model/Rrule.php:437 js/RrulePanel.js:570 js/RrulePanel.js:751
+#: js/Calendar-FAT-debug.js:11182 js/Calendar-FAT-debug.js:11363
+#: js/Calendar-FAT.js:6
 msgid "first"
 msgstr "第一"
 
 #: Model/Rrule.php:440 js/RrulePanel.js:571 js/RrulePanel.js:752
+#: js/Calendar-FAT-debug.js:11183 js/Calendar-FAT-debug.js:11364
+#: js/Calendar-FAT.js:6
 msgid "second"
 msgstr "第二"
 
 #: Model/Rrule.php:443 js/RrulePanel.js:572 js/RrulePanel.js:753
+#: js/Calendar-FAT-debug.js:11184 js/Calendar-FAT-debug.js:11365
+#: js/Calendar-FAT.js:6
 msgid "third"
 msgstr "第三"
 
 #: Model/Rrule.php:446 js/RrulePanel.js:573 js/RrulePanel.js:754
+#: js/Calendar-FAT-debug.js:11185 js/Calendar-FAT-debug.js:11366
+#: js/Calendar-FAT.js:6
 msgid "fourth"
 msgstr "第四"
 
@@ -170,11 +181,14 @@ msgstr ""
 msgid "Start"
 msgstr "开始"
 
-#: Model/Event.php:368 js/RrulePanel.js:335
+#: Model/Event.php:368 js/RrulePanel.js:335 js/Calendar-FAT-debug.js:10947
+#: js/Calendar-FAT.js:6
 msgid "End"
 msgstr "结束"
 
-#: Model/Event.php:369 js/EventDetailsPanel.js:270 js/GridView.js:127
+#: Model/Event.php:369 js/EventDetailsPanel.js:270 js/GridView.js:216
+#: js/Calendar-FAT-debug.js:4766 js/Calendar-FAT-debug.js:5683
+#: js/Calendar-FAT.js:6
 msgid "Blocking"
 msgstr ""
 
@@ -183,17 +197,25 @@ msgid "Classification"
 msgstr ""
 
 #: Model/Event.php:371 js/ResourceEditDialog.js:95 js/EventEditDialog.js:266
-#: js/Model.js:299 js/GridView.js:161
+#: js/Model.js:293 js/GridView.js:250 js/Calendar-FAT-debug.js:839
+#: js/Calendar-FAT-debug.js:4800 js/Calendar-FAT-debug.js:8373
+#: js/Calendar-FAT-debug.js:11698 js/Calendar-FAT.js:6
 msgid "Description"
 msgstr "描述"
 
 #: Model/Event.php:372 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
-#: js/EventEditDialog.js:127 js/Model.js:298 js/GridView.js:148
+#: js/EventEditDialog.js:127 js/Model.js:292 js/GridView.js:237
+#: js/Calendar-FAT-debug.js:838 js/Calendar-FAT-debug.js:4787
+#: js/Calendar-FAT-debug.js:5693 js/Calendar-FAT-debug.js:8239
+#: js/Calendar-FAT-debug.js:11576 js/Calendar-FAT.js:6
 msgid "Location"
 msgstr "位置"
 
 #: Model/Event.php:373 js/EventDetailsPanel.js:284 js/EventEditDialog.js:330
-#: js/Model.js:318 js/GridView.js:154 js/PerspectiveCombo.js:127
+#: js/Model.js:312 js/GridView.js:243 js/Calendar-FAT-debug.js:858
+#: js/Calendar-FAT-debug.js:4793 js/Calendar-FAT-debug.js:5697
+#: js/Calendar-FAT-debug.js:8447 js/Calendar-FAT-debug.js:10234
+#: js/Calendar-FAT.js:6 js/PerspectiveCombo.js:127 Config.php:201
 msgid "Organizer"
 msgstr "组织者"
 
@@ -202,13 +224,19 @@ msgid "Priority"
 msgstr ""
 
 #: Model/Event.php:375 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:183 js/GridView.js:173 js/AttendeeGridPanel.js:213
-#: js/AddToEventPanel.js:88
+#: js/EventEditDialog.js:183 js/GridView.js:262 js/AttendeeGridPanel.js:213
+#: js/AddToEventPanel.js:88 js/Calendar-FAT-debug.js:4812
+#: js/Calendar-FAT-debug.js:8295 js/Calendar-FAT-debug.js:8972
+#: js/Calendar-FAT-debug.js:12229 js/Calendar-FAT-debug.js:12616
+#: js/Calendar-FAT.js:6
 msgid "Status"
 msgstr "状态"
 
 #: Model/Event.php:376 js/ContactEventsGridPanel.js:113
-#: js/EventEditDialog.js:82 js/Model.js:297 js/GridView.js:143
+#: js/EventEditDialog.js:82 js/Model.js:291 js/GridView.js:232
+#: js/Calendar-FAT-debug.js:837 js/Calendar-FAT-debug.js:4782
+#: js/Calendar-FAT-debug.js:8194 js/Calendar-FAT-debug.js:12216
+#: js/Calendar-FAT.js:6
 msgid "Summary"
 msgstr "摘要"
 
@@ -236,111 +264,135 @@ msgstr "不"
 msgid "Yes"
 msgstr "是"
 
-#: js/calendarRenderer.js:30
+#: js/calendarRenderer.js:30 js/Calendar-FAT-debug.js:12674
+#: js/Calendar-FAT.js:6
 msgid ""
 "This event is originally stored in a calendar you don't have access to."
 msgstr ""
 
-#: js/calendarRenderer.js:31
+#: js/calendarRenderer.js:31 js/Calendar-FAT-debug.js:12675
+#: js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "This event is originally stored in {0}"
 msgstr ""
 
-#: js/calendarRenderer.js:33
+#: js/calendarRenderer.js:33 js/Calendar-FAT-debug.js:12677
+#: js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr ""
 
-#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:466
+#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:460
 #: js/AttendeeGridPanel.js:89 js/EventContextAttendeesItem.js:112
-#: js/WestPanel.js:90
+#: js/WestPanel.js:90 js/Calendar-FAT-debug.js:1006
+#: js/Calendar-FAT-debug.js:5715 js/Calendar-FAT-debug.js:7831
+#: js/Calendar-FAT-debug.js:7991 js/Calendar-FAT-debug.js:8848
+#: js/Calendar-FAT-debug.js:9810 js/Calendar-FAT.js:6 Config.php:200
 msgid "Attendee"
 msgstr "参加者"
 
-#: js/AttendeeFilterModel.js:100
+#: js/AttendeeFilterModel.js:100 js/Calendar-FAT-debug.js:9875
+#: js/Calendar-FAT.js:6
 msgid "Select Attendee"
 msgstr "选择参加者"
 
-#: js/RrulePanel.js:34
+#: js/ColorManager.js:173
+msgid "Colors"
+msgstr ""
+
+#: js/ColorManager.js:177
+msgid "Color by Calendar"
+msgstr ""
+
+#: js/ColorManager.js:182
+msgid "Color by Attendee Role"
+msgstr ""
+
+#: js/RrulePanel.js:34 js/Calendar-FAT-debug.js:10646 js/Calendar-FAT.js:6
 msgid "Recurrances"
 msgstr ""
 
-#: js/RrulePanel.js:42
+#: js/RrulePanel.js:42 js/Calendar-FAT-debug.js:10654 js/Calendar-FAT.js:6
 msgid "No recurring rule defined"
 msgstr ""
 
-#: js/RrulePanel.js:77
+#: js/RrulePanel.js:77 js/Calendar-FAT-debug.js:10689 js/Calendar-FAT.js:6
 msgid "None"
 msgstr ""
 
-#: js/RrulePanel.js:91
+#: js/RrulePanel.js:91 js/Calendar-FAT-debug.js:10703 js/Calendar-FAT.js:6
 msgid "Weekly"
 msgstr "每周"
 
-#: js/RrulePanel.js:98
+#: js/RrulePanel.js:98 js/Calendar-FAT-debug.js:10710 js/Calendar-FAT.js:6
 msgid "Monthly"
 msgstr "每月"
 
-#: js/RrulePanel.js:105
+#: js/RrulePanel.js:105 js/Calendar-FAT-debug.js:10717 js/Calendar-FAT.js:6
 msgid "Yearly"
 msgstr "每年"
 
-#: js/RrulePanel.js:192
+#: js/RrulePanel.js:192 js/Calendar-FAT-debug.js:10804 js/Calendar-FAT.js:6
 msgid "Exceptions of reccuring events can't have recurrences themselves."
 msgstr ""
 
-#: js/RrulePanel.js:254
+#: js/RrulePanel.js:254 js/Calendar-FAT-debug.js:10866 js/Calendar-FAT.js:6
 msgid "at"
 msgstr "在"
 
-#: js/RrulePanel.js:266
+#: js/RrulePanel.js:266 js/Calendar-FAT-debug.js:10878 js/Calendar-FAT.js:6
 msgid "never"
 msgstr "从不"
 
-#: js/RrulePanel.js:275
+#: js/RrulePanel.js:275 js/Calendar-FAT-debug.js:10887 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "after {0} occurrences"
 msgstr ""
 
-#: js/RrulePanel.js:396
+#: js/RrulePanel.js:396 js/Calendar-FAT-debug.js:11008 js/Calendar-FAT.js:6
 msgid "Until has to be after event start"
 msgstr ""
 
 #: js/RrulePanel.js:406 js/RrulePanel.js:409 js/RrulePanel.js:412
-#: js/RrulePanel.js:415
+#: js/RrulePanel.js:415 js/Calendar-FAT-debug.js:11018
+#: js/Calendar-FAT-debug.js:11021 js/Calendar-FAT-debug.js:11024
+#: js/Calendar-FAT-debug.js:11027 js/Calendar-FAT.js:6
 msgid "The event is longer than the recurring interval"
 msgstr ""
 
-#: js/RrulePanel.js:446
+#: js/RrulePanel.js:446 js/Calendar-FAT-debug.js:11058 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Every {0}. Day"
 msgstr ""
 
-#: js/RrulePanel.js:479
+#: js/RrulePanel.js:479 js/Calendar-FAT-debug.js:11091 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Every {0}. Week at"
 msgstr ""
 
-#: js/RrulePanel.js:545
+#: js/RrulePanel.js:545 js/Calendar-FAT-debug.js:11157 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Every {0}. Month"
 msgstr ""
 
 #: js/RrulePanel.js:551 js/RrulePanel.js:600 js/RrulePanel.js:732
-#: js/RrulePanel.js:782
+#: js/RrulePanel.js:782 js/Calendar-FAT-debug.js:11163
+#: js/Calendar-FAT-debug.js:11212 js/Calendar-FAT-debug.js:11344
+#: js/Calendar-FAT-debug.js:11394 js/Calendar-FAT.js:6
 msgid "at the"
 msgstr ""
 
-#: js/RrulePanel.js:725
+#: js/RrulePanel.js:725 js/Calendar-FAT-debug.js:11337 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Every {0}. Year"
 msgstr ""
 
-#: js/RrulePanel.js:823 js/RrulePanel.js:831
+#: js/RrulePanel.js:823 js/RrulePanel.js:831 js/Calendar-FAT-debug.js:11435
+#: js/Calendar-FAT-debug.js:11443 js/Calendar-FAT.js:6
 msgid "of"
 msgstr "的"
 
-#: js/AdminPanel.js:45
+#: js/AdminPanel.js:46 js/Calendar-FAT-debug.js:1303 js/Calendar-FAT.js:6
 msgid "Manage Resources"
 msgstr "管理资源"
 
@@ -348,166 +400,175 @@ msgstr "管理资源"
 msgid "Originally"
 msgstr "原始的"
 
-#: js/ImportDialog.js:112
+#: js/ImportDialog.js:112 js/Calendar-FAT-debug.js:12797 js/Calendar-FAT.js:6
 msgid "Import Definition Success!"
 msgstr ""
 
-#: js/ImportDialog.js:113
+#: js/ImportDialog.js:113 js/Calendar-FAT-debug.js:12798 js/Calendar-FAT.js:6
 msgid ""
 "The Ical Import definition has been created successfully! Please wait some "
 "minutes to get the events synced by the cronjob."
 msgstr ""
 
-#: js/ImportDialog.js:139
+#: js/ImportDialog.js:139 js/Calendar-FAT-debug.js:12824 js/Calendar-FAT.js:6
 msgid "Choose Import File"
 msgstr ""
 
-#: js/ImportDialog.js:143
+#: js/ImportDialog.js:143 js/Calendar-FAT-debug.js:12828 js/Calendar-FAT.js:6
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:147
+#: js/ImportDialog.js:147 js/Calendar-FAT-debug.js:12832 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Select file containing your {0}"
 msgstr ""
 
-#: js/ImportDialog.js:162
+#: js/ImportDialog.js:162 js/Calendar-FAT-debug.js:12847 js/Calendar-FAT.js:6
 msgid "once"
 msgstr ""
 
-#: js/ImportDialog.js:163
+#: js/ImportDialog.js:163 js/Calendar-FAT-debug.js:12848 js/Calendar-FAT.js:6
 msgid "hourly"
 msgstr ""
 
-#: js/ImportDialog.js:164
+#: js/ImportDialog.js:164 js/Calendar-FAT-debug.js:12849 js/Calendar-FAT.js:6
 msgid "daily"
 msgstr ""
 
-#: js/ImportDialog.js:165
+#: js/ImportDialog.js:165 js/Calendar-FAT-debug.js:12850 js/Calendar-FAT.js:6
 msgid "weekly"
 msgstr ""
 
-#: js/ImportDialog.js:178
+#: js/ImportDialog.js:178 js/Calendar-FAT-debug.js:12863 js/Calendar-FAT.js:6
 msgid "Choose Remote Location"
 msgstr ""
 
-#: js/ImportDialog.js:182
+#: js/ImportDialog.js:182 js/Calendar-FAT-debug.js:12867 js/Calendar-FAT.js:6
 msgid "Please choose a remote location you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:198
+#: js/ImportDialog.js:198 js/Calendar-FAT-debug.js:12883 js/Calendar-FAT.js:6
 msgid "Username"
 msgstr ""
 
-#: js/ImportDialog.js:215
+#: js/ImportDialog.js:215 js/Calendar-FAT-debug.js:12900 js/Calendar-FAT.js:6
 msgid "Password"
 msgstr ""
 
-#: js/ImportDialog.js:232
+#: js/ImportDialog.js:232 js/Calendar-FAT-debug.js:12917 js/Calendar-FAT.js:6
 msgid "Refresh time"
 msgstr ""
 
-#: js/ImportDialog.js:264
+#: js/ImportDialog.js:264 js/Calendar-FAT-debug.js:12949 js/Calendar-FAT.js:6
 msgid "General Settings"
 msgstr ""
 
-#: js/ImportDialog.js:269
+#: js/ImportDialog.js:269 js/Calendar-FAT-debug.js:12954 js/Calendar-FAT.js:6
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
 msgstr ""
 
-#: js/ImportDialog.js:288
+#: js/ImportDialog.js:288 js/Calendar-FAT-debug.js:12973 js/Calendar-FAT.js:6
 msgid "or"
 msgstr ""
 
-#: js/ImportDialog.js:329
+#: js/ImportDialog.js:329 js/Calendar-FAT-debug.js:13014 js/Calendar-FAT.js:6
 msgid "What should the file you upload look like?"
 msgstr ""
 
-#: js/ImportDialog.js:334
+#: js/ImportDialog.js:334 js/Calendar-FAT-debug.js:13019 js/Calendar-FAT.js:6
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You"
 " will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
-#: js/ImportDialog.js:337
+#: js/ImportDialog.js:337 js/Calendar-FAT-debug.js:13022
 msgid ""
 "Following you find a list of all supported import formats and a sample file,"
 " how Tine 2.0 expects your file to look like."
 msgstr ""
 
-#: js/ImportDialog.js:340
+#: js/ImportDialog.js:340 js/Calendar-FAT-debug.js:13025 js/Calendar-FAT.js:6
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/ImportDialog.js:361
+#: js/ImportDialog.js:361 js/Calendar-FAT-debug.js:13046 js/Calendar-FAT.js:6
 msgid "Download example file"
 msgstr ""
 
-#: js/ImportDialog.js:383
+#: js/ImportDialog.js:383 js/Calendar-FAT-debug.js:13068 js/Calendar-FAT.js:6
 msgid "Remote / ICS"
 msgstr ""
 
-#: js/ImportDialog.js:384
+#: js/ImportDialog.js:384 js/Calendar-FAT-debug.js:13069 js/Calendar-FAT.js:6
 msgid "Remote / CalDAV (BETA)"
 msgstr ""
 
-#: js/ImportDialog.js:385
+#: js/ImportDialog.js:385 js/Calendar-FAT-debug.js:13070 js/Calendar-FAT.js:6
 msgid "Upload"
 msgstr ""
 
-#: js/ImportDialog.js:398
+#: js/ImportDialog.js:398 js/Calendar-FAT-debug.js:13083 js/Calendar-FAT.js:6
 msgid "Choose File and Format"
 msgstr ""
 
-#: js/ImportDialog.js:407
+#: js/ImportDialog.js:407 js/Calendar-FAT-debug.js:13092 js/Calendar-FAT.js:6
 msgid "Select type of source"
 msgstr ""
 
-#: js/ImportDialog.js:411
+#: js/ImportDialog.js:411 js/Calendar-FAT-debug.js:13096 js/Calendar-FAT.js:6
 msgid "Please select the type of source you want to add to Tine 2.0"
 msgstr ""
 
-#: js/ImportDialog.js:475
+#: js/ImportDialog.js:475 js/Calendar-FAT-debug.js:13160 js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Importing {0}"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:69
+#: js/iMIPDetailsPanel.js:69 js/Calendar-FAT-debug.js:12323
+#: js/Calendar-FAT.js:6
 msgid "Checking Calendar Data..."
 msgstr "检验日历数据中…"
 
-#: js/iMIPDetailsPanel.js:95
+#: js/iMIPDetailsPanel.js:95 js/Calendar-FAT-debug.js:12349
+#: js/Calendar-FAT.js:6
 msgid "Reply to Recurring Event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:96
+#: js/iMIPDetailsPanel.js:96 js/Calendar-FAT-debug.js:12350
+#: js/Calendar-FAT.js:6
 msgid "You are responding to an recurring event. What would you like to do?"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:100
+#: js/iMIPDetailsPanel.js:100 js/Calendar-FAT-debug.js:12354
+#: js/Calendar-FAT.js:6
 msgid "Respond to whole series"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:101
+#: js/iMIPDetailsPanel.js:101 js/Calendar-FAT-debug.js:12355
+#: js/Calendar-FAT.js:6
 msgid "Do not respond"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:198
+#: js/iMIPDetailsPanel.js:198 js/Calendar-FAT-debug.js:12452
+#: js/Calendar-FAT.js:6
 msgid "The event of this message does not exist"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:203
+#: js/iMIPDetailsPanel.js:203 js/Calendar-FAT-debug.js:12457
+#: js/Calendar-FAT.js:6
 msgid "The sender is not authorised to update the event"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:208
+#: js/iMIPDetailsPanel.js:208 js/Calendar-FAT-debug.js:12462
+#: js/Calendar-FAT.js:6
 msgid "This message is already processed"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:213
+#: js/iMIPDetailsPanel.js:213 js/Calendar-FAT-debug.js:12467
+#: js/Calendar-FAT.js:6
 msgid "You are not an attendee of this event"
 msgstr ""
 
@@ -519,558 +580,679 @@ msgstr ""
 msgid "This event has been canceled."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:225
+#: js/iMIPDetailsPanel.js:225 js/Calendar-FAT-debug.js:12471
+#: js/Calendar-FAT.js:6
 msgid "Unsupported message"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:235
+#: js/iMIPDetailsPanel.js:235 js/Calendar-FAT-debug.js:12481
+#: js/Calendar-FAT.js:6
 msgid "This is an event invitation for someone else."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:237
+#: js/iMIPDetailsPanel.js:237 js/Calendar-FAT-debug.js:12483
+#: js/Calendar-FAT.js:6
 msgid "You have already replied to this event invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:239
+#: js/iMIPDetailsPanel.js:239 js/Calendar-FAT-debug.js:12485
+#: js/Calendar-FAT.js:6
 msgid "You received an event invitation. Set your response to:"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:247
+#: js/iMIPDetailsPanel.js:247 js/Calendar-FAT-debug.js:12493
+#: js/Calendar-FAT.js:6
 msgid "An invited attendee responded to the invitation."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:255
+#: js/iMIPDetailsPanel.js:255 js/Calendar-FAT-debug.js:12497
+#: js/Calendar-FAT.js:6
 msgid "Unsupported method"
 msgstr ""
 
-#: js/Calendar.js:29 js/MonthView.js:83 js/YearView.js:83 js/DaysView.js:115
+#: js/Calendar.js:29 js/MonthView.js:83 js/YearView.js:83
+#: js/Calendar-FAT-debug.js:2071 js/Calendar-FAT-debug.js:3677
+#: js/Calendar-FAT-debug.js:8026 js/DaysView.js:115
 msgid "New Event"
 msgstr "新事件"
 
-#: js/Calendar.js:39 js/Model.js:73 Setup/setup.xml:4
+#: js/Calendar.js:39 js/Model.js:73 js/Calendar-FAT-debug.js:620
+#: js/Calendar-FAT-debug.js:8036 js/Calendar-FAT.js:6 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "日历"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:69 js/Model.js:470
+#: js/ContactEventsGridPanel.js:50 js/Model.js:69 js/Model.js:464
+#: js/Calendar-FAT-debug.js:616 js/Calendar-FAT-debug.js:1010
+#: js/Calendar-FAT-debug.js:12153 js/Calendar-FAT.js:6
 msgid "Events"
 msgstr "事件"
 
 #: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:260
-#: js/EventEditDialog.js:133 js/GridView.js:109 Preference.php:127
+#: js/EventEditDialog.js:133 js/GridView.js:198 js/Calendar-FAT-debug.js:4748
+#: js/Calendar-FAT-debug.js:5673 js/Calendar-FAT-debug.js:8245
+#: js/Calendar-FAT-debug.js:12222 js/Calendar-FAT.js:6 Preference.php:127
 msgid "Start Time"
 msgstr "开始时间"
 
-#: js/MonthView.js:88 js/WestPanel.js:55
+#: js/MonthView.js:88 js/WestPanel.js:55 js/Calendar-FAT-debug.js:3682
+#: js/Calendar-FAT-debug.js:7956 js/Calendar-FAT.js:6
 msgid "WK"
 msgstr ""
 
-#: js/MonthView.js:93 js/YearView.js:88
+#: js/MonthView.js:93 js/YearView.js:88 js/Calendar-FAT-debug.js:3687
 #, python-brace-format
 msgid "{0} more..."
 msgstr ""
 
 #: js/ResourcesGridPanel.js:43 js/ResourceEditDialog.js:68
-#: js/AttendeeGridPanel.js:205
+#: js/AttendeeGridPanel.js:205 js/Calendar-FAT-debug.js:8964
+#: js/Calendar-FAT-debug.js:11565 js/Calendar-FAT-debug.js:11671
+#: js/Calendar-FAT.js:6
 msgid "Name"
 msgstr "名字"
 
 #: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:73
+#: js/Calendar-FAT-debug.js:11571 js/Calendar-FAT-debug.js:11676
+#: js/Calendar-FAT.js:6
 msgid "Email"
 msgstr "电子邮件"
 
 #: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
+#: js/Calendar-FAT-debug.js:11682 js/Calendar-FAT-debug.js:11683
+#: js/Calendar-FAT.js:6
 msgid "Is a location"
 msgstr "是一个位置"
 
-#: js/ResourceEditDialog.js:86
+#: js/ResourceEditDialog.js:86 js/Calendar-FAT-debug.js:11689
+#: js/Calendar-FAT.js:6
 msgid "Default attendee status"
 msgstr ""
 
-#: js/ResourceEditDialog.js:91
+#: js/ResourceEditDialog.js:91 js/Calendar-FAT-debug.js:11694
+#: js/Calendar-FAT.js:6
 msgid "Suppress notification"
 msgstr ""
 
-#: js/ResourceEditDialog.js:96
+#: js/ResourceEditDialog.js:96 js/Calendar-FAT-debug.js:11699
+#: js/Calendar-FAT.js:6
 msgid "Enter description..."
 msgstr "输入描述 ..."
 
-#: js/ResourceEditDialog.js:121
+#: js/ResourceEditDialog.js:121 js/Calendar-FAT-debug.js:11731
+#: js/Calendar-FAT.js:6
 msgid "Grants"
 msgstr ""
 
-#: js/EventDetailsPanel.js:28 js/Model.js:482 js/AttendeeGridPanel.js:585
+#: js/EventDetailsPanel.js:28 js/Model.js:476 js/AttendeeGridPanel.js:585
 #: js/AttendeeGridPanel.js:603 js/AttendeeGridPanel.js:620
-#: js/AttendeeGridPanel.js:632
+#: js/AttendeeGridPanel.js:632 js/Calendar-FAT-debug.js:1022
+#: js/Calendar-FAT-debug.js:5441 js/Calendar-FAT-debug.js:9344
+#: js/Calendar-FAT-debug.js:9362 js/Calendar-FAT-debug.js:9379
+#: js/Calendar-FAT-debug.js:9391 js/Calendar-FAT.js:6
 msgid "No Information"
 msgstr "没有信息"
 
-#: js/EventDetailsPanel.js:66
+#: js/EventDetailsPanel.js:66 js/Calendar-FAT-debug.js:5479
+#: js/Calendar-FAT.js:6
 msgid "Unknown date"
 msgstr ""
 
-#: js/EventDetailsPanel.js:69
+#: js/EventDetailsPanel.js:69 js/Calendar-FAT-debug.js:5482
+#: js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "{0} {1} o'clock"
 msgstr ""
 
-#: js/EventDetailsPanel.js:98 js/EventUI.js:244
+#: js/EventDetailsPanel.js:98 js/Calendar-FAT-debug.js:1645
+#: js/Calendar-FAT-debug.js:5511 js/Calendar-FAT.js:6 js/EventUI.js:248
 msgid "recurring event"
 msgstr ""
 
-#: js/EventDetailsPanel.js:100 js/EventUI.js:249
+#: js/EventDetailsPanel.js:100 js/Calendar-FAT-debug.js:1650
+#: js/Calendar-FAT-debug.js:5513 js/Calendar-FAT.js:6 js/EventUI.js:253
 msgid "recurring event exception"
 msgstr ""
 
-#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:148 js/GridView.js:115
-#: Preference.php:131
+#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:148 js/GridView.js:204
+#: js/Calendar-FAT-debug.js:4754 js/Calendar-FAT-debug.js:5678
+#: js/Calendar-FAT-debug.js:8260 js/Calendar-FAT.js:6 Preference.php:131
 msgid "End Time"
 msgstr "结束时间"
 
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:203 js/GridView.js:135
-#: Setup/Initialize.php:115 Setup/Update/Release5.php:94
+#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:203 js/GridView.js:224
+#: js/Calendar-FAT-debug.js:4774 js/Calendar-FAT-debug.js:5688
+#: js/Calendar-FAT-debug.js:8315 js/Calendar-FAT.js:6 Config.php:223
+#: Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr "临时的"
 
-#: js/EventEditDialog.js:98
+#: js/EventEditDialog.js:98 js/Calendar-FAT-debug.js:8210 js/Calendar-FAT.js:6
 msgid "View"
 msgstr ""
 
-#: js/EventEditDialog.js:114
+#: js/EventEditDialog.js:114 js/Calendar-FAT-debug.js:8226
+#: js/Calendar-FAT.js:6
 msgid "Details"
 msgstr ""
 
-#: js/EventEditDialog.js:142 js/GridView.js:121 js/SearchCombo.js:201
-#: js/Printer/Base.js:74
+#: js/EventEditDialog.js:142 js/GridView.js:210 js/SearchCombo.js:201
+#: js/Calendar-FAT-debug.js:534 js/Calendar-FAT-debug.js:4760
+#: js/Calendar-FAT-debug.js:8254 js/Calendar-FAT-debug.js:11851
+#: js/Calendar-FAT.js:6 js/Printer/Base.js:74
 msgid "whole day"
 msgstr "整天"
 
-#: js/EventEditDialog.js:165
+#: js/EventEditDialog.js:165 js/Calendar-FAT-debug.js:8277
+#: js/Calendar-FAT.js:6
 msgid "Saved in"
 msgstr ""
 
-#: js/EventEditDialog.js:187 js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:187 js/Calendar-FAT-debug.js:8299
+#: js/Calendar-FAT-debug.js:10191 js/Calendar-FAT.js:6
+#: js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr ""
 
-#: js/EventEditDialog.js:217 js/GridView.js:94
+#: js/EventEditDialog.js:217 js/GridView.js:183 js/Calendar-FAT-debug.js:4733
+#: js/Calendar-FAT-debug.js:8329 js/Calendar-FAT.js:6
 msgid "Private"
 msgstr "私人"
 
-#: js/EventEditDialog.js:280
+#: js/EventEditDialog.js:280 js/Calendar-FAT-debug.js:8387
+#: js/Calendar-FAT.js:6
 msgid "Enter description"
 msgstr "输入描述"
 
-#: js/EventEditDialog.js:318
+#: js/EventEditDialog.js:318 js/Calendar-FAT-debug.js:8435
+#: js/Calendar-FAT.js:6
 msgid "Mute Notification"
 msgstr ""
 
-#: js/EventEditDialog.js:549
+#: js/EventEditDialog.js:549 js/Calendar-FAT-debug.js:8666
+#: js/Calendar-FAT.js:6
 msgid "End date is not valid"
 msgstr "结束日期无效"
 
-#: js/EventEditDialog.js:552
+#: js/EventEditDialog.js:552 js/Calendar-FAT-debug.js:8669
+#: js/Calendar-FAT.js:6
 msgid "End date must be after start date"
 msgstr "结束日期必须在开始日期之后"
 
-#: js/EventEditDialog.js:558
+#: js/EventEditDialog.js:558 js/Calendar-FAT-debug.js:8675
+#: js/Calendar-FAT.js:6
 msgid "End time is not allowed to be after the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:594
+#: js/EventEditDialog.js:594 js/Calendar-FAT-debug.js:8711
+#: js/Calendar-FAT.js:6
 msgid "Start date is not valid"
 msgstr "开始日期无效"
 
-#: js/EventEditDialog.js:601
+#: js/EventEditDialog.js:601 js/Calendar-FAT-debug.js:8718
+#: js/Calendar-FAT.js:6
 msgid "Start date is not allowed to be before the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:621
+#: js/EventEditDialog.js:621 js/Calendar-FAT-debug.js:8738
+#: js/Calendar-FAT.js:6
 msgid "Errors"
 msgstr ""
 
-#: js/Model.js:69 js/Model.js:470 js/SearchCombo.js:79
+#: js/Model.js:69 js/Model.js:464 js/SearchCombo.js:79
+#: js/Calendar-FAT-debug.js:412 js/Calendar-FAT-debug.js:616
+#: js/Calendar-FAT-debug.js:1010 js/Calendar-FAT.js:6
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "事件"
 
-#: js/Model.js:73
+#: js/Model.js:73 js/Calendar-FAT-debug.js:620
 msgid "Calendars"
 msgstr "日历"
 
-#: js/Model.js:296
+#: js/Model.js:290 js/Calendar-FAT-debug.js:836 js/Calendar-FAT.js:6
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:303
+#: js/Model.js:297 js/Calendar-FAT-debug.js:843 js/Calendar-FAT.js:6
 msgid "Attendee Status"
 msgstr ""
 
-#: js/Model.js:312
+#: js/Model.js:306 js/Calendar-FAT-debug.js:852 js/Calendar-FAT.js:6
 msgid "Attendee Role"
 msgstr ""
 
-#: js/Model.js:328
+#: js/Model.js:322 js/Calendar-FAT-debug.js:868
 msgid "Event (as attendee)"
 msgstr ""
 
-#: js/Model.js:335
+#: js/Model.js:329 js/Calendar-FAT-debug.js:875
 msgid "Event (as organizer)"
 msgstr ""
 
-#: js/Model.js:345
+#: js/Model.js:339 js/Calendar-FAT-debug.js:885
 msgid "Event attendee"
 msgstr "事件参加者"
 
-#: js/Model.js:466
+#: js/Model.js:460 js/Calendar-FAT-debug.js:1006
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "参加者"
 
-#: js/Model.js:694 js/AttendeeGridPanel.js:197
+#: js/Model.js:688 js/AttendeeGridPanel.js:197 js/Calendar-FAT-debug.js:1234
+#: js/Calendar-FAT-debug.js:8956 js/Calendar-FAT.js:6
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "资源"
 
-#: js/Model.js:694
+#: js/Model.js:688 js/Calendar-FAT-debug.js:1234
 msgid "Resources"
 msgstr "资源"
 
-#: js/GridView.js:102
+#: js/GridView.js:191 js/Calendar-FAT-debug.js:4741 js/Calendar-FAT.js:6
 msgid "Tags"
 msgstr "标签"
 
-#: js/AttendeeGridPanel.js:26
+#: js/AttendeeGridPanel.js:26 js/Calendar-FAT-debug.js:8785
 msgid "Click here to invite another attender..."
 msgstr ""
 
 #: js/AttendeeGridPanel.js:139 js/AddToEventPanel.js:78
+#: js/Calendar-FAT-debug.js:8898 js/Calendar-FAT-debug.js:12606
+#: js/Calendar-FAT.js:6
 msgid "Role"
 msgstr "角色"
 
-#: js/AttendeeGridPanel.js:153
+#: js/AttendeeGridPanel.js:153 js/Calendar-FAT-debug.js:8912
+#: js/Calendar-FAT.js:6
 msgid "This is the calendar where the attender has saved this event in"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:186
+#: js/AttendeeGridPanel.js:186 js/Calendar-FAT-debug.js:8945
+#: js/Calendar-FAT.js:6
 msgid "Type"
 msgstr "类型"
 
-#: js/AttendeeGridPanel.js:187
+#: js/AttendeeGridPanel.js:187 js/Calendar-FAT-debug.js:8946
+#: js/Calendar-FAT.js:6
 msgid "Click icon to change"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:195
+#: js/AttendeeGridPanel.js:195 js/Calendar-FAT-debug.js:8954
+#: js/Calendar-FAT.js:6
 msgid "User"
 msgstr "用户"
 
-#: js/AttendeeGridPanel.js:196
+#: js/AttendeeGridPanel.js:196 js/Calendar-FAT-debug.js:8955
+#: js/Calendar-FAT.js:6
 msgid "Group"
 msgstr "组"
 
-#: js/AttendeeGridPanel.js:198
+#: js/AttendeeGridPanel.js:198 js/Calendar-FAT-debug.js:8957
+#: js/Calendar-FAT.js:6
 msgid "Member of group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:410
+#: js/AttendeeGridPanel.js:410 js/Calendar-FAT-debug.js:9169
+#: js/Calendar-FAT.js:6
 msgid "Remove Attender"
 msgstr "移除参加者"
 
-#: js/AttendeeGridPanel.js:423
+#: js/AttendeeGridPanel.js:423 js/Calendar-FAT-debug.js:9182
+#: js/Calendar-FAT.js:6
 msgid "Compose email"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:590
+#: js/AttendeeGridPanel.js:590 js/Calendar-FAT-debug.js:9349
+#: js/Calendar-FAT.js:6
 msgid "(as a group member)"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:681
+#: js/AttendeeGridPanel.js:681 js/Calendar-FAT-debug.js:9440
+#: js/Calendar-FAT.js:6
 msgid "External Attendee"
 msgstr ""
 
-#: js/SearchCombo.js:70
+#: js/SearchCombo.js:70 js/Calendar-FAT-debug.js:403 js/Calendar-FAT.js:6
 msgid "no events found"
 msgstr ""
 
-#: js/SearchCombo.js:71
+#: js/SearchCombo.js:71 js/Calendar-FAT-debug.js:404 js/Calendar-FAT.js:6
 msgid "Searching..."
 msgstr ""
 
-#: js/SearchCombo.js:80
+#: js/SearchCombo.js:80 js/Calendar-FAT-debug.js:413 js/Calendar-FAT.js:6
 msgid "Search Event"
 msgstr ""
 
-#: js/EventContextAttendeesItem.js:63
+#: js/EventContextAttendeesItem.js:63 js/Calendar-FAT-debug.js:7782
+#: js/Calendar-FAT.js:6
 msgid "Additional Attendees ..."
 msgstr ""
 
-#: js/EventContextAttendeesItem.js:120
+#: js/EventContextAttendeesItem.js:120 js/Calendar-FAT-debug.js:7839
+#: js/Calendar-FAT.js:6
 msgid "Cancel"
 msgstr ""
 
-#: js/EventContextAttendeesItem.js:126
+#: js/EventContextAttendeesItem.js:126 js/Calendar-FAT-debug.js:7845
+#: js/Calendar-FAT.js:6
 msgid "Ok"
 msgstr ""
 
-#: js/WestPanel.js:32
+#: js/WestPanel.js:32 js/Calendar-FAT-debug.js:7933 js/Calendar-FAT.js:6
 msgid "Mini Calendar"
 msgstr ""
 
-#: js/AddToEventPanel.js:35
+#: js/AddToEventPanel.js:35 js/Calendar-FAT-debug.js:12563
+#: js/Calendar-FAT.js:6
 msgid "Please choose the Event to add the contacts to"
 msgstr ""
 
-#: js/AddToEventPanel.js:79
+#: js/AddToEventPanel.js:79 js/Calendar-FAT-debug.js:12607
+#: js/Calendar-FAT.js:6
 msgid "Select Role"
 msgstr "选择角色"
 
-#: js/AddToEventPanel.js:89
+#: js/AddToEventPanel.js:89 js/Calendar-FAT-debug.js:12617
+#: js/Calendar-FAT.js:6
 msgid "Select Status"
 msgstr "选择状态"
 
-#: js/AddToEventPanel.js:109
+#: js/AddToEventPanel.js:109 js/Calendar-FAT-debug.js:12637
+#: js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "Adding {0} Attendee to event"
 msgstr ""
 
-#: js/EventUI.js:237
+#: js/Calendar-FAT-debug.js:1638 js/Calendar-FAT.js:6 js/EventUI.js:241
 msgid "private classification"
 msgstr ""
 
-#: js/EventUI.js:258
+#: js/Calendar-FAT-debug.js:1659 js/Calendar-FAT.js:6 js/EventUI.js:262
 msgid "has alarm"
 msgstr ""
 
-#: js/EventUI.js:265
+#: js/Calendar-FAT-debug.js:1666 js/Calendar-FAT.js:6 js/EventUI.js:269
 msgid "has attachments"
 msgstr ""
 
-#: js/DaysView.js:120
+#: js/Calendar-FAT-debug.js:2076 js/DaysView.js:120
 #, python-brace-format
 msgid "{0}, the {1}. of {2}"
 msgstr ""
 
-#: js/DaysView.js:768
+#: js/Calendar-FAT-debug.js:2724 js/Calendar-FAT.js:6 js/DaysView.js:768
 msgid "The summary must not be longer than 255 characters."
 msgstr ""
 
-#: js/DaysView.js:770
+#: js/Calendar-FAT-debug.js:2726 js/Calendar-FAT.js:6 js/DaysView.js:770
 msgid "The summary must have at least 1 character."
 msgstr ""
 
-#: js/DaysView.js:807
+#: js/Calendar-FAT-debug.js:2763 js/Calendar-FAT.js:6 js/DaysView.js:807
 msgid "Summary too Long"
 msgstr "总结太长"
 
-#: js/DaysView.js:817
+#: js/Calendar-FAT-debug.js:2773 js/Calendar-FAT.js:6 js/DaysView.js:817
 msgid "Summary too Short"
 msgstr ""
 
-#: js/EventContextTagsItem.js:63
-msgid "Additional Tags ..."
-msgstr ""
+#: js/Calendar-FAT-debug.js:5258 js/Calendar-FAT-debug.js:6088
+#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:279
+#: js/PagingToolbar.js:300
+msgid "Week"
+msgstr "星期"
 
-#: js/PerspectiveCombo.js:110
-msgid "Displayed in"
-msgstr ""
-
-#: js/Printer/DaysView.js:108
-#, python-brace-format
-msgid "Week {0} :"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:28
+#: js/Calendar-FAT-debug.js:5837 js/MainScreenCenterPanel.js:28
 msgid "Loading events, please wait..."
 msgstr "加载事件，请等待 ..."
 
+#: js/Calendar-FAT-debug.js:5961 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:152
 msgid "Cut event"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:5968 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:159
 msgid "Copy Event to clipboard"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:5975 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:166
 msgid "Stop cut / copy & paste"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:5996 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:187
 msgid "Print Page"
 msgstr "打印"
 
-#: js/MainScreenCenterPanel.js:196 js/MainScreenCenterPanel.js:260
+#: js/Calendar-FAT-debug.js:6005 js/Calendar-FAT-debug.js:6069
+#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:196
+#: js/MainScreenCenterPanel.js:260
 msgid "Grid"
 msgstr "表格"
 
-#: js/MainScreenCenterPanel.js:200 js/MainScreenCenterPanel.js:245
+#: js/Calendar-FAT-debug.js:6009 js/Calendar-FAT-debug.js:6054
+#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:200
+#: js/MainScreenCenterPanel.js:245
 msgid "Sheet"
 msgstr "工作表"
 
+#: js/Calendar-FAT-debug.js:6022 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:213
 msgid "Export Events"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6030 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:221
 msgid "Export as ODS"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6037 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:228
 msgid "Export as ..."
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6079 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:270
 msgid "Day"
 msgstr "日期"
 
-#: js/MainScreenCenterPanel.js:279 js/PagingToolbar.js:300
-msgid "Week"
-msgstr "星期"
-
+#: js/Calendar-FAT-debug.js:6097 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:288
 msgid "Month"
 msgstr "月"
 
-#: js/MainScreenCenterPanel.js:297 js/PagingToolbar.js:465
-msgid "Year"
-msgstr ""
-
+#: js/Calendar-FAT-debug.js:6107 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:307
 msgid "Import Events"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6179 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:381
 #, python-brace-format
 msgid "Paste event \"{0}\""
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6496 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:696
 msgid "Set my response"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6525 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:725
 #, python-brace-format
 msgid "Copy {0}"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6541 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:741
 msgid "Updating event in the past"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6542 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:742
 msgid "Update this event"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6543 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:743
 msgid "Do not update this event"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6547 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:747
 msgid "Creating event in the past"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6548 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:748
 msgid "Create this event"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6549 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:749
 msgid "Do not create this event"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6679 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:879
 msgid "Update this event only"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6680 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:880
 msgid "Update this and all future events"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6683 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:883
 msgid "Update whole series"
 msgstr "更新整个系列"
 
+#: js/Calendar-FAT-debug.js:6684 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:884
 msgid "Update nothing"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6687 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:887
 msgid "Update Event"
 msgstr "更新事件"
 
+#: js/Calendar-FAT-debug.js:6832 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1032
 msgid "Please Change Selection"
 msgstr "请修改选择"
 
+#: js/Calendar-FAT-debug.js:6833 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1033
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6846 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1046
 msgid "Delete Event"
 msgstr "删除事件"
 
+#: js/Calendar-FAT-debug.js:6850 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1050
 msgid "Delete this event only"
 msgstr "只删除该事件"
 
+#: js/Calendar-FAT-debug.js:6851 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1051
 msgid "Delete this and all future events"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6852 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1052
 msgid "Delete whole series"
 msgstr "删除整个系列"
 
+#: js/Calendar-FAT-debug.js:6853 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1053
 msgid "Delete nothing"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:6904 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1104
 #, python-brace-format
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] ""
 
+#: js/Calendar-FAT-debug.js:7166 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1366
 msgid "Could not Print"
 msgstr "不能打印"
 
+#: js/Calendar-FAT-debug.js:7166 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1366
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:7319 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1519
 msgid "Scheduling Conflict"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:7321 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1521
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:7325 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1525
 msgid "Ignore Conflict"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:7326 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1526
 msgid "Edit Event"
 msgstr "编辑事件"
 
+#: js/Calendar-FAT-debug.js:7327 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1527
 msgid "Cancel this action"
 msgstr ""
 
-#: js/AttendeeFilterGrid.js:28
+#: js/Calendar-FAT-debug.js:7635 js/Calendar-FAT.js:6
+#: js/EventContextTagsItem.js:63
+msgid "Additional Tags ..."
+msgstr ""
+
+#: js/Calendar-FAT-debug.js:9500 js/AttendeeFilterGrid.js:28
 msgid "Add attendee"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:9519 js/Calendar-FAT.js:6
 #: js/AttendeeFilterGrid.js:47
 msgid "Sort Attendee"
 msgstr ""
 
+#: js/Calendar-FAT-debug.js:9532 js/Calendar-FAT.js:6
 #: js/AttendeeFilterGrid.js:60
 msgid "Check to filter for this attendee"
+msgstr ""
+
+#: js/Calendar-FAT-debug.js:10217 js/Calendar-FAT.js:6
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
+msgstr ""
+
+#: js/Calendar-FAT-debug.js:12018 js/Calendar-FAT.js:6
+#: js/Printer/DaysView.js:108
+#, python-brace-format
+msgid "Week {0} :"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:297 js/PagingToolbar.js:465
+msgid "Year"
 msgstr ""
 
 #: Controller/EventNotifications.php:401
@@ -1233,145 +1415,173 @@ msgstr ""
 msgid "On attendee responses too"
 msgstr ""
 
-#: Config.php:141
+#: Config.php:148
 msgid "Fixed Calendars"
 msgstr "固定日历"
 
-#: Config.php:143
+#: Config.php:150
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr "无论如何设置筛选参数，这些日历总会被选中。一个合理的用例是：强制显示某个节日日历。"
 
-#: Config.php:150
+#: Config.php:157
 msgid "Crop Days"
 msgstr ""
 
-#: Config.php:152 Config.php:176
+#: Config.php:159 Config.php:183
 msgid "Crop calendar view configured start and endtime."
 msgstr ""
 
-#: Config.php:162
+#: Config.php:169
 msgid "Crop Days Limit Override"
 msgstr ""
 
-#: Config.php:164
+#: Config.php:171
 msgid "Allow events outside start and endtime."
 msgstr ""
 
-#: Config.php:174
+#: Config.php:181
 msgid "Week View Mouse Wheel Increment"
 msgstr ""
 
-#: Config.php:186 Config.php:188
+#: Config.php:193 Config.php:195
 msgid "Default View for Events"
 msgstr ""
 
-#: Config.php:197
+#: Config.php:210
 msgid "Attendee Status Available"
 msgstr "参加者的状态"
 
-#: Config.php:199
+#: Config.php:212
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
-"might impact other calendar systems on export or syncronisation."
-msgstr "列出可能的参加者状态。注意：当导出或者同步时，附加信息可能会对其它日历系统产生影响。"
+"might impact other calendar systems on export or synchronisation."
+msgstr ""
 
-#: Config.php:207
+#: Config.php:220 Setup/Update/Release5.php:91
+msgid "No response"
+msgstr "没有响应"
+
+#: Config.php:221 Setup/Update/Release5.php:92
+msgid "Accepted"
+msgstr "被接受"
+
+#: Config.php:222 Setup/Update/Release5.php:93
+msgid "Declined"
+msgstr "被拒绝"
+
+#: Config.php:229
 msgid "Attendee Roles Available"
 msgstr ""
 
-#: Config.php:209
+#: Config.php:231
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
-"might impact other calendar systems on export or syncronisation."
+"might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:217
+#: Config.php:239 Setup/Update/Release5.php:77
+msgid "Required"
+msgstr "要求的"
+
+#: Config.php:240 Setup/Update/Release5.php:78
+msgid "Optional"
+msgstr "可选的"
+
+#: Config.php:246
 msgid "Filter timeslot for CalDAV events"
 msgstr ""
 
-#: Config.php:219
+#: Config.php:248
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
 msgstr ""
 
-#: Config.php:228
+#: Config.php:257
 msgid "Timeslot for event notifications"
 msgstr ""
 
-#: Config.php:230
+#: Config.php:259
 msgid ""
 "For how long in the past (in weeks) event notifications should be sent."
 msgstr ""
 
-#: Config.php:239
+#: Config.php:268
 msgid "Default filter period (from) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:241
+#: Config.php:270
 msgid "For how long in the past (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:250
+#: Config.php:279
 msgid "Default filter period (until) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:252
+#: Config.php:281
 msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:261 Config.php:263
+#: Config.php:290 Config.php:292
 msgid "Disable iMIP for external organizers"
 msgstr ""
 
-#: Config.php:272
+#: Config.php:301
 msgid "(CalDAV) Skip double events from personal or shared calendar"
 msgstr ""
 
-#: Config.php:274
+#: Config.php:303
 msgid ""
 "(CalDAV) Skip double events from personal or shared calendar (\"personal\" >"
 " Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
 msgstr ""
 
-#: Config.php:283
+#: Config.php:312
 msgid ""
 "Send notifications to every user with edit permissions of the added "
 "resources"
 msgstr ""
 
-#: Config.php:293
+#: Config.php:322
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:295
+#: Config.php:324
 msgid "Enabled Features in Calendar Application."
 msgstr ""
 
-#: Config.php:302
+#: Config.php:331
 msgid "Calendar Split View"
 msgstr ""
 
-#: Config.php:303
+#: Config.php:332
 msgid "Split day and week views by attendee"
 msgstr ""
 
-#: Config.php:306
+#: Config.php:335
 msgid "Calendar Year View"
 msgstr ""
 
-#: Config.php:307
+#: Config.php:336
 msgid "Adds year view to Calendar"
 msgstr ""
 
-#: Config.php:310
+#: Config.php:339
 msgid "Calendar Extended Context Menu Actions"
 msgstr ""
 
-#: Config.php:311
+#: Config.php:340
 msgid "Adds extended actions to event context menus"
+msgstr ""
+
+#: Config.php:343
+msgid "Color Events By"
+msgstr ""
+
+#: Config.php:344
+msgid "Choose event color by different criteria"
 msgstr ""
 
 #: Import/definitions/cal_import_ical.xml:12
@@ -1405,26 +1615,6 @@ msgstr ""
 #: Setup/Initialize.php:78
 msgid "Events I'm the organizer of"
 msgstr ""
-
-#: Setup/Initialize.php:98 Setup/Update/Release5.php:77
-msgid "Required"
-msgstr "要求的"
-
-#: Setup/Initialize.php:99 Setup/Update/Release5.php:78
-msgid "Optional"
-msgstr "可选的"
-
-#: Setup/Initialize.php:112 Setup/Update/Release5.php:91
-msgid "No response"
-msgstr "没有响应"
-
-#: Setup/Initialize.php:113 Setup/Update/Release5.php:92
-msgid "Accepted"
-msgstr "被接受"
-
-#: Setup/Initialize.php:114 Setup/Update/Release5.php:93
-msgid "Declined"
-msgstr "被拒绝"
 
 #: views/eventNotification.php:12
 msgid "Updates"

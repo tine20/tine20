@@ -155,57 +155,57 @@ msgid ""
 "impact other Projects systems on export or syncronisation."
 msgstr "Possibili stati Progetto. Si prega di notare che lo stato di progetto aggiuntivo potrebbe influire sugli altri Progetti, sull'esportazione o sincronizzazione."
 
+#: Config.php:47
+msgid "On hold"
+msgstr "In attesa"
+
 #: Config.php:48
+msgid "Completed"
+msgstr "Completato"
+
+#: Config.php:49
+msgid "Cancelled"
+msgstr "Cancellato"
+
+#: Config.php:50
+msgid "In process"
+msgstr "In esecuzione"
+
+#: Config.php:56
 msgid "Project Attendee Role Available"
 msgstr "Ruoli Disponibili dei Partecipante al Progetto"
 
-#: Config.php:50
+#: Config.php:58
 msgid ""
 "Possible Project attendee roles. Please note that additional project "
 "attendee roles might impact other Projects systems on export or "
 "syncronisation."
 msgstr "Possibili ruoli del Partecipante al Progetto. Si prega di notare che lo stato di progetto aggiuntivo potrebbe influire sugli altri Progetti, sull'esportazione o sincronizzazione."
 
-#: Setup/Initialize.php:34
-msgid "On hold"
-msgstr "In attesa"
-
-#: Setup/Initialize.php:35
-msgid "Completed"
-msgstr "Completato"
-
-#: Setup/Initialize.php:36
-msgid "Cancelled"
-msgstr "Cancellato"
-
-#: Setup/Initialize.php:37
-msgid "In process"
-msgstr "In esecuzione"
-
-#: Setup/Initialize.php:50
+#: Config.php:65
 msgid "Coworker"
 msgstr "Collaboratore"
 
-#: Setup/Initialize.php:51
+#: Config.php:66
 msgid "Responsible"
 msgstr "Responsabile"
 
-#: Setup/Initialize.php:79
+#: Setup/Initialize.php:36
 msgid "All my open projects"
 msgstr "Miei progetti aperti"
 
-#: Setup/Initialize.php:99
+#: Setup/Initialize.php:56
 msgid "My projects that I'm responsible for"
 msgstr "Progetti di cui sono responsabile"
 
-#: Setup/Initialize.php:100
+#: Setup/Initialize.php:57
 msgid "All my open projects that I am responsible for"
 msgstr "Progetti aperti di cui sono responsabile"
 
-#: Setup/Initialize.php:120
+#: Setup/Initialize.php:77
 msgid "My waiting projects"
 msgstr "Miei progetti in attesa"
 
-#: Setup/Initialize.php:121
+#: Setup/Initialize.php:78
 msgid "My projects that are on hold"
 msgstr "I miei progetti che sono in attesa"

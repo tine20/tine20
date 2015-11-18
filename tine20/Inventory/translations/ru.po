@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-28 14:52+0000\n"
-"Last-Translator: Aleksey Ubozhenko <aleksdem@aleksdem.com>\n"
+"PO-Revision-Date: 2015-11-18 13:16+0000\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,11 +17,6 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Controller.php:79
-#, python-format
-msgid "%s's personal inventory items"
-msgstr "Предметы инвентаризации %s's"
 
 #: Model/InventoryItem.php:35
 msgid "Inventory item"
@@ -167,6 +162,30 @@ msgstr "Доступен статус инвенторизации"
 msgid "Possible status."
 msgstr "Возможное состояние."
 
+#: Config.php:40
+msgid "ordered"
+msgstr "заказан"
+
+#: Config.php:41
+msgid "available"
+msgstr "доступен"
+
+#: Config.php:42
+msgid "defect"
+msgstr "повреждён"
+
+#: Config.php:43
+msgid "missing"
+msgstr "утерян"
+
+#: Config.php:44
+msgid "removed"
+msgstr "списан"
+
+#: Config.php:45
+msgid "unknown"
+msgstr "неизвестно"
+
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
 msgstr "Импорт файла CSV"
@@ -185,34 +204,10 @@ msgstr "Предметы импортированы ###CURRENTDATE### в ###CURR
 msgid "Inventory"
 msgstr "инвентарь"
 
-#: Setup/Initialize.php:33
-msgid "ordered"
-msgstr "заказан"
-
-#: Setup/Initialize.php:34
-msgid "available"
-msgstr "доступен"
-
-#: Setup/Initialize.php:35
-msgid "defect"
-msgstr "повреждён"
-
-#: Setup/Initialize.php:36
-msgid "missing"
-msgstr "утерян"
-
-#: Setup/Initialize.php:37
-msgid "removed"
-msgstr "списан"
-
-#: Setup/Initialize.php:38
-msgid "unknown"
-msgstr "неизвестно"
-
-#: Setup/Initialize.php:66 Setup/Update/Release7.php:127
+#: Setup/Initialize.php:34 Setup/Update/Release7.php:127
 msgid "All Inventory Items"
 msgstr "Все предметы из инвентаризации"
 
-#: Setup/Initialize.php:67 Setup/Update/Release7.php:128
+#: Setup/Initialize.php:35 Setup/Update/Release7.php:128
 msgid "All existing Inventory Items"
 msgstr "Все существующие предметы из инвентаризации"
