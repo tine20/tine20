@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:54+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Estonian (http://www.transifex.com/tine20/tine20/language/et/)\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Business Address"
 msgstr ""
 
-#: Export/Pdf.php:52 js/ContactGrid.js:132
+#: Export/Pdf.php:52 js/ContactGrid.js:302
 msgid "Email"
 msgstr "E-post"
 
@@ -62,7 +62,7 @@ msgid "Role"
 msgstr "Roll"
 
 #: Export/Pdf.php:76 js/ContactEditDialog.js:147 js/Model.js:33
-#: js/ContactGrid.js:121
+#: js/ContactGrid.js:291
 msgid "Room"
 msgstr "Ruum"
 
@@ -109,12 +109,12 @@ msgid "Other Data"
 msgstr ""
 
 #: Export/Pdf.php:114 js/ContactEditDialog.js:174 js/Model.js:26
-#: js/Model.js:152 js/ContactGrid.js:147
+#: js/Model.js:152 js/ContactGrid.js:317
 msgid "Birthday"
 msgstr "Sünnipäev"
 
 #: Export/Pdf.php:117 js/ContactEditDialog.js:168 js/Model.js:30
-#: js/Model.js:147 js/ContactGrid.js:119
+#: js/Model.js:147 js/ContactGrid.js:289
 msgid "Job Title"
 msgstr ""
 
@@ -163,8 +163,8 @@ msgstr ""
 msgid "CardDAV URL"
 msgstr ""
 
-#: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134
-#: js/ContactGrid.js:285
+#: js/ContactFilterModel.js:35 js/Model.js:95 js/Model.js:134 js/Model.js:287
+#: js/ContactGrid.js:255
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] ""
@@ -178,38 +178,38 @@ msgstr "Kaart"
 msgid "Personal Information"
 msgstr "Isiklik info"
 
-#: js/ContactEditDialog.js:92 js/Model.js:29 js/ContactGrid.js:103
+#: js/ContactEditDialog.js:92 js/Model.js:29 js/ContactGrid.js:273
 msgid "Salutation"
 msgstr "Tervitus"
 
 #: js/ContactEditDialog.js:108 js/Model.js:22 js/Model.js:140
-#: js/ContactGrid.js:111
+#: js/ContactGrid.js:281
 msgid "Title"
 msgstr "Tiitel"
 
 #: js/ContactEditDialog.js:113 js/Model.js:20 js/Model.js:141
-#: js/ContactGrid.js:114
+#: js/ContactGrid.js:284
 msgid "First Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:118 js/Model.js:21 js/Model.js:143
-#: js/ContactGrid.js:112
+#: js/ContactGrid.js:282
 msgid "Middle Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:123 js/Model.js:19 js/Model.js:142
-#: js/ContactGrid.js:113
+#: js/ContactGrid.js:283
 msgid "Last Name"
 msgstr ""
 
 #: js/ContactEditDialog.js:129 js/Model.js:27 js/Model.js:144
-#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:117
-#: Setup/Initialize.php:70 Setup/Update/Release5.php:196
+#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:287 Config.php:96
+#: Setup/Update/Release5.php:196
 msgid "Company"
 msgstr ""
 
 #: js/ContactEditDialog.js:134 js/Model.js:28 js/Model.js:145
-#: js/ContactGrid.js:118
+#: js/ContactGrid.js:288
 msgid "Unit"
 msgstr ""
 
@@ -218,11 +218,11 @@ msgid "Suffix"
 msgstr ""
 
 #: js/ContactEditDialog.js:143 js/Model.js:31 js/Model.js:151
-#: js/ContactGrid.js:120
+#: js/ContactGrid.js:290
 msgid "Job Role"
 msgstr ""
 
-#: js/ContactEditDialog.js:163 js/Model.js:24 js/ContactGrid.js:116
+#: js/ContactEditDialog.js:163 js/Model.js:24 js/ContactGrid.js:286
 msgid "Display Name"
 msgstr ""
 
@@ -232,31 +232,31 @@ msgstr ""
 
 #: js/ContactEditDialog.js:187 js/Model.js:51 js/Model.js:146
 #: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/ContactGrid.js:133
+#: js/ContactGrid.js:303
 msgid "Phone"
 msgstr ""
 
 #: js/ContactEditDialog.js:192 js/Model.js:52
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/ContactGrid.js:134
+#: js/ContactGrid.js:304
 msgid "Mobile"
 msgstr ""
 
 #: js/ContactEditDialog.js:197 js/Model.js:53
 #: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/ContactGrid.js:135
+#: js/ContactGrid.js:305
 msgid "Fax"
 msgstr ""
 
-#: js/ContactEditDialog.js:202 js/Model.js:57 js/ContactGrid.js:138
+#: js/ContactEditDialog.js:202 js/Model.js:57 js/ContactGrid.js:308
 msgid "Phone (private)"
 msgstr ""
 
-#: js/ContactEditDialog.js:207 js/Model.js:59 js/ContactGrid.js:140
+#: js/ContactEditDialog.js:207 js/Model.js:59 js/ContactGrid.js:310
 msgid "Mobile (private)"
 msgstr ""
 
-#: js/ContactEditDialog.js:212 js/Model.js:58 js/ContactGrid.js:139
+#: js/ContactEditDialog.js:212 js/Model.js:58 js/ContactGrid.js:309
 msgid "Fax (private)"
 msgstr ""
 
@@ -271,7 +271,7 @@ msgstr "E-post (privaatne)"
 
 #: js/ContactEditDialog.js:230 js/Model.js:64
 #: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/ContactGrid.js:142
+#: js/ContactGrid.js:312
 msgid "Web"
 msgstr "Koduleht"
 
@@ -281,7 +281,7 @@ msgid "Company Address"
 msgstr "Ettevõtte aadress"
 
 #: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303 js/Model.js:153
-#: js/Model.js:158 js/ContactGrid.js:122
+#: js/Model.js:158 js/ContactGrid.js:292
 msgid "Street"
 msgstr "Tänav"
 
@@ -290,7 +290,7 @@ msgid "Street 2"
 msgstr "Tänav 2"
 
 #: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311 js/Model.js:154
-#: js/Model.js:159 js/ContactGrid.js:124
+#: js/Model.js:159 js/ContactGrid.js:294
 msgid "Region"
 msgstr "Piirkond"
 
@@ -300,20 +300,21 @@ msgid "Postal Code"
 msgstr "Postiindeks"
 
 #: js/ContactEditDialog.js:290 js/ContactEditDialog.js:319 js/Model.js:156
-#: js/Model.js:161 js/ContactGrid.js:123
+#: js/Model.js:161 js/ContactGrid.js:293
 msgid "City"
 msgstr "Linn"
 
 #: js/ContactEditDialog.js:295 js/ContactEditDialog.js:324 js/Model.js:157
-#: js/Model.js:162 js/ContactGrid.js:126
+#: js/Model.js:162 js/ContactGrid.js:296
 msgid "Country"
 msgstr "Riik"
 
-#: js/ContactEditDialog.js:350 js/Model.js:68 js/Model.js:148
+#: js/ContactEditDialog.js:350 js/Model.js:68 js/Model.js:148 js/Model.js:226
+#: js/ListEditDialog.js:93
 msgid "Description"
 msgstr "Kirjeldus"
 
-#: js/ContactEditDialog.js:364
+#: js/ContactEditDialog.js:364 js/ListEditDialog.js:107
 msgid "Enter description"
 msgstr "Sisesta kirjeldus"
 
@@ -349,7 +350,7 @@ msgstr ""
 msgid "New Contact"
 msgstr "Uus kontakt"
 
-#: js/Addressbook.js:32 js/Model.js:99 js/Model.js:208
+#: js/Addressbook.js:32 js/Model.js:99 js/Model.js:209 js/Model.js:259
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] ""
@@ -359,7 +360,8 @@ msgstr[1] ""
 msgid "Member of List"
 msgstr ""
 
-#: js/Model.js:19
+#: js/Model.js:19 js/Model.js:225 js/ListGrid.js:101 js/ListEditDialog.js:71
+#: js/ListEditDialog.js:155
 msgid "Name"
 msgstr ""
 
@@ -427,11 +429,11 @@ msgstr ""
 msgid "Contacts"
 msgstr "Kontaktid"
 
-#: js/Model.js:99 js/Model.js:208
+#: js/Model.js:99 js/Model.js:209 js/Model.js:259
 msgid "Addressbooks"
 msgstr ""
 
-#: js/Model.js:134
+#: js/Model.js:134 js/Model.js:219 js/Model.js:287
 msgid "User Account"
 msgstr ""
 
@@ -439,34 +441,77 @@ msgstr ""
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:163 js/ContactGrid.js:101
+#: js/Model.js:163 js/ListGrid.js:100 js/ContactGrid.js:271
 msgid "Type"
 msgstr "Tüüp"
 
-#: js/Model.js:164
+#: js/Model.js:164 js/Model.js:227
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Model.js:165
+#: js/Model.js:165 js/Model.js:228
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Model.js:166
+#: js/Model.js:166 js/Model.js:229
 msgid "Creation Time"
 msgstr ""
 
-#: js/Model.js:167
+#: js/Model.js:167 js/Model.js:230
 msgid "Created By"
 msgstr ""
 
-#: js/Model.js:204
+#: js/Model.js:205 js/Model.js:219 js/ListGridDetailsPanel.js:86
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:204
+#: js/Model.js:205 js/ListGridDetailsPanel.js:57 js/ListGridDetailsPanel.js:83
 msgid "Lists"
+msgstr ""
+
+#: js/Model.js:222 js/Model.js:290
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:255
+msgid "Email Address"
+msgid_plural "Email Addresses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:255
+msgid "Email Addresses"
+msgstr ""
+
+#: js/ListMemberGridPanel.js:30
+msgid "Members"
+msgstr ""
+
+#: js/ListMemberGridPanel.js:39
+msgid "Add"
+msgstr ""
+
+#: js/ListMemberGridPanel.js:49
+msgid "Remove"
+msgstr ""
+
+#: js/ListGridDetailsPanel.js:60
+msgid "Select list"
+msgstr ""
+
+#: js/ListGrid.js:102
+msgid "Emails"
+msgstr ""
+
+#: js/ListEditDialog.js:59
+msgid "List Information"
+msgstr ""
+
+#: js/ListEditDialog.js:155
+#, python-brace-format
+msgid "{0} must be given"
 msgstr ""
 
 #: js/MapPanel.js:58
@@ -497,108 +542,108 @@ msgstr ""
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ContactGrid.js:102
-msgid "Tags"
-msgstr "Sildid"
-
-#: js/ContactGrid.js:115
-msgid "Full Name"
-msgstr "Täielik nimi"
-
-#: js/ContactGrid.js:125
-msgid "Postalcode"
-msgstr "Postiindeks"
-
-#: js/ContactGrid.js:127
-msgid "Street (private)"
-msgstr "Tänav (privaatne)"
-
-#: js/ContactGrid.js:128
-msgid "City (private)"
-msgstr "Linn (prvaatne)"
-
-#: js/ContactGrid.js:129
-msgid "Region (private)"
-msgstr "Piirkond (privaatne)"
-
-#: js/ContactGrid.js:130
-msgid "Postalcode (private)"
-msgstr "Postiindeks (privaatne)"
-
-#: js/ContactGrid.js:131
-msgid "Country (private)"
-msgstr "Riik (privaatne)"
-
-#: js/ContactGrid.js:136
-msgid "Car phone"
-msgstr ""
-
-#: js/ContactGrid.js:137
-msgid "Pager"
-msgstr ""
-
-#: js/ContactGrid.js:141
-msgid "Email (private)"
-msgstr ""
-
-#: js/ContactGrid.js:143
-msgid "URL (private)"
-msgstr ""
-
-#: js/ContactGrid.js:144
-msgid "Note"
-msgstr "Märkus"
-
-#: js/ContactGrid.js:145
-msgid "Timezone"
-msgstr "Ajavöönd"
-
-#: js/ContactGrid.js:146
-msgid "Geo"
-msgstr "Geo"
-
-#: js/ContactGrid.js:157 js/ContactGrid.js:158 js/ContactGrid.js:159
+#: js/ContactGrid.js:110 js/ContactGrid.js:111 js/ContactGrid.js:112
 #, python-brace-format
 msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ContactGrid.js:168
+#: js/ContactGrid.js:121
 msgid "Export as PDF"
 msgstr "Ekspordi PDF-ina"
 
-#: js/ContactGrid.js:175
+#: js/ContactGrid.js:128
 msgid "Export as CSV"
 msgstr "Ekspordi CSV-na"
 
-#: js/ContactGrid.js:182
+#: js/ContactGrid.js:135
 msgid "Export as ODS"
 msgstr "Ekspordi ODS-ina"
 
-#: js/ContactGrid.js:189
+#: js/ContactGrid.js:142
 msgid "Export as XLS"
 msgstr "Ekspordi XLS-ina"
 
-#: js/ContactGrid.js:196
+#: js/ContactGrid.js:149
 msgid "Export as DOC"
 msgstr ""
 
-#: js/ContactGrid.js:203
+#: js/ContactGrid.js:156
 msgid "Export as ..."
 msgstr "Ekspordi kui ..."
 
-#: js/ContactGrid.js:215
+#: js/ContactGrid.js:168
 msgid "Import contacts"
 msgstr "Impordi kontakte"
 
-#: js/ContactGrid.js:285
+#: js/ContactGrid.js:255
 msgid "Contact of a user account"
 msgstr ""
 
-#: js/ContactGrid.js:292
+#: js/ContactGrid.js:262
 msgid "No name"
 msgstr ""
+
+#: js/ContactGrid.js:272
+msgid "Tags"
+msgstr "Sildid"
+
+#: js/ContactGrid.js:285
+msgid "Full Name"
+msgstr "Täielik nimi"
+
+#: js/ContactGrid.js:295
+msgid "Postalcode"
+msgstr "Postiindeks"
+
+#: js/ContactGrid.js:297
+msgid "Street (private)"
+msgstr "Tänav (privaatne)"
+
+#: js/ContactGrid.js:298
+msgid "City (private)"
+msgstr "Linn (prvaatne)"
+
+#: js/ContactGrid.js:299
+msgid "Region (private)"
+msgstr "Piirkond (privaatne)"
+
+#: js/ContactGrid.js:300
+msgid "Postalcode (private)"
+msgstr "Postiindeks (privaatne)"
+
+#: js/ContactGrid.js:301
+msgid "Country (private)"
+msgstr "Riik (privaatne)"
+
+#: js/ContactGrid.js:306
+msgid "Car phone"
+msgstr ""
+
+#: js/ContactGrid.js:307
+msgid "Pager"
+msgstr ""
+
+#: js/ContactGrid.js:311
+msgid "Email (private)"
+msgstr ""
+
+#: js/ContactGrid.js:313
+msgid "URL (private)"
+msgstr ""
+
+#: js/ContactGrid.js:314
+msgid "Note"
+msgstr "Märkus"
+
+#: js/ContactGrid.js:315
+msgid "Timezone"
+msgstr "Ajavöönd"
+
+#: js/ContactGrid.js:316
+msgid "Geo"
+msgstr "Geo"
 
 #: Controller/Contact.php:334
 msgid "Uploaded new contact image."
@@ -653,31 +698,55 @@ msgstr ""
 msgid "All Contacts"
 msgstr ""
 
-#: Config.php:45
+#: Config.php:52
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:54
+msgid "Enabled Features in Calendar Application."
+msgstr ""
+
+#: Config.php:61
+msgid "Calendar Split View"
+msgstr ""
+
+#: Config.php:62
+msgid "Split day and week views by attendee)"
+msgstr ""
+
+#: Config.php:71
 msgid "Contact duplicate check fields"
 msgstr ""
 
-#: Config.php:47
+#: Config.php:73
 msgid ""
 "These fields are checked when a new contact is created. If a record with the"
 " same data in the fields is found, a duplicate exception is thrown."
 msgstr ""
 
-#: Config.php:59
+#: Config.php:85
 msgid "Contact salutations available"
 msgstr ""
 
-#: Config.php:61
+#: Config.php:87
 msgid ""
 "Possible contact salutations. Please note that additional values might "
 "impact other Addressbook systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:69
+#: Config.php:94 Setup/Update/Release5.php:194
+msgid "Mr"
+msgstr ""
+
+#: Config.php:95 Setup/Update/Release5.php:195
+msgid "Ms"
+msgstr ""
+
+#: Config.php:102
 msgid "Parsing rules for addresses"
 msgstr ""
 
-#: Config.php:71
+#: Config.php:104
 msgid "Path to a XML file with address parsing rules."
 msgstr ""
 
@@ -747,38 +816,30 @@ msgstr ""
 msgid "Internal Contacts"
 msgstr ""
 
-#: Setup/Initialize.php:68 Setup/Update/Release5.php:194
-msgid "Mr"
-msgstr ""
-
-#: Setup/Initialize.php:69 Setup/Update/Release5.php:195
-msgid "Ms"
-msgstr ""
-
-#: Setup/Initialize.php:140 Setup/Update/Release3.php:37
+#: Setup/Initialize.php:114 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr ""
 
-#: Setup/Initialize.php:145
+#: Setup/Initialize.php:119
 msgid "My company"
 msgstr "Minu ettevõte"
 
-#: Setup/Initialize.php:146
+#: Setup/Initialize.php:120
 msgid "All coworkers in my company"
 msgstr ""
 
-#: Setup/Initialize.php:159
+#: Setup/Initialize.php:133
 msgid "My contacts"
 msgstr "Minu kontaktid"
 
-#: Setup/Initialize.php:160
+#: Setup/Initialize.php:134
 msgid "All contacts in my Addressbooks"
 msgstr ""
 
-#: Setup/Initialize.php:172
+#: Setup/Initialize.php:146
 msgid "Last modified by me"
 msgstr "Viimati minu poolt muudetud"
 
-#: Setup/Initialize.php:173
+#: Setup/Initialize.php:147
 msgid "All contacts that I have last modified"
 msgstr ""

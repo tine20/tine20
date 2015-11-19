@@ -169,49 +169,61 @@ msgstr "De standaard favoriet die bij het opstarten van Klassen wordt geladen"
 msgid "Internet access options."
 msgstr "Internet toegang opties"
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "Aan"
+
+#: Config.php:106
+msgid "Off"
+msgstr "Uit"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Gefilterd"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Internet toegang groep (aan)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet toegang groep (gefilterd)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Studenten groep"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr "Student importeer waarde"
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr "Variable studenten loginnaam"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr "Student gebruikersnaam schema"
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Student gebruikersnaam schema (0 = alleen achternaam (10 karakters), 1 = achternaam + 2 karakters van voornaam"
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Samba gebruikersopties"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr "Standaard afdeling"
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr "De standaard afdeling voor nieuwe cursussen"
 
@@ -219,22 +231,10 @@ msgstr "De standaard afdeling voor nieuwe cursussen"
 msgid "Courses"
 msgstr "Cursussen"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Aan"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Uit"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Gefilterd"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr "School"
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr "Standaard school voor Cursussen applicatie "

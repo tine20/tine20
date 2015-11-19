@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:54+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Italian (http://www.transifex.com/tine20/tine20/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -69,11 +69,11 @@ msgstr "Titolo"
 msgid "New Car"
 msgstr "Nuova auto"
 
-#: ModelConfiguration.php:379 ModelConfiguration.php:382
+#: ModelConfiguration.php:380 ModelConfiguration.php:383
 msgid "Banking Information"
 msgstr ""
 
-#: ModelConfiguration.php:383
+#: ModelConfiguration.php:384
 msgid "Private Information"
 msgstr "Informazioni private"
 
@@ -111,37 +111,45 @@ msgstr "Sistema Contenitore"
 msgid "This is a system container which could not be deleted!"
 msgstr "Questo è un sistema di contenitore che non può essere cancellato!"
 
-#: Acl/Rights.php:147
+#: Acl/Rights.php:154
 msgid "Report bugs"
 msgstr "Rapporto errori"
 
-#: Acl/Rights.php:148
+#: Acl/Rights.php:155
 msgid "Report bugs to the software vendor directly when they occur."
 msgstr "Rapporto errori al fornitore del software quando si verificano."
 
-#: Acl/Rights.php:151
+#: Acl/Rights.php:158
 msgid "Check version"
 msgstr "Verifica versione"
 
-#: Acl/Rights.php:152
+#: Acl/Rights.php:159
 msgid "Check for new versions of this software."
 msgstr "Verificare la presenza di nuove versioni di questo software."
 
-#: Acl/Rights.php:155
+#: Acl/Rights.php:162
 msgid "Manage own profile"
 msgstr "Gestione profilo"
 
-#: Acl/Rights.php:156
+#: Acl/Rights.php:163
 msgid "The right to manage the own profile (selected contact data)."
 msgstr "Permessi di gestione per il proprio profilo (contatto selezionato)."
 
-#: Acl/Rights.php:159
+#: Acl/Rights.php:166
 msgid "Manage own client state"
 msgstr "Gestione proprio stato cliente"
 
-#: Acl/Rights.php:160
+#: Acl/Rights.php:167
 msgid "The right to manage the own client state."
 msgstr "Permessi di gestione per il proprio stato cliente."
+
+#: Acl/Rights.php:170
+msgid "Maintenance"
+msgstr ""
+
+#: Acl/Rights.php:171
+msgid "The right to use the installation in maintenance mode."
+msgstr ""
 
 #: Acl/Rights/Abstract.php:79
 msgid "admin"
@@ -236,7 +244,7 @@ msgstr "online"
 msgid "offline"
 msgstr "offline"
 
-#: js/ux/form/LayerCombo.js:186 js/PasswordChangeDialog.js:65
+#: js/ux/form/LayerCombo.js:190 js/PasswordChangeDialog.js:65
 #: js/LicenseScreen.js:51 js/widgets/account/ChangeAccountAction.js:78
 #: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:490
 #: js/widgets/tags/TagsMassAttachAction.js:108
@@ -250,7 +258,7 @@ msgstr "offline"
 msgid "Ok"
 msgstr "Ok"
 
-#: js/ux/form/LayerCombo.js:193 js/ExceptionDialog.js:109
+#: js/ux/form/LayerCombo.js:197 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/PasswordChangeDialog.js:59
 #: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
 #: js/widgets/container/ContainerSelect.js:481
@@ -629,7 +637,7 @@ msgid "delete"
 msgstr "Cancella"
 
 #: js/widgets/tree/ContextMenu.js:35 js/widgets/ActivitiesGridPanel.js:241
-#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:587
+#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:595
 #, python-brace-format
 msgid "Add {0}"
 msgstr "Aggiungi {0}"
@@ -639,8 +647,8 @@ msgstr "Aggiungi {0}"
 msgid "Rename {0}"
 msgstr "Rinomina {0}"
 
-#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:661
-#: js/widgets/grid/GridPanel.js:662 js/widgets/grid/GridPanel.js:664
+#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:669
+#: js/widgets/grid/GridPanel.js:670 js/widgets/grid/GridPanel.js:672
 #, python-brace-format
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -733,7 +741,7 @@ msgstr "Non rinominato {0}"
 
 #: js/widgets/tree/ContextMenu.js:357
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1848
+#: js/widgets/grid/GridPanel.js:1886
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:690
 #: js/widgets/dialog/EditDialog.js:902 js/MainMenu.js:260
 msgid "Confirm"
@@ -778,7 +786,7 @@ msgid "Properties"
 msgstr "Proprietà"
 
 #: js/widgets/container/PropertiesDialog.js:113
-#: js/widgets/tags/TagsPanel.js:513
+#: js/widgets/tags/TagsPanel.js:513 js/widgets/keyfield/ConfigGrid.js:125
 msgid "Color"
 msgstr "Colore"
 
@@ -815,6 +823,7 @@ msgid "Updating Grants"
 msgstr "Aggiornamento Permessi"
 
 #: js/widgets/container/GrantsDialog.js:125
+#: js/widgets/keyfield/ConfigGrid.js:149 js/widgets/keyfield/ConfigGrid.js:155
 msgid "Error"
 msgstr "Errore"
 
@@ -900,7 +909,7 @@ msgid "is equal to"
 msgstr "è uguale a"
 
 #: js/widgets/container/FilterModel.js:268
-#: js/widgets/grid/PickerGridPanel.js:260
+#: js/widgets/grid/PickerGridPanel.js:262
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/grid/PickerFilter.js:310
 #, python-brace-format
@@ -927,7 +936,7 @@ msgid "Note"
 msgstr "Nota"
 
 #: js/widgets/ActivitiesPanel.js:79 js/widgets/ActivitiesGridPanel.js:112
-#: js/widgets/grid/GridPanel.js:1458
+#: js/widgets/grid/GridPanel.js:1471
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr "Creata da"
@@ -1126,9 +1135,9 @@ msgstr "Note"
 msgid "Creation time"
 msgstr ""
 
-#: js/widgets/ActivitiesGridPanel.js:248 js/widgets/grid/GridPanel.js:334
-#: js/widgets/grid/GridPanel.js:561 js/widgets/grid/GridPanel.js:562
-#: js/widgets/grid/GridPanel.js:563
+#: js/widgets/ActivitiesGridPanel.js:248 js/widgets/grid/GridPanel.js:342
+#: js/widgets/grid/GridPanel.js:569 js/widgets/grid/GridPanel.js:570
+#: js/widgets/grid/GridPanel.js:571
 #, python-brace-format
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
@@ -1224,7 +1233,7 @@ msgid ""
 msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:455
-#: js/widgets/grid/GridPanel.js:1186
+#: js/widgets/grid/GridPanel.js:1199
 msgid "Record"
 msgstr "Dato"
 
@@ -1237,7 +1246,7 @@ msgid "Dependency"
 msgstr "Dipendenza"
 
 #: js/widgets/relation/GenericPickerGridPanel.js:460
-#: js/widgets/grid/GridPanel.js:1457
+#: js/widgets/grid/GridPanel.js:1470
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr "Data di creazione"
@@ -1266,6 +1275,38 @@ msgstr "Seleziona un operatore"
 #: js/widgets/relation/FilterModel.js:119
 msgid "Define ..."
 msgstr "Definizione ..."
+
+#: js/widgets/keyfield/ConfigGrid.js:39
+msgid "Default"
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:104
+msgid "ID"
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:110
+msgid "Add a New ID..."
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:114
+msgid "Value"
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:120
+msgid "Add a New Value..."
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:149
+msgid "ID already exists"
+msgstr ""
+
+#: js/widgets/keyfield/ConfigGrid.js:155
+msgid "Value already exists"
+msgstr ""
+
+#: js/widgets/keyfield/ConfigField.js:47
+msgid "Key Field Records"
+msgstr ""
 
 #: js/widgets/ContentTypeTreePanel.js:39
 msgid "Modules"
@@ -1463,15 +1504,15 @@ msgstr "quest'anno"
 msgid "last year"
 msgstr "scorso anno"
 
-#: js/widgets/grid/PickerGridPanel.js:162
+#: js/widgets/grid/PickerGridPanel.js:164
 msgid "Remove record"
 msgstr "Rimuovi dato"
 
-#: js/widgets/grid/PickerGridPanel.js:304
+#: js/widgets/grid/PickerGridPanel.js:306
 msgid "Search for records ..."
 msgstr "Ricerca per dati ..."
 
-#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:478
+#: js/widgets/grid/FileUploadGrid.js:68 js/Models.js:489
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
@@ -1495,90 +1536,97 @@ msgstr "dimensione"
 msgid "type"
 msgstr "Tipo"
 
-#: js/widgets/grid/GridPanel.js:331
+#: js/widgets/grid/BbarGridPanel.js:46
+#, python-brace-format
+msgid ""
+"There could not be found any {0}. Please try to change your filter-criteria "
+"or view-options."
+msgstr ""
+
+#: js/widgets/grid/GridPanel.js:339
 #, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or the {1} you search in."
 msgstr "Non è stato trovato alcun {0}. Prova a cambiare i criteri del filtro, le opzioni di visualizzazione o {1} nella tua ricerca"
 
-#: js/widgets/grid/GridPanel.js:332
+#: js/widgets/grid/GridPanel.js:340
 #, python-brace-format
 msgid ""
 "There could not be found any {0}. Please try to change your filter-criteria,"
 " view-options or change the module you search in."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:576 js/widgets/dialog/EditDialog.js:674
+#: js/widgets/grid/GridPanel.js:584 js/widgets/dialog/EditDialog.js:674
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "Copia {0}"
 
-#: js/widgets/grid/GridPanel.js:595
+#: js/widgets/grid/GridPanel.js:603
 msgid "Print Page"
 msgstr "Stampa Pagina"
 
-#: js/widgets/grid/GridPanel.js:625
-#: js/widgets/dialog/DuplicateMergeDialog.js:220
+#: js/widgets/grid/GridPanel.js:633
+#: js/widgets/dialog/DuplicateMergeDialog.js:222
 #, python-brace-format
 msgid "Merge {0}"
 msgstr "Unione {0}"
 
-#: js/widgets/grid/GridPanel.js:1109
+#: js/widgets/grid/GridPanel.js:1122
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1131
+#: js/widgets/grid/GridPanel.js:1144
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Visualizzazione dati {0} - {1} di {2}"
 
-#: js/widgets/grid/GridPanel.js:1132
+#: js/widgets/grid/GridPanel.js:1145
 #, python-brace-format
 msgid "No {0} to display"
 msgstr "Nessun {0} da visualizzare"
 
-#: js/widgets/grid/GridPanel.js:1186
+#: js/widgets/grid/GridPanel.js:1199
 msgid "Records"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1390
+#: js/widgets/grid/GridPanel.js:1403
 msgid "New..."
 msgstr "Nuovo..."
 
-#: js/widgets/grid/GridPanel.js:1409
+#: js/widgets/grid/GridPanel.js:1422
 msgid "Add to..."
 msgstr "Aggiungi a..."
 
-#: js/widgets/grid/GridPanel.js:1459
+#: js/widgets/grid/GridPanel.js:1472
 msgid "Last Modified Time"
 msgstr "Ultima modifica"
 
-#: js/widgets/grid/GridPanel.js:1460
+#: js/widgets/grid/GridPanel.js:1473
 msgid "Last Modified By"
 msgstr "Ultima modifica di"
 
-#: js/widgets/grid/GridPanel.js:1822
+#: js/widgets/grid/GridPanel.js:1860
 msgid "Not Allowed"
 msgstr "Non Autorizzato"
 
-#: js/widgets/grid/GridPanel.js:1823
+#: js/widgets/grid/GridPanel.js:1861
 msgid "You are not allowed to delete all pages at once"
 msgstr "Non sei autorizzato a cancellare tutte le pagine in una sola volta"
 
-#: js/widgets/grid/GridPanel.js:1846
+#: js/widgets/grid/GridPanel.js:1884
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Vuoi davvero eliminare il dato selezionato ({0})?"
 msgstr[1] "Vuoi davvero eliminare i dati selezionati ({0})?"
 
-#: js/widgets/grid/GridPanel.js:1891 js/widgets/dialog/EditDialog.js:904
+#: js/widgets/grid/GridPanel.js:1929 js/widgets/dialog/EditDialog.js:904
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr "Cancellazione {0}"
 
-#: js/widgets/grid/GridPanel.js:1891
+#: js/widgets/grid/GridPanel.js:1929
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -1841,40 +1889,40 @@ msgstr "Successivo"
 msgid "Finish"
 msgstr "Completare"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:134
+#: js/widgets/dialog/DuplicateMergeDialog.js:136
 msgid "Merging Records..."
 msgstr "Unione dei dati..."
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
+#: js/widgets/dialog/DuplicateMergeDialog.js:175
 msgid "Merge Failed"
 msgstr "Unione Fallita"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:173
+#: js/widgets/dialog/DuplicateMergeDialog.js:175
 #, python-brace-format
 msgid "The merge succeeded, but the duplicate {0} could not be deleted."
 msgstr "L'unione è riuscita, ma il duplicato {0} non può essere cancellato."
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:212
+#: js/widgets/dialog/DuplicateMergeDialog.js:214
 #, python-brace-format
 msgid "Merge {0}, prefer First"
 msgstr "Unione {0}, preferenza Prima"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:213
+#: js/widgets/dialog/DuplicateMergeDialog.js:215
 #, python-brace-format
 msgid "Merge {0}, prefer Second"
 msgstr "Unione {0}, preferenza Seconda"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:223
+#: js/widgets/dialog/DuplicateMergeDialog.js:225
 #, python-brace-format
 msgid "First {0}"
 msgstr "Primo {0}"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:224
+#: js/widgets/dialog/DuplicateMergeDialog.js:226
 #, python-brace-format
 msgid "Second {0}"
 msgstr "Secondo {0}"
 
-#: js/widgets/dialog/DuplicateMergeDialog.js:225
+#: js/widgets/dialog/DuplicateMergeDialog.js:227
 #, python-brace-format
 msgid "Final {0}"
 msgstr "Finale {0}"
@@ -1948,14 +1996,14 @@ msgstr "Questo campo ha valori diversi. Modifica questo campo sovrascrive i vecc
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:873 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:873 js/LoginPanel.js:500
 msgid "Errors"
 msgstr "Errori"
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 #: js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:895 js/LoginPanel.js:508
+#: js/widgets/dialog/EditDialog.js:895 js/LoginPanel.js:500
 msgid "Please fix the errors noted."
 msgstr "Si prega di correggere gli errori rilevati."
 
@@ -2482,7 +2530,7 @@ msgstr "Dati non validi"
 msgid "Your input data is not valid. Please provide valid data."
 msgstr "I dati inseriti non sono validi. Si prega di fornire dati validi."
 
-#: js/ExceptionHandler.js:246 js/LoginPanel.js:482
+#: js/ExceptionHandler.js:246
 msgid "Connection lost, please check your network!"
 msgstr "Connessione persa, controlla la tua rete!"
 
@@ -2564,13 +2612,13 @@ msgid_plural "Departments"
 msgstr[0] "Dipartimento"
 msgstr[1] "Dipartimenti"
 
-#: js/Models.js:450
+#: js/Models.js:461
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "configurazione"
 msgstr[1] "Configurazioni"
 
-#: js/Models.js:450
+#: js/Models.js:461
 msgid "Configs"
 msgstr "Configurazioni"
 
@@ -2663,11 +2711,11 @@ msgstr ""
 msgid "about {0} minutes"
 msgstr "circa {0} minuti"
 
-#: js/LoginPanel.js:313 js/LoginPanel.js:551
+#: js/LoginPanel.js:313 js/LoginPanel.js:543
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 ha bisogno del tuo aiuto"
 
-#: js/LoginPanel.js:315 js/LoginPanel.js:553
+#: js/LoginPanel.js:315 js/LoginPanel.js:545
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
@@ -2716,29 +2764,29 @@ msgstr "Accesso in corso..."
 msgid "Login successful. Loading {0}..."
 msgstr "Accesso riuscito. {0} Caricamento in corso..."
 
-#: js/LoginPanel.js:486
-msgid "There was an error verifying your certificate!"
+#: js/LoginPanel.js:479
+msgid "There was an error verifying your certificate!!!"
 msgstr ""
 
-#: js/LoginPanel.js:487
-msgid "Your username and/or your password are wrong!"
+#: js/LoginPanel.js:480
+msgid "Your username and/or your password are wrong!!!"
 msgstr ""
 
-#: js/LoginPanel.js:489
+#: js/LoginPanel.js:482
 msgid "Login failure"
 msgstr "Accesso fallito"
 
-#: js/LoginPanel.js:523
+#: js/LoginPanel.js:515
 msgid "Please enter your login data"
 msgstr "Inserisci i tuoi dati di accesso"
 
-#: js/data/Record.js:203
+#: js/data/Record.js:212
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Attività"
 msgstr[1] "Attività"
 
-#: js/data/Record.js:207
+#: js/data/Record.js:216
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "lista cose da fare"
@@ -2824,7 +2872,7 @@ msgstr ""
 msgid "If enabled quickfilter searches through relations as well."
 msgstr ""
 
-#: Frontend/Cli.php:832
+#: Frontend/Cli.php:948
 #, python-format
 msgid "%s's personal "
 msgstr ""
@@ -2833,327 +2881,331 @@ msgstr ""
 msgid "Your session is not valid. You need to login again."
 msgstr "La tua sessione non è valida. Devi effettuare il login nuovamente."
 
-#: Container.php:752
+#: Container.php:668
 #, python-format
 msgid "%s's personal container"
 msgstr "contenitore personale di %s"
 
-#: Container.php:1788
+#: Container.php:1820
 msgid ""
 "You are not allowed to delete this Container. Please define another "
 "container as the default addressbook for internal contacts!"
 msgstr "Non sei autorizzato ad eliminare questa contenitore. Si prega di definire un altro contenitore come rubrica predefinita per i contatti interni!"
 
-#: Config.php:330
+#: Config.php:337
 msgid "System IMAP"
 msgstr "Sistema IMAP"
 
-#: Config.php:332
+#: Config.php:339
 msgid "System IMAP server configuration."
 msgstr "Configurazione server IMAP"
 
-#: Config.php:341
+#: Config.php:348
 msgid "System SMTP"
 msgstr "Sistema SMTP"
 
-#: Config.php:343
+#: Config.php:350
 msgid "System SMTP server configuration."
 msgstr "Configurazione server SMTP"
 
-#: Config.php:352
+#: Config.php:359
 msgid "System SIEVE"
 msgstr "Sistema SIEVE"
 
-#: Config.php:354
+#: Config.php:361
 msgid "System SIEVE server configuration."
 msgstr "Configurazione server SIEVE"
 
-#: Config.php:363
+#: Config.php:370
 msgid "Authentication Backend"
 msgstr "Autenticazione Area Riservata"
 
-#: Config.php:365
+#: Config.php:372
 msgid "Backend adapter for user authentication."
 msgstr "Adattatore backend per l'autenticazione utente."
 
-#: Config.php:373
+#: Config.php:380
 msgid "Authentication Configuration"
 msgstr "Configurazione Autenticazione"
 
-#: Config.php:375
+#: Config.php:382
 msgid "Authentication backend configuration."
 msgstr "Configurazione autenticazione backend"
 
-#: Config.php:384
+#: Config.php:391
 msgid "User Backend"
 msgstr "Utente Backend"
 
-#: Config.php:386
+#: Config.php:393
 msgid "Backend adapter for user data."
 msgstr "Adattatore backend per i dati utente"
 
-#: Config.php:394
+#: Config.php:401
 msgid "User Configuration"
 msgstr "Configurazione Utente"
 
-#: Config.php:396
+#: Config.php:403
 msgid "User backend configuration."
 msgstr "Configurazione utente backend"
 
-#: Config.php:405
+#: Config.php:412
 msgid "Cronuser ID"
 msgstr "Utente Cron ID"
 
-#: Config.php:407
+#: Config.php:414
 msgid "User ID of the cron user."
 msgstr "ID dell'utente Cron"
 
-#: Config.php:415
+#: Config.php:422
 msgid "Title Postfix"
 msgstr "Titolo Postfix"
 
-#: Config.php:417
+#: Config.php:424
 msgid "Postfix string appended to the title of this installation."
 msgstr "Stringa Postfix aggiunta al titolo di questa installazione."
 
-#: Config.php:425
+#: Config.php:432
 msgid "Redirect URL"
 msgstr "URL di reindirizzamento"
 
-#: Config.php:427
+#: Config.php:434
 msgid "Redirect to this URL after logout."
 msgstr "URL di reindirizzamento dopo il logout"
 
-#: Config.php:435
+#: Config.php:442
 msgid "Redirect to Referrer"
 msgstr "Reindirizzamento al Referente"
 
-#: Config.php:437
+#: Config.php:444
 msgid "Redirect to referrer after logout."
 msgstr "Reindirizzamento al referente dopo il logout."
 
-#: Config.php:445
+#: Config.php:452
 msgid "Redirect Always"
 msgstr "Reindirizza sempre"
 
-#: Config.php:447
+#: Config.php:454
 msgid "Redirect to configured redirect URL also for login."
 msgstr "Reindirizzamento configurato anche per il login."
 
-#: Config.php:455
+#: Config.php:462
 msgid "Allowed Origins"
 msgstr "Origini ammesse"
 
-#: Config.php:457
+#: Config.php:464
 msgid "Allowed Origins for the JSON API."
 msgstr "Origini ammesse per l'API JSON."
 
-#: Config.php:465
+#: Config.php:472
 msgid "Accepted Terms Version"
 msgstr "Accettato Termini di Versione"
 
-#: Config.php:467
+#: Config.php:474
 msgid "Accepted version number of the terms and conditions document."
 msgstr "Numero di versione accettato per i termini e le condizioni del documento."
 
-#: Config.php:475
+#: Config.php:482
 msgid "Use Geolocation Services"
 msgstr "Utilizzare i servizi di geolocalizzazione"
 
-#: Config.php:477
+#: Config.php:484
 msgid "Use of external Geolocation services is allowed."
 msgstr "è consentito l'utilizzo di servizi di Geolocalizzazione esterni."
 
-#: Config.php:485
+#: Config.php:492
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:487
+#: Config.php:494
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:496
+#: Config.php:503
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:498
+#: Config.php:505
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:506
+#: Config.php:513
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:508
+#: Config.php:515
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:517
+#: Config.php:524
 msgid "IP Session Validator"
 msgstr "Convalida della Sessione IP"
 
-#: Config.php:519
+#: Config.php:526
 msgid "Destroy session if the users IP changes."
 msgstr "Distruggere la sessione se l'IP degli utenti cambia."
 
-#: Config.php:527
+#: Config.php:534
 msgid "UA Session Validator"
 msgstr "Convalida della Sessione UA"
 
-#: Config.php:529
+#: Config.php:536
 msgid "Destroy session if the users user agent string changes."
 msgstr "Distruggere la sessione se la stringa agente dell'utente è cambiata."
 
-#: Config.php:537
+#: Config.php:544
 msgid "Files Directory"
 msgstr "Directory Files"
 
-#: Config.php:539
+#: Config.php:546
 msgid "Directory with web server write access for user files."
 msgstr "Directory con accesso in scrittura per i file utente."
 
-#: Config.php:547 Config.php:549
+#: Config.php:554 Config.php:556
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:557 Config.php:559
+#: Config.php:564 Config.php:566
 msgid "User may change password"
 msgstr "L'utente può modificare la password"
 
-#: Config.php:568 Config.php:570
+#: Config.php:575 Config.php:577
 msgid "Enable password policy"
 msgstr "Abilita le politiche sulle password"
 
-#: Config.php:578
+#: Config.php:585
 msgid "Only ASCII"
 msgstr "Solo ASCII"
 
-#: Config.php:580
+#: Config.php:587
 msgid "Only ASCII characters are allowed in passwords."
 msgstr "Solo i caratteri ASCII sono consentiti nelle password."
 
-#: Config.php:588
+#: Config.php:595
 msgid "Minimum length"
 msgstr "Lunghezza minima"
 
-#: Config.php:590
+#: Config.php:597
 msgid "Minimum password length"
 msgstr "Lunghezza minima password"
 
-#: Config.php:598
+#: Config.php:605
 msgid "Minimum word chars"
 msgstr "Numero minimo di caratteri per parola"
 
-#: Config.php:600
+#: Config.php:607
 msgid "Minimum word chars in password"
 msgstr "Numero minimo di caratteri per la password"
 
-#: Config.php:608
+#: Config.php:615
 msgid "Minimum uppercase chars"
 msgstr "Numero caratteri maiuscoli minimi"
 
-#: Config.php:610
+#: Config.php:617
 msgid "Minimum uppercase chars in password"
 msgstr "Numero caratteri maiuscoli minimi per la password"
 
-#: Config.php:618
+#: Config.php:625
 msgid "Minimum special chars"
 msgstr "Numero caratteri speciali minimi"
 
-#: Config.php:620
+#: Config.php:627
 msgid "Minimum special chars in password"
 msgstr "Numero caratteri speciali minimi per la passowrd"
 
-#: Config.php:628
+#: Config.php:635
 msgid "Minimum numbers"
 msgstr "numero minimo"
 
-#: Config.php:630
+#: Config.php:637
 msgid "Minimum numbers in password"
 msgstr "Numero caratteri numerici minimi per la password"
 
-#: Config.php:638
+#: Config.php:645
 msgid "Forbid part of username"
 msgstr "Vietato utilizzare parte del nome utente"
 
-#: Config.php:640
+#: Config.php:647
 msgid "Forbid part of username in password"
 msgstr "Vietato utilizzare parte del nome utente nella password"
 
-#: Config.php:648
+#: Config.php:655
 msgid "Automatic bugreports"
 msgstr "Rapporto errori Automatico"
 
-#: Config.php:650
+#: Config.php:657
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr "Invia sempre i rapporti di errori, anche su timeout e altre eccezioni/errori."
 
-#: Config.php:658
+#: Config.php:665
 msgid "Last sessions cleanup run"
 msgstr "Pulizia delle ultime sessioni "
 
-#: Config.php:660
+#: Config.php:667
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr "Memorizza la data e ora dell'ultima esecuzione di pulizia delle sessioni."
 
-#: Config.php:668
+#: Config.php:675
 msgid "Maximum login failures"
 msgstr "Numero massimo di accessi falliti"
 
-#: Config.php:670
+#: Config.php:677
 msgid "Maximum allowed login failures before blocking account"
 msgstr "Numero massimo di errori di accessi consentiti prima del blocco dell'account"
 
-#: Config.php:678
+#: Config.php:685
 msgid "Disable Anyone Account"
 msgstr "Disattiva Qualsiasi Account"
 
-#: Config.php:680
+#: Config.php:687
 msgid "Disallow anyone account in grant configurations"
 msgstr "Disattiva Qualsiasi Account nella configurazione permessi"
 
-#: Config.php:688
+#: Config.php:695
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:690
+#: Config.php:697
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of"
 " sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:698
+#: Config.php:705
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:700
+#: Config.php:707
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login"
 " with deactivated account"
 msgstr ""
 
-#: Config.php:708
+#: Config.php:715
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:710
+#: Config.php:717
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:718 Config.php:720
+#: Config.php:725 Config.php:727
 msgid "Max username length"
 msgstr ""
 
-#: Config.php:727
+#: Config.php:734
 msgid "conf.d folder name"
 msgstr ""
 
-#: Config.php:729
+#: Config.php:736 Config.php:747
 msgid ""
 "Folder for additional config files (conf.d) - NOTE: this is only used if set"
 " in config.inc.php!"
+msgstr ""
+
+#: Config.php:745
+msgid "Maintenance mode enabled"
 msgstr ""
 
 #: Import/Csv/Abstract.php:236
@@ -3174,43 +3226,43 @@ msgstr ""
 msgid "Shared folders"
 msgstr ""
 
-#: Setup/setup.xml:3425
+#: Setup/setup.xml:3429
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3430
+#: Setup/setup.xml:3434
 msgid "default note type"
 msgstr "tipo di nota predefinita"
 
-#: Setup/setup.xml:3456
+#: Setup/setup.xml:3460
 msgid "telephone"
 msgstr "telefono"
 
-#: Setup/setup.xml:3461
+#: Setup/setup.xml:3465
 msgid "telephone call"
 msgstr "telefonata"
 
-#: Setup/setup.xml:3487
+#: Setup/setup.xml:3491
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3492
+#: Setup/setup.xml:3496
 msgid "email contact"
 msgstr "contatto email"
 
-#: Setup/setup.xml:3518
+#: Setup/setup.xml:3522
 msgid "created"
 msgstr "Creato"
 
-#: Setup/setup.xml:3523
+#: Setup/setup.xml:3527
 msgid "record created"
 msgstr "Dato creato"
 
-#: Setup/setup.xml:3549
+#: Setup/setup.xml:3553
 msgid "changed"
 msgstr "modificato"
 
-#: Setup/setup.xml:3554
+#: Setup/setup.xml:3558
 msgid "record changed"
 msgstr "dato modificato"
 

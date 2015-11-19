@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -68,11 +68,11 @@ msgstr "Kapcsolatok"
 msgid "Address"
 msgstr "Cím"
 
-#: Export/Pdf.php:218 Controller.php:177
+#: Export/Pdf.php:218 Controller.php:165
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Export/Pdf.php:219 Controller.php:176
+#: Export/Pdf.php:219 Controller.php:164
 msgid "Email"
 msgstr "Email"
 
@@ -108,55 +108,50 @@ msgstr "magas"
 msgid "urgent"
 msgstr "sürgős"
 
-#: Controller.php:117
-#, python-format
-msgid "%s's personal leads"
-msgstr "%s személyes ügyletei"
-
-#: Controller.php:162 Model/Lead.php:123 js/LeadGridPanel.js:153
+#: Controller.php:150 Model/Lead.php:123 js/LeadGridPanel.js:153
 #: js/LeadGridDetailsPanel.js:45 js/Contact.js:161 js/Contact.js:356
 #: js/Contact.js:396 Controller/Lead.php:203
 msgid "Customer"
 msgstr "Vásárló"
 
-#: Controller.php:163 js/LeadGridPanel.js:152 js/LeadGridDetailsPanel.js:45
+#: Controller.php:151 js/LeadGridPanel.js:152 js/LeadGridDetailsPanel.js:45
 #: js/Contact.js:181 js/Contact.js:357 js/Contact.js:400
 msgid "Partner"
 msgstr "Partner"
 
-#: Controller.php:164
+#: Controller.php:152
 msgid "Reseller"
 msgstr "Viszonteladó"
 
-#: Controller.php:167
+#: Controller.php:155
 msgid "open"
 msgstr "nyitott"
 
-#: Controller.php:168
+#: Controller.php:156
 msgid "contacted"
 msgstr "kapcsolatban"
 
-#: Controller.php:169
+#: Controller.php:157
 msgid "waiting for feedback"
 msgstr "visszajelzésre vár"
 
-#: Controller.php:170
+#: Controller.php:158
 msgid "quote sent"
 msgstr "árajánlat elküldve"
 
-#: Controller.php:171
+#: Controller.php:159
 msgid "accepted"
 msgstr "elfogadva"
 
-#: Controller.php:172
+#: Controller.php:160
 msgid "lost"
 msgstr "elveszítve"
 
-#: Controller.php:175
+#: Controller.php:163
 msgid "Market"
 msgstr "Piac"
 
-#: Controller.php:178
+#: Controller.php:166
 msgid "Website"
 msgstr "Weboldal"
 
@@ -614,33 +609,41 @@ msgstr "Alapértelmezett kedvenc"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Alapértelmezett kedvenc, ami a Crm indításakor betöltődik"
 
-#: Config.php:48
+#: Config.php:55
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:50
+#: Config.php:57
 msgid "Enabled Features in Crm Application."
 msgstr ""
 
-#: Config.php:57
+#: Config.php:64
 msgid "Lead Import"
 msgstr ""
 
-#: Config.php:66
+#: Config.php:73
 msgid "Add new task on lead import"
 msgstr ""
 
-#: Config.php:68
+#: Config.php:75
 msgid ""
 "Automatically creates a task for the responsible person if a new lead is "
-"imported"
+"imported."
 msgstr ""
 
-#: Config.php:75
+#: Config.php:82
+msgid "Send notification email on lead import"
+msgstr ""
+
+#: Config.php:84
+msgid "Sends an email to all responsible persons for the imported leads."
+msgstr ""
+
+#: Config.php:91
 msgid "Lead duplicate check fields"
 msgstr ""
 
-#: Config.php:77
+#: Config.php:93
 msgid ""
 "These fields are checked when a new lead is created. If a record with the "
 "same data in the fields is found, a duplicate exception is thrown."
@@ -648,6 +651,16 @@ msgstr ""
 
 #: Import/Csv.php:159
 msgid "Edit new lead"
+msgstr ""
+
+#: Import/Csv.php:268
+#, python-format
+msgid "The following leads have just been imported into lead list %s"
+msgstr ""
+
+#: Import/Csv.php:273
+#, python-format
+msgid "%s new leads have been imported"
 msgstr ""
 
 #: Import/definitions/crm_tine_import_csv.xml:11

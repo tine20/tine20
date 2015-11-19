@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 10:14+0000\n"
+"PO-Revision-Date: 2015-11-18 13:41+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -86,8 +86,8 @@ msgstr "Speichern"
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1345
-#: js/GridPanel.js:1361
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1348
+#: js/GridPanel.js:1364
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
@@ -236,7 +236,7 @@ msgid "To (Email CC)"
 msgstr "An (E-Mail CC)"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:974 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr "Betreff"
@@ -333,7 +333,7 @@ msgstr[1] "{0} ungelesene Nachrichten"
 msgid "Message not available."
 msgstr "Nachricht nicht verfügbar"
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:880
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
 msgid "From"
 msgstr "Von"
 
@@ -353,11 +353,11 @@ msgstr "Datum"
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der E-Mail-Header"
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:814 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: js/GridPanelHook.js:34
+#: js/GridPanelHook.js:34 js/GridPanelHook.js:90
 msgid "Compose email"
 msgstr "E-Mail verfassen"
 
@@ -585,86 +585,86 @@ msgstr "Aktivieren Sie diesen Knopf um eine Lesebestätigung zu erhalten."
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
 
-#: js/MessageEditDialog.js:369
+#: js/MessageEditDialog.js:402
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr "Am {0}, schrieb {1}"
 
-#: js/MessageEditDialog.js:389
+#: js/MessageEditDialog.js:422
 msgid "Original message"
 msgstr "Originalnachricht"
 
-#: js/MessageEditDialog.js:575 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:608 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr "Lade E-Mail-Adressen"
 
-#: js/MessageEditDialog.js:626
+#: js/MessageEditDialog.js:659
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:629
+#: js/MessageEditDialog.js:662
 #, python-brace-format
 msgid "{0} Message"
 msgstr "{0} Nachricht"
 
-#: js/MessageEditDialog.js:683 js/MessageEditDialog.js:688
+#: js/MessageEditDialog.js:716 js/MessageEditDialog.js:721
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/MessageEditDialog.js:684
+#: js/MessageEditDialog.js:717
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "{0} E-Mailaccount-Einstellung leer."
 
-#: js/MessageEditDialog.js:689 js/MessageEditDialog.js:1011
+#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
-#: js/MessageEditDialog.js:754 js/MessageEditDialog.js:984
+#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
 msgid "Compose email:"
 msgstr "E-Mail verfassen:"
 
-#: js/MessageEditDialog.js:949 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
 msgid "Body"
 msgstr "Nachricht"
 
-#: js/MessageEditDialog.js:1039
+#: js/MessageEditDialog.js:1072
 msgid "Empty subject"
 msgstr "Leerer Betreff"
 
-#: js/MessageEditDialog.js:1040
+#: js/MessageEditDialog.js:1073
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
 
-#: js/MessageEditDialog.js:1061
+#: js/MessageEditDialog.js:1094
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
-#: js/MessageEditDialog.js:1062
+#: js/MessageEditDialog.js:1095
 msgid "Edit Email Note Text:"
 msgstr "E-Mailnotiz bearbeiten:"
 
-#: js/MessageEditDialog.js:1085
+#: js/MessageEditDialog.js:1118
 msgid "No recipients set."
 msgstr "Empfänger fehlen."
 
-#: js/RecipientGrid.js:230
+#: js/RecipientGrid.js:233
 msgid "Click here to set To/CC/BCC."
 msgstr "Hier klicken um An/CC/BCC zu setzen"
 
-#: js/RecipientGrid.js:234 js/RecipientGrid.js:258
+#: js/RecipientGrid.js:237 js/RecipientGrid.js:261
 msgid "To:"
 msgstr "An:"
 
-#: js/RecipientGrid.js:237 js/RecipientGrid.js:259
+#: js/RecipientGrid.js:240 js/RecipientGrid.js:262
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:240 js/RecipientGrid.js:260
+#: js/RecipientGrid.js:243 js/RecipientGrid.js:263
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:374
+#: js/RecipientGrid.js:389
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -717,7 +717,7 @@ msgstr "Id"
 msgid "Sender"
 msgstr "Absender"
 
-#: js/GridPanel.js:577 Controller/Message/Flags.php:24
+#: js/GridPanel.js:577 Controller/Message/Flags.php:25
 msgid "Answered"
 msgstr "Beantwortet"
 
@@ -726,27 +726,31 @@ msgid "Forwarded"
 msgstr "Weitergeleitet"
 
 #: js/GridPanel.js:583
+msgid "Tine20"
+msgstr "Tine20"
+
+#: js/GridPanel.js:586
 msgid "Recent"
 msgstr "Neueste"
 
-#: js/GridPanel.js:965
+#: js/GridPanel.js:968
 msgid "Send Reading Confirmation"
 msgstr "Sende Lesebestätigung"
 
-#: js/GridPanel.js:966
+#: js/GridPanel.js:969
 msgid "Do you want to send a reading confirmation message?"
 msgstr "Wollen Sie eine Lesebestätigung senden?"
 
-#: js/GridPanel.js:1190
+#: js/GridPanel.js:1193
 #, python-brace-format
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1198
+#: js/GridPanel.js:1201
 msgid "Your quota"
 msgstr "Ihr Kontingent"
 
-#: js/GridPanel.js:1199
+#: js/GridPanel.js:1202
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} verfügbar (insgesamt: {1})"
@@ -799,72 +803,72 @@ msgstr "Aktive Abwesenheitsbenachrichtigung"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-Mailkonto {0} hat eine aktive Abwesenheitsbenachrichtigung"
 
-#: js/Felamimail.js:165
+#: js/Felamimail.js:173
 #, python-brace-format
 msgid "{0} as default mailer"
 msgstr "{0} als default Mailer"
 
-#: js/Felamimail.js:577
+#: js/Felamimail.js:585
 msgid "New mails"
 msgstr "Neue E-Mails"
 
-#: js/Felamimail.js:578
+#: js/Felamimail.js:586
 #, python-brace-format
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1} ({2})"
 
-#: js/Felamimail.js:698
+#: js/Felamimail.js:706
 #, python-brace-format
 msgid "IMAP Credentials for {0}"
 msgstr "Empfangsserver-Zugangsdaten (IMAP) für {0}"
 
-#: js/Felamimail.js:701
+#: js/Felamimail.js:709
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
-#: js/Felamimail.js:896 js/Felamimail.js:929
+#: js/Felamimail.js:904 js/Felamimail.js:937
 msgid "IMAP Error"
 msgstr "IMAP-Fehler (Empfangsserver)"
 
-#: js/Felamimail.js:897
+#: js/Felamimail.js:905
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum Empfangsserver-Server (IMAP)."
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:921
 msgid "IMAP Credentials Error"
 msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
-#: js/Felamimail.js:914
+#: js/Felamimail.js:922
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
 
-#: js/Felamimail.js:930
+#: js/Felamimail.js:938
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
 
-#: js/Felamimail.js:959
+#: js/Felamimail.js:967
 msgid "SMTP Error"
 msgstr "SMTP-Fehler (Sendeserver)"
 
-#: js/Felamimail.js:960
+#: js/Felamimail.js:968
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum Sendeserver (SMTP)."
 
-#: js/Felamimail.js:968
+#: js/Felamimail.js:976
 msgid "Sieve Error"
 msgstr "Sieve-Fehler"
 
-#: js/Felamimail.js:969
+#: js/Felamimail.js:977
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve-Server."
 
-#: js/Felamimail.js:977
+#: js/Felamimail.js:985
 msgid "Save Sieve Script Error"
 msgstr "Fehler beim Speichern des Sieve-Skriptes"
 
-#: js/Felamimail.js:978
+#: js/Felamimail.js:986
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
@@ -1020,19 +1024,19 @@ msgstr "Fehler: %s"
 msgid "Could not send message"
 msgstr "Konnte Nachricht nicht senden."
 
-#: Controller/Message/Flags.php:25
+#: Controller/Message/Flags.php:26
 msgid "Seen"
 msgstr "Gelesen"
 
-#: Controller/Message/Flags.php:26
+#: Controller/Message/Flags.php:27
 msgid "Deleted"
 msgstr "Gelöscht"
 
-#: Controller/Message/Flags.php:27
+#: Controller/Message/Flags.php:28
 msgid "Draft"
 msgstr "Entwurf"
 
-#: Controller/Message/Flags.php:28
+#: Controller/Message/Flags.php:29
 msgid "Flagged"
 msgstr "Markiert"
 
@@ -1040,72 +1044,97 @@ msgstr "Markiert"
 msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
 
-#: Preference.php:59
+#: Preference.php:65
 msgid "All inboxes"
 msgstr "Alle Posteingänge"
 
-#: Preference.php:106
+#: Preference.php:113
 msgid "Default Email Account"
 msgstr "Standard E-Mailkonto"
 
-#: Preference.php:107
+#: Preference.php:114
 msgid "The default email account to use when sending mails."
 msgstr "Das Standard E-Mailkonto für das Versenden von E-Mails."
 
-#: Preference.php:110
+#: Preference.php:117
 msgid "Email Update Interval"
 msgstr "E-Mail Aktualisierungsintervall"
 
-#: Preference.php:111
+#: Preference.php:118
 msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll (in Minuten)."
 
-#: Preference.php:114
+#: Preference.php:121
 msgid "Use for mailto links"
 msgstr "Für mailto: Verweise verwenden"
 
-#: Preference.php:115
+#: Preference.php:122
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
 msgstr "Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm verwenden"
 
-#: Preference.php:118
+#: Preference.php:125
 msgid "Use for NOTES"
 msgstr "E-Mail-Notiz erzeugen"
 
-#: Preference.php:119
+#: Preference.php:126
 msgid "Save Note default Value."
 msgstr "Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht erzeugt."
 
-#: Preference.php:122
+#: Preference.php:129
 msgid "Confirm Delete"
 msgstr "Löschen bestätigen"
 
-#: Preference.php:123
+#: Preference.php:130
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
 
-#: Config.php:45
+#: Preference.php:133
+msgid ".eml file Attachment in forwarded mails"
+msgstr ".eml Dateianhang in weitergeleiteten Mails"
+
+#: Preference.php:134
+msgid ""
+"Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+
+#: Config.php:53
 msgid "Vacation Templates Container ID"
 msgstr "Container ID für Abwesenheitsnotizvorlagen"
 
-#: Config.php:54
+#: Config.php:62
 msgid "Custom Vacation Message"
 msgstr "Benutzerdefnierte Abwesenheitsnotiz"
 
-#: Config.php:56
+#: Config.php:64
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
 
-#: Config.php:65
+#: Config.php:73
 msgid "Cache email body"
 msgstr "E-Mail zwischenspeichern"
 
-#: Config.php:67
+#: Config.php:75
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
+
+#: Config.php:84
+msgid "Enabled Features"
+msgstr "Feature aktivieren"
+
+#: Config.php:86
+msgid "Enabled features in Felamimail application."
+msgstr "Feature in der Felamimail Applikation aktivieren."
+
+#: Config.php:93
+msgid "Tine 2.0 Flag"
+msgstr "Tine 2.0 Flag"
+
+#: Config.php:94
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"

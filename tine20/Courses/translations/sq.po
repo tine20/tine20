@@ -168,49 +168,61 @@ msgstr "E preferuara e paracktuar që ngarkohet në fillim të klasës"
 msgid "Internet access options."
 msgstr "Opsionet e hyrjes në internet"
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "Ndezur"
+
+#: Config.php:106
+msgid "Off"
+msgstr "Fikur"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Filtruar"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Hyrje në Internet e grupit (ON)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Hyrje në internet e grupit (FILTRUAR)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Grupi Studentëve"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr "Percaktimi i importimit të studentëve"
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr "Parashtesa i emrit hyrës së studentëve"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr "Skema e emrit të perdoruesit të studentit"
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Skema e emrit të perdoruesit të studentit (0 = vetëm mbiemri (10 karaktere), 1 = mbiemri + 2 karaktere të emrit"
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Konfigurimet e përdoruesit Samba"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr ""
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr ""
 
@@ -218,22 +230,10 @@ msgstr ""
 msgid "Courses"
 msgstr "Kurset"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Ndezur"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Fikur"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtruar"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""

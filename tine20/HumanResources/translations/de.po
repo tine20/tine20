@@ -260,13 +260,12 @@ msgid "Cost Centers"
 msgstr "Kostenstellen"
 
 #: Model/Employee.php:258 js/FreeTimeGridPanel.js:77
-#: js/FreeTimeGridPanel.js:275 Setup/Initialize.php:74
+#: js/FreeTimeGridPanel.js:275 Config.php:79
 msgid "Vacation"
 msgstr "Urlaub"
 
 #: Model/Employee.php:271 js/FreeTimeGridPanel.js:73
-#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121
-#: Setup/Initialize.php:73
+#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121 Config.php:78
 msgid "Sickness"
 msgstr "Krankheit"
 
@@ -403,7 +402,7 @@ msgstr "Kalender"
 msgid "Calendars"
 msgstr "Kalender"
 
-#: js/AdminPanel.js:230 Config.php:118
+#: js/AdminPanel.js:230 Config.php:146
 msgid "Vacation expires"
 msgstr "Urlaub verfällt"
 
@@ -707,47 +706,79 @@ msgstr "Freizeitanspruch Typ"
 msgid "Possible free time definitions"
 msgstr "Mögliche Definitionen für Freie Zeit"
 
-#: Config.php:79
+#: Config.php:85
 msgid "Vacation Status"
 msgstr "Urlaubsstatus"
 
-#: Config.php:81
+#: Config.php:87
 msgid "Possible vacation status definitions"
 msgstr "Mögliche Definitionen des Urlaubsstatus"
 
-#: Config.php:89
+#: Config.php:94
+msgid "Requested"
+msgstr "beantragt"
+
+#: Config.php:95
+msgid "In process"
+msgstr "in Bearbeitung"
+
+#: Config.php:96
+msgid "Accepted"
+msgstr "angenommen"
+
+#: Config.php:97
+msgid "Declined"
+msgstr "abgewiesen"
+
+#: Config.php:104
 msgid "Sickness Status"
 msgstr "Krankheitsstatus"
 
-#: Config.php:91
+#: Config.php:106
 msgid "Possible sickness status definitions"
 msgstr "Mögliche Definitionen von Krankheiten"
 
-#: Config.php:99
+#: Config.php:113 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr "Entschuldigt"
+
+#: Config.php:114 Setup/Update/Release6.php:300
+msgid "Unexcused"
+msgstr "Unentschuldigt"
+
+#: Config.php:121
 msgid "Default Feast Calendar"
 msgstr "Standard Feiertagskalender"
 
-#: Config.php:101
+#: Config.php:123
 msgid ""
 "Here you can define the default feast calendar used to set feast days and "
 "other free days in datepicker"
 msgstr "Hier können Sie den Standard Feiertagskalender festlegen, der benutzt wird um Feiertage und andere freie Tage in der Datumsauswahl anzuzeigen"
 
-#: Config.php:108
+#: Config.php:130
 msgid "Extra freetime type"
 msgstr "Sonderurlaub Typ"
 
-#: Config.php:110
+#: Config.php:132
 msgid "Possible extra free time definitions"
 msgstr "Mögliche Sonderurlaube"
 
-#: Config.php:120
+#: Config.php:139 Setup/Update/Release7.php:373
+msgid "Payed"
+msgstr "Bezahlt"
+
+#: Config.php:140 Setup/Update/Release7.php:374
+msgid "Not payed"
+msgstr "Unbezahlt"
+
+#: Config.php:148
 msgid ""
 "Here you can define the day, when the vacation days taken from last year "
 "expires, the format is MM-DD."
 msgstr "Hier können Sie den Tag angeben, ab dem die Urlaubstage vom letzten Jahr verfallen sind. Bitte im Format JJ-DD angeben."
 
-#: Config.php:128
+#: Config.php:156
 msgid "Report Templates Container ID"
 msgstr "Container ID für Berichte"
 
@@ -775,47 +806,15 @@ msgstr "Alle Konten"
 msgid "All available accounts"
 msgstr "Alle verfügbaren Benutzerkonten"
 
-#: Setup/Initialize.php:88 Setup/Update/Release7.php:373
-msgid "Payed"
-msgstr "Bezahlt"
-
-#: Setup/Initialize.php:89 Setup/Update/Release7.php:374
-msgid "Not payed"
-msgstr "Unbezahlt"
-
-#: Setup/Initialize.php:103
-msgid "Requested"
-msgstr "beantragt"
-
-#: Setup/Initialize.php:104
-msgid "In process"
-msgstr "in Bearbeitung"
-
-#: Setup/Initialize.php:105
-msgid "Accepted"
-msgstr "angenommen"
-
-#: Setup/Initialize.php:106
-msgid "Declined"
-msgstr "abgewiesen"
-
-#: Setup/Initialize.php:121 Setup/Update/Release6.php:299
-msgid "Excused"
-msgstr "Entschuldigt"
-
-#: Setup/Initialize.php:122 Setup/Update/Release6.php:300
-msgid "Unexcused"
-msgstr "Unentschuldigt"
-
-#: Setup/Initialize.php:141
+#: Setup/Initialize.php:65
 msgid "Full-time 40 hours"
 msgstr "Vollzeit 40 Stunden"
 
-#: Setup/Initialize.php:148
+#: Setup/Initialize.php:72
 msgid "Full-time 37.5 hours"
 msgstr "Vollzeit 37,5 Stunden"
 
-#: Setup/Initialize.php:155
+#: Setup/Initialize.php:79
 msgid "Part-time 20 hours"
 msgstr "Teilzeit 20 Stunden"
 

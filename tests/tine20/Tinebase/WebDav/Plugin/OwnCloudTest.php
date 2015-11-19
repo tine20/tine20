@@ -5,26 +5,16 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
-/**
- * Test helper
- */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
  */
-class Tinebase_WebDav_Plugin_OwnCloudTest extends TestCase
+class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_AbstractBaseTest
 {
-    /**
-     * 
-     * @var Sabre\DAV\Server
-     */
-    protected $server;
-    
     /**
      * Runs the test methods of this class.
      *
@@ -47,14 +37,9 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends TestCase
     {
         parent::setUp();
         
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
-        
         $this->plugin = new Tinebase_WebDav_Plugin_OwnCloud();
         
         $this->server->addPlugin($this->plugin);
-        
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
     }
 
     /**

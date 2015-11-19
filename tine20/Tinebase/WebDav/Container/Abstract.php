@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -358,6 +358,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                 case '{DAV:}getetag':
                     $response[$prop] = $this->getETag();
                     break;
+
+                case '{DAV:}sync-token':
+                    $response[$prop] = $this->getSyncToken();
+                    break;
                     
                 default:
                     if (isset($properties[$prop])) $response[$prop] = $properties[$prop];
@@ -525,5 +529,60 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    /**
+     * indicates whether the concrete class supports sync-token
+     *
+     * @return bool
+     */
+    public function supportsSyncToken()
+    {
+        return false;
+    }
+
+    /**
+     * Returns the content sequence for this container
+     *
+     * @return string
+     */
+    public function getSyncToken()
+    {
+       return Tinebase_Container::getInstance()->getContentSequence($this->_container);
+    }
+
+    /**
+     * returns the changes happened since the provided syncToken which is the content sequence
+     *
+     * @param string $syncToken
+     * @return array
+     */
+    public function getChanges($syncToken)
+    {
+        $result = array(
+            'syncToken' => $this->getSyncToken(),
+            Tinebase_Model_ContainerContent::ACTION_CREATE => array(),
+            Tinebase_Model_ContainerContent::ACTION_UPDATE => array(),
+            Tinebase_Model_ContainerContent::ACTION_DELETE => array(),
+        );
+
+        $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
+        foreach($resultSet as $contentModel) {
+            switch($contentModel->action) {
+                case Tinebase_Model_ContainerContent::ACTION_DELETE:
+                    unset($result[Tinebase_Model_ContainerContent::ACTION_CREATE][$contentModel->record_id]);
+                    unset($result[Tinebase_Model_ContainerContent::ACTION_UPDATE][$contentModel->record_id]);
+                case Tinebase_Model_ContainerContent::ACTION_CREATE:
+                case Tinebase_Model_ContainerContent::ACTION_UPDATE:
+                    $result[$contentModel->action][$contentModel->record_id] = $contentModel->record_id . $this->_suffix;
+                    break;
+
+                default:
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' unknown Tinebase_Model_ContainerContent::ACTION_* found: ' . $contentModel->action . ' ... ignoring');
+                    break;
+            }
+        }
+
+        return $result;
     }
 }
