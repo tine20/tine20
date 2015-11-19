@@ -109,7 +109,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @todo move this to constructor when this no longer extends Tinebase_Backend_Sql_Abstract
      */
-    protected function _getContentBackend()
+    public function getContentBackend()
     {
         if ($this->_contentBackend === NULL) {
             $this->_contentBackend  = new Tinebase_Backend_Sql(array(
@@ -1733,7 +1733,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ));
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
-                $this->_getContentBackend()->create($contentRecord);
+                $this->getContentBackend()->create($contentRecord);
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1764,9 +1764,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $pagination = new Tinebase_Model_Pagination(array(
             'sort' => 'content_seq'
         ));
-        
-        $result = $this->_getContentBackend()->search($filter, $pagination);
-        
+        $result = $this->getContentBackend()->search($filter, $pagination);
         return $result;
     }
 

@@ -357,40 +357,46 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             . ' WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('expired')
                 . ' THEN ' . $this->_db->quote('expired')
             . ' ELSE ' . $this->_db->quote('disabled') . ' END';
-        
+
+        $fields =  array(
+            'accountId'             => $this->rowNameMapping['accountId'],
+            'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
+            'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
+            'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
+            'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
+            'accountStatus'         => $statusSQL,
+            'accountExpires'        => $this->rowNameMapping['accountExpires'],
+            'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
+            'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
+            'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
+            'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
+            'accountFullName'       => $this->rowNameMapping['accountFullName'],
+            'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
+            'accountLastName'       => $this->rowNameMapping['accountLastName'],
+            'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
+            'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
+            'loginFailures'         => $this->rowNameMapping['loginFailures'],
+            'contact_id',
+            'openid',
+            'visibility',
+        );
+
+        // modlog fields have been added later
+        if ($this->_userTableHasModlogFields()) {
+            $fields = array_merge($fields, array(
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time',
+                'is_deleted',
+                'deleted_time',
+                'deleted_by',
+                'seq',
+            ));
+        }
+
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'accounts', 
-                array(
-                    'accountId'             => $this->rowNameMapping['accountId'],
-                    'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
-                    'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => $statusSQL,
-                    'accountExpires'        => $this->rowNameMapping['accountExpires'],
-                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
-                    'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
-                    'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
-                    'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
-                    'accountFullName'       => $this->rowNameMapping['accountFullName'],
-                    'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
-                    'accountLastName'       => $this->rowNameMapping['accountLastName'],
-                    'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
-                    'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
-                    'loginFailures'         => $this->rowNameMapping['loginFailures'],
-                    'contact_id',
-                    'openid',
-                    'visibility',
-                    'created_by',
-                    'creation_time',
-                    'last_modified_by',
-                    'last_modified_time',
-                    'is_deleted',
-                    'deleted_time',
-                    'deleted_by',
-                    'seq',
-                )
-            )
+            ->from(SQL_TABLE_PREFIX . 'accounts', $fields)
             ->joinLeft(
                SQL_TABLE_PREFIX . 'addressbook',
                $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.contact_id') . ' = ' 
@@ -1131,9 +1137,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getFirstUserCreationTime()
     {
-        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
-        $fallback = new Tinebase_DateTime('2014-12-01');
-        if (!isset($schema['creation_time'])) {
+        if (! $this->_userTableHasModlogFields()) {
+            $fallback = new Tinebase_DateTime('2014-12-01');
             return $fallback;
         }
 
@@ -1150,7 +1155,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * fetch all user ids from accounts table
+     * checks if use table already has modlog fields
+     *
+     * @return bool
+     */
+    protected function _userTableHasModlogFields()
+    {
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        return isset($schema['creation_time']);
+    }
+
+    /**
+     * fetch all user ids from accounts table: updating from an old version fails if the modlog fields don't exist
      *
      * @return array
      */

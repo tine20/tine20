@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -132,8 +132,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
-        #self::$_server->addPlugin(new DAV\Sync\Plugin());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             ob_start();
