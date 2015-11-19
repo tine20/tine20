@@ -1361,4 +1361,32 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody whos allowed to edit this resource)');
         $this->assertEquals(3, count($persistentEvent->attendee));
     }
+    
+    /**
+     * testGroupInvitation
+     */
+    public function testGroupInvitation()
+    {
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        
+        $event = $this->_getEvent(TRUE);
+        
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+                'user_id'   => $defaultUserGroup->getId(),
+                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ));
+        
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+        $this->_assertMail('jsmith', NULL);
+        $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
+        
+        self::flushMailer();
+         
+        $persistentEvent = $this->_eventController->delete($persistentEvent);
+        $this->_assertMail('jsmith', NULL);
+        $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
+    }
 }
