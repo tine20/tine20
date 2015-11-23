@@ -121,11 +121,15 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
         if ($syncTokenList->length == 1) {
             $syncToken = $syncTokenList->item(0)->textContent; //?!? //nodeValue;
         }
-        // Sync-token must start with our prefix
-        if (substr($syncToken, 0, strlen(self::SYNCTOKEN_PREFIX)) !== self::SYNCTOKEN_PREFIX || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
-            throw new Sabre\DAV\Exception\BadRequest('Invalid or unknown sync token');
+        if (strlen($syncToken) > 0 ) {
+            // Sync-token must start with our prefix
+            if (substr($syncToken, 0, strlen(self::SYNCTOKEN_PREFIX)) !== self::SYNCTOKEN_PREFIX || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
+                throw new Sabre\DAV\Exception\BadRequest('Invalid or unknown sync token');
+            }
+            $syncToken = substr($syncToken, strlen(self::SYNCTOKEN_PREFIX));
+        } else {
+            $syncToken = 0;
         }
-        $syncToken = substr($syncToken, strlen(self::SYNCTOKEN_PREFIX));
 
         // get the list of properties the client requested
         $properties = array_keys(Sabre\DAV\XMLUtil::parseProperties($report->documentElement));
