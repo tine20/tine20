@@ -182,7 +182,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             // too many login failures?
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+
+                // first check if the current user agent should be blocked
+                if (! Tinebase_AccessLog::getInstance()->isUserAgentBlocked($_user, $_accessLog)) {
+                    return;
+                }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
             }
@@ -272,19 +278,33 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _loginFailed($authResult, Tinebase_Model_AccessLog $accessLog)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-            __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!");
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
-        
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
         $accessLog->lo = $accessLog->li;
-        
-        Tinebase_User::getInstance()->setLastLoginFailure($accessLog->login_name);
+        $user = null;
+
+        if (Tinebase_Auth::FAILURE_CREDENTIAL_INVALID == $accessLog->result) {
+            $user = Tinebase_User::getInstance()->setLastLoginFailure($accessLog->login_name);
+        }
+
+        $loglevel = Zend_Log::INFO;
+        if (null !== $user) {
+            $accessLog->account_id = $user->getId();
+            $warnLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::WARN_LOGIN_FAILURES, 4);
+            if ($user->loginFailures >= $warnLoginFailures) {
+                $loglevel = Zend_Log::WARN;
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel($loglevel)) Tinebase_Core::getLogger()->log(
+            __METHOD__ . '::' . __LINE__
+                . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!"
+                . ($user ? ' Auth failure count: ' . $user->loginFailures : ''),
+            $loglevel);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
+
         Tinebase_AccessLog::getInstance()->create($accessLog);
-        
-        sleep(mt_rand(2,5));
     }
     
      /**
@@ -697,6 +717,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
         
         if ($accessLog->result !== Tinebase_Auth::SUCCESS || !$user) {
+
+            if ($user) {
+                $accessLog->account_id = $user->getId();
+            }
             $this->_loginFailed($authResult, $accessLog);
             
             return false;

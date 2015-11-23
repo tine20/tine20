@@ -273,11 +273,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
     
     /**
-     * MAX_LOGIN_FAILURES
+     * WARN_LOGIN_FAILURES
      *
      * @var string
      */
-    const MAX_LOGIN_FAILURES = 'maxLoginFailures';
+    const WARN_LOGIN_FAILURES = 'warnLoginFailures';
      
     /**
      * ANYONE_ACCOUNT_DISABLED
@@ -699,15 +699,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::MAX_LOGIN_FAILURES => array(
-        //_('Maximum login failures')
-            'label'                 => 'Maximum login failures',
-        //_('Maximum allowed login failures before blocking account')
-            'description'           => 'Maximum allowed login failures before blocking account',
+        self::WARN_LOGIN_FAILURES => array(
+            //_('Warn after X login failures')
+            'label'                 => 'Warn after X login failures',
+            //_('Maximum allowed login failures before writing warn log messages')
+            'description'           => 'Maximum allowed login failures before writing warn log messages',
             'type'                  => 'int',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+            'default'               => 4
         ),
         self::ANYONE_ACCOUNT_DISABLED => array(
                                    //_('Disable Anyone Account')
