@@ -166,10 +166,9 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         $view->updater = $_updater;
         $view->lead = $_lead;
-        $settings = Crm_Controller::getInstance()->getConfigSettings();
-        $view->leadState = $settings->getOptionById($_lead->leadstate_id, 'leadstates');
-        $view->leadType = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
-        $view->leadSource = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
+        $view->leadState = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getTranslatedValue($_lead->leadstate_id);
+        $view->leadType = Crm_Config::getInstance()->get(Crm_Config::LEAD_TYPES)->getTranslatedValue($_lead->leadtype_id);
+        $view->leadSource = Crm_Config::getInstance()->get(Crm_Config::LEAD_SOURCES)->getTranslatedValue($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
         
         if (isset($_lead->relations)) {

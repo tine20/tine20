@@ -116,20 +116,19 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
     protected function _appendForeignSort(Tinebase_Model_Pagination $pagination, Zend_Db_Select $select)
     {
         $virtualSortColumns = array(
-            'leadstate_id'  => Crm_Model_Config::LEADSTATES,
-            'leadsource_id' => Crm_Model_Config::LEADSOURCES,
-            'leadtype_id'   => Crm_Model_Config::LEADTYPES,
+            'leadstate_id'  => Crm_Config::LEAD_STATES,
+            'leadsource_id' => Crm_Config::LEAD_SOURCES,
+            'leadtype_id'   => Crm_Config::LEAD_TYPES,
         );
         
         $col = $pagination->sort;
         if (isset($virtualSortColumns[$col])) {
-            $settings = Crm_Controller::getInstance()->getConfigSettings();
-            $setting = $settings->{$virtualSortColumns[$col]};
-            
+            $config = Crm_Config::getInstance()->get($virtualSortColumns[$col]);
+
             // create cases (when => then) for sql switch (CASE) command
             $cases = array();
-            foreach ($setting as $settingRecord) {
-                $cases[$settingRecord['id']] = $settingRecord[str_replace('_id', '', $col)];
+            foreach ($config['records'] as $settingRecord) {
+                $cases[$settingRecord['id']] = $settingRecord['value'];
             }
             
             $foreignSortCase = $this->_dbCommand->getSwitch($col, $cases);

@@ -506,3 +506,17 @@ Tine.Tinebase.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.
     recordName: 'File',
     recordsName: 'Files'
 });
+
+Tine.Tinebase.Model.KeyFieldRecord = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'value' },
+    { name: 'i18nValue' },
+    { name: 'icon' },
+    { name: 'color' },
+    { name: 'system' }
+], {
+    appName: 'Tinebase',
+    modelName: 'KeyFieldRecord',
+    idProperty: 'id',
+    titleProperty: 'value'
+});

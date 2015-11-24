@@ -503,6 +503,8 @@ Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
 // Ext.Layer.prototype.showAction = Ext.Layer.prototype.showAction.createSequence(function() {
 // Ext.Layer.prototype.hideAction = Ext.Layer.prototype.hideAction.createSequence(function() {
 Ext.form.ComboBox.prototype.expand = Ext.form.ComboBox.prototype.expand.createSequence(function() {
+    // fix z-index problem when used in editorGrids
+    // manage z-index by windowMgr
     this.list.setActive = Ext.emptyFn;
     this.list.setZIndex = Ext.emptyFn;
     Ext.WindowMgr.register(this.list);

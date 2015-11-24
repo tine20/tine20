@@ -17,12 +17,19 @@
 class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
 {
     /**
+     * appname this keyfield belongs to
+     *
+     * @var string
+     */
+    protected $_appName = null;
+
+    /**
      * classname of the key fields record model
      * 
      * @var string
      */
     protected $_keyFieldRecordModel = 'Tinebase_Config_KeyFieldRecord';
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract::$_identifier
@@ -49,10 +56,13 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     public static function create($_data, array $_options = array())
     {
         $record = new self();
+        if (isset($_options['appName'])) {
+            $record->setAppName($_options['appName']);
+        }
         if (isset($_options['recordModel'])) {
             $record->setKeyFieldRecordModel($_options['recordModel']);
         }
-        
+
         $record->setFromArray($_data);
         return $record;
     }
@@ -78,6 +88,20 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      */
     public function setKeyFieldRecordModel($_keyFieldRecordModel) {
         $this->_keyFieldRecordModel = $_keyFieldRecordModel;
+
+        return $this;
+    }
+
+    /**
+     * set appName
+     *
+     * @param  string $_appName
+     * @return Tinebase_Config_KeyField $this
+     */
+    public function setAppName($_appName) {
+        $this->_appName = $_appName;
+
+        return $this;
     }
     
     /**
@@ -103,5 +127,62 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
             return $record->getFirstRecord();
         }
         return '';
+    }
+
+    /**
+     * get value of given id
+     *
+     * @param $id
+     * @return string
+     */
+    public function getValue($id)
+    {
+        $record = $this->records->filter('id', $id)->getFirstRecord();
+        if (! $record) {
+            $record = $this->getKeyfieldDefault();
+        }
+
+        return $record ? $record->value : '';
+    }
+
+    /**
+     * get translated value of given id
+     *
+     * @param $id
+     * @return string
+     */
+    public function getTranslatedValue($id)
+    {
+        $value = $this->getValue($id);
+        if ($value) {
+            $translate = Tinebase_Translation::getTranslation($this->_appName);
+            return $translate->_($value);
+        }
+
+        return '';
+    }
+
+    /**
+     * get keyfield record id for given translated value
+     *
+     * @TODO try all locales
+     *
+     * @param $translatedValue
+     * @return string|null
+     */
+    public function getIdByTranslatedValue($translatedValue)
+    {
+        $translate = Tinebase_Translation::getTranslation($this->_appName);
+        $originRecord = null;
+
+        foreach ($this->records as $record) {
+            // check id & translated value
+            if (in_array($translatedValue, array($translate->_($record->value), $record->getId()))) {
+                $originRecord = $record;
+                break;
+            }
+        }
+
+        return $originRecord ? $originRecord->getId() : null;
     }
 }
