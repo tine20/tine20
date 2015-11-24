@@ -401,6 +401,9 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         if(this.isExpanded()){
             this.collapse();
             this.el.focus();
+            if (this.inEditor && this.editor) {
+                this.onCancel();
+            }
         } else {
             this.onFocus({});
             this.expand()

@@ -71,12 +71,12 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
             this.menu = new Ext.menu.ColorMenu({
                 hideOnClick: false
             });
+
         }
         this.onFocus();
+        this.menuEvents('on');
 
         this.menu.show(this.el, "tl-bl?");
-
-        this.menuEvents('on');
     },
 
     setValue : function(color){
@@ -92,7 +92,7 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     menuEvents: function(method){
         this.menu[method]('select', this.onSelect, this);
         this.menu[method]('hide', this.onMenuHide, this);
-        this.menu[method]('show', this.onFocus, this);
+        this.menu[method]('show', this.onMenuShow, this);
     },
     
     //private
@@ -106,11 +106,24 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
 
         this.menu.hide();
     },
-    
+
+    //private
+    onMenuShow: function() {
+        // manage z-index by windowMgr
+        this.menu.setActive = Ext.emptyFn;
+        this.menu.setZIndex = Ext.emptyFn;
+        Ext.WindowMgr.register(this.menu);
+        Ext.WindowMgr.bringToFront(this.menu);
+
+        this.onFocus();
+    },
+
     //private
     onMenuHide: function(){
         this.focus(false, 60);
         this.menuEvents('un');
+
+        Ext.WindowMgr.unregister(this.menu);
 
         if (this.inEditor && this.editor) {
             this.editor.cancelEdit();
