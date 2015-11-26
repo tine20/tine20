@@ -61,6 +61,12 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'type' => 'keyfield',
                 'name' => 'exampleStatus'
             ),
+            'reason' => array(
+                'reason' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label' => 'Reason', // _('Reason')
+                'type' => 'keyfield',
+                'name' => 'exampleReason'
+            ),
         )
     );
 }

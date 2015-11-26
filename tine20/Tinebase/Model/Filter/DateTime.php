@@ -31,7 +31,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     {
         $result = parent::toArray($_valueToJson);
        
-        if ($this->_operator != 'within' && $_valueToJson == true) {
+        if ($this->_operator != 'within' && $_valueToJson == true && $result['value']) {
             $date = new Tinebase_DateTime($result['value']);
             $date->setTimezone(Tinebase_Core::getUserTimezone());
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
@@ -47,7 +47,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
      */
     public function setValue($_value)
     {
-        if ($this->_operator != 'within') {
+        if ($this->_operator != 'within' && $_value) {
             $_value = $this->_convertStringToUTC($_value);
         }
         

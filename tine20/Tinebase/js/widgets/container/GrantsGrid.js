@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
@@ -104,28 +104,12 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
      * init grid columns
      */
     initColumns: function() {
-        var grants = ['read', 'add', 'edit', 'delete', 'export', 'sync'];
+        var grants = this.grantContainer
+            ? Tine.widgets.container.GrantsManager.getByContainer(this.grantContainer)
+            : Tine.widgets.container.GrantsManager.defaultGrants();
         
         if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
             grants.push('admin');
-        }
-
-        if (this.grantContainer) {
-            // @todo move this to cal app when apps can cope with their own grant models
-            if (this.grantContainer.application_id && this.grantContainer.application_id.name) {
-                var isCalendar = (this.grantContainer.application_id.name == 'Calendar');
-            } else {
-                var calApp = Tine.Tinebase.appMgr.get('Calendar'),
-                    calId = calApp ? calApp.id : 'none',
-                    isCalendar = this.grantContainer.application_id === calId;
-            }
-            if (this.grantContainer.type == 'personal' && isCalendar) {
-                grants.push('freebusy');
-            }
-            
-            if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
-                grants.push('private');
-            }
         }
         
         this.configColumns = [];
@@ -140,3 +124,53 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         }, this);
     }
 });
+
+/**
+ * grants by model registry
+ *
+ * @type {{defaultGrants, getByContainer, register}}
+ */
+Tine.widgets.container.GrantsManager = function() {
+    /**
+     * contains Array of grants or a function that returns the grants depending on some condition
+     *
+     * @type {Object}
+     */
+    var grantsForModels = {};
+
+    return {
+        /**
+         * default grants
+         *
+         * @return Array
+         */
+        defaultGrants: function() {
+            return ['read', 'add', 'edit', 'delete', 'export', 'sync'];
+        },
+
+        /**
+         * get container grants for specific container
+         *
+         * @param {Tine.Tinebase.Model.Container} container
+         * @return Array
+         */
+        getByContainer: function(container) {
+            var modelName = container.model,
+                grants  = grantsForModels[modelName]
+                    ? (Ext.isFunction(grantsForModels[modelName]) ? grantsForModels[modelName](container) : grantsForModels[modelName])
+                    : this.defaultGrants();
+
+            return grants;
+        },
+
+        /**
+         * register grants or grants function for given model
+         *
+         * @param {Record/String} modelName
+         * @param {Array|Function} grants
+         */
+        register: function(modelName, grantsOrFunction) {
+            grantsForModels[modelName] = grantsOrFunction;
+        },
+    };
+}();

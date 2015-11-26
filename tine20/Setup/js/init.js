@@ -11,7 +11,12 @@
 /*global Ext, Tine*/
 
 Ext.ns('Tine', 'Tine.Setup');
- 
+
+/**
+ * local storage prefix for Setup
+ */
+Tine.Tinebase.tineInit.initAjax.lsPrefix = Tine.Tinebase.common.getUrl('path') + 'TineSetup';
+
 /**
  * init ajax
  */
