@@ -37,7 +37,11 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
         throw ('No keyfield config found for ' + config.keyFieldName + ' in ' + config.app.appName + ' registry.');
     }
     
-    var modelName = config.keyFieldConfig.definition && config.keyFieldConfig.definition.options ? config.keyFieldConfig.definition.options['recordModel'] : "Tinebase_Config_KeyFieldRecord",
+    var modelName = config.keyFieldConfig.definition
+                    && config.keyFieldConfig.definition.options
+                    && config.keyFieldConfig.definition.options.recordModel ?
+                        config.keyFieldConfig.definition.options.recordModel :
+                        "Tinebase_Config_KeyFieldRecord",
         modelParts = modelName.split('_Model_'),
         recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[1]] ? Tine[modelParts[0]]['Model'][modelParts[1]] : null;
     

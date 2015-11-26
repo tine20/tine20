@@ -73,6 +73,12 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                             fieldLabel: this.app.i18n._('Status'),
                             name: 'status',
                             columnWidth: 0.5
+                        }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'ExampleApplication',
+                            keyFieldName: 'exampleReason',
+                            fieldLabel: this.app.i18n._('Reason'),
+                            name: 'reason',
+                            columnWidth: 0.5
                         })]
                     ] 
                 }, {

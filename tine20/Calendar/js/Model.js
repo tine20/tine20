@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
@@ -313,6 +313,20 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
+
+// register grants for calendar containers
+Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
+    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
+
+    if (container.type == 'personal') {
+        grants.push('freebusy');
+    }
+    if (container.type == 'personal' && container.capabilites_private) {
+        grants.push('private');
+    }
+
+    return grants;
+});
 
 // register calendar filters in addressbook
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {

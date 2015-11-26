@@ -857,7 +857,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     
                     this.editDialog.record.set(this.editDialogRecordProperty, items);
                     this.editDialog.fireEvent('updateDependent');
-                } else {
+                } else if (this.recordProxy) {
                     this.recordProxy.saveRecord(record, {
                         scope: this,
                         success: function(updatedRecord) {
@@ -1763,6 +1763,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onUpdateRecord: function(record, mode) {
         if (! this.rendered) {
             return;
+        }
+
+        if (! mode && ! this.recordProxy) {
+            // proxy-less = local if not defined otherwise
+            mode = 'local';
         }
         
         if (Ext.isString(record)) {
