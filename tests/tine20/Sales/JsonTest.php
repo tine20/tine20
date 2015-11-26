@@ -256,6 +256,21 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(1, $search['totalcount']);
     }
 
+    public function testSearchEmptyDateTimeFilter()
+    {
+        // create
+        $contract = $this->_getContract();
+        $contractData = $this->_instance->saveContract($contract->toArray());
+
+        $filter = $this->_getFilter();
+        $filter[] = array('field' => 'end_date', 'operator' => 'equals', 'value' => '');
+
+        $result = $this->_instance->searchContracts($filter, $this->_getPaging());
+
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals('', $result['filter'][1]['value']);
+    }
+
     /**
      * try to get a customer
      */
