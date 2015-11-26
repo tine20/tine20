@@ -54,7 +54,13 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         // get keyField config
         this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
 
-        if (! this.value && (this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default'))) {
+        var definition = this.keyFieldConfig.definition,
+            options = definition.options || {};
+
+        this.parentField = options.parentField;
+
+
+        if (! this.value && ! this.parentField && (this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default'))) {
             this.value = this.keyFieldConfig.value['default'];
         }
 
@@ -67,6 +73,8 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         this.showIcon = this.showIcon && this.store.find('icon', /^.+$/) > -1;
         
         this.initTpl();
+
+        this.on('afterrender', this.onAfterRender, this, {buffer: 50});
         Tine.Tinebase.widgets.keyfield.ComboBox.superclass.initComponent.call(this);
     },
     
@@ -74,6 +82,46 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         if (this.showIcon) {
             this.tpl = '<tpl for="."><div class="x-combo-list-item"><img src="{icon}" class="tine-keyfield-icon"/>{' + this.displayField + '}</div></tpl>';
         }
+    },
+
+    onAfterRender: function() {
+        if (this.parentField) {
+            var formPanel = this.findParentBy(function (c) {
+                    return Ext.isFunction(c.getForm)
+                }),
+                form = formPanel ? formPanel.getForm() : null,
+                parentField = form ? form.findField(this.parentField) : null;
+
+            if (parentField) {
+                parentField.setValue = parentField.setValue.createSequence(this.applyParentValue, this);
+
+                this.applyParentValue(parentField.getValue());
+            }
+        }
+    },
+
+    applyParentValue: function(parentValue){
+        this.store.filter('id', parentValue);
+
+        var parentRe = new RegExp('^' + parentValue),
+            defaultValues = this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default') ? this.keyFieldConfig.value.default : false,
+            defaultValue = '';
+
+        // apply default if current value is not appropriate
+        if (! String(this.getValue()).match(parentRe)) {
+            Ext.each(defaultValues, function (candidate) {
+                if (String(candidate).match(parentRe)) {
+                    defaultValue = candidate;
+                    return false;
+                }
+            }, this);
+
+            this.setValue(defaultValue);
+        }
+    },
+
+    doQuery: function() {
+        this.onLoad();
     }
 });
 

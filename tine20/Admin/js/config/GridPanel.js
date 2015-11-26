@@ -134,6 +134,7 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             colModel.config[o.column].setEditor(
                 Tine.Admin.config.FieldManager.create(o.record, {
                     app: this.configApp,
+                    configRecord: o.record,
                     expandOnFocus: true
                 })
             );

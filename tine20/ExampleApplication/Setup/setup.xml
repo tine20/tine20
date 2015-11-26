@@ -35,6 +35,12 @@
                     <default>IN-PROCESS</default>
                     <notnull>true</notnull>
                 </field>
+                <!-- keyfield 'reason' -->
+                <field>
+                    <name>reason</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
                 <!-- add more fields here -->
                 <!-- defaults for tine system -->
                 <field>

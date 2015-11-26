@@ -165,15 +165,17 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
  *
  * @return Ext.grid.ColumnModel
  */
-Tine.Calendar.GridView.initCM = function(app){
-
+Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
+    if (! additionalColumns) {
+        additionalColumns = [];
+    }
 
     return new Ext.grid.ColumnModel({
         defaults: {
             sortable: true,
             resizable: true
         },
-        columns: [{
+        columns: additionalColumns.concat([{
             id: 'container_id',
             header: Tine.Calendar.Model.Event.getContainerName(),
             width: 150,
@@ -257,13 +259,6 @@ Tine.Calendar.GridView.initCM = function(app){
                 }
                 return Ext.util.Format.htmlEncode(description);
             }
-        }/*, {
-         id: 'attendee_status',
-         header: app.i18n._("Status"),
-         width: 100,
-         sortable: true,
-         dataIndex: 'attendee',
-         //                renderer: this.attendeeStatusRenderer.createDelegate(this)
-         }*/]
+        }])
     });
 };
