@@ -983,6 +983,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting user' . $user->accountLoginName);
+
+        $event = new Tinebase_Event_User_DeleteAccount(
+            Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
+        );
+        $event->account = $user;
+        Tinebase_Event::fireEvent($event);
         
         $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));

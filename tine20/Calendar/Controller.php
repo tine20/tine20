@@ -61,16 +61,20 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
-        switch(get_class($_eventObject)) {
+        switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
                 //$this->createPersonalFolder($_eventObject->account);
                 Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $_eventObject->account->getId());
                 break;
                 
-            case 'Admin_Event_DeleteAccount':
-                // not a good idea, as it could be the originaters container for invitations
-                // we need to move all contained events first
-                //$this->deletePersonalFolder($_eventObject->account);
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                $this->_handleDeleteUserEvent($_eventObject);
+
+                // let event bubble
+                parent::_handleEvent($_eventObject);
                 break;
                 
             case 'Admin_Event_UpdateGroup':
@@ -92,16 +96,146 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 break;
         }
     }
-    
+
+    protected function _handleDeleteUserEvent($_eventObject)
+    {
+        if ($_eventObject->keepOrganizerEvents()) {
+            $this->_keepOrganizerEvents($_eventObject);
+        }
+
+        if ($_eventObject->deletePersonalContainers()) {
+            $this->deletePersonalFolder($_eventObject->account);
+        }
+    }
+
+    protected function _keepOrganizerEvents($_eventObject)
+    {
+        $accountId = $_eventObject->account->getId();
+        $contactId = $_eventObject->account->contact_id;
+
+        $contact = null;
+        $newContact = null;
+        $contactEmail = null;
+        if ($_eventObject->keepAsContact()) {
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
+                $contactEmail = $contact->getPreferedEmailAddress();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // ignore
+                $contactEmail = $_eventObject->account->accountEmailAddress;
+            }
+        } else {
+            $contactEmail = $_eventObject->account->accountEmailAddress;
+        }
+
+        if (null === $contact) {
+            $newContact = Calendar_Model_Attender::resolveEmailToContact(array(
+                'email' => $contactEmail,
+            ));
+        }
+
+        $eventController = Calendar_Controller_Event::getInstance();
+        $oldState = $eventController->doContainerACLChecks(false);
+        // delete all events where our deletee is organizer and that are private (no matter if they have attendees or not)
+        /*$filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'class', 'operator' => 'equals', 'value' => Calendar_Model_Event::CLASS_PRIVATE),
+            array('field' => 'organizer', 'operator' => 'equals', 'value' => $contactId),
+        ));
+        $eventController->deleteByFilter($filter);*/
+
+        // delete all events where our deletee is organizer and that dont have any additional attenders except the organizer / deletee himself
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'organizer', 'operator' => 'equals', 'value' => $contactId),
+            array('field' => 'attender', 'operator' => 'notHasSomeExcept', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id' => $contactId,
+            )),
+        ));
+        $eventController->deleteByFilter($filter);
+
+        $eventController->doContainerACLChecks($oldState);
+
+        // get all personal containers
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $this->getDefaultModel(), $accountId, '*', true);
+        if ($containers->count() > 0) {
+            // take the first one and make it an invitation container
+            $container = $containers->getByIndex(0);
+            $this->convertToInvitationContainer($container, $contactEmail);
+
+            // if there are more than 1 container, move contents to invitation container, then delete them
+            $i = 1;
+            while ($containers->count() > 1) {
+                $moveContainer = $containers->getByIndex($i);
+                $containers->offsetUnset($i++);
+
+                //move $moveContainer content to $container
+                $eventController->getBackend()->moveEventsToContainer($moveContainer, $container);
+                //delete $moveContainer
+                Tinebase_Container::getInstance()->deleteContainer($moveContainer, true);
+            }
+        }
+
+        // replace old contactId with newContact->getId()
+        if (null !== $newContact) {
+            $eventController->getBackend()->replaceContactId($contactId, $newContact->getId());
+        }
+    }
+
+    /**
+     * Converts the calendar to be a calendar for external organizer
+     *
+     * @param Tinebase_Model_Container $container
+     */
+    public function convertToInvitationContainer(Tinebase_Model_Container $container, $emailAddress)
+    {
+        if ($container->model !== 'Calendar_Model_Event') {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' container provided needs to have the model Calendar_Model_Event instead of ' . $container->model);
+            throw Tinebase_Exception_UnexpectedValue('container provided needs to have the model Calendar_Model_Event instead of ' . $container->model);
+        }
+
+        $tbc = Tinebase_Container::getInstance();
+        try {
+            $oldContainer = $tbc->getContainerByName('Calendar', $emailAddress, Tinebase_Model_Container::TYPE_SHARED);
+
+            // TODO fix me!
+            // bad, we should move the events from $oldContainer to $container
+
+            $tbc->deleteContainer($oldContainer, true);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            //good, ignore
+        }
+
+        $container->name = $emailAddress;
+        $container->color = '#333399';
+        $container->type = Tinebase_Model_Container::TYPE_SHARED;
+        $tbc->update($container);
+
+        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_ADD         => true,
+                Tinebase_Model_Grants::GRANT_EDIT        => true,
+                Tinebase_Model_Grants::GRANT_DELETE      => true,
+            )
+        ));
+        $tbc->setGrants($container->getId(), $grants, true, false);
+    }
+
     /**
      * Get/Create Calendar for external organizer
      * 
      * @param  Addressbook_Model_Contact $organizer organizer id
+     * @param  string $emailAddress
      * @return Tinebase_Model_Container  container id
      */
-    public function getInvitationContainer($organizer)
+    public function getInvitationContainer($organizer, $emailAddress = null)
     {
-        $containerName = $organizer->getPreferedEmailAddress();
+        if (null!==$organizer) {
+            $containerName = $organizer->getPreferedEmailAddress();
+        } else {
+            $containerName = $emailAddress;
+        }
         
         try {
             $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $containerName, Tinebase_Model_Container::TYPE_SHARED);
@@ -161,17 +295,6 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
-    }
-    
-    /**
-     * delete all personal user folders and the contacts associated with these folders
-     *
-     * @param Tinebase_Model_User $_account the accountd object
-     * @todo implement and write test
-     */
-    public function deletePersonalFolder($_account)
-    {
-        
     }
     
     /**

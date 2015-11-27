@@ -386,10 +386,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 $groupsController->removeGroupMember($groupId, $accountId);
             }
             
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && !empty($oldUser->contact_id)) {
-                $this->_deleteContact($oldUser->contact_id);
-            }
-            
             $this->_userBackend->deleteUser($accountId);
         }
     }
@@ -480,17 +476,5 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         return $contact;
-    }
-    
-    /**
-     * delete contact associated with user
-     * 
-     * @param string  $_contactId
-     */
-    protected function _deleteContact($_contactId)
-    {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-        
-        $contactsBackend->delete($_contactId);
     }
 }

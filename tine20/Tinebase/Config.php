@@ -299,6 +299,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
+
+    /**
+     * ACCOUNT_DELETION_EVENTCONFIGURATION
+     *
+     * @var string
+     */
+    const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
     
     /**
      * roleChangeAllowed
@@ -333,6 +340,27 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        /**
+         * possible values:
+         *
+         * $_deletePersonalContainers => delete personal containers
+         * $_keepAsContact => keep "account" as contact in the addressbook
+         * $_keepOrganizerEvents => keep accounts organizer events as external events in the calendar
+         * $_keepAsContact => keep accounts calender event attendee as external attendee
+         *
+         * TODO add more options (like move to another container)
+         */
+        self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
+            //_('Account Deletion Event')
+            'label'                 => 'Account Deletion Event',
+            //_('Configure what should happen to data of deleted users')
+            'description'           => 'Configure what should happen to data of deleted users',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
         self::IMAP => array(
                                    //_('System IMAP')
             'label'                 => 'System IMAP',

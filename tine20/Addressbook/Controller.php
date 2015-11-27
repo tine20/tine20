@@ -79,9 +79,24 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            case 'Admin_Event_DeleteAccount':
-                foreach ($_eventObject->accountIds as $accountId) {
-                    $this->deletePersonalFolder($accountId);
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                if ($_eventObject->deletePersonalContainers()) {
+                    $this->deletePersonalFolder($_eventObject->account);
+                }
+
+                //make to be deleted accounts (user) contact a normal contact
+                if ($_eventObject->keepAsContact()) {
+                    $contact = Addressbook_Controller_Contact::getInstance()->get($_eventObject->account->contact_id);
+                    $contact->type = Addressbook_Model_Contact::CONTACTTYPE_CONTACT;
+                    Addressbook_Controller_Contact::getInstance()->update($contact);
+
+                } else {
+                    //or just delete it
+                    $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                    $contactsBackend->delete($_eventObject->account->contact_id);
                 }
                 break;
         }
@@ -114,16 +129,6 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
-    }
-    
-    /**
-     * delete all personal user folders and the contacts associated with these folders
-     *
-     * @param Tinebase_Model_User $_account the accountd object
-     * @todo implement and write test
-     */
-    public function deletePersonalFolder($_account)
-    {
     }
 
     /**
