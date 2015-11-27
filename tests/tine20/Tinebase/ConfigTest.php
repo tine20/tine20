@@ -237,4 +237,14 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $cachedConfigFilename = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
         $this->assertTrue(file_exists($cachedConfigFilename), 'cached config file does not exist: ' . $cachedConfigFilename);
     }
+
+    /**
+     * @see 0011456: unable to add new activesync-devices in tine20
+     */
+    public function testDefaultNull()
+    {
+        // TODO maybe we need to remove the current config if is set
+        $defaultPolicy = ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEFAULT_POLICY, null);
+        $this->assertTrue(is_null($defaultPolicy), 'config should be null: ' . var_export($defaultPolicy, true));
+    }
 }

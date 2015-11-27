@@ -607,6 +607,10 @@ abstract class Tinebase_Config_Abstract
      */
     protected function _rawToConfig($_rawData, $_name)
     {
+        if ($_rawData === null) {
+            return $_rawData;
+        }
+
         $definition = self::getDefinition($_name);
         
         if (! $definition) {
@@ -615,7 +619,7 @@ abstract class Tinebase_Config_Abstract
         if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
             return new $definition['class'](is_array($_rawData) ? $_rawData : array());
         }
-        
+
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
             case self::TYPE_BOOL:       return (bool) (int) $_rawData;
