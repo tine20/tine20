@@ -57,6 +57,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
+            'default'               => null,
         ),
         self::DISABLE_ACCESS_LOG => array(
         //_('Disable Access Log')
