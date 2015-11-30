@@ -938,4 +938,25 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $attendeeBackend = new Calendar_Backend_Sql_Attendee();
         $attendeeBackend->replaceContactId($oldContactId, $newContactId);
     }
+
+    /**
+     * takes event ids, filters out recuring events and returns only the uids of the base events of those event ids.
+     *
+     * @param array $eventIds
+     * @return array
+     */
+    public function getUidOfBaseEvents(array $eventIds)
+    {
+        if (count($eventIds) == 0) {
+            return array();
+        }
+
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . $this->_tableName, 'uid')
+            ->where($this->_db->quoteIdentifier('id') . ' IN (?) AND ' . $this->_db->quoteIdentifier('recurid') . ' IS NULL', $eventIds);
+
+        $stmt = $this->_db->query($select);
+
+        return $stmt->fetchAll(Zend_Db::FETCH_NUM);
+    }
 }

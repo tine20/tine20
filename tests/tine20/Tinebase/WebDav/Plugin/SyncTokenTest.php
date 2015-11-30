@@ -52,24 +52,45 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
     public function tearDown()
     {
         parent::tearDown();
-
-        Tinebase_Container::getInstance()->getContentBackend()->delete($this->objects['containerContent']);
     }
 
     protected function setupCalendarContent()
     {
-        /**
-         * @var Tinebase_Backend_Sql
-         */
-        $contentBackend = Tinebase_Container::getInstance()->getContentBackend();
-        $this->objects['containerContent'] = new Tinebase_Model_ContainerContent(array(
-            'action'          => Tinebase_Model_ContainerContent::ACTION_CREATE,
-            'record_id'       => 'testRecordId',
-            'time'            => Tinebase_DateTime::now(),
-            'container_id'    => $this->objects['initialContainer']->id,
-            'content_seq'     => 1,
+        $eventController = Calendar_Controller_Event::getInstance();
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'container_id'  => $this->objects['initialContainer']->id,
+            'summary'       => 'change socks',
+            'dtstart'       => '1979-06-05 07:55:00',
+            'dtend'         => '1979-06-05 08:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
+            'exdate'        => '2009-03-31 07:00:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule_until'   => '2009-04-01 08:00:00',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
-        $contentBackend->create($this->objects['containerContent']);
+        $eventController->create($event);
+
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'container_id'  => $this->objects['initialContainer']->id,
+            'summary'       => 'change t-shirt',
+            'dtstart'       => '1979-06-05 08:00:00',
+            'dtend'         => '1979-06-05 08:05:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=2;UNTIL=2009-04-01 08:00:00',
+            'exdate'        => '2009-03-31 07:00:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule_until'   => '2009-04-01 08:00:00',
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+
+        $persistentEvent = $eventController->create($event);
+
+        $exception = clone $persistentEvent;
+        $exception->summary = 'use blue t-shirt today';
+
+        $eventController->createRecurException($exception);
+
     }
 
     /**
@@ -104,7 +125,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->server->httpRequest = $request;
         $this->server->exec();
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/1</d:sync-token></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>', $this->response->body);
+        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response></d:multistatus>', $this->response->body);
     }
 
     /**
@@ -133,6 +154,9 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
         $this->server->exec();
         
         $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
-        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/1</d:sync-token></d:multistatus>', $this->response->body);
+        $this->assertContains('<d:sync-token>http://tine20.net/ns/sync/5</d:sync-token></d:multistatus>', $this->response->body);
+
+        //check that we only got 2 responses, so no reoccuring events!
+        $this->assertEquals(2, preg_match_all('/<d:response>/', $this->response->body, $m));
     }
 }
