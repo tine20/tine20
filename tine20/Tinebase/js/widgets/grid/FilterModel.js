@@ -222,6 +222,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             fields: ['operator', 'label'],
             data: [
                 {operator: 'contains',      label: _('contains')},
+                {operator: 'notcontains',   label: _('contains not')},
                 {operator: 'regex',         label: _('reg. exp.')},
                 {operator: 'equals',        label: _('is equal to')},
                 {operator: 'equalsspecial', label: _('is equal to without (-, )')},
@@ -249,7 +250,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (this.operators.length == 0) {
             switch (this.valueType) {
                 case 'string':
-                    this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not', 'in');
+                    this.operators.push('contains', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');

@@ -1712,6 +1712,9 @@ msgstr "nächstes Jahr"
 msgid "contains"
 msgstr "enthält"
 
+msgid "contains not"
+msgstr "enthält nicht"
+
 #: js/widgets/grid/FilterModel.js:225
 msgid "reg. exp."
 msgstr "reg. Ausdruck"
