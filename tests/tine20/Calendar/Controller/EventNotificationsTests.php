@@ -509,7 +509,36 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('sclever', 'Alarm');
         $this->assertEquals(1, count(self::getMessages()));
     }
-    
+
+    public function testAlarmSkipPreference()
+    {
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $calPreferences = Tinebase_Core::getPreference('Calendar');
+        $calPreferences->setValueForUser(
+            Calendar_Preference::SEND_ALARM_NOTIFICATIONS,
+            0,
+            $this->_getPersona('sclever')->getId(), TRUE
+        );
+
+        $event = $this->_getEvent();
+        $event->dtstart = Tinebase_DateTime::now()->addMinute(15);
+        $event->dtend = clone $event->dtstart;
+        $event->dtend->addMinute(30);
+        $event->attendee = $this->_getAttendee();
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+
+        $persistentEvent = $this->_eventController->create($event);
+
+        self::flushMailer();
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $this->_assertMail('sclever', NULL);
+    }
+
     /**
      * CalDAV/Custom can have alarms with odd times
      */
@@ -547,7 +576,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
         $this->_assertMail('sclever');
     }
-    
+
     /**
      * testParallelAlarmTrigger
      * 

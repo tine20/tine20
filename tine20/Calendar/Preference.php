@@ -51,6 +51,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * send notifications of own updates
      */
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
+
+    /**
+     * send alarm notifications
+     */
+    const SEND_ALARM_NOTIFICATIONS = 'sendalarmnotifications';
     
     /**
      * enable default alarm 
@@ -94,6 +99,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::SEND_ALARM_NOTIFICATIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
             self::DEFAULTATTENDEE_STRATEGY,
@@ -144,6 +150,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS => array(
                 'label'         => $translate->_('Send Notifications Emails of own Actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
+            ),
+            self::SEND_ALARM_NOTIFICATIONS => array(
+                'label'         => $translate->_('Send Alarm Notifications Emails'),
+                'description'   => $translate->_('Get event alarms via email'),
             ),
             self::DEFAULTALARM_ENABLED => array(
                 'label'         => $translate->_('Enable Standard Alarm'),
@@ -266,6 +276,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::SEND_NOTIFICATION_OF_OWN_ACTIONS:
                 $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::SEND_ALARM_NOTIFICATIONS:
+                $preference->value      = 1;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
