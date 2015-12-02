@@ -744,16 +744,20 @@ class Tinebase_User
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to delete ' . count($deletedInSyncBackend) . ' users in SQL backend...');
+            . ' About to delete / expire ' . count($deletedInSyncBackend) . ' users in SQL backend...');
 
         foreach ($deletedInSyncBackend as $userToDelete) {
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
+
+            if (in_array($user->accountLoginName, self::getSystemUsernames())) {
+                return;
+            }
 
             // at first, we expire the user
             $now = Tinebase_DateTime::now();
             if (! $user->accountExpires) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Set expiry date to ' . $now);
+                    . ' Set expiry date of ' . $user->accountLoginName . ' to ' . $now);
                 $user->accountExpires = $now;
                 Tinebase_User::getInstance()->updateUserInSqlBackend($user);
             } else {
@@ -777,6 +781,16 @@ class Tinebase_User
                 }
             }
         }
+    }
+
+    /**
+     * returns login_names of system users
+     *
+     * @return array
+     */
+    public static function getSystemUsernames()
+    {
+        return array('cronuser', 'calendarscheduling');
     }
 
     /**
