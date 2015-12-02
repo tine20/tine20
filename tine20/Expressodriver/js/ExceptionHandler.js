@@ -35,7 +35,7 @@ Tine.Expressodriver.handleRequestException = function(exception, request) {
                 icon: Ext.MessageBox.WARNING,
                 title: _('Service Unavailable'),
                 msg: String.format(app.i18n._('The Expressodriver is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator.'),
-                    '<a href="http://www.tine20.org/wiki/index.php/Admin_FAQ#The_message_.22filesdir_config_value_not_set.22_appears_in_the_logfile_and_I_can.27t_open_the_Expressodriver" target="_blank">',
+                    '<a href="http://wiki.tine20.org/Admin_FAQ#The_message_.22filesdir_config_value_not_set.22_appears_in_the_logfile_and_I_can.27t_open_the_Expressodriver" target="_blank">',
                     '</a>')
             });
             break;

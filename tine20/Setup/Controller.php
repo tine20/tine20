@@ -70,7 +70,7 @@ class Setup_Controller
      *
      * @var string
      */
-    protected $_helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
+    protected $_helperLink = ' <a href="http://wiki.tine20.org/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
 
     /**
      * the singleton pattern

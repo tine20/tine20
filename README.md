@@ -11,7 +11,7 @@ equally high standard of professional software development.
 
 ## Contributors Guide
 To start developing with tine20 and GIT please visit
-* [Tine2.0 Contributors Guide](https://www.tine20.org/wiki/index.php/Developers/Getting_Started/Contributors_Guide)
+* [Tine2.0 Contributors Guide](https://wiki.tine20.org/Developers/Getting_Started/Contributors_Guide)
 
 ## Official Ressources
 

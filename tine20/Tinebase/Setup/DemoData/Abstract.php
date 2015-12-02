@@ -74,7 +74,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     
     /**
      * the personas to create demodata for
-     * http://www.tine20.org/wiki/index.php/Personas
+     * http://wiki.tine20.org/Personas
      * will be resolved to array of accounts
      * 
      * @var array
