@@ -746,6 +746,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
     
     /**
+     * vaidates on multiple edit
+     * 
+     * @return {Boolean}
+     */
+    isMultipleValid: function() {
+        return true;
+    },
+    
+    /**
      * @private
      */
     onCancel: function(){
