@@ -303,8 +303,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _rawDataToRecord(array $_rawData)
     {
         $result = new $this->_modelName($_rawData, true);
-
-        $result->runConvertToRecord();
         
         $this->_explodeForeignValues($result);
         
@@ -1080,7 +1078,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _recordToRawData($_record)
     {
-        $_record->runConvertToData();
         $readOnlyFields = $_record->getReadOnlyFields();
         $raw = $_record->toArray(FALSE);
         foreach ($raw as $key => $value) {
