@@ -63,7 +63,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
              return;
          }
 
-         $db = Tinebase_Core::getDb();
+         $db = $_backend->getAdapter();
 
          switch ($this->_operator) {
              case 'contains':
