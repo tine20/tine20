@@ -245,6 +245,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 }, {
                     // activities and tags
+                    // TODO make order of accordion items stateful
                     region: 'east',
                     layout: 'accordion',
                     animate: true,
@@ -256,11 +257,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                        new Tine.widgets.tags.TagPanel({
-                            app: 'Calendar',
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
-                        }),
                         new Ext.Panel({
                             // @todo generalise!
                             title: this.app.i18n._('Description'),
@@ -280,6 +276,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Calendar',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]
