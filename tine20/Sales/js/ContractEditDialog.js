@@ -338,7 +338,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }]
+            }, this.productGridPanel]
         };
     }
 });

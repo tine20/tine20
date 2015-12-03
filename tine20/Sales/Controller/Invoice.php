@@ -316,13 +316,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _prepareInvoiceRelationsAndFindBillableAccountables($productAggregates)
     {
         $modelsToBill = array();
-        $billedRelations = array();
         $simpleProductsToBill = array();
         $modelsToSkip = array();
-        // this holds all relations for the invoice
-        $relations            = array();
-        $billableAccountables = array();
-
         
         // iterate product aggregates to get the billing definition for the models
         foreach ($productAggregates as $productAggregate) {
@@ -392,50 +387,23 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 if (($product->accountable == 'Sales_Model_Product') || ($product->accountable == '')) {
                     $simpleProductsToBill[] = array('pa' => $productAggregate, 'ac' => $productAggregate);
                 } else {
-
-                    if ($productAggregate->json_attributes && isset($productAggregate->json_attributes['assignedAccountables']) &&
-                        is_array($productAggregate->json_attributes['assignedAccountables']) && count($productAggregate->json_attributes['assignedAccountables'])) {
-
-                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relationId) {
-                            $billedRelations[$relationId] = true;
-
-                            $relation = $this->_currentBillingContract->relations->getById($relationId);
-
-                            if (false === $relation || $product->accountable != $relation->related_model) {
-                                throw new Tinebase_Exception_UnexpectedValue('couldnt resolved assignedAccountables');
-                            }
-
-                            $relations[] = array_merge(array(
-                                'related_model'  => $relation->related_model,
-                                'related_id'     => $relation->related_id,
-                                'related_record' => $relation->related_record->toArray(),
-                            ), $this->_getRelationDefaults());
-
-                            $billableAccountables[] = array(
-                                'ac' => $relation->related_record,
-                                'pa' => $productAggregate
-                            );
-                        }
-                    } else {
-                        $modelsToBill[$product->accountable] = $productAggregate;
-                    }
+                    $modelsToBill[$product->accountable] = $productAggregate;
                 }
             } else {
                 $modelsToSkip[] = $product->accountable;
             }
         }
         
-
+        // this holds all relations for the invoice
+        $relations            = array();
+        $billableAccountables = array();
         
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if (isset($billedRelations[$relation->id])) {
-                continue;
-            }
             // use productaggregate definition, if it has been found
             if (isset($modelsToBill[$relation->related_model]) && (! in_array($relation->related_model, $modelsToSkip))) {
                 $relations[] = array_merge(array(
-                    'related_model'  => $relation->related_model,
+                    'related_model'  => get_class($relation->related_record),
                     'related_id'     => $relation->related_id,
                     'related_record' => $relation->related_record->toArray(),
                 ), $this->_getRelationDefaults());
@@ -448,7 +416,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             } elseif ((! in_array($relation->related_model, $modelsToSkip)) && in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_model))) {
                 // no product aggregate definition has been found -> use default values
                 $relations[] = array_merge(array(
-                    'related_model'  => $relation->related_model,
+                    'related_model'  => get_class($relation->related_record),
                     'related_id'     => $relation->related_id,
                     'related_record' => $relation->related_record->toArray(),
                 ), $this->_getRelationDefaults());

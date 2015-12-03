@@ -48,12 +48,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      * @var boolean
      */
     protected $_handleDependentRecords = TRUE;
-
-    /**
-     * holds the callbacks to call after modifications are done
-     * @var array
-     */
-    protected $_afterModifyCallbacks = array();
     
     /**
      * holds the instance of the singleton
@@ -238,21 +232,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
     {
         $this->_handleDependentRecords = $toggle;
     }
-
-    public function addAfterModifyCallback($key, $callable)
-    {
-        $this->_afterModifyCallbacks[$key] = $callable;
-    }
-
-    protected function _afterModifyCallbacks()
-    {
-        foreach($this->_afterModifyCallbacks as $callable)
-        {
-            call_user_func($callable[0], $callable[1]);
-        }
-        $this->_afterModifyCallbacks = array();
-    }
-
+    
     /**
      * inspect creation of one record (after create)
      *
@@ -268,8 +248,6 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
                 $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
             }
         }
-
-        $this->_afterModifyCallbacks();
     }
     
     /**
@@ -279,16 +257,14 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($this->_handleDependentRecords) {
-            $config = $_updatedRecord::getConfiguration()->recordsFields;
+            $config = $_record::getConfiguration()->recordsFields;
             foreach (array_keys($config) as $p) {
-                $this->_updateDependentRecords($_updatedRecord, $_oldRecord, $p, $config[$p]['config']);
+                $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
             }
         }
-
-        $this->_afterModifyCallbacks();
     }
     
     /**

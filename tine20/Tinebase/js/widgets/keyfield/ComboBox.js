@@ -55,7 +55,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
 
         var definition = this.keyFieldConfig.definition,
-            options = definition.options || {};
+            options = definition && definition.options || {};
 
         this.parentField = options.parentField;
 
@@ -104,7 +104,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         this.store.filter('id', parentValue);
 
         var parentRe = new RegExp('^' + parentValue),
-            defaultValues = this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default') ? this.keyFieldConfig.value.default : false,
+            defaultValues = this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default') ? this.keyFieldConfig.value['default'] : false,
             defaultValue = '';
 
         // apply default if current value is not appropriate
