@@ -77,6 +77,17 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         return self::$_instance;
     }
+
+    /**
+     * unsets the instance to save memory, be aware that hasBeenRun still needs to work after unsetting!
+     *
+     */
+    public function unsetInstance()
+    {
+        if (self::$_instance !== NULL) {
+            self::$_instance = null;
+        }
+    }
     
     /**
      * this is required for other applications needing demo data of this application
@@ -295,6 +306,10 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $contacts = Addressbook_Controller_Contact::getInstance()->getAll();
         $addresses = $contacts->filter('type', 'contact');
+        $pagination = new Tinebase_Model_Pagination();
+        $pagination->start = 0;
+        $pagination->limit = 100;
+        $addresses->limitByPagination($pagination);
         $users = $contacts->filter('type', 'user');
         
         unset($contacts);

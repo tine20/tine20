@@ -357,6 +357,7 @@ class Setup_Frontend_Cli
                 }
             }
         }
+        unset($containers);
         echo "Successfully cleand up containers.\n";
         
         //remove state
