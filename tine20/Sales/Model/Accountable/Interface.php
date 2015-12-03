@@ -103,23 +103,4 @@ interface Sales_Model_Accountable_Interface
      * @return Sales_Model_ProductAggregate
      */
     public function getDefaultProductAggregate(Sales_Model_Contract $contract);
-
-    /**
-     * called by the product aggregate controller in case accountables are assigned to the changed
-     * product aggregate
-     *
-     * @param Sales_Model_ProductAggregate $productAggregate
-     * @return void
-     */
-    public function _inspectBeforeCreateProductAggregate(Sales_Model_ProductAggregate $productAggregate);
-
-    /**
-     * called by the product aggregate controller in case accountables are assigned to the changed
-     * product aggregate
-     *
-     * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_ProductAggregate $oldRecord
-     * @return void
-     */
-    public function _inspectBeforeUpdateProductAggregate(Sales_Model_ProductAggregate $productAggregate, Sales_Model_ProductAggregate $oldRecord);
 }

@@ -263,23 +263,4 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      * @return boolean
      */
     abstract public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL);
-
-    /**
-     * called by the product aggregate controller in case accountables are assigned to the changed
-     * product aggregate
-     *
-     * @param Sales_Model_ProductAggregate $productAggregate
-     * @return void
-     */
-    public function _inspectBeforeCreateProductAggregate(Sales_Model_ProductAggregate $productAggregate) {}
-
-    /**
-     * called by the product aggregate controller in case accountables are assigned to the changed
-     * product aggregate
-     *
-     * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_ProductAggregate $oldRecord
-     * @return void
-     */
-    public function _inspectBeforeUpdateProductAggregate(Sales_Model_ProductAggregate $productAggregate, Sales_Model_ProductAggregate $oldRecord) {}
 }

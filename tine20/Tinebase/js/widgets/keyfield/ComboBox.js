@@ -55,7 +55,7 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
         this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
 
         var definition = this.keyFieldConfig.definition,
-            options = definition.options || {};
+            options = definition && definition.options || {};
 
         this.parentField = options.parentField;
 

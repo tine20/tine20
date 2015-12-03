@@ -256,6 +256,14 @@
             $organizer = $_event->resolveOrganizer();
             $organizerAccountId = $organizer->account_id;
             $attendee = $_attender->getResolvedUser();
+
+            if ($attendee instanceof Addressbook_Model_List) {
+                // don't send notification to lists as we already resolved the list members for individual mails
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Skip notification for list " . $attendee->name);
+                return;
+            }
+
             $attendeeAccountId = $_attender->getUserAccountId();
             
             $prefUserId = $attendeeAccountId ? $attendeeAccountId :
@@ -288,7 +296,7 @@
             $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel);
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
-            // NOTE prefUser is organzier for external notifications
+            // NOTE prefUser is organizer for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
                 || ($sendLevel < $_notificationLevel && (
                         ((is_object($organizer) && method_exists($attendee, 'getPreferedEmailAddress') && $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress())

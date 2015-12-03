@@ -131,7 +131,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Name'), 
                     name: 'name',
                     allowBlank: false,
-                    maxLength: 40
+                    maxLength: 255
                 }, {
                     xtype: 'combo',
                     readOnly: this.record.id != 0,
