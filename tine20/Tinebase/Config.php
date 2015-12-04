@@ -82,7 +82,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CRONUSERID = 'cronuserid';
-    
+
+    /**
+     * FEATURE_SHOW_ADVANCED_SEARCH
+     *
+     * @var string
+     */
+    const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
+
     /**
      * user defined page title postfix for browser page title
      * 
@@ -407,6 +414,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            'description'           => 'Enabled Features',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_SHOW_ADVANCED_SEARCH => array(
+                    'label'         => 'Show Advanced Search', //_('Show Advanced Search')
+                    'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
+                    //_('Show toggle button to switch on or off the advanced search for the quickfilter')
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_SHOW_ADVANCED_SEARCH => false,
+            ),
         ),
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
