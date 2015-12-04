@@ -733,7 +733,7 @@ class Tinebase_Core
             }
             
         } else {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -746,17 +746,17 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             
-        } catch (Zend_Cache_Exception $e) {
-            $enabled = FALSE;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+
+            $enabled = false;
             if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
-                // create cache directory and re-try
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
                 if (mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
             }
-            
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Cache error: ' . $e->getMessage());
-            
+
             self::setupCache($enabled);
             return;
         }
