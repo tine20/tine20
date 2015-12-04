@@ -300,7 +300,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'id' => 1234567890
         );
         
-        $employee = $this->_getEmployee('unittest')->toArray();
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName)->toArray();
         $employee['contracts'] = $contracts;
         
         $employee = $this->_json->saveEmployee($employee);
@@ -403,7 +403,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $contractBackend = new HumanResources_Backend_Contract();
     
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
         
@@ -644,7 +644,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      */
     public function testNoAccountException()
     {
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         
         $this->setExpectedException('HumanResources_Exception_NoAccount');
         
@@ -666,7 +666,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeController = HumanResources_Controller_Employee::getInstance();
         $contractBackend = new HumanResources_Backend_Contract();
     
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
         
@@ -721,7 +721,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
         $employmentBegin->setTime(12,0,0);
         
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
         
@@ -765,7 +765,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             $employmentEnd   = clone $employmentBegin;
             $employmentEnd->setDate(2014, 1, 30);
         
-            $employee = $this->_getEmployee('unittest');
+            $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
             $employee->employment_begin = $employmentBegin;
             $employee->employment_end = $employmentEnd;
         
@@ -822,7 +822,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employmentEnd   = clone $employmentBegin;
         $employmentEnd->setDate(2014, 1, 30);
         
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
         $employee->employment_end = $employmentEnd;
         
@@ -912,7 +912,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     public function testAlternatingContracts()
     {
         $date = Tinebase_DateTime::now()->setDate(2014, 1, 1)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
-        $employee = $this->_getEmployee('unittest');
+        $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         
         $employee->employment_begin = clone $date;
         
