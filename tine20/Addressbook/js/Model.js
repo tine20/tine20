@@ -37,8 +37,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_one_region', label: 'Region (Company Address)', group: 'Company Address' }, //_('Region (Company Address)')
     {name: 'adr_one_postalcode', label: 'Postal Code (Company Address)', group: 'Company Address' }, //_('Postal Code (Company Address)')
     {name: 'adr_one_countryname', label: 'Country (Company Address)', group: 'Company Address' }, //_('Country (Company Address)')
-    {name: 'adr_one_lon', group: 'Company Address', omitDuplicateResolving: true },
-    {name: 'adr_one_lat', group: 'Company Address', omitDuplicateResolving: true },
+    {name: 'adr_one_lon', label: 'Longitude (Company Address)', group: 'Company Address', omitDuplicateResolving: true }, //_('Longitude (Company Address)')
+    {name: 'adr_one_lat', label: 'Latitude (Company Address)', group: 'Company Address', omitDuplicateResolving: true }, //_('Latitude (Company Address)')
     {name: 'label', omitDuplicateResolving: true},
     {name: 'adr_two_street', label: 'Street (Private Address)', group: 'Private Address' }, //_('Street (Private Address)')  _('Private Address')
     {name: 'adr_two_street2', label: 'Street 2 (Private Address)', group: 'Private Address' }, //_('Street 2 (Private Address)')

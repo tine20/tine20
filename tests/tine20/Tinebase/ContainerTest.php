@@ -100,10 +100,14 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             sha1($container->getId() . 'd0'),
             Tinebase_Cache_PerRequest::VISIBILITY_SHARED
         );
-        
         $cachedContainer = Tinebase_Core::getCache()->load($persistentCacheId);
-        $this->assertEquals('Tinebase_Model_Container', get_class($cachedContainer), 'wrong type');
-        $this->assertEquals($cachedContainer->name, $container->name);
+        if (is_object($cachedContainer)) {
+            $this->assertEquals('Tinebase_Model_Container', get_class($cachedContainer), 'wrong type');
+            $this->assertEquals($cachedContainer->name, $container->name);
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " No persistent cache found");
+        }
     }
     
     /**
