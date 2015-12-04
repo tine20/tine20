@@ -179,6 +179,11 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
                     group: 'colorStrategy',
                     checkHandler: this.changeColorStrategy.createDelegate(this, ['container'])
                 }, {
+                    text: this.app.i18n._('Color by Tags'),
+                    checked: this.colorStrategy == 'tag',
+                    group: 'colorStrategy',
+                    checkHandler: this.changeColorStrategy.createDelegate(this, ['tag'])
+                }, {
                     text: this.app.i18n._('Color by Attendee Role'),
                     checked: this.colorStrategy == 'requiredAttendee',
                     group: 'colorStrategy',
@@ -244,6 +249,20 @@ Tine.Calendar.colorStrategies['requiredAttendee'] = {
             color = role == 'REQ' ? 'FF0000' : '00FF00'
         } else {
             color = 'C0C0C0' // light gray
+        }
+
+        return color;
+    }
+};
+
+Tine.Calendar.colorStrategies['tag'] = {
+    getColor: function(event, attendeeRecord) {
+        var color = 'C0C0C0',
+            tags = event.get('tags'),
+            tag = Ext.isArray(tags) ? tags[0] : null;
+
+        if (tag) {
+            color = tag.color;
         }
 
         return color;

@@ -315,8 +315,12 @@ msgid "Color by Calendar"
 msgstr "Farbe nach Kalender"
 
 #: js/ColorManager.js:182
+msgid "Color by Tags"
+msgstr "Farbe nach Tag"
+
+#: js/ColorManager.js:187
 msgid "Color by Attendee Role"
-msgstr "Farbe nachTeilnehmer Rolle"
+msgstr "Farbe nach Teilnehmerrolle"
 
 #: js/RrulePanel.js:34 js/Calendar-FAT-debug.js:10646 js/Calendar-FAT.js:6
 msgid "Recurrances"
