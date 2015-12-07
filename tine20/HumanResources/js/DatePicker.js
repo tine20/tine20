@@ -240,6 +240,8 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         var split = rr.lastDay.date.split(' '), dateSplit = split[0].split('-');
         var lastDay = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
+        // allow too book last years leftover holidays
+        lastDay.setFullYear(lastDay.getFullYear() + 1);
         this.setMaxDate(lastDay);
         
         // if ownFreeDays is empty, the record hasn't been saved already, so use the properties from the local record
