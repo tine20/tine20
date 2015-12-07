@@ -156,6 +156,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      */
     public function testOverwriteAttachment()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
         $event = $this->calDAVTests->createEventWithAttachment();
         
         $request = new Sabre\HTTP\Request(array(
@@ -190,6 +192,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     
     public function testUpdateAttachment()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         
@@ -223,6 +227,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     
     public function testRemoveAttachment()
     {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         

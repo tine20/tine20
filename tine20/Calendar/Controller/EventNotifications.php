@@ -283,12 +283,14 @@
             $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
             $sendLevel        = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUserId);
             $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
-            
+            $sendAlarms = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_ALARM_NOTIFICATIONS, $prefUserId);
+
             // external (non account) notification
             if (! $attendeeAccountId) {
                 // external organizer needs status updates
                 $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
+                $sendAlarms = false;
             }
 
             $recipients = array($attendee);
@@ -306,6 +308,12 @@
                 ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
+                return;
+            }
+
+            if ($_action == 'alarm' && ! $sendAlarms) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " User does not want alarm mails -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
 
