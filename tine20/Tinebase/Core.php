@@ -60,6 +60,7 @@ class Tinebase_Core
     const SESSION = 'session';
     
     /**
+     * session id constant
      */
     const SESSIONID = 'sessionId';
 
@@ -463,6 +464,22 @@ class Tinebase_Core
             $coreSession->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
         self::set('jsonKey', $coreSession->jsonKey);
+    }
+
+    /**
+     * return current session id
+     *
+     * @return mixed|null
+     */
+    public static function getSessionId()
+    {
+        if (! self::isRegistered(self::SESSIONID)) {
+            self::set(self::SESSIONID, Tinebase_Session::isStarted()
+                ? Tinebase_Session::getId()
+                : Tinebase_Record_Abstract::generateUID());
+        }
+
+        return self::get(self::SESSIONID);
     }
     
     /**

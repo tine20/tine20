@@ -120,10 +120,12 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      * @param string $_ipAddress the ip address the user connects from
      * @return void|Tinebase_Model_AccessLog
      */
-    public function setLogout($_sessionId)
+    public function setLogout()
     {
+        $sessionId = Tinebase_Core::getSessionId();
+
         try {
-            $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
+            $loginRecord = $this->_backend->getByProperty($sessionId, 'sessionid');
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find access log login record for session id ' . $_sessionId);
             return;
@@ -160,5 +162,58 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             . ' Removed ' . $deletedRows . ' rows.');
         
         return $deletedRows;
+    }
+
+
+    /**
+     * return accessLog instance
+     *
+     * @param string $loginName
+     * @param Zend_Auth_Result $authResult
+     * @param Zend_Controller_Request_Abstract $request
+     * @param string $clientIdString
+     * @return Tinebase_Model_AccessLog
+     */
+    public function getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
+    {
+        if ($header = $request->getHeaders('USER-AGENT')) {
+            $userAgent = substr($header->getFieldValue(), 0, 255);
+        } else {
+            $userAgent = 'unknown';
+        }
+
+        $accessLog = new Tinebase_Model_AccessLog(array(
+            'ip'         => $request->getServer('REMOTE_ADDR'),
+            'li'         => Tinebase_DateTime::now(),
+            'result'     => $authResult->getCode(),
+            'clienttype' => $clientIdString,
+            'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
+            'user_agent' => $userAgent
+        ), true);
+
+        return $accessLog;
+    }
+
+    /**
+     * set session for current request
+     *
+     * @param Tinebase_Model_AccessLog $accessLog
+     */
+    public function setSessionId(Tinebase_Model_AccessLog $accessLog)
+    {
+        if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
+            try {
+                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
+                // $accessLog->sessionid is set now
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // ignore
+            }
+        }
+
+        if (! $accessLog->sessionid) {
+            $accessLog->sessionid = Tinebase_Core::getSessionId();
+        }
+
+        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
 }
