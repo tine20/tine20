@@ -2015,7 +2015,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($attender->displaycontainer_id) {
             // check if user is allowed to set status
             if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
-                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                    //If resource has an default status use this
+                    $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
+                } else {
+                    $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                }
             }
         }
 
@@ -2123,7 +2128,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // reset all status but calUser on reschedule except resources (Resources might have a configured default value)
         if ($isRescheduled && !$attender->isSame($this->getCalendarUser())) {
-            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                //If resource has a default status reset to this
                 $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
                 $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
             } else {
