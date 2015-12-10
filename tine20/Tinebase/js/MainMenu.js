@@ -286,12 +286,12 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     document.execCommand('ClearAuthenticationCache');
                 }
 
-                // remove the event handler
                 // the reload() triggers the unload event
-                // TODO move redirect handling to Tine.Tinebase.common.reload
                 var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
                 if (redirect && redirect != '') {
-                    window.location = Tine.Tinebase.registry.get('redirectUrl');
+                    Tine.Tinebase.common.reload({
+                        redirectUrl: Tine.Tinebase.registry.get('redirectUrl')
+                    });
                 } else {
                     // registry is cleared before reload
                     Tine.Tinebase.common.reload({});

@@ -84,7 +84,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
-        $accessLog = $this->_getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
         
         $user = $this->_validateAuthResult($authResult, $accessLog);
         
@@ -101,7 +101,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
-        $this->_setSessionId($accessLog);
+        Tinebase_AccessLog::getInstance()->setSessionId($accessLog);
         
         $this->initUser($user);
         
@@ -458,7 +458,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         if ($this->_writeAccessLog) {
             if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
-                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID));
+                Tinebase_AccessLog::getInstance()->setLogout();
             }
         }
     }
@@ -570,35 +570,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
     
     /**
-     * return accessLog instance 
-     * 
-     * @param string $loginName
-     * @param Zend_Auth_Result $authResult
-     * @param Zend_Controller_Request_Abstract $request
-     * @param string $clientIdString
-     * @return Tinebase_Model_AccessLog
-     */
-    protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
-    {
-        if ($header = $request->getHeaders('USER-AGENT')) {
-            $userAgent = substr($header->getFieldValue(), 0, 255);
-        } else {
-            $userAgent = 'unknown';
-        }
-        
-        $accessLog = new Tinebase_Model_AccessLog(array(
-            'ip'         => $request->getServer('REMOTE_ADDR'),
-            'li'         => Tinebase_DateTime::now(),
-            'result'     => $authResult->getCode(),
-            'clienttype' => $clientIdString,
-            'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
-            'user_agent' => $userAgent
-        ), true);
-        
-        return $accessLog;
-    }
-    
-    /**
      * handle events for Tinebase
      * 
      * @param Tinebase_Event_Abstract $_eventObject
@@ -621,29 +592,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 }
                 break;
         }
-    }
-    
-    /**
-     * set session for current request
-     * 
-     * @param Tinebase_Model_AccessLog $accessLog
-     */
-    protected function _setSessionId(Tinebase_Model_AccessLog &$accessLog)
-    {
-        if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
-            try {
-                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
-                // $accessLog->sessionid is set now
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // ignore
-            }
-        }
-        
-        if (!$accessLog->sessionid) {
-            $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
-        }
-        
-        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
     
     /**
