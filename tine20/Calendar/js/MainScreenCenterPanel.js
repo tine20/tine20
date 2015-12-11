@@ -1232,8 +1232,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
         // Allow to change attendee if in split view
         var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
-        if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-            record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
+        if (Ext.isArray(defaultAttendee) && defaultAttendee.length === 1) {
+            if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
+                record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
+            }
         }
 
         record.set('dtstart', datetime);
