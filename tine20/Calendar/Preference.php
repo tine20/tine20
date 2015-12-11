@@ -81,8 +81,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * timeIncrement
      */
     const DEFAULT_TIMEINCREMENT = 'timeIncrement';
+    
+    /**
+     * firstdayofweek
+     */
+    const FIRSTDAYOFWEEK = 'firstdayofweek';
 
-        /**
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -109,7 +114,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTATTENDEE_STRATEGY,
             self::DEFAULT_TIMEINCREMENT,
             self::DEFAULTATTENDEE_STRATEGY,
-            self::DEFAULT_EVENTS_RRIVATE
+            self::DEFAULT_EVENTS_RRIVATE,
+            self::FIRSTDAYOFWEEK
         );
         
         if ($cropDays) {
@@ -180,7 +186,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_EVENTS_RRIVATE => array(
                 'label'         => $translate->_('Default set Events to privat'),
                 'description'   => $translate->_('If enabled every created event is always privat.'),
-            )
+            ),
+            self::FIRSTDAYOFWEEK => array(
+                'label'         => $translate->_('First Day of Week'),
+                'description'   => $translate->_('On what day the week should be starting'),
+            ),
         );
         
         return $prefDescriptions;
@@ -366,6 +376,20 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::FIRSTDAYOFWEEK:
+                $preference->value = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Sunday</label>
+                            <value>0</value>
+                        </option>
+                        <option>
+                            <label>Monday</label>
+                            <value>1</value>
+                        </option>
                     </options>';
                 break;
             default:
