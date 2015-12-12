@@ -1234,7 +1234,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
         if (Ext.isArray(defaultAttendee) && defaultAttendee.length === 1) {
             if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-                record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
+                record.data.attendee[0] = defaultAttendee[0];
             }
         }
 
