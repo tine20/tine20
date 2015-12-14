@@ -371,10 +371,10 @@ abstract class Tinebase_Model_Filter_Abstract
         
         return $result;
     }
-    
+
     /**
      * replaces wildcards
-     * 
+     *
      * @param  string $value
      * @return string
      */
@@ -388,26 +388,68 @@ abstract class Tinebase_Model_Filter_Abstract
         } else {
             $returnValue = $this->_replaceWildcardsSingleValue($value);
         }
-        
+
         return $returnValue;
     }
-    
+
     /**
      * replaces wildcards of a single value
-     * 
+     *
      * @param  string $value
      * @return string
      */
     protected function _replaceWildcardsSingleValue($value)
     {
         $action = $this->_opSqlMap[$this->_operator];
-        
+
         // replace wildcards from user ()
         $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $value);
-        
+
         // add wildcard to value according to operator
         $returnValue = str_replace('?', $returnValue, $action['wildcards']);
-        
+
         return $returnValue;
+    }
+
+    /**
+     * append relation filter
+     *
+     * @param string $ownModel
+     * @param array $relationsToSearchIn
+     * @return Tinebase_Model_Filter_Id
+     */
+    protected function _getAdvancedSearchFilter($ownModel = null, $relationsToSearchIn = null)
+    {
+        if (  Tinebase_Core::get('ADVANCED_SEARCHING') ||
+            ! Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, false) ||
+              empty($relationsToSearchIn))
+        {
+            return null;
+        }
+
+        $ownIds = array();
+        foreach ((array) $relationsToSearchIn as $relatedModel) {
+            $filterModel = $relatedModel . 'Filter';
+            // prevent recursion here
+            // TODO find a better way for this, maybe we could pass this an option to all filters in filter model
+            Tinebase_Core::set('ADVANCED_SEARCHING', true);
+            $relatedFilter = new $filterModel(array(
+                array('field' => 'query',   'operator' => 'contains', 'value' => $this->_value),
+            ));
+            $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
+            Tinebase_Core::set('ADVANCED_SEARCHING', false);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found ' . count($relatedIds) . ' related ids');
+
+            $relationFilter = new Tinebase_Model_RelationFilter(array(
+                array('field' => 'own_model',     'operator' => 'equals', 'value' => $ownModel),
+                array('field' => 'related_model', 'operator' => 'equals', 'value' => $relatedModel),
+                array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
+            ));
+            $ownIds = array_merge($ownIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id);
+        }
+
+        return new Tinebase_Model_Filter_Id('id', 'in', $ownIds);
     }
 }
