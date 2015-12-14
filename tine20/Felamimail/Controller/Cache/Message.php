@@ -843,19 +843,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if (! (isset($_message['header']) || array_key_exists('header', $_message)) || ! is_array($_message['header'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
-            return FALSE;
+            return false;
         }
         
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
         $cachedMessage = $this->_addMessageToCache($messageToCache);
 
-        if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
-            Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($cachedMessage);
-        }
-        if ($cachedMessage !== FALSE) {
+        if ($cachedMessage !== false) {
+            if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
+                Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($cachedMessage);
+            }
+
             $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             
-            if ($_updateFolderCounter == TRUE) {
+            if ($_updateFolderCounter == true) {
                 Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                     'cache_totalcount'  => '+1',
                     'cache_unreadcount' => (! $messageToCache->hasSeenFlag())   ? '+1' : '+0',
