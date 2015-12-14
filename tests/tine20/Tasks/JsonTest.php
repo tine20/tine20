@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tasks_JsonTest
  */
-class Tasks_JsonTest extends PHPUnit_Framework_TestCase
+class Tasks_JsonTest extends TestCase
 {
     /**
      * Backend
@@ -46,16 +46,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      * @var Zend_Mail_Transport_Abstract
      */
     protected $_smtpTransport = NULL;
-    
-    /**
-     * main function
-     *
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tasks_JsonTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -65,7 +55,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_backend = new Tasks_Frontend_Json();
         $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
@@ -84,8 +74,10 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
             Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $this->_smtpConfig);
             Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
         }
-        
-        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
+
+        parent::tearDown();
     }
     
     /**
@@ -460,5 +452,25 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
             'dir' => 'ASC',
         );
     }
-}
 
+    /**
+     * test advanced search
+     *
+     * @see 0011492: activate advanced search (search in lead relations)
+     */
+    public function testAdvancedSearch()
+    {
+        // create task with lead relation
+        $crmTests = new Crm_JsonTest();
+        $crmTests->saveLead();
+
+        // activate advanced search
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
+
+        // search in lead
+        $result = $this->_backend->searchTasks(array(array(
+            'field' => 'query', 'operator' => 'contains', 'value' => 'PHPUnit LEAD'
+        )), array());
+        $this->assertEquals(1, $result['totalcount']);
+    }
+}

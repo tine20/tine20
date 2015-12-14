@@ -39,7 +39,13 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Tasks_Model_Task')),
         'uid'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'etag'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description'))),
+        'query'                => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array(
+            'modelName' => 'Tasks_Model_Task',
+            'fields' => array('summary', 'description'),
+            'relatedModels' => array(
+                'Crm_Model_Lead',
+            )
+        )),
         'organizer'            => array('filter' => 'Tinebase_Model_Filter_User'),
         'status'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'due'                  => array('filter' => 'Tinebase_Model_Filter_DateTime'),

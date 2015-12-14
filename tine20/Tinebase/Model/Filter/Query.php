@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -145,6 +145,19 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
                 break;
             default:
                 throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
+        }
+
+        // append advanced search filter if configured
+        if (isset($this->_options['relatedModels']) && isset($this->_options['modelName'])) {
+            $relationFilter = $this->_getAdvancedSearchFilter($this->_options['modelName'], $this->_options['relatedModels']);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Got relation filter: '
+                . ($relationFilter instanceof Tinebase_Model_Filter_Abstract ? print_r($relationFilter->toArray(), true) : ''));
+            if ($relationFilter) {
+                $relationSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+                $relationFilter->appendFilterSql($relationSelect, $_backend);
+                $relationSelect->appendWhere(Zend_Db_Select::SQL_OR);
+            }
         }
     }
 }
