@@ -250,7 +250,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $count = $this->_backend->searchCount($_filter);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Got ' . is_array($count) ? print_r($count, 1) : $count . ' search count');
+            . ' Got ' . (is_array($count) ? print_r($count, 1) : $count) . ' search count');
         
         return $count;
     }

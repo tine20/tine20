@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -19,7 +19,7 @@
 class Tinebase_ModelConfiguration {
 
     /**
-     * this holds (caches) the availibility info of applications globally
+     * this holds (caches) the availability info of applications globally
      * 
      * @var array
      */
@@ -856,12 +856,47 @@ class Tinebase_ModelConfiguration {
         
         // set some default filters
         if (count($queryFilters)) {
-            $this->_filterModel['query'] = array('label' => 'Quick Search', 'field' => 'query', 'filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => $queryFilters), 'useGlobalTranslation' => true);
+            $this->_getQueryFilter($queryFilters);
         }
         $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);
     }
-    
+
+    /**
+     * constructs the query filter
+     *
+     * adds ExplicitRelatedRecords-filters to query filter (relatedModels) to allow search in relations
+     *
+     * @param array $queryFilters
+     *
+     * @see 0011494: activate advanced search for contracts (customers, ...)
+     */
+    protected function _getQueryFilter($queryFilters)
+    {
+        $queryFilterData = array(
+            'label' => 'Quick Search',
+            'field' => 'query',
+            'filter' => 'Tinebase_Model_Filter_Query',
+            'useGlobalTranslation' => true,
+            'options' => array(
+                'fields' => $queryFilters,
+                'modelName' => $this->_getPhpClassName(),
+            )
+        );
+
+        $relatedModels = array();
+        foreach ($this->_filterModel as $name => $filter) {
+            if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
+                $relatedModels[] = $filter['options']['related_model'];
+            }
+        }
+        if (count($relatedModels) > 0) {
+            $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
+        }
+
+        $this->_filterModel['query'] = $queryFilterData;
+    }
+
     /**
      * populate model config properties
      * 
@@ -962,8 +997,12 @@ class Tinebase_ModelConfiguration {
      * @param string $_type
      * @return string
      */
-    protected function _getPhpClassName($_fieldConfig, $_type = 'Model')
+    protected function _getPhpClassName($_fieldConfig = null, $_type = 'Model')
     {
+        if (! $_fieldConfig) {
+            $_fieldConfig = array('appName' => $this->_appName, 'modelName' => $this->_modelName);
+        }
+
         return $_fieldConfig['appName'] . '_' . $_type . '_' . $_fieldConfig['modelName'];
     }
     
