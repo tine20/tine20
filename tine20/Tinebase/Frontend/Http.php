@@ -486,9 +486,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header('Content-Type: application/javascript');
             die($translations);
         }
-        
+
         $this->_deliverChangedFiles('lang');
-        
+
         die();
     }
     
@@ -544,17 +544,18 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * check if js or css files have changed and return all js/css as one big file or return "HTTP/1.0 304 Not Modified" if files don't have changed
      * 
      * @param string $_fileType
+     * @param array $filesToWatch
      */
-    protected function _deliverChangedFiles($_fileType)
+    protected function _deliverChangedFiles($_fileType, $filesToWatch=null)
     {
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
-        
+
+        $config          = Tinebase_Config::getInstance();
         $cacheId         = null;
         $clientETag      = null;
         $ifModifiedSince = null;
-        $filesToWatch    = array();
-        
+
         if (isset($_SERVER['If_None_Match'])) {
             $clientETag     = trim($_SERVER['If_None_Match'], '"');
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
@@ -562,8 +563,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
-        
-        $filesToWatch = $this->_getFilesToWatch($_fileType);
+
+        $filesToWatch = $filesToWatch ? $filesToWatch : $this->_getFilesToWatch($_fileType);
+        if ($_fileType == 'js' && TINE20_BUILDTYPE != 'DEVELOPMENT') {
+            $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
+            if (! empty($customJSFiles)) {
+                $filesToWatch = array_merge($filesToWatch, (array)$customJSFiles);
+            }
+
+        }
         $lastModified = $this->_getLastModified($filesToWatch);
         
         // use last modified time also
@@ -644,10 +652,25 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     break;
             }
         }
-        
+
         return $filesToWatch;
     }
-    
+
+    /**
+     * dev mode custom js delivery
+     */
+    public function getCustomJsFiles()
+    {
+        try {
+            $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
+            $this->_deliverChangedFiles('js', (array) $customJSFiles);
+        } catch (Exception $exception) {
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " can't deliver custom js: \n" . $exception);
+
+        }
+        die();
+    }
+
     /**
      * return last modified timestamp formated in gmt
      * 

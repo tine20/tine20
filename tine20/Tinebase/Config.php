@@ -336,6 +336,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MAINTENANCE_MODE = 'maintenanceMode';
 
     /**
+     * @var array of strings
+     */
+    const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -780,6 +785,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::FAT_CLIENT_CUSTOM_JS => array(
+            // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
+            //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
+            //_('Custom Javascript includes for Fat-Client')
+            'label'                 => 'Custom Javascript includes for Fat-Client',
+            //_('An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.')
+            'description'           => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
+            'type'                  => 'array',
+            'default'               => array(),
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
     );
     
