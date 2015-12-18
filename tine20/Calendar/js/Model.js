@@ -661,7 +661,7 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
             attendeeType.push('groupmember');
         }
 
-        if (attendeeType.indexOf(r.get('user_type') >= 0) && r.getUserId() == attendee.getUserId()) {
+        if (attendeeType.indexOf(r.get('user_type')) >= 0 && r.getUserId() == attendee.getUserId()) {
             attendeeRecord = r;
             return false;
         }
