@@ -192,4 +192,28 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         
         return call_user_func(array($_controllerName, 'getInstance'));
     }
+
+    /**
+     * delete all personal user folders and the content associated with these folders
+     *
+     * @param Tinebase_Model_User|string $_accountId the account object
+     */
+    public function deletePersonalFolder($_accountId, $model = '')
+    {
+        if ($_accountId instanceof Tinebase_Record_Abstract) {
+            $_accountId = $_accountId->getId();
+        }
+
+        if ('' === $model) {
+            $model = static::$_defaultModel;
+        }
+        // attention, currently everybody who has admin rights on a personal container is the owner of it
+        // even if multiple users have admin rights on that personal container! (=> multiple owners)
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($_accountId, $model, $_accountId, '*', true);
+
+        foreach ($containers as $container) {
+            //Tinebase_Container::getInstance()->deleteContainerContents($container, true);
+            Tinebase_Container::getInstance()->deleteContainer($container, true);
+        }
+    }
 }

@@ -47,7 +47,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'attender_status'       => array('filter' => 'Calendar_Model_AttenderStatusFilter'),
         'attender_role'         => array('filter' => 'Calendar_Model_AttenderRoleFilter'),
         'organizer'             => array('filter' => 'Addressbook_Model_ContactIdFilter', 'options' => array('modelName' => 'Addressbook_Model_Contact')),
-        //'class'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'class'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'status'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
             'idProperty' => 'cal_events.id',

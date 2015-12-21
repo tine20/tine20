@@ -78,9 +78,12 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            case 'Admin_Event_DeleteAccount':
-                foreach ($_eventObject->accountIds as $accountId) {
-                    $this->deletePersonalFolder($accountId);
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                if ($_eventObject->deletePersonalContainers()) {
+                    $this->deletePersonalFolder($_eventObject->account);
                 }
                 break;
         }
@@ -113,15 +116,5 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
         
         return $container;
-    }
-    
-    /**
-     * delete all personal user folders and the contacts associated with these folders
-     *
-     * @param Tinebase_Model_User $_account the accountd object
-     * @todo implement and write test
-     */
-    public function deletePersonalFolder($_account)
-    {
     }
 }

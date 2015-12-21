@@ -312,10 +312,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.dd = new Ext.dd.DropZone(this.mainWrap.dom, {
             ddGroup: 'cal-event',
 
-            me: this,
+            view: this,
 
             notifyOver : function(dd, e, data) {
-                var sourceEl = Ext.fly(data.sourceEl);
+                var sourceEl = Ext.fly(data.sourceEl),
+                    sourceView = data.scope;
+
                 sourceEl.setStyle({'border-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
                 
@@ -330,7 +332,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         }
 
                         if (event.get('editGrant')) {
-                            return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            return this.view == sourceView && Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                         }
                     }
                 }
@@ -364,7 +366,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     }
 
                     // deny drop for missing edit grant or no time change
-                    if (! event.get('editGrant') || Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE
+                    if (! event.get('editGrant') || (v == this.view && Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE)
                             || outOfCropBounds) {
                         return false;
                     }
@@ -383,13 +385,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     }
 
                     event.set('is_all_day_event', targetDate.is_all_day_event);
-                    event.endEdit();
 
-                    if (this.me.ownerCt.attendee) {
-                        var attendee = new Tine.Calendar.Model.Attender(this.me.ownerCt.attendee);
-                        event.data.attendee[0].user_id = attendee.data.data.user_id;
+
+                    // change attendee in split view
+                    if (this.view.ownerCt.attendee) {
+                        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee')),
+                            sourceAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, event.view.ownerCt.attendee),
+                            destinationAttendee = new Tine.Calendar.Model.Attender(this.view.ownerCt.attendee.data);
+
+                        attendeeStore.remove(sourceAttendee);
+                        attendeeStore.add(destinationAttendee);
+
+                        Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, event);
                     }
 
+                    event.endEdit();
                     v.fireEvent('updateEvent', event);
                 }
                 

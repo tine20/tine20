@@ -199,4 +199,29 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
      {
 
      }
+
+    /**
+     * returns something similar to "interval $staticPart * $dynamicPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @param string $dynamicPart
+     * @return string
+     */
+    public function getDynamicInterval($timeUnit, $staticPart, $dynamicPart)
+    {
+        return 'INTERVAL ' . $staticPart . ' * ' . $dynamicPart . ' ' . $timeUnit;
+    }
+
+    /**
+     * returns something similar to "interval $staticPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @return string
+     */
+    public function getInterval($timeUnit, $staticPart)
+    {
+        return 'INTERVAL ' . $staticPart . ' ' . $timeUnit;
+    }
 }

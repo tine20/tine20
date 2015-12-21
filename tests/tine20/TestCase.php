@@ -486,4 +486,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         
         Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);
     }
+
+    /**
+     * set current user
+     *
+     * @param $user
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _setUser($user)
+    {
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+    }
 }
