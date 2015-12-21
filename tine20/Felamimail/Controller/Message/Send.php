@@ -478,7 +478,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting mail headers');
         
         // add user agent
-        $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
+        $_mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Email Client'));
         
         // set organization
         if (isset($_account->organization) && ! empty($_account->organization)) {

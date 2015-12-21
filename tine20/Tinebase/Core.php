@@ -1670,4 +1670,15 @@ class Tinebase_Core
         $config = self::getConfig();
         return !! $config->maintenanceMode;
     }
+
+    /**
+     * returns Tine 2.0 user agent string
+     *
+     * @param string $submodule
+     * @return string
+     */
+    public static function getTineUserAgent($submodule = '')
+    {
+        return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
+    }
 }
