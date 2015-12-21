@@ -250,4 +250,29 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
             PARALLEL_ENABLE AGGREGATE USING t_string_agg;";
          $backend->execQueryVoid($group_concat);
      }
+
+    /**
+     * returns something similar to "interval $staticPart * $dynamicPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @param string $dynamicPart
+     * @return string
+     */
+    public function getDynamicInterval($timeUnit, $staticPart, $dynamicPart)
+    {
+        return 'INTERVAL ' . $staticPart . ' * ' . $dynamicPart . ' ' . $timeUnit;
+    }
+
+    /**
+     * returns something similar to "interval $staticPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @return string
+     */
+    public function getInterval($timeUnit, $staticPart)
+    {
+        return 'INTERVAL ' . $staticPart . ' ' . $timeUnit;
+    }
 }

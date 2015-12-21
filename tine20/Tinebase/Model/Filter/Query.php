@@ -32,7 +32,11 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
         0 => 'contains',
         1 => 'in',
         2 => 'equals',
-        3 => 'startswith'
+        3 => 'startswith',
+        4 => 'endswith',
+        5 => 'not',
+        6 => 'notcontains',
+        7 => 'notin',
     );
 
     /**
@@ -53,71 +57,94 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
     /**
      * appends sql to given select statement
      *
-     * @param Zend_Db_Select                $_select
+     * @param Zend_Db_Select $_select
      * @param Tinebase_Backend_Sql_Abstract $_backend
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function appendFilterSql($_select, $_backend)
     {
-         if (empty($this->_value)) {
-             $_select->where('1=1/* empty query */');
-             return;
-         }
+        if (empty($this->_value)) {
+            $_select->where('1=1/* empty query */');
+            return;
+        }
 
-         $db = $_backend->getAdapter();
+        $db = $_backend->getAdapter();
 
-         switch ($this->_operator) {
-             case 'contains':
-             case 'equals':
-             case 'startswith':
-                 $queries = explode(' ', $this->_value);
-                 foreach ($queries as $query) {
-                     $whereParts = array();
-                     foreach ($this->_options['fields'] as $qField) {
-                         // if field has . in name, then we already have tablename
+        $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
+        if (0 === strpos($this->_operator, 'not')) {
+            $not = true;
+        } else {
+            $not = false;
+        }
+
+        switch ($this->_operator) {
+            case 'contains':
+            case 'notcontains':
+            case 'equals':
+            case 'not':
+            case 'startswith':
+            case 'endswith':
+                $queries = explode(' ', $this->_value);
+
+                foreach ($queries as $query) {
+                    $whereParts = array();
+                    foreach ($this->_options['fields'] as $qField) {
+                        // if field has . in name, then we already have tablename
                         if (strpos($qField, '.') !== FALSE) {
-                            $whereParts[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent($db->quoteIdentifier($qField))) . ' ' . Tinebase_Backend_Sql_Command::factory($db)->getLike() . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent('(?)'));
+                            $whereParts[] = $sqlCommand->prepareForILike($sqlCommand->getUnaccent($db->quoteIdentifier($qField))) . ' ' . ($not?'NOT ':'') . $sqlCommand->getLike() . $sqlCommand->prepareForILike($sqlCommand->getUnaccent('(?)'));
                         }
                         else {
-                            $whereParts[] = Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent($db->quoteIdentifier($_backend->getTableName() . '.' . $qField))) . ' ' . Tinebase_Backend_Sql_Command::factory($db)->getLike() . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike(Tinebase_Backend_Sql_Command::factory($db)->getUnaccent('(?)'));
+                            $whereParts[] = $sqlCommand->prepareForILike($sqlCommand->getUnaccent($db->quoteIdentifier($_backend->getTableName() . '.' . $qField))) . ' ' . ($not?'NOT ':'') . $sqlCommand->getLike() . $sqlCommand->prepareForILike($sqlCommand->getUnaccent('(?)'));
                         }
-                     }
-                     $whereClause = '';
-                     if (!empty($whereParts)) {
-                         $whereClause = implode(' OR ', $whereParts);
-                     }
-                      
-                     if (!empty($whereClause)) {
-                         if ($this->_operator == 'equals') {
-                             $_select->where($db->quoteInto($whereClause, trim($query)));
-                         }
-                         else if ($this->_operator == 'startswith') {
-                             $_select->where($db->quoteInto($whereClause, trim($query) . '%'));
-                         }
-                         else {
-                             $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
-                         }
-                     }
-                 }
-                 break;
-             case 'in':
-                 foreach ($this->_options['fields'] as $qField) {
+                    }
+                    $whereClause = '';
+                    if (!empty($whereParts)) {
+                        if ($not) {
+                            $whereClause = implode(' AND ', $whereParts);
+                        } else {
+                            $whereClause = implode(' OR ', $whereParts);
+                        }
+                    }
+
+                    if (!empty($whereClause)) {
+                        $query = trim($query);
+                        if ($this->_operator === 'startswith') {
+                            $query .= '%';
+                        } else if ($this->_operator === 'contains' || $this->_operator === 'notcontains'){
+                            $query = '%' . $query . '%';
+                        } else if ($this->_operator === 'endswith') {
+                            $query = '%' . $query;
+                        }
+
+                        $_select->where($db->quoteInto($whereClause, $query));
+                    }
+                }
+                break;
+
+            case 'notin':
+            case 'in':
+                foreach ($this->_options['fields'] as $qField) {
                     // if field has . in name, then we allready have tablename
                     if (strpos($qField, '.') !== FALSE) {
-                        $whereParts[] = $db->quoteInto($db->quoteIdentifier($qField) . ' IN (?)', (array) $this->_value);
+                        $whereParts[] = $db->quoteInto($db->quoteIdentifier($qField) . ($not?' NOT':'') . ' IN (?)', (array) $this->_value);
                     }
                     else {
-                         $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' IN (?)', (array) $this->_value);
+                         $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ($not?' NOT':'') . ' IN (?)', (array) $this->_value);
                     }
-                 }
-                 if (! empty($whereParts)) {
-                     $whereClause = implode(' OR ', $whereParts);
-                 }
-                 if (! empty($whereClause)) {
-                     $_select->where($whereClause);
-                 }
-                 break;
-             default:
-                 throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
-         }
-     }
+                }
+                if (! empty($whereParts)) {
+                    if ($not) {
+                        $whereClause = implode(' AND ', $whereParts);
+                    } else {
+                        $whereClause = implode(' OR ', $whereParts);
+                    }
+                }
+                if (! empty($whereClause)) {
+                    $_select->where($whereClause);
+                }
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
+        }
+    }
 }

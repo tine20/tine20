@@ -311,8 +311,12 @@ msgid "Colors"
 msgstr "Farben"
 
 #: js/ColorManager.js:177
-msgid "Color by Calendar"
-msgstr "Farbe nach Kalender"
+msgid "Color by Organizer Calendar"
+msgstr "Farbe nach Kalender des Organisators"
+
+#: js/ColorManager.js:177
+msgid "Color by Attendee Calendar"
+msgstr "Farbe nach Kalender des Teilnehmers"
 
 #: js/ColorManager.js:182
 msgid "Color by Tags"
