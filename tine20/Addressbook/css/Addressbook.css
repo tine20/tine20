@@ -31,15 +31,34 @@
     background-image:url(../../images/oxygen/16x16/actions/user-female.png) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
+    height: 16px;
 }
 
 .renderer_typeContactIcon {
     background-image:url(../../images/oxygen/16x16/actions/user.png) !important;
     background-repeat: no-repeat;
     background-position: 2px 2px;
+    height: 16px;
+}
+
+.x-grid3-cell-inner .renderer_typeAccountIcon,
+.x-grid3-cell-inner .renderer_typeContactIcon {
+    margin-bottom: -2px;
+    margin-top: -2px;
 }
 
 .renderer_displayNameRenderer_noName {
     font-style: italic;
     /*color: #808080;*/
+}
+
+.addressbook-search-combo table {
+    width: 100%;
+    font-size: 11px;
+    border: none;
+}
+
+.addressbook-search-combo td {
+    vertical-align: top;
+    padding-top: 4px;
 }
