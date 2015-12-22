@@ -474,9 +474,14 @@ class Tinebase_Core
     public static function getSessionId()
     {
         if (! self::isRegistered(self::SESSIONID)) {
-            self::set(self::SESSIONID, Tinebase_Session::isStarted()
-                ? Tinebase_Session::getId()
-                : Tinebase_Record_Abstract::generateUID());
+            $sessionId = null;
+            if (Tinebase_Session::isStarted()) {
+                $sessionId = Tinebase_Session::getId();
+            }
+            if (empty($sessionId)) {
+                $sessionId = 'NOSESSION' . Tinebase_Record_Abstract::generateUID(31);
+            }
+            self::set(self::SESSIONID, $sessionId);
         }
 
         return self::get(self::SESSIONID);

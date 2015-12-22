@@ -720,8 +720,8 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
                     if ($property['type'] == Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG) {
                         $dbConfig = $config->get($name);
                         $dbConfigRecords = $dbConfig['records']->toArray();
-                        $defaultRecords = $property['default']['records'];
-                        if (json_encode($dbConfigRecords) != json_encode($defaultRecords)) {
+                        $defaultRecords = (isset($property['default']['records'])) ? $property['default']['records'] : null;
+                        if ($defaultRecords && json_encode($dbConfigRecords) != json_encode($defaultRecords)) {
                             // set default value
                             if (array_key_exists('default', $property['default'])) {
                                 $dbConfig->default = $property['default']['default'];

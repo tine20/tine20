@@ -279,7 +279,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        if (! $accessLog->sessionid) {
+        if (empty($accessLog->sessionid)) {
             $accessLog->sessionid = Tinebase_Core::getSessionId();
         }
 

@@ -579,12 +579,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('robbat2@gentoo.org', $message->from_email);
         $this->assertEquals($this->_account->getId(), $message->account_id);
-        $this->assertEquals('Robin H. Johnson', $message->from_name);
-        $this->assertEquals('"Robin H. Johnson" <robbat2@stork.gentoo.org>', $message->sender);
+        $this->assertEquals('Robin H. Johnsön', $message->from_name);
+        $this->assertEquals('"Robin H. Johnsön" <robbat2@stork.gentoo.org>', $message->sender);
         $this->assertEquals('1', $message->text_partid);
         $this->assertEquals('1', $message->has_attachment);
         $this->assertEquals(null, $message->html_partid);
-        $this->assertEquals('9606', $message->size);
+        $this->assertEquals('9636', $message->size);
         $this->assertContains("Automated Package Removal", $message->subject);
         $this->assertContains('\Seen', $message->flags);
         $this->assertContains('11AC BA4F 4778 E3F6 E4ED  F38E B27B 944E 3488 4E85', $message->body);
