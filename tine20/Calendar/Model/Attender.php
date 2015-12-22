@@ -101,7 +101,18 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
         ),
     );
-    
+
+    /**
+     * datetime fields
+     *
+     * @var array
+     */
+    protected $_datetimeFields = array(
+        'creation_time',
+        'last_modified_time',
+        'deleted_time',
+    );
+
     /**
      * returns accountId of this attender if present
      * 
@@ -145,11 +156,50 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->email;
                 break;
             default:
-                throw new Exception("type $type not yet supported");
+                throw new Exception("type {$this->user_type} not yet supported");
                 break;
         }
     }
-    
+
+    /**
+     * get email addresses this attendee had in the past
+     *
+     * @return array
+     */
+    public function getEmailsFromHistory()
+    {
+        $emails = array();
+
+        $typeMap = array(
+            self::USERTYPE_USER        => 'Addressbook_Model_Contact',
+            self::USERTYPE_GROUPMEMBER => 'Addressbook_Model_Contact',
+            self::USERTYPE_RESOURCE    => 'Calendar_Model_Resource',
+        );
+
+        if (isset ($typeMap[$this->user_type])) {
+            $type = $typeMap[$this->user_type];
+            $id = $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
+
+            $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
+                Tinebase_Helper::array_value(0, explode('_', $type)),
+                $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id,
+                $type,
+                'Sql',
+                $this->creation_time
+            );
+
+            foreach($modifications as $modification) {
+                if (in_array($modification->modified_attribute, array('email', 'email_home'))) {
+                    if ($modification->old_value) {
+                        $emails[] = $modification->old_value;
+                    }
+                }
+            }
+        }
+
+        return $emails;
+    }
+
     /**
      * get name of attender
      * 
@@ -173,7 +223,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $resolvedUser->name ?: $resolvedUser->n_fileas;
                 break;
             default:
-                throw new Exception("type $type not yet supported");
+                throw new Exception("type $this->user_type not yet supported");
                 break;
         }
     }
@@ -308,6 +358,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         // delete attendees no longer attending from recordset
         foreach ($attendeesToDelete as $attendeeToDelete) {
+            // NOTE: email of attendee might have changed in the meantime
+            //       => get old email adresses from modlog and try to match
+            foreach($attendeeToDelete->getEmailsFromHistory() as $oldEmail) {
+                if (isset($emailsOfNewAttendees[$oldEmail])) {
+                    unset($emailsOfNewAttendees[$oldEmail]);
+                    continue 2;
+                }
+            }
+            
             $_event->attendee->removeRecord($attendeeToDelete);
         }
         
@@ -1025,5 +1084,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $isOrganizerCondition = $_event ? $_event->isOrganizer($_attendee) : TRUE;
         $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
         return ($isAttendeeCondition || $isOrganizerCondition)&& $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
+    }
+
+    /**
+     * clear in class cache
+     */
+    public static function clearCache()
+    {
+        foreach(self::$_resolvedAttendeesCache as $name => $entries) {
+            self::$_resolvedAttendeesCache[$name] = array();
+        }
     }
 }

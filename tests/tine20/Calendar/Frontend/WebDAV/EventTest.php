@@ -538,7 +538,33 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
         $this->assertEquals('New Event', $record->summary);
     }
-    
+
+    /**
+     * test updating existing event when attendee or organizer email changed in the meantime
+     */
+    public function testPutEventWhenEmailChanged()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
+
+        $event = $this->testCreateEventWithExternalOrganizer();
+
+        // change email address of organizer / attendee
+        $contact = $event->getRecord()->organizer;
+        $contact->email = 'changed@mail.domain';
+        sleep(1);
+        Addressbook_Controller_Contact::getInstance()->update($contact);
+        Calendar_Model_Attender::clearCache();
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
+        $vcalendar = str_replace("lars@kneschke.de", "l.kneschke@metaways.de", $vcalendar);
+        $event->put($vcalendar);
+
+        $record = $event->getRecord();
+
+        $this->assertEquals($contact->getId(), $record->organizer->getId(), 'organizer must not change');
+        $this->assertCount(1, $record->attendee->filter('user_id', $contact->getId()), 'attendee must not change');
+    }
+
     /**
      * test deleting attachment from existing event
      */
