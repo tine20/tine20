@@ -23,7 +23,7 @@ switch(TINE20_BUILDTYPE) {
         echo $this->jsb2tk->getHTML();
         echo '    <script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
         $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
-        if (! empty($customJSFiles)) {
+        if ($customJSFiles && count($customJSFiles) > 0) {
             echo "\n    <!-- HEADS UP! CUSTOMJS IN PLACE! -->";
             echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getCustomJsFiles\"></script>";
         }
