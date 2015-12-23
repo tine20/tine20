@@ -4,7 +4,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -1134,46 +1134,15 @@ class Admin_JsonTest extends TestCase
         $secondaryDomainConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) && isset($smtpConfig['secondarydomains'])
             ? $smtpConfig['secondarydomains'] : '';
 
-        $afj = new Admin_Frontend_Json();
-        $registryData = $afj->getRegistryData();
+        $registryData = $this->_json->getRegistryData();
 
         $this->assertEquals($registryData['primarydomain'],  $primaryDomainConfig);
         $this->assertEquals($registryData['secondarydomains'], $secondaryDomainConfig);
     }
 
-//    public function testGetConfig()
-//    {
-//        $afj = new Admin_Frontend_Json();
-//        $config = $afj->getConfig('Calendar');
-//
-//        $this->assertGreaterThanOrEqual(2, count($config));
-//        $this->assertArrayHasKey('attendeeRoles', $config);
-//        $this->assertArrayHasKey('records', $config['attendeeRoles']);
-//        $this->assertGreaterThanOrEqual(1, $config['attendeeRoles']['records']);
-//    }
-//
-//    public function testSetConfig()
-//    {
-//        $afj = new Admin_Frontend_Json();
-//        $config = $afj->getConfig('Calendar');
-//
-//        $attendeeRoles = $config['attendeeRoles'];
-//        $attendeeRoles['records'][] = array(
-//            'id'    => 'CHAIR',
-//            'value' => 'Chair'
-//        );
-//
-//        $afj->setConfig('Calendar', 'attendeeRoles', $attendeeRoles);
-//
-//        $updatedConfig = $afj->getConfig('Calendar');
-//        $this->assertEquals(count($attendeeRoles['records']), count($updatedConfig['attendeeRoles']['records']));
-//    }
-
     public function testSearchConfigs()
     {
-        $afj = new Admin_Frontend_Json();
-
-        $result = $afj->searchConfigs(array(
+        $result = $this->_json->searchConfigs(array(
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), array());
 
@@ -1197,8 +1166,7 @@ class Admin_JsonTest extends TestCase
     {
         $attendeeRoles = $this->testUpdateConfig();
 
-        $afj = new Admin_Frontend_Json();
-        $fetchedAttendeeRoles = $afj->getConfig($attendeeRoles['id']);
+        $fetchedAttendeeRoles = $this->_json->getConfig($attendeeRoles['id']);
 
         $this->assertEquals($attendeeRoles['value'], $fetchedAttendeeRoles['value']);
     }
@@ -1215,13 +1183,64 @@ class Admin_JsonTest extends TestCase
         $attendeeRoles['value'] = json_encode($keyFieldConfig);
         $attendeeRoles['id'] = '';
 
-
-        $afj = new Admin_Frontend_Json();
-        $afj->saveConfig($attendeeRoles);
+        $this->_json->saveConfig($attendeeRoles);
 
         $updatedAttendeeRoles = $this->testSearchConfigs();
 
         $this->assertEquals($attendeeRoles['value'], $updatedAttendeeRoles['value']);
         return $updatedAttendeeRoles;
+    }
+
+    /**
+     * @see 0011504: deactivated user is removed from group when group is saved
+     */
+    public function testDeactivatedUserGroupSave()
+    {
+        // deactivate user
+        $userArray = $this->testSaveAccount();
+
+        Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+
+        // save group
+        $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit');
+        $groupArray = $this->_json->getGroup($group->getId());
+        $this->assertEquals(1, $groupArray['groupMembers']['totalcount']);
+        $groupArray['container_id'] = $groupArray['container_id']['id'];
+        $savedGroup = $this->_json->saveGroup($groupArray, array($userArray['accountId']));
+
+        // check group memberships
+        $this->assertEquals(1, $savedGroup['groupMembers']['totalcount']);
+    }
+
+    /**
+     * @see 0011504: deactivated user is removed from group when group is saved
+     */
+    public function testBlockedUserGroupSave()
+    {
+        // deactivate user
+        $userArray = $this->testSaveAccount();
+        $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
+        $userArray['loginFailures'] = 10;
+
+        // save group
+        // TODO generalize
+        $group = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit');
+        $groupArray = $this->_json->getGroup($group->getId());
+        $this->assertEquals(1, $groupArray['groupMembers']['totalcount']);
+        $groupArray['container_id'] = $groupArray['container_id']['id'];
+        $savedGroup = $this->_json->saveGroup($groupArray, array($userArray['accountId']));
+
+        // check group memberships
+        $this->assertEquals(1, $savedGroup['groupMembers']['totalcount']);
+    }
+
+    /**
+     * test set expired status
+     */
+    public function testSetUserExpiredStatus()
+    {
+        $userArray = $this->testSaveAccount();
+        $result = Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
+        $this->assertEquals(1, $result);
     }
 }
