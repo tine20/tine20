@@ -351,7 +351,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $newPersistentExceptions = $exceptions->filter('is_deleted', 0);
-        
+
         $migration = $this->_getExceptionsMigration($currentPersistentExceptions, $newPersistentExceptions);
 
         $this->_eventController->delete($migration['toDelete']->getId());

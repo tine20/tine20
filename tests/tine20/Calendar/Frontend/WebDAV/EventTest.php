@@ -565,6 +565,72 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $this->assertCount(1, $record->attendee->filter('user_id', $contact->getId()), 'attendee must not change');
     }
 
+    public function testPutEventWithRecurExceptions()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_exdate_mozlastack.ics');
+        $id = Tinebase_Record_Abstract::generateUID();
+        $targetContainer = $this->objects['initialContainer'];
+
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
+        $record = $event->getRecord();
+
+        $eventToUpdate = new Calendar_Frontend_WebDAV_Event($targetContainer, $id);
+        $vcalendarToUpdate = stream_get_contents($eventToUpdate->get());
+        $vcalendarToUpdate = str_replace("abendessen später am heiligabend", "vesper später am heiligabend", $vcalendarToUpdate);
+//        echo $vcalendarToUpdate;
+        $eventToUpdate->put($vcalendarToUpdate);
+
+        $updatedRecord = Calendar_Controller_MSEventFacade::getInstance()->get($id);
+        $xmas = $updatedRecord->exdate->filter('summary', '/^vesper.*/', true)->getFirstRecord();
+        $this->assertNotNull($xmas, print_r($updatedRecord->toArray(), true));
+    }
+
+    public function testPutEventWithRecurFirstInstanceException()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $vcalendar = file_get_contents(dirname(__FILE__) . '/../../Import/files/lightning_repeating_group_first_instance_exception.ics');
+        $vcalendar = str_replace("d981a72be8f21808b588daa0e8644046c634250f", Tinebase_Group::getInstance()->getDefaultGroup()->list_id, $vcalendar);
+
+        $id = Tinebase_Record_Abstract::generateUID();
+        $targetContainer = $this->objects['initialContainer'];
+
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
+
+        // sometimes base_event_id is set for base_events;
+        $record = $event->getRecord();
+        $record->base_event_id = $record->getId();
+        Calendar_Controller_Event::getInstance()->update($record);
+
+        $eventToUpdate = new Calendar_Frontend_WebDAV_Event($targetContainer, $id);
+        $vcalendarToUpdate = stream_get_contents($eventToUpdate->get());
+        $eventToUpdate->put($vcalendarToUpdate);
+    }
+
+    public function testPutEventWithRecurExceptionsExternalOrganizer()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+
+        $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning_repeating_exdate_mozlastack.ics');
+        $vcalendar = str_replace("sclever", "external", $vcalendar);
+//        echo $vcalendar;
+
+        $id = Tinebase_Record_Abstract::generateUID();
+        $targetContainer = $this->objects['initialContainer'];
+
+        $event = Calendar_Frontend_WebDAV_Event::create($targetContainer, "$id.ics", $vcalendar);
+        $record = $event->getRecord();
+
+        $loadedEvent = new Calendar_Frontend_WebDAV_Event($targetContainer, $id);
+        $loadedRecord = $loadedEvent->getRecord();
+//        echo stream_get_contents($loadedEvent->get());
+
+        $xmas = $loadedRecord->exdate->filter('summary', '/.*heiligabend$/', true)->getFirstRecord();
+        $this->assertNotNull($xmas, print_r($loadedRecord->toArray(), true));
+    }
+
     /**
      * test deleting attachment from existing event
      */

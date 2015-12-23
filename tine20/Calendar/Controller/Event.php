@@ -1212,7 +1212,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
 
     /**
-     * returns all persistent recur exceptions of recur series identified by uid of given event
+     * returns all persistent recur exceptions of recur series
      * 
      * NOTE: deleted instances are saved in the base events exception property
      * NOTE: returns all exceptions regardless of current filters and access restrictions
@@ -1228,6 +1228,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         $exceptionFilter = new Calendar_Model_EventFilter(array(
             array('field' => 'base_event_id', 'operator' => 'equals',  'value' => $baseEventId),
+            array('field' => 'recurid',       'operator' => 'notnull', 'value' => NULL)
         ));
         
         if ($_eventFilter instanceof Calendar_Model_EventFilter) {
