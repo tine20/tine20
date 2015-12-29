@@ -31,55 +31,7 @@ class Calendar_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerT
      */
     protected $objects = array();
     
-    protected $_testXMLInput = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-    <Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar">
-        <Collections>
-            <Collection>
-                <Class>Calendar</Class>
-                <SyncKey>9</SyncKey>
-                <CollectionId>41</CollectionId>
-                <DeletesAsMoves/>
-                <GetChanges/>
-                <WindowSize>50</WindowSize>
-                <Options><FilterType>5</FilterType></Options>
-                <Commands>
-                    <Change>
-                        <ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId>
-                        <ApplicationData>
-                            <Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone>
-                            <Calendar:AllDayEvent>0</Calendar:AllDayEvent>
-                            <Calendar:BusyStatus>2</Calendar:BusyStatus>
-                            <Calendar:DtStamp>20121125T150537Z</Calendar:DtStamp>
-                            <Calendar:EndTime>20121123T160000Z</Calendar:EndTime>
-                            <Calendar:Sensitivity>2</Calendar:Sensitivity>
-                            <Calendar:Subject>Repeat</Calendar:Subject>
-                            <Calendar:StartTime>20121123T130000Z</Calendar:StartTime>
-                            <Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID>
-                            <Calendar:MeetingStatus>1</Calendar:MeetingStatus>
-                            <Calendar:Attendees>
-                                <Calendar:Attendee>
-                                    <Calendar:Name>Lars Kneschke</Calendar:Name>
-                                    <Calendar:Email>lars@kneschke.de</Calendar:Email>
-                                </Calendar:Attendee>
-                            </Calendar:Attendees>
-                            <Calendar:Recurrence>
-                                <Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20121128T225959Z</Calendar:Until>
-                            </Calendar:Recurrence>
-                            <Calendar:Exceptions>
-                                <Calendar:Exception>
-                                    <Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20121125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20121125T140000Z</Calendar:StartTime><Calendar:EndTime>20121125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent>
-                                </Calendar:Exception>
-                                <Calendar:Exception>
-                                    <Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20121124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception>
-                                </Calendar:Exceptions>
-                            <Calendar:Reminder>15</Calendar:Reminder>
-                            <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
-                        </ApplicationData>
-                    </Change>
-                </Commands>
-            </Collection>
-        </Collections>
-    </Sync>';
+    protected $_testXMLInput;
     
     protected $_testXMLInput_palmPreV12 = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
     <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
@@ -504,17 +456,26 @@ Zeile 3</AirSyncBase:Data>
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
-        
+
+        $this->_testXMLInput = $this->_loadFile('event_with_attendee.xml');
+    }
+
+    protected function _loadFile($filename)
+    {
+        $xml = file_get_contents(__DIR__ . '/files/' . $filename);
+
         // replace email to make current user organizer and attendee
         $testConfig = Zend_Registry::get('testConfig');
         $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
-        
-        $this->_testXMLInput = str_replace(array(
+
+        $xml = str_replace(array(
             'lars@kneschke.de',
             'unittest@tine20.org',
-        ), $email, $this->_testXMLInput);
+        ), $email, $xml);
+
+        return $xml;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_TestCase::testCreateEntry()
@@ -809,7 +770,29 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue((bool) $syncrotonEvent->exceptions[0]->deleted);
         $this->assertTrue((bool) $syncrotonEvent->exceptions[1]->deleted);
     }
-    
+
+    public function testRecurEventFirstInstanceException($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+
+        $xmlString = $this->_loadFile('repeating_with_first_instance_exception.xml');
+        $xml = new SimpleXMLElement($xmlString);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+
+        $this->assertEquals('First Instance Exception', $syncrotonEvent->exceptions[0]->subject);
+        $this->assertCount(1, $syncrotonEvent->exceptions);
+
+        return array($serverId, $syncrotonEvent);
+    }
+
     public function testStatusUpdate($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {

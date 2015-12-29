@@ -181,7 +181,22 @@ abstract class ActiveSync_TestCase extends TestCase
 
         return $this->objects['devices'][$_deviceType];
     }
-    
+
+    protected function _asXML($syncrotonModel)
+    {
+        $imp                   = new DOMImplementation();
+
+        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+        $testDoc               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
+        $testDoc->formatOutput = true;
+        $testDoc->encoding     = 'utf-8';
+
+        $appData    = $testDoc->documentElement->appendChild($testDoc->createElementNS('uri:AirSync', 'ApplicationData'));
+
+        $syncrotonModel->appendXML($appData, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE));
+
+        return $testDoc->saveXML();
+    }
     /**
      * returns a test event
      * 
