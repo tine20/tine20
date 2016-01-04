@@ -663,8 +663,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         try {
             $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
-            if ($customJSFiles && count($customJSFiles) > 0) {
-                $this->_deliverChangedFiles('js', (array)$customJSFiles);
+            if (! empty($customJSFiles)) {
+                $this->_deliverChangedFiles('js', $customJSFiles);
             }
         } catch (Exception $exception) {
             Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " can't deliver custom js: \n" . $exception);

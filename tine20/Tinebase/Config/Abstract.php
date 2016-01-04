@@ -70,6 +70,13 @@ abstract class Tinebase_Config_Abstract
     const TYPE_KEYFIELD = 'keyField';
 
     /**
+     * array config type
+     *
+     * @var string
+     */
+    const TYPE_ARRAY = 'array';
+
+    /**
      * keyFieldConfig config type
      * 
      * @var string
@@ -625,6 +632,7 @@ abstract class Tinebase_Config_Abstract
             case self::TYPE_BOOL:       return (bool) (int) $_rawData;
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
+            case self::TYPE_ARRAY:      return (array) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
             case self::TYPE_KEYFIELD_CONFIG:   return Tinebase_Config_KeyField::create(
                 $_rawData,
