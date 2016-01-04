@@ -474,6 +474,11 @@ class Tinebase_User
             $currentUser->accountEmailAddress       = $user->accountEmailAddress;
             $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
             $currentUser->accountLoginShell         = $user->accountLoginShell;
+
+            $currentUser->accountStatus             = isset($user->accountStatus)
+                ? $user->accountStatus
+                : Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+
             if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
                 $currentUser->visibility            = $user->visibility;
                 if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
@@ -755,12 +760,13 @@ class Tinebase_User
                 return;
             }
 
-            // at first, we expire the user
+            // at first, we expire+deactivate the user
             $now = Tinebase_DateTime::now();
-            if (! $user->accountExpires) {
+            if (! $user->accountExpires || $user->accountStatus !== Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Set expiry date of ' . $user->accountLoginName . ' to ' . $now);
+                    . ' Disable user and set expiry date of ' . $user->accountLoginName . ' to ' . $now);
                 $user->accountExpires = $now;
+                $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
                 Tinebase_User::getInstance()->updateUserInSqlBackend($user);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -869,7 +875,7 @@ class Tinebase_User
 
         $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $adminLoginName,
-            'accountStatus'         => 'enabled',
+            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
             'accountPrimaryGroup'   => $userGroup->getId(),
             'accountLastName'       => $adminLastName,
             'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,
