@@ -217,7 +217,7 @@ class Sales_InvoiceTestCase extends TestCase
         $this->_lastMonthDays = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
         
         // find out if year is a leap year
-        if (($this->_referenceYear % 400) == 0 || (($this->_referenceYear % 4) == 0 && ($this->_referenceYear % 100) != 0)) {
+        if ((bool)$this->_referenceDate->format('L')) {
             $this->_isLeapYear = TRUE;
             $this->_lastMonthDays[1] = 29;
         }

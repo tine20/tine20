@@ -1944,7 +1944,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 if (! $record->getId() || strlen($record->getId()) != 40) {
                     $record->{$record->getIdProperty()} = NULL;
                 }
-                $new->add($controller->create($record));
+                $new->addRecord($controller->create($record));
             }
     
             $_createdRecord->{$_property} = $new->toArray();

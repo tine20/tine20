@@ -186,4 +186,69 @@ class Sales_ControllerTest extends PHPUnit_Framework_TestCase
         $result = Sales_Controller_Address::getInstance()->resolveVirtualFields($address);
         $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString - de-234)");
     }
+
+    /**
+     * tests adding and removing of products to a contract
+     */
+    public function testAddDeleteProducts()
+    {
+        $prodTest = new Sales_ProductControllerTest();
+        $productOne = $prodTest->testCreateProduct();
+        $productTwo = $prodTest->testCreateProduct();
+
+        $contractData = $this->_getContract();
+        $contractData->products = array(
+            array(
+                'product_id' => $productOne->getId(),
+                'quantity' => 1,
+                'interval' => 1,
+                'billing_point' => 1,
+            ),
+            array(
+                'product_id' => $productTwo->getId(),
+                'quantity' => 1,
+                'interval' => 1,
+                'billing_point' => 1,
+            ),
+        );
+        $this->_backend->create($contractData);
+        $contract = $this->_backend->get($contractData->getId());
+
+        // checks
+        $this->assertEquals($contractData->getId(), $contract->getId());
+        $this->assertGreaterThan(0, $contract->number);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $contract->created_by);
+
+        // check count of product aggregates
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
+        ));
+        $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        $this->assertEquals(2, count($productAggregates));
+
+        $contractData->products = array(
+            array(
+                'product_id' => $productOne->getId(),
+                'quantity' => 1,
+                'interval' => 1,
+                'billing_point' => 1,
+            ),
+        );
+        $this->_backend->update($contractData);
+        $contract = $this->_backend->get($contractData->getId());
+
+        // check count of product aggregates
+        $filter = new Sales_Model_ProductAggregateFilter(array());
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $contract->getId())
+        ));
+        $productAggregates = Sales_Controller_ProductAggregate::getInstance()->search($filter);
+        $this->assertEquals(1, count($productAggregates));
+
+        // cleanup
+        $this->_backend->delete($contract->getId());
+        $this->_decreaseNumber();
+        $prodTest->getUit()->delete(array($productOne->getId(), $productTwo->getId()));
+    }
 }
