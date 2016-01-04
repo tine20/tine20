@@ -76,7 +76,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         
         $select = $this->_getSelect('*');
         $select->where($this->_db->quoteIdentifier('id') . ' = ?', $fileId)
-               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', $this->_getSessionId());
+               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', Tinebase_Core::getSessionId());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -93,26 +93,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     }
     
     /**
-     * get session id
-     * 
-     * @return string
-     * 
-     * @see 0008460: WebDAV File Upload fails "Tinebase_Exception_Record_Validation' with message 'some fields session_id have invalid content"
-     */
-    protected function _getSessionId()
-    {
-        $sessionId = Tinebase_Core::get(Tinebase_Core::SESSIONID);
-        if (empty($sessionId)) {
-            $sessionId = 'nosessionid';
-        }
-        
-        return $sessionId;
-    }
-    
-    /**
      * uploads a file and saves it in the db
      *
-     * @todo seperate out frontend code
+     * @todo separate out frontend code
      * @todo work on a file model
      *  
      * @return Tinebase_Model_TempFile
@@ -207,7 +190,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
            'id'          => $id,
-           'session_id'  => $this->_getSessionId(),
+           'session_id'  => Tinebase_Core::getSessionId(),
            'time'        => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
            'path'        => $_path,
            'name'        => $filename,

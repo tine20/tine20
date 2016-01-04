@@ -250,7 +250,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $count = $this->_backend->searchCount($_filter);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Got ' . is_array($count) ? print_r($count, 1) : $count . ' search count');
+            . ' Got ' . (is_array($count) ? print_r($count, 1) : $count) . ' search count');
         
         return $count;
     }
@@ -1944,7 +1944,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 if (! $record->getId() || strlen($record->getId()) != 40) {
                     $record->{$record->getIdProperty()} = NULL;
                 }
-                $new->add($controller->create($record));
+                $new->addRecord($controller->create($record));
             }
     
             $_createdRecord->{$_property} = $new->toArray();

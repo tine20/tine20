@@ -100,38 +100,24 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      */
     initTemplate: function() {
         // Custom rendering Template
-        // TODO move style def to css ?
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate(
-                '<tpl for="."><div class="search-item">',
-                    '<table cellspacing="0" cellpadding="2" border="0" style="font-size: 11px;" width="100%">',
+                '<tpl for="."><div class="search-item addressbook-search-combo">',
+                    '<table>',
                         '<tr>',
-                            '<td style="min-width: 20px;">{[this.getIcon(values)]}</td>',
-                            '<td width="30%"><b>{[this.encode(values.n_fileas, "fileas")]}</b><br/>{[this.encode(values.org_name)]}</td>',
+                            '<td style="min-width: 20px;">{[Tine.Addressbook.ContactGridPanel.contactTypeRenderer(null, null, values)]}</td>',
+                            '<td width="30%"><b>{[Tine.Addressbook.ContactGridPanel.displayNameRenderer(values.n_fileas)]}</b><br/>,' +
+                                '{[this.encode(values.org_name)]}</td>',
                             '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
                                 '{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',
                             '<td width="25%">{[this.encode(values.tel_work)]}<br/>{[this.encode(values.tel_cell)]}</td>',
-                            '<td width="20%">',
+                            '<td width="50px">',
                                 '<img width="45px" height="39px" src="{jpegphoto}" />',
                             '</td>',
                         '</tr>',
                     '</table>',
-                '</div></tpl>',
-                {
-                    getIcon: function(contactData) {
-                        return Tine.Addressbook.ContactGridPanel.contactTypeRenderer.call(this, null, null, contactData);
-                    },
-                    encode: function(value, field) {
-                        if (value) {
-                            return Ext.util.Format.htmlEncode(value);
-                        } else {
-                            return field == 'fileas' ?
-                                Tine.Addressbook.ContactGridPanel.prototype.displayNameRenderer(value) :
-                                '';
-                        }
-                    }
-                }
-            );
+                '</div></tpl>'
+             );
         }
     },
     

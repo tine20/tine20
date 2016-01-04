@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,8 +20,6 @@ class Tinebase_ControllerServerTest extends ServerTestCase
      */
     public function testValidLogin()
     {
-        Zend_Session::$_unitTestEnabled = true;
-        
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
 POST /index.php HTTP/1.1\r
 Content-Type: application/json\r
@@ -53,8 +51,6 @@ EOS
      */
     public function testInvalidLogin()
     {
-        Zend_Session::$_unitTestEnabled = true;
-        
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
 POST /index.php HTTP/1.1\r
 Content-Type: application/json\r
@@ -83,11 +79,16 @@ EOS
     
     /**
      * @group ServerTests
+     *
+     * @see 0011440: rework login failure handling
      */
     public function testAccountBlocking()
     {
-        Zend_Session::$_unitTestEnabled = true;
-        
+        // NOTE: end transaction here as NOW() returns the start of the current transaction in pgsql
+        //  and is used in user status statement (think about using statement_timestamp() instead of NOW() with pgsql)
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = null;
+
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
 POST /index.php HTTP/1.1\r
 Content-Type: application/json\r
@@ -109,17 +110,23 @@ EOS
         
         $credentials = $this->getTestCredentials();
         
-        $maxLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_LOGIN_FAILURES, 5);
-        
-        for ($i=0; $i<=$maxLoginFailures; $i++) {
+        for ($i=0; $i <= 3; $i++) {
             $result = Tinebase_Controller::getInstance()->login($credentials['username'], 'foobar', $request);
-            
             $this->assertFalse($result);
         }
         
-        // account must be blocked now
         $result = Tinebase_Controller::getInstance()->login($credentials['username'], $credentials['password'], $request);
-        
-        $this->assertFalse($result);
+        $this->assertFalse($result, 'account must be blocked now');
+
+        // wait for some time (2^4 = 16 +1 seconds)
+        $timeToWait = 17;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Waiting for ' . $timeToWait . ' seconds...');
+
+        sleep($timeToWait);
+
+        $result = Tinebase_Controller::getInstance()->login($credentials['username'], $credentials['password'], $request);
+        $this->assertTrue($result, 'account should be unblocked now');
     }
 }

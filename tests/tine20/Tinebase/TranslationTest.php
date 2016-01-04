@@ -251,6 +251,10 @@ msgstr "изпълни"
      */
     public function testTranslationFiles()
     {
+        if (! file_exists('/usr/bin/msgfmt')) {
+            $this->markTestSkipped('msgfmt (gettext) executable required for this test');
+        }
+
         $tineRoot = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20';
         exec('for i in `ls ' . $tineRoot . '/*/translations/*.po`; do msgfmt -o - --strict $i 2>&1 1>/dev/null ; done', $output);
         

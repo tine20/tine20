@@ -344,6 +344,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         // cache result
                         this.calculatedFeastDays[year] = response.results;
                         this.onAccountLoad(response.results);
+                        // update date picker
+                        this.datePicker.onFeastDaysLoad(response, false, null, year);
                     },
                     failure : function(exception) {
                         Tine.Tinebase.ExceptionHandler.handleRequestException(exception, this.onFeastDaysLoadFailureCallback, this);

@@ -514,20 +514,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onRecordUpdate: function(record) {
         this.stopEditing(false);
-        
-        var attendee = [];
-        this.store.each(function(attender) {
-            var user_id = attender.get('user_id');
-            if (user_id/* && user_id.id*/) {
-                if (typeof user_id.get == 'function') {
-                    attender.data.user_id = user_id.data;
-                }
-                
-               attendee.push(attender.data);
-            }
-        }, this);
-        
-        record.set('attendee', attendee);
+
+        Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store, record);
     },
     
     onKeyDown: function(e) {

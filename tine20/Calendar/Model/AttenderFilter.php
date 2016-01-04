@@ -28,7 +28,11 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         1 => 'not',
         2 => 'in',
         3 => 'notin',
-        4 => 'specialNode' // one of {allResources}
+        4 => 'specialNode', // one of {allResources}
+        5 => 'hasSomeExcept',
+        6 => 'notHasSomeExcept',
+        7 => 'hasSomeExceptIn',
+        8 => 'notHasSomeExceptIn',
     );
 
     /**
@@ -41,10 +45,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         switch ($this->_operator) {
             case 'equals':
             case 'not':
+            case 'hasSomeExcept':
+            case 'notHasSomeExcept':
                 $this->_value = array($_value);
                 break;
             case 'in':
             case 'notin':
+            case 'hasSomeExceptIn':
+            case 'notHasSomeExceptIn':
                 $this->_value = $_value;
                 break;
             case 'specialNode' :
@@ -88,6 +96,8 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         
         $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
         $adapter = $_backend->getAdapter();
+        $isExcept = strpos($this->_operator, 'Except') !== false;
+        $sign = $isExcept ? '<>' : '=';
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') value: ' . print_r($this->_value, true));
         foreach ($this->_value as $attenderValue) {
@@ -104,12 +114,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     array(
                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                         'user_id'   => $attenderValue['user_id']
-                    ),
-                    array(
-                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                        'user_id'   => $attenderValue['user_id']
                     )
                 );
+                if (!$isExcept) {
+                    $attendee[] = array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                        'user_id' => $attenderValue['user_id']
+                    );
+                }
             } else if ($attenderValue['user_type'] == self::USERTYPE_MEMBEROF) {
                 // resolve group members
                 $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
@@ -125,10 +137,12 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                             'user_id'   => $member
                         );
-                        $attendee[] = array(
-                            'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                            'user_id'   => $member
-                        );
+                        if (!$isExcept) {
+                            $attendee[] = array(
+                                'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                                'user_id' => $member
+                            );
+                        }
                     }
                 }
             } else {
@@ -137,23 +151,39 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             
             foreach ($attendee as $attender) {
                 $gs->orWhere(
-                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ' .
-                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' = ?', $attender['user_id'])
+                    ($isExcept ? '' : $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_type') . ' = ?', $attender['user_type']) . ' AND ') .
+                    $adapter->quoteInto($adapter->quoteIdentifier('attendee.user_id') .   ' ' . $sign . ' ?', $attender['user_id'])
                 );
             }
         }
-        
+
         if (substr($this->_operator, 0, 3) === 'not') {
             // join attendee to be excluded as a new column. records having this column NULL don't have the attendee
             $dname = 'attendee-not-' . Tinebase_Record_Abstract::generateUID(5);
             $_select->joinLeft(
-                    /* table  */ array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
-                    /* on     */ $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
-                                 ' AND ' .  $gs->getSQL(),
-                    /* select */ array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
+            /* table  */
+                array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
+                /* on     */
+                $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
+                ' AND ' . $gs->getSQL(),
+                /* select */
+                array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
             $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NULL');
         } else {
-            $gs->appendWhere(Zend_Db_Select::SQL_OR);
+            if ($isExcept) {
+                $dname = 'attendee-hasSome-' . Tinebase_Record_Abstract::generateUID(5);
+                $_select->joinLeft(
+                /* table  */
+                    array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
+                    /* on     */
+                    $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
+                    ' AND ' . $gs->getSQL(),
+                    /* select */
+                    array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
+                $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NOT NULL');
+            } else {
+                $gs->appendWhere(Zend_Db_Select::SQL_OR);
+            }
         }
     }
     

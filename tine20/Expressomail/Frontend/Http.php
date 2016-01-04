@@ -31,7 +31,7 @@ class Expressomail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $file = new Zend_Form_Element_File('file');
         $maxsize = $file->getMaxFileSize();
 
-        $sessionId = Tinebase_Core::get(Tinebase_Session::SESSIONID);
+        $sessionId = Tinebase_Core::getSessionId();
         if(move_uploaded_file($_FILES['upload']['tmp_name'], $tmpFile)) {
             $image_id = str_replace(Tinebase_Core::getTempDir().'/','',$tmpFile);
             $image_size = filesize($tmpFile);

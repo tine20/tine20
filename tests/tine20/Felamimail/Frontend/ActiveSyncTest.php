@@ -130,7 +130,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
             $message->getId()
         );
         
-        $this->assertEquals('9631', $syncrotonModelEmail->body->estimatedDataSize);
+        $this->assertEquals('9661', $syncrotonModelEmail->body->estimatedDataSize);
     }
 
     /**
@@ -270,7 +270,7 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
         
         $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', $syncrotonEmail->subject);
         // size of the body
-        $this->assertEquals(9631, $syncrotonEmail->body->estimatedDataSize);
+        $this->assertEquals(9661, $syncrotonEmail->body->estimatedDataSize);
         // size of the attachment
         $this->assertEquals(2787, $syncrotonEmail->attachments[0]->estimatedDataSize);
         $this->assertEquals(Syncroton_Model_Email::LASTVERB_REPLYTOSENDER, $syncrotonEmail->lastVerbExecuted, 'reply flag missing');

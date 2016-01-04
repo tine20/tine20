@@ -24,7 +24,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      *
      * @var Crm_Frontend_Json
      */
-    protected $_instance;
+    protected $_instance = null;
     
     /**
      * fs controller
@@ -51,9 +51,20 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         parent::setUp();
         
-        $this->_instance = new Crm_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         Crm_Controller_Lead::getInstance()->duplicateCheckFields(array());
+    }
+
+    /**
+     * @return Crm_Frontend_Json
+     */
+    protected function _getUit()
+    {
+        if ($this->_instance === null) {
+            $this->_instance = new Crm_Frontend_Json();
+        }
+
+        return new $this->_instance;
     }
 
     /**
@@ -85,7 +96,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testGetRegistryData()
     {
-        $registry = $this->_instance->getRegistryData();
+        $registry = $this->_getUit()->getRegistryData();
         
         $types = array('leadtypes', 'leadstates', 'leadsources');
         
@@ -118,7 +129,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testGetSettings()
     {
-        $result = $this->_instance->getSettings();
+        $result = $this->_getUit()->getSettings();
         
         $this->assertArrayHasKey('leadstates',  $result);
         $this->assertArrayHasKey('leadtypes',   $result);
@@ -136,7 +147,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testSaveSettings()
     {
-        $oldSettings = $this->_instance->getSettings();
+        $oldSettings = $this->_getUit()->getSettings();
         
         // change some settings
         $newSettings = $oldSettings;
@@ -145,11 +156,11 @@ class Crm_JsonTest extends Crm_AbstractTest
             'id' => 5,
             'leadsource' => 'Another Leadsource'
         );
-        $anotherResult = $this->_instance->saveSettings($newSettings);
+        $anotherResult = $this->_getUit()->saveSettings($newSettings);
         $this->assertEquals($newSettings, $anotherResult, 'new settings have not been saved');
         
         // reset original settings
-        $result = $this->_instance->saveSettings($oldSettings);
+        $result = $this->_getUit()->saveSettings($oldSettings);
         $this->assertEquals($result, $oldSettings, 'old settings have not been reset');
         
         // test Crm_Model_Config::getOptionById
@@ -164,9 +175,9 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testAddGetSearchDeleteLead()
     {
-        $savedLead = $this->_saveLead();
-        $getLead = $this->_instance->getLead($savedLead['id']);
-        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), '');
+        $savedLead = $this->saveLead();
+        $getLead = $this->_getUit()->getLead($savedLead['id']);
+        $searchLeads = $this->_getUit()->searchLeads($this->_getLeadFilter(), '');
         
         // test manual resolving of organizer in related_record and set it back for following tests
         for ($i = 0; $i < count($getLead['relations']); $i++) {
@@ -228,12 +239,12 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($this->_getProduct()->name, $relatedProduct['name'], 'product name does not match');
         
         // delete all
-        $this->_instance->deleteLeads($savedLead['id']);
+        $this->_getUit()->deleteLeads($savedLead['id']);
         Addressbook_Controller_Contact::getInstance()->delete($relatedContact['id']);
         Sales_Controller_Product::getInstance()->delete($relatedProduct['id']);
         
         // check if delete worked
-        $result = $this->_instance->searchLeads($this->_getLeadFilter(), '');
+        $result = $this->_getUit()->searchLeads($this->_getLeadFilter(), '');
         $this->assertEquals(0, $result['totalcount']);
         
         // check if linked task got removed as well
@@ -246,7 +257,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      * 
      * @return array
      */
-    protected function _saveLead()
+    public function saveLead()
     {
         $contact    = $this->_getContact();
         $task       = $this->_getTask();
@@ -267,7 +278,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         );
         $leadData['notes'] = array($note);
         
-        $savedLead = $this->_instance->saveLead($leadData);
+        $savedLead = $this->_getUit()->saveLead($leadData);
         return $savedLead;
     }
     
@@ -279,7 +290,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testTagFilter()
     {
         $lead       = $this->_getLead();
-        $savedLead = $this->_instance->saveLead($lead->toArray());
+        $savedLead = $this->_getUit()->saveLead($lead->toArray());
         
         $sharedTagName = Tinebase_Record_Abstract::generateUID();
         $tag = new Tinebase_Model_Tag(array(
@@ -299,7 +310,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             array('field' => 'tag',           'operator' => 'equals',       'value' => $tag->getId()),
         );
         
-        $result = $this->_instance->searchLeads($filter, array());
+        $result = $this->_getUit()->searchLeads($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'Should not find the lead!');
     }    
     
@@ -311,7 +322,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testSearchByBrokenFilter()
     {
         $filter = Zend_Json::decode('[{"field":"query","operator":"contains","value":"test"},{"field":"container_id","operator":"equals","value":{"path":"/"}},{"field":"contact","operator":"AND","value":[{"field":":id","operator":"equals","value":{"n_fn":"","n_fileas":"","org_name":"","container_id":"2576"}}]}]');
-        $result = $this->_instance->searchLeads($filter, array());
+        $result = $this->_getUit()->searchLeads($filter, array());
         $this->assertEquals(0, $result['totalcount']);
     }
     
@@ -330,16 +341,16 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadData['relations'] = array(
             array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
         );
-        $savedLead = $this->_instance->saveLead($leadData);
+        $savedLead = $this->_getUit()->saveLead($leadData);
         
         $savedLead['relations'] = array();
-        $savedLead = $this->_instance->saveLead($savedLead);
+        $savedLead = $this->_getUit()->saveLead($savedLead);
         $this->assertEquals(0, count($savedLead['relations']));
         
         $savedLead['relations'] = array(
             array('type'  => 'PARTNER', 'related_record' => $savedContact->toArray()),
         );
-        $savedLead = $this->_instance->saveLead($savedLead);
+        $savedLead = $this->_getUit()->saveLead($savedLead);
         
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals($contact->n_fn, $savedLead['relations'][0]['related_record']['n_fn'], 'Contact name does not match');
@@ -360,7 +371,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $leadData['relations'] = array(
             array('type'  => '', 'related_record' => $savedContact->toArray()),
         );
-        $savedLead = $this->_instance->saveLead($leadData);
+        $savedLead = $this->_getUit()->saveLead($leadData);
         
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
@@ -374,7 +385,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testConcurrentRelationSetting()
     {
-        $leadData = $this->_instance->saveLead($this->_getLead()->toArray());
+        $leadData = $this->_getUit()->saveLead($this->_getLead()->toArray());
         $task = $this->_getTask();
         
         $taskJson = new Tasks_Frontend_Json();
@@ -396,14 +407,14 @@ class Crm_JsonTest extends Crm_AbstractTest
         $taskData['description'] = 1;
         $taskJson->saveTask($taskData);
         
-        $savedLead = $this->_instance->getLead($leadData['id']);
+        $savedLead = $this->_getUit()->getLead($leadData['id']);
         $savedLead['relations'][0]['related_record']['description'] = '2';
         $savedLead['relations'][0]['related_record']['due'] = '2012-10-18 12:54:33';
         
         // client may send wrong seq -> this should cause a concurrency conflict
         $savedLead['relations'][0]['related_record']['seq'] = 0;
         try {
-            $this->_instance->saveLead($savedLead);
+            $this->_getUit()->saveLead($savedLead);
             $this->fail('expected concurrency exception');
         } catch (Tinebase_Timemachine_Exception_ConcurrencyConflict $ttecc) {
             $this->assertEquals('concurrency conflict!', $ttecc->getMessage());
@@ -418,7 +429,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testConstraintsOtherSide()
     {
-        $leadData1 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
+        $leadData1 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
         $task = $this->_getTask();
         
         $taskJson = new Tasks_Frontend_Json();
@@ -438,7 +449,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $taskData = $taskJson->saveTask($taskData);
         
-        $leadData2 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
+        $leadData2 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
         $taskData['relations'][] = array(
             'type'  => 'TASK',
             'own_model' => 'Tasks_Model_Task',
@@ -459,7 +470,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testOtherRecordConstraintsConfig()
     {
-        $leadData1 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
+        $leadData1 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
         $task = $this->_getTask();
         
         $taskJson = new Tasks_Frontend_Json();
@@ -481,7 +492,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $taskData = $taskJson->saveTask($taskData);
         
-        $leadData2 = $this->_instance->saveLead($this->_getLead(FALSE, FALSE)->toArray());
+        $leadData2 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
         
         $leadData2['relations'] = array(
             array(
@@ -604,7 +615,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         }
         
         return new Crm_Model_Lead(array(
-            'lead_name'     => 'PHPUnit',
+            'lead_name'     => 'PHPUnit LEAD',
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
@@ -653,7 +664,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testRelatedModlog()
     {
         // create lead with tag, customfield and related contacts
-        $savedLead = $this->_saveLead();
+        $savedLead = $this->saveLead();
         
         // change relations, customfields + tags
         $savedLead['tags'][] = array('name' => 'another tag', 'type' => Tinebase_Model_Tag::TYPE_PERSONAL);
@@ -666,7 +677,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             }
         }
         $savedLead['customfields'][$this->_cfcName] = '5678';
-        $updatedLead = $this->_instance->saveLead($savedLead);
+        $updatedLead = $this->_getUit()->saveLead($savedLead);
         
         // check modlog + history
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Crm', $updatedLead['id']);
@@ -711,7 +722,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $lead = $this->_getLead()->toArray();
         $lead['attachments'] = array(array('tempFile' => $tempFile->toArray()));
         
-        $savedLead = $this->_instance->saveLead($lead);
+        $savedLead = $this->_getUit()->saveLead($lead);
         // add path to files to remove
         $this->_objects['paths'][] = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath(new Crm_Model_Lead($savedLead, TRUE)) . '/' . $tempFile->name;
         
@@ -734,7 +745,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testUpdateLeadWithAttachment()
     {
         $lead = $this->testCreateLeadWithAttachment();
-        $savedLead = $this->_instance->saveLead($lead);
+        $savedLead = $this->_getUit()->saveLead($lead);
         $this->assertTrue(isset($savedLead['attachments']), 'no attachments found');
         $this->assertEquals(1, count($savedLead['attachments']));
     }
@@ -749,7 +760,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $lead = $this->testCreateLeadWithAttachment();
         $lead['attachments'] = array();
     
-        $savedLead = $this->_instance->saveLead($lead);
+        $savedLead = $this->_getUit()->saveLead($lead);
         $this->assertEquals(0, count($savedLead['attachments']));
         $this->assertFalse($this->_fsController->fileExists($this->_objects['paths'][0]));
     }
@@ -762,7 +773,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testDeleteLeadWithAttachment()
     {
         $lead = $this->testCreateLeadWithAttachment();
-        $this->_instance->deleteLeads(array($lead['id']));
+        $this->_getUit()->deleteLeads(array($lead['id']));
         $this->assertFalse($this->_fsController->fileExists($this->_objects['paths'][0]));
     }
 
@@ -775,7 +786,7 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         $leadArray = $this->_getLead()->toArray();
         $leadArray['start'] = null;
-        $newLead = $this->_instance->saveLead($leadArray);
+        $newLead = $this->_getUit()->saveLead($leadArray);
         
         $this->assertContains(Tinebase_DateTime::now()->format('Y-m-d'), $newLead['start'], 'start should be set to now if missing');
     }
@@ -787,16 +798,16 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testSortByLeadState()
     {
-        $this->_saveLead();
+        $this->saveLead();
         $lead2 = $this->_getLead()->toArray();  // open
         $lead2['leadstate_id'] = 2;             // contacted
-        $this->_instance->saveLead($lead2);
+        $this->_getUit()->saveLead($lead2);
         
         $sort = array(
             'sort' => 'leadstate_id',
             'dir' => 'ASC'
         );
-        $searchLeads = $this->_instance->searchLeads($this->_getLeadFilter(), $sort);
+        $searchLeads = $this->_getUit()->searchLeads($this->_getLeadFilter(), $sort);
         
         $this->assertEquals(2, $searchLeads['results'][0]['leadstate_id'], 'leadstate "contacted" should come first');
     }
@@ -810,11 +821,11 @@ class Crm_JsonTest extends Crm_AbstractTest
     {
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
         
-        $this->_saveLead();
+        $this->saveLead();
         $filter = array(
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit test product'),
         );
-        $searchLeads = $this->_instance->searchLeads($filter, '');
+        $searchLeads = $this->_getUit()->searchLeads($filter, '');
         $this->assertEquals(1, $searchLeads['totalcount']);
     }
 }

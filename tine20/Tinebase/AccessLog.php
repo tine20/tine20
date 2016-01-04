@@ -56,7 +56,76 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
+
+    /**
+     * returns false if not blocked and number of failed logins if
+     *
+     * @param Tinebase_Model_FullUser  $_user
+     * @param Tinebase_Model_AccessLog $_accessLog
+     * @return bool|integer
+     */
+    public function isUserAgentBlocked(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog)
+    {
+        if ($this->_tooManyUserAgents($_user)) {
+            return true;
+        }
+
+        $db = $this->_backend->getAdapter();
+        $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
+        $select = $db->select()
+            ->from($this->_backend->getTablePrefix() . $this->_backend->getTableName(), new Zend_Db_Expr('count(*)'))
+            ->where( $db->quoteIdentifier('account_id') . ' = ?', $_user->getId() )
+            ->where( $db->quoteIdentifier('li') . ' > NOW() - ' . $dbCommand->getInterval('MINUTE', '1'))
+            ->where( $db->quoteIdentifier('result') . ' <> ?', Tinebase_Auth::SUCCESS, Zend_Db::PARAM_INT)
+            ->where( $db->quoteIdentifier('user_agent') . ' = ?', $_accessLog->user_agent);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+
+        $stmt = $db->query($select);
+        $count = $stmt->fetchColumn();
+        $stmt->closeCursor();
+
+        if ($count > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' UserAgent blocked. Login failures: ' . $count);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * check if user connected with too many user agent during the last hour
+     *
+     * @param Tinebase_Model_FullUser  $_user
+     * @param int $numberOfAllowedUserAgents
+     * @return bool
+     */
+    protected function _tooManyUserAgents($_user, $numberOfAllowedUserAgents = 3)
+    {
+        $result = false;
+        $db = $this->_backend->getAdapter();
+        $dbCommand = Tinebase_Backend_Sql_Command::factory($db);
+        $select = $db->select()
+            ->distinct(true)
+            ->from($this->_backend->getTablePrefix() . $this->_backend->getTableName(), 'user_agent')
+            ->where( $db->quoteIdentifier('account_id') . ' = ?', $_user->getId() )
+            ->where( $db->quoteIdentifier('li') . ' > NOW() - ' . $dbCommand->getInterval('HOUR', '1'))
+            ->where( $db->quoteIdentifier('result') . ' <> ?', Tinebase_Auth::SUCCESS, Zend_Db::PARAM_INT)
+            ->limit(10);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+
+        $stmt = $db->query($select);
+
+        if ($stmt->columnCount() > $numberOfAllowedUserAgents) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' More than ' . $numberOfAllowedUserAgents . ' different UserAgents? we don\'t trust you!');
+            $result = true;
+        }
+        $stmt->closeCursor();
+        return $result;
+    }
+
     /**
      * get previous access log entry
      * 
@@ -118,15 +187,17 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_sessionId the session id
      * @param string $_ipAddress the ip address the user connects from
-     * @return void|Tinebase_Model_AccessLog
+     * @return null|Tinebase_Model_AccessLog
      */
-    public function setLogout($_sessionId)
+    public function setLogout()
     {
+        $sessionId = Tinebase_Core::getSessionId();
+
         try {
-            $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
+            $loginRecord = $this->_backend->getByProperty($sessionId, 'sessionid');
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find access log login record for session id ' . $_sessionId);
-            return;
+            return null;
         }
         
         $loginRecord->lo = Tinebase_DateTime::now();
@@ -160,5 +231,58 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             . ' Removed ' . $deletedRows . ' rows.');
         
         return $deletedRows;
+    }
+
+
+    /**
+     * return accessLog instance
+     *
+     * @param string $loginName
+     * @param Zend_Auth_Result $authResult
+     * @param Zend_Controller_Request_Abstract $request
+     * @param string $clientIdString
+     * @return Tinebase_Model_AccessLog
+     */
+    public function getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
+    {
+        if ($header = $request->getHeaders('USER-AGENT')) {
+            $userAgent = substr($header->getFieldValue(), 0, 255);
+        } else {
+            $userAgent = 'unknown';
+        }
+
+        $accessLog = new Tinebase_Model_AccessLog(array(
+            'ip'         => $request->getServer('REMOTE_ADDR'),
+            'li'         => Tinebase_DateTime::now(),
+            'result'     => $authResult->getCode(),
+            'clienttype' => $clientIdString,
+            'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
+            'user_agent' => $userAgent
+        ), true);
+
+        return $accessLog;
+    }
+
+    /**
+     * set session for current request
+     *
+     * @param Tinebase_Model_AccessLog $accessLog
+     */
+    public function setSessionId(Tinebase_Model_AccessLog $accessLog)
+    {
+        if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
+            try {
+                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
+                // $accessLog->sessionid is set now
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // ignore
+            }
+        }
+
+        if (empty($accessLog->sessionid)) {
+            $accessLog->sessionid = Tinebase_Core::getSessionId();
+        }
+
+        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
 }

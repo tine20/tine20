@@ -251,9 +251,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         } elseif ($_operator === 'inweek') {
             $date = $this->_getDate(NULL, TRUE);
             
-            if ($_value > 52) {
-                $_value = 52;
-            } elseif ($_value < 1) {
+            if ($_value < 1) {
                 $_value = $date->get('W');
             }
             $value = $this->_getFirstAndLastDayOfWeek($date, $_value);

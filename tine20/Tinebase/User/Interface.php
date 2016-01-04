@@ -62,6 +62,7 @@ interface Tinebase_User_Interface
      * increase bad password counter and store last login failure timestamp if user exists
      * 
      * @param string $_loginName
+     * @return  Tinebase_Model_FullUser user
      */
     public function setLastLoginFailure($_loginName);
 

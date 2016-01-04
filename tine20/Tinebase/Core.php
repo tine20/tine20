@@ -60,6 +60,7 @@ class Tinebase_Core
     const SESSION = 'session';
     
     /**
+     * session id constant
      */
     const SESSIONID = 'sessionId';
 
@@ -464,6 +465,27 @@ class Tinebase_Core
         }
         self::set('jsonKey', $coreSession->jsonKey);
     }
+
+    /**
+     * return current session id
+     *
+     * @return mixed|null
+     */
+    public static function getSessionId()
+    {
+        if (! self::isRegistered(self::SESSIONID)) {
+            $sessionId = null;
+            if (Tinebase_Session::isStarted()) {
+                $sessionId = Tinebase_Session::getId();
+            }
+            if (empty($sessionId)) {
+                $sessionId = 'NOSESSION' . Tinebase_Record_Abstract::generateUID(31);
+            }
+            self::set(self::SESSIONID, $sessionId);
+        }
+
+        return self::get(self::SESSIONID);
+    }
     
     /**
      * initializes the build constants like buildtype, package information, ...
@@ -678,7 +700,7 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                            'logging'                => ($config->caching->logging) ? $config->caching->logging : false,
                             'logger'                 => self::getLogger(),
                         );
                         break;
@@ -733,7 +755,7 @@ class Tinebase_Core
             }
             
         } else {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -746,17 +768,17 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             
-        } catch (Zend_Cache_Exception $e) {
-            $enabled = FALSE;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+
+            $enabled = false;
             if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
-                // create cache directory and re-try
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
                 if (mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
             }
-            
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Cache error: ' . $e->getMessage());
-            
+
             self::setupCache($enabled);
             return;
         }

@@ -5,13 +5,23 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     New BSD License
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * This object appends all contained filters at once concated by the concatenation
- * operator of the filtergroup, in order to archive nested filters.
+ * This object appends all contained filters at once concatenated by the concatenation
+ * operator of the filtergroup, in order to achieve nested filters.
+ *
+ * use it like this:
+ *
+ * $select1->where(COND1.1)
+ * $select1->where(COND1.2)
+ * $select2 = new Tinebase_Backend_Sql_Filter_GroupSelect($select1);
+ * $select2->where(COND2.1)
+ * $select2->appendWhere(Zend_Db_Select::SQL_OR);
+ *
+ * => (COND1.1 AND COND1.2) OR COND2.1
  * 
  * @package     Tinebase
  * @subpackage  Filter
@@ -63,7 +73,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      * 
      * @param string   $cond  The WHERE condition.
      * @param string   $value OPTIONAL A single value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param string $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function where($cond, $value = null, $type = null)
@@ -78,7 +88,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      *
      * @param string   $cond  The WHERE condition.
      * @param string   $value OPTIONAL A single value to quote into the condition.
-     * @param constant $type  OPTIONAL The type of the given value
+     * @param string $type  OPTIONAL The type of the given value
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function orWhere($cond, $value = null, $type = null)

@@ -128,7 +128,7 @@ Tine.Tinebase.common = {
      * @param {Object} options
      *      {Boolean} keepRegistry
      *      {Boolean} clearCache
-     *      {String}  url
+     *      {String}  redirectUrl
      */
     reload: function(options) {
         options = options || {};
@@ -138,8 +138,12 @@ Tine.Tinebase.common = {
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
-        window.setTimeout(function(){
-            window.location.reload(!! options.clearCache);
+        window.setTimeout(function () {
+            if (options.redirectUrl && Ext.isString(options.redirectUrl)) {
+                window.location = options.redirectUrl;
+            } else {
+                window.location.reload(!!options.clearCache);
+            }
         }, 500);
     },
 
