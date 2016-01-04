@@ -315,6 +315,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'sclevers event should not be found');
     }
     
+    /**
+     * test get free busy info with single event
+     * 
+     * @return Tinebase_Record_Interface
+     */
     public function testGetFreeBusyInfo()
     {
         $event = $this->_getEvent();
@@ -330,8 +335,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         return $persistentEvent;
     }
-    
-    public function testSearchFreeTime() {
+
+    public function testSearchFreeTime()
+    {
         $persistentEvent = $this->testGetFreeBusyInfo();
         
         $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee);

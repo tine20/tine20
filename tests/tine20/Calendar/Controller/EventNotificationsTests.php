@@ -1358,6 +1358,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         } else {
             $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
         }
+
+        // assert user agent
+        // @see 0011498: set user agent header for notification messages
+        $headers = $messages[0]->getHeaders();
+        $this->assertEquals(Tinebase_Core::getTineUserAgent('Notification Service'), $headers['User-Agent'][0]);
     }
 
     /**

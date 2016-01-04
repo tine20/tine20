@@ -49,8 +49,12 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $this->assertEquals($resource->name, $resourceContainer->name);
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $resourceContainer->type);
         $this->assertEquals('Calendar_Model_Event', $resourceContainer->model);
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($this->_getResource());
+        $this->_toCleanup->addRecord($persistentResource);
         
-        return $resource;
+        $this->assertEquals('Meeting Room', $persistentResource->name);
+
+        return $persistentResource;
     }
     
     /**
@@ -80,7 +84,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         }
     }
     
-    public function testResourceConfict()
+    public function testResourceConflict()
     {
         $resource = $this->testCreateResource();
         

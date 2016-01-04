@@ -762,7 +762,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $index = $month - 1;
             
             $this->assertEquals('01', $invoice->start_date->format('d'));
-            $this->assertEquals($this->_lastMonthDays[$index], $invoice->end_date->format('d'), print_r($invoice->toArray(), 1));
+            $this->assertEquals($invoice->end_date->format('t'), $invoice->end_date->format('d'), print_r($invoice->toArray(), 1));
             
             $this->assertEquals(1, $invoice->start_date->format('d'));
             

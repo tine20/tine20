@@ -159,7 +159,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        // 
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Skipping free/busy check because event is transparent");
@@ -185,7 +184,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
             
-            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, /* resolve_display_containers = */ false);
             $busyException->setEvent($_event);
             
             throw $busyException;
@@ -321,7 +320,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $filter = new Calendar_Model_EventFilter($filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
-            . ' free/busy fitler: ' . print_r($filter->toArray(), true));
+            . ' free/busy filter: ' . print_r($filter->toArray(), true));
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
@@ -334,7 +333,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // create a typemap
         $typeMap = array();
-        foreach($attendee as $attender) {
+        foreach ($attendee as $attender) {
             if (! (isset($typeMap[$attender['user_type']]) || array_key_exists($attender['user_type'], $typeMap))) {
                 $typeMap[$attender['user_type']] = array();
             }

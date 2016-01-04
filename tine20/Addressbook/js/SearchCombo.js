@@ -105,8 +105,8 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                 '<tpl for="."><div class="search-item addressbook-search-combo">',
                     '<table>',
                         '<tr>',
-                            '<td style="min-width: 20px;">{[Tine.Addressbook.ContactGridPanel.prototype.contactTypeRenderer(null, null, values)]}</td>',
-                            '<td width="30%"><b>{[Tine.Addressbook.ContactGridPanel.prototype.displayNameRenderer(values.n_fileas)]}</b><br/>,' +
+                            '<td style="min-width: 20px;">{[Tine.Addressbook.ContactGridPanel.contactTypeRenderer(null, null, values)]}</td>',
+                            '<td width="30%"><b>{[Tine.Addressbook.ContactGridPanel.displayNameRenderer(values.n_fileas)]}</b><br/>,' +
                                 '{[this.encode(values.org_name)]}</td>',
                             '<td width="25%">{[this.encode(values.adr_one_street)]}<br/>',
                                 '{[this.encode(values.adr_one_postalcode)]} {[this.encode(values.adr_one_locality)]}</td>',

@@ -73,6 +73,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         // add header to identify mails sent by notification service / don't reply to this mail, dear autoresponder ... :)
         $mail->addHeader('X-Tine20-Type', 'Notification');
         $mail->addHeader('Precedence', 'bulk');
+        $mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Notification Service'));
         
         if (empty($this->_fromAddress)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No notification service address set. Could not send notification.');

@@ -1594,22 +1594,22 @@ class Calendar_JsonTests extends Calendar_TestCase
         )));
         $eventData = $this->_getEvent()->toArray();
         $eventData['relations'] = array(
-        array(
-            'own_model'              => 'Calendar_Model_Event',
-            'own_backend'            => 'Sql',
-            'own_id'                 => 0,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'type'                   => '',
-            'related_backend'        => 'Sql',
-            'related_id'             => $contact->getId(),
-            'related_model'          => 'Addressbook_Model_Contact',
-            'remark'                 => NULL,
-        ));
+            array(
+                'own_model' => 'Calendar_Model_Event',
+                'own_backend' => 'Sql',
+                'own_id' => 0,
+                'own_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'type' => '',
+                'related_backend' => 'Sql',
+                'related_id' => $contact->getId(),
+                'related_model' => 'Addressbook_Model_Contact',
+                'remark' => NULL,
+            ));
         $event = $this->_uit->saveEvent($eventData);
-        
+
         $tfj = new Tinebase_Frontend_Json();
         $relations = $tfj->getRelations('Calendar_Model_Event', $event['id']);
-        
+
         $this->assertEquals(1, $relations['totalcount']);
         $this->assertEquals($contact->n_fn, $relations['results'][0]['related_record']['n_family'], print_r($relations['results'], true));
     }
