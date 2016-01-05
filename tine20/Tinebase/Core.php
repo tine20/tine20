@@ -469,17 +469,22 @@ class Tinebase_Core
     /**
      * return current session id
      *
+     * @param boolean $generateUid
      * @return mixed|null
      */
-    public static function getSessionId()
+    public static function getSessionId($generateUid = true)
     {
         if (! self::isRegistered(self::SESSIONID)) {
             $sessionId = null;
-            if (Tinebase_Session::isStarted()) {
+            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
+            if (Tinebase_Session::isStarted() && ! Tinebase_Session::isSetupSession()) {
                 $sessionId = Tinebase_Session::getId();
             }
             if (empty($sessionId)) {
-                $sessionId = 'NOSESSION' . Tinebase_Record_Abstract::generateUID(31);
+                $sessionId = 'NOSESSION';
+                if ($generateUid) {
+                    $sessionId .= Tinebase_Record_Abstract::generateUID(31);
+                }
             }
             self::set(self::SESSIONID, $sessionId);
         }
