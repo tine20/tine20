@@ -514,10 +514,15 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         if (isset($store->options['range'])) {
             $pagination = new Tinebase_Model_Pagination(array(
                 'start' => $store->options['range'][0],
-                'limit' => $store->options['range'][1] - $store->options['range'][0]
+                'limit' => $store->options['range'][1] - $store->options['range'][0],
+                'sort' => $this->_sortField,
+                'dir' => 'DESC',
             ));
         } else {
-            $pagination = null;
+            $pagination = new Tinebase_Model_Pagination(array(
+                'sort' => $this->_sortField,
+                'dir' => 'DESC',
+            ));
         }
         
         $serverIds = $this->_contentController->search($filter, $pagination, false, true, 'sync');
