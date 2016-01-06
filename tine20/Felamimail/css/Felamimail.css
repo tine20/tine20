@@ -1,3 +1,23 @@
+.felamimail-action-encrypt {
+    background-image:url(../../images/oxygen/16x16/actions/document-encrypt.png) !important;
+}
+.x-btn-medium .felamimail-action-encrypt {
+    background-image:url(../../images/oxygen/22x22/actions/document-encrypt.png) !important;
+}
+.x-btn-large .felamimail-action-encrypt {
+    background-image:url(../../images/oxygen/32x32/actions/document-encrypt.png) !important;
+}
+
+.felamimail-action-decrypt {
+    background-image:url(../../images/oxygen/16x16/actions/document-decrypt.png) !important;
+}
+.x-btn-medium .felamimail-action-decrypt {
+    background-image:url(../../images/oxygen/22x22/actions/document-decrypt.png) !important;
+}
+.x-btn-large .felamimail-action-decrypt {
+    background-image:url(../../images/oxygen/32x32/actions/document-decrypt.png) !important;
+}
+
 .action_email_flag {
     background-image:url(../../images/oxygen/16x16/actions/flag-red.png) !important;
 }

@@ -49,10 +49,10 @@ Ext.ns('Tine.Felamimail');
         this.initTemplate();
         this.initDefaultTemplate();
         //this.initTopToolbar();
-        
+
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
-    
+
     /**
      * use default Tpl for default and multi view
      */
@@ -200,12 +200,42 @@ Ext.ns('Tine.Felamimail');
         this.doLayout();
 
         this.tpl.overwrite(body, record.data);
+
         this.getEl().down('div').down('div').scrollTo('top', 0, false);
-        
+
         if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
             Tine.log.debug('Tine.Felamimail.GridDetailsPanel::setTemplateContent about to handle preparedParts');
             this.handlePreparedParts(record);
         }
+
+        /**
+         * @TODO
+         * - move this block elsewhere
+         * - prepare message on server?
+         */
+        if (String(record.data.body).match(/-----BEGIN PGP MESSAGE-----/)) {
+            var me = this;
+
+            me.getLoadMask().show();
+            var contentBodyEl = body.child('.preview-panel-felamimail-body');
+            contentBodyEl.dom.id = Ext.id();
+            contentBodyEl.update('');
+
+            Tine.Felamimail.mailvelopeHelper.getKeyring().then(function (keyring) {
+                var armoredMsg = Tine.Tinebase.common.html2text(record.data.body);
+                mailvelope.createDisplayContainer('#' + contentBodyEl.dom.id, armoredMsg, keyring).then(function() {
+                    me.getLoadMask().hide();
+                });
+            }).catch(function() {
+                var msg = me.app.i18n._('To decrypt this message please install {0} with API support enabled');
+                msg = String.format(msg, '<a href="https://www.mailvelope.com" target="_blank">Mailvelope</a>');
+                Ext.Msg.alert(me.app.i18n._('PGP encrypted Message'), msg);
+
+                me.getLoadMask().hide();
+                me.tpl.overwrite(body, record.data);
+            });
+        }
+
     },
     
     /**

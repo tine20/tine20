@@ -1376,18 +1376,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Bool} onlyImportant
      * @return {String}
      */
-    formatHeaders: function(headers, ellipsis, onlyImportant) {
+    formatHeaders: function(headers, ellipsis, onlyImportant, plain) {
         var result = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
                     (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
             {
-                result += '<b>' + header + ':</b> ' 
+                result += (plain ? (header + ': ') : ('<b>' + header + ':</b> '))
                     + Ext.util.Format.htmlEncode(
                         (ellipsis) 
                             ? Ext.util.Format.ellipsis(headers[header], 40)
                             : headers[header]
-                    ) + '<br/>';
+                    ) + (plain ? '\n' : '<br/>');
             }
         }
         return result;

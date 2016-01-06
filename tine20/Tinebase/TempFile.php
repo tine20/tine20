@@ -76,7 +76,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         
         $select = $this->_getSelect('*');
         $select->where($this->_db->quoteIdentifier('id') . ' = ?', $fileId)
-               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', Tinebase_Core::getSessionId());
+               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', Tinebase_Core::getSessionId(/* $generateUid */ false));
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
@@ -190,7 +190,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
            'id'          => $id,
-           'session_id'  => Tinebase_Core::getSessionId(),
+           'session_id'  => Tinebase_Core::getSessionId(/* $generateUid */ false),
            'time'        => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
            'path'        => $_path,
            'name'        => $filename,

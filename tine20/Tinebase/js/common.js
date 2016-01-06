@@ -576,30 +576,6 @@ Tine.Tinebase.common = {
     },
 
     /**
-     * i18n renderer
-     *
-     * NOTE: needs to be bound to i18n object!
-     *
-     * renderer: Tine.Tinebase.common.i18nRenderer.createDelegate(this.app.i18n)
-     * @param original
-     */
-    i18nRenderer: function(original) {
-        return this._hidden(original);
-    },
-
-    /**
-     * color renderer
-     *
-     * @param color
-     */
-    colorRenderer: function(color) {
-        // normalize
-        color = String(color).replace('#', '');
-
-        return '<div style="background-color: #' + Ext.util.Format.htmlEncode(color) + '">&#160;</div>';
-    },
-
-    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id
@@ -790,7 +766,25 @@ Tine.Tinebase.common = {
     doubleEncode: function(value) {
         return Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(value));
     },
-    
+
+    /**
+     * simple html to text conversion
+     *
+     * @param html
+     * @returns {String}
+     */
+    html2text: function(html) {
+        text = html.replace(/\n/g, ' ')
+            .replace(/(<br[ /]*>)/g, '\n')
+            .replace(/(<li>)/g, '\n * ')
+            .replace(/<(blockquote|div|dl|dt|dd|form|h1|h2|h3|h4|h5|h6|hr|p|pre|table|tr|td|li|section|header|footer)>/g, '\n')
+            .replace(/<style(.+?)\/style>/g, '')
+            .replace(/<(.+?)>/g, '')
+            .replace(/&nbsp;/g, ' ')
+
+        return Ext.util.Format.htmlDecode(text);
+    },
+
     /**
      * resolves an appName to applicationInstance or vice versa
      * returns applicationinstance if getInstance is true

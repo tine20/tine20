@@ -10,6 +10,10 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "es6-promise.js",
+          "path": "../library/es6-promise/"
+        },
+        {
           "text": "extFixes.js",
           "path": "js/"
         },
@@ -68,6 +72,10 @@
         {
           "text": "store.compat.js",
           "path": "../library/Store/"
+        },
+        {
+          "text": "addressparser.js",
+          "path": "../library/addressparser.js/"
         },
         {
           "text": "MapPanel.js",
