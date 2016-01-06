@@ -139,7 +139,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         Tine.Felamimail.mailvelopeHelper.mailvelopeLoaded.then(function() {
             me.button_toggleEncrypt.setVisible(true);
-        }).catch(function() {
+        })['catch'](function() {
             Tine.log.info('mailvelope not available');
         });
     },
