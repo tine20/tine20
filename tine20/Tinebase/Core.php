@@ -717,7 +717,7 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                            'logging'                => ($config->caching->logging) ? $config->caching->logging : false,
                             'logger'                 => self::getLogger(),
                         );
                         break;
