@@ -51,7 +51,7 @@ Tine.clientVersion.releaseTime      = 'none';
  * 
  * @type String
  */
-Tine.title = 'Tine 2.0<small>org</small>';
+Tine.title = 'Tine 2.0';
 Tine.weburl = 'https://www.tine20.org/en/the-project/contribute.html';
 Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
 
