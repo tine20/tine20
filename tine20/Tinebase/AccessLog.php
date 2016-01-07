@@ -264,7 +264,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * set session for current request
+     * set session id for current request in accesslog
      *
      * @param Tinebase_Model_AccessLog $accessLog
      */
@@ -272,8 +272,8 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     {
         if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
             try {
-                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
-                // $accessLog->sessionid is set now
+                $previousAccessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
+                $accessLog->sessionid = $previousAccessLog->sessionid;
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // ignore
             }
@@ -281,8 +281,8 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
 
         if (empty($accessLog->sessionid)) {
             $accessLog->sessionid = Tinebase_Core::getSessionId();
+        } else {
+            Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
         }
-
-        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
 }
