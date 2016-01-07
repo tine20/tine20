@@ -427,6 +427,13 @@ abstract class Tinebase_Model_Filter_Abstract
             return null;
         }
 
+        if (0 === strpos($this->_operator, 'not')) {
+            $not = true;
+            $operator = substr($this->_operator, 3);
+        } else {
+            $not = false;
+            $operator = $this->_operator;
+        }
         $ownIds = array();
         foreach ((array) $relationsToSearchIn as $relatedModel) {
             $filterModel = $relatedModel . 'Filter';
@@ -434,7 +441,7 @@ abstract class Tinebase_Model_Filter_Abstract
             // TODO find a better way for this, maybe we could pass this an option to all filters in filter model
             Tinebase_Core::set('ADVANCED_SEARCHING', true);
             $relatedFilter = new $filterModel(array(
-                array('field' => 'query',   'operator' => 'contains', 'value' => $this->_value),
+                array('field' => 'query',   'operator' => $operator, 'value' => $this->_value),
             ));
             $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
             Tinebase_Core::set('ADVANCED_SEARCHING', false);
@@ -450,6 +457,6 @@ abstract class Tinebase_Model_Filter_Abstract
             $ownIds = array_merge($ownIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id);
         }
 
-        return new Tinebase_Model_Filter_Id('id', 'in', $ownIds);
+        return new Tinebase_Model_Filter_Id('id', $not?'notin':'in', $ownIds);
     }
 }
