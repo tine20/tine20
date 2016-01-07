@@ -683,17 +683,20 @@ class Tinebase_Core
                 self::set(self::SHAREDCACHE, false);
             }
         }
-        
+
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
+            $logging = ($config->caching->logging) ? $config->caching->logging : false;
+            $logger = self::getLogger();
+
             $frontendOptions = array(
                 'lifetime'                  => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization'   => true, // turn that off for more speed
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
                 'write_control'             => false, // don't read cache entry after it got written
-                'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                'logger'                    => self::getLogger(),
+                'logging'                   => $logging,
+                'logger'                    => $logger,
             );
             
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
@@ -705,8 +708,8 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => ($config->caching->logging) ? $config->caching->logging : false,
-                            'logger'                 => self::getLogger(),
+                            'logging'                => $logging,
+                            'logger'                 => $logger,
                         );
                         break;
                         
