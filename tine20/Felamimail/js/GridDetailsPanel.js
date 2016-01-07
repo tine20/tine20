@@ -226,7 +226,7 @@ Ext.ns('Tine.Felamimail');
                 mailvelope.createDisplayContainer('#' + contentBodyEl.dom.id, armoredMsg, keyring).then(function() {
                     me.getLoadMask().hide();
                 });
-            }).catch(function() {
+            })['catch'](function() {
                 var msg = me.app.i18n._('To decrypt this message please install {0} with API support enabled');
                 msg = String.format(msg, '<a href="https://www.mailvelope.com" target="_blank">Mailvelope</a>');
                 Ext.Msg.alert(me.app.i18n._('PGP encrypted Message'), msg);
