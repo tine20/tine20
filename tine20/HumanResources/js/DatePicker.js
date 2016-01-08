@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.HumanResources');
 
@@ -255,20 +255,21 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 this.store.add(new this.recordClass(fd));
             }, this);
         }
-        
-        
-        if (this.accountPickerActive) {
+
+        if (this.accountPickerActive && onInit) {
+            // set remaining vacation days in edit dialog
+            // TODO this should be refactored and moved to edit dialog as this is an unexpected place here
             var substractDays = this.editDialog.getDaysToSubstract();
-            
             this.editDialog.getForm().findField('remaining_vacation_days').setValue(rr.allVacation - substractDays);
-            this.editDialog.accountPicker.setValue(this.currentYear);
         }
         
         this.updateCellClasses();
         this.loadMask.hide();
-        
-        this.previousYear = this.currentYear;
-        this.currentYear = parseInt(rr.firstDay.date.split('-')[0]);
+
+        if (onInit) {
+            this.previousYear = this.currentYear;
+            this.currentYear = parseInt(rr.firstDay.date.split('-')[0]);
+        }
 
         var focusDate = freetime.get('firstday_date');
         if (date) {
@@ -280,20 +281,24 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 focusDate = new Date(this.currentYear + '/12/31 12:00:00 AM');
             }
         }
-        
+
+        // disableYearChange here to make sure we don't load feast and free days again during update() or enable()
+        // TODO this needs to be refactored!!
+        this.disableYearChange = true;
+
         // focus
         if (focusDate) {
             Tine.log.debug('focusDate ' + focusDate + ' currentYear ' + this.currentYear);
             this.update(focusDate);
         }
-        
+
         this.enable();
         
         this.disableYearChange = false;
     },
     
     /**
-     * if loading feast and freedays failes
+     * if loading feast and freedays fails
      */
     onFeastDaysLoadFailureCallback: function() {
         
