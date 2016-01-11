@@ -338,7 +338,13 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })
                     ]
                 }]
-            }, this.productGridPanel]
+            }, this.productGridPanel,
+                new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: 'Sales_Model_Contract'
+                })
+            ]
         };
     }
 });
