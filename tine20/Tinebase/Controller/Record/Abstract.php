@@ -108,7 +108,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @var boolean
      */
-    protected $_sendNotifications = FALSE;
+    protected $_sendNotifications = false;
 
     /**
      * if some of the relations should be deleted
@@ -122,8 +122,15 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @var boolean
      */
-    protected $_inspectRelatedRecords  = FALSE;
-    
+    protected $_inspectRelatedRecords  = false;
+
+    /**
+     * set this to true to check (duplicate/freebusy/...) in create/update of related records
+     *
+     * @var boolean
+     */
+    protected $_doRelatedCreateUpdateCheck  = false;
+
     /**
      * record alarm field
      *
@@ -1031,7 +1038,14 @@ abstract class Tinebase_Controller_Record_Abstract
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
             $type = $this->_getBackendType();
-            Tinebase_Relations::getInstance()->setRelations($this->_modelName, $type, $updatedRecord->getId(), $record->relations, FALSE, $this->_inspectRelatedRecords);
+            Tinebase_Relations::getInstance()->setRelations(
+                $this->_modelName,
+                $type,
+                $updatedRecord->getId(),
+                $record->relations,
+                FALSE,
+                $this->_inspectRelatedRecords,
+                $this->_doRelatedCreateUpdateCheck);
         }
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
             $updatedRecord->tags = $record->tags;

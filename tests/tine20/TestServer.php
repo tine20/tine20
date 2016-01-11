@@ -233,14 +233,41 @@ class TestServer
      */
     public static function replaceEmailDomainInFile($filename)
     {
-        $config = TestServer::getInstance()->getConfig();
-        $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $maildomain = self::getPrimaryMailDomain();
         $tempPath = Tinebase_TempFile::getTempPath();
         $contents = file_get_contents($filename);
         $contents = preg_replace('/tine20.org/', $maildomain, $contents);
         file_put_contents($tempPath, $contents);
         
         return $tempPath;
+    }
+
+    /**
+     * returns configured primary mail domain
+     *
+     * phpunit.config.inc > smtp config primary domain > current user mail domain > tine20.org
+     *
+     * @return mixed|string
+     */
+    public static function getPrimaryMailDomain()
+    {
+        $config = TestServer::getInstance()->getConfig();
+        if ($config->maildomain) {
+            return $config->maildomain;
+        } else {
+            $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+            if (isset($smtpConfig['primarydomain'])) {
+                return $smtpConfig['primarydomain'];
+            }
+
+            if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+                list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
+                return $domain;
+            }
+
+        }
+
+        return 'tine20.org';
     }
 
     /**

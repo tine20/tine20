@@ -228,8 +228,7 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public static function getTestRecord()
     {
-        $config = Zend_Registry::get('testConfig');
-        $emailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $emailDomain = TestServer::getPrimaryMailDomain();
         
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',

@@ -433,6 +433,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             format = 'text/plain';
         }
 
+        if (this.replyTo) {
+            this.msgBody = '<br/>'
+                + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
+        }
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
     },
 

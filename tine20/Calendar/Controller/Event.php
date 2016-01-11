@@ -161,7 +161,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Skipping free/busy check because event is transparent");
+                . " Skipping free/busy check because event is transparent or has no attendee");
             return;
         }
         
