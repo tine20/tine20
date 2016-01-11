@@ -164,8 +164,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             $this->_getFolder($folderToCreate);
         }
         
-        $config = TestServer::getInstance()->getConfig();
-        $this->_mailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $this->_mailDomain = TestServer::getPrimaryMailDomain();
 
         $this->_frontend = new Tinebase_Frontend_Json();
     }

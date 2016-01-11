@@ -389,16 +389,8 @@ class Tinebase_User_SqlTest extends TestCase
      */
     public static function getTestRecord()
     {
-        $testconfig = Zend_Registry::get('testConfig');
-        
-        if ($testconfig && isset($testconfig->maildomain)) {
-            $domain = $testconfig->maildomain;
-        } else if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
-        } else {
-             $domain = 'tine20.org';
-        }
-        
+        $domain = TestServer::getPrimaryMailDomain();
+
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',

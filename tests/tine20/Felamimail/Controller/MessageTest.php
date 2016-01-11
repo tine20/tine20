@@ -1119,8 +1119,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testSendWithWrongLineEnd()
     {
-        $config = TestServer::getInstance()->getConfig();
-        $mailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $mailDomain = TestServer::getPrimaryMailDomain();
         
         // build message with wrong line end rfc822 part
         $mail = new Tinebase_Mail('utf-8');

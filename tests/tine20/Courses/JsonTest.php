@@ -253,8 +253,7 @@ class Courses_JsonTest extends TestCase
         $this->assertEquals('lahmph', $lahm['data']);
         
         // get user and check email
-        $testConfig = Zend_Registry::get('testConfig');
-        $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
+        $maildomain = TestServer::getPrimaryMailDomain();
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
         $this->assertEquals('lahmph', $user->accountLoginName);
         $this->assertEquals('lahmph@' . $maildomain, $user->accountEmailAddress);
@@ -646,8 +645,7 @@ class Courses_JsonTest extends TestCase
             $this->assertGreaterThan(0, $result['results']);
             
         } else {
-            $testConfig = Zend_Registry::get('testConfig');
-            $maildomain = ($testConfig->maildomain) ? $testConfig->maildomain : 'school.org';
+            $maildomain = TestServer::getPrimaryMailDomain();
             
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, array(
                     'group_id'                  => $courseData['group_id'],
