@@ -865,9 +865,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     },
                     failure: this.onRequestFailed,
                     timeout: 300000 // 5 minutes
-                }, {
-                    duplicateCheck: this.doDuplicateCheck
-                });
+                }, this.getAdditionalSaveParams());
             } else {
                 this.onRecordLoad();
                 var ticketFn = this.onAfterApplyChanges.deferByTickets(this, [closeWindow]),
@@ -881,6 +879,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.loadMask.hide();
             Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
         }
+    },
+
+    /**
+     * returns additional save params
+     *
+     * @returns {{duplicateCheck: boolean}}
+     */
+    getAdditionalSaveParams: function() {
+        return {
+            duplicateCheck: this.doDuplicateCheck
+        };
     },
     
     onAfterApplyChanges: function(closeWindow) {
