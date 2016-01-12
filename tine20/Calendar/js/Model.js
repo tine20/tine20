@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
@@ -136,7 +136,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      * @return {Boolean}
      */
     isRecurInstance: function() {
-        return this.id && this.id.match(/^fakeid/);
+        return this.id && Ext.isFunction(this.id.match) && this.id.match(/^fakeid/);
     },
     
     /**
@@ -177,7 +177,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         organizer = (defaultAttendeeStrategy != 'me' && container.ownerContact) ? container.ownerContact : Tine.Tinebase.registry.get('userContact'),
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
         makeEventsPrivate = prefs.get('defaultSetEventsToPrivat'),
-        eventClass = null;
+        eventClass = null,
         period = centerPanel.getCalendarPanel(centerPanel.activeView).getView().getPeriod();
         
     // if dtstart is out of current period, take start of current period
@@ -191,20 +191,14 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
 
     var data = {
         summary: '',
-        class: eventClass,
+        'class': eventClass,
         dtstart: dtstart,
         dtend: dtstart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
         container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer) /*[
-            Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                user_type: 'user',
-                user_id: Tine.Tinebase.registry.get('userContact'),
-                status: 'ACCEPTED'
-            })
-        ]*/
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer)
     };
     
     if (prefs.get('defaultalarmenabled')) {
@@ -319,6 +313,20 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
+
+// register grants for calendar containers
+Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
+    var grants = Tine.widgets.container.GrantsManager.defaultGrants();
+
+    if (container.type == 'personal') {
+        grants.push('freebusy');
+    }
+    if (container.type == 'personal' && container.capabilites_private) {
+        grants.push('private');
+    }
+
+    return grants;
+});
 
 // register calendar filters in addressbook
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
@@ -631,19 +639,19 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
  * @static
  */
 Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord = function(attendeeStore) {
-        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
-        var myRecord = false;
-        
-        attendeeStore.each(function(attender) {
-            var userAccountId = attender.getUserAccountId();
-            if (userAccountId == currentAccountId) {
-                myRecord = attender;
-                return false;
-            }
-        }, this);
-        
-        return myRecord;
-    }
+    var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+    var myRecord = false;
+
+    attendeeStore.each(function(attender) {
+        var userAccountId = attender.getUserAccountId();
+        if (userAccountId == currentAccountId) {
+            myRecord = attender;
+            return false;
+        }
+    }, this);
+
+    return myRecord;
+};
     
 /**
  * returns attendee record of given attendee if exists, else false
@@ -660,13 +668,40 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
             attendeeType.push('groupmember');
         }
 
-        if (attendeeType.indexOf(r.get('user_type') >= 0) && r.getUserId() == attendee.getUserId()) {
+        if (attendeeType.indexOf(r.get('user_type')) >= 0 && r.getUserId() == attendee.getUserId()) {
             attendeeRecord = r;
             return false;
         }
     }, this);
     
     return attendeeRecord;
+};
+
+/**
+ * returns attendee data
+ * optinally fills into event record
+ */
+Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, event) {
+    var attendeeData = [];
+
+    Tine.Tinebase.common.assertComparable(attendeeData);
+
+    attendeeStore.each(function (attender) {
+        var user_id = attender.get('user_id');
+        if (user_id/* && user_id.id*/) {
+            if (typeof user_id.get == 'function') {
+                attender.data.user_id = user_id.data;
+            }
+
+            attendeeData.push(attender.data);
+        }
+    }, this);
+
+    if (event) {
+        event.set('attendee', attendeeData);
+    }
+
+    return attendeeData;
 }
 
 /**

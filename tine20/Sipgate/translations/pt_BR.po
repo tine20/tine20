@@ -95,7 +95,7 @@ msgstr "Fax"
 msgid "Type"
 msgstr "Tipo"
 
-#: js/AccountGridPanel.js:98 js/AccountEditDialog.js:262 Config.php:68
+#: js/AccountGridPanel.js:98 js/AccountEditDialog.js:262 Config.php:82
 msgid "Account Type"
 msgstr "Tipo de Conta"
 
@@ -603,61 +603,61 @@ msgstr "Situação da Conexão"
 msgid "Possible connection states"
 msgstr "Possíveis situações de conexão"
 
-#: Config.php:58
+#: Config.php:57 Setup/Update/Release1.php:50
+msgid "accepted"
+msgstr "aceito"
+
+#: Config.php:58 Setup/Update/Release1.php:51
+msgid "outgoing"
+msgstr "cessante"
+
+#: Config.php:59 Setup/Update/Release1.php:52
+msgid "missed"
+msgstr "faltou"
+
+#: Config.php:65
 msgid "Connection TOS"
 msgstr "Conexão TOS"
 
-#: Config.php:60
+#: Config.php:67
 msgid "Possible connection type of services"
 msgstr "Possível tipo de serviço de conexão"
 
-#: Config.php:70
+#: Config.php:74 Setup/Update/Release1.php:66
+msgid "Telephone Call"
+msgstr "Chamada Telefônica"
+
+#: Config.php:75 Setup/Update/Release1.php:67
+msgid "Facsimile"
+msgstr "Fax"
+
+#: Config.php:84
 msgid ""
 "Private Accounts are editable only for the creating user. Shared accounts "
 "are editable for users with \"edit shared\" rights"
 msgstr "Contas Privadas são editáveis somente para o usuário que as criou. Contas compartilhadas são editáveis para usuários com \"editar compartilhar\" privilégios"
 
-#: Config.php:78
-msgid "Sipgate Account Type"
-msgstr "Código Telefônico do Tipo da Conta"
-
-#: Config.php:80
-msgid "The type of your account as defined in the contract"
-msgstr "O tipo da sua conta está definida no contrato"
-
-#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
-msgid "accepted"
-msgstr "aceito"
-
-#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
-msgid "outgoing"
-msgstr "cessante"
-
-#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
-msgid "missed"
-msgstr "faltou"
-
-#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
-msgid "Telephone Call"
-msgstr "Chamada Telefônica"
-
-#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
-msgid "Facsimile"
-msgstr "Fax"
-
-#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
+#: Config.php:91 Setup/Update/Release1.php:91
 msgid "basic/plus"
 msgstr "básico/mais"
 
-#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
+#: Config.php:92 Setup/Update/Release1.php:92
 msgid "team"
 msgstr "equipe"
 
-#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
+#: Config.php:98
+msgid "Sipgate Account Type"
+msgstr "Código Telefônico do Tipo da Conta"
+
+#: Config.php:100
+msgid "The type of your account as defined in the contract"
+msgstr "O tipo da sua conta está definida no contrato"
+
+#: Config.php:107 Setup/Update/Release1.php:106
 msgid "private"
 msgstr "privado"
 
-#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
+#: Config.php:108 Setup/Update/Release1.php:107
 msgid "shared"
 msgstr "compartilhado"
 

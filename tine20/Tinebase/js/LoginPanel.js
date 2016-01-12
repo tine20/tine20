@@ -234,7 +234,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     html: '<p>' + String.format(_('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + String.format(_('{0} Translation Howto'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="http://wiki.tine20.org/Contributors/Howtos/Translations" border="0">' + String.format(_('{0} Translation Howto'), Tine.title) + '</a></li>' +
                         '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + _('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
@@ -458,7 +458,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             
         if (form.isValid()) {
             Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
-            
+
             Ext.Ajax.request({
                 scope: this,
                 params : {
@@ -468,39 +468,31 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     securitycode: values.securitycode
                 },
                 timeout: 60000, // 1 minute
-                callback: function (request, httpStatus, response) {
+                success:function(response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.title), _('Please wait!'));
                         window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope, response);
                     } else {
-                        if (responseData.data && responseData.data.code === 510) {
-                            // NOTE: when communication is lost, we can't create a nice ext window.
-                            (function() {
-                                Ext.MessageBox.hide();
-                                alert(_('Connection lost, please check your network!'));
-                            }).defer(1000);
-                        } else {
-                            var modSsl = Tine.Tinebase.registry.get('modSsl');
-                            var resultMsg = modSsl ? _('There was an error verifying your certificate!') :
-                                _('Your username and/or your password are wrong!');
-                            Ext.MessageBox.show({
-                                title: _('Login failure'),
-                                msg: resultMsg,
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR,
-                                fn: function () {
-                                    this.getLoginPanel().getForm().findField('password').focus(true);
-                                    if(document.getElementById('useCaptcha')) {
-                                        if(typeof responseData.c1 != 'undefined') {
-                                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
-                                            document.getElementById('contImgCaptcha').style.visibility = 'visible';  
-                                        }
+                        var modSsl = Tine.Tinebase.registry.get('modSsl');
+                        var resultMsg = modSsl ? _('There was an error verifying your certificate!!!') :
+                            _('Your username and/or your password are wrong!!!');
+                        Ext.MessageBox.show({
+                            title: _('Login failure'),
+                            msg: resultMsg,
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR,
+                            fn: function () {
+                                this.getLoginPanel().getForm().findField('password').focus(true);
+                                if(document.getElementById('useCaptcha')) {
+                                    if(typeof responseData.c1 != 'undefined') {
+                                        document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
+                                        document.getElementById('contImgCaptcha').style.visibility = 'visible';
                                     }
-                                }.createDelegate(this)
-                            });
-                        }
+                                }
+                            }.createDelegate(this)
+                        });
                     }
                 }
             });

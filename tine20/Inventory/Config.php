@@ -35,7 +35,17 @@ class Inventory_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Inventory_Model_Status'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'AVAILABLE'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'ORDERED',    'value' => 'ordered'                       ), //_('ordered')
+                    array('id' => 'AVAILABLE',  'value' => 'available'                     ), //_('available')
+                    array('id' => 'DEFECT',     'value' => 'defect'                        ), //_('defect')
+                    array('id' => 'MISSING',    'value' => 'missing'                       ), //_('missing')
+                    array('id' => 'REMOVED',    'value' => 'removed'                       ), //_('removed')
+                    array('id' => 'UNKNOWN',    'value' => 'unknown'                       ), //_('unknown')
+                ),
+                'default' => 'AVAILABLE',
+            )
         ),
     );
     

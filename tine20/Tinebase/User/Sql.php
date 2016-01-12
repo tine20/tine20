@@ -276,13 +276,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $select = $this->_getUserSelectObject()
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping[$_property]) . ' = ?', $value));
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+
         $stmt = $select->query();
 
         $row = $stmt->fetch(Zend_Db::FETCH_ASSOC);
         if ($row === false) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($row, true));
 
         try {
             $account = new $_accountClass(NULL, TRUE);
@@ -332,65 +336,62 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _getUserSelectObject()
     {
-        /*
-         * CASE WHEN `status` = 'enabled' THEN (CASE WHEN DATE(NOW()) > `expires_at` THEN 'expired'
-         * WHEN ( `login_failures` > 5 AND DATE(`last_login_failure_at`) + INTERVAL '15' MINUTE > DATE(NOW())) THEN 'blocked'
-         * ELSE 'enabled' END) WHEN `status` = 'expired' THEN 'expired' ELSE 'disabled' END
-         */
-        
-        $maxLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_LOGIN_FAILURES, 5);
-        if ($maxLoginFailures > 0) {
-            $loginFailuresCondition = 'WHEN ( ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$maxLoginFailures} AND "
-                . $this->_dbCommand->setDate($this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure'])) . " + INTERVAL '{$this->_blockTime}' MINUTE > "
-                . $this->_dbCommand->setDate('NOW()') .") THEN 'blocked'";
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' User blocking disabled.');
-            $loginFailuresCondition = '';
-        }
+        $interval = $this->_dbCommand->getDynamicInterval(
+            'SECOND',
+            '1',
+            'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures'])
+            . ' > 5 THEN 60 ELSE POWER(2, ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . ') END');
         
         $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN ('
             . 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires'])
             . ' THEN ' . $this->_db->quote('expired')
-            . ' ' . $loginFailuresCondition
+            . ' WHEN ( ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . ' > 0 AND '
+            . $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . ' + ' . $interval . ' > NOW()) THEN ' . $this->_db->quote('blocked')
             . ' ELSE ' . $this->_db->quote('enabled') . ' END)'
             . ' WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('expired')
                 . ' THEN ' . $this->_db->quote('expired')
             . ' ELSE ' . $this->_db->quote('disabled') . ' END';
-        
+
+        $fields =  array(
+            'accountId'             => $this->rowNameMapping['accountId'],
+            'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
+            'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
+            'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
+            'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
+            'accountStatus'         => $statusSQL,
+            'accountExpires'        => $this->rowNameMapping['accountExpires'],
+            'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
+            'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
+            'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
+            'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
+            'accountFullName'       => $this->rowNameMapping['accountFullName'],
+            'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
+            'accountLastName'       => $this->rowNameMapping['accountLastName'],
+            'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
+            'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
+            'loginFailures'         => $this->rowNameMapping['loginFailures'],
+            'contact_id',
+            'openid',
+            'visibility',
+            'NOW()', // only needed for debugging
+        );
+
+        // modlog fields have been added later
+        if ($this->_userTableHasModlogFields()) {
+            $fields = array_merge($fields, array(
+                'created_by',
+                'creation_time',
+                'last_modified_by',
+                'last_modified_time',
+                'is_deleted',
+                'deleted_time',
+                'deleted_by',
+                'seq',
+            ));
+        }
+
         $select = $this->_db->select()
-            ->from(SQL_TABLE_PREFIX . 'accounts', 
-                array(
-                    'accountId'             => $this->rowNameMapping['accountId'],
-                    'accountLoginName'      => $this->rowNameMapping['accountLoginName'],
-                    'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
-                    'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
-                    'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => $statusSQL,
-                    'accountExpires'        => $this->rowNameMapping['accountExpires'],
-                    'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
-                    'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
-                    'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
-                    'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
-                    'accountFullName'       => $this->rowNameMapping['accountFullName'],
-                    'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
-                    'accountLastName'       => $this->rowNameMapping['accountLastName'],
-                    'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
-                    'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
-                    'loginFailures'         => $this->rowNameMapping['loginFailures'],
-                    'contact_id',
-                    'openid',
-                    'visibility',
-                    'created_by',
-                    'creation_time',
-                    'last_modified_by',
-                    'last_modified_time',
-                    'is_deleted',
-                    'deleted_time',
-                    'deleted_by',
-                    'seq',
-                )
-            )
+            ->from(SQL_TABLE_PREFIX . 'accounts', $fields)
             ->joinLeft(
                SQL_TABLE_PREFIX . 'addressbook',
                $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.contact_id') . ' = ' 
@@ -640,17 +641,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * set last login failure in accounts table
      * 
      * @param string $_loginName
+     * @return Tinebase_Model_FullUser|null user if found
      * @see Tinebase/User/Tinebase_User_Interface::setLastLoginFailure()
      */
     public function setLastLoginFailure($_loginName)
     {
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Login of user ' . $_loginName . ' failed.');
-        
         try {
-            $user = $this->getUserByPropertyFromSqlBackend('accountLoginName', $_loginName);
+            $user = $this->getUserByPropertyFromSqlBackend('accountLoginName', $_loginName, 'Tinebase_Model_FullUser');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // nothing todo => is no existing user
-            return;
+            return null;
         }
         
         $values = array(
@@ -663,6 +663,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         );
         
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
+
+        return $user;
     }
     
     /**
@@ -977,6 +979,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting user' . $user->accountLoginName);
+
+        $event = new Tinebase_Event_User_DeleteAccount(
+            Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
+        );
+        $event->account = $user;
+        Tinebase_Event::fireEvent($event);
         
         $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
@@ -1131,9 +1139,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getFirstUserCreationTime()
     {
-        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
-        $fallback = new Tinebase_DateTime('2014-12-01');
-        if (!isset($schema['creation_time'])) {
+        if (! $this->_userTableHasModlogFields()) {
+            $fallback = new Tinebase_DateTime('2014-12-01');
             return $fallback;
         }
 
@@ -1150,7 +1157,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * fetch all user ids from accounts table
+     * checks if use table already has modlog fields
+     *
+     * @return bool
+     */
+    protected function _userTableHasModlogFields()
+    {
+        $schema = Tinebase_Db_Table::getTableDescriptionFromCache($this->_db->table_prefix . $this->_tableName, $this->_db);
+        return isset($schema['creation_time']);
+    }
+
+    /**
+     * fetch all user ids from accounts table: updating from an old version fails if the modlog fields don't exist
      *
      * @return array
      */

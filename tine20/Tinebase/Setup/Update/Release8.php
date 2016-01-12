@@ -551,20 +551,201 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
         $tableVersion = $this->getTableVersion('relations');
 
         if ($tableVersion < 8) {
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                    <index>
-                        <name>own_id</name>
-                        <field>
+            try {
+                $declaration = new Setup_Backend_Schema_Index_Xml('
+                        <index>
                             <name>own_id</name>
-                        </field>
-                    </index>
-                ');
-
-            $this->_backend->addIndex('relations', $declaration);
-            $this->setTableVersion('relations', '8');
+                            <field>
+                                <name>own_id</name>
+                            </field>
+                        </index>
+                    ');
+    
+                $this->_backend->addIndex('relations', $declaration);
+                $this->setTableVersion('relations', '8');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Index own_id already exists.');
+            }
         }
 
         $this->setApplicationVersion('Tinebase', '8.13');
+    }
+
+    /**
+     * adds ondelete cascade to some indices (tags + roles)
+     *
+     * @see 0010249: Tinebase.purgeDeletedRecords fails
+     */
+    public function update_13()
+    {
+        $indexToChange = array(array(
+            'table'         => 'tags_acl',
+            'tableversion'  => 3,
+            'name'          => 'tags_acl::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tags_acl::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>'
+        ), array(
+            'table'         => 'tags_context',
+            'tableversion'  => 2,
+            'name'          => 'tags_context::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tags_context::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'tagging',
+            'tableversion'  => 2,
+            'name'          => 'tagging::tag_id--tags::id',
+            'xml'           => '
+                <index>
+                    <name>tagging::tag_id--tags::id</name>
+                    <field>
+                        <name>tag_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>tags</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'role_rights',
+            'tableversion'  => 2,
+            'name'          => 'role_rights::role_id--roles::id',
+            'xml'           => '
+                <index>
+                    <name>role_rights::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ), array(
+            'table'         => 'role_accounts',
+            'tableversion'  => 3,
+            'name'          => 'role_accounts::role_id--roles::id',
+            'xml'           => '
+                 <index>
+                    <name>role_accounts::role_id--roles::id</name>
+                    <field>
+                        <name>role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>roles</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            '
+        ));
+
+        foreach ($indexToChange as $index) {
+            if ($this->getTableVersion($index['table']) < $index['tableversion']) {
+                try {
+                    $this->_backend->dropIndex($index['table'], $index['name']);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $zdse->getMessage());
+                }
+
+                try {
+                    $declaration = new Setup_Backend_Schema_Index_Xml($index['xml']);
+
+                    $this->_backend->addIndex($index['table'], $declaration);
+                    $this->setTableVersion($index['table'], $index['tableversion']);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Index ' . $index['name'] . ' already exists.');
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '8.14');
+    }
+
+    /**
+     * update to 8.15
+     *
+     * move keyFieldConfig defaults to config files
+     */
+    public function update_14()
+    {
+        // either put default to DB or delete form DB
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config',
+            'tableName' => 'config',
+        ));
+        $configRecords = $cb->getAll();
+
+        // iterate installed apps
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            try {
+                // get config
+                $config = Tinebase_Config::getAppConfig($application->name);
+                if (! method_exists($config, 'getProperties'))  {
+                    continue;
+                }
+                foreach($config->getProperties() as $name => $property) {
+                    if ($property['type'] == Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG) {
+                        $dbConfig = $config->get($name);
+                        $dbConfigRecords = $dbConfig['records']->toArray();
+                        $defaultRecords = (isset($property['default']['records'])) ? $property['default']['records'] : null;
+                        if ($defaultRecords && json_encode($dbConfigRecords) != json_encode($defaultRecords)) {
+                            // set default value
+                            if (array_key_exists('default', $property['default'])) {
+                                $dbConfig->default = $property['default']['default'];
+                                $config->set($name, $dbConfig->toArray());
+                            }
+                        } else {
+                            // delete default config
+                            $configRecord = $configRecords
+                                ->filter('application_id', $application->getId())
+                                ->filter('name', $name)
+                                ->getFirstRecord();
+                            if ($configRecord) {
+                                $cb->delete($configRecord->getId());
+                            }
+                        }
+                    }
+                }
+            } catch(Exception $e) {
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not migrate keyFieldConfig ' . $e);
+            }
+
+
+        }
+        $this->setApplicationVersion('Tinebase', '8.15');
     }
 
     /**
@@ -572,8 +753,9 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
      *
      * @return void
      */
-    public function update_13()
+    public function update_15()
     {
         $this->setApplicationVersion('Tinebase', '9.0');
     }
+
 }

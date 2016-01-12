@@ -474,6 +474,11 @@ class Tinebase_User
             $currentUser->accountEmailAddress       = $user->accountEmailAddress;
             $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
             $currentUser->accountLoginShell         = $user->accountLoginShell;
+
+            $currentUser->accountStatus             = isset($user->accountStatus)
+                ? $user->accountStatus
+                : Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+
             if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
                 $currentUser->visibility            = $user->visibility;
                 if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
@@ -746,20 +751,54 @@ class Tinebase_User
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to delete ' . count($deletedInSyncBackend) . ' users in SQL backend...');
+            . ' About to delete / expire ' . count($deletedInSyncBackend) . ' users in SQL backend...');
 
         foreach ($deletedInSyncBackend as $userToDelete) {
             $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
-            Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
 
-            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
+            if (in_array($user->accountLoginName, self::getSystemUsernames())) {
+                return;
+            }
+
+            // at first, we expire+deactivate the user
+            $now = Tinebase_DateTime::now();
+            if (! $user->accountExpires || $user->accountStatus !== Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Deleting user contact of ' . $user->accountLoginName);
+                    . ' Disable user and set expiry date of ' . $user->accountLoginName . ' to ' . $now);
+                $user->accountExpires = $now;
+                $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+                Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User already expired ' . print_r($user->toArray(), true));
 
-                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                $contactsBackend->delete($user->contact_id);
+                // TODO make time span configurable?
+                if ($user->accountExpires->isEarlier($now->subYear(1))) {
+                    // if he or she is already expired longer than configured expiry, we remove them!
+                    Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+
+                    if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Deleting user contact of ' . $user->accountLoginName);
+
+                        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                        $contactsBackend->delete($user->contact_id);
+                    }
+                } else {
+                    // keep user in expiry state
+                }
             }
         }
+    }
+
+    /**
+     * returns login_names of system users
+     *
+     * @return array
+     */
+    public static function getSystemUsernames()
+    {
+        return array('cronuser', 'calendarscheduling');
     }
 
     /**
@@ -836,7 +875,7 @@ class Tinebase_User
 
         $user = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => $adminLoginName,
-            'accountStatus'         => 'enabled',
+            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
             'accountPrimaryGroup'   => $userGroup->getId(),
             'accountLastName'       => $adminLastName,
             'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,

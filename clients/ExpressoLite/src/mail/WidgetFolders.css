@@ -1,0 +1,31 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetFolders object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2014 Serpro (http://www.serpro.gov.br)
+ */
+
+.Folders_ul { margin:0 8px 0 0; padding:0; }
+.Folders_li { list-style:none; cursor:pointer; margin:0; }
+
+.Folders_text { }
+@media (min-width:1025px) { .Folders_text { padding:3px 0; } } /* desktop */
+@media (max-width:1024px) { .Folders_text { padding:8px 0; } } /* mobile */
+
+.Folders_text:hover { background:#F5F5F5; }
+.Folders_current    { background:#D9E8FB; }
+.Folders_folderName { display:inline-block; padding:5px 3px 5px 0; }
+.Folders_counter    { color:#8C8C8C; }
+
+.Folders_arrowDown,.Folders_arrowRite { height:14px; display:inline-block;
+    background-image:url(../img/arrows.png); background-repeat:no-repeat; }
+@media (min-width:1025px) { .Folders_arrowDown,.Folders_arrowRite { width:20px; } } /* desktop */
+@media (max-width:1024px) { .Folders_arrowDown,.Folders_arrowRite { width:26px; } } /* mobile */
+.Folders_arrowDown { background-position:0 0; }
+.Folders_arrowRite { background-position:0 -14px; }
+
+.Folders_loading  { text-align:center; margin:10px; color:#999; font-style:italic; }
+.Folders_throbber { display:inline-block; width:16px; height:16px; background:url(../img/chromiumthrobber.svg); }

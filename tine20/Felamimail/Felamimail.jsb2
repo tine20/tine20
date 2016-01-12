@@ -126,6 +126,10 @@
         {
           "text": "FolderFilterModel.js",
           "path": "js/"
+        },
+        {
+          "text": "MailvelopeHelper.js",
+          "path": "js/"
         }
       ]
     },

@@ -167,49 +167,61 @@ msgstr "O favorito padrão que foi carregado na inicialização das Classes"
 msgid "Internet access options."
 msgstr "Opções de acesso à internet"
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "Em"
+
+#: Config.php:106
+msgid "Off"
+msgstr "Fora"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Filtrado"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Grupo de Acesso à Internet (ON)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Grupo de Acesso à Internet (FILTRADO)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Grupo de Estudantes"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr "Definição de Importação de Estudantes"
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr "Prefixo do nome de entrada de estudantes"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr ""
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr ""
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Configuração de usuário para o Samba"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr ""
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr ""
 
@@ -217,22 +229,10 @@ msgstr ""
 msgid "Courses"
 msgstr "Cursos"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Em"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Fora"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrado"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""

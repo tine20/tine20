@@ -41,10 +41,16 @@ Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
         
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
-        this.items = [new Tine.Calendar.ResourcesGridPanel({
-            title: this.app.i18n._('Manage Resources'),
-            disabled: !Tine.Tinebase.common.hasRight('manage_resources', 'Calendar')
-        })];
+        this.items = [
+            new Tine.Calendar.ResourcesGridPanel({
+                title: this.app.i18n._('Manage Resources'),
+                disabled: !Tine.Tinebase.common.hasRight('manage_resources', 'Calendar')
+            }),
+            new Tine.Admin.config.GridPanel({
+                configApp: this.app
+            })
+
+        ];
         
         Tine.Calendar.AdminPanel.superclass.initComponent.call(this);
     }
@@ -58,7 +64,7 @@ Tine.Calendar.AdminPanel = Ext.extend(Ext.TabPanel, {
  */
 Tine.Calendar.AdminPanel.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 500,
+        width: 600,
         height: 470,
         name: 'cal-mange-resources',
         contentPanelConstructor: 'Tine.Calendar.AdminPanel',

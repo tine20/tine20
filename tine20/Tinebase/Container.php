@@ -109,7 +109,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @todo move this to constructor when this no longer extends Tinebase_Backend_Sql_Abstract
      */
-    protected function _getContentBackend()
+    public function getContentBackend()
     {
         if ($this->_contentBackend === NULL) {
             $this->_contentBackend  = new Tinebase_Backend_Sql(array(
@@ -1106,6 +1106,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $tm->commitTransaction($myTransactionId);
         
         return $deletedContainer;
+
         /*
         // move all contained objects to next available personal container and try again to delete container
         $app = Tinebase_Application::getApplicationById($container->application_id);
@@ -1136,7 +1137,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function deleteContainerContents($container, $_ignoreAcl = FALSE)
     {
-        // set records belonging to this container to deleted
         $model = $container->model;
 
         if (empty($model)) {
@@ -1145,9 +1145,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Deleting container contents ...');
-
         $controller = Tinebase_Core::getApplicationInstance($model);
         $filterName = $model . 'Filter';
 
@@ -1155,19 +1152,22 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $acl = $controller->doContainerACLChecks(FALSE);
         }
         if ($controller && class_exists($filterName)) {
-            $filter = new $filterName(array(
-                array(
-                    'field'    => 'container_id',
-                    'operator' => 'equals',
-                    'value'    => intval($container->id)
-                ),
-                array(
-                    'field'    => 'is_deleted',
-                    'operator' => 'equals',
-                    'value'    => 0
-                )),
-                'AND');
-            $controller::getInstance()->deleteByFilter($filter);
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Delete ' . $model . ' records in container ' . $container->getId());
+
+            $filter = new $filterName(array(array(
+                'field'    => 'container_id',
+                'operator' => 'equals',
+                'value'    => intval($container->id)
+            )), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+
+            if ($_ignoreAcl) {
+                $backend = $controller::getInstance()->getBackend();
+                $idsToDelete = $backend->search($filter, null, /* $_onlyIds */ true);
+                $controller::getInstance()->delete($idsToDelete);
+            } else {
+                $controller::getInstance()->deleteByFilter($filter);
+            }
         }
 
         if ($_ignoreAcl === TRUE && method_exists($controller, 'doContainerACLChecks')) {
@@ -1733,7 +1733,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ));
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Creating "' . $action . '" action content history record for record id ' . $recordId);
-                $this->_getContentBackend()->create($contentRecord);
+                $this->getContentBackend()->create($contentRecord);
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -1764,9 +1764,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $pagination = new Tinebase_Model_Pagination(array(
             'sort' => 'content_seq'
         ));
-        
-        $result = $this->_getContentBackend()->search($filter, $pagination);
-        
+        $result = $this->getContentBackend()->search($filter, $pagination);
         return $result;
     }
 
@@ -1826,6 +1824,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * create a new system container
      * - by default user group gets READ grant
      * - by default admin group gets all grants
+     *
+     * NOTE: this should never be called in user land and only in admin/setup contexts
      * 
      * @param Tinebase_Model_Application|string $application app record, app id or app name
      * @param string $name
@@ -1838,7 +1838,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         $application = ($application instanceof Tinebase_Model_Application) ? $application : Tinebase_Application::getInstance()->getApplicationById($application);
         if ($model === null) {
-            $controller = Tinebase_Core::getApplicationInstance($application->name);
+            $controller = Tinebase_Core::getApplicationInstance($application->name, /* $_modelName = */ '', /* $_ignoreACL = */ true);
             $model = $controller->getDefaultModel();
         }
         

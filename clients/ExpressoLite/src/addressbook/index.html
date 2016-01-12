@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+ * Expresso Lite
+ * Entry index page for addressbook module.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+-->
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1"/>
+    <link rel="icon" type="image/png" href="../img/favicon.png"/>
+    <link type="text/css" rel="stylesheet" href="../common-js/general.css"/>
+    <link rel="stylesheet" href="addressbook.css" />
+    <title>ExpressoBr</title>
+    <script src="../cordova.js"></script>
+    <script src="../common-js/require.min.js" data-main="addressbook.js"></script>
+</head>
+<body>
+    <section id="leftMenu">
+        <div id="tipoContatoDiv"></div>
+    </section>
+    <section id="contactListSection"></section>
+    <section id="contactDetailsSection"></section>
+</body>
+</html>

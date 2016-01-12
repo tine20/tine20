@@ -126,7 +126,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
                 )),
             ))
         ), Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
-        
+
         Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
     }
 

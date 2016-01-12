@@ -216,8 +216,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
 
         $class = $event->class == Calendar_Model_Event::CLASS_PUBLIC ? 'PUBLIC' : 'CONFIDENTIAL';
-        $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
         $vevent->add('X-CALENDARSERVER-ACCESS', $class);
+        if (! $_event->isRecurException()) {
+            // add one time only
+            $vcalendar->add('X-CALENDARSERVER-ACCESS', $class);
+        }
 
         // categories
         if (!isset($event->tags)) {
@@ -588,7 +591,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates,Sabre\VObject\Component\VEvent $vevent)
     {
         // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
-        $exDate = Calendar_Convert_Event_VCalendar_Abstract::getUTCDateFromStringInUsertime((string) $vevent->{'RECURRENCE-ID'});
+        $exDate = $this->_convertToTinebaseDateTime($vevent->{'RECURRENCE-ID'});
+        $exDate->setTimezone('UTC');
         $exDateString = $exDate->format('Y-m-d H:i:s');
 
         foreach ($oldExdates as $id => $oldExdate) {

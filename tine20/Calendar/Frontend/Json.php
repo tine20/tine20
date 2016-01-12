@@ -293,7 +293,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
         // find out if fixed calendars should be used
-        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS, new Tinebase_Config_Struct(array()))->toArray();
+        $fixedCalendars = Calendar_Config::getInstance()->get(Calendar_Config::FIXED_CALENDARS);
         $useFixedCalendars = is_array($fixedCalendars) && ! empty($fixedCalendars);
         
         $periodFilter = $filter->getFilter('period');

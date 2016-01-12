@@ -115,8 +115,12 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @param {Ext.EventObject} e
      */
     collapseIf : function(e){
-        if(!e.within(this.wrap) && !e.within(this.layer)){
+        if(Ext.WindowMgr.getActive() == this.layer && !e.within(this.wrap) && !e.within(this.layer)){
             this.collapse();
+
+            if (this.inEditor && this.editor) {
+                this.onCancel();
+            }
         }
     },
     
@@ -147,7 +151,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         });
         this.fireEvent('expand', this);
     },
-    
+
     /**
      * get values from form
      * 
@@ -230,11 +234,32 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @return {String} value The selected value
      */
     getValue: function() {
-        return this.currentValue;
+        return Ext.decode(Ext.encode(this.currentValue));
     },
     
     initComponent: function() {
         Ext.ux.form.LayerCombo.superclass.initComponent.apply(this, arguments);
+
+        this.on('afterrender', this.onAfterRender, this, {buffer: 500});
+        this.on('beforedestroy', this.onBeforeDestory, this);
+    },
+
+    onAfterRender: function() {
+        // if used as gridEditor
+        if (this.inEditor) {
+            var editorWrapEl = this.el.up('.x-grid-editor', 5);
+            if (editorWrapEl) {
+                this.editor = Ext.getCmp(editorWrapEl.id);
+                this.editor.allowBlur = true;
+                this.expand();
+            }
+        }
+    },
+
+    onBeforeDestory: function() {
+        if (this.layer) {
+            Ext.WindowMgr.unregister(this.layer);
+        }
     },
 
     /**
@@ -245,24 +270,19 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     initLayer: function() {
         if(!this.layer){
             var cls = 'ux-layercombo-layer',
-                layerParent = Ext.getDom(this.getLayerParent() || Ext.getBody()),
-                zindex = parseInt(Ext.fly(layerParent).getStyle('z-index') ,10);
-
-            if (this.ownerCt && !zindex){
-                this.findParentBy(function(ct){
-                    zindex = parseInt(ct.getPositionEl().getStyle('z-index'), 10);
-                    return !!zindex;
-                });
-            }
+                layerParent = Ext.getDom(this.getLayerParent() || Ext.getBody());
 
             this.layer = new Ext.Layer({
                 parentEl: layerParent,
                 shadow: this.shadow,
                 cls: [cls, this.layerClass].join(' '),
-                constrain:false,
-                // 12000 was too much, the attendee filter layer was hidden behind the filter toolbar
-                zindex: (zindex || 10000) + 5
+                constrain:false
             });
+
+            // manage z-index by windowMgr
+            this.layer.setActive = Ext.emptyFn;
+            Ext.WindowMgr.register(this.layer);
+            Ext.WindowMgr.bringToFront(this.layer);
 
             var lw = this.layerWidth || Math.max(this.wrap.getWidth(), this.minLayerWidth);
             this.layer.setSize(lw, 0);
@@ -286,7 +306,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
             this.setLayerHeight(this.layerHeight ? this.layerHeight : 'auto');
         }
     },
-    
+
     /**
      * Returns true if the dropdown layer is expanded, else false.
      */
@@ -300,6 +320,10 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     onCancel: function() {
         this.setValue(this.currentValue);
         this.collapse();
+
+        if (this.inEditor && this.editor) {
+            this.editor.cancelEdit();
+        }
     },
     
     /**
@@ -329,7 +353,11 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         this.setValue(v);
         
         this.fireEvent('select', this, v);
-        this.startValue = v;
+        //this.startValue = v;
+
+        if (this.inEditor && this.editor) {
+            this.editor.completeEdit();
+        }
     },
     
     /**
@@ -373,6 +401,9 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
         if(this.isExpanded()){
             this.collapse();
             this.el.focus();
+            if (this.inEditor && this.editor) {
+                this.onCancel();
+            }
         } else {
             this.onFocus({});
             this.expand()

@@ -9,7 +9,7 @@
 
 /**
  * this class represents a key field record of a key field config
- * @see http://www.tine20.org/wiki/index.php/Developers/Concepts/KeyFields
+ * @see http://wiki.tine20.org/Developers/Concepts/KeyFields
  * 
  * @package     Tinebase
  * @subpackage  Config
@@ -41,6 +41,7 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
         // key field record specific
         'value'                => array('allowEmpty' => false         ),
         'icon'                 => array('allowEmpty' => true          ),
+        'color'                => array('allowEmpty' => true          ),
         'system'               => array('allowEmpty' => true,  'Int'  ),
     );
     

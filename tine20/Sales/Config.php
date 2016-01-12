@@ -205,7 +205,14 @@ class Sales_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sales_Model_InvoiceType'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'INVOICE'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'INVOICE',  'value' => 'Invoice',  'system' => true), // _('Invoice')
+                    array('id' => 'REVERSAL', 'value' => 'Reversal', 'system' => true), // _('Reversal')
+                    array('id' => 'CREDIT',   'value' => 'Credit',   'system' => true)  // _('Credit')
+                ),
+                'default' => 'INVOICE'
+            )
         ),
         self::PRODUCT_CATEGORY => array(
                                    //_('Product Category')
@@ -215,7 +222,12 @@ class Sales_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sales_Model_ProductCategory'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'DEFAULT'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'DEFAULT', 'value' => 'Default', 'system' => true) // _('Default')
+                ),
+                'default' => 'DEFAULT'
+            )
         ),
         self::PRODUCT_NUMBER_GENERATION => array(
                                    //_('Product Number Creation')
@@ -271,7 +283,17 @@ class Sales_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sales_Model_PaymentMethod'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'BANK TRANSFER'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'BANK TRANSFER', 'value' => 'Bank transfer', 'system' => true), // _('Bank transfer')
+                    array('id' => 'DIRECT DEBIT',  'value' => 'Direct debit',  'system' => true),  // _('Direct debit')
+                    array('id' => 'CANCELLATION',  'value' => 'Cancellation',  'system' => true),  // _('Cancellation')
+                    array('id' => 'CREDIT',  'value' => 'Credit',  'system' => true),  // _('Credit')
+                    array('id' => 'CREDIT CARD',  'value' => 'Credit card',  'system' => true),  // _('Credit card')
+                    array('id' => 'PAYPAL',  'value' => 'Paypal',  'system' => true),  // _('Paypal')
+                ),
+                'default' => 'BANK TRANSFER'
+            )
         ),
         self::INVOICE_CLEARED => array(
                                    //_('Invoice Cleared')
@@ -281,7 +303,13 @@ class Sales_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Sales_Model_InvoiceCleared'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'TO_CLEAR'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'TO_CLEAR', 'value' => 'to clear', 'system' => true), // _('to clear')
+                    array('id' => 'CLEARED',  'value' => 'cleared',  'system' => true), // _('cleared')
+                ),
+                'default' => 'TO_CLEAR'
+            )
         ),
         /**
          * enabled Sales features

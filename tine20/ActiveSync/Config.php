@@ -57,6 +57,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
+            'default'               => null,
         ),
         self::DISABLE_ACCESS_LOG => array(
         //_('Disable Access Log')
@@ -75,7 +76,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
         //_('For how long in the past the emails should be synchronized.')
             'description'           => 'For how long in the past the emails should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-            // @todo options is not used yet (only for TYPE_KEYFIELD configs),
+            // @todo options is not used yet (only for TYPE_KEYFIELD_CONFIG configs),
             //  but this is helpful to see which values are possible here
             'options'               => array(
                 Syncroton_Command_Sync::FILTER_NOTHING,
@@ -98,7 +99,7 @@ class ActiveSync_Config extends Tinebase_Config_Abstract
         //_('For how long in the past the events should be synchronized.')
             'description'           => 'For how long in the past the events should be synchronized.',
             'type'                  => Tinebase_Config_Abstract::TYPE_INT,
-            // @todo options is not used yet (only for TYPE_KEYFIELD configs),
+            // @todo options is not used yet (only for TYPE_KEYFIELD_CONFIG configs),
             //  but this is helpful to see which values are possible here
             'options'               => array(
                 Syncroton_Command_Sync::FILTER_6_MONTHS_BACK,

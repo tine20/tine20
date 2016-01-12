@@ -51,6 +51,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * send notifications of own updates
      */
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
+
+    /**
+     * send alarm notifications
+     */
+    const SEND_ALARM_NOTIFICATIONS = 'sendalarmnotifications';
     
     /**
      * enable default alarm 
@@ -76,8 +81,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * timeIncrement
      */
     const DEFAULT_TIMEINCREMENT = 'timeIncrement';
+    
+    /**
+     * firstdayofweek
+     */
+    const FIRSTDAYOFWEEK = 'firstdayofweek';
 
-        /**
+    /**
      * @var string application
      */
     protected $_application = 'Calendar';
@@ -98,12 +108,14 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
             self::SEND_NOTIFICATION_OF_OWN_ACTIONS,
+            self::SEND_ALARM_NOTIFICATIONS,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
             self::DEFAULTATTENDEE_STRATEGY,
             self::DEFAULT_TIMEINCREMENT,
             self::DEFAULTATTENDEE_STRATEGY,
-            self::DEFAULT_EVENTS_RRIVATE
+            self::DEFAULT_EVENTS_RRIVATE,
+            self::FIRSTDAYOFWEEK
         );
         
         if ($cropDays) {
@@ -151,6 +163,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Send Notifications Emails of own Actions'),
                 'description'   => $translate->_('Get notifications emails for actions you did yourself'),
             ),
+            self::SEND_ALARM_NOTIFICATIONS => array(
+                'label'         => $translate->_('Send Alarm Notifications Emails'),
+                'description'   => $translate->_('Get event alarms via email'),
+            ),
             self::DEFAULTALARM_ENABLED => array(
                 'label'         => $translate->_('Enable Standard Alarm'),
                 'description'   => $translate->_('New events get a standard alarm as defined below'),
@@ -170,7 +186,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_EVENTS_RRIVATE => array(
                 'label'         => $translate->_('Default set Events to privat'),
                 'description'   => $translate->_('If enabled every created event is always privat.'),
-            )
+            ),
+            self::FIRSTDAYOFWEEK => array(
+                'label'         => $translate->_('First Day of Week'),
+                'description'   => $translate->_('On what day the week should be starting'),
+            ),
         );
         
         return $prefDescriptions;
@@ -281,6 +301,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
+            case self::SEND_ALARM_NOTIFICATIONS:
+                $preference->value      = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
             case self::DEFAULTALARM_ENABLED:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
@@ -349,6 +376,20 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::FIRSTDAYOFWEEK:
+                $preference->value = 1;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>Sunday</label>
+                            <value>0</value>
+                        </option>
+                        <option>
+                            <label>Monday</label>
+                            <value>1</value>
+                        </option>
                     </options>';
                 break;
             default:

@@ -3,29 +3,22 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Tinebase
- * @subpackage  Frontend
+ * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 require_once 'vendor/sabre/dav/tests/Sabre/DAV/Auth/Backend/Mock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
  */
-class Tinebase_WebDav_Plugin_PrincipalSearchTest extends TestCase
+class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_AbstractBaseTest
 {
-    /**
-     * 
-     * @var Sabre\DAV\Server
-     */
-    protected $server;
-    
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -35,8 +28,6 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
         
         $mockBackend = new Sabre\DAV\Auth\Backend\Mock();
         $mockBackend->defaultUser = Tinebase_Core::getUser()->contact_id;
@@ -54,9 +45,6 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends TestCase
         
         $this->plugin = new Tinebase_WebDav_Plugin_PrincipalSearch();
         $this->server->addPlugin($this->plugin);
-        
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
     }
 
     /**

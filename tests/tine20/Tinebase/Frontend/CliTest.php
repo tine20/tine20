@@ -128,20 +128,27 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * test purge deleted records
+     *
+     * @see 0010249: Tinebase.purgeDeletedRecords fails
      */
     public function testPurgeDeletedRecordsAllTables()
     {
         $opts = $this->_getOpts();
         $deletedContact = $this->_addAndDeleteContact();
         $deletedLead = $this->_addAndDeleteLead();
+
+        // delete personal adb container and tag, too
+        Tinebase_Container::getInstance()->deleteContainer($this->_getPersonalContainer('Addressbook')->getId());
+        Tinebase_Tags::getInstance()->deleteTags($deletedContact->tags->getFirstRecord()->getId());
         
         ob_start();
         $this->_cli->purgeDeletedRecords($opts);
         $out = ob_get_clean();
-        
+
         $this->assertContains('Removing all deleted entries before', $out);
         $this->assertContains('Cleared table addressbook (deleted ', $out);
         $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
+        $this->assertNotContains('Failed to purge', $out);
 
         $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
@@ -161,12 +168,13 @@ class Tinebase_Frontend_CliTest extends TestCase
     {
         $newContact = new Addressbook_Model_Contact(array(
             'n_family'          => 'PHPUNIT',
-            'container_id'      => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId(),
+            'container_id'      => $this->_getPersonalContainer('Addressbook')->getId(),
             'tel_cell_private'  => '+49TELCELLPRIVATE',
+            'tags'              => array(array('name' => 'temptag')),
         ));
         $newContact = Addressbook_Controller_Contact::getInstance()->create($newContact);
         Addressbook_Controller_Contact::getInstance()->delete($newContact->getId());
-        
+
         return $newContact;
     }
 

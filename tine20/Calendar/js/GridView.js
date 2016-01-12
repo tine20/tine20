@@ -51,7 +51,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
         
         this.store.sort(this.defaultSortInfo.field, this.defaultSortInfo.direction);
         
-        this.cm = this.initCM();
+        this.cm = Tine.Calendar.GridView.initCM(this.app);
         this.selModel = this.initSM();
         this.view = this.initVIEW();
         
@@ -72,113 +72,7 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
         Tine.Calendar.GridView.superclass.initComponent.call(this);
     },
     
-    /**
-     * returns cm
-     * 
-     * @return Ext.grid.ColumnModel
-     * @private
-     */
-    initCM: function(){
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true,
-                resizable: true
-            },
-            columns: [{
-                id: 'container_id',
-                header: this.recordClass.getContainerName(),
-                width: 150,
-                renderer: Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id')
-            }, {
-                id: 'class',
-                header: this.app.i18n._("Private"),
-                width: 50,
-                dataIndex: 'class',
-                renderer: function(transp) {
-                    return Tine.Tinebase.common.booleanRenderer(transp == 'PRIVATE');
-                }
-            }, {
-                id: 'tags',
-                header: this.app.i18n._("Tags"),
-                width: 50,
-                dataIndex: 'tags',
-                renderer: Tine.Tinebase.common.tagsRenderer
-                
-            }, {
-                id: 'dtstart',
-                header: this.app.i18n._("Start Time"),
-                width: 120,
-                dataIndex: 'dtstart',
-                renderer: Tine.Tinebase.common.dateTimeRenderer
-            }, {
-                id: 'dtend',
-                header: this.app.i18n._("End Time"),
-                width: 120,
-                dataIndex: 'dtend',
-                renderer: Tine.Tinebase.common.dateTimeRenderer
-            }, {
-                id: 'is_all_day_event',
-                header: this.app.i18n._("whole day"),
-                width: 50,
-                dataIndex: 'is_all_day_event',
-                renderer: Tine.Tinebase.common.booleanRenderer
-            }, {
-                id: 'transp',
-                header: this.app.i18n._("Blocking"),
-                width: 50,
-                dataIndex: 'transp',
-                renderer: function(transp) {
-                    return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
-                }
-            }, {
-                id: 'status',
-                header: this.app.i18n._("Tentative"),
-                width: 50,
-                dataIndex: 'status',
-                renderer: function(transp) {
-                    return Tine.Tinebase.common.booleanRenderer(transp == 'TENTATIVE');
-                }
-            }, {
-                id: 'summary',
-                header: this.app.i18n._("Summary"),
-                width: 200,
-                dataIndex: 'summary'
-            }, {
-                id: 'location',
-                header: this.app.i18n._("Location"),
-                width: 200,
-                hidden: true,
-                dataIndex: 'location'
-            }, {
-                id: 'organizer',
-                header: this.app.i18n._("Organizer"),
-                width: 200,
-                hidden: true,
-                dataIndex: 'organizer',
-                renderer: Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName
-            }, {
-                id: 'description',
-                header: this.app.i18n._("Description"),
-                width: 200,
-                hidden: true,
-                dataIndex: 'description',
-                renderer: function(description, metaData, record) {
-                    if (metaData) {
-                        metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
-                    }
-                    return Ext.util.Format.htmlEncode(description);
-                }
-            }/*, {
-                id: 'attendee_status',
-                header: this.app.i18n._("Status"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'attendee',
-//                renderer: this.attendeeStatusRenderer.createDelegate(this)
-            }*/]
-        });
-    },
-    
+
     initSM: function() {
         return new Ext.grid.RowSelectionModel({
             allowMultiple: true,
@@ -265,3 +159,106 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
         return 'cal-status-' + record.get('status');
     }
 });
+
+/**
+ * returns cm
+ *
+ * @return Ext.grid.ColumnModel
+ */
+Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
+    if (! additionalColumns) {
+        additionalColumns = [];
+    }
+
+    return new Ext.grid.ColumnModel({
+        defaults: {
+            sortable: true,
+            resizable: true
+        },
+        columns: additionalColumns.concat([{
+            id: 'container_id',
+            header: Tine.Calendar.Model.Event.getContainerName(),
+            width: 150,
+            renderer: Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id')
+        }, {
+            id: 'class',
+            header: app.i18n._("Private"),
+            width: 50,
+            dataIndex: 'class',
+            renderer: function(transp) {
+                return Tine.Tinebase.common.booleanRenderer(transp == 'PRIVATE');
+            }
+        }, {
+            id: 'tags',
+            header: app.i18n._("Tags"),
+            width: 50,
+            dataIndex: 'tags',
+            renderer: Tine.Tinebase.common.tagsRenderer
+
+        }, {
+            id: 'dtstart',
+            header: app.i18n._("Start Time"),
+            width: 120,
+            dataIndex: 'dtstart',
+            renderer: Tine.Tinebase.common.dateTimeRenderer
+        }, {
+            id: 'dtend',
+            header: app.i18n._("End Time"),
+            width: 120,
+            dataIndex: 'dtend',
+            renderer: Tine.Tinebase.common.dateTimeRenderer
+        }, {
+            id: 'is_all_day_event',
+            header: app.i18n._("whole day"),
+            width: 50,
+            dataIndex: 'is_all_day_event',
+            renderer: Tine.Tinebase.common.booleanRenderer
+        }, {
+            id: 'transp',
+            header: app.i18n._("Blocking"),
+            width: 50,
+            dataIndex: 'transp',
+            renderer: function(transp) {
+                return Tine.Tinebase.common.booleanRenderer(transp == 'OPAQUE');
+            }
+        }, {
+            id: 'status',
+            header: app.i18n._("Tentative"),
+            width: 50,
+            dataIndex: 'status',
+            renderer: function(transp) {
+                return Tine.Tinebase.common.booleanRenderer(transp == 'TENTATIVE');
+            }
+        }, {
+            id: 'summary',
+            header: app.i18n._("Summary"),
+            width: 200,
+            dataIndex: 'summary'
+        }, {
+            id: 'location',
+            header: app.i18n._("Location"),
+            width: 200,
+            hidden: true,
+            dataIndex: 'location'
+        }, {
+            id: 'organizer',
+            header: app.i18n._("Organizer"),
+            width: 200,
+            hidden: true,
+            dataIndex: 'organizer',
+            renderer: Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName
+        }, {
+            id: 'description',
+            header: app.i18n._("Description"),
+            width: 200,
+            hidden: true,
+            dataIndex: 'description',
+            renderer: function(description, metaData, record) {
+                if (metaData) {
+                    metaData.attr = 'ext:qtip="' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(description))) + '"';
+                }
+                return Ext.util.Format.htmlEncode(description);
+            }
+        }])
+    });
+};

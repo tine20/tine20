@@ -1,0 +1,25 @@
+/*!
+ * Expresso Lite
+ * CSS styles for ContactsAutocomplete.js class.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#ContactsAutocomplete_template { display:none; }
+
+.ContactsAutocomplete_frame { display:block; position:absolute; padding:2px;
+    background-color:white; border:1px solid #CCC; box-shadow:2px 2px 12px #888; }
+.ContactsAutocomplete_results { display:inline-block; overflow:auto; width:100%;
+    border-bottom:1px solid #DDD; height:calc(100% - 40px); }
+.ContactsAutocomplete_footer { width:100%; text-align:center; padding:3px; height:40px; }
+.ContactsAutocomplete_throbber { display:none; font-style:italic; color:#666; }
+
+.ContactsAutocomplete_oneResult { width:100%; border-bottom:1px solid #EEE; padding:3px; cursor:pointer; }
+.ContactsAutocomplete_oneResult:hover { background-color:#F5F5F5; }
+.ContactsAutocomplete_oneResultSel { background-color:#D9E8FB; }
+.ContactsAutocomplete_name { }
+.ContactsAutocomplete_orgUnit,.ContactsAutocomplete_mail { font-size:90%; color:#666; }
+.ContactsAutocomplete_count { color:#888; }

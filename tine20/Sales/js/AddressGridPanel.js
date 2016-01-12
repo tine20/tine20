@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Sales');
 
@@ -12,7 +12,7 @@ Ext.ns('Tine.Sales');
  * 
  * @namespace   Tine.Sales
  * @class       Tine.Sales.AddressGridPanel
- * @extends     Tine.widgets.grid.GridPanel
+ * @extends     Tine.widgets.grid.BbarGridPanel
  * 
  * <p>Address Grid Panel</p>
  * <p><pre>
@@ -25,10 +25,7 @@ Ext.ns('Tine.Sales');
  * @constructor
  * Create a new Tine.Sales.AddressGridPanel
  */
-Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    
-    editDialogRecordProperty: null,
-    editDialog: null,
+Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.BbarGridPanel, {
     
     /**
      * holds the type of the address currently handled, autoset by editDialog
@@ -36,11 +33,8 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @type {String}
      */
     addressType: null,
-    
-    storeRemoteSort: false,
+
     defaultSortInfo: {field: 'countryname', direction: 'ASC'},
-    
-    usePagingToolbar: false,
     
     /**
      * inits this cmp
@@ -48,10 +42,6 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        this.bbar = [];
-        
-        this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);
-
         this.clipboardAction = new Ext.ux.grid.ActionColumnPlugin({
             header: this.app.i18n._('Clipboard'),
             keepSelection: false,
@@ -67,16 +57,6 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins = Ext.isArray(this.plugins) ? this.plugins.push(this.clipboardAction) : [this.clipboardAction];
         
         Tine.Sales.AddressGridPanel.superclass.initComponent.call(this);
-        
-        this.fillBottomToolbar();
-        
-        this.store.on('add', this.updateTitle, this);
-        this.store.on('remove', this.updateTitle, this);
-
-        // update count of tab
-        (function() {
-            this.updateTitle(((this.editDialog.record.data.hasOwnProperty(this.editDialogRecordProperty) && this.editDialog.record.data[this.editDialogRecordProperty]) ? this.editDialog.record.data[this.editDialogRecordProperty].length : 0));
-        }).defer(100, this);
     },
     
     /**
@@ -89,32 +69,7 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var companyName = this.editDialog.record.get('name');
         Tine.Sales.addToClipboard(record, companyName);
     },
-    
-    /**
-     * overwrites the default function, no refactoring needed, this file will be deleted in the next release
-     */
-    initFilterPanel: function() {},
-    
-    /**
-     * updates the title ot the tab
-     * 
-     * @param {Number} count
-     */
-    updateTitle: function(count) {
-        count = Ext.isNumber(count) ? count : this.store.getCount();
-        this.setTitle((count > 1 ? this.i18nRecordsName : this.i18nRecordName) + ' (' + count + ')');
-    },
-    
-    /**
-     * will be called in Edit Dialog Mode
-     */
-    fillBottomToolbar: function() {
-        var tbar = this.getBottomToolbar();
-        tbar.addButton(new Ext.Button(this.action_editInNewWindow));
-        tbar.addButton(new Ext.Button(this.action_addInNewWindow));
-        tbar.addButton(new Ext.Button(this.action_deleteRecord));
-    },
-    
+
     /**
      * overwrites and calls superclass
      * 

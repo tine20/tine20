@@ -268,7 +268,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              */
             'updateDependent'
         );
-        
+
         if (Ext.isString(this.modelConfig)) {
             this.modelConfig = Ext.decode(this.modelConfig);
         }
@@ -783,13 +783,29 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {Boolean}
      */
     isValid: function() {
-        return this.getForm().isValid();
+        var me = this;
+        return new Promise(function (fulfill, reject) {
+            if (me.getForm().isValid()) {
+                fulfill(true);
+            } else {
+                reject(me.getValidationErrorMessage())
+            }
+        });
+    },
+
+    /**
+     * vaidates on multiple edit
+     * 
+     * @return {Boolean}
+     */
+    isMultipleValid: function() {
+        return true;
     },
     
     /**
      * @private
      */
-    onCancel: function(){
+    onCancel : function(){
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
@@ -833,45 +849,66 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         // quit copy mode
         this.copyRecord = false;
-        
-        if (this.isValid()) {
-            if (this.mode !== 'local') {
-                this.recordProxy.saveRecord(this.record, {
-                    scope: this,
-                    success: function(record) {
+
+        var isValid = this.isValid(),
+            vBool = !! isValid,
+            me = this;
+
+        if (Ext.isDefined(isValid) && ! Ext.isFunction(isValid.then)) {
+            // convert legacy isValid into promise
+            isValid = new Promise(function (fulfill, reject) {;
+                return vBool ? fulfill(true) : reject(me.getValidationErrorMessage());
+            });
+        }
+
+        isValid.then(function () {
+            if (me.mode !== 'local') {
+                me.recordProxy.saveRecord(me.record, {
+                    scope: me,
+                    success: function (record) {
                         // override record with returned data
-                        this.record = record;
-                        if (! Ext.isFunction(this.window.cascade)) {
+                        me.record = record;
+                        if (!Ext.isFunction(me.window.cascade)) {
                             // update form with this new data
                             // NOTE: We update the form also when window should be closed,
                             //       cause sometimes security restrictions might prevent
                             //       closing of native windows
-                            this.onRecordLoad();
+                            me.onRecordLoad();
                         }
-                        var ticketFn = this.onAfterApplyChanges.deferByTickets(this, [closeWindow]),
+                        var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
                             wrapTicket = ticketFn();
-                            
-                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode, this, ticketFn);
+
+                        me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
                         wrapTicket();
                     },
-                    failure: this.onRequestFailed,
+                    failure: me.onRequestFailed,
                     timeout: 300000 // 5 minutes
-                }, {
-                    duplicateCheck: this.doDuplicateCheck
-                });
+                }, this.getAdditionalSaveParams(me));
             } else {
-                this.onRecordLoad();
-                var ticketFn = this.onAfterApplyChanges.deferByTickets(this, [closeWindow]),
+                me.onRecordLoad();
+                var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),
                     wrapTicket = ticketFn();
-                    
-                this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode, this, ticketFn);
+
+                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
                 wrapTicket();
             }
-        } else {
-            this.saving = false;
-            this.loadMask.hide();
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
-        }
+        }, function (message) {
+            me.saving = false;
+            me.loadMask.hide();
+            Ext.MessageBox.alert(_('Errors'), message);
+        });
+    },
+
+    /**
+     * returns additional save params
+     *
+     * @param {EditDialog} me
+     * @returns {{duplicateCheck: boolean}}
+     */
+    getAdditionalSaveParams: function(me) {
+        return {
+            duplicateCheck: me.doDuplicateCheck
+        };
     },
     
     onAfterApplyChanges: function(closeWindow) {

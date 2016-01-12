@@ -211,6 +211,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         folderName: folder ? folder.get('globalname') : ''
                     },
                     scope: this,
+                    timeout: 150000, // 3 minutes
                     success: function(result, request){
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
                         // clear query to query server again and reload subfolders
@@ -219,8 +220,9 @@ Tine.Felamimail.setTreeContextMenus = function() {
                             this.selectInbox(account);
                         }, this);
                     },
-                    failure: function() {
+                    failure: function(exception) {
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                        Tine.Felamimail.folderBackend.handleRequestException(exception);
                     }
                 });
             }

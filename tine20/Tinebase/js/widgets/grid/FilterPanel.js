@@ -105,7 +105,14 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.activeFilterPanel = filterPanel;
         
         this.initQuickFilterField();
-        
+
+        // need to create a "dummy" app to call featureEnabled()
+        // TODO: should be improved
+        var tinebaseApp = new Tine.Tinebase.Application({
+            appName: 'Tinebase'
+        });
+        this.advancedSearchEnabled = (tinebaseApp.featureEnabled('featureShowAdvancedSearch'));
+
         this.items = [{
             region: 'east',
             width: 200,
@@ -237,7 +244,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
         
         this.quickFilter = new Ext.ux.SearchField({
-            width: 250,
+            width: this.advancedSearchEnabled ? 250 : 300,
             enableKeyEvents: true
         });
         
@@ -450,20 +457,34 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      * gets the (extra) quick filter toolbar items
      * 
      * @return {Ext.ButtonGroup}
-     *
-     *
      */
     getQuickFilterField: function() {
         if (! this.quickFilterGroup) {
-            this.quickFilterGroup = new Ext.ButtonGroup({
-                columns: 2,
-                items: [
-                    this.quickFilter,
-                    this.advancedSearchButton,
-                    this.criteriaText,
-                    this.detailsToggleBtn
-                ]
-            });
+            var quickfilterConfig;
+            if (this.advancedSearchEnabled) {
+                quickfilterConfig = {
+                    columns: 2,
+                    items: [
+                        this.quickFilter,
+                        this.advancedSearchButton,
+                        this.criteriaText,
+                        this.detailsToggleBtn
+                    ]
+                };
+            } else {
+                quickfilterConfig = {
+                    columns: 1,
+                    items: [
+                        this.quickFilter, {
+                            xtype: 'toolbar',
+                            style: {border: 0, background: 'none'},
+                            items: [this.criteriaText, '->', this.detailsToggleBtn]
+                        }
+                    ]
+                };
+            }
+
+            this.quickFilterGroup = new Ext.ButtonGroup(quickfilterConfig);
         }
         
         return this.quickFilterGroup;

@@ -1,0 +1,68 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetWeek object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Week_template { display:none; }
+.Week_container { height:100%; }
+
+.Week_buttons { position:absolute; width:100%; height:38px; text-align:center; padding-top:6px; }
+
+.Week_weekLabels { position:absolute; height:36px; top:38px; border-bottom:1px solid #DDD; }
+@media (max-width:1024px) { /* mobile */
+    .Week_weekLabels {
+        left:24px;
+        width:calc(100% - 24px); /* 100% - hourLabels */
+    }
+}
+@media (min-width:1025px) { /* desktop */
+    .Week_weekLabels {
+        left:42px;
+        width:calc(100% - 42px - 16px); /* 100% - weekLabels - average yscroll width */
+    }
+}
+
+.Week_labelWeek { display:inline-block; color:#AAA; width:calc(100% / 7); padding:4px 0 0 6px; }
+@media (max-width:1024px) { .Week_labelWeek { font-size:80%; } } /* mobile */
+@media (min-width:1025px) { .Week_labelWeek { font-size:90%; } } /* desktop */
+.Week_labelWeekToday { font-weight:bold; }
+
+.Week_grid { position:absolute; width:100%; overflow-y:scroll;
+    top:calc(38px + 36px); /* buttons + weekLabels */
+    height:calc(100% - 38px - 36px); } /* 100% - buttons - weekLabels */
+
+.Week_hourLabelsPhone,.Week_hourLabelsDesktop { position:absolute; color:#666; }
+.Week_gridHours { position:absolute; }
+.Week_eachHour { display:inline-block; width:100%; padding:4px; height:44px; }
+@media (max-width:1024px) { /* mobile */
+    .Week_hourLabelsPhone { width:24px; }
+    .Week_hourLabelsDesktop { display:none; }
+    .Week_gridHours { left:24px; width:calc(100% - 24px); }
+    .Week_eachHour { font-size:80%; }
+}
+@media (min-width:1025px) { /* desktop */
+    .Week_hourLabelsPhone { display:none; }
+    .Week_hourLabelsDesktop { width:42px; }
+    .Week_gridHours { left:42px; width:calc(100% - 42px); }
+    .Week_eachHour { font-size:90%; }
+}
+
+@media (max-width:1024px) { .Week_labelFull { display:none; } } /* mobile */
+@media (min-width:1025px) { .Week_labelShort { display:none; } } /* desktop */
+
+.Week_colDay { display:inline-block; width:calc(100% / 7); }
+.Week_colDayToday .Week_cellHour { background-color:#EEF5FF; }
+.Week_cellHour { display:inline-block; width:100%; height:44px;
+    border-left:1px solid #DDD; border-bottom:1px solid #DDD; }
+.Week_cellHourNonWorking { background-color:#F9F9F9; }
+.Week_event { position:absolute; display:block; width:calc(100% / 7); height:44px;
+    cursor:pointer; padding:0 2px; border:1px solid white;
+    overflow-x:hidden; overflow-y:auto; color:white; opacity:.8; }
+@media (max-width:1024px) { .Week_event { font-size:80%; } } /* mobile */
+
+.Week_loading { text-align:center; margin:10px; color:#888; font-style:italic; }

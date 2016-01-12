@@ -29,6 +29,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     const SESSION = 'session';
     
     protected static $_sessionEnabled = false;
+    protected static $_isSetupSession = false;
     
     /**
      * get a value from the registry
@@ -279,7 +280,12 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Session of backend type '{$backendType}' configured.");
     }
-    
+
+    /**
+     * activate session and set name in options
+     *
+     * @param $sessionName
+     */
     public static function setSessionEnabled($sessionName)
     {
         self::setSessionOptions(array(
@@ -287,6 +293,18 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         ));
         
         self::$_sessionEnabled = true;
+        self::$_isSetupSession = $sessionName === 'TINE20SETUPSESSID';
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO it would be better to look into the session options and check the name
+     * TODO and maybe this can be removed as we already have Setup_Session and Tinebase_Session classes ...
+     */
+    public static function isSetupSession()
+    {
+        return self::$_isSetupSession;
     }
     
     /**

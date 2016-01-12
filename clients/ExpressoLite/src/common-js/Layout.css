@@ -1,0 +1,120 @@
+/*!
+ * Expresso Lite
+ * Main layout styles.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Layout_template { position:absolute; width:100%; height:100%; } /* fits whole page */
+
+
+/* --- Top section --- */
+
+#Layout_top { position:absolute; height:60px; padding:7px; border-bottom:6px solid #0061AA;
+    background:linear-gradient(to bottom,#CCC,white 70px); }
+@media (max-width:1024px) { #Layout_top { width:100%; } } /* mobile */
+@media (min-width:1025px) { #Layout_top { width:calc(100% - 280px); left:280px; } } /* desktop */
+
+#Layout_top > * { position:absolute; }
+
+#Layout_logo3Lines { cursor:pointer; margin-top:3px; }
+@media (min-width:1025px) { #Layout_logo3Lines { display:none; } } /* desktop */
+
+#Layout_arrowLeft { cursor:pointer; margin-top:2px; }
+
+#Layout_context { top:10px; cursor:pointer; }
+@media (min-width:1025px) { #Layout_context { left:8px; } } /* desktop */
+@media (max-width:1024px) { #Layout_context { right:60px; } } /* mobile */
+
+#Layout_title { font-size:110%; padding-top:10px; }
+@media (min-width:1025px) { #Layout_title { left:50px; } } /* desktop */
+@media (max-width:1024px) { #Layout_title { left:42px; } } /* mobile */
+
+@media (min-width:1025px) { #Layout_txtSearch { width:360px; right:110px; top:16px; } } /* desktop */
+@media (max-width:1024px) { #Layout_txtSearch { display:none; } } /* mobile */
+
+#Layout_btnSearch { top:10px; cursor:pointer; }
+@media (min-width:1025px) { #Layout_btnSearch { right:74px; } } /* desktop */
+@media (max-width:1024px) { #Layout_btnSearch { right:12px; } } /* mobile */
+
+
+/* --- Left section --- */
+
+#Layout_left { position:absolute; height:100%; padding:15px 12px; overflow-y:auto;
+    background:linear-gradient(to bottom,#CCC,white 70px); }
+@media (max-width:1024px) { /* mobile */
+    #Layout_left { display:none; width:300px; box-shadow:0 0 15px #666; }
+    #Layout_left.away { }
+}
+@media (min-width:1025px) { /* desktop */
+    #Layout_left { width:280px; }
+    #Layout_left.away { height:60px; overflow:hidden; border-bottom:6px solid #0061AA; }
+}
+
+#Layout_logo { width:120px; }
+@media (max-width:1024px) { #Layout_logo { left:10px; cursor:pointer; } } /* mobile */
+@media (min-width:1025px) { #Layout_logo { left:18px; } } /* desktop */
+
+#Layout_userMail { padding-top:10px; padding-bottom:6px; color:#777; }
+#Layout_loggingOff { display:none; font-style:italic; padding:10px 20px; }
+#Layout_throbber { display:inline-block; width:16px; height:16px; background:url(../img/chromiumthrobber.svg); }
+
+#Layout_modules { margin-top:8px; margin-bottom:18px; padding:4px 0; color:#444;
+    border-top:1px solid #DCE8F0; border-bottom:1px solid #DCE8F0; }
+#Layout_modules li { list-style-type:none; padding:0; cursor:pointer; }
+#Layout_modules li:hover { background-color:#F5F5F5; }
+#Layout_modules li a { text-decoration:none; color:#444; }
+#Layout_modules li span { position:relative; top:-10px; }
+
+#Layout_leftContent { padding-bottom:26px; }
+
+
+/* --- Container for middle & right section --- */
+
+#Layout_center { position:absolute; top:60px; height:calc(100% - 60px); }
+@media (min-width:1025px) { #Layout_center { left:280px; width:calc(100% - 280px); } } /* desktop */
+@media (max-width:1024px) { #Layout_center { width:100%; } } /* mobile */
+#Layout_center.wide { left:0; width:100%; }
+
+
+/* --- Middle section --- */
+
+#Layout_middleContent { position:absolute; height:100%; }
+@media (min-width:1025px) { /* desktop */
+    #Layout_middleContent.wide { width:100%; }
+    #Layout_middleContent.narrow { width:400px; }
+}
+@media (max-width:1024px) { /* mobile */
+    #Layout_middleContent.wide { width:100%; }
+    #Layout_middleContent.narrow { display:none; }
+}
+
+
+/* --- Right section --- */
+
+#Layout_rightContent { position:absolute; height:100%; }
+@media (min-width:1025px) { /* desktop */
+    #Layout_rightContent.away { display:none; }
+    #Layout_rightContent.shown { left:400px; width:calc(100% - 400px); }
+}
+@media (max-width:1024px) { /* mobile */
+    #Layout_rightContent.away { display:none; }
+    #Layout_rightContent.shown { width:100%; }
+}
+
+
+/* --- Sprite icons --- */
+
+.Layout_icon32 { background-image:url('../img/layout-icons32.png'); display:inline-block; width:32px; height:32px; }
+.Layout_icon3Lines   { background-position:0 0; }
+.Layout_icon3Dots    { background-position:0 -32px; }
+.Layout_iconGoLeft   { background-position:0 -64px; }
+.Layout_iconSearch   { background-position:0 -96px; }
+.Layout_iconLogoff   { background-position:0 -128px; }
+.Layout_iconEmail    { background-position:0 -160px; }
+.Layout_iconAddress  { background-position:0 -192px; }
+.Layout_iconCalendar { background-position:0 -224px; }

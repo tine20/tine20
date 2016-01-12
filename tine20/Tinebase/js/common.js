@@ -128,7 +128,7 @@ Tine.Tinebase.common = {
      * @param {Object} options
      *      {Boolean} keepRegistry
      *      {Boolean} clearCache
-     *      {String}  url
+     *      {String}  redirectUrl
      */
     reload: function(options) {
         options = options || {};
@@ -138,8 +138,12 @@ Tine.Tinebase.common = {
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
-        window.setTimeout(function(){
-            window.location.reload(!! options.clearCache);
+        window.setTimeout(function () {
+            if (options.redirectUrl && Ext.isString(options.redirectUrl)) {
+                window.location = options.redirectUrl;
+            } else {
+                window.location.reload(!!options.clearCache);
+            }
         }, 500);
     },
 
@@ -570,7 +574,7 @@ Tine.Tinebase.common = {
         
         return translationString.substr(0, translationString.indexOf(':'));
     },
-    
+
     /**
      * sorts account/user objects
      * 
@@ -762,7 +766,25 @@ Tine.Tinebase.common = {
     doubleEncode: function(value) {
         return Ext.util.Format.htmlEncode(Ext.util.Format.htmlEncode(value));
     },
-    
+
+    /**
+     * simple html to text conversion
+     *
+     * @param html
+     * @returns {String}
+     */
+    html2text: function(html) {
+        text = html.replace(/\n/g, ' ')
+            .replace(/(<br[ /]*>)/g, '\n')
+            .replace(/(<li>)/g, '\n * ')
+            .replace(/<(blockquote|div|dl|dt|dd|form|h1|h2|h3|h4|h5|h6|hr|p|pre|table|tr|td|li|section|header|footer)>/g, '\n')
+            .replace(/<style(.+?)\/style>/g, '')
+            .replace(/<(.+?)>/g, '')
+            .replace(/&nbsp;/g, ' ')
+
+        return Ext.util.Format.htmlDecode(text);
+    },
+
     /**
      * resolves an appName to applicationInstance or vice versa
      * returns applicationinstance if getInstance is true

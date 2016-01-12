@@ -33,7 +33,7 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
      * holds the default Model of this application
      * @var string
      */
-    protected static $_defaultModel = 'SimpleFAQ_Model_FAQ';
+    protected static $_defaultModel = 'SimpleFAQ_Model_Faq';
     
     /**
      * the constructor
@@ -91,8 +91,13 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            case 'Admin_Event_DeleteAccount':
-                $this->deletePersonalFolder($_eventObject->account);
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                if ($_eventObject->deletePersonalContainers()) {
+                    $this->deletePersonalFolder($_eventObject->account);
+                }
                 break;
         }
     }
@@ -125,16 +130,6 @@ Class SimpleFAQ_Controller extends Tinebase_Controller_Event implements Tinebase
         $container = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($personalContainer));
 
         return $container;
-    }
-
-    /**
-     * delete all personal user folders and the contacts associated with these folders
-     *
-     * @param Tinebase_Model_User $_account the accountd object
-     * @todo implement and write test
-     */
-    public function deletePersonalFolder($_account)
-    {
     }
     
     /**

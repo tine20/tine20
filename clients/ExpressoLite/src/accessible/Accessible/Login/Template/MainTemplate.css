@@ -1,0 +1,44 @@
+/*!
+ * Expresso Lite
+ * CSS for Main.php template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Diogo Santos <diogo.santos@serpro.gov.br>
+ * @author    Edgar Lucca <edgar.lucca@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#credent {
+    height:560px;
+    width:350px;
+    margin:0 auto;
+    margin-top:30px;
+    border-radius:12px;
+    box-shadow:2px 2px 6px #999;
+    background-color:white;
+    background:url("../../../../img/logo-expressobr-bottom.png") no-repeat bottom;
+}
+
+#logo_top { margin-top:20px; margin-left:50px; }
+
+#frmLogin {
+    margin-left:20px;
+    margin-right:20px;
+    padding-top:30px;
+    border-top:1px solid #E8E8E8;
+}
+
+.frmLoginFields { margin-left:10px; margin-right:20px; margin-bottom:25px; }
+
+#frmLoginSubmit { text-align:center; margin-top:52px; }
+
+#expressoBrAccess {
+    height:24px;
+    line-height:24px;
+    text-align:center;
+    font-size:90%;
+    margin-top:20px;
+}
+#expressoBrAccess a { text-decoration:none; color:#006594; }
+#expressoBrAccess a:hover { text-decoration:underline; }

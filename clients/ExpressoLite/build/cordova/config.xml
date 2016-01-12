@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="br.gov.serpro.expressobr" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ExpressoBr</name>
+    <description>
+        Cliente de e-mail para o ExpressoBr em dispositivos móveis.
+    </description>
+    <author email="expresso@serpro.gov.br" href="http://serpro.gov.br">
+        Equipe de desenvolvimento do ExpressoBr
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <platform name="android">
+        <icon src="icons/expressobr-ldpi.png" density="ldpi" />
+        <icon src="icons/expressobr-mdpi.png" density="mdpi" />
+        <icon src="icons/expressobr-hdpi.png" density="hdpi" />
+        <icon src="icons/expressobr-xhdpi.png" density="xhdpi" />
+    </platform>
+</widget>

@@ -81,6 +81,10 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
  */
 Tine.Calendar.MainScreen = function(config) {
     Ext.apply(this, config);
+
+    var prefs = this.app.getRegistry().get('preferences');
+    Ext.DatePicker.prototype.startDay = parseInt((prefs ? prefs.get('firstdayofweek') : 1), 10);
+
     Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
     
     Tine.Calendar.MainScreen.superclass.constructor.apply(this, arguments);

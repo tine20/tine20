@@ -129,6 +129,9 @@ Tine.Sales.PurchaseInvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPan
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Credit Term') + '</span>{[this.encode(values, "credit_term")]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n.n_('Cost Center', 'Cost Centers', 1) + '</span>{[this.encode(values, "costcenter_id")]}<br/>',
                         '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Cleared') + '</span>{[this.encode(values, "cleared")]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Price Net') + '</span>{[this.encode(values, "price_net")]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Price Tax') + ' (' + '{[this.encode(values, "sales_tax")]}' + ')' + '</span>{[this.encode(values, "price_tax")]}<br/>',
+                        '<span class="preview-panel-symbolcompare wide">' + this.app.i18n._('Total Price') + '</span>{[this.encode(values, "price_total")]}<br/>',
                     '</div>',
                 '</div>',
             '</tpl>',
@@ -151,6 +154,12 @@ Tine.Sales.PurchaseInvoiceDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPan
                         case 'customer':
                             var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);
                             return renderer(that.record.get('relations'));
+                        case 'price_total':
+                            return Ext.util.Format.euMoney(value.price_total);
+                        case 'price_net':
+                            return Ext.util.Format.euMoney(value.price_net);
+                        case 'price_tax':
+                            return Ext.util.Format.euMoney(value.price_tax);
                     }
 
                     var renderer = Tine.widgets.grid.RendererManager.get('Sales', 'Invoice', key);

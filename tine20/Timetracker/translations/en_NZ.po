@@ -1,11 +1,12 @@
 # 
 # Translators:
+# Ingo Ratsdorf, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
-"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"PO-Revision-Date: 2015-10-19 19:03+0000\n"
+"Last-Translator: Ingo Ratsdorf\n"
 "Language-Team: English (New Zealand) (http://www.transifex.com/tine20/tine20/language/en_NZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,43 +19,43 @@ msgstr ""
 
 #: Acl/Rights.php:121
 msgid "Manage timeaccounts"
-msgstr ""
+msgstr "Manage timeaccounts"
 
 #: Acl/Rights.php:122
 msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr ""
+msgstr "Add, edit and delete timeaccounts (includes all timesheet grants)"
 
 #: Acl/Rights.php:125 Acl/Rights.php:126
 msgid "Add timeaccounts"
-msgstr ""
+msgstr "Add timeaccounts"
 
 #: Acl/Rights.php:129
 msgid "Manage shared timeaccount favorites"
-msgstr ""
+msgstr "Manage shared timeaccount favorites"
 
 #: Acl/Rights.php:130
 msgid "Create or update shared timeaccount favorites"
-msgstr ""
+msgstr "Create or update shared timeaccount favourites"
 
 #: Acl/Rights.php:133
 msgid "Manage shared timesheet favorites"
-msgstr ""
+msgstr "Manage shared timesheet favourites"
 
 #: Acl/Rights.php:134
 msgid "Create or update shared timesheet favorites"
-msgstr ""
+msgstr "Create or update shared timesheet favourites"
 
 #: Model/Timesheet.php:164 Model/Timeaccount.php:500
 msgid "hour"
-msgstr ""
+msgstr "hour"
 
 #: Model/Timeaccount.php:43 js/TimeaccountEditDialog.js:144
 msgid "Cost Center"
-msgstr ""
+msgstr "Cost Center"
 
 #: Model/Timeaccount.php:47 js/TimeaccountEditDialog.js:159
 msgid "Responsible Person"
-msgstr ""
+msgstr "Responsible Person"
 
 #: js/Timetracker.js:25
 msgid "New Timesheet"

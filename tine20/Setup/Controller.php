@@ -70,7 +70,7 @@ class Setup_Controller
      *
      * @var string
      */
-    protected $_helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
+    protected $_helperLink = ' <a href="http://wiki.tine20.org/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
 
     /**
      * the singleton pattern
@@ -1405,7 +1405,7 @@ class Setup_Controller
             $this->_backend->setForeignKeyChecks(0);
             foreach ($installedApps as $app) {
                 if ($app->name != 'Tinebase') {
-                    $this->_uninstallApplication($app);
+                    $this->_uninstallApplication($app, true);
                 } else {
                     $tinebase = $app;
                 }
@@ -1529,7 +1529,7 @@ class Setup_Controller
      * @param Tinebase_Model_Application $_application
      * @throws Setup_Exception
      */
-    protected function _uninstallApplication(Tinebase_Model_Application $_application)
+    protected function _uninstallApplication(Tinebase_Model_Application $_application, $uninstallAll = false)
     {
         if ($this->_backend === null) {
             throw new Setup_Exception('No setup backend available');
@@ -1610,12 +1610,19 @@ class Setup_Controller
         }
         
         if ($_application->name != 'Tinebase') {
-            // delete containers, config options and other data for app
-            Tinebase_Application::getInstance()->removeApplicationData($_application);
+            if (!$uninstallAll) {
+                Tinebase_Relations::getInstance()->removeApplication($_application->name);
+
+                Tinebase_Timemachine_ModificationLog::getInstance()->removeApplication($_application);
+
+                // delete containers, config options and other data for app
+                Tinebase_Application::getInstance()->removeApplicationData($_application);
+            }
             
             // remove application from table of installed applications
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
+
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Removed app: " . $_application->name);
     }
 

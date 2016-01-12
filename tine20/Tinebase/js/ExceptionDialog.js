@@ -203,7 +203,6 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     /**
      * send the report to tine20.org bugracker
      * 
-     * NOTE: due to same domain policy, we need to send data via a img get request
      * @private
      */
     onSendReport: function () {
@@ -230,21 +229,44 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         if (! Ext.getCmp('tb-exceptiondialog-send-contact').collapsed) {
             this.exception.contact = Ext.getCmp('tb-exceptiondialog-contact').getValue();
         }
-        
-        // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
-        //        - 1024 chars are expected to be pass client/server limits savely => 940
-        //        - base64 means about 30% overhead => 600 
-        var chunks = this.strChunk(Ext.util.JSON.encode(this.exception), 600);
-        
-        var img = [];
-        for (var i = 0; i < chunks.length; i++) {
-            var part = i+1 + '/' + chunks.length;
-            var data = {data : this.base64encode('hash=' + hash + '&part=' + part + '&data=' + chunks[i])};
-            
-            var url = baseUrl + '?' + Ext.urlEncode(data);
-            img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
+
+
+        var ua = navigator.userAgent.toLowerCase(),
+            isIE = ua.match(/msie (\d+)/),
+            useCOSR = !isIE || isIE[1] > 9;
+
+        if (useCOSR) {
+            // NOTE: - we create a new connection to not compromise the json key
+            var conn = new Ext.data.Connection();
+            conn.request({
+                url: baseUrl,
+                method: 'POST',
+                jsonData: Ext.encode({
+                    jsonrpc: '2.0',
+                    method: 'API.reportBug',
+                    id: ++Ext.Ajax.requestId,
+                    params: {
+                        hash: hash,
+                        exception: this.exception
+                    }
+                })
+            });
+        } else {
+            // NOTE:  - we have about 80 chars overhead (url, paramnames etc) in each request
+            //        - 1024 chars are expected to be pass client/server limits savely => 940
+            //        - base64 means about 30% overhead => 600
+            var chunks = this.strChunk(Ext.util.JSON.encode(this.exception), 600);
+
+            var img = [];
+            for (var i = 0; i < chunks.length; i++) {
+                var part = i + 1 + '/' + chunks.length;
+                var data = {data: this.base64encode('hash=' + hash + '&part=' + part + '&data=' + chunks[i])};
+
+                var url = baseUrl + '?' + Ext.urlEncode(data);
+                img.push(Ext.DomHelper.insertFirst(this.el, {tag: 'img', src: url, hidden: true}, true));
+            }
         }
-        
+
         if (! this.nonInteractive) {
             window.setTimeout(this.showTransmissionCompleted, 4000);
         }

@@ -131,7 +131,7 @@ class Tinebase_Helper
      */
     public static function getCodename()
     {
-        return 'Koriander';
+        return 'Elena';
     }
     
     /**

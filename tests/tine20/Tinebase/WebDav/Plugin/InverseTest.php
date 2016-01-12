@@ -5,30 +5,16 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
-
-/**
  * Test class for Tinebase_WebDav_Plugin_Inverse
  */
-class Tinebase_WebDav_Plugin_InverseTest extends TestCase
+class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_AbstractBaseTest
 {
-    /**
-     * @var array test objects
-     */
-    protected $objects = array();
-    
-    /**
-     * 
-     * @var Sabre\DAV\Server
-     */
-    protected $server;
+
     
     /**
      * Runs the test methods of this class.
@@ -52,21 +38,11 @@ class Tinebase_WebDav_Plugin_InverseTest extends TestCase
     {
         parent::setUp();
         
-        $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
-            'name'              => Tinebase_Record_Abstract::generateUID(),
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => 'Sql',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-        )));
-        
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        parent::setupCalendarContainer();
         
         $this->plugin = new Tinebase_WebDav_Plugin_Inverse();
         
         $this->server->addPlugin($this->plugin);
-        
-        $this->response = new Sabre\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
     }
 
     /**

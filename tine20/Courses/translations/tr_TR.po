@@ -165,49 +165,61 @@ msgstr ""
 msgid "Internet access options."
 msgstr "Web Giriş Bilgileri"
 
-#: Config.php:105 Config.php:107
+#: Config.php:105
+msgid "On"
+msgstr "Açık"
+
+#: Config.php:106
+msgid "Off"
+msgstr "Kapalı"
+
+#: Config.php:107
+msgid "Filtered"
+msgstr "Filtrelendi"
+
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr "Web Grup Girişi (Açık)"
 
-#: Config.php:113 Config.php:115
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr "Web Grup Girişi (Filtreli)"
 
-#: Config.php:121 Config.php:123
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr "Öğrenci Grubu"
 
-#: Config.php:129 Config.php:131
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr ""
 
-#: Config.php:137
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr ""
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:158
 msgid "Student username schema"
 msgstr ""
 
-#: Config.php:153
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr ""
 
-#: Config.php:160 Config.php:162
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr "Samba Üye Ayarları"
 
-#: Config.php:171
+#: Config.php:178
 msgid "Default department"
 msgstr ""
 
-#: Config.php:173
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr ""
 
@@ -215,22 +227,10 @@ msgstr ""
 msgid "Courses"
 msgstr "Kurslar"
 
-#: Setup/Initialize.php:66
-msgid "On"
-msgstr "Açık"
-
-#: Setup/Initialize.php:67
-msgid "Off"
-msgstr "Kapalı"
-
-#: Setup/Initialize.php:68
-msgid "Filtered"
-msgstr "Filtrelendi"
-
-#: Setup/Initialize.php:91
+#: Setup/Initialize.php:57
 msgid "School"
 msgstr ""
 
-#: Setup/Initialize.php:92
+#: Setup/Initialize.php:58
 msgid "Defaul school for Courses application"
 msgstr ""

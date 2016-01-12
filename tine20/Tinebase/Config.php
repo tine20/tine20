@@ -82,7 +82,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CRONUSERID = 'cronuserid';
-    
+
+    /**
+     * FEATURE_SHOW_ADVANCED_SEARCH
+     *
+     * @var string
+     */
+    const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
+
     /**
      * user defined page title postfix for browser page title
      * 
@@ -273,11 +280,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
     
     /**
-     * MAX_LOGIN_FAILURES
+     * WARN_LOGIN_FAILURES
      *
      * @var string
      */
-    const MAX_LOGIN_FAILURES = 'maxLoginFailures';
+    const WARN_LOGIN_FAILURES = 'warnLoginFailures';
      
     /**
      * ANYONE_ACCOUNT_DISABLED
@@ -299,6 +306,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
+
+    /**
+     * ACCOUNT_DELETION_EVENTCONFIGURATION
+     *
+     * @var string
+     */
+    const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
     
     /**
      * roleChangeAllowed
@@ -322,10 +336,43 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const CONFD_FOLDER = 'confdfolder';
 
     /**
+     * maintenance mode
+     *
+     * @var bool
+     */
+    const MAINTENANCE_MODE = 'maintenanceMode';
+
+    /**
+     * @var array of strings
+     */
+    const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        /**
+         * possible values:
+         *
+         * $_deletePersonalContainers => delete personal containers
+         * $_keepAsContact => keep "account" as contact in the addressbook
+         * $_keepOrganizerEvents => keep accounts organizer events as external events in the calendar
+         * $_keepAsContact => keep accounts calender event attendee as external attendee
+         *
+         * TODO add more options (like move to another container)
+         */
+        self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
+            //_('Account Deletion Event')
+            'label'                 => 'Account Deletion Event',
+            //_('Configure what should happen to data of deleted users')
+            'description'           => 'Configure what should happen to data of deleted users',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
         self::IMAP => array(
                                    //_('System IMAP')
             'label'                 => 'System IMAP',
@@ -400,6 +447,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            'description'           => 'Enabled Features',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::FEATURE_SHOW_ADVANCED_SEARCH => array(
+                    'label'         => 'Show Advanced Search', //_('Show Advanced Search')
+                    'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
+                    //_('Show toggle button to switch on or off the advanced search for the quickfilter')
+                ),
+            ),
+            'default'               => array(
+                self::FEATURE_SHOW_ADVANCED_SEARCH => false,
+            ),
         ),
         self::CRONUSERID => array(
                                    //_('Cronuser ID')
@@ -503,15 +568,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
         ),
         self::SYNC_USER_CONTACT_DATA => array(
-                //_('Sync contact data from sync backend')
-                'label'                 => 'Sync contact data from sync backend',
-                //_('Sync user contact data from sync backend')
-                'description'           => 'Sync user contact data from sync backend',
-                'type'                  => 'bool',
-                'clientRegistryInclude' => FALSE,
-                'setByAdminModule'      => FALSE,
-                'setBySetupModule'      => FALSE,
-                'default'               => TRUE
+            //_('Sync contact data from sync backend')
+            'label'                 => 'Sync contact data from sync backend',
+            //_('Sync user contact data from sync backend')
+            'description'           => 'Sync user contact data from sync backend',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE
         ),
         self::SESSIONIPVALIDATION => array(
                                    //_('IP Session Validator')
@@ -664,15 +729,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::MAX_LOGIN_FAILURES => array(
-        //_('Maximum login failures')
-            'label'                 => 'Maximum login failures',
-        //_('Maximum allowed login failures before blocking account')
-            'description'           => 'Maximum allowed login failures before blocking account',
+        self::WARN_LOGIN_FAILURES => array(
+            //_('Warn after X login failures')
+            'label'                 => 'Warn after X login failures',
+            //_('Maximum allowed login failures before writing warn log messages')
+            'description'           => 'Maximum allowed login failures before writing warn log messages',
             'type'                  => 'int',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+            'default'               => 4
         ),
         self::ANYONE_ACCOUNT_DISABLED => array(
                                    //_('Disable Anyone Account')
@@ -715,13 +781,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
         ),
         self::MAX_USERNAME_LENGTH => array(
-                //_('Max username length')
-                'label'                 => 'Max username length',
-                //_('Max username length')
-                'description'           => 'Max username length',
-                'type'                  => 'int',
-                'default'               => NULL,
-                'clientRegistryInclude' => FALSE,
+            //_('Max username length')
+            'label'                 => 'Max username length',
+            //_('Max username length')
+            'description'           => 'Max username length',
+            'type'                  => 'int',
+            'default'               => NULL,
+            'clientRegistryInclude' => FALSE,
         ),
         self::CONFD_FOLDER => array(
             //_('conf.d folder name')
@@ -730,6 +796,30 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!',
             'type'                  => 'string',
             'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::MAINTENANCE_MODE => array(
+            //_('Maintenance mode enabled')
+            'label'                 => 'Maintenance mode enabled',
+            //_('Folder for additional config files (conf.d) - NOTE: this is only used if set in config.inc.php!')
+            'description'           => 'Installation is in maintenance mode. With this only users having the maintenance right can login',
+            'type'                  => 'bool',
+            'default'               => '',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::FAT_CLIENT_CUSTOM_JS => array(
+            // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
+            //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
+            //_('Custom Javascript includes for Fat-Client')
+            'label'                 => 'Custom Javascript includes for Fat-Client',
+            //_('An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.')
+            'description'           => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
+            'type'                  => 'array',
+            'default'               => array(),
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
@@ -847,15 +937,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * get application config
      *
      * @param  string  $applicationName Application name
-     * @return string  $configClassName
-     * 
-     * @todo shouldn't this return a config object??
+     * @return Tinebase_Config_Abstract  $configClass
      */
     public static function getAppConfig($applicationName)
     {
         $configClassName = $applicationName . '_Config';
         if (@class_exists($configClassName)) {
-            return $configClassName;
+            return $configClassName::getInstance();
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Application ' . $applicationName . ' has no config.');

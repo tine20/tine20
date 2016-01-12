@@ -1,0 +1,39 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetHeadlines object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2014 Serpro (http://www.serpro.gov.br)
+ */
+
+#Headlines_template { display:none; }
+.Headlines_entry { cursor:pointer; border-bottom:1px solid #D0D0D0; border-left:1px solid #DDD; }
+.Headlines_entry * { -moz-user-select:none; -webkit-user-select:none; }
+.Headlines_entryCurrent { background:#D9E8FB !important; } /* thread currently being read */
+.Headlines_entryUnread { font-weight:bold; }
+.Headlines_entryRead { background:#F3F3F3; }
+.Headlines_entryChecked { background:#FFC; }
+.Headlines_sender { font-weight:normal; }
+.Headlines_folderName { font-size:80%; color:#87A6D2; }
+@media (max-width:1024px) { /* mobile */
+    .Headlines_entry     { display:block; padding:2px 4px; position:relative; }
+    .Headlines_check     { display:inline-block; float:left; }
+    .Headlines_sender    { display:inline-block; width:88%; color:#777; }
+    .Headlines_highlight { display:inline-block; position:absolute; right:3px; }
+    .Headlines_subject   { display:inline-block; width:85%; font-size:110%; }
+    .Headlines_icons     { display:inline-block; float:right; }
+    .Headlines_when      { display:inline-block; margin-left:32px; width:50%; font-size:80%; color:#888; }
+}
+@media (min-width:1025px) { /* desktop */
+    .Headlines_entry     { display:table; width:100%; }
+    .Headlines_entry > div { padding:6px; display:table-cell; vertical-align:middle; }
+    .Headlines_check     { width:26px; padding:0 !important; }
+    .Headlines_sender    { width:28%; }
+    .Headlines_highlight { width:26px; }
+    .Headlines_subject   { width:50%; }
+    .Headlines_icons     { }
+    .Headlines_when      { text-align:right; }
+}
+.Headlines_loading { text-align:center; margin:16px; color:#888; font-style:italic; }

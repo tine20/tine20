@@ -249,13 +249,12 @@ msgid "Cost Centers"
 msgstr "ศูนย์ต้นทุน"
 
 #: Model/Employee.php:258 js/FreeTimeGridPanel.js:77
-#: js/FreeTimeGridPanel.js:275 Setup/Initialize.php:74
+#: js/FreeTimeGridPanel.js:275 Config.php:79
 msgid "Vacation"
 msgstr "พักร้อน"
 
 #: Model/Employee.php:271 js/FreeTimeGridPanel.js:73
-#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121
-#: Setup/Initialize.php:73
+#: js/FreeTimeGridPanel.js:273 js/AccountEditDialog.js:121 Config.php:78
 msgid "Sickness"
 msgstr "เจ็บป่วย"
 
@@ -386,7 +385,7 @@ msgstr "ปฏิทิน"
 msgid "Calendars"
 msgstr "ปฏิทิน"
 
-#: js/AdminPanel.js:230 Config.php:118
+#: js/AdminPanel.js:230 Config.php:146
 msgid "Vacation expires"
 msgstr "พักร้อนหมด"
 
@@ -687,47 +686,79 @@ msgstr "ประเภท เวลาว่าง"
 msgid "Possible free time definitions"
 msgstr "จำกัดความเรื่องเวลาว่างที่เป็นไปได้"
 
-#: Config.php:79
+#: Config.php:85
 msgid "Vacation Status"
 msgstr "สถานะ การพักร้อน"
 
-#: Config.php:81
+#: Config.php:87
 msgid "Possible vacation status definitions"
 msgstr "จำกัดความสถานะการพักร้อนที่เป็นไปได้"
 
-#: Config.php:89
+#: Config.php:94
+msgid "Requested"
+msgstr "ได้ทำเรื่องขอ"
+
+#: Config.php:95
+msgid "In process"
+msgstr "อยู่ระหว่างดำเนินการ"
+
+#: Config.php:96
+msgid "Accepted"
+msgstr "ได้อนุมัติแล้ว"
+
+#: Config.php:97
+msgid "Declined"
+msgstr "ได้ปฏิเสธแล้ว"
+
+#: Config.php:104
 msgid "Sickness Status"
 msgstr "สถานะ เจ็บป่วย"
 
-#: Config.php:91
+#: Config.php:106
 msgid "Possible sickness status definitions"
 msgstr "จำกัดความเรื่องสถานะของการอาจจะเกิดการเจ็บป่วย"
 
-#: Config.php:99
+#: Config.php:113 Setup/Update/Release6.php:299
+msgid "Excused"
+msgstr ""
+
+#: Config.php:114 Setup/Update/Release6.php:300
+msgid "Unexcused"
+msgstr ""
+
+#: Config.php:121
 msgid "Default Feast Calendar"
 msgstr "ปฏิทินงานเทศกาลหลัก"
 
-#: Config.php:101
+#: Config.php:123
 msgid ""
 "Here you can define the default feast calendar used to set feast days and "
 "other free days in datepicker"
 msgstr "ตรงนี้คุณสามารถจำกัดปฏิทินงานเทศกาลหลักเพื่อใช้เป็นตัวตั้งวันฉลองและวันหยุดอื่น ๆ ได้"
 
-#: Config.php:108
+#: Config.php:130
 msgid "Extra freetime type"
 msgstr "ประเภท เวลาว่างพิเศษ"
 
-#: Config.php:110
+#: Config.php:132
 msgid "Possible extra free time definitions"
 msgstr "จำกัดความเรื่องเวลาว่างพิเศษที่เป็นไปได้"
 
-#: Config.php:120
+#: Config.php:139 Setup/Update/Release7.php:373
+msgid "Payed"
+msgstr "จ่ายแล้ว"
+
+#: Config.php:140 Setup/Update/Release7.php:374
+msgid "Not payed"
+msgstr "ไม่ได้จ่าย"
+
+#: Config.php:148
 msgid ""
 "Here you can define the day, when the vacation days taken from last year "
 "expires, the format is MM-DD."
 msgstr "ตรงนี้คุณสามารถจำกัดวันได้ เมื่อวันพักร้อนของปีก่อนได้นำมาใช้ รูปแบบจะเป็น MM-DD"
 
-#: Config.php:128
+#: Config.php:156
 msgid "Report Templates Container ID"
 msgstr ""
 
@@ -755,47 +786,15 @@ msgstr "บัญชีทั้งหมด"
 msgid "All available accounts"
 msgstr "บัญชีทั้งหมดที่มีอยู่"
 
-#: Setup/Initialize.php:88 Setup/Update/Release7.php:373
-msgid "Payed"
-msgstr "จ่ายแล้ว"
-
-#: Setup/Initialize.php:89 Setup/Update/Release7.php:374
-msgid "Not payed"
-msgstr "ไม่ได้จ่าย"
-
-#: Setup/Initialize.php:103
-msgid "Requested"
-msgstr "ได้ทำเรื่องขอ"
-
-#: Setup/Initialize.php:104
-msgid "In process"
-msgstr "อยู่ระหว่างดำเนินการ"
-
-#: Setup/Initialize.php:105
-msgid "Accepted"
-msgstr "ได้อนุมัติแล้ว"
-
-#: Setup/Initialize.php:106
-msgid "Declined"
-msgstr "ได้ปฏิเสธแล้ว"
-
-#: Setup/Initialize.php:121 Setup/Update/Release6.php:299
-msgid "Excused"
-msgstr ""
-
-#: Setup/Initialize.php:122 Setup/Update/Release6.php:300
-msgid "Unexcused"
-msgstr ""
-
-#: Setup/Initialize.php:141
+#: Setup/Initialize.php:65
 msgid "Full-time 40 hours"
 msgstr "เต็มเวลา 40 ชั่วโมง"
 
-#: Setup/Initialize.php:148
+#: Setup/Initialize.php:72
 msgid "Full-time 37.5 hours"
 msgstr "เต็มเวลา 37.5 ชั่วโมง"
 
-#: Setup/Initialize.php:155
+#: Setup/Initialize.php:79
 msgid "Part-time 20 hours"
 msgstr ""
 

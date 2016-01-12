@@ -32,7 +32,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      * @var array
      */
     protected $_calendarQueryCache = null;
-    
+
+
+
     /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
@@ -165,7 +167,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         return $children;
     }
-    
+
     /**
      * Returns the list of properties
      *
@@ -178,6 +180,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $properties = array(
             '{http://calendarserver.org/ns/}getctag' => $ctags,
+            '{DAV:}sync-token'  => Tinebase_WebDav_Plugin_SyncToken::SYNCTOKEN_PREFIX . $ctags,
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
@@ -331,6 +334,10 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     protected function _getMaxPeriodFrom()
     {
+        //if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active, allow to filter for all calendar events => return 100 years
+        if (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT'])) {
+            return 100;
+        }
         return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
     }
     
@@ -438,5 +445,45 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     public function updateShares(array $add, array $remove)
     {
         
+    }
+
+    /**
+     * indicates whether the concrete class supports sync-token
+     *
+     * @return bool
+     */
+    public function supportsSyncToken()
+    {
+        return true;
+    }
+
+    /**
+     * returns the changes happened since the provided syncToken which is the content sequence
+     *
+     * @param string $syncToken
+     * @return array
+     */
+    public function getChanges($syncToken)
+    {
+        $result = parent::getChanges($syncToken);
+
+        $newResult = array();
+        $backend = Calendar_Controller_Event::getInstance()->getBackend();
+
+        foreach ($result as $action => $value) {
+            if (!is_array($value)) {
+                $newResult[$action] = $value;
+                continue;
+            }
+
+            $uids = $backend->getUidOfBaseEvents(array_keys($value));
+
+            $newResult[$action] = array();
+            foreach($uids as $row) {
+                $newResult[$action][$row[0]] = $row[0] . $this->_suffix;
+            }
+        }
+
+        return $newResult;
     }
 }

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:55+0000\n"
+"PO-Revision-Date: 2015-11-18 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -78,8 +78,8 @@ msgstr "Lưu lại"
 msgid "Print Message"
 msgstr "In nội dung"
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1345
-#: js/GridPanel.js:1361
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1348
+#: js/GridPanel.js:1364
 msgid "Print Preview"
 msgstr "Xem trước khi in"
 
@@ -228,7 +228,7 @@ msgid "To (Email CC)"
 msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:974 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr "Tiêu đề"
@@ -324,7 +324,7 @@ msgstr[0] "one:{0} thư chưa đọc\nother:{0} thư chưa đọc"
 msgid "Message not available."
 msgstr "Nội dung không sẵn sàng"
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:880
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
 msgid "From"
 msgstr "Từ"
 
@@ -344,11 +344,11 @@ msgstr "Ngày"
 msgid "Show or hide header information"
 msgstr "Hiện/ ẩn thông tin header"
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:814 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Đính kèm"
 
-#: js/GridPanelHook.js:34
+#: js/GridPanelHook.js:34 js/GridPanelHook.js:90
 msgid "Compose email"
 msgstr "Soạn Email"
 
@@ -567,86 +567,86 @@ msgstr ""
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Click để tìm kiếm và thêm người nhận từ danh bạ"
 
-#: js/MessageEditDialog.js:369
+#: js/MessageEditDialog.js:402
 #, python-brace-format
 msgid "On {0}, {1} wrote"
 msgstr "Vào {0}, {1} viết"
 
-#: js/MessageEditDialog.js:389
+#: js/MessageEditDialog.js:422
 msgid "Original message"
 msgstr "Nội dung gốc"
 
-#: js/MessageEditDialog.js:575 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:608 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr "Đang tải địa chỉ email"
 
-#: js/MessageEditDialog.js:626
+#: js/MessageEditDialog.js:659
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:629
+#: js/MessageEditDialog.js:662
 #, python-brace-format
 msgid "{0} Message"
 msgstr "Nội dung {0}"
 
-#: js/MessageEditDialog.js:683 js/MessageEditDialog.js:688
+#: js/MessageEditDialog.js:716 js/MessageEditDialog.js:721
 msgid "Failed"
 msgstr "Thất bại"
 
-#: js/MessageEditDialog.js:684
+#: js/MessageEditDialog.js:717
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "{0} thiết lập tài khoản rỗng."
 
-#: js/MessageEditDialog.js:689 js/MessageEditDialog.js:1011
+#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
 msgid "Files are still uploading."
 msgstr "Files vẫn đang được upload."
 
-#: js/MessageEditDialog.js:754 js/MessageEditDialog.js:984
+#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
 msgid "Compose email:"
 msgstr "Soạn email:"
 
-#: js/MessageEditDialog.js:949 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
 msgid "Body"
 msgstr "Nội dung"
 
-#: js/MessageEditDialog.js:1039
+#: js/MessageEditDialog.js:1072
 msgid "Empty subject"
 msgstr "Tiêu đề trống"
 
-#: js/MessageEditDialog.js:1040
+#: js/MessageEditDialog.js:1073
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Bạn có muốn gửi 1 email với tiêu đề trống?"
 
-#: js/MessageEditDialog.js:1061
+#: js/MessageEditDialog.js:1094
 msgid "Add Note"
 msgstr "Thêm ghi chú"
 
-#: js/MessageEditDialog.js:1062
+#: js/MessageEditDialog.js:1095
 msgid "Edit Email Note Text:"
 msgstr "Sửa văn bản ghi chú email:"
 
-#: js/MessageEditDialog.js:1085
+#: js/MessageEditDialog.js:1118
 msgid "No recipients set."
 msgstr "Không chỉ ra người nhận."
 
-#: js/RecipientGrid.js:230
+#: js/RecipientGrid.js:233
 msgid "Click here to set To/CC/BCC."
 msgstr "Click vào đây để đặt To/CC/BCC"
 
-#: js/RecipientGrid.js:234 js/RecipientGrid.js:258
+#: js/RecipientGrid.js:237 js/RecipientGrid.js:261
 msgid "To:"
 msgstr "To:"
 
-#: js/RecipientGrid.js:237 js/RecipientGrid.js:259
+#: js/RecipientGrid.js:240 js/RecipientGrid.js:262
 msgid "Cc:"
 msgstr "Cc:"
 
-#: js/RecipientGrid.js:240 js/RecipientGrid.js:260
+#: js/RecipientGrid.js:243 js/RecipientGrid.js:263
 msgid "Bcc:"
 msgstr "Bcc:"
 
-#: js/RecipientGrid.js:374
+#: js/RecipientGrid.js:389
 msgid "Remove"
 msgstr "Xóa"
 
@@ -699,7 +699,7 @@ msgstr "ID"
 msgid "Sender"
 msgstr "Người gửi"
 
-#: js/GridPanel.js:577 Controller/Message/Flags.php:24
+#: js/GridPanel.js:577 Controller/Message/Flags.php:25
 msgid "Answered"
 msgstr "Đã trả lời"
 
@@ -708,27 +708,31 @@ msgid "Forwarded"
 msgstr "Đã chuyển tiếp"
 
 #: js/GridPanel.js:583
+msgid "Tine20"
+msgstr ""
+
+#: js/GridPanel.js:586
 msgid "Recent"
 msgstr "Gần đây"
 
-#: js/GridPanel.js:965
+#: js/GridPanel.js:968
 msgid "Send Reading Confirmation"
 msgstr "Gửi xác nhận đã đọc"
 
-#: js/GridPanel.js:966
+#: js/GridPanel.js:969
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
-#: js/GridPanel.js:1190
+#: js/GridPanel.js:1193
 #, python-brace-format
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1198
+#: js/GridPanel.js:1201
 msgid "Your quota"
 msgstr "Hạn mức của bạn"
 
-#: js/GridPanel.js:1199
+#: js/GridPanel.js:1202
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "có sẵn {0} (tổng số: {1})"
@@ -781,72 +785,72 @@ msgstr "Bật chế độ tự động trả lời"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Tài khoản email \"{0}\" có 1 email tự động trả lời đang hoạt động"
 
-#: js/Felamimail.js:165
+#: js/Felamimail.js:173
 #, python-brace-format
 msgid "{0} as default mailer"
 msgstr ""
 
-#: js/Felamimail.js:577
+#: js/Felamimail.js:585
 msgid "New mails"
 msgstr "Email mới"
 
-#: js/Felamimail.js:578
+#: js/Felamimail.js:586
 #, python-brace-format
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "Bạn có {0} email mới trong thư mục {1} ({2})."
 
-#: js/Felamimail.js:698
+#: js/Felamimail.js:706
 #, python-brace-format
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Credentials for {0}"
 
-#: js/Felamimail.js:701
+#: js/Felamimail.js:709
 msgid "Credentials"
 msgstr "Credentials"
 
-#: js/Felamimail.js:896 js/Felamimail.js:929
+#: js/Felamimail.js:904 js/Felamimail.js:937
 msgid "IMAP Error"
 msgstr "IMAP Error"
 
-#: js/Felamimail.js:897
+#: js/Felamimail.js:905
 msgid "No connection to IMAP server."
 msgstr "Không kết nối tới máy chủ IMAP"
 
-#: js/Felamimail.js:913
+#: js/Felamimail.js:921
 msgid "IMAP Credentials Error"
 msgstr "IMAP Credentials Error"
 
-#: js/Felamimail.js:914
+#: js/Felamimail.js:922
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Thông tin email bị sai. Xin hãy liên lạc với quản trị hệ thống của bạn."
 
-#: js/Felamimail.js:930
+#: js/Felamimail.js:938
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
 msgstr "Một trong số thư mục của bạn đã bị xóa hoặc đổi tên bởi người dùng khác."
 
-#: js/Felamimail.js:959
+#: js/Felamimail.js:967
 msgid "SMTP Error"
 msgstr "SMTP Error"
 
-#: js/Felamimail.js:960
+#: js/Felamimail.js:968
 msgid "No connection to SMTP server."
 msgstr "Không có kết nối tới máy chủ SMTP"
 
-#: js/Felamimail.js:968
+#: js/Felamimail.js:976
 msgid "Sieve Error"
 msgstr "Sieve Error"
 
-#: js/Felamimail.js:969
+#: js/Felamimail.js:977
 msgid "No connection to Sieve server."
 msgstr "Không có kết nối tới máy chủ Sieve"
 
-#: js/Felamimail.js:977
+#: js/Felamimail.js:985
 msgid "Save Sieve Script Error"
 msgstr "Lưu lỗi Sieve Script"
 
-#: js/Felamimail.js:978
+#: js/Felamimail.js:986
 msgid "Could not save script on Sieve server."
 msgstr "Không thể lưu scrip trên máy chủ Sieve"
 
@@ -1002,19 +1006,19 @@ msgstr "Lỗi: %s"
 msgid "Could not send message"
 msgstr "Không thể gửi message"
 
-#: Controller/Message/Flags.php:25
+#: Controller/Message/Flags.php:26
 msgid "Seen"
 msgstr "Đã xem"
 
-#: Controller/Message/Flags.php:26
+#: Controller/Message/Flags.php:27
 msgid "Deleted"
 msgstr "Đã xóa"
 
-#: Controller/Message/Flags.php:27
+#: Controller/Message/Flags.php:28
 msgid "Draft"
 msgstr "Nháp"
 
-#: Controller/Message/Flags.php:28
+#: Controller/Message/Flags.php:29
 msgid "Flagged"
 msgstr "Đã cắm cờ"
 
@@ -1022,72 +1026,97 @@ msgstr "Đã cắm cờ"
 msgid "Out of Office reply from %1$s"
 msgstr "Trả lời bên ngoài cơ quan từ %1$s"
 
-#: Preference.php:59
+#: Preference.php:65
 msgid "All inboxes"
 msgstr "Mọi thư đến"
 
-#: Preference.php:106
+#: Preference.php:113
 msgid "Default Email Account"
 msgstr "Tài khoản email mặc định"
 
-#: Preference.php:107
+#: Preference.php:114
 msgid "The default email account to use when sending mails."
 msgstr "Tài khoản email mặc định được dùng khi gửi email"
 
-#: Preference.php:110
+#: Preference.php:117
 msgid "Email Update Interval"
 msgstr "Khoảng thời gian cập nhật email"
 
-#: Preference.php:111
+#: Preference.php:118
 msgid "How often should Felamimail check for new Emails (in minutes)."
 msgstr ""
 
-#: Preference.php:114
+#: Preference.php:121
 msgid "Use for mailto links"
 msgstr ""
 
-#: Preference.php:115
+#: Preference.php:122
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
 msgstr ""
 
-#: Preference.php:118
+#: Preference.php:125
 msgid "Use for NOTES"
 msgstr "Sử dụng cho GHI CHÉP"
 
-#: Preference.php:119
+#: Preference.php:126
 msgid "Save Note default Value."
 msgstr "Lưu giá trị ghi chép mặc định "
 
-#: Preference.php:122
+#: Preference.php:129
 msgid "Confirm Delete"
 msgstr "Xác nhận xóa"
 
-#: Preference.php:123
+#: Preference.php:130
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Hiển thị cửa sổ xác nhận khi xóa thư."
 
-#: Config.php:45
+#: Preference.php:133
+msgid ".eml file Attachment in forwarded mails"
+msgstr ""
+
+#: Preference.php:134
+msgid ""
+"Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr ""
+
+#: Config.php:53
 msgid "Vacation Templates Container ID"
 msgstr "Vacation Templates Container ID"
 
-#: Config.php:54
+#: Config.php:62
 msgid "Custom Vacation Message"
 msgstr "Nội dung trả lời tự động"
 
-#: Config.php:56
+#: Config.php:64
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "Người dùng được phép đặt nội dung trả lời tự động theo ý muốn cho tài khoản hệ thống"
 
-#: Config.php:65
+#: Config.php:73
 msgid "Cache email body"
 msgstr "Bản lưu đệm nội dung email"
 
-#: Config.php:67
+#: Config.php:75
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr "Should the email body be cached (recommended for slow IMAP server connections)"
+
+#: Config.php:84
+msgid "Enabled Features"
+msgstr ""
+
+#: Config.php:86
+msgid "Enabled features in Felamimail application."
+msgstr ""
+
+#: Config.php:93
+msgid "Tine 2.0 Flag"
+msgstr ""
+
+#: Config.php:94
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
 
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"

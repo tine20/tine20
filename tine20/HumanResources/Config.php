@@ -73,7 +73,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeType'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'VACATION'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'SICKNESS',             'value' => 'Sickness',           'icon' => 'images/oxygen/16x16/actions/book.png',  'system' => TRUE),  //_('Sickness')
+                    array('id' => 'VACATION',             'value' => 'Vacation',           'icon' => 'images/oxygen/16x16/actions/book2.png', 'system' => TRUE),  //_('Vacation')
+                ),
+                'default' => 'VACATION'
+            )
         ),
         self::VACATION_STATUS => array(
             //_('Vacation Status')
@@ -83,7 +89,16 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'REQUESTED'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'REQUESTED',  'value' => 'Requested',  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => TRUE),  //_('Requested')
+                    array('id' => 'IN-PROCESS', 'value' => 'In process', 'icon' => 'images/oxygen/16x16/actions/view-refresh.png',         'system' => TRUE),  //_('In process')
+                    array('id' => 'ACCEPTED',   'value' => 'Accepted',   'icon' => 'images/oxygen/16x16/actions/ok.png', 'system' => TRUE),  //_('Accepted')
+                    array('id' => 'DECLINED',   'value' => 'Declined',   'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png', 'system' => TRUE),  //_('Declined')
+
+                ),
+                'default' => 'REQUESTED'
+            )
         ),
         self::SICKNESS_STATUS => array(
             //_('Sickness Status')
@@ -93,7 +108,14 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_FreeTimeStatus'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'EXCUSED'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'EXCUSED',   'value' => 'Excused',   'icon' => 'images/oxygen/16x16/actions/smiley.png', 'system' => TRUE),  //_('Excused')
+                    array('id' => 'UNEXCUSED', 'value' => 'Unexcused', 'icon' => 'images/oxygen/16x16/actions/tools-report-bug.png', 'system' => TRUE),  //_('Unexcused')
+
+                ),
+                'default' => 'EXCUSED'
+            )
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
             // _('Default Feast Calendar')
@@ -112,7 +134,13 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'HumanResources_Model_ExtraFreeTimeType'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'PAYED'
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'PAYED',     'value' => 'Payed',     'icon' => NULL, 'system' => TRUE),  //_('Payed')
+                    array('id' => 'NOT_PAYED', 'value' => 'Not payed', 'icon' => NULL, 'system' => TRUE),  //_('Not payed')
+                ),
+                'default' => 'PAYED'
+            )
         ),
         self::VACATION_EXPIRES => array(
             // _('Vacation expires')

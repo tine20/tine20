@@ -134,6 +134,11 @@ class Crm_Import_CsvTest extends ImportTestCase
      */
     public function testEmailNotification()
     {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (empty($smtpConfig)) {
+            $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+
         Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_NOTIFICATION, true);
         $this->testImport(/* dry run = */ false);
         // mark tasks for deletion
@@ -152,8 +157,8 @@ class Crm_Import_CsvTest extends ImportTestCase
             }
         }
 
-        $this->assertGreaterThan(2, count($importNotifications),
-            'expecting 2 mails (for unittest + sclever) / messages:'
+        $this->assertGreaterThan(1, count($importNotifications),
+            'expecting 2 or more mails (at least for unittest + sclever) / messages:'
             . print_r($messages, true));
         $firstMessage = $importNotifications[0];
         $this->assertContains('neuer lead 2', $firstMessage->getBodyText()->getContent(), 'lead name missing');

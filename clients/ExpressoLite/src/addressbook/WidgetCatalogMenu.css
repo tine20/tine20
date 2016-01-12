@@ -1,0 +1,25 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetCatalogMenu object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#WidgetCatalogMenu_list {padding:0; list-style-type:none;}
+
+#WidgetCatalogMenu_list li {cursor:pointer; width: 100%; line-height: 32px;}
+
+@media (min-width:1025px) { /* desktop */
+    #WidgetCatalogMenu_list li {padding: 0px 4px;}
+}
+
+@media (max-width:1024px) { /* mobile */
+    #WidgetCatalogMenu_list li {padding: 8px 4px;}
+}
+
+#WidgetCatalogMenu_list li.selected {background-color:#D9E8FB;}
+
+#WidgetCatalogMenu_list li:hover { background-color:#F5F5F5; }

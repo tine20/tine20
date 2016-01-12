@@ -86,7 +86,8 @@ class Tinebase_Notification
             } catch (Exception $e) {
                 $exception = $e;
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . " Failed to send notification message to '{$recipient->email}'. Exception: " . $e);
+                    . ' Failed to send notification message (recipient: '
+                    . ($recipient instanceof Addressbook_Model_Contact ? $recipient->email : $recipient) . '. Exception: ' . $e);
             }
         }
         

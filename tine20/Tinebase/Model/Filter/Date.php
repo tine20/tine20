@@ -70,10 +70,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         if ($this->_operator === 'equals' && empty($this->_value)) {
             // @see 0009362: allow to filter for empty datetimes
             $operator = 'isnull';
-            $value[0] = $this->_value;
+            $value = array($this->_value);
         } else {
             $operator = $this->_operator;
-            $value = (array)$this->_getDateValues($operator, $this->_value);
+            $value = $this->_getDateValues($operator, $this->_value);
+            if (! is_array($value)) {
+                // NOTE: (array) null is an empty array
+                $value = array($value);
+            }
         }
         
         // quote field identifier
@@ -247,9 +251,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         } elseif ($_operator === 'inweek') {
             $date = $this->_getDate(NULL, TRUE);
             
-            if ($_value > 52) {
-                $_value = 52;
-            } elseif ($_value < 1) {
+            if ($_value < 1) {
                 $_value = $date->get('W');
             }
             $value = $this->_getFirstAndLastDayOfWeek($date, $_value);

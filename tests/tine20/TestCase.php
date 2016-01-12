@@ -298,19 +298,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getMailDomain()
     {
-        $testconfig = Zend_Registry::get('testConfig');
-        
-        if ($testconfig && isset($testconfig->maildomain)) {
-            return $testconfig->maildomain;
-        }
-        
-        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
-            
-            return $domain;
-        }
-        
-        return 'tine20.org';
+        return TestServer::getPrimaryMailDomain();
     }
     
     /**
@@ -485,5 +473,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         )));
         
         Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);
+    }
+
+    /**
+     * set current user
+     *
+     * @param $user
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _setUser($user)
+    {
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
     }
 }

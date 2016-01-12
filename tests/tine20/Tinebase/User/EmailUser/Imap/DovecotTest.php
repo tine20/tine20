@@ -244,8 +244,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     public function testDuplicateUserId()
     {
-        $config = Zend_Registry::get('testConfig');
-        $emailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $emailDomain = TestServer::getPrimaryMailDomain();
         $user = $this->_addUser('testuser@' . $emailDomain);
         
         // update user loginname

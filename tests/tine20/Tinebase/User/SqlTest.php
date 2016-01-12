@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -14,14 +14,10 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_SqlTest::main');
-}
-
 /**
  * Test class for Tinebase_User
  */
-class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
+class Tinebase_User_SqlTest extends TestCase
 {
     /**
      * sql user backend
@@ -34,18 +30,6 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $objects = array();
-
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_SqlTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -61,30 +45,17 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->_backend = Tinebase_User::factory(Tinebase_User::SQL);
 
-        // remove user left over by broken tests
-        try {
-            $user = $this->_backend->getUserByLoginName('tine20phpunituser', 'Tinebase_Model_FullUser');
-            $this->_backend->deleteUser($user);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            // do nothing 
-        }
-        
-        $this->objects['users'] = array();
+        parent::setUp();
     }
 
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
     protected function tearDown()
     {
-        foreach ($this->objects['users'] as $user) {
-            $this->_backend->deleteUser($user);
-        }
+        parent::tearDown();
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
+        )));
     }
-    
+
     /**
      * try to add an account
      *
@@ -331,7 +302,65 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
     }
-    
+
+    /**
+     * test if deleted users data is removed
+     *
+     * @see TODO add mantis issue
+     *
+     * TODO add test cases for keepOrganizerEvents and $_keepAsContact and $_keepAsContact
+     */
+    public function testDeleteUsersData()
+    {
+        // configure removal of data
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
+            '_deletePersonalContainers' => true,
+
+        )));
+
+        // we need a valid group and a contact for this test
+        $userContact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_given' => 'testuser'
+        )));
+        $testUser = $this->getTestRecord();
+        $testUser->contact_id = $userContact->getId();
+        $this->_backend->addUser($testUser);
+        Tinebase_Group::getInstance()->addGroupMember($testUser->accountPrimaryGroup, $testUser->getId());
+
+        $this->_setUser($testUser);
+
+        // add a contact and an event to personal folders
+        $event = Calendar_Controller_Event::getInstance()->create(new Calendar_Model_Event(array(
+            'summary' => 'testevent',
+            'dtstart' => '2015-12-24 12:00:00',
+            'dtend' => '2015-12-24 13:00:00',
+//            'organizer' => $testUser->conta
+        ), true));
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_given' => 'testcontact'
+        )));
+
+        $this->_setUser($this->_originalTestUser);
+
+        $this->_backend->deleteUser($testUser);
+
+        // check if contact and event are removed
+        $adbBackend = new Addressbook_Backend_Sql();
+        try {
+            $adbBackend->get($contact->getId());
+            $this->fail('contact be deleted');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
+        }
+        $calBackend = new Calendar_Backend_Sql();
+        try {
+            $calBackend->get($event->getId());
+            $this->fail('event should be deleted: ' . print_r($event->toArray(), true));
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
+        }
+    }
+
     public function testSanitizeAccountPrimaryGroupId()
     {
         $account = Tinebase_Core::get('currentAccount');
@@ -360,16 +389,8 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function getTestRecord()
     {
-        $testconfig = Zend_Registry::get('testConfig');
-        
-        if ($testconfig && isset($testconfig->maildomain)) {
-            $domain = $testconfig->maildomain;
-        } else if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            list($user, $domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
-        } else {
-             $domain = 'tine20.org';
-        }
-        
+        $domain = TestServer::getPrimaryMailDomain();
+
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',

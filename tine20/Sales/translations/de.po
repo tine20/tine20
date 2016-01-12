@@ -1,7 +1,7 @@
 # 
 # Translators:
 # Björn Balazs <transifex@lazs.de>, 2013
-# Ettore Atalan <atalanttore@googlemail.com>, 2014
+# Ettore Atalan <atalanttore@googlemail.com>, 2014-2015
 # Kay Strobach <info@kay-strobach.de>, 2012
 # Kay Strobach <info@kay-strobach.de>, 2012
 # pschuele <p.schuele@metaways.de>, 2013-2014
@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 10:29+0000\n"
+"PO-Revision-Date: 2015-11-18 13:37+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -397,7 +397,7 @@ msgstr[1] "Verträge"
 #: Model/Product.php:48 Model/CostCenter.php:50 js/OfferEditDialog.js:102
 #: js/CostCenterEditDialog.js:108 js/ContractEditDialog.js:203
 #: js/CostCenterGridPanel.js:56 js/ExceptionHandler.js:91
-#: js/OrderConfirmationEditDialog.js:102 Config.php:183 Config.php:239
+#: js/OrderConfirmationEditDialog.js:102 Config.php:183 Config.php:251
 msgid "Number"
 msgstr "Nummer"
 
@@ -526,7 +526,8 @@ msgid "Price Net"
 msgstr "Nettopreis"
 
 #: Model/PurchaseInvoice.php:158 Model/Invoice.php:164
-#: js/InvoiceEditDialog.js:364 js/PurchaseInvoiceEditDialog.js:281
+#: js/InvoiceEditDialog.js:364 js/InvoiceDetailsPanel.js:132
+#: js/PurchaseInvoiceEditDialog.js:281
 msgid "Price Gross"
 msgstr "Bruttopreis"
 
@@ -543,7 +544,8 @@ msgstr "MwSt."
 msgid "Sales Tax"
 msgstr "Mehrwertsteuer"
 
-#: Model/PurchaseInvoice.php:190 js/PurchaseInvoiceEditDialog.js:309
+#: Model/PurchaseInvoice.php:190 js/PurchaseInvoiceDetailsPanel.js:132
+#: js/PurchaseInvoiceEditDialog.js:309
 msgid "Total Price"
 msgstr "Gesamtpreis"
 
@@ -617,20 +619,20 @@ msgstr "Mtl. Abrechnungsintervall (variabel)"
 msgid "Billing Point"
 msgstr "Abrechnungszeitpunkt"
 
-#: Model/ProductAggregate.php:120 Model/Invoice.php:252 Model/Invoice.php:256
+#: Model/ProductAggregate.php:124 Model/Invoice.php:252 Model/Invoice.php:256
 #: Model/Invoice.php:260 Model/Invoice.php:264 Model/Invoice.php:268
 #: Model/Invoice.php:272 Model/Invoice.php:276
 msgid "Invoice Item"
 msgstr "Rechnungsposten"
 
-#: Model/ProductAggregate.php:284
+#: Model/ProductAggregate.php:288
 msgid "Piece"
 msgstr "Stück"
 
 #: Model/Invoice.php:35 js/InvoiceEditDialog.js:391
 #: js/InvoiceEditDialog.js:404 js/InvoiceDetailsPanel.js:98
 #: js/PurchaseInvoiceDetailsPanel.js:98 js/PurchaseInvoiceEditDialog.js:389
-#: Setup/Initialize.php:123
+#: Config.php:210
 msgid "Invoice"
 msgid_plural "Invoices"
 msgstr[0] "Rechnung"
@@ -656,7 +658,7 @@ msgstr "Zahlungsziel in Tagen"
 
 #: Model/Invoice.php:132 js/InvoiceEditDialog.js:519
 #: js/InvoiceDetailsPanel.js:131 js/PurchaseInvoiceDetailsPanel.js:131
-#: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:151
+#: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:152
 msgid "Cleared"
 msgstr "Abgerechnet"
 
@@ -693,18 +695,11 @@ msgstr "Monat"
 msgid "Unit"
 msgstr "Einheit"
 
-#: js/AddressGridPanel.js:53
-#, python-brace-format
-msgid ""
-"There could not be found any {0}. Please try to change your filter-criteria "
-"or view-options."
-msgstr "Es konnte keine {0} gefunden werden. Bitte ändern Sie die Filterkriterien oder Ansichtseinstellungen."
-
-#: js/AddressGridPanel.js:56
+#: js/AddressGridPanel.js:46
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
-#: js/AddressGridPanel.js:61 js/CustomerEditDialog.js:126
+#: js/AddressGridPanel.js:51 js/CustomerEditDialog.js:126
 #: js/SupplierEditDialog.js:122 js/Sales.js:60
 msgid "Copy address to the clipboard"
 msgstr "Adresse in die Zwischenablage kopieren"
@@ -748,7 +743,7 @@ msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worde
 
 #: js/InvoiceEditDialog.js:381 js/PurchaseInvoiceEditDialog.js:343
 msgid "Sales Tax (percent)"
-msgstr "Mehrwertsteuer in Prozent"
+msgstr "MwSt. in Prozent"
 
 #: js/InvoiceEditDialog.js:415 js/InvoiceEditDialog.js:421
 #: js/PurchaseInvoiceEditDialog.js:401 js/PurchaseInvoiceEditDialog.js:425
@@ -776,7 +771,7 @@ msgstr "Lade ..."
 msgid "Euro (€)"
 msgstr "Euro (€)"
 
-#: js/CustomerEditDialog.js:45 js/SupplierEditDialog.js:41
+#: js/CustomerEditDialog.js:45
 msgid "Either street or postbox is required!"
 msgstr "Bitte geben Sie entweder eine Straße oder ein Postfach an!"
 
@@ -905,6 +900,10 @@ msgstr "Bitte geben Sie eine Beschreibung ein..."
 #: js/ContractEditDialog.js:94
 msgid "Please use a decimal number here!"
 msgstr "Bitte benutzen Sie eine Dezimalzahl!"
+
+#: js/SupplierEditDialog.js:41
+msgid "Either postalcode or postbox is required!"
+msgstr "Bitte geben Sie entweder eine Postleitzahl oder ein Postfach an!"
 
 #: js/SupplierEditDialog.js:62
 msgid "Copy Supplier"
@@ -1083,11 +1082,11 @@ msgstr "Vertragsnummer-Erstellung"
 msgid "Should the contract number be set manually or be auto-created?"
 msgstr "Soll die Vertragsnummer manuell gesetzt oder autmatisch erstellt werden?"
 
-#: Config.php:170 Config.php:226
+#: Config.php:170 Config.php:238
 msgid "automatically"
 msgstr "automatisch"
 
-#: Config.php:171 Config.php:227
+#: Config.php:171 Config.php:239
 msgid "manually"
 msgstr "manuell"
 
@@ -1095,11 +1094,11 @@ msgstr "manuell"
 msgid "Contract Number Validation"
 msgstr "Vertragsnummer-Validierung"
 
-#: Config.php:180 Config.php:236
+#: Config.php:180 Config.php:248
 msgid "The Number can be validated as text or number."
 msgstr "Die Vertragsnummer kann als Text oder Nummer validiert werden."
 
-#: Config.php:184 Config.php:240
+#: Config.php:184 Config.php:252
 msgid "Text"
 msgstr "Text"
 
@@ -1122,82 +1121,124 @@ msgid "Possible Invoice Types."
 msgstr "Mögliche Rechnungstypen."
 
 #: Config.php:211
+msgid "Reversal"
+msgstr "Storno"
+
+#: Config.php:212 Config.php:291 Setup/Update/Release8.php:2155
+msgid "Credit"
+msgstr "Gutschrift"
+
+#: Config.php:218
 msgid "Product Category"
 msgstr "Produktkategorie "
 
-#: Config.php:213
+#: Config.php:220
 msgid "Possible Product Categories."
 msgstr "Mögliche Produktkategorien."
 
-#: Config.php:221
+#: Config.php:227 Setup/Update/Release8.php:1953
+msgid "Default"
+msgstr "Default"
+
+#: Config.php:233
 msgid "Product Number Creation"
 msgstr "Produktnummern Erstellung"
 
-#: Config.php:223
+#: Config.php:235
 msgid "Should the product number be set manually or be auto-created?"
 msgstr "Soll die Produktnummer manuell oder automatisch erstellt werden?"
 
-#: Config.php:234
+#: Config.php:246
 msgid "Product Number Validation"
 msgstr "Produktnummern Validation"
 
-#: Config.php:247
+#: Config.php:259
 msgid "Product Number Prefix"
 msgstr "Produktnummern Präfix"
 
-#: Config.php:249
+#: Config.php:261
 msgid "The prefix of the product number."
 msgstr "Das Präfix der Produktnummer."
 
-#: Config.php:257
+#: Config.php:269
 msgid "Product Number Zero Fill"
 msgstr ""
 
-#: Config.php:259
+#: Config.php:271
 msgid "Fill the number with leading zero"
-msgstr ""
+msgstr "Nummer mit führender Null auffüllen"
 
-#: Config.php:267
+#: Config.php:279
 msgid "Payment Method"
 msgstr "Zahlungsart"
 
-#: Config.php:269
+#: Config.php:281
 msgid "Possible Payment Methods."
 msgstr "Mögliche Zahlungsarten"
 
-#: Config.php:277
+#: Config.php:288 Setup/Update/Release8.php:1904
+#: Setup/Update/Release8.php:2152
+msgid "Bank transfer"
+msgstr "Banküberweisung"
+
+#: Config.php:289 Setup/Update/Release8.php:1905
+#: Setup/Update/Release8.php:2153
+msgid "Direct debit"
+msgstr "Lastschrifteinzug"
+
+#: Config.php:290 Setup/Update/Release8.php:2154
+msgid "Cancellation"
+msgstr "Stornierung"
+
+#: Config.php:292 Setup/Update/Release8.php:2156
+msgid "Credit card"
+msgstr "Kreditkarte"
+
+#: Config.php:293 Setup/Update/Release8.php:2157
+msgid "Paypal"
+msgstr "Paypal"
+
+#: Config.php:299
 msgid "Invoice Cleared"
 msgstr "Rechnung abgerechnet"
 
-#: Config.php:279
+#: Config.php:301
 msgid "Possible Invoice Cleared States."
 msgstr "Mögliche Werte für Abgerechnetstatus"
 
-#: Config.php:302
+#: Config.php:308
+msgid "to clear"
+msgstr "abzurechnen"
+
+#: Config.php:309
+msgid "cleared"
+msgstr "abgerechnet"
+
+#: Config.php:330
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
-#: Config.php:304
+#: Config.php:332
 msgid "Enabled Features in Sales Application."
 msgstr "Feature in der Sales Applikation aktivieren."
 
-#: Config.php:311
+#: Config.php:339
 msgid "Invoices Module"
 msgstr "Rechnungsmodul"
 
-#: Config.php:315
+#: Config.php:343
 msgid "Offers Module"
 msgstr "Angebotsmodul"
 
-#: Config.php:319
+#: Config.php:347
 msgid "Order Confirmations Module"
 msgstr "Auftragsbestätigung Modul"
 
-#: Config.php:323
+#: Config.php:351
 msgid "Suppliers Module"
 msgstr "Lieferantenmodul"
 
-#: Config.php:327
+#: Config.php:355
 msgid "Purchase Invoice Module"
 msgstr "Eingangsrechnungsmodul"
 
@@ -1217,78 +1258,35 @@ msgstr "Meine Verträge"
 msgid "Contracts created by myself"
 msgstr "Von mir erstellte Aufträge"
 
-#: Setup/Initialize.php:68 Setup/Update/Release8.php:514
+#: Setup/Initialize.php:68 Setup/Update/Release8.php:515
 msgid "All Customers"
 msgstr "Alle Kunden"
 
-#: Setup/Initialize.php:69 Setup/Update/Release8.php:515
+#: Setup/Initialize.php:69 Setup/Update/Release8.php:516
 msgid "All customer records"
 msgstr "Datensätze aller Kunden"
 
-#: Setup/Initialize.php:80 Setup/Update/Release8.php:1335
+#: Setup/Initialize.php:80 Setup/Update/Release8.php:1337
 msgid "All Offers"
 msgstr "Alle Angebotsdatensätze"
 
-#: Setup/Initialize.php:81 Setup/Update/Release8.php:1336
+#: Setup/Initialize.php:81 Setup/Update/Release8.php:1338
 msgid "All offer records"
 msgstr "Alle Angebote"
 
-#: Setup/Initialize.php:109 Setup/Update/Release8.php:1954
-msgid "Default"
-msgstr "Default"
-
-#: Setup/Initialize.php:124
-msgid "Reversal"
-msgstr "Storno"
-
-#: Setup/Initialize.php:125 Setup/Initialize.php:157
-#: Setup/Update/Release8.php:2154
-msgid "Credit"
-msgstr "Gutschrift"
-
-#: Setup/Initialize.php:139
-msgid "to clear"
-msgstr "abzurechnen"
-
-#: Setup/Initialize.php:140
-msgid "cleared"
-msgstr "abgerechnet"
-
-#: Setup/Initialize.php:154 Setup/Update/Release8.php:1905
-#: Setup/Update/Release8.php:2151
-msgid "Bank transfer"
-msgstr "Banküberweisung"
-
-#: Setup/Initialize.php:155 Setup/Update/Release8.php:1906
-#: Setup/Update/Release8.php:2152
-msgid "Direct debit"
-msgstr "Lastschrifteinzug"
-
-#: Setup/Initialize.php:156 Setup/Update/Release8.php:2153
-msgid "Cancellation"
-msgstr "Stornierung"
-
-#: Setup/Initialize.php:158 Setup/Update/Release8.php:2155
-msgid "Credit card"
-msgstr "Kreditkarte"
-
-#: Setup/Initialize.php:159 Setup/Update/Release8.php:2156
-msgid "Paypal"
-msgstr "Paypal"
-
-#: Setup/Update/Release8.php:145
+#: Setup/Update/Release8.php:146
 msgid "Status"
 msgstr "Status"
 
-#: Setup/Update/Release8.php:157
+#: Setup/Update/Release8.php:158
 msgid "Cleared In"
 msgstr "Abgerechnet in"
 
-#: Setup/Update/Release8.php:1396
+#: Setup/Update/Release8.php:1397
 msgid "All Suppliers"
 msgstr "Alle Lieferanten"
 
-#: Setup/Update/Release8.php:1397
+#: Setup/Update/Release8.php:1398
 msgid "All supllier records"
 msgstr "Alle Lieferantendatensätze"
 
@@ -1300,51 +1298,51 @@ msgstr "Alle Eingangsrechnungen"
 msgid "All purchase invoices"
 msgstr "Alle Eingangsrechnungen"
 
-#: Setup/Update/Release8.php:1446
+#: Setup/Update/Release8.php:1445
 msgid "All Products"
 msgstr "Alle Produkte"
 
-#: Setup/Update/Release8.php:1447
+#: Setup/Update/Release8.php:1446
 msgid "All product records"
 msgstr "Alle Produktdatensätze"
 
-#: Setup/Update/Release8.php:1457
+#: Setup/Update/Release8.php:1456
 msgid "All Contracts"
 msgstr "Alle Verträge"
 
-#: Setup/Update/Release8.php:1458
+#: Setup/Update/Release8.php:1457
 msgid "All contract records"
 msgstr "Alle Vertragsdatensätze"
 
-#: Setup/Update/Release8.php:1468
+#: Setup/Update/Release8.php:1467
 msgid "All Invoices"
 msgstr "Alle Rechnungen"
 
-#: Setup/Update/Release8.php:1469
+#: Setup/Update/Release8.php:1468
 msgid "All invoice records"
 msgstr "Alle Rechnungsdatensätze"
 
-#: Setup/Update/Release8.php:1479
+#: Setup/Update/Release8.php:1478
 msgid "All Cost Centers"
 msgstr "Alle Kostenstellen"
 
-#: Setup/Update/Release8.php:1480
+#: Setup/Update/Release8.php:1479
 msgid "All costcenter records"
 msgstr "Alle Kostenstellendatensätze"
 
-#: Setup/Update/Release8.php:1490
+#: Setup/Update/Release8.php:1489
 msgid "All Divisions"
 msgstr "Alle Abteilungen"
 
-#: Setup/Update/Release8.php:1491
+#: Setup/Update/Release8.php:1490
 msgid "All division records"
 msgstr "Alle Abteilungsdatensätze"
 
-#: Setup/Update/Release8.php:1501
+#: Setup/Update/Release8.php:1500
 msgid "All Order Confirmations"
 msgstr "Alle Auftragsbestätigungen"
 
-#: Setup/Update/Release8.php:1502
+#: Setup/Update/Release8.php:1501
 msgid "All order confirmation records"
 msgstr "Alle Auftragsbestätigungsdatensätze"
 

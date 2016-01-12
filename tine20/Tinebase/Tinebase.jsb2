@@ -10,6 +10,10 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "es6-promise.js",
+          "path": "../library/es6-promise/"
+        },
+        {
           "text": "extFixes.js",
           "path": "js/"
         },
@@ -68,6 +72,10 @@
         {
           "text": "store.compat.js",
           "path": "../library/Store/"
+        },
+        {
+          "text": "addressparser.js",
+          "path": "../library/addressparser.js/"
         },
         {
           "text": "MapPanel.js",
@@ -589,7 +597,6 @@
           "text": "GroupingGridPlugin.js",
           "path": "js/ux/grid/"
         },
-        
         {
           "text": "OwnRecordFilter.js",
           "path": "js/widgets/grid/"
@@ -639,7 +646,19 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "BbarGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "Filter.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
+          "text": "ConfigGrid.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
+          "text": "ConfigField.js",
           "path": "js/widgets/keyfield/"
         },
         {

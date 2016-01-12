@@ -46,9 +46,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.tbarItems = [
             this.action_import,
-            this.action_addNewMember,
-            {xtype: 'widget-activitiesaddbutton'}
-            
+            this.action_addNewMember
         ];
         Tine.Courses.CourseEditDialog.superclass.initComponent.call(this);
     },
@@ -234,13 +232,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         hideLabel: internetAccessDeactivated,
                         hidden: internetAccessDeactivated
                     })
-//                    {
-//                        hideLabel: true,
-//                        boxLabel: this.app.i18n._('Fileserver Access'),
-//                        name: 'fileserver',
-//                        xtype: 'checkbox',
-//                        columnWidth: 0.5
-//                    }
                     ]]
                 }, {
                     // activities and tags
@@ -255,12 +246,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Courses',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
                     new Tine.widgets.tags.TagPanel({
                         app: 'Courses',
                         border: false,

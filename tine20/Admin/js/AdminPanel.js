@@ -34,10 +34,10 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
      * @private
      */
     appName: 'Admin',
-    
+
     /**
      * get config items
-     * 
+     *
      * @return {Array}
      */
     getConfigItems: function() {
@@ -54,7 +54,7 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
 
 /**
  * admin panel on update function
- * 
+ *
  * TODO         update registry without reloading the mainscreen
  */
 Tine.Admin.AdminPanel.onUpdate = function() {

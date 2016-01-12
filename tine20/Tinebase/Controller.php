@@ -75,6 +75,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param   string                           $clientIdString
      *
      * @return  bool
+     * @throws  Tinebase_Exception_MaintenanceMode
      *
      * TODO what happened to the $securitycode parameter?
      *  ->  @param   string                           $securitycode   the security code(captcha)
@@ -83,7 +84,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $password);
         
-        $accessLog = $this->_getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
+        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request, $clientIdString);
         
         $user = $this->_validateAuthResult($authResult, $accessLog);
         
@@ -93,8 +94,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} succeeded.");
-        
-        $this->_setSessionId($accessLog);
+
+        if (Tinebase_Core::inMaintenanceMode()) {
+            if (! $user->hasRight('Tinebase', Tinebase_Acl_Rights::MAINTENANCE)) {
+                throw new Tinebase_Exception_MaintenanceMode();
+            }
+        }
+
+        Tinebase_AccessLog::getInstance()->setSessionId($accessLog);
         
         $this->initUser($user);
         
@@ -175,7 +182,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             // too many login failures?
             else if ($_user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+
+                // first check if the current user agent should be blocked
+                if (! Tinebase_AccessLog::getInstance()->isUserAgentBlocked($_user, $_accessLog)) {
+                    return;
+                }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' Account: '. $_user->accountLoginName . ' is blocked');
                 $_accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
             }
@@ -222,6 +235,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         // FIXME 0010508: Session_Validator_AccountStatus causes problems
         //Tinebase_Session::registerValidatorAccountStatus();
+
+        Tinebase_Session::registerValidatorMaintenanceMode();
         
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::SESSIONUSERAGENTVALIDATION, TRUE)) {
             Tinebase_Session::registerValidatorHttpUserAgent();
@@ -263,19 +278,33 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _loginFailed($authResult, Tinebase_Model_AccessLog $accessLog)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-            __METHOD__ . '::' . __LINE__ . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!");
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Failure messages: ' . print_r($authResult->getMessages(), TRUE));
-        
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
         $accessLog->lo = $accessLog->li;
-        
-        Tinebase_User::getInstance()->setLastLoginFailure($accessLog->login_name);
+        $user = null;
+
+        if (Tinebase_Auth::FAILURE_CREDENTIAL_INVALID == $accessLog->result) {
+            $user = Tinebase_User::getInstance()->setLastLoginFailure($accessLog->login_name);
+        }
+
+        $loglevel = Zend_Log::INFO;
+        if (null !== $user) {
+            $accessLog->account_id = $user->getId();
+            $warnLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::WARN_LOGIN_FAILURES, 4);
+            if ($user->loginFailures >= $warnLoginFailures) {
+                $loglevel = Zend_Log::WARN;
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel($loglevel)) Tinebase_Core::getLogger()->log(
+            __METHOD__ . '::' . __LINE__
+                . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!"
+                . ($user ? ' Auth failure count: ' . $user->loginFailures : ''),
+            $loglevel);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
+
         Tinebase_AccessLog::getInstance()->create($accessLog);
-        
-        sleep(mt_rand(2,5));
     }
     
      /**
@@ -449,7 +478,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         if ($this->_writeAccessLog) {
             if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
-                Tinebase_AccessLog::getInstance()->setLogout(Tinebase_Core::get(Tinebase_Core::SESSIONID));
+                Tinebase_AccessLog::getInstance()->setLogout();
             }
         }
     }
@@ -561,35 +590,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
     
     /**
-     * return accessLog instance 
-     * 
-     * @param string $loginName
-     * @param Zend_Auth_Result $authResult
-     * @param Zend_Controller_Request_Abstract $request
-     * @param string $clientIdString
-     * @return Tinebase_Model_AccessLog
-     */
-    protected function _getAccessLogEntry($loginName, Zend_Auth_Result $authResult, \Zend\Http\Request $request, $clientIdString)
-    {
-        if ($header = $request->getHeaders('USER-AGENT')) {
-            $userAgent = substr($header->getFieldValue(), 0, 255);
-        } else {
-            $userAgent = 'unknown';
-        }
-        
-        $accessLog = new Tinebase_Model_AccessLog(array(
-            'ip'         => $request->getServer('REMOTE_ADDR'),
-            'li'         => Tinebase_DateTime::now(),
-            'result'     => $authResult->getCode(),
-            'clienttype' => $clientIdString,
-            'login_name' => $loginName ? $loginName : $authResult->getIdentity(),
-            'user_agent' => $userAgent
-        ), true);
-        
-        return $accessLog;
-    }
-    
-    /**
      * handle events for Tinebase
      * 
      * @param Tinebase_Event_Abstract $_eventObject
@@ -612,29 +612,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 }
                 break;
         }
-    }
-    
-    /**
-     * set session for current request
-     * 
-     * @param Tinebase_Model_AccessLog $accessLog
-     */
-    protected function _setSessionId(Tinebase_Model_AccessLog &$accessLog)
-    {
-        if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
-            try {
-                $accessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
-                // $accessLog->sessionid is set now
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // ignore
-            }
-        }
-        
-        if (!$accessLog->sessionid) {
-            $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
-        }
-        
-        Tinebase_Core::set(Tinebase_Core::SESSIONID, $accessLog->sessionid);
     }
     
     /**
@@ -688,6 +665,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
         
         if ($accessLog->result !== Tinebase_Auth::SUCCESS || !$user) {
+
+            if ($user) {
+                $accessLog->account_id = $user->getId();
+            }
             $this->_loginFailed($authResult, $accessLog);
             
             return false;

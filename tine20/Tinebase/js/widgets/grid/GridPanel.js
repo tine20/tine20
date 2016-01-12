@@ -232,6 +232,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     copyEditAction: false,
 
     /**
+     * disable delete confirmation by default
+     *
+     * @type Boolean
+     * @property disableDeleteConfirmation
+     */
+    disableDeleteConfirmation: false,
+
+    /**
      * @type Ext.Toolbar
      * @property actionToolbar
      */
@@ -698,6 +706,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initStore: function() {
+        if (this.store) {
+            // store is already initialized
+            return;
+        }
+
         if (this.recordProxy) {
             var storeClass = this.groupField ? Ext.data.GroupingStore : Ext.data.Store;
             this.store = new storeClass({
@@ -844,7 +857,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     
                     this.editDialog.record.set(this.editDialogRecordProperty, items);
                     this.editDialog.fireEvent('updateDependent');
-                } else {
+                } else if (this.recordProxy) {
                     this.recordProxy.saveRecord(record, {
                         scope: this,
                         success: function(updatedRecord) {
@@ -875,7 +888,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
         options.params = options.params || {};
-        // allways start with an empty filter set!
+        // always start with an empty filter set!
         // this is important for paging and sort header!
         options.params.filter = [];
 
@@ -1677,7 +1690,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var selectedRows = this.grid.getSelectionModel().getSelections();
                 record = selectedRows[0];
             } else {
-                record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+                record = this.createNewRecord();
             }
         }
 
@@ -1704,6 +1717,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 totalRecordCount: totalcount
             });
         }
+
+        Tine.log.debug('GridPanel::onEditInNewWindow');
+        Tine.log.debug(record);
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
@@ -1723,6 +1739,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
+     * create new record
+     *
+     * @returns {Tine.Tinebase.data.Record}
+     */
+    createNewRecord: function() {
+        return new this.recordClass(this.recordClass.getDefaultData(), 0);
+    },
+
+    /**
      * is called after multiple records have been updated
      */
     onUpdateMultipleRecords: function() {
@@ -1733,31 +1758,49 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * on update after edit
      * 
      * @param {String|Tine.Tinebase.data.Record} record
+     * @param {String} mode
      */
     onUpdateRecord: function(record, mode) {
-        
         if (! this.rendered) {
             return;
         }
+
+        if (! mode && ! this.recordProxy) {
+            // proxy-less = local if not defined otherwise
+            mode = 'local';
+        }
         
-        if (Ext.isString(record) && this.recordProxy) {
-            record = this.recordProxy.recordReader({responseText: record});
+        if (Ext.isString(record)) {
+            record = this.recordProxy
+                ? this.recordProxy.recordReader({responseText: record})
+                : Tine.Tinebase.data.Record.setFromJson(record, this.recordClass);
+
         } else if (record && Ext.isFunction(record.copy)) {
             record = record.copy();
         }
 
+        if (record.id === 0) {
+            // we need to set a id != 0 to make identity handling in stores possible
+            // TODO add config for this behaviour?
+            record.id = 'new-' + Ext.id();
+            record.setId(record.id);
+        }
+
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
-        
+
         if (record && Ext.isFunction(record.copy)) {
             var idx = this.getStore().indexOfId(record.id);
-            if (idx >=0) {
-                var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                this.getStore().removeAt(idx);
-                this.getStore().insert(idx, [record]);
-
-                if (isSelected) {
-                    this.getGrid().getSelectionModel().selectRow(idx, true);
+            if (idx >= 0) {
+                // only run do this in local mode as we reload the store in remote mode
+                // NOTE: this would otherwise delete the record if a record proxy exists!
+                if (mode == 'local') {
+                    var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                    this.getStore().removeAt(idx);
+                    this.getStore().insert(idx, [record]);
+                    if (isSelected) {
+                        this.getGrid().getSelectionModel().selectRow(idx, true);
+                    }
                 }
             } else {
                 this.getStore().add([record]);
@@ -1829,9 +1872,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         var records = sm.getSelections();
 
-        if (Tine[this.app.appName].registry.get('preferences')
+        if (this.disableDeleteConfirmation || (Tine[this.app.appName].registry.get('preferences')
             && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') !== null
-            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0
+            && Tine[this.app.appName].registry.get('preferences').get('confirmDelete') == 0)
         ) {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);

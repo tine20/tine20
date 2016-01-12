@@ -40,8 +40,22 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
              */
             'select'
         );
+
+        this.on('afterrender', this.onAfterRender, this, {buffer: 500});
     },
-    
+
+    onAfterRender: function() {
+        // if used as gridEditor
+        if (this.inEditor) {
+            var editorWrapEl = this.el.up('.x-grid-editor', 5);
+            if (editorWrapEl) {
+                this.editor = Ext.getCmp(editorWrapEl.id);
+                this.editor.allowBlur = true;
+                this.onTriggerClick();
+            }
+        }
+    },
+
     // private
     onDestroy : function(){
         Ext.destroy(this.menu);
@@ -57,40 +71,63 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
             this.menu = new Ext.menu.ColorMenu({
                 hideOnClick: false
             });
+
         }
         this.onFocus();
+        this.menuEvents('on');
 
         this.menu.show(this.el, "tl-bl?");
-
-        this.menuEvents('on');
     },
 
     setValue : function(color){
         color = color || '#FFFFFF';
-        Ext.ux.form.ColorField.superclass.setValue.call(this, color);
-        
+
         this.el.setStyle('background', color);
         this.el.setStyle('color', color);
+
+        return Ext.ux.form.ColorField.superclass.setValue.call(this, color);
     },
     
     //private
     menuEvents: function(method){
         this.menu[method]('select', this.onSelect, this);
         this.menu[method]('hide', this.onMenuHide, this);
-        this.menu[method]('show', this.onFocus, this);
+        this.menu[method]('show', this.onMenuShow, this);
     },
     
     //private
     onSelect: function(m, d){
         this.setValue('#'+d);
         this.fireEvent('select', this, '#'+d);
+
+        if (this.inEditor && this.editor) {
+            this.editor.completeEdit();
+        }
+
         this.menu.hide();
     },
-    
+
+    //private
+    onMenuShow: function() {
+        // manage z-index by windowMgr
+        this.menu.setActive = Ext.emptyFn;
+        this.menu.setZIndex = Ext.emptyFn;
+        Ext.WindowMgr.register(this.menu);
+        Ext.WindowMgr.bringToFront(this.menu);
+
+        this.onFocus();
+    },
+
     //private
     onMenuHide: function(){
         this.focus(false, 60);
         this.menuEvents('un');
+
+        Ext.WindowMgr.unregister(this.menu);
+
+        if (this.inEditor && this.editor) {
+            this.editor.cancelEdit();
+        }
     }
 });
 

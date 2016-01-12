@@ -1,0 +1,45 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetCompose object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#Compose_template { display:none; }
+
+.Compose_panel { }
+@media (max-width:1024px) { .Compose_panel { padding:5px; height:100%; overflow-y:scroll; } } /* mobile */
+@media (min-width:1025px) { .Compose_panel { padding:9px; } } /* desktop */
+
+.Compose_attacher { display:none; }
+.Compose_subject,.Compose_body,.Compose_attacher { width:100%; margin-bottom:6px; padding:4px; }
+
+.Compose_fieldLabel,.Compose_fieldAddr { display:inline-block; vertical-align:middle; }
+.Compose_fieldLabel { color:#777; font-size:90%; font-style:italic; }
+.Compose_fieldAddr { min-height:26px; border:1px solid #BBB; cursor:text; margin-bottom:6px; padding:1px; }
+.Compose_toggleFields > input { margin:0 6px 5px 0; }
+@media (max-width:1024px) { /* mobile */
+    .Compose_toggleFields { margin-left:40px; }
+    .Compose_fieldLabel { width:40px; }
+    .Compose_fieldAddr,.Compose_subject { width:calc(100% - 40px); }
+    .Compose_fieldLabelSubject { display:none; }
+    .Compose_subject { width:100%; }
+}
+@media (min-width:1025px) { /* desktop */
+    .Compose_toggleFields { margin-left:54px; }
+    .Compose_fieldLabel { width:54px; }
+    .Compose_fieldAddr { max-height:100px; overflow-y:auto; }
+    .Compose_fieldAddr,.Compose_subject { width:calc(100% - 54px); }
+}
+.Compose_ccBlock,.Compose_bccBlock { display:none; } /* initially hidden, buttons shown */
+
+.Compose_body { margin-bottom:8px; border:1px solid #BBB; overflow:auto; }
+@media (max-width:1024px) { .Compose_body { height:300px; } } /* mobile */
+
+.Compose_send,.Compose_draft,.Compose_attachNew { margin-bottom:10px; }
+.Compose_attacher { max-height:120px; overflow-x:hidden; overflow-y:auto; }
+.Compose_important { margin-bottom:12px; }
+.Compose_panel label { white-space:nowrap; }

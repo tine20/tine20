@@ -60,6 +60,7 @@ class Tinebase_Core
     const SESSION = 'session';
     
     /**
+     * session id constant
      */
     const SESSIONID = 'sessionId';
 
@@ -464,6 +465,32 @@ class Tinebase_Core
         }
         self::set('jsonKey', $coreSession->jsonKey);
     }
+
+    /**
+     * return current session id
+     *
+     * @param boolean $generateUid
+     * @return mixed|null
+     */
+    public static function getSessionId($generateUid = true)
+    {
+        if (! self::isRegistered(self::SESSIONID)) {
+            $sessionId = null;
+            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
+            if (Tinebase_Session::isStarted() && ! Tinebase_Session::isSetupSession()) {
+                $sessionId = Tinebase_Session::getId();
+            }
+            if (empty($sessionId)) {
+                $sessionId = 'NOSESSION';
+                if ($generateUid) {
+                    $sessionId .= Tinebase_Record_Abstract::generateUID(31);
+                }
+            }
+            self::set(self::SESSIONID, $sessionId);
+        }
+
+        return self::get(self::SESSIONID);
+    }
     
     /**
      * initializes the build constants like buildtype, package information, ...
@@ -656,17 +683,20 @@ class Tinebase_Core
                 self::set(self::SHAREDCACHE, false);
             }
         }
-        
+
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
+            $logging = ($config->caching->logging) ? $config->caching->logging : false;
+            $logger = self::getLogger();
+
             $frontendOptions = array(
                 'lifetime'                  => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization'   => true, // turn that off for more speed
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
                 'write_control'             => false, // don't read cache entry after it got written
-                'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                'logger'                    => self::getLogger(),
+                'logging'                   => $logging,
+                'logger'                    => $logger,
             );
             
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
@@ -678,8 +708,8 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                            'logger'                 => self::getLogger(),
+                            'logging'                => $logging,
+                            'logger'                 => $logger,
                         );
                         break;
                         
@@ -733,7 +763,7 @@ class Tinebase_Core
             }
             
         } else {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -746,17 +776,17 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
             
-        } catch (Zend_Cache_Exception $e) {
-            $enabled = FALSE;
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+
+            $enabled = false;
             if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
-                // create cache directory and re-try
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
                 if (mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
             }
-            
-            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Cache error: ' . $e->getMessage());
-            
+
             self::setupCache($enabled);
             return;
         }
@@ -1658,5 +1688,27 @@ class Tinebase_Core
         }
 
         return $isFileSystemAvailable;
+    }
+
+    /**
+     * returns true if installation is in maintenance mode
+     *
+     * @return bool
+     */
+    public static function inMaintenanceMode()
+    {
+        $config = self::getConfig();
+        return !! $config->maintenanceMode;
+    }
+
+    /**
+     * returns Tine 2.0 user agent string
+     *
+     * @param string $submodule
+     * @return string
+     */
+    public static function getTineUserAgent($submodule = '')
+    {
+        return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
     }
 }

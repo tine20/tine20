@@ -26,6 +26,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_applicationName = 'Tinebase';
 
     /**
+     * needed by demo data fns
+     *
+     * @var array
+     */
+    protected $_applicationsToWorkOn = array();
+
+    /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      */
     public function cleanModlog()
@@ -384,6 +391,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * 
      * @param $_opts
      * @return boolean success
+     *
+     * TODO move purge logic to applications, purge Tinebase tables at the end
      */
     public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
     {
@@ -412,28 +421,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $where = array();
         }
         $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
-        
-        foreach ($args['tables'] as $table) {
-            try {
-                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nCould not get schema (" . $zdse->getMessage() ."). Skipping table $table";
-                continue;
-            }
-            if (! (isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema)) || ! (isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
-                continue;
-            }
-            
-            $deleteCount = 0;
-            try {
-                $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
-            }
-            if ($deleteCount > 0) {
-                echo "\nCleared table $table (deleted $deleteCount records).";
-            }
-        }
+
+        $orderedTables = $this->_orderTables($args['tables']);
+        $this->_purgeTables($orderedTables, $where);
 
         if ($doEverything) {
             echo "\nCleaning relations...";
@@ -464,7 +454,74 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return $result;
     }
-    
+
+    /**
+     * order tables for purging deleted records in a defined order
+     *
+     * @param array $tables
+     * @return array
+     *
+     * TODO could be improved by using usort
+     */
+    protected function _orderTables($tables)
+    {
+        // tags should be deleted first
+        // containers should be deleted last
+
+        $orderedTables = array();
+        $lastTables = array();
+        foreach($tables as $table) {
+            switch ($table) {
+                case 'container':
+                    $lastTables[] = $table;
+                    break;
+                case 'tags':
+                    array_unshift($orderedTables, $table);
+                    break;
+                default:
+                    $orderedTables[] = $table;
+            }
+        }
+        $orderedTables = array_merge($orderedTables, $lastTables);
+
+        return $orderedTables;
+    }
+
+    /**
+     * purge tables
+     *
+     * @param $orderedTables
+     * @param $where
+     */
+    protected function _purgeTables($orderedTables, $where)
+    {
+        foreach ($orderedTables as $table) {
+            try {
+                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                echo "\nCould not get schema (" . $zdse->getMessage() . "). Skipping table $table";
+                continue;
+            }
+            if (!(isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema)) || !(isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
+                continue;
+            }
+
+            $deleteCount = 0;
+            try {
+                $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
+            }
+            if ($deleteCount > 0) {
+                echo "\nCleared table $table (deleted $deleteCount records).";
+            }
+            // TODO this should only be echoed with --verbose or written to the logs
+            else {
+                echo "\nNothing to purge from $table";
+            }
+        }
+    }
+
     /**
      * add new customfield config
      * 
@@ -964,8 +1021,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         // get all persistent filters without grants
         // TODO this could be enhanced by allowing to set default grants for other filters, too
-
-        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter());
+        Tinebase_PersistentFilter::getInstance()->doContainerACLChecks(false);
+        $filters = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter(array(),'', array('ignoreAcl' => true)));
         $filtersWithoutGrants = 0;
 
         foreach ($filters as $filter) {

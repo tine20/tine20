@@ -95,7 +95,7 @@ msgstr "Faks"
 msgid "Type"
 msgstr ""
 
-#: js/AccountGridPanel.js:98 js/AccountEditDialog.js:262 Config.php:68
+#: js/AccountGridPanel.js:98 js/AccountEditDialog.js:262 Config.php:82
 msgid "Account Type"
 msgstr "Typ konta"
 
@@ -604,61 +604,61 @@ msgstr "Status połączenia"
 msgid "Possible connection states"
 msgstr "Możliwe statusy połączenia"
 
-#: Config.php:58
+#: Config.php:57 Setup/Update/Release1.php:50
+msgid "accepted"
+msgstr "zaakceptowano"
+
+#: Config.php:58 Setup/Update/Release1.php:51
+msgid "outgoing"
+msgstr "wychodzące"
+
+#: Config.php:59 Setup/Update/Release1.php:52
+msgid "missed"
+msgstr "brakujące"
+
+#: Config.php:65
 msgid "Connection TOS"
 msgstr "TOS połączenia"
 
-#: Config.php:60
+#: Config.php:67
 msgid "Possible connection type of services"
 msgstr "Możliwy typ połączenia serwisów"
 
-#: Config.php:70
+#: Config.php:74 Setup/Update/Release1.php:66
+msgid "Telephone Call"
+msgstr "Rozmowa telefoniczna"
+
+#: Config.php:75 Setup/Update/Release1.php:67
+msgid "Facsimile"
+msgstr "Podobizna"
+
+#: Config.php:84
 msgid ""
 "Private Accounts are editable only for the creating user. Shared accounts "
 "are editable for users with \"edit shared\" rights"
 msgstr "Prywatne konta może edytować wyłącznie użytkownik konta. Współdzielone konta mogą edytować użytkownicy z uprawnieniami \"współdzielona edycja\""
 
-#: Config.php:78
-msgid "Sipgate Account Type"
-msgstr "Typ konta Sipgate"
-
-#: Config.php:80
-msgid "The type of your account as defined in the contract"
-msgstr "Typ konta zapisanego w umowie"
-
-#: Setup/Initialize.php:34 Setup/Update/Release1.php:50
-msgid "accepted"
-msgstr "zaakceptowano"
-
-#: Setup/Initialize.php:35 Setup/Update/Release1.php:51
-msgid "outgoing"
-msgstr "wychodzące"
-
-#: Setup/Initialize.php:36 Setup/Update/Release1.php:52
-msgid "missed"
-msgstr "brakujące"
-
-#: Setup/Initialize.php:50 Setup/Update/Release1.php:66
-msgid "Telephone Call"
-msgstr "Rozmowa telefoniczna"
-
-#: Setup/Initialize.php:51 Setup/Update/Release1.php:67
-msgid "Facsimile"
-msgstr "Podobizna"
-
-#: Setup/Initialize.php:65 Setup/Update/Release1.php:91
+#: Config.php:91 Setup/Update/Release1.php:91
 msgid "basic/plus"
 msgstr "podstawowe/plus"
 
-#: Setup/Initialize.php:66 Setup/Update/Release1.php:92
+#: Config.php:92 Setup/Update/Release1.php:92
 msgid "team"
 msgstr "zespół"
 
-#: Setup/Initialize.php:80 Setup/Update/Release1.php:106
+#: Config.php:98
+msgid "Sipgate Account Type"
+msgstr "Typ konta Sipgate"
+
+#: Config.php:100
+msgid "The type of your account as defined in the contract"
+msgstr "Typ konta zapisanego w umowie"
+
+#: Config.php:107 Setup/Update/Release1.php:106
 msgid "private"
 msgstr "prywatne"
 
-#: Setup/Initialize.php:81 Setup/Update/Release1.php:107
+#: Config.php:108 Setup/Update/Release1.php:107
 msgid "shared"
 msgstr "współdzielone"
 

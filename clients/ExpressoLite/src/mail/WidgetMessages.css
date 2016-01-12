@@ -1,0 +1,54 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetMessages object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2013-2014 Serpro (http://www.serpro.gov.br)
+ */
+
+#Messages_template { display:none; }
+
+#subjectTop   { font-size:115%; color:#777; padding:12px 8px; }
+#closeButton  { padding:4px 0; }
+
+.Messages_attachs,.Messages_content,.Messages_showQuote,.Messages_quote { display:none; }
+.Messages_unit { border-top:1px solid #CCC; margin:0 4px; }
+.Messages_top1 { cursor:pointer; }
+.Messages_top2 { cursor:pointer; padding:0 3px 6px 3px; overflow:auto; width:100%; display:none; }
+.Messages_people   { }
+.Messages_dropdown { float:right; margin-right:8px; }
+.Messages_unread   { }
+.Messages_read     { background:#F4F4F4; }
+.Messages_mugshot > img { width:20px; padding:0; }
+.Messages_icons      { text-align:right; padding-right:3px; }
+.Messages_when       { text-align:right; }
+.Messages_fromName   { display:inline-block; font-weight:bold; }
+.Messages_fromMail   { display:inline-block; padding-right:6px; color:#555; }
+.Messages_addr       { font-size:90%; padding-top:2px; color:#606060; }
+.Messages_addrDomain { color:#999; }
+.Messages_attachs    { color:#555; padding:2px; margin:4px; font-size:90%; border-left:6px solid #DDD; }
+.Messages_attachs a  { color:#1B41D8; }
+.Messages_attachs a:active { color:#E00; }
+.Messages_content    { padding:5px; margin:4px; border:1px solid #D0D0D0; }
+.Messages_showQuote  { margin:8px 0 0 50%; }
+.Messages_quote      { padding:5px; margin:4px; border:1px solid #BFD2E1; background:rgba(220,220,220,.075); }
+@media (max-width:1024px) { /* mobile */
+    .Messages_unit    { margin-top:2px; font-size:95%; }
+    .Messages_mugshot { display:inline-block; position:absolute; }
+    .Messages_from    { display:inline-block; margin-left:22px; padding:4px; }
+    .Messages_icons   { display:inline-block; float:right; }
+    .Messages_when    { display:inline-block; margin-left:22px; font-size:80%; }
+    .Messages_addr    { margin-top:2px; border-top:1px solid #DDD; }
+}
+@media (min-width:1025px) { /* desktop */
+    .Messages_top1  { }
+    .Messages_top1 > div { display:inline-block; vertical-align:middle; }
+    .Messages_from  {  }
+    .Messages_icons {  }
+    .Messages_when  { float:right; padding:4px; }
+}
+.Messages_loading { text-align:center; margin:10px; color:#888; font-style:italic; }
+
+pre.message-viewer { white-space:pre-wrap; }

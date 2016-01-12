@@ -45,7 +45,14 @@ class Sales_JsonTest extends TestCase
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
-    
+
+    protected function tearDown()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
+
+        parent::tearDown();
+    }
+
     /**
      * try to add a contract
      * 
@@ -256,6 +263,21 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(1, $search['totalcount']);
     }
 
+    public function testSearchEmptyDateTimeFilter()
+    {
+        // create
+        $contract = $this->_getContract();
+        $contractData = $this->_instance->saveContract($contract->toArray());
+
+        $filter = $this->_getFilter();
+        $filter[] = array('field' => 'end_date', 'operator' => 'equals', 'value' => '');
+
+        $result = $this->_instance->searchContracts($filter, $this->_getPaging());
+
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals('', $result['filter'][1]['value']);
+    }
+
     /**
      * try to get a customer
      */
@@ -440,12 +462,13 @@ class Sales_JsonTest extends TestCase
     /**
      * get filter
      *
+     * @param string $search
      * @return array
      */
-    protected function _getFilter()
+    protected function _getFilter($search ='blabla' )
     {
         return array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => 'blabla'),
+            array('field' => 'query', 'operator' => 'contains', 'value' => $search),
         );
     }
 
@@ -708,5 +731,19 @@ class Sales_JsonTest extends TestCase
         
         $this->assertEquals(NULL, $contract['products'][0]['quantity']);
         $this->assertEquals(36, $contract['products'][0]['interval']);
+    }
+
+    /**
+     * @see 0011494: activate advanced search for contracts (customers, ...)
+     */
+    public function testAdvancedContractsSearch()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
+        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
+        list($contact1) = $this->_createContacts(1);
+        $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
+        $result = $this->_instance->searchContracts($this->_getFilter('wolf'), array());
+
+        $this->assertEquals(1, $result['totalcount'], 'should find contract of customer person Peter Wolf');
     }
 }

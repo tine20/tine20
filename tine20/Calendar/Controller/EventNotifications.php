@@ -256,6 +256,14 @@
             $organizer = $_event->resolveOrganizer();
             $organizerAccountId = $organizer->account_id;
             $attendee = $_attender->getResolvedUser();
+
+            if ($attendee instanceof Addressbook_Model_List) {
+                // don't send notification to lists as we already resolved the list members for individual mails
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Skip notification for list " . $attendee->name);
+                return;
+            }
+
             $attendeeAccountId = $_attender->getUserAccountId();
             
             $prefUserId = $attendeeAccountId ? $attendeeAccountId :
@@ -275,20 +283,22 @@
             $translate = Tinebase_Translation::getTranslation('Calendar', $locale);
             $sendLevel        = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::NOTIFICATION_LEVEL, $prefUserId);
             $sendOnOwnActions = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS, $prefUserId);
-            
+            $sendAlarms = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_ALARM_NOTIFICATIONS, $prefUserId);
+
             // external (non account) notification
             if (! $attendeeAccountId) {
                 // external organizer needs status updates
                 $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
+                $sendAlarms = false;
             }
 
             $recipients = array($attendee);
 
-            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel);
+            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel, $_updates);
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
-            // NOTE prefUser is organzier for external notifications
+            // NOTE prefUser is organizer for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
                 || ($sendLevel < $_notificationLevel && (
                         ((is_object($organizer) && method_exists($attendee, 'getPreferedEmailAddress') && $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress())
@@ -298,6 +308,12 @@
                 ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Preferred notification level not reached -> skipping notification for {$_attender->getEmail()}");
+                return;
+            }
+
+            if ($_action == 'alarm' && ! $sendAlarms) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " User does not want alarm mails -> skipping notification for {$_attender->getEmail()}");
                 return;
             }
 
@@ -346,7 +362,7 @@
       * @param $sendLevel
       * @return bool
       */
-     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel)
+     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
      {
          // Add additional recipients for resources
          if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE
@@ -355,23 +371,44 @@
              return true;
          }
          
+         // Set custom startus booked
+         if ($action == 'created') {
+             $action = 'booked';
+         }
+         
          $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
          if ($resource->suppress_notification) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                      . " Do not send Notifications for this resource: ". $resource->name);
+             // $recipients will still contain the resource itself
              return true;
          }
-
-         if ($action == 'created') {
-             $action = 'booked';
+         
+         // The resource has no account there for the organizer preference (sendLevel) is used. We don't want that
+         $sendLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+         //handle attendee status change
+         if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate'])) {
+             foreach ($_updates['attendee']['toUpdate'] as $updatedAttendee) {
+                 if ($updatedAttendee->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE && $resource->getId() == $updatedAttendee->user_id) {
+                     $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                 }
+             }
          }
-
-         // Consider all notification level (Resource Users have a send level of 30)
-         $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+         
+         /*
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Attender: ". $attender);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Action: ". $action);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Notification Level: ". $_notificationLevel);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Send Level: ". $sendLevel);
+         */
+         
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
-                 Calendar_Controller_Resource::getInstance()->get($attender->user_id),
-                 $_notificationLevel
+                 Calendar_Controller_Resource::getInstance()->get($attender->user_id)
              )
          );
      }
@@ -475,7 +512,9 @@
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
         }
-        
+        if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            $messageSubject = '[' . $translate->_('Resource Management') . '] ' . $messageSubject;
+        }
         return $messageSubject;
     }
     
