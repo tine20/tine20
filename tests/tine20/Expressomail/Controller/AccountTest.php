@@ -172,23 +172,23 @@ class Expressomail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testChangePasswordAndUpdateCredentialCache()
     {
-        $testConfig = Zend_Registry::get('testConfig');
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
         
         $account = clone($this->_account);
         unset($account->id);
         $account->type = Expressomail_Model_Account::TYPE_USER;
-        $account->user = $testConfig->username;
+        $account->user = $testCredentials['username'];
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
             $account->user .= '@' . $imapConfig['domain'];
         }
-        $account->password = $testConfig->password;
+        $account->password = $testCredentials['password'];
         $account = $this->_controller->create($account);
         
         $testPw = 'testpwd';
         
         // change pw & update credential cache
-        $this->_setCredentials($testConfig->username, $testPw);
+        $this->_setCredentials($testCredentials['password'], $testPw);
         $account = $this->_controller->get($account->getId());
 
         // try to connect to imap
