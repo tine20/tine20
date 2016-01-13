@@ -145,7 +145,7 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onReverseInvoice: function(action, event) {
         var rows = this.getGrid().getSelectionModel().getSelections();
         if (rows.length == 1) {
-            var record = this.recordProxy.recordReader({responseText: rows[0]});
+            var record = rows[0];
             
             var cfg = {
                 record: record,
