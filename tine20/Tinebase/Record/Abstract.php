@@ -1240,4 +1240,32 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         return $keys;
     }
+
+    public function runConvertToRecord()
+    {
+        $conf = self::getConfiguration();
+        if (null === $conf)
+            return;
+        foreach ($conf->getConverters() as $key => $converters) {
+            if (isset($this->_properties[$key])) {
+                foreach ($converters as $converter) {
+                    $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
+                }
+            }
+        }
+    }
+
+    public function runConvertToData()
+    {
+        $conf = self::getConfiguration();
+        if (null === $conf)
+            return;
+        foreach ($conf->getConverters() as $key => $converters) {
+            if (isset($this->_properties[$key])) {
+                foreach ($converters as $converter) {
+                    $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
+                }
+            }
+        }
+    }
 }
