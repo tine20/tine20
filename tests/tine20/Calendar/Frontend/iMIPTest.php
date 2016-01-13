@@ -165,8 +165,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     protected function _getiMIP($_method, $_addEventToiMIP = FALSE, $_testEmptyMethod = FALSE)
     {
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
+        $email = $this->_getEmailAddress();
         
         $event = $this->_getEvent();
         $event = Calendar_Controller_Event::getInstance()->create($event);
@@ -506,8 +505,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     public function testInvitationExternalReply()
     {
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
+        $email = $email = $this->_getEmailAddress();
         
         $ics = file_get_contents(dirname(__FILE__) . '/files/invitation_reply_external_accepted.ics' );
         $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);

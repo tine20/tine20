@@ -281,6 +281,7 @@ class Tinebase_ModelConfiguration {
      * integer     seconds       Seconds             integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     minutes       Minutes             integer  integer                       int               Tinebase_Model_Filter_Int
      * float                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
      * user                      User                string                                 Tinebase_Model_Filter_User
@@ -524,6 +525,13 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_filters;
+
+    /**
+     * converters (will be set by field configuration)
+     *
+     * @var array
+     */
+    protected $_converters = array();
     
     /**
      * Holds the default Data for the model (autoset from field config)
@@ -564,7 +572,7 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig'
     );
 
     /**
@@ -595,6 +603,12 @@ class Tinebase_ModelConfiguration {
      */
     protected $_filterConfiguration = NULL;
 
+    /**
+     *
+     * @var array
+     */
+    protected $_attributeConfig = NULL;
+
     /*
      * mappings
      */
@@ -609,6 +623,7 @@ class Tinebase_ModelConfiguration {
         'time'     => 'Tinebase_Model_Filter_Date',
         'string'   => 'Tinebase_Model_Filter_Text',
         'text'     => 'Tinebase_Model_Filter_Text',
+        'json'     => 'Tinebase_Model_Filter_Text',
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
         'float'    => 'Tinebase_Model_Filter_Float',
@@ -640,6 +655,15 @@ class Tinebase_ModelConfiguration {
     protected $_validatorMapping = array(
         'record'    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'relation'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+    );
+
+    /**
+     * This maps field types to their default converter
+     *
+     * @var array
+     */
+    protected $_converterDefaultMapping = array(
+        'json'      => array('Tinebase_Model_Converter_Json'),
     );
 
     /**
@@ -848,6 +872,15 @@ class Tinebase_ModelConfiguration {
             // add field to modlog omit, if configured and modlog is used
             if ($this->_modlogActive && (isset($fieldDef['modlogOmit']) || array_key_exists('modlogOmit', $fieldDef))) {
                 $this->_modlogOmitFields[] = $fieldKey;
+            }
+
+            // set converters
+            if (isset($fieldDef['converters']) && is_array($fieldDef['converters'])) {
+                if (count($fieldDef['converters'])) {
+                    $this->_converters[$fieldKey] = $fieldDef['converters'];
+                }
+            } elseif(isset($this->_converterDefaultMapping[$fieldDef['type']])) {
+                $this->_converters[$fieldKey] = $this->_converterDefaultMapping[$fieldDef['type']];
             }
             
             $this->_populateProperties($fieldKey, $fieldDef);
@@ -1090,6 +1123,14 @@ class Tinebase_ModelConfiguration {
     public function getFields()
     {
         return $this->_fields;
+    }
+
+    /**
+     * returns the converters of the model
+     */
+    public function getConverters()
+    {
+        return $this->_converters;
     }
 
     /**
