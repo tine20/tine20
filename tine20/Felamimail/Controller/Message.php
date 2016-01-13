@@ -169,7 +169,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if ($_setSeen) {
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
-        
+
         $this->prepareAndProcessParts($message);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
@@ -296,7 +296,36 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        
+
+        // PGP MIME Version 1
+        if ($_message->structure['contentType'] == 'multipart/encrypted'
+         && isset($_message->structure['parts'][1]['subType'])
+         && $_message->structure['parts'][1]['subType'] == 'pgp-encrypted') {
+            $identification = $this->getMessagePart($_message, 1)->getContent();
+
+            if (strpos($identification, 'Version: 1') !== FALSE) {
+                $amored = $this->getMessagePart($_message, 2)->getContent();
+
+                $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
+                    'id'             => $_message->getId() . '_2',
+                    'contentType'    => 'application/pgp-encrypted',
+                    'preparedData'   => $amored,
+                )));
+            }
+        }
+
+        // PGP INLINE
+        if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') !== false) {
+            preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/', $_message->body, $matches);
+            $amored = Felamimail_Message::convertFromHTMLToText($matches[0]);
+
+            $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
+                'id'             => $_message->getId(),
+                'contentType'    => 'application/pgp-encrypted',
+                'preparedData'   => $amored,
+            )));
+        }
+
         $_message->preparedParts = $preparedParts;
     }
     
@@ -315,7 +344,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
     {
         $part = $this->getMessagePart($_message, $_partId);
-        
+
         $userAgent = (isset($_message->headers['user-agent'])) ? $_message->headers['user-agent'] : NULL;
         $parameters = (isset($_partData['parameters'])) ? $_partData['parameters'] : array();
         $decodedContent = $part->getDecodedContent();

@@ -72,6 +72,10 @@
           "path": "js/"
         },
         {
+          "text": "PGPDetailsPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/"
         },

@@ -455,7 +455,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $bodyParts = array();
         $structure = ($_structure !== NULL) ? $_structure : $this->structure;
-        
+
         if (! is_array($structure)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Structure should be an array (' . $structure . ')');
             return $bodyParts;

@@ -1137,7 +1137,79 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $fullMessage = $this->_json->getMessage($message['id']);
         $this->assertTrue(empty($fullMessage->preparedParts));
     }
-    
+
+    /**
+     * testSendMailveopeAPIMessage
+     *
+     * - envolpe amored message into PGP MIME structure
+     */
+    public function testSendMailveopeAPIMessage()
+    {
+        $subject = 'testSendMailveopeAPIMessage';
+        $messageData = $this->_getMessageData('', $subject);
+        $messageData['body'] = '-----BEGIN PGP MESSAGE-----
+Version: Mailvelope v1.3.3
+Comment: https://www.mailvelope.com
+
+wcFMA/0LJF28pDbGAQ//YgtsmEZN+pgIJiBDb7iYwPEOchDRIEjGOx543KF6
+5YigW9p39pfcJgvGfT8x9cUIrYGxyw5idPSOEftYXyjjGaOYGaKpRSR4hI83
+OcJSlEHKq72xhg04mNpCjjJ8dLBstPcQ7tDtsA8Nfb4PwkUYB9IhIBnARg+n
+NvrN8mSA2UnY9ElFCvf30sar8EuM5swAjbk64C8TIypMy/Bg4T93zRdxwik6
+7BCcbOpm/2PTsiVYBOTcU4+XdG5eyTENXH58M6UTxTD4/g7Qi5PjN+PxyXqf
+v2Y1k9F49Y1egf2QJ2r4PX0EWS8SaynSHiIoBsp1xb07nLwZwCdMPG1QNPpF
+l2FqlS4dEuQTdkv0deMvd7gtiNynRTAVcJc1ZC6RuWJ+EH2jA49XWkn14eRC
+e5jMtPPudkhubnN9Je5lwatGKbJGyuXh+IaM0E0WQMZ3dm8+ST1l4WpVuGbw
+KozLUiTRJP9UoxWOcwpQOnzcSlc4rHmWdtF0y3usM9u9GPREqpNUWkEyEEuv
+XdZE7rKKj22dJHLCXxAQEh3m29Y2WVaq50YbtEZ+SwwbrHhxP4+FJEru+byh
+fiZ47sVW2KvYGJPvbFoSZHiSvMecxDg8BVwe+naZXww/Rwa/TlaX4bYyzpUG
+KeJUAzWEfFpJ0+yAvMGQEC7psIJ9NCx149C4ujiQmajSwhUB3XANcmCGB0wm
+JjcqC4AHvc7/t4MrQZm0F/W+nrMmNqbZk+gylVrPs9rFEqu7wbjwTmsFA3sS
+LkenvQIxBali6uzCR+nd09REqcYirG9cLti39DW048lhhG/ml+gAxxNEaSpG
+NbIoV/3w8n7sAIM1fjuHne8bX0gWG43TTjU8MwSMryG7tCOG5u+Cebh6TAoY
+NzbX2dpDhOYq5zXdCgKU4P3eh0csSs4UrqFT3TdAxIGrQJ7KrXvB6+N8gRZo
+FcUaR+zrRPJjPUZfi46ecP5SG/tM5ea1hqvkwEnEpqjLmCUxqB+rfxx46USX
+hMZd2ukUv6kEKv3EUDsRYu1SlDLhDLhWNx8RJae5XkMR+eUUMyNNVwbeMQbB
+VAcMcaPITTk84sH7XElr9eF6sCUN4V79OSBRPGY/aNGrcwcoDSD4Hwu+Lw9w
+Q+1n8EQ66gAkbJzCNd5GaYMZR9echkBaD/rdWDS3ktcrMehra+h44MTQONV9
+8W+RI+IT5jaIXtB4jePmGjsJjbC9aEhTRBRkUnPA7phgknc52dD74AY/6lzK
+yd4uZ6S3vhurJW0Vt4iBWJzhFNiSODh5PzteeNzCVAkGMsQvy1IHk0d3uzcE
+0tEuSh8fZOFGB4fvMx9Mk8oAU92wfj4J7AVpSo5oRdxMqAXfaYKqfr2Gn++q
+E5LClhVIBbFXclCoe0RYNz4wtxjeeYbP40Bq5g0JvPutD/dBMp8hz8Qt+yyG
+d8X4/KmQIXyFZ8aP17GMckE5GVVvY9y89eWnWuTUJdwM540hB/EJNeHHTE5y
+N2FSLGcmNkvE+3H7BczQ2ZI1SZDhof+umbUst0qoQW+hHmY3CSma48yGAVox
+52u2t7hosHCfpf631Ve/6fcICo8vJ2Qfufu2BGIMlSfx4WzUuaMQBynuxFSa
+IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
+=BaAn
+-----END PGP MESSAGE-----';
+
+        $this->_foldersToClear[] = 'INBOX';
+        $this->_json->saveMessage($messageData);
+
+        $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
+        $fullMessage = $this->_json->getMessage($message['id']);
+
+        $this->assertContains('multipart/encrypted', $fullMessage['headers']['content-type']);
+        $this->assertContains('protocol="application/pgp-encrypted"', $fullMessage['headers']['content-type']);
+        $this->assertCount(2, $fullMessage['structure']['parts']);
+        $this->assertEquals('application/pgp-encrypted', $fullMessage['structure']['parts'][1]['contentType']);
+        $this->assertEquals('application/octet-stream', $fullMessage['structure']['parts'][2]['contentType']);
+
+        return $fullMessage;
+    }
+
+    /**
+     * testMessagePGPMime
+     *
+     * - prepare amored part of PGP MIME structure
+     */
+    public function testMessagePGPMime()
+    {
+        $fullMessage = $this->testSendMailveopeAPIMessage();
+
+        $this->assertEquals('application/pgp-encrypted', $fullMessage['preparedParts'][0]['contentType']);
+        $this->assertContains('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
+    }
+
     /*********************** sieve tests ****************************/
     
     /**

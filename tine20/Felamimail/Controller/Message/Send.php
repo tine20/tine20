@@ -394,6 +394,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _setMailBody(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
+        if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') === 0) {
+            $_mail->setBodyPGPMime($_message->body);
+            return;
+        }
+
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_mail->getBodyHtml(TRUE));

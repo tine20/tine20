@@ -213,7 +213,27 @@ class Tinebase_Mail extends Zend_Mail
 
         return $this;
     }
-    
+
+    public function setBodyPGPMime($amored)
+    {
+        $this->_type = 'multipart/encrypted; protocol="application/pgp-encrypted"';
+
+        // PGP/MIME Versions Identification
+        $pgpIdent = new Zend_Mime_Part('Version: 1');
+        $pgpIdent->encoding = '7bit';
+        $pgpIdent->type = 'application/pgp-encrypted';
+        $pgpIdent->description = 'PGP/MIME Versions Identification';
+        $this->_bodyText = $pgpIdent;
+
+        // OpenPGP encrypted message
+        $pgpMessage = new Zend_Mime_Part($amored);
+        $pgpMessage->encoding = '7bit';
+        $pgpMessage->disposition = 'inline; filename=encrypted.asc';
+        $pgpMessage->type = 'application/octet-stream; name=encrypted.asc';
+        $pgpMessage->description = 'OpenPGP encrypted message';
+        $this->_bodyHtml = $pgpMessage;
+    }
+
     /**
      * set headers
      * 
@@ -293,7 +313,7 @@ class Tinebase_Mail extends Zend_Mail
         
         return $this;
     }
-    
+
     /**
      * Sets Sender-header and sender of the message
      *
