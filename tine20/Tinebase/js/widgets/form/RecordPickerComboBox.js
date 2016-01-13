@@ -145,8 +145,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             });
         }
     },
-    
-    
+
+    // TODO re-init this.list if it goes away?
+    // NOTE: we sometimes lose this.list (how?). prevent error by checking existence.
+    doResize: function(w){
+        if(!Ext.isDefined(this.listWidth) && this.list){
+            var lw = Math.max(w, this.minListWidth);
+            this.list.setWidth(lw);
+            this.innerList.setWidth(lw - this.list.getFrameWidth('lr'));
+        }
+    },
+
     /**
      * prepare paging and sort
      * 
