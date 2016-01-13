@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  * 
  * @todo        split this
@@ -19,7 +19,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Auth_Abstract
  */
-class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
+class Tinebase_AuthTest extends TestCase
 {
     /**
      * @var array test objects
@@ -37,18 +37,6 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     protected $_originalBackendType = null;
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_AuthTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -56,7 +44,8 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
+
         $this->_originalBackendConfiguration = Tinebase_Auth::getBackendConfiguration();
         $this->_originalBackendType = Tinebase_Auth::getConfiguredBackend();
     }
@@ -76,7 +65,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         Tinebase_Auth::saveBackendConfiguration();
         Tinebase_Auth::getInstance()->setBackend();
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
     }
 
     /**
@@ -182,19 +171,17 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(Tinebase_Auth::IMAP, Tinebase_Auth::getConfiguredBackend());
 
-        $testConfig = Zend_Registry::get('testConfig');
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
         
         // valid authentication
-        $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, $testConfig->password);
+        $authResult = Tinebase_Auth::getInstance()->authenticate($testCredentials['username'], $testCredentials['password']);
         $this->assertTrue($authResult->isValid());
         
         // invalid authentication
-        $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, 'some pw');
+        $authResult = Tinebase_Auth::getInstance()->authenticate($testCredentials['username'], 'some pw');
         $this->assertFalse($authResult->isValid());
         $this->assertEquals(Tinebase_Auth::FAILURE_CREDENTIAL_INVALID, $authResult->getCode());
-        if ($testConfig->email) {
-            $this->assertEquals(array('Invalid credentials for user ' . $testConfig->email, ''), $authResult->getMessages());
-        }
+        $this->assertEquals(array('Invalid credentials for user ' . $this->_getEmailAddress(), ''), $authResult->getMessages());
     }
     
     /**

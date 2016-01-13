@@ -883,7 +883,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     },
                     failure: me.onRequestFailed,
                     timeout: 300000 // 5 minutes
-                }, this.getAdditionalSaveParams(me));
+                }, me.getAdditionalSaveParams(me));
             } else {
                 me.onRecordLoad();
                 var ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]),

@@ -465,8 +465,7 @@ Zeile 3</AirSyncBase:Data>
         $xml = file_get_contents(__DIR__ . '/files/' . $filename);
 
         // replace email to make current user organizer and attendee
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
+        $email = $this->_getEmailAddress();
 
         $xml = str_replace(array(
             'lars@kneschke.de',

@@ -17,7 +17,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
+class Felamimail_Controller_MessageTest extends TestCase
 {
     /**
      * @var Felamimail_Controller_Message
@@ -1157,8 +1157,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $badLineEndCount);
         
         $badLineEndCount = preg_match_all("/\\x0d/", $smtpLog, $matches);
-        $this->assertTrue(preg_match_all("/\\x0d/", $smtpLog, $matches) > 70, 'unix line ends are missing');
-        
+        $this->assertTrue($badLineEndCount > 70, 'unix line ends are missing');
     }
     
    /**
@@ -1190,7 +1189,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $event = $preparediMIPPart->getEvent();
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals($expectedEventSummary, $event->summary);
-        $this->assertEquals($expectedAttendeeCount, count($event->attendee));
+        $this->assertEquals($expectedAttendeeCount, count($event->attendee), 'attendee count mismatch: ' . print_r($event->attendee->toArray(), true));
     }
 
    /**
@@ -1239,9 +1238,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTestEmailAddress()
     {
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
-        return $email;
+        return $this->_getEmailAddress();
     }
     
     /**

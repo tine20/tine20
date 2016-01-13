@@ -62,4 +62,63 @@ class Sales_Controller_ProductAggregate extends Tinebase_Controller_Record_Abstr
         
         return self::$_instance;
     }
+
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        $acs = $this->_getProductAccountables($_record);
+        if ($acs !== null && $acs->count())
+        {
+            foreach($acs as $ac) {
+                $ac->_inspectBeforeCreateProductAggregate($_record);
+            }
+        }
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        if ($_record->product_id != $_oldRecord->product_id) {
+            // uhh, now what?!?
+        }
+        $acs = $this->_getProductAccountables($_record);
+        if ($acs !== null && $acs->count())
+        {
+            foreach($acs as $ac) {
+                $ac->_inspectBeforeUpdateProductAggregate($_record, $_oldRecord);
+            }
+        }
+    }
+
+    /**
+     * @param Sales_Model_ProductAggregate $productAggregate
+     * @return null|Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getProductAccountables(Sales_Model_ProductAggregate $productAggregate) {
+        $json_attributes = $productAggregate->json_attributes;
+        if (!is_array($json_attributes) || !isset($json_attributes['assignedAccountables']))
+            return null;
+
+        $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+        if ($product->accountable == '')
+            return null;
+
+
+        $app = Tinebase_Core::getApplicationInstance($product->accountable, '');
+        return $app->getMultiple($json_attributes['assignedAccountables']);
+    }
 }
