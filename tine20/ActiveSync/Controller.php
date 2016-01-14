@@ -55,20 +55,27 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
     /**
      * reset sync for user
      *
-     * @param string $username
+     * @param mixed $user
      * @param array $classesToReset
      * @return boolean
      */
-    public function resetSyncForUser($username, $classesToReset)
+    public function resetSyncForUser($user, $classesToReset)
     {
+
+        if (! $user instanceof Tinebase_Model_User) {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $user);
+            }
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Resetting sync for user ' . $username . ' collections: ' . print_r($classesToReset, true));
-        
-        $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $username);
-        
+            . ' Resetting sync for user ' . $user->accountDisplayName . ' collections: ' . print_r($classesToReset, true));
+
         self::initSyncrotonRegistry();
         
-        $devices = $this->_getDevicesForUser($user);
+        $devices = $this->_getDevicesForUser($user->getId());
         
         foreach ($devices as $device) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -92,13 +99,13 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
     /**
      * fetch devices for user
      * 
-     * @param Tinebase_Model_FullUser $user
+     * @param string $userId
      */
-    protected function _getDevicesForUser($user)
+    protected function _getDevicesForUser($userId)
     {
         $deviceBackend = new ActiveSync_Backend_Device();
         $deviceFilter = new ActiveSync_Model_DeviceFilter(array(
-            array('field' => 'owner_id', 'operator' => 'equals', 'value' => $user->getId())
+            array('field' => 'owner_id', 'operator' => 'equals', 'value' => $userId)
         ));
         $devices = $deviceBackend->search($deviceFilter);
         return $devices;

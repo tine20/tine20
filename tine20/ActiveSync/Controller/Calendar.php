@@ -196,7 +196,14 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
         'samsunggtn7000', // Samsung Galaxy Note 
         'samsunggti9300', // Samsung Galaxy S-3
     );
-    
+
+    /**
+     * folder id which is currenttly synced
+     *
+     * @var string
+     */
+    protected $_syncFolderId = null;
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Controller_Abstract::__construct()
@@ -277,7 +284,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                     
                 case 'attendee':
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                         
                         continue;
                     }
@@ -545,7 +552,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                 } else {
                     if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
@@ -565,7 +572,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
                 case 'attendee':
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                             continue;
                     }
@@ -1028,6 +1035,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract impl
             $containerId = Tinebase_Core::getPreference('ActiveSync')->{$this->_defaultFolder};
             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
         }
+
+        $this->_syncFolderId = $container->getId();
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container, false);
     }
 }

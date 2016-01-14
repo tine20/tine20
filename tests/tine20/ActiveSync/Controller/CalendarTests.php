@@ -1261,7 +1261,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
 
         // assert attendee are preserved
         $updatedEvent = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
-        $this->assertNotEmpty($updatedEvent->attendee, 'attendee must be preserved during update');
+        $this->assertNotEmpty($updatedEvent, 'attendee must be preserved during update');
     }
 
     /**
@@ -1269,9 +1269,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
      *
      * for iOS devices we need to suppress attendee during sync for non default folder (see foldertype in foldersync)
      * iOS can only have one default folder
-     *
-     * NOTE: our implementation in not correct at the moment as we only append attendee if the event is in the default folder.
-     *       correct implementation would be to append attendee when default folder is synced
      */
     public function testUpdateEntriesIPhoneNonDefaultFolder()
     {
@@ -1304,7 +1301,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $this->assertEquals($syncrotonEventtoUpdate->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
 
         // assert attendee are preserved
-        $updatedEvent = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
-        $this->assertNotEmpty($updatedEvent->attendee, 'attendee must be preserved during update');
+        $this->assertNotEmpty($updatedSyncrotonEvent->attendees, 'attendee must be preserved during update');
     }
 }
