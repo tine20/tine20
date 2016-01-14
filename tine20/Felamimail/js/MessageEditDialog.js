@@ -823,6 +823,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
     },
 
+    /**
+     * get quoted mail header
+     *
+     * @param format
+     * @returns {String}
+     */
     getQuotedMailHeader: function(format) {
         if(this.replyTo) {
             var date = (this.replyTo.get('sent'))
@@ -839,6 +845,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     format == 'text/plain' ? '\n' : '</b><br />')
                 + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
                 + (format == 'text/plain' ? '' : '<br /><br />');
+        } else {
+            return '';
         }
     },
 
