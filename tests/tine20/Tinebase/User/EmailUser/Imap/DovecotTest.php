@@ -103,7 +103,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         
         $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
         $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
-        
+
         $this->assertEquals(array(
             'emailUserId'     => $this->_objects['user']->getId(),
             'emailUsername'   => $this->_objects['user']->imapUser->emailUsername,
@@ -112,10 +112,9 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailGID'        => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'  => null,
             'emailMailSize'   => 0,
-            #'emailSieveQuota' => 0,
             'emailSieveSize'  => null,
-            'emailPort'       => 143,
-            'emailSecure'     => 'tls',
+            'emailPort'       => $this->_config['port'],
+            'emailSecure'     => $this->_config['ssl'],
             'emailHost'       => 'localhost'
         ), $this->_objects['user']->imapUser->toArray());
         
