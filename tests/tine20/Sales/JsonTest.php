@@ -745,5 +745,18 @@ class Sales_JsonTest extends TestCase
         $result = $this->_instance->searchContracts($this->_getFilter('wolf'), array());
 
         $this->assertEquals(1, $result['totalcount'], 'should find contract of customer person Peter Wolf');
+
+        // test notcontains
+        $contract2 = Sales_Controller_Contract::getInstance()->create($this->_getContract('test2'));
+        $result = $this->_instance->searchContracts($this->_getFilter(), array());
+        $this->assertEquals(2, $result['totalcount'], 'should find 2 contracts');
+
+        // search with notcontains
+        $search = $this->_instance->searchContracts(array(
+            array('field' => 'query', 'operator' => 'notcontains', 'value' => 'wolf'),
+        ), $this->_getPaging());
+
+        $this->assertEquals($contract2->title, $search['results'][0]['title']);
+        $this->assertEquals(1, $search['totalcount']);
     }
 }

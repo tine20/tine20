@@ -19,7 +19,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Tinebase_Group
  */
-class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
+class Felamimail_Frontend_JsonTest extends TestCase
 {
     /**
      * @var Felamimail_Frontend_Json
@@ -125,18 +125,6 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected $_frontend = NULL;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -518,6 +506,8 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Clever')
         ));
         $contactIds = Addressbook_Controller_Contact::getInstance()->search($contactFilter, NULL, FALSE, TRUE);
+        $this->assertTrue(count($contactIds) > 0, 'sclever not found in addressbook');
+
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
         $originalEmail =  $contact->email;
         $contact->email = $this->_account->email;
@@ -974,7 +964,7 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $forwardMessageData = array(
             'account_id'    => $this->_account->getId(),
             'subject'       => $fwdSubject,
-            'to'            => array('unittest@' . $this->_mailDomain),
+            'to'            => array($this->_getEmailAddress()),
             'body'          => "aaaaaä <br>",
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'original_id'   => $message['id'],
