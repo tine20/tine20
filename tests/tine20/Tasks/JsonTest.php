@@ -160,6 +160,7 @@ class Tasks_JsonTest extends TestCase
         
         // set wrong smtp user/password
         $wrongCredentialsConfig = $this->_smtpConfig;
+        $wrongCredentialsConfig['username'] = $this->_getEmailAddress();
         $wrongCredentialsConfig['password'] = 'wrongpw';
         Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $wrongCredentialsConfig);
         $this->_smtpConfigChanged = TRUE;
@@ -167,7 +168,8 @@ class Tasks_JsonTest extends TestCase
         $this->_sendAlarm();
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         
-        $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status'],
+            'should not send message with wrong pw - maybe smtp server is not configured correctly?');
         $this->assertContains('535 5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'], 
             'got: ' . $loadedTaskData['alarms'][0]['sent_message']);
     }

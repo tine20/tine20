@@ -156,7 +156,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
             if ($relationFilter) {
                 $relationSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
                 $relationFilter->appendFilterSql($relationSelect, $_backend);
-                $relationSelect->appendWhere(Zend_Db_Select::SQL_OR);
+                $relationSelect->appendWhere($not?Zend_Db_Select::SQL_AND:Zend_Db_Select::SQL_OR);
             }
         }
     }

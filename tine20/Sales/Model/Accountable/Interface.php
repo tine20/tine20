@@ -73,6 +73,17 @@ interface Sales_Model_Accountable_Interface
      * @return boolean
      */
     public function isBillable(Tinebase_DateTime $date, Sales_Model_Contract $contract = NULL);
+
+    /**
+     * returns true if this invoice needs to be recreated because data changed
+     *
+     * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
+     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Contract $contract
+     * @return boolean
+     */
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract);
     
     /**
      * returns the name of the billable controller
