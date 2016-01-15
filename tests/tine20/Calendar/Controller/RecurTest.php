@@ -466,7 +466,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'dtstart'       => '2011-04-21 10:00:00',
             'dtend'         => '2011-04-21 12:00:00',
             'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-27 21:59:59',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-28 21:59:59',
             'container_id'  => $this->_testCalendar->getId()
         ));
         
@@ -479,6 +479,9 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $recurSet->summary = 'Limo bei Schweinske';
         $recurSet[5]->dtstart->addHour(2);
         $recurSet[5]->dtend->addHour(2);
+
+        $recurSet[6]->dtstart->subDay(6);
+        $recurSet[6]->dtend->subDay(6);
         
         $this->_controller->createRecurException($recurSet[1], TRUE);  // (23) delete instance
         
@@ -493,6 +496,10 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[5]);
         $recurSet[5]->last_modified_time = $updatedBaseEvent->last_modified_time;
         $this->_controller->createRecurException($recurSet[5], FALSE); // (27) move instance
+
+        $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[6]);
+        $recurSet[6]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $this->_controller->createRecurException($recurSet[6], FALSE); // (28) move instance to 22
         
         // now test update allfollowing
         $recurSet[3]->summary = 'Spezi bei Schwinske';
@@ -501,7 +508,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $updatedBaseEvent = $this->_controller->getRecurBaseEvent($recurSet[3]);
         $recurSet[3]->last_modified_time = $updatedBaseEvent->last_modified_time;
-        $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE);
+        $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE); // split at 25
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
@@ -509,18 +516,18 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ))));
         
         Calendar_Model_Rrule::mergeRecurrenceSet($events, $from, $until);
-        $this->assertEquals(6, count($events), 'there should be exactly 6 events');
+        $this->assertEquals(7, count($events), 'there should be exactly 6 events');
         
         $oldSeries = $events->filter('uid', $persistentEvent->uid);
         $newSeries = $events->filter('uid', $newBaseEvent->uid);
         $this->assertEquals(3, count($oldSeries), 'there should be exactly 3 events with old uid');
-        $this->assertEquals(3, count($newSeries), 'there should be exactly 3 events with new uid');
+        $this->assertEquals(4, count($newSeries), 'there should be exactly 3 events with new uid');
         
         $this->assertEquals(1, count($oldSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one old base event');
         $this->assertEquals(1, count($newSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one new base event');
         
         $this->assertEquals(1, count($oldSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one old persitent event exception');
-        $this->assertEquals(1, count($newSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one new persitent event exception');
+        $this->assertEquals(2, count($newSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one new persitent event exception');
         
         $this->assertEquals(1, count($oldSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one old fake event');
         $this->assertEquals(1, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event'); //26 (reset)
@@ -535,6 +542,7 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $this->assertFalse(!!array_diff($newBaseEvent->exdate, array(
             new Tinebase_DateTime('2011-04-27 14:00:00'),
+            new Tinebase_DateTime('2011-04-28 14:00:00'),
         )), 'exdate of new series');
         
         $this->assertFalse(!!array_diff($oldSeries->dtstart, array(
@@ -542,11 +550,12 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             new Tinebase_DateTime('2011-04-22 10:00:00'),
             new Tinebase_DateTime('2011-04-24 10:00:00'),
         )), 'dtstart of old series');
-        
+
         $this->assertFalse(!!array_diff($newSeries->dtstart, array(
             new Tinebase_DateTime('2011-04-25 14:00:00'),
             new Tinebase_DateTime('2011-04-26 14:00:00'),
             new Tinebase_DateTime('2011-04-27 12:00:00'),
+            new Tinebase_DateTime('2011-04-22 10:00:00'),
         )), 'dtstart of new series');
     }
 

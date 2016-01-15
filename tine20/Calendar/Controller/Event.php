@@ -1038,7 +1038,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $pastPersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             $futurePersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             foreach ($persistentExceptionEvents as $persistentExceptionEvent) {
-                $persistentExceptionEvent->dtstart->isLater($_event->dtstart) ? $futurePersistentExceptionEvents->addRecord($persistentExceptionEvent) : $pastPersistentExceptionEvents->addRecord($persistentExceptionEvent);
+                $persistentExceptionEvent->getOriginalDtStart()->isLater($_event->dtstart) ?
+                    $futurePersistentExceptionEvents->addRecord($persistentExceptionEvent) :
+                    $pastPersistentExceptionEvents->addRecord($persistentExceptionEvent);
             }
             
             // update baseEvent
