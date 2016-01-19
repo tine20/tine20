@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -31,18 +31,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     
     protected $_user = NULL;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_CustomFieldTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -284,17 +272,16 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
         
         $json = new Addressbook_Frontend_Json();
-        $result = $json->searchContacts(array(
-            array("condition" => "OR",
-                "filters" => array(array("condition" => "AND",
-                    "filters" => array(
-                        array("field" => "customfield", "operator" => "within", "value" => array("cfId" => $cf->getId(), "value" => "weekThis")),
-                        )
-                ))
-            )
-        ), array());
+        $filter = array("condition" => "OR",
+            "filters" => array(array("condition" => "AND",
+                "filters" => array(
+                    array("field" => "customfield", "operator" => "within", "value" => array("cfId" => $cf->getId(), "value" => "weekThis")),
+                )
+            ))
+        );
+        $result = $json->searchContacts(array($filter), array());
         
-        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(1, $result['totalcount'], 'searched contact not found. filter: ' . print_r($filter, true));
         $this->assertEquals('Rita', $result['results'][0]['n_given']);
         
         $json->deleteContacts(array($contact->getId()));
