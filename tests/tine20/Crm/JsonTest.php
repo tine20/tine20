@@ -502,6 +502,27 @@ class Crm_JsonTest extends Crm_AbstractTest
     }
     
     /**
+     * try to add multiple related tasks with one save
+     *
+     */
+    public function testLeadWithMultipleTasks()
+    {
+        $lead = $this->_getLead();
+        $task1 = $this->_getTask();
+        $task2 = $this->_getTask();
+        
+        
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+                array('type'  => 'TASK', 'related_record' => $task1->toArray()),
+                array('type'  => 'TASK', 'related_record' => $task2->toArray())
+        );
+        
+        $savedLead = $this->_getUit()->saveLead($leadData);
+        $this->assertEquals(2, count($savedLead['relations']), 'Relations missing');
+    }
+    
+    /**
      * get contact
      * 
      * @return Addressbook_Model_Contact

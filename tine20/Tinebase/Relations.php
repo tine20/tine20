@@ -104,7 +104,15 @@ class Tinebase_Relations
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
-        
+
+        // prevent two empty related_id s of the same relation type
+        $emptyRelatedId = array();
+        foreach ($toAdd as $idx) {
+            if (empty($relations[$idx]->related_id)) {
+                $relations[$idx]->related_id = Tinebase_Record_Abstract::generateUID();
+                $emptyRelatedId[$idx] = true;
+            }
+        }
         $this->_validateConstraintsConfig($_model, $relations, $toDel, $toUpdate);
         
         // break relations
@@ -114,7 +122,8 @@ class Tinebase_Relations
         
         // add new relations
         foreach ($toAdd as $idx) {
-            if(empty($relations[$idx]->related_id)) {
+            if(isset($emptyRelatedId[$idx])) {
+                $relations[$idx]->related_id = null;
                 $this->_setAppRecord($relations[$idx], $_doCreateUpdateCheck);
             }
             $this->_addRelation($relations[$idx]);
