@@ -435,6 +435,10 @@ class Setup_Frontend_Cli
             $options['deleteUsers'] = true;
         }
 
+        if ($_opts->syncaccountstatus) {
+            $options['syncAccountStatus'] = true;
+        }
+
         Tinebase_User::syncUsers($options);
     }
     

@@ -61,6 +61,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_FileSystem_RecordAttachmentsTest');
         $suite->addTestSuite('Tinebase_FileSystemTest');
         $suite->addTestSuite('Tinebase_ControllerTest');
+        $suite->addTestSuite('Tinebase_MailTest');
         $suite->addTestSuite('Tinebase_NotificationTest');
         $suite->addTestSuite('Tinebase_Model_Filter_TextTest');
         $suite->addTestSuite('Tinebase_TagsTest');

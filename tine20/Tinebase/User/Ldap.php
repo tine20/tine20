@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -405,8 +405,27 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         
         $metaData = $this->_getMetaData($_accountId);
+        $ldapData = $this->_getUserStatusValues($_status);
 
-        if ($_status == 'disabled') {
+        foreach ($this->_ldapPlugins as $plugin) {
+            $plugin->inspectStatus($_status, $ldapData);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            " {$metaData['dn']}  ldapData: " . print_r($ldapData, true));
+
+        $this->_ldap->update($metaData['dn'], $ldapData);
+    }
+
+    /**
+     * get LDAP user status values depending on tine20 status
+     *
+     * @param $status one of expired, enabled, disabled
+     * @return array
+     */
+    protected function _getUserStatusValues($status)
+    {
+        if ($status == Tinebase_Model_User::ACCOUNT_STATUS_DISABLED) {
             $ldapData = array(
                 'shadowMax'      => 1,
                 'shadowInactive' => 1
@@ -416,15 +435,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 'shadowMax'      => 999999,
                 'shadowInactive' => array()
             );
+            if ($status == Tinebase_Model_User::ACCOUNT_STATUS_ENABLED) {
+                // remove expiry setting
+                $ldapData['shadowexpire'] = array();
+            }
         }
 
-        foreach ($this->_ldapPlugins as $plugin) {
-            $plugin->inspectStatus($_status, $ldapData);
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
-
-        $this->_ldap->update($metaData['dn'], $ldapData);
+        return $ldapData;
     }
 
     /**
@@ -454,7 +471,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectExpiryDate($_expiryDate, $ldapData);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " {$metaData['dn']}  $ldapData: " . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " {$metaData['dn']}  ldapData: " . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
@@ -481,11 +499,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
         
-        // no need to update this attribute, it's not allowed to change and even might not be updateable
+        // no need to update this attribute, it's not allowed to change and even might not be update-able
         unset($ldapData[$this->_userUUIDAttribute]);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' DN: ' . $ldapEntry['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' LDAP data: ' . print_r($ldapData, true));
         
         $this->_ldap->update($ldapEntry['dn'], $ldapData);
         
@@ -496,7 +516,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (isset($ldapData[key($rdn)]) && $rdn[key($rdn)] != $ldapData[key($rdn)]) {
             $groupsBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
             
-            // get the current groupmemberships
+            // get the current group memberships
             $memberships = $groupsBackend->getGroupMembershipsFromSyncBackend($_account);
             
             // remove the user from current groups, because the dn/uid has changed
@@ -627,7 +647,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $attributes[] = 'objectclass';
         $attributes[] = 'uidnumber';
         $attributes[] = 'useraccountcontrol';
-        
+        // needed for account status handling (shadowmax: days after which password must be changed)
+        $attributes[] = 'shadowmax';
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filter ' . $filter);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
@@ -823,26 +845,21 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                             // account does not expire
                             $accountArray[$keyMapping] = null;
                         } else {
-                            $accountArray[$keyMapping] = new Tinebase_DateTime(($shadowExpire < 100000) ? $shadowExpire * 86400 : $shadowExpire);
+                            $accountArray[$keyMapping] = new Tinebase_DateTime(($shadowExpire < 100000)
+                                ? $shadowExpire * 86400
+                                : $shadowExpire);
                         }
                         break;
-                        
+
+                    // shadowInactive
                     case 'accountStatus':
-                        if ((isset($_userData['shadowmax']) || array_key_exists('shadowmax', $_userData)) && (isset($_userData['shadowinactive']) || array_key_exists('shadowinactive', $_userData))) {
-                            $lastChange = (isset($_userData['shadowlastchange']) || array_key_exists('shadowlastchange', $_userData)) ? $_userData['shadowlastchange'] : 0;
-                            if (($lastChange + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Tinebase_DateTime::now()->getTimestamp()) {
-                                $accountArray[$keyMapping] = 'enabled';
-                            } else {
-                                $accountArray[$keyMapping] = 'disabled';
-                            }
-                        } else {
-                            $accountArray[$keyMapping] = 'enabled';
+                        if ($this->_isUserDisabled($_userData)) {
+                            $accountArray[$keyMapping] = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
                         }
                         break;
 
                     case 'accountId':
                         $accountArray[$keyMapping] = $this->_decodeAccountId($value[0]);
-                        
                         break;
                         
                     default:
@@ -856,13 +873,58 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $accountArray['accountLastName'] = $accountArray['accountFullName'];
         }
         if ($errors) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user ' . print_r($_userData, 1));
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user '
+                . print_r($_userData, 1));
             $accountObject = null;
         } else {
             $accountObject = new $_accountClass($accountArray, TRUE);
         }
 
+        // normalize account status
+        if ($accountObject instanceof Tinebase_Model_FullUser) {
+            if (!isset($accountObject->accountStatus)) {
+                $accountObject->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+            }
+            if ($accountObject->accountExpires &&
+                $accountObject->accountExpires->isEarlier(Tinebase_DateTime::now()) &&
+                $accountObject->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED
+            ) {
+                $accountObject->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED;
+            }
+        }
+
         return $accountObject;
+    }
+
+    /**
+     * check if user is disabled in LDAP
+     *
+     * @param array $ldapData
+     * @return bool
+     *
+     * TODO fix/improve LDAP disabled user detection
+     */
+    protected function _isUserDisabled($ldapData)
+    {
+        if ((isset($ldapData['shadowmax']) || array_key_exists('shadowmax', $ldapData))) {
+            // FIXME this is very strange code!
+//            $lastChange = (isset($ldapData['shadowlastchange']) || array_key_exists('shadowlastchange', $ldapData)) ? $ldapData['shadowlastchange'][0] : 0;
+//            if (($lastChange + $ldapData['shadowmax'][0] + $ldapData['shadowinactive'][0]) * 86400
+//                <= Tinebase_DateTime::now()->getTimestamp()
+//            ) {
+//                return false;
+//            } else {
+//                return true;
+//            }
+
+            // this is what tine sets for disabled accounts
+            if (isset($ldapData['shadowmax'][0]) && $ldapData['shadowmax'][0] == 1 &&
+                isset($ldapData['shadowinactive'][0]) && $ldapData['shadowinactive'][0] == 1
+            ) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -876,7 +938,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
     
     /**
-     * helper function to be overwriten in subclasses
+     * helper function to be overwritten in subclasses
      * 
      * @param  string  $accountId
      * @return string
@@ -887,7 +949,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
 
     /**
-     * helper function to be overwriten in subclasses
+     * helper function to be overwritten in subclasses
      * 
      * @param  string  $accountId
      * @return string
@@ -967,13 +1029,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         $ldapData[$ldapProperty] = $value instanceof DateTime ? floor($value->getTimestamp() / 86400) : array();
                         break;
                     case 'accountStatus':
-                        if ($value == 'enabled') {
-                            $ldapData['shadowMax']      = 999999;
-                            $ldapData['shadowInactive'] = array();
-                        } else {
-                            $ldapData['shadowMax']      = 1;
-                            $ldapData['shadowInactive'] = 1;
-                        }
+                        $ldapData = array_merge($ldapData, $this->_getUserStatusValues($value));
                         break;
                     case 'accountPrimaryGroup':
                         $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
