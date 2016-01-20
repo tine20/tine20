@@ -527,7 +527,7 @@ class Tinebase_Mail extends Zend_Mail
                 $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
             } else {
                 $address = preg_replace('/[,;]*/i', '', $address);
-                $addresses[$key] = array('name' => null, 'address' => $address);
+                $addresses[$key] = array('name' => null, 'address' => trim($address));
             }
         }
 

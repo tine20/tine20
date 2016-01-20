@@ -196,7 +196,14 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
         'samsunggtn7000', // Samsung Galaxy Note 
         'samsunggti9300', // Samsung Galaxy S-3
     );
-    
+
+    /**
+     * folder id which is currenttly synced
+     *
+     * @var string
+     */
+    protected $_syncFolderId = null;
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::__construct()
@@ -277,7 +284,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 case 'attendee':
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                         
                         continue;
                     }
@@ -549,7 +556,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 } else {
                     if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
@@ -569,7 +576,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 case 'attendee':
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $entry->container_id       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                             continue;
                     }
@@ -618,20 +625,17 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 case 'exdate':
                     // handle exceptions from recurrence
                     $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                    $oldExdates = $event->exdate instanceof Tinebase_Record_RecordSet ? $event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
                     
                     foreach ($data->$syncrotonProperty as $exception) {
+                        $eventException = $this->_getRecurException($oldExdates, $exception);
+
                         if ($exception->deleted == 0) {
-                            $eventException = $this->toTineModel($exception);
+                            $eventException = $this->toTineModel($exception, $eventException);
                             $eventException->last_modified_time = new Tinebase_DateTime($this->_syncTimeStamp);
-                            $eventException->recurid            = new Tinebase_DateTime($exception->exceptionStartTime);
-                            $eventException->is_deleted         = false;
-                        } else {
-                            $eventException = new Calendar_Model_Event(array(
-                                'recurid'    => new Tinebase_DateTime($exception->exceptionStartTime),
-                                'is_deleted' => true
-                            ));
                         }
-                        
+
+                        $eventException->is_deleted = (bool) $exception->deleted;
                         $eventException->seq = $entry['seq'];
                         $exdates->addRecord($eventException);
                     }
@@ -817,7 +821,30 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             $event->alarms->removeRecord($currentAlarm);
         }
     }
-    
+
+    /**
+     * find a matching exdate or return an empty event record
+     *
+     * @param  Tinebase_Record_RecordSet        $oldExdates
+     * @param  Syncroton_Model_EventException   $sevent
+     * @return Calendar_Model_Event
+     */
+    protected function _getRecurException(Tinebase_Record_RecordSet $oldExdates, Syncroton_Model_EventException $sevent)
+    {
+        // we need to use the user timezone here if this is a DATE (like this: RECURRENCE-ID;VALUE=DATE:20140429)
+        $originalDtStart = new Tinebase_DateTime($sevent->exceptionStartTime);
+
+        foreach ($oldExdates as $id => $oldExdate) {
+            if ($originalDtStart == $oldExdate->getOriginalDtStart()) {
+                return $oldExdate;
+            }
+        }
+
+        return new Calendar_Model_Event(array(
+            'recurid'    => $originalDtStart,
+        ));
+    }
+
     /**
      * append organizer name and email
      *
@@ -1017,6 +1044,8 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             $containerId = Tinebase_Core::getPreference('ActiveSync')->{$this->_defaultFolder};
             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
         }
+
+        $this->_syncFolderId = $container->getId();
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container, false);
     }
 }
