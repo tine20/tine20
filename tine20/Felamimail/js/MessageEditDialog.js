@@ -830,7 +830,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @returns {String}
      */
     getQuotedMailHeader: function(format) {
-        if(this.replyTo) {
+        if (this.replyTo) {
             var date = (this.replyTo.get('sent'))
                 ? this.replyTo.get('sent')
                 : ((this.replyTo.get('received')) ? this.replyTo.get('received') : new Date());
@@ -845,9 +845,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     format == 'text/plain' ? '\n' : '</b><br />')
                 + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
                 + (format == 'text/plain' ? '' : '<br /><br />');
-        } else {
-            return '';
         }
+
+        return '';
     },
 
     /**
@@ -1079,8 +1079,21 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.mailvelopeWrap = new Ext.Container({
-            id: 'mailvelopeWrap',
-            flex: 1  // Take up all *remaining* vertical space
+            flex: 1,  // Take up all *remaining* vertical space
+
+            // mailvelope can't cope with container size changes yet
+            // but it notices window size changes
+            listeners: {
+                scope: this,
+                resize: function(ct, aw, ah) {
+                    if (! ct.mailvelopeFixResizeCycle && this.button_toggleEncrypt.pressed) {
+                        ct.mailvelopeFixResizeCycle = true;
+                        window.resizeBy(1,1);
+                    } else {
+                        ct.mailvelopeFixResizeCycle = false;
+                    }
+                }
+            }
         });
 
         return {

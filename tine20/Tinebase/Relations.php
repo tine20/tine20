@@ -104,7 +104,15 @@ class Tinebase_Relations
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
-        
+
+        // prevent two empty related_id s of the same relation type
+        $emptyRelatedId = array();
+        foreach ($toAdd as $idx) {
+            if (empty($relations[$idx]->related_id)) {
+                $relations[$idx]->related_id = Tinebase_Record_Abstract::generateUID();
+                $emptyRelatedId[$idx] = true;
+            }
+        }
         $this->_validateConstraintsConfig($_model, $relations, $toDel, $toUpdate);
         
         // break relations
@@ -114,7 +122,8 @@ class Tinebase_Relations
         
         // add new relations
         foreach ($toAdd as $idx) {
-            if(empty($relations[$idx]->related_id)) {
+            if(isset($emptyRelatedId[$idx])) {
+                $relations[$idx]->related_id = null;
                 $this->_setAppRecord($relations[$idx], $_doCreateUpdateCheck);
             }
             $this->_addRelation($relations[$idx]);
@@ -145,8 +154,15 @@ class Tinebase_Relations
                 )) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Related record diff: ' . print_r($current->related_record->diff($update->related_record)->toArray(), true));
-                    
-                    $this->_setAppRecord($update, $_doCreateUpdateCheck);
+
+                    if ( !$update->related_record->has('container_id') ||
+                        Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser()->getId(), $update->related_record->container_id,
+                            array(Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN)) ) {
+                        $this->_setAppRecord($update, $_doCreateUpdateCheck);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                            ' Permission denied to update related record');
+                    }
                 }
             }
             

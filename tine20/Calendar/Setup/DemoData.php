@@ -76,6 +76,17 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
 
     /**
+     * unsets the instance to save memory, be aware that hasBeenRun still needs to work after unsetting!
+     *
+     */
+    public function unsetInstance()
+    {
+        if (self::$_instance !== NULL) {
+            self::$_instance = null;
+        }
+    }
+
+    /**
      * this is required for other applications needing demo data of this application
      * if this returns true, this demodata has been run already
      * 
