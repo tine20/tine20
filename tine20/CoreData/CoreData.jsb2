@@ -1,0 +1,44 @@
+{
+  "projectName": "Tine 2.0 - CoreData",
+  "deployDir": "CoreData",
+  "licenseText": "Tine 2.0 - CoreData \nCopyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "CoreData FAT Client",
+      "file": "js/CoreData-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Manager.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "WestPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "CoreData.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "CoreData FAT Client",
+      "file": "css/CoreData-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "CoreData.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

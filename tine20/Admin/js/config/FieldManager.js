@@ -92,6 +92,5 @@ Tine.Admin.config.FieldManager = function() {
         register: function (type, constructor) {
             items[type] = constructor;
         }
-
     };
 }();

@@ -151,7 +151,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * @param {Mixed} body
      */
     showDefault: function(body) {
-        if (this.defaultTpl) {
+        if (this.defaultTpl && body) {
             this.defaultTpl.overwrite(body);
         }
     },

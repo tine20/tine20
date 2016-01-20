@@ -216,4 +216,20 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
             Tinebase_Container::getInstance()->deleteContainer($container, true);
         }
     }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     *
+     * TODO add generic approach for fetching core data from config
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = new Tinebase_Record_RecordSet('CoreData_Model_CoreData');
+
+        // TODO get configured core data
+
+        return $result;
+    }
 }
