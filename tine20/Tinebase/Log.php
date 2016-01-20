@@ -101,7 +101,12 @@ class Tinebase_Log extends Zend_Log
     {
         $loggerConfig = ($loggerConfig instanceof Tinebase_Config_Struct || $loggerConfig instanceof Zend_Config)
             ? $loggerConfig : new Tinebase_Config_Struct($loggerConfig);
-        
+
+        if (isset($loggerConfig->active) && $loggerConfig->active == false) {
+            // writer deactivated
+            return;
+        }
+
         if (empty($loggerConfig->filename)) {
             throw new Tinebase_Exception_NotFound('filename missing in logger config');
         }
