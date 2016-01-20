@@ -450,4 +450,22 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $this->setTableVersion('cal_events', 11);
         $this->setApplicationVersion('Calendar', '8.10');
     }
+
+    /**
+     * force activesync calendar resync for iOS devices
+     */
+    public function update_10()
+    {
+        $deviceBackend = new ActiveSync_Backend_Device();
+        $usersWithiPhones = $deviceBackend->search(new ActiveSync_Model_DeviceFilter(array(
+            'devicetype' => 'iphone'
+        )), NULL, 'owner_id');
+
+        $activeSyncController = ActiveSync_Controller::getInstance();
+        foreach($usersWithiPhones as $userId) {
+            $activeSyncController->resetSyncForUser($userId, 'Calendar');
+        }
+
+        $this->setApplicationVersion('Calendar', '8.11');
+    }
 }
