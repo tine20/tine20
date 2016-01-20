@@ -459,11 +459,15 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
         $deviceBackend = new ActiveSync_Backend_Device();
         $usersWithiPhones = $deviceBackend->search(new ActiveSync_Model_DeviceFilter(array(
             'devicetype' => 'iphone'
-        )), NULL, 'owner_id');
+        )))->owner_id;
 
         $activeSyncController = ActiveSync_Controller::getInstance();
         foreach($usersWithiPhones as $userId) {
-            $activeSyncController->resetSyncForUser($userId, 'Calendar');
+            try {
+                $activeSyncController->resetSyncForUser($userId, 'Calendar');
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e, /* suppress trace */ false);
+            }
         }
 
         $this->setApplicationVersion('Calendar', '8.11');
