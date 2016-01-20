@@ -419,7 +419,7 @@ class Tinebase_User
     }
     
     /**
-     * syncronize user from syncbackend to local sql backend
+     * synchronize user from syncbackend to local sql backend
      * 
      * @param  mixed  $username  the login id of the user to synchronize
      * @param  array $options
@@ -428,7 +428,6 @@ class Tinebase_User
      * 
      * @todo make use of dbmail plugin configurable (should be false by default)
      * @todo switch to new primary group if it could not be found
-     * @todo write a test and refactor this ... :(
      */
     public static function syncUser($username, $options = array())
     {
@@ -461,38 +460,8 @@ class Tinebase_User
         self::getPrimaryGroupForUser($user);
 
         try {
-            $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
-        
-            $currentUser->accountLoginName          = $user->accountLoginName;
-            $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
-            $currentUser->accountExpires            = $user->accountExpires;
-            $currentUser->accountPrimaryGroup       = $user->accountPrimaryGroup;
-            $currentUser->accountDisplayName        = $user->accountDisplayName;
-            $currentUser->accountLastName           = $user->accountLastName;
-            $currentUser->accountFirstName          = $user->accountFirstName;
-            $currentUser->accountFullName           = $user->accountFullName;
-            $currentUser->accountEmailAddress       = $user->accountEmailAddress;
-            $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
-            $currentUser->accountLoginShell         = $user->accountLoginShell;
+            $syncedUser = self::_syncDataAndUpdateUser($user, $options);
 
-            $currentUser->accountStatus             = isset($user->accountStatus)
-                ? $user->accountStatus
-                : Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
-
-            if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
-                $currentUser->visibility            = $user->visibility;
-                if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
-                    self::createContactForSyncedUser($currentUser);
-                }
-            }
-            
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
-            $syncedUser = $userBackend->updateUserInSqlBackend($currentUser);
-            if (! empty($user->container_id)) {
-                $syncedUser->container_id = $user->container_id;
-            }
-            $userBackend->updatePluginUser($syncedUser, $user);
-            
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
                 $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
@@ -514,6 +483,53 @@ class Tinebase_User
         self::syncContactData($syncedUser, $options);
         
         Tinebase_Group::syncMemberships($syncedUser);
+
+        return $syncedUser;
+    }
+
+    /**
+     * sync account data and update
+     *
+     * @param Tinebase_Model_FullUser $user
+     * @param array $options
+     * @return mixed
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected static function _syncDataAndUpdateUser($user, $options)
+    {
+        $currentUser = Tinebase_User::getInstance()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
+
+        $fieldsToSync = array('accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
+            'accountDisplayName', 'accountLastName', 'accountFirstName', 'accountFullName', 'accountEmailAddress',
+            'accountHomeDirectory', 'accountLoginShell');
+        if (isset($options['syncAccountStatus']) && $options['syncAccountStatus']) {
+            $fieldsToSync[] = 'accountStatus';
+        }
+        $recordNeedsUpdate = false;
+        foreach ($fieldsToSync as $field) {
+            if ($currentUser->{$field} !== $user->{$field}) {
+                $currentUser->{$field} = $user->{$field};
+                $recordNeedsUpdate = true;
+            }
+        }
+
+        if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
+            $currentUser->visibility            = $user->visibility;
+            if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
+                self::createContactForSyncedUser($currentUser);
+            }
+        }
+
+        if ($recordNeedsUpdate) {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+        } else {
+            $syncedUser = $currentUser;
+        }
+        if (! empty($user->container_id)) {
+            $syncedUser->container_id = $user->container_id;
+        }
+        Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
 
         return $syncedUser;
     }

@@ -569,25 +569,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setStatus($_accountId, $_status)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->setStatusInSyncBackend($_accountId, $_status);
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         switch($_status) {
-            case 'enabled':
+            case Tinebase_Model_User::ACCOUNT_STATUS_ENABLED:
                 $accountData[$this->rowNameMapping['loginFailures']]  = 0;
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
                 $accountData['status'] = $_status;
                 break;
                 
-            case 'disabled':
+            case Tinebase_Model_User::ACCOUNT_STATUS_DISABLED:
                 $accountData['status'] = $_status;
                 break;
                 
-            case 'expired':
-                $accountData['expires_at'] = Tinebase_DateTime::now()->getTimestamp();
+            case Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED:
+                $expiryDate = Tinebase_DateTime::now()->subSecond(1);
+                $accountData['expires_at'] = $expiryDate->toString();
+                if ($this instanceof Tinebase_User_Interface_SyncAble) {
+                    $this->setExpiryDateInSyncBackend($_accountId, $expiryDate);
+                }
+
                 break;
             
             default:
@@ -614,7 +619,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->setExpiryDateInSyncBackend($_accountId, $_expiryDate);
         }
         

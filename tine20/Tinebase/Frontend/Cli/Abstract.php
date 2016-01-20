@@ -196,8 +196,12 @@ class Tinebase_Frontend_Cli_Abstract
             }
             
 
-            if ($className::getInstance()->createDemoData($options)) {
+            $setupDemoData = $className::getInstance();
+            if ($setupDemoData->createDemoData($options)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
+                if (method_exists($setupDemoData, 'unsetInstance')) {
+                    $setupDemoData->unsetInstance();
+                }
             } else {
                 echo 'No Demo Data has been created' . chr(10) . chr(10);
             }
