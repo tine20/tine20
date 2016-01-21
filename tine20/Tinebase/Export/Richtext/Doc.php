@@ -15,20 +15,20 @@
  * @package     Tinebase
  * @subpackage    Export
  */
- 
+
 class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface {
     
     /**
      * the document
      * 
-     * @var PHPWord
+     * @var \PhpOffice\PhpWord\PhpWord
      */
     protected $_docObject;
     
     /**
      * the template to work on
      * 
-     * @var PHPWord_Template
+     * @var \PhpOffice\PhpWord\TemplateProcessor
      */
     protected $_docTemplate;
     
@@ -70,6 +70,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
     {
         $this->_createDocument();
         $this->_exportRecords();
+
     }
     
     /**
@@ -77,11 +78,20 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
      */
     public function write()
     {
-        $tempFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID() . '.docx';
-        $this->getDocument()->save($tempFile);
-        readfile($tempFile);
-        unlink($tempFile);
+        $document = $this->getDocument();
+        $tempfile = $document->save();
+        readfile($tempfile);
+        unlink($tempfile);
     }
+
+    public function save($filename) {
+        $document = $this->getDocument();
+        $tempfile = $document->save();
+
+        copy($tempfile, $filename);
+        unlink($tempfile);
+    }
+
     /**
      * add body rows
      *
@@ -96,16 +106,14 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
         
         foreach ($this->_config->properties->prop as $prop) {
             $property = (string) $prop;
-            // @TODO: remove the utf8_decode here when PHPWord_Template does not convert to utf8 anymore.
-            //        the htmlspecialchars shouldn't be required, this should have been done by the PHPWord Library
-            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? utf8_decode(htmlspecialchars($resolved[$property])) : ''));
+            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? htmlspecialchars($resolved[$property]) : ''));
         }
     }
     
     /**
      * get word object
      *
-     * @return PHPExcel
+     * @return \PhpOffice\PhpWord\PhpWord | \PhpOffice\PhpWord\TemplateProcessor
      */
     public function getDocument()
     {
@@ -114,22 +122,19 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
 
     
     /**
-     * create new excel document
+     * create new PhpWord document
      *
      * @return void
      */
     protected function _createDocument()
     {
-        // this looks stupid, but the PHPDoc library is beta, so this is needed. otherwise the lib would create temp files in the template folder ;(
+        \PhpOffice\PhpWord\Settings::setTempDir(Tinebase_Core::getTempDir());
+
         $templateFile = $this->_getTemplateFilename();
-        $tempTemplateFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID() . '.docx';
-        copy($templateFile, $tempTemplateFile);
-        $this->_docObject = new PHPWord();
+        $this->_docObject = new \PhpOffice\PhpWord\PhpWord();
         
         if ($templateFile !== NULL) {
-            $this->_docTemplate = $this->_docObject->loadTemplate($tempTemplateFile);
+            $this->_docTemplate = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
         }
-        
-        unlink($tempTemplateFile);
     }
 }
