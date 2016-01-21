@@ -295,7 +295,7 @@
 
             $recipients = array($attendee);
 
-            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel);
+            $this->_handleResourceEditors($_attender, $_notificationLevel, $recipients, $_action, $sendLevel, $_updates);
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organizer for external notifications
@@ -362,7 +362,7 @@
       * @param $sendLevel
       * @return bool
       */
-     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel)
+     protected function _handleResourceEditors($attender, $_notificationLevel, &$recipients, &$action, &$sendLevel, $_updates)
      {
          // Add additional recipients for resources
          if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE
@@ -371,23 +371,44 @@
              return true;
          }
          
+         // Set custom startus booked
+         if ($action == 'created') {
+             $action = 'booked';
+         }
+         
          $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
          if ($resource->suppress_notification) {
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                      . " Do not send Notifications for this resource: ". $resource->name);
+             // $recipients will still contain the resource itself
              return true;
          }
-
-         if ($action == 'created') {
-             $action = 'booked';
+         
+         // The resource has no account there for the organizer preference (sendLevel) is used. We don't want that
+         $sendLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+         //handle attendee status change
+         if(! empty($_updates['attendee']) && ! empty($_updates['attendee']['toUpdate'])) {
+             foreach ($_updates['attendee']['toUpdate'] as $updatedAttendee) {
+                 if ($updatedAttendee->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE && $resource->getId() == $updatedAttendee->user_id) {
+                     $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                 }
+             }
          }
-
-         // Consider all notification level (Resource Users have a send level of 30)
-         $sendLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+         
+         /*
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Attender: ". $attender);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Action: ". $action);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Notification Level: ". $_notificationLevel);
+         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                 . " Send Level: ". $sendLevel);
+         */
+         
          $recipients = array_merge($recipients,
              Calendar_Controller_Resource::getInstance()->getNotificationRecipients(
-                 Calendar_Controller_Resource::getInstance()->get($attender->user_id),
-                 $_notificationLevel
+                 Calendar_Controller_Resource::getInstance()->get($attender->user_id)
              )
          );
      }
@@ -491,7 +512,9 @@
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
         }
-        
+        if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            $messageSubject = '[' . $translate->_('Resource Management') . '] ' . $messageSubject;
+        }
         return $messageSubject;
     }
     

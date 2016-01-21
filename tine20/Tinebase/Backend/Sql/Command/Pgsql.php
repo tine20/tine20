@@ -235,4 +235,31 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
      {
 
      }
+
+    /**
+     * returns something similar to "(interval '$staticPart $timeUnit' * $dynamicPart)"
+     *
+     * @see http://www.postgresql.org/docs/9.1/static/functions-datetime.html
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @param string $dynamicPart
+     * @return string
+     */
+    public function getDynamicInterval($timeUnit, $staticPart, $dynamicPart)
+    {
+        return '(' . $this->getInterval($timeUnit, $staticPart) .  ' * ' . $dynamicPart . ')';
+    }
+
+    /**
+     * returns something similar to "interval '$staticPart $timeUnit'"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @return string
+     */
+    public function getInterval($timeUnit, $staticPart)
+    {
+        return "INTERVAL '" . $staticPart . ' ' . $timeUnit . "'";
+    }
 }

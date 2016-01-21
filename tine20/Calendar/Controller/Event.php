@@ -159,10 +159,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
         
-        // 
         if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Skipping free/busy check because event is transparent");
+                . " Skipping free/busy check because event is transparent or has no attendee");
             return;
         }
         
@@ -185,7 +184,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $busyException = new Calendar_Exception_AttendeeBusy();
             $busyException->setFreeBusyInfo($fbInfo);
             
-            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, /* resolve_display_containers = */ false);
             $busyException->setEvent($_event);
             
             throw $busyException;
@@ -321,7 +320,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $filter = new Calendar_Model_EventFilter($filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
-            . ' free/busy fitler: ' . print_r($filter->toArray(), true));
+            . ' free/busy filter: ' . print_r($filter->toArray(), true));
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
@@ -334,7 +333,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // create a typemap
         $typeMap = array();
-        foreach($attendee as $attender) {
+        foreach ($attendee as $attender) {
             if (! (isset($typeMap[$attender['user_type']]) || array_key_exists($attender['user_type'], $typeMap))) {
                 $typeMap[$attender['user_type']] = array();
             }
@@ -1050,7 +1049,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $pastPersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             $futurePersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
             foreach ($persistentExceptionEvents as $persistentExceptionEvent) {
-                $persistentExceptionEvent->dtstart->isLater($_event->dtstart) ? $futurePersistentExceptionEvents->addRecord($persistentExceptionEvent) : $pastPersistentExceptionEvents->addRecord($persistentExceptionEvent);
+                $persistentExceptionEvent->getOriginalDtStart()->isLater($_event->dtstart) ?
+                    $futurePersistentExceptionEvents->addRecord($persistentExceptionEvent) :
+                    $pastPersistentExceptionEvents->addRecord($persistentExceptionEvent);
             }
             
             // update baseEvent
@@ -1213,7 +1214,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
 
     /**
-     * returns all persistent recur exceptions of recur series identified by uid of given event
+     * returns all persistent recur exceptions of recur series
      * 
      * NOTE: deleted instances are saved in the base events exception property
      * NOTE: returns all exceptions regardless of current filters and access restrictions
@@ -1229,6 +1230,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         $exceptionFilter = new Calendar_Model_EventFilter(array(
             array('field' => 'base_event_id', 'operator' => 'equals',  'value' => $baseEventId),
+            array('field' => 'recurid',       'operator' => 'notnull', 'value' => NULL)
         ));
         
         if ($_eventFilter instanceof Calendar_Model_EventFilter) {
@@ -2015,7 +2017,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($attender->displaycontainer_id) {
             // check if user is allowed to set status
             if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
-                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                    //If resource has an default status use this
+                    $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
+                } else {
+                    $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                }
             }
         }
 
@@ -2123,7 +2130,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // reset all status but calUser on reschedule except resources (Resources might have a configured default value)
         if ($isRescheduled && !$attender->isSame($this->getCalendarUser())) {
-            if ($attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                //If resource has a default status reset to this
                 $resource = Calendar_Controller_Resource::getInstance()->get($attender->user_id);
                 $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
             } else {

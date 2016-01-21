@@ -63,7 +63,7 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public function testGetUsers()
     {
-        $user = $this->testAddUser();
+        $this->testAddUser();
         
         $users = $this->_backend->getUsers('phpunit', 'accountStatus');
         
@@ -112,6 +112,7 @@ class Tinebase_User_LdapTest extends TestCase
         $groupsBeforeUpdate = $groupsBackend->getGroupMembershipsFromSyncBackend($user);
         
         $user->accountLoginName = 'tine20phpunituser-updated';
+        $this->_usernamesToDelete[] = $user->accountLoginName;
         $testUser = $this->_backend->updateUser($user);
         $groupsAfterUpdate = $groupsBackend->getGroupMembershipsFromSyncBackend($testUser);
         
@@ -210,7 +211,7 @@ class Tinebase_User_LdapTest extends TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -228,8 +229,7 @@ class Tinebase_User_LdapTest extends TestCase
      */
     public static function getTestRecord()
     {
-        $config = Zend_Registry::get('testConfig');
-        $emailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $emailDomain = TestServer::getPrimaryMailDomain();
         
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',
@@ -298,6 +298,32 @@ class Tinebase_User_LdapTest extends TestCase
             $this->fail('user contact should be deleted from tine20 db');
         } catch (Tinebase_Exception_NotFound $tenf) {
             $this->assertContains('Addressbook_Model_Contact record with id = ' . $sqlUser->contact_id, $tenf->getMessage());
+        }
+    }
+
+    /**
+     * test user status sync tine <-> ldap
+     *
+     * @see 0011554: improve ldap account status handling
+     */
+    public function testSyncUserStatus()
+    {
+        $user = $this->testAddUser();
+
+        // set user status in tine (disabled, expired, enabled)
+        $statusToTest = array(
+            Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED,
+            Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED,
+            Tinebase_Model_User::ACCOUNT_STATUS_ENABLED,
+        );
+
+        foreach($statusToTest as $status) {
+            Tinebase_User::getInstance()->setStatus($user, $status);
+
+            // sync user -> user status should be the same
+            $syncedUser = Tinebase_User::syncUser($user, array('syncAccountStatus' => true));
+            $this->assertEquals($status, $syncedUser->accountStatus, print_r($syncedUser->toArray(), true));
         }
     }
 }

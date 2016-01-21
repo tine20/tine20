@@ -19,7 +19,7 @@ Received: from stork.gentoo.org (stork.gentoo.org [64.127.104.133])	(using TLSv1
 Received: from robbat2 by stork.gentoo.org
 	with local (Exim 4.69)	(envelope-from <robbat2@stork.gentoo.org>)
 	id 1Lt9pF-0007Ej-Kh; Mon, 13 Apr 2009 00:15:01 +0000
-From: "Robin H. Johnson" <robbat2@gentoo.org>
+From: =?UTF-8?Q?Robin H. Johns=c3=b6n?= <robbat2@gentoo.org>
 To: gentoo-dev@lists.gentoo.org, gentoo-dev-announce@lists.gentoo.org,
 	gwn-feedback@gentoo.org
 Subject: [gentoo-dev] Automated Package Removal and Addition Tracker, for
@@ -37,7 +37,7 @@ List-Id: Gentoo Linux mail <gentoo-dev.gentoo.org>
 X-BeenThere: gentoo-dev@lists.gentoo.org
 Reply-to: gentoo-dev@lists.gentoo.org
 Message-Id: <E1Lt9pF-0007Ej-Kh@stork.gentoo.org>
-Sender: "Robin H. Johnson" <robbat2@stork.gentoo.org>
+Sender: =?UTF-8?Q?Robin H. Johns=c3=b6n?= <robbat2@stork.gentoo.org>
 X-Antispam: No, score=0.1/5.0, scanned in 3.376sec at (mail3.metaways.net
 	[127.0.0.1])
 	by smf-spamd v1.3.1 - http://smfs.sf.net/

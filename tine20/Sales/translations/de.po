@@ -743,7 +743,7 @@ msgstr "Dem ausgewählten Vertrag ist bisher keine Kostenstelle zugeordnet worde
 
 #: js/InvoiceEditDialog.js:381 js/PurchaseInvoiceEditDialog.js:343
 msgid "Sales Tax (percent)"
-msgstr "Mehrwertsteuer in Prozent"
+msgstr "MwSt. in Prozent"
 
 #: js/InvoiceEditDialog.js:415 js/InvoiceEditDialog.js:421
 #: js/PurchaseInvoiceEditDialog.js:401 js/PurchaseInvoiceEditDialog.js:425

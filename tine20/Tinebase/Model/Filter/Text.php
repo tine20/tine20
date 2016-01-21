@@ -36,7 +36,8 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         9 => 'group',
 
         // filter replace space and - with %
-        10 => 'equalsspecial'
+        10 => 'equalsspecial',
+        11 => 'notcontains',
     );
     
     /**
@@ -70,6 +71,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         $this->_opSqlMap = array(
             'equals'            => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'  ),
             'contains'          => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '%?%'),
+            'notcontains'       => array('sqlop' => ' NOT LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),      'wildcards' => '%?%'),
             'startswith'        => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?%' ),
             'endswith'          => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '%?' ),
             'not'               => array('sqlop' => ' NOT LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),      'wildcards' => '?'  ),
@@ -78,7 +80,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
             'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
             'group'             => array('sqlop' => " NOT LIKE  ''",    'wildcards' => '?'  ),
-            'equalsspecial'     => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'     ),
+            'equalsspecial'     => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'  ),
         );
     }
 
@@ -143,7 +145,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
             $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         }
 
-        if (in_array($this->_operator, array('not', 'notin')) && $value !== '') {
+        if (in_array($this->_operator, array('not', 'notin', 'notcontains')) && $value !== '') {
             $where = "( $where OR $field IS NULL)";
         }
 

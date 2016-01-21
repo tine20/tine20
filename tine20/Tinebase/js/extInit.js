@@ -188,3 +188,23 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         return v;
    }
 });
+
+/**
+ * html encoding for user generated content
+ *
+ * @param {String} value
+ * @returns {String}
+ */
+Ext.XTemplate.prototype.encode = function(value) {
+    return Ext.util.Format.htmlEncode(value);
+};
+
+/**
+ * html encoding for user generated content when internally decoded (e.g. tooltips)
+ *
+ * @param {String} value
+ * @returns {String}
+ */
+Ext.XTemplate.prototype.doubleEncode = function(value) {
+    return Tine.Tinebase.common.doubleEncode(value);
+};

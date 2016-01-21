@@ -49,10 +49,10 @@ Ext.ns('Tine.Felamimail');
         this.initTemplate();
         this.initDefaultTemplate();
         //this.initTopToolbar();
-        
+
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
     },
-    
+
     /**
      * use default Tpl for default and multi view
      */
@@ -190,8 +190,6 @@ Ext.ns('Tine.Felamimail');
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * @param {String} body
-     * 
-     * TODO allow other prepared parts than email invitations
      */
     setTemplateContent: function(record, body) {
         this.currentId = record.id;
@@ -200,8 +198,9 @@ Ext.ns('Tine.Felamimail');
         this.doLayout();
 
         this.tpl.overwrite(body, record.data);
+
         this.getEl().down('div').down('div').scrollTo('top', 0, false);
-        
+
         if (this.record.get('preparedParts') && this.record.get('preparedParts').length > 0) {
             Tine.log.debug('Tine.Felamimail.GridDetailsPanel::setTemplateContent about to handle preparedParts');
             this.handlePreparedParts(record);
@@ -225,6 +224,7 @@ Ext.ns('Tine.Felamimail');
         
         var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
             detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
+                detailsPanel: this,
                 preparedPart: firstPreparedPart
             });
             
@@ -232,7 +232,7 @@ Ext.ns('Tine.Felamimail');
         Ext.fly(bodyEl).update('');
         detailsPanel.render(bodyEl);
     },
-    
+
     /**
      * init single message template (this.tpl)
      * @private

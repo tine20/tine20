@@ -1338,7 +1338,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         // create resource with email address of unittest user
         $resource = $this->_getResource();
-        $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
+        $resource->email = $this->_GetPersonasContacts('pwulf')->email;
         $resource->suppress_notification = $suppress_notification;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
         
@@ -1354,22 +1354,28 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $messages = self::getMessages();
 
         if ($suppress_notification) {
-            $this->assertEquals(1, count($messages), 'one mails should be send to current user (only attender)');
+            $this->assertEquals(2, count($messages), 'two mails should be send to attender (invite) + resource');
         } else {
             $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
         }
+
+        // assert user agent
+        // @see 0011498: set user agent header for notification messages
+        $headers = $messages[0]->getHeaders();
+        $this->assertEquals(Tinebase_Core::getTineUserAgent('Notification Service'), $headers['User-Agent'][0]);
     }
 
     /**
      * Enable by a preference which sends mails to every user who got permissions to edit the resource
      */
-    public function testResourceNotificationForGrantedUsers($userIsAttendee = true)
+    public function testResourceNotificationForGrantedUsers($userIsAttendee = true, $suppress_notification = false)
     {
         // Enable feature, disabled by default!
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
 
         $resource = $this->_getResource();
         $resource->email = Tinebase_Core::getUser()->accountEmailAddress;
+        $resource->suppress_notification = $suppress_notification;
         $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
 
         $event = $this->_getEvent(/*now = */ true);
@@ -1406,8 +1412,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
         $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
 
-        $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
-        $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
+        if ($suppress_notification) {
+            $this->assertEquals(2, count($messages), 'two mails should be send to current user (resource + attender)');
+        } else {
+            $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+            $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
+        }
     }
 
     /**
@@ -1425,7 +1435,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     public function testResourceNotificationMuteForEditors()
     {
-        $this->testResourceNotification(/* $suppress_notification = */ false);
+        $this->testResourceNotification(/* $suppress_notification = */ true);
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
     }
     
     /**

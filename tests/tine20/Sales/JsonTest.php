@@ -45,7 +45,14 @@ class Sales_JsonTest extends TestCase
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
     }
-    
+
+    protected function tearDown()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
+
+        parent::tearDown();
+    }
+
     /**
      * try to add a contract
      * 
@@ -455,12 +462,13 @@ class Sales_JsonTest extends TestCase
     /**
      * get filter
      *
+     * @param string $search
      * @return array
      */
-    protected function _getFilter()
+    protected function _getFilter($search ='blabla' )
     {
         return array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => 'blabla'),
+            array('field' => 'query', 'operator' => 'contains', 'value' => $search),
         );
     }
 
@@ -723,5 +731,32 @@ class Sales_JsonTest extends TestCase
         
         $this->assertEquals(NULL, $contract['products'][0]['quantity']);
         $this->assertEquals(36, $contract['products'][0]['interval']);
+    }
+
+    /**
+     * @see 0011494: activate advanced search for contracts (customers, ...)
+     */
+    public function testAdvancedContractsSearch()
+    {
+        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
+        $contract = Sales_Controller_Contract::getInstance()->create($this->_getContract());
+        list($contact1) = $this->_createContacts(1);
+        $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
+        $result = $this->_instance->searchContracts($this->_getFilter('wolf'), array());
+
+        $this->assertEquals(1, $result['totalcount'], 'should find contract of customer person Peter Wolf');
+
+        // test notcontains
+        $contract2 = Sales_Controller_Contract::getInstance()->create($this->_getContract('test2'));
+        $result = $this->_instance->searchContracts($this->_getFilter(), array());
+        $this->assertEquals(2, $result['totalcount'], 'should find 2 contracts');
+
+        // search with notcontains
+        $search = $this->_instance->searchContracts(array(
+            array('field' => 'query', 'operator' => 'notcontains', 'value' => 'wolf'),
+        ), $this->_getPaging());
+
+        $this->assertEquals($contract2->title, $search['results'][0]['title']);
+        $this->assertEquals(1, $search['totalcount']);
     }
 }

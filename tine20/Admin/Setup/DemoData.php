@@ -97,6 +97,17 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
 
     /**
+     * unsets the instance to save memory, be aware that hasBeenRun still needs to work after unsetting!
+     *
+     */
+    public function unsetInstance()
+    {
+        if (self::$_instance !== NULL) {
+            self::$_instance = null;
+        }
+    }
+
+    /**
      * creates the groups if not created already
      */
     protected function _createGroups()
@@ -174,13 +185,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
                 $groupId = $group->getId();
                 
-                try {
-                    $testconfig = Zend_Registry::get('testConfig');
-                } catch (Zend_Exception $e) {
-                    $testconfig = NULL;
-                }
-                // TODO think about fetching this from IMAP config
-                $emailDomain = ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+                $emailDomain = $this->_getMailDomain();
 
                 $user = new Tinebase_Model_FullUser(array(
                     'accountLoginName'      => $login,
@@ -212,7 +217,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $listBackend->addListMember($group->list_id, $user->contact_id);
                 }
 
-                $this->_setUserPassword($user, $testconfig);
+                $this->_setUserPassword($user);
             }
             
             if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -239,15 +244,49 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_createRoles();
         $this->_createSharedTags();
     }
-    
+
+    /**
+     * get mail domain
+     *
+     * @return string
+     */
+    protected function _getMailDomain()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (isset($smtpConfig['primarydomain'])) {
+            return $smtpConfig['primarydomain'];
+        }
+
+        $testconfig = $this->_getTestConfig();
+        $emailDomain = ($testconfig && isset($testconfig->maildomain)) ? $testconfig->maildomain : 'tine20.org';
+
+        return $emailDomain;
+    }
+
+    /**
+     * get testconfig
+     *
+     * @return mixed|null
+     */
+    protected function _getTestConfig()
+    {
+        try {
+            $testconfig = Zend_Registry::get('testConfig');
+        } catch (Zend_Exception $e) {
+            $testconfig = NULL;
+        }
+
+        return $testconfig;
+    }
+
     /**
      * give additional testusers a password
      * 
      * @param Tinebase_Model_User $user
-     * @param Zend_Config|null $testconfig
      */
-    protected function _setUserPassword($user, $testconfig)
+    protected function _setUserPassword($user)
     {
+        $testconfig = $this->_getTestConfig();
         $password =
             // use password of the primary test account 
             ($testconfig && isset($testconfig->password)) ? $testconfig->password :

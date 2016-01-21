@@ -105,8 +105,13 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
-            case 'Admin_Event_DeleteAccount':
-                #$this->deletePersonalFolder($_eventObject->account);
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                if ($_eventObject->deletePersonalContainers()) {
+                    $this->deletePersonalFolder($_eventObject->account);
+                }
                 break;
         }
     }

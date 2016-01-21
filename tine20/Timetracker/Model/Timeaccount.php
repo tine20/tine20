@@ -218,11 +218,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $ced)
             ));
         }
-        
+
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'invoice_id', 'operator' => 'equals', 'value' => '')
         ));
-        
+
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
         ));
@@ -530,5 +530,34 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         }
         
         $this->_enableTimesheetChecks($tsController);
+    }
+
+    /**
+     * returns true if this invoice needs to be recreated because data changed
+     *
+     * @param Tinebase_DateTime $date
+     * @param Sales_Model_ProductAggregate $productAggregate
+     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Contract $contract
+     * @return boolean
+     */
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract)
+    {
+        $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())
+        ));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' TS Filter: ' . print_r($filter->toArray(), true));
+        $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter);
+        $timesheets->setTimezone(Tinebase_Core::getUserTimezone());
+        foreach($timesheets as $timesheet)
+        {
+            if ($timesheet->last_modified_time && $timesheet->last_modified_time->isLater($invoice->creation_time)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -72,6 +72,10 @@
           "path": "js/"
         },
         {
+          "text": "PGPDetailsPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/"
         },
@@ -125,6 +129,10 @@
         },
         {
           "text": "FolderFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MailvelopeHelper.js",
           "path": "js/"
         }
       ]

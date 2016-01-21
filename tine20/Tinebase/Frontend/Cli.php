@@ -816,6 +816,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo 'DemoData in application "' . $appName . '" not found.' . PHP_EOL . PHP_EOL;
             }
         }
+        unset($applications);
         
         foreach($this->_applicationsToWorkOn as $app => $cfg) {
             $this->_createDemoDataRecursive($app, $cfg, $_opts);

@@ -912,4 +912,51 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
         }
     }
+
+    /**
+     * @param Tinebase_Model_Container $sourceContainer
+     * @param Tinebase_Model_Container $destinationContainer
+     */
+    public function moveEventsToContainer(Tinebase_Model_Container $sourceContainer, Tinebase_Model_Container $destinationContainer)
+    {
+        $this->_db->update($this->_tablePrefix . $this->_tableName, array('container_id' => $destinationContainer->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $sourceContainer->getId()));
+
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $attendeeBackend->moveEventsToContainer($sourceContainer, $destinationContainer);
+    }
+
+    /**
+     * @param string $oldContactId
+     * @param string $newContactId
+     */
+    public function replaceContactId($oldContactId, $newContactId)
+    {
+        $this->_db->update($this->_tablePrefix . $this->_tableName, array('organizer' => $newContactId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('organizer') . ' = ?', $oldContactId));
+
+        $attendeeBackend = new Calendar_Backend_Sql_Attendee();
+        $attendeeBackend->replaceContactId($oldContactId, $newContactId);
+    }
+
+    /**
+     * takes event ids, filters out recuring events and returns only the uids of the base events of those event ids.
+     *
+     * @param array $eventIds
+     * @return array
+     */
+    public function getUidOfBaseEvents(array $eventIds)
+    {
+        if (count($eventIds) == 0) {
+            return array();
+        }
+
+        $select = $this->_db->select()
+            ->from($this->_tablePrefix . $this->_tableName, 'uid')
+            ->where($this->_db->quoteIdentifier('id') . ' IN (?) AND ' . $this->_db->quoteIdentifier('recurid') . ' IS NULL', $eventIds);
+
+        $stmt = $this->_db->query($select);
+
+        return $stmt->fetchAll(Zend_Db::FETCH_NUM);
+    }
 }

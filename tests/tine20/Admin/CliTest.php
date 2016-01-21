@@ -340,8 +340,7 @@ class Admin_CliTest extends TestCase
         if ($username == 'hmoster') {
             $this->assertEquals('Hins', $user->accountFirstName);
         }
-        $config = TestServer::getInstance()->getConfig();
-        $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $maildomain = TestServer::getPrimaryMailDomain();
         $this->assertEquals($username . '@' . $maildomain, $user->accountEmailAddress);
     }
 
@@ -371,8 +370,7 @@ class Admin_CliTest extends TestCase
     public function testImportUsersWithEmailUser()
     {
         $userBackend = Tinebase_User::getInstance();
-        $config = TestServer::getInstance()->getConfig();
-        $maildomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
+        $maildomain = TestServer::getPrimaryMailDomain();
 
         $readFile = fopen(dirname(__FILE__) . '/files/tine_user5.csv', 'r');
         $writeFile = fopen('test.csv', 'w');

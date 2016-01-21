@@ -98,6 +98,14 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
             case 'Admin_Event_AddAccount':
                 $this->createPersonalFolder($_eventObject->account);
                 break;
+            case 'Tinebase_Event_User_DeleteAccount':
+                /**
+                 * @var Tinebase_Event_User_DeleteAccount $_eventObject
+                 */
+                if ($_eventObject->deletePersonalContainers()) {
+                    $this->deletePersonalFolder($_eventObject->account);
+                }
+                break;
         }
     }
 }

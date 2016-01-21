@@ -31,55 +31,7 @@ class Calendar_Frontend_ActiveSyncTest extends ActiveSync_Controller_ControllerT
      */
     protected $objects = array();
     
-    protected $_testXMLInput = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-    <Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar">
-        <Collections>
-            <Collection>
-                <Class>Calendar</Class>
-                <SyncKey>9</SyncKey>
-                <CollectionId>41</CollectionId>
-                <DeletesAsMoves/>
-                <GetChanges/>
-                <WindowSize>50</WindowSize>
-                <Options><FilterType>5</FilterType></Options>
-                <Commands>
-                    <Change>
-                        <ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId>
-                        <ApplicationData>
-                            <Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone>
-                            <Calendar:AllDayEvent>0</Calendar:AllDayEvent>
-                            <Calendar:BusyStatus>2</Calendar:BusyStatus>
-                            <Calendar:DtStamp>20121125T150537Z</Calendar:DtStamp>
-                            <Calendar:EndTime>20121123T160000Z</Calendar:EndTime>
-                            <Calendar:Sensitivity>2</Calendar:Sensitivity>
-                            <Calendar:Subject>Repeat</Calendar:Subject>
-                            <Calendar:StartTime>20121123T130000Z</Calendar:StartTime>
-                            <Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID>
-                            <Calendar:MeetingStatus>1</Calendar:MeetingStatus>
-                            <Calendar:Attendees>
-                                <Calendar:Attendee>
-                                    <Calendar:Name>Lars Kneschke</Calendar:Name>
-                                    <Calendar:Email>lars@kneschke.de</Calendar:Email>
-                                </Calendar:Attendee>
-                            </Calendar:Attendees>
-                            <Calendar:Recurrence>
-                                <Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20121128T225959Z</Calendar:Until>
-                            </Calendar:Recurrence>
-                            <Calendar:Exceptions>
-                                <Calendar:Exception>
-                                    <Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20121125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20121125T140000Z</Calendar:StartTime><Calendar:EndTime>20121125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent>
-                                </Calendar:Exception>
-                                <Calendar:Exception>
-                                    <Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20121124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception>
-                                </Calendar:Exceptions>
-                            <Calendar:Reminder>15</Calendar:Reminder>
-                            <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
-                        </ApplicationData>
-                    </Change>
-                </Commands>
-            </Collection>
-        </Collections>
-    </Sync>';
+    protected $_testXMLInput;
     
     protected $_testXMLInput_palmPreV12 = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
     <Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar">
@@ -504,17 +456,25 @@ Zeile 3</AirSyncBase:Data>
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
-        
+
+        $this->_testXMLInput = $this->_loadFile('event_with_attendee.xml');
+    }
+
+    protected function _loadFile($filename)
+    {
+        $xml = file_get_contents(__DIR__ . '/files/' . $filename);
+
         // replace email to make current user organizer and attendee
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
-        
-        $this->_testXMLInput = str_replace(array(
+        $email = $this->_getEmailAddress();
+
+        $xml = str_replace(array(
             'lars@kneschke.de',
             'unittest@tine20.org',
-        ), $email, $this->_testXMLInput);
+        ), $email, $xml);
+
+        return $xml;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see ActiveSync_TestCase::testCreateEntry()
@@ -809,7 +769,29 @@ Zeile 3</AirSyncBase:Data>
         $this->assertTrue((bool) $syncrotonEvent->exceptions[0]->deleted);
         $this->assertTrue((bool) $syncrotonEvent->exceptions[1]->deleted);
     }
-    
+
+    public function testRecurEventFirstInstanceException($syncrotonFolder = null)
+    {
+        if ($syncrotonFolder === null) {
+            $syncrotonFolder = $this->testCreateFolder();
+        }
+
+        $xmlString = $this->_loadFile('repeating_with_first_instance_exception.xml');
+        $xml = new SimpleXMLElement($xmlString);
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+
+        $this->assertEquals('First Instance Exception', $syncrotonEvent->exceptions[0]->subject);
+        $this->assertCount(1, $syncrotonEvent->exceptions);
+
+        return array($serverId, $syncrotonEvent);
+    }
+
     public function testStatusUpdate($syncrotonFolder = null)
     {
         if ($syncrotonFolder === null) {
@@ -1220,51 +1202,77 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         
         $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
     }
-    
+
     public function testUpdateEntriesIPhone()
     {
+        // create event
         $syncrotonFolder = $this->testCreateFolder();
-        
         $syncrotonFolder2 = $this->testCreateFolder();
         
         //make $syncrotonFolder2 the default
         Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
-    
         list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
-        $event = Calendar_Controller_Event::getInstance()->get($serverId);
-    
-        unset($syncrotonEvent->recurrence);
-        unset($syncrotonEvent->exceptions);
-        unset($syncrotonEvent->attendees);
 
-        // need to create new controller to set new sync timestamp for concurrency handling
+        // update event
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
+        $syncrotonEventtoUpdate->exceptions[0]->startTime->addHour(1);
+        $syncrotonEventtoUpdate->exceptions[0]->endTime->addHour(1);
+
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
-        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
-        
-        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        $updatedEvent = Calendar_Controller_Event::getInstance()->get($serverId);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
-        $this->assertEmpty($syncrotonEvent->attendees, 'Events attendees found in folder which is not the default calendar');
-        $this->assertNotEmpty($updatedEvent->attendee, 'attendee must be preserved');
-        $this->assertEquals($event->attendee[0]->getId(), $updatedEvent->attendee[0]->getId(), 'attendee must be perserved');
+        // assert update
+        $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertEquals('update', $updatedSyncrotonEvent->exceptions[0]->subject);
+        $this->assertNotEquals($syncrotonEvent->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
+        $this->assertEquals($syncrotonEventtoUpdate->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
 
-        return;
-        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder2);
+        // assert attendee are preserved
+        $updatedEvent = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
+        $this->assertNotEmpty($updatedEvent, 'attendee must be preserved during update');
+    }
 
-        unset($syncrotonEvent->recurrence);
-        unset($syncrotonEvent->exceptions);
-        $syncrotonEvent->attendees[0]->name = Tinebase_Record_Abstract::generateUID();
+    /**
+     * testUpdateEntriesIPhoneNonDefaultFolder
+     *
+     * for iOS devices we need to suppress attendee during sync for non default folder (see foldertype in foldersync)
+     * iOS can only have one default folder
+     */
+    public function testUpdateEntriesIPhoneNonDefaultFolder()
+    {
+        // create event in folder1
+        $syncrotonFolder = $this->testCreateFolder();
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
 
-        // need to create new controller to set new sync timestamp for concurrency handling
+        // create new default folder2
+        $syncrotonFolder2 = $this->testCreateFolder();
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
+
+        // load event in non default folder2
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertEmpty($syncrotonEventtoUpdate->attendees, 'attendee in non default folders must be removed for ios');
+
+        // update event in non default folder
+        $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
+        $syncrotonEventtoUpdate->exceptions[0]->startTime->addHour(1);
+        $syncrotonEventtoUpdate->exceptions[0]->endTime->addHour(1);
+
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
-        $serverId = $controller->updateEntry($syncrotonFolder2->serverId, $serverId, $syncrotonEvent);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
-        $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
+        // assert update from non default folder
+        $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
+        $this->assertEquals('update', $updatedSyncrotonEvent->exceptions[0]->subject);
+        $this->assertNotEquals($syncrotonEvent->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
+        $this->assertEquals($syncrotonEventtoUpdate->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
 
-        $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
+        // assert attendee are preserved
+        $this->assertNotEmpty($updatedSyncrotonEvent->attendees, 'attendee must be preserved during update');
     }
 }

@@ -66,10 +66,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         $this->objects['users'] = array();
         
-        $config = TestServer::getInstance()->getConfig();
-        if ($config->maildomain) {
-            $this->_mailDomain = $config->maildomain;
-        }
+        $this->_mailDomain = TestServer::getPrimaryMailDomain();
     }
 
     /**

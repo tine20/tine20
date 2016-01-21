@@ -111,4 +111,23 @@ interface Tinebase_Backend_Sql_Command_Interface
      * @param Setup_Backend_Interface $backend
      */
     public function initProcedures(Setup_Backend_Interface $backend);
+
+    /**
+     * returns something similar to "interval $staticPart * $dynamicPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @param string $dynamicPart
+     * @return string
+     */
+    public function getDynamicInterval($timeUnit, $staticPart, $dynamicPart);
+
+    /**
+     * returns something similar to "interval $staticPart $timeUnit"
+     *
+     * @param string $timeUnit
+     * @param string $staticPart
+     * @return string
+     */
+    public function getInterval($timeUnit, $staticPart);
 }

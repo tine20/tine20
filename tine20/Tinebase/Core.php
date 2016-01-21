@@ -469,14 +469,24 @@ class Tinebase_Core
     /**
      * return current session id
      *
+     * @param boolean $generateUid
      * @return mixed|null
      */
-    public static function getSessionId()
+    public static function getSessionId($generateUid = true)
     {
         if (! self::isRegistered(self::SESSIONID)) {
-            self::set(self::SESSIONID, Tinebase_Session::isStarted()
-                ? Tinebase_Session::getId()
-                : Tinebase_Record_Abstract::generateUID());
+            $sessionId = null;
+            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
+            if (Tinebase_Session::isStarted() && ! Tinebase_Session::isSetupSession()) {
+                $sessionId = Tinebase_Session::getId();
+            }
+            if (empty($sessionId)) {
+                $sessionId = 'NOSESSION';
+                if ($generateUid) {
+                    $sessionId .= Tinebase_Record_Abstract::generateUID(31);
+                }
+            }
+            self::set(self::SESSIONID, $sessionId);
         }
 
         return self::get(self::SESSIONID);
@@ -673,17 +683,20 @@ class Tinebase_Core
                 self::set(self::SHAREDCACHE, false);
             }
         }
-        
+
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
+            $logging = ($config->caching->logging) ? $config->caching->logging : false;
+            $logger = self::getLogger();
+
             $frontendOptions = array(
                 'lifetime'                  => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization'   => true, // turn that off for more speed
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
                 'write_control'             => false, // don't read cache entry after it got written
-                'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                'logger'                    => self::getLogger(),
+                'logging'                   => $logging,
+                'logger'                    => $logger,
             );
             
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
@@ -695,8 +708,8 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => ($config->caching->logging) ? $config->caching->logging : false,
-                            'logger'                 => self::getLogger(),
+                            'logging'                => $logging,
+                            'logger'                 => $logger,
                         );
                         break;
                         
@@ -1686,5 +1699,16 @@ class Tinebase_Core
     {
         $config = self::getConfig();
         return !! $config->maintenanceMode;
+    }
+
+    /**
+     * returns Tine 2.0 user agent string
+     *
+     * @param string $submodule
+     * @return string
+     */
+    public static function getTineUserAgent($submodule = '')
+    {
+        return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
     }
 }

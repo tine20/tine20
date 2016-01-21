@@ -280,11 +280,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const LAST_SESSIONS_CLEANUP_RUN = 'lastSessionsCleanupRun';
     
     /**
-     * MAX_LOGIN_FAILURES
+     * WARN_LOGIN_FAILURES
      *
      * @var string
      */
-    const MAX_LOGIN_FAILURES = 'maxLoginFailures';
+    const WARN_LOGIN_FAILURES = 'warnLoginFailures';
      
     /**
      * ANYONE_ACCOUNT_DISABLED
@@ -306,6 +306,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const ACCOUNT_DEACTIVATION_NOTIFICATION = 'accountDeactivationNotification';
+
+    /**
+     * ACCOUNT_DELETION_EVENTCONFIGURATION
+     *
+     * @var string
+     */
+    const ACCOUNT_DELETION_EVENTCONFIGURATION = 'accountDeletionEventConfiguration';
     
     /**
      * roleChangeAllowed
@@ -336,10 +343,36 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const MAINTENANCE_MODE = 'maintenanceMode';
 
     /**
+     * @var array of strings
+     */
+    const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        /**
+         * possible values:
+         *
+         * $_deletePersonalContainers => delete personal containers
+         * $_keepAsContact => keep "account" as contact in the addressbook
+         * $_keepOrganizerEvents => keep accounts organizer events as external events in the calendar
+         * $_keepAsContact => keep accounts calender event attendee as external attendee
+         *
+         * TODO add more options (like move to another container)
+         */
+        self::ACCOUNT_DELETION_EVENTCONFIGURATION => array(
+            //_('Account Deletion Event')
+            'label'                 => 'Account Deletion Event',
+            //_('Configure what should happen to data of deleted users')
+            'description'           => 'Configure what should happen to data of deleted users',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
         self::IMAP => array(
                                    //_('System IMAP')
             'label'                 => 'System IMAP',
@@ -696,15 +729,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
-        self::MAX_LOGIN_FAILURES => array(
-        //_('Maximum login failures')
-            'label'                 => 'Maximum login failures',
-        //_('Maximum allowed login failures before blocking account')
-            'description'           => 'Maximum allowed login failures before blocking account',
+        self::WARN_LOGIN_FAILURES => array(
+            //_('Warn after X login failures')
+            'label'                 => 'Warn after X login failures',
+            //_('Maximum allowed login failures before writing warn log messages')
+            'description'           => 'Maximum allowed login failures before writing warn log messages',
             'type'                  => 'int',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+            'default'               => 4
         ),
         self::ANYONE_ACCOUNT_DISABLED => array(
                                    //_('Disable Anyone Account')
@@ -776,6 +810,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::FAT_CLIENT_CUSTOM_JS => array(
+            // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
+            //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
+            //_('Custom Javascript includes for Fat-Client')
+            'label'                 => 'Custom Javascript includes for Fat-Client',
+            //_('An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.')
+            'description'           => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
+            'type'                  => 'array',
+            'default'               => array(),
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
         ),
     );
     

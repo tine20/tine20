@@ -19,7 +19,7 @@ class Sales_ProductControllerTest extends TestCase
      *
      * @return Sales_Controller_Product
      */
-    protected function _getUit()
+    public function getUit()
     {
         if ($this->_uit === null) {
             $this->_uit = Sales_Controller_Product::getInstance();
@@ -34,7 +34,7 @@ class Sales_ProductControllerTest extends TestCase
      */
     public function testCreateProduct()
     {
-        $product = $this->_getUit()->create(new Sales_Model_Product(array(
+        $product = $this->getUit()->create(new Sales_Model_Product(array(
             'name' => 'A new product'
         )));
         
@@ -50,20 +50,20 @@ class Sales_ProductControllerTest extends TestCase
      */
     public function testUpdateProductLifespan()
     {
-        $product1 = $this->_getUit()->create(new Sales_Model_Product(array(
+        $product1 = $this->getUit()->create(new Sales_Model_Product(array(
             'name' => 'product activates in future',
             'lifespan_start' => Tinebase_DateTime::now()->addDay(1)
         )));
-        $product2 = $this->_getUit()->create(new Sales_Model_Product(array(
+        $product2 = $this->getUit()->create(new Sales_Model_Product(array(
             'name' => 'product lifespan ended',
             'lifespan_end' => Tinebase_DateTime::now()->subDay(1)
         )));
-        $product3 = $this->_getUit()->create(new Sales_Model_Product(array(
+        $product3 = $this->getUit()->create(new Sales_Model_Product(array(
             'is_active' => 0,
             'name' => 'product lifespan started',
             'lifespan_start' => Tinebase_DateTime::now()->subDay(1)
         )));
-        $product4 = $this->_getUit()->create(new Sales_Model_Product(array(
+        $product4 = $this->getUit()->create(new Sales_Model_Product(array(
             'is_active' => 0,
             'name' => 'product lifespan not yet ended',
             'lifespan_end' => Tinebase_DateTime::now()->addDay(1)
@@ -76,10 +76,10 @@ class Sales_ProductControllerTest extends TestCase
             array('expectedIsActive' => 1, 'product' => $product4),
         );
         
-        $this->_getUit()->updateProductLifespan();
+        $this->getUit()->updateProductLifespan();
         
         foreach ($productsToTest as $product) {
-            $updatedProduct = $this->_getUit()->get($product['product']);
+            $updatedProduct = $this->getUit()->get($product['product']);
             $this->assertEquals($product['expectedIsActive'], $updatedProduct->is_active, print_r($product['product']->toArray(), true));
         }
     }

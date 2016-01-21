@@ -40,4 +40,24 @@ class Calendar_Backend_Sql_Attendee extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
+
+    /**
+     * @param Tinebase_Model_Container $sourceContainer
+     * @param Tinebase_Model_Container $destinationContainer
+     */
+    public function moveEventsToContainer(Tinebase_Model_Container $sourceContainer, Tinebase_Model_Container $destinationContainer)
+    {
+        $this->_db->update($this->_tablePrefix . $this->_tableName, array('displaycontainer_id' => $destinationContainer->getId()),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('displaycontainer_id') . ' = ?', $sourceContainer->getId()));
+    }
+
+    /**
+     * @param string $oldContactId
+     * @param string $newContactId
+     */
+    public function replaceContactId($oldContactId, $newContactId)
+    {
+        $this->_db->update($this->_tablePrefix . $this->_tableName, array('user_id' => $newContactId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('user_id') . ' = ?', $oldContactId));
+    }
 }

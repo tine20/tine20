@@ -174,11 +174,16 @@ Tine.Calendar.ColorManager.colorStrategyBtn = Ext.extend(Ext.Button, {
         this.menu = {
             items: [
                 {
-                    text: this.app.i18n._('Color by Calendar'),
+                    text: this.app.i18n._('Color by Organizer Calendar'),
                     checked: this.colorStrategy == 'container',
                     group: 'colorStrategy',
                     checkHandler: this.changeColorStrategy.createDelegate(this, ['container'])
                 }, {
+                    text: this.app.i18n._('Color by Attendee Calendar'),
+                    checked: this.colorStrategy == 'displayContainer',
+                    group: 'colorStrategy',
+                    checkHandler: this.changeColorStrategy.createDelegate(this, ['displayContainer'])
+                },{
                     text: this.app.i18n._('Color by Tags'),
                     checked: this.colorStrategy == 'tag',
                     group: 'colorStrategy',
@@ -236,6 +241,23 @@ Tine.Calendar.colorStrategies['container'] = {
         }
         
         return String(container.color).replace('#', '');
+    }
+};
+
+Tine.Calendar.colorStrategies['displayContainer'] = {
+    getColor: function(event, attendeeRecord) {
+        var container = null,
+            color = null;
+
+        if (attendeeRecord) {
+            container = attendeeRecord.get('displaycontainer_id');
+            color = container ? String(container.color).replace('#', '') : 'C0C0C0';
+
+        }  else {
+            color = 'C0C0C0' // light gray
+        }
+
+        return color;
     }
 };
 

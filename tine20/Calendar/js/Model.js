@@ -639,19 +639,19 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
  * @static
  */
 Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord = function(attendeeStore) {
-        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
-        var myRecord = false;
-        
-        attendeeStore.each(function(attender) {
-            var userAccountId = attender.getUserAccountId();
-            if (userAccountId == currentAccountId) {
-                myRecord = attender;
-                return false;
-            }
-        }, this);
-        
-        return myRecord;
-    }
+    var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+    var myRecord = false;
+
+    attendeeStore.each(function(attender) {
+        var userAccountId = attender.getUserAccountId();
+        if (userAccountId == currentAccountId) {
+            myRecord = attender;
+            return false;
+        }
+    }, this);
+
+    return myRecord;
+};
     
 /**
  * returns attendee record of given attendee if exists, else false
@@ -668,13 +668,40 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord = function(atten
             attendeeType.push('groupmember');
         }
 
-        if (attendeeType.indexOf(r.get('user_type') >= 0) && r.getUserId() == attendee.getUserId()) {
+        if (attendeeType.indexOf(r.get('user_type')) >= 0 && r.getUserId() == attendee.getUserId()) {
             attendeeRecord = r;
             return false;
         }
     }, this);
     
     return attendeeRecord;
+};
+
+/**
+ * returns attendee data
+ * optinally fills into event record
+ */
+Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, event) {
+    var attendeeData = [];
+
+    Tine.Tinebase.common.assertComparable(attendeeData);
+
+    attendeeStore.each(function (attender) {
+        var user_id = attender.get('user_id');
+        if (user_id/* && user_id.id*/) {
+            if (typeof user_id.get == 'function') {
+                attender.data.user_id = user_id.data;
+            }
+
+            attendeeData.push(attender.data);
+        }
+    }, this);
+
+    if (event) {
+        event.set('attendee', attendeeData);
+    }
+
+    return attendeeData;
 }
 
 /**

@@ -65,9 +65,16 @@ class Tinebase_Relations
      * @param  array  $_relationData    data for relations to create
      * @param  bool   $_ignoreACL       create relations without checking permissions
      * @param  bool   $_inspectRelated  do update/create related records on the fly
+     * @param  bool   $_doCreateUpdateCheck do duplicate/freebusy/... checking for relations
      * @return void
      */
-    public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE, $_inspectRelated = FALSE)
+    public function setRelations($_model,
+                                 $_backend,
+                                 $_id,
+                                 $_relationData,
+                                 $_ignoreACL = false,
+                                 $_inspectRelated = false,
+                                 $_doCreateUpdateCheck = false)
     {
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         foreach((array) $_relationData as $relationData) {
@@ -97,7 +104,15 @@ class Tinebase_Relations
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
-        
+
+        // prevent two empty related_id s of the same relation type
+        $emptyRelatedId = array();
+        foreach ($toAdd as $idx) {
+            if (empty($relations[$idx]->related_id)) {
+                $relations[$idx]->related_id = Tinebase_Record_Abstract::generateUID();
+                $emptyRelatedId[$idx] = true;
+            }
+        }
         $this->_validateConstraintsConfig($_model, $relations, $toDel, $toUpdate);
         
         // break relations
@@ -107,8 +122,9 @@ class Tinebase_Relations
         
         // add new relations
         foreach ($toAdd as $idx) {
-            if(empty($relations[$idx]->related_id)) {
-                $this->_setAppRecord($relations[$idx]);
+            if(isset($emptyRelatedId[$idx])) {
+                $relations[$idx]->related_id = null;
+                $this->_setAppRecord($relations[$idx], $_doCreateUpdateCheck);
             }
             $this->_addRelation($relations[$idx]);
         }
@@ -138,8 +154,15 @@ class Tinebase_Relations
                 )) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Related record diff: ' . print_r($current->related_record->diff($update->related_record)->toArray(), true));
-                    
-                    $this->_setAppRecord($update);
+
+                    if ( !$update->related_record->has('container_id') ||
+                        Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser()->getId(), $update->related_record->container_id,
+                            array(Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN)) ) {
+                        $this->_setAppRecord($update, $_doCreateUpdateCheck);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                            ' Permission denied to update related record');
+                    }
                 }
             }
             
@@ -287,7 +310,10 @@ class Tinebase_Relations
         
         $allConstraints = array_count_values($groups);
 
-        foreach($constraintsConfigs as $cc) {
+        foreach ($constraintsConfigs as $cc) {
+            if (! isset($cc['config'])) {
+                continue;
+            }
             foreach($cc['config'] as $config) {
                 
                 $group = $cc['relatedRecordClassName'] . '--' . $config['type'];
@@ -409,9 +435,10 @@ class Tinebase_Relations
      * creates/updates application records
      * 
      * @param   Tinebase_Record_RecordSet of Tinebase_Model_Relation
+     * @param   bool $_doCreateUpdateCheck
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    protected function _setAppRecord($_relation)
+    protected function _setAppRecord($_relation, $_doCreateUpdateCheck = false)
     {
         if (! $_relation->related_record instanceof Tinebase_Record_Abstract) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -431,8 +458,8 @@ class Tinebase_Relations
             . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Relation: ' . print_r($_relation->toArray(), TRUE));
-        
-        $record = $appController->$method($_relation->related_record, FALSE);
+
+        $record = $appController->$method($_relation->related_record, $_doCreateUpdateCheck && $this->_doCreateUpdateCheck($_relation));
         $_relation->related_id = $record->getId();
         
         switch ($_relation->related_model) {
@@ -446,6 +473,26 @@ class Tinebase_Relations
                 $_relation->related_backend = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
                 break;
         }
+    }
+
+    /**
+     * get configuration for duplicate/freebusy checks from relatable config
+     *
+     * @param $relation
+     *
+     * TODO relatable config should be an object with functions to get the needed information...
+     */
+    protected function _doCreateUpdateCheck($relation)
+    {
+        $relatableConfig = call_user_func($relation->own_model . '::getRelatableConfig');
+        foreach ($relatableConfig as $config) {
+            if ($relation->related_model === $config['relatedApp'] . '_Model_' . $config['relatedModel']
+                && isset($config['createUpdateCheck'])
+            ) {
+                return $config['createUpdateCheck'];
+            }
+        }
+        return false;
     }
     
     /**
