@@ -176,7 +176,19 @@ abstract class Tinebase_Export_Abstract
      * @return mixed filename/generated object/...
      */
     abstract public function generate();
-    
+
+    /**
+     * output to stdout
+     *
+     * @return void
+     */
+//    abstract public function write();
+
+    /**
+     * @param string|ressource $file
+     */
+//    abstract public function save($file);
+
     /**
      * get custom field names for this app
      * 
