@@ -647,7 +647,7 @@ abstract class Tinebase_Config_Abstract
 
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
-            case self::TYPE_BOOL:       return (bool) (int) $_rawData;
+            case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_ARRAY:      return (array) $_rawData;

@@ -485,4 +485,19 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         Tinebase_Core::set(Tinebase_Core::USER, $user);
     }
+
+    /**
+     * call handle cli function with params
+     *
+     * @param array $_params
+     */
+    protected function _cliHelper($command, $_params)
+    {
+        $opts = new Zend_Console_Getopt(array($command => $command));
+        $opts->setArguments($_params);
+        ob_start();
+        $this->_cli->handle($opts, false);
+        $out = ob_get_clean();
+        return $out;
+    }
 }

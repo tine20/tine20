@@ -16,11 +16,13 @@
  */
 define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
 define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
-define('PATH_TO_TEST_DIR', dirname(__FILE__));
+define('PATH_TO_SETUP_TEST_DIR', dirname(__FILE__));
+define('PATH_TO_TEST_DIR', dirname(__FILE__) . '/../tine20');
 
 $path = array(
     PATH_TO_REAL_DIR,
     get_include_path(),
+    PATH_TO_SETUP_TEST_DIR,
     PATH_TO_TEST_DIR,
     PATH_TO_TINE_LIBRARY
 );
