@@ -414,18 +414,22 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Felamimail.Model.Account} account
      */
     setMessageBody: function(message, account) {
-        var format = 'text/html';
+        var format = 'text/html',
+            preparedParts = message.get('preparedParts');
 
         this.msgBody = message.get('body');
 
-        if (String(this.msgBody).match(/-----BEGIN PGP MESSAGE-----/)) {
-            this.quotedPGPMessage = Tine.Tinebase.common.html2text(this.msgBody);
+        if (preparedParts && preparedParts.length > 0) {
+            if (preparedParts[0].contentType == 'application/pgp-encrypted') {
+                this.quotedPGPMessage = preparedParts[0].preparedData;
 
-            var me = this;
-            this.isRendered().then(function() {
-                me.button_toggleEncrypt.toggle();
-            });
+                this.msgBody = this.msgBody + this.app.i18n._('Encrypted Content');
 
+                var me = this;
+                this.isRendered().then(function () {
+                    me.button_toggleEncrypt.toggle();
+                });
+            }
         }
 
         if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
