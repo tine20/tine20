@@ -245,7 +245,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             xtype: 'combo',
             ref: '../actionCombo',
             typeAhead: true,
-            width: 250,
+            width: 350,
             triggerAction: 'all',
             lazyRender:true,
             mode: 'local',
