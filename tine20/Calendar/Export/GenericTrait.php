@@ -11,19 +11,14 @@
  */
 
 /**
- * abstract calendar export class
+ * generic calendar export trait
  *
  * @package     Calendar
  * @subpackage  Export
  *
  */
-abstract class Calendar_Export_Abstract extends Tinebase_Export_Spreadsheet_Ods
+trait Calendar_Export_GenericTrait
 {
-    /**
-     * @var string application of this export class
-     */
-    protected $_applicationName = 'Calendar';
-
     /**
      * @var Tinebase_DateTime
      */
@@ -41,8 +36,10 @@ abstract class Calendar_Export_Abstract extends Tinebase_Export_Spreadsheet_Ods
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function init(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
+        $this->_applicationName = 'Calendar';
+
         $periodFilter = $_filter->getFilter('period');
 
         if ($periodFilter) {

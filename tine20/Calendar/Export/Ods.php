@@ -17,8 +17,10 @@
  * @subpackage  Export
  *
  */
-class Calendar_Export_Ods extends Calendar_Export_Abstract
+class Calendar_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
 {
+    use Calendar_Export_GenericTrait;
+
     /**
      * the constructor
      *
@@ -28,6 +30,7 @@ class Calendar_Export_Ods extends Calendar_Export_Abstract
      */
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
+        $this->init($_filter, $_controller, $_additionalOptions);
 
         parent::__construct($_filter, $_controller, $_additionalOptions);
     }
