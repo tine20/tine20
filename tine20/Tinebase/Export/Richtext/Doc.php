@@ -99,17 +99,67 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
      */
     public function processIteration($_records)
     {
-        $record = $_records->getFirstRecord();
-        
-        $converter = Tinebase_Convert_Factory::factory($record);
-        $resolved = $converter->fromTine20Model($record);
-        
-        foreach ($this->_config->properties->prop as $prop) {
-            $property = (string) $prop;
-            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? htmlspecialchars($resolved[$property]) : ''));
+        $this->_resolveRecords($_records);
+
+        foreach($_records as $idx => $record) {
+            $this->processRecord($record, $idx);
         }
     }
-    
+
+    /**
+     * export single record
+     *
+     * @TODO: split for template / non template
+     */
+    public function processRecord($record, $idx)
+    {
+        $idx = $idx+1;
+        $templateProcessor = $this->_docTemplate;
+
+        // set all fields available
+        foreach($record->getFields() as $property) {
+            $value = $record->{$property};
+            if ($value instanceof DateTime) {
+                $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $this->_config->datetimeformat);
+            }
+
+            if (is_object($value) && method_exists($value, '__toString')) {
+                $value = $value->__toString();
+            }
+
+            if (is_scalar($value)) {
+                $templateProcessor->setValue($property . '#' . $idx, $value, 1);
+            }
+        }
+
+        // go through custom column configurations
+        for ($i = 0; $i < $this->_config->columns->column->count(); $i++) {
+            $column = $this->_config->columns->column->{$i};
+
+            // @TODO value should be generated in Export_Abstract
+            $value = $record->{$column->identifier};
+            if ($value instanceof DateTime) {
+                $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $column->format);
+            }
+
+            $templateProcessor->setValue($column->header.'#'.$idx, $value, 1);
+        }
+    }
+
+    /**
+     * set generic data
+     *
+     * @param array $result
+     */
+    protected function _onAfterExportRecords($result)
+    {
+        $this->getDocument()->setValue('export_time', Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), null, null, $this->_config->timeformat));
+        $this->getDocument()->setValue('export_date', Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), null, null, $this->_config->dateformat));
+        $this->getDocument()->setValue('export_account', Tinebase_Core::getUser()->accountDisplayName);
+        $this->getDocument()->setValue('export_account_n_given', Tinebase_Core::getUser()->accountFirstName);
+        $this->getDocument()->setValue('export_account_n_family', Tinebase_Core::getUser()->accountLastName);
+    }
+
     /**
      * get word object
      *

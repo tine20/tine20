@@ -39,6 +39,7 @@ trait Calendar_Export_GenericTrait
     public function init(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         $this->_applicationName = 'Calendar';
+        $this->_modelName = 'Event';
 
         $periodFilter = $_filter->getFilter('period');
 
@@ -59,9 +60,7 @@ trait Calendar_Export_GenericTrait
         $records = $this->_controller->search($this->_filter, NULL, $this->_getRelations, false, 'export');
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
 
-        $records->sort(function($r1, $r2) {
-            return $r1->container_id < $r2->container_id && $r1->dtstart < $r2->dtstart;
-        });
+        $this->_sortRecords($records);
 
         $this->_resolveRecords($records);
         foreach($records as $idx => $record) {
@@ -73,6 +72,13 @@ trait Calendar_Export_GenericTrait
         $this->_onAfterExportRecords($result);
     }
 
+    protected function _sortRecords($records)
+    {
+        $records->sort(function($r1, $r2) {
+            return $r1->dtstart > $r2->dtstart;
+        });
+    }
+
     /**
      * resolve records and prepare for export (set user timezone, ...)
      *
@@ -80,6 +86,8 @@ trait Calendar_Export_GenericTrait
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
+        parent::_resolveRecords($_records);
+
         Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
         $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($_records->organizer), TRUE);
 

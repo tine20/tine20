@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>cal_default_doc_sheet</name>
+    <type>export</type>
+    <plugin>Calendar_Export_DocSheet</plugin>
+    <template>SimpleDocSheet.docx</template>
+    <dateformat>YYYY-MM-dd</dateformat>
+    <timeformat>HH:mm</timeformat>
+    <!-- _('Default Calendar Sheet Export') -->
+    <label>Default Calendar Sheet Export</label>
+    <!-- _('Export Events as Calendar Sheet') -->
+    <description>Export Events as Calendar Sheet</description>
+    <!-- NOTE in template export we generally add all fields with their internal name
+         it depends on the template to use it or not.
+
+         Columns can be defined to export fields in a non standard way
+
+         NOTE: you need to define two columns at minimum as Zend_Config can't cope with just one and
+               we use the first column as the field to expand rows with
+    -->
+    <columns>
+        <column>
+            <identifier>dtstart</identifier>
+            <header>tstart</header>
+            <format>HH:mm</format>
+        </column>
+        <column>
+            <identifier>someother</identifier>
+        </column>
+    </columns>
+</config>
