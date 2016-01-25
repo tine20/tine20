@@ -42,27 +42,16 @@ class CoreData_JsonTest extends TestCase
     {
         $result = $this->_uit->getCoreData();
 
-        $this->assertEquals(0, $result['totalcount'], print_r($result, true));
+        $this->assertGreaterThan(0, $result['totalcount'], print_r($result, true));
 
-        // look for 'positions'
-//        $positions = null;
-//        foreach ($result['results'] as $coreData) {
-//            if ($coreData['id'] === 'adb_positions') {
-//                $positions = $coreData;
-//            }
-//        }
-//        $this->assertTrue($positions !== null);
-//        $this->assertEquals('Addressbook_Model_Position', $positions['model'], print_r($positions, true));
-
-        // look for 'positions'
-//        $positions = null;
-//        foreach ($result['results'] as $coreData) {
-//            if ($coreData['id'] === 'adb_positions') {
-//                $positions = $coreData;
-//            }
-//        }
-//        $this->assertTrue($positions !== null);
-//        $this->assertEquals('Addressbook_Model_Position', $positions['model'], print_r($positions, true));
-
+        // look for 'lists'
+        $lists = null;
+        foreach ($result['results'] as $coreData) {
+            if ($coreData['id'] === 'adb_lists') {
+                $lists = $coreData;
+            }
+        }
+        $this->assertTrue($lists !== null);
+        $this->assertEquals('Addressbook_Model_List', $lists['model'], print_r($lists, true));
     }
 }
