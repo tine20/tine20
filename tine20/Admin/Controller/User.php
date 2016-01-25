@@ -125,7 +125,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param   string $_accountId  account id
      * @param   string $_status     status to set
-     * @return  array with success flag
+     * @return  int
      */
     public function setAccountStatus($_accountId, $_status)
     {

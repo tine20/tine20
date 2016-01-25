@@ -629,7 +629,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * save group data from edit form
      *
      * @param   array $groupData        group data
-     * @param   array $groupMembers     group members
+     * @param   array $groupMembers     group members (array of ids)
      * 
      * @return  array
      */
