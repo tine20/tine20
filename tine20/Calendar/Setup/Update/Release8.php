@@ -502,17 +502,19 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     public function update_11()
     {
-        $deviceBackend = new ActiveSync_Backend_Device();
-        $usersWithiPhones = $deviceBackend->search(new ActiveSync_Model_DeviceFilter(array(
-            'devicetype' => 'iphone'
-        )))->owner_id;
+        if (Tinebase_Application::getInstance()->isInstalled('ActiveSync')) {
+            $deviceBackend = new ActiveSync_Backend_Device();
+            $usersWithiPhones = $deviceBackend->search(new ActiveSync_Model_DeviceFilter(array(
+                'devicetype' => 'iphone'
+            )))->owner_id;
 
-        $activeSyncController = ActiveSync_Controller::getInstance();
-        foreach($usersWithiPhones as $userId) {
-            try {
-                $activeSyncController->resetSyncForUser($userId, 'Calendar');
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e, /* suppress trace */ false);
+            $activeSyncController = ActiveSync_Controller::getInstance();
+            foreach ($usersWithiPhones as $userId) {
+                try {
+                    $activeSyncController->resetSyncForUser($userId, 'Calendar');
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e, /* suppress trace */ false);
+                }
             }
         }
 
