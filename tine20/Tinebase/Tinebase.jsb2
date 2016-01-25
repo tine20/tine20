@@ -466,6 +466,10 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "SimpleRecordEditDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
           "text": "MultipleEditDialogPlugin.js",
           "path": "js/widgets/dialog/"
         },

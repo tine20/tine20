@@ -1745,4 +1745,32 @@ Steuernummer 33/111/32212";
             $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
         }
     }
+
+    /**
+     * @see 0011578: add list roles to CoreData + Addressbook
+     *
+     * TODO could be generalized to test SimpleRecord models
+     */
+    public function testListRolesApi()
+    {
+        $newListRole = array(
+            'name'          => 'my test role',
+            'description'   => 'my test description'
+        );
+        $savedListRole = $this->_instance->saveListRole($newListRole);
+
+        $this->assertEquals('my test role', $savedListRole['name']);
+        $savedListRole['description'] = 'my updated description';
+
+        $updatedListRole = $this->_instance->saveListRole($savedListRole);
+        $this->assertEquals('my updated description', $updatedListRole['description']);
+
+        $this->_instance->deleteListRoles(array($updatedListRole['id']));
+        try {
+            $this->_instance->getListRole($updatedListRole['id']);#
+            $this->fail('should delete ListRole');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+        }
+    }
 }

@@ -196,7 +196,52 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, Addressbook_Controller_Contact::getInstance());
     }
-    
+
+    /**
+     * get one contact identified by $id
+     *
+     * @param string $id
+     * @return array
+     */
+    public function getListRole($id)
+    {
+        return $this->_get($id, Addressbook_Controller_ListRole::getInstance());
+    }
+
+    /**
+     * Search for lists roles matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchListRoles($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Addressbook_Controller_ListRole::getInstance(), 'Addressbook_Model_ListRoleFilter');
+    }
+
+    /**
+     * delete multiple lists roles
+     *
+     * @param array $ids list of listId's to delete
+     * @return array
+     */
+    public function deleteListRoles($ids)
+    {
+        return $this->_delete($ids, Addressbook_Controller_ListRole::getInstance());
+    }
+
+    /**
+     * save list role
+     *
+     * @param array $ids list of contactId's to delete
+     * @return array
+     */
+    public function saveListRole($recordData)
+    {
+        return $this->_save($recordData, Addressbook_Controller_ListRole::getInstance(), 'ListRole');
+    }
+
     /**
      * save one contact
      *
