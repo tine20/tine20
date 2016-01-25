@@ -576,6 +576,30 @@ Tine.Tinebase.common = {
     },
 
     /**
+     * i18n renderer
+     *
+     * NOTE: needs to be bound to i18n object!
+     *
+     * renderer: Tine.Tinebase.common.i18nRenderer.createDelegate(this.app.i18n)
+     * @param original
+     */
+    i18nRenderer: function(original) {
+        return this._hidden(original);
+    },
+
+    /**
+     * color renderer
+     *
+     * @param color
+     */
+    colorRenderer: function(color) {
+        // normalize
+        color = String(color).replace('#', '');
+
+        return '<div style="background-color: #' + Ext.util.Format.htmlEncode(color) + '">&#160;</div>';
+    },
+
+    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id
