@@ -1080,20 +1080,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.mailvelopeWrap = new Ext.Container({
             flex: 1,  // Take up all *remaining* vertical space
-
-            // mailvelope can't cope with container size changes yet
-            // but it notices window size changes
-            listeners: {
-                scope: this,
-                resize: function(ct, aw, ah) {
-                    if (! ct.mailvelopeFixResizeCycle && this.button_toggleEncrypt.pressed) {
-                        ct.mailvelopeFixResizeCycle = true;
-                        window.resizeBy(1,1);
-                    } else {
-                        ct.mailvelopeFixResizeCycle = false;
-                    }
-                }
-            }
         });
 
         return {
