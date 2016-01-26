@@ -1315,7 +1315,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * @return void
       * @return int The number of affected rows.
       */
-    public function delete($_id) 
+    public function delete($_id)
     {
         if (empty($_id)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');
