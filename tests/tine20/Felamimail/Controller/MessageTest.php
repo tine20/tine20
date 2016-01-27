@@ -1124,9 +1124,9 @@ class Felamimail_Controller_MessageTest extends TestCase
         // build message with wrong line end rfc822 part
         $mail = new Tinebase_Mail('utf-8');
         $mail->setBodyText('testmail' . "\r\n" . "\r\n");
-        $mail->setFrom('unittest@' . $mailDomain, 'unittest');
+        $mail->setFrom($this->_getEmailAddress(), 'unittest');
         $mail->setSubject('line end test');
-        $mail->addTo('unittest@' . $mailDomain);
+        $mail->addTo($this->_getEmailAddress());
         $mail->addHeader('X-Tine20TestMessage', 'lineend');
         
         // replace EOLs

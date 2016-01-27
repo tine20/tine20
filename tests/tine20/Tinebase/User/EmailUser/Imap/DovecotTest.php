@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -36,18 +36,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     protected $_config;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -139,9 +127,9 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailLastLogin'   => null,
             'emailMailSize'    => 0,
             'emailSieveSize'   => null,
-            'emailPort'        => 143,
-            'emailSecure'      => 'tls',
-            'emailHost'        => 'localhost'
+            'emailPort'        => $this->_config['port'],
+            'emailSecure'      => $this->_config['ssl'],
+            'emailHost'        => $this->_config['host']
         ), $additionalExpectations), $this->_objects['user']->imapUser->toArray());
     }
     
