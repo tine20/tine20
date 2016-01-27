@@ -671,7 +671,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             // to allow gridpanel hooks (like email compose)
             {
                 ptype: 'ux.itemregistry',
-                key:   'Calendar-GridPanel-ContextMenu'
+                key:   'Calendar-Event-GridPanel-ContextMenu'
             }],
             items: menuitems
         });

@@ -155,4 +155,27 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             'data'         => $image
         ));
     }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        if (Tinebase_Core::getUser()->hasRight($application, Addressbook_Acl_Rights::MANAGE_CORE_DATA_LISTS)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'adb_lists',
+                'application_id' => $application,
+                'model' => 'Addressbook_Model_List',
+                'label' => 'Lists' // _('Lists')
+            )));
+        }
+
+        return $result;
+    }
 }

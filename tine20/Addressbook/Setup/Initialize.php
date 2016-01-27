@@ -166,7 +166,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         
         // give anyone read rights to the internal addressbook
-        // give Adminstrators group read/edit/admin rights to the internal addressbook
+        // give Administrators group read/edit/admin rights to the internal addressbook
         Tinebase_Container::getInstance()->addGrants($this->_getInternalAddressbook(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);

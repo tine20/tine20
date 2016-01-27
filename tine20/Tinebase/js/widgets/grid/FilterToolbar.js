@@ -681,7 +681,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFilterRowsChange: function() {
-        if (! this.supressEvents) {
+        if (! this.supressEvents && Ext.isFunction(this.ownerCt.layout.layout)) {
             this.ownerCt.layout.layout();
         }
         this.doLayout();
@@ -730,19 +730,16 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }
         this.filterStore.add(filter);
 
-        var fRow = this.templates.filterrow.insertAfter(this.bwrap.child('tr[class=fw-ftb-frow]:last'),{
-            id: 'tw-ftb-frowid-' + filter.id
-        }, true);
-        
-        this.renderFilterRow(filter);
-        
-        this.onFilterRowsChange();
-        
-        /*
-        if (!this.supressEvents) {
-            this.onFiltertrigger();
+        if (this.bwrap) {
+            var fRow = this.templates.filterrow.insertAfter(this.bwrap.child('tr[class=fw-ftb-frow]:last'), {
+                id: 'tw-ftb-frowid-' + filter.id
+            }, true);
+
+            this.renderFilterRow(filter);
         }
-        */
+
+        this.onFilterRowsChange();
+
         return filter;
     },
     
@@ -765,15 +762,18 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             filterModel = this.getFilterModel(filter);
             
         this.filterStore.remove(this.filterStore.getById(filter.id));
-        filter.formFields.field.destroy();
-        filter.formFields.operator.destroy();
-        filter.formFields.value.destroy();
+
+        if (filter.formFields) {
+            filter.formFields.field.destroy();
+            filter.formFields.operator.destroy();
+            filter.formFields.value.destroy();
+        }
         
         if (filterModel && Ext.isFunction(filterModel.onDestroy)) {
             filterModel.onDestroy(filter);
         }
         
-        if (isLast) {
+        if (isLast && this.bwrap) {
             // add a new first row
             var firstFilter = this.addFilter();
             

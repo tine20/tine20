@@ -1,29 +1,29 @@
 <?php
 /**
  * Tine 2.0
- * @package     ExampleApplication
+ * @package     CoreData
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * cli server for ExampleApplication
+ * cli server for CoreData
  *
- * This class handles cli requests for the ExampleApplication
+ * This class handles cli requests for the CoreData
  *
- * @package     ExampleApplication
+ * @package     CoreData
  * @subpackage  Frontend
  */
-class ExampleApplication_Frontend_Cli
+class CoreData_Frontend_Cli
 {
     /**
      * the internal name of the application
      *
      * @var string
      */
-    protected $_applicationName = 'ExampleApplication';
+    protected $_applicationName = 'CoreData';
     
     /**
      * help array with function names and param descriptions
