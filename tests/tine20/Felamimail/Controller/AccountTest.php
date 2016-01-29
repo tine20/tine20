@@ -147,8 +147,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('IMAP4', $capabilities['capabilities']) || in_array('IMAP4rev1', $capabilities['capabilities']), 
             'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
 
-        // TODO enable quota plugin in dovecot config
-        //$this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
+        $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
         $this->assertEquals($capabilities, Tinebase_Helper::array_value($this->_account->getId(), Felamimail_Session::getSessionNamespace()->account));
     }
