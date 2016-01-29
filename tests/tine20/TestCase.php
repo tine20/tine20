@@ -500,4 +500,41 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $out = ob_get_clean();
         return $out;
     }
+
+    /**
+     * test record json api
+     *
+     * @param $modelName
+     */
+    protected function _testSimpleRecordApi($modelName)
+    {
+        $uit = $this->_getUit();
+        if (! $uit instanceof Tinebase_Frontend_Json_Abstract) {
+            throw new Exception('only allowed for json frontend tests suites');
+        }
+
+        $newRecord = array(
+            'name'          => 'my test ' . $modelName,
+            'description'   => 'my test description'
+        );
+        $savedRecord = call_user_func(array($uit, 'save' . $modelName), $newRecord);
+
+        $this->assertEquals('my test ' . $modelName, $savedRecord['name'], print_r($savedRecord, true));
+        $savedRecord['description'] = 'my updated description';
+
+        $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
+        $this->assertEquals('my updated description', $updatedRecord['description']);
+
+        $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
+        $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
+        $this->assertEquals(1, $result['totalcount']);
+
+        call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
+        try {
+            call_user_func(array($uit, 'get' . $modelName), $updatedRecord['id']);
+            $this->fail('should delete Record');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+        }
+    }
 }
