@@ -54,9 +54,8 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
             app: this
         });
 
-        // TODO generalize this: Tine.widgets.grid.SimpleRecordGridPanel
-        Tine.CoreData.Manager.registerGrid('adb_list_roles', Tine.widgets.grid.GridPanel, {
-            recordClass: Tine.Addressbook.Model.ListRole,
+        // TODO move this to a generic place
+        var simpleGridConfig = {
             app: this,
             gridConfig: {
                 autoExpandColumn: 'name',
@@ -74,11 +73,23 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
                     header: this.i18n._("Name"),
                     width: 300,
                     sortable: true,
-                    dataIndex: 'name',
-                    editable: true
+                    dataIndex: 'name'
+                }, {
+                    id: 'description',
+                    header: this.i18n._("Description"),
+                    width: 300,
+                    sortable: true,
+                    dataIndex: 'description',
+                    hidden: true
                 }]
             }
-        });
+        };
+
+        Tine.CoreData.Manager.registerGrid(
+            'adb_list_roles',
+            Tine.widgets.grid.GridPanel,
+            Ext.apply(simpleGridConfig, {recordClass: Tine.Addressbook.Model.ListRole})
+        );
     }
 });
 

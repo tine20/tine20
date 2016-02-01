@@ -198,7 +198,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * get one contact identified by $id
+     * get one list role identified by $id
      *
      * @param string $id
      * @return array
@@ -221,7 +221,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * delete multiple lists roles
+     * delete multiple list roles
      *
      * @param array $ids list of listId's to delete
      * @return array
@@ -234,7 +234,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save list role
      *
-     * @param array $ids list of contactId's to delete
+     * @param $recordData
      * @return array
      */
     public function saveListRole($recordData)
