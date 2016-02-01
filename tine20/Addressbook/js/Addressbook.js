@@ -46,10 +46,7 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
         return mainscreen;
     },
 
-    init: function() {
-        Tine.Addressbook.Application.superclass.init.apply(this, arguments);
-
-        // register Core Data widgets
+    registerCoreData: function() {
         Tine.CoreData.Manager.registerGrid('adb_lists', Tine.Addressbook.ListGridPanel, {
             app: this
         });
