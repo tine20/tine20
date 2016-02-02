@@ -119,7 +119,7 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
      */
     onClick: function (node, e) {
         // switch content type and set north + center panels
-        if (node.attributes.attributes && node.attributes.attributes.id) {
+        if (node.attributes.attributes && node.attributes.attributes.id && node.leaf) {
             Tine.log.debug('Tine.CoreData.TreePanel::onClick');
             Tine.log.debug(node);
 

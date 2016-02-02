@@ -124,6 +124,10 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             Tine.log.debug('Tine.Calendar.CalendarPanelSplitPlugin::onMainStoreLoad try again with active subview');
             cp.onStoreLoad(this.getActiveView().store, options);
         }
+
+        if (! this.attendeeFilterGrid) {
+            return;
+        }
         
         // create view for each attendee
         var filteredAttendee = this.attendeeFilterGrid.getValue(),

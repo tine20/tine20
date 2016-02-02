@@ -48,7 +48,8 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
 
     registerCoreData: function() {
         Tine.CoreData.Manager.registerGrid('adb_lists', Tine.Addressbook.ListGridPanel, {
-            app: this
+            app: this,
+            hasDetailsPanel: false
         });
 
         // TODO move this to a generic place
@@ -56,8 +57,6 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
             app: this,
             gridConfig: {
                 autoExpandColumn: 'name',
-                gridType: Ext.grid.EditorGridPanel,
-                clicksToEdit: 'auto',
                 columns: [{
                     id: 'id',
                     header: this.i18n._("ID"),
@@ -85,7 +84,7 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
         Tine.CoreData.Manager.registerGrid(
             'adb_list_roles',
             Tine.widgets.grid.GridPanel,
-            Ext.apply(simpleGridConfig, {recordClass: Tine.Addressbook.Model.ListRole})
+            Ext.copyTo({recordClass: Tine.Addressbook.Model.ListRole}, simpleGridConfig, 'app,gridConfig')
         );
     }
 });
