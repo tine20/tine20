@@ -494,7 +494,7 @@ abstract class Tinebase_Export_Abstract
      * @param boolean $onlyFirstRelation
      * @return string
      */
-    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE)
+    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
     {
         $record->relations->addIndices(array('type'));
         $matchingRelations = $record->relations->filter('type', $relationType);
@@ -505,7 +505,13 @@ abstract class Tinebase_Export_Abstract
         $resultArray = array();
         foreach ($matchingRelations as $relation) {
             if ($recordField !== NULL) {
-                $resultArray[] = $relation->related_record->{$recordField};
+                if ($keyfield !== NULL && $application !== NULL) {
+                    // special case where we want to translate a keyfield
+                    $result = $this->_getResolvedKeyfield($relation->related_record->{$recordField}, $keyfield, $application);
+                } else {
+                    $result = $relation->related_record->{$recordField};
+                }
+                $resultArray[] = $result;
             } else {
                 $resultArray[] = $this->_getRelationSummary($relation->related_record);
             }
