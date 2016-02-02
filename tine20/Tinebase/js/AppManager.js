@@ -272,7 +272,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             
         } catch(e) {
             console.error('Initialising of Application "' + app.appName + '" failed with the following message:' + e);
-            console.warn(e);
+            console.error(e.stack);
             return false;
         }
     },
