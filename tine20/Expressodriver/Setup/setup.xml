@@ -3,6 +3,7 @@
     <name>Expressodriver</name>
     <version>1.0</version>
     <order>11</order>
+    <status>disabled</status>
     <depends>
         <application>Admin</application>
     </depends>

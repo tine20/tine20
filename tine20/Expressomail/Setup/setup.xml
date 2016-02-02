@@ -3,7 +3,7 @@
     <name>Expressomail</name>
     <version>0.5</version>
     <order>50</order>
-    <status>enabled</status>
+    <status>disabled</status>
     <tables>
         <table>
             <name>expressomail_account</name>
