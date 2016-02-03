@@ -60,25 +60,15 @@ class Crm_Export_Helper
         
         switch($_param['type']) {
             case 'status':
-                $value = $_record->getLeadStatus();
-                break;
             case 'source':
-                $settings = Crm_Controller::getInstance()->getConfigSettings();
-                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
-                if (isset($source['leadsource'])) {
-                    $value = $source['leadsource'];
-                } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadsource id not found:' . $_record->leadsource_id);
-                    $value = '';
-                }
-                break;
             case 'type':
+                $leadIdType = $_param['type'] == 'status' ? 'leadstate' : 'lead' . $_param['type'];
                 $settings = Crm_Controller::getInstance()->getConfigSettings();
-                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
-                if (isset($type['leadtype'])) {
-                    $value = $type['leadtype'];
+                $source = $settings->getOptionById($_record->{$leadIdType . '_id'}, $leadIdType . 's');
+                if (isset($source[$leadIdType])) {
+                    $value = $source[$leadIdType];
                 } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadtype id not found:' . $_record->leadtype_id);
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . $leadIdType . ' id not found:' . $_record->{$leadIdType . '_id'});
                     $value = '';
                 }
                 break;
