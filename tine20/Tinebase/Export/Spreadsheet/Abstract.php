@@ -164,7 +164,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     $_record,
                     /* $relationType = */       $_field->identifier,
                     /* $recordField = */        $_field->field,
-                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false
+                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false,
+                    /* $keyfield = */            isset($_field->keyfield) ? $_field->keyfield : NULL,
+                    /* $application = */        isset($_field->application) ? $_field->application : NULL
                 );
                 break;
             case 'notes':
