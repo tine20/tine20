@@ -13,8 +13,6 @@
  * 
  * @package     Addressbook
  * @subpackage  Filter
- * 
- * @todo add bday filter
  */
 class Addressbook_Model_ListRoleFilter extends Tinebase_Model_Filter_FilterGroup
 {
@@ -44,7 +42,7 @@ class Addressbook_Model_ListRoleFilter extends Tinebase_Model_Filter_FilterGroup
         ),
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('value'))
+            'options' => array('fields' => array('name'))
         ),
     );
 }
