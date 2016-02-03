@@ -217,7 +217,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTACTTYPE_CONTACT,
             array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
-        )
+        ),
     );
     
     /**

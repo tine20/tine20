@@ -26,6 +26,9 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
     
     this.init();
+    if (Tine.CoreData) {
+        this.registerCoreData();
+    }
     this.initAutoHooks();
 };
 
@@ -120,6 +123,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * template function for subclasses to initialize application
      */
     init: Ext.emptyFn,
+
+    /**
+     * template function for subclasses to register app core data
+     */
+    registerCoreData: Ext.emptyFn,
 
     /**
      * init some auto hooks

@@ -35,10 +35,15 @@ class CoreData_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function getCoreData()
     {
-       $result =  CoreData_Controller::getInstance()->getCoreData();
+        try {
+            $result =  CoreData_Controller::getInstance()->getCoreData()->toArray();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $result = array();
+        }
 
         return array(
-            'results'    => $result->toArray(),
+            'results'    => $result,
             'totalcount' => count($result)
         );
     }
