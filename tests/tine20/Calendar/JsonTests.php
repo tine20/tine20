@@ -1434,7 +1434,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
         $event = $this->_uit->saveEvent($eventData);
         
-        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 2);
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 2);
         $this->assertEquals(1, count($loggedMods), 'attender modification has not been logged');
         
         $eventData['attendee'] = $currentAttendee;

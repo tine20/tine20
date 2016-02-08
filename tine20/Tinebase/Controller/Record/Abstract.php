@@ -919,7 +919,9 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing concurrency check ...');
 
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-        $modLog->manageConcurrentUpdates($_record, $_currentRecord);
+        $modLog->manageConcurrentUpdates(
+            Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            $_record, $_currentRecord);
         $modLog->setRecordMetaData($_record, 'update', $_currentRecord);
     }
     
