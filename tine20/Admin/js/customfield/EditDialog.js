@@ -162,11 +162,15 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */ 
     onStoreWindowOK: function () {
         if (this[this.fieldType + 'Store'].isValid()) {
-            this[this.fieldType + 'Config'] = {
-                value: {
-                    records: this[this.fieldType + 'Store'].getValue()      
-                }
-            };
+            if (this.fieldType == 'record') {
+                this[this.fieldType + 'Config'] = {
+                    value: {
+                        records: this[this.fieldType + 'Store'].getValue()
+                    }
+                };
+            } else {
+                this[this.fieldType + 'Config'] = {value: this[this.fieldType + 'Store'].getValue()};
+            }
              
             this.onStoreWindowClose();
         }
@@ -300,17 +304,17 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             items: this['init' + (this.fieldType.charAt(0).toUpperCase() + this.fieldType.substr(1)) + 'Store'](),
             fbar: ['->', {
-                text: _('OK'),
-                minWidth: 70,
-                scope: this,
-                handler: this.onStoreWindowOK,
-                iconCls: 'action_applyChanges'
-            }, {
                 text: _('Cancel'),
                 minWidth: 70,
                 scope: this,
                 handler: this.onStoreWindowClose,
                 iconCls: 'action_cancel'
+            }, {
+                text: _('OK'),
+                minWidth: 70,
+                scope: this,
+                handler: this.onStoreWindowOK,
+                iconCls: 'action_applyChanges'
             }]
         });
     },
@@ -348,7 +352,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.configureStoreBtn = new Ext.Button({
-            columnWidth: 0.333,
+            columnWidth: 0.4,
             fieldLabel: '&#160;',
             xtype: 'button',
             iconCls: 'admin-node-customfields-store',
@@ -419,7 +423,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'columnform',
                     border: false,
                     items: [[{
-                        columnWidth: 0.666,
+                        columnWidth: 0.6,
                         xtype: 'combo',
                         readOnly: this.record.id != 0,
                         store: [
