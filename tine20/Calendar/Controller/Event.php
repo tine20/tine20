@@ -164,20 +164,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 . " Skipping free/busy check because event is transparent or has no attendee");
             return;
         }
-        
-        $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($_event));
-        
-        if (! empty($_event->rrule)) {
-            $checkUntil = clone $_event->dtstart;
-            $checkUntil->add(1, Tinebase_DateTime::MODIFIER_MONTH);
-            Calendar_Model_Rrule::mergeRecurrenceSet($eventSet, $_event->dtstart, $checkUntil);
-        }
-        
-        $periods = array();
-        foreach ($eventSet as $event) {
-            $periods[] = array('from' => $event->dtstart, 'until' => $event->dtend);
-        }
-        
+
+        $periods = $this->getBlockingPeriods($_event, array(
+            'from'  => $_event->dtstart,
+            'until' => $_event->dtstart->getClone()->addMonth(2)
+        ));
+
         $fbInfo = $this->getFreeBusyInfo($periods, $_event->attendee, $ignoreUIDs);
         
         if (count($fbInfo) > 0) {
@@ -276,13 +268,106 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         throw new Tinebase_Exception_NotImplemented('not implemented');
     }
-    
+
+    /**
+     * returns period filter expressing blocking times caused by given event
+     *
+     * @param  Calendar_Model_Event         $event
+     * @param  array                        $checkPeriod array(
+            "from"  => DateTime  (defaults to dtstart)
+            "until" => DateTime  (defaults to dtstart + 2 years)
+            "max"   => Integer   (defaults to 25)
+        )
+     * @return Calendar_Model_EventFilter
+     */
+    public function getBlockingPeriods($event, $checkPeriod = array())
+    {
+        $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
+
+        if (! empty($event->rrule)) {
+            try {
+                $eventSet->merge($this->getRecurExceptions($event, true));
+            } catch (Tinebase_Exception_NotFound $e) {
+                // it's ok, event is not exising yet so we don't have exceptions as well
+            }
+
+            $from = isset($checkPeriod['from']) ? $checkPeriod['from'] : clone $event->dtstart;
+            $until = isset($checkPeriod['until']) ? $checkPeriod['until'] : $from->getClone()->addMonth(24);
+            Calendar_Model_Rrule::mergeRecurrenceSet($eventSet, $from, $until);
+        }
+
+        $periodFilters = array();
+        foreach ($eventSet as $candidate) {
+            if ($candidate->transp != Calendar_Model_Event::TRANSP_TRANSP) {
+                $periodFilters[] = array(
+                    'field' => 'period',
+                    'operator' => 'within',
+                    'value' => array(
+                        'from' => $candidate->dtstart,
+                        'until' => $candidate->dtend,
+                    ),
+                );
+            }
+        }
+
+        $filter = new Calendar_Model_EventFilter($periodFilters, Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+
+        return $filter;
+    }
+
+    /**
+     * returns conflicting periods
+     *
+     * @param Calendar_Model_EventFilter $periodCandidates
+     * @param Calendar_Model_EventFilter $conflictCriteria
+     * @param bool                       $getAll
+     * @return array
+     */
+    public function getConflictingPeriods($periodCandidates, $conflictCriteria, $getAll=false)
+    {
+        $conflictFilter = clone $conflictCriteria;
+        $conflictFilter->addFilterGroup($periodCandidates);
+        $conflictCandidates = $this->search($conflictFilter);
+
+        $from = Tinebase_DateTime::now();
+        $until = Tinebase_DateTime::now();
+
+        foreach ($periodCandidates as $periodFilter) {
+            $period = $periodFilter->getValue();
+            $from = min($from, $period['from']);
+            $until = max($until, $period['until']);
+//            Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $period['from'], $period['until']);
+        }
+        Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
+
+        $conflicts = array();
+        foreach ($periodCandidates as $periodFilter) {
+            $period = $periodFilter->getValue();
+
+            foreach($conflictCandidates as $event) {
+                if ($event->dtstart->isEarlier($period['until']) && $event->dtend->isLater($period['from'])) {
+                    $conflicts[] = array(
+                        'from' => $period['from'],
+                        'until' => $period['until'],
+                        'event' => $event
+                    );
+
+                    if (! $getAll) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $conflicts;
+    }
+
     /**
      * returns freebusy information for given period and given attendee
      * 
      * @todo merge overlapping events to one freebusy entry
      * 
-     * @param  array of array with from and until                   $_periods
+     * @param  Calendar_Model_EventFilter                           $_periods
      * @param  Tinebase_Record_RecordSet of Calendar_Model_Attender $_attendee
      * @param  array of UIDs                                        $_ignoreUIDs
      * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
@@ -293,44 +378,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // map groupmembers to users
         $attendee = clone $_attendee;
-        $attendee->addIndices(array('user_type'));
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
         
-        // base filter data
-        $filterData = array(
+        $conflictCriteria = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $_attendee),
             array('field' => 'transp',   'operator' => 'equals', 'value' => Calendar_Model_Event::TRANSP_OPAQUE)
-        );
-        
-        // add all periods to filterdata
-        $periodFilters = array();
-        foreach ($_periods as $period) {
-            $periodFilters[] = array(
-                'field' => 'period', 
-                'operator' => 'within', 
-                'value' => array(
-                    'from' => $period['from'], 
-                    'until' => $period['until']
-            ));
-        }
-        $filterData[] = array('condition' => 'OR', 'filters' => $periodFilters);
-        
-        // finaly create filter
-        $filter = new Calendar_Model_EventFilter($filterData);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
-            . ' free/busy filter: ' . print_r($filter->toArray(), true));
-        
-        $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
-        
-        foreach ($_periods as $period) {
-            Calendar_Model_Rrule::mergeRecurrenceSet($events, $period['from'], $period['until']);
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
-            . ' value: ' . print_r($events->toArray(), true));
-        
+        ));
+
+        $conflictingPeriods = $this->getConflictingPeriods($_periods, $conflictCriteria, true);
+
         // create a typemap
         $typeMap = array();
         foreach ($attendee as $attender) {
@@ -342,38 +399,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
             . ' value: ' . print_r($typeMap, true));
-        
-        // generate freeBusyInfos
-        foreach ($events as $event) {
+
+        $processedEvents = array();
+
+        foreach($conflictingPeriods as $conflictingPeriod) {
+            $event = $conflictingPeriod['event'];
+
+            // one event may conflict multiple periods
+            if (in_array($event, $processedEvents)) {
+                continue;
+            }
+
+            $processedEvents[] = $event;
+
             // skip events with ignoreUID
             if (in_array($event->uid, $_ignoreUIDs)) {
                 continue;
             }
-            
-            // check if event is conflicting one of the given periods
-            $conflicts = FALSE;
-            foreach($_periods as $period) {
-                if ($event->dtstart->isEarlier($period['until']) && $event->dtend->isLater($period['from'])) {
-                    $conflicts = TRUE;
-                    break;
-                }
-            }
-            if (! $conflicts) {
-                continue;
-            }
-            
+
             // map groupmembers to users
-            $event->attendee->addIndices(array('user_type'));
             $groupmembers = $event->attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
             $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
-        
+
             foreach ($event->attendee as $attender) {
                 // skip declined/transp events
                 if ($attender->status == Calendar_Model_Attender::STATUS_DECLINED ||
                     $attender->transp == Calendar_Model_Event::TRANSP_TRANSP) {
                     continue;
                 }
-                
+
                 if ((isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap)) && (isset($typeMap[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, $typeMap[$attender->user_type]))) {
                     $fbInfo = new Calendar_Model_FreeBusy(array(
                         'user_type' => $attender->user_type,
@@ -461,7 +515,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function searchFreeTime($_from, $_until, $_attendee/*, $_constains, $_mode*/)
     {
-        $fbInfoSet = $this->getFreeBusyInfo(array(array('from' => $_from, 'until' => $_until)), $_attendee);
+        throw new Tinebase_Exception_NotImplemented();
+
+//        $fbInfoSet = $this->getFreeBusyInfo(array(array('from' => $_from, 'until' => $_until)), $_attendee);
         
 //        $fromTs = $_from->getTimestamp();
 //        $untilTs = $_until->getTimestamp();
@@ -1506,20 +1562,29 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         if ($_record->isRecurException()) {
-            $baseEvent = $this->getRecurBaseEvent($_record);
-
-            // remove invalid rrules
-            if ($_record->rrule !== NULL) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Removing invalid rrule from recur exception: ' . $_record->rrule);
-                $_record->rrule = NULL;
-            }
+            $_record->rrule = NULL;
+            $_record->rrule_constraints = NULL;
 
 //            // Maybe Later
+//            $baseEvent = $this->getRecurBaseEvent($_record);
 //            // exdates needs to stay in baseEvents container
 //            if($_record->container_id != $baseEvent->container_id) {
 //                throw new Calendar_Exception_ExdateContainer();
 //            }
+        }
+
+        // inspect rrule_constraints
+        if ($_record->rrule_constraints) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' event has rrule constrains, calculating exdates');
+
+            $exdates = is_array($_record->exdate) ? $_record->exdate : array();
+            $constrainExdatePeriods = $this->getConflictingPeriods($this->getBlockingPeriods($_record), $_record->rrule_constraints);
+            foreach($constrainExdatePeriods as $constrainExdatePeriod) {
+                $exdates[] = $constrainExdatePeriod['from'];
+            }
+
+            $_record->exdate = array_unique($exdates);
         }
     }
 

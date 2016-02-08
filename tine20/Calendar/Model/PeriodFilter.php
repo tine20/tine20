@@ -59,7 +59,19 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     {
         return new Tinebase_DateTime($this->_until);
     }
-    
+
+    /**
+     * returns combined value
+     *
+     * @return array
+     */
+    public function getValue()
+    {
+        return array(
+            'from'  => $this->getFrom(),
+            'until' => $this->getUntil(),
+        );
+    }
     /**
      * set this filter en/disabled
      * 

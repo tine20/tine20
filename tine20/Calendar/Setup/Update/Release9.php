@@ -60,4 +60,26 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
         $release8->update_11();
         $this->setApplicationVersion('Calendar', '9.4');
     }
+
+    /**
+     * add rrule_constraints
+     */
+    public function update_4()
+    {
+        if (!$this->_backend->columnExists('rrule_constraints', 'cal_events')) {
+            $seqCol = '<field>
+                <name>rrule_constraints</name>
+                <type>text</type>
+                <notnull>false</notnull>
+            </field>';
+
+            $declaration = new Setup_Backend_Schema_Field_Xml($seqCol);
+            $this->_backend->addCol('cal_events', $declaration);
+        }
+
+
+        $this->setTableVersion('cal_events', '12');
+        $this->setApplicationVersion('Calendar', '9.5');
+    }
+
 }
