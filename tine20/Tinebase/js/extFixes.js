@@ -497,3 +497,17 @@ Ext.form.TriggerField.prototype.taskForFocusFix = new Ext.util.DelayedTask(funct
 });
 
 Ext.form.TriggerField.prototype.taskForFocusFix.delay(1000);
+
+// fixing layers in LayerCombo
+// TODO maybe expand this to all Ext.Layers:
+// Ext.Layer.prototype.showAction = Ext.Layer.prototype.showAction.createSequence(function() {
+// Ext.Layer.prototype.hideAction = Ext.Layer.prototype.hideAction.createSequence(function() {
+Ext.form.ComboBox.prototype.expand = Ext.form.ComboBox.prototype.expand.createSequence(function() {
+    this.list.setActive = Ext.emptyFn;
+    this.list.setZIndex = Ext.emptyFn;
+    Ext.WindowMgr.register(this.list);
+    Ext.WindowMgr.bringToFront(this.list);
+});
+Ext.form.ComboBox.prototype.collapse = Ext.form.ComboBox.prototype.collapse.createSequence(function() {
+    Ext.WindowMgr.unregister(this.list);
+});
