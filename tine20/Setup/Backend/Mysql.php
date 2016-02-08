@@ -99,6 +99,8 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (isset($_table->comment)) {
             $statement .= " COMMENT='" . $_table->comment . "'";
         }
+
+        if (Setup_Core::isLogLevel(Zend_Log::TRACE)) Setup_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $statement);
         
         return $statement;
     }
@@ -308,6 +310,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (!empty($_key->referenceOnUpdate)) {
             $snippet .= " ON UPDATE " . strtoupper($_key->referenceOnUpdate);
         }
+
         return $snippet;
     }
     

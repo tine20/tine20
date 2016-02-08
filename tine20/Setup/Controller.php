@@ -1443,12 +1443,16 @@ class Setup_Controller
         }
         
         try {
+            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
+
             $createdTables = array();
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
-                    
+
+                    if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $currentTable);
+
                     try {
                         $this->_backend->createTable($table);
                     } catch (Zend_Db_Statement_Exception $zdse) {
@@ -1466,9 +1470,7 @@ class Setup_Controller
                 'order'     => $_xml->order ? (string)$_xml->order : 99,
                 'version'   => (string)$_xml->version
             ));
-            
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
-            
+
             $application = Tinebase_Application::getInstance()->addApplication($application);
             
             // keep track of tables belonging to this application
@@ -1488,8 +1490,7 @@ class Setup_Controller
             
             Setup_Initialize::initialize($application, $_options);
         } catch (Exception $e) {
-            $table = (isset($currentTable)) ? ' Table: ' . $currentTable : '';
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . $table . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
     }
