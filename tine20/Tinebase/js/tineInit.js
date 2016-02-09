@@ -54,6 +54,7 @@ Tine.clientVersion.releaseTime      = 'none';
 Tine.title = 'Tine 2.0';
 Tine.weburl = 'https://www.tine20.org/en/the-project/contribute.html';
 Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
+Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
  * quiet logging in release mode
