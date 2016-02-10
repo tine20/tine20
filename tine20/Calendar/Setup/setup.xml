@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>9.5</version>
+    <version>9.6</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -462,7 +462,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -538,6 +538,13 @@
                     <type>text</type>
                     <length>32</length>
                     <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>busy_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>BUSY</default>
                     <notnull>true</notnull>
                 </field>
                 <field>

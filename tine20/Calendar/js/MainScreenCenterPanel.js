@@ -1461,6 +1461,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             // generate html for each busy attender
             var busyAttendeeHTML = '';
+            var denyIgnore = false;
+
             Ext.each(busyAttendee, function(busyAttender) {
                 // TODO refactore name handling of attendee
                 //      -> attender model needs knowlege of how to get names!
@@ -1482,11 +1484,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     if (fbInfo.event && fbInfo.event.summary) {
                         eventInfo += ' : ' + fbInfo.event.summary;
                     }
+                    if (fbInfo.type == 'BUSY_UNAVAILABLE') {
+                        denyIgnore = true;
+                        eventInfo += '<span class="cal-conflict-eventinfos-unavailable">' + this.app.i18n._('Unavailable') + '</span>';
+                    }
                     eventInfos.push(eventInfo);
                 }, this);
                 busyAttendeeHTML += '<div class="cal-conflict-eventinfos">' + eventInfos.join(', <br />') + '</div>';
                 
-            });
+            }, this);
             
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
@@ -1498,7 +1504,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                '</div>' +
                                busyAttendeeHTML,
                 options: [
-                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
+                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
                     {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
                     {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],

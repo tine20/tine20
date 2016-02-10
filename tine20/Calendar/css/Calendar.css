@@ -209,6 +209,12 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     margin-left: 15px;
 }
 
+.cal-conflict-eventinfos-unavailable {
+    padding-left: 5px;
+    font-style: italic;
+    color: red;
+}
+
 /**** status icons ****/
 .cal-status-icon {
     background-image:url(../../images/calendar-status-icons.gif) !important;

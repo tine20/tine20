@@ -120,6 +120,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
         Ext.each(this.options, function(option) {
             items.push({
                 checked: !! option.checked,
+                disabled: !! option.disabled,
                 fieldLabel: '',
                 labelSeparator: '',
                 boxLabel: option.text,

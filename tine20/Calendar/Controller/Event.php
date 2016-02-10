@@ -400,9 +400,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
             . ' value: ' . print_r($typeMap, true));
 
+        // fetch resources to get freebusy type
+        // NOTE: we could add busy_type to attendee later
+        if (isset($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE])) {
+            $resources = Calendar_Controller_Resource::getInstance()->getMultiple(array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
+        }
+
         $processedEvents = array();
 
-        foreach($conflictingPeriods as $conflictingPeriod) {
+        foreach ($conflictingPeriods as $conflictingPeriod) {
             $event = $conflictingPeriod['event'];
 
             // one event may conflict multiple periods
@@ -429,12 +435,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
 
                 if ((isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap)) && (isset($typeMap[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, $typeMap[$attender->user_type]))) {
+                    $type = Calendar_Model_FreeBusy::FREEBUSY_BUSY;
+
+                    if ($attender->user_type == Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                        $resource = $resources->getById($attender->user_id);
+                        if ($resource) {
+                            $type = $resource->busy_type;
+                        }
+                    }
+
                     $fbInfo = new Calendar_Model_FreeBusy(array(
                         'user_type' => $attender->user_type,
                         'user_id'   => $attender->user_id,
                         'dtstart'   => clone $event->dtstart,
                         'dtend'     => clone $event->dtend,
-                        'type'      => Calendar_Model_FreeBusy::FREEBUSY_BUSY,
+                        'type'      => $type,
                     ), true);
                     
                     if ($event->{Tinebase_Model_Grants::GRANT_READ}) {

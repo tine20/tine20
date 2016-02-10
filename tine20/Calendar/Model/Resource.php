@@ -55,6 +55,7 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'email'                => array('allowEmpty' => true          ),
         'is_location'          => array('allowEmpty' => true          ),
         'status'               => array('allowEmpty' => true          ),
+        'busy_type'            => array('allowEmpty' => true          ),
         'suppress_notification'=> array('allowEmpty' => true          ),
         'tags'                 => array('allowEmpty' => true          ),
         'notes'                => array('allowEmpty' => true          ),

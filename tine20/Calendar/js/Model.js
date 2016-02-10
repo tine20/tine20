@@ -732,6 +732,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'email'},
     {name: 'is_location', type: 'bool'},
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
+    {name: 'busy_type', type: 'keyField', keyFieldConfigName: 'freebusyTypes'},
     {name: 'suppress_notification', type: 'bool'},
     {name: 'tags'},
     {name: 'notes'},

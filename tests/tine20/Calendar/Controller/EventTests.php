@@ -497,7 +497,35 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->_controller->create($nonConflictEvent, TRUE);
     }
-    
+
+    public function testCreateConflictResourceUnavailable()
+    {
+        $event = $this->_getEvent();
+
+        // create & add resource
+        $rt = new Calendar_Controller_ResourceTest();
+        $rt->setUp();
+        $resource = $rt->testCreateResource();
+        $resource->busy_type = Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE;
+        Calendar_Controller_Resource::getInstance()->update($resource);
+
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->getId()
+        ))));
+
+        $conflictEvent = clone $event;
+        $this->_controller->create($event);
+        try {
+            $this->_controller->create($conflictEvent, TRUE);
+            $this->fail('Calendar_Exception_AttendeeBusy was not thrown');
+        } catch (Calendar_Exception_AttendeeBusy $abe) {
+            $fb = $abe->getFreeBusyInfo();
+            $this->assertEquals(Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE, $fb[0]->type);
+        }
+
+    }
+
     public function testUpdateWithConflictNoTimechange()
     {
         $persitentConflictEvent = $this->testCreateEventWithConflict();
