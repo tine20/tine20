@@ -49,12 +49,14 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     registerCoreData: function() {
         Tine.CoreData.Manager.registerGrid('adb_lists', Tine.Addressbook.ListGridPanel, {
             app: this,
+            initialLoadAfterRender: false,
             hasDetailsPanel: false
         });
 
         // TODO move this to a generic place
         var simpleGridConfig = {
             app: this,
+            initialLoadAfterRender: false,
             gridConfig: {
                 autoExpandColumn: 'name',
                 columns: [{

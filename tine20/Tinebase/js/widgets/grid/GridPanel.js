@@ -309,7 +309,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @property splitAddButton
      */
     splitAddButton: true,
-    
+
+
+    /**
+     * do initial load (by loading default favorite) after render
+     *
+     * @type Boolean
+     */
+    initialLoadAfterRender: true,
+
     /**
      * add "create new record" button
      * 
@@ -1225,7 +1233,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     afterRender: function() {
         Tine.widgets.grid.GridPanel.superclass.afterRender.apply(this, arguments);
-        this.initialLoad();
+        if (this.initialLoadAfterRender) {
+            this.initialLoad();
+        }
     },
 
     /**
