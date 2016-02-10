@@ -68,6 +68,10 @@
           "path": "js/"
         },
         {
+          "text": "ListRoleGridPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "ListEditDialog.js",
           "path": "js/"
         },

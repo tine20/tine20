@@ -300,6 +300,7 @@ Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
 Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'name'},
+    {name: 'members'},
     {name: 'description'}
 ], {
     appName: 'Addressbook',
