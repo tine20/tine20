@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "ListRoleMemberFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "Model.js",
           "path": "js/"
         },

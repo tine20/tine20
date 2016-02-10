@@ -138,6 +138,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: _('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
+        {filtertype: 'addressbook.listRoleMember', app: app},
         {label: app.i18n._('Title'),                                                    field: 'n_prefix' },
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},

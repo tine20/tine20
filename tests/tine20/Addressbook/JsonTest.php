@@ -1765,11 +1765,11 @@ Steuernummer 33/111/32212";
     /**
      * @see 0011584: allow to set group member roles
      */
-    public function testListMemberRoles()
+    public function testCeateListWithMemberAndRole($listRoleName = 'my test role')
     {
         $contact = $this->_addContact();
         $listRole = $this->_uit->saveListRole(array(
-            'name'          => 'my test role',
+            'name'          => $listRoleName,
             'description'   => 'my test description'
         ));
         $memberroles = array(array(
@@ -1790,6 +1790,16 @@ Steuernummer 33/111/32212";
         $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
         $this->assertEquals($listRole['id'], $list['memberroles'][0]['list_role_id']['id'], 'member roles are not saved/returned in list: ' . print_r($list, true));
 
+        return $list;
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testRemoveListMemberRoles()
+    {
+        $list = $this->testCeateListWithMemberAndRole();
+
         $list['memberroles'] = array();
         $updatedList = $this->_uit->saveList($list);
         $this->assertTrue(empty($updatedList['memberroles']), 'memberroles should be removed: ' . print_r($updatedList, true));
@@ -1801,5 +1811,21 @@ Steuernummer 33/111/32212";
     public function testListRolesApi()
     {
         $this->_testSimpleRecordApi('ListRole');
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testSearchContactByListRole()
+    {
+        $list = $this->testCeateListWithMemberAndRole();
+
+        $filter = array(
+            array('field' => 'list_role_id','operator' => 'in', 'value' => array($list['memberroles'][0]['list_role_id']['id']))
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount']);
     }
 }
