@@ -94,6 +94,13 @@ class Tinebase_Timemachine_ModificationLog
      * @var Tinebase_Timemachine_ModificationLog
      */
     private static $instance = NULL;
+
+    /**
+     * holds the applicationId of the current context temporarily.
+     *
+     * @var string
+     */
+    protected $_applicationId = NULL;
     
     /**
      * the singleton pattern
@@ -275,18 +282,20 @@ class Tinebase_Timemachine_ModificationLog
 
     /**
      * get modifications by seq
-     * 
+     *
+     * @param string $applicationId
      * @param Tinebase_Record_Abstract $newRecord
      * @param integer $currentSeq
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
-    public function getModificationsBySeq(Tinebase_Record_Abstract $newRecord, $currentSeq)
+    public function getModificationsBySeq($applicationId, Tinebase_Record_Abstract $newRecord, $currentSeq)
     {
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'seq',            'operator' => 'greater', 'value' => $newRecord->seq),
             array('field' => 'seq',            'operator' => 'less',    'value' => $currentSeq + 1),
             array('field' => 'record_type',    'operator' => 'equals',  'value' => get_class($newRecord)),
             array('field' => 'record_id',      'operator' => 'equals',  'value' => $newRecord->getId()),
+            array('field' => 'application_id', 'operator' => 'equals',  'value' => $applicationId),
         ));
         $paging = new Tinebase_Model_Pagination(array(
             'sort' => 'seq'
@@ -384,18 +393,21 @@ class Tinebase_Timemachine_ModificationLog
     
     /**
      * merges changes made to local storage on concurrent updates into the new record 
-     * 
+     *
+     * @param string $applicationId
      * @param  Tinebase_Record_Interface $newRecord record from user data
      * @param  Tinebase_Record_Interface $curRecord record from storage
      * @return Tinebase_Record_RecordSet with resolved concurrent updates (Tinebase_Model_ModificationLog records)
      * @throws Tinebase_Timemachine_Exception_ConcurrencyConflict
      */
-    public function manageConcurrentUpdates(Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord)
+    public function manageConcurrentUpdates($applicationId, Tinebase_Record_Interface $newRecord, Tinebase_Record_Interface $curRecord)
     {
         if (! $newRecord->has('seq')) {
             return $this->manageConcurrentUpdatesByTimestamp($newRecord, $curRecord, get_class($newRecord), 'Sql', $newRecord->getId());
         }
-        
+
+        $this->_applicationId = $applicationId;
+
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         if ($curRecord->seq != $newRecord->seq) {
             
@@ -407,7 +419,7 @@ class Tinebase_Timemachine_ModificationLog
                     ($curRecord->creation_time instanceof DateTime ? $curRecord->creation_time : 'unknown')) .
                 "' / current sequence: " . $curRecord->seq . " - new record sequence: " . $newRecord->seq);
             
-            $loggedMods = $this->getModificationsBySeq($newRecord, $curRecord->seq);
+            $loggedMods = $this->getModificationsBySeq($applicationId, $newRecord, $curRecord->seq);
             
             // effective modifications made to the record after current user got his record
             $diffs = $this->computeDiff($loggedMods);
@@ -533,8 +545,11 @@ class Tinebase_Timemachine_ModificationLog
                     . ' new record: ' . print_r($newRecordsRecord->toArray(), TRUE));
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' modified record: ' . print_r($modifiedRecord->toArray(), TRUE));
-                
-                $this->manageConcurrentUpdates($newRecordsRecord, $modifiedRecord);
+
+                if (null === $this->_applicationId) {
+                    throw new Tinebase_Exception_UnexpectedValue('application_id needs to be set here');
+                }
+                $this->manageConcurrentUpdates($this->_applicationId, $newRecordsRecord, $modifiedRecord);
             } else {
                 throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict - modified record changes could not be merged!');
             }
