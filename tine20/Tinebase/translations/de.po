@@ -921,8 +921,8 @@ msgstr "ist gleich"
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/grid/PickerFilter.js:310
 #, python-brace-format
-msgid "Selected  {0}"
-msgstr "Ausgewählt {0}"
+msgid "Selected {0}"
+msgstr "Ausgewählte {0}"
 
 #: js/widgets/mainscreen/WestPanel.js:302
 msgid "containers"

@@ -102,6 +102,13 @@ class Setup_Backend_Schema_Table_Factory
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
             </declaration>
         </table>
         ');

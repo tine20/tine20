@@ -70,18 +70,6 @@ class Addressbook_JsonTest extends TestCase
     protected $_groupIdsToDelete = NULL;
     
     protected $_originalRoleRights = null;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -118,6 +106,8 @@ class Addressbook_JsonTest extends TestCase
             'sort' => 'n_fileas',
             'dir' => 'ASC',
         );
+
+        parent::setUp();
     }
 
     /**
@@ -156,6 +146,8 @@ class Addressbook_JsonTest extends TestCase
         }
         
         $this->_resetOriginalRoleRights();
+
+        parent::tearDown();
     }
     
     protected function _resetOriginalRoleRights()
@@ -858,9 +850,13 @@ class Addressbook_JsonTest extends TestCase
      * test import
      * 
      * @see 0006226: Data truncated for column 'adr_two_lon'
+     *
+     * TODO move import test to separate test class
      */
     public function testImport()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper();
         $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.' . print_r($result, TRUE));
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
@@ -898,6 +894,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithResolveStrategyDiscard()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $fritz = $result['results'][1];
 
@@ -919,6 +917,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithResolveStrategyMergeTheirs()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, count($result['results']), 'no import results');
         $fritz = $result['results'][1];
@@ -986,6 +986,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportWithTags()
     {
+        $this->_testNeedsTransaction();
+
         $options = array(
             'dryrun'     => 0,
             'autotags'   => array(array(
@@ -1038,6 +1040,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithExistingTag()
     {
+        $this->_testNeedsTransaction();
+
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         $tag = Tinebase_Tags::getInstance()->create($tag);
         
@@ -1056,6 +1060,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithNewTag()
     {
+        $this->_testNeedsTransaction();
+
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         
         $options = array(
@@ -1075,6 +1081,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportKeepExistingWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $klaus = $this->_tagImportHelper('discard');
         $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus['tags'], TRUE));
     }
@@ -1085,6 +1093,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportMergeTheirsWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertTrue(count($result['results']) > 0, 'no record were imported');
         $klaus = $result['results'][0];
@@ -1158,6 +1168,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportKeepBothWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $klaus = $this->_tagImportHelper('keep');
         $this->assertEquals(1, count($klaus['tags']), 'klaus should have only one tag: ' . print_r($klaus['tags'], TRUE));
     }
@@ -1170,6 +1182,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportTagWithLongName()
     {
+        $this->_testNeedsTransaction();
+
         // import records with long tag name
         $result = $this->_importHelper(array('dryrun' => 0), array(), dirname(__FILE__) . '/Import/files/adb_tine_import_with_tag.csv');
         
@@ -1479,6 +1493,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testDuplicateCheckWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $tagName = Tinebase_Record_Abstract::generateUID();
         $tag = array(
             'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -1731,9 +1747,9 @@ Steuernummer 33/111/32212";
         $tag2 = Tinebase_Tags::getInstance()->create($this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL, 'tag2'));
 
         $filter = array(array('field' => 'id','operator' => 'in', 'value' => array($contact1['id'], $contact2['id'])));
-        $json = new Tinebase_Frontend_Json();
+        $tinebaseJson = new Tinebase_Frontend_Json();
 
-        $json->attachMultipleTagsToMultipleRecords($filter,'Addressbook_Model_ContactFilter',array(
+        $tinebaseJson->attachMultipleTagsToMultipleRecords($filter,'Addressbook_Model_ContactFilter',array(
             $tag1->toArray(),
             $tag2->toArray(),
         ));
@@ -1744,6 +1760,39 @@ Steuernummer 33/111/32212";
         foreach($result['results'] as $contactData) {
             $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
         }
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testListMemberRoles()
+    {
+        $contact = $this->_addContact();
+        $listRole = $this->_uit->saveListRole(array(
+            'name'          => 'my test role',
+            'description'   => 'my test description'
+        ));
+        $memberroles = array(array(
+            'contact_id'   => $contact['id'],
+            'list_role_id' => $listRole['id'],
+        ));
+        $list = $this->_uit->saveList(array(
+            'name'                  => 'my test list',
+            'description'           => '',
+            'members'               => array($contact['id']),
+            'memberroles'           => $memberroles,
+            'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
+        ));
+
+        $this->assertEquals(array($contact['id']), $list['members'], 'members are not saved/returned in list: ' . print_r($list, true));
+        $this->assertTrue(isset($list['memberroles']), 'memberroles missing from list');
+        $this->assertEquals(1, count($list['memberroles']), 'member roles are not saved/returned in list: ' . print_r($list, true));
+        $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
+        $this->assertEquals($listRole['id'], $list['memberroles'][0]['list_role_id']['id'], 'member roles are not saved/returned in list: ' . print_r($list, true));
+
+        $list['memberroles'] = array();
+        $updatedList = $this->_uit->saveList($list);
+        $this->assertTrue(empty($updatedList['memberroles']), 'memberroles should be removed: ' . print_r($updatedList, true));
     }
 
     /**

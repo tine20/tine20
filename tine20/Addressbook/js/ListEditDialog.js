@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Frederic Heihoff <heihoff@sh-systems.eu>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -21,20 +21,26 @@ Ext.ns('Tine.Addressbook');
  * @author      Frederic Heihoff <heihoff@sh-systems.eu>
  */
 Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    
-    /**
-     * parse address button
-     * @type Ext.Button 
-     */
-    parseAddressButton: null,
-    
+
     windowNamePrefix: 'ListEditWindow_',
     appName: 'Addressbook',
     recordClass: Tine.Addressbook.Model.List,
     showContainerSelector: true,
     multipleEdit: true,
-    
-    // TODO: Add History and Tagging Functionality
+    displayNotes: true,
+
+    /**
+     * init component
+     */
+    initComponent: function () {
+        this.memberGridPanel = new Tine.Addressbook.ListMemberRoleGridPanel({
+            region: "center",
+            frame: true,
+            margins: '6 0 0 0'
+        });
+        this.supr().initComponent.apply(this, arguments);
+    },
+
     getFormItems: function () {
         return {
             xtype: 'tabpanel',
@@ -107,36 +113,22 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 emptyText: this.app.i18n._('Enter description'),
                                 requiredGrant: 'editGrant'
                             }]
-                        })/*,
-                        new Tine.widgets.activities.ActivitiesPanel({
-                            app: 'Addressbook',
-                            showAddNoteForm: false,
-                            border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Tine.widgets.tags.TagPanel({
                             app: 'Addressbook',
                             border: false,
                             bodyStyle: 'border:1px solid #B5B8C8;'
-                        })*/
+                        })
                     ]
                 }]
             },
-            /*new Tine.widgets.activities.ActivitiesTabPanel({
+            new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-            })*/
+            })
             ]
         };
-    },
-    
-    /**
-     * init component
-     */
-    initComponent: function () {    
-        this.memberGridPanel = new Tine.Addressbook.ListMemberGridPanel({ region: "center", frame: true, margins: '6 0 0 0' });           
-        this.supr().initComponent.apply(this, arguments);
     },
     
     /**
@@ -166,24 +158,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * onRecordLoad
      */
     onRecordLoad: function () {
-        this.memberGridPanel.setMembers(this.record.get("members")); 
         // NOTE: it comes again and again till
         if (this.rendered) {
-            var container = this.record.get('container_id');
-            
-            // handle default container
-            // TODO is this still needed? don't we already have generic default container handling?
-            if (! this.record.id) {
-                if (this.forceContainer) {
-                    container = this.forceContainer;
-                    // only force initially!
-                    this.forceContainer = null;
-                } else if (! Ext.isObject(container)) {
-                    container = Tine.Addressbook.registry.get('defaultAddressbook');
-                }
-                
-                this.record.set('container_id', '');
-                this.record.set('container_id', container);
+            this.memberGridPanel.record = this.record;
+            if (this.record.id) {
+                this.memberGridPanel.setMembers();
             }
         }
         this.supr().onRecordLoad.apply(this, arguments);
@@ -195,7 +174,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Addressbook.ListEditDialog.superclass.onRecordUpdate.apply(this, arguments);
         this.record.set("members", this.memberGridPanel.getMembers());
-    },
+        this.record.set("memberroles", this.memberGridPanel.getMemberRoles());
+    }
 });
 
 /**

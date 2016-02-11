@@ -75,7 +75,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
     {name: 'attachments', omitDuplicateResolving: true},
-    {name: 'type', omitDuplicateResolving: true}
+    {name: 'type', omitDuplicateResolving: true},
+    {name: 'memberroles', omitDuplicateResolving: true}
 ]);
 
 /**
@@ -181,22 +182,27 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
  * list model
  */
 Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
-   {name: 'id'},
-   {name: 'container_id'},
-   {name: 'created_by'},
-   {name: 'creation_time'},
-   {name: 'last_modified_by'},
-   {name: 'last_modified_time'},
-   {name: 'is_deleted'},
-   {name: 'deleted_time'},
-   {name: 'deleted_by'},
-   {name: 'name'},
-   {name: 'description'},
-   {name: 'members'},
-   {name: 'email'},
-   {name: 'type'},
-   {name: 'group_id'},
-   {name: 'emails'}
+    {name: 'id'},
+    {name: 'container_id'},
+    {name: 'created_by'},
+    {name: 'creation_time'},
+    {name: 'last_modified_by'},
+    {name: 'last_modified_time'},
+    {name: 'is_deleted'},
+    {name: 'deleted_time'},
+    {name: 'deleted_by'},
+    {name: 'name'},
+    {name: 'description'},
+    {name: 'members'},
+    {name: 'memberroles'},
+    {name: 'email'},
+    {name: 'type'},
+    {name: 'group_id'},
+    {name: 'emails'},
+    {name: 'notes', omitDuplicateResolving: true},
+    {name: 'relations', omitDuplicateResolving: true},
+    {name: 'customfields', omitDuplicateResolving: true},
+    {name: 'tags'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',
@@ -298,7 +304,7 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
     appName: 'Addressbook',
     modelName: 'ListRole',
     titleProperty: 'name',
-    // ngettext('ListRole', ListRoles', n); gettext('ListRoles');
+    // ngettext('List Role', List Roles', n); gettext('List Roles');
     recordName: 'List Role',
     recordsName: 'List Roles'
 });

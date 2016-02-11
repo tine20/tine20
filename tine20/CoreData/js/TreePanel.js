@@ -81,12 +81,14 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
             if ((path === '/applications' && coreData.application_id.name !== 'Tinebase') ||
                 (path === '/general' && coreData.application_id.name === 'Tinebase')) {
 
+                var coreDataApp = Tine.Tinebase.appMgr.get(coreData.application_id.name);
+
                 if (! coreDataNodes[coreData.application_id.name]) {
                     coreDataNodes[coreData.application_id.name] = [];
                     applicationNodes.push({
                         path: path + '/' + coreData.application_id.id,
                         id: coreData.application_id.id,
-                        text: _(coreData.application_id.name),
+                        text: coreDataApp.i18n._(coreData.application_id.name),
                         attributes: coreData.application_id
                     });
                 }
@@ -94,7 +96,7 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                 coreDataNodes[coreData.application_id.name].push({
                     path: path + '/' + coreData.application_id.id + '/' + coreData.id,
                     id: coreData.id,
-                    text: this.app.i18n._(coreData.label),
+                    text: coreDataApp.i18n._(coreData.label),
                     leaf: true,
                     attributes: coreData
                 });

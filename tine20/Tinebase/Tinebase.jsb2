@@ -622,6 +622,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "PickerGridLayerCombo.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "LinkGridPanel.js",
           "path": "js/widgets/grid/"
         },

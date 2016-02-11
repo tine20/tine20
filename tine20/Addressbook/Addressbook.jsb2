@@ -56,7 +56,11 @@
           "path": "js/"
         },
         {
-          "text": "ListMemberGridPanel.js",
+          "text": "ListMemberRoleLayerCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListMemberRoleGridPanel.js",
           "path": "js/"
         },
         {
@@ -74,7 +78,11 @@
         {
           "text": "CardDAVContainerPropertiesHookField.js",
           "path": "js/"
-        }
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+          }
       ]
     },
     {

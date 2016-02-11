@@ -259,7 +259,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getColumnModel: function() {
         if (! this.columns) {
-            var labelColumn = {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
+            var labelColumn = {
+                id: this.labelField,
+                // TODO use translated records name here
+                //header: String.format(_('Selected {0}'),
+                //    this.recordClass.getMeta('recordsName')),
+                header: _('Records'),
+                dataIndex: this.labelField
+            };
             if (this.labelRenderer != Ext.emptyFn) {
                 labelColumn.renderer = this.labelRenderer;
             }

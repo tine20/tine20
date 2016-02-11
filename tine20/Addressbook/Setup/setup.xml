@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>9.1</version>
+    <version>9.4</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -495,7 +495,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -570,13 +570,6 @@
                     <primary>true</primary>
                     <field>
                         <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
                     </field>
                 </index>
             </declaration>
@@ -702,6 +695,85 @@
                     <notnull>true</notnull>
                     <default>0</default>
                 </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <!-- addressbook list member roles / NOTE: had to use a very short name because of index length restrictions :( -->
+            <name>adb_list_m_role</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_role_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>adb_list_m_role::list_id--addressbook_lists::id</name>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook_lists</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>adb_list_m_role::contact_id--addressbook::id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>adb_list_m_role::list_role_id--addressbook_list_role::id</name>
+                    <field>
+                        <name>list_role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook_list_role</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
             </declaration>
         </table>
     </tables>
