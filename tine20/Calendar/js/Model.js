@@ -191,7 +191,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         transp: 'OPAQUE',
         editGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer)
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container)
     };
     
     if (prefs.get('defaultalarmenabled')) {
@@ -201,7 +201,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
-Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
+Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
@@ -252,24 +252,38 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
             
         case 'calendarOwner':
             var addedOwnerIds = [];
-            Ext.each(filteredContainers, function(container){
-                if (container.ownerContact) {
+            
+            Ext.each(filteredContainers, function(filteredContainer){
+                if (filteredContainer.ownerContact && filteredContainer.type && filteredContainer.type == 'personal') {
                     var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                         user_type: 'user',
-                        user_id: container.ownerContact
+                        user_id: filteredContainer.ownerContact
                     });
                     
                     if (attendeeData.user_id.id == organizer.id){
                         attendeeData.status = 'ACCEPTED';
                     }
-
-                    if (addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+                    
+                    if (addedOwnerIds.indexOf(filteredContainer.ownerContact.id) < 0) {
                         defaultAttendee.push(attendeeData);
-                        addedOwnerIds.push(container.ownerContact.id);
+                        addedOwnerIds.push(filteredContainer.ownerContact.id);
                     }
                 }
             }, this);
             
+            if (container.ownerContact && addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+                var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                    user_type: 'user',
+                    user_id: container.ownerContact
+                });
+                
+                if (container.ownerContact.id == organizer.id){
+                    attendeeData.status = 'ACCEPTED';
+                }
+                
+                defaultAttendee.push(attendeeData);
+                addedOwnerIds.push(container.ownerContact.id);
+            }
             break;
     }
     
