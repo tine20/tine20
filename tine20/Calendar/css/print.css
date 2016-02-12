@@ -191,4 +191,28 @@ div.page
     width: 1% !important;
 }
 
+/* ------------ single record ------------ */
+.customfield-rendered-label,
+.cal-print-single-label {
+    font-style: italic;
+    display: inline-block;
+    width: 3cm;
+}
 
+.cal-print-single-block {
+    margin-left: 0.5cm;
+}
+
+.cal-print-single-summary .cal-print-single-value {
+    font-weight: bold;
+}
+
+.cal-print-single {
+    margin-left: 1cm;
+    margin-right: 1cm;
+}
+
+.cal-print-single-logo {
+    text-align: right;
+    margin-bottom: 1cm;
+}

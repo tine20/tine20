@@ -152,6 +152,10 @@
           "path": "js/Printer/"
         },
         {
+          "text": "EventRecord.js",
+          "path": "js/Printer/"
+        },
+        {
           "text": "ContactEventsGridPanel.js",
           "path": "js/"
         },
