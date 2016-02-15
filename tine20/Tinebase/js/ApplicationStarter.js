@@ -254,6 +254,7 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime':
                 filter.valueType = 'date';
                 break;
+            case 'float':
             case 'integer':
                 filter.valueType = 'number';
         }

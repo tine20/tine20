@@ -6,12 +6,25 @@
     <plugin>Addressbook_Export_Doc</plugin>
     <template>addressbook_contact_letter.docx</template>
     <description>default doc letter definition</description>
-    <properties>
-        <prop>org_name</prop>
-        <prop>adr_one_locality</prop>
-        <prop>adr_one_street</prop>
-        <prop>adr_one_postalcode</prop>
-        <prop>n_given</prop>
-        <prop>n_family</prop>
-    </properties>
+    <dateformat>YYYY-MM-dd</dateformat>
+    <timeformat>HH:mm</timeformat>
+    <!-- NOTE in template export we generally add all fields with their internal name
+     it depends on the template to use it or not.
+
+     Columns can be defined to export fields in a non standard way
+
+     NOTE: you need to define two columns at minimum as Zend_Config can't cope with just one and
+           we use the first column as the field to expand rows with
+-->
+    <columns>
+        <column>
+            <identifier>bday</identifier>
+            <header>Birthday</header>
+            <format>YYYY-MM-dd</format>
+        </column>
+        <column>
+            <identifier>someother</identifier>
+        </column>
+    </columns>
+
 </config>

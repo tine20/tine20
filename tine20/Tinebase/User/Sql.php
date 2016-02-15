@@ -1144,8 +1144,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getFirstUserCreationTime()
     {
+        $fallback = new Tinebase_DateTime('2014-12-01');
         if (! $this->_userTableHasModlogFields()) {
-            $fallback = new Tinebase_DateTime('2014-12-01');
             return $fallback;
         }
 

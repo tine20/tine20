@@ -51,6 +51,8 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
             }
         }
 
+        this.keyFieldConfig = {};
+
         this.defaultCheck = new Ext.ux.grid.CheckColumn({
             id: 'default',
             header: _('Default'),

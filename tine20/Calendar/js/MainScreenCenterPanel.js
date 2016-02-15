@@ -204,37 +204,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }]
             }
         });
-
-        /**
-         * @type {Ext.Action}
-         */
-        this.actions_exportEvents = new Ext.Action({
-            requiredGrant: 'exportGrant',
-            text: this.app.i18n._('Export Events'),
-            translationObject: this.app.i18n,
-            iconCls: 'action_export',
-            scope: this,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.Calendar.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Calendar.exportEvents',
-                        gridPanel: this
-                    }),
-                    new Tine.Calendar.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Calendar.exportEvents',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
-
+        
         this.showSheetView = new Ext.Button({
             pressed: this.isActiveView('Sheet'),
             scale: 'medium',
@@ -307,14 +277,19 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             text: this.app.i18n._('Import Events'),
             disabled: false,
             handler: this.onImport,
-            scale: 'medium',
             minWidth: 60,
-            rowspan: 2,
-            iconAlign: 'top',
             requiredGrant: 'readGrant',
             iconCls: 'action_import',
             scope: this,
             allowMultiple: true
+        });
+
+        this.action_export = new Tine.Calendar.ExportButton({
+            text: this.app.i18n._('Export Events'),
+            iconCls: 'action_export',
+            exportFunction: 'Calendar.exportEvents',
+            showExportDialog: true,
+            gridPanel: this
         });
 
         this.changeViewActions = [
@@ -393,7 +368,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             rows: 2,
             frame: false,
             items: [
-                this.action_import
+                this.action_import,
+                this.action_export
             ]
         }, {
             xtype: 'buttongroup',

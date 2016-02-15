@@ -43,9 +43,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    */
   windowPrint: function(component) {
     var name = component && component.getXType
-             ? String.format("print_{0}_{1}", component.getXType().replace(/(\.|-)/g, '_'), component.id.replace(/(\.|-)/g, '_'))
+             ? String.format("print_{0}_{1}", String(component.getXType()).replace(/(\.|-)/g, '_'), component.id.replace(/(\.|-)/g, '_'))
              : "print";
-             
+
     var win = window.open('', name);
     
     win.document.write(this.generateHTML(component));

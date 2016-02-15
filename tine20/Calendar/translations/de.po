@@ -1682,3 +1682,6 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+msgid "Print Event"
+msgstr "Termin Drucken"

@@ -314,13 +314,13 @@ html, body {
 
 
 .action_import {
-    background-image:url(../../images/oxygen/16x16/actions/view-sort-ascending.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/file-import.png) !important;
 }
 .x-btn-medium .action_import {
-    background-image:url(../../images/oxygen/22x22/actions/view-sort-ascending.png) !important;
+    background-image:url(../../images/oxygen/22x22/actions/file-import.png) !important;
 }
 .x-btn-large .action_import {
-    background-image:url(../../images/oxygen/32x32/actions/view-sort-ascending.png) !important;
+    background-image:url(../../images/oxygen/32x32/actions/file-import.png) !important;
 }
 
 

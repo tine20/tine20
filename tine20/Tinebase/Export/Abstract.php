@@ -234,7 +234,7 @@ abstract class Tinebase_Export_Abstract
     {
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }
-    
+
     /**
      * export records
      */
@@ -447,7 +447,7 @@ abstract class Tinebase_Export_Abstract
         
         for ($i = 0; $i < $config->columns->column->count(); $i++) {
             $column = $config->columns->column->{$i};
-            if ($column->separateColumns) {
+            if ($column && $column->separateColumns) {
                 $this->_addMatrixHeaders($config, $config->columns->column->{$i});
                 unset($config->columns->column->{$i});
             }
