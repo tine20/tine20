@@ -239,7 +239,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     public function getNote($_noteId)
     {
-        $row = $this->_notesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', (string) $_noteId));
+        $row = $this->_notesTable->fetchRow($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ? AND '
+            . $this->_db->quoteIdentifier('is_deleted') . ' = 0', (string) $_noteId));
         
         if (!$row) {
             throw new Tinebase_Exception_NotFound('Note not found.');
@@ -321,7 +322,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_record->toArray(), TRUE));
         
-        $currentNotesIds = $this->getNotesOfRecord($model, $_record->getId(), $backend)->getArrayOfIds();
+        $currentNotes = $this->getNotesOfRecord($model, $_record->getId(), $backend);
         $notes = $_record->$_notesProperty;
         
         if ($notes instanceOf Tinebase_Record_RecordSet) {
@@ -360,10 +361,14 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         }
         
         //$toAttach = array_diff($notesToSet->getArrayOfIds(), $currentNotesIds);
-        $toDetach = array_diff($currentNotesIds, $notesToSet->getArrayOfIds());
+        $toDetach = array_diff($currentNotes->getArrayOfIds(), $notesToSet->getArrayOfIds());
+        $toDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
+        foreach($toDetach as $detachee) {
+            $toDelete->addRecord($currentNotes->getById($detachee));
+        }
 
         // delete detached/deleted notes
-        $this->deleteNotes($toDetach);
+        $this->deleteNotes($toDelete);
         
         // add new notes
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding ' . count($notesToSet) . ' note(s) to record.');
@@ -495,17 +500,24 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $this->addSystemNote($recordId, $_userId, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modsOfRecord, 'Sql', $modelName);
         }
     }
-    
+
     /**
      * delete notes
      *
-     * @param array $_noteIds
+     * @param Tinebase_Record_RecordSet $notes
      */
-    public function deleteNotes(array $_noteIds)
+    public function deleteNotes(Tinebase_Record_RecordSet $notes)
     {
-        if (!empty($_noteIds)) {
-            $where = array($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', $_noteIds));
-            $this->_notesTable->delete($where);
+        $sqlBackend = new Tinebase_Backend_Sql(
+            array(
+                'tableName' => $this->getTableName(),
+                'modelName' => 'Tinebase_Model_Note'
+            ),
+            $this->getAdapter());
+
+        foreach($notes as $note) {
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($note, 'delete', $note);
+            $sqlBackend->update($note);
         }
     }
 
@@ -521,8 +533,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $backend = ucfirst(strtolower($_backend));
         
         $notes = $this->getNotesOfRecord($_model, $_id, $backend);
-        
-        $this->deleteNotes($notes->getArrayOfIdsAsString());
+
+        $this->deleteNotes($notes);
     }
     
     /**

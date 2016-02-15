@@ -580,6 +580,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _mapRelation($fieldValue, $field, &$data)
     {
+        if (empty($fieldValue)) {
+            // no need to continue here
+            return;
+        }
+
         if (! isset($field['related_model']) || ! isset($field['filter'])) {
             throw new Tinebase_Exception_UnexpectedValue('field config missing');
         }

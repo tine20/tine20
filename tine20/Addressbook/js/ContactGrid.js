@@ -262,6 +262,11 @@ Tine.Addressbook.ContactGridPanel.displayNameRenderer = function(data) {
     return data ? data : ('<div class="renderer_displayNameRenderer_noName">' + i18n._('No name') + '</div>');
 };
 
+Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
+    data = Locale.getTranslationData('CountryList', data);
+    return data;
+};
+
 /**
  * Statically constructs the columns used to represent a contact. Reused by ListMemberGridPanel
  *
@@ -293,12 +298,12 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'adr_one_locality', header: i18n._('City'), dataIndex: 'adr_one_locality', width: 150, hidden: false },
         { id: 'adr_one_region', header: i18n._('Region'), dataIndex: 'adr_one_region' },
         { id: 'adr_one_postalcode', header: i18n._('Postalcode'), dataIndex: 'adr_one_postalcode' },
-        { id: 'adr_one_countryname', header: i18n._('Country'), dataIndex: 'adr_one_countryname' },
+        { id: 'adr_one_countryname', header: i18n._('Country'), dataIndex: 'adr_one_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
         { id: 'adr_two_street', header: i18n._('Street (private)'), dataIndex: 'adr_two_street' },
         { id: 'adr_two_locality', header: i18n._('City (private)'), dataIndex: 'adr_two_locality' },
         { id: 'adr_two_region', header: i18n._('Region (private)'), dataIndex: 'adr_two_region' },
         { id: 'adr_two_postalcode', header: i18n._('Postalcode (private)'), dataIndex: 'adr_two_postalcode' },
-        { id: 'adr_two_countryname', header: i18n._('Country (private)'), dataIndex: 'adr_two_countryname' },
+        { id: 'adr_two_countryname', header: i18n._('Country (private)'), dataIndex: 'adr_two_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
         { id: 'email', header: i18n._('Email'), dataIndex: 'email', width: 150, hidden: false },
         { id: 'tel_work', header: i18n._('Phone'), dataIndex: 'tel_work', hidden: false },
         { id: 'tel_cell', header: i18n._('Mobile'), dataIndex: 'tel_cell', hidden: false },
