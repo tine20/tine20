@@ -119,6 +119,10 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
         // set all fields available
         foreach($record->getFields() as $property) {
             $value = $record->{$property};
+            if (is_null($value)) {
+                $value = '';
+            }
+
             if ($value instanceof DateTime) {
                 $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $this->_config->datetimeformat);
             }
