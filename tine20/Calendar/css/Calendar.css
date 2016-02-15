@@ -1,4 +1,4 @@
-.CalendarIconCls {
+.CalendarIconCls, .CalendarEvent {
     background-image:url(../../images/oxygen/16x16/apps/korganizer.png);
 }
 .x-btn-medium .CalendarIconCls {
@@ -88,7 +88,7 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-month.png) !important;
 }
 
-.cal-resource {
+.cal-resource, .CalendarResource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
 }
 .x-btn-medium .cal-resource {

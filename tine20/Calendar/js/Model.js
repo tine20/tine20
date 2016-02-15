@@ -734,7 +734,9 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'suppress_notification', type: 'bool'},
     {name: 'tags'},
     {name: 'notes'},
-    {name: 'grants'}
+    {name: 'grants'},
+    { name: 'relations',   omitDuplicateResolving: true},
+    { name: 'customfields', omitDuplicateResolving: true}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

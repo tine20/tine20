@@ -59,6 +59,8 @@ class Calendar_Model_Resource extends Tinebase_Record_Abstract
         'tags'                 => array('allowEmpty' => true          ),
         'notes'                => array('allowEmpty' => true          ),
         'grants'               => array('allowEmpty' => true          ),
+        'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'customfields'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     );
     
     /**
