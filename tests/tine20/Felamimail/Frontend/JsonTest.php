@@ -560,17 +560,17 @@ class Felamimail_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
         
         // check / delete notes
-        $emailNoteIds = array();
+        $emailNotes = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
         foreach ($contact->notes as $note) {
             if ($note->note_type_id == $emailNoteType->getId()) {
                 $this->assertContains($subject, $note->note, 'did not find note subject');
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
                 $this->assertContains('aaaaaä', $note->note);
-                $emailNoteIds[] = $note->getId();
+                $emailNotes->addRecord($note);
             }
         }
-        $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
-        Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
+        $this->assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        Tinebase_Notes::getInstance()->deleteNotes($emailNotes);
     }
 
     /**

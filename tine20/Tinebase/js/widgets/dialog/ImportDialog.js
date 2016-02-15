@@ -181,23 +181,23 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         Tine.log.debug(response);
         
         this.lastImportResponse = response;
-        
-        // load exception store
-        this.exceptionStore.loadData(response.exceptions);
-        this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
-        
-        // update conflict panel
-//            var duplicatecount = response.duplicatecount || 0,
-//                recordsName = this.app.i18n.n_(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), duplicatecount);
-//                
-//            this.conflictsLabel.setText(String.format(this.conflictsLabel.rawText, duplicatecount, recordsName), false);
-        if (this.exceptionStore.getCount()) {
-            this.loadConflict(0);
-        }
-        
-        // finlay apply callback
-        if (Ext.isFunction(callback)) {
-            callback.call(this, request, success, response);
+
+        if (success) {
+            // load exception store
+            this.exceptionStore.loadData(response.exceptions);
+            this.exceptionStore.filterBy(this.exceptionStoreFilter, this);
+
+            if (this.exceptionStore.getCount()) {
+                this.loadConflict(0);
+            }
+
+            // finally apply callback
+            if (Ext.isFunction(callback)) {
+                callback.call(this, request, success, response);
+            }
+        } else {
+            this.checkMask.hide();
+            Tine.Tinebase.ExceptionHandler.handleRequestException(response.data);
         }
     },
     

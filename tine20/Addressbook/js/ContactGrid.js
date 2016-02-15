@@ -123,12 +123,12 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { id: 'adr_one_locality', header: this.app.i18n._('City'), dataIndex: 'adr_one_locality', width: 150, hidden: false },
             { id: 'adr_one_region', header: this.app.i18n._('Region'), dataIndex: 'adr_one_region' },
             { id: 'adr_one_postalcode', header: this.app.i18n._('Postalcode'), dataIndex: 'adr_one_postalcode' },
-            { id: 'adr_one_countryname', header: this.app.i18n._('Country'), dataIndex: 'adr_one_countryname' },
+            { id: 'adr_one_countryname', header: this.app.i18n._('Country'), dataIndex: 'adr_one_countryname', renderer: this.countryRenderer},
             { id: 'adr_two_street', header: this.app.i18n._('Street (private)'), dataIndex: 'adr_two_street' },
             { id: 'adr_two_locality', header: this.app.i18n._('City (private)'), dataIndex: 'adr_two_locality' },
             { id: 'adr_two_region', header: this.app.i18n._('Region (private)'), dataIndex: 'adr_two_region' },
             { id: 'adr_two_postalcode', header: this.app.i18n._('Postalcode (private)'), dataIndex: 'adr_two_postalcode' },
-            { id: 'adr_two_countryname', header: this.app.i18n._('Country (private)'), dataIndex: 'adr_two_countryname' },
+            { id: 'adr_two_countryname', header: this.app.i18n._('Country (private)'), dataIndex: 'adr_two_countryname', renderer: this.countryRenderer},
             { id: 'email', header: this.app.i18n._('Email'), dataIndex: 'email', width: 150, hidden: false },
             { id: 'tel_work', header: this.app.i18n._('Phone'), dataIndex: 'tel_work', hidden: false },
             { id: 'tel_cell', header: this.app.i18n._('Mobile'), dataIndex: 'tel_cell', hidden: false },
@@ -290,6 +290,11 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     displayNameRenderer: function(data) {
         var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
         return data ? data : ('<div class="renderer_displayNameRenderer_noName">' + i18n._('No name') + '</div>');
+    },
+    
+    countryRenderer: function(data) {
+        data = Locale.getTranslationData('CountryList', data);
+        return data;
     },
 
     /**
