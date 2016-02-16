@@ -23,6 +23,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     enableHdMenu: false,
     autoExpandColumn: 'n_fileas',
     memberroles: null,
+    memberRolesPanel: null,
 
     // the list record
     record: null,
@@ -74,6 +75,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
      */
     onAfterEdit: function(o) {
         o.record.commit();
+
+        // update this.memberroles + memberRolesPanel
+        this.memberRolesPanel.setListRolesOfContact(o.record);
     },
 
     /**
@@ -96,12 +100,13 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         if (this.memberroles) {
             this.store.each(function(contact) {
                 var contactRoles = [];
-                // TODO load memberroles into contacts
                 Tine.log.debug(contact);
                 // TODO improve detection of matching contact (filter?)
                 Ext.each(this.memberroles, function(memberrole) {
                     if (memberrole.contact_id.id == contact.get('id')
-                        && memberrole.list_id == this.record.get('id'))
+                        && memberrole.list_id == this.record.get('id')
+                        && memberrole.list_role_id.id
+                    )
                     {
                         contactRoles.push(memberrole);
                     }
@@ -111,6 +116,8 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
                     contact.commit();
                 }
             }, this);
+
+            this.memberRolesPanel.setListRoles(this.memberroles);
         }
     },
 
@@ -179,7 +186,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
         return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n);
     },
 
-    // NOTE: Ext docu seems to be wrong on arguments here
+    // NOTE: Ext doc seems to be wrong on arguments here
     onContextMenu: function(e, target) {
         e.preventDefault();
         var row = this.getView().findRowIndex(target);

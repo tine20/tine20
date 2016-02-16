@@ -460,7 +460,33 @@ class Calendar_JsonTests extends Calendar_TestCase
         $midnightInUTC = new Tinebase_DateTime($queryResult['rrule_until']);
         $this->assertEquals(Tinebase_DateTime::now()->setTime(23,59,59)->toString(), $midnightInUTC->setTimezone(Tinebase_Core::getUserTimezone(), TRUE)->toString());
     }
-    
+
+    /**
+     * testCreateRecurEventWithConstrains
+     */
+    public function testCreateRecurEventWithConstrains()
+    {
+
+        $eventData = $this->testCreateEvent();
+        $eventData['rrule'] = array(
+            'freq'       => 'WEEKLY',
+            'interval'   => 1,
+            'byday'      => 'WE',
+        );
+        $eventData['rrule_constraints'] = array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($eventData['container_id'])),
+        );
+
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+
+        $this->assertTrue(is_array($updatedEventData['rrule_constraints']));
+        $this->assertEquals('personal',$updatedEventData['rrule_constraints'][0]['value'][0]['type'], 'filter is not resolved');
+        $this->assertEquals(1, count($updatedEventData['exdate']));
+        $this->assertEquals('2009-03-25 06:00:00', $updatedEventData['exdate'][0]);
+
+        return $updatedEventData;
+    }
+
     /**
     * testSearchRecuringIncludes
     */

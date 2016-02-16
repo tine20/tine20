@@ -57,8 +57,18 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         
         this.ruleCards = new Ext.Panel({
             layout: 'card',
+            baseCls: 'ux-arrowcollapse',
+            cls: 'ux-arrowcollapse-plain',
+            collapsible: true,
+            collapsed: true,
             activeItem: 0,
-            style: 'padding: 10px 0 0 10px;',
+            listeners: {
+                scope: this,
+                collapse: this.doLayout,
+                expand: this.doLayout
+            },
+            //style: 'padding: 10px 0 0 20px;',
+            title: this.app.i18n._('Details'),
             items: [
                 this.NONEcard,
                 this.DAILYcard,
@@ -157,7 +167,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
      * disable contents not panel
      */
     setDisabled: function(v) {
-        this.items.each(function(item) {
+        this.getTopToolbar().items.each(function(item) {
             item.setDisabled(v);
         }, this);
     },
@@ -182,12 +192,21 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.ruleCards.activeItem = this.activeRuleCard;
         
         this.activeRuleCard.setRule(this.rrule);
-        
+
+        this.constrains = this.record.get('rrule_constraints');
+        if (this.constrains) {
+            var constrainsValue = this.constrains[0].value;
+            if (constrainsValue && this.activeRuleCard.constrains) {
+                this.activeRuleCard.constrains.setValue(constrainsValue);
+            }
+        }
+
         if (this.record.isRecurException()) {
             this.activeRuleCard = this.NONEcard;
             this.items.each(function(item) {
                 item.setDisabled(true);
             }, this);
+            this.ruleCards.collapsed = false;
             
             this.NONEcard.html = this.app.i18n._("Exceptions of reccuring events can't have recurrences themselves.");
         }
@@ -203,6 +222,17 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         
         record.set('rrule', '');
         record.set('rrule', rrule);
+
+        record.set('rrule_constraints', '');
+
+        if (! this.activeRuleCard.rendered) {
+            record.set('rrule_constraints', this.constrains);
+        } else {
+            var constrainsValue = this.activeRuleCard.constrains.getValue();
+            if (constrainsValue && constrainsValue.length) {
+                record.set('rrule_constraints', [{field: 'container_id', operator: 'in', value: constrainsValue}]);
+            }
+        }
     }
 });
 
@@ -329,7 +359,42 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
                 }]
             }].concat(this.items);
         }
-        
+
+        this.constrains = new Tine.widgets.container.FilterModelMultipleValueField({
+        //this.constrains = new Tine.widgets.container.selectionComboBox({
+            app: this.app,
+            allowBlank: true,
+            width: 200,
+            listWidth: 200,
+            allowNodeSelect: true,
+            recordClass: Tine.Calendar.Model.Event
+        });
+
+        this.items = this.items.concat([{
+            layout: 'column',
+            style: 'padding-top: 2px;',
+            items: [
+                {
+                    xtype: 'label',
+                    style: 'padding-top: 2px;',
+                    width: 70,
+                    text: this.app.i18n._('Except')
+                },
+                {
+                    // @IDEA: this could be a combo later
+                    // - if one attendee is busy
+                    // - if organizer is busy
+                    // - resources are busy
+                    // - ...
+                    xtype: 'label',
+                    style: 'padding-top: 2px;',
+                    width: 150,
+                    text: this.app.i18n._('during events in calendar')
+                },
+                this.constrains
+            ]
+        }]);
+
         this.items = this.items.concat({
             layout: 'form',
             html: '<div style="padding-top: 5px;">' + this.app.i18n._('End') + '</div>' +

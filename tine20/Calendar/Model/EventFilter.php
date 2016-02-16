@@ -73,5 +73,8 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
         'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
+            'idProperty' => 'cal_events.id'
+        )),
     );
 }

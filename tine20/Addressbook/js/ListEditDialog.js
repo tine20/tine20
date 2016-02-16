@@ -38,6 +38,12 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true,
             margins: '6 0 0 0'
         });
+        this.memberRolesPanel = new Tine.Addressbook.ListRoleGridPanel({
+            region: "south",
+            frame: true,
+            margins: '6 0 0 0',
+            height: 150
+        });
         this.supr().initComponent.apply(this, arguments);
     },
 
@@ -80,7 +86,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }]]
                             }]
                         }]
-                    }, this.memberGridPanel]
+                    },
+                        // TODO allow user to switch between those two grid panels (card layout?)
+                        this.memberGridPanel,
+                        this.memberRolesPanel
+                    ]
                 }, {
                     // activities and tags
                     region: 'east',
@@ -163,6 +173,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.memberGridPanel.record = this.record;
             if (this.record.id) {
                 this.memberGridPanel.setMembers();
+                this.memberGridPanel.memberRolesPanel = this.memberRolesPanel;
             }
         }
         this.supr().onRecordLoad.apply(this, arguments);

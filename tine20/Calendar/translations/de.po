@@ -1685,3 +1685,18 @@ msgstr "Termin Details"
 
 msgid "Print Event"
 msgstr "Termin Drucken"
+
+msgid "Unavailable"
+msgstr "Nicht Verfügbar"
+
+msgid "Busy Type"
+msgstr "Belegt Typ"
+
+msgid "Default Status"
+msgstr "Standard Status"
+
+msgid "Free"
+msgstr "Frei"
+
+msgid "Busy"
+msgstr "Belegt"

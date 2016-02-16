@@ -115,7 +115,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     );
     
     /**
-     * @var array supported rrule parts
+     * @var array supported standard rrule parts
      */
     protected $_rruleParts = array('freq', 'interval', 'until', 'count', 'wkst', 'byday', 'bymonth', 'bymonthday');
     

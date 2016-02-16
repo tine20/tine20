@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "ListRoleMemberFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "Model.js",
           "path": "js/"
         },
@@ -61,6 +65,10 @@
         },
         {
           "text": "ListMemberRoleGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListRoleGridPanel.js",
           "path": "js/"
         },
         {
