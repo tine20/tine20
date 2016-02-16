@@ -48,8 +48,8 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                 path: '/general',
                 id: 'general',
                 expanded: true,
-                leaf: (generalChildren.length == 0),
                 text: this.app.i18n._('General Data'),
+                hidden: (generalChildren.length == 0),
                 children: generalChildren
             }, {
                 path: '/applications',
