@@ -66,7 +66,7 @@ Tine.widgets.customfields.Renderer = function(){
                             case 'boolean':
                                 return Tine.Tinebase.common.booleanRenderer(customfields[cfName]);
                             default:
-                                return Ext.util.Format.htmlEncode(customfields[cfName]);
+                                return Ext.util.Format.htmlEncode(customfields[cfName] || "");
                         }
                     };
                 }
@@ -95,7 +95,7 @@ Tine.widgets.customfields.Renderer = function(){
             Ext.each(cfDefs, function(cfDef) {
                 var renderedValue = this.render(app, cfDef, data);
 
-                html += '<div class="customfield-rendered-row">' +
+                html += '<div class="customfield-rendered-row print-single-details-row">' +
                     '<span class="customfield-rendered-label">'+ cfDef.get('definition').label + '</span>' +
                     '<span class="customfield-rendered-value">'+ renderedValue + '</span>' +
                 '</div>';
