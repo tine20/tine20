@@ -135,7 +135,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.title = this.i18nTitle = Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
         
-        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
+        //Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
 
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         

@@ -84,7 +84,7 @@ class Tinebase_Record_Iterator
         'limit'            => 100,
         'searchAction'    => 'get',
         'sortInfo'        => NULL,
-        'getRelations'  => FALSE,
+        'getRelations'    => FALSE,
     );
 
     /**

@@ -1156,6 +1156,9 @@ abstract class Tinebase_Controller_Record_Abstract
     
     /**
      * handles relations on update multiple
+     *
+     * Syntax 1 (old): key: '%<type>-<related_model>', value: <related_id>
+     * Syntax 2      : key: '%<add|remove|replace>', value: <relation json>
      * 
      * @param string $key
      * @param string $value
@@ -1163,23 +1166,26 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRelationsOnUpdateMultiple($key, $value)
     {
-        $getRelations = true;
-        preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a);
-        if (count($a) < 4) {
+        if (preg_match('/%(add|remove|replace)/', $key, $matches)) {
+            $action = $matches[1];
+            $rel = json_decode($value, true);
+        } else if (preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a)) {
+            $action = $value ? 'replace' : 'remove';
+            $rel = array(
+                'related_model' => $a[2],
+                'type' => $a[1],
+                'related_id' => $value,
+            );
+        } else {
             throw new Tinebase_Exception_Record_DefinitionFailure('The relation to delete/set is not configured properly!');
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Handle relations for ' . $this->_modelName);
-        }
-        
-        $relConfig = Tinebase_Relations::getConstraintsConfigs(array($this->_modelName, $a[2]));
-        
-        $constraintsConfig = NULL;
-        
+        // find constraint config
+        $constraintsConfig = array();
+        $relConfig = Tinebase_Relations::getConstraintsConfigs(array($this->_modelName, $rel['related_model']));
         if ($relConfig) {
             foreach ($relConfig as $config) {
-                if ($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && isset($config['config']) && is_array($config['config'])) {
+                if ($rel['related_model'] == "{$config['relatedApp']}_Model_{$config['relatedModel']}" && isset($config['config']) && is_array($config['config'])) {
                     foreach ($config['config'] as $constraint) {
                         if ($constraint['type'] == $a[1]) {
                             $constraintsConfig = $constraint;
@@ -1189,39 +1195,32 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        
-        // update multiple is not possible without having a constraints config
-        if (! $constraintsConfig) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('No relation definition could be found for this model!');
-        }
 
-        $rel = array(
-            'own_model' => $this->_modelName,
-            'own_backend' => 'Sql',
-            'own_degree' => isset($constraintsConfig['sibling']) ? $constraintsConfig['sibling'] : 'sibling',
-            'related_model' => $a[2],
-            'related_backend' => 'Sql',
-            'type' => isset($constraintsConfig['type']) ? $constraintsConfig['type'] : ' ',
-            'remark' => isset($constraintsConfig['defaultRemark']) ? $constraintsConfig['defaultRemark'] : ' '
-        );
-        
-        if (! $this->_removeRelations) {
-            $this->_removeRelations = array($rel);
-        } else {
+        // apply defaults
+        $rel = array_merge($rel, array(
+            'own_model'         => $this->_modelName,
+            'own_backend'       => 'Sql',
+            'related_backend'   => 'Sql',
+            'own_degree'        => isset($rel['own_degree']) ? $rel['own_degree'] :
+                                    (isset($constraintsConfig['sibling']) ? isset($constraintsConfig['sibling']) : 'sibling'),
+            'type'              => isset($rel['type']) ? $rel['type'] :
+                                    (isset($constraintsConfig['type']) ? isset($constraintsConfig['type']) : ' '),
+            'remark'            => isset($rel['remark']) ? $rel['remark'] :
+                                    (isset($constraintsConfig['defaultRemark']) ? isset($constraintsConfig['defaultRemark']) : ' '),
+        ));
+
+        if (in_array($action, array('remove', 'replace'))) {
+            $this->_removeRelations ?: array();
             $this->_removeRelations[] = $rel;
         }
-        
-        if (! empty($value)) { // delete relations in iterator
-            $rel['related_id'] = $value;
-            if (! $this->_newRelations) {
-                $this->_newRelations = array($rel);
-            } else {
-                $this->_newRelations[] = $rel;
-            }
+
+        if (in_array($action, array('add', 'replace'))) {
+            $this->_newRelations ?: array();
+            $this->_newRelations[] = $rel;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
                . ' Remove relations: ' . print_r($this->_removeRelations, true));
         }
     }
@@ -1323,25 +1322,22 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // handle new relations
         if($this->_newRelations) {
-            $removeRelations = NULL;
             foreach($this->_newRelations as $newRelation) {
-                $removeRelations = $currentRecord->relations
-                    ->filter('type', $newRelation['type'])
-                    ->filter('related_model', $newRelation['related_model']);
-                
-                $already = $removeRelations->filter('related_id', $newRelation['related_id']);
-                
-                if($already->count() > 0) {
-                    $removeRelations = NULL;
-                } else {
-                    $newRelation['own_id'] = $currentRecord->getId();
-                    $rel = new Tinebase_Model_Relation();
-                    $rel->setFromArray($newRelation);
-                    if ($removeRelations) {
-                        $currentRecord->relations->removeRecords($removeRelations);
-                    }
-                    $currentRecord->relations->addRecord($rel);
+                // convert duplicate to update (remark / degree)
+                $duplicate = $currentRecord->relations
+                    ->filter('related_model', $newRelation['related_model'])
+                    ->filter('related_id',    $newRelation['related_id'])
+                    ->filter('type',          $newRelation['type'])
+                    ->getFirstRecord();
+
+                if ($duplicate) {
+                    $currentRecord->relations->removeRecord($duplicate);
                 }
+
+                $newRelation['own_id'] = $currentRecord->getId();
+                $rel = new Tinebase_Model_Relation();
+                $rel->setFromArray($newRelation);
+                $currentRecord->relations->addRecord($rel);
             }
         }
         

@@ -203,6 +203,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $oldRecordArray = $currentRecord->toArray();
             $data = array_merge($oldRecordArray, $_data);
 
+            if ($this->_newRelations || $this->_removeRelations) {
+                $data['relations'] = $this->_iterateRelations($currentRecord);
+            }
+
             try {
                 $record = new $this->_modelName($data);
                 $record->__set('jpegphoto', NULL);
