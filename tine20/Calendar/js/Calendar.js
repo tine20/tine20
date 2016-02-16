@@ -64,6 +64,15 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         if (Tine.Felamimail) {
             Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
         }
+    },
+
+    registerCoreData: function() {
+        Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourcesGridPanel, {
+            // prevent adding of another toolbar above grid
+            initLayout: function () {
+                this.supr().initLayout.call(this);
+            }
+        });
     }
 });
 

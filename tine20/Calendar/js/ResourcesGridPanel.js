@@ -30,7 +30,7 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     newRecordIcon: 'cal-resource',
     
-    initFilterPanel: function() {},
+    initFilterPanel: Ext.emptyFn,
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
