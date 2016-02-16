@@ -1195,7 +1195,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         // TODO: fallback, remove if all models use modelconfiguration
         if (! $c) {
-            return $this->title;
+            return $this->has('title') ? $this->title :
+                ($this->has('name') ? $this->name : $this->{$this->_identifier});
         }
         
         // use vsprintf formatting if it is an array

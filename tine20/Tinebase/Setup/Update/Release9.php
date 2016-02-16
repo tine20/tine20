@@ -60,7 +60,6 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 
     /**
      * update to 9.5
-     *
      */
     public function update_4()
     {
@@ -95,7 +94,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             $this->_backend->alterCol('relations', $declaration, 'own_degree');
         }
 
-        // delte index unique-fields
+        // delete index unique-fields
         try {
             $this->_backend->dropIndex('relations', 'unique-fields');
         } catch (Exception $e) {}
@@ -131,5 +130,77 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setTableVersion('relations', '9');
         $this->setApplicationVersion('Tinebase', '9.6');
+    }
+
+    /**
+     * update to 9.7
+     *
+     * @see 0011620: add "path" filter for records
+     */
+    public function update_6()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>path</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>path</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>shadow_path</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>path</name>
+                    <field>
+                        <name>path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>shadow_path</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>shadow_path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>record_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        $this->createTable('path', $declaration);
+        $this->setApplicationVersion('Tinebase', '9.7');
     }
 }

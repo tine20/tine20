@@ -450,4 +450,15 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $result = $this->_getMemberRolesBackend()->getMultipleByProperty($record->getId(), 'list_id');
         return $result;
     }
+
+    /**
+     * get all lists given contact is member of
+     *
+     * @param $contact
+     * @return array
+     */
+    public function getMemberships($contact)
+    {
+        return $this->_backend->getMemberships($contact);
+    }
 }

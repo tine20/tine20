@@ -169,7 +169,7 @@
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . " queueing action: '{$action}'");
+            __METHOD__ . '::' . __LINE__ . " Queueing action: '{$action}'");
         
         return $this->_queue->send($message);
     }

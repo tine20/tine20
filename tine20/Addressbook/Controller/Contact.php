@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -24,13 +24,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @var boolean
      */
     protected $_setGeoDataForContacts = FALSE;
-    
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Addressbook';
         $this->_modelName = 'Addressbook_Model_Contact';
         $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
@@ -41,6 +42,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array('n_given', 'n_family', 'org_name'),
             array('email'),
         ));
+        $this->_useRecordPaths = true;
         
         // fields used for private and company address
         $this->_addressFields = array('locality', 'postalcode', 'street', 'countryname');
@@ -261,7 +263,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     
     /**
      * inspect update of one record (after update)
-     * 
+     *
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
      * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
@@ -273,7 +275,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             Tinebase_User::getInstance()->updateContact($updatedRecord);
         }
     }
-    
+
     /**
      * delete one record
      * - don't delete if it belongs to an user account
@@ -549,6 +551,57 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             'unrecognizedTokens'  => $converter->getUnrecognizedTokens(),
         );
                     
+        return $result;
+    }
+
+    /**
+     * generates path for the contact
+     *
+     * - we add to the path:
+     *      - lists contact is member of
+     *      - we add list role memberships
+     *
+     * @param Tinebase_Record_Abstract $record
+     * @return Tinebase_Record_RecordSet
+     */
+    public function generatePathForRecord($record)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
+
+        // fetch all groups and role memberships and add to path
+        $listIds = Addressbook_Controller_List::getInstance()->getMemberships($record);
+        foreach ($listIds as $listId) {
+            $list = Addressbook_Controller_List::getInstance()->get($listId);
+            $listPaths = $this->_getPathsOfRecord($list);
+            if (count($listPaths) === 0) {
+                // add self
+                $listPaths->addRecord(new Tinebase_Model_Path(array(
+                    'path'          => '/' . $this->_getPathPart($list),
+                    'shadow_path'   => '/' . $list->getId(),
+                    'record_id'     => $list->getId(),
+                    'creation_time' => Tinebase_DateTime::now(),
+                )));
+            }
+
+            foreach ($list->memberroles as $role) {
+                if ($role->contact_id === $record->getId()) {
+                    $role = Addressbook_Controller_ListRole::getInstance()->get($role->list_role_id);
+                    foreach ($listPaths as $listPath) {
+                        $listPath->path .= '/' . $this->_getPathPart($role);
+                        $listPath->shadow_path .= '/' . $role->getId();
+                        $listPath->record_id = $role->getId();
+                    }
+                }
+            }
+
+            foreach ($listPaths as $listPath) {
+                $listPath->path .= '/' . $this->_getPathPart($record);
+                $listPath->shadow_path .= '/' .$record->getId();
+                $listPath->record_id = $record->getId();
+                $result->addRecord($listPath);
+            }
+        }
+
         return $result;
     }
 }

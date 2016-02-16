@@ -106,6 +106,8 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
         if (this.userOnly) {
             this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
+
+        // TODO add OR filter with path here
     },
     
     /**

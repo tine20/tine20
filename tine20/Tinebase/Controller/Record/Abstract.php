@@ -175,6 +175,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
+     * support record paths
+     *
+     * @var bool
+     */
+    protected $_useRecordPaths = false;
+
+    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -1035,7 +1042,10 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
-        
+
+        $pathPartChanged = false;
+        $relationsTouched = false;
+
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
@@ -1048,7 +1058,43 @@ abstract class Tinebase_Controller_Record_Abstract
                 FALSE,
                 $this->_inspectRelatedRecords,
                 $this->_doRelatedCreateUpdateCheck);
+
+            $relationsTouched = true;
+
+        } elseif ($this->_getPathPart($updatedRecord) !== $this->_getPathPart($record)) {
+            $pathPartChanged = true;
         }
+
+        // rebuild paths if relations where set or if pathPart changed
+        if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
+
+            // rebuild own paths
+            $this->buildPath($record);
+
+            // rebuild paths of children that have been added or removed
+            if ($relationsTouched) {
+                //we need to do this to reload the relations in the next line...
+                $record->relations = null;
+                $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_CHILD);
+                $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+
+                foreach ($newChildRelations as $relation) {
+                    $oldOffset = $oldChildRelations->getIndexById($relation->id);
+                    // new child
+                    if (false === $oldOffset) {
+                        $this->buildPath($relation->related_record);
+                    } else {
+                        $oldChildRelations->offsetUnset($oldOffset);
+                    }
+                }
+
+                //removed children
+                foreach ($oldChildRelations as $relation) {
+                    $this->buildPath($relation->related_record);
+                }
+            }
+        }
+
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
             $updatedRecord->tags = $record->tags;
             Tinebase_Tags::getInstance()->setTagsOfRecord($updatedRecord);
@@ -2094,5 +2140,83 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _createDependentRecord($record, $_record, $_fieldConfig, $controller, $recordSet)
     {
         
+    }
+
+    /**
+     * returns path of record
+     *
+     * @param     $record
+     * @param int $depth
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception
+     */
+    protected function _getPathsOfRecord($record, $depth = 0)
+    {
+        if ($depth > 8) {
+            throw new Tinebase_Exception('too many recursions while calculating record path');
+        }
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
+
+        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
+        foreach ($parentRelations as $parent) {
+
+            // we do not need to generate the parents paths, they should be in DB
+            $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);
+
+            // this is redundant and should be removed, if parents paths are not correctly generated, it is inconsistent behavior:
+            // if parents paths are incorrectly not yet generated at all, we do it here
+            // but if parents paths are just incorrectly generated, but something is there, we accept that...
+            // better to remove this
+            //if (count($parentPaths) === 0) {
+            //    $parentPaths = $this->_getPathsOfRecord($parent->related_record, $depth + 1);
+            //}
+
+            if (count($parentPaths) === 0) {
+                $path = new Tinebase_Model_Path(array(
+                    'path'          => '/' .$this->_getPathPart($parent->related_record) . '/' . $this->_getPathPart($record),
+                    'shadow_path'   => '/' .$parent->related_id . '/' .$record->getId(),
+                    'record_id'     => $record->getId(),
+                    'creation_time' => Tinebase_DateTime::now(),
+                ));
+                $result->addRecord($path);
+            } else {
+                // merge paths
+                foreach ($parentPaths as $path) {
+                    $newPath = new Tinebase_Model_Path(array(
+                        'path'          => $path->path . '/' . $this->_getPathPart($record),
+                        'shadow_path'   => $path->shadow_path . '/' . $record->getId(),
+                        'record_id'     => $record->getId(),
+                        'creation_time' => Tinebase_DateTime::now(),
+                    ));
+
+                    $result->addRecord($newPath);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $record
+     * @return string
+     */
+    protected function _getPathPart($record)
+    {
+        return mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 40);
+    }
+
+    /**
+     * shortcut to Tinebase_Record_Path::generatePathForRecord
+     *
+     * @param $record
+     */
+    public function buildPath($record)
+    {
+        if ($this->_useRecordPaths) {
+            Tinebase_Record_Path::getInstance()->generatePathForRecord($record);
+        }
     }
 }
