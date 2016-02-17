@@ -189,7 +189,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'type'                   => 'INVOICE_ITEM'
         );
@@ -482,7 +482,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Contract',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingContract->getId(),
@@ -495,7 +495,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Customer',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingCustomer['id'],

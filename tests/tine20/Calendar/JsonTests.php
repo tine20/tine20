@@ -1626,7 +1626,7 @@ class Calendar_JsonTests extends Calendar_TestCase
                 'own_model' => 'Calendar_Model_Event',
                 'own_backend' => 'Sql',
                 'own_id' => 0,
-                'own_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type' => '',
                 'related_backend' => 'Sql',
                 'related_id' => $contact->getId(),

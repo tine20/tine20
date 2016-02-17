@@ -90,7 +90,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'own_model'              => 'Crm_Model_Lead',
                 'own_backend'            => 'SQL',
                 'own_id'                 => $this->_crmId['id'],
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Tasks_Model_Task',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => Tinebase_Record_Abstract::generateUID(),//'8a572723e867dd73dd68d1740dd94f586eff5432',
@@ -100,7 +100,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'own_model'              => 'Crm_Model_Lead',
                 'own_backend'            => 'SQL',
                 'own_id'                 => $this->_crmId['id'],
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
                 'related_model'          => 'Tasks_Model_Task',
                 'related_backend'        => '',
                 'related_id'             => '',
@@ -115,7 +115,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'own_model'              => '',
                 'own_backend'            => '',
                 'own_id'                 => '',
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
                 'related_model'          => 'Addressbook_Model_Contact',
                 'related_backend'        => '',
                 'related_id'             => '',
@@ -250,7 +250,7 @@ class Tinebase_Relation_RelationTest extends TestCase
             'own_model'              => '',
             'own_backend'            => '',
             'own_id'                 => '',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_PARENT,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => '',
             'related_id'             => '',
@@ -343,7 +343,7 @@ class Tinebase_Relation_RelationTest extends TestCase
         
         $contractJson = $contract->toArray();
         $contractJson['relations'][] = array(
-            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $sclever->toArray(),
             'type'           => 'CUSTOMER',
@@ -353,13 +353,13 @@ class Tinebase_Relation_RelationTest extends TestCase
         
         $contract2Json = $contract2->toArray();
         $contract2Json['relations'][] = array(
-            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $sclever->toArray(),
             'type'           => 'PARTNER',
         );
         $contract2Json['relations'][] = array(
-            'own_degree'     => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'  => 'Addressbook_Model_Contact',
             'related_record' => $pwulf->toArray(),
             'type'           => 'PARTNER',

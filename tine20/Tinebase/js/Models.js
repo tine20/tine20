@@ -407,6 +407,21 @@ Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
 });
 
 /**
+ * find duplicate relation in store
+ *
+ * @param store
+ * @param record
+ * @return int index in store
+ */
+Tine.Tinebase.Model.Relation.findDuplicate = function(store, record) {
+    return store.findBy(function(r) {
+        return r.get('related_model') == record.get('related_model') &&
+            r.get('related_id') == record.get('related_id') &&
+            r.get('type') == record.get('type');
+    }, this);
+};
+
+/**
  * @namespace Tine.Tinebase.Model
  * @class     Tine.Tinebase.Model.Department
  * @extends   Tine.Tinebase.data.Record

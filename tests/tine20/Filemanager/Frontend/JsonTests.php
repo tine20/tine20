@@ -1045,7 +1045,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'own_model'              => 'Filemanager_Model_Node',
             'own_backend'            => 'Sql',
             'own_id'                 => $node['id'],
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'type'                   => 'FILE',
             'related_backend'        => 'Sql',
             'related_model'          => 'Addressbook_Model_Contact',

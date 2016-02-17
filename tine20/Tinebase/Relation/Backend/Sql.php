@@ -218,7 +218,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $where[] = $this->_db->quoteIdentifier('is_deleted') . ' = '.(int)FALSE;
         }
         if ($_degree) {
-            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('own_degree') . ' = ?', $_degree);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('related_degree') . ' = ?', $_degree);
         }
         if (! empty($_type)) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' IN (?)', $_type);
@@ -333,12 +333,12 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $data['related_model']   = $_data['own_model'];
         $data['related_backend'] = $_data['own_backend'];
         $data['related_id']      = $_data['own_id'];
-        switch ($_data['own_degree']) {
+        switch ($_data['related_degree']) {
             case Tinebase_Model_Relation::DEGREE_PARENT:
-                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_CHILD;
+                $data['related_degree'] = Tinebase_Model_Relation::DEGREE_CHILD;
                 break;
             case Tinebase_Model_Relation::DEGREE_CHILD:
-                $data['own_degree'] = Tinebase_Model_Relation::DEGREE_PARENT;
+                $data['related_degree'] = Tinebase_Model_Relation::DEGREE_PARENT;
                 break;
         }
         return $data;
@@ -356,6 +356,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') . ' = ?', $_relation->own_model),
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') . ' = ?', $_relation->own_backend),
             $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') . ' = ?', $_relation->own_id),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', $_relation->type),
             $this->_db->quoteInto($this->_db->quoteIdentifier('related_id') . ' = ?', $_relation->related_id),
             $this->_db->quoteIdentifier('is_deleted') . ' = 1'
         );

@@ -355,11 +355,10 @@ class Addressbook_JsonTest extends TestCase
             array('name' => '%add', 'value' => json_encode(array(
                 'own_model'         => 'Addressbook_Model_Contact',
                 'own_backend'       => 'Sql',
-                'own_degree'        => 'parent',
+                'related_degree'    => 'parent',
                 'related_model'     => 'Addressbook_Model_Contact',
                 'related_backend'   => 'Sql',
                 'related_id'        => Tinebase_Core::getUser()->contact_id,
-//                'type'              => 'SOMETYPE',
                 'remark'            => 'some remark'
             ))),
         );
@@ -1254,7 +1253,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
                 'related_backend'        => 'Sql',
                 'related_id'             => $_contact['id'],
@@ -1265,7 +1264,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'RESPONSIBLE',
                 'related_backend'        => 'Sql',
                 'related_id'             => Tinebase_Core::getUser()->contact_id,

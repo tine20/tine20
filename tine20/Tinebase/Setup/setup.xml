@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>9.5</version>
+    <version>9.6</version>
     <tables>
         <table>
             <name>applications</name>
@@ -1006,7 +1006,7 @@
 
         <table>
             <name>relations</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1039,7 +1039,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>own_degree</name>
+                    <name>related_degree</name>
                     <type>text</type>
                     <length>32</length>
                     <notnull>true</notnull>
@@ -1166,6 +1166,9 @@
                     </field>
                     <field>
                         <name>related_id</name>
+                    </field>
+                    <field>
+                        <name>type</name>
                     </field>
                 </index>
             </declaration>

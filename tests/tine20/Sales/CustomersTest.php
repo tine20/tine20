@@ -70,7 +70,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
             'own_model' => 'Sales_Model_Coustomer',
             'own_backend' => 'Sql',
             'own_id' => $ipnet->getId(),
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'remark' => 'phpunit test',
             'related_model' => 'Sales_Model_Contract',
             'related_backend' => 'Sql',
@@ -151,7 +151,7 @@ class Sales_CustomersTest extends PHPUnit_Framework_TestCase
                     array(
                         'own_model' => 'Sales_Model_Address',
                         'own_backend' => 'Sql',
-                        'own_degree' => 'sibling',
+                        'related_degree' => 'sibling',
                         'remark' => 'phpunit test',
                         'related_model' => 'Sales_Model_Contract',
                         'related_backend' => 'Sql',

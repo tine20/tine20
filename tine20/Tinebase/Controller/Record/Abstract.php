@@ -1201,7 +1201,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'own_model'         => $this->_modelName,
             'own_backend'       => 'Sql',
             'related_backend'   => 'Sql',
-            'own_degree'        => isset($rel['own_degree']) ? $rel['own_degree'] :
+            'related_degree'    => isset($rel['own_degree']) ? $rel['own_degree'] :
                                     (isset($constraintsConfig['sibling']) ? isset($constraintsConfig['sibling']) : 'sibling'),
             'type'              => isset($rel['type']) ? $rel['type'] :
                                     (isset($constraintsConfig['type']) ? isset($constraintsConfig['type']) : ' '),
@@ -1224,6 +1224,7 @@ abstract class Tinebase_Controller_Record_Abstract
                . ' Remove relations: ' . print_r($this->_removeRelations, true));
         }
     }
+
     /**
      * update multiple records
      *

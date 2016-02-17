@@ -108,7 +108,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                         related_id: recordToAdd.id,
                         related_model: this.fullModelName,
                         type: this.relationType,
-                        own_degree: this.relationDegree
+                        related_degree: this.relationDegree
                     }), recordToAdd.id);
 
                     this.combo.startRecord = recordToAdd;

@@ -137,7 +137,7 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
             'own_model' => 'Timetracker_Model_Timeaccount',
             'own_backend' => 'Sql',
             'own_id' => $timeaccount->getId(),
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'remark' => 'phpunit test',
             'related_model' => 'Sales_Model_Contract',
             'related_backend' => 'Sql',

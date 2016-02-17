@@ -84,7 +84,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     type: this.app.getRegistry().get('config')['projectAttendeeRole'].definition['default'],
                     own_model: 'Projects_Model_Project',
                     related_model: 'Addressbook_Model_Contact',
-                    own_degree: 'sibling',
+                    related_degree: 'sibling',
                     related_backend: 'Sql'
                 }
             },

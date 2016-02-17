@@ -73,7 +73,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                 'own_model'              => 'Sales_Model_Contract',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
                 'own_id'                 => NULL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_CostCenter',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
