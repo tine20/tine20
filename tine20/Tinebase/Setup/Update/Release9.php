@@ -57,4 +57,21 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         $update8->update_14();
         $this->setApplicationVersion('Tinebase', '9.4');
     }
+    
+    /**
+     * update to 9.5
+     *
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <default>0</default>
+                    <notnull>false</notnull>
+            </field>');
+        $this->_backend->addCol('container', $declaration);
+        $this->setTableVersion('container', 10);
+        $this->setApplicationVersion('Tinebase', '9.5');
+    }
 }

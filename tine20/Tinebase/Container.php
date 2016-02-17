@@ -842,7 +842,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
             ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED)
             
-            ->order('container.name');
+            ->order('container.order', 'container.name');
         
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
         
