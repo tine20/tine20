@@ -398,6 +398,7 @@ class Addressbook_JsonTest extends TestCase
         $fullRecord = $this->_uit->getContact($record['id']);
         $this->assertEquals(1, count($fullRecord['relations']), 'relation got not added');
         $this->assertEquals('some remark', $fullRecord['relations'][0]['remark']);
+        $this->assertEquals('parent', $fullRecord['relations'][0]['related_degree']);
 
         // check invalid data
         $changes = array(

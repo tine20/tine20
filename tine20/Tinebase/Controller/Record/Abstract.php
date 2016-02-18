@@ -1201,7 +1201,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'own_model'         => $this->_modelName,
             'own_backend'       => 'Sql',
             'related_backend'   => 'Sql',
-            'related_degree'    => isset($rel['own_degree']) ? $rel['own_degree'] :
+            'related_degree'    => isset($rel['related_degree']) ? $rel['related_degree'] :
                                     (isset($constraintsConfig['sibling']) ? isset($constraintsConfig['sibling']) : 'sibling'),
             'type'              => isset($rel['type']) ? $rel['type'] :
                                     (isset($constraintsConfig['type']) ? isset($constraintsConfig['type']) : ' '),
