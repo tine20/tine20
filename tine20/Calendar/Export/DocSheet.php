@@ -102,6 +102,11 @@ class Calendar_Export_DocSheet extends Tinebase_Export_Richtext_Doc
         $cloneRow = $this->_config->columns->column->{0}->header;
         $templateProcessor->cloneRow($cloneRow, count($dayEvents));
 
+        $this->processDayEvents($dayEvents);
+    }
+
+    public function processDayEvents($dayEvents)
+    {
         foreach($dayEvents as $idx => $event) {
             parent::processRecord($event, $idx);
         }
