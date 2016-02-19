@@ -1187,7 +1187,7 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($relConfig as $config) {
                 if ($rel['related_model'] == "{$config['relatedApp']}_Model_{$config['relatedModel']}" && isset($config['config']) && is_array($config['config'])) {
                     foreach ($config['config'] as $constraint) {
-                        if ($constraint['type'] == $rel['type']) {
+                        if (isset($rel['type']) && isset($constraint['type']) && $constraint['type'] == $rel['type']) {
                             $constraintsConfig = $constraint;
                             break 2;
                         }
