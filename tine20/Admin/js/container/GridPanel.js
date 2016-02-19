@@ -65,7 +65,8 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('ID'), id: 'id', dataIndex: 'id', width: 50},
             { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'name', hidden: false, width: 200},
             { header: this.app.i18n._('Application'), id: 'application_id', dataIndex: 'application_id', hidden: false, width: 100, renderer: this.appRenderer.createDelegate(this)},
-            { header: this.app.i18n._('Type'), id: 'type', dataIndex: 'type', hidden: false, width: 80, renderer: this.typeRenderer.createDelegate(this)}
+            { header: this.app.i18n._('Type'), id: 'type', dataIndex: 'type', hidden: false, width: 80, renderer: this.typeRenderer.createDelegate(this)},
+            { header: this.app.i18n._('Container Order'), id: 'order', dataIndex: 'order', hidden: true, width: 200}
         ];
     },
     
