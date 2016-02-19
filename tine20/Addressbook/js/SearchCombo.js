@@ -88,7 +88,15 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      */
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-        
+
+        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter},
+            pathFilter = { field: 'path', operator: 'contains', value: qevent.query };
+
+        this.store.baseParams.filter = [{condition: "OR", filters: [
+            contactFilter,
+            pathFilter
+        ] }];
+
         if (this.userOnly) {
             this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
