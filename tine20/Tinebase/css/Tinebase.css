@@ -907,6 +907,14 @@ span:hover.tinebase-showheaders-link {
 
 .search-item {border: 1px solid white}
 
+.search-combo-col td {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 /* multiple edit dialog */
     
 .tinebase-editmultipledialog-noneedit, 
