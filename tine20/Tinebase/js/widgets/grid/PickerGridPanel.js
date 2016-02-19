@@ -66,12 +66,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     searchRecordClass: null,
     
     /**
-     * search combo class
-     * @cfg {} searchComboClass
-     */
-    searchComboClass: null,
-    
-    /**
      * search combo config
      * @cfg {} searchComboConfig
      */
@@ -307,19 +301,20 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox|this.searchComboClass}
      */
     getSearchCombo: function() {
-        var searchComboClass = (this.searchComboClass !== null) ? this.searchComboClass : Tine.Tinebase.widgets.form.RecordPickerComboBox;
-        
-        // added reference to searchcombo
-        this.searchCombo = new searchComboClass(Ext.apply({
-            blurOnSelect: true,
-            recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
-            emptyText: _('Search for records ...'),
-            listeners: {
-                scope: this,
-                'select': this.onAddRecordFromCombo
-            }
-        }, this.searchComboConfig));
-        
+        if (! this.searchCombo) {
+            var recordClass = (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
+                appName = recordClass.getMeta('appName');
+                //model = recordClass.getModel();
+
+            this.searchCombo = Tine.widgets.form.RecordPickerManager.get(appName, recordClass, Ext.apply({
+                blurOnSelect: true,
+                listeners: {
+                    scope: this,
+                    select: this.onAddRecordFromCombo
+                }
+            }, this.searchComboConfig));
+        }
+
         return this.searchCombo;
     },
     
