@@ -67,8 +67,8 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
 
     }
 
-    var qtip = pathName.replace('###SEPARATOR###', "<br/>&nbsp;" + Ext.util.Format.htmlEncode('>'));
-    pathName = pathName.replace('###SEPARATOR###', Ext.util.Format.htmlEncode('>'));
+    var qtip = pathName.replace(/###SEPARATOR###/g, "<br/>&nbsp;" + Ext.util.Format.htmlEncode('>'));
+    pathName = pathName.replace(/###SEPARATOR###/g, Ext.util.Format.htmlEncode('>'));
 
 
     return pathName ? '<div class="tb-widgets-path-pathitem" ext:qtip="' + Ext.util.Format.htmlEncode(qtip) + '">' + pathName + '</div>' : pathName;

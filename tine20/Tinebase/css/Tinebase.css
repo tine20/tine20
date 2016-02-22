@@ -1023,6 +1023,9 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     font-size: 9px;
     color: grey;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
 }
 
 .tb-widgets-path-pathitem-match {
