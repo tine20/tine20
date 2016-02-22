@@ -32,6 +32,15 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      * @var string
      */
     protected static $_defaultModel = 'Addressbook_Model_Contact';
+
+    /**
+     * Models of this application that make use of Tinebase_Record_Path
+     *
+     * @var array|null
+     */
+    protected $_modelsUsingPath = array(
+        'Addressbook_Model_Contact'
+    );
     
     /**
      * constructor (get current user)

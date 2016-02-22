@@ -33,6 +33,71 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_applicationsToWorkOn = array();
 
     /**
+    * @param Zend_Console_Getopt $_opts
+    * @return boolean success
+    */
+    public function rebuildPaths($opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $applications = Tinebase_Application::getInstance()->getApplications();
+        foreach($applications as $application) {
+            try {
+                $app = Tinebase_Core::getApplicationInstance($application, '', true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
+
+            if ( ! $app instanceof Tinebase_Controller_Abstract) {
+                continue;
+            }
+
+            $pathModels = $app->getModelsUsingPaths();
+            foreach($pathModels as $pathModel) {
+                $controller = Tinebase_Core::getApplicationInstance($pathModel, '', true);
+
+                $_filter = $pathModel . 'Filter';
+                $_filter = new $_filter();
+
+                $this->_iterationResult = array(
+                    'exceptions' => new Tinebase_Record_RecordSet('Tinebase_Exception'),
+                    'totalcount' => 0,
+                    'failcount' => 0,
+                );
+
+                $iterator = new Tinebase_Record_Iterator(array(
+                    'iteratable' => $this,
+                    'controller' => $controller,
+                    'filter' => $_filter,
+                    'options' => array('getRelations' => true),
+                    'function' => 'rebuildPathsIteration',
+                ));
+                $result = $iterator->iterate($controller);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
+                }
+            }
+        }
+    }
+
+    /**
+     * rebuild paths for multiple records in an iteration
+     * @see Tinebase_Record_Iterator / self::rebuildPaths()
+     *
+     * @param Tinebase_Record_RecordSet $records
+     * @param Tinebase_Controller_Abstract $controller
+     */
+    public function rebuildPathsIteration(Tinebase_Record_RecordSet $records, Tinebase_Controller_Record_Abstract $controller)
+    {
+        foreach ($records as $record) {
+            $controller->buildPath($record, true);
+        }
+    }
+
+    /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      */
     public function cleanModlog()

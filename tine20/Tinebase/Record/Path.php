@@ -70,11 +70,12 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
      * generates path for the record
      *
      * @param Tinebase_Record_Abstract $record
+     * @param boolean $rebuildRecursively
      * @return Tinebase_Record_RecordSet
      *
      * TODO what about acl? the account who creates the path probably does not see all relations ...
      */
-    public function generatePathForRecord($record)
+    public function generatePathForRecord(Tinebase_Record_Abstract $record, $rebuildRecursively = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Generate path for ' . get_class($record) . ' record with id ' . $record->getId());
@@ -89,7 +90,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         $newPaths = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
 
         // fetch all parent -> child relations and add to path
-        $newPaths->merge($this->_getPathsOfRecord($record));
+        $newPaths->merge($this->_getPathsOfRecord($record, $rebuildRecursively));
 
         if (method_exists($recordController, 'generatePathForRecord')) {
             $newPaths->merge($recordController->generatePathForRecord($record));

@@ -45,6 +45,13 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * @var mixed   false => no events filtered, true => all events filtered, array => disable only specific events
      */
     protected $_disabledEvents = false;
+
+    /**
+     * Models of this application that make use of Tinebase_Record_Path
+     *
+     * @var array|null
+     */
+    protected $_modelsUsingPath = null;
     
     /**
      * generic check admin rights function
@@ -231,5 +238,15 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         // TODO get configured core data
 
         return $result;
+    }
+
+    /**
+     * get all models of this application that use tinebase_record_path
+     *
+     * @return array|null
+     */
+    public function getModelsUsingPaths()
+    {
+        return $this->_modelsUsingPath;
     }
 }

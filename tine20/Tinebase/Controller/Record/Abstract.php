@@ -1312,7 +1312,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'totalcount'        => 0,
             'failcount'         => 0,
         );
-        
+
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => $this,
@@ -2156,9 +2156,9 @@ abstract class Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Tinebase_Exception
      */
-    protected function _getPathsOfRecord($record, $depth = 0)
+    protected function _getPathsOfRecord($record, $depth = false)
     {
-        if ($depth > 8) {
+        if (false !== $depth && $depth > 8) {
             throw new Tinebase_Exception('too many recursions while calculating record path');
         }
 
@@ -2167,16 +2167,13 @@ abstract class Tinebase_Controller_Record_Abstract
         $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
         foreach ($parentRelations as $parent) {
 
-            // we do not need to generate the parents paths, they should be in DB
-            $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);
-
-            // this is redundant and should be removed, if parents paths are not correctly generated, it is inconsistent behavior:
-            // if parents paths are incorrectly not yet generated at all, we do it here
-            // but if parents paths are just incorrectly generated, but something is there, we accept that...
-            // better to remove this
-            //if (count($parentPaths) === 0) {
-            //    $parentPaths = $this->_getPathsOfRecord($parent->related_record, $depth + 1);
-            //}
+            if (!$depth) {
+                // we do not need to generate the parents paths, they should be in DB
+                $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);
+            } else {
+                // we have to regenerate parents paths
+                $parentPaths = $this->_getPathsOfRecord($parent->related_record, $depth + 1);
+            }
 
             if (count($parentPaths) === 0) {
                 $path = new Tinebase_Model_Path(array(
@@ -2239,11 +2236,12 @@ abstract class Tinebase_Controller_Record_Abstract
      * shortcut to Tinebase_Record_Path::generatePathForRecord
      *
      * @param $record
+     * @param $rebuildRecursively
      */
-    public function buildPath($record)
+    public function buildPath($record, $rebuildRecursively = false)
     {
         if ($this->_useRecordPaths) {
-            Tinebase_Record_Path::getInstance()->generatePathForRecord($record);
+            Tinebase_Record_Path::getInstance()->generatePathForRecord($record, $rebuildRecursively);
         }
     }
 }
