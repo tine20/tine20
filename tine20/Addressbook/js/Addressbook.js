@@ -86,7 +86,7 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
         Tine.CoreData.Manager.registerGrid(
             'adb_list_roles',
             Tine.widgets.grid.GridPanel,
-            Ext.copyTo({recordClass: Tine.Addressbook.Model.ListRole}, simpleGridConfig, 'app,gridConfig')
+            Ext.copyTo({recordClass: Tine.Addressbook.Model.ListRole}, simpleGridConfig, 'app,gridConfig,initialLoadAfterRender')
         );
     }
 });
