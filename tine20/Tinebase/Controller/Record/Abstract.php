@@ -616,7 +616,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
-            $this->_setRelatedData($createdRecord, $_record, TRUE);
+            $this->_setRelatedData($createdRecord, $_record, null, TRUE);
             $this->_setNotes($createdRecord, $_record);
             
             if ($this->sendNotifications()) {
@@ -917,7 +917,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
             
             $this->_inspectAfterUpdate($updatedRecord, $_record, $currentRecord);
-            $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, TRUE);
+            $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, $currentRecord, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
             
@@ -1035,10 +1035,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
@@ -1061,7 +1062,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $relationsTouched = true;
 
-        } elseif ($this->_getPathPart($updatedRecord) !== $this->_getPathPart($record)) {
+        } elseif (null === $currentRecord || $this->_getPathPart($currentRecord) !== $this->_getPathPart($updatedRecord)) {
             $pathPartChanged = true;
         }
 
@@ -1069,14 +1070,18 @@ abstract class Tinebase_Controller_Record_Abstract
         if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
 
             // rebuild own paths
-            $this->buildPath($record);
+            $this->buildPath($updatedRecord);
 
             // rebuild paths of children that have been added or removed
             if ($relationsTouched) {
                 //we need to do this to reload the relations in the next line...
                 $record->relations = null;
-                $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_CHILD);
-                $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+                $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+                if (null === $currentRecord) {
+                    $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+                } else {
+                    $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+                }
 
                 foreach ($newChildRelations as $relation) {
                     $oldOffset = $oldChildRelations->getIndexById($relation->id);

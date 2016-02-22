@@ -50,7 +50,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         return $this->_db->update($this->_tablePrefix . $this->_tableName, array(
             'path' => new Zend_Db_Expr($this->_db->quoteInto($this->_db->quoteInto('REPLACE(path, ?', $replace) . ', ?)', $substitution)),
             ),
-            $this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like "?/%"', $shadowPath)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like ?', $shadowPath . '/%')
         );
     }
 
@@ -61,7 +61,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function deleteForShadowPathTree($shadowPath)
     {
         return $this->_db->delete($this->_tablePrefix . $this->_tableName,
-            $this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like "?/%"', $shadowPath)
+            $this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like ?', $shadowPath . '/%')
         );
     }
 
@@ -79,7 +79,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 'shadow_path'   => new Zend_Db_Expr($this->_db->quoteInto($this->_db->quoteInto('REPLACE(shadow_path, ?', $oldShadowPath) . ', ?)', $newShadowPath)),
                 'record_id'     => 'record_id',
                 'creation_time' => new Zend_Db_Expr('NOW()'),
-            ))->where($this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like "?/%"', $shadowPath));
+            ))->where($this->_db->quoteInto($this->_db->quoteIdentifier('shadow_path') . ' like ?', $shadowPath . '/%'));
         $stmt = $this->_db->query($select);
         $entries = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 

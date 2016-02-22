@@ -175,12 +175,10 @@ class Tinebase_Record_PathTest extends TestCase
     }
 
     /**
-     * TODO make this work
+     * testTriggerRebuildIfFatherChanged
      */
     public function testTriggerRebuildIfFatherChanged()
     {
-        $this->markTestSkipped('FIXME: this should work');
-
         $contact = $this->testTriggerRebuildPathForRecords();
 
         // change contact name and check path in related records
@@ -192,6 +190,39 @@ class Tinebase_Record_PathTest extends TestCase
 
         // check both paths again
         $expectedPaths = array('/grandparent/stepfather/tester', '/mother/tester');
+        foreach ($expectedPaths as $expectedPath) {
+            $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
+                . print_r($recordPaths->toArray(), true));
+        }
+    }
+
+    /**
+     * testTriggerRebuildIfFatherRemovedChild
+     */
+    public function testTriggerRebuildIfFatherRemovedChild()
+    {
+        $contact = $this->testTriggerRebuildPathForRecords();
+
+        // remove child relation from father and check paths of child records
+        $father = Addressbook_Controller_Contact::getInstance()->get($this->_fatherRecord->getId());
+
+        foreach($father->relations as $relation) {
+            if ($relation->related_degree === Tinebase_Model_Relation::DEGREE_CHILD) {
+                $father->relations->removeRecord($relation);
+                break;
+            }
+        }
+
+        //workaround as _setRelatedData expects an array!?!
+        $father->relations = $father->relations->toArray();
+
+        Addressbook_Controller_Contact::getInstance()->update($father);
+
+        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $this->assertEquals(1, count($recordPaths));
+
+        // check remaining path again
+        $expectedPaths = array('/mother/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));
