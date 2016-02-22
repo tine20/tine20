@@ -145,7 +145,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        //execute deletes only now, important to make 100% sure "new parents" just above still has data to work on!
+        // execute deletes only now, important to make 100% sure "new parents" just above still has data to work on!
         foreach($toDelete as $delete) {
             // delete where shadow_path LIKE '$delete/%'
             $this->_backend->deleteForShadowPathTree($delete);
@@ -154,7 +154,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 
         // delete current paths of this record
         $this->deletePathsForRecord($record);
-
 
         // recreate new paths of this record
         foreach ($newPaths as $path) {

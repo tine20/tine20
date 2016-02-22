@@ -14,6 +14,11 @@
  */
 class Tinebase_Record_PathTest extends TestCase
 {
+    /**
+     * @var Addressbook_Model_Contact
+     */
+    protected $_fatherRecord = null;
+
     protected function setUp()
     {
         $this->_uit = Tinebase_Record_Path::getInstance();
@@ -244,5 +249,32 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertTrue(isset($firstRecord['paths']), 'paths should be set in record' . print_r($firstRecord, true));
         $this->assertEquals(1, count($firstRecord['paths']));
         $this->assertContains('/grandparent', $firstRecord['paths'][0]['path'], 'could not find grandparent in paths of record' . print_r($firstRecord, true));
+    }
+
+    public function testPathWithDifferentTypeRelations()
+    {
+        $contact = $this->_createFatherMotherChild();
+
+        // add another relation to same record with different type
+        $relations = $contact->relations->toArray();
+        $relation2 = $this->_getParentRelationArray($this->_fatherRecord);
+        $relation2['own_id'] = $contact->getId();
+        $relation2['type'] = 'type';
+        $relations[] = $relation2;
+        $contact->relations = $relations;
+
+        $updatedContact = Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $this->assertEquals(3, count($updatedContact->relations), print_r($updatedContact->relations->toArray(), true));
+
+        $recordPaths = $this->_uit->getPathsForRecords($contact);
+
+        // check the 3 paths
+        $this->assertEquals(3, count($recordPaths), 'paths: ' . print_r($recordPaths->toArray(), true));
+        $expectedPaths = array('/grandparent/father/tester', '/mother/tester', '/grandparent/father/tester(type)');
+        foreach ($expectedPaths as $expectedPath) {
+            $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
+                . print_r($recordPaths->toArray(), true));
+        }
     }
 }
