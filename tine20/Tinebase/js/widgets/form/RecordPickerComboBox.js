@@ -214,6 +214,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
         }
         this.store.baseParams.filter = filter;
+        this.tpl.lastQuery = qevent.query;
     },
     
     /**

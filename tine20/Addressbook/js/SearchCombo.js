@@ -130,8 +130,9 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                             '</td>',
                         '</tr>',
                     '</table>',
+                    '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
                 '</div></tpl>'
-             );
+            );
         }
     },
     

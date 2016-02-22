@@ -1013,3 +1013,18 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .tb-version-tinepanel {
     display: none;
 }
+
+.tb-widgets-path-pathsblock {
+    padding-top: 2px;
+    padding-left: 4px;
+}
+
+.tb-widgets-path-pathitem {
+    font-size: 9px;
+    color: grey;
+    text-overflow: ellipsis;
+}
+
+.tb-widgets-path-pathitem-match {
+    color: black;
+}

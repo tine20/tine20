@@ -78,7 +78,7 @@ class Tinebase_Model_Filter_Path extends Tinebase_Model_Filter_Text
             //  we only need the record_ids here and not complete records, so we could directly use the path sql backend
             //  and just request the property we need
             $this->_pathRecordIds = $this->_getController()->search(new Tinebase_Model_PathFilter(array(
-                array('field' => 'path', 'operator' => $this->_operator, 'value' => $this->_value)
+                array('field' => 'query', 'operator' => $this->_operator, 'value' => $this->_value)
             )))->record_id;
         }
 
