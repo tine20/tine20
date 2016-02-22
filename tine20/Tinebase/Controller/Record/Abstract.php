@@ -1215,7 +1215,9 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
-        if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
+        if ($record->has('relations') && isset($record->relations)
+            && (is_array($record->relations) || $record->relations instanceof Tinebase_Record_RecordSet))
+        {
             $type = $this->_getBackendType();
             Tinebase_Relations::getInstance()->setRelations(
                 $this->_modelName,

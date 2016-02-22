@@ -752,10 +752,11 @@ class Sales_JsonTest extends TestCase
         list($contact1, $contact2, $contact3, $contact4) = $this->_createContacts(4);
         
         $this->_setContractRelations($contract, array($contact1), 'RESPONSIBLE');
-        
+
+        unset($contact1->relations);
         Addressbook_Controller_Contact::getInstance()->update($contact1);
         $contact1 = Addressbook_Controller_Contact::getInstance()->get($contact1->getId(), NULL, TRUE);
-        $this->assertEquals(1, count($contact1->relations));
+        $this->assertEquals(1, count($contact1->relations), 'did not find expected relation in contact');
         
         // a partner may be added
         $relation = new Tinebase_Model_Relation(array(
@@ -771,7 +772,7 @@ class Sales_JsonTest extends TestCase
         ));
         
         $contact2->relations = array($relation);
-    
+
         $contact2 = Addressbook_Controller_Contact::getInstance()->update($contact2);
         $contact2 = Addressbook_Controller_Contact::getInstance()->get($contact2->getId(), NULL, TRUE);
         $this->assertEquals(1, count($contact2->relations));

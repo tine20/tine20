@@ -388,8 +388,9 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_createFullFixtures();
 
         // we dont want this contract 1 to be part of the runs below, move it out of the way
-        $this->_contractRecords->getByIndex(0)->start_date->addMonth(12);
-        Sales_Controller_Contract::getInstance()->update($this->_contractRecords->getByIndex(0));
+        $contract = $this->_contractRecords->getByIndex(0);
+        $contract->start_date->addMonth(12);
+        Sales_Controller_Contract::getInstance()->update($contract);
 
         $date = clone $this->_referenceDate;
         $customer4Timeaccount = $this->_timeaccountRecords->filter('title', 'TA-for-Customer4')->getFirstRecord();
@@ -400,6 +401,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
         if (null === $this->_timeaccountController)
             $this->_timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
+        // don't update relations
+        unset($customer4Timeaccount->relations);
         $this->_timeaccountController->update($customer4Timeaccount);
 
         // this is a ts on 20xx-03-18
@@ -477,6 +480,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         sleep(1);
         Sales_Controller_ProductAggregate::getInstance()->update($pA);
         $contract4->title = $contract4->getTitle() . ' changed';
+        // don't update relations
+        unset($contract4->relations);
         $this->_contractController->update($contract4);
         sleep(1);
 
@@ -581,7 +586,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             )),
         ));
         $positions = $ipc->search($f);
-        $this->assertEquals(1, $positions->count());
+        $this->assertEquals(1, $positions->count(), 'no invoice position found');
         $this->assertEquals($result, $positions->getFirstRecord()->quantity);
     }
 
@@ -697,6 +702,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         $taController = Timetracker_Controller_Timeaccount::getInstance();
+        unset($customer1Timeaccount->relations);
         $taController->update($customer1Timeaccount);
         
         // this is a ts on 20xx-01-18
@@ -725,6 +731,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, count($result['created']));
         
         $customer1Timeaccount->status = 'to bill';
+        unset($customer1Timeaccount->relations);
         $taController->update($customer1Timeaccount);
         
         $date->addSecond(1);

@@ -98,7 +98,7 @@ class Tinebase_Relations
      * @param  string $_model           own model to get relations for
      * @param  string $_backend         own backend to get relations for
      * @param  string $_id              own id to get relations for 
-     * @param  array  $_relationData    data for relations to create
+     * @param  array|Tinebase_Record_RecordSet  $_relationData    data for relations to create
      * @param  bool   $_ignoreACL       create relations without checking permissions
      * @param  bool   $_inspectRelated  do update/create related records on the fly
      * @param  bool   $_doCreateUpdateCheck do duplicate/freebusy/... checking for relations
@@ -112,14 +112,18 @@ class Tinebase_Relations
                                  $_inspectRelated = false,
                                  $_doCreateUpdateCheck = false)
     {
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-        foreach((array) $_relationData as $relationData) {
-            if ($relationData instanceof Tinebase_Model_Relation) {
-                $relations->addRecord($relationData);
-            } else {
-                $relation = new Tinebase_Model_Relation(NULL, TRUE);
-                $relation->setFromJsonInUsersTimezone($relationData);
-                $relations->addRecord($relation);
+        if ($_relationData instanceof Tinebase_Record_RecordSet) {
+            $relations = $_relationData;
+        } else {
+            $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+            foreach ((array)$_relationData as $relationData) {
+                if ($relationData instanceof Tinebase_Model_Relation) {
+                    $relations->addRecord($relationData);
+                } else {
+                    $relation = new Tinebase_Model_Relation(NULL, TRUE);
+                    $relation->setFromJsonInUsersTimezone($relationData);
+                    $relations->addRecord($relation);
+                }
             }
         }
         

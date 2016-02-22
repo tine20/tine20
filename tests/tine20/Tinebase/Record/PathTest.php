@@ -309,12 +309,10 @@ class Tinebase_Record_PathTest extends TestCase
     {
         $contact = $this->testTriggerRebuildPathForRecords();
 
-        // due to full text we need to commit here!
-        //Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
-        //$this->_transactionId = null;
-
         // change contact name and check path in related records
         $this->_fatherRecord->n_family = 'stepfather';
+        // don't update relations
+        unset($this->_fatherRecord->relations);
         Addressbook_Controller_Contact::getInstance()->update($this->_fatherRecord);
 
         $recordPaths = $this->_uit->getPathsForRecord($contact);
