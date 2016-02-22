@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -34,7 +34,7 @@ Ext.ns('Tine.Addressbook');
  * 
  * TODO         add     forceSelection: true ?
  */
-Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
+Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     /**
      * @cfg {Boolean} userOnly
@@ -170,5 +170,8 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
 
 });
 
-Ext.reg('addressbookcontactpicker', Tine.Addressbook.SearchCombo);
-Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.SearchCombo);
+// legacy
+Tine.Addressbook.SearchCombo = Tine.Addressbook.ContactSearchCombo;
+
+Ext.reg('addressbookcontactpicker', Tine.Addressbook.ContactSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.ContactSearchCombo);

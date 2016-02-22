@@ -76,7 +76,11 @@
           "path": "js/"
         },
         {
-          "text": "SearchCombo.js",
+          "text": "ContactSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListSearchCombo.js",
           "path": "js/"
         },
         {
