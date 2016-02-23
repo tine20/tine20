@@ -62,6 +62,23 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     );
 
     /**
+     * configurable array of additional attributes that should be fetched
+     *
+     * @var array
+     *
+     * TODO allow to configure this OR move some of them to plugins (plugins can request their own attributes)
+     */
+    protected $_additionalLdapAttributesToFetch = array(
+        'objectclass',
+        'uidnumber',
+        'useraccountcontrol',
+        // needed for syncing account status (shadowmax: days after which password must be changed)
+        'shadowmax',
+        // this is from qmail schema and allows to define an alternate / alias email address
+        'mailalternateaddress',
+    );
+
+    /**
      * objectclasses required by this backend
      *
      * @var array
@@ -217,11 +234,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             ));
         }
 
+        $attributes = array_values($this->_rowNameMapping);
+
         $accounts = $this->_ldap->search(
             $filter,
             $this->_baseDn,
             $this->_userSearchScope,
-            array_values($this->_rowNameMapping),
+            $attributes,
             $_sort !== null ? $this->_rowNameMapping[$_sort] : null
         );
         
@@ -644,11 +663,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         foreach ($this->_ldapPlugins as $plugin) {
             $attributes = array_merge($attributes, $plugin->getSupportedAttributes());
         }
-        $attributes[] = 'objectclass';
-        $attributes[] = 'uidnumber';
-        $attributes[] = 'useraccountcontrol';
-        // needed for account status handling (shadowmax: days after which password must be changed)
-        $attributes[] = 'shadowmax';
+
+        $attributes = array_merge($attributes, $this->_additionalLdapAttributesToFetch);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filter ' . $filter);
@@ -673,7 +689,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
     
     /**
-     * get metatada of existing user
+     * get metadata of existing user
      *
      * @param  string  $_userId
      * @return array
