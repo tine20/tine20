@@ -2177,8 +2177,8 @@ abstract class Tinebase_Controller_Record_Abstract
 
             if (count($parentPaths) === 0) {
                 $path = new Tinebase_Model_Path(array(
-                    'path'          => '/' . $this->_getPathPart($parent->related_record) . '/' . $this->_getPathPart($record, $parent),
-                    'shadow_path'   => '/' . $parent->related_id . '/' . $this->_getShadowPathPart($record, $parent),
+                    'path'          => $this->_getPathPart($parent->related_record) . $this->_getPathPart($record, $parent),
+                    'shadow_path'   => '/' . $parent->related_id . $this->_getShadowPathPart($record, $parent),
                     'record_id'     => $record->getId(),
                     'creation_time' => Tinebase_DateTime::now(),
                 ));
@@ -2187,8 +2187,8 @@ abstract class Tinebase_Controller_Record_Abstract
                 // merge paths
                 foreach ($parentPaths as $path) {
                     $newPath = new Tinebase_Model_Path(array(
-                        'path'          => $path->path . '/' . $this->_getPathPart($record, $parent),
-                        'shadow_path'   => $path->shadow_path . '/' . $this->_getShadowPathPart($record, $parent),
+                        'path'          => $path->path . $this->_getPathPart($record, $parent),
+                        'shadow_path'   => $path->shadow_path . $this->_getShadowPathPart($record, $parent),
                         'record_id'     => $record->getId(),
                         'creation_time' => Tinebase_DateTime::now(),
                     ));
@@ -2203,6 +2203,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
     /**
      * @param $record
+     * @param $relation
      * @return string
      *
      * TODO use decorators
@@ -2211,16 +2212,17 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $type = $this->_getTypeForPathPart($relation);
 
-        return mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 30) . $type;
+        return $type . '/' . mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 32);
     }
 
     protected function _getTypeForPathPart($relation)
     {
-        return ($relation && ! empty($relation->type)) ? '(' . $relation->type . ')' : '';
+        return ($relation && ! empty($relation->type)) ? '{' . $relation->type . '}' : '';
     }
 
     /**
      * @param $record
+     * @param $relation
      * @return string
      *
      * TODO use decorators
@@ -2229,7 +2231,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $type = $this->_getTypeForPathPart($relation);
 
-        return $record->getId() . $type;
+        return $type . '/' . $record->getId();
     }
 
     /**

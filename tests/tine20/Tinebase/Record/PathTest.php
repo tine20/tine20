@@ -302,7 +302,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         // check the 3 paths
         $this->assertEquals(3, count($recordPaths), 'paths: ' . print_r($recordPaths->toArray(), true));
-        $expectedPaths = array('/grandparent/father/tester', '/mother/tester', '/grandparent/father/tester(type)');
+        $expectedPaths = array('/grandparent/father/tester', '/mother/tester', '/grandparent/father{type}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));

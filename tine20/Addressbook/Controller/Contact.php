@@ -576,7 +576,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             if (count($listPaths) === 0) {
                 // add self
                 $listPaths->addRecord(new Tinebase_Model_Path(array(
-                    'path'          => '/' . $this->_getPathPart($list),
+                    'path'          => $this->_getPathPart($list),
                     'shadow_path'   => '/' . $list->getId(),
                     'record_id'     => $list->getId(),
                     'creation_time' => Tinebase_DateTime::now(),
@@ -587,7 +587,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 if ($role->contact_id === $record->getId()) {
                     $role = Addressbook_Controller_ListRole::getInstance()->get($role->list_role_id);
                     foreach ($listPaths as $listPath) {
-                        $listPath->path .= '/' . $this->_getPathPart($role);
+                        $listPath->path .= $this->_getPathPart($role);
                         $listPath->shadow_path .= '/' . $role->getId();
                         $listPath->record_id = $role->getId();
                     }
@@ -595,7 +595,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
 
             foreach ($listPaths as $listPath) {
-                $listPath->path .= '/' . $this->_getPathPart($record);
+                $listPath->path .= $this->_getPathPart($record);
                 $listPath->shadow_path .= '/' .$record->getId();
                 $listPath->record_id = $record->getId();
                 $result->addRecord($listPath);
