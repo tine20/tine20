@@ -72,7 +72,6 @@ Tine.Addressbook.ListRoleGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'members',
-            hidden: true,
             renderer: this.memberRenderer
         }];
     },
