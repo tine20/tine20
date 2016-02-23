@@ -583,23 +583,28 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 )));
             }
 
-            foreach ($list->memberroles as $role) {
-                if ($role->contact_id === $record->getId()) {
-                    $role = Addressbook_Controller_ListRole::getInstance()->get($role->list_role_id);
-                    foreach ($listPaths as $listPath) {
-                        $listPath->path .= $this->_getPathPart($role);
-                        $listPath->shadow_path .= '/' . $role->getId();
-                        $listPath->record_id = $role->getId();
+            foreach ($listPaths as $listPath) {
+                if (count($list->memberroles) > 0) {
+                    foreach ($list->memberroles as $role) {
+                        $rolePath = clone($listPath);
+                        if ($role->contact_id === $record->getId()) {
+                            $role = Addressbook_Controller_ListRole::getInstance()->get($role->list_role_id);
+                            $rolePath->path .= $this->_getPathPart($role);
+                            $rolePath->shadow_path .= '/' . $role->getId();
+                            $rolePath->record_id = $role->getId();
+                            $result->addRecord($rolePath);
+                        }
                     }
+                } else {
+                    $result->addRecord($listPath);
                 }
             }
+        }
 
-            foreach ($listPaths as $listPath) {
-                $listPath->path .= $this->_getPathPart($record);
-                $listPath->shadow_path .= '/' .$record->getId();
-                $listPath->record_id = $record->getId();
-                $result->addRecord($listPath);
-            }
+        foreach ($result as $listPath) {
+            $listPath->path .= $this->_getPathPart($record);
+            $listPath->shadow_path .= '/' . $record->getId();
+            $listPath->record_id = $record->getId();
         }
 
         return $result;

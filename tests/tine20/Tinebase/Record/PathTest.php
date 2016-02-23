@@ -115,9 +115,16 @@ class Tinebase_Record_PathTest extends TestCase
             'name'          => 'my role',
             'description'   => 'my test description'
         ));
+        $listRole2 = $adbJson->saveListRole(array(
+            'name'          => 'my second role',
+            'description'   => 'my test description'
+        ));
         $memberroles = array(array(
             'contact_id'   => $contact->getId(),
             'list_role_id' => $listRole['id'],
+        ), array(
+            'contact_id'   => $contact->getId(),
+            'list_role_id' => $listRole2['id'],
         ));
         $adbJson->saveList(array(
             'name'                  => 'my test group',
@@ -128,10 +135,14 @@ class Tinebase_Record_PathTest extends TestCase
             'relations'             => array($this->_getParentRelationArray($this->_getFatherWithGrandfather()))
         ));
 
-        $result = $this->_uit->generatePathForRecord($contact);
-        $this->assertTrue($result instanceof Tinebase_Record_RecordSet);
-        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $this->assertEquals('/grandparent/father/my test group/my role/tester', $result->getFirstRecord()->path);
+        $recordPaths = $this->_uit->generatePathForRecord($contact);
+        $this->assertTrue($recordPaths instanceof Tinebase_Record_RecordSet);
+        $this->assertEquals(2, count($recordPaths), 'should find 2 path for record. paths:' . print_r($recordPaths->toArray(), true));
+        $expectedPaths = array('/grandparent/father/my test group/my role/tester', '/grandparent/father/my test group/my second role/tester');
+        foreach ($expectedPaths as $expectedPath) {
+            $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
+                . print_r($recordPaths->toArray(), true));
+        }
 
         return $contact;
     }
@@ -278,7 +289,7 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals(2, $result['totalcount']);
         $firstRecord = $result['results'][0];
         $this->assertTrue(isset($firstRecord['paths']), 'paths should be set in record' . print_r($firstRecord, true));
-        $this->assertEquals(1, count($firstRecord['paths']));
+        $this->assertEquals(2, count($firstRecord['paths']));
         $this->assertContains('/grandparent', $firstRecord['paths'][0]['path'], 'could not find grandparent in paths of record' . print_r($firstRecord, true));
     }
 
