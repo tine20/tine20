@@ -1031,3 +1031,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .tb-widgets-path-pathitem-match {
     color: black;
 }
+
+.tb-widgets-path-pathitem-type {
+    font-size: 7px;
+}
