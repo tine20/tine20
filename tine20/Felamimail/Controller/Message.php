@@ -731,8 +731,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_transformBodyTags($config);
         
         // add uri filter
-        $uri = $config->getDefinition('URI');
-        $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
+        // TODO could be improved by adding on demand button if loading external resources is allowed
+        //   or only load uris of known recipients
+        if (Felamimail_Config::getInstance()->get(Felamimail_Config::FILTER_EMAIL_URIS)) {
+            $uri = $config->getDefinition('URI');
+            $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
+        }
         
         // add cid uri scheme
         require_once(dirname(dirname(__FILE__)) . '/HTMLPurifier/URIScheme/cid.php');

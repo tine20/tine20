@@ -48,7 +48,6 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
      * @param HTMLPurifier_Token $token
      * @return boolean
      * 
-     * @todo we need a preference / on demand button if loading external ressources is allowed
      * @todo use a different namespace for src= e.g. tine20:src= $context->attr[tine20:URI] = OR use "library/extjs/blank.gif?resourceURI"
      */
     protected function _checkExternalUrl($uri, $token)
