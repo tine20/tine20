@@ -50,7 +50,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
-            if ( ! $app instanceof Tinebase_Controller_Abstract) {
+            if (! $app instanceof Tinebase_Controller_Abstract) {
                 continue;
             }
 
@@ -60,12 +60,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
                 $_filter = $pathModel . 'Filter';
                 $_filter = new $_filter();
-
-                $this->_iterationResult = array(
-                    'exceptions' => new Tinebase_Record_RecordSet('Tinebase_Exception'),
-                    'totalcount' => 0,
-                    'failcount' => 0,
-                );
 
                 $iterator = new Tinebase_Record_Iterator(array(
                     'iteratable' => $this,
@@ -77,7 +71,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $result = $iterator->iterate($controller);
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
+                    if (false === $result) {
+                        $result['totalcount'] = 0;
+                    }
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Build paths for ' . $result['totalcount'] . ' records of ' . $pathModel);
                 }
             }
         }
@@ -93,7 +90,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function rebuildPathsIteration(Tinebase_Record_RecordSet $records, Tinebase_Controller_Record_Abstract $controller)
     {
         foreach ($records as $record) {
-            $controller->buildPath($record, true);
+            try {
+                $controller->buildPath($record, true);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' record path building failed: '
+                    . $e->getMessage() . PHP_EOL
+                    . $e->getTraceAsString() . PHP_EOL
+                    . $record->toArray());
+            }
         }
     }
 

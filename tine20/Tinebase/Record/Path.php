@@ -80,12 +80,14 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Generate path for ' . get_class($record) . ' record with id ' . $record->getId());
 
-        // fetch full record + check acl
-        $recordController = Tinebase_Core::getApplicationInstance(get_class($record));
-        $record = $recordController->get($record->getId());
+        // if we rebuild recursively, dont do any tree operation, just rebuild the paths for the record and be done with it
+        if (false === $rebuildRecursively) {
+            // fetch full record + check acl
+            $recordController = Tinebase_Core::getApplicationInstance(get_class($record));
+            $record = $recordController->get($record->getId());
 
-
-        $currentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($record);
+            $currentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($record);
+        }
 
         $newPaths = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
 
@@ -96,60 +98,64 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             $newPaths->merge($recordController->generatePathForRecord($record));
         }
 
-        //compare currentPaths with newPaths to find out if we need to make subtree updates
-        //we should do this before the new paths of the current record have been persisted to DB!
-        $currentShadowPathOffset = array();
-        foreach($currentPaths as $offset => $path) {
-            $currentShadowPathOffset[$path->shadow_path] = $offset;
-        }
 
-        $newShadowPathOffset = array();
-        foreach($newPaths as $offset => $path) {
-            $newShadowPathOffset[$path->shadow_path] = $offset;
-        }
-
-        $toDelete = array();
-        $anyOldOffset = null;
-        foreach($currentShadowPathOffset as $shadowPath => $offset) {
-            $anyOldOffset = $offset;
-
-            // parent path has been deleted!
-            if (false === isset($newShadowPathOffset[$shadowPath])) {
-                $toDelete[] = $shadowPath;
-                continue;
+        // if we rebuild recursively, dont do any tree operation, just rebuild the paths for the record and be done with it
+        if (false === $rebuildRecursively) {
+            //compare currentPaths with newPaths to find out if we need to make subtree updates
+            //we should do this before the new paths of the current record have been persisted to DB!
+            $currentShadowPathOffset = array();
+            foreach ($currentPaths as $offset => $path) {
+                $currentShadowPathOffset[$path->shadow_path] = $offset;
             }
 
-            $currentPath = $currentPaths[$offset];
-            $newPath = $newPaths[$newShadowPathOffset[$shadowPath]];
-
-            // path changed (a title was updated or similar)
-            if ($currentPath->path !== $newPath->path) {
-                // update ... set path = REPLACE(path, $currentPath->path, $newPath->path) where shadow_path LIKE '$shadowPath/%'
-                $this->_backend->replacePathForShadowPathTree($shadowPath, $currentPath->path, $newPath->path);
+            $newShadowPathOffset = array();
+            foreach ($newPaths as $offset => $path) {
+                $newShadowPathOffset[$path->shadow_path] = $offset;
             }
 
-            unset($newShadowPathOffset[$shadowPath]);
-        }
+            $toDelete = array();
+            $anyOldOffset = null;
+            foreach ($currentShadowPathOffset as $shadowPath => $offset) {
+                $anyOldOffset = $offset;
 
-        // new parents
-        if (count($newShadowPathOffset) > 0 && null !== $anyOldOffset) {
-            $anyPath = $currentPaths[$anyOldOffset];
-            $newParents = array_values($newShadowPathOffset);
-            foreach ($newParents as $newParentOffset) {
-                $newParent = $newPaths[$newParentOffset];
+                // parent path has been deleted!
+                if (false === isset($newShadowPathOffset[$shadowPath])) {
+                    $toDelete[] = $shadowPath;
+                    continue;
+                }
 
-                // insert into ... select
-                // REPLACE(path, $anyPath->path, $newParent->path) as path,
-                // REPLACE(shadow_path, $anyPath->shadow_path, $newParent->shadow_path) as shadow_path
-                // from ... where shadow_path LIKE '$anyPath->shadow_path/%'
-                $this->_backend->copyTreeByShadowPath($anyPath->shadow_path, $newParent->path, $anyPath->path, $newParent->shadow_path, $anyPath->shadow_path);
+                $currentPath = $currentPaths[$offset];
+                $newPath = $newPaths[$newShadowPathOffset[$shadowPath]];
+
+                // path changed (a title was updated or similar)
+                if ($currentPath->path !== $newPath->path) {
+                    // update ... set path = REPLACE(path, $currentPath->path, $newPath->path) where shadow_path LIKE '$shadowPath/%'
+                    $this->_backend->replacePathForShadowPathTree($shadowPath, $currentPath->path, $newPath->path);
+                }
+
+                unset($newShadowPathOffset[$shadowPath]);
             }
-        }
 
-        // execute deletes only now, important to make 100% sure "new parents" just above still has data to work on!
-        foreach($toDelete as $delete) {
-            // delete where shadow_path LIKE '$delete/%'
-            $this->_backend->deleteForShadowPathTree($delete);
+            // new parents
+            if (count($newShadowPathOffset) > 0 && null !== $anyOldOffset) {
+                $anyPath = $currentPaths[$anyOldOffset];
+                $newParents = array_values($newShadowPathOffset);
+                foreach ($newParents as $newParentOffset) {
+                    $newParent = $newPaths[$newParentOffset];
+
+                    // insert into ... select
+                    // REPLACE(path, $anyPath->path, $newParent->path) as path,
+                    // REPLACE(shadow_path, $anyPath->shadow_path, $newParent->shadow_path) as shadow_path
+                    // from ... where shadow_path LIKE '$anyPath->shadow_path/%'
+                    $this->_backend->copyTreeByShadowPath($anyPath->shadow_path, $newParent->path, $anyPath->path, $newParent->shadow_path, $anyPath->shadow_path);
+                }
+            }
+
+            //execute deletes only now, important to make 100% sure "new parents" just above still has data to work on!
+            foreach ($toDelete as $delete) {
+                // delete where shadow_path LIKE '$delete/%'
+                $this->_backend->deleteForShadowPathTree($delete);
+            }
         }
 
 
