@@ -364,15 +364,15 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         //this.constrains = new Tine.widgets.container.selectionComboBox({
             app: this.app,
             allowBlank: true,
-            width: 200,
+            width: 260,
             listWidth: 200,
             allowNodeSelect: true,
             recordClass: Tine.Calendar.Model.Event
         });
 
         this.items = this.items.concat([{
-            layout: 'column',
-            style: 'padding-top: 2px;',
+            layout: 'hbox',
+            //style: 'padding-top: 2px;',
             items: [
                 {
                     xtype: 'label',
@@ -388,10 +388,14 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
                     // - ...
                     xtype: 'label',
                     style: 'padding-top: 2px;',
-                    width: 150,
-                    text: this.app.i18n._('during events in calendar')
+                    width: 200,
+                    text: this.app.i18n._('during events in the calendars')
                 },
-                this.constrains
+                {
+                    xtype: 'label',
+                    width: 260,
+                    id: this.limitId + 'constraints'
+                },
             ]
         }]);
 
@@ -439,6 +443,9 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         
         this.countRadio.render(countradioel);
         this.count.render(countel);
+
+        this.constrains.render(Ext.get(this.limitId + 'constraints'));
+        this.constrains.wrap.setWidth(260);
     },
     
     onLimitRadioCheck: function(radio, checked) {
