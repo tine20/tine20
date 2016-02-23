@@ -42,33 +42,32 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
 
     pathName = pathName
         .replace(/^\//, '')
-        .replace(/\//g, ' ###SEPARATOR### ');
+        .replace(/\//g, ' \u0362 ');
 
     pathName = Ext.util.Format.htmlEncode(pathName);
+    console.log(pathName);
 
     if (queryParts.length) {
-        var hasQueryMatches = false;
-        Ext.each(queryParts, function(queryPart) {
-            queryPart = Ext.util.Format.htmlEncode(queryPart);
+        var hasQueryMatches = false,
+            search = '';
 
-            var queryPartRe = new RegExp(queryPart, 'i'),
-                matches = pathName.match(queryPartRe);
+        Ext.each(queryParts, function(queryPart, idx) {
+            search += (search ? '|(' :'(') + Ext.util.Format.htmlEncode(queryPart) + ')';
+        });
 
-            if (matches) {
-                hasQueryMatches = true;
-                pathName = pathName.replace(queryPartRe, '<span class="tb-widgets-path-pathitem-match">' + matches[0] + '</span>');
-            }
+        pathName = pathName.replace(new RegExp(search,'gi'), function(match) {
+            hasQueryMatches = true;
+            return '<span class="tb-widgets-path-pathitem-match">' + match + '</span>';
         });
 
         // skip path if no token matched
         if (! hasQueryMatches) {
             pathName = '';
         }
-
     }
 
-    var qtip = pathName.replace(/###SEPARATOR###/g, "<br/>&nbsp;" + Ext.util.Format.htmlEncode('>'));
-    pathName = pathName.replace(/###SEPARATOR###/g, Ext.util.Format.htmlEncode('>'));
+    var qtip = pathName.replace(/\u0362/g, "<br/>&nbsp;" + Ext.util.Format.htmlEncode('\u00BB'));
+    pathName = pathName.replace(/\u0362/g, Ext.util.Format.htmlEncode('\u00BB'));
 
 
     return pathName ? '<div class="tb-widgets-path-pathitem" ext:qtip="' + Ext.util.Format.htmlEncode(qtip) + '">' + pathName + '</div>' : pathName;
