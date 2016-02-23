@@ -2167,6 +2167,10 @@ abstract class Tinebase_Controller_Record_Abstract
         $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
         foreach ($parentRelations as $parent) {
 
+            if (!is_object($parent->related_record)) {
+                $parent->related_record = Tinebase_Core::getApplicationInstance($parent->related_model)->get($parent->related_id);
+            }
+
             if (false === $depth) {
                 // we do not need to generate the parents paths, they should be in DB
                 $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);

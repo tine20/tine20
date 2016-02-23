@@ -80,10 +80,11 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Generate path for ' . get_class($record) . ' record with id ' . $record->getId());
 
+        $recordController = Tinebase_Core::getApplicationInstance(get_class($record));
+
         // if we rebuild recursively, dont do any tree operation, just rebuild the paths for the record and be done with it
         if (false === $rebuildRecursively) {
             // fetch full record + check acl
-            $recordController = Tinebase_Core::getApplicationInstance(get_class($record));
             $record = $recordController->get($record->getId());
 
             $currentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($record);

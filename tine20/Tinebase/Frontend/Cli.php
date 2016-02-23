@@ -55,6 +55,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             $pathModels = $app->getModelsUsingPaths();
+            if (!is_array($pathModels)) {
+                $pathModels = array();
+            }
             foreach($pathModels as $pathModel) {
                 $controller = Tinebase_Core::getApplicationInstance($pathModel, '', true);
 
