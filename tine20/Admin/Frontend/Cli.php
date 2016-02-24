@@ -77,6 +77,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $admUserController = Admin_Controller_User::getInstance();
         $userContactIds = array();
         foreach ($records as $list) {
+            if ($list->type == 'group') {
+                echo "Skipping list " . $list->name ."\n";
+            }
+
             /**
              * @var Addressbook_Model_List $list
              */
@@ -104,6 +108,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         'accountDisplayName'    => $member->n_fileas ? $member->n_fileas : $member->n_fn,
                         'accountLastName'       => $member->n_family ? $member->n_family : $member->n_fn,
                         'accountFullName'       => $member->n_fn,
+                        'accountFirstName'      => $member->n_given ? $member->n_given : '',
+                        'accountEmailAddress'   => $member->email,
                     ), true);
                     $user->accountLoginName = Tinebase_User::getInstance()->generateUserName($user);
 
