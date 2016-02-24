@@ -47,7 +47,7 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * @cfg {Bool} hasDetailsPanel 
      */
-    hasDetailsPanel: true,
+    hasDetailsPanel: false,
     
     /**
      * inits this cmp
