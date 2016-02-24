@@ -99,7 +99,14 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return [
             { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 30, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer, hidden: false },
             { id: 'name', header: this.app.i18n._('Name'), dataIndex: 'name', width: 30, hidden: false },
-            { id: 'emails', header: this.app.i18n._('Emails'), dataIndex: 'emails', hidden: false },
+            { id: 'emails', header: this.app.i18n._('Emails'), dataIndex: 'emails', hidden: false, renderer: function(value) {
+                if (! value) {
+                    return '';
+                }
+                // TODO should be fixed on server side
+                // remove leading comma
+                return value.replace(/^,/, '');
+            }},
         ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()));
     },
     
