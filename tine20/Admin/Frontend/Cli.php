@@ -66,17 +66,17 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * iterate adb lists
+     *
      * @param Tinebase_Record_RecordSet $records
-     * @param Addressbook_Controller_List $controller
      */
     public function iterateAddressbookLists(Tinebase_Record_RecordSet $records)
     {
-        $addListController = Addressbook_Controller_List::getInstance();
         $addContactController = Addressbook_Controller_Contact::getInstance();
         $admGroupController = Admin_Controller_Group::getInstance();
         $admUserController = Admin_Controller_User::getInstance();
-        foreach($records as $list)
-        {
+        $userContactIds = array();
+        foreach ($records as $list) {
             /**
              * @var Addressbook_Model_List $list
              */
@@ -86,7 +86,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $group = new Tinebase_Model_Group(array(
                 'container_id'  => $list->container_id,
-                'list_id'       => $list->list_id,
+                'list_id'       => $list->getId(),
                 'name'          => $list->name,
                 'description'   => $list->description,
                 'email'         => $list->email,
@@ -96,32 +96,35 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $members = $addContactController->getMultiple($list->members);
             foreach ($members as $member) {
 
-                if ($member->type == Addressbook_Model_Contact::CONTACTTYPE_CONTACT) {
+                if ($member->type == Addressbook_Model_Contact::CONTACTTYPE_CONTACT && ! in_array($member->getId(), $userContactIds)) {
                     $pwd = Tinebase_Record_Abstract::generateUID();
-                    $user = new Tinebase_Model_FullUser(
-                        array(
-                            'email'         => $member->email,
-                            'username'      => $member->email,
-                            //'password'      => $pwd,
-                            'contact_id'    => $member->getId(),
-                        )
-                    );
+                    $user = new Tinebase_Model_FullUser(array(
+                        'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                        'contact_id'            => $member->getId(),
+                        'accountDisplayName'    => $member->n_fileas ? $member->n_fileas : $member->n_fn,
+                        'accountLastName'       => $member->n_family ? $member->n_family : $member->n_fn,
+                        'accountFullName'       => $member->n_fn,
+                    ), true);
+                    $user->accountLoginName = Tinebase_User::getInstance()->generateUserName($user);
 
+                    echo 'Creating user ' . $user->accountLoginName . "...\n";
                     $user = $admUserController->create($user, $pwd, $pwd);
-
-                    //we dont need to persist this, the adm controller did it for us, but below we need the user id in $member, so we set it
-                    $member->user_id = $user->getId();
+                    $member->account_id = $user->getId();
+                    $userContactIds[] = $member->getId();
                 }
 
-                $allMembers[] = $member->user_id;
+                $allMembers[] = $member->account_id;
             }
 
             $group->members = $allMembers;
 
-            $group = $admGroupController->create($group);
+            echo 'Creating group ' . $group->name . "...\n";
 
-            $list->group_id = $group->getId();
-            $addListController->update($list);
+            try {
+                $admGroupController->create($group);
+            } catch (Exception $e) {
+                echo $e->getMessage() . "\n";
+            }
         }
     }
 
