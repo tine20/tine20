@@ -136,8 +136,10 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onAfterRecordLoad: function() {
         Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
-        
-        this.grantsGridPanel.getStore().loadData(this.record.data);
+
+        if (this.record.data && this.record.data.grants) {
+            this.grantsGridPanel.getStore().loadData(this.record.data);
+        }
     },
     
     onRecordUpdate: function() {

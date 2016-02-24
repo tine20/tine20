@@ -268,7 +268,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
                 sortable: false
             },
             columns:  [
-                {id: 'name', header: String.format(_('Selected  {0}'), this.containersName), dataIndex: 'name'}
+                {id: 'name', header: String.format(_('Selected {0}'), this.containersName), dataIndex: 'name'}
             ]
         });
     },
@@ -364,6 +364,9 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
         this.store.removeAll();
         var containerNames = [];
         Ext.each(value, function(containerData) {
+            // ignore broken value
+            if (! containerData) return;
+
             // ignore server name for node 'My containers'
             if (containerData.path && containerData.path === Tine.Tinebase.container.getMyNodePath()) {
                 containerData.name = null;

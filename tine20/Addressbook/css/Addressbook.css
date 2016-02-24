@@ -41,6 +41,20 @@
     height: 16px;
 }
 
+.renderer_typeGroupIcon, .AddressbookList{
+    background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
+    background-repeat: no-repeat;
+    /*background-position: 2px 2px;*/
+    /*height: 16px;*/
+}
+
+.renderer_typeListIcon {
+    background-image:url(../../images/list.png) !important;
+    background-repeat: no-repeat;
+    /*background-position: 2px 2px;*/
+    /*height: 16px;*/
+}
+
 .x-grid3-cell-inner .renderer_typeAccountIcon,
 .x-grid3-cell-inner .renderer_typeContactIcon {
     margin-bottom: -2px;

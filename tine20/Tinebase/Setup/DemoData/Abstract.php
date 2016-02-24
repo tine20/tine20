@@ -708,7 +708,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
             'own_model'              => $ownModel,
             'own_backend'            => 'Sql',
             'own_id'                 => $ownRecord->getId(),
-            'own_degree'             => $ownDegree,
+            'related_degree'         => $ownDegree,
             'related_model'          => $foreignModel,
             'related_backend'        => 'Sql',
             'related_id'             => $foreignRecord->getId(),

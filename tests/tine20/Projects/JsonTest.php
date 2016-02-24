@@ -373,7 +373,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
                 'related_record'         => NULL,
                 'related_backend'        => 'Sql',

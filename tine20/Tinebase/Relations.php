@@ -651,7 +651,7 @@ class Tinebase_Relations
     public function transferRelations($sourceId, $destinationId, $model)
     {
         if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
-            throw new Tinebase_Exception_AccessDenied('Non admins of Tinebase aren\'t allowed to perform his operation!');
+            throw new Tinebase_Exception_AccessDenied('Only Admins are allowed to perform his operation!');
         }
         
         return $this->_backend->transferRelations($sourceId, $destinationId, $model);
@@ -679,5 +679,25 @@ class Tinebase_Relations
     public function removeApplication($applicationName)
     {
         $this->_backend->removeApplication($applicationName);
+    }
+
+    public function getRelationsOfRecordByDegree($record, $degree)
+    {
+        // get relations if not yet present OR use relation search here
+        if (empty($record->relations)) {
+            $backendType = 'Sql';
+            $modelName = get_class($record);
+            $record->relations = Tinebase_Relations::getInstance()->getRelations($modelName, $backendType, $record->getId());
+        }
+
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        foreach ($record->relations as $relation) {
+            if ($relation->related_degree === $degree) {
+                $result->addRecord($relation);
+            }
+        }
+
+        return $result;
     }
 }

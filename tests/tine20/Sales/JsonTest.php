@@ -208,7 +208,7 @@ class Sales_JsonTest extends TestCase
         $relationData = array();
         foreach ($contacts as $contact) {
             $relationData[] = array(
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_degree' => 'sibling',
                 'related_model' => 'Addressbook_Model_Contact',
                 'related_backend' => 'Sql',
@@ -496,7 +496,7 @@ class Sales_JsonTest extends TestCase
                     'container_id'  => $personalContainer[0]->getId(),
                 ),
                 'related_model' => 'Addressbook_Model_Contact',
-                'own_degree'    => 'sibling'
+                'related_degree'=> 'sibling'
             ),
             array(
                 'type'              => Sales_Model_Contract::RELATION_TYPE_RESPONSIBLE,
@@ -505,7 +505,7 @@ class Sales_JsonTest extends TestCase
                     'container_id'  => $personalContainer[0]->getId(),
                 ),
                 'related_model' => 'Addressbook_Model_Contact',
-                'own_degree'    => 'sibling'
+                'related_degree'=> 'sibling'
             ),
         );
     }
@@ -657,7 +657,7 @@ class Sales_JsonTest extends TestCase
         
         // a partner may be added
         $relation = new Tinebase_Model_Relation(array(
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'own_model'  => 'Addressbook_Model_Contact',
             'own_backend' => 'Sql',
             'own_id' => $contact2->getId(),
@@ -676,7 +676,7 @@ class Sales_JsonTest extends TestCase
         
         // a second partner may be added also
         $relation = new Tinebase_Model_Relation(array(
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'own_model'  => 'Addressbook_Model_Contact',
             'own_backend' => 'Sql',
             'own_id' => $contact3->getId(),
@@ -697,7 +697,7 @@ class Sales_JsonTest extends TestCase
 
         // but a second responsible must not be added
         $relation = new Tinebase_Model_Relation(array(
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'own_model'  => 'Addressbook_Model_Contact',
             'own_backend' => 'Sql',
             'own_id' => $contact4->getId(),

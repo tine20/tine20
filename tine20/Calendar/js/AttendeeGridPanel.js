@@ -336,11 +336,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 
                 case 'group':
                 case 'memberOf':
-                colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                colModel.config[o.column].setEditor(new Tine.Addressbook.ListSearchCombo({
                     minListWidth: 350,
                     blurOnSelect: true,
-                    sortBy: 'name',
-                    recordClass: Tine.Addressbook.Model.List,
+                    groupOnly: true,
                     getValue: function() {
                         return this.selectedRecord ? this.selectedRecord.data : null;
                     }

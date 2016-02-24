@@ -88,8 +88,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 // set all grants and mask other checkboxes
                 Ext.each(this.getColumnModel().columns, function(col, colIdx) {
                     var matches;
-                    if ((matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
-//                          //Ext.fly(this.getView().getCell(store.indexOf(record), colIdx)).mask('test');
+                    if (col.dataIndex && (matches = col.dataIndex.match(/^([a-z]+)Grant$/)) && matches[1] != 'admin') {
                         record.set(col.dataIndex, true);
                     }
                 }, this);

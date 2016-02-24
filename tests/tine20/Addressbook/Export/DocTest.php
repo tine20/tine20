@@ -39,13 +39,11 @@ class Addressbook_Export_DocTest extends TestCase
         $doc->save($tempfile);
 
         $this->assertGreaterThan(0, filesize($tempfile));
-//        `open $tempfile`;
     }
 
     // read and write sucks
     public function _testReadWriteCycleSucks()
     {
-
         PhpWord\Settings::setTempDir(Tinebase_Core::getTempDir());
 
         $source = str_replace('tests/tine20', 'tine20', __DIR__) . '/templates/addressbook_contact_letter.docx';

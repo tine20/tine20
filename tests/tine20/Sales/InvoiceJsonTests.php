@@ -314,7 +314,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $c1['relations'] = array(array(
             'related_model' => 'Timetracker_Model_Timeaccount',
             'related_id'    => $ta['id'],
-            'own_degree'    => 'sibling',
+            'related_degree'=> 'sibling',
             'type'          => 'TIME_ACCOUNT',
             'remark'        => 'unittest',
             'related_backend' => 'Sql'
@@ -332,7 +332,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $c2['relations'] = array(array(
             'related_model'   => 'Timetracker_Model_Timeaccount',
             'related_id'      => $ta['id'],
-            'own_degree'      => 'sibling',
+            'related_degree'  => 'sibling',
             'type'            => 'TIME_ACCOUNT',
             'remark'          => 'unittest',
             'related_backend' => 'Sql'

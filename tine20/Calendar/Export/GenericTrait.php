@@ -41,7 +41,7 @@ trait Calendar_Export_GenericTrait
         $this->_applicationName = 'Calendar';
         $this->_modelName = 'Event';
 
-        $periodFilter = $_filter->getFilter('period');
+        $periodFilter = $_filter->getFilter('period', false, true);
 
         if ($periodFilter) {
             $this->_from = $periodFilter->getFrom();

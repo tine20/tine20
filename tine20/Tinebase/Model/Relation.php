@@ -67,7 +67,7 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         'own_model'              => array('presence' => 'required', 'allowEmpty' => false),
         'own_backend'            => array('presence' => 'required', 'allowEmpty' => false),
         'own_id'                 => array('presence' => 'required', 'allowEmpty' => true),
-        'own_degree'             => array('presence' => 'required', 'allowEmpty' => false, array('InArray', array(
+        'related_degree'         => array('presence' => 'required', 'allowEmpty' => false, array('InArray', array(
             self::DEGREE_PARENT,
             self::DEGREE_CHILD,
             self::DEGREE_SIBLING

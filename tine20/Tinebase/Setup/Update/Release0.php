@@ -701,7 +701,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>own_degree</name>
+                    <name>related_degree</name>
                     <type>enum</type>
                     <value>parent</value>
                     <value>child</value>
@@ -876,7 +876,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         'own_model'              => 'Crm_Model_Lead',
                         'own_backend'            => 'SQL',
                         'own_id'                 => $link->link_id1,
-                        'own_degree'             => $degree,
+                        'related_degree'         => $degree,
                         'related_model'          => $relatedModel,
                         'related_backend'        => $backend,
                         'related_id'             => $link->link_id2,

@@ -907,6 +907,14 @@ span:hover.tinebase-showheaders-link {
 
 .search-item {border: 1px solid white}
 
+.search-combo-col td {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
 /* multiple edit dialog */
     
 .tinebase-editmultipledialog-noneedit, 
@@ -1004,4 +1012,26 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .tb-version-tinepanel {
     display: none;
+}
+
+.tb-widgets-path-pathsblock {
+    padding-top: 2px;
+    padding-left: 4px;
+}
+
+.tb-widgets-path-pathitem {
+    font-size: 9px;
+    color: grey;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+}
+
+.tb-widgets-path-pathitem-match {
+    color: black;
+}
+
+.tb-widgets-path-pathitem-type {
+    font-size: 7px;
 }

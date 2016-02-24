@@ -175,6 +175,13 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_updateMultipleValidateEachRecord = FALSE;
 
     /**
+     * support record paths
+     *
+     * @var bool
+     */
+    protected $_useRecordPaths = false;
+
+    /**
      * returns controller for records of given model
      *
      * @param string $_model
@@ -609,7 +616,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
-            $this->_setRelatedData($createdRecord, $_record, TRUE);
+            $this->_setRelatedData($createdRecord, $_record, null, TRUE);
             $this->_setNotes($createdRecord, $_record);
             
             if ($this->sendNotifications()) {
@@ -910,7 +917,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Updated record: ' . print_r($updatedRecord->toArray(), TRUE));
             
             $this->_inspectAfterUpdate($updatedRecord, $_record, $currentRecord);
-            $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, TRUE);
+            $updatedRecordWithRelatedData = $this->_setRelatedData($updatedRecord, $_record, $currentRecord, TRUE);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Updated record with related data: ' . print_r($updatedRecordWithRelatedData->toArray(), TRUE));
             
@@ -1028,14 +1035,18 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = FALSE)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
-        
+
+        $pathPartChanged = false;
+        $relationsTouched = false;
+
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
@@ -1048,7 +1059,47 @@ abstract class Tinebase_Controller_Record_Abstract
                 FALSE,
                 $this->_inspectRelatedRecords,
                 $this->_doRelatedCreateUpdateCheck);
+
+            $relationsTouched = true;
+
+        } elseif (null === $currentRecord || $this->_getPathPart($currentRecord) !== $this->_getPathPart($updatedRecord)) {
+            $pathPartChanged = true;
         }
+
+        // rebuild paths if relations where set or if pathPart changed
+        if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
+
+            // rebuild own paths
+            $this->buildPath($updatedRecord);
+
+            // rebuild paths of children that have been added or removed
+            if ($relationsTouched) {
+                //we need to do this to reload the relations in the next line...
+                $record->relations = null;
+                $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+                if (null === $currentRecord) {
+                    $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+                } else {
+                    $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+                }
+
+                foreach ($newChildRelations as $relation) {
+                    $oldOffset = $oldChildRelations->getIndexById($relation->id);
+                    // new child
+                    if (false === $oldOffset) {
+                        $this->buildPath($relation->related_record);
+                    } else {
+                        $oldChildRelations->offsetUnset($oldOffset);
+                    }
+                }
+
+                //removed children
+                foreach ($oldChildRelations as $relation) {
+                    $this->buildPath($relation->related_record);
+                }
+            }
+        }
+
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
             $updatedRecord->tags = $record->tags;
             Tinebase_Tags::getInstance()->setTagsOfRecord($updatedRecord);
@@ -1156,6 +1207,9 @@ abstract class Tinebase_Controller_Record_Abstract
     
     /**
      * handles relations on update multiple
+     *
+     * Syntax 1 (old): key: '%<type>-<related_model>', value: <related_id>
+     * Syntax 2      : key: '%<add|remove|replace>', value: <relation json>
      * 
      * @param string $key
      * @param string $value
@@ -1163,25 +1217,28 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _handleRelationsOnUpdateMultiple($key, $value)
     {
-        $getRelations = true;
-        preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a);
-        if (count($a) < 4) {
+        if (preg_match('/%(add|remove|replace)/', $key, $matches)) {
+            $action = $matches[1];
+            $rel = json_decode($value, true);
+        } else if (preg_match('/%(.+)-((.+)_Model_(.+))/', $key, $a)) {
+            $action = $value ? 'replace' : 'remove';
+            $rel = array(
+                'related_model' => $a[2],
+                'type' => $a[1],
+                'related_id' => $value,
+            );
+        } else {
             throw new Tinebase_Exception_Record_DefinitionFailure('The relation to delete/set is not configured properly!');
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Handle relations for ' . $this->_modelName);
-        }
-        
-        $relConfig = Tinebase_Relations::getConstraintsConfigs(array($this->_modelName, $a[2]));
-        
-        $constraintsConfig = NULL;
-        
+        // find constraint config
+        $constraintsConfig = array();
+        $relConfig = Tinebase_Relations::getConstraintsConfigs(array($this->_modelName, $rel['related_model']));
         if ($relConfig) {
             foreach ($relConfig as $config) {
-                if ($config['relatedApp'] == $a[3] && $config['relatedModel'] == $a[4] && isset($config['config']) && is_array($config['config'])) {
+                if ($rel['related_model'] == "{$config['relatedApp']}_Model_{$config['relatedModel']}" && isset($config['config']) && is_array($config['config'])) {
                     foreach ($config['config'] as $constraint) {
-                        if ($constraint['type'] == $a[1]) {
+                        if (isset($rel['type']) && isset($constraint['type']) && $constraint['type'] == $rel['type']) {
                             $constraintsConfig = $constraint;
                             break 2;
                         }
@@ -1189,42 +1246,36 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        
-        // update multiple is not possible without having a constraints config
-        if (! $constraintsConfig) {
-            throw new Tinebase_Exception_Record_DefinitionFailure('No relation definition could be found for this model!');
-        }
 
-        $rel = array(
-            'own_model' => $this->_modelName,
-            'own_backend' => 'Sql',
-            'own_degree' => isset($constraintsConfig['sibling']) ? $constraintsConfig['sibling'] : 'sibling',
-            'related_model' => $a[2],
-            'related_backend' => 'Sql',
-            'type' => isset($constraintsConfig['type']) ? $constraintsConfig['type'] : ' ',
-            'remark' => isset($constraintsConfig['defaultRemark']) ? $constraintsConfig['defaultRemark'] : ' '
-        );
-        
-        if (! $this->_removeRelations) {
-            $this->_removeRelations = array($rel);
-        } else {
+        // apply defaults
+        $rel = array_merge($rel, array(
+            'own_model'         => $this->_modelName,
+            'own_backend'       => 'Sql',
+            'related_backend'   => 'Sql',
+            'related_degree'    => isset($rel['related_degree']) ? $rel['related_degree'] :
+                                    (isset($constraintsConfig['sibling']) ? isset($constraintsConfig['sibling']) : 'sibling'),
+            'type'              => isset($rel['type']) ? $rel['type'] :
+                                    (isset($constraintsConfig['type']) ? isset($constraintsConfig['type']) : ' '),
+            'remark'            => isset($rel['remark']) ? $rel['remark'] :
+                                    (isset($constraintsConfig['defaultRemark']) ? isset($constraintsConfig['defaultRemark']) : ' '),
+        ));
+
+        if (in_array($action, array('remove', 'replace'))) {
+            $this->_removeRelations ?: array();
             $this->_removeRelations[] = $rel;
         }
-        
-        if (! empty($value)) { // delete relations in iterator
-            $rel['related_id'] = $value;
-            if (! $this->_newRelations) {
-                $this->_newRelations = array($rel);
-            } else {
-                $this->_newRelations[] = $rel;
-            }
+
+        if (in_array($action, array('add', 'replace'))) {
+            $this->_newRelations ?: array();
+            $this->_newRelations[] = $rel;
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' New relations: ' . print_r($this->_newRelations, true)
                . ' Remove relations: ' . print_r($this->_removeRelations, true));
         }
     }
+
     /**
      * update multiple records
      *
@@ -1261,7 +1312,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'totalcount'        => 0,
             'failcount'         => 0,
         );
-        
+
         $iterator = new Tinebase_Record_Iterator(array(
             'iteratable' => $this,
             'controller' => $this,
@@ -1323,25 +1374,22 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // handle new relations
         if($this->_newRelations) {
-            $removeRelations = NULL;
             foreach($this->_newRelations as $newRelation) {
-                $removeRelations = $currentRecord->relations
-                    ->filter('type', $newRelation['type'])
-                    ->filter('related_model', $newRelation['related_model']);
-                
-                $already = $removeRelations->filter('related_id', $newRelation['related_id']);
-                
-                if($already->count() > 0) {
-                    $removeRelations = NULL;
-                } else {
-                    $newRelation['own_id'] = $currentRecord->getId();
-                    $rel = new Tinebase_Model_Relation();
-                    $rel->setFromArray($newRelation);
-                    if ($removeRelations) {
-                        $currentRecord->relations->removeRecords($removeRelations);
-                    }
-                    $currentRecord->relations->addRecord($rel);
+                // convert duplicate to update (remark / degree)
+                $duplicate = $currentRecord->relations
+                    ->filter('related_model', $newRelation['related_model'])
+                    ->filter('related_id',    $newRelation['related_id'])
+                    ->filter('type',          $newRelation['type'])
+                    ->getFirstRecord();
+
+                if ($duplicate) {
+                    $currentRecord->relations->removeRecord($duplicate);
                 }
+
+                $newRelation['own_id'] = $currentRecord->getId();
+                $rel = new Tinebase_Model_Relation();
+                $rel->setFromArray($newRelation);
+                $currentRecord->relations->addRecord($rel);
             }
         }
         
@@ -2097,5 +2145,109 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _createDependentRecord($record, $_record, $_fieldConfig, $controller, $recordSet)
     {
         
+    }
+
+    /**
+     * returns path of record
+     *
+     * @param     $record
+     * @param int $depth
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception
+     */
+    protected function _getPathsOfRecord($record, $depth = false)
+    {
+        if (false !== $depth && $depth > 8) {
+            throw new Tinebase_Exception('too many recursions while calculating record path');
+        }
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
+
+        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
+        foreach ($parentRelations as $parent) {
+
+            if (!is_object($parent->related_record)) {
+                $parent->related_record = Tinebase_Core::getApplicationInstance($parent->related_model)->get($parent->related_id);
+            }
+
+            if (false === $depth) {
+                // we do not need to generate the parents paths, they should be in DB
+                $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);
+            } else {
+                // we have to regenerate parents paths
+                $parentPaths = $this->_getPathsOfRecord($parent->related_record, $depth === true ? 1 : $depth + 1);
+            }
+
+            if (count($parentPaths) === 0) {
+                $path = new Tinebase_Model_Path(array(
+                    'path'          => $this->_getPathPart($parent->related_record) . $this->_getPathPart($record, $parent),
+                    'shadow_path'   => '/' . $parent->related_id . $this->_getShadowPathPart($record, $parent),
+                    'record_id'     => $record->getId(),
+                    'creation_time' => Tinebase_DateTime::now(),
+                ));
+                $result->addRecord($path);
+            } else {
+                // merge paths
+                foreach ($parentPaths as $path) {
+                    $newPath = new Tinebase_Model_Path(array(
+                        'path'          => $path->path . $this->_getPathPart($record, $parent),
+                        'shadow_path'   => $path->shadow_path . $this->_getShadowPathPart($record, $parent),
+                        'record_id'     => $record->getId(),
+                        'creation_time' => Tinebase_DateTime::now(),
+                    ));
+
+                    $result->addRecord($newPath);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $record
+     * @param $relation
+     * @return string
+     *
+     * TODO use decorators
+     */
+    protected function _getPathPart($record, $relation = null)
+    {
+        $type = $this->_getTypeForPathPart($relation);
+
+        return $type . '/' . mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 32);
+    }
+
+    protected function _getTypeForPathPart($relation)
+    {
+        return ($relation && ! empty($relation->type)) ? '{' . $relation->type . '}' : '';
+    }
+
+    /**
+     * @param $record
+     * @param $relation
+     * @return string
+     *
+     * TODO use decorators
+     */
+    protected function _getShadowPathPart($record, $relation = null)
+    {
+        $type = $this->_getTypeForPathPart($relation);
+
+        return $type . '/' . $record->getId();
+    }
+
+    /**
+     * shortcut to Tinebase_Record_Path::generatePathForRecord
+     *
+     * @param $record
+     * @param $rebuildRecursively
+     */
+    public function buildPath($record, $rebuildRecursively = false)
+    {
+        if ($this->_useRecordPaths) {
+            Tinebase_Record_Path::getInstance()->generatePathForRecord($record, $rebuildRecursively);
+        }
     }
 }

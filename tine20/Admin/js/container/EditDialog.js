@@ -127,7 +127,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 autoHeight: true,
                 items: [[{
-                    columnWidth: 0.225,
+                    columnWidth: 0.2,
                     fieldLabel: this.app.i18n._('Name'), 
                     name: 'name',
                     allowBlank: false,
@@ -136,7 +136,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     readOnly: this.record.id != 0,
                     store: this.appStore,
-                    columnWidth: 0.225,
+                    columnWidth: 0.2,
                     name: 'application_id',
                     displayField: 'name',
                     valueField: 'id',
@@ -157,7 +157,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     readOnly: this.record.id != 0,
                     store: this.modelStore,
-                    columnWidth: 0.225,
+                    columnWidth: 0.2,
                     name: 'model',
                     displayField: 'name',
                     valueField: 'value',
@@ -170,7 +170,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     id: 'modelCombo'
                 }, {
                     xtype: 'combo',
-                    columnWidth: 0.225,
+                    columnWidth: 0.2,
                     name: 'type',
                     fieldLabel: this.app.i18n._('Type'),
                     store: [['personal', this.app.i18n._('personal')], ['shared', this.app.i18n._('shared')]],
@@ -184,6 +184,11 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     anchor: '100%',
                     allowBlank: false,
                     forceSelection: true
+                }, {
+                    columnWidth: 0.1,
+                    fieldLabel: this.app.i18n._('Order'),
+                    name: 'order',
+                    value: 0
                 }, {
                     xtype: 'colorfield',
                     columnWidth: 0.1,
@@ -212,7 +217,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Admin.ContainerEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 600,
+        width: 700,
         height: 400,
         name: Tine.Admin.ContainerEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.ContainerEditDialog',

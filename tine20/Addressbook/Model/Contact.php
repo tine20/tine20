@@ -218,6 +218,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTACTTYPE_CONTACT,
             array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
         ),
+        'paths'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -429,5 +430,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     {
         $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId());
         return $image->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+    }
+
+    /**
+     * get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->n_fn;
     }
 }

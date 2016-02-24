@@ -66,7 +66,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     getFormItems: function() {
         return new Tine.widgets.grid.PickerGridPanel({
             height: 'auto',
-            searchComboClass: Tine.widgets.tags.TagCombo,
             searchComboConfig: {app: this.app},
             recordClass: Tine.Tinebase.Model.Tag,
             store: this.store,

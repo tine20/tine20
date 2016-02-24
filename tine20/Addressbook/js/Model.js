@@ -75,6 +75,7 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
     {name: 'attachments', omitDuplicateResolving: true},
+    {name: 'paths', omitDuplicateResolving: true},
     {name: 'type', omitDuplicateResolving: true},
     {name: 'memberroles', omitDuplicateResolving: true}
 ]);

@@ -192,11 +192,16 @@ div.page
 }
 
 /* ------------ single record ------------ */
+
+.print-single-details-row:nth-of-type(odd) {
+    background: #e0e0e0;
+}
+
 .customfield-rendered-label,
 .cal-print-single-label {
     font-style: italic;
     display: inline-block;
-    width: 3cm;
+    width: 6cm;
 }
 
 .cal-print-single-block {

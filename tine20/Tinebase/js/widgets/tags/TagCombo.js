@@ -154,3 +154,5 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
 });
 
 Ext.reg('Tine.widgets.tags.TagCombo', Tine.widgets.tags.TagCombo);
+Tine.widgets.form.RecordPickerManager.register('Tinebase', 'Tag', Tine.widgets.tags.TagCombo);
+

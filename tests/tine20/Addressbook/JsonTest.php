@@ -351,9 +351,17 @@ class Addressbook_JsonTest extends TestCase
         $changes = array(
             array('name' => 'url',                    'value' => "http://www.phpunit.de"),
             array('name' => 'adr_one_region',         'value' => 'PHPUNIT_multipleUpdate'),
-            array('name' => 'customfield_' . $createdCustomField->name, 'value' => 'PHPUNIT_multipleUpdate' )
+            array('name' => 'customfield_' . $createdCustomField->name, 'value' => 'PHPUNIT_multipleUpdate' ),
+            array('name' => '%add', 'value' => json_encode(array(
+                'own_model'         => 'Addressbook_Model_Contact',
+                'own_backend'       => 'Sql',
+                'related_degree'    => 'parent',
+                'related_model'     => 'Addressbook_Model_Contact',
+                'related_backend'   => 'Sql',
+                'related_id'        => Tinebase_Core::getUser()->contact_id,
+                'remark'            => 'some remark'
+            ))),
         );
-
         foreach($companies as $company) {
             $contact = $this->_addContact($company);
             $contactIds[] = $contact['id'];
@@ -384,8 +392,14 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
         
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
-        
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 hinzugefügt) customfields ( -> {');
+
+        // check relation
+        $fullRecord = $this->_uit->getContact($record['id']);
+        $this->assertEquals(1, count($fullRecord['relations']), 'relation got not added');
+        $this->assertEquals('some remark', $fullRecord['relations'][0]['remark']);
+        $this->assertEquals('parent', $fullRecord['relations'][0]['related_degree']);
+
         // check invalid data
         $changes = array(
             array('name' => 'type', 'value' => 'Z'),
@@ -1240,7 +1254,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
                 'related_backend'        => 'Sql',
                 'related_id'             => $_contact['id'],
@@ -1251,7 +1265,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'RESPONSIBLE',
                 'related_backend'        => 'Sql',
                 'related_id'             => Tinebase_Core::getUser()->contact_id,

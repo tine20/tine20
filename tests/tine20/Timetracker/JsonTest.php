@@ -870,7 +870,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $r = new Tinebase_Model_Relation(array(
             'own_model' => 'Timetracker_Model_Timeaccount',
             'own_backend' => 'Sql',
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'own_id' => $ta->getId(),
             'remark' => 'PHP UNITTEST',
             'related_model' => 'Sales_Model_Contract',
@@ -985,8 +985,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $contract = $contractController->create(new Sales_Model_Contract(array('number' => '123', 'title' => 'UnitTest')));
         
         Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
-            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'own_degree' => 'sibling'),
-            array('related_backend' => 'Sql', 'type' => 'TIME_ACCOUNT', 'related_model' => 'Sales_Model_Contract', 'related_id' => $contract->getId(), 'own_degree' => 'sibling'),
+            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'related_degree' => 'sibling'),
+            array('related_backend' => 'Sql', 'type' => 'TIME_ACCOUNT', 'related_model' => 'Sales_Model_Contract', 'related_id' => $contract->getId(), 'related_degree' => 'sibling'),
         ));
         
         // add 2 relations
@@ -1031,7 +1031,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $bday = $contact['bday'];
         
         Tinebase_Relations::getInstance()->setRelations('Timetracker_Model_Timeaccount', 'Sql', $ta['id'], array(
-            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'own_degree' => 'sibling'),
+            array('related_backend' => 'Sql', 'type' => 'RESPONSIBLE', 'related_model' => 'Addressbook_Model_Contact', 'related_id' => $contact->getId(), 'related_degree' => 'sibling'),
         ));
         
         // update a few times, bday of contract should not change
@@ -1096,7 +1096,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
                 'own_backend' => 'Sql',
                 'own_id' => $contract->getId(),
                 'own_model' => 'Sales_Model_Contract',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'remark' => 'PHP UNITTEST',
                 'related_model' => 'Addressbook_Model_Contact',
                 'related_backend' => 'Sql',
@@ -1109,7 +1109,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $taToFind->relations = array(
             new Tinebase_Model_Relation(array(
                 'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'own_id' => $taToFind->getId(),
                 'own_model' => 'Timetracker_Model_Timeaccount',
                 'remark' => 'PHP UNITTEST',
@@ -1189,7 +1189,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'related_id' => $ta->id,
             'related_model' => 'Timetracker_Model_Timeaccount',
             'related_record' => $ta,
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'type' => 'INVOICE'
         )));
         

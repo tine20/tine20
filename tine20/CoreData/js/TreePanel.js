@@ -17,6 +17,8 @@ Ext.ns('Tine', 'Tine.CoreData');
  * CoreData TreePanel<br>
  *
  * @author      Philipp Schüle <p.schuele@metaways.de>
+ *
+ * TODO allow to customize tree layout (remove parent nodes (/general, /applications, maybe even the application nodes)
  */
 Tine.CoreData.TreePanel = function (config) {
     Ext.apply(this, config);
@@ -48,8 +50,8 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
                 path: '/general',
                 id: 'general',
                 expanded: true,
-                leaf: (generalChildren.length == 0),
                 text: this.app.i18n._('General Data'),
+                hidden: (generalChildren.length == 0),
                 children: generalChildren
             }, {
                 path: '/applications',
@@ -70,8 +72,6 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
      *
      * @param path
      * @returns {*}
-     *
-     * TODO translate application names
      */
     getCoreDataNodes: function (path) {
         var applicationNodes = [],

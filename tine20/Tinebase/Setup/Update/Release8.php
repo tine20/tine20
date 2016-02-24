@@ -109,7 +109,7 @@ class Tinebase_Setup_Update_Release8 extends Setup_Update_Abstract
      */
     protected function _addFilterAclTable()
     {
-        $xml = $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
             <name>filter_acl</name>
             <version>1</version>
             <declaration>

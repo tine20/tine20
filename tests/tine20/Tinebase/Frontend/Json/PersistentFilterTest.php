@@ -391,7 +391,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                 'own_model'              => 'Addressbook_Model_Contact',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => '',
                 'related_backend'        => 'Sql',
                 'related_id'             => $contact1->getId(),

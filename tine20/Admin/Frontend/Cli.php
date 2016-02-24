@@ -38,7 +38,93 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )
         ),
     );
-    
+
+    /**
+     * create system groups for addressbook lists that dont have a system group
+     *
+     * @param $_opts
+     */
+    public function createSystemGroupsForAddressbookLists($_opts)
+    {
+        $_filter = new Addressbook_Model_ListFilter();
+
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+            'controller' => Addressbook_Controller_List::getInstance(),
+            'filter' => $_filter,
+            'options' => array('getRelations' => false),
+            'function' => 'iterateAddressbookLists',
+        ));
+        $result = $iterator->iterate();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (false === $result) {
+                $result['totalcount'] = 0;
+            }
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Worked on ' . $result['totalcount'] . ' lists');
+        }
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $records
+     * @param Addressbook_Controller_List $controller
+     */
+    public function iterateAddressbookLists(Tinebase_Record_RecordSet $records)
+    {
+        $addListController = Addressbook_Controller_List::getInstance();
+        $addContactController = Addressbook_Controller_Contact::getInstance();
+        $admGroupController = Admin_Controller_Group::getInstance();
+        $admUserController = Admin_Controller_User::getInstance();
+        foreach($records as $list)
+        {
+            /**
+             * @var Addressbook_Model_List $list
+             */
+            if (!empty($list->group_id)) {
+                continue;
+            }
+
+            $group = new Tinebase_Model_Group(array(
+                'container_id'  => $list->container_id,
+                'list_id'       => $list->list_id,
+                'name'          => $list->name,
+                'description'   => $list->description,
+                'email'         => $list->email,
+            ));
+
+            $allMembers = array();
+            $members = $addContactController->getMultiple($list->members);
+            foreach ($members as $member) {
+
+                if ($member->type == Addressbook_Model_Contact::CONTACTTYPE_CONTACT) {
+                    $pwd = Tinebase_Record_Abstract::generateUID();
+                    $user = new Tinebase_Model_FullUser(
+                        array(
+                            'email'         => $member->email,
+                            'username'      => $member->email,
+                            //'password'      => $pwd,
+                            'contact_id'    => $member->getId(),
+                        )
+                    );
+
+                    $user = $admUserController->create($user, $pwd, $pwd);
+
+                    //we dont need to persist this, the adm controller did it for us, but below we need the user id in $member, so we set it
+                    $member->user_id = $user->getId();
+                }
+
+                $allMembers[] = $member->user_id;
+            }
+
+            $group->members = $allMembers;
+
+            $group = $admGroupController->create($group);
+
+            $list->group_id = $group->getId();
+            $addListController->update($list);
+        }
+    }
+
     /**
      * import users
      *

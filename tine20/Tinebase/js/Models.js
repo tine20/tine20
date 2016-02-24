@@ -82,6 +82,7 @@ Tine.Tinebase.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     {name: 'id'},
     {name: 'name'},
     {name: 'type'},
+    {name: 'order'},
     {name: 'color'},
     {name: 'path'},
     {name: 'ownerContact'},
@@ -404,6 +405,21 @@ Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
     recordName: 'Relation',
     recordsName: 'Relations'
 });
+
+/**
+ * find duplicate relation in store
+ *
+ * @param store
+ * @param record
+ * @return int index in store
+ */
+Tine.Tinebase.Model.Relation.findDuplicate = function(store, record) {
+    return store.findBy(function(r) {
+        return r.get('related_model') == record.get('related_model') &&
+            r.get('related_id') == record.get('related_id') &&
+            r.get('type') == record.get('type');
+    }, this);
+};
 
 /**
  * @namespace Tine.Tinebase.Model

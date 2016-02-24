@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -34,7 +34,7 @@ Ext.ns('Tine.Addressbook');
  * 
  * TODO         add     forceSelection: true ?
  */
-Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
+Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
     
     /**
      * @cfg {Boolean} userOnly
@@ -57,11 +57,17 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     
     //private
     initComponent: function(){
-        
+        this.app = Tine.Tinebase.appMgr.get('Addressbook');
+
         if (this.recordClass === null) {
             this.recordClass = Tine.Addressbook.Model.Contact;
             this.recordProxy = Tine.Addressbook.contactBackend;
         }
+
+        this.emptyText = this.emptyText || (this.userOnly ?
+            this.app.i18n._('Search for users ...') :
+            this.app.i18n._('Search for Contacts ...')
+        );
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
@@ -88,7 +94,15 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
      */
     onBeforeQuery: function(qevent){
         Tine.Addressbook.SearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-        
+
+        var contactFilter = {condition: 'AND', filters: this.store.baseParams.filter},
+            pathFilter = { field: 'path', operator: 'contains', value: qevent.query };
+
+        this.store.baseParams.filter = [{condition: "OR", filters: [
+            contactFilter,
+            pathFilter
+        ] }];
+
         if (this.userOnly) {
             this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
@@ -116,8 +130,9 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
                             '</td>',
                         '</tr>',
                     '</table>',
+                    '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
                 '</div></tpl>'
-             );
+            );
         }
     },
     
@@ -155,5 +170,8 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
 
 });
 
-Ext.reg('addressbookcontactpicker', Tine.Addressbook.SearchCombo);
-Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.SearchCombo);
+// legacy
+Tine.Addressbook.SearchCombo = Tine.Addressbook.ContactSearchCombo;
+
+Ext.reg('addressbookcontactpicker', Tine.Addressbook.ContactSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.ContactSearchCombo);

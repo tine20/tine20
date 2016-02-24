@@ -119,6 +119,12 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
         // set all fields available
         foreach($record->getFields() as $property) {
             $value = $record->{$property};
+            $fieldConfig = $this->getFieldConfig($property);
+
+            if (is_null($value)) {
+                $value = '';
+            }
+
             if ($value instanceof DateTime) {
                 $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $this->_config->datetimeformat);
             }
@@ -128,6 +134,9 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
             }
 
             if (is_scalar($value)) {
+                if ($fieldConfig && isset($fieldConfig->replace->pattern)) {
+                    $value = preg_replace($fieldConfig->replace->pattern, $fieldConfig->replace->replacement, $value);
+                }
                 $templateProcessor->setValue($property . '#' . $idx, $value, 1);
             }
         }
@@ -142,6 +151,9 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
                 $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $column->format);
             }
 
+            if (isset($column->replace->pattern)) {
+                $value = preg_replace($column->replace->pattern, $column->replace->replacement, $value);
+            }
             $templateProcessor->setValue($column->header.'#'.$idx, $value, 1);
         }
     }

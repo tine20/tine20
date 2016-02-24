@@ -53,40 +53,39 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
             hasDetailsPanel: false
         });
 
-        // TODO move this to a generic place
-        var simpleGridConfig = {
-            app: this,
-            initialLoadAfterRender: false,
-            gridConfig: {
-                autoExpandColumn: 'name',
-                columns: [{
-                    id: 'id',
-                    header: this.i18n._("ID"),
-                    width: 150,
-                    sortable: true,
-                    dataIndex: 'id',
-                    hidden: true
-                }, {
-                    id: 'name',
-                    header: this.i18n._("Name"),
-                    width: 300,
-                    sortable: true,
-                    dataIndex: 'name'
-                }, {
-                    id: 'description',
-                    header: this.i18n._("Description"),
-                    width: 300,
-                    sortable: true,
-                    dataIndex: 'description',
-                    hidden: true
-                }]
-            }
-        };
-
         Tine.CoreData.Manager.registerGrid(
             'adb_list_roles',
             Tine.widgets.grid.GridPanel,
-            Ext.copyTo({recordClass: Tine.Addressbook.Model.ListRole}, simpleGridConfig, 'app,gridConfig')
+            {
+                recordClass: Tine.Addressbook.Model.ListRole,
+                app: this,
+                initialLoadAfterRender: false,
+                // TODO move this to a generic place
+                gridConfig: {
+                    autoExpandColumn: 'name',
+                    columns: [{
+                        id: 'id',
+                        header: this.i18n._("ID"),
+                        width: 150,
+                        sortable: true,
+                        dataIndex: 'id',
+                        hidden: true
+                    }, {
+                        id: 'name',
+                        header: this.i18n._("Name"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'name'
+                    }, {
+                        id: 'description',
+                        header: this.i18n._("Description"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'description',
+                        hidden: true
+                    }]
+                }
+            }
         );
     }
 });

@@ -629,4 +629,19 @@ abstract class Tinebase_Export_Abstract
         
         return $value;
     }
+
+    /**
+     * get field config by name
+     *
+     * @param  string $fieldName
+     * @return Zend_Config
+     */
+    public function getFieldConfig($fieldName)
+    {
+        foreach($this->_config->columns->column as $column) {
+            if ($column->identifier == $fieldName) {
+                return $column;
+            }
+        }
+    }
 }

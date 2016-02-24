@@ -541,7 +541,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             return;
         }
         
-        $period = $_filter->getFilter('period');
+        $period = $_filter->getFilter('period', false, true);
         if ($period) {
             self::mergeRecurrenceSet($_events, $period->getFrom(), $period->getUntil());
             

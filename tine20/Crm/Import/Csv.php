@@ -163,7 +163,7 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
                 'own_model'              => 'Tasks_Model_Task',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'TASK',
                 'related_record'         => $lead,
                 'related_id'             => $lead->getId(),

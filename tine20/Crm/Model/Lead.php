@@ -122,7 +122,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
             array('type' => 'RESPONSIBLE', 'degree' => 'parent', 'text' => 'Responsible', 'max' => '0:0'), // _('Responsible')
             array('type' => 'CUSTOMER', 'degree' => 'parent', 'text' => 'Customer', 'max' => '0:0'),  // _('Customer')
             ),
-            'default' => array('type' => 'CUSTOMER', 'own_degree' => 'parent')
+            'default' => array('type' => 'CUSTOMER', 'related_degree' => 'parent')
         ),
         // a lead may have many tasks, but a task may have one lead, no more
         array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
@@ -220,7 +220,7 @@ class Crm_Model_Lead extends Tinebase_Record_Abstract
                         'own_model'              => 'Crm_Model_Lead',
                         'own_backend'            => 'Sql',
                         'own_id'                 => (isset($_data['id'])) ? $_data['id'] : 0,
-                        'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'type'                   => $relation['type'],
                         'related_record'         => (isset($relation['related_record'])) ? $relation['related_record'] : array(),
                         'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,

@@ -49,7 +49,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'related_record'         => $this->_getContact(),
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'Sql',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => Tasks_Backend_Factory::SQL,
         ), TRUE));
@@ -78,7 +78,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'related_record'         => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'Sql',
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
             'related_backend'        => Tasks_Backend_Factory::SQL,
         ), TRUE));
@@ -105,7 +105,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
                 'related_record'         => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
                 'own_model'              => 'Crm_Model_Lead',
                 'own_backend'            => 'Sql',
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Addressbook_Model_Contact',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
         ), TRUE));

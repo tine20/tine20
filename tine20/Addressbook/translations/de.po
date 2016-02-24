@@ -859,3 +859,9 @@ msgid "List Role"
 msgid_plural "List Roles"
 msgstr[0] "Gruppenrolle"
 msgstr[1] "Gruppenrollen"
+
+msgid "Search for users ..."
+msgstr "Suche nach Benutzern ..."
+
+msgid "Search for Contacts ..."
+msgstr "Suche nach Kontakten ..."

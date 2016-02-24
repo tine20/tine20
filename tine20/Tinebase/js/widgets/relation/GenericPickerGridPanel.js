@@ -96,6 +96,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     border: true,
     autoScroll: true,
     layout: 'fit',
+    stateful: true,
+    stateId: 'widgets-relation-genereic-picker-grid',
 
     /**
      * initializes the component
@@ -133,7 +135,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.title = this.i18nTitle = Tine.Tinebase.translation.ngettext('Relation', 'Relations', 50);
         
-        Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
+        //Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
 
         this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         
@@ -455,7 +457,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     {id: 'related_model', dataIndex: 'related_model', header: _('Record'), editor: false, renderer: this.relatedModelRenderer.createDelegate(this), scope: this},
                     {id: 'related_record', dataIndex: 'related_record', header: _('Description'), renderer: this.relatedRecordRenderer.createDelegate(this), editor: false, scope: this},
                     {id: 'remark', dataIndex: 'remark', header: _('Remark'), renderer: this.remarkRenderer.createDelegate(this), editor: Ext.form.Field, scope: this, width: 120},
-                    {id: 'own_degree', hidden: true, dataIndex: 'own_degree', header: _('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
+                    {id: 'related_degree', hidden: true, dataIndex: 'related_degree', header: _('Dependency'), editor: this.degreeEditor, renderer: this.degreeRenderer.createDelegate(this), scope: this, width: 100},
                     {id: 'type', dataIndex: 'type', renderer: this.typeRenderer, header: _('Type'),  scope: this, width: 120, editor: true},
                     {id: 'creation_time', dataIndex: 'creation_time', editor: false, renderer: Tine.Tinebase.common.dateTimeRenderer, header: _('Creation Time'), width: 140}
                 ]
@@ -745,7 +747,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 related_id: record.id,
                 related_model: relatedPhpModel,
                 type: type,
-                own_degree: 'sibling'
+                related_degree: 'sibling'
             }, relconf)), Ext.id());
             
             var mySideValid = true;
@@ -877,7 +879,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 this.view.invalidRelatedRecords.splice(index, 1);
             }
         }
-        
+
         this.onAddNewRelationToStore(relationRecord, record);
     },
     
@@ -891,13 +893,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         relationRecord.data.related_record.relations = null;
         delete relationRecord.data.related_record.relations;
         
-        // add if not already in
-        if (this.store.findExact('related_id', record.id) === -1) {
+        if (this.relationCheck(relationRecord)) {
             Tine.log.debug('Adding new relation:');
             Tine.log.debug(relationRecord);
             this.store.add([relationRecord]);
         }
-        
+
         this.view.refresh();
     },
     
@@ -908,20 +909,21 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @return {Boolean}
      */
     relationCheck: function(recordToAdd, relatedModel) {
-        var add = true;
-        this.store.each(function(relation) {
-            if (relation.get('related_model') == relatedModel && relation.get('related_id') == recordToAdd.getId()) {
-                Ext.MessageBox.show({
-                    title: _('Failure'),
-                    msg: _('The record you tried to link is already linked. Please edit the existing link.'),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.INFO
-                });
-                add = false;
-                return false;
-            }
-        }, this);
-        
+        var duplicateIdx = Tine.Tinebase.Model.Relation.findDuplicate(this.store, recordToAdd),
+            duplicateIsSelf = this.store.getAt(duplicateIdx) == recordToAdd,
+            add = !duplicateIsSelf;
+
+        if (duplicateIdx >= 0 && ! duplicateIsSelf) {
+            Ext.MessageBox.show({
+                title: _('Failure'),
+                msg: _('The record you tried to link is already linked. Please edit the existing link.'),
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.INFO
+            });
+            add = false;
+            return false;
+        }
+
         // don't allow to relate itself
         if((this.ownRecordClass.getMeta('phpClassName') == relatedModel) && recordToAdd.getId() == this.editDialog.record.getId()) {
             Ext.MessageBox.show({

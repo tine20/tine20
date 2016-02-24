@@ -842,6 +842,10 @@
           "path": "js/widgets/persistentfilter/"
         },
         {
+          "text": "renderer.js",
+          "path": "js/widgets/path/"
+        },
+        {
           "text": "PasswordChangeDialog.js",
           "path": "js/"
         },
