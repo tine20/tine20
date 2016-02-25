@@ -71,9 +71,13 @@ Ext.extend(Tine.CoreData.TreePanel, Ext.tree.TreePanel, {
      * get core data nodes
      *
      * @param path
-     * @returns {*}
+     * @returns Array
      */
     getCoreDataNodes: function (path) {
+        if (! Tine.CoreData.registry.get('coreData')) {
+            return [];
+        }
+
         var applicationNodes = [],
             coreDataNodes = {}; // applications => [core data nodes]
 
