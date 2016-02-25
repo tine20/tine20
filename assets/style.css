@@ -1,0 +1,61 @@
+* {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+}
+
+a {
+    color: #028cd2;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+html {
+    background-color: #f7f7f7;
+}
+
+body {
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+header {
+    height: 55px;
+    max-width: 1000px;
+    background-image: url("images/tine20.png");
+    background-repeat: no-repeat;
+}
+
+header span {
+    font-size: 30px;
+    position: relative;
+    top: 10px;
+    left: 190px;
+    width: 120px;
+}
+
+section h1 {
+    font-size: 25px;
+}
+
+p, li {
+    font-size: 15px;
+    padding: 2px;
+    margin: 2px;
+}
+
+section ul, li {
+    margin-left: 15px;
+    padding-left: 0px;
+}
+
+footer {
+    padding-top: 10px;
+    padding-left: 4px;
+    color: #c8c8c8;
+    font-size: 15px;
+}
