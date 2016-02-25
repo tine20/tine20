@@ -1033,5 +1033,10 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 }
 
 .tb-widgets-path-pathitem-type {
+    color: black;
     font-size: 7px;
+}
+
+.tb-widgets-path-pathitem-separator {
+    color: black;
 }

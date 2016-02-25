@@ -38,7 +38,7 @@ Tine.widgets.path.pathsRenderer = function(paths, queryString) {
  */
 Tine.widgets.path.pathRenderer = function(path, queryString) {
     var pathName = String(path.path),
-        queryParts = String(queryString).split(' ');
+        queryParts = String(queryString).trim().split(' ');
 
     pathName = pathName
         .replace(/^\//, '')
@@ -47,7 +47,7 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
     pathName = Ext.util.Format.htmlEncode(pathName);
 
     if (queryParts.length) {
-        var hasQueryMatches = false,
+        var queryMatchCount = 0,
             search = '';
 
         Ext.each(queryParts, function(queryPart, idx) {
@@ -55,22 +55,22 @@ Tine.widgets.path.pathRenderer = function(path, queryString) {
         });
 
         pathName = pathName.replace(new RegExp(search,'gi'), function(match) {
-            hasQueryMatches = true;
+            queryMatchCount++;
             return '<span class="tb-widgets-path-pathitem-match">' + match + '</span>';
         });
 
         // skip path if no token matched
-        if (! hasQueryMatches) {
+        if (queryParts.length != queryMatchCount) {
             pathName = '';
         }
     }
 
-    var qtip = pathName.replace(/(?:{(.*)}){0,1}\u0362/g, function(all, type) {
-        return "<br/>&nbsp;" + (type ? type + ' ' : '') + Ext.util.Format.htmlEncode('\u00BB') + '&nbsp;';
+    var qtip = pathName.replace(/(?:{(.*?)}){0,1}\u0362/g, function(all, type) {
+        return "<br/>&nbsp;" + (type ? type + ' ' : '') + '<span class="tb-widgets-path-pathitem-separator">' + Ext.util.Format.htmlEncode('\u00BB') + '</span>&nbsp;';
     });
 
-    pathName = pathName.replace(/(?:{(.*)}){0,1}\u0362/g, function(all, type) {
-        return "&nbsp;" + (type ? '<span class="tb-widgets-path-pathitem-type">' + type[0] + '</span>' : '') + Ext.util.Format.htmlEncode('\u00BB') + '&nbsp;';
+    pathName = pathName.replace(/(?:{(.*?)}){0,1}\u0362/g, function(all, type) {
+        return "&nbsp;" + (type ? '<span class="tb-widgets-path-pathitem-type">' + type[0] + '</span>' : '') + '<span class="tb-widgets-path-pathitem-separator">' + Ext.util.Format.htmlEncode('\u00BB') + '</span>&nbsp;';
     });
 
 
