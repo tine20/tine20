@@ -348,6 +348,11 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         } else {
             $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountLastName), 0, 10));
         }
+
+        if (empty($userName)) {
+            // try email address
+            $userName = strtolower(substr(Tinebase_Helper::replaceSpecialChars($_account->accountEmailAddress), 0, 19));
+        }
         
         $userName = $this->_addSuffixToNameIfExists('accountLoginName', $userName);
         

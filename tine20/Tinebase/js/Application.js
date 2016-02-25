@@ -26,7 +26,7 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
     
     this.init();
-    if (Tine.CoreData) {
+    if (Tine.CoreData && Tine.CoreData.Manager) {
         this.registerCoreData();
     }
     this.initAutoHooks();

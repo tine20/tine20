@@ -853,9 +853,6 @@ msgid "List Roles"
 msgstr "Gruppenrollen"
 
 msgid "List Role"
-msgstr "Gruppenrolle"
-
-msgid "List Role"
 msgid_plural "List Roles"
 msgstr[0] "Gruppenrolle"
 msgstr[1] "Gruppenrollen"

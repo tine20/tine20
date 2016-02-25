@@ -3308,6 +3308,3 @@ msgstr "entfernt"
 #: Record/RecordSetDiff.php:44
 msgid "modified"
 msgstr "geändert"
-
-msgid "Selected {0}"
-msgstr "Ausgewählte {0}"
