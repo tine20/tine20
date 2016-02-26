@@ -38,8 +38,16 @@ header span {
     width: 120px;
 }
 
+section {
+    display: table;
+    width: 100%;
+}
+
 section h1 {
     font-size: 25px;
+    width: 100%;
+    display: block;
+    border-bottom: 3px solid #028cd2;
 }
 
 p, li {
@@ -58,4 +66,19 @@ footer {
     padding-left: 4px;
     color: #c8c8c8;
     font-size: 15px;
+}
+
+.column {
+    min-width:487px;
+    width: 487px;
+    float: left;
+    margin-right: 25px;
+}
+
+.column + .column {
+    margin-right: 0px;
+}
+
+.clear {
+    clear: both;
 }
