@@ -518,14 +518,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     scope: this,
                     select: function() {    
                         // enable or disable save button dependent to containers account grants
-                        var grants = this.containerSelectCombo.selectedContainer ? this.containerSelectCombo.selectedContainer.account_grants : {};
-                        // on edit check editGrant, on add check addGrant
-                        if (this.record.data.id) {  // edit if record has already an id
-                            var disable = grants.hasOwnProperty('editGrant') ? ! grants.editGrant : false;
-                        } else {
-                            var disable = grants.hasOwnProperty('addGrant') ? ! grants.addGrant : false;
-                        }
-                        this.action_saveAndClose.setDisabled(disable);
+                        // on edit: check editGrant, on add: check addGrant
+                        var grants = this.containerSelectCombo.selectedContainer
+                            ? this.containerSelectCombo.selectedContainer.account_grants : {},
+                            grantToCheck = (this.record.data.id) ? 'editGrant' : 'addGrant',
+                            enabled =  grants.hasOwnProperty(grantToCheck) && grants[grantToCheck]
+                                    || grants.hasOwnProperty('adminGrant') && grants.adminGrant ? true : false;
+
+                        this.action_saveAndClose.setDisabled(! enabled);
                     }
                 }
             });
