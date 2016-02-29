@@ -10,7 +10,7 @@ a {
 }
 
 html {
-    background-color: #f7f7f7;
+    background-color: #F5F7FA;
 }
 
 body {
@@ -20,6 +20,7 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     border-radius: 10px;
+    border: solid 1px #E6E9ED;
     background-color: #ffffff;
 }
 
@@ -50,10 +51,11 @@ section h1 {
     border-bottom: 3px solid #028cd2;
 }
 
-p, li {
+p, li, span {
     font-size: 15px;
     padding: 2px;
     margin: 2px;
+    color: #000;
 }
 
 section ul, li {
@@ -81,4 +83,9 @@ footer {
 
 .clear {
     clear: both;
+}
+
+span {
+    margin: 0;
+    padding: 0;
 }
