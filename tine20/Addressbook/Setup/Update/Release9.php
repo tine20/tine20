@@ -127,4 +127,24 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->_backend->createTable($table, 'Addressbook', 'addressbook_list_member_role');
         $this->setApplicationVersion('Addressbook', '9.4');
     }
+    
+    /**
+     * update to 9.5
+     *
+     * @return void
+     */
+    public function update_4()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>list_type</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->addCol('addressbook_lists', $declaration);
+        
+        $this->setTableVersion('addressbook_lists', 4);
+        $this->setApplicationVersion('Addressbook', '9.5');
+    }
 }

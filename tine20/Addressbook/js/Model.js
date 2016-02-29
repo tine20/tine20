@@ -199,6 +199,7 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'memberroles'},
     {name: 'email'},
     {name: 'type'},
+    {name: 'list_type'},
     {name: 'group_id'},
     {name: 'emails'},
     {name: 'notes', omitDuplicateResolving: true},
