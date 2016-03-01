@@ -187,6 +187,11 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
         $lifetime = $this->getLifetime($specificLifetime);
         
         $transaction = $this->_redis->multi();
+
+        if (! $transaction) {
+            $this->_log("Zend_Cache_Backend_Redis::save() : problem with Redis multi-transaction during save");
+            return false;
+        }
         
         if ($lifetime) {
             $transaction->setex($id, $lifetime, array($data, time(), $lifetime, (array)$tags));
