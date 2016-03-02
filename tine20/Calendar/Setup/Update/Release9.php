@@ -62,6 +62,8 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 9.5
+     *
      * add rrule_constraints
      */
     public function update_4()
@@ -104,5 +106,18 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setTableVersion('cal_resources', '4');
         $this->setApplicationVersion('Calendar', '9.6');
+    }
+
+    /**
+     * update to 9.7
+     *
+     * add rrule_constraints background job
+     */
+    public function update_6()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
+
+        $this->setApplicationVersion('Calendar', '9.7');
     }
 }
