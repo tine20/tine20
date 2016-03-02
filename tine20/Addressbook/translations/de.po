@@ -862,3 +862,18 @@ msgstr "Suche nach Benutzern ..."
 
 msgid "Search for Contacts ..."
 msgstr "Suche nach Kontakten ..."
+
+msgid "List type"
+msgstr "Listen Typ"
+
+msgid "Department"
+msgstr "Abteilung"
+
+msgid "Mailing list"
+msgstr "Mailingliste"
+
+msgid "List types available"
+msgstr "Verfügbare Listen Typen"
+
+msgid "List types available."
+msgstr "Verfügbare Listen Typen."

@@ -44,6 +44,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     private function __construct()
     {
+        $this->_resolveCustomFields = true;
         $this->_backend = new Addressbook_Backend_List();
     }
 
@@ -259,6 +260,18 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $this->_fireChangeListeEvent($_createdRecord);
+    }
+
+    /**
      * inspect update of one record
      *
      * @param   Tinebase_Record_Interface $_record the update record
@@ -270,6 +283,49 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         if (isset($record->type) && $record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
             throw new Addressbook_Exception_InvalidArgument('can not update list of type ' . Addressbook_Model_List::LISTTYPE_GROUP);
         }
+    }
+
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        $this->_fireChangeListeEvent($updatedRecord);
+    }
+
+    /**
+     * fireChangeListeEvent
+     *
+     * @param Addressbook_Model_List $list
+     */
+    protected function _fireChangeListeEvent(Addressbook_Model_List $list)
+    {
+        $event = new Addressbook_Event_ChangeList();
+        $event->list = $list;
+        Tinebase_Event::fireEvent($event);
+    }
+
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     */
+    protected function _inspectDelete(array $_ids)
+    {
+        $lists = $this->getMultiple($_ids);
+        foreach ($lists as $list) {
+            $event = new Addressbook_Event_DeleteList();
+            $event->list = $list;
+            Tinebase_Event::fireEvent($event);
+        }
+
+        return $_ids;
     }
 
     /**

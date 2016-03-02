@@ -83,7 +83,16 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Name'),
                                     name: 'name',
                                     maxLength: 64
-                                }]]
+                                }],
+                                [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        columnWidth: 1,
+                                        fieldLabel: this.app.i18n._('List type'),
+                                        name: 'list_type',
+                                        app: 'Addressbook',
+                                        keyFieldName: 'listType',
+                                        value: ''
+                                    })
+                                ]]
                             }]
                         }]
                     },
