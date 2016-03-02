@@ -166,7 +166,7 @@ class Setup_Controller
         }
         
         // check mysql requirements
-        $missingMysqlExtensions = array_diff(array('mysql', 'pdo_mysql'), $loadedExtensions);
+        $missingMysqlExtensions = array_diff(array('pdo_mysql'), $loadedExtensions);
         
         // check pgsql requirements
         $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
