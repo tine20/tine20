@@ -54,7 +54,7 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
      */
     public static function getFilterById($_id)
     {
-        $obj = new Tinebase_PersistentFilter();
+        $obj = Tinebase_PersistentFilter::getInstance();
         $persistentFilter = $obj->get($_id);
         
         return $persistentFilter->filters;
