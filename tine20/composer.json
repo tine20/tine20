@@ -13,12 +13,6 @@
         "url": "http://git.tine20.org/git/timezoneconvert"
     }, {
         "type": "git",
-        "url": "https://github.com/lkneschke/phing"
-    }, {
-        "type": "git",
-        "url": "https://github.com/lkneschke/Component_ZendHttp"
-    }, {
-        "type": "git",
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
@@ -30,12 +24,13 @@
         "sabre/vobject": "3.1.3 as 2.1.313",
         "metaways/opendocument": "1.0",
         "metaways/timezoneconvert": "0.2",
-        "zendframework/zend-http": "2.2.8-p3 as 2.2.8"
+        "zendframework/zend-http": "2.4.*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "phing/phing": "2.6.1-p0",
-        "phpdocumentor/phpdocumentor": "2.1.*"
+        "phing/phing": "2.*",
+        "tedivm/jshrink": "~1.0",
+        "phpdocumentor/phpdocumentor": "2.*"
     },
     "autoload": {
         "files": [],

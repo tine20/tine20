@@ -22,12 +22,11 @@ class ActiveSync_Server_PluginTests extends TestCase
      */
     public function testServerGetParameter()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php?frontend=activesync HTTP/1.1\r
-Host: localhost\r
-Depth: 0\r
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php?frontend=activesync HTTP/1.1\r\n".
+            "Host: localhost\r\n".
+            "Depth: 0\r\n".
+            "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7"
         );
         
         $request->setQuery(new Zend\Stdlib\Parameters(array('frontend' => 'activesync')));

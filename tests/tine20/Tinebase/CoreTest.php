@@ -24,19 +24,18 @@ class Tinebase_CoreTest extends TestCase
     
     public function testGetDispatchServerJSON()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-OPTIONS /index.php HTTP/1.1\r
-Host: localhost\r
-User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\r
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r
-Accept-Language: en-us,en;q=0.5\r
-Accept-Encoding: gzip,deflate\r
-Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r
-Connection: keep-alive\r
-Origin: http://foo.example\r
-Access-Control-Request-Method: POST\r
-Access-Control-Request-Headers: X-PINGOTHER\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "OPTIONS /index.php HTTP/1.1\r\n".
+            "Host: localhost\r\n".
+            "User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\r\n".
+            "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n".
+            "Accept-Language: en-us,en;q=0.5\r\n".
+            "Accept-Encoding: gzip,deflate\r\n".
+            "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\n".
+            "Connection: keep-alive\r\n".
+            "Origin: http://foo.example\r\n".
+            "Access-Control-Request-Method: POST\r\n".
+            "Access-Control-Request-Headers: X-PINGOTHER"
         );
         Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
@@ -44,12 +43,11 @@ EOS
         
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1\r
-X-Tine20-Request-Type: JSON\r
-\r
-{"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "X-Tine20-Request-Type: JSON\r\n".
+            "\r\n".
+            '{"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}'
         );
         Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
@@ -58,12 +56,11 @@ EOS
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
         
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1\r
-Content-Type: application/json\r
-\r
-{"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "Content-Type: application/json\r\n".
+            "\r\n".
+            '{"jsonrpc":"2.0","method":"Admin.searchUsers","params":{"filter":[{"field":"query","operator":"contains","value":"","id":"ext-record-2"}],"paging":{"sort":"accountLoginName","dir":"ASC","start":0,"limit":50}},"id":37}'
         );
         Tinebase_Core::set(Tinebase_Core::REQUEST, $request);
         
@@ -74,10 +71,9 @@ EOS
     
     public function testGetDispatchServerSnom()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1\r
-User-Agent: Mozilla/4.0 (compatible; snom300-SIP 8.4.35 1.1.3-u)\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "User-Agent: Mozilla/4.0 (compatible; snom300-SIP 8.4.35 1.1.3-u)"
         );
         
         $server = Tinebase_Core::getDispatchServer($request);
@@ -87,10 +83,9 @@ EOS
     
     public function testGetDispatchServerAsterisk()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1\r
-User-Agent: asterisk-libcurl-agent/1.0\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "User-Agent: asterisk-libcurl-agent/1.0"
         );
         
         $server = Tinebase_Core::getDispatchServer($request);
@@ -100,10 +95,9 @@ EOS
     
     public function testGetDispatchServerActiveSync()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-GET /index.php?frontend=activesync HTTP/1.1\r
-User-Agent: SAMSUNG-GT-I9300/101.403\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "GET /index.php?frontend=activesync HTTP/1.1\r\n".
+            "User-Agent: SAMSUNG-GT-I9300/101.403"
         );
         $request->setQuery(new \Zend\Stdlib\Parameters(array('frontend' => 'activesync')));
         
@@ -114,10 +108,9 @@ EOS
     
     public function testGetDispatchServerWebDAV()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-GET /index.php?frontend=webdav HTTP/1.1\r
-User-Agent: SAMSUNG-GT-I9300/101.403\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "GET /index.php?frontend=webdav HTTP/1.1\r\n".
+            "User-Agent: SAMSUNG-GT-I9300/101.403"
         );
         $request->setQuery(new \Zend\Stdlib\Parameters(array('frontend' => 'webdav')));
         
