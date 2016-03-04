@@ -111,8 +111,9 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             this.lastFocusEl = document.activeElement;
             
             // save west panel scrolling position so we can restore it after selecting nodes
-            if (this.treePanel.app.getMainScreen().getWestPanel().body) {
-                var scroller = Ext.get('treecards').dom.parentElement;
+            var westPanel = this.treePanel.app.getMainScreen().westPanel;
+            if (westPanel && westPanel.body) {
+                var scroller = westPanel.body.dom;
                 if (scroller) {
                     this.leftPanelScrollTop = scroller.scrollTop;
                 }
@@ -162,7 +163,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                     
                     if (this.leftPanelScrollTop) {
                         try {
-                            Ext.get('treecards').dom.parentElement.scrollTop = this.leftPanelScrollTop;
+                            this.treePanel.app.getMainScreen().westPanel.body.dom.scrollTop = this.leftPanelScrollTop;
                         } catch (e) {}
                     } 
                     

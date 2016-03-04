@@ -125,7 +125,7 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             
             var mainscreen = app.getMainScreen();
             if (mainscreen) {
-                mainscreen.show();
+                mainscreen.activate();
             } else {
                 // app has no mainscreen / perhaps it has been disabled
                 return false;
@@ -289,7 +289,11 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
         var appPanel = Tine[app.appName].getPanel();
         var appObj =  new Tine.Tinebase.Application(app);
         var mainScreen = new Tine.widgets.MainScreen({app: appObj});
-        
+
+        Ext.apply(appObj, {
+            mainScreen: mainScreen
+        });
+
         Ext.apply(mainScreen, {
             appPanel: appPanel,
             getContainerTreePanel: function() {
@@ -298,20 +302,23 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
             getWestPanel: function() {
                 return this.appPanel;
             },
-            show: function() {
+            activate: function() {
+                Tine.Tinebase.MainScreen.setActiveCenterPanel(mainScreen, true);
+                Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
+
+
                 // remove favorite toolbar for legacy modules
-                var westPanelToolbar = Ext.getCmp('west').getTopToolbar();
+                var westRegionPanel = mainScreen.westRegionPanel,
+                    westPanelToolbar = westRegionPanel.getTopToolbar();
+
                 westPanelToolbar.removeAll();
                 westPanelToolbar.hide();
                 westPanelToolbar.doLayout();
 
-                Tine.Tinebase.MainScreen.setActiveTreePanel(appPanel, true);
                 appPanel.fireEvent('beforeexpand', appPanel);
             }
         });
-        Ext.apply(appObj, {
-            mainScreen: mainScreen
-        });
+
         appPanel.on('render', function(p) {
             p.header.remove();
             // additionally to removing the DOM node, we also need to reset the 

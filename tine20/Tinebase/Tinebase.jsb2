@@ -302,6 +302,10 @@
           "path": "js/ux/layout/"
         },
         {
+          "text": "cardLayoutHelper.js",
+          "path": "js/ux/layout/"
+        },
+        {
           "text": "GMapPanel.js",
           "path": "js/ux/"
         },

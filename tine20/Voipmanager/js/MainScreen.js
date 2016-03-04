@@ -26,9 +26,9 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         var ac = (this.activeContentType) ? this.activeContentType : '';
         var ag = (this.activeContentGroup) ? this.activeContentGroup : '';
         return ag + ac;
-    },    
-    
-    showCenterPanel: function() {
+    },
+
+    getCenterPanel: function(contentType) {
         
         // which content panel?
         var type = this.activeContentType;
@@ -42,33 +42,37 @@ Tine.Voipmanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
            
         }
           
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[group + type + 'GridPanel'], true);
         this[group + type + 'GridPanel'].store.load();
+
+        return this[group + type + 'GridPanel'];
     },
-    
+
     /**
-     * sets toolbar in mainscreen
+     * get north panel for given contentType
+     *
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showNorthPanel: function() {
+    getNorthPanel: function(contentType) {
         var type = this.activeContentType;
         var group = this.activeContentGroup;
               
         if (! this[group + type + 'ActionToolbar']) {
             this[group + type + 'ActionToolbar'] = this[group + type + 'GridPanel'].actionToolbar;
         }
-        
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[group + type + 'ActionToolbar'], true);
+
+        return this[group + type + 'ActionToolbar'];
     },
     
     /**
      * overwrite default
      * @return Tine.Voipmanager.PhoneTreePanel
      */
-    getWestPanel: function() {
+    getWestPanel: function(contentType) {
 
-        if(!this.westPanel) {
-            this.westPanel = new Tine.Voipmanager.PhoneTreePanel({app: this.app});
+        if(!this.PhoneTreePanel) {
+            this.PhoneTreePanel = new Tine.Voipmanager.PhoneTreePanel({app: this.app});
         }
-        return this.westPanel;
+        return this.PhoneTreePanel;
     }
 });

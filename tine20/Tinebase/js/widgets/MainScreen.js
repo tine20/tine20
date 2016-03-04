@@ -3,49 +3,23 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets');
 
 /**
  * @namespace   Tine.widgets
  * @class       Tine.widgets.MainScreen
- * @extends     Ext.util.Observable
- * 
+ * @extends     Ext.Panel
+ *
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @constructor
  */
-Tine.widgets.MainScreen = function(config) {
-    Ext.apply(this, config);
-    
-    this.addEvents(
-        /**
-         * @event beforeshow
-         * Fires before the component is shown. Return false to stop the show.
-         * @param {Ext.Component} this
-         */
-        'beforeshow',
-        /**
-         * @event show
-         * Fires after the component is shown.
-         * @param {Ext.Component} this
-         */
-        'show'
-    );
-    
-    this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
-    
-    Tine.widgets.MainScreen.superclass.constructor.call(this);
-};
-
-Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
+Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required)
      */
     app: null,
-    
     /**
      * @cfg {String} activeContentType
      */
@@ -54,24 +28,126 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
      * @cfg {Array} contentTypes
      */
     contentTypes: null,
-    
     /**
      * @cfg {String} centerPanelClassName
      * name of centerpanel class name suffix in namespace of this app (defaults to GridPanel)
      * the class name will be expanded to Tine[this.appName][contentType + this.centerPanelClassNameSuffix]
      */
     centerPanelClassNameSuffix: 'GridPanel',
-
     /**
-     * private 
-     */
-    
-    /**
-     * @type {Bool} useModuleTreePanel
+     * @cfg {Bool} useModuleTreePanel
      * use modulePanel (defaults to null -> autodetection)
      */
     useModuleTreePanel: null,
-    
+
+    layout: 'border',
+
+    initComponent: function() {
+        this.useModuleTreePanel = Ext.isArray(this.contentTypes) && this.contentTypes.length > 1;
+        this.initLayout();
+
+        Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
+    },
+
+    /**
+     * @private
+     */
+    initLayout: function() {
+        this.items = [{
+            ref: 'northCardPanel',
+            cls: 'tine-mainscreen-centerpanel-north',
+            region: 'north',
+            layout: 'card',
+            activeItem: 0,
+            height: 59,
+            border: false,
+            items: []
+        }, {
+            ref: 'centerCardPanel',
+            cls: 'tine-mainscreen-centerpanel-center',
+            region: 'center',
+            animate: true,
+            border: false,
+            layout: 'card',
+            activeItem: 0,
+            defaults: {
+                hideMode: 'offsets'
+            },
+            items: []
+        }, {
+            ref: 'westRegionPanel',
+            cls: 'tine-mainscreen-centerpanel-west',
+            region: 'west',
+            //id: 'west',
+            stateful: false,
+            split: true,
+            width: 200,
+            minSize: 100,
+            maxSize: 300,
+            border: false,
+            collapsible:true,
+            collapseMode: 'mini',
+            header: false,
+            layout: 'fit',
+            listeners: {
+                afterrender: function() {
+                    // add to scrollmanager
+                    if (arguments[0] && arguments[0].hasOwnProperty('body')) {
+                        Ext.dd.ScrollManager.register(arguments[0].body);
+                    }
+                }
+            },
+            autoScroll: true,
+            tbar: [{
+                buttonAlign : 'center'
+            }],
+            items: [{
+                ref: '../moduleCardPanel',
+                cls: 'tine-mainscreen-centerpanel-west-modules',
+                border: false,
+                autoScroll: false,
+                autoHeight: true,
+                style: {
+                    width: '100%'
+                },
+                layout: 'card',
+                activeItem: 0,
+                items: []
+            }, {
+                ref: '../westCardPanel',
+                cls: 'tine-mainscreen-centerpanel-west-treecards',
+                border: false,
+                style: {
+                    width: '100%'
+                },
+                autoScroll: false,
+                layout: 'card',
+                activeItem: 0,
+                items: []
+            }]
+         }];
+    },
+
+    /**
+     * shows/activates this app mainscreen
+     *
+     * @return {Tine.widgets.MainScreen} this
+     */
+    activate: function() {
+        if(this.fireEvent("beforeshow", this) !== false){
+            Tine.Tinebase.MainScreen.setActiveCenterPanel(this, true);
+
+            // lazy loading
+            this.showWestCardPanel();
+            this.showCenterPanel();
+            this.showNorthPanel();
+            this.showModuleTreePanel();
+
+            this.fireEvent('show', this);
+        }
+        return this;
+    },
+
     /**
      * returns active content type
      * 
@@ -107,17 +183,7 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
         
         return this[contentType + this.centerPanelClassNameSuffix];
     },
-    
-    /**
-     * convinience fn to get container tree panel from westpanel
-     * 
-     * @return {Tine.widgets.container.containerTreePanel}
-     *
-    getContainerTreePanel: function() {
-        return this.getWestPanel().getContainerTreePanel();
-    },
-    */
-    
+
     /**
      * get north panel for given contentType
      * 
@@ -169,9 +235,9 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
     },
     
     /**
-     * get west panel for given contentType
-     * 
-     * template method to be overridden by subclasses to modify default behaviour
+     * get panel for westCardPanel region of given contentType
+     *
+     * NOTE: do not confuse this with westRegionPanel!
      * 
      * @return {Ext.Panel}
      */
@@ -214,50 +280,36 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                 this[wpName] = new Ext.Panel({html: 'ERROR'});
             }
         }
+
+
         return this[wpName];
     },
-    
-    /**
-     * shows/activates this app mainscreen
-     * 
-     * @return {Tine.widgets.MainScreen} this
-     */
-    show: function() {
-        if(this.fireEvent("beforeshow", this) !== false){
-            this.showWestPanel();
-            this.showCenterPanel();
-            this.showNorthPanel();
-            this.showModuleTreePanel()
-            this.fireEvent('show', this);
-        }
-        return this;
-    },
-    
+
     /**
      * shows center panel in mainscreen
      */
     showCenterPanel: function() {
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.getCenterPanel(this.getActiveContentType()), true);
+        this.setActiveContentPanel(this.getCenterPanel(this.getActiveContentType()), true);
     },
     
     /**
      * shows module tree panel in mainscreen
      */
     showModuleTreePanel: function() {
-        Tine.Tinebase.MainScreen.setActiveModulePanel(this.getModuleTreePanel(), true);
+        this.setActiveModulePanel(this.getModuleTreePanel(), true);
     },
     
     /**
      * shows west panel in mainscreen
      */
-    showWestPanel: function() {
+    showWestCardPanel: function() {
         // add save favorites button to toolbar if favoritesPanel exists
-        // @TODO refactor me!
         var westPanel = this.getWestPanel(),
-            favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : null,
-            westPanelToolbar = Ext.getCmp('west').getTopToolbar();
-        
+            favoritesPanel = Ext.isFunction(westPanel.getFavoritesPanel) ? westPanel.getFavoritesPanel() : false,
+            westPanelToolbar = this.westRegionPanel.getTopToolbar();
+
         westPanelToolbar.removeAll();
+
         if (favoritesPanel) {
             westPanelToolbar.addButton({
                 xtype: 'button',
@@ -268,21 +320,76 @@ Ext.extend(Tine.widgets.MainScreen, Ext.util.Observable, {
                     favoritesPanel.saveFilter.call(favoritesPanel);
                 }
             });
-            
+
             westPanelToolbar.show();
         } else {
             westPanelToolbar.hide();
         }
         
         westPanelToolbar.doLayout();
-        
-        Tine.Tinebase.MainScreen.setActiveTreePanel(this.getWestPanel(), true);
+
+        this.setActiveTreePanel(westPanel, true);
     },
     
     /**
      * shows north panel in mainscreen
      */
     showNorthPanel: function() {
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.getNorthPanel(this.getActiveContentType()), true);
+        this.setActiveToolbar(this.getNorthPanel(this.getActiveContentType()), true);
+    },
+
+    /**
+     * sets the active content panel
+     *
+     * @param {Ext.Panel} item Panel to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveContentPanel: function(panel, keep) {
+        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.centerCardPanel, panel, keep);
+    },
+
+    /**
+     * sets the active tree panel
+     *
+     * @param {Ext.Panel} panel Panel to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveTreePanel: function(panel, keep) {
+        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.westCardPanel, panel, keep);
+    },
+
+    /**
+     * sets the active module tree panel
+     *
+     * @param {Ext.Panel} panel Panel to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveModulePanel: function(panel, keep) {
+        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.moduleCardPanel, panel, keep);
+    },
+
+    /**
+     * sets item
+     *
+     * @param {Ext.Toolbar} panel toolbar to activate
+     * @param {Bool} keep keep panel
+     */
+    setActiveToolbar: function(panel, keep) {
+        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.northCardPanel, panel, keep);
+    },
+
+    /**
+     * gets the currently displayed toolbar
+     *
+     * @return {Ext.Toolbar}
+     */
+    getActiveToolbar: function() {
+        var northPanel = this.northCardPanel;
+
+        if (northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
+            return northPanel.layout.activeItem.el;
+        } else {
+            return false;
+        }
     }
 });

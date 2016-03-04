@@ -34,53 +34,41 @@ Tine.Setup.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
      * @type String
      */
     activePanel: 'EnvCheckGridPanel',
-    
-    /**
-     * set content panel
-     */
-    showCenterPanel: function() {
-        
-        // which content panel?
-        var panel = this.activePanel;
-        
-        if (! this[panel]) {
-            this[panel] = new Tine.Setup[panel]({
-                app: this.app
-            });
-        }
-        
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this[panel], true);
-        
-        if (this[panel].hasOwnProperty('store')) {
-            this[panel].store.load();
-        }
-    },
-    
+
     /**
      * get content panel
-     * 
+     *
      * @return {Ext.Panel}
      */
     getCenterPanel: function() {
+        if (! this[this.activePanel]) {
+            this[this.activePanel] = new Tine.Setup[this.activePanel]({
+                app: this.app
+            });
+        }
+
         return this[this.activePanel];
     },
-    
+
     /**
-     * sets toolbar in mainscreen
+     * get north panel for given contentType
+     *
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showNorthPanel: function() {
+    getNorthPanel: function(contentType) {
         var panel = this.activePanel;
         
         if (! this[panel + 'ActionToolbar']) {
             this[panel + 'ActionToolbar'] = this[panel].actionToolbar;
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this[panel + 'ActionToolbar'], true);
-        
         // hide and disable stuff in main menu
         Tine.Tinebase.MainScreen.getMainMenu().action_changePassword.setHidden(true);
         Tine.Tinebase.MainScreen.getMainMenu().action_showPreferencesDialog.setHidden(true);
         Tine.Tinebase.MainScreen.getMainMenu().action_editProfile.setDisabled(true);
+
+        return this[panel + 'ActionToolbar'];
     },
     
     /**
@@ -91,10 +79,10 @@ Tine.Setup.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
      * @return {Ext.Panel}
      */
     getWestPanel: function() {
-        if (! this.westPanel) {
-            this.westPanel = new Tine.Setup.TreePanel();
+        if (! this.setupTreePanel) {
+            this.setupTreePanel = new Tine.Setup.TreePanel();
         }
         
-        return this.westPanel;
+        return this.setupTreePanel;
     }
 });
