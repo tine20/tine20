@@ -493,7 +493,7 @@ class Setup_Controller
         $setupXml = $this->getSetupXml($_application->name);
         $messages = array();
         
-        switch(version_compare($_application->version, $setupXml->version)) {
+        switch (version_compare($_application->version, $setupXml->version)) {
             case -1:
                 $message = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
                 
@@ -506,9 +506,14 @@ class Setup_Controller
                 
                 $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
                 if(! class_exists($className)) {
-                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . " update class {$className} does not exists, skipping release {$_majorVersion} for app {$_application->name}"
+                    $nextMajorRelease = ($_majorVersion + 1) . ".0";
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . " Update class {$className} does not exists, skipping release {$_majorVersion} for app "
+                        . "{$_application->name} and increasing version to $nextMajorRelease"
                     );
+                    $_application->version = $nextMajorRelease;
+                    Tinebase_Application::getInstance()->updateApplication($_application);
+
                 } else {
                     $update = new $className($this->_backend);
                 
