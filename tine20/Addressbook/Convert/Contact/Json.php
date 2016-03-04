@@ -20,8 +20,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
    /**
     * parent converts Tinebase_Record_RecordSet to external format
     * this resolves Image Paths
-    * @TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved.
-    * 
+    *
     * @param Tinebase_Record_RecordSet  $_records
     * @param Tinebase_Model_Filter_FilterGroup $_filter
     * @param Tinebase_Model_Pagination $_pagination
@@ -32,7 +31,8 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         if (count($_records) == 0) {
             return array();
         }
-        
+
+        // TODO: Can be removed when "0000284: modlog of contact images / move images to vfs" is resolved.
         Addressbook_Frontend_Json::resolveImages($_records);
 
         $this->_appendRecordPaths($_records, $_filter);

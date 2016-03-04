@@ -1130,12 +1130,20 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         } else {
             $recordData = Zend_Json::decode($_data);
         }
-        
+
+        if ($this->has('image') && !empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', $_data['image'], $matches)) {
+            // add image to attachments
+            if (! isset($recordData['attachments'])) {
+                $recordData['attachments'] = array();
+            }
+            $recordData['attachments'][] = array('tempFile' => array('id' => $matches[1]));
+        }
+
         // sanitize container id if it is an array
         if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id']) && isset($recordData['container_id']['id']) ) {
             $recordData['container_id'] = $recordData['container_id']['id'];
         }
-        
+
         $this->_setFromJson($recordData);
         $this->setFromArray($recordData);
     }
