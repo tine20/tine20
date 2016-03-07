@@ -834,5 +834,22 @@ Tine.Tinebase.common = {
             return Tine[appName].Model[modelName];
         }
         return modelName;
+    },
+
+    /**
+     * Confirm application restart
+     *
+     * @param Boolean closewindow
+     */
+    confirmApplicationRestart: function (closewindow) {
+        Ext.Msg.confirm(_('Confirm'), _('Restart application to apply new configuration?'), function (btn) {
+            if (btn == 'yes') {
+                // reload mainscreen to make sure registry gets updated
+                Tine.Tinebase.common.reload();
+                if (closewindow) {
+                    window.close();
+                }
+            }
+        }, this);
     }
 };

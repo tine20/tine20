@@ -3308,3 +3308,6 @@ msgstr "entfernt"
 #: Record/RecordSetDiff.php:44
 msgid "modified"
 msgstr "geändert"
+
+msgid "Restart application to apply new configuration?"
+msgstr "Möchten Sie die Anwendung zum Anwenden der neuen Konfiguration neu starten?"
