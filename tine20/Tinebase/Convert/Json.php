@@ -416,6 +416,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
     {
         Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($records);
+
+        self::resolveAttachmentImage($records);
         
         self::resolveMultipleIdFields($records);
         
@@ -426,6 +428,30 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
             // resolve all multiple records fields
             $this->_resolveMultipleRecordFields($records, $modelConfiguration, $multiple);
+        }
+    }
+
+    /**
+     * adds image property with image url like this:
+     *  'index.php?method=Tinebase.getImage&application=Tinebase&location=vfs&id=e4b7de34e229672c0d5e22be0912779441e6e051'
+     *
+     * @param $records
+     */
+    static public function resolveAttachmentImage($records)
+    {
+        // get all images from attachments and set 'image' properties
+
+        // TODO find an additional condition to better detect the attachments that should be the record image(s)
+
+        foreach ($records as $record) {
+            if ($record->has('image') && $record->attachments instanceof Tinebase_Record_RecordSet) {
+                foreach ($record->attachments as $attachment) {
+                    if (in_array($attachment->contenttype, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+                        $record->image = Tinebase_Model_Image::getImageUrl('Tinebase', $attachment->getId(), 'vfs');
+                        break;
+                    }
+                }
+            }
         }
     }
     

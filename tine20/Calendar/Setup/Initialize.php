@@ -81,4 +81,13 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             )
         ))));
     }
+
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
+    }
 }

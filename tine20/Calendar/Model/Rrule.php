@@ -1082,7 +1082,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }
         }
     }
-    
+
     /**
      * skips date to (n'th next/previous) occurance of $_wday
      *

@@ -180,7 +180,7 @@ Tine.Voipmanager.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel,{
                                 
             this.app.getMainScreen().activeContentType = contentType;
             this.app.getMainScreen().activeContentGroup = contentGroup;
-            this.app.getMainScreen().show();
+            this.app.getMainScreen().activate();
             
             
             

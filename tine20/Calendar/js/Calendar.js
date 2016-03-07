@@ -115,15 +115,18 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
         
         return this.contentPanel;
     },
-    
+
     /**
-     * Set toolbar panel in Tinebase.MainScreen
+     * get north panel for given contentType
+     *
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showNorthPanel: function() {
+    getNorthPanel: function(contentType) {
         if (! this.actionToolbar) {
             this.actionToolbar = this.contentPanel.getActionToolbar();
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+        return this.actionToolbar;
     }
 });

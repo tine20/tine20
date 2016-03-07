@@ -465,7 +465,61 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $fbInfoSet;
     }
-    
+
+    /**
+     * update future constraint exdates of a single event
+     *
+     * @param $_record
+     */
+    public function setConstraintsExdates($_record)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' event has rrule constrains, calculating exdates');
+
+        $exdates = is_array($_record->exdate) ? $_record->exdate : array();
+
+        // own event should not trigger constraints conflicts
+        $constraints = clone $_record->rrule_constraints;
+        $constraints->addFilter(new Tinebase_Model_Filter_Text('uid', 'not', $_record->uid));
+
+        $constrainExdatePeriods = $this->getConflictingPeriods($this->getBlockingPeriods($_record), $constraints);
+        foreach ($constrainExdatePeriods as $constrainExdatePeriod) {
+            $exdates[] = $constrainExdatePeriod['from'];
+        }
+
+        $_record->exdate = array_unique($exdates);
+    }
+
+    /**
+     * update all future constraints exdates
+     */
+    public function updateConstraintsExdates()
+    {
+        // find all future recur events with constraints (ignoring ACL's)
+        $constraintsEventIds = $this->_backend->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from' => Tinebase_DateTime::now(),
+                'until' => Tinebase_DateTime::now()->addMonth(24)
+            )),
+            array('field' => 'rrule_contraints', 'operator' => 'notnull', 'value' => NULL)
+        )), NULL, 'id');
+
+        // update each
+        foreach($constraintsEventIds as $constraintsEventId) {
+            try {
+                $event = $this->_backend->get($constraintsEventId);
+                $this->setConstraintsExdates($event);
+                // NOTE: touch also updates
+                $this->_touch($event);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " cannot update constraints exdates for event {$event->getId()}: " . $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " cannot update constraints exdates for event {$event->getId()}: " . $e);
+            }
+        }
+    }
+
     /**
      * get list of records
      *
@@ -1590,16 +1644,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         // inspect rrule_constraints
         if ($_record->rrule_constraints) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' event has rrule constrains, calculating exdates');
-
-            $exdates = is_array($_record->exdate) ? $_record->exdate : array();
-            $constrainExdatePeriods = $this->getConflictingPeriods($this->getBlockingPeriods($_record), $_record->rrule_constraints);
-            foreach($constrainExdatePeriods as $constrainExdatePeriod) {
-                $exdates[] = $constrainExdatePeriod['from'];
-            }
-
-            $_record->exdate = array_unique($exdates);
+            $this->setConstraintsExdates($_record);
         }
     }
 

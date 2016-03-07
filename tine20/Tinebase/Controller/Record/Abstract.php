@@ -1068,36 +1068,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // rebuild paths if relations where set or if pathPart changed
         if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
-
-            // rebuild own paths
-            $this->buildPath($updatedRecord);
-
-            // rebuild paths of children that have been added or removed
-            if ($relationsTouched) {
-                //we need to do this to reload the relations in the next line...
-                $record->relations = null;
-                $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-                if (null === $currentRecord) {
-                    $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-                } else {
-                    $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-                }
-
-                foreach ($newChildRelations as $relation) {
-                    $oldOffset = $oldChildRelations->getIndexById($relation->id);
-                    // new child
-                    if (false === $oldOffset) {
-                        $this->buildPath($relation->related_record);
-                    } else {
-                        $oldChildRelations->offsetUnset($oldOffset);
-                    }
-                }
-
-                //removed children
-                foreach ($oldChildRelations as $relation) {
-                    $this->buildPath($relation->related_record);
-                }
-            }
+            $this->_rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched);
         }
 
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
@@ -1115,8 +1086,47 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($returnUpdatedRelatedData) {
             $this->_getRelatedData($updatedRecord);
         }
-        
+
         return $updatedRecord;
+    }
+
+    /**
+     * @param $updatedRecord
+     * @param $record
+     * @param $currentRecord
+     * @param $relationsTouched
+     */
+    protected function _rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched)
+    {
+        // rebuild own paths
+        $this->buildPath($updatedRecord);
+
+        // rebuild paths of children that have been added or removed
+        if ($relationsTouched) {
+            //we need to do this to reload the relations in the next line...
+            $record->relations = null;
+            $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+            if (null === $currentRecord) {
+                $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+            } else {
+                $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
+            }
+
+            foreach ($newChildRelations as $relation) {
+                $oldOffset = $oldChildRelations->getIndexById($relation->id);
+                // new child
+                if (false === $oldOffset) {
+                    $this->buildPath($relation->related_record);
+                } else {
+                    $oldChildRelations->offsetUnset($oldOffset);
+                }
+            }
+
+            //removed children
+            foreach ($oldChildRelations as $relation) {
+                $this->buildPath($relation->related_record);
+            }
+        }
     }
 
     /**

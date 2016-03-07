@@ -405,7 +405,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $this->get($event->getId(), TRUE);
     }
-    
+
     /**
      * get the basic select object to fetch records from the database
      *  

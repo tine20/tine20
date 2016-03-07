@@ -121,8 +121,11 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
      * @param integer    $height     height
      * @param integer    $ratiomode  ratiomode
      */
-    public static function getImageUrl($appName, $id, $location = '', $width = 90, $height = 90, $ratiomode = 0) {
-        return 'index.php?method=Tinebase.getImage&application=' . $appName . '&location=' . $location . '&id=' . $id . '&width=' . $width . '&height=' . $height . '&ratiomode='.$ratiomode;
+    public static function getImageUrl($appName, $id, $location = '', $width = 90, $height = 90, $ratiomode = 0)
+    {
+        return 'index.php?method=Tinebase.getImage&application='
+            . $appName . '&location=' . $location . '&id='
+            . $id . '&width=' . $width . '&height=' . $height . '&ratiomode='.$ratiomode;
     }
     
     /**

@@ -227,7 +227,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
 
         if (! this.activeRuleCard.rendered) {
             record.set('rrule_constraints', this.constrains);
-        } else {
+        } else if (this.activeRuleCard.constrains)  {
             var constrainsValue = this.activeRuleCard.constrains.getValue();
             if (constrainsValue && constrainsValue.length) {
                 record.set('rrule_constraints', [{field: 'container_id', operator: 'in', value: constrainsValue}]);

@@ -466,6 +466,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateRecurEventWithConstrains()
     {
+        $conflictEventData = $this->testCreateEvent();
 
         $eventData = $this->testCreateEvent();
         $eventData['rrule'] = array(
