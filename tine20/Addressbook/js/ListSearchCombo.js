@@ -16,6 +16,7 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
      * @cfg {Boolean} groupOnly
      */
     groupOnly: false,
+    departmentOnly: false,
 
     //private
     initComponent: function(){
@@ -49,6 +50,10 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
         if (this.groupOnly) {
             this.store.baseParams.filter.push({field: 'type', operator: 'equals', value: 'group'});
         }
+        
+        if (this.departmentOnly) {
+            this.store.baseParams.filter.push({field: 'list_type', operator: 'equals', value: 'department'});
+        }
     },
 
     /**
@@ -62,21 +67,15 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
                         '<table>',
                             '<tr>',
                                 '<td style="min-width: 20px;">{[Tine.Addressbook.ListGridPanel.listTypeRenderer(null, null, values)]}</td>',
-                                '<td width="100%">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</td>',
+                                '<td width="100%">{[this.encode(values.name)]}</td>',
                             '</tr>',
                         '</table>',
                         '{[Tine.widgets.path.pathsRenderer(values.paths, this.lastQuery)]}',
                     '</div>',
-                '</tpl>', {
-                getTitle: (function(id) {
-                    var record = this.getStore().getById(id),
-                        title = record ? record.getTitle() : '&nbsp';
-
-                    return Ext.util.Format.htmlEncode(title);
-                }).createDelegate(this)
-            });
+                '</tpl>'
+            );
         }
     }
 });
 
-Tine.widgets.form.RecordPickerManager.register('Addressbook', 'Contact', Tine.Addressbook.ListSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Addressbook', 'List', Tine.Addressbook.ListSearchCombo);
