@@ -840,10 +840,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             )
             
             ->where("{$this->_db->quoteIdentifier('container.application_id')} = ?", $application->getId())
-            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED)
-            
-            ->order('container.order', 'container.name');
-        
+            ->where("{$this->_db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_SHARED);
+
+        // TODO maybe this could be removed or changed to a preference later
+        $sortOrder = Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_CONTAINER_CUSTOM_SORT)
+            ? array('container.order', 'container.name')
+            : 'container.name';
+        $select->order($sortOrder);
+
         $this->addGrantsSql($select, $accountId, $grant, 'container_acl', $_andGrants, __CLASS__ . '::addGrantsSqlCallback');
         
         $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
