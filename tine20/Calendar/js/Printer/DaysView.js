@@ -34,41 +34,52 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
     },
 
     onBeforePrint: function(document, view) {
+        if (this.printMode == 'sheet') {
+            if (view.cropDayTime) {
+                var node = document.getElementById(this.panelId),
+                    cropper = node.getElementsByClassName('cal-daysviewpanel-cropper')[0],
+                    dayStartPx = view.getTimeOffset(view.dayStart);
 
-        //if (this.printMode == 'sheet') {
-        //    // scroll to dayStart if crop is disabled
-        //    if (! view.cropDayTime) {
-        //        var scroller = document.getElementsByClassName('cal-daysviewpanel-scroller')[0],
-        //            dayStartPx = view.getTimeOffset(view.dayStart);
-        //
-        //        scroller.scrollTop = dayStartPx;
-        //    }
-        //    // FF has scale to page option but scrambles everything after the first page
-        //    // @TODO downscale to fit one page
-        //
-        //    // Chrome does not have a scale to page option
-        //    // A4 Landscape is about 1000px in my chrome ;-)
-        //    var zoom = 1000 / vw;
-        //    document.body.style.zoom = zoom;
-        //    document.body.style.MozTransform = 'scale(' + zoom + ')';
-        //    document.body.style.MozTransformOrigin = 'top left';
-        //}
+                cropper.scrollTop = dayStartPx;
+            }
+        }
     },
 
     generateSheetHTML: function(view) {
         var node = view.el.dom.cloneNode(true),
+            daysViewPanel = node.firstChild,
             header = node.getElementsByClassName('cal-daysviewpanel-wholedayheader-scroller')[0],
             scroller = node.getElementsByClassName('cal-daysviewpanel-scroller')[0],
+            cropper = node.getElementsByClassName('cal-daysviewpanel-cropper')[0],
+            body = node.getElementsByClassName('cal-daysviewpanel-body')[0],
             dayStartPx = view.getTimeOffset(view.dayStart),
             fullHeight = view.getTimeOffset(view.startDate.add(Date.DAY, 1).add(Date.MINUTE, -1)),
             cropHeight = view.dayEndPx - dayStartPx + 20,
             scrollerHeight = view.cropDayTime ? cropHeight : fullHeight;
 
 
+        daysViewPanel.id = this.panelId = Ext.id();
+
         // resize header/scroller to fullsize
         header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
-        scroller.style.height =  scrollerHeight + 'px';
         scroller.style.width = null;
+
+        //scroller.style.height =  scrollerHeight + 'px';
+
+        if (Ext.isGecko) {
+            console.warn('Printing with Firefox is a pain!');
+            var pch = 12,
+                d = view.mainBody.getHeight() / view.cropper.getHeight(),
+                t = view.mainBody.getHeight() / view.cropper.dom.scrollTop,
+                pbh = pch * d,
+                pbm = pbh/t;
+
+            // NOTE: as soon as the cropper does not fit to page, FF scrambles the layout
+            //       we might need to know page size and calculate cropper height
+            cropper.style.height = pch + 'cm';
+            body.style.height = pbh + 'cm';
+            body.style['margin-top'] = -1 * pbm + 'cm';
+        }
 
         return this.generateTitle(view) + node.innerHTML;
     },

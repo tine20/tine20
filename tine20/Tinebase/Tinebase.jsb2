@@ -110,6 +110,10 @@
           "path": "js/ux/"
         },
         {
+          "text": "Date.js",
+          "path": "js/ux/"
+        },
+        {
           "text": "Log.js",
           "path": "js/ux/"
         },

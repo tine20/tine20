@@ -128,6 +128,20 @@ div.page
     background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
 }
 
+.cal-daysviewpanel-header {
+    page-break-after: avoid;
+}
+
+.cal-daysviewpanel-body,
+.cal-daysviewpanel-cropper,
+.cal-daysviewpanel-scroller {
+    page-break-before: avoid;
+}
+
+.cal-daysviewpanel-scroller {
+    border-top: none;
+    display: inline;
+}
 /* .cal-daysviewpanel-header-inner {
     background: none;
 } */
