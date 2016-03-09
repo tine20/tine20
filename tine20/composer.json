@@ -50,5 +50,8 @@
         ]
     },
     "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
-    "include-path": ["", "library/zf1ext", "library"]
+    "include-path": ["", "library/zf1ext", "library"],
+    "config": {
+        "secure-http": false
+    }
 }
