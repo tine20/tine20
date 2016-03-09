@@ -1237,6 +1237,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $locale = $locale ?: Tinebase_Core::getLocale();
         
         $weekInfo = Zend_Locale::getTranslationList('week', $locale);
+        if (!isset($weekInfo['firstDay'])) {
+            $weekInfo['firstDay'] = 'mon';
+        }
         return Tinebase_Helper::array_value($weekInfo['firstDay'], array_flip(self::$WEEKDAY_MAP));
     }
 }
