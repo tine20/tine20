@@ -91,6 +91,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
 
     /**
+     * FEATURE_CONTAINER_CUSTOM_SORT
+     *
+     * @var string
+     */
+    const FEATURE_CONTAINER_CUSTOM_SORT = 'featureContainerCustomSort';
+
+    /**
      * user defined page title postfix for browser page title
      * 
      * @var string
@@ -461,9 +468,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
                 ),
+                self::FEATURE_CONTAINER_CUSTOM_SORT => array(
+                    'label'         => 'Container Custom Sort', //_('Container Custom Sort')
+                    'description'   => 'Allows to sort containers by setting the sort order in Admin/Container',
+                    //_('Allows to sort containers by setting the sort order in Admin/Container')
+                ),
             ),
             'default'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH => false,
+                self::FEATURE_SHOW_ADVANCED_SEARCH  => false,
+                self::FEATURE_CONTAINER_CUSTOM_SORT => false,
             ),
         ),
         self::CRONUSERID => array(
