@@ -426,11 +426,11 @@ class Expressomail_Model_DeliveryStatusNotificationMessagePart
         $html .= '<br /><br />';
 
         // Per Recipient Notification Status
-        foreach ($this->_recipients as $finalRecipient => $recipient) {
+        foreach ($this->_recipients as $recipient) {
             // Recipient Address
             $html .= '<b>' . $translate->_('Recipient') . ':</b> ';
             $html .= isset($recipient['originalRecipient']) ? $recipient['originalRecipient']
-                        : $finalRecipient;
+                        : $recipient['finalRecipient'];
             $html .= '<br />';
 
             // Delivery Status Notification Class

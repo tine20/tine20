@@ -130,6 +130,7 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
      * is needed by Tine.widgets.mainscreen.WestPanel to fake container tree panel
      */
     selectContainerPath: Ext.emptyFn,
+    updateGridDelay: 500,
 
     /**
      * init
@@ -197,7 +198,7 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
         this.on('containerrename', this.onFolderRename, this);
         this.on('beforecontainerrename', this.onBeforeFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
-        this.selModel.on('selectionchange', this.onSelectionChange, this);
+        this.selModel.on('selectionchange', this.onSelectionChangeDelay, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
 
         // call parent::initComponent
@@ -238,6 +239,66 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
             renderTo: document.body,
             listeners: {beforeshow: this.updateUnreadTip.createDelegate(this)}
         });
+    },
+
+    onSharingUpdate: function(node, shares, recursive) {
+        var added = [],
+            removed = [],
+            path = node.attributes.path,
+            record = this.folderStore.getAt(this.folderStore.findExact(
+                    'path', path));
+
+        Ext.each(shares, function(share){
+            if (node.attributes.sharing_with.indexOf(share) === -1) {
+                added.push(share);
+            }
+        }, this);
+        Ext.each(node.attributes.sharing_with, function(share){
+            if (shares.indexOf(share) === -1) {
+                removed.push(share);
+            }
+        }, this);
+
+        var editValue = function(_record){
+            if (_record.get('can_share') && (!Ext.isEmpty(added) || !Ext.isEmpty(removed))) {
+                var currentShares = _record.get('sharing_with').slice(0); // Cloning array
+                _record.beginEdit();
+                Ext.each(added, function(share){
+                    if (currentShares.indexOf(share) === -1){
+                        currentShares.push(share);
+                    }
+                }, this);
+                Ext.each(removed, function(share){
+                    var index = currentShares.indexOf(share);
+                    if (index !== -1){
+                        currentShares.splice(index, 1);
+                    }
+                }, this);
+                _record.set('sharing_with', currentShares);
+                _record.endEdit();
+            }
+        };
+        if (recursive && !node.isLeaf()) {
+            var records = this.folderStore.query('parent_path', path);
+            records.add(record);
+            records.each(editValue);
+        } else {
+            editValue.call(this, record);
+        }
+    },
+
+    /**
+     * called when a selection gets changed
+     *
+     * @param {SelectionModel} sm
+     * @param {Object} node
+     */
+    onSelectionChangeDelay: function(sm, nodes) {
+        if (this.selectionChangeDelayedTask) {
+            this.selectionChangeDelayedTask.cancel();
+        }
+        this.selectionChangeDelayedTask = new Ext.util.DelayedTask(this.onSelectionChange, this, [sm, nodes]);
+        this.selectionChangeDelayedTask.delay(this.updateGridDelay);
     },
 
     /**
@@ -288,7 +349,12 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
             
             // set ftb filters according to tree selection
             ftb.addFilter(new ftb.record(filter));
-            
+
+            // prevent unnecessary loading of nodes that aren't selected anymore
+            if (!(sm.selNodes==nodes)) {
+                return;
+            }
+
             // Prevent empty path filters from trigger searchMessage
             if (Ext.isEmpty(filter.value)){
                 ftb.supressEvents = true;
@@ -320,6 +386,23 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
                 singleNodeOperator: 'in'
             });
         }
+
+        this.filterPlugin.override( {
+            setValue: function(filters) {
+                if (! this.selectNodes) {
+                    return null;
+                }
+
+                var sm = this.treePanel.getSelectionModel();
+
+                // prevent unnecessary loading of nodes that aren't selected anymore
+                if (!(sm.selNodes==this.selectNodes)) {
+                    return;
+                }
+
+                Tine.widgets.tree.FilterPlugin.superclass.setValue.call(this, filters);
+            }
+        });
 
         return this.filterPlugin;
     },
@@ -450,6 +533,14 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
         }
     },
 
+    setDisabledContextMenuItem: function(menu, iconClsName, disable) {
+        menu.items.each(function(item) {
+            if (item.iconCls === iconClsName) {
+                item.setDisabled(disable);
+            }
+        });
+    },
+
     /**
      * show context menu for folder tree
      *
@@ -491,16 +582,43 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
                 this.contextMenuAccount.showAt(event.getXY());
             }
         } else {
-            if (folder.get('globalname') === account.get('trash_folder')) {
-                this.contextMenuTrash.showAt(event.getXY());
-            } else if (! folder.get('is_selectable')){
-                this.unselectableFolder.showAt(event.getXY());
-            } else if (folder.get('system_folder')) {
-                this.contextMenuSystemFolder.showAt(event.getXY());
-            } else if(folder.get('has_children')){
-                this.contextMenuUserFolderChildren.showAt(event.getXY());
-            } else {
-                this.contextMenuUserFolder.showAt(event.getXY());
+            var is_shared = folder.get('parent').indexOf('user'),
+                export_folder_enabled = Tine.Expressomail.registry.get('enableMailDirExport'),
+                can_share = folder.get('can_share'),
+                action = 'action_managePermissions';
+            if ((is_shared < 0) && (export_folder_enabled)){
+                if (folder.get('globalname') === account.get('trash_folder')) {
+                    this.setDisabledContextMenuItem(this.contextMenuTrashExp, action, !can_share);
+                    this.contextMenuTrashExp.showAt(event.getXY());
+                } else if (! folder.get('is_selectable')){
+                    this.unselectableFolder.showAt(event.getXY());
+                } else if (folder.get('system_folder')) {
+                    this.setDisabledContextMenuItem(this.contextMenuSystemFolderExp, action, !can_share);
+                    this.contextMenuSystemFolderExp.showAt(event.getXY());
+                } else if(folder.get('has_children')){
+                    this.setDisabledContextMenuItem(this.contextMenuUserFolderChildrenExp, action, !can_share);
+                    this.contextMenuUserFolderChildrenExp.showAt(event.getXY());
+                } else {
+                    this.setDisabledContextMenuItem(this.contextMenuUserFolderExp, action, !can_share);
+                    this.contextMenuUserFolderExp.showAt(event.getXY());
+                }
+            }
+            else{
+                if (folder.get('globalname') === account.get('trash_folder')) {
+                    this.setDisabledContextMenuItem(this.contextMenuTrash, action, !can_share);
+                    this.contextMenuTrash.showAt(event.getXY());
+                } else if (! folder.get('is_selectable')){
+                    this.unselectableFolder.showAt(event.getXY());
+                } else if (folder.get('system_folder')) {
+                    this.setDisabledContextMenuItem(this.contextMenuSystemFolder, action, !can_share);
+                    this.contextMenuSystemFolder.showAt(event.getXY());
+                } else if(folder.get('has_children')){
+                    this.setDisabledContextMenuItem(this.contextMenuUserFolderChildren, action, !can_share);
+                    this.contextMenuUserFolderChildren.showAt(event.getXY());
+                } else {
+                    this.setDisabledContextMenuItem(this.contextMenuUserFolder, action, !can_share);
+                    this.contextMenuUserFolder.showAt(event.getXY());
+                }
             }
         }
     },
@@ -814,6 +932,53 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
                 progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
             }
         }
+        if (node) {
+            if (Boolean(folder.get('sharing_with').length) !== Boolean(node.attributes.sharing_with.length)) {
+                var classesMap = [
+                    'x-tree-node-expanded',
+                    'x-tree-node-collapsed',
+                    'expressomail-node-trash',
+                    'expressomail-node-trash-full',
+                    'expressomail-node-sent',
+                    'expressomail-node-inbox',
+                    'expressomail-node-drafts',
+                    'expressomail-node-templates',
+                    'expressomail-node-junk',
+                    'expressomail-node-remote',
+                    'expressomail-node-remote-open'
+                ];
+
+                // Find classes to change
+                var foundClasses = new Array();
+                Ext.each(classesMap, function(item){
+                    if (Ext.fly(node.getUI().elNode).hasClass(item)){
+                        foundClasses.push(item);
+                    } else if (Ext.fly(node.getUI().elNode).hasClass(item + '-overlay-share')) {
+                        foundClasses.push(item + '-overlay-share');
+                    }
+                });
+
+                Ext.each(foundClasses, function(oldCls){
+                    var newCls = Boolean(folder.get('sharing_with').length) ? oldCls + '-overlay-share'
+                                                                    : oldCls.replace('-overlay-share', '');
+
+                    if (Boolean(folder.get('sharing_with').length)
+                        && !Ext.fly(node.getUI().elNode).hasClass("x-tree-node-leaf"))
+                    {
+                        Ext.fly(node.getUI().elNode).addClass("x-tree-node-leaf");
+                    } else if (!Boolean(folder.get('sharing_with').length)
+                                && Ext.fly(node.getUI().elNode).hasClass("x-tree-node-leaf"))
+                    {
+                        if (!node.getUI().wasLeaf) {
+                            Ext.fly(node.getUI().elNode).removeClass("x-tree-node-leaf");
+                        }
+                    }
+                    Ext.fly(node.getUI().elNode).replaceClass(oldCls, newCls);
+                }, this);
+            }
+            node.attributes.sharing_with = folder.get('sharing_with');
+        }
+
     },
 
     /**

@@ -172,6 +172,26 @@ Tine.Expressomail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, 
     },
 
     /**
+     * update details panel
+     *
+     * @param {Ext.grid.RowSelectionModel} sm
+     */
+    onDetailsUpdate: function(sm) {
+        Tine.Expressomail.GridDetailsPanel.superclass.onDetailsUpdate.call(this, sm);
+        this.scrollPreviewToTop();
+    },
+
+    /**
+     * scroll preview panel to top
+     */
+    scrollPreviewToTop: function() {
+        var els = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-expressomail]');
+        if (els) {
+            els[0].parentElement.scrollTop = 0;
+        }
+    },
+
+    /**
      * (on) update details
      *
      * @param {Tine.Expressomail.Model.Message} record
@@ -196,11 +216,13 @@ Tine.Expressomail.GridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, 
                 // TODO: set signature, attachments, etc
                 this.setTemplateContent(record, this.getMessageRecordPanel().body);
                 this.fireEvent('dblwindow');
+                this.scrollPreviewToTop();
             }
             this.isNavKey = false;
         } else if (record === this.record) {
             this.setTemplateContent(record, this.getMessageRecordPanel().body);
             this.fireEvent('dblwindow');
+            this.scrollPreviewToTop();
         }
     },
 

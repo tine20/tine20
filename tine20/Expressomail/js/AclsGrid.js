@@ -37,6 +37,7 @@ Tine.Expressomail.AclsGrid = Ext.extend(Tine.widgets.account.PickerGridPanel, {
     selectTypeDefault: 'user',
     hasAccountPrefix: true,
     recordClass: Tine.Expressomail.Model.Acl,
+    enableSendAs: false,
     
     /**
      * @private
@@ -60,13 +61,15 @@ Tine.Expressomail.AclsGrid = Ext.extend(Tine.widgets.account.PickerGridPanel, {
                 tooltip: _('Write and delete messages from folders'),
                 dataIndex: 'writeacl',
                 width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
+            })
+        ];
+        if (this.enableSendAs) {
+            this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Send as'),
                 tooltip: _('Send as folder owner'),
                 dataIndex: 'sendacl',
-                width: 55
-            })            
-        ];
+                width: 55,
+            }));
+        }
     }
 });

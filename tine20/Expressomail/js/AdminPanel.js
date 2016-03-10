@@ -67,6 +67,22 @@ Tine.Expressomail.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
                 value: null,
                 maxLength: 64,
                 allowBlank: true
+            },
+            {
+                name: 'enableMailDirExport',
+                fieldLabel: this.app.i18n._('Enable mail folders for exportation (compressed)'),
+                typeAhead     : false,
+                triggerAction : 'all',
+                lazyRender    : true,
+                editable      : false,
+                mode          : 'local',
+                forceSelection: true,
+                value: null,
+                xtype: 'combo',
+                store: [
+                    [false, this.app.i18n._('No')],
+                    [true,  this.app.i18n._('Yes')]
+                ]
             }
         ]];
     }

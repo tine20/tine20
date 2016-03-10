@@ -32,7 +32,7 @@ class Expressomail_Model_Filter_DateTime extends Tinebase_Model_Filter_DateTime
         // prepare value
         $value = (array) $this->_getDateValues($this->_operator, $this->_value);
         $timezone = Tinebase_Helper::array_value('timezone', $this->_options);
-        $timezone = $timezone ? $timezone : Tinebase_Core::get('userTimeZone');
+        $timezone = $timezone ? $timezone : Tinebase_Core::getUserTimezone();
         foreach ($value as &$date)
         {
             $date = new Tinebase_DateTime($date); // should be in user timezone

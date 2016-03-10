@@ -42,6 +42,9 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalAcls: false,
+    enableSendAs: false,
+
+    node: null,
 
     /**
      * @private
@@ -96,7 +99,8 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         this.aclsGrid = new  Tine.Expressomail.AclsGrid({
-            store: this.aclStore
+            store: this.aclStore,
+            enableSendAs: this.enableSendAs
         });
 
         return this.aclsGrid;
@@ -110,8 +114,12 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         var acls = [];
         this.aclStore.each(function(_record){
+            // sendacl only makes sense with INBOX
+            if (!this.enableSendAs) {
+                _record.data.sendacl = false;
+            }
             acls.push(_record.data);
-        });
+        }, this);
 
         Ext.Ajax.request({
             params: {
@@ -151,6 +159,7 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         });
+        this.fireEvent('save', this.aclStore);
     }
 });
 

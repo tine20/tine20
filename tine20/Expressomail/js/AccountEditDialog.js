@@ -58,19 +58,25 @@ Tine.Expressomail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         Tine.Expressomail.AccountEditDialog.superclass.onRecordLoad.call(this);
 
         // if account type == system disable most of the input fields
-        if (this.record.get('type') == 'system') {
-            this.getForm().items.each(function(item) {
-                // only enable some fields
-                switch(item.name) {
-                    case 'signature':
-                    case 'signature_position':
-                    case 'display_format':
+        this.getForm().items.each(function(item) {
+            // only enable some fields
+            switch(item.name) {
+                case 'shared_seen':
+                    item.setDisabled(!this.record.get('shared_seen_support'));
+                    break;
+                case 'signature':
+                case 'signature_position':
+                case 'display_format':
+                    if (this.record.get('type') === 'system') {
                         break;
-                    default:
+                    }// else it gets into default
+                default:
+                    if (!item.name.match(/^customfield*/)
+                            && this.record.get('type') === 'system') {
                         item.setDisabled(true);
-                }
-            }, this);
-        }
+                    }
+            }
+        }, this);
     },    
 	
     /**
@@ -169,6 +175,19 @@ Tine.Expressomail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 }, {
                     fieldLabel: this.app.i18n._('Organization'),
                     name: 'organization'
+                }, {
+                    fieldLabel: this.app.i18n._('Enable Shared Seen Flags'),
+                    name: 'shared_seen',
+                    editable: false,
+                    lazyRender: true,
+                    mode: 'local',
+                    forceSelection: true,
+                    value: false,
+                    xtype: 'combo',
+                    store: [
+                        [true, this.app.i18n._('Yes')],
+                        [false, this.app.i18n._('No')]
+                    ]
                 }, this.signatureEditor,
                 {
                     fieldLabel: this.app.i18n._('Signature position'),
@@ -411,7 +430,7 @@ Tine.Expressomail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
  Tine.Expressomail.AccountEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 620,
-        height: 550,
+        height: 570,
         name: Tine.Expressomail.AccountEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Expressomail.AccountEditDialog',
         contentPanelConstructorConfig: config

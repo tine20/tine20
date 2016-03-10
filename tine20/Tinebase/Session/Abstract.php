@@ -387,10 +387,11 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     /**
      * Gets Tinebase User session namespace
      *
+     * @param string $sessionNamespace (optional)
      * @throws Zend_Session_Exception
      * @return Zend_Session_Namespace
      */
-    public static function getSessionNamespace()
+    public static function getSessionNamespace($sessionNamespace = 'Default')
     {
         if (! Tinebase_Session::isStarted()) {
             throw new Zend_Session_Exception('Session not started');
@@ -399,10 +400,11 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
         if (!self::getSessionEnabled()) {
             throw new Zend_Session_Exception('Session not enabled for request');
         }
-        
+
+        $sessionNamespace = (is_null($sessionNamespace)) ? get_called_class() . '_Namespace' : $sessionNamespace;
+
         try {
-           return self::_getSessionNamespace(static::NAMESPACE_NAME);
-           
+           return self::_getSessionNamespace($sessionNamespace);
         } catch(Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());

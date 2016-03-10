@@ -9,18 +9,17 @@
 #   <p.schuele@metaways.de>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0\n"
+"Project-Id-Version: ExpressoBr - Expressomail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-08-24 10:49-0300\n"
-"Last-Translator: Rommel Cysne <rommel.cysne@serpro.gov.br>\n"
-"Language-Team: German (http://www.transifex.com/projects/p/tine20/language/"
-"de/)\n"
+"PO-Revision-Date: 2015-08-24 15:07-0300\n"
+"Last-Translator: Cassiano Dal Pizzol <cassiano.dalpizzol@serpro.gov.br>\n"
+"Language-Team: ExpressoBr Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:106

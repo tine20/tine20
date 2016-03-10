@@ -123,7 +123,30 @@ class Tinebase_Helper
         
         return $revision;
     }
-    
+
+    /**
+     * Convert array values including keys (optional) to cache Id
+     * @param array $values
+     * @param boolean $includeKeys
+     * @return string
+     */
+    public static function arrayToCacheId($values, $includeKeys = false)
+    {
+        $ctx = hash_init('md5');
+
+        $values = (array) $values;
+
+        foreach ($values as $id => $value) {
+            if (is_array($value)) {
+                $value = self::arrayToCacheId($value, $includeKeys);
+            }
+
+            hash_update($ctx, ($includeKeys ? $id : null) . (string)$value);
+        }
+
+        return hash_final($ctx);
+    }
+
     /**
      * get release Codename
      *

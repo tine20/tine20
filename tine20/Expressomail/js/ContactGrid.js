@@ -127,7 +127,8 @@ Tine.Expressomail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPane
                 dataIndex: Ext.util.Format.lowercase(type),
                 width: 50,
                 hidden: false,
-                renderer: this.typeRadioRenderer.createDelegate(this, [type], 0)
+                renderer: this.typeRadioRenderer.createDelegate(this, [type], 0),
+                searchable: false
             });
             
         }, this);

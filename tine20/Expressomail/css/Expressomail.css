@@ -379,6 +379,49 @@
     background-image:url(../../images/remote-folder-open.gif);
 }
 
+.x-tree-node-expanded-overlay-share img.x-tree-node-icon{
+    background-image:url(../../images/shared.png), url(../../images/folder-open.gif);
+}
+
+.x-tree-node-collapsed-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/folder.gif);
+}
+
+.expressomail-node-trash-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/user-trash.png);
+}
+
+.expressomail-node-trash-full-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/user-trash-full.png);
+}
+
+.expressomail-node-sent-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/mail-folder-sent.png);
+}
+
+.expressomail-node-inbox-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/mail-folder-inbox.png);
+}
+
+.expressomail-node-drafts-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/folder-txt.png);
+}
+
+.expressomail-node-templates-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/folder-tar.png);
+}
+
+.expressomail-node-junk-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/oxygen/16x16/places/trashcan-empty-alt.png);
+}
+
+.expressomail-node-remote-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/remote-folder.gif);
+}
+
+.expressomail-node-remote-open-overlay-share img.x-tree-node-icon {
+    background-image:url(../../images/shared.png), url(../../images/remote-folder-open.gif);
+}
 
 .expressomail-node-statusbox {
 	padding-right: 5px;

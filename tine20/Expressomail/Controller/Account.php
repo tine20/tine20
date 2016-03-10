@@ -18,6 +18,11 @@
 class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * Contant for Expressomail Controller account search cache key
+     */
+    const EXPRESSOMAILCONTROLLERACCOUNTSEARCH = 'Expressomail_Controller_Account_search';
+
+    /**
      * application name (is needed in checkRight())
      *
      * @var string
@@ -68,6 +73,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
         $this->_doContainerACLChecks = FALSE;
         $this->_doRightChecks = TRUE;
         $this->_purgeRecords = FALSE;
+        $this->_resolveCustomFields = TRUE;
 
         $this->_backend = new Expressomail_Backend_Account();
 
@@ -97,6 +103,8 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
         return self::$_instance;
     }
 
+
+
     /**
      * get list of records
      *
@@ -113,8 +121,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
             $_filter = new Expressomail_Model_AccountFilter(array());
         }
 
-        $params = array('Expressomail_Controller_Account_search', Tinebase_Core::getUser()->accountId,  $_filter->toArray());
-        $cacheId = Tinebase_Helper::arrayHash($params);
+        $cacheId = $this->_createExpressomailControllerAccountSearchCacheId($_filter);
         $cache = Tinebase_Core::getCache();
         if ($cache->test($cacheId)) {
             $result = $cache->load($cacheId);
@@ -135,6 +142,9 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
             }
             if (! $systemAccountFound) {
                 $this->_addSystemAccount($result);
+            }
+            if ($this->resolveCustomfields()) {
+                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
             }
         }
 
@@ -162,6 +172,28 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
     }
 
     /**
+     * Create a Expressomail Controller account search cache id
+     *
+     * @param mixed $_filter
+     * @return string
+     */
+    protected function _createExpressomailControllerAccountSearchCacheId($_filter)
+    {
+        return Tinebase_Helper::arrayToCacheId(array(self::EXPRESSOMAILCONTROLLERACCOUNTSEARCH, Tinebase_Core::getUser()->accountId, $_filter->toArray()));
+    }
+
+    /**
+     * Create Expressomail_Model_Account cache id
+     *
+     * @param string Expressomail Model Account id
+     * @return string cache id
+     */
+    protected function _createExpressomailModelAccountCacheId($_id)
+    {
+        return Tinebase_Helper::arrayToCacheId(array(Tinebase_Core::getUser()->accountId, $_id));
+    }
+
+    /**
      * get by id
      *
      * @param string $_id
@@ -172,7 +204,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
     {
         Tinebase_Core::setupCache();
         $cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Helper::arrayHash(array(Tinebase_Core::getUser()->accountId,$_id));
+        $cacheId = $this->_createExpressomailModelAccountCacheId($_id);
         $record = $cache->load($cacheId);
         if ($record === FALSE){
             $record = parent::get($_id, $_containerId);
@@ -183,7 +215,16 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
             if ($record->type == Expressomail_Model_Account::TYPE_SYSTEM) {
                 $this->_addSystemAccountConfigValues($record);
             }
-            
+
+            if ($this->_checkSharedSeenSupport($record)) {
+                $record->shared_seen_support = TRUE;
+                $record->shared_seen = $this->_getSharedSeenValue($record);
+            }
+
+            if ($this->_resolveCustomFields && $record->has('customfields')) {
+               Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+            }
+
             $cache->save($record, $cacheId, array('expressomailAccount'));
         }
 
@@ -378,12 +419,16 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
 
-        $expressomailSession = Expressomail_Session::getSessionNamespace();        
-        // reset capabilities if imap host / port changed
-        if (isset($expressomailSession->account) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Resetting capabilities for account ' . $_record->name);
-            unset($expressomailSession->account[$_record->getId()]);
+        try {
+            $expressomailSession = Expressomail_Session::getSessionNamespace();
+            // reset capabilities if imap host / port changed
+            if (isset($expressomailSession->account) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Resetting capabilities for account ' . $_record->name);
+                unset($expressomailSession->account[$_record->getId()]);
+            }
+        } catch (Zend_Session_Exception $zse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . "::" . __LINE__ . ":: It was not possible to get Expressomail Session Namespace");
         }
     }
 
@@ -398,7 +443,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
     {
         // get old credentials
         $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $userCredentialCache = Tinebase_Core::getUserCredentialCache();
 
         if ($userCredentialCache !== NULL) {
             $credentialsBackend->getCachedCredentials($userCredentialCache);
@@ -546,12 +591,17 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
      */
     public function updateCapabilities(Expressomail_Model_Account $_account, Expressomail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        $expressomailSession = Expressomail_Session::getSessionNamespace();
-        if (isset($expressomailSession->account) &&
-                is_array($expressomailSession->account) && 
-                array_key_exists($_account->getId(), $expressomailSession->account)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
-            return $expressomailSession->account[$_account->getId()];
+        try {
+            $expressomailSession = Expressomail_Session::getSessionNamespace();
+            if (isset($expressomailSession->account) &&
+                    is_array($expressomailSession->account) &&
+                    array_key_exists($_account->getId(), $expressomailSession->account)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
+                return $expressomailSession->account[$_account->getId()];
+            }
+        } catch (Zend_Session_Exception $zse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . "::" . __LINE__ .
+                    ":: It was not possible to get Expressomail Session Namespace");
         }
 
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
@@ -915,7 +965,7 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
         }
 
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
             Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
         } else {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
@@ -1038,11 +1088,115 @@ class Expressomail_Controller_Account extends Tinebase_Controller_Record_Abstrac
     {
 	Tinebase_Core::setupCache();
 	$cache = Tinebase_Core::getCache();
-        $cacheId = Tinebase_Core::createCacheId(array(Tinebase_Core::getUser()->accountId,$_account->getId()));
+        $cacheId = $this->_createExpressomailModelAccountCacheId($_account->getId());
         $_filter = new Expressomail_Model_AccountFilter(array());
         //Cleans cache generate in user login, when the method seach is called with a empty filter.
-        $cacheSearch = Tinebase_Core::createCacheId(array('Expressomail_Controller_Account_search', Tinebase_Core::getUser()->accountId,  $_filter->toArray()));
+        $cacheSearch = $this->_createExpressomailControllerAccountSearchCacheId($_filter);
 	$cache->remove($cacheId);
         $cache->remove($cacheSearch);
+    }
+
+    /**
+     * Get cyrus murder backend hostname
+     *
+     * @param Expressomail_Model_Account $_record Account model
+     * @return mixed backend's hostaname or FALSE if not found
+     */
+    protected function _getCyrusMurderBackend(Expressomail_Model_Account $_record)
+    {
+        $imapBackend = $this->_getIMAPBackend($_record, TRUE);
+        return $imapBackend->getCyrusMurderBackend();
+    }
+
+    /**
+     * Get shared seen value
+     *
+     * @param Expressomail_Model_Account $_record
+     * @return boolean shared seen value
+     */
+    protected function _getSharedSeenValue(Expressomail_Model_Account $_record)
+    {
+        $imapBackend = $this->_getIMAPBackend($_record, TRUE);
+        return $imapBackend->getSharedSeen();
+    }
+
+    /**
+     * Set shared seen value
+     *
+     * @param Expressomail_Model_Account $_record Account model
+     * @param string $_value Shared seen value
+     * @return boolean return operation's success status
+     */
+    protected function _setSharedSeenValue(Expressomail_Model_Account $_record, $_value)
+    {
+        $imapConfig = $_record->getImapConfig();
+        $backendHostname = trim($this->_getCyrusMurderBackend($_record));
+
+        if (empty($backendHostname) || $imapConfig['host'] === $backendHostname) {
+            // Problaby we don't have load balancing/partitioning on Cyrus' infrastructure
+            $imapBackend = $this->_getIMAPBackend($_record, TRUE);
+        } else {
+            $imapConfig['host'] = $backendHostname;
+            $imapBackend = new Expressomail_Backend_Imap((object) $imapConfig);
+        }
+
+        return $imapBackend->setSharedSeen($_value);
+    }
+
+    /**
+     * Checks if imapd is cyrus and if it supports ANNOTATEMORE extension
+     *
+     * @param Expressomail_Model_Account $_record Account Model
+     * @return boolean true if imapd supports ANNOTATEMORE extension
+     */
+    protected function _checkSharedSeenSupport(Expressomail_Model_Account $_record)
+    {
+        // TODO: check cyrus imapd version
+        // ANNOTATEMORE extension is a draft that originated the METADATA extension RFC5464, maybe we
+        // should be using the later.
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct());
+        if (Tinebase_EmailUser::IMAP_CYRUS === ucfirst(strtolower($imapConfig->backend))
+            && $_record->hasCapability('ANNOTATEMORE')
+        ){
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     *
+     */
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = TRUE)
+    {
+        $sharedSeenValue = $_record->shared_seen;
+
+        $updatedRecord = parent::update($_record, $_duplicateCheck);
+        if ($this->_checkSharedSeenSupport($_record)) {
+            $updatedRecord->shared_seen_support = TRUE;
+            if ($this->_setSharedSeenValue($_record, $sharedSeenValue)) {
+                $updatedRecord->shared_seen = $sharedSeenValue;
+            } else {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Imap command failed when setting sharedseen value!');
+                $translate = Tinebase_Translation::getTranslation('Expressomail');
+                $message = $translate->_('Imap command failed when setting sharedseen value!');
+                throw new Expressomail_Exception_IMAPCommandFailed($message);
+            }
+        }
+
+        Tinebase_Core::setupCache();
+        $cache = Tinebase_Core::getCache();
+        $cache->save($updatedRecord,
+            $this->_createExpressomailModelAccountCacheId($updatedRecord->id),
+            array('expressomailAccount')
+        );
+
+        return $updatedRecord;
     }
 }

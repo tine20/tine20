@@ -68,6 +68,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     fetchtry: 0,
 
     saveOnDestroy: {},
+    updateDetailsDelay: 500,
 
     /**
      * @private grid cfg
@@ -134,14 +135,57 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Expressomail.GridPanel.superclass.initComponent.call(this)
 
-        this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
+        this.grid.getSelectionModel().on('rowselect', this.onRowSelectionDelay, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
 
         this.initPagingToolbar();
 
         this.saveOnDestroy = {};
     },
-    
+
+    /**
+     * init grid
+     * @private
+     */
+    initGrid: function() {
+        Tine.Expressomail.GridPanel.superclass.initGrid.call(this);
+        this.selectionModel.events.selectionchange.clearListeners();
+        this.selectionModel.on('selectionchange', this.onSelectionChangeDelay, this);
+    },
+
+    /**
+     * called when a selection gets changed
+     *
+     * @param {SelectionModel} sm
+     */
+    onSelectionChangeDelay: function(sm) {
+        this.actionUpdater.updateActions(sm);
+        this.ctxNode = this.selectionModel.getSelections();
+        if (this.updateOnSelectionChange && this.detailsPanel) {
+            if (this.selectionChangeDelayedTask) {
+                this.selectionChangeDelayedTask.cancel();
+            }
+            this.selectionChangeDelayedTask = new Ext.util.DelayedTask(this.detailsPanel.onDetailsUpdate, this.detailsPanel, [sm]);
+            this.selectionChangeDelayedTask.delay(this.updateDetailsDelay);
+        }
+    },
+
+    /**
+     * called when a row gets selected
+     *
+     * @param {SelectionModel} sm
+     * @param {Number} rowIndex
+     * @param {Tine.Expressomail.Model.Message} record
+     * @param {Number} retryCount
+     */
+    onRowSelectionDelay: function(sm, rowIndex, record, retryCount) {
+        if (this.rowSelectionDelayedTask) {
+            this.rowSelectionDelayedTask.cancel();
+        }
+        this.rowSelectionDelayedTask = new Ext.util.DelayedTask(this.onRowSelection, this, [sm, rowIndex, record, retryCount]);
+        this.rowSelectionDelayedTask.delay(this.updateDetailsDelay);
+    },
+
     /**
      * get load mask
      * 
@@ -243,18 +287,6 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * skip initial till we know the INBOX id
      */
     initialLoad: function() {
-        var account = this.app.getActiveAccount(),
-            accountId = account ? account.id : null,
-            inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname').match(/^inbox$/i);
-            }, this).first() : null;
-
-        if (! inbox) {
-            this.initialLoad.defer(100, this, arguments);
-            return;
-        }
-
-        return Tine.Expressomail.GridPanel.superclass.initialLoad.apply(this, arguments);
     },
 
     /**
@@ -1622,13 +1654,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.detailsPanel.addListener('dblwindow', this.openDblClickWindow, this);
         }
         else {
-            if(this.detailsPanel.record.bodyIsFetched()){
-                this.openDblClickWindow(grid, row, e);
-            }else{
-                this.detailsPanel.getLoadMask().hide();
-                this.getLoadMask().show();
-                this.detailsPanel.addListener('dblwindow', this.openDblClickWindow, this);
-            }
+            this.openDblClickWindow(grid, row, e);
         }
     },
     
@@ -1797,6 +1823,9 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         try { // because editwindow could be closed yet
             editwindow.record.commit(true);
+            if (!editwindow.record.get('initial_id')) {
+                editwindow.record.set('initial_id', record.get('draft_id'));
+            }
             editwindow.record.set('draft_id', record.get('original_id'));
             editwindow.setMessageOnTitle(editwindow.notifyClear);
             editwindow.setSaveDraftsDelayedTask();

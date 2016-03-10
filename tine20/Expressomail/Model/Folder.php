@@ -129,6 +129,8 @@ class Expressomail_Model_Folder extends Tinebase_Record_Abstract
         'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_totalcount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_timestamp'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'can_share'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'sharing_with'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     // cache values 
         'cache_status'           => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
@@ -222,5 +224,30 @@ class Expressomail_Model_Folder extends Tinebase_Record_Abstract
             'localname' => $localname,
             'parent'    => $parent,
         );
+    }
+
+    /**
+     * Set can_share and is_sharing attributes from folder's ACLs
+     * @param boolean|array $acls folder's acls or false if coudn't get folder's acls
+     */
+    public function setSharingValues($acls)
+    {
+        $userAclIndex = FALSE;
+        $sharingWith = array();
+
+        if ($acls !== FALSE && is_array($acls) && isset($acls['results'])) {
+            $accountLoginName = Tinebase_Core::getUser()->accountLoginName;
+            $index = 0;
+            foreach ($acls['results'] as $index => $acl) {
+                if (isset($acl['account_id']) && $acl['account_id'] === $accountLoginName) {
+                    $userAclIndex = $index;
+                } else if (isset($acl['account_id'])) {
+                    $sharingWith[] = $acl['account_id'];
+                }
+            }
+        }
+
+        $this->can_share = $userAclIndex === FALSE ? FALSE : $acls['results'][$userAclIndex]['administer'];
+        $this->sharing_with = $sharingWith;
     }
 }

@@ -102,7 +102,7 @@ class Expressomail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
             ->setReason($this->reason)
             ->setDateEnabled($this->date_enabled);
         
-        $this->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $this->setTimezone(Tinebase_Core::getUserTimezone());
         if ($this->start_date instanceof Tinebase_DateTime) {
             $fsv->setStartdate($this->start_date->format('Y-m-d'));
         }

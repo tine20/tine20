@@ -16,27 +16,6 @@
  * @package     Expressomail
  * @subpackage  Session
  */
-class Expressomail_Session extends Tinebase_Session_Abstract {    
-    
-    /**
-     * Session namespace for Expressomail
-     */
-    const EXPRESSOMAIL_SESSION_NAMESPACE = 'Expressomail_Session_Namespace';
-    
-	/**
-	 * Gets Expressomail session namespace
-	 * 
-	 * @throws Exception
-	 * @return Ambigous <Zend_Session_Namespace, NULL, mixed>
-	 */
-	public static function getSessionNamespace()
-	{	    
-	    try {
-		   return self::_getSessionNamespace(self::EXPRESSOMAIL_SESSION_NAMESPACE);
-	    } catch(Exception $e) {	        
-	        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $e->getMessage());
-	        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());	        
-	        throw $e;
-	    }	    
-	}    
+class Expressomail_Session extends Tinebase_Session_Abstract
+{
 }
