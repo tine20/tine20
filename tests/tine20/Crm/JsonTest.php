@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -32,7 +32,6 @@ class Crm_JsonTest extends Crm_AbstractTest
      * @var Tinebase_FileSystem
      */
     protected $_fsController;
-
 
     /**
      * customfield name
@@ -737,6 +736,10 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testCreateLeadWithAttachment()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP backend (full test suite run only)');
+        }
+
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
         

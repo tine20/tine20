@@ -1124,15 +1124,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
 
     /**
-     * returns number of current non-system users
-     *
+     * returns number of current not-disabled, non-system users
+     * 
      * @return number
      */
     public function countNonSystemUsers()
     {
         $select = $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
-            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')");
+            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED));
+
         $userCount = $this->_db->fetchOne($select);
         return $userCount;
     }

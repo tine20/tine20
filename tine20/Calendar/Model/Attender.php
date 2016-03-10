@@ -551,7 +551,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * resolves group members and adds/removes them if nesesary
      * 
-     * NOTE: If a user is listed as user and as groupmember, we supress the groupmember
+     * NOTE: If a user is listed as user and as groupmember, we suppress the groupmember
      * 
      * NOTE: The role to assign to a new group member is not always clear, as multiple groups
      *       might be the 'source' of the group member. To deal with this, we take the role of
@@ -581,10 +581,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         $allGroupMembersContactIds = array();
         foreach ($groupAttendee as $groupAttender) {
-            #$groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
-            #$groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
-            #$allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
-            
             $listId = null;
         
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {

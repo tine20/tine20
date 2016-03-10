@@ -655,7 +655,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue(empty($attender->displaycontainer_id), 'displaycontainer_id must not be set for contacts');
     }
     
-    public function testAttendeeGroupMembers()
+    public function testAttendeeGroupMembersResolving()
     {
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -670,8 +670,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persistentEvent = $this->_controller->create($event);
         $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
-        // user as attender + group + all members - supressed user 
-        $this->assertEquals(1 + 1 + count($defaultUserGroupMembers) -1, count($persistentEvent->attendee));
+        // user as attender + group + all members
+        $expectedAttendeeCount = 1 + 1 + count($defaultUserGroupMembers);
+        if (in_array(Tinebase_Core::getUser()->getId(), $defaultUserGroupMembers)) {
+            // remove suppressed user (only if user is member of default group)
+            $expectedAttendeeCount--;
+        }
+        $this->assertEquals($expectedAttendeeCount, count($persistentEvent->attendee),
+            'attendee: ' . print_r($persistentEvent->attendee->toArray(), true));
         
         $groupAttender = $persistentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         $persistentEvent->attendee->removeRecord($groupAttender);
