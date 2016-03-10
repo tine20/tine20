@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -81,13 +81,19 @@ class Tinebase_PersistentFilterTest extends TestCase
      */
     public function testSaveSharedFavorite()
     {
-        $filter = new Tinebase_Model_PersistentFilter(Tinebase_Frontend_Json_PersistentFilterTest::getPersistentFilterData());
+        $filter = new Tinebase_Model_PersistentFilter(
+            Tinebase_Frontend_Json_PersistentFilterTest::getPersistentFilterData()
+        );
         $filter->account_id = null;
         $newFilter = $this->_instance->create($filter);
         
         $this->assertTrue(count($newFilter->grants) === 2, 'did not find default grants in filter: '
             . print_r($newFilter->toArray(), true));
-        
+
+        $filterArray = $newFilter->toArray();
+        $this->assertEquals(Tinebase_Model_User::CURRENTACCOUNT, $filterArray['filters'][2]['value'],
+            print_r($filterArray['filters'], true));
+
         return $newFilter;
     }
     
@@ -187,5 +193,37 @@ class Tinebase_PersistentFilterTest extends TestCase
         $grant = $updatedFilter->grants->filter('account_id', $defaultUserGroup->getId())->getFirstRecord();
         $this->assertTrue($grant !== null);
         $this->assertTrue($grant->userHasGrant(Tinebase_Model_PersistentFilterGrant::GRANT_READ));
+    }
+
+    /**
+     * testCurrentAccountValue: checks if organizer is "magic word" Tinebase_Model_User::CURRENTACCOUNT
+     *
+     * @see 0011090: Aufgaben - Favoriten - Falscher Verantwortlicher
+     */
+    public function testCurrentAccountValue()
+    {
+        // look at default task favorites: currentAccount should be set as value
+        foreach (array('My open tasks', 'All tasks for me') as $filterName) {
+            $filter = new Tinebase_Model_PersistentFilterFilter(array(
+                //array('field' => 'account_id',      'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+                array(
+                    'field' => 'name',
+                    'operator' => 'equals',
+                    'value' => $filterName
+                ),
+                array(
+                    'field' => 'application_id',
+                    'operator' => 'equals',
+                    'value' => Tinebase_Application::getInstance()->getApplicationById('Tasks')->getId()
+                ),
+            ));
+
+            $result = Tinebase_PersistentFilter::getInstance()->search($filter)->getFirstRecord();
+
+            $this->assertTrue($result !== null);
+            $filters = $result->toArray();
+            $filters = $filters['filters'];
+            $this->assertEquals(Tinebase_Model_User::CURRENTACCOUNT, $filters[0]['value'], print_r($filters, true));
+        }
     }
 }

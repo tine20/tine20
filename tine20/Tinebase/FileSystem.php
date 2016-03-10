@@ -717,7 +717,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $node       = null;
         
         // find out if we have cached any node up in the path
-        while ($pathPart = array_pop($pathParts)) {
+        while (($pathPart = array_pop($pathParts) !== null)) {
             $cacheId = $this->_getCacheId($pathParts);
             
             if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {

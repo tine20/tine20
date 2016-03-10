@@ -46,7 +46,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
             'name'              => "My open tasks",
             'description'       => "My open tasks", // _("My open tasks")
             'filters'           => array(
-                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
                 array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
             )
         ))));

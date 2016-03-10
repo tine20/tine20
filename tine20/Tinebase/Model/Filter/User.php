@@ -56,8 +56,11 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
             $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
         }
         
-        // transform current user 
-        $_value = ($_value == Tinebase_Model_User::CURRENTACCOUNT && is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : $_value;
+        // transform current user
+        if ($_value == Tinebase_Model_User::CURRENTACCOUNT && is_object(Tinebase_Core::getUser())) {
+            $_value = Tinebase_Core::getUser()->getId();
+            $this->_userValue = Tinebase_Model_User::CURRENTACCOUNT;
+        }
         
         parent::setValue($_value);
     }
@@ -74,6 +77,9 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         
         if ($this->_userOperator && $this->_userOperator == 'inGroup') {
             $result['operator'] = $this->_userOperator;
+            $result['value']    = $this->_userValue;
+        } else if ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT) {
+            // switch back to CURRENTACCOUNT to make sure filter is saved and shown in client correctly
             $result['value']    = $this->_userValue;
         }
         
