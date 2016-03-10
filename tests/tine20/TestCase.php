@@ -206,6 +206,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteGroups()
     {
+        if (! is_array($this->_groupIdsToDelete)) {
+            return;
+        }
+
         foreach ($this->_groupIdsToDelete as $groupId) {
             if ($this->_removeGroupMembers) {
                 foreach (Tinebase_Group::getInstance()->getGroupMembers($groupId) as $userId) {
