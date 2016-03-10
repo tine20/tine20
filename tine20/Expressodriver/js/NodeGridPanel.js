@@ -383,9 +383,41 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getContextMenu: function(grid, row, e) {
         var r = this.store.getAt(row),
-            type = r ? r.get('type') : null;
+            type = r ? r.get('type') : null,
+            pathParts = r ? r.get('path') : null;
 
-        return type === 'folder' ? this.folderContextMenu : this.contextMenu;
+        var isRootFolder = pathParts ? pathParts.split('/').length < 3 : false;
+        if (isRootFolder) {
+            return;
+        } else if (type === 'folder') {
+            return this.folderContextMenu;
+        } else {
+            return this.contextMenu;
+        }
+    },
+
+    /**
+     * called on row context click
+     *
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Number} row
+     * @param {Ext.EventObject} e
+     */
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if (!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
+
+        var contextMenu = this.getContextMenu(grid, row, e);
+        if (contextMenu) {
+            contextMenu.showAt(e.getXY())
+        }
+        // reset preview update
+        this.updateOnSelectionChange = true;
     },
 
     /**

@@ -216,5 +216,17 @@ class Expressodriver_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $registryData;
     }
 
+    /**
+     * set credentials for given adapter
+     *
+     * @param string $adapterName
+     * @param string $password
+     * @return array
+     */
+    public function setCredentials($adapterName, $password)
+    {
+        return Expressodriver_Controller::getInstance()->setCredentials($adapterName, $password);
+    }
+
 
 }
