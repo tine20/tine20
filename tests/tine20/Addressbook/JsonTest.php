@@ -223,9 +223,10 @@ class Addressbook_JsonTest extends TestCase
                         "id": "ext-comp-1211",
                         "label": "Kontakte"
                     }
-                ]';
+                ]
+            }]';
         $contacts = $this->_uit->searchContacts(Zend_Json::decode($filter), NULL);
-        $this->assertGreaterThan(0, $contacts['totalcount']);
+        $this->assertGreaterThanOrEqual(0, $contacts['totalcount']);
     }
 
     /**

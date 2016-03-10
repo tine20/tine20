@@ -150,12 +150,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             "operator": "equals",
             "value": "' . $timeaccountData['id'] . '"
         }]';
-        $paging = '"paging": {
+        $paging = '{
+        "paging": {
             "sort": "number",
             "dir": "DESC",
             "start": 0,
             "limit": 50
-        }';
+        }}';
+
         $searchResult = $this->_json->searchTimeaccounts(Zend_Json::decode($searchFilter), Zend_Json::decode($paging));
         $this->assertEquals(1, $searchResult['totalcount']);
         $this->assertEquals(1, count($searchResult['filter']), 'did not get ta filter: ' . print_r($searchResult, TRUE));
@@ -1046,28 +1048,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $this->assertEquals($bday->setTimezone(Tinebase_Core::getUserTimezone())->toString(), $contactJson['bday']);
     }
-    
-    /**
-     * test and filter
-     * @see: 0009730: Fix & use Explicit_Related_Record Filter in all applications
-     */
-    public function testTimeaccountFailureFilter()
-    {
-        $req = Zend_Json::decode('{"params":{"filter":
-            [{"condition":"OR","filters":[{"condition":"AND","filters":
-            [{"field":"start_date","operator":"within","value":"weekLast","id":"ext-record-1"},{"field":"account_id","operator":"AND","value":
-            [{"field":"query","operator":"contains","value":"43518","id":"ext-record-
-            95"}],"id":"ext-record-2"}],"id":"ext-comp-1074","label":"Stundenzettel"}]}],"paging":
-            {"sort":"start_date","dir":"ASC","start":0,"limit":50}}'
-        );
-    
-        $feTa = new Timetracker_Frontend_Json();
-    
-        $result = $feTa->searchTimesheets($req['params']['filter'], $req['params']['paging']);
-    
-        $this->assertArrayHasKey('results', $result);
-    }
-    
+
     /**
      * here we search for all timeaccounts, which are related to an contract with a special
      * internal contact assigned

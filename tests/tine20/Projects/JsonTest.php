@@ -194,7 +194,7 @@ class Projects_JsonTest extends PHPUnit_Framework_TestCase
                         "id": "ext-comp-1330",
                         "label": "Projekte"
                     }
-                ]';
+                ]}]';
         $search = $this->_json->searchProjects(Zend_Json::decode($filter), $this->_getPaging());
         $this->assertGreaterThanOrEqual(0, $search['totalcount']);
     }
