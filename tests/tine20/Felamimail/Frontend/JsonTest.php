@@ -1555,6 +1555,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        // sleep for 2 secs because mailserver may be slower than expected
+        sleep(2);
         
         $result = $this->_getMessages($folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
