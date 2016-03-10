@@ -500,4 +500,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $out = ob_get_clean();
         return $out;
     }
+
+    /**
+     * returns true if main db adapter is postgresql
+     *
+     * @return bool
+     */
+    protected function _dbIsPgsql()
+    {
+        $db = Tinebase_Core::getDb();
+        return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
+    }
 }
