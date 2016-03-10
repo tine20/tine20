@@ -303,7 +303,11 @@ class Tinebase_Mail extends Zend_Mail
                             $this->addTo($address['address'], $address['name']);
                         }
                         break;
-                        
+
+                    case 'reply-to':
+                        $this->setReplyTo($value);
+                        break;
+
                     default:
                         $this->addHeader($header, $value);
                         break;

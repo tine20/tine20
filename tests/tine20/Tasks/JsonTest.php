@@ -170,7 +170,7 @@ class Tasks_JsonTest extends TestCase
         
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status'],
             'should not send message with wrong pw - maybe smtp server is not configured correctly?');
-        $this->assertContains('535 5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'], 
+        $this->assertContains('5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'],
             'got: ' . $loadedTaskData['alarms'][0]['sent_message']);
     }
     

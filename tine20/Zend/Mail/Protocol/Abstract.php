@@ -12,12 +12,13 @@
  * If you did not receive a copy of the license and are unable to
  * obtain it through the world-wide-web, please send an email
  * to license@zend.com so we can send you a copy immediately.
- * 
+ *
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage Protocol
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
 
 
@@ -37,12 +38,13 @@ require_once 'Zend/Validate/Hostname.php';
  * Zend_Mail_Protocol_Abstract
  *
  * Provides low-level methods for concrete adapters to communicate with a remote mail server and track requests and responses.
- * 
+ *
  * @category   Zend
  * @package    Zend_Mail
  * @subpackage Protocol
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  * @todo Implement proxy settings
  */
 abstract class Zend_Mail_Protocol_Abstract
@@ -57,6 +59,12 @@ abstract class Zend_Mail_Protocol_Abstract
      * Default timeout in seconds for initiating session
      */
     const TIMEOUT_CONNECTION = 30;
+
+    /**
+     * Maximum of the transaction log
+     * @var integer
+     */
+    protected $_maximumLog = 64;
 
 
     /**
@@ -104,22 +112,24 @@ abstract class Zend_Mail_Protocol_Abstract
     /**
      * String template for parsing server responses using sscanf (default: 3 digit code and response string)
      * @var resource
+     * @deprecated Since 1.10.3
      */
     protected $_template = '%d%s';
 
 
     /**
      * Log of mail requests and server responses for a session
-     * @var string
+     * @var array
      */
-    private $_log;
+    private $_log = array();
 
     /**
      * is logging enabled?
-     * 
+     *
      * @var boolean
      */
     public static $loggingEnabled = false;
+
 
     /**
      * Constructor.
@@ -157,6 +167,28 @@ abstract class Zend_Mail_Protocol_Abstract
         $this->_disconnect();
     }
 
+    /**
+     * Set the maximum log size
+     *
+     * @param integer $maximumLog Maximum log size
+     * @return void
+     */
+    public function setMaximumLog($maximumLog)
+    {
+        $this->_maximumLog = (int) $maximumLog;
+    }
+
+
+    /**
+     * Get the maximum log size
+     *
+     * @return int the maximum log size
+     */
+    public function getMaximumLog()
+    {
+        return $this->_maximumLog;
+    }
+
 
     /**
      * Create a connection to the remote host
@@ -192,14 +224,14 @@ abstract class Zend_Mail_Protocol_Abstract
      * Retrieve the transaction log
      *
      * @return string
-     * 
+     *
      * NOTE: Logging is currently disabled by default due to high memory usage
-     * 
+     *
      * @see 0004169: try to reduce memory consumption when sending message with big attachement(s)
      */
     public function getLog()
     {
-        return $this->_log;
+        return implode('', $this->_log);
     }
 
 
@@ -210,7 +242,22 @@ abstract class Zend_Mail_Protocol_Abstract
      */
     public function resetLog()
     {
-        $this->_log = '';
+        $this->_log = array();
+    }
+
+    /**
+     * Add the transaction log
+     *
+     * @param  string new transaction
+     * @return void
+     */
+    protected function _addLog($value)
+    {
+        if ($this->_maximumLog >= 0 && count($this->_log) >= $this->_maximumLog) {
+            array_shift($this->_log);
+        }
+
+        $this->_log[] = $value;
     }
 
     /**
@@ -241,7 +288,7 @@ abstract class Zend_Mail_Protocol_Abstract
             throw new Zend_Mail_Protocol_Exception($errorStr);
         }
 
-        if (($result = stream_set_timeout($this->_socket, self::TIMEOUT_CONNECTION)) === false) {
+        if (($result = $this->_setStreamTimeout(self::TIMEOUT_CONNECTION)) === false) {
             /**
              * @see Zend_Mail_Protocol_Exception
              */
@@ -289,7 +336,7 @@ abstract class Zend_Mail_Protocol_Abstract
 
         // Save request to internal log
         if (self::$loggingEnabled) {
-            $this->_log .= $request . self::EOL;
+            $this->_addLog($request);
         }
 
         if ($result === false) {
@@ -323,7 +370,7 @@ abstract class Zend_Mail_Protocol_Abstract
 
         // Adapters may wish to supply per-commend timeouts according to appropriate RFC
         if ($timeout !== null) {
-           stream_set_timeout($this->_socket, $timeout);
+            $this->_setStreamTimeout($timeout);
         }
 
         // Retrieve response
@@ -331,7 +378,7 @@ abstract class Zend_Mail_Protocol_Abstract
 
         // Save request to internal log
         if (self::$loggingEnabled) {
-            $this->_log .= $reponse;
+            $this->_addLog($reponse);
         }
 
         // Check meta data to ensure connection is still valid
@@ -370,8 +417,10 @@ abstract class Zend_Mail_Protocol_Abstract
     protected function _expect($code, $timeout = null)
     {
         $this->_response = array();
-        $cmd = '';
-        $msg = '';
+        $cmd  = '';
+        $more = '';
+        $msg  = '';
+        $errMsg = '';
 
         if (!is_array($code)) {
             $code = array($code);
@@ -379,18 +428,35 @@ abstract class Zend_Mail_Protocol_Abstract
 
         do {
             $this->_response[] = $result = $this->_receive($timeout);
-            sscanf($result, $this->_template, $cmd, $msg);
+            list($cmd, $more, $msg) = preg_split('/([\s-]+)/', $result, 2, PREG_SPLIT_DELIM_CAPTURE);
 
-            if ($cmd === null || !in_array($cmd, $code)) {
-                /**
-                 * @see Zend_Mail_Protocol_Exception
-                 */
-                require_once 'Zend/Mail/Protocol/Exception.php';
-                throw new Zend_Mail_Protocol_Exception($result);
+            if ($errMsg !== '') {
+                $errMsg .= ' ' . $msg;
+            } elseif ($cmd === null || !in_array($cmd, $code)) {
+                $errMsg =  $msg;
             }
 
-        } while (strpos($msg, '-') === 0); // The '-' message prefix indicates an information string instead of a response string.
+        } while (strpos($more, '-') === 0); // The '-' message prefix indicates an information string instead of a response string.
+
+        if ($errMsg !== '') {
+            /**
+             * @see Zend_Mail_Protocol_Exception
+             */
+            require_once 'Zend/Mail/Protocol/Exception.php';
+            throw new Zend_Mail_Protocol_Exception($errMsg, $cmd);
+        }
 
         return $msg;
+    }
+
+    /**
+     * Set stream timeout
+     *
+     * @param integer $timeout
+     * @return boolean
+     */
+    protected function _setStreamTimeout($timeout)
+    {
+       return stream_set_timeout($this->_socket, $timeout);
     }
 }
