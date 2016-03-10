@@ -176,7 +176,7 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         
         $groupMemberships = $this->_groupLDAP->getGroupMembershipsFromSyncBackend($user);
         
-        $this->assertEquals(2, count($groupMemberships));
+        $this->assertEquals(1, count($groupMemberships));
         
         $this->_groupLDAP->removeGroupMember($group, $user);
         

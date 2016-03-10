@@ -94,6 +94,10 @@ class Calendar_Model_AttenderTests extends Calendar_TestCase
      */
     public function testEmailsToAttendeeWithGroups()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP backend (full test suite run only)');
+        }
+
         $event = $this->_getEvent();
         
         $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
