@@ -271,6 +271,28 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
+        this.toggleFullScreen = new Ext.Toolbar.Button({
+            text: '\u2197',
+            scope: this,
+            handler: function() {
+                if (this.ownerCt.ref == 'tineViewportMaincardpanel') {
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem);
+                    this.originalOwner.add(this);
+                    this.originalOwner.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2197');
+                    this.southPanel.expand();
+                } else {
+                    this.originalOwner = this.ownerCt;
+                    this.originalOwner.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.add(this);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2199');
+                    this.southPanel.collapse();
+                }
+            }
+        });
         
        this.action_import = new Ext.Action({
             requiredGrant: 'addGrant',
@@ -301,6 +323,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.app.featureEnabled('featureYearView')) {
             this.changeViewActions.push(this.showYearView);
         }
+
+        this.changeViewActions.push(this.toggleFullScreen);
 
         this.recordActions = [
             this.action_editInNewWindow,
@@ -404,6 +428,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.detailsPanel) {
             this.items.push({
                 region: 'south',
+                ref: 'southPanel',
                 border: false,
                 collapsible: true,
                 collapseMode: 'mini',
