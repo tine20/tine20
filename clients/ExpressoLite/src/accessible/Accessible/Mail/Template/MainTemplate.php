@@ -47,6 +47,16 @@
             <li><a href="<?= $VIEW->lnkLogoff ?>" title="Sair do expressobr acessível" accesskey="s">Sair do sistema [s]</a></li>
         </ul>
     </div>
+ </div>
+
+<!--
+ * This element is a top page anchor link, it can be repeated on template files.
+ * But only one link element, of these repeated, should contain 'accesskey="t"' attribute.
+ -->
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top" accesskey="t">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 
 <form action="<?= $VIEW->lnkConfirmMessageAction ?>" method="post">
@@ -110,12 +120,24 @@
     <?php ENDIF;?>
 </div>
 
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
+</div>
+
 <?php IF ($VIEW->curFolder->totalMails > 0) : ?>
 <div id="actions" name="actions">
     <h2 class="anchorsTitle">Ações</h2>
     <div class="contentAlign">
         <button type="submit" name="actionProcess" value="<?= $VIEW->action_mark_unread ?>">Marcar como não lido</button>
     </div>
+</div>
+
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 <?php ENDIF;?>
 </form>
@@ -133,6 +155,11 @@
             <?php ENDIF; ?>
         </ul>
     </div>
+</div>
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 <?php ENDIF; ?>
 

@@ -8,7 +8,7 @@
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
  * @author    Charles Wust <charles.wust@serpro.gov.br>
- * @copyright Copyright (c) 2014-2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2014-2016 Serpro (http://www.serpro.gov.br)
  */
 namespace ExpressoLite\Backend\Request;
 
@@ -24,6 +24,7 @@ class SearchContactsByEmail extends LiteRequest
     public function execute()
     {
         $emails = explode(',', $this->param('emails'));
+        $getPicture = $this->param('getPicture') == '1';
 
         $filters = array();
         foreach ($emails as $email) {
@@ -57,10 +58,11 @@ class SearchContactsByEmail extends LiteRequest
         foreach ($response->result->results as $contact) {
             $contacts[] = (object) array(
                 'id' => $contact->id,
+                'accountId' => $contact->account_id,
                 'isDeleted' => $contact->is_deleted !== '0',
                 'created' => strtotime($contact->creation_time),
                 'email' => $contact->email,
-                'mugshot' => $this->getContactPicture($contact->id, strtotime($contact->creation_time), 90, 113),
+                'mugshot' => $getPicture ? $this->getContactPicture($contact->id, strtotime($contact->creation_time), 90, 113) : null,
                 //'mugshotUrl' => $this->assemblyMugshotUrl($contact->id, strtotime($contact->creation_time), 90, 113),
                 'name' => $contact->n_fn,
                 'phone' => $contact->tel_work,

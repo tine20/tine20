@@ -30,7 +30,7 @@
 .Week_labelWeek { display:inline-block; color:#AAA; width:calc(100% / 7); padding:4px 0 0 6px; }
 @media (max-width:1024px) { .Week_labelWeek { font-size:80%; } } /* mobile */
 @media (min-width:1025px) { .Week_labelWeek { font-size:90%; } } /* desktop */
-.Week_labelWeekToday { font-weight:bold; }
+.Week_labelWeekToday { font-weight:bold; color:#0061AA; }
 
 .Week_grid { position:absolute; width:100%; overflow-y:scroll;
     top:calc(38px + 36px); /* buttons + weekLabels */
@@ -56,13 +56,13 @@
 @media (min-width:1025px) { .Week_labelShort { display:none; } } /* desktop */
 
 .Week_colDay { display:inline-block; width:calc(100% / 7); }
-.Week_colDayToday .Week_cellHour { background-color:#EEF5FF; }
+.Week_colDayToday { border:1px solid #0061AA; }
 .Week_cellHour { display:inline-block; width:100%; height:44px;
     border-left:1px solid #DDD; border-bottom:1px solid #DDD; }
 .Week_cellHourNonWorking { background-color:#F9F9F9; }
 .Week_event { position:absolute; display:block; width:calc(100% / 7); height:44px;
-    cursor:pointer; padding:0 2px; border:1px solid white;
+    cursor:pointer; padding:0 2px; border:1px solid white; font-size:90%;
     overflow-x:hidden; overflow-y:auto; color:white; opacity:.8; }
-@media (max-width:1024px) { .Week_event { font-size:80%; } } /* mobile */
+@media (max-width:1024px) { .Week_event { font-size:75%; } } /* mobile */
 
 .Week_loading { text-align:center; margin:10px; color:#888; font-style:italic; }

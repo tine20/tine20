@@ -14,6 +14,7 @@ define(['jquery',
 function($, Cordova) {
     var isUnloadingPage = false;
     var App = {};
+    var ajaxUrl = null; // to be cached on first GetAjaxUrl() call
 
     function _DisableRefreshOnPullDown() {
         var isFirefoxAndroid =
@@ -46,6 +47,21 @@ function($, Cordova) {
         }
     }
 
+    function _CheckUserInfoAvailability() {
+        var defer = $.Deferred();
+        if (App.GetUserInfo('mailAddress') === null) { // can happen when storage expires and session is still valid
+            App.Post('GetUserInfo').done(function(response) {
+                for (var i in response) {
+                    App.SetUserInfo(i, response[i]);
+                }
+                defer.resolve();
+            });
+        } else {
+            defer.resolve();
+        }
+        return defer.promise();
+    }
+
     (function _Constructor() {
         $.ajaxSetup({ // iOS devices may cache POST requests, so make no-cache explicit
             type: 'POST',
@@ -71,10 +87,16 @@ function($, Cordova) {
     };
 
     App.GetAjaxUrl = function() {
-        var backendUrl = Cordova.isEnabled() ?
+        if (ajaxUrl === null) {
+            ajaxUrl = Cordova.isEnabled() ?
                 Cordova.getLiteBackendUrl() :
                 require.toUrl('.'); // follows require.config() baseUrl
-        return backendUrl + '/api/ajax.php';
+            if (ajaxUrl.charAt(ajaxUrl.length - 1) !== '/') {
+                ajaxUrl += '/';
+            }
+            ajaxUrl += 'api/ajax.php';
+        }
+        return ajaxUrl;
     }
 
     App.Post = function(requestName, params) {
@@ -82,12 +104,6 @@ function($, Cordova) {
         // Returns a promise object.
 
         var defer = $.Deferred();
-
-        function returnToLoginScreen() {
-            var currHref = document.location.href.split('#')[0]; //uses only the part before the first # (it there is one)
-            var destHref = currHref.replace(/\b(\/mail|\/addressbook)\b/gi, '') //removes /mail or /addressbook from the address
-            document.location.href = destHref;
-        }
 
         $.post(
             App.GetAjaxUrl(),
@@ -111,6 +127,8 @@ function($, Cordova) {
                 App.ReturnToLoginScreen();
                 // as this will leave the current screen, we
                 // won't neither resolve or reject
+            } else if (data.status === 500 && data.responseText == 'CurlNotInstalledException') {
+                window.alert('O pacote PHP cURL (php5-curl) não está instalado no servidor');
             } else {
                 defer.reject(data);
             }
@@ -163,7 +181,7 @@ function($, Cordova) {
 
     App.ReturnToLoginScreen = function() {
         var currHref = document.location.href.split('#')[0]; //uses only the part before the first # (it there is one)
-        var destHref = currHref.replace(/\b(\/mail|\/addressbook|\/calendar)\b/gi, ''); //removes /module from the URL address
+        var destHref = currHref.replace(/\b(\/mail|\/addressbook|\/calendar|\/debugger)\b/gi, ''); //removes /module from the URL address
 
         if (destHref.slice(-1) != '/') { //checks last char
             destHref += '/';
@@ -177,16 +195,18 @@ function($, Cordova) {
     };
 
     App.Ready = function(callback) {
-        if (Cordova.isEnabled()) {
-            $(document).ready(function() {
-                document.addEventListener('deviceready', function() {
-                    Cordova.RegisterCordovaListeners();
-                    callback();
-                }, false);
-            });
-        } else {
-            $(document).ready(callback);
-        }
+        _CheckUserInfoAvailability().done(function() {
+            if (Cordova.isEnabled()) {
+                $(document).ready(function() {
+                    document.addEventListener('deviceready', function() {
+                        Cordova.RegisterCordovaListeners();
+                        callback();
+                    }, false);
+                });
+            } else {
+                $(document).ready(callback);
+            }
+        });
     };
 
     App.GoToFolder = function(folderName) {

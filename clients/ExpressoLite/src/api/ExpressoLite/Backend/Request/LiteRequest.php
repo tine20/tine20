@@ -17,10 +17,10 @@ use ExpressoLite\TineTunnel\TineSession;
 use ExpressoLite\Backend\LiteRequestProcessor;
 use ExpressoLite\Backend\TineSessionRepository;
 use ExpressoLite\Exception\UserMismatchException;
+use ExpressoLite\Exception\DebuggerModuleNotEnabledException;
 
 abstract class LiteRequest
 {
-
     /**
      * @var array Will contain all input params to be processed by the request handler
      */
@@ -66,14 +66,28 @@ abstract class LiteRequest
     }
 
     /**
-     * Checks all constraints that can prevent this request from 
+     * Checks all constraints that can prevent this request from
      * being executed are met.
      *
      */
-    public function checkConstraints() 
+    public function checkConstraints()
     {
+        $this->checkDebuggerModule();
         $this->checkIfSessionIsLoggedIn();
         $this->checkIfSessionUserIsValid();
+    }
+
+    /**
+     * If the debugger module is not available, this function will throw an exception.
+     *
+     */
+    private function checkDebuggerModule()
+    {
+        $debuggerIsEnabled = defined('SHOW_DEBUGGER_MODULE') && SHOW_DEBUGGER_MODULE === true;
+
+        if ($this->allowAccessOnlyWithDebuggerModule() && !$debuggerIsEnabled) {
+            throw new DebuggerModuleNotEnabledException('This request can only be processed when debugger module is available');
+        }
     }
 
     /**
@@ -224,8 +238,23 @@ abstract class LiteRequest
      * @return TineSession The new TineSession
      *
      */
-    public function resetTineSession() {
+    public function resetTineSession()
+    {
         $this->tineSession = TineSessionRepository::resetTineSession();
+    }
+
+    /**
+     * Indicates if the request can only be invoked when the debugger module
+     * is made available in the conf.php file. The default value is false,
+     * but it is meant to be overriden when the request is debug related.
+     *
+     * @return boolean True if the request can only be called when the
+     *         debugger module is available, false otherwise
+     *
+     */
+    public function allowAccessOnlyWithDebuggerModule()
+    {
+        return false;
     }
 }
 

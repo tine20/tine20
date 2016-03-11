@@ -1,1 +1,35 @@
 Here are the build tools to create a package of the ExpressoLite
+
+REQUIREMENTS
+- NodeJs
+- UglifyJS
+- CleanCss
+
+INSTALLING NODEJS
+
+In order to run the build script, you need to have NodeJS installed to run the JS and CSS minifiers
+There are several ways to install NodeJs, but this seems to be the easiest way:
+
+------------
+#extracted from https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
+sudo apt-get install curl
+curl --silent --location https://deb.nodesource.com/setup_0.12 | sudo bash -
+sudo apt-get install nodejs
+------------
+
+INSTALLING UGLIFYJS
+
+Once NodeJs is installed, installing UglifyJs is simple (WARNING: do not forget the @1 at the end of the command line):
+
+------------
+sudo npm -g install uglify-js@1
+------------
+
+
+INSTALLING CLEANCSS
+
+Once NodeJs is installed, installing CleanCss is straightforward:
+------------
+sudo npm -g install clean-css
+------------
+

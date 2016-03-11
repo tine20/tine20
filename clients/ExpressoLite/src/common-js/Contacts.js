@@ -5,7 +5,7 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2013-2016 Serpro (http://www.serpro.gov.br)
  */
 
 define(['jquery',
@@ -75,8 +75,10 @@ function($, App) {
         }
 
         if (addrs.length) {
-            App.Post('searchContactsByEmail', { emails:addrs.join(',') })
-            .fail(function(resp) {
+            App.Post('searchContactsByEmail', {
+                emails: addrs.join(','),
+                getPicture: '1'
+            }).fail(function(resp) {
                 window.alert('Erro ao trazer a foto de um contato.\n' + resp.responseText);
             }).done(function(contacts) {
                 var people = _ReadContactsList();

@@ -17,9 +17,9 @@ return function(options) {
     }, options);
 
     var THIS         = this;
-    var onProgressCB = null; // (pct, xhr)
-    var onDoneCB     = null; // (file, xhr)
-    var onFailCB     = null; // (xhr, str, err)
+    var onProgressCB = $.noop; // (pct, xhr)
+    var onDoneCB     = $.noop; // (file, xhr)
+    var onFailCB     = $.noop; // (xhr, str, err)
 
     function _ToBlob(dataChunk) {
         // http://stackoverflow.com/questions/7211902/corruption-with-filereader-into-formdata
@@ -62,18 +62,16 @@ return function(options) {
                         complete: function(jqxhr, msg) {
                             curSlice += userOpts.chunkSize;
                             if (curSlice > file.size) curSlice = file.size;
-                            if (onProgressCB !== null) onProgressCB(curSlice / file.size, jqxhr);
+                            onProgressCB(curSlice / file.size, jqxhr);
 
                             if (curSlice < file.size) { // still more chunks to upload
                                 ReadNextChunk();
-                            } else if (onDoneCB !== null) {
+                            } else {
                                 onDoneCB(file, jqxhr);
                             }
                         },
                         error: function(jqxhr, txtStatus, errThrown) {
-                            if (onFailCB !== null) {
-                                onFailCB(jqxhr, txtStatus, errThrown);
-                            }
+                            onFailCB(jqxhr, txtStatus, errThrown);
                         }
                     });
                 };

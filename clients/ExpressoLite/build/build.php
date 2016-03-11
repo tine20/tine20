@@ -1,5 +1,17 @@
 <?php
 
+function command_exist($cmd) {
+    $returnVal = shell_exec("which $cmd");
+    return (empty($returnVal) ? false : true);
+}
+
+if (!command_exist('uglifyjs') || !command_exist('cleancss')) {
+    die("\n".
+        "UglifyJS and/or CleanCss are not installed\n".
+        "NodeJS, UglifyJS and CleanCSS are required to run this build script.\n".
+        "Check build/README for more details\n\n");
+}
+
 if(!isset($argv[1]) || !isset($argv[2]) || !isset($argv[3])) {
     die("\n".
         " Minifier for Expresso Lite\n".
@@ -12,9 +24,6 @@ $src = $argv[1];
 $dest = $argv[2];
 $versionName = $argv[3];
 
-//$src = '/var/www/git/Expressov3/scripts/expressolite';
-//$dest = '/var/www/teste5';
-
 function Now() {
     $tod = gettimeofday();
     return $tod['sec'] * 1000 + round($tod['usec'] / 1000); // timestamp in milliseconds
@@ -25,10 +34,10 @@ function EndsWith($str, $what) {
 
 $totalDirs = 0;
 $totalFiles = 0;
-$totalYui = 0;
+$totalMinified = 0;
 
 function ProcessDir($dir) {
-    global $src, $dest, $totalDirs, $totalFiles, $totalYui;
+    global $src, $dest, $totalDirs, $totalFiles, $totalMinified;
 
     if(!file_exists($dest.substr($dir, strlen($src)))) {
         echo 'mkdir -> '.$dest.substr($dir, strlen($src))."\n";
@@ -42,12 +51,16 @@ function ProcessDir($dir) {
             ++$totalDirs;
             ProcessDir($file);
         } else {
-            if(EndsWith($file, '.zScript build ip') || EndsWith($file, '.gz') || EndsWith($file, '.bz2')) {
+            if (EndsWith($file, '.zScript build ip') || EndsWith($file, '.gz') || EndsWith($file, '.bz2')) {
                 continue;
-            } else if( (EndsWith($file, '.js') && !EndsWith($file, '.min.js')) || EndsWith($file, '.css') ) {
-                echo 'YUI Compressor -> '.$dest.substr($file, strlen($src))."\n";
-                system('java -jar yuicompressor/yuicompressor-2.4.8.jar -o '.$dest.substr($file, strlen($src)).' '.$file);
-                ++$totalYui;
+            } else if (EndsWith($file, '.js') && !EndsWith($file, '.min.js')) {
+                echo 'UglifyJS -> '.$dest.substr($file, strlen($src))."\n";
+                system('uglifyjs -o '.$dest.substr($file, strlen($src)).' '.$file);
+                ++$totalMinified;
+            } else if (EndsWith($file, '.css')) {
+                echo 'CleanCSS -> '.$dest.substr($file, strlen($src))."\n";
+                system('cleancss --skip-rebase -o '.$dest.substr($file, strlen($src)).' '.$file);
+                ++$totalMinified;
             } else {
                 copy($file, $dest.substr($file, strlen($src)));
             }
@@ -76,5 +89,5 @@ if(!EndsWith($dest, '/')) $dest .= '/';
 ProcessDir($src);
 ReplaceVersionName($dest . 'version.php');
 $t = (Now() - $t0) / 1000;
-echo "Total: $totalFiles files ($totalYui minified) within $totalDirs directories in $t seconds.\n";
+echo "Total: $totalFiles files ($totalMinified minified) within $totalDirs directories in $t seconds.\n";
 

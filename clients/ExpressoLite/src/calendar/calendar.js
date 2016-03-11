@@ -5,7 +5,7 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
 require.config({
@@ -17,18 +17,28 @@ require(['jquery',
     'common-js/App',
     'common-js/UrlStack',
     'common-js/Layout',
+    'common-js/SimpleMenu',
+    'common-js/Contacts',
     'calendar/DateCalc',
     'calendar/Events',
     'calendar/WidgetMonth',
     'calendar/WidgetWeek',
-    'calendar/WidgetEvents'
+    'calendar/WidgetEvents',
+    'calendar/WidgetEditEvent'
 ],
-function($, App, UrlStack, Layout, DateCalc, Events, WidgetMonth, WidgetWeek, WidgetEvents) {
+function($, App, UrlStack, Layout, SimpleMenu, Contacts, DateCalc, Events,
+    WidgetMonth, WidgetWeek, WidgetEvents, WidgetEditEvent) {
 window.Cache = {
     events: null, // Events object
+    chooseViewMenu: null,
+    chooseCalendarMenu: null,
     viewMonth: null, // WidgetMonth object
     viewWeek: null, // WidgetWeek object
-    viewEvents: null // WidgetEvents object
+    viewEvents: null, // WidgetEvents object
+    wndEditEvent: null, // WidgetEditEvent object, modeless popup
+    curView: '', // 'month'|'week'
+    curCalendar: null, // calendar object
+    curDate: DateCalc.today() // current date being displayed
 };
 
 App.Ready(function() {
@@ -40,42 +50,113 @@ App.Ready(function() {
         $right: $('#rightBody')
     });
     Cache.events = new Events();
+    Cache.chooseViewMenu = new SimpleMenu({ $parentContainer: $('#chooseViewMenu') });
+    Cache.chooseCalendarMenu = new SimpleMenu({ $parentContainer: $('#chooseCalendarMenu') });
     Cache.viewMonth = new WidgetMonth({ events:Cache.events, $elem: $('#middleBody') });
     Cache.viewWeek = new WidgetWeek({ events:Cache.events, $elem: $('#middleBody') });
     Cache.viewEvents = new WidgetEvents({ events:Cache.events, $elem: $('#rightBody') });
+    Cache.wndEditEvent = new WidgetEditEvent({ });
 
     // Some initial work.
     UrlStack.keepClean();
+    Contacts.loadPersonal();
 
     // Load templates of widgets.
     $.when(
         Cache.layout.load(),
         Cache.viewMonth.load(),
         Cache.viewWeek.load(),
-        Cache.viewEvents.load()
+        Cache.viewEvents.load(),
+        Cache.wndEditEvent.load()
     ).done(function() {
+        $('#btnRefresh,#btnCreateEvent').css('display', 'none');
         Cache.layout.setLeftMenuVisibleOnPhone(true).done(function() {
-            $('#renderMonth').trigger('click'); // full month is selected by default
+            LoadUserCalendars().done(function() {
+                $('#btnRefresh,#btnCreateEvent').css('display', '');
+            });
         });
 
         // Setup events.
         Cache.layout
             .onKeepAlive(function() { })
-            .onHideRightPanel(function() { })
+            .onHideRightPanel(function() { Cache.viewMonth.clearDaySelected(); })
             .onSearch(function() { }); // when user performs a search
+        Cache.chooseViewMenu
+            .addOption('Ver mês', 'month', function() { SetCalendarView('month'); })
+            .addOption('Ver semana', 'week', function() { SetCalendarView('week'); });
         Cache.viewMonth
             .onMonthChanged(UpdateCurrentMonthName)
             .onEventClicked(EventClicked);
         Cache.viewWeek
             .onWeekChanged(UpdateCurrentWeekName)
             .onEventClicked(EventClicked);
+        Cache.wndEditEvent
+            .onEventSaved(UpdateAfterSaving);
         $('#btnRefresh').on('click', RefreshEvents);
-        $('#renderOptions li').on('click', ChangeRenderOption);
+        $('#btnCreateEvent').on('click', CreateEvent);
     });
 });
 
+function LoadUserCalendars() {
+    var defer = $.Deferred();
+    $('#chooseViewMenu,#chooseCalendarMenu').hide();
+    App.Post('getCalendars')
+        .fail(function(resp) {
+            window.alert('Erro ao carregar calendários pessoais.\n' +
+                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            defer.reject();
+        }).done(function(cals) {
+            $('#loadCalendars').hide();
+            $('#chooseViewMenu,#chooseCalendarMenu').show();
+            $.each(cals, function(idx, cal) {
+                Cache.chooseCalendarMenu.addOption(cal.name, cal.id, function() {
+                    Cache.curCalendar = cal;
+                    (Cache.curView === 'month') ? RenderMonth() : RenderWeek();
+                });
+            });
+            Cache.chooseViewMenu.selectOption('month');
+            defer.resolve();
+        });
+    return defer.promise();
+}
+
+function SetCalendarView(view) {
+    Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
+        var isFirst = (Cache.curView === '');
+        Cache.curView = view;
+        if (isFirst) {
+            Cache.chooseCalendarMenu.selectFirstOption();
+        } else {
+            (view === 'month') ? RenderMonth() : RenderWeek();
+        }
+    });
+}
+
+function RenderMonth() {
+    Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
+        Cache.viewWeek.hide();
+        Cache.viewMonth.show(Cache.curCalendar.id, Cache.curDate).done(function() {
+            UpdateCurrentMonthName();
+        });
+    });
+}
+
+function RenderWeek() {
+    Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
+        var curMonth = DateCalc.firstOfMonth(Cache.curDate);
+        if (DateCalc.isSameMonth(curMonth, DateCalc.today())) {
+            curMonth = DateCalc.today();
+        }
+        Cache.viewMonth.hide();
+        Cache.viewWeek.show(Cache.curCalendar.id, curMonth).done(function() {
+            UpdateCurrentWeekName();
+        });
+    });
+}
+
 function UpdateCurrentMonthName() {
-    var curMonth = DateCalc.firstOfMonth(Cache.viewMonth.getCurDate());
+    Cache.curDate = Cache.viewMonth.getCurDate();
+    var curMonth = DateCalc.firstOfMonth(Cache.curDate);
     Cache.layout.setTitle(
         DateCalc.monthName(curMonth.getMonth()) + ', ' +
         curMonth.getFullYear()
@@ -83,7 +164,8 @@ function UpdateCurrentMonthName() {
 }
 
 function UpdateCurrentWeekName() {
-    var curWeek = DateCalc.sundayOfWeek(Cache.viewWeek.getCurDate());
+    Cache.curDate = Cache.viewWeek.getCurDate();
+    var curWeek = DateCalc.sundayOfWeek(Cache.curDate);
     var saturday = DateCalc.saturdayOfWeek(curWeek);
     if (curWeek.getMonth() === saturday.getMonth()) {
         Cache.layout.setTitle(
@@ -104,54 +186,40 @@ function UpdateCurrentWeekName() {
 }
 
 function RefreshEvents() {
-    var $curLi = $('#renderOptions .renderOptionCurrent');
-
     Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
-        $('#btnRefresh').hide();
+        $('#btnRefresh,#btnCreateEvent').hide();
         $('#txtRefresh').show();
-
-        if ($curLi.is('#renderMonth')) {
-            var day1 = DateCalc.firstOfMonth(Cache.viewMonth.getCurDate());
-            Cache.events.clearMonthCache(day1);
-            Cache.viewMonth.show(day1).done(finishedRefreshing);
-        } else if ($curLi.is('#renderWeek')) {
-            var sunday = DateCalc.sundayOfWeek(Cache.viewWeek.getCurDate());
-            Cache.events.clearWeekCache(sunday);
-            Cache.viewWeek.show(sunday).done(finishedRefreshing);
+        var curSel = Cache.chooseViewMenu.getSelectedIdentifier();
+        if (curSel === 'month') {
+            var day1 = DateCalc.firstOfMonth(Cache.curDate);
+            Cache.events.clearMonthCache(Cache.curCalendar.id, day1);
+            Cache.viewMonth.show(Cache.curCalendar.id, day1).done(finishedRefreshing);
+        } else if (curSel === 'week') {
+            var sunday = DateCalc.sundayOfWeek(Cache.curDate);
+            Cache.events.clearWeekCache(Cache.curCalendar.id, sunday);
+            Cache.viewWeek.show(Cache.curCalendar.id, sunday).done(finishedRefreshing);
         }
     });
 
     function finishedRefreshing() {
-        $('#btnRefresh').show();
+        $('#btnRefresh,#btnCreateEvent').show();
         $('#txtRefresh').hide();
     }
 }
 
-function ChangeRenderOption() {
-    var $li = $(this);
-    $('#renderOptions li').removeClass('renderOptionCurrent'); // remove from all LI
-    $li.addClass('renderOptionCurrent');
+function CreateEvent() {
+    $('#btnCreateEvent').blur();
     Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
-        if ($li.attr('id') === 'renderMonth') {
-            Cache.viewWeek.hide();
-            Cache.viewMonth.show(Cache.viewWeek.getCurDate()).done(function() {
-                UpdateCurrentMonthName();
-            });
-        } else if ($li.attr('id') === 'renderWeek') {
-            var curMonth = DateCalc.firstOfMonth(Cache.viewMonth.getCurDate());
-            if (DateCalc.isSameMonth(curMonth, DateCalc.today())) {
-                curMonth = DateCalc.today();
-            }
-            Cache.viewMonth.hide();
-            Cache.viewWeek.show(curMonth).done(function() {
-                UpdateCurrentWeekName();
-            });
-        }
+        Cache.wndEditEvent.show(Cache.curCalendar);
     });
 }
 
-function EventClicked(eventsOfDay) {
+function EventClicked(eventsOfDay, eventClicked) {
     Cache.layout.setRightPanelVisible(true);
-    Cache.viewEvents.render(eventsOfDay);
+    Cache.viewEvents.render(eventsOfDay, eventClicked);
+}
+
+function UpdateAfterSaving() {
+    $('#btnRefresh').trigger('click');
 }
 });

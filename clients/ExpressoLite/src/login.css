@@ -39,8 +39,8 @@
 }
 
 #frmLogin { margin:18px 20px 60px 20px; padding-top:30px; border-top:1px solid #E8E8E8; }
-input[type=text],input[type=password] { height:2.2em; margin:6px; width:240px; }
-input[type=text]:focus, input[type=password]:focus { box-shadow:0 0 6px #6EA2DE; border:1px solid #6EA2DE; }
+input[type=email],input[type=password] { height:2.2em; margin:6px; width:240px; }
+input[type=email]:focus, input[type=password]:focus { box-shadow:0 0 6px #6EA2DE; border:1px solid #6EA2DE; }
 input[type=submit] { margin:8px 0; }
 .throbber { display:none; margin:6px 0; }
 .throbber > span { font-style:italic; color:#666; -moz-user-select:none; -webkit-user-select:none; }
