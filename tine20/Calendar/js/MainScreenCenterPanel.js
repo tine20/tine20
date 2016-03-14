@@ -1212,13 +1212,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             return;
         }
         
-        var dtend   = record.get('dtend');
-        var dtstart = record.get('dtstart');
-        var eventLength = dtend - dtstart;
+        var dtend   = record.get('dtend'),
+            dtstart = record.get('dtstart'),
+            eventLength = dtend - dtstart,
+            store = this.getStore();
+
+        record.beginEdit();
 
         if (isCopy != true) {
-            // remove before update
-            var store = this.getStore();
+            // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
                 oldRecord.ui.remove();
@@ -1252,10 +1254,25 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
         }
 
-        // @TODO only set day in monthview!
-        // @TODO respect all day area in daysView
-        record.set('dtstart', datetime);
-        record.set('dtend', new Date(datetime.getTime() + eventLength));
+
+        if (datetime.is_all_day_event) {
+            record.set('dtstart', datetime);
+            record.set('dtend', datetime.clone().add(Date.DAY, 1).add(Date.SECOND, -1));
+            record.set('is_all_day_event', true);
+        } else if (datetime.date_only) {
+            var adoptedDtStart = datetime.clone();
+            adoptedDtStart.setHours(dtstart.getHours());
+            adoptedDtStart.setMinutes(dtstart.getMinutes());
+            adoptedDtStart.setSeconds(dtstart.getSeconds());
+
+            record.set('dtstart', adoptedDtStart);
+            record.set('dtend', new Date(adoptedDtStart.getTime() + eventLength));
+        } else {
+            record.set('dtstart', datetime);
+            record.set('dtend', new Date(datetime.getTime() + eventLength));
+        }
+
+        record.endEdit();
 
         if (isCopy == true) {
             record.isCopy = true;
