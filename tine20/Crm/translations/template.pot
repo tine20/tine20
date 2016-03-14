@@ -595,7 +595,7 @@ msgstr ""
 
 #: Controller/Lead.php:209
 #, python-format
-msgid "%s changed from %s to %s."
+msgid "'%s' changed from '%s' to '%s'."
 msgstr ""
 
 #: Controller/Lead.php:215

@@ -610,8 +610,8 @@ msgstr "Geänderte Felder:"
 
 #: Controller/Lead.php:209
 #, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s wurde von %s auf %s geändert."
+msgid "'%s' changed from '%s' to '%s'."
+msgstr "'%s' wurde von '%s' auf '%s' geändert."
 
 #: Controller/Lead.php:215
 #, python-format

@@ -33,6 +33,13 @@
 <?php if (count($this->updates) > 0): ?>
 <?php echo $this->lang_updatedFields . "\n" ?>
 <?php foreach ($this->updates as $update): ?>
-<?php echo '  ' . sprintf($this->lang_updatedFieldMsg, $update->modified_attribute, $update->old_value, $update->new_value) . "\n" ?>
+<?php echo '  ' . sprintf($this->lang_updatedFieldMsg, $update['modified_attribute'], $update['old_value'], $update['new_value']) . "\n" ?>
+<?php endforeach; ?>
+<?php endif;?>
+
+<?php if (count($this->tags) > 0): ?>
+<?php echo $this->lang_tags . "\n" ?>
+<?php foreach ($this->tags as $tag): ?>
+<?php echo $tag->name . "\n" ?>
 <?php endforeach; ?>
 <?php endif;?>
