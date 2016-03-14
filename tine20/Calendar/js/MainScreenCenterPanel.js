@@ -1200,8 +1200,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Date} datetime
      */
     onPasteEvent: function(datetime) {
-        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
-        var isCopy = record.isCopy;
+        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event'),
+            isCopy = record.isCopy,
+            sourceView = record.view,
+            sourceRecord = record,
+            sourceViewAttendee = sourceView.ownerCt.attendee,
+            destinationView = this.getCalendarPanel(this.activeView).getView(),
+            destinationViewAttendee = destinationView.ownerCt.attendee;
 
         if (! record) {
             return;
@@ -1230,12 +1235,25 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }, this);
         }
 
-        // Allow to change attendee if in split view
-        var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
-        if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-            record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
+        // @TODO move to common function with daysView::notifyDrop parts
+        // change attendee in split view
+        if (sourceViewAttendee || destinationViewAttendee) {
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(sourceRecord.get('attendee')),
+                sourceAttendee = sourceViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, sourceViewAttendee) : false,
+                destinationAttendee = destinationViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, destinationViewAttendee) : false;
+
+            if (destinationViewAttendee && !destinationAttendee) {
+                destinationAttendee = new Tine.Calendar.Model.Attender(destinationViewAttendee.data);
+
+                attendeeStore.remove(sourceAttendee);
+                attendeeStore.add(destinationAttendee);
+
+                Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, record);
+            }
         }
 
+        // @TODO only set day in monthview!
+        // @TODO respect all day area in daysView
         record.set('dtstart', datetime);
         record.set('dtend', new Date(datetime.getTime() + eventLength));
 

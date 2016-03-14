@@ -391,12 +391,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     if (this.view.ownerCt.attendee) {
                         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee')),
                             sourceAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, event.view.ownerCt.attendee),
+                            destinationAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, this.view.ownerCt.attendee);
+
+                        if (! destinationAttendee) {
                             destinationAttendee = new Tine.Calendar.Model.Attender(this.view.ownerCt.attendee.data);
 
-                        attendeeStore.remove(sourceAttendee);
-                        attendeeStore.add(destinationAttendee);
+                            attendeeStore.remove(sourceAttendee);
+                            attendeeStore.add(destinationAttendee);
 
-                        Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, event);
+                            Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, event);
+                        }
                     }
 
                     event.endEdit();
