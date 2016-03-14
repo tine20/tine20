@@ -37,7 +37,7 @@
         "psr-0": {
             "": ["", "library"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",
-            "Zend_": ["", "library/zf1ext", "library"],
+            "Zend_": [""],
             "qCal": "library/qCal/lib"
         },
         "classmap": [
@@ -45,7 +45,7 @@
         ]
     },
     "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
-    "include-path": ["", "library/zf1ext", "library"],
+    "include-path": [""],
     "config": {
         "secure-http": false
     }
