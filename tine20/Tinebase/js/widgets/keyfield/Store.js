@@ -41,12 +41,16 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
                     && config.keyFieldConfig.definition.options
                     && config.keyFieldConfig.definition.options.recordModel ?
                         config.keyFieldConfig.definition.options.recordModel :
-                        "Tinebase_Config_KeyFieldRecord",
-        modelParts = modelName.split('_Model_'),
-        recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[1]] ? Tine[modelParts[0]]['Model'][modelParts[1]] : null;
-    
-    config.fields = recordClass ? recordClass : ['id', 'value', 'icon', 'system', 'i18nValue'];
-    
+                        "Tinebase_Model_KeyFieldRecord",
+        recordClass = Tine.Tinebase.data.RecordMgr.get(modelName) || Tine.Tinebase.Model.KeyFieldRecord,
+        fields = [].concat(recordClass.getFieldDefinitions());
+
+    // add 'virtual' field
+    fields.push({name: 'i18nValue'});
+    this.recordClass = Ext.data.Record.create(fields);
+
+    config.fields = this.recordClass;
+
     Tine.Tinebase.widgets.keyfield.Store.superclass.constructor.call(this, config);
 };
 

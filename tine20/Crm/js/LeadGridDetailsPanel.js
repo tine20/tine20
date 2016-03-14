@@ -94,24 +94,7 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         
         return a.join("\n");
     },
-    
-    /**
-     * lead state renderer
-     * 
-     * @param   {Number} id
-     * @param   {Store} store
-     * @return  {String} label
-     * @return  {String} label
-     */
-    sourceTypeRenderer: function(id, store, definitionsLabel) {
-        record = store.getById(id);
-        if (record) {
-            return record.data[definitionsLabel];
-        } else {
-            return this.app.i18n._('undefined');
-        }
-    },
-    
+
     /**
      * inits this component
      */
@@ -237,12 +220,12 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 xtype: 'ux.displayfield',
                                 name: 'leadtype_id',
                                 fieldLabel: this.app.i18n._('Leadtype'),
-                                renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadType.getStore(), 'leadtype'], true)
+                                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'leadsource_id',
                                 fieldLabel: this.app.i18n._('Leadsource'),
-                                renderer: this.sourceTypeRenderer.createDelegate(this, [Tine.Crm.LeadSource.getStore(), 'leadsource'], true)
+                                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')
                             }]
                         }, {
                             flex: 1,

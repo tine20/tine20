@@ -52,8 +52,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
  */ 
 Tine.Projects.Model.Project.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Projects');
-    var defaultsContainer = Tine.Projects.registry.get('defaultContainer');
-    
+
     return {
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         status: 'IN-PROCESS'

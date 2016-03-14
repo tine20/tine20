@@ -57,16 +57,23 @@ class Crm_Export_Helper
         if (is_null($_key)) {
             throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
         }
-        
+
         switch($_param['type']) {
             case 'status':
+                // TODO what about status? there is something missing here ... the code should be generalized for status/source/type
             case 'source':
+                $source = Crm_Config::getInstance()->get(Crm_Config::LEAD_SOURCES)->getTranslatedValue($_record->leadsource_id);
+                if (isset($source)) {
+                    $value = $source;
+                } else {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadsource id not found:' . $_record->leadsource_id);
+                    $value = '';
+                }
+                break;
             case 'type':
-                $leadIdType = $_param['type'] == 'status' ? 'leadstate' : 'lead' . $_param['type'];
-                $settings = Crm_Controller::getInstance()->getConfigSettings();
-                $source = $settings->getOptionById($_record->{$leadIdType . '_id'}, $leadIdType . 's');
-                if (isset($source[$leadIdType])) {
-                    $value = $source[$leadIdType];
+                $type = Crm_Config::getInstance()->get(Crm_Config::LEAD_TYPES)->getTranslatedValue($_record->leadtype_id);
+                if (isset($type['leadtype'])) {
+                    $value = $type;
                 } else {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . $leadIdType . ' id not found:' . $_record->{$leadIdType . '_id'});
                     $value = '';

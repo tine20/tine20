@@ -111,31 +111,16 @@ Tine.Crm.leadBackend = new Tine.Tinebase.data.RecordProxy({
 });
 
 /**
- * @namespace Tine.Crm
- * @class Tine.Crm.settingBackend
- * @extends Tine.Tinebase.data.RecordProxy
- * 
- * Settings Backend
- * 
- * TODO generalize this
- */ 
-Tine.Crm.settingsBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Crm',
-    modelName: 'Settings',
-    recordClass: Tine.Crm.Model.Settings
-});
-
-/**
  * returns ids of ended lead states
  */
 Tine.Crm.getEndedLeadStateIds = function() {
-    var leadstates = Tine.Crm.registry.get('leadstates')['results'];
+    var leadstates = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Crm', 'leadstates');
     var ids = [];
-    for (var index = 0; index < leadstates.length; index++) {
-        if (leadstates[index].endslead == 1) {
-            ids.push(leadstates[index].id);
+    leadstates.each(function(leadstate) {
+        if (leadstate.json.endslead == 1) {
+            ids.push(leadstate.id);
         }
-    }
+    }, this);
     
     return ids;
 }

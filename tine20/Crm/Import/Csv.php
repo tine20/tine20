@@ -79,7 +79,6 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
      * @return array
      *
      * TODO think about moving this to import definition
-     * TODO simplify crm/lead config handling for leadstate/source/type
      */
     protected function _doConversions($_data)
     {
@@ -89,36 +88,19 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             . ' ' . print_r($data, true));
 
         // adjust lead_name/leadstate/source/types if missing
-        $configSettings = Crm_Controller::getInstance()->getConfigSettings()->toArray();
-
-        $requiredFields = array(
-            'leadstate_id' => 'leadstates',
-            'leadtype_id' => 'leadtypes',
-            'leadsource_id' => 'leadsources'
+        $keyFields = array(
+            Crm_Config::LEAD_STATES  => 'leadstate_id',
+            Crm_Config::LEAD_TYPES   => 'leadtype_id',
+            Crm_Config::LEAD_SOURCES => 'leadsource_id',
         );
-        foreach ($requiredFields as $requiredField => $configKey) {
-            if (! empty($data[$requiredField])) {
-                continue;
-            }
 
-            switch ($requiredField) {
-                default:
-                    // get default leadstate/source/type OR try to find it by name if given
-                    if (! isset($configSettings[$configKey])) {
-                        continue;
-                    }
-                    $settingField = preg_replace('/s$/', '', $configKey);
+        foreach ($keyFields as $keyFieldName => $fieldName) {
+            $keyField = Crm_Config::getInstance()->get($keyFieldName);
 
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' config settings' . print_r($configSettings[$configKey], true));
-
-                    // init with default
-                    $data[$requiredField] = isset($configSettings[$configKey][0]['id']) ? $configSettings[$configKey][0]['id'] : 1;
-                    foreach ($configSettings[$configKey] as $setting) {
-                        if (isset($setting[$settingField]) && isset($_data[$settingField]) && strtolower($setting[$settingField]) === strtolower($_data[$settingField])) {
-                            $data[$requiredField] = $setting['id'];
-                        }
-                    }
+            if (isset($data[$fieldName])) {
+                $data[$fieldName] = $keyField->getIdByTranslatedValue($data[$fieldName]);
+            } else {
+                $data[$fieldName] = $keyField->getKeyfieldDefault()->getId();
             }
         }
 

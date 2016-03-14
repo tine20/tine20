@@ -156,6 +156,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      */
     public function testOverwriteAttachment()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
+        }
+
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();
@@ -192,6 +196,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     
     public function testUpdateAttachment()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
+        }
+
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();
@@ -227,6 +235,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     
     public function testRemoveAttachment()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
+        }
+
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();

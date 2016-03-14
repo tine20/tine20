@@ -513,13 +513,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _testSimpleRecordApi($modelName)
     {
         $uit = $this->_getUit();
-        if (! $uit instanceof Tinebase_Frontend_Json_Abstract) {
+        if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
             throw new Exception('only allowed for json frontend tests suites');
         }
 
         $newRecord = array(
-            'name'          => 'my test ' . $modelName,
-            'description'   => 'my test description'
+            'name' => 'my test ' . $modelName,
+            'description' => 'my test description'
         );
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), $newRecord);
 
@@ -540,5 +540,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {
             $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
         }
+    }
+
+    /**
+     * returns true if main db adapter is postgresql
+     *
+     * @return bool
+     */
+    protected function _dbIsPgsql()
+    {
+        $db = Tinebase_Core::getDb();
+        return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
     }
 }
