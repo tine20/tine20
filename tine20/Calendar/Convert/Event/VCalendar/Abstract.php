@@ -788,8 +788,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'SUMMARY':
                     $key = strtolower($property->name);
                     $value = $property->getValue();
+                    if (in_array($key, array('location', 'summary')) && extension_loaded('mbstring')) {
+                        $value = mb_substr($value, 0, 1024, 'UTF-8');
+                    }
+
                     $event->$key = $value;
-                    
                     break;
                     
                 case 'ORGANIZER':

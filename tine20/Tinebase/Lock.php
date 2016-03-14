@@ -41,8 +41,8 @@ class Tinebase_Lock
 
         } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             $id = sha1($id, true);
-            $intId = unpack('q', $id);
-            if (    ($stmt = $db->query('SELECT pg_try_advisory_lock(' . $intId . ')')) &&
+            $intId = unpack('N', $id);
+            if (    ($stmt = $db->query('SELECT pg_try_advisory_lock(' . current($intId) . ')')) &&
                     $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                     ($row = $stmt->fetch()) &&
                     $row[0] == 1) {
@@ -76,8 +76,8 @@ class Tinebase_Lock
 
         } elseif($db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
             $id = sha1($id, true);
-            $intId = unpack('q', $id);
-            if (    ($stmt = $db->query('SELECT pg_advisory_unlock(' . $intId . ')')) &&
+            $intId = unpack('N', $id);
+            if (    ($stmt = $db->query('SELECT pg_advisory_unlock(' . current($intId) . ')')) &&
                 $stmt->setFetchMode(Zend_Db::FETCH_NUM) &&
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
