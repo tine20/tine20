@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -16,19 +16,22 @@
 class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 {
     protected $_testUser = NULL;
-    
+
     /**
-     * Runs the test methods of this class.
+     * Sets up the fixture.
+     * This method is called before a test is executed.
      *
-     * @access public
-     * @static
+     * @access protected
      */
-    public static function main()
+    protected function setUp()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Invoice Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
+        }
+
+        parent::setUp();
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see TestCase::tearDown()

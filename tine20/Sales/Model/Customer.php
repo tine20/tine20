@@ -57,7 +57,9 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
             'number' => array(
                 'label'       => 'Customer Number', //_('Customer Number')
                 'group'       => 'core',
-                'queryFilter' => TRUE,
+                // TODO number can't be part of query filter because it is an integer
+                // for mysql it is ok, but for pgsql we need a typecast...
+                //'queryFilter' => TRUE,
                 'type'        => 'integer'
             ),
             'name' => array(
