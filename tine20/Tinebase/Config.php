@@ -475,8 +475,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ),
             ),
             'default'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH  => false,
-                self::FEATURE_CONTAINER_CUSTOM_SORT => false,
+                self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
+                self::FEATURE_CONTAINER_CUSTOM_SORT => true,
             ),
         ),
         self::CRONUSERID => array(
