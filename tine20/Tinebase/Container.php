@@ -1362,9 +1362,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $classCacheId = $accountId . $containerId . $container->seq . $_grantModel;
         
         try {
-            return $this->loadFromClassCache(__FUNCTION__, $classCacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            $grants = $this->loadFromClassCache(__FUNCTION__, $classCacheId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+            if ($grants instanceof Tinebase_Model_Grants) {
+                return $grants;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                    ' Invalid data in cache ... fetching fresh data from DB');
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            
+            // not found in cache
         }
         
         $select = $this->_getAclSelectByContainerId($containerId)
