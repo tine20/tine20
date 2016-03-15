@@ -234,6 +234,10 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     protected function _encrypt($_cache)
     {
+        if (! extension_loaded('mcrypt')) {
+            throw new Tinebase_Exception_SystemGeneric('mcrypt extension required');
+        }
+
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
         mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
         
@@ -255,6 +259,10 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      */
     protected function _decrypt($_cache)
     {
+        if (! extension_loaded('mcrypt')) {
+            throw new Tinebase_Exception_SystemGeneric('mcrypt extension required');
+        }
+
         $encryptedData = base64_decode($_cache->cache);
         
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
