@@ -1201,20 +1201,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Date} datetime
      */
     onPasteEvent: function(datetime) {
-        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
-        var isCopy = record.isCopy;
+        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event'),
+            isCopy = record.isCopy,
+            sourceView = record.view,
+            sourceRecord = record,
+            sourceViewAttendee = sourceView.ownerCt.attendee,
+            destinationView = this.getCalendarPanel(this.activeView).getView(),
+            destinationViewAttendee = destinationView.ownerCt.attendee;
 
         if (! record) {
             return;
         }
         
-        var dtend   = record.get('dtend');
-        var dtstart = record.get('dtstart');
-        var eventLength = dtend - dtstart;
+        var dtend   = record.get('dtend'),
+            dtstart = record.get('dtstart'),
+            eventLength = dtend - dtstart,
+            store = this.getStore();
+
+        record.beginEdit();
 
         if (isCopy != true) {
-            // remove before update
-            var store = this.getStore();
+            // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
                 oldRecord.ui.remove();
@@ -1231,14 +1238,42 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }, this);
         }
 
-        // Allow to change attendee if in split view
-        var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
-        if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-            record.data.attendee[0] = Tine.Calendar.Model.Event.getDefaultData().attendee[0];
+        // @TODO move to common function with daysView::notifyDrop parts
+        // change attendee in split view
+        if (sourceViewAttendee || destinationViewAttendee) {
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(sourceRecord.get('attendee')),
+                sourceAttendee = sourceViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, sourceViewAttendee) : false,
+                destinationAttendee = destinationViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, destinationViewAttendee) : false;
+
+            if (destinationViewAttendee && !destinationAttendee) {
+                destinationAttendee = new Tine.Calendar.Model.Attender(destinationViewAttendee.data);
+
+                attendeeStore.remove(sourceAttendee);
+                attendeeStore.add(destinationAttendee);
+
+                Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, record);
+            }
         }
 
-        record.set('dtstart', datetime);
-        record.set('dtend', new Date(datetime.getTime() + eventLength));
+
+        if (datetime.is_all_day_event) {
+            record.set('dtstart', datetime);
+            record.set('dtend', datetime.clone().add(Date.DAY, 1).add(Date.SECOND, -1));
+            record.set('is_all_day_event', true);
+        } else if (datetime.date_only) {
+            var adoptedDtStart = datetime.clone();
+            adoptedDtStart.setHours(dtstart.getHours());
+            adoptedDtStart.setMinutes(dtstart.getMinutes());
+            adoptedDtStart.setSeconds(dtstart.getSeconds());
+
+            record.set('dtstart', adoptedDtStart);
+            record.set('dtend', new Date(adoptedDtStart.getTime() + eventLength));
+        } else {
+            record.set('dtstart', datetime);
+            record.set('dtend', new Date(datetime.getTime() + eventLength));
+        }
+
+        record.endEdit();
 
         if (isCopy == true) {
             record.isCopy = true;
