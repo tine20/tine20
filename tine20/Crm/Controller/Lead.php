@@ -171,6 +171,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->leadType = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
         $view->leadSource = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
+        $view->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_lead);
+        $view->updates = $this->_getNotificationUpdates($_lead, $_oldLead);
         
         if (isset($_lead->relations)) {
             $customer = $_lead->relations->filter('type', 'CUSTOMER')->getFirstRecord();
@@ -212,7 +214,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->lang_folder = $translate->_('Folder');
         $view->lang_updatedBy = $translate->_('Updated by');
         $view->lang_updatedFields = $translate->_('Updated Fields:');
-        $view->lang_updatedFieldMsg = $translate->_('%s changed from %s to %s.');
+        $view->lang_updatedFieldMsg = $translate->_("'%s' changed from '%s' to '%s'.");
+        $view->lang_tags = $translate->_('Tags');
         
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
@@ -287,6 +290,36 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         }
         
         return $recipients;
+    }
+
+    /**
+     * get udpate diff for notification
+     *
+     * @param $lead
+     * @param $oldLead
+     * @return array
+     *
+     * TODO generalize
+     * TODO translate field names (modelconfig?)
+     */
+    protected function _getNotificationUpdates($lead, $oldLead)
+    {
+        if (! $oldLead) {
+            return array();
+        }
+
+        $result = array();
+        foreach ($lead->diff($oldLead, array('seq', 'notes', 'tags', 'relations', 'last_modified_time', 'last_modified_by'))->diff
+             as $key => $value)
+        {
+            $result[] = array(
+                'modified_attribute' => $key,
+                'old_value' => $value,
+                'new_value' => $lead->{$key}
+            );
+        }
+
+        return $result;
     }
     
     /**
