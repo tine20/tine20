@@ -18,9 +18,11 @@ Tine.Felamimail.PGPDetailsPanel = Ext.extend(Ext.Component, {
                 me.detailsPanel.getLoadMask().hide();
             });
         })['catch'](function() {
-            var msg = me.app.i18n._('To decrypt this message please install {0} with API support enabled');
+            var app = Tine.Tinebase.appMgr.get('Felamimail'),
+                msg = app.i18n._('To decrypt this message please install {0} with API support enabled');
+
             msg = String.format(msg, '<a href="https://www.mailvelope.com" target="_blank">Mailvelope</a>');
-            Ext.Msg.alert(me.app.i18n._('PGP encrypted Message'), msg);
+            Ext.Msg.alert(app.i18n._('PGP encrypted Message'), msg);
 
             me.detailsPanel.getLoadMask().hide();
         });

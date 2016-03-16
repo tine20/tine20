@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -398,12 +398,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * set small contact image
      *
      * @param $newPhotoBlob
+     * @param $maxSize
      */
-    public function setSmallContactImage($newPhotoBlob)
+    public function setSmallContactImage($newPhotoBlob, $maxSize = self::SMALL_PHOTO_SIZE)
     {
         if ($this->getId()) {
             try {
-                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId())->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId())->getBlob('image/jpeg', $maxSize);
             } catch (Exception $e) {
                 // no current photo
             }
@@ -422,14 +423,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     /**
      * return small contact image for sync
      *
+     * @param $maxSize
+     *
      * @return string
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function getSmallContactImage()
+    public function getSmallContactImage($maxSize = self::SMALL_PHOTO_SIZE)
     {
         $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId());
-        return $image->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+        return $image->getBlob('image/jpeg', $maxSize);
     }
 
     /**

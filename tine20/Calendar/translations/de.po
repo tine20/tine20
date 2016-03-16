@@ -1706,3 +1706,9 @@ msgstr "Außer"
 
 msgid "during events in the calendars"
 msgstr "während Terminen in den Kalendern"
+
+msgid "Visible Time"
+msgstr "Angezeigte Zeit"
+
+msgid "Time to be displayed at once"
+msgstr "Wie viele Zeit auf einmal angezeigt werden sollen"

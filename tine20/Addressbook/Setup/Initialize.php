@@ -205,7 +205,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
                     'adminPassword' => $loginConfig->password,
                 );
             } else {
-                throw Setup_Exception('Inital admin username and password are required');
+                throw new Setup_Exception('Inital admin username and password are required');
             }
         }
         

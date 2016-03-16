@@ -251,11 +251,12 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         var target = e.getTarget('td.cal-monthview-daycell', 3);
         
         if (target) {
-            var dateIdx = this.dayCells.indexOf(target);
-            var date = this.dateMesh[this.dayCells.indexOf(target)];
+            var dateIdx = this.dayCells.indexOf(target),
+                date = this.dateMesh[this.dayCells.indexOf(target)];
+
+            // date has no time part
+            date.date_only = true;
         
-            // set some default time:
-            date.add(Date.HOUR, 10);
             return date;
         }
     },

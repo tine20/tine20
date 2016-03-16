@@ -70,7 +70,15 @@ Tine.Calendar.DaysView = function(config){
          * 
          * @param {Tine.Calendar.Model.Event} event
          */
-        'updateEvent'
+        'updateEvent',
+        /**
+         * @event onBeforeAllDayScrollerResize
+         * fired when an the allDayArea gets resized
+         *
+         * @param {Tine.Calendar.Model.DaysView} this
+         * @param {number} heigt
+         */
+        'onBeforeAllDayScrollerResize'
     );
 };
 
@@ -127,37 +135,45 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     timeGranularity: 30,
     /**
      * @cfg {Number} timeIncrement
-     * time increment for range adds/edits
+     * time increment for range adds/edits (minutes)
      */
     timeIncrement: 15,
     /**
-     * @cfg {Number} granularityUnitHeights
-     * heights in px of a granularity unit
+     * @cfg {Number} timeVisible
+     * time visible in scrolling area (minutes)
      */
-    granularityUnitHeights: 18,
+    timeVisible: '10:00',
     /**
      * @cfg {Boolean} denyDragOnMissingEditGrant
      * deny drag action if edit grant for event is missing
      */
     denyDragOnMissingEditGrant: true,
+
+
     /**
      * store holding timescale
-     * @type {Ext.data.Store}
+     * @property {Ext.data.Store}
+     * @private
      */
     timeScale: null,
     /**
      * The amount of space to reserve for the scrollbar (defaults to 19 pixels)
-     * @type {Number}
+     * @property {Number}
+     * @private
      */
     scrollOffset: 19,
-
     /**
      * The time in milliseconds, a scroll should be delayed after using the mousewheel
-     * 
-     * @type Number
+     * @property Number
+     * @private
      */
     scrollBuffer: 200,
-    
+    /**
+     * The minmum all day height in px
+     * @property Number
+     * @private
+     */
+    minAllDayScrollerHight: 10,
     /**
      * @property {bool} editing
      * @private
@@ -226,9 +242,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.initTimeScale();
         this.initTemplates();
         
-        this.on('beforehide', this.onBeforeHide, this);
-        this.on('show', this.onShow, this);
-        
         this.mon(Tine.Tinebase.appMgr, 'activate', this.onAppActivate, this);
         
         if (! this.selModel) {
@@ -241,8 +254,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var prefs = this.app.getRegistry().get('preferences'),
             defaultStartTime = Date.parseDate(prefs.get('daysviewdefaultstarttime'), 'H:i'),
             startTime = Date.parseDate(prefs.get('daysviewstarttime'), 'H:i'),
-            endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i');
-        
+            endTime = Date.parseDate(prefs.get('daysviewendtime'), 'H:i'),
+            timeVisible = Date.parseTimePart(prefs.get('daysviewtimevisible'), 'H:i');
+
         this.dayStart = Ext.isDate(startTime) ? startTime : Date.parseDate(this.dayStart, 'H:i');
         this.dayEnd = Ext.isDate(endTime) ? endTime : Date.parseDate(this.dayEnd, 'H:i');
         // 00:00 in users timezone is a spechial case where the user expects
@@ -250,9 +264,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         if (this.dayEnd.format('H:i') == '00:00') {
             this.dayEnd = this.dayEnd.add(Date.MINUTE, -1);
         }
-        this.dayEndPx = this.getTimeOffset(this.dayEnd);
-        
-        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar') && !(!this.getTimeOffset(this.dayStart) && !this.getTimeOffset(this.dayEnd));
+
+        this.timeVisible = Ext.isDate(timeVisible) ? timeVisible : Date.parseTimePart(this.timeVisible, 'H:i');
+
+        this.cropDayTime = !! Tine.Tinebase.configManager.get('daysviewcroptime', 'Calendar');
 
         if (this.cropDayTime) {
             this.defaultStart = Ext.isDate(defaultStartTime) ? defaultStartTime : Date.parseDate(this.defaultStart, 'H:i');
@@ -320,6 +335,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
                 sourceEl.setStyle({'border-style': 'dashed'});
                 sourceEl.setOpacity(0.5);
+
+                data.denyDrop = true;
                 
                 if (data.event) {
                     var event = data.event;
@@ -332,7 +349,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         }
 
                         if (event.get('editGrant')) {
-                            return this.view == sourceView && Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
+                            data.denyDrop = this.view == sourceView && Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE;
+
+                            if (data.dtstartLimit && targetDateTime.getTimePart() > data.dtstartLimit) {
+                                data.denyDrop = true;
+                            }
+
+                            return  data.denyDrop ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
                         }
                     }
                 }
@@ -352,22 +375,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     var event = data.event,
                         originalDuration = (event.get('dtend').getTime() - event.get('dtstart').getTime()) / Date.msMINUTE;
 
-                    // Get the new endDate to ensure it's not out of croptimes
-                    var outOfCropBounds = false;
-                    if (v.cropDayTime == true) {
-                        var newEnd = new Date(),
-                            dayEndCompare = new Date();
-
-                        newEnd.setTime(targetDate.getTime());
-                        newEnd.add(Date.MINUTE, originalDuration);
-                        dayEndCompare.setTime(targetDate.getTime());
-                        dayEndCompare.setHours(v.dayEnd.getHours(), v.dayEnd.getMinutes());
-                        outOfCropBounds = (newEnd > dayEndCompare);
-                    }
-
-                    // deny drop for missing edit grant or no time change
-                    if (! event.get('editGrant') || (v == this.view && Math.abs(targetDate.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE)
-                            || outOfCropBounds) {
+                    if (data.denyDrop) {
                         return false;
                     }
 
@@ -391,12 +399,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     if (this.view.ownerCt.attendee) {
                         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(event.get('attendee')),
                             sourceAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, event.view.ownerCt.attendee),
+                            destinationAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, this.view.ownerCt.attendee);
+
+                        if (! destinationAttendee) {
                             destinationAttendee = new Tine.Calendar.Model.Attender(this.view.ownerCt.attendee.data);
 
-                        attendeeStore.remove(sourceAttendee);
-                        attendeeStore.add(destinationAttendee);
+                            attendeeStore.remove(sourceAttendee);
+                            attendeeStore.add(destinationAttendee);
 
-                        Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, event);
+                            Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, event);
+                        }
                     }
 
                     event.endEdit();
@@ -413,8 +425,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     initDragZone: function() {
         this.scroller.ddScrollConfig = {
-            vthresh: this.granularityUnitHeights * 2,
-            increment: this.granularityUnitHeights * 4,
             hthresh: -1,
             frequency: 500
         };
@@ -428,6 +438,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             containerScroll: true,
             
             getDragData: function(e) {
+                // adjust scrollConfig
+                var scrollUnit = this.view.getTimeOffset(this.view.timeIncrement);
+                this.view.scroller.ddScrollConfig.vthresh = scrollUnit *2;
+                this.view.scroller.ddScrollConfig.increment =  scrollUnit * 4;
+
                 var selected = this.view.getSelectionModel().getSelectedEvents();
                 
                 var eventEl = e.getTarget('div.cal-daysviewpanel-event', 10);
@@ -442,16 +457,21 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     }
                     
                     // we need to clone an event with summary in
-                    var d = Ext.get(event.ui.domIds[0]).dom.cloneNode(true);
+                    var eventEl = Ext.get(event.ui.domIds[0]),
+                        eventBox = eventEl.getBox(),
+                        d = eventEl.dom.cloneNode(true);
+
                     d.id = Ext.id();
-                    
+
                     if (event.get('is_all_day_event')) {
+                        Ext.fly(d).setTop(-2);
                         Ext.fly(d).setLeft(0);
+                        Ext.fly(d).setWidth(eventBox.width);
                     } else {
                         var width = (Ext.fly(this.view.dayCols[0]).getWidth() * 0.9);
                         Ext.fly(d).setTop(0);
                         Ext.fly(d).setWidth(width);
-                        Ext.fly(d).setHeight(this.view.getTimeHeight.call(this.view, event.get('dtstart'), event.get('dtend')));
+                        Ext.fly(d).setHeight(eventBox.height);
                     }
 
                     return {
@@ -459,7 +479,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                         sourceEl: eventEl,
                         event: event,
                         ddel: d,
-                        selections: this.view.getSelectionModel().getSelectedEvents()
+                        selections: this.view.getSelectionModel().getSelectedEvents(),
+                        dtstartLimit: this.view.cropDayTime ? this.view.dayEnd.getTimePart() - event.duration : false
                     }
                 }
             },
@@ -511,26 +532,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.initDragZone();
         
         this.updatePeriod({from: this.startDate});
-        
-        if (this.store.getCount()) {
-            this.onLoad.apply(this);
-        }
-        
+
         // apply os specific scrolling space
         Ext.fly(this.innerHd.firstChild.firstChild).setStyle('margin-right', Ext.getScrollBarWidth() + 'px');
         
         // crop daytime
         if (this.cropDayTime) {
-            var cropStartPx = this.getTimeOffset(this.dayStart),
-                cropHeightPx = this.getTimeOffset(this.dayEnd) +2;
-                
-            this.mainBody.setStyle('margin-top', '-' + cropStartPx + 'px');
-            this.mainBody.setStyle('height', cropHeightPx + 'px');
-            this.mainBody.setStyle('overflow', 'hidden');
+            this.cropper.setStyle('overflow', 'hidden');
             this.scroller.addClass('cal-daysviewpanel-body-cropDayTime');
         }
 
-        this.unbufferedOnLayout();
+        if (this.store.getCount()) {
+            this.onLoad.defer(100, this);
+        }
 
         // scrollTo initial position
         this.isScrolling = true;
@@ -572,7 +586,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     onBeforeScroll: function() {
         if (! this.isScrolling) {
             this.isScrolling = true;
-            
+
+            var topOffset = this.getHeightMinutes(this.scroller.dom.scrollTop);
+            if (topOffset) {
+                this.lastScrollTime = this.dayStart.clearTime(true).add(Date.MINUTE, topOffset);
+            }
+
             // walk all cols an hide hints
             Ext.each(this.dayCols, function(dayCol, idx) {
                 this.aboveHints.item(idx).setDisplayed(false);
@@ -589,18 +608,28 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @param {} o
      */
     onScroll: function(e, t, o) {
+        // no arguments means programatic scroll (show/hide/...)
+        if (! arguments.length) {
+            var topTime = this.lastScrollTime || this.defaultStart,
+                topOffset = this.getTimeOffset(topTime);
+
+            if (topOffset) {
+                this.scroller.dom.scrollTop = this.getTimeOffset(topTime);
+            }
+        }
+
         var visibleHeight = this.scroller.dom.clientHeight,
             visibleStart  = this.scroller.dom.scrollTop - this.mainBody.dom.offsetTop,
             visibleEnd    = visibleStart + visibleHeight,
             vStartMinutes = this.getHeightMinutes(visibleStart),
             vEndMinutes   = this.getHeightMinutes(visibleEnd);
-            
+
         Ext.each(this.dayCols, function(dayCol, idx) {
             var dayColEl    = Ext.get(dayCol),
                 dayStart    = this.startDate.add(Date.DAY, idx),
                 aboveEvents = this.parallelScrollerEventsRegistry.getEvents(dayStart, dayStart.add(Date.MINUTE, vStartMinutes)),
                 belowEvents = this.parallelScrollerEventsRegistry.getEvents(dayStart.add(Date.MINUTE, vEndMinutes), dayStart.add(Date.DAY, 1));
-                
+
             if (aboveEvents.length) {
                 var aboveHint = this.aboveHints.item(idx);
                 aboveHint.setTop(visibleStart + 5);
@@ -608,7 +637,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                     aboveHint.fadeIn({duration: 1.6});
                 }
             }
-            
+
             if (belowEvents.length) {
                 var belowHint = this.belowHints.item(idx);
                 belowHint.setTop(visibleEnd - 14);
@@ -617,19 +646,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 }
             }
         }, this);
-        
+
         this.isScrolling = false;
     },
-    
-    onShow: function() {
-        this.onLayout();
-        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(this.defaultStart);
-    },
-    
-    onBeforeHide: function() {
-        this.lastScrollPos = this.scroller.dom.scrollTop;
-    },
-    
+
     /**
      * renders a single event into this daysview
      * @param {Tine.Calendar.Model.Event} event
@@ -860,6 +880,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.updateDayHeaders();
         this.redrawWholeDayEvents.defer(50, this);
+
+        this.unbufferedOnLayout();
     },
     
     redrawWholeDayEvents: function() {
@@ -964,13 +986,15 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var sm = this.getSelectionModel();
         sm.select(targetEvent);
         
-        var dtStart = this.getTargetDateTime(e);
+        var dtStart = this.getTargetDateTime(e),
+            dtEnd = this.getTargetDateTime(e, this.timeIncrement, 's');
+
         if (dtStart) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var event = new Tine.Calendar.Model.Event(Ext.apply(Tine.Calendar.Model.Event.getDefaultData(), {
                 id: newId,
                 dtstart: dtStart,
-                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtStart.add(Date.MINUTE, Tine.Calendar.Model.Event.getMeta('defaultEventDuration')),
+                dtend: dtStart.is_all_day_event ? dtStart.add(Date.HOUR, 24).add(Date.SECOND, -1) : dtEnd,
                 is_all_day_event: dtStart.is_all_day_event
             }), newId);
             event.isRangeAdd = true;
@@ -994,7 +1018,18 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     onBeforeEventResize: function(rz, e) {
         var parts = rz.el.id.split(':');
         var event = this.store.getById(parts[1]);
-        
+
+        // @TODO compute max minutes also
+        var maxHeight = 10000;
+
+        if (this.cropDayTime) {
+            var maxMinutes = (this.dayEnd.getTimePart() - event.get('dtstart').getTimePart()) / Date.msMINUTE;
+            maxHeight = this.getTimeOffset(maxMinutes);
+        }
+
+        rz.heightIncrement = this.getTimeOffset(this.timeIncrement);
+        rz.maxHeight = maxHeight,
+
         rz.event = event;
         rz.originalHeight = rz.el.getHeight();
         rz.originalWidth  = rz.el.getWidth();
@@ -1115,7 +1150,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @private
      */
     onAdd : function(ds, records, index){
-        //console.log('onAdd');
         for (var i=0; i<records.length; i++) {
             var event = records[i];
             
@@ -1237,9 +1271,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * get date of a (event) target
      * 
      * @param {Ext.EventObject} e
+     * @param {number} graticule
+     * @param {char} graticuleEdge one of n (north) s, (south)
      * @return {Date}
      */
-    getTargetDateTime: function(e) {
+    getTargetDateTime: function(e, graticule, graticuleHandle) {
         var target = e.getTarget('div[class^=cal-daysviewpanel-datetime]');
         
         if (target && target.id.match(/^ext-gen\d+:\d+/)) {
@@ -1249,8 +1285,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             date.is_all_day_event = true;
             
             if (parts[2] ) {
-                var timePart = this.timeScale.getAt(parts[2]);
-                date = date.add(Date.MINUTE, timePart.get('minutes'));
+                var timePart = this.timeScale.getAt(parts[2]),
+                    eventXY = e.getXY(),
+                    mainBodyXY = this.mainBody.getXY(),
+                    offsetPx = eventXY[1] - mainBodyXY[1],
+                    offsetMinutes = this.getHeightMinutes(offsetPx),
+                    graticule = graticule ? graticule : this.timeGranularity,
+                    graticuleHandle = graticuleHandle ? graticuleHandle : 'n',
+                    graticuleFn = graticuleHandle == 'n' ? Math.floor : Math.ceil;
+
+                // constraint to graticule
+                offsetMinutes = graticuleFn(offsetMinutes/graticule) * graticule;
+
+                date = date.add(Date.MINUTE, offsetMinutes);
                 date.is_all_day_event = false;
             }
             
@@ -1274,40 +1321,86 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             return this.store.getById(parts[1]);
         }
     },
-    
+
+    /**
+     * get offset in px for the time part of given date (with current scaling)
+     *
+     * @param {date} date
+     * @returns {number}
+     */
     getTimeOffset: function(date) {
-        var d = this.granularityUnitHeights / this.timeGranularity;
-        
-        return Math.round(d * ( 60 * date.getHours() + date.getMinutes()));
+        if (this.mainBody) {
+            var minutes = Ext.isDate(date) ? date.getTimePart() / Date.msMINUTE : date,
+                d = this.mainBody.getHeight() / (24 * 60);
+
+            return Math.round(d * minutes);
+        }
     },
-    
+
+    /**
+     * get offset in % for the time part of given date
+     *
+     * @param {date|number} date
+     * @returns {number}
+     */
+    getTimeOffsetPct: function(date) {
+        var minutes = Ext.isDate(date) ? date.getTimePart() / Date.msMINUTE : date;
+
+        return 100 * ((Date.msMINUTE * minutes) / Date.msDAY);
+    },
+
+    /**
+     * get height in px of the diff for the given dates (with current scaling)
+     *
+     * @param {date} dtStart
+     * @param {date} dtEnd
+     * @returns {number}
+     */
     getTimeHeight: function(dtStart, dtEnd) {
-        var d = this.granularityUnitHeights / this.timeGranularity;
-        return Math.round(d * ((dtEnd.getTime() - dtStart.getTime()) / Date.msMINUTE));
+        if (this.mainBody) {
+            var d = this.mainBody.getHeight() / (24 * 60);
+            return Math.round(d * ((dtEnd.getTime() - dtStart.getTime()) / Date.msMINUTE));
+        }
     },
-    
+
+    /**
+     * get height in % of the diff for the given dates
+     *
+     * @param {date} dtStart
+     * @param {date} dtEnd
+     * @returns {number}
+     */
+    getTimeHeightPct: function(dtStart, dtEnd) {
+        return 100 * ((dtEnd.getTime() - dtStart.getTime()) / Date.msDAY);
+    },
+
+    /**
+     * get number of minutes represented by height in px (current scaleing)
+     *
+     * @param {number} height
+     * @returns {number}
+     */
     getHeightMinutes: function(height) {
-        return Math.round(height * this.timeGranularity / this.granularityUnitHeights);
+        var d = (24 * 60) / this.mainBody.getHeight();
+        return Math.round(d * height);
     },
-    
+
+
     /**
      * fetches elements from our generated dom
      */
     initElements : function(){
         var E = Ext.Element;
 
-//        var el = this.el.dom.firstChild;
         var cs = this.el.dom.firstChild.childNodes;
-
-//        this.el = new E(el);
 
         this.mainWrap = new E(cs[0]);
         this.mainHd = new E(this.mainWrap.dom.firstChild);
 
         this.innerHd = this.mainHd.dom.firstChild;
         
-        this.wholeDayScroller = this.innerHd.firstChild.childNodes[1];
-        this.wholeDayArea = this.wholeDayScroller.firstChild;
+        this.wholeDayScroller = new E(this.innerHd.firstChild.childNodes[1]);
+        this.wholeDayArea = this.wholeDayScroller.dom.firstChild;
         
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
@@ -1317,8 +1410,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         this.mon(this.scroller, 'scroll', this.onBeforeScroll, this);
         this.mon(this.scroller, 'scroll', this.onScroll, this, {buffer: 200});
 
-        this.mainBody = new E(this.scroller.dom.firstChild);
-        this.dayCols = this.mainBody.dom.firstChild.lastChild.childNodes;
+
+        this.cropper = new E(this.scroller.dom.firstChild);
+        this.mainBody = new E(this.cropper.dom.firstChild);
+        this.dayCols = this.mainBody.dom.lastChild.childNodes;
 
         this.focusEl = new E(this.el.dom.lastChild.lastChild);
         this.focusEl.swallowEvent("click", true);
@@ -1377,25 +1472,57 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.el.setSize(csize.width, csize.height);
         
-        // layout whole day area
-        var wholeDayAreaEl = Ext.get(this.wholeDayArea);
-        for (var i=0, bottom = wholeDayAreaEl.getTop(); i<this.wholeDayArea.childNodes.length -1; i++) {
-            bottom = Math.max(parseInt(Ext.get(this.wholeDayArea.childNodes[i]).getBottom(), 10), bottom);
-        }
-        var wholeDayAreaHeight = bottom - wholeDayAreaEl.getTop() + 10;
-        // take one third of the available height maximum
-        wholeDayAreaEl.setHeight(wholeDayAreaHeight);
-        Ext.fly(this.wholeDayScroller).setHeight(Math.min(Math.round(csize.height/3), wholeDayAreaHeight));
+        // layout whole day area -> take one third of the available height maximum
+        var wholeDayAreaEl = Ext.get(this.wholeDayArea),
+            wholeDayAreaHeight = this.computeAllDayAreaHeight(),
+            wholeDayScrollerHeight = wholeDayAreaHeight,
+            maxAllowedHeight = Math.round(csize.height/3),
+            resizeEvent = {
+                wholeDayAreaHeight: wholeDayAreaHeight,
+                wholeDayScrollerHeight: wholeDayScrollerHeight,
+                maxAllowedHeight: maxAllowedHeight
+            };
+
+        wholeDayAreaEl.setHeight(Math.min(wholeDayAreaHeight, maxAllowedHeight));
+        this.fireEvent('onBeforeAllDayScrollerResize', this, resizeEvent);
+
+        this.wholeDayScroller.setHeight(resizeEvent.wholeDayScrollerHeight);
         
         var hdHeight = this.mainHd.getHeight();
         var vh = csize.height - (hdHeight);
         
         this.scroller.setSize(vw, vh);
-        
+
+        // resize mainBody for visibleMinutes to fit
+        var timeToDisplay = this.timeVisible.getTime() / Date.msMINUTE,
+            scrollerHeight = this.scroller.getHeight(),
+            height = scrollerHeight * (24 * 60)/timeToDisplay;
+
+        this.mainBody.setHeight(height);
+
+        if (this.cropDayTime) {
+            var cropHeightPx = this.getTimeHeight(this.dayStart, this.dayEnd),
+                cropStartPx = this.getTimeOffset(this.dayStart);
+
+            this.cropper.setStyle('height', cropHeightPx + 'px');
+            this.cropper.dom.scrollTop = cropStartPx;
+        }
+
         // force positioning on scroll hints
+        this.onBeforeScroll.defer(50, this);
         this.onScroll.defer(100, this);
     },
-    
+
+    computeAllDayAreaHeight: function() {
+        var wholeDayAreaEl = Ext.get(this.wholeDayArea);
+        for (var i=0, bottom = wholeDayAreaEl.getTop(); i<this.wholeDayArea.childNodes.length -1; i++) {
+            bottom = Math.max(parseInt(Ext.get(this.wholeDayArea.childNodes[i]).getBottom(), 10), bottom);
+        }
+
+        // take one third of the available height maximum
+        return bottom - wholeDayAreaEl.getTop() + this.minAllDayScrollerHight;
+    },
+
     onDestroy: function() {
         this.removeAllEvents();
         this.initData(false);
@@ -1415,7 +1542,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             var day = this.startDate.add(Date.DAY, i);
             html += this.templates.dayHeader.applyTemplate({
                 day: String.format(this.dayFormatString, day.format('l'), day.format('j'), day.format('F')),
-                height: this.granularityUnitHeights,
+                height: '20px',
                 width: width + '%',
                 left: i * width + '%'
             });
@@ -1466,7 +1593,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         for (var i=0; i<this.numOfDays; i++) {
             html += this.templates.wholeDayCol.applyTemplate({
                 //day: date.get('dateString'),
-                //height: this.granularityUnitHeights,
                 id: baseId + ':' + i,
                 width: width + '%',
                 left: i * width + '%'
@@ -1486,8 +1612,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
             html += this.templates.timeRow.applyTemplate({
                 cls: time.get('minutes')%60 ? 'cal-daysviewpanel-timeRow-off' : 'cal-daysviewpanel-timeRow-on',
-                height: this.granularityUnitHeights + 'px',
-                top: index * this.granularityUnitHeights + 'px',
+                height: 100/(24 * 60 / this.timeGranularity) + '%',
                 time: time.get('minutes')%60 ? '' : time.get('time')
             });
         }, this);
@@ -1517,15 +1642,19 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * gets HTML fragment of the time over rows
      */
     getOverRows: function(dayIndex) {
-        var html = '';
-        var baseId = Ext.id();
+        var html = '',
+            baseId = Ext.id();
         
-        this.timeScale.each(function(time){
-            var index = time.get('index');
+        this.timeScale.each(function(time, index, totalCount) {
+            var cls = 'cal-daysviewpanel-daycolumn-row-' + (time.get('minutes')%60 ? 'off' : 'on');
+            if (index+1 == totalCount) {
+                cls += ' cal-daysviewpanel-daycolumn-row-last';
+            }
+
             html += this.templates.overRow.applyTemplate({
                 id: baseId + ':' + dayIndex + ':' + index,
-                cls: 'cal-daysviewpanel-daycolumn-row-' + (time.get('minutes')%60 ? 'off' : 'on'),
-                height: this.granularityUnitHeights + 'px',
+                cls: cls,
+                height: 100/(24 * 60 / this.timeGranularity) + '%',
                 time: time.get('time')
             });
         }, this);
@@ -1542,11 +1671,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         ts.master = new Ext.XTemplate(
             '<div class="cal-daysviewpanel" hidefocus="true">',
                 '<div class="cal-daysviewpanel-viewport">',
-                    '<div class="cal-daysviewpanel-header"><div class="cal-daysviewpanel-header-inner"><div class="cal-daysviewpanel-header-offset">{header}</div></div><div class="x-clear"></div></div>',
-                    '<div class="cal-daysviewpanel-scroller"><div class="cal-daysviewpanel-body">{body}</div></div>',
+                    '<div class="cal-daysviewpanel-header">',
+                        '<div class="cal-daysviewpanel-header-inner">',
+                            '<div class="cal-daysviewpanel-header-offset">{header}</div>',
+                        '</div>',
+                    '<div class="x-clear"></div>',
                 '</div>',
-                '<a href="#" class="cal-daysviewpanel-focus" tabIndex="-1"></a>',
-            '</div>'
+                '<div class="cal-daysviewpanel-scroller">',
+                    '<div class="cal-daysviewpanel-cropper">{body}</div>',
+                '</div>',
+            '</div>',
+            '<a href="#" class="cal-daysviewpanel-focus" tabIndex="-1"></a>'
         );
         
         ts.header = new Ext.XTemplate(
@@ -1573,9 +1708,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         );
         
         ts.body = new Ext.XTemplate(
-            '<div class="cal-daysviewpanel-body-inner">' +
-                '{timeRows}' +
-                '<div class="cal-daysviewpanel-body-daycolumns">{dayColumns}</div>' +
+            '<div class="cal-daysviewpanel-body">',
+                '<div class="cal-daysviewpanel-body-timecolumn">{timeRows}</div>',
+                '<div class="cal-daysviewpanel-body-daycolumns">{dayColumns}</div>',
             '</div>'
         );
         
@@ -1586,7 +1721,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         );
         
         ts.dayColumn = new Ext.XTemplate(
-            '<div class="cal-daysviewpanel-body-daycolumn" style="left: {left}; width: {width};">',
+            '<div class="cal-daysviewpanel-body-daycolumn" style="left: {left}; width: {width}; height: 100%">',
                 '<div class="cal-daysviewpanel-body-daycolumn-inner">&#160;</div>',
                 '{overRows}',
                 '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-hint-above" />',

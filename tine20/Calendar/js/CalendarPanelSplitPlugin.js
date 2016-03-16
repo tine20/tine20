@@ -53,7 +53,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         }, this);
         this.calPanel.on('afterlayout', function() {
             this.calPanel.body.setWidth(this.calPanel.getWidth());
-            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
         }, this);
         
         this.mainStore = this.calPanel.view.store;
@@ -237,8 +236,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
                     attendeeView.onLoad();
                 }
             }, this);
-
-            this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
         }
     },
     
@@ -272,7 +269,8 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         if (view.onBeforeScroll) {
             view.onBeforeScroll = view.onBeforeScroll.createSequence(this.onScroll.createDelegate(this, [view], 0));
         }
-        
+
+        view.on('onBeforeAllDayScrollerResize', this.onAllDayAreaResize, this);
         return view;
     },
     
@@ -322,8 +320,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
             }
         }, this);
         
-        this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this);
-
         if (this.calPanel.mainScreen) {
             this.calPanel.mainScreen.updateEventActions.call(this.calPanel.mainScreen);
         }
@@ -341,62 +337,34 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         this.attendeeViews.each(function(view) {
             view.constructor.prototype.updatePeriod.apply(view, origArgs);
         }, this);
-        
-        this.resizeWholeDayArea.defer(this.attendeeViews.items.length * 120, this, [true]);
     },
-    
-    /**
-     * set whole day area to the height of the highest whole day area
-     */
-    resizeWholeDayArea: function(onupdate) {
+
+    onAllDayAreaResize: function (originView, rzEvent) {
         if (this.attendeeViews.items.length > 1) {
             var maxWholeDayAreaSize = 10;
-            var scrollerSize = this.getActiveView().scroller ? this.getActiveView().scroller.getHeight() : 0;
             this.attendeeViews.each(function(view) {
-                if (! view.wholeDayArea) {
-                    return;
-                }
+                if (view.wholeDayArea) {
+                    var allDayAreaHeight = view.computeAllDayAreaHeight();
 
-                if (onupdate) {
-                    view.wholeDayArea.heightIsCalculated = false;
-                }
-                if (view.wholeDayArea.children.length > 1
-                    && ((view.wholeDayArea.hasOwnProperty('heightIsCalculated')
-                    && view.wholeDayArea.heightIsCalculated == false)
-                    || (! view.wholeDayArea.hasOwnProperty('heightIsCalculated'))))
-                {
-                    if (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) {
-                        maxWholeDayAreaSize = view.wholeDayArea.clientHeight;
-                        scrollerSize = view.scroller.getHeight();
+                    if (allDayAreaHeight > maxWholeDayAreaSize) {
+                        maxWholeDayAreaSize = allDayAreaHeight;
                     }
                 }
+            }, this);
 
-                if (parseInt(view.wholeDayArea.clientHeight) > maxWholeDayAreaSize) {
-                    maxWholeDayAreaSize = view.wholeDayArea.clientHeight;
-                    scrollerSize = this.container.getSize(true);
-                }
-            });
+            rzEvent.wholeDayScrollerHeight = Math.min(maxWholeDayAreaSize, rzEvent.maxAllowedHeight);
+
             this.attendeeViews.each(function(view) {
-                if (! view.wholeDayArea) {
-                    return;
+                if (view.wholeDayArea) {
+                    var allDayAreaEl = Ext.get(view.wholeDayArea),
+                        allDayAreaHeight = allDayAreaEl.getHeight();
+                    view.wholeDayScroller.setHeight(rzEvent.wholeDayScrollerHeight);
+                    allDayAreaEl.setHeight(Math.max(allDayAreaHeight, maxWholeDayAreaSize));
                 }
-                var wholeDayAreaEl = Ext.get(view.wholeDayArea);
-                if (wholeDayAreaEl.getHeight() != maxWholeDayAreaSize) {
-                    wholeDayAreaEl.setHeight(maxWholeDayAreaSize);
-                    view.wholeDayArea.heightIsCalculated = true;
-                } else {
-                    view.wholeDayArea.heightIsCalculated = false;
-                }
-                Ext.fly(view.wholeDayScroller).setHeight(maxWholeDayAreaSize);
-
-                var hdHeight = this.mainHd.getHeight();
-                var vh = this.container.getSize(true).height - (hdHeight);
-
-                Ext.fly(view.scroller).setHeight(vh);
-            });
+            }, this);
         }
     },
-    
+
     cloneStore: function(filterFn) {
         var clone = new Ext.data.Store({
             fields: Tine.Calendar.Model.Event,
@@ -517,12 +485,18 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
     getAdditionalHeaders: Tine.Calendar.Printer.DaysViewRenderer.prototype.getAdditionalHeaders,
     generateBody: function(splitView) {
         var viewRenderer = splitView.calPanel.view.printRenderer,
-        htmlArray = [];
-        
+            htmlArray = [];
+
+        this.rendererArray = [];
+        this.viewArray = [];
+
         this.paperHeight = viewRenderer.paperHeight;
         
         splitView.attendeeViews.each(function(v, i) {
             var renderer = new v.printRenderer({printMode: this.printMode});
+            this.rendererArray.push(renderer);
+            this.viewArray.push(v);
+
             renderer.extraTitle = v.title + ' // ';
             renderer.titleStyle = i > 0 ? 'page-break-before:always' : '';
 
@@ -530,6 +504,12 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         }, this);
         
         return htmlArray.join('');
+    },
+
+    onBeforePrint: function(doc, view) {
+        Ext.each(this.rendererArray, function(renderer, i) {
+            renderer.onBeforePrint(doc, this.viewArray[i]);
+        }, this)
     }
 });
 

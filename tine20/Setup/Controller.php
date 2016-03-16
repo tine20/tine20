@@ -1385,7 +1385,11 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {
-            $this->_installApplication($xml, $_options);
+            if (! $xml) {
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
+            } else {
+                $this->_installApplication($xml, $_options);
+            }
         }
     }
 

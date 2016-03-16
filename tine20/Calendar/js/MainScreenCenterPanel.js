@@ -271,6 +271,28 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
+        this.toggleFullScreen = new Ext.Toolbar.Button({
+            text: '\u2197',
+            scope: this,
+            handler: function() {
+                if (this.ownerCt.ref == 'tineViewportMaincardpanel') {
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem);
+                    this.originalOwner.add(this);
+                    this.originalOwner.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2197');
+                    this.southPanel.expand();
+                } else {
+                    this.originalOwner = this.ownerCt;
+                    this.originalOwner.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.add(this);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2199');
+                    this.southPanel.collapse();
+                }
+            }
+        });
         
        this.action_import = new Ext.Action({
             requiredGrant: 'addGrant',
@@ -301,6 +323,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.app.featureEnabled('featureYearView')) {
             this.changeViewActions.push(this.showYearView);
         }
+
+        this.changeViewActions.push(this.toggleFullScreen);
 
         this.recordActions = [
             this.action_editInNewWindow,
@@ -404,6 +428,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.detailsPanel) {
             this.items.push({
                 region: 'south',
+                ref: 'southPanel',
                 border: false,
                 collapsible: true,
                 collapseMode: 'mini',
@@ -1176,20 +1201,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Date} datetime
      */
     onPasteEvent: function(datetime) {
-        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
-        var isCopy = record.isCopy;
+        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event'),
+            isCopy = record.isCopy,
+            sourceView = record.view,
+            sourceRecord = record,
+            sourceViewAttendee = sourceView.ownerCt.attendee,
+            destinationView = this.getCalendarPanel(this.activeView).getView(),
+            destinationViewAttendee = destinationView.ownerCt.attendee;
 
         if (! record) {
             return;
         }
         
-        var dtend   = record.get('dtend');
-        var dtstart = record.get('dtstart');
-        var eventLength = dtend - dtstart;
+        var dtend   = record.get('dtend'),
+            dtstart = record.get('dtstart'),
+            eventLength = dtend - dtstart,
+            store = this.getStore();
+
+        record.beginEdit();
 
         if (isCopy != true) {
-            // remove before update
-            var store = this.getStore();
+            // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
                 oldRecord.ui.remove();
@@ -1206,16 +1238,42 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }, this);
         }
 
-        // Allow to change attendee if in split view
-        var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
-        if (Ext.isArray(defaultAttendee) && defaultAttendee.length === 1) {
-            if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-                record.data.attendee[0] = defaultAttendee[0];
+        // @TODO move to common function with daysView::notifyDrop parts
+        // change attendee in split view
+        if (sourceViewAttendee || destinationViewAttendee) {
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(sourceRecord.get('attendee')),
+                sourceAttendee = sourceViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, sourceViewAttendee) : false,
+                destinationAttendee = destinationViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, destinationViewAttendee) : false;
+
+            if (destinationViewAttendee && !destinationAttendee) {
+                destinationAttendee = new Tine.Calendar.Model.Attender(destinationViewAttendee.data);
+
+                attendeeStore.remove(sourceAttendee);
+                attendeeStore.add(destinationAttendee);
+
+                Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, record);
             }
         }
 
-        record.set('dtstart', datetime);
-        record.set('dtend', new Date(datetime.getTime() + eventLength));
+
+        if (datetime.is_all_day_event) {
+            record.set('dtstart', datetime);
+            record.set('dtend', datetime.clone().add(Date.DAY, 1).add(Date.SECOND, -1));
+            record.set('is_all_day_event', true);
+        } else if (datetime.date_only) {
+            var adoptedDtStart = datetime.clone();
+            adoptedDtStart.setHours(dtstart.getHours());
+            adoptedDtStart.setMinutes(dtstart.getMinutes());
+            adoptedDtStart.setSeconds(dtstart.getSeconds());
+
+            record.set('dtstart', adoptedDtStart);
+            record.set('dtend', new Date(adoptedDtStart.getTime() + eventLength));
+        } else {
+            record.set('dtstart', datetime);
+            record.set('dtend', new Date(datetime.getTime() + eventLength));
+        }
+
+        record.endEdit();
 
         if (isCopy == true) {
             record.isCopy = true;
