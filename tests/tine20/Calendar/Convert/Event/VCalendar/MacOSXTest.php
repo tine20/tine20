@@ -136,14 +136,4 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends Calendar_TestCase
 
         $this->assertEquals('FREQ=YEARLY;INTERVAL=1;UNTIL=2016-09-17 22:00:00', $event->rrule);
     }
-
-    public function testConvertToTine20ModelYosemite()
-    {
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX, '10.10.4');
-
-        $vcalendarStream = fopen(dirname(__FILE__) . '/../../../Import/files/apple_calendar_yosemite_attendee.ics', 'r');
-        $event = $converter->toTine20Model($vcalendarStream);
-
-        $this->assertCount(2, $event->attendee, 'CHAIR should be skipped, Attendee should be recognised');
-    }
 }
