@@ -46,10 +46,13 @@ class Sales_Controller_OrderConfirmation extends Sales_Controller_NumberableAbst
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_OrderConfirmation();
         $this->_modelName = 'Sales_Model_OrderConfirmation';
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**

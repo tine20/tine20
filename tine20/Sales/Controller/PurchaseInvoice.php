@@ -27,12 +27,15 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Sales_Backend_PurchaseInvoice();
         $this->_duplicateCheckFields = array(
             array('number'),
             array('date', 'price_total'),
         );
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**

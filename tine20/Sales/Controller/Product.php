@@ -40,11 +40,14 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Sales_Backend_Product();
         
         $this->_numberPrefix   = Sales_Config::getInstance()->get(Sales_Config::PRODUCT_NUMBER_PREFIX);
         $this->_numberZerofill = Sales_Config::getInstance()->get(Sales_Config::PRODUCT_NUMBER_ZEROFILL);
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**
