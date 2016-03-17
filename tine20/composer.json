@@ -45,7 +45,7 @@
         ]
     },
     "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
-    "include-path": [""],
+    "include-path": ["", "vendor/zendframework/zendframework1/library", "library"],
     "config": {
         "secure-http": false
     }
