@@ -143,9 +143,9 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             throw new Addressbook_Exception_NotFound('Contact has no image.');
         }
         $imageInfo = Tinebase_ImageHelper::getImageInfoFromBlob($image);
-        
+
         return new Tinebase_Model_Image($imageInfo + array(
-            'id'           => $_identifier,
+            'id'           => sha1($image),
             'application'  => $this->_applicationName,
             'data'         => $image
         ));
