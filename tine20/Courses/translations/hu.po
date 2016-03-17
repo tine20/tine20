@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:54+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Hungarian (http://www.transifex.com/tine20/tine20/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -65,45 +65,41 @@ msgstr "Kurzus tagok importálása"
 msgid "Add new member"
 msgstr "Új résztvevő hozzáadása"
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurzus"
 msgstr[1] "Kurzusok"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:204
 msgid "Course Name"
 msgstr "Kurzus név"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:211
 msgid "Course / School Type"
 msgstr "Kurzus / Iskola típus"
 
-#: js/CourseEditDialog.js:223
+#: js/CourseEditDialog.js:221
 msgid "Description"
 msgstr "Leírás"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr "Internet elérés"
 
-#: js/CourseEditDialog.js:239
-msgid "Fileserver Access"
-msgstr "Fileszerver elérés"
-
-#: js/CourseEditDialog.js:271
+#: js/CourseEditDialog.js:256
 msgid "Members"
 msgstr "Tagok"
 
-#: js/CourseEditDialog.js:298
+#: js/CourseEditDialog.js:283
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: js/CourseEditDialog.js:302
+#: js/CourseEditDialog.js:287
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: js/CourseEditDialog.js:307
+#: js/CourseEditDialog.js:292
 msgid "Reset Password"
 msgstr "Jelszó újraállítása"
 

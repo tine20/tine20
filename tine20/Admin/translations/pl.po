@@ -1,11 +1,11 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2015
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012,2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:15+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -203,12 +203,13 @@ msgstr "Wyświetl aplikację {0} - {1} z {2}"
 msgid "No applications to display"
 msgstr "Brak aplikacji"
 
-#: js/Applications.js:281 js/customfield/EditDialog.js:484
+#: js/Applications.js:281 js/customfield/EditDialog.js:488
+#: js/container/EditDialog.js:189
 msgid "Order"
 msgstr "lp"
 
 #: js/Applications.js:282 js/customfield/GridPanel.js:67
-#: js/customfield/EditDialog.js:450 js/SambaMachineGrid.js:83
+#: js/customfield/EditDialog.js:454 js/SambaMachineGrid.js:83
 #: js/config/GridPanel.js:74 js/container/EditDialog.js:131
 #: js/AccessLog.js:128 js/Tags.js:229 js/Roles.js:241 js/Groups.js:238
 #: js/user/EditDialog.js:285 js/user/EditDialog.js:321
@@ -249,7 +250,7 @@ msgid "Could not save tag ({0})"
 msgstr "Brak możliwości zapisania znacznika ({0})"
 
 #: js/TagEditDialog.js:91 js/customfield/EditDialog.js:138
-#: js/customfield/EditDialog.js:270 js/RoleEditDialog.js:115
+#: js/customfield/EditDialog.js:274 js/RoleEditDialog.js:115
 #: js/GroupEditDialog.js:78
 msgid "Errors"
 msgstr "Błędy"
@@ -289,7 +290,7 @@ msgstr "Nazwa znacznika"
 msgid "Description"
 msgstr "Opis"
 
-#: js/TagEditDialog.js:235 js/container/EditDialog.js:190 js/Tags.js:226
+#: js/TagEditDialog.js:235 js/container/EditDialog.js:195 js/Tags.js:226
 msgid "Color"
 msgstr "Kolor"
 
@@ -359,13 +360,13 @@ msgstr "Informacja o serwerze"
 
 #: js/Admin.js:153
 msgid "ActiveSync Devices"
-msgstr ""
+msgstr "Urządzenia ActiveSync"
 
 #: js/Admin.js:191
 msgid "Admin"
 msgstr "Administrator"
 
-#: js/Admin.js:275
+#: js/Admin.js:277
 msgid "Refresh"
 msgstr "Odśwież"
 
@@ -379,19 +380,19 @@ msgstr "Domyślna książka adresowa dla nowych kontaktów i grup"
 msgid "ID"
 msgstr "ID"
 
-#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:456
+#: js/customfield/GridPanel.js:66 js/customfield/EditDialog.js:460
 #: js/config/GridPanel.js:80
 msgid "Label"
 msgstr "Etykieta"
 
-#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:438
-#: js/container/GridPanel.js:68 js/container/GridPanel.js:99
+#: js/customfield/GridPanel.js:68 js/customfield/EditDialog.js:442
+#: js/container/GridPanel.js:68 js/container/GridPanel.js:100
 #: js/container/EditDialog.js:175
 msgid "Type"
 msgstr "Typ"
 
-#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:225
-#: js/customfield/EditDialog.js:381 js/container/GridPanel.js:67
+#: js/customfield/GridPanel.js:69 js/customfield/EditDialog.js:229
+#: js/customfield/EditDialog.js:385 js/container/GridPanel.js:67
 #: js/container/EditDialog.js:143 js/ApplicationFilter.js:33 js/Models.js:128
 msgid "Application"
 msgid_plural "Applications"
@@ -399,7 +400,7 @@ msgstr[0] "Aplikacja"
 msgstr[1] "aplikacje"
 msgstr[2] "aplikacje"
 
-#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:403
+#: js/customfield/GridPanel.js:70 js/customfield/EditDialog.js:407
 #: js/container/EditDialog.js:164
 msgid "Model"
 msgstr "Model"
@@ -411,99 +412,90 @@ msgstr[0] "Pole użytkownika"
 msgstr[1] "Pola użytkownika"
 msgstr[2] "Pola użytkownika"
 
-#: js/customfield/GridPanel.js:128 js/Tags.js:64 js/Roles.js:47
-#: js/Groups.js:52
-msgid "Confirm"
-msgstr "Potwierdź"
-
-#: js/customfield/GridPanel.js:128
-msgid "Restart application to apply new customfields?"
-msgstr "Czy zrestartować aplikację w celu dodania nowych pól?"
-
 #: js/customfield/EditDialog.js:138
 msgid "Please configure store for this field type"
 msgstr "Proszę skonfigurować schowek dla takiego rodzaju pola"
 
-#: js/customfield/EditDialog.js:245
+#: js/customfield/EditDialog.js:249
 msgid "Record Class"
 msgstr "Klasa wiersza"
 
-#: js/customfield/EditDialog.js:270
+#: js/customfield/EditDialog.js:274
 msgid "Given record class not found"
 msgstr "Brak szukanej klasy wiersza"
 
-#: js/customfield/EditDialog.js:303
-msgid "OK"
-msgstr "OK"
-
-#: js/customfield/EditDialog.js:309 js/user/EditDialog.js:736
+#: js/customfield/EditDialog.js:307 js/user/EditDialog.js:736
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/customfield/EditDialog.js:355
+#: js/customfield/EditDialog.js:313
+msgid "OK"
+msgstr "OK"
+
+#: js/customfield/EditDialog.js:359
 msgid "Configure store"
 msgstr "Konfiguruj schowek"
 
-#: js/customfield/EditDialog.js:415
+#: js/customfield/EditDialog.js:419
 msgid "Custom field definition"
 msgstr "Definicja pola użytkownika"
 
-#: js/customfield/EditDialog.js:426
+#: js/customfield/EditDialog.js:430
 msgid "Text"
 msgstr "Text"
 
-#: js/customfield/EditDialog.js:427
+#: js/customfield/EditDialog.js:431
 msgid "Number"
 msgstr "Numer"
 
-#: js/customfield/EditDialog.js:428
+#: js/customfield/EditDialog.js:432
 msgid "Date"
 msgstr "Data"
 
-#: js/customfield/EditDialog.js:429
+#: js/customfield/EditDialog.js:433
 msgid "DateTime"
 msgstr "Data i godzina"
 
-#: js/customfield/EditDialog.js:430
+#: js/customfield/EditDialog.js:434
 msgid "Time"
 msgstr "Godzina"
 
-#: js/customfield/EditDialog.js:431
+#: js/customfield/EditDialog.js:435
 msgid "Boolean"
 msgstr "Wyrażenie boolowskie"
 
-#: js/customfield/EditDialog.js:432
+#: js/customfield/EditDialog.js:436
 msgid "Search Combo"
 msgstr "Wyszukiwanie combo"
 
-#: js/customfield/EditDialog.js:433
+#: js/customfield/EditDialog.js:437
 msgid "Key Field"
 msgstr "Pole klucz"
 
-#: js/customfield/EditDialog.js:434
+#: js/customfield/EditDialog.js:438
 msgid "Record"
 msgstr "Wiersz"
 
-#: js/customfield/EditDialog.js:462
+#: js/customfield/EditDialog.js:466
 msgid "Length"
 msgstr "Długość"
 
-#: js/customfield/EditDialog.js:467
+#: js/customfield/EditDialog.js:471
 msgid "Required"
 msgstr "Wymagane"
 
-#: js/customfield/EditDialog.js:474
+#: js/customfield/EditDialog.js:478
 msgid "Custom field additional properties"
 msgstr "Dodatkowe właściwości pola użytkownika"
 
-#: js/customfield/EditDialog.js:479 js/GroupEditDialog.js:222 js/Models.js:87
+#: js/customfield/EditDialog.js:483 js/GroupEditDialog.js:222 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Grupa"
 msgstr[1] "Grupy"
 msgstr[2] "Grupy"
 
-#: js/customfield/EditDialog.js:507
+#: js/customfield/EditDialog.js:511
 msgid "Customfield already exists. Please choose another name."
 msgstr "Takie pole już istnieje. Proszę wprowadzić inną nazwę."
 
@@ -513,29 +505,29 @@ msgstr "Nazwa komputera"
 
 #: js/config/FieldManager.js:49
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: js/config/FieldManager.js:49
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 #: js/config/GridPanel.js:49 js/Models.js:160
 msgid "Config"
 msgid_plural "Configs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Pliki konfiguracyjne"
+msgstr[1] "Pliki konfiguracyjne"
+msgstr[2] "Pliki konfiguracyjne"
 
 #: js/config/GridPanel.js:87
 msgid "Value"
 msgstr "Wartość"
 
-#: js/config/GridPanel.js:220
+#: js/config/GridPanel.js:238
 #, python-brace-format
 msgid "Default ({0})"
-msgstr ""
+msgstr "Domyślnie ({0})"
 
-#: js/container/Container.js:46 js/container/GridPanel.js:98
+#: js/container/Container.js:46 js/container/GridPanel.js:99
 msgid "Container"
 msgid_plural "Containers"
 msgstr[0] "Kontener"
@@ -546,6 +538,10 @@ msgstr[2] "kontenery"
 msgid "Container Name"
 msgstr "Nazwa kontenera"
 
+#: js/container/GridPanel.js:69
+msgid "Container Order"
+msgstr ""
+
 #: js/container/EditDialog.js:176
 msgid "personal"
 msgstr "osobista"
@@ -554,7 +550,7 @@ msgstr "osobista"
 msgid "shared"
 msgstr "współdzielona"
 
-#: js/container/EditDialog.js:195
+#: js/container/EditDialog.js:200
 msgid "Note for Owner"
 msgstr "Informacja dla właściciela"
 
@@ -658,6 +654,10 @@ msgstr "Dodaj nową rolę"
 #, python-brace-format
 msgid "Edit Role \"{0}\""
 msgstr "Edytuj rolę \"{0}\""
+
+#: js/Tags.js:64 js/Roles.js:47 js/Groups.js:52
+msgid "Confirm"
+msgstr "Potwierdź"
 
 #: js/Tags.js:64
 msgid "Do you really want to delete the selected tags?"
@@ -1105,7 +1105,7 @@ msgstr "SMTP"
 
 #: js/Models.js:160
 msgid "Configs"
-msgstr ""
+msgstr "Pliki konfiguracyjne"
 
 #: Controller/Container.php:198
 msgid "Your container has been changed"

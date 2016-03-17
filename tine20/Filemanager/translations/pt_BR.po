@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:15+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:101
+#: Controller.php:104
 #, python-format
 msgid "%s's personal files"
 msgstr "Arquivos pessoais de %s"
@@ -218,7 +218,7 @@ msgstr "Por favor, aguarde"
 
 #: js/Model.js:526
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
 #: js/Model.js:528 js/NodeGridPanel.js:142
 msgid "Contenttype"

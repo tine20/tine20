@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:101
+#: Controller.php:104
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's personlige filer"

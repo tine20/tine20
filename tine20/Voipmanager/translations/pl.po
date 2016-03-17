@@ -1,11 +1,11 @@
 # 
 # Translators:
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2015
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-02-14 21:19+0000\n"
+"PO-Revision-Date: 2016-01-15 11:18+0000\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -687,7 +687,7 @@ msgstr "nie"
 
 #: js/Asterisk/SipPeerEditDialog.js:187
 msgid "nonat"
-msgstr ""
+msgstr "brak zwrotnej"
 
 #: js/Asterisk/SipPeerGridPanel.js:55
 msgid "account code"
