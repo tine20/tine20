@@ -16,6 +16,7 @@
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
+        "zendframework/zendframework1": "1.12.*",
         "syncroton/syncroton": "1.1.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "codeplex/phpexcel": "1.7.8",
