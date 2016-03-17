@@ -18,6 +18,7 @@ if (isset($_SERVER['HTTP_HOST'])) {
 $paths = array(
     realpath(dirname(__FILE__)),
     realpath(dirname(__FILE__) . '/library'),
+    realpath(dirname(__FILE__) . '/vendor/zendframework/zendframework1/library'),
     get_include_path()
 );
 set_include_path(implode(PATH_SEPARATOR, $paths));
