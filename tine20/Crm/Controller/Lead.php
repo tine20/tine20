@@ -301,6 +301,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      *
      * TODO generalize
      * TODO translate field names (modelconfig?)
+     * TODO allow non scalar values
      */
     protected function _getNotificationUpdates($lead, $oldLead)
     {
@@ -312,11 +313,14 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         foreach ($lead->diff($oldLead, array('seq', 'notes', 'tags', 'relations', 'last_modified_time', 'last_modified_by'))->diff
              as $key => $value)
         {
-            $result[] = array(
-                'modified_attribute' => $key,
-                'old_value' => $value,
-                'new_value' => $lead->{$key}
-            );
+            // only allow scalars atm
+            if (! is_array($value) && ! is_array($lead->{$key})) {
+                $result[] = array(
+                    'modified_attribute' => $key,
+                    'old_value' => $value,
+                    'new_value' => $lead->{$key}
+                );
+            }
         }
 
         return $result;
