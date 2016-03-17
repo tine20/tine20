@@ -495,13 +495,18 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $tableName = SQL_TABLE_PREFIX . 'relations';
 
-        $select = $this->_db->select()->from($tableName)->columns('rel_id')
-            ->where($this->_db->quoteIdentifier('own_model') . ' LIKE ?', $applicationName . '_%');
+        $select = $this->_db->select()->from($tableName, array('rel_id'))
+            ->where($this->_db->quoteIdentifier('own_model') . ' LIKE ?', $applicationName . '_%')
+            ->limit(10000);
 
-        $relation_ids = $this->_db->fetchCol($select);
+        do {
+            $relation_ids = $this->_db->fetchCol($select);
 
-        if (is_array($relation_ids) && count($relation_ids) > 0) {
-            $this->_db->delete($tableName, $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' IN (?)', $relation_ids));
-        }
+            if (is_array($relation_ids) && count($relation_ids) > 0) {
+                $this->_db->delete($tableName, $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') . ' IN (?)', $relation_ids));
+            } else {
+                break;
+            }
+        } while(true);
     }
 }
