@@ -6,6 +6,9 @@
     "homepage": "http://www.tine20.org",
     "license" : ["AGPL-3.0", "BSD-3-Clause", "LGPL-2.1+", "MIT"],
     "repositories": [{
+      "type": "git",
+      "url": "http://git.tine20.org/git/zendframework1"
+    },{
         "type": "git",
         "url": "http://git.tine20.org/git/opendocument"
     }, {
@@ -16,7 +19,7 @@
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
-        "zendframework/zendframework1": "1.12.*",
+        "zendframework/zendframework1": "dev-master as 1.12.18",
         "syncroton/syncroton": "1.1.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "codeplex/phpexcel": "1.7.8",
@@ -38,7 +41,7 @@
         "psr-0": {
             "": ["", "library"],
             "TimeZoneConvert": "library/TimeZoneConvert/lib/",
-            "Zend_": [""],
+            "Zend_": ["vendor/zendframework/zendframework1/library"],
             "qCal": "library/qCal/lib"
         },
         "classmap": [
