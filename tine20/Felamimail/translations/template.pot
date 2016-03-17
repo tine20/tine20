@@ -224,7 +224,7 @@ msgid "To (Email CC)"
 msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1110 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr ""
@@ -321,7 +321,7 @@ msgstr[1] ""
 msgid "Message not available."
 msgstr ""
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1012
 msgid "From"
 msgstr ""
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Show or hide header information"
 msgstr ""
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:945 js/GridPanel.js:468
 msgid "Attachments"
 msgstr ""
 
@@ -535,105 +535,124 @@ msgid_plural "Flag lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/MessageEditDialog.js:144
+#: js/MessageEditDialog.js:154
 msgid "Send"
 msgstr ""
 
-#: js/MessageEditDialog.js:152
+#: js/MessageEditDialog.js:162
 msgid "Search Recipients"
 msgstr ""
 
-#: js/MessageEditDialog.js:160
+#: js/MessageEditDialog.js:170
 msgid "Save As Draft"
 msgstr ""
 
-#: js/MessageEditDialog.js:168
+#: js/MessageEditDialog.js:178
 msgid "Save As Template"
 msgstr ""
 
-#: js/MessageEditDialog.js:177
+#: js/MessageEditDialog.js:187
 msgid "Save Email Note"
 msgstr ""
 
-#: js/MessageEditDialog.js:185
+#: js/MessageEditDialog.js:195
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the "
 "recipient(s) contact(s)."
 msgstr ""
 
-#: js/MessageEditDialog.js:189
+#: js/MessageEditDialog.js:199
 msgid "Reading Confirmation"
 msgstr ""
 
-#: js/MessageEditDialog.js:197
+#: js/MessageEditDialog.js:207
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr ""
 
-#: js/MessageEditDialog.js:215
+#: js/MessageEditDialog.js:211
+msgid "Encrypt Email"
+msgstr ""
+
+#: js/MessageEditDialog.js:221
+msgid "Encrypt email using Mailvelope"
+msgstr ""
+
+#: js/MessageEditDialog.js:239
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr ""
 
-#: js/MessageEditDialog.js:402
-#, python-brace-format
-msgid "On {0}, {1} wrote"
+#: js/MessageEditDialog.js:426
+msgid "Encrypted Content"
 msgstr ""
 
-#: js/MessageEditDialog.js:422
-msgid "Original message"
-msgstr ""
-
-#: js/MessageEditDialog.js:608 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:638 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr ""
 
-#: js/MessageEditDialog.js:659
+#: js/MessageEditDialog.js:689
 msgid "Fwd:"
 msgstr ""
 
-#: js/MessageEditDialog.js:662
+#: js/MessageEditDialog.js:692
 #, python-brace-format
 msgid "{0} Message"
 msgstr ""
 
-#: js/MessageEditDialog.js:716 js/MessageEditDialog.js:721
+#: js/MessageEditDialog.js:746 js/MessageEditDialog.js:751
 msgid "Failed"
 msgstr ""
 
-#: js/MessageEditDialog.js:717
+#: js/MessageEditDialog.js:747
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr ""
 
-#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
+#: js/MessageEditDialog.js:752 js/MessageEditDialog.js:1153
 msgid "Files are still uploading."
 msgstr ""
 
-#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
+#: js/MessageEditDialog.js:842
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr ""
+
+#: js/MessageEditDialog.js:847
+msgid "Original message"
+msgstr ""
+
+#: js/MessageEditDialog.js:885 js/MessageEditDialog.js:1120
 msgid "Compose email:"
 msgstr ""
 
-#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:1081 Controller/Message/Send.php:288
 msgid "Body"
 msgstr ""
 
-#: js/MessageEditDialog.js:1072
+#: js/MessageEditDialog.js:1178
 msgid "Empty subject"
 msgstr ""
 
-#: js/MessageEditDialog.js:1073
+#: js/MessageEditDialog.js:1179
 msgid "Do you really want to send a message with an empty subject?"
 msgstr ""
 
-#: js/MessageEditDialog.js:1094
+#: js/MessageEditDialog.js:1201
 msgid "Add Note"
 msgstr ""
 
-#: js/MessageEditDialog.js:1095
+#: js/MessageEditDialog.js:1202
 msgid "Edit Email Note Text:"
 msgstr ""
 
-#: js/MessageEditDialog.js:1118
+#: js/MessageEditDialog.js:1230
 msgid "No recipients set."
+msgstr ""
+
+#: js/MessageEditDialog.js:1252
+#, python-brace-format
+msgid ""
+"Cannot encrypt message. Public keys for the following recipients are "
+"missing: {0}"
 msgstr ""
 
 #: js/RecipientGrid.js:233
@@ -741,6 +760,15 @@ msgstr ""
 #: js/GridPanel.js:1202
 #, python-brace-format
 msgid "{0} available (total: {1})"
+msgstr ""
+
+#: js/PGPDetailsPanel.js:22
+#, python-brace-format
+msgid "To decrypt this message please install {0} with API support enabled"
+msgstr ""
+
+#: js/PGPDetailsPanel.js:25
+msgid "PGP encrypted Message"
 msgstr ""
 
 #: js/RecipientPickerDialog.js:63
@@ -1086,42 +1114,52 @@ msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
-#: Config.php:53
+#: Config.php:60
 msgid "Vacation Templates Container ID"
 msgstr ""
 
-#: Config.php:62
+#: Config.php:69
 msgid "Custom Vacation Message"
 msgstr ""
 
-#: Config.php:64
+#: Config.php:71
 msgid "User is allowed to set custom vacation message for system account"
 msgstr ""
 
-#: Config.php:73
+#: Config.php:80
 msgid "Cache email body"
 msgstr ""
 
-#: Config.php:75
+#: Config.php:82
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr ""
 
-#: Config.php:84
+#: Config.php:91
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:86
+#: Config.php:93
 msgid "Enabled features in Felamimail application."
 msgstr ""
 
-#: Config.php:93
+#: Config.php:100
 msgid "Tine 2.0 Flag"
 msgstr ""
 
-#: Config.php:94
+#: Config.php:101
 msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+#: Config.php:109
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+#: Config.php:111
+msgid ""
+"Should the email body uris be filtered. Only anchors with URIs are allowed "
+"if this is turned on.)"
 msgstr ""
 
 #: Setup/Initialize.php:44
