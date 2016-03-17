@@ -108,12 +108,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Invoice();
         $this->_modelName = 'Sales_Model_Invoice';
         $this->_doContainerACLChecks = FALSE;
         $this->_cachedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**

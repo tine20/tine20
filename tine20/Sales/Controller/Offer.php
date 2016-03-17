@@ -50,6 +50,8 @@ class Sales_Controller_Offer extends Sales_Controller_NumberableAbstract
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Offer();
         $this->_modelName = 'Sales_Model_Offer';
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**
