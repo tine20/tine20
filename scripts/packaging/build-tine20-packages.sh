@@ -234,7 +234,6 @@ function createArchives()
                     # remove composer dev requires
                     composer install --no-dev -d $TEMPDIR/tine20
                     
-                    rm -rf $TEMPDIR/tine20/vendor/zendframework/zendframework1
                     rm -rf $TEMPDIR/tine20/vendor/phpdocumentor
                     rm -rf $TEMPDIR/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
                     
