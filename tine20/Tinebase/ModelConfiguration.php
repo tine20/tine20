@@ -75,6 +75,14 @@ class Tinebase_ModelConfiguration {
      * @var string/array
      */
     protected $_titleProperty = 'title';
+
+
+    /**
+     * If this is true, the json api (smd) is generated automatically
+     *
+     * @var boolean
+     */
+    protected $_autoGenerateSmd = NULL;
     
     /**
      * Human readable name of the container

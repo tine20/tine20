@@ -372,8 +372,101 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                ->setEnvelope(Zend_Json_Server_Smd::ENV_JSONRPC_2);
             
         $smd = $server->getServiceMap();
-        
+
+        self::_addModelConfigServices($smd);
+
         return $smd;
+    }
+
+    /**
+     * add default modelconfig functions to service map
+     *
+     * @param Zend_Json_Server_Smd $smd
+     */
+    protected static function _addModelConfigServices(Zend_Json_Server_Smd $smd)
+    {
+        $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
+
+        $cache = Tinebase_Core::getCache();
+        $cacheId = '_addModelConfigServices' . sha1(Zend_Json_Encoder::encode($userApplications->getArrayOfIds()));
+        $services = $cache->load($cacheId);
+
+        if (! $services) {
+            $services = array();
+            foreach ($userApplications as $application) {
+                try {
+                    $controller = Tinebase_Core::getApplicationInstance($application->name);
+                    $models = $controller->getModels();
+                    if (!$models) {
+                        continue;
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                }
+
+                foreach ($models as $model) {
+                    $config = $model::getConfiguration();
+                    if ($config && $config->autoGenerateSmd) {
+                        $commonServiceOptions = array(
+                            'envelope' => 'JSON-RPC-2.0',
+                            'transport' => 'POST',
+                            'return' => 'array'
+                        );
+
+                        // TODO replace this with generic method
+                        $simpleModelName = str_replace($application->name . '_Model_', '', $model);
+
+                        $services[] = array_merge($commonServiceOptions, array(
+                            'name' => $application->name . '.get' . $simpleModelName,
+                            'params' =>
+                                array(array(
+                                    'type' => 'string',
+                                    'name' => 'id',
+                                    'optional' => false,
+                                )),
+                        ));
+                        $services[] = array_merge($commonServiceOptions, array(
+                            'name' => $application->name . '.save' . $simpleModelName,
+                            'params' =>
+                                array(array(
+                                    'type' => 'any',
+                                    'name' => 'recordData',
+                                    'optional' => false,
+                                )),
+                        ));
+                        $services[] = array_merge($commonServiceOptions, array(
+                            'name' => $application->name . '.delete' . $simpleModelName . 's',
+                            'params' =>
+                                array(array(
+                                    'type' => 'array',
+                                    'name' => 'ids',
+                                    'optional' => false,
+                                )),
+                            'return' => 'string'
+                        ));
+                        $services[] = array_merge($commonServiceOptions, array(
+                            'name' => $application->name . '.search' . $simpleModelName . 's',
+                            'params' =>
+                                array(array(
+                                    'type' => 'array',
+                                    'name' => 'filter',
+                                    'optional' => false,
+                                ), array(
+                                    'type' => 'array',
+                                    'name' => 'paging',
+                                    'optional' => false,
+                                )),
+                        ));
+                    }
+                }
+            }
+
+            $cache->save($services, $cacheId);
+        }
+
+        foreach ($services as $service) {
+            $smd->addService($service);
+        }
     }
     
     /**

@@ -43,6 +43,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
+        'autoGenerateSmd'   => TRUE,
 
         'createModule'    => TRUE,
 
