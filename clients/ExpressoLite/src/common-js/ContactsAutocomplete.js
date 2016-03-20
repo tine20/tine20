@@ -27,8 +27,8 @@ var ContactsAutocomplete = function(options) {
     var $tpl          = null; // ContactsAutocomplete_frame DIV
     var isMouseDown   = false;
     var isCacheSearch = true; // current search is within cached contacts?
-    var onSelectCB    = null; // user callbacks
-    var onBackspaceCB = null;
+    var onSelectCB    = $.noop; // user callbacks
+    var onBackspaceCB = $.noop;
 
     (function _Constructor() {
         $tpl = $('#ContactsAutocomplete_template > .ContactsAutocomplete_frame').clone();
@@ -52,7 +52,7 @@ var ContactsAutocomplete = function(options) {
 
         userOpts.$txtField.on('keydown', function(ev) {
             if(ev.which === 8) { // backspace
-                if (!userOpts.$txtField.val().length && onBackspaceCB !== null) {
+                if (!userOpts.$txtField.val().length) {
                     ev.stopImmediatePropagation();
                     onBackspaceCB(); // invoke user callback
                     return false;
@@ -128,9 +128,7 @@ var ContactsAutocomplete = function(options) {
         });
 
         $tpl.find('.ContactsAutocomplete_results').on('click', '.ContactsAutocomplete_oneResult', function() {
-            if (onSelectCB !== null) {
-                onSelectCB($(this).data('contact').emails); // invoke user callback, send array
-            }
+            onSelectCB($(this).data('contact').emails); // invoke user callback, send array
             $tpl.find('.ContactsAutocomplete_results').empty();
             userOpts.$txtField.val('');
             THIS.hide();
@@ -269,9 +267,7 @@ var ContactsAutocomplete = function(options) {
         var looksLikeEmail = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(token); // holy s**t!
 
         if (looksLikeEmail) { // then accept written text as a valid address
-            if (onSelectCB !== null) {
-                onSelectCB([ token ]); // invoke user callback
-            }
+            onSelectCB([ token ]); // invoke user callback
             userOpts.$txtField.val('');
         }
     }

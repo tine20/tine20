@@ -32,6 +32,15 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
      * @var string
      */
     protected static $_defaultModel = 'Addressbook_Model_Contact';
+
+    /**
+     * Models of this application that make use of Tinebase_Record_Path
+     *
+     * @var array|null
+     */
+    protected $_modelsUsingPath = array(
+        'Addressbook_Model_Contact'
+    );
     
     /**
      * constructor (get current user)
@@ -154,5 +163,37 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             'application'  => $this->_applicationName,
             'data'         => $image
         ));
+    }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        if (Tinebase_Core::getUser()->hasRight($application, Addressbook_Acl_Rights::MANAGE_CORE_DATA_LISTS)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'adb_lists',
+                'application_id' => $application,
+                'model' => 'Addressbook_Model_List',
+                'label' => 'Lists' // _('Lists')
+            )));
+        }
+
+        if (Tinebase_Core::getUser()->hasRight($application, Addressbook_Acl_Rights::MANAGE_CORE_DATA_LIST_ROLES)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'adb_list_roles',
+                'application_id' => $application,
+                'model' => 'Addressbook_Model_ListRole',
+                'label' => 'List Roles' // _('List Roles')
+            )));
+        }
+
+        return $result;
     }
 }

@@ -72,6 +72,10 @@
           "path": "js/"
         },
         {
+          "text": "PGPDetailsPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/"
         },
@@ -88,7 +92,7 @@
           "path": "js/"
         },
         {
-          "text": "SearchCombo.js",
+          "text": "ContactSearchCombo.js",
           "path": "../Addressbook/js/"
         },
         {

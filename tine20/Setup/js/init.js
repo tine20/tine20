@@ -56,7 +56,7 @@ Tine.Tinebase.tineInit.onRegistryLoad = Tine.Tinebase.tineInit.onRegistryLoad.cr
         status: 'enabled'
     }]);
     Tine.Tinebase.MainScreenPanel.prototype.defaultAppName = 'Setup';
-    Tine.Tinebase.MainScreenPanel.prototype.appPickerStyle = 'none';
+    Tine.Tinebase.MainScreenPanel.prototype.hideAppTabs = true;
 
     return true;
 });

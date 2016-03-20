@@ -45,6 +45,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_TINE20_FLAG = 'tine20Flag';
 
     /**
+     * Tine 2.0 filter message uris (only allow <a> uris)
+     *
+     * @var string
+     */
+    const FILTER_EMAIL_URIS = 'filterEmailUris';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -97,6 +104,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'default'               => array(
                 self::FEATURE_TINE20_FLAG => true,
             ),
+        ),
+        self::FILTER_EMAIL_URIS => array(
+            //_('Filter E-Mail URIs')
+            'label'                 => 'Filter E-Mail URIs',
+            // _('Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on.)')
+            'description'           => 'Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => true,
         ),
     );
     

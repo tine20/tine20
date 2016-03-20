@@ -42,8 +42,11 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Sales_Backend_Supplier();
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**

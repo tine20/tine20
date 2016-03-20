@@ -327,7 +327,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $updatedTask = Tasks_Controller_Task::getInstance()->update($task);
         
         $task->seq = 1;
-        $modlog = $this->_modLogClass->getModificationsBySeq($task, 2);
+        $modlog = $this->_modLogClass->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            $task, 2);
         
         $this->assertEquals(1, count($modlog));
         $this->assertEquals((string) $task->due, (string) $modlog->getFirstRecord()->new_value, 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));

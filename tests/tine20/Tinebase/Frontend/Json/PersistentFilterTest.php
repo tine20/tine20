@@ -304,7 +304,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                     break;
                 case 'organizer':
                     $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
-                    $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
+                    if ($requestFilter['value'] !== 'currentAccount') {
+                        $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
+                    } else {
+                        $this->assertEquals(Tinebase_Core::getUser()->getId(), $responseFilter['value']['accountId'], 'wrong accountId');
+                    }
                     break;
                 case 'due':
                     $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong due date');
@@ -332,7 +336,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
             'filters'           => array(
                 array('field' => 'query',        'operator' => 'contains',  'value' => 'test'),
                 array('field' => 'container_id', 'operator' => 'equals',    'value' => Tasks_Controller::getInstance()->getDefaultContainer()->getId()),
-                array('field' => 'organizer',    'operator' => 'equals',    'value' => Tinebase_Core::getUser()->getId()),
+                array('field' => 'organizer',    'operator' => 'equals',    'value' => Tinebase_Model_User::CURRENTACCOUNT),
                 array('field' => 'due',          'operator' => 'after',     'value' => '2010-03-20 18:00:00'),
             )
         );
@@ -391,7 +395,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                 'own_model'              => 'Addressbook_Model_Contact',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => '',
                 'related_backend'        => 'Sql',
                 'related_id'             => $contact1->getId(),

@@ -58,6 +58,10 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         foreach ($events as $event) {
             if ($event->rrule) {
                 $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
+
+                if ($event->rrule_constraints instanceof Calendar_Model_EventFilter) {
+                    $event->rrule_constraints = $event->rrule_constraints->toArray(true);
+                }
             }
         }
     }

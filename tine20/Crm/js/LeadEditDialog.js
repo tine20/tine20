@@ -260,7 +260,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         // Don't show item if it's a archived source!
-        var sourceStore = Tine.Crm.LeadSource.getStore();
+        var sourceStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Crm', 'leadsources');
 
         var preserveRecords = [];
 
@@ -275,7 +275,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         copiedStore.add(preserveRecords);
 
         sourceStore.each(function(item) {
-            if (item.get('archived') == true) {
+            if (item.json.archived == true) {
                 sourceStore.remove(item);
             }
         });
@@ -284,7 +284,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var rawValue = parseInt(combo.getRawValue());
 
             if (Ext.isNumber(rawValue)) {
-                combo.setRawValue(copiedStore.getById(combo.getValue()).get('leadsource'));
+                combo.setRawValue(copiedStore.getById(combo.getValue()).get('value'));
             }
         };
 
@@ -369,39 +369,32 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         anchor:'95%',
                                         xtype: 'combo'
                                     },
-                                    items: [{
-                                        fieldLabel: this.app.i18n._('Leadstate'), 
-                                        id:'leadstatus',
-                                        name:'leadstate_id',
-                                        store: Tine.Crm.LeadState.getStore(),
-                                        displayField:'leadstate',
-                                        lazyInit: false,
-                                        value: (Tine.Crm.LeadState.getStore().getCount() > 0) ? Tine.Crm.LeadState.getStore().getAt(0).id : null,
+                                    items: [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        app: 'Crm',
+                                        keyFieldName: 'leadstates',
+                                        fieldLabel: this.app.i18n._('Leadstate'),
+                                        name: 'leadstate_id',
                                         listeners: {
                                             'select': function(combo, record, index) {
-                                                if (this.record.data.probability !== null) {
+                                                if (this.record.json.probability !== null) {
                                                     this.combo_probability.setValue(record.data.probability);
                                                 }
-                                                if (record.data.endslead == '1') {
+                                                if (record.json.endslead == '1') {
                                                     this.date_end.setValue(new Date());
                                                 }
                                             },
                                             scope: this
                                         }
-                                    }, {
-                                        fieldLabel: this.app.i18n._('Leadtype'), 
-                                        id:'leadtype',
-                                        name:'leadtype_id',
-                                        store: Tine.Crm.LeadType.getStore(),
-                                        value: (Tine.Crm.LeadType.getStore().getCount() > 0) ? Tine.Crm.LeadType.getStore().getAt(0).id : null,
-                                        displayField:'leadtype'
-                                    }, {
-                                        fieldLabel: this.app.i18n._('Leadsource'), 
-                                        id:'leadsource',
-                                        name:'leadsource_id',
-                                        store: sourceStore,
-                                        displayField:'leadsource',
-                                        value: (sourceStore.getCount() > 0) ? sourceStore.getAt(0).id : null,
+                                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        app: 'Crm',
+                                        keyFieldName: 'leadtypes',
+                                        fieldLabel: this.app.i18n._('Leadtype'),
+                                        name: 'leadtype_id'
+                                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                        app: 'Crm',
+                                        keyFieldName: 'leadsources',
+                                        fieldLabel: this.app.i18n._('Leadsource'),
+                                        name: 'leadsource_id',
                                         listeners: {
                                             scope: this,
                                             // When loading
@@ -413,7 +406,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 setdeffered.defer(5, this, [combo]);
                                             }
                                         }
-                                    }]
+                                    })]
                                 }]
                             }, {
                                 columnWidth: 0.33,

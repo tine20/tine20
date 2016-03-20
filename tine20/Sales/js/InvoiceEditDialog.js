@@ -114,7 +114,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
             
             newRelations.push({
-                own_degree:      'sibling',
+                related_degree:  'sibling',
                 own_backend:     'Sql',
                 related_id:      originalRecord.get('id'),
                 related_record:  originalRecord.data,

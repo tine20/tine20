@@ -204,37 +204,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 }]
             }
         });
-
-        /**
-         * @type {Ext.Action}
-         */
-        this.actions_exportEvents = new Ext.Action({
-            requiredGrant: 'exportGrant',
-            text: this.app.i18n._('Export Events'),
-            translationObject: this.app.i18n,
-            iconCls: 'action_export',
-            scope: this,
-            allowMultiple: true,
-            menu: {
-                items: [
-                    new Tine.Calendar.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Calendar.exportEvents',
-                        gridPanel: this
-                    }),
-                    new Tine.Calendar.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Calendar.exportEvents',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
-
+        
         this.showSheetView = new Ext.Button({
             pressed: this.isActiveView('Sheet'),
             scale: 'medium',
@@ -301,20 +271,47 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             toggleGroup: 'Calendar_Toolbar_tgViews'
         });
+        this.toggleFullScreen = new Ext.Toolbar.Button({
+            text: '\u2197',
+            scope: this,
+            handler: function() {
+                if (this.ownerCt.ref == 'tineViewportMaincardpanel') {
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem);
+                    this.originalOwner.add(this);
+                    this.originalOwner.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2197');
+                    this.southPanel.expand();
+                } else {
+                    this.originalOwner = this.ownerCt;
+                    this.originalOwner.remove(this, false);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.add(this);
+                    Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this);
+                    this.toggleFullScreen.setText('\u2199');
+                    this.southPanel.collapse();
+                }
+            }
+        });
         
        this.action_import = new Ext.Action({
             requiredGrant: 'addGrant',
             text: this.app.i18n._('Import Events'),
             disabled: false,
             handler: this.onImport,
-            scale: 'medium',
             minWidth: 60,
-            rowspan: 2,
-            iconAlign: 'top',
             requiredGrant: 'readGrant',
             iconCls: 'action_import',
             scope: this,
             allowMultiple: true
+        });
+
+        this.action_export = new Tine.Calendar.ExportButton({
+            text: this.app.i18n._('Export Events'),
+            iconCls: 'action_export',
+            exportFunction: 'Calendar.exportEvents',
+            showExportDialog: true,
+            gridPanel: this
         });
 
         this.changeViewActions = [
@@ -326,6 +323,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.app.featureEnabled('featureYearView')) {
             this.changeViewActions.push(this.showYearView);
         }
+
+        this.changeViewActions.push(this.toggleFullScreen);
 
         this.recordActions = [
             this.action_editInNewWindow,
@@ -393,7 +392,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             rows: 2,
             frame: false,
             items: [
-                this.action_import
+                this.action_import,
+                this.action_export
             ]
         }, {
             xtype: 'buttongroup',
@@ -428,6 +428,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (this.detailsPanel) {
             this.items.push({
                 region: 'south',
+                ref: 'southPanel',
                 border: false,
                 collapsible: true,
                 collapseMode: 'mini',
@@ -671,7 +672,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             // to allow gridpanel hooks (like email compose)
             {
                 ptype: 'ux.itemregistry',
-                key:   'Calendar-GridPanel-ContextMenu'
+                key:   'Calendar-Event-GridPanel-ContextMenu'
             }],
             items: menuitems
         });
@@ -1200,20 +1201,27 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
      * @param {Date} datetime
      */
     onPasteEvent: function(datetime) {
-        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event');
-        var isCopy = record.isCopy;
+        var record = Tine.Tinebase.data.Clipboard.pull('Calendar', 'Event'),
+            isCopy = record.isCopy,
+            sourceView = record.view,
+            sourceRecord = record,
+            sourceViewAttendee = sourceView.ownerCt.attendee,
+            destinationView = this.getCalendarPanel(this.activeView).getView(),
+            destinationViewAttendee = destinationView.ownerCt.attendee;
 
         if (! record) {
             return;
         }
         
-        var dtend   = record.get('dtend');
-        var dtstart = record.get('dtstart');
-        var eventLength = dtend - dtstart;
+        var dtend   = record.get('dtend'),
+            dtstart = record.get('dtstart'),
+            eventLength = dtend - dtstart,
+            store = this.getStore();
+
+        record.beginEdit();
 
         if (isCopy != true) {
-            // remove before update
-            var store = this.getStore();
+            // remove from ui before update
             var oldRecord = store.getAt(store.findExact('id', record.getId()));
             if (oldRecord && oldRecord.hasOwnProperty('ui')) {
                 oldRecord.ui.remove();
@@ -1230,16 +1238,42 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }, this);
         }
 
-        // Allow to change attendee if in split view
-        var defaultAttendee = Tine.Calendar.Model.Event.getDefaultData().attendee;
-        if (Ext.isArray(defaultAttendee) && defaultAttendee.length === 1) {
-            if (record.data.attendee[0].user_id.account_id != defaultAttendee[0].user_id.account_id) {
-                record.data.attendee[0] = defaultAttendee[0];
+        // @TODO move to common function with daysView::notifyDrop parts
+        // change attendee in split view
+        if (sourceViewAttendee || destinationViewAttendee) {
+            var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(sourceRecord.get('attendee')),
+                sourceAttendee = sourceViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, sourceViewAttendee) : false,
+                destinationAttendee = destinationViewAttendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(attendeeStore, destinationViewAttendee) : false;
+
+            if (destinationViewAttendee && !destinationAttendee) {
+                destinationAttendee = new Tine.Calendar.Model.Attender(destinationViewAttendee.data);
+
+                attendeeStore.remove(sourceAttendee);
+                attendeeStore.add(destinationAttendee);
+
+                Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, record);
             }
         }
 
-        record.set('dtstart', datetime);
-        record.set('dtend', new Date(datetime.getTime() + eventLength));
+
+        if (datetime.is_all_day_event) {
+            record.set('dtstart', datetime);
+            record.set('dtend', datetime.clone().add(Date.DAY, 1).add(Date.SECOND, -1));
+            record.set('is_all_day_event', true);
+        } else if (datetime.date_only) {
+            var adoptedDtStart = datetime.clone();
+            adoptedDtStart.setHours(dtstart.getHours());
+            adoptedDtStart.setMinutes(dtstart.getMinutes());
+            adoptedDtStart.setSeconds(dtstart.getSeconds());
+
+            record.set('dtstart', adoptedDtStart);
+            record.set('dtend', new Date(adoptedDtStart.getTime() + eventLength));
+        } else {
+            record.set('dtstart', datetime);
+            record.set('dtend', new Date(datetime.getTime() + eventLength));
+        }
+
+        record.endEdit();
 
         if (isCopy == true) {
             record.isCopy = true;
@@ -1487,6 +1521,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             // generate html for each busy attender
             var busyAttendeeHTML = '';
+            var denyIgnore = false;
+
             Ext.each(busyAttendee, function(busyAttender) {
                 // TODO refactore name handling of attendee
                 //      -> attender model needs knowlege of how to get names!
@@ -1508,11 +1544,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     if (fbInfo.event && fbInfo.event.summary) {
                         eventInfo += ' : ' + fbInfo.event.summary;
                     }
+                    if (fbInfo.type == 'BUSY_UNAVAILABLE') {
+                        denyIgnore = true;
+                        eventInfo += '<span class="cal-conflict-eventinfos-unavailable">' + this.app.i18n._('Unavailable') + '</span>';
+                    }
                     eventInfos.push(eventInfo);
                 }, this);
                 busyAttendeeHTML += '<div class="cal-conflict-eventinfos">' + eventInfos.join(', <br />') + '</div>';
                 
-            });
+            }, this);
             
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
@@ -1524,7 +1564,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                '</div>' +
                                busyAttendeeHTML,
                 options: [
-                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
+                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', disabled: denyIgnore},
                     {text: this.app.i18n._('Edit Event'), name: 'edit', checked: true},
                     {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],

@@ -108,7 +108,7 @@
           "path": "js/"
         },
         {
-          "text": "SearchCombo.js",
+          "text": "ContactSearchCombo.js",
           "path": "../Addressbook/js/"
         },
         {
@@ -177,10 +177,6 @@
         },
         {
           "text": "ReadConfirmationDetailsPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "MultiWindow.js",
           "path": "js/"
         }
       ]

@@ -209,7 +209,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         if (! this.nonInteractive) {
             Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
         }
-        var baseUrl = 'https://api.tine20.net/bugreport.php';
+        var baseUrl = Tine.bugreportUrl;
         var hash = this.generateHash();
         
         this.exception.msg           = this.exception.message;

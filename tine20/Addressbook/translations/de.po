@@ -469,12 +469,12 @@ msgstr "Angelegt von"
 #: js/Model.js:205 js/Model.js:219 js/ListGridDetailsPanel.js:86
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] "Liste"
-msgstr[1] "Listen"
+msgstr[0] "Gruppe"
+msgstr[1] "Gruppen"
 
 #: js/Model.js:205 js/ListGridDetailsPanel.js:57 js/ListGridDetailsPanel.js:83
 msgid "Lists"
-msgstr "Listen"
+msgstr "Gruppen"
 
 #: js/Model.js:222 js/Model.js:290
 msgid "Quick search"
@@ -504,7 +504,7 @@ msgstr "Entfernen"
 
 #: js/ListGridDetailsPanel.js:60
 msgid "Select list"
-msgstr "Liste auswählen"
+msgstr "Gruppe auswählen"
 
 #: js/ListGrid.js:102
 msgid "Emails"
@@ -512,7 +512,7 @@ msgstr "E-Mail"
 
 #: js/ListEditDialog.js:59
 msgid "List Information"
-msgstr "Listen Informationen"
+msgstr "Gruppeninformationen"
 
 #: js/ListEditDialog.js:155
 #, python-brace-format
@@ -848,3 +848,32 @@ msgstr "Zuletzt von mir bearbeitet"
 #: Setup/Initialize.php:147
 msgid "All contacts that I have last modified"
 msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
+
+msgid "List Roles"
+msgstr "Gruppenrollen"
+
+msgid "List Role"
+msgid_plural "List Roles"
+msgstr[0] "Gruppenrolle"
+msgstr[1] "Gruppenrollen"
+
+msgid "Search for users ..."
+msgstr "Suche nach Benutzern ..."
+
+msgid "Search for Contacts ..."
+msgstr "Suche nach Kontakten ..."
+
+msgid "List type"
+msgstr "Listen Typ"
+
+msgid "Department"
+msgstr "Abteilung"
+
+msgid "Mailing list"
+msgstr "Mailingliste"
+
+msgid "List types available"
+msgstr "Verfügbare Listen Typen"
+
+msgid "List types available."
+msgstr "Verfügbare Listen Typen."

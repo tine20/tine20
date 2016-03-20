@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -67,7 +67,7 @@ class Crm_Import_CsvTest extends ImportTestCase
     {
         $this->_testNeedsTransaction();
 
-        $this->_testContainer = $this->_getTestContainer('Crm');
+        $this->_testContainer = $this->_getTestContainer('Crm', 'Crm_Model_Lead');
         $this->_filename = dirname(__FILE__) . '/files/' . $importFilename;
         $this->_deleteImportFile = false;
 

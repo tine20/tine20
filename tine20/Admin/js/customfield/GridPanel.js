@@ -122,18 +122,6 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * Confirm application restart
-     */
-    confirmApplicationRestart: function () {
-        Ext.Msg.confirm(this.app.i18n._('Confirm'), this.app.i18n._('Restart application to apply new customfields?'), function (btn) {
-            if (btn == 'yes') {
-                // reload mainscreen to make sure registry gets updated
-                Tine.Tinebase.common.reload();
-            }
-        }, this);
-    },
-    
-    /**
      * on update after edit
      * 
      * @param {String|Tine.Tinebase.data.Record} record
@@ -141,7 +129,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onUpdateRecord: function (record) {
         Tine.Admin.customfield.GridPanel.superclass.onUpdateRecord.apply(this, arguments);
         
-        this.confirmApplicationRestart();
+        Tine.Tinebase.common.confirmApplicationRestart();
     },
     
     /**
@@ -153,6 +141,6 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onAfterDelete: function (ids) {
         Tine.Admin.customfield.GridPanel.superclass.onAfterDelete.apply(this, arguments);
         
-        this.confirmApplicationRestart();
+        Tine.Tinebase.common.confirmApplicationRestart();
     }
 });

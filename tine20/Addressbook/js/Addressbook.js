@@ -45,6 +45,48 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
 
         return mainscreen;
     },
+
+    registerCoreData: function() {
+        Tine.CoreData.Manager.registerGrid('adb_lists', Tine.Addressbook.ListGridPanel, {
+            app: this,
+            initialLoadAfterRender: false
+        });
+
+        Tine.CoreData.Manager.registerGrid(
+            'adb_list_roles',
+            Tine.widgets.grid.GridPanel,
+            {
+                recordClass: Tine.Addressbook.Model.ListRole,
+                app: this,
+                initialLoadAfterRender: false,
+                // TODO move this to a generic place
+                gridConfig: {
+                    autoExpandColumn: 'name',
+                    columns: [{
+                        id: 'id',
+                        header: this.i18n._("ID"),
+                        width: 150,
+                        sortable: true,
+                        dataIndex: 'id',
+                        hidden: true
+                    }, {
+                        id: 'name',
+                        header: this.i18n._("Name"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'name'
+                    }, {
+                        id: 'description',
+                        header: this.i18n._("Description"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'description',
+                        hidden: true
+                    }]
+                }
+            }
+        );
+    }
 });
 
 /**
@@ -55,7 +97,7 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
- Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
+Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Contact',
     contentTypes: [
         {model: 'Contact',  requiredRight: null, singularContainerMode: false},

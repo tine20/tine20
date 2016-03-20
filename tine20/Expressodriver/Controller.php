@@ -129,4 +129,56 @@ class Expressodriver_Controller extends Tinebase_Controller_Event
 
         return $this->getConfigSettings();
     }
+
+    /**
+     * set credentials for given adapter
+     *
+     * @param string $adapterName
+     * @param string $password
+     * @return array
+     */
+    public function setCredentials($adapterName, $password)
+    {
+
+        $adapter = null;
+        $config = $this->getConfigSettings();
+        foreach ($config['adapters'] as $adapterConfig) {
+            if ($adapterName === $adapterConfig['name']) {
+                $adapter = $adapterConfig;
+            }
+        }
+
+        $url = $adapter['url'];
+        if ($adapter['adapter'] == 'owncloud') {
+            $url = rtrim($url, '/');
+            $url .= '/remote.php/webdav/';
+        }
+        $username = $adapter['useEmailAsLoginName']
+                ? Tinebase_Core::getUser()->accountEmailAddress
+                : Tinebase_Core::getUser()->accountLoginName;
+
+        $options = array(
+            'host' => $adapter['url'],
+            'user' => $username,
+            'password' => $password,
+            'root' => '/',
+            'name' => $adapter['name'],
+            'useCache' => $config['default']['useCache'],
+            'cacheLifetime' => $config['default']['cacheLifetime'],
+        );
+        $adapterInstance = Expressodriver_Backend_Storage_Abstract::factory($adapter['adapter'], $options);
+
+        // check authentication for owncloud/webdav
+        if ($adapterInstance->checkCredentials($url, $username, $password)) {
+            Expressodriver_Session::getSessionNamespace()->password[$adapterName] = $password;
+            return array(
+                'success' => true
+            );
+        } else {
+            return array(
+                'success' => false,
+                'errorMessage' => 'Invalid Credentials'
+            );
+        }
+    }
 }

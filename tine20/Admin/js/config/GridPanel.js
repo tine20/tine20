@@ -184,12 +184,30 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.supr().initStore.call(this);
 
         this.store.on('beforeload', this.onStoreBeforeload, this);
-
     },
 
     onStoreBeforeload: function(store, options) {
         this.supr().onStoreBeforeload.call(this, store, options);
         options.params.filter.push({'field': 'application_id', 'operator': 'equals', 'value': this.configApp.id})
+    },
+
+    /**
+     * called when the store gets updated, e.g. from editgrid
+     *
+     * @param {Ext.data.store} store
+     * @param {Tine.Tinebase.data.Record} record
+     * @param {String} operation
+     */
+    onStoreUpdate: function(store, record, operation) {
+        this.supr().onStoreUpdate.call(this, store, record, operation);
+
+        switch (operation) {
+            case Ext.data.Record.EDIT:
+                // do/check registry reload
+                // TODO do this in parent window?
+                Tine.Tinebase.common.confirmApplicationRestart(true);
+                break;
+        }
     },
 
     valueRenderer: function(value, metaData, record, rowIndex, colIndex, store) {
@@ -213,7 +231,6 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 value = '...';
                 break;
             default:
-                //value = Ext.encode(value);
                 break;
         }
 

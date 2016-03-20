@@ -185,8 +185,24 @@ Tine.Expressomail.setTreeContextMenus = function() {
                     var window = Tine.Expressomail.AclsEditDialog.openWindow({
                         title: String.format(this.app.i18n._('Share mailbox')),
                         accountId: account,
-                        // Using 'INBOX', can use folderId
-                        globalName: 'INBOX'
+                        globalName: folderId,
+                        enableSendAs: folderId === "INBOX" ? true : false,
+                        listeners: {
+                            // NOTE: scope has to be first item in listeners! @see Ext.ux.WindowFactory
+                            scope: this,
+                            'save': function(data) {
+                                var shares = [];
+                                data.each(function(_record){
+                                    if (_record.get('readacl')
+                                        || _record.get('writeacl')
+                                        || _record.get('sendacl')
+                                    ){
+                                        shares.push(_record.get('account_id'));
+                                    }
+                                });
+                                this.ctxNode.getOwnerTree().onSharingUpdate(this.ctxNode, shares, true);
+                            }
+                        }
                     });
                 }
             }
@@ -294,6 +310,64 @@ Tine.Expressomail.setTreeContextMenus = function() {
         }
     };
 
+    //export mail dir scheduler
+    var scheduleFolderExportAction = {
+        text: this.app.i18n._('Export Folder'),
+        iconCls: 'action_export',
+        scope: this,
+        handler: function() {
+            if (this.ctxNode) {
+                var folderId = this.ctxNode.attributes.folder_id,
+                    folder = this.app.getFolderStore().getById(folderId),
+                    folderName = folder.get('globalname');
+
+                var baseStyle = 'border:1px solid rgb(214,133,2);padding:4px;margin:5px;background-color: rgb(250,239,165);';
+                var confirmQuestion = this.app.i18n._('Please, do you confirm your request to schedule a task to export all mail data contained in the following folder?')
+                                                    + '<div style="' + baseStyle + '">' + setFolderName(folderName) + '</div><p>'
+                                                    + this.app.i18n._('<b>NOTE:</b> if you choose a folder root, all child folders will be included too.<br/>')
+                                                    + this.app.i18n._('<b>IMPORTANT:</b> all events related to this action will be comunicated to your e-mail address.')
+                                                    + '</p>';
+
+                Ext.MessageBox.confirm(this.app.i18n._('Scheduler confirm'), confirmQuestion, function (btn) {
+                    if (btn == 'yes') {
+                        Ext.MessageBox.wait(this.app.i18n.gettext('Please wait'), this.app.i18n.gettext('Scheduling your request...'));
+
+                        var params = {
+                            method: 'Expressomail.schedulerFolder',
+                            folder: folderId
+                        };
+
+                        Ext.Ajax.request({
+                            params: params,
+                            scope: this,
+                            timeout: 15000, // 15s
+                            success: function(_result, _request){
+                                var scheduled = Ext.util.JSON.decode(_result.responseText);
+                                if(scheduled.status === 'failure'){
+                                    Ext.MessageBox.alert(
+                                            this.app.i18n._('Failed'),
+                                            this.app.i18n._(scheduled.message)
+                                    );
+                                } else{
+                                    Ext.MessageBox.show({
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.INFO,
+                                        title: this.app.i18n._('Export Folder'),
+                                        msg: this.app.i18n._('Your scheduler was successfully done! Pay attention at you mail box for notifications.')
+                                    });
+                                }
+                            },
+                            failure: function (_result, _request) {
+                                var msgError = Ext.util.JSON.decode(_result.responseText);
+                                Ext.MessageBox.alert(this.app.i18n._('Failed'), this.app.i18n._(msgError.message));
+                            }
+                        });
+                    }
+                }, this);
+            }
+        }
+    };
+
     // mutual config options
     var config = {
         nodeName: _('Folder'),
@@ -303,30 +377,89 @@ Tine.Expressomail.setTreeContextMenus = function() {
     };
 
     // system folder ctx menu
-    config.actions = [markFolderSeenAction, 'add',manageEmlImportAction];
+    config.actions = [markFolderSeenAction, 'add',manageEmlImportAction, manageAclsAction];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
 
+    config.actions = [markFolderSeenAction, 'add',manageEmlImportAction, manageAclsAction,
+                        scheduleFolderExportAction];
+    this.contextMenuSystemFolderExp = Tine.widgets.tree.ContextMenu.getMenu(config);
+
     // user folder ctx menu
-    config.actions = [markFolderSeenAction, 'add', 'rename', 'delete',manageEmlImportAction];
+    config.actions = [markFolderSeenAction, 'add', 'rename', 'delete',manageEmlImportAction,
+                        manageAclsAction];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
 
+    // user folder ctx menu
+    config.actions = [markFolderSeenAction, 'add', 'rename', 'delete',manageEmlImportAction,
+                        manageAclsAction, scheduleFolderExportAction];
+    this.contextMenuUserFolderExp = Tine.widgets.tree.ContextMenu.getMenu(config);
+
     // trash ctx menu
-    config.actions = [markFolderSeenAction, 'add', emptyFolderAction];
+    config.actions = [markFolderSeenAction, 'add', emptyFolderAction, manageAclsAction];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
+
+    // trash ctx menu
+    config.actions = [markFolderSeenAction, 'add', emptyFolderAction, manageAclsAction,
+                        scheduleFolderExportAction];
+    this.contextMenuTrashExp = Tine.widgets.tree.ContextMenu.getMenu(config);
 
     // account ctx menu
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [addFolderToRootAction, manageAclsAction, updateFolderCacheAction, editVacationAction, editRulesAction, editAccountAction],
+        actions: [addFolderToRootAction, updateFolderCacheAction, editVacationAction, editRulesAction, editAccountAction],
         scope: this,
         backend: 'Expressomail',
         backendModel: 'Account'
     });
-    
-    config.actions = [markFolderSeenAction, 'add', 'rename', deleteFolderChildAction , manageEmlImportAction];
+
+    config.actions = [markFolderSeenAction, 'add', 'rename', deleteFolderChildAction ,
+                        manageEmlImportAction, manageAclsAction];
     this.contextMenuUserFolderChildren = Tine.widgets.tree.ContextMenu.getMenu(config);
+
+    config.actions = [markFolderSeenAction, 'add', 'rename', deleteFolderChildAction ,
+                        manageEmlImportAction, manageAclsAction, scheduleFolderExportAction];
+    this.contextMenuUserFolderChildrenExp = Tine.widgets.tree.ContextMenu.getMenu(config);
 
     // context menu for unselectable folders (like public/shared namespace)
     config.actions = ['add'];
     this.unselectableFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
 };
+
+/*
+ * function do split folder global name for translation parts
+ * @param String folder
+ * @returns String setname
+ */
+function setFolderName(folder) {
+    var charIndex = '/';
+    var splitData = folder.split(charIndex);
+    if (splitData.lenght <= 0){
+        return folder;
+    } else{
+        var setname = "";
+        for(var i=0; i < splitData.length; i++){
+            var adjusted = doTranslateName((splitData[i]));
+            setname =  setname + adjusted + '\\';
+        }
+        setname = setname.substring(0, setname.length -1);
+        return(setname);
+    }
+}
+
+/*
+ * function to process translation partial path
+ * @param String name
+ * @returns String
+ */
+function doTranslateName(name) {
+    this.app = Tine.Tinebase.appMgr.get('Expressomail');
+    this.i18n = this.app.i18n;
+
+    switch(name){
+        case 'user':
+            return (this.app.i18n._('Shared'));
+            break;
+        default:
+            return (this.app.i18n._(name));
+    }
+}

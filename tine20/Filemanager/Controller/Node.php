@@ -848,7 +848,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 } else if ($_action === 'copy') {
                     $node = $this->_copyNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
                 }
-                $result->addRecord($node);
+
+                if ($node instanceof Tinebase_Record_Abstract) {
+                    $result->addRecord($node);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Could not copy or move node to destination ' . $destinationPathRecord->flatpath);
+                }
             } catch (Filemanager_Exception_NodeExists $fene) {
                 $nodeExistsException = $this->_handleNodeExistsException($fene, $nodeExistsException);
             }

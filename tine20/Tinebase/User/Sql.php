@@ -569,25 +569,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setStatus($_accountId, $_status)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->setStatusInSyncBackend($_accountId, $_status);
         }
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
         switch($_status) {
-            case 'enabled':
+            case Tinebase_Model_User::ACCOUNT_STATUS_ENABLED:
                 $accountData[$this->rowNameMapping['loginFailures']]  = 0;
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
                 $accountData['status'] = $_status;
                 break;
                 
-            case 'disabled':
+            case Tinebase_Model_User::ACCOUNT_STATUS_DISABLED:
                 $accountData['status'] = $_status;
                 break;
                 
-            case 'expired':
-                $accountData['expires_at'] = Tinebase_DateTime::now()->getTimestamp();
+            case Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED:
+                $expiryDate = Tinebase_DateTime::now()->subSecond(1);
+                $accountData['expires_at'] = $expiryDate->toString();
+                if ($this instanceof Tinebase_User_Interface_SyncAble) {
+                    $this->setExpiryDateInSyncBackend($_accountId, $expiryDate);
+                }
+
                 break;
             
             default:
@@ -614,7 +619,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
+        if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->setExpiryDateInSyncBackend($_accountId, $_expiryDate);
         }
         
@@ -1119,15 +1124,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
 
     /**
-     * returns number of current non-system users
-     *
+     * returns number of current not-disabled, non-system users
+     * 
      * @return number
      */
     public function countNonSystemUsers()
     {
         $select = $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
-            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')");
+            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED));
+
         $userCount = $this->_db->fetchOne($select);
         return $userCount;
     }
@@ -1139,8 +1146,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getFirstUserCreationTime()
     {
+        $fallback = new Tinebase_DateTime('2014-12-01');
         if (! $this->_userTableHasModlogFields()) {
-            $fallback = new Tinebase_DateTime('2014-12-01');
             return $fallback;
         }
 

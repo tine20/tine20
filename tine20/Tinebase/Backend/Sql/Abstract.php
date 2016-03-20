@@ -312,6 +312,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _rawDataToRecord(array $_rawData)
     {
         $result = new $this->_modelName($_rawData, true);
+
+        $result->runConvertToRecord();
         
         $this->_explodeForeignValues($result);
         
@@ -1122,6 +1124,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _recordToRawData($_record)
     {
+        $_record->runConvertToData();
         $readOnlyFields = $_record->getReadOnlyFields();
         $raw = $_record->toArray(FALSE);
         foreach ($raw as $key => $value) {
@@ -1363,7 +1366,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * @return void
       * @return int The number of affected rows.
       */
-    public function delete($_id) 
+    public function delete($_id)
     {
         if (empty($_id)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');

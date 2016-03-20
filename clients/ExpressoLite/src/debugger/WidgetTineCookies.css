@@ -1,0 +1,38 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetTineCookies object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#WidgetTineCookies_templates {
+    display: none;
+}
+
+#WidgetTineCookies_throbberDiv {
+    margin: 5px;
+    width: 90%;
+    text-align: center;
+}
+
+.WidgetTineCookies_cookieLine {
+    margin: 5px;
+    width: 90%;
+}
+
+.WidgetTineCookies_cookieLine:hover {
+    background-color: #D9E8FB;
+}
+
+.WidgetTineCookies_cookieName {
+    width: 160px;
+    display: inline-block;
+    text-align: right;
+}
+
+.WidgetTineCookies_cookieValue {
+    width: 320px;
+}

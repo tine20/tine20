@@ -40,8 +40,6 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ModelConfigurationTest');
         $suite->addTestSuite('Tinebase_DateTimeTest');
         $suite->addTestSuite('Tinebase_ExceptionTest');
-        $suite->addTestSuite('Tinebase_Record_RecordTest');
-        $suite->addTestSuite('Tinebase_Record_RecordSetTest');
         $suite->addTestSuite('Tinebase_AuthTest');
         $suite->addTestSuite('Tinebase_UserTest');
         $suite->addTestSuite('Tinebase_GroupTest');
@@ -63,6 +61,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_FileSystem_RecordAttachmentsTest');
         $suite->addTestSuite('Tinebase_FileSystemTest');
         $suite->addTestSuite('Tinebase_ControllerTest');
+        $suite->addTestSuite('Tinebase_MailTest');
         $suite->addTestSuite('Tinebase_NotificationTest');
         $suite->addTestSuite('Tinebase_Model_Filter_TextTest');
         $suite->addTestSuite('Tinebase_TagsTest');
@@ -80,6 +79,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Frontend_AllTests::suite());
         $suite->addTest(Tinebase_Acl_AllTests::suite());
         $suite->addTest(Tinebase_Tree_AllTests::suite());
+        $suite->addTest(Tinebase_Record_AllTests::suite());
         $suite->addTest(Tinebase_Scheduler_AllTests::suite());
         $suite->addTest(Tinebase_WebDav_AllTests::suite());
         $suite->addTest(OpenDocument_AllTests::suite());

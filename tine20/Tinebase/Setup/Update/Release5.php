@@ -154,7 +154,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
-                <name>own_degree</name>
+                <name>related_degree</name>
                 <type>text</type>
                 <length>32</length>
                 <notnull>true</notnull>

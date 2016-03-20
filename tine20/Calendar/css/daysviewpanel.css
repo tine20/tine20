@@ -2,6 +2,7 @@
 .cal-daysviewpanel-header {
     position: relative;
     border-bottom: 1px solid #F0F0F0;
+    z-index: 5000;
 }
 
 .cal-daysviewpanel-header-inner {
@@ -62,10 +63,16 @@
     margin-left:45px;
 }
 /********************************* Body *********************************/
-.cal-daysviewpanel-body-inner {
+.cal-daysviewpanel {
+    overflow: hidden;
+}
+
+.cal-daysviewpanel-body {
     position: relative;
     top: 0px;
     left: 0px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .cal-daysviewpanel-scroller {
@@ -80,6 +87,8 @@
     left:45px;
     right:0;
     top:0;
+    height: 100%;
+    border-bottom: 1px solid #EDEDED;
 }
 
 .cal-daysviewpanel-body-daycolumn {
@@ -142,10 +151,6 @@
     background-color: #EBF3FD;
 }
 
-.cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row-on {
-    border-top: 1px solid #EDEDED;
-}
-
 .cal-daysviewpanel-body-daycolumn-inner {
     border-left: 3px double #EDEDED;
     height:100%;
@@ -177,7 +182,18 @@
     /*cursor: pointer; see ticket #1484*/
 }
 
+.cal-daysviewpanel-body-timecolumn {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    float: left;
+    width: 45px;
+    height: 100%;
+    margin-top: -8px;
+}
+
 .cal-daysviewpanel-timeRow-time {
+    height:100%;
     width: 40px;
     padding-top: 2px;
     text-align: right;
@@ -192,20 +208,15 @@
     white-space:nowrap;
 }
 
-.cal-daysviewpanel-timeRow-on {
-    border-top: 1px solid #EDEDED;
-    position: absolute;
-    width: 100%;
-    /*background-color:#F1F1F1;*/
+.cal-daysviewpanel-timeRow-on .cal-daysviewpanel-timeRow-time{
+    border-top: 1px solid transparent;
 }
-.cal-daysviewpanel-timeRow-off {
-    width: 100%;
-    position: absolute;
-    /*background-color:#FFFFFF;*/
+.cal-daysviewpanel-timeRow-off .cal-daysviewpanel-timeRow-time{
+    border-top: 1px dotted transparent;
 }
 
 .cal-daysviewpanel-daycolumn-row-on,
-.cal-daysviewpanel-daycolumn-row-on {
+.cal-daysviewpanel-daycolumn-row-off {
     height: 100%;
 }
 
@@ -213,15 +224,20 @@
     border-top: 1px dotted #EDEDED;
 }
 
+.cal-daysviewpanel-daycolumn-row-on {
+    border-top: 1px solid #EDEDED;
+}
+
 /********************************* Events *********************************/
 .cal-daysviewpanel-event {
+    min-height: 16px;
     margin-left: 3px;
     background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
     border-radius: 8px;
     position: absolute;
     border: 1px solid #808080;
-    overflow: hidden;
-    
+    overflow-y: hidden;
+
     text-align: left;
     color:black;
     font-family:arial,tahoma,helvetica,sans-serif;
@@ -388,9 +404,8 @@
 
 .cal-daysviewpanel-event-body {
     position: absolute;
-    width: 100%;
     top: 13px;
-    padding: 0px 4px;
+    padding: 0px 2px 0px 2px;
     white-space: normal;
 }
 
@@ -433,10 +448,14 @@
 }
 
 .cal-daysviewpanel-wholedayevent-body {
-    top: 1px;
+    margin-top: 1px;
+    margin-left: 1px;
     cursor: move;
     padding: 0px 4px;
     white-space: normal;
+    height: 13px;
+    word-break: break-all;
+    overflow: hidden;
 }
 
 .cal-daysviewpanel-wholedayevent-tags {
@@ -492,9 +511,18 @@
     position: absolute;
     top: 0px;
     padding-top: 0px;
-    height: 11px;
+    padding-left: 0px;
 }
 .cal-daysviewpanel-wholedayevent-body .x-form-field {
     height: 11px;
-    font-size: 10px;
+    font-size: 10.5px;
+    margin-top: 1px;
+}
+
+.cal-daysviewpanel-wholedayheader .cal-daysviewpanel-event-rzduration {
+    display: none;
+}
+
+.x-dd-drag-ghost .cal-daysviewpanel-wholedayevent-body {
+    margin-left: 15px;
 }

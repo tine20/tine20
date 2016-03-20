@@ -9,9 +9,9 @@
  */
 
 /**
- * cli server for timetracker
+ * cli server for ExampleApplication
  *
- * This class handles cli requests for the timetracker
+ * This class handles cli requests for the ExampleApplication
  *
  * @package     ExampleApplication
  * @subpackage  Frontend

@@ -44,7 +44,12 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality'))
         ),
+        'path'                => array(
+            'filter' => 'Tinebase_Model_Filter_Path',
+            'options' => array()
+        ),
         'list'                 => array('filter' => 'Addressbook_Model_ListMemberFilter'),
+        'list_role_id'         => array('filter' => 'Addressbook_Model_ListRoleMemberFilter'),
         'telephone'            => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array(

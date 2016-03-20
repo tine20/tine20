@@ -28,12 +28,16 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
          * @return Ext.data.Store
          */
         get: function(app, keyFieldName, what) {
-            var appName = Ext.isString(app) ? app : app.appName,
-                app = Tine.Tinebase.appMgr.get(appName),
-                store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName),
-                what = what ? what : 'text|icon',
-                whatParts = what.split('|'),
-                key = appName + keyFieldName + what;
+            try {
+                var appName = Ext.isString(app) ? app : app.appName,
+                    app = Tine.Tinebase.appMgr.get(appName),
+                    store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName),
+                    what = what ? what : 'text|icon',
+                    whatParts = what.split('|'),
+                    key = appName + keyFieldName + what;
+            } catch (e) {
+                Tine.log.error(e);
+            }
                 
             if (! renderers[key]) {
                 renderers[key] = function(id) {

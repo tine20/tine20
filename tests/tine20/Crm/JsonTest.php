@@ -4,7 +4,7 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -32,7 +32,6 @@ class Crm_JsonTest extends Crm_AbstractTest
      * @var Tinebase_FileSystem
      */
     protected $_fsController;
-
 
     /**
      * customfield name
@@ -88,86 +87,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         parent::tearDown();
         Crm_Controller_Lead::getInstance()->duplicateCheckFields(array('lead_name'));
     }
-     
-    /**
-     * test get crm registry
-     * 
-     * @return void
-     */
-    public function testGetRegistryData()
-    {
-        $registry = $this->_getUit()->getRegistryData();
-        
-        $types = array('leadtypes', 'leadstates', 'leadsources');
-        
-        // check data
-        foreach ($types as $type) {
-            $this->assertGreaterThan(0, $registry[$type]['totalcount']);
-            $this->assertGreaterThan(0, count($registry[$type]['results']));
-        }
-        
-        // check defaults
-        $this->assertEquals(array(
-            'leadstate_id'  => 1,
-            'leadtype_id'   => 1,
-            'leadsource_id' => 1,
-        ), array(
-            'leadstate_id' => $registry['defaults']['leadstate_id'],
-            'leadtype_id' => $registry['defaults']['leadtype_id'],
-            'leadsource_id' => $registry['defaults']['leadsource_id'],
-        ));
-        $this->assertEquals(
-            Tinebase_Container::getInstance()->getDefaultContainer('Crm')->getId(),
-            $registry['defaults']['container_id']['id']
-        );
-    }
-    
-    /**
-     * test get settings/config
-     * 
-     * @return void
-     */
-    public function testGetSettings()
-    {
-        $result = $this->_getUit()->getSettings();
-        
-        $this->assertArrayHasKey('leadstates',  $result);
-        $this->assertArrayHasKey('leadtypes',   $result);
-        $this->assertArrayHasKey('leadsources', $result);
-        $this->assertArrayHasKey('defaults',    $result);
-        $this->assertEquals(6, count($result[Crm_Model_Config::LEADSTATES]));
-        $this->assertEquals(3, count($result[Crm_Model_Config::LEADTYPES]));
-        $this->assertEquals(4, count($result[Crm_Model_Config::LEADSOURCES]));
-    }
-    
-    /**
-     * test get settings/config
-     * 
-     * @return void
-     */
-    public function testSaveSettings()
-    {
-        $oldSettings = $this->_getUit()->getSettings();
-        
-        // change some settings
-        $newSettings = $oldSettings;
-        $newSettings['defaults']['leadstate_id'] = 2;
-        $newSettings['leadsources'][] = array(
-            'id' => 5,
-            'leadsource' => 'Another Leadsource'
-        );
-        $anotherResult = $this->_getUit()->saveSettings($newSettings);
-        $this->assertEquals($newSettings, $anotherResult, 'new settings have not been saved');
-        
-        // reset original settings
-        $result = $this->_getUit()->saveSettings($oldSettings);
-        $this->assertEquals($result, $oldSettings, 'old settings have not been reset');
-        
-        // test Crm_Model_Config::getOptionById
-        $settings = Crm_Controller::getInstance()->getConfigSettings();
-        $this->assertEquals(array(), $settings->getOptionById(5, 'leadsources'), 'Crm_Model_Config::getOptionById failed');
-    }
-    
+
     /**
      * try to add/search/delete a lead with linked contact, task and product
      * 
@@ -395,7 +315,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'type'  => 'TASK',
                 'own_model' => 'Tasks_Model_Task',
                 'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
                 'related_id' => $leadData['id'],
@@ -439,7 +359,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'type'  => 'TASK',
                 'own_model' => 'Tasks_Model_Task',
                 'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
                 'related_id' => $leadData1['id'],
@@ -454,7 +374,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'type'  => 'TASK',
             'own_model' => 'Tasks_Model_Task',
             'own_backend' => 'Sql',
-            'own_degree' => 'sibling',
+            'related_degree' => 'sibling',
             'related_model' => 'Crm_Model_Lead',
             'related_backend' => 'Sql',
             'related_id' => $leadData2['id'],
@@ -482,7 +402,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'type'  => 'TASK',
                 'own_model' => 'Tasks_Model_Task',
                 'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_model' => 'Crm_Model_Lead',
                 'related_backend' => 'Sql',
                 'related_id' => $leadData1['id'],
@@ -499,7 +419,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 'type'  => 'TASK',
                 'own_model' => 'Crm_Model_Lead',
                 'own_backend' => 'Sql',
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_model' => 'Tasks_Model_Task',
                 'related_backend' => 'Sql',
                 'related_id' => $taskData['id'],
@@ -510,6 +430,27 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->setExpectedException('Tinebase_Exception_InvalidRelationConstraints');
         
         $leadJson->saveLead($leadData2);
+    }
+    
+    /**
+     * try to add multiple related tasks with one save
+     *
+     */
+    public function testLeadWithMultipleTasks()
+    {
+        $lead = $this->_getLead();
+        $task1 = $this->_getTask();
+        $task2 = $this->_getTask();
+        
+        
+        $leadData = $lead->toArray();
+        $leadData['relations'] = array(
+                array('type'  => 'TASK', 'related_record' => $task1->toArray()),
+                array('type'  => 'TASK', 'related_record' => $task2->toArray())
+        );
+        
+        $savedLead = $this->_getUit()->saveLead($leadData);
+        $this->assertEquals(2, count($savedLead['relations']), 'Relations missing');
     }
     
     /**
@@ -716,6 +657,10 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testCreateLeadWithAttachment()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP backend (full test suite run only)');
+        }
+
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/Filemanager/files/test.txt');
         

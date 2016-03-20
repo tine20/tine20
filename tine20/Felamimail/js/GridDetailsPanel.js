@@ -190,8 +190,6 @@ Ext.ns('Tine.Felamimail');
      * 
      * @param {Tine.Felamimail.Model.Message} record
      * @param {String} body
-     * 
-     * TODO allow other prepared parts than email invitations
      */
     setTemplateContent: function(record, body) {
         this.currentId = record.id;
@@ -207,35 +205,6 @@ Ext.ns('Tine.Felamimail');
             Tine.log.debug('Tine.Felamimail.GridDetailsPanel::setTemplateContent about to handle preparedParts');
             this.handlePreparedParts(record);
         }
-
-        /**
-         * @TODO
-         * - move this block elsewhere
-         * - prepare message on server?
-         */
-        if (String(record.data.body).match(/-----BEGIN PGP MESSAGE-----/)) {
-            var me = this;
-
-            me.getLoadMask().show();
-            var contentBodyEl = body.child('.preview-panel-felamimail-body');
-            contentBodyEl.dom.id = Ext.id();
-            contentBodyEl.update('');
-
-            Tine.Felamimail.mailvelopeHelper.getKeyring().then(function (keyring) {
-                var armoredMsg = Tine.Tinebase.common.html2text(record.data.body);
-                mailvelope.createDisplayContainer('#' + contentBodyEl.dom.id, armoredMsg, keyring).then(function() {
-                    me.getLoadMask().hide();
-                });
-            })['catch'](function() {
-                var msg = me.app.i18n._('To decrypt this message please install {0} with API support enabled');
-                msg = String.format(msg, '<a href="https://www.mailvelope.com" target="_blank">Mailvelope</a>');
-                Ext.Msg.alert(me.app.i18n._('PGP encrypted Message'), msg);
-
-                me.getLoadMask().hide();
-                me.tpl.overwrite(body, record.data);
-            });
-        }
-
     },
     
     /**
@@ -255,6 +224,7 @@ Ext.ns('Tine.Felamimail');
         
         var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0],
             detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
+                detailsPanel: this,
                 preparedPart: firstPreparedPart
             });
             
@@ -262,7 +232,7 @@ Ext.ns('Tine.Felamimail');
         Ext.fly(bodyEl).update('');
         detailsPanel.render(bodyEl);
     },
-    
+
     /**
      * init single message template (this.tpl)
      * @private

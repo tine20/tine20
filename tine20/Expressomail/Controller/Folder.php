@@ -480,7 +480,7 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
 
         if ($folder) {
             $cache = Tinebase_Core::getCache();
-            $cacheKey = 'Expressomail_Model_Folder_'.$folder->id;
+            $cacheKey = $this->_backend->getFolderCacheId($folder->id);
             $cache->remove($cacheKey);
         }
 
@@ -695,7 +695,7 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
 
         if ($folder) {
             $cache = Tinebase_Core::getCache();
-            $cacheKey = 'Expressomail_Model_Folder_'.$folder->id;
+            $cacheKey = $this->_backend->getFolderCacheId($folder->id);
             $cache->remove($cacheKey);
         }
 
@@ -952,9 +952,9 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
         }
         $result = new Tinebase_Record_RecordSet('Expressomail_Model_Folder');
         foreach ($ids as $folder) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  ' Checking folder ' . $folder->globalname);
-
             $folder = $this->getIMAPFolderCounter($folder);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  ' Checking folder ' . $folder->globalname);
 
             // we don't have cache, checking only recent messages
             if ($folder->cache_recentcount > 0) {

@@ -921,8 +921,8 @@ msgstr "ist gleich"
 #: js/widgets/grid/FilterModelMultiSelect.js:214
 #: js/widgets/grid/PickerFilter.js:310
 #, python-brace-format
-msgid "Selected  {0}"
-msgstr "Ausgewählt {0}"
+msgid "Selected {0}"
+msgstr "Ausgewählte {0}"
 
 #: js/widgets/mainscreen/WestPanel.js:302
 msgid "containers"
@@ -3308,3 +3308,6 @@ msgstr "entfernt"
 #: Record/RecordSetDiff.php:44
 msgid "modified"
 msgstr "geändert"
+
+msgid "Restart application to apply new configuration?"
+msgstr "Möchten Sie die Anwendung zum Anwenden der neuen Konfiguration neu starten?"

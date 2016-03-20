@@ -166,7 +166,7 @@ class Setup_Controller
         }
         
         // check mysql requirements
-        $missingMysqlExtensions = array_diff(array('mysql', 'pdo_mysql'), $loadedExtensions);
+        $missingMysqlExtensions = array_diff(array('pdo_mysql'), $loadedExtensions);
         
         // check pgsql requirements
         $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
@@ -493,7 +493,7 @@ class Setup_Controller
         $setupXml = $this->getSetupXml($_application->name);
         $messages = array();
         
-        switch(version_compare($_application->version, $setupXml->version)) {
+        switch (version_compare($_application->version, $setupXml->version)) {
             case -1:
                 $message = "Executing updates for " . $_application->name . " (starting at " . $_application->version . ")";
                 
@@ -506,9 +506,14 @@ class Setup_Controller
                 
                 $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
                 if(! class_exists($className)) {
-                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . " update class {$className} does not exists, skipping release {$_majorVersion} for app {$_application->name}"
+                    $nextMajorRelease = ($_majorVersion + 1) . ".0";
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . " Update class {$className} does not exists, skipping release {$_majorVersion} for app "
+                        . "{$_application->name} and increasing version to $nextMajorRelease"
                     );
+                    $_application->version = $nextMajorRelease;
+                    Tinebase_Application::getInstance()->updateApplication($_application);
+
                 } else {
                     $update = new $className($this->_backend);
                 
@@ -1380,7 +1385,11 @@ class Setup_Controller
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {
-            $this->_installApplication($xml, $_options);
+            if (! $xml) {
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
+            } else {
+                $this->_installApplication($xml, $_options);
+            }
         }
     }
 
@@ -1443,12 +1452,16 @@ class Setup_Controller
         }
         
         try {
+            if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
+
             $createdTables = array();
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
-                    
+
+                    if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $currentTable);
+
                     try {
                         $this->_backend->createTable($table);
                     } catch (Zend_Db_Statement_Exception $zdse) {
@@ -1466,9 +1479,7 @@ class Setup_Controller
                 'order'     => $_xml->order ? (string)$_xml->order : 99,
                 'version'   => (string)$_xml->version
             ));
-            
-            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
-            
+
             $application = Tinebase_Application::getInstance()->addApplication($application);
             
             // keep track of tables belonging to this application
@@ -1488,8 +1499,7 @@ class Setup_Controller
             
             Setup_Initialize::initialize($application, $_options);
         } catch (Exception $e) {
-            $table = (isset($currentTable)) ? ' Table: ' . $currentTable : '';
-            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . $table . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
     }

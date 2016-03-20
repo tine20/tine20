@@ -1,11 +1,12 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Expressomail\n"
+"Project-Id-Version: ExpressoBr - Expressomail\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-08-24 10:49-0300\n"
-"Last-Translator: Rommel Cysne <rommel.cysne@serpro.gov.br>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: 2015-08-24 15:07-0300\n"
+"Last-Translator: Cassiano Dal Pizzol <cassiano.dalpizzol@serpro.gov.br>\n"
+"Language-Team: ExpressoBr Translators\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +14,6 @@ msgstr ""
 "X-Launchpad-Export-Date: 2012-03-02 09:32+0000\n"
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Language: en\n"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
@@ -1014,59 +1014,59 @@ msgstr "All drafts"
 msgid "All mails with the draft flag"
 msgstr "All mails with the draft flag"
 
-#: js/GridDetailsPanel.js:255
+#: js/GridDetailsPanel.js: 255
 msgid "Verification Failed!"
 msgstr "Verification Failed!"
 
-#: js/GridDetailsPanel.js:251
+#: js/GridDetailsPanel.js: 251
 msgid "Verification Successful!"
 msgstr "Verification Successful!"
 
-#: js/GridDetailsPanel.js:245
+#: js/GridDetailsPanel.js: 245
 msgid "Digital Signature"
 msgstr "Digital Signature"
 
-#: js/GridDetailsPanel.js:547
+#: js/GridDetailsPanel.js: 547
 msgid "Verification Details"
 msgstr "Verification Details"
 
-#: js/GridDetailsPanel.js:542
+#: js/GridDetailsPanel.js: 542
 msgid "Serial Number"
 msgstr "Serial Number"
 
-#: js/GridDetailsPanel.js:542
+#: js/GridDetailsPanel.js: 542
 msgid "Issuer"
 msgstr "Issuer"
 
-#: js/GridDetailsPanel.js:542
+#: js/GridDetailsPanel.js: 542
 msgid "Owner"
 msgstr "Owner"
 
-#: js/GridDetailsPanel.js:542
+#: js/GridDetailsPanel.js: 542
 msgid "Valid From"
 msgstr "Valid From"
 
-#: js/GridDetailsPanel.js:542
+#: js/GridDetailsPanel.js: 542
 msgid "Valid To"
 msgstr "Valid To"
 
-#: Smime.php:129
+#: Smime.php: 129
 msgid "Message Integrity Verification Failure"
 msgstr "Message Integrity Verification Failure"
 
-#: js/GridDetailsPanel.js:561
+#: js/GridDetailsPanel.js: 561
 msgid "Sender's email is different from Digital Certificate's email"
 msgstr "Sender's email is different from Digital Certificate's email"
 
-#: js/GridDetailsPanel.js:392
+#: js/GridDetailsPanel.js: 392
 msgid "show details of digitial signature verification"
 msgstr "show details of digitial signature verification"
 
-#: Preference.php:166
+#: Preference.php: 166
 msgid "Sign messages by default when sending mail"
 msgstr "Sign messages by default when sending mail"
 
-#: Preference.php:166
+#: Preference.php: 166
 msgid ""
 "Choose yes, to open message editor with toggle button \"Sign Message\" "
 "pressed"
@@ -1074,11 +1074,11 @@ msgstr ""
 "Choose yes, to open message editor with toggle button \"Sign Message\" "
 "pressed"
 
-#: js/TreeContextMenu.js:199
+#: js/TreeContextMenu.js: 199
 msgid "Digitally Sign Mail"
 msgstr "Digitally Sign Mail"
 
-#: js/TreeContextMenu.js:199
+#: js/TreeContextMenu.js: 199
 msgid "Activate this toggle button to sign a message on send"
 msgstr "Activate this toggle button to sign a message on send"
 

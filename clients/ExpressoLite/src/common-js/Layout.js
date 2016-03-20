@@ -30,7 +30,7 @@ return function(options) {
     var THIS               = this;
     var contextMenu        = null; // ContextMenu object
     var onKeepAliveCB      = null; // user callbacks
-    var onHideRightPanelCB = null;
+    var onHideRightPanelCB = $.noop;
     var onSearchCB         = null;
 
     THIS.load = function() {
@@ -39,10 +39,18 @@ return function(options) {
             $('#Layout_userMail').text(userOpts.userMail);
             userOpts.$menu.appendTo('#Layout_leftContent'); // detach from page, attach to DIV
             userOpts.$middle.appendTo('#Layout_middleContent');
-            userOpts.$right.appendTo('#Layout_rightContent');
+            if (userOpts.$right) {
+                userOpts.$right.appendTo('#Layout_rightContent');
+            }
+
             _SetEvents();
             contextMenu = new ContextMenu({ $btn:$('#Layout_context') });
             THIS.setContextMenuVisible(false); // initially hidden
+
+            if (App.GetUserInfo('showDebuggerModule') === 'show') {
+                $('#Layout_module_debugger').show();
+            }
+
             THIS.setRightPanelVisible(false);
             _SetCurrentModuleAsBold();
             defer.resolve();
@@ -68,9 +76,7 @@ return function(options) {
             $('#Layout_logo3Lines').css('display', '');
             $('#Layout_arrowLeft').css('display', 'none');
             UrlStack.pop('#fullContent');
-            if (onHideRightPanelCB !== null) {
-                onHideRightPanelCB(); // invoke user callback
-            }
+            onHideRightPanelCB(); // invoke user callback
         }
 
         return THIS;
@@ -165,8 +171,9 @@ return function(options) {
             if (onSearchCB !== null) {
                 var searchTerm = App.IsPhone() ?
                     window.prompt('Busca') : $('#Layout_txtSearch').val();
-                if (searchTerm === null) searchTerm = '';
-                onSearchCB(searchTerm);
+                if (searchTerm !== null) {
+                    onSearchCB(searchTerm);
+                }
             }
         });
 
@@ -176,11 +183,15 @@ return function(options) {
 
         $('#Layout_logoff').on('click', function(ev) { // logoff the whole application
             ev.stopImmediatePropagation();
-            $('#Layout_logoff').css('display', 'none');
-            $('#Layout_loggingOff').css('display', 'inline-block');
+            $('#Layout_logoffScreen').show();
             App.Post('logoff')
             .done(function(data) {
-                App.ReturnToLoginScreen();
+                $('body').css('overflow', 'hidden');
+                $('#Layout_logoffText').animate({ top:$(window).height() / 4 }, 200, function() {
+                    $('#Layout_logoffText').animate({ top:$(window).height() }, 300, function() {
+                        App.ReturnToLoginScreen();
+                    });
+                });
             }).fail(function(error) {
                 console.error('Logout error: ' + error.responseText);
                 location.href = '.';

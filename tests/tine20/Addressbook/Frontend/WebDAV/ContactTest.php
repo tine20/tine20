@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -105,8 +105,15 @@ class Addressbook_Frontend_WebDAV_ContactTest extends PHPUnit_Framework_TestCase
         $record = $contact->getRecord();
 
         $imgBlob = $record->getSmallContactImage();
-        $this->assertTrue(strlen($imgBlob) > 0);
-        $this->assertTrue(strlen($imgBlob) < Addressbook_Model_Contact::SMALL_PHOTO_SIZE);
+        $standardSize = strlen($imgBlob);
+        $this->assertTrue($standardSize > 0);
+        $this->assertTrue($standardSize < Addressbook_Model_Contact::SMALL_PHOTO_SIZE);
+
+        // test custom size
+        $imgBlob = $record->getSmallContactImage(Addressbook_Model_Contact::SMALL_PHOTO_SIZE / 8);
+        $this->assertTrue(strlen($imgBlob) < $standardSize, 'custom size error');
+
+        return $contact;
     }
 
     /**

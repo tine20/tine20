@@ -1,0 +1,38 @@
+<!--
+ * Expresso Lite
+ * HTML template for WidgetComponentTest
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+-->
+<div id="WidgetComponentTest_templates">
+    <div id="WidgetComponentTest_div">
+        <div id="mainForm">
+            <div class="WidgetComponentTest_formField">
+                <label>Component name</label>:
+                <select id="componentSelect">
+                    <option value="">-- Selecione --</option>
+                </select>
+            </div>
+            <div class="WidgetComponentTest_formField">
+                <label>Component name</label>:
+                <select id="functionSelect">
+                    <option value="">-- Selecione --</option>
+                </select>
+            </div>
+            <div id="parameters_div"></div>
+             <input type="button" id="btnExecute" value="Executar"><br />
+        </div>
+        <hr />
+        <label>Result</label>: <br />
+        <div id="resultAreaContainer">
+            <pre id="resultArea" ></pre>
+        </div>
+    </div>
+    <div class="WidgetComponentTest_parameterField WidgetComponentTest_formField">
+        <label class="WidgetComponentTest_parameterLabel"></label>: <input type="text" class="WidgetComponentTest_parameterValue">
+    </div>
+    <img class="WidgetComponentTest_throbberImg" src="../img/chromiumthrobber.svg"/>
+</div>

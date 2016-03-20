@@ -136,6 +136,7 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_part_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false),
+        'initial_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'draft_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -334,7 +335,7 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
                 return;
 
             // calculate timezone in "GMT-HH:MM" format
-            $dtz = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+            $dtz = new DateTimeZone(Tinebase_Core::getUserTimezone());
             $time= new DateTime('now', $dtz);
             $offset = $dtz->getOffset( $time );
             $sign = ($offset < 0 ) ? "-" : "+";

@@ -100,10 +100,16 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @type Boolean
      */
     hasFocusedSubPanels: null,
+
     /**
      * @private
      */
     initComponent: function() {
+        // autoinit config
+        this.appName = ! this.appName && this.recordClass ? this.recordClass.getAppName() : this.appName;
+        this.containerName = this.containerName == 'container' && this.recordClass ? this.recordClass.getContainerName() : this.containerName;
+        this.containersName = this.containersName == 'containers' && this.recordClass ? this.recordClass.getContainersName() : this.containersName;
+
         // init state
         if (this.stateful && !this.stateId) {
             if (! this.recordClass) {

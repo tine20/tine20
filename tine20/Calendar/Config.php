@@ -37,6 +37,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const ATTENDEE_ROLES = 'attendeeRoles';
 
     /**
+     * FreeBusy Types Available
+     *
+     * @var string
+     */
+    const FREEBUSY_TYPES = 'freebusyTypes';
+
+    /**
      * Crop days view
      *
      * @var string
@@ -242,6 +249,24 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 'default' => 'REQ'
             )
         ),
+        self::FREEBUSY_TYPES => array(
+            //_('Free/Busy Types Available')
+            'label'                 => 'Free/Busy Types Available',
+            //_('Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_FREE, 'value' => 'Free', 'system' => true), //_('Free')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY, 'value' => 'Busy', 'system' => true), //_('Busy')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY_TENTATIVE, 'value' => 'Tentative', 'system' => true), //_('Tentative')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE, 'value' => 'Unavailable', 'system' => true), //_('Unavailable')
+                ),
+                'default' => Calendar_Model_FreeBusy::FREEBUSY_BUSY
+            )
+        ),
         self::MAX_FILTER_PERIOD_CALDAV => array(
         //_('Filter timeslot for CalDAV events')
             'label'                 => 'Filter timeslot for events',
@@ -348,7 +373,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SPLIT_VIEW                        => true,
                 self::FEATURE_YEAR_VIEW                         => false,
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
-                self::FEATURE_COLOR_BY    => true,
+                self::FEATURE_COLOR_BY                          => true,
             ),
         ),
     );

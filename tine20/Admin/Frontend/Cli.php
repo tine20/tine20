@@ -38,7 +38,102 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )
         ),
     );
-    
+
+    /**
+     * create system groups for addressbook lists that dont have a system group
+     *
+     * @param $_opts
+     */
+    public function createSystemGroupsForAddressbookLists($_opts)
+    {
+        $_filter = new Addressbook_Model_ListFilter();
+
+        $iterator = new Tinebase_Record_Iterator(array(
+            'iteratable' => $this,
+            'controller' => Addressbook_Controller_List::getInstance(),
+            'filter' => $_filter,
+            'options' => array('getRelations' => false),
+            'function' => 'iterateAddressbookLists',
+        ));
+        $result = $iterator->iterate();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if (false === $result) {
+                $result['totalcount'] = 0;
+            }
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Worked on ' . $result['totalcount'] . ' lists');
+        }
+    }
+
+    /**
+     * iterate adb lists
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    public function iterateAddressbookLists(Tinebase_Record_RecordSet $records)
+    {
+        $addContactController = Addressbook_Controller_Contact::getInstance();
+        $admGroupController = Admin_Controller_Group::getInstance();
+        $admUserController = Admin_Controller_User::getInstance();
+        $userContactIds = array();
+        foreach ($records as $list) {
+            if ($list->type == 'group') {
+                echo "Skipping list " . $list->name ."\n";
+            }
+
+            /**
+             * @var Addressbook_Model_List $list
+             */
+            if (!empty($list->group_id)) {
+                continue;
+            }
+
+            $group = new Tinebase_Model_Group(array(
+                'container_id'  => $list->container_id,
+                'list_id'       => $list->getId(),
+                'name'          => $list->name,
+                'description'   => $list->description,
+                'email'         => $list->email,
+            ));
+
+            $allMembers = array();
+            $members = $addContactController->getMultiple($list->members);
+            foreach ($members as $member) {
+
+                if ($member->type == Addressbook_Model_Contact::CONTACTTYPE_CONTACT && ! in_array($member->getId(), $userContactIds)) {
+                    $pwd = Tinebase_Record_Abstract::generateUID();
+                    $user = new Tinebase_Model_FullUser(array(
+                        'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                        'contact_id'            => $member->getId(),
+                        'accountDisplayName'    => $member->n_fileas ? $member->n_fileas : $member->n_fn,
+                        'accountLastName'       => $member->n_family ? $member->n_family : $member->n_fn,
+                        'accountFullName'       => $member->n_fn,
+                        'accountFirstName'      => $member->n_given ? $member->n_given : '',
+                        'accountEmailAddress'   => $member->email,
+                    ), true);
+                    $user->accountLoginName = Tinebase_User::getInstance()->generateUserName($user);
+
+                    echo 'Creating user ' . $user->accountLoginName . "...\n";
+                    $user = $admUserController->create($user, $pwd, $pwd);
+                    $member->account_id = $user->getId();
+                    $userContactIds[] = $member->getId();
+                }
+
+                $allMembers[] = $member->account_id;
+            }
+
+            $group->members = $allMembers;
+
+            echo 'Creating group ' . $group->name . "...\n";
+
+            try {
+                $admGroupController->create($group);
+            } catch (Exception $e) {
+                echo $e->getMessage() . "\n";
+            }
+        }
+    }
+
     /**
      * import users
      *

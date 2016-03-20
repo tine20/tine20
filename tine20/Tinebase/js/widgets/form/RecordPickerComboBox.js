@@ -115,7 +115,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
-        
+
+        this.emptyText = this.emptyText || _('Search for records ...')
+
         this.loadingText = _('Searching...');
         
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
@@ -145,8 +147,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             });
         }
     },
-    
-    
+
+    // TODO re-init this.list if it goes away?
+    // NOTE: we sometimes lose this.list (how?). prevent error by checking existence.
+    doResize: function(w){
+        if(!Ext.isDefined(this.listWidth) && this.list){
+            var lw = Math.max(w, this.minListWidth);
+            this.list.setWidth(lw);
+            this.innerList.setWidth(lw - this.list.getFrameWidth('lr'));
+        }
+    },
+
     /**
      * prepare paging and sort
      * 
@@ -203,6 +214,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
         }
         this.store.baseParams.filter = filter;
+        this.tpl.lastQuery = qevent.query;
     },
     
     /**

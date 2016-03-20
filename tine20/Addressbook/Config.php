@@ -30,6 +30,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_SALUTATION = 'contactSalutation';
     
     /**
+     * fields for list type
+     *
+     * @var string
+     */
+    const LIST_TYPE = 'listType';
+    
+    /**
      * config for address parsing rules file
      * 
      * @var string
@@ -107,6 +114,21 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::LIST_TYPE => array(
+                //_('List types available')
+                'label'                 => 'List types available',
+                //_('List types available.')
+                'description'           => 'List types available.',
+                'type'                  => 'keyFieldConfig',
+                'clientRegistryInclude' => TRUE,
+                'setByAdminModule'      => true,
+                'default'               => array(
+                    'records' => array(
+                        array('id' => 'DEPARTMENT',    'value' => 'Department'), //_('Department')
+                        array('id' => 'MAILINGLIST',    'value' => 'Mailing list'), //_('Mailing list')
+                    ),
+            )
         ),
     );
     

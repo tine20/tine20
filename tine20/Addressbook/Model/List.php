@@ -80,9 +80,16 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => self::LISTTYPE_LIST,
             array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
         ),
+        'list_type'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'group_id'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'emails'                => array(Zend_Filter_Input::ALLOW_EMPTY => true)
+        'emails'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'memberroles'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // tine 2.0 generic fields
+        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
     );
     
     /**

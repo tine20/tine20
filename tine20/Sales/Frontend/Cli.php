@@ -156,7 +156,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )));
             
             $rel->setRelations('Sales_Model_OrderConfirmation', 'Sql', $oc->getId(), array(array(
-                'own_degree' => 'sibling',
+                'related_degree' => 'sibling',
                 'related_degree' => 'sibling',
                 'related_model' => 'Sales_Model_Contract',
                 'related_backend' => 'Sql',

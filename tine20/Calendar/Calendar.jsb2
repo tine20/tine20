@@ -40,6 +40,14 @@
           "path": "js/"
         },
         {
+          "text": "DaysViewEventUI.js",
+          "path": "js/"
+        },
+        {
+          "text": "MonthViewEventUI.js",
+          "path": "js/"
+        },
+        {
           "text": "EventSelectionModel.js",
           "path": "js/"
         },
@@ -149,6 +157,10 @@
         },
         {
           "text": "YearView.js",
+          "path": "js/Printer/"
+        },
+        {
+          "text": "EventRecord.js",
           "path": "js/Printer/"
         },
         {

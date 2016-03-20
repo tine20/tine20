@@ -217,9 +217,11 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     setActiveFilterPanel: function(filterPanel) {
         filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
         this.activeFilterPanel = filterPanel;
-        
-        this.layout.center.panel.add(filterPanel);
-        this.layout.center.panel.layout.setActiveItem(filterPanel.id);
+
+        if (this.layout.center) {
+            this.layout.center.panel.add(filterPanel);
+            this.layout.center.panel.layout.setActiveItem(filterPanel.id);
+        }
         
         filterPanel.doLayout();
         if (filterPanel.activeSheet) {

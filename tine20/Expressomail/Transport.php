@@ -5,8 +5,9 @@
  * @package     Expressomail
  * @subpackage  Transport
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Bruno Vieira Costa <bruno.vieira-costa@serpro.gov.br>
+ * @author      Cassiano Dal Pizzol <cassiano.dalpizzol@serpro.gov.br>
+ * @copyright   Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  * 
  */
 
@@ -136,10 +137,6 @@ class Expressomail_Transport extends Zend_Mail_Transport_Smtp
      */
     protected function _buildBody()
     {
-//        if (($text = $this->_mail->getBodyText())
-//            && ($html = $this->_mail->getBodyHtml()))
-      
-//        
         $text = $this->_mail->getBodyText();
         $html = $this->_mail->getBodyHtml();
 
@@ -155,17 +152,8 @@ class Expressomail_Transport extends Zend_Mail_Transport_Smtp
             $boundaryLine = $mime->boundaryLine($this->EOL);
             $boundaryEnd  = $mime->mimeEnd($this->EOL);
 
-//            $text->disposition = false;
             $html->disposition = false;
 
-//            $body = $boundaryLine
-//                  . $text->getHeaders($this->EOL)
-//                  . $this->EOL
-//                  . $text->getContent($this->EOL)
-//                  . $this->EOL
-//                  . $boundaryLine
-//                  . $html->getHeaders($this->EOL)
-            
             if ($hasHtmlRelatedParts) {
                 $message = new Zend_Mime_Message();
                 array_unshift($htmlAttachmentParts, $html);

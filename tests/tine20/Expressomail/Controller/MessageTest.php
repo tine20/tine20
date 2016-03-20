@@ -4,7 +4,7 @@
  *
  * @package     Expressomail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  *
@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Expressomail_Controller
  */
-class Expressomail_Controller_MessageTest extends PHPUnit_Framework_TestCase
+class Expressomail_Controller_MessageTest extends TestCase
 {
     /**
      * @var Felamimail_Controller_Message
@@ -60,18 +60,6 @@ class Expressomail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected $_accountsToDelete = array();
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Expressomail Message Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -1203,9 +1191,7 @@ class Expressomail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTestEmailAddress()
     {
-        $testConfig = Zend_Registry::get('testConfig');
-        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
-        return $email;
+        return $this->_getEmailAddress();
     }
     
     /**

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -36,18 +36,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     protected $_config;
     
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -103,22 +91,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         
         $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
         $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
-        
-        $this->assertEquals(array(
-            'emailUserId'     => $this->_objects['user']->getId(),
-            'emailUsername'   => $this->_objects['user']->imapUser->emailUsername,
-            'emailMailQuota'  => null,
-            'emailUID'        => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
-            'emailGID'        => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
-            'emailLastLogin'  => null,
-            'emailMailSize'   => 0,
-            #'emailSieveQuota' => 0,
-            'emailSieveSize'  => null,
-            'emailPort'       => 143,
-            'emailSecure'     => 'tls',
-            'emailHost'       => 'localhost'
-        ), $this->_objects['user']->imapUser->toArray());
-        
+
+        $this->_assertImapUser();
         return $this->_objects['user'];
     }
     
@@ -134,23 +108,29 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $user->imapUser->emailMailQuota = 600;
         
         $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
-        
-        //print_r($user->toArray());
-        
-        $this->assertEquals(array(
+        $this->_assertImapUser(array('emailMailQuota'   => '600'));
+    }
+
+    /**
+     * asserts that imapUser object contains the correct data
+     *
+     * @param array $additionalExpectations
+     */
+    protected function _assertImapUser($additionalExpectations = array())
+    {
+        $this->assertEquals(array_merge(array(
             'emailUserId'      => $this->_objects['user']->getId(),
             'emailUsername'    => $this->_objects['user']->imapUser->emailUsername,
-            'emailMailQuota'   => '600',
+            'emailMailQuota'   => null,
             'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'         => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'   => null,
             'emailMailSize'    => 0,
-            #'emailSieveQuota'  => 0,
             'emailSieveSize'   => null,
-            'emailPort'        => 143,
-            'emailSecure'      => 'tls',
-            'emailHost'        => 'localhost'
-        ), $this->_objects['user']->imapUser->toArray());
+            'emailPort'        => $this->_config['port'],
+            'emailSecure'      => $this->_config['ssl'],
+            'emailHost'        => $this->_config['host']
+        ), $additionalExpectations), $this->_objects['user']->imapUser->toArray());
     }
     
     /**

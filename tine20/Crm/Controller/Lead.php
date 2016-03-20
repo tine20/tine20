@@ -166,11 +166,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         $view->updater = $_updater;
         $view->lead = $_lead;
-        $settings = Crm_Controller::getInstance()->getConfigSettings();
-        $view->leadState = $settings->getOptionById($_lead->leadstate_id, 'leadstates');
-        $view->leadType = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
-        $view->leadSource = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
+        $view->leadState = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getTranslatedValue($_lead->leadstate_id);
+        $view->leadType = Crm_Config::getInstance()->get(Crm_Config::LEAD_TYPES)->getTranslatedValue($_lead->leadtype_id);
+        $view->leadSource = Crm_Config::getInstance()->get(Crm_Config::LEAD_SOURCES)->getTranslatedValue($_lead->leadsource_id);
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
+        $view->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_lead);
+        $view->updates = $this->_getNotificationUpdates($_lead, $_oldLead);
         
         if (isset($_lead->relations)) {
             $customer = $_lead->relations->filter('type', 'CUSTOMER')->getFirstRecord();
@@ -212,7 +213,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->lang_folder = $translate->_('Folder');
         $view->lang_updatedBy = $translate->_('Updated by');
         $view->lang_updatedFields = $translate->_('Updated Fields:');
-        $view->lang_updatedFieldMsg = $translate->_('%s changed from %s to %s.');
+        $view->lang_updatedFieldMsg = $translate->_("'%s' changed from '%s' to '%s'.");
+        $view->lang_tags = $translate->_('Tags');
         
         $plain = $view->render('newLeadPlain.php');
         $html = $view->render('newLeadHtml.php');
@@ -288,6 +290,40 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         return $recipients;
     }
+
+    /**
+     * get udpate diff for notification
+     *
+     * @param $lead
+     * @param $oldLead
+     * @return array
+     *
+     * TODO generalize
+     * TODO translate field names (modelconfig?)
+     * TODO allow non scalar values
+     */
+    protected function _getNotificationUpdates($lead, $oldLead)
+    {
+        if (! $oldLead) {
+            return array();
+        }
+
+        $result = array();
+        foreach ($lead->diff($oldLead, array('seq', 'notes', 'tags', 'relations', 'last_modified_time', 'last_modified_by'))->diff
+             as $key => $value)
+        {
+            // only allow scalars atm
+            if (! is_array($value) && ! is_array($lead->{$key})) {
+                $result[] = array(
+                    'modified_attribute' => $key,
+                    'old_value' => $value,
+                    'new_value' => $lead->{$key}
+                );
+            }
+        }
+
+        return $result;
+    }
     
     /**
      * inspect creation of one record
@@ -331,7 +367,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 }
                 
                 // check if relation is product and has price
-                if ($relation['type'] == 'PRODUCT') {
+                if ($relation['type'] == 'PRODUCT' && isset($relation['remark']['price'])) {
                     $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1;
                     $sum += $relation['remark']['price'] * (integer) $quantity;
                 }

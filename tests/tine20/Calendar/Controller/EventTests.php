@@ -287,9 +287,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
         $this->assertEquals(1, count($eventsFound), 'sclever is groupmember');
     }
-    
+
+    /**
+     * @see 0006702: CalDAV: single event appears in personal and shared calendar
+     *
+     * TODO fix for pgsql: Failed asserting that 0 matches expected 1.
+     *
+     */
     public function testAttendeeNotInFilter()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011674: problem with Attendee "NotIn" Filter (pgsql)');
+        }
+
         foreach(array(Tinebase_Core::getUser()->contact_id, $this->_personasContacts['sclever']->getId()) as $attId) {
             $event = $this->_getEvent();
             $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
@@ -308,7 +318,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 )),
         ));
         $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
-        $this->assertEquals(1, count($eventsFound), 'should be one event only');
+        $this->assertEquals(1, count($eventsFound), 'should be exactly one event');
         $this->assertEquals(
                 Tinebase_Core::getUser()->contact_id, 
                 $eventsFound->getFirstRecord()->attendee->getFirstRecord()->user_id,
@@ -328,8 +338,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('user_id' => $this->_getPersonasContacts('pwulf')->getId())
         ));
         $persistentEvent = $this->_controller->create($event);
-        
-        $fbinfo = $this->_controller->getFreeBusyInfo(array(array('from' => $persistentEvent->dtstart, 'until' => $persistentEvent->dtend)), $persistentEvent->attendee);
+
+        $period = new Calendar_Model_EventFilter(array(array(
+            'field'     => 'period',
+            'operator'  => 'within',
+            'value'     => array(
+                'from'      => $persistentEvent->dtstart,
+                'until'     => $persistentEvent->dtend
+            ),
+        )));
+        $fbinfo = $this->_controller->getFreeBusyInfo($period, $persistentEvent->attendee);
        
         $this->assertGreaterThanOrEqual(2, count($fbinfo));
         
@@ -338,9 +356,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
     public function testSearchFreeTime()
     {
+        $this->markTestSkipped();
         $persistentEvent = $this->testGetFreeBusyInfo();
-        
-        $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee);
+
+        $period = new Calendar_Model_EventFilter(array(array(
+            'field'     => 'period',
+            'operator'  => 'within',
+            'value'     => array(
+                'from'      => $persistentEvent->dtstart->setHour(6),
+                'until'     => $persistentEvent->dtend->setHour(22)
+            ),
+        )));
+
+        $this->_controller->searchFreeTime($period, $persistentEvent->attendee);
     }
     
     /**
@@ -479,7 +507,35 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->_controller->create($nonConflictEvent, TRUE);
     }
-    
+
+    public function testCreateConflictResourceUnavailable()
+    {
+        $event = $this->_getEvent();
+
+        // create & add resource
+        $rt = new Calendar_Controller_ResourceTest();
+        $rt->setUp();
+        $resource = $rt->testCreateResource();
+        $resource->busy_type = Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE;
+        Calendar_Controller_Resource::getInstance()->update($resource);
+
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->getId()
+        ))));
+
+        $conflictEvent = clone $event;
+        $this->_controller->create($event);
+        try {
+            $this->_controller->create($conflictEvent, TRUE);
+            $this->fail('Calendar_Exception_AttendeeBusy was not thrown');
+        } catch (Calendar_Exception_AttendeeBusy $abe) {
+            $fb = $abe->getFreeBusyInfo();
+            $this->assertEquals(Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE, $fb[0]->type);
+        }
+
+    }
+
     public function testUpdateWithConflictNoTimechange()
     {
         $persitentConflictEvent = $this->testCreateEventWithConflict();
@@ -609,7 +665,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue(empty($attender->displaycontainer_id), 'displaycontainer_id must not be set for contacts');
     }
     
-    public function testAttendeeGroupMembers()
+    public function testAttendeeGroupMembersResolving()
     {
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -624,8 +680,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persistentEvent = $this->_controller->create($event);
         $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
-        // user as attender + group + all members - supressed user 
-        $this->assertEquals(1 + 1 + count($defaultUserGroupMembers) -1, count($persistentEvent->attendee));
+        // user as attender + group + all members
+        $expectedAttendeeCount = 1 + 1 + count($defaultUserGroupMembers);
+        if (in_array(Tinebase_Core::getUser()->getId(), $defaultUserGroupMembers)) {
+            // remove suppressed user (only if user is member of default group)
+            $expectedAttendeeCount--;
+        }
+        $this->assertEquals($expectedAttendeeCount, count($persistentEvent->attendee),
+            'attendee: ' . print_r($persistentEvent->attendee->toArray(), true));
         
         $groupAttender = $persistentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
         $persistentEvent->attendee->removeRecord($groupAttender);

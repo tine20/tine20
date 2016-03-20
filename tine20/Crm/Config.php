@@ -16,6 +16,27 @@
 class Crm_Config extends Tinebase_Config_Abstract
 {
     /**
+     * lead states available
+     *
+     * @var string
+     */
+    const LEAD_STATES = 'leadstates';
+
+    /**
+     * lead sources available
+     *
+     * @var string
+     */
+    const LEAD_SOURCES = 'leadsources';
+
+    /**
+     * lead types available
+     *
+     * @var string
+     */
+    const LEAD_TYPES = 'leadtypes';
+
+    /**
      * lead import feature
      *
      * @var string
@@ -48,6 +69,67 @@ class Crm_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::LEAD_STATES => array(
+            //_('Lead States Available')
+            'label'                 => 'Lead States Available',
+            //_('Possible lead status, with their associated turnover probabilities. If a status is flagged, leads with this status are treated as closed.')
+            'description'           => 'Possible lead status, with their associated turnover probabilities. If a status is flagged, leads with this status are treated as closed.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'options'               => array('recordModel' => 'Crm_Model_LeadState'),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 1, 'value' => 'open',                  'probability' => 0,     'endslead' => 0), //_('open')
+                    array('id' => 2, 'value' => 'contacted',             'probability' => 10,    'endslead' => 0), //_('contacted')
+                    array('id' => 3, 'value' => 'waiting for feedback',  'probability' => 30,    'endslead' => 0), //_('waiting for feedback')
+                    array('id' => 4, 'value' => 'quote sent',            'probability' => 50,    'endslead' => 0), //_('quote sent')
+                    array('id' => 5, 'value' => 'accepted',              'probability' => 100,   'endslead' => 1), //_('accepted')
+                    array('id' => 6, 'value' => 'lost',                  'probability' => 0,     'endslead' => 1), //_('lost')
+                ),
+                'default' => 1
+            )
+        ),
+
+        self::LEAD_SOURCES => array(
+            //_('Lead Sources Available')
+            'label'                 => 'Lead Sources Available',
+            //_('Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed.')
+            'description'           => '\'Possible lead sources. If a source is flagged as archived, leads of this source are treated as closed.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'options'               => array('recordModel' => 'Crm_Model_LeadSource'),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array (
+                'records' => array(
+                    array('id' => 1, 'value' => 'Market'),
+                    array('id' => 2, 'value' => 'Email'),
+                    array('id' => 3, 'value' => 'Telephone'),
+                    array('id' => 4, 'value' => 'Website'),
+                ),
+                'default' => 1
+            )
+        ),
+
+        self::LEAD_TYPES => array(
+            //_('Lead Types Available')
+            'label'                 => 'Lead Types Available',
+            //_('Possible lead types.')
+            'description'           => 'Possible lead types.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+//            'options'               => array('recordModel' => 'Crm_Model_LeadType'),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 1, 'value' => 'Customer'),   //_('Customer')
+                    array('id' => 2, 'value' => 'Partner'),    //_('Partner')
+                    array('id' => 3, 'value' => 'Reseller'),   //_('Reseller')
+                ),
+                'default' => 1
+            )
+        ),
+
         /**
          * enabled Crm features
          */

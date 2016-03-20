@@ -90,6 +90,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected $_autoInvoiceIterationDetailResults = NULL;
 
     /**
+     * holds the recreation invoice mapping
+     *
+     * @var array
+     */
+    protected $_autoInvoiceRecreationResults = NULL;
+
+    /**
      * holds the failures caught on a run
      * 
      * @var array
@@ -101,12 +108,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Invoice();
         $this->_modelName = 'Sales_Model_Invoice';
         $this->_doContainerACLChecks = FALSE;
         $this->_cachedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**
@@ -182,7 +192,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'type'                   => 'INVOICE_ITEM'
         );
@@ -316,8 +326,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     protected function _prepareInvoiceRelationsAndFindBillableAccountables($productAggregates)
     {
         $modelsToBill = array();
+        $billedRelations = array();
         $simpleProductsToBill = array();
         $modelsToSkip = array();
+        // this holds all relations for the invoice
+        $relations            = array();
+        $billableAccountables = array();
+
         
         // iterate product aggregates to get the billing definition for the models
         foreach ($productAggregates as $productAggregate) {
@@ -387,23 +402,50 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 if (($product->accountable == 'Sales_Model_Product') || ($product->accountable == '')) {
                     $simpleProductsToBill[] = array('pa' => $productAggregate, 'ac' => $productAggregate);
                 } else {
-                    $modelsToBill[$product->accountable] = $productAggregate;
+
+                    if ($productAggregate->json_attributes && isset($productAggregate->json_attributes['assignedAccountables']) &&
+                        is_array($productAggregate->json_attributes['assignedAccountables']) && count($productAggregate->json_attributes['assignedAccountables'])) {
+
+                        foreach ($productAggregate->json_attributes['assignedAccountables'] as $relationId) {
+                            $billedRelations[$relationId] = true;
+
+                            $relation = $this->_currentBillingContract->relations->getById($relationId);
+
+                            if (false === $relation || $product->accountable != $relation->related_model) {
+                                throw new Tinebase_Exception_UnexpectedValue('couldnt resolved assignedAccountables');
+                            }
+
+                            $relations[] = array_merge(array(
+                                'related_model'  => $relation->related_model,
+                                'related_id'     => $relation->related_id,
+                                'related_record' => $relation->related_record->toArray(),
+                            ), $this->_getRelationDefaults());
+
+                            $billableAccountables[] = array(
+                                'ac' => $relation->related_record,
+                                'pa' => $productAggregate
+                            );
+                        }
+                    } else {
+                        $modelsToBill[$product->accountable] = $productAggregate;
+                    }
                 }
             } else {
                 $modelsToSkip[] = $product->accountable;
             }
         }
         
-        // this holds all relations for the invoice
-        $relations            = array();
-        $billableAccountables = array();
+
         
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
+            if (isset($billedRelations[$relation->id])) {
+                continue;
+            }
             // use productaggregate definition, if it has been found
             if (isset($modelsToBill[$relation->related_model]) && (! in_array($relation->related_model, $modelsToSkip))) {
                 $relations[] = array_merge(array(
-                    'related_model'  => get_class($relation->related_record),
+                    'related_model'  => $relation->related_model,
                     'related_id'     => $relation->related_id,
                     'related_record' => $relation->related_record->toArray(),
                 ), $this->_getRelationDefaults());
@@ -416,7 +458,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             } elseif ((! in_array($relation->related_model, $modelsToSkip)) && in_array('Sales_Model_Accountable_Interface', class_implements($relation->related_model))) {
                 // no product aggregate definition has been found -> use default values
                 $relations[] = array_merge(array(
-                    'related_model'  => get_class($relation->related_record),
+                    'related_model'  => $relation->related_model,
                     'related_id'     => $relation->related_id,
                     'related_record' => $relation->related_record->toArray(),
                 ), $this->_getRelationDefaults());
@@ -443,7 +485,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Contract',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingContract->getId(),
@@ -456,7 +498,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Customer',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingCustomer['id'],
@@ -581,7 +623,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         foreach($invoices as $id)
         {
             if (!isset($excludeIds[$id])) {
-                $this->checkForUpdate($id);
+                $result = array_merge($result, $this->checkForUpdate($id));
             }
         }
 
@@ -596,9 +638,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     public function checkForUpdate($id)
     {
         $invoice = $this->get($id);
+        $result = array();
         if (!$invoice) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can not ::get invoice with id: ' . $id);
-            return;
+            return $result;
         }
 
         $this->_currentBillingContract = NULL;
@@ -610,7 +653,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         if (NULL === $this->_currentBillingContract) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can not find contract for invoice with id: ' . $id);
-            return;
+            return $result;
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found contract ' . $this->_currentBillingContract->getId() . ' for: ' . $id);
@@ -661,6 +704,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($billableAccountables) . ' accountables that need to be checked for: ' . $id);
+        }
+
+
+        // check if an accountable wants the invoice to be recreated
+        foreach($billableAccountables as $ba) {
+            if ($ba['ac']->needsInvoiceRecreation($this->_currentMonthToBill, $ba['pa'], $invoice, $this->_currentBillingContract)) {
+                $this->checkForRecreation(array($id), $this->_currentBillingContract);
+                return $this->_autoInvoiceIterationResults;
+            }
         }
 
         // this function should not return positions
@@ -727,6 +779,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         } elseif (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' no updates found for: ' . $id);
         }
+
+        return $result;
     }
 
     public function checkForRecreation(array $ids, $contract)
@@ -739,11 +793,16 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' for: ' . $forTrace);
         }
 
+        $this->_autoInvoiceIterationDetailResults = array();
+        $this->_autoInvoiceIterationResults = array();
+        $this->_autoInvoiceRecreationResults = array();
         $oldInvoices = array();
+        $oldPositions = array();
         $somethingChanged = false;
         $failed = false;
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $invoicePositionController = Sales_Controller_InvoicePosition::getInstance();
 
         foreach ($ids as $id) {
             $invoice = $this->get($id);
@@ -754,6 +813,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
             $invoice->setTimezone(Tinebase_Core::getUserTimezone());
             $oldInvoices[] = $invoice;
+            $filter = new Sales_Model_InvoicePositionFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())
+            ));
+            $oldPositions[$invoice->getId()] = $invoicePositionController->search($filter);
 
             try {
                 $this->delete(array($invoice));
@@ -776,8 +840,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         $this->_currentBillingContract = $contract;
         $this->_currentBillingContract->setTimezone(Tinebase_Core::getUserTimezone());
-        $this->_autoInvoiceIterationDetailResults = array();
-        $this->_autoInvoiceIterationResults = array();
+
         // the newest invoice!
         $date = clone $oldInvoices[0]->date;
         // date seems not to have a tz, so after the clone, the tz is UTC!! we need to reset it
@@ -803,6 +866,28 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 foreach ($oldInvoices as $oldInvoice) {
                     if ($newInvoice->date->equals($oldInvoice->date)) {
                         $diff = $newInvoice->diff($oldInvoice, array('description', 'id', 'relations', 'contract', 'customer', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time'));
+                        //if nothing changed, check the invoice positions
+                        if ($diff->isEmpty()) {
+                            $filter = new Sales_Model_InvoicePositionFilter(array());
+                            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                                array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $newInvoice->getId())
+                            ));
+                            $newPositions = $invoicePositionController->search($filter);
+                            $i = 0;
+                            foreach($oldPositions[$invoice->getId()] as $oldPosition)
+                            {
+                                if ($i + 1 > $newPositions->count()) {
+                                    $diff = null;
+                                    break;
+                                }
+                                $newPosition = $newPositions->getByIndex($i++);
+                                $diff = $newPosition->diff($oldPosition, array('id', 'invoice_id'));
+                                if (!$diff->isEmpty()) {
+                                    break;
+                                }
+                            }
+
+                        }
                         break;
                     }
                 }
@@ -822,6 +907,16 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' something changed for: ' . $forTrace);
             }
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+            //create mapping of old to new invoices
+            foreach ($this->_autoInvoiceIterationDetailResults as $newInvoice) {
+                foreach ($oldInvoices as $oldInvoice) {
+                    if ($newInvoice->date->equals($oldInvoice->date)) {
+                        $this->_autoInvoiceRecreationResults[$oldInvoice->getId()] = $newInvoice->getId();
+                    }
+                }
+            }
+
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' nothing changed for: ' . $forTrace);
@@ -1481,5 +1576,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             default;
             break;
         }
+    }
+
+    /**
+     * returns _autoInvoiceRecreationResults
+     * @return array
+     */
+    public function getAutoInvoiceRecreationResults()
+    {
+        return $this->_autoInvoiceRecreationResults;
     }
 }

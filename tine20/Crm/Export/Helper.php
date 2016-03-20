@@ -52,35 +52,39 @@ class Crm_Export_Helper
      * @param array $_resolvedRecords
      * @return string
      */
-    public static function getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL, $_resolvedRecords = NULL)
+    public static function getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param,
+                                                $_key = NULL,
+                                                &$_cellType = NULL,
+                                                $_resolvedRecords = NULL)
     {
         if (is_null($_key)) {
             throw new Tinebase_Exception_InvalidArgument('Missing required parameter $key');
         }
-        
-        switch($_param['type']) {
+
+        $configKeysAndProps = array(
+            'status' => array(
+                'config' => Crm_Config::LEAD_STATES,
+                'property' => 'leadstate_id',
+            ),
+            'source' => array(
+                'config' => Crm_Config::LEAD_SOURCES,
+                'property' => 'leadsource_id',
+            ),
+            'type'   => array(
+                'config' => Crm_Config::LEAD_TYPES,
+                'property' => 'leadtype_id',
+            ),
+        );
+
+        switch ($_param['type']) {
             case 'status':
-                $value = $_record->getLeadStatus();
-                break;
             case 'source':
-                $settings = Crm_Controller::getInstance()->getConfigSettings();
-                $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
-                if (isset($source['leadsource'])) {
-                    $value = $source['leadsource'];
-                } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadsource id not found:' . $_record->leadsource_id);
-                    $value = '';
-                }
-                break;
             case 'type':
-                $settings = Crm_Controller::getInstance()->getConfigSettings();
-                $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
-                if (isset($type['leadtype'])) {
-                    $value = $type['leadtype'];
-                } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Leadtype id not found:' . $_record->leadtype_id);
-                    $value = '';
-                }
+                $value = Crm_Config::getInstance()->get(
+                    $configKeysAndProps[$_param['type']]['config']
+                )->getTranslatedValue(
+                    $_record->{$configKeysAndProps[$_param['type']]['property']}
+                );
                 break;
             case 'open_tasks':
                 $value = 0;
@@ -90,7 +94,6 @@ class Crm_Export_Helper
                         $idx = $_resolvedRecords['tasksStatus']->getIndexById($relation->related_record->status);
                         if ($idx) {
                             $status = $_resolvedRecords['tasksStatus'][$idx];
-                            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE));
                             if ($status->is_open) {
                                 $value++;
                             }

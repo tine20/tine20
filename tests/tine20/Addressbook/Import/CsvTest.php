@@ -88,7 +88,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         
         $found = FALSE;
         foreach ($result['exceptions'] as $exception) {
-            if ($exception['exception']['clientRecord']['n_fn'] === Tinebase_Core::getUser()->accountFullName) {
+            if ($exception['exception']['clientRecord']['email'] === Tinebase_Core::getUser()->accountEmailAddress) {
                 $found = TRUE;
                 $this->assertTrue(isset($exception['exception']['clientRecord']['salutation']), 'no salutation found: ' . print_r($exception['exception']['clientRecord'], TRUE));
                 $this->assertEquals($salutation, $exception['exception']['clientRecord']['salutation']);
@@ -96,7 +96,9 @@ class Addressbook_Import_CsvTest extends ImportTestCase
             }
         }
         
-        $this->assertTrue($found, 'did not find user record in import exceptions: ' . print_r($result['exceptions']->toArray(), true));
+        $this->assertTrue($found,
+            'did not find user ' . Tinebase_Core::getUser()->accountFullName . ' in import exceptions: '
+            . print_r($result['exceptions']->toArray(), true));
     }
 
     /**
@@ -115,7 +117,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $found = FALSE;
         foreach ($result['exceptions'] as $exception) {
             $record = $exception['exception']['clientRecord'];
-            if ($record['n_fn'] === Tinebase_Core::getUser()->accountFullName) {
+            if ($record['email'] === Tinebase_Core::getUser()->accountEmailAddress) {
                 $found = TRUE;
                 $this->assertEquals($myContact->org_name, $record['org_name']);
             }

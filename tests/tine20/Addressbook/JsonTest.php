@@ -27,7 +27,7 @@ class Addressbook_JsonTest extends TestCase
      *
      * @var Addressbook_Frontend_Json
      */
-    protected $_instance;
+    protected $_uit;
 
     /**
      * contacts that should be deleted later
@@ -70,18 +70,6 @@ class Addressbook_JsonTest extends TestCase
     protected $_groupIdsToDelete = NULL;
     
     protected $_originalRoleRights = null;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -96,7 +84,7 @@ class Addressbook_JsonTest extends TestCase
         // always resolve customfields
         Addressbook_Controller_Contact::getInstance()->resolveCustomfields(TRUE);
         
-        $this->_instance = new Addressbook_Frontend_Json();
+        $this->_uit = new Addressbook_Frontend_Json();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'),
@@ -118,6 +106,8 @@ class Addressbook_JsonTest extends TestCase
             'sort' => 'n_fileas',
             'dir' => 'ASC',
         );
+
+        parent::setUp();
     }
 
     /**
@@ -130,7 +120,7 @@ class Addressbook_JsonTest extends TestCase
     {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
         
-        $this->_instance->deleteContacts($this->_contactIdsToDelete);
+        $this->_uit->deleteContacts($this->_contactIdsToDelete);
 
         foreach ($this->_customfieldIdsToDelete as $cfd) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
@@ -156,6 +146,8 @@ class Addressbook_JsonTest extends TestCase
         }
         
         $this->_resetOriginalRoleRights();
+
+        parent::tearDown();
     }
     
     protected function _resetOriginalRoleRights()
@@ -179,7 +171,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -195,7 +187,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'list', 'operator' => 'equals',   'value' => $adminListId),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
         // check if user in admin list
@@ -231,9 +223,10 @@ class Addressbook_JsonTest extends TestCase
                         "id": "ext-comp-1211",
                         "label": "Kontakte"
                     }
-                ]';
-        $contacts = $this->_instance->searchContacts(Zend_Json::decode($filter), NULL);
-        $this->assertGreaterThan(0, $contacts['totalcount']);
+                ]
+            }]';
+        $contacts = $this->_uit->searchContacts(Zend_Json::decode($filter), NULL);
+        $this->assertGreaterThanOrEqual(0, $contacts['totalcount']);
     }
 
     /**
@@ -249,7 +242,7 @@ class Addressbook_JsonTest extends TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         );
     
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
     
@@ -264,7 +257,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'container_id', 'operator' => 'equals',   'value' => ''),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -280,7 +273,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'otherUsers'),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThanOrEqual(0, $contacts['totalcount'], 'getting other peoples contacts failed');
     }
@@ -298,7 +291,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'telephone', 'operator' => 'contains', 'value' => '+49TELCELLPRIVATE')
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
         $this->assertEquals(1, $contacts['totalcount']);
     }
 
@@ -316,7 +309,7 @@ class Addressbook_JsonTest extends TestCase
         if ($_tags !== NULL) {
             $newContactData['tags'] = $_tags;
         }
-        $newContact = $this->_instance->saveContact($newContactData, $_forceCreation);
+        $newContact = $this->_uit->saveContact($newContactData, $_forceCreation);
         $this->assertEquals($newContactData['n_family'], $newContact['n_family'], 'Adding contact failed');
 
         $this->_contactIdsToDelete[] = $newContact['id'];
@@ -359,9 +352,17 @@ class Addressbook_JsonTest extends TestCase
         $changes = array(
             array('name' => 'url',                    'value' => "http://www.phpunit.de"),
             array('name' => 'adr_one_region',         'value' => 'PHPUNIT_multipleUpdate'),
-            array('name' => 'customfield_' . $createdCustomField->name, 'value' => 'PHPUNIT_multipleUpdate' )
+            array('name' => 'customfield_' . $createdCustomField->name, 'value' => 'PHPUNIT_multipleUpdate' ),
+            array('name' => '%add', 'value' => json_encode(array(
+                'own_model'         => 'Addressbook_Model_Contact',
+                'own_backend'       => 'Sql',
+                'related_degree'    => 'parent',
+                'related_model'     => 'Addressbook_Model_Contact',
+                'related_backend'   => 'Sql',
+                'related_id'        => Tinebase_Core::getUser()->contact_id,
+                'remark'            => 'some remark'
+            ))),
         );
-
         foreach($companies as $company) {
             $contact = $this->_addContact($company);
             $contactIds[] = $contact['id'];
@@ -377,7 +378,7 @@ class Addressbook_JsonTest extends TestCase
 
         // check if default field adr_one_region value was found
         $sFilter = array(array('field' => 'adr_one_region','operator' => 'equals', 'value' => 'PHPUNIT_multipleUpdate'));
-        $searchResult = $this->_instance->searchContacts($sFilter,$this->objects['paging']);
+        $searchResult = $this->_uit->searchContacts($sFilter,$this->objects['paging']);
 
         // look if all 3 contacts are found again by default field, and check if default field got properly updated
         $this->assertEquals(3, $searchResult['totalcount'],'Could not find the correct number of records by adr_one_region');
@@ -392,8 +393,14 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
         
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) customfields ( -> {');
-        
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 hinzugefügt) customfields ( -> {');
+
+        // check relation
+        $fullRecord = $this->_uit->getContact($record['id']);
+        $this->assertEquals(1, count($fullRecord['relations']), 'relation got not added');
+        $this->assertEquals('some remark', $fullRecord['relations'][0]['remark']);
+        $this->assertEquals('parent', $fullRecord['relations'][0]['related_degree']);
+
         // check invalid data
         $changes = array(
             array('name' => 'type', 'value' => 'Z'),
@@ -432,7 +439,7 @@ class Addressbook_JsonTest extends TestCase
         $cf = $this->_createCustomfield();
         $contact = $this->_addContact();
         $contact['customfields'][$cf->name] = 'changed value';
-        $result = $this->_instance->saveContact($contact);
+        $result = $this->_uit->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
         $this->_checkChangedNote($result['id'], ' -> {"' . $cf->name . '":"changed value"})');
@@ -485,7 +492,7 @@ class Addressbook_JsonTest extends TestCase
         );
         $contact['tags'] = array($tag);
         
-        $result = $this->_instance->saveContact($contact);
+        $result = $this->_uit->saveContact($contact);
         
         $this->assertEquals($tagName, $result['tags'][0]['name']);
         $this->_checkChangedNote($result['id'], array(
@@ -521,7 +528,7 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->testTagsModlog();
         $contact['tags'] = array();
         sleep(1); // make sure that the second change always gets last when fetching notes
-        $result = $this->_instance->saveContact($contact);
+        $result = $this->_uit->saveContact($contact);
         $this->_checkChangedNote($result['id'], array(
             'tags',
             '1 ' . Tinebase_Translation::getTranslation('Tinebase')->_('removed'),
@@ -555,7 +562,7 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->testAttachMultipleTagsModlog(Tinebase_Model_Tag::TYPE_PERSONAL);
         $this->_originalRoleRights = $this->_removeRoleRight('Addressbook', Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
         
-        $contact = $this->_instance->getContact($contact['id']);
+        $contact = $this->_uit->getContact($contact['id']);
         
         $this->assertTrue(! isset($contact['tags']) || count($contact['tags'] === 0), 'record should not have any tags');
     }
@@ -574,7 +581,7 @@ class Addressbook_JsonTest extends TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'singleContainer'),
             array('field' => 'container', 'operator' => 'equals',   'value' => $this->container->id),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -593,7 +600,7 @@ class Addressbook_JsonTest extends TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',  'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         );
-        $contacts = $this->_instance->searchContacts($filter, $paging);
+        $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }
@@ -606,7 +613,7 @@ class Addressbook_JsonTest extends TestCase
     {
         $contact = $this->_addContact();
 
-        $contact = $this->_instance->getContact($contact['id']);
+        $contact = $this->_uit->getContact($contact['id']);
 
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
@@ -623,7 +630,7 @@ class Addressbook_JsonTest extends TestCase
         $contact['n_family'] = 'PHPUNIT UPDATE';
         $contact['adr_one_locality'] = 'Hamburg';
         $contact['adr_one_street'] = 'Pickhuben 2';
-        $updatedContact = $this->_instance->saveContact($contact);
+        $updatedContact = $this->_uit->saveContact($contact);
 
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
@@ -638,7 +645,7 @@ class Addressbook_JsonTest extends TestCase
             $updatedContact['adr_one_street']      = 'Blindengasse 52';
             $updatedContact['adr_one_postalcode']  = '1095';
             $updatedContact['adr_one_countryname'] = '';
-            $updatedContact = $this->_instance->saveContact($updatedContact);
+            $updatedContact = $this->_uit->saveContact($updatedContact);
 
             // check geo data
             $this->assertEquals(16,   round($updatedContact['adr_one_lon']), 'wrong geodata (lon): ' . $updatedContact['adr_one_lon']);
@@ -655,10 +662,10 @@ class Addressbook_JsonTest extends TestCase
     {
         $contact = $this->_addContact();
 
-        $this->_instance->deleteContacts($contact['id']);
+        $this->_uit->deleteContacts($contact['id']);
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $contact = $this->_instance->getContact($contact['id']);
+        $contact = $this->_uit->getContact($contact['id']);
     }
 
     /**
@@ -858,9 +865,13 @@ class Addressbook_JsonTest extends TestCase
      * test import
      * 
      * @see 0006226: Data truncated for column 'adr_two_lon'
+     *
+     * TODO move import test to separate test class
      */
     public function testImport()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper();
         $this->assertEquals(2, $result['totalcount'], 'dryrun should detect 2 for import.' . print_r($result, TRUE));
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
@@ -898,6 +909,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithResolveStrategyDiscard()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $fritz = $result['results'][1];
 
@@ -919,6 +932,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithResolveStrategyMergeTheirs()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertEquals(2, count($result['results']), 'no import results');
         $fritz = $result['results'][1];
@@ -971,7 +986,7 @@ class Addressbook_JsonTest extends TestCase
         $options = array_merge($additionalOptions, array(
             'container_id'  => $this->container->getId(),
         ));
-        $result = $this->_instance->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
+        $result = $this->_uit->importContacts($tempFile->getId(), $definition->getId(), $options, $clientRecords);
         if (isset($additionalOptions['dryrun']) && $additionalOptions['dryrun'] === 0) {
             foreach ($result['results'] as $contact) {
                 $this->_contactIdsToDelete[] = $contact['id'];
@@ -986,6 +1001,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportWithTags()
     {
+        $this->_testNeedsTransaction();
+
         $options = array(
             'dryrun'     => 0,
             'autotags'   => array(array(
@@ -1007,7 +1024,7 @@ class Addressbook_JsonTest extends TestCase
             'name'    => 'supi',
             'type'    => Tinebase_Model_Tag::TYPE_PERSONAL,
         ));
-        $fritz = $this->_instance->saveContact($fritz);
+        $fritz = $this->_uit->saveContact($fritz);
         //print_r($fritz);
         
         // once again for duplicates (check if client record has tag)
@@ -1038,6 +1055,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithExistingTag()
     {
+        $this->_testNeedsTransaction();
+
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         $tag = Tinebase_Tags::getInstance()->create($tag);
         
@@ -1056,6 +1075,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testImportWithNewTag()
     {
+        $this->_testNeedsTransaction();
+
         $tag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         
         $options = array(
@@ -1075,6 +1096,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportKeepExistingWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $klaus = $this->_tagImportHelper('discard');
         $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus['tags'], TRUE));
     }
@@ -1085,6 +1108,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportMergeTheirsWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $result = $this->_importHelper(array('dryrun' => 0));
         $this->assertTrue(count($result['results']) > 0, 'no record were imported');
         $klaus = $result['results'][0];
@@ -1106,7 +1131,7 @@ class Addressbook_JsonTest extends TestCase
         $result = $this->_importHelper($options, $clientRecords);
         $this->assertEquals(2, count($result['results'][0]['tags']), 'klaus should have both tags: ' . print_r($result['results'][0], TRUE));
         
-        $klaus = $this->_instance->getContact($klaus['id']);
+        $klaus = $this->_uit->getContact($klaus['id']);
         $this->assertEquals(2, count($klaus['tags']), 'klaus should have both tags: ' . print_r($klaus, TRUE));
         $this->assertEquals('12345', $klaus['adr_one_postalcode']);
     }
@@ -1146,7 +1171,7 @@ class Addressbook_JsonTest extends TestCase
         $this->assertEquals($expectedTotalcount, $result['totalcount'], 'Should discard fritz');
         $this->assertEquals(1, $result['duplicatecount'], 'fritz should still be a duplicate');
         
-        $klaus = $this->_instance->getContact($klausId);
+        $klaus = $this->_uit->getContact($klausId);
         
         return $klaus;
     }
@@ -1158,6 +1183,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportKeepBothWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $klaus = $this->_tagImportHelper('keep');
         $this->assertEquals(1, count($klaus['tags']), 'klaus should have only one tag: ' . print_r($klaus['tags'], TRUE));
     }
@@ -1170,6 +1197,8 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportTagWithLongName()
     {
+        $this->_testNeedsTransaction();
+
         // import records with long tag name
         $result = $this->_importHelper(array('dryrun' => 0), array(), dirname(__FILE__) . '/Import/files/adb_tine_import_with_tag.csv');
         
@@ -1197,7 +1226,7 @@ class Addressbook_JsonTest extends TestCase
             $this->markTestSkipped('Projects not installed.');
         }
         
-        $contact = $this->_instance->saveContact($this->_getContactData());
+        $contact = $this->_uit->saveContact($this->_getContactData());
         $project = $this->_getProjectData($contact);
 
         $projectJson = new Projects_Frontend_Json();
@@ -1226,7 +1255,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'COWORKER',
                 'related_backend'        => 'Sql',
                 'related_id'             => $_contact['id'],
@@ -1237,7 +1266,7 @@ class Addressbook_JsonTest extends TestCase
                 'own_model'              => 'Projects_Model_Project',
                 'own_backend'            => 'Sql',
                 'own_id'                 => 0,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type'                   => 'RESPONSIBLE',
                 'related_backend'        => 'Sql',
                 'related_id'             => Tinebase_Core::getUser()->contact_id,
@@ -1291,7 +1320,7 @@ class Addressbook_JsonTest extends TestCase
             ),
             array('field' => 'id', 'operator' => 'in', 'value' => array($_contact['id'], Tinebase_Core::getUser()->contact_id)),
         );
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals('relation', $result['filter'][0]['value']['linkType']);
         $this->assertTrue(isset($result['filter'][0]['id']), 'id expected');
@@ -1336,7 +1365,7 @@ class Addressbook_JsonTest extends TestCase
             ),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
         $this->assertEquals('foreignRecord', $result['filter'][0]['field']);
         $this->assertEquals('foreignId', $result['filter'][0]['value']['linkType']);
         $this->assertEquals('ContactAttendeeFilter', $result['filter'][0]['value']['filterName']);
@@ -1359,7 +1388,7 @@ class Addressbook_JsonTest extends TestCase
             $this->_getOrganizerForeignIdFilter(),
             array('field' => 'id', 'operator' => 'in', 'value' => array(Tinebase_Core::getUser()->contact_id, $contact['id']))
         );
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $result['results'][0]['id']);
@@ -1406,7 +1435,7 @@ class Addressbook_JsonTest extends TestCase
                 array('field' => 'id', 'operator' => 'in', 'value' => array($contact['id']))
             )
         ));
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertEquals(2, $result['totalcount'], 'expected 2 contacts');
     }
@@ -1479,6 +1508,8 @@ class Addressbook_JsonTest extends TestCase
     */
     public function testDuplicateCheckWithTag()
     {
+        $this->_testNeedsTransaction();
+
         $tagName = Tinebase_Record_Abstract::generateUID();
         $tag = array(
             'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
@@ -1492,7 +1523,7 @@ class Addressbook_JsonTest extends TestCase
         // replace tag array with single tag id (like the client does)
         $contact['tags'] = array($contact['tags'][0]['id']);
         try {
-            $newContact = $this->_instance->saveContact($contact, TRUE);
+            $newContact = $this->_uit->saveContact($contact, TRUE);
             $this->assertTrue(FALSE, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
             $exceptionData = $ted->toArray();
@@ -1510,12 +1541,12 @@ class Addressbook_JsonTest extends TestCase
     {
         $contact = $this->_getContactData();
         $contact['email'] = 'test@example.org';
-        $contact = $this->_instance->saveContact($contact);
+        $contact = $this->_uit->saveContact($contact);
         $this->_contactIdsToDelete[] = $contact['id'];
         try {
             $contact2 = $this->_getContactData();
             $contact2['email'] = 'test@example.org';
-            $contact2 = $this->_instance->saveContact($contact2);
+            $contact2 = $this->_uit->saveContact($contact2);
             $this->_contactIdsToDelete[] = $contact2['id'];
             $this->assertTrue(FALSE, 'no duplicate exception');
         } catch (Tinebase_Exception_Duplicate $ted) {
@@ -1538,7 +1569,7 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testImportDefinitionsInRegistry()
     {
-        $registryData = $this->_instance->getRegistryData();
+        $registryData = $this->_uit->getRegistryData();
 
         $this->assertEquals('adb_tine_import_csv', $registryData['defaultImportDefinition']['name']);
         $this->assertTrue(is_array($registryData['importDefinitions']['results']));
@@ -1555,7 +1586,7 @@ class Addressbook_JsonTest extends TestCase
      */
     public function testSearchContactsWithTagIsNotFilter()
     {
-        $allContacts = $this->_instance->searchContacts(array(), array());
+        $allContacts = $this->_uit->searchContacts(array(), array());
 
         $filter = new Addressbook_Model_ContactFilter(array(array(
             'field'    => 'n_fileas',
@@ -1576,7 +1607,7 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'not',
             'value'    => $tag->getId()
         ));
-        $allContactsWithoutTheTag = $this->_instance->searchContacts($filter, array());
+        $allContactsWithoutTheTag = $this->_uit->searchContacts($filter, array());
 
         $this->assertTrue(count($allContactsWithoutTheTag['totalcount']) > 0);
         $this->assertEquals($allContacts['totalcount']-1, $allContactsWithoutTheTag['totalcount']);
@@ -1607,7 +1638,7 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'in',
             'value'    => array($tag->getId())
         ));
-        $allContactsWithTheTag = $this->_instance->searchContacts($filter, array());
+        $allContactsWithTheTag = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(1, $allContactsWithTheTag['totalcount']);
 
         $filter = array(array(
@@ -1615,7 +1646,7 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'in',
             'value'    => array()
         ));
-        $emptyResult = $this->_instance->searchContacts($filter, array());
+        $emptyResult = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(0, $emptyResult['totalcount']);
     }
     
@@ -1634,7 +1665,7 @@ Web: http://www.metaways.de
 Tel: +49 (0)40 343244-232
 Fax: +49 (0)40 343244-222";
         
-        $result = $this->_instance->parseAddressData($addressString);
+        $result = $this->_uit->parseAddressData($addressString);
         
         $this->assertTrue((isset($result['contact']) || array_key_exists('contact', $result)));
         $this->assertTrue(is_array($result['contact']));
@@ -1664,7 +1695,7 @@ Fax: +49 (0)40 343244-222";
         $addressString = "Straßenname 25 · 23569 Lübeck
 Steuernummer 33/111/32212";
         
-        $result = $this->_instance->parseAddressData($addressString);
+        $result = $this->_uit->parseAddressData($addressString);
         $this->assertEquals('Straßenname 25', $result['contact']['adr_one_street'], 'wrong street: ' . print_r($result, TRUE));
         $this->assertEquals('Lübeck', $result['contact']['adr_one_locality'], 'wrong street: ' . print_r($result, TRUE));
     }
@@ -1683,11 +1714,11 @@ Steuernummer 33/111/32212";
         
         // search for her with ContactDisabledFilter
         $filter = array(array('field' => 'n_given',      'operator' => 'equals',   'value' => 'Susan'));
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'found contacts: ' . print_r($result, true));
         
         $filter[] = array('field' => 'showDisabled', 'operator' => 'equals',   'value' => TRUE);
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(1, $result['totalcount']);
     }
     
@@ -1719,11 +1750,11 @@ Steuernummer 33/111/32212";
             'value'    => 'hiddengroup'
         ));
         
-        $result = $this->_instance->searchLists($filter, array());
+        $result = $this->_uit->searchLists($filter, array());
         $this->assertEquals(0, $result['totalcount'], 'should not find hidden list: ' . print_r($result, TRUE));
     }
 
-    public function testAttachMultipleTagsToMultipleRecords()
+    public function testAttachMultipleTagsToMultipleRecorstds()
     {
         $contact1 = $this->_addContact('contact1');
         $contact2 = $this->_addContact('contact2');
@@ -1731,18 +1762,85 @@ Steuernummer 33/111/32212";
         $tag2 = Tinebase_Tags::getInstance()->create($this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL, 'tag2'));
 
         $filter = array(array('field' => 'id','operator' => 'in', 'value' => array($contact1['id'], $contact2['id'])));
-        $json = new Tinebase_Frontend_Json();
+        $tinebaseJson = new Tinebase_Frontend_Json();
 
-        $json->attachMultipleTagsToMultipleRecords($filter,'Addressbook_Model_ContactFilter',array(
+        $tinebaseJson->attachMultipleTagsToMultipleRecords($filter,'Addressbook_Model_ContactFilter',array(
             $tag1->toArray(),
             $tag2->toArray(),
         ));
 
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
         $this->assertCount(2, $result['results'], 'search count failed');
 
         foreach($result['results'] as $contactData) {
             $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
         }
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testCeateListWithMemberAndRole($listRoleName = 'my test role')
+    {
+        $contact = $this->_addContact();
+        $listRole = $this->_uit->saveListRole(array(
+            'name'          => $listRoleName,
+            'description'   => 'my test description'
+        ));
+        $memberroles = array(array(
+            'contact_id'   => $contact['id'],
+            'list_role_id' => $listRole['id'],
+        ));
+        $list = $this->_uit->saveList(array(
+            'name'                  => 'my test list',
+            'description'           => '',
+            'members'               => array($contact['id']),
+            'memberroles'           => $memberroles,
+            'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
+        ));
+
+        $this->assertEquals(array($contact['id']), $list['members'], 'members are not saved/returned in list: ' . print_r($list, true));
+        $this->assertTrue(isset($list['memberroles']), 'memberroles missing from list');
+        $this->assertEquals(1, count($list['memberroles']), 'member roles are not saved/returned in list: ' . print_r($list, true));
+        $this->assertTrue(isset($list['memberroles'][0]['list_role_id']['id']), 'list roles should be resolved');
+        $this->assertEquals($listRole['id'], $list['memberroles'][0]['list_role_id']['id'], 'member roles are not saved/returned in list: ' . print_r($list, true));
+
+        return $list;
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testRemoveListMemberRoles()
+    {
+        $list = $this->testCeateListWithMemberAndRole();
+
+        $list['memberroles'] = array();
+        $updatedList = $this->_uit->saveList($list);
+        $this->assertTrue(empty($updatedList['memberroles']), 'memberroles should be removed: ' . print_r($updatedList, true));
+    }
+
+    /**
+     * @see 0011578: add list roles to CoreData + Addressbook
+     */
+    public function testListRolesApi()
+    {
+        $this->_testSimpleRecordApi('ListRole');
+    }
+
+    /**
+     * @see 0011584: allow to set group member roles
+     */
+    public function testSearchContactByListRole()
+    {
+        $list = $this->testCeateListWithMemberAndRole();
+
+        $filter = array(
+            array('field' => 'list_role_id','operator' => 'in', 'value' => array($list['memberroles'][0]['list_role_id']['id']))
+        );
+
+        $result = $this->_uit->searchContacts($filter, array());
+
+        $this->assertEquals(1, $result['totalcount']);
     }
 }

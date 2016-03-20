@@ -752,18 +752,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
         
-        if ($application == 'Tinebase' && $location == 'tempFile') {
-            
-            $tempFile = Tinebase_TempFile::getInstance()->getTempFile($id);
+        $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
 
-            $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
-            $image = new Tinebase_Model_Image($imgInfo + array(
-                'application' => $application,
-                'id'          => $id,
-                'location'    => $location
-            ));
-        } else {
-            $image = Tinebase_Controller::getInstance()->getImage($application, $id, $location);
+        if (is_array($image)) {
         }
         
         $serverETag = sha1($image->blob . $width . $height . $ratiomode);

@@ -64,6 +64,15 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         if (Tine.Felamimail) {
             Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
         }
+    },
+
+    registerCoreData: function() {
+        Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourcesGridPanel, {
+            // prevent adding of another toolbar above grid
+            initLayout: function () {
+                this.supr().initLayout.call(this);
+            }
+        });
     }
 });
 
@@ -106,15 +115,18 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
         
         return this.contentPanel;
     },
-    
+
     /**
-     * Set toolbar panel in Tinebase.MainScreen
+     * get north panel for given contentType
+     *
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showNorthPanel: function() {
+    getNorthPanel: function(contentType) {
         if (! this.actionToolbar) {
             this.actionToolbar = this.contentPanel.getActionToolbar();
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+        return this.actionToolbar;
     }
 });

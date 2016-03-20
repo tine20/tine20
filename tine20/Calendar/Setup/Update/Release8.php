@@ -465,7 +465,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 <notnull>true</notnull>
             </field>');
         $this->_backend->addCol('cal_resources', $declaration);
-        
+
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>status</name>
@@ -474,7 +474,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>
             </index>');
         $this->_backend->addIndex('cal_resources', $declaration);
-        
+
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>suppress_notification</name>
@@ -482,7 +482,7 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 <default>false</default>
             </field>');
         $this->_backend->addCol('cal_resources', $declaration);
-        
+
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>suppress_notification</name>
@@ -491,15 +491,40 @@ class Calendar_Setup_Update_Release8 extends Setup_Update_Abstract
                 </field>
             </index>');
         $this->_backend->addIndex('cal_resources', $declaration);
-        
+
         $this->setTableVersion('cal_resources', '3');
+
         $this->setApplicationVersion('Calendar', '8.11');
+    }
+
+    /**
+     * force activesync calendar resync for iOS devices
+     */
+    public function update_11()
+    {
+        if (Tinebase_Application::getInstance()->isInstalled('ActiveSync')) {
+            $deviceBackend = new ActiveSync_Backend_Device();
+            $usersWithiPhones = $deviceBackend->search(new ActiveSync_Model_DeviceFilter(array(
+                'devicetype' => 'iphone'
+            )))->owner_id;
+
+            $activeSyncController = ActiveSync_Controller::getInstance();
+            foreach ($usersWithiPhones as $userId) {
+                try {
+                    $activeSyncController->resetSyncForUser($userId, 'Calendar');
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e, /* suppress trace */ false);
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Calendar', '8.12');
     }
 
     /**
      * update to 9.0
      */
-    public function update_11()
+    public function update_12()
     {
         $this->setApplicationVersion('Calendar', '9.0');
     }

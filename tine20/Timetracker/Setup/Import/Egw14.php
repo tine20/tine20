@@ -453,7 +453,7 @@ class Timetracker_Setup_Import_Egw14
         $timeaccount->relations = array(array(
             'own_model'              => 'Timetracker_Model_Timeaccount',
             'own_backend'            => Timetracker_Backend_Timeaccount::TYPE,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'type'                   => Timetracker_Model_Timeaccount::RELATION_TYPE_CONTRACT,
             'related_id'             => $_contractId,   
             'related_model'          => 'Sales_Model_Contract',

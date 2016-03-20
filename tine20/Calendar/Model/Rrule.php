@@ -115,7 +115,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
     );
     
     /**
-     * @var array supported rrule parts
+     * @var array supported standard rrule parts
      */
     protected $_rruleParts = array('freq', 'interval', 'until', 'count', 'wkst', 'byday', 'bymonth', 'bymonthday');
     
@@ -541,7 +541,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             return;
         }
         
-        $period = $_filter->getFilter('period');
+        $period = $_filter->getFilter('period', false, true);
         if ($period) {
             self::mergeRecurrenceSet($_events, $period->getFrom(), $period->getUntil());
             
@@ -1082,7 +1082,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             }
         }
     }
-    
+
     /**
      * skips date to (n'th next/previous) occurance of $_wday
      *
@@ -1237,6 +1237,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $locale = $locale ?: Tinebase_Core::getLocale();
         
         $weekInfo = Zend_Locale::getTranslationList('week', $locale);
+        if (!isset($weekInfo['firstDay'])) {
+            $weekInfo['firstDay'] = 'mon';
+        }
         return Tinebase_Helper::array_value($weekInfo['firstDay'], array_flip(self::$WEEKDAY_MAP));
     }
 }

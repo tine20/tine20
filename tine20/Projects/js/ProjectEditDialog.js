@@ -78,13 +78,12 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             newRecordClass: Tine.Addressbook.Model.Contact,
             title: this.app.i18n._('Attendee'),
             typeColumnHeader: this.app.i18n._('Role'),
-            searchComboClass: Tine.Addressbook.SearchCombo,
             searchComboConfig: {
                 relationDefaults: {
                     type: this.app.getRegistry().get('config')['projectAttendeeRole'].definition['default'],
                     own_model: 'Projects_Model_Project',
                     related_model: 'Addressbook_Model_Contact',
-                    own_degree: 'sibling',
+                    related_degree: 'sibling',
                     related_backend: 'Sql'
                 }
             },

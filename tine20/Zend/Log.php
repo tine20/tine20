@@ -25,6 +25,17 @@
  * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
+ *
+ * Convenience methods for log [@see Zend_Log::__call()]:
+ *
+ * @method emerg(string $message, $extras = null)
+ * @method alert(string $message, $extras = null)
+ * @method crit(string $message, $extras = null)
+ * @method err(string $message, $extras = null)
+ * @method warn(string $message, $extras = null)
+ * @method notice(string $message, $extras = null)
+ * @method info(string $message, $extras = null)
+ * @method debug(string $message, $extras = null)
  */
 class Zend_Log
 {
@@ -37,7 +48,6 @@ class Zend_Log
     const INFO    = 6;  // Informational: informational messages
     const DEBUG   = 7;  // Debug: debug messages
     const TRACE   = 8;  // Trace: trace messages
-
 
     /**
      * @var array of priorities where the keys are the
@@ -106,7 +116,6 @@ class Zend_Log
      * Class constructor.  Create a new logger
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
-     * @return void
      */
     public function __construct(Zend_Log_Writer_Abstract $writer = null)
     {
@@ -175,7 +184,7 @@ class Zend_Log
     /**
      * Construct a writer object based on a configuration array
      *
-     * @param  array $spec config array with writer spec
+     * @param  array $config config array with writer spec
      * @return Zend_Log_Writer_Abstract
      * @throws Zend_Log_Exception
      */
@@ -353,6 +362,7 @@ class Zend_Log
      */
     public function __destruct()
     {
+        /** @var Zend_Log_Writer_Abstract $writer */
         foreach($this->_writers as $writer) {
             $writer->shutdown();
         }
@@ -442,6 +452,7 @@ class Zend_Log
         }
 
         // abort if rejected by the global filters
+        /** @var Zend_Log_Filter_Interface $filter */
         foreach ($this->_filters as $filter) {
             if (! $filter->accept($event)) {
                 return;
@@ -449,6 +460,7 @@ class Zend_Log
         }
 
         // send to each writer
+        /** @var Zend_Log_Writer_Abstract $writer */
         foreach ($this->_writers as $writer) {
             $writer->write($event);
         }
@@ -457,8 +469,9 @@ class Zend_Log
     /**
      * Add a custom priority
      *
-     * @param  string   $name      Name of priority
-     * @param  integer  $priority  Numeric priority
+     * @param  string  $name     Name of priority
+     * @param  integer $priority Numeric priority
+     * @return $this
      * @throws Zend_Log_Exception
      */
     public function addPriority($name, $priority)
@@ -483,7 +496,7 @@ class Zend_Log
      * must be accepted by all filters added with this method.
      *
      * @param  int|Zend_Config|array|Zend_Log_Filter_Interface $filter
-     * @return Zend_Log
+     * @return $this
      * @throws Zend_Log_Exception
      */
     public function addFilter($filter)
@@ -512,6 +525,7 @@ class Zend_Log
      *
      * @param  mixed $writer Zend_Log_Writer_Abstract or Config array
      * @return Zend_Log
+     * @throws Zend_Log_Exception
      */
     public function addWriter($writer)
     {

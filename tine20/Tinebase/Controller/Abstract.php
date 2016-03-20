@@ -45,6 +45,13 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * @var mixed   false => no events filtered, true => all events filtered, array => disable only specific events
      */
     protected $_disabledEvents = false;
+
+    /**
+     * Models of this application that make use of Tinebase_Record_Path
+     *
+     * @var array|null
+     */
+    protected $_modelsUsingPath = null;
     
     /**
      * generic check admin rights function
@@ -215,5 +222,31 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
             //Tinebase_Container::getInstance()->deleteContainerContents($container, true);
             Tinebase_Container::getInstance()->deleteContainer($container, true);
         }
+    }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     *
+     * TODO add generic approach for fetching core data from config
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = new Tinebase_Record_RecordSet('CoreData_Model_CoreData');
+
+        // TODO get configured core data
+
+        return $result;
+    }
+
+    /**
+     * get all models of this application that use tinebase_record_path
+     *
+     * @return array|null
+     */
+    public function getModelsUsingPaths()
+    {
+        return $this->_modelsUsingPath;
     }
 }

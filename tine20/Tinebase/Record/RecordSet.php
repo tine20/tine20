@@ -671,6 +671,23 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         
         return $this;
     }
+
+    /**
+     * merges records from given record set if id not yet present in current record set
+     *
+     * @param Tinebase_Record_RecordSet $_recordSet
+     * @return void
+     */
+    public function mergeById(Tinebase_Record_RecordSet $_recordSet)
+    {
+        foreach ($_recordSet as $record) {
+            if (false === $this->getIndexById($record->getId())) {
+                $this->addRecord($record);
+            }
+        }
+
+        return $this;
+    }
     
     /**
      * sorts this recordset

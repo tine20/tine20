@@ -32,11 +32,6 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
     app: null,
     
     /**
-     * @cfg {String} appPickerStyle "tabs" or "pile" defaults to "tabs"
-     */
-    appPickerStyle: 'tabs',
-    
-    /**
      * @private
      */
     initComponent: function() {
@@ -45,8 +40,8 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
         
         this.initLayout();
         Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
-        
-        this.supr().initComponent.call(this);
+
+        this.supr().initComponent.apply(this, arguments);
     },
     
     /**
@@ -54,6 +49,7 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
      */
     initLayout: function() {
         this.items = [{
+            ref: 'topBox',
             cls: 'tine-mainscreen-topbox',
             border: false,
             html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
@@ -64,91 +60,20 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
             border: false,
             items: this.getMainMenu()
         }, {
+            ref: 'appTabs',
             cls: 'tine-mainscreen-apptabs',
-            hidden: this.appPickerStyle != 'tabs',
+            hidden: this.hideAppTabs,
             border: false,
             height: Ext.isGecko ? 22 : 20,
             items: new Tine.Tinebase.AppTabsPanel({
                 plain: true
             })
         }, {
+            ref: 'centerPanel',
             cls: 'tine-mainscreen-centerpanel',
             flex: 1,
-            layout: 'border',
             border: false,
-            items: [{
-                cls: 'tine-mainscreen-centerpanel-north',
-                region: 'north',
-                layout: 'card',
-                activeItem: 0,
-                height: 59,
-                border: false,
-                id:     'north-panel-2',
-                items: []
-            }, {
-                cls: 'tine-mainscreen-centerpanel-center',
-                region: 'center',
-                id: 'center-panel',
-                animate: true,
-                border: false,
-                layout: 'card',
-                activeItem: 0,
-                defaults: {
-                    hideMode: 'offsets'
-                },
-                items: []
-            }, {
-                cls: 'tine-mainscreen-centerpanel-west',
-                region: 'west',
-                id: 'west',
-                stateful: false,
-                split: true,
-                width: 200,
-                minSize: 100,
-                maxSize: 300,
-                border: false,
-                collapsible:true,
-                collapseMode: 'mini',
-                header: false,
-                layout: 'fit',
-                listeners: {
-                    afterrender: function() {
-                        // add to scrollmanager
-                        if (arguments[0] && arguments[0].hasOwnProperty('body')) {
-                            Ext.dd.ScrollManager.register(arguments[0].body);
-                        }
-                    }
-                },
-                autoScroll: true,
-                tbar: [{
-                    buttonAlign : 'center'
-                }],
-                
-                items: [{
-                    id: 'moduletree',
-                    cls: 'tine-mainscreen-centerpanel-west-modules',
-                    border: false,
-                    autoScroll: false,
-                    autoHeight: true,
-                    style: {
-                        width: '100%'
-                    },
-                    layout: 'card',
-                    activeItem: 0,
-                    items: []
-                }, {
-                    id: 'treecards',
-                    cls: 'tine-mainscreen-centerpanel-west-treecards',
-                    border: false,
-                    style: {
-                        width: '100%'
-                    },
-                    autoScroll: false,
-                    layout: 'card',
-                    activeItem: 0,
-                    items: []
-                }]
-            }]
+            layout: 'card'
         }];
     },
     
@@ -160,13 +85,22 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
     getMainMenu: function() {
         if (! this.mainMenu) {
             this.mainMenu = new Tine.Tinebase.MainMenu({
-                showMainMenu: this.appPickerStyle != 'tabs'
+                showMainMenu: false
             });
         }
         
         return this.mainMenu;
     },
-    
+
+    /**
+     * returns center (card) panel
+     *
+     * @returns {Ext.Panel}
+     */
+    getCenterPanel: function() {
+        return this.centerPanel;
+    },
+
     /**
      * appMgr app activation listener
      * 
@@ -207,7 +141,7 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
             passwordDialog.show();
         }
     },
-    
+
     /**
      * activate default application
      * 
@@ -216,111 +150,84 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     activateDefaultApp: function() {
-        if (Ext.getCmp('treecards').rendered) {
+        if (this.getCenterPanel().rendered) {
             Tine.Tinebase.appMgr.activate();
         } else {
             this.activateDefaultApp.defer(10, this);
         }
     },
-    
+
+    /**
+     * set the active center panel
+     * @param panel
+     */
+    setActiveCenterPanel: function(panel, keep) {
+        if (panel.app) {
+            // neede for legacy handling
+            this.app = panel.app;
+        }
+        var cardPanel = this.getCenterPanel();
+
+        Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(cardPanel, panel, keep);
+    },
+
+
     /**
      * sets the active content panel
-     * 
+     *
+     * @deprecated
      * @param {Ext.Panel} item Panel to activate
      * @param {Bool} keep keep panel
      */
     setActiveContentPanel: function(panel, keep) {
-        var cardPanel = Ext.getCmp('center-panel');
-        panel.keep = keep;
-        
-        this.cleanupCardPanelItems(cardPanel);
-        this.setActiveCardPanelItem(cardPanel, panel);
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveContentPanel is deprecated, use <App>.Mainscreen.setActiveContentPanel instead ' + new Error().stack);
+        return this.app.getMainScreen().setActiveContentPanel(panel, keep);
     },
-    
+
     /**
      * sets the active tree panel
-     * 
+     *
+     * @deprecated
      * @param {Ext.Panel} panel Panel to activate
      * @param {Bool} keep keep panel
      */
     setActiveTreePanel: function(panel, keep) {
-        var cardPanel = Ext.getCmp('treecards');
-        panel.keep = keep;
-        this.cleanupCardPanelItems(cardPanel);
-        this.setActiveCardPanelItem(cardPanel, panel);
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveTreePanel is deprecated, use <App>.Mainscreen.setActiveTreePanel instead ' + new Error().stack);
+        return this.app.getMainScreen().setActiveTreePanel(panel, keep);
     },
-    
+
     /**
      * sets the active module tree panel
-     * 
+     *
+     * @deprecated
      * @param {Ext.Panel} panel Panel to activate
      * @param {Bool} keep keep panel
      */
     setActiveModulePanel: function(panel, keep) {
-        var modulePanel = Ext.getCmp('moduletree');
-        panel.keep = keep;
-        this.cleanupCardPanelItems(modulePanel);
-        this.setActiveCardPanelItem(modulePanel, panel);
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveModulePanel is deprecated, use <App>.Mainscreen.setActiveModulePanel instead ' + new Error().stack);
+        return this.app.getMainScreen().setActiveModulePanel(panel, keep);
     },
-    
+
     /**
      * sets item
-     * 
+     *
+     * @deprecated
      * @param {Ext.Toolbar} panel toolbar to activate
      * @param {Bool} keep keep panel
      */
     setActiveToolbar: function(panel, keep) {
-        var cardPanel = Ext.getCmp('north-panel-2');
-        panel.keep = keep;
-        
-        this.cleanupCardPanelItems(cardPanel);
-        this.setActiveCardPanelItem(cardPanel, panel);
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.setActiveToolbar is deprecated, use <App>.Mainscreen.setActiveToolbar instead ' + new Error().stack);
+        return this.app.getMainScreen().setActiveToolbar(panel, keep);
     },
-    
+
     /**
      * gets the currently displayed toolbar
-     * 
+     *
+     * @deprecated
      * @return {Ext.Toolbar}
      */
     getActiveToolbar: function() {
-        var northPanel = Ext.getCmp('north-panel-2');
-
-        if (northPanel.layout.activeItem && northPanel.layout.activeItem.el) {
-            return northPanel.layout.activeItem.el;
-        } else {
-            return false;
-        }
-    },
-    
-    /**
-     * remove all items which should not be keeped -> don't have a keep flag
-     * 
-     * @param {Ext.Panel} cardPanel
-     */
-    cleanupCardPanelItems: function(cardPanel) {
-        if (cardPanel.items) {
-            for (var i=0,p; i<cardPanel.items.length; i++){
-                p =  cardPanel.items.get(i);
-                if (! p.keep) {
-                    cardPanel.remove(p);
-                }
-            }  
-        }
-    },
-    
-    /**
-     * add or set given item
-     * 
-     * @param {Ext.Panel} cardPanel
-     * @param {Ext.Panel} item
-     */
-    setActiveCardPanelItem: function(cardPanel, item) {
-        if (cardPanel.items.indexOf(item) !== -1) {
-            cardPanel.layout.setActiveItem(item.id);
-        } else {
-            cardPanel.add(item);
-            cardPanel.layout.setActiveItem(item.id);
-            cardPanel.doLayout();
-        }
+        Tine.log.warn('Tine.Tinebase.MainScreenPanel.getActiveToolbar is deprecated, use <App>.Mainscreen.getActiveToolbar instead ' + new Error().stack);
+        return this.app.getMainScreen().getActiveToolbar();
     }
 });

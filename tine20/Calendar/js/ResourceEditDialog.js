@@ -81,12 +81,17 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'is_location'
                     }], [
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                app: 'Calendar',
-                                keyFieldName: 'attendeeStatus',
-                                fieldLabel: this.app.i18n._('Default attendee status'),
-                                name: 'status',
-                                value: 'NEEDS-ACTION'
-                    }), {
+                            app: 'Calendar',
+                            keyFieldName: 'attendeeStatus',
+                            fieldLabel: this.app.i18n._('Default attendee status'),
+                            name: 'status',
+                            value: 'NEEDS-ACTION'
+                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Calendar',
+                            keyFieldName: 'freebusyTypes',
+                            fieldLabel: this.app.i18n._('Busy Type'),
+                            name: 'busy_type'
+                        }),{
                         xtype: 'checkbox',
                         fieldLabel: this.app.i18n._('Suppress notification'),
                         name: 'suppress_notification'
@@ -131,8 +136,10 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     onAfterRecordLoad: function() {
         Tine.Calendar.ResourceEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
-        
-        this.grantsGridPanel.getStore().loadData(this.record.data);
+
+        if (this.record.data && this.record.data.grants) {
+            this.grantsGridPanel.getStore().loadData(this.record.data);
+        }
     },
     
     onRecordUpdate: function() {

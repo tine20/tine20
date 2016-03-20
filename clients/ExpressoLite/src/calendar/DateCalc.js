@@ -5,7 +5,7 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
 define([
@@ -28,6 +28,13 @@ var DateCalc = {
         // All dates use 12:00:00 to avoid Daylight Saving Time tweaks.
         // Month is zero-based.
         return new Date(year, month, day, 12);
+    },
+
+    createFromYmd: function(ymd) {
+        // Expected format: '2016-02-25'; month is one-based
+        return DateCalc.create(ymd.substr(0, 4),
+            parseInt(ymd.substr(5, 2)) - 1,
+            ymd.substr(8, 2) );
     },
 
     clone: function(when) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>9.4</version>
+    <version>9.7</version>
     <tables>
         <table>
             <name>applications</name>
@@ -515,7 +515,7 @@
         </table>
         <table>
             <name>container</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -540,6 +540,12 @@
                     <type>text</type>
                     <length>7</length>
                     <default>NULL</default>
+                </field>
+                <field>
+                    <name>order</name>
+                    <type>integer</type>
+                    <default>0</default>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>backend</name>
@@ -1000,7 +1006,7 @@
 
         <table>
             <name>relations</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1033,7 +1039,7 @@
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>own_degree</name>
+                    <name>related_degree</name>
                     <type>text</type>
                     <length>32</length>
                     <notnull>true</notnull>
@@ -1160,6 +1166,9 @@
                     </field>
                     <field>
                         <name>related_id</name>
+                    </field>
+                    <field>
+                        <name>type</name>
                     </field>
                 </index>
             </declaration>
@@ -3409,6 +3418,66 @@
                         <onupdate>cascade</onupdate>
                         <!-- add ondelete? -->
                     </reference>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>path</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>path</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>shadow_path</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>path</name>
+                    <field>
+                        <name>path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>shadow_path</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>shadow_path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>record_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
                 </index>
             </declaration>
         </table>

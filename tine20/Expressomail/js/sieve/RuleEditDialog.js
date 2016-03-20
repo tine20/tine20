@@ -375,7 +375,17 @@ Tine.Expressomail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             allowBlank: false,
                             emptyText: 'test@example.org',
                             width: 200,
-                            hideLabel: true
+                            hideLabel: true,
+                            validator: function(text){
+                                allowedDomais = Tine.Expressomail.registry.get("allowedDomais");
+                                if(allowedDomais){
+                                    domains = allowedDomais.replace(/\s/g, "").replace(/\./g, "\\.").replace(/,/g, "|");
+                                    domainRegexp = new RegExp("(" + domains +")$");
+                                    return domainRegexp.test(text)?true:Tine.Tinebase.appMgr.get('Expressomail').i18n._('Redirect to this address not allowed.');;
+                                }else{
+                                    return true
+                                }
+                            }
                         }]
                     }, {
                         id: this.idPrefix + 'reject',

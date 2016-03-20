@@ -75,7 +75,9 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
     {name: 'attachments', omitDuplicateResolving: true},
-    {name: 'type', omitDuplicateResolving: true}
+    {name: 'paths', omitDuplicateResolving: true},
+    {name: 'type', omitDuplicateResolving: true},
+    {name: 'memberroles', omitDuplicateResolving: true}
 ]);
 
 /**
@@ -137,6 +139,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: _('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
+        {filtertype: 'addressbook.listRoleMember', app: app},
         {label: app.i18n._('Title'),                                                    field: 'n_prefix' },
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
@@ -181,22 +184,28 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
  * list model
  */
 Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
-   {name: 'id'},
-   {name: 'container_id'},
-   {name: 'created_by'},
-   {name: 'creation_time'},
-   {name: 'last_modified_by'},
-   {name: 'last_modified_time'},
-   {name: 'is_deleted'},
-   {name: 'deleted_time'},
-   {name: 'deleted_by'},
-   {name: 'name'},
-   {name: 'description'},
-   {name: 'members'},
-   {name: 'email'},
-   {name: 'type'},
-   {name: 'group_id'},
-   {name: 'emails'}
+    {name: 'id'},
+    {name: 'container_id'},
+    {name: 'created_by'},
+    {name: 'creation_time'},
+    {name: 'last_modified_by'},
+    {name: 'last_modified_time'},
+    {name: 'is_deleted'},
+    {name: 'deleted_time'},
+    {name: 'deleted_by'},
+    {name: 'name'},
+    {name: 'description'},
+    {name: 'members'},
+    {name: 'memberroles'},
+    {name: 'email'},
+    {name: 'type'},
+    {name: 'list_type'},
+    {name: 'group_id'},
+    {name: 'emails'},
+    {name: 'notes', omitDuplicateResolving: true},
+    {name: 'relations', omitDuplicateResolving: true},
+    {name: 'customfields', omitDuplicateResolving: true},
+    {name: 'tags'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',
@@ -247,7 +256,7 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
    {name: 'n_fileas'},
    {name: 'emails'},
    {name: 'email'},
-   {name: 'email_home'},
+   {name: 'email_home'}
 ], {
     appName: 'Addressbook',
     modelName: 'EmailAddress',
@@ -282,10 +291,36 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
  * @return {Array} filterModel definition
  */ 
 Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Addressbook');
-    
-    var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
-    
+    return [
+        {label: _('Quick search'),       field: 'query',              operators: ['contains']}
+    ];
+};
+
+/**
+ * ListRole model
+ */
+Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'members'},
+    {name: 'description'}
+], {
+    appName: 'Addressbook',
+    modelName: 'ListRole',
+    titleProperty: 'name',
+    // ngettext('List Role', List Roles', n); gettext('List Roles');
+    recordName: 'List Role',
+    recordsName: 'List Roles'
+});
+
+/**
+ * get filtermodel of ListRole model
+ *
+ * @namespace Tine.Addressbook.Model
+ * @static
+ * @return {Array} filterModel definition
+ */
+Tine.Addressbook.Model.ListRole.getFilterModel = function() {
     return [
         {label: _('Quick search'),       field: 'query',              operators: ['contains']}
     ];

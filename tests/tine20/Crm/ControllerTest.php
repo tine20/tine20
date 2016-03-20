@@ -293,7 +293,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'Sql',
             'own_id'                 => $GLOBALS['Addressbook_ControllerTest']['leadId'],
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Tasks_Model_Task',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $task->getId(),

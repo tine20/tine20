@@ -27,9 +27,9 @@ return function(options) {
     }, options);
 
     var THIS      = this;
-    var onCloseCB = null; // user callbacks
-    var onSendCB  = null;
-    var onDraftCB = null;
+    var onCloseCB = $.noop; // user callbacks
+    var onSendCB  = $.noop;
+    var onDraftCB = $.noop;
     var $tpl      = null; // jQuery object with our HTML template
     var popup     = null; // Dialog object, created on show()
     var txtBadgesTo = null, txtBadgesCc = null, txtBadgesBcc = null;
@@ -268,9 +268,7 @@ return function(options) {
         attacher.removeAll();
         attacher = null;
         $tpl = null; // discard the cloned HTML template
-        if (onCloseCB !== null) {
-            onCloseCB(); // invoke user callback
-        }
+        onCloseCB(); // invoke user callback
     }
 
     function _FillNewFields(showOpts) {
@@ -435,9 +433,7 @@ return function(options) {
                         if (fwdMsg !== null) fwdMsg.forwarded = true;
                         isSending = false;
                         popup.close();
-                        if (onSendCB !== null) {
-                            onSendCB(reMsg, fwdMsg, draftMsg, message); // invoke user callback
-                        }
+                        onSendCB(reMsg, fwdMsg, draftMsg, message); // invoke user callback
                     });
                 });
             }
@@ -465,9 +461,7 @@ return function(options) {
                     _DeleteOldDraftIfAny(msg.draft, function() {
                         isSending = false;
                         popup.close();
-                        if (onDraftCB !== null) {
-                            onDraftCB(); // invoke user callback
-                        }
+                        onDraftCB(); // invoke user callback
                     });
                 });
             }

@@ -139,6 +139,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'type'    => 'float',
                 'specialType' => 'percent',
                 'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy'     => TRUE,
             ),
             'discount_until' => array(

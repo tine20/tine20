@@ -3,88 +3,94 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:     Koriander (2014.09)
-Last change: 2015-01-09
+Release:     Egon (2016.03)
+Last change: 2016-03-14
 
-1 Enhanced CalDAV connection
-1.1 Connection to Apple Calendar application
-Tine 2.0 now supports all features of the calendar application implemented in MAC OS X. These include support for attachments on events, sharing calendars and management of access rights.
-1.2 Connection to external calendars
-External calendar in ICS format can now be imported and updated regularly.
-1.3 Creating new calendars via CalDAV
-Users of CalDAV programs can now create new calendar directly from the CalDAV program.
-In the previous version of Tine 2.0 new calendars had to be created via the Tine 2.0 web interface.
-1.4 External invitations
-Support for external invitations by e-mail has been improved. Tine 2.0 now supports the processing of invitations that go to multiple users in a Tine 2.0 installation.
-In the previous version of Tine 2.0, each user has an own invitation and could not make out what other participants were invited.
-1.5 Improvements to Thunderbird CalDAV client (Lightning)
-Users of the Thunderbird add-on Lightning now have the option to hide duplicate appointments, which result from the use of shared folders.
+1. Update to latest Version of Zend Framework
+----
 
-2 Improvements to the CRM module
-In the overview of the CRM edit dialogue a column "organizer" was added
-New field "resubmission" inserted
-The field "expected sales" is shown as currency field with separators of 1000 and currency symbol
-Column for "Planned end" was added to lead overview
-Leads whose resubmission date (new feature) or "Planned end date" have expired and are still open are marked red in the lead overview
-The probability of a lead is shown in the lead overview as beam and with colour indexing (such as the percentage of a task in the task list).
+* Current ZF Version used: 1.12.17
+* All ZF classes in tine20/library/Zend and tine20/library/zf1ext have been removed
+* Overwritten ZF classes are now in tine20/Zend
+* Additional Information: 0011160: Update to latest ZF1 / https://forge.tine20.org/view.php?id=11160
 
-3 Publication of files
-Tine 2.0 now allows the publishing of files. Files can be published from the file manager. Therefore Tine 2.0 creates download URLs, which can be accessed without authentication. The validity of the download URLs can be limited.
+2. Update libraries managed by composer
+----
 
-4 Enhanced access rights for favorites
-The visibility of common favorites can be defined.
-In the previous version of Tine 2.0 common favorites were always visible to all users.
-Now you can specify for each joint favorites which users can see the favorite, edit or delete them.
+* zendframework 2.2.10 -> 2.4.9
+* phing 2.6 -> 2.13
+* ... and some more
+* Additional Information: 0011320: avoid dead/outdated dependencies / https://forge.tine20.org/view.php?id=11320
 
-5 Secretaries mode
-The so-called secretaries mode allows users to take on the role of another user without knowing the credentials of this user. With the new role entries in Tine 2.0 can then be modified, only the access to e-mails is not possible.
-The possibility of role reversal must be configured separately in the admin area for each role change.
+3. PHP 5.5 is now required
+----
 
-6 New calendar functions
-6.1 Cut & Paste for appointments
-Appointments can now be cut out from the context menu, and be pasted to a new date again. Technically it is the moving of an appointment.
-6.2 Smart appointment mode
-If you select the calendars of several users and set a new date, the selected users are invited automatically.
-6.3 Notifications of schedule changes
-When a user updates an appointment, he can now suppress the notification that otherwise would be sent to the other participants.
-6.4 Simplified e-mail distribution
-It is now very easy to send an e-mail to individual participants from the appointment dialogue. This is possible from the context menu of the individual participant.
+* ... because Tine 2.0 uses traits.
 
-7 Enhanced export of addresses
-Tine 2.0 now supports the export of addresses as mail merge. The exported data can now be grouped according to certain criteria (for example, name of organization).
-In addition, the tags of an address will not be summarized in a column, but moved to its own columns.
+4. PHP 7 is supported
+----
 
-8 Directory / resource grouping
-directory or resources are grouped automatically when they are created as a subfolder For example, the directory "Test/Unterordner/Ordner1" and "Test/Unterordner/Ordner2" are displayed in the frontend
+5. CoreData: New CoreData application has been added
+----
 
-Hauptordner
-- Unterordner
--- Ordner1
--- Ordner2
-Ordner
+* New Tine 2.0 application for handling data that does not change very often (like Calendar resources, Addressbook lists,
+  Keyfields, ...)
+* Additional Information: 0011568: add new CoreData application / https://forge.tine20.org/view.php?id=11568
 
-9 Enhancement Sales module
-The contract management has been thoroughly revised and expanded
-The customer management has been thoroughly revised and expanded
+6. Addressbook: Record paths to ease searching in hierarchical structures
+----
 
-10 Performance improvements
-There were again optimized a lot of requests. Thus, the response time for requests to the Tine 2.0 server was extremely improved in many places, also resource consumption was reduced. This enables more users on comparable hardware.
-The greatest improvements have taken place in the calendar application and the connection of external CalDAV and ActiveSync programs. Certain CalDAV requests could be reduced to 1 second in large environments (<1000 users) (coming from 30 seconds).
+* Currently this is used for contacts that have parent/child relationsips with other contacts or are group members
+* Additional Information: 0011620: add "path" filter for records / https://forge.tine20.org/view.php?id=11620
 
-11 Extended user import
-Importing group memberships
-Importing extended attributes (eg. home directory, logon script)
+7. Calendar: Free-Busy types added
+----
 
-12 AD/LDAP connection enhanced
-Inconsistent Samba 4 Active Directory database connections avoided
-Improved performance of LDAP and Active Directory connection
+* ... to allow/forbid resource overbooking
+* Additional Information: 0011592: Optionally Deny Resource Overbooking / https://forge.tine20.org/view.php?id=11592
 
-13 Behaviour on disabled user accounts
-The logout of deactivated or expired user accounts has been accelerated. Tine 2.0 now checks for each request, whether a user account has already expired or been disabled.
-In the previous version of Tine 2.0, this review took place only during the registration. Registered users could therefore continue to access the system, even though the account was already disabled or expired.
-By admin configurable e-mail notifications to the user if the user has been deactivated and therefore fails the login.
+8. Calendar: Doc-Export
+----
 
-14 Miscellaneous
-E-mail: support of winmail.dat attachments
-Notes can be deleted
-Better visibility of tags
+* Template-based export for events
+* Additional Information: 0011596: add calendar doc export / https://forge.tine20.org/view.php?id=11596
+
+9. Calendar: Color Strategies
+----
+
+* Adds new color strategies for calendar events: Tags + Displaycontainer
+
+10. Calendar: Visible hour in day/week view
+----
+
+* By setting the visible hours it is possible to zoom in and out in week and days view
+* Additional Information: 011642: add config for visible hours in day|week sheet view
+
+
+11. Felamimail: PGP-Mail-Encryption via Mailvelope
+----
+
+* Additional Information: 0011384: use mailvelope API if available / https://forge.tine20.org/view.php?id=11384
+
+12. JavaScript Client: Allow custom JS files
+----
+
+* Additional Information: 0011502: allow custom/additional javascript for FAT client / https://forge.tine20.org/view.php?id=11502
+
+13. Admin: new GUI for application config
+----
+
+* Allows to manage application config in a Applications/Settings module of Admin area
+
+14. Admin: user data deletion behavior
+----
+
+* Added new config option to define handling of data of a deleted user (remove/keep data)
+* Additional Information: 0001500: User is deleted - his containers still exists / https://forge.tine20.org/view.php?id=1500
+
+15. User login failure behavior change
+----
+
+* Users are no longer blocked if they try to login with wrong credentials
+* Time user needs to wait until next login attempt is increased instead
+* Additional Information: 0011440: rework login failure handling / https://forge.tine20.org/view.php?id=11440

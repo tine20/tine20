@@ -63,6 +63,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'base_event_id'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'rrule_until'           => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'rrule_constraints'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'summary'               => array('filter' => 'Tinebase_Model_Filter_Text'),
         'location'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -73,5 +74,8 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
         'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
+            'idProperty' => 'cal_events.id'
+        )),
     );
 }

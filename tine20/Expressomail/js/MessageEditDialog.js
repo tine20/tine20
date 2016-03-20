@@ -856,9 +856,8 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
         } else if (this.forwardMsgs) {
             this.record.set('flags', 'Passed');
             this.record.set('original_id', this.forwardMsgs[0].id);
-        } else if (this.draftOrTemplate) {
-            this.record.set('draft_id', this.draftOrTemplate.id);
         }
+
         this.record.set('add_contacts', true);
 
         Tine.log.debug('Tine.Expressomail.MessageEditDialog::initRecord() -> record:');
@@ -2243,6 +2242,8 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
 Tine.Expressomail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         notifiable: true,
+        multiple: true,
+        limit: 1,
         width: 829,
         height: 700,
         ref: Tine.Tinebase.appMgr.get('Expressomail'),

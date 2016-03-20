@@ -15,20 +15,20 @@
  * @package     Tinebase
  * @subpackage    Export
  */
- 
+
 class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements Tinebase_Record_IteratableInterface {
     
     /**
      * the document
      * 
-     * @var PHPWord
+     * @var \PhpOffice\PhpWord\PhpWord
      */
     protected $_docObject;
     
     /**
      * the template to work on
      * 
-     * @var PHPWord_Template
+     * @var \PhpOffice\PhpWord\TemplateProcessor
      */
     protected $_docTemplate;
     
@@ -70,6 +70,7 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
     {
         $this->_createDocument();
         $this->_exportRecords();
+
     }
     
     /**
@@ -77,11 +78,20 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
      */
     public function write()
     {
-        $tempFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID() . '.docx';
-        $this->getDocument()->save($tempFile);
-        readfile($tempFile);
-        unlink($tempFile);
+        $document = $this->getDocument();
+        $tempfile = $document->save();
+        readfile($tempfile);
+        unlink($tempfile);
     }
+
+    public function save($filename) {
+        $document = $this->getDocument();
+        $tempfile = $document->save();
+
+        copy($tempfile, $filename);
+        unlink($tempfile);
+    }
+
     /**
      * add body rows
      *
@@ -89,23 +99,83 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
      */
     public function processIteration($_records)
     {
-        $record = $_records->getFirstRecord();
-        
-        $converter = Tinebase_Convert_Factory::factory($record);
-        $resolved = $converter->fromTine20Model($record);
-        
-        foreach ($this->_config->properties->prop as $prop) {
-            $property = (string) $prop;
-            // @TODO: remove the utf8_decode here when PHPWord_Template does not convert to utf8 anymore.
-            //        the htmlspecialchars shouldn't be required, this should have been done by the PHPWord Library
-            $this->_docTemplate->setValue($property, (isset($resolved[$property]) ? utf8_decode(htmlspecialchars($resolved[$property])) : ''));
+        $this->_resolveRecords($_records);
+
+        foreach($_records as $idx => $record) {
+            $this->processRecord($record, $idx);
         }
     }
-    
+
+    /**
+     * export single record
+     *
+     * @TODO: split for template / non template
+     */
+    public function processRecord($record, $idx)
+    {
+        $idx = $idx+1;
+        $templateProcessor = $this->_docTemplate;
+
+        // set all fields available
+        foreach($record->getFields() as $property) {
+            $value = $record->{$property};
+            $fieldConfig = $this->getFieldConfig($property);
+
+            if (is_null($value)) {
+                $value = '';
+            }
+
+            if ($value instanceof DateTime) {
+                $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $this->_config->datetimeformat);
+            }
+
+            if (is_object($value) && method_exists($value, '__toString')) {
+                $value = $value->__toString();
+            }
+
+            if (is_scalar($value)) {
+                if ($fieldConfig && isset($fieldConfig->replace->pattern)) {
+                    $value = preg_replace($fieldConfig->replace->pattern, $fieldConfig->replace->replacement, $value);
+                }
+                $templateProcessor->setValue($property . '#' . $idx, $value, 1);
+            }
+        }
+
+        // go through custom column configurations
+        for ($i = 0; $i < $this->_config->columns->column->count(); $i++) {
+            $column = $this->_config->columns->column->{$i};
+
+            // @TODO value should be generated in Export_Abstract
+            $value = $record->{$column->identifier};
+            if ($value instanceof DateTime) {
+                $value = Tinebase_Translation::dateToStringInTzAndLocaleFormat($value, null, null, $column->format);
+            }
+
+            if (isset($column->replace->pattern)) {
+                $value = preg_replace($column->replace->pattern, $column->replace->replacement, $value);
+            }
+            $templateProcessor->setValue($column->header.'#'.$idx, $value, 1);
+        }
+    }
+
+    /**
+     * set generic data
+     *
+     * @param array $result
+     */
+    protected function _onAfterExportRecords($result)
+    {
+        $this->getDocument()->setValue('export_time', Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), null, null, $this->_config->timeformat));
+        $this->getDocument()->setValue('export_date', Tinebase_Translation::dateToStringInTzAndLocaleFormat(Tinebase_DateTime::now(), null, null, $this->_config->dateformat));
+        $this->getDocument()->setValue('export_account', Tinebase_Core::getUser()->accountDisplayName);
+        $this->getDocument()->setValue('export_account_n_given', Tinebase_Core::getUser()->accountFirstName);
+        $this->getDocument()->setValue('export_account_n_family', Tinebase_Core::getUser()->accountLastName);
+    }
+
     /**
      * get word object
      *
-     * @return PHPExcel
+     * @return \PhpOffice\PhpWord\PhpWord | \PhpOffice\PhpWord\TemplateProcessor
      */
     public function getDocument()
     {
@@ -114,22 +184,19 @@ class Tinebase_Export_Richtext_Doc extends Tinebase_Export_Abstract implements T
 
     
     /**
-     * create new excel document
+     * create new PhpWord document
      *
      * @return void
      */
     protected function _createDocument()
     {
-        // this looks stupid, but the PHPDoc library is beta, so this is needed. otherwise the lib would create temp files in the template folder ;(
+        \PhpOffice\PhpWord\Settings::setTempDir(Tinebase_Core::getTempDir());
+
         $templateFile = $this->_getTemplateFilename();
-        $tempTemplateFile = Tinebase_Core::guessTempDir() . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID() . '.docx';
-        copy($templateFile, $tempTemplateFile);
-        $this->_docObject = new PHPWord();
+        $this->_docObject = new \PhpOffice\PhpWord\PhpWord();
         
         if ($templateFile !== NULL) {
-            $this->_docTemplate = $this->_docObject->loadTemplate($tempTemplateFile);
+            $this->_docTemplate = new \PhpOffice\PhpWord\TemplateProcessor($templateFile);
         }
-        
-        unlink($tempTemplateFile);
     }
 }

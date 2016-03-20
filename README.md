@@ -2,6 +2,14 @@
 
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
 
+## Official Community ressources
+* [Documentation Wiki](https://www.tine20.org/wiki/)
+* [Issue tracker](https://forge.tine20.org/mantisbt/)
+* [Forum](https://www.tine20.org/forum/)
+* [Package Downloads](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/releases)
+* [Twitter](https://twitter.com/tine20org)
+* [Slack (send us a message for invitation)](https://tine20.slack.com)
+
 ## Free Software without compromise
 In contrast to the so called "open core" approach, where only a subset of the software is released as open source, 
 you'll find the complete sourcecode of all standard Tine 2.0 applications and features here. Like RHEL is the stable 
@@ -56,10 +64,3 @@ legal fraught from other parties.
 ## Contributors Guide
 To start developing with tine20 and GIT please visit
 * [Tine2.0 Contributors Guide](https://wiki.tine20.org/Developers/Getting_Started/Contributors_Guide)
-
-## Official Ressources
-* [Documentation Wiki](https://www.tine20.org/wiki/)
-* [Issue tracker](https://forge.tine20.org/mantisbt/)
-* [Forum](https://www.tine20.org/forum/)
-* [Twitter](https://twitter.com/tine20org)
-* [Slack (send us a message for invitation)](https://tine20.slack.com)

@@ -81,6 +81,17 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         return self::$_instance;
     }
+
+    /**
+     * unsets the instance to save memory, be aware that hasBeenRun still needs to work after unsetting!
+     *
+     */
+    public function unsetInstance()
+    {
+        if (self::$_instance !== NULL) {
+            self::$_instance = null;
+        }
+    }
     
     /**
      * this is required for other applications needing demo data of this application
@@ -341,7 +352,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => 'Sales_Model_CostCenter',
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $ccid,
@@ -351,7 +362,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tasks_Backend_Factory::SQL,
                     'own_id'                 => NULL,
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => 'Sales_Model_Customer',
                     'related_backend'        => Tasks_Backend_Factory::SQL,
                     'related_id'             => $customer->getId(),
@@ -400,7 +411,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'own_model'              => 'Sales_Model_OrderConfirmation',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
                 'own_id'                 => NULL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Contract',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $contract->getId(),
@@ -437,7 +448,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'own_model'              => 'Sales_Model_Offer',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
                 'own_id'                 => NULL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Customer',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $customer->getId(),
@@ -446,7 +457,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'own_model'              => 'Sales_Model_Offer',
                 'own_backend'            => Tasks_Backend_Factory::SQL,
                 'own_id'                 => NULL,
-                'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_OrderConfirmation',
                 'related_backend'        => Tasks_Backend_Factory::SQL,
                 'related_id'             => $oc->getId(),

@@ -90,6 +90,39 @@ class Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * add container
+     *
+     * example usages:
+     * (1) $ php tine20.php --method=Calendar.createContainer name=TEST type=shared owner=
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean
+     */
+    public function createContainer(Zend_Console_Getopt $_opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        $data = $this->_parseArgs($_opts, array('name', 'type'), array('owner', 'color'));
+
+        if ($data['type'] !== 'shared') {
+            die ('only shared containers supported');
+        }
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        $container = new Tinebase_Model_Container(array(
+            'name'              => $data['name'],
+            'type'              => $data['type'],
+            'application_id'    => $app->getId(),
+            'backend'           => 'Sql'
+        ));
+
+        Tinebase_Container::getInstance()->addContainer($container);
+    }
+
+    /**
      * set container grants
      * 
      * example usages: 
@@ -124,7 +157,7 @@ class Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
-    
+
     /**
      * create demo data
      * 
@@ -196,8 +229,12 @@ class Tinebase_Frontend_Cli_Abstract
             }
             
 
-            if ($className::getInstance()->createDemoData($options)) {
+            $setupDemoData = $className::getInstance();
+            if ($setupDemoData->createDemoData($options)) {
                 echo 'Demo Data was created successfully' . chr(10) . chr(10);
+                if (method_exists($setupDemoData, 'unsetInstance')) {
+                    $setupDemoData->unsetInstance();
+                }
             } else {
                 echo 'No Demo Data has been created' . chr(10) . chr(10);
             }

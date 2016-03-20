@@ -47,7 +47,7 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * @cfg {Bool} hasDetailsPanel 
      */
-    hasDetailsPanel: true,
+    hasDetailsPanel: false,
     
     /**
      * inits this cmp
@@ -97,9 +97,17 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumns: function() {
         return [
-            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 30, renderer: this.listTypeRenderer.createDelegate(this), hidden: false },
+            { id: 'type', header: this.app.i18n._('Type'), dataIndex: 'type', width: 30, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer, hidden: false },
             { id: 'name', header: this.app.i18n._('Name'), dataIndex: 'name', width: 30, hidden: false },
-            { id: 'emails', header: this.app.i18n._('Emails'), dataIndex: 'emails', hidden: false },
+            { id: 'list_type', header: this.app.i18n._('List type'), dataIndex: 'list_type', width: 30, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'listType'), hidden: false },
+            { id: 'emails', header: this.app.i18n._('Emails'), dataIndex: 'emails', hidden: false, renderer: function(value) {
+                if (! value) {
+                    return '';
+                }
+                // TODO should be fixed on server side
+                // remove leading comma
+                return value.replace(/^,/, '');
+            }},
         ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()));
     },
     
@@ -109,21 +117,7 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initActions: function() {        
         Tine.Addressbook.ListGridPanel.superclass.initActions.call(this);
     },
-        
-    /**
-     * tid renderer
-     * 
-     * @private
-     * @return {String} HTML
-     */
-    listTypeRenderer: function(data, cell, record) {
-        if (data == "group") {
-            return '<div style="background-position:0px;" class="renderer_typeAccountIcon">&#160</div>';
-        } else {
-            return '<div style="background-position:0px;" class="renderer_typeContactIcon">&#160</div>';
-        }
-    },
-    
+
     /**
      * returns details panel
      * 
@@ -137,3 +131,18 @@ Tine.Addressbook.ListGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     }
 });
+
+/**
+ * list type renderer
+ *
+ * @private
+ * @return {String} HTML
+ */
+Tine.Addressbook.ListGridPanel.listTypeRenderer = function(data, cell, record) {
+    var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
+        type = ((record.get && record.get('type')) || record.type),
+        cssClass = type == 'group' ? 'renderer_typeGroupIcon' : 'renderer_typeListIcon',
+        qtipText = Tine.Tinebase.common.doubleEncode(type == 'group' ? i18n._('System Group') : i18n._('Group'));
+
+    return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+};

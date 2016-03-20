@@ -1130,12 +1130,20 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         } else {
             $recordData = Zend_Json::decode($_data);
         }
-        
+
+        if ($this->has('image') && !empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', $_data['image'], $matches)) {
+            // add image to attachments
+            if (! isset($recordData['attachments'])) {
+                $recordData['attachments'] = array();
+            }
+            $recordData['attachments'][] = array('tempFile' => array('id' => $matches[1]));
+        }
+
         // sanitize container id if it is an array
         if ($this->has('container_id') && isset($recordData['container_id']) && is_array($recordData['container_id']) && isset($recordData['container_id']['id']) ) {
             $recordData['container_id'] = $recordData['container_id']['id'];
         }
-        
+
         $this->_setFromJson($recordData);
         $this->setFromArray($recordData);
     }
@@ -1195,7 +1203,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         // TODO: fallback, remove if all models use modelconfiguration
         if (! $c) {
-            return $this->title;
+            return $this->has('title') ? $this->title :
+                ($this->has('name') ? $this->name : $this->{$this->_identifier});
         }
         
         // use vsprintf formatting if it is an array
@@ -1239,5 +1248,33 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         return $keys;
+    }
+
+    public function runConvertToRecord()
+    {
+        $conf = self::getConfiguration();
+        if (null === $conf)
+            return;
+        foreach ($conf->getConverters() as $key => $converters) {
+            if (isset($this->_properties[$key])) {
+                foreach ($converters as $converter) {
+                    $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
+                }
+            }
+        }
+    }
+
+    public function runConvertToData()
+    {
+        $conf = self::getConfiguration();
+        if (null === $conf)
+            return;
+        foreach ($conf->getConverters() as $key => $converters) {
+            if (isset($this->_properties[$key])) {
+                foreach ($converters as $converter) {
+                    $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
+                }
+            }
+        }
     }
 }

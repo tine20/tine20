@@ -35,7 +35,6 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
     protected function _setIndex($_declaration)
     {
         $this->setName($_declaration['COLUMN_NAME']);
-        $type = '';
         $length= '';
         
         switch ($_declaration['DATA_TYPE']) {

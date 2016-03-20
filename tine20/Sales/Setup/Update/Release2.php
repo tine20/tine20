@@ -159,7 +159,7 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
                     'own_model'              => 'Crm_Model_Lead',
                     'own_backend'            => 'Sql',
                     'own_id'                 => $row['lead_id'],
-                    'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'type'                   => 'PRODUCT',
                     'related_model'          => 'Sales_Model_Product',
                     'related_backend'        => 'Sql',

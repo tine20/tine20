@@ -576,6 +576,30 @@ Tine.Tinebase.common = {
     },
 
     /**
+     * i18n renderer
+     *
+     * NOTE: needs to be bound to i18n object!
+     *
+     * renderer: Tine.Tinebase.common.i18nRenderer.createDelegate(this.app.i18n)
+     * @param original
+     */
+    i18nRenderer: function(original) {
+        return this._hidden(original);
+    },
+
+    /**
+     * color renderer
+     *
+     * @param color
+     */
+    colorRenderer: function(color) {
+        // normalize
+        color = String(color).replace('#', '');
+
+        return '<div style="background-color: #' + Ext.util.Format.htmlEncode(color) + '">&#160;</div>';
+    },
+
+    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id
@@ -810,5 +834,22 @@ Tine.Tinebase.common = {
             return Tine[appName].Model[modelName];
         }
         return modelName;
+    },
+
+    /**
+     * Confirm application restart
+     *
+     * @param Boolean closewindow
+     */
+    confirmApplicationRestart: function (closewindow) {
+        Ext.Msg.confirm(_('Confirm'), _('Restart application to apply new configuration?'), function (btn) {
+            if (btn == 'yes') {
+                // reload mainscreen to make sure registry gets updated
+                Tine.Tinebase.common.reload();
+                if (closewindow) {
+                    window.close();
+                }
+            }
+        }, this);
     }
 };

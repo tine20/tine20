@@ -69,8 +69,6 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      */
     protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {
-        $settings = Crm_Controller::getInstance()->getConfigSettings();
-        
         $leadFields = array (
             array(  'label' => /* $_translate->_('Lead Data') */ "", 
                     'type' => 'separator' 
@@ -128,14 +126,11 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                             } elseif ( $key === 'probability' ) {
                                 $content[] = $_lead->$key . " %";
                             } elseif ( $key === 'leadstate_id' ) {
-                                $state = $settings->getOptionById($_lead->leadstate_id, 'leadstates');
-                                $content[] = $state['leadstate'];
+                                $content[] = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->getTranslatedValue($_lead->leadstate_id);
                             } elseif ( $key === 'leadtype_id' ) {
-                                $type = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
-                                $content[] = $type['leadtype'];
+                                $content[] = Crm_Config::getInstance()->get(Crm_Config::LEAD_TYPES)->getTranslatedValue($_lead->leadtype_id);
                             } elseif ( $key === 'leadsource_id' ) {
-                                $source = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
-                                $content[] = $source['leadsource'];
+                                $content[] = Crm_Config::getInstance()->get(Crm_Config::LEAD_SOURCES)->getTranslatedValue($_lead->leadsource_id);
                             } else {
                                 $content[] = $_lead->$key;
                             }

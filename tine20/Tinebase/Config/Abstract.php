@@ -647,15 +647,16 @@ abstract class Tinebase_Config_Abstract
 
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
-            case self::TYPE_BOOL:       return (bool) (int) $_rawData;
+            case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_ARRAY:      return (array) $_rawData;
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
-            case self::TYPE_KEYFIELD_CONFIG:   return Tinebase_Config_KeyField::create(
-                $_rawData,
-                (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array()
-            );
+            case self::TYPE_KEYFIELD_CONFIG:
+                $options = (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array();
+                $options['appName'] = $this->_appName;
+                return Tinebase_Config_KeyField::create($_rawData, $options);
+
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }

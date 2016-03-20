@@ -22,7 +22,7 @@ var WidgetAttacher = function(options) {
 
     var THIS = this;
     var $targetDiv = userOpts.$elem;
-    var onContentChangeCB = null; // user callback
+    var onContentChangeCB = $.noop; // user callback
 
     function _BuildDisplayName(fileObj) {
         var $disp = $('#Attacher_template > .Attacher_fileNameDisplay').clone();
@@ -54,7 +54,7 @@ var WidgetAttacher = function(options) {
                 partId: file.partId
             });
         }
-        if (headline.attachments.length && onContentChangeCB !== null) {
+        if (headline.attachments.length) {
             onContentChangeCB(); // invoke user callback
         }
         return THIS;
@@ -72,9 +72,7 @@ var WidgetAttacher = function(options) {
             if ($divSlot === null) { // first call, create DIV entry with progress bar and stuff
                 $divSlot = $('#Attacher_template > .Attacher_unit').clone();
                 $divSlot.appendTo($targetDiv);
-                if (onContentChangeCB !== null) {
-                    onContentChangeCB(); // invoke user callback
-                }
+                onContentChangeCB(); // invoke user callback
             }
             tempFiles.push(xhr.responseJSON.tempFile); // object returned by Tinebase.uploadTempFile
             $divSlot.find('.Attacher_text')
@@ -84,9 +82,7 @@ var WidgetAttacher = function(options) {
             if ($divSlot === null) {
                 $divSlot = $('#Attacher_template > .Attacher_unit').clone();
                 $divSlot.appendTo($targetDiv);
-                if (onContentChangeCB !== null) {
-                    onContentChangeCB(); // invoke user callback
-                }
+                onContentChangeCB(); // invoke user callback
             }
             if (xhr.responseJSON.status === 'success') {
                 App.Post('joinTempFiles', { tempFiles:JSON.stringify(tempFiles) })
@@ -124,9 +120,7 @@ var WidgetAttacher = function(options) {
     $targetDiv.on('click', '.Attacher_remove', function() {
         var $slot = $(this).closest('.Attacher_unit');
         $slot.remove();
-        if (onContentChangeCB !== null) {
-            onContentChangeCB(); // invoke user callback
-        }
+        onContentChangeCB(); // invoke user callback
     });
 };
 
