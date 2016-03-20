@@ -189,7 +189,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
-        $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
+        $decodedPagination = $this->_prepareParameter($_paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $filter = $this->_decodeFilter($_filter, $_filterModel);
         
@@ -217,7 +217,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = FALSE)
     {
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
-        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
+        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
         if (is_array($decodedFilter)) {
             $filter = new $filterModel(array());
@@ -308,7 +308,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
         $this->_longRunningRequest();
-        $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
+        $decodedData   = $this->_prepareParameter($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
         
         $result = $_controller->updateMultiple($filter, $decodedData);
@@ -371,7 +371,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller, $additionalArguments = array())
     {
         if (! is_array($_ids) && strpos($_ids, '[') !== false) {
-            $_ids = Zend_Json::decode($_ids);
+            $_ids = $this->_prepareParameter($_ids);
         }
         $args = array_merge(array($_ids), $additionalArguments);
         call_user_func_array(array($_controller, 'delete'), $args);
@@ -432,6 +432,28 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return array(
             'status'    => 'success'
         );
+    }
+
+    /**
+     * returns function parameter as object, decode Json if needed
+     *
+     * Prepare function input to be an object. Input maybe already an array or (empty) text.
+     * Starting PHP 7 Zend_Json::decode can't handle empty strings.
+     *
+     * @param  mixed $_dataAsArrayOrJson
+     * @return array
+     */
+    protected function _prepareParameter($_dataAsArrayOrJson)
+    {
+        if (is_array($_dataAsArrayOrJson)) {
+            return $_dataAsArrayOrJson;
+        }
+        else if (trim($_dataAsArrayOrJson) == '') {
+            return Zend_Json::decode("{}");
+        }
+        else {
+            return Zend_Json::decode($_dataAsArrayOrJson);
+        }
     }
 
     /**

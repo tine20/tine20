@@ -929,7 +929,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchPreferencesForApplication($applicationName, $filter)
     {
-        $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
+        $decodedFilter = $this->_prepareParameter($filter);
         
         $filter = new Tinebase_Model_PreferenceFilter();
         if (! empty($decodedFilter)) {
@@ -992,7 +992,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function savePreferences($data, $adminMode)
     {
-        $decodedData = is_array($data) ? $data : Zend_Json::decode($data);
+        $decodedData = $this->_prepareParameter($data);
         
         $result = array();
         foreach ($decodedData as $applicationName => $data) {
