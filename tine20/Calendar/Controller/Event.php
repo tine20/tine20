@@ -479,12 +479,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $exdates = is_array($_record->exdate) ? $_record->exdate : array();
 
         // own event should not trigger constraints conflicts
-        $constraints = clone $_record->rrule_constraints;
-        $constraints->addFilter(new Tinebase_Model_Filter_Text('uid', 'not', $_record->uid));
+        if ($_record->rrule_constraints && $_record->rrule_constraints instanceof Calendar_Model_EventFilter) {
+            $constraints = clone $_record->rrule_constraints;
+            $constraints->addFilter(new Tinebase_Model_Filter_Text('uid', 'not', $_record->uid));
 
-        $constrainExdatePeriods = $this->getConflictingPeriods($this->getBlockingPeriods($_record), $constraints);
-        foreach ($constrainExdatePeriods as $constrainExdatePeriod) {
-            $exdates[] = $constrainExdatePeriod['from'];
+            $constrainExdatePeriods = $this->getConflictingPeriods($this->getBlockingPeriods($_record), $constraints);
+            foreach ($constrainExdatePeriods as $constrainExdatePeriod) {
+                $exdates[] = $constrainExdatePeriod['from'];
+            }
         }
 
         $_record->exdate = array_unique($exdates);
@@ -505,7 +507,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         )), NULL, 'id');
 
         // update each
-        foreach($constraintsEventIds as $constraintsEventId) {
+        foreach ($constraintsEventIds as $constraintsEventId) {
             try {
                 $event = $this->_backend->get($constraintsEventId);
                 $this->setConstraintsExdates($event);
