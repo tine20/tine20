@@ -16,6 +16,7 @@
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
+        "zendframework/zendframework1": "1.12.*",
         "syncroton/syncroton": "1.1.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "codeplex/phpexcel": "1.7.8",
@@ -45,7 +46,7 @@
         ]
     },
     "include-path-desc": "ZF1 still needs include path as it does not consequently use autoloading internally",
-    "include-path": [""],
+    "include-path": ["", "vendor/zendframework/zendframework1/library", "library"],
     "config": {
         "secure-http": false
     }

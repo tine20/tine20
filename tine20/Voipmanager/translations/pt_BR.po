@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-11-19 15:26+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -418,7 +418,7 @@ msgstr "Usuários"
 #: js/Models.js:193 js/Models.js:235 js/Models.js:313 js/Models.js:377
 #: js/Models.js:481 js/Models.js:520 js/Models.js:579 js/Models.js:617
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
 #: js/Snom/LocationGridPanel.js:58
 msgid "FW Interval"

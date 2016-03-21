@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3708be3d2f868be8c8c9912e2edbbcb0",
-    "content-hash": "54d585b7b9d18845bf326cb5a37476c7",
+    "hash": "d578ce7b1dd3fbf76fdc64179abd3e2a",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -18,8 +17,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/markushausammann/PHPExcel/zipball/6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
-                "reference": "1.7.8",
-                "shasum": ""
+                "reference": "6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
+                "shasum": "1ae50befdfc9c93b7efdf30a0da645fedd3c3ab1"
             },
             "require": {
                 "ext-xml": "*",
@@ -69,7 +68,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
+                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
             },
             "require": {
                 "php": ">=5.2"
@@ -352,7 +351,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/961546d71c332ab34ad1c5bba7f372c08b388dcf",
                 "reference": "961546d71c332ab34ad1c5bba7f372c08b388dcf",
-                "shasum": ""
+                "shasum": "48bc39b88cb0ebaa070553c3233914bd12e290b9"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -855,7 +854,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/Cilex/console-service-provider/zipball/25ee3d1875243d38e1a3448ff94bdf944f70d24e",
                 "reference": "25ee3d1875243d38e1a3448ff94bdf944f70d24e",
-                "shasum": ""
+                "shasum": "58c87368a6b70743d013c380f925745cdc38f263"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -1244,7 +1243,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/schmittjoh/parser-lib/zipball/c509473bc1b4866415627af0e1c6cc8ac97fa51d",
                 "reference": "c509473bc1b4866415627af0e1c6cc8ac97fa51d",
-                "shasum": ""
+                "shasum": "985e6016a79a201eda49545e838c56f898eb7b26"
             },
             "require": {
                 "phpoption/phpoption": ">=0.9,<2.0-dev"
@@ -1720,7 +1719,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpDocumentor/Fileset/zipball/bfa78d8fa9763dfce6d0e5d3730c1d8ab25d34b0",
                 "reference": "bfa78d8fa9763dfce6d0e5d3730c1d8ab25d34b0",
-                "shasum": ""
+                "shasum": "46022b05e8d3bc7312f0eb83a22f976290fdfed4"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2359,7 +2358,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5794e3c5c5ba0fb037b11d8151add2a07fa82875",
                 "reference": "5794e3c5c5ba0fb037b11d8151add2a07fa82875",
-                "shasum": ""
+                "shasum": "e2798bcae4e0efe50b6529b0389c7620d61685ed"
             },
             "require": {
                 "php": ">=5.3.3",
@@ -2454,7 +2453,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
                 "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "shasum": ""
+                "shasum": "d2559a6d16760a977b09524dfb92b1508c321f6d"
             },
             "type": "library",
             "autoload": {

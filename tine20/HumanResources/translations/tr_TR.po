@@ -127,7 +127,7 @@ msgstr "Hesap"
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
 #: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
-#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:519
+#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:521
 #: js/AccountEditDialog.js:161
 msgid "Description"
 msgstr "Açıklama"
@@ -320,7 +320,7 @@ msgstr[0] "one: Boş Zaman\n\nother: Boş Zamanlar"
 msgid "Type"
 msgstr "Tip"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:369
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:371
 msgid "Status"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgid_plural "Cost Centers"
 msgstr[0] ""
 
 #: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
-#: js/FreeTimeEditDialog.js:533
+#: js/FreeTimeEditDialog.js:535
 msgid "Enter description"
 msgstr "Açıklama Giriniz"
 
@@ -443,21 +443,21 @@ msgstr "Takvim Haftası"
 msgid "Loading calendar data..."
 msgstr "Takvim Yüklenizoe"
 
-#: js/DatePicker.js:404
+#: js/DatePicker.js:411
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:405
+#: js/DatePicker.js:412
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:464
+#: js/DatePicker.js:471
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:465
+#: js/DatePicker.js:472
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -599,11 +599,11 @@ msgstr ""
 msgid "No day selected"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:447
+#: js/FreeTimeEditDialog.js:449
 msgid "Remaining"
 msgstr ""
 
-#: js/FreeTimeEditDialog.js:500
+#: js/FreeTimeEditDialog.js:502
 msgid "Select Days"
 msgstr "Günleri Seçiniz"
 

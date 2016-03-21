@@ -77,6 +77,10 @@ msgstr ""
 msgid "Depreciate"
 msgstr ""
 
+#: Model/InventoryItem.php:149
+msgid "Image"
+msgstr ""
+
 #: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
 msgstr ""

@@ -31,7 +31,7 @@ msgstr "مدیریت پروژه‌های مشترک موردعلاقه"
 msgid "Create new shared project favorites"
 msgstr "ایجاد پروژه مشترک مورد علاقه جدید"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Pluralized Translations\none: پروژه\nother: پروژه"
@@ -45,39 +45,39 @@ msgstr[0] "Pluralized Translations\n\none: لیست پروژه\nother: لیست 
 msgid "Project lists"
 msgstr "فهرست پروژه ها"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "عنوان"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "شماره"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "توضیحات"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "وضعیت"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "تاریخ و زمان آخرین اصلاح"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "آخرین اصلاح توسط"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "زمان ساخت"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "ساخته شده توسط"
 
@@ -89,7 +89,7 @@ msgstr "شرکت کنندگان"
 msgid "Role"
 msgstr "سِمَت"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "توضیحات"
 
