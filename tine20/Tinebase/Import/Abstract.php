@@ -607,7 +607,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             
             $relation = array(
                 'type'  => $field['destination'], 
-                'related_record' => $record
+                'related_record' => $record,
+                // TODO move this to product (modelconfig?)
+                'remark' => $field['destination'] == 'PRODUCT' ? array('quantity' => 1) : null
             );
             
             $relations[] = $relation;

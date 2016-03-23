@@ -371,7 +371,7 @@
     <!-- ============================================  -->
     <target name="tine-install">
         <property file="${configdir}/install.properties" />
-        <echo msg="Installing Tine 2.0" />
+        <echo msg="Installing Tine 2.0 with initial admin '${adminLoginName}'" />
         <exec command="php -d include_path=.:${configdir} setup.php \
             --install -- \
                 adminLoginName=${adminLoginName} \
@@ -383,7 +383,16 @@
                 authentication=${authentication} \
                 accounts=${accounts} \
                 sieve=${sieve}
-" passthru="true"/>
+" passthru="true" returnProperty="return"/>
+        <if>
+        <equals arg1="${return}" arg2="0" />
+        <then>
+            <echo message="Installation successful" />
+        </then>
+        <else>
+            <fail message="Installation failed" />
+        </else>
+        </if>
     </target>
 
     <!-- ============================================  -->
