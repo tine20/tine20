@@ -207,27 +207,27 @@ msgstr "Политика по умолчанию для новых устрой�
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Введите ID политики для применения к вновь созданным устройствам."
 
-#: Config.php:62
+#: Config.php:63
 msgid "Disable Access Log"
 msgstr "Отключить лог"
 
-#: Config.php:64
+#: Config.php:65
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Отключить создание лога подключений ActiveSync"
 
-#: Config.php:73
+#: Config.php:74
 msgid "Filter timeslot for emails"
 msgstr "Фильтрация писем по времени"
 
-#: Config.php:75
+#: Config.php:76
 msgid "For how long in the past the emails should be synchronized."
 msgstr "Насколько давние письма должны быть синхронизированы."
 
-#: Config.php:96
+#: Config.php:97
 msgid "Filter timeslot for events"
 msgstr "Фильтрация событий по времени"
 
-#: Config.php:98
+#: Config.php:99
 msgid "For how long in the past the events should be synchronized."
 msgstr "Насколько давние события должны быть синхронизированы."
 

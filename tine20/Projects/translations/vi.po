@@ -30,7 +30,7 @@ msgstr "Quản lý lối tắt dự án dùng chung"
 msgid "Create new shared project favorites"
 msgstr "Tạo lối tắt dự án dùng chung"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "one: Dự án\nother: Dự án"
@@ -44,39 +44,39 @@ msgstr[0] "one: Danh sách dự án\nother: Danh sách dự án"
 msgid "Project lists"
 msgstr "Danh sách dự án"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr "Tìm nhanh"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Số"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "Mô tả"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Trạng thái"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "Lần sửa cuối"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "Sửa lần cuối bởi"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "Thời gian tạo"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "Tạo bởi"
 
@@ -88,7 +88,7 @@ msgstr "Người tham gia"
 msgid "Role"
 msgstr "Vai trò"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "Nhập mô tả"
 

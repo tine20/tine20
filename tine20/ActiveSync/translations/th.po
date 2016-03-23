@@ -198,27 +198,27 @@ msgstr "นโยบายหลักสำหรับอุปกรณ์ใ
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "ใส่รหัสของนโยบายเพื่อใช้สำหรับอุปกรณ์ที่เพิ่งสร้างขึ้น"
 
-#: Config.php:62
+#: Config.php:63
 msgid "Disable Access Log"
 msgstr "ไม่สามารถบันทึกการใช้งาน"
 
-#: Config.php:64
+#: Config.php:65
 msgid "Disable ActiveSync Access Log creation."
 msgstr ""
 
-#: Config.php:73
+#: Config.php:74
 msgid "Filter timeslot for emails"
 msgstr "ตัวกรองช่วงเวลาสำหรับอีเมล"
 
-#: Config.php:75
+#: Config.php:76
 msgid "For how long in the past the emails should be synchronized."
 msgstr "ระยะเวลานานแค่ไหนในอดีตที่อีเมลควรจะได้รับการอัพเดท"
 
-#: Config.php:96
+#: Config.php:97
 msgid "Filter timeslot for events"
 msgstr "ตัวกรองช่วงเวลาสำหรับเหตุการณ์ต่าง ๆ"
 
-#: Config.php:98
+#: Config.php:99
 msgid "For how long in the past the events should be synchronized."
 msgstr "ระยะเวลานานแค่ไหนในอดีที่เหตุการณ์ควรจะได้รับการอัพเดท"
 

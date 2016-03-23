@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-09-11 13:03+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -537,7 +537,7 @@ msgstr "Favor validar os parâmetros da conta antes de salvar!"
 
 #: js/Models.js:97 js/Models.js:144 js/Models.js:321
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
 #: js/Models.js:98
 msgid "Created By"

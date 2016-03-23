@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 09:54+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/tine20/tine20/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -64,44 +64,40 @@ msgstr "导入课程成员"
 msgid "Add new member"
 msgstr ""
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "课程"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:204
 msgid "Course Name"
 msgstr "课程名"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:211
 msgid "Course / School Type"
 msgstr "课程 / 学校类型"
 
-#: js/CourseEditDialog.js:223
+#: js/CourseEditDialog.js:221
 msgid "Description"
 msgstr "描述"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr "因特网访问"
 
-#: js/CourseEditDialog.js:239
-msgid "Fileserver Access"
-msgstr "文件服务器访问"
-
-#: js/CourseEditDialog.js:271
+#: js/CourseEditDialog.js:256
 msgid "Members"
 msgstr "成员"
 
-#: js/CourseEditDialog.js:298
+#: js/CourseEditDialog.js:283
 msgid "Login"
 msgstr "登录"
 
-#: js/CourseEditDialog.js:302
+#: js/CourseEditDialog.js:287
 msgid "unknown"
 msgstr ""
 
-#: js/CourseEditDialog.js:307
+#: js/CourseEditDialog.js:292
 msgid "Reset Password"
 msgstr "重置密码"
 

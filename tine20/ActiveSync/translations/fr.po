@@ -201,27 +201,27 @@ msgstr "Politique par défaut pour les nouveaux appareils"
 msgid "Enter the id of the policy to apply to newly created devices."
 msgstr "Entrez le numéro de la politique qui s'appliquera aux appareils nouvellement enregistrés"
 
-#: Config.php:62
+#: Config.php:63
 msgid "Disable Access Log"
 msgstr "Désactiver la journalisation des accès"
 
-#: Config.php:64
+#: Config.php:65
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Désactiver la journalisation des accès"
 
-#: Config.php:73
+#: Config.php:74
 msgid "Filter timeslot for emails"
 msgstr "Jours à synchroniser pour les messages"
 
-#: Config.php:75
+#: Config.php:76
 msgid "For how long in the past the emails should be synchronized."
 msgstr "Période de synchronisation des messages passés"
 
-#: Config.php:96
+#: Config.php:97
 msgid "Filter timeslot for events"
 msgstr "Jours à synchroniser pour les évènements"
 
-#: Config.php:98
+#: Config.php:99
 msgid "For how long in the past the events should be synchronized."
 msgstr "Période de synchronisation des événements passés"
 

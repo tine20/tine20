@@ -128,7 +128,7 @@ msgstr "Llogari"
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
 #: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
-#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:519
+#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:521
 #: js/AccountEditDialog.js:161
 msgid "Description"
 msgstr "Përshkrimi"
@@ -325,7 +325,7 @@ msgstr[1] "Kohëra të Lira"
 msgid "Type"
 msgstr "Modeli"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:369
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:371
 msgid "Status"
 msgstr "Statusi"
 
@@ -368,7 +368,7 @@ msgstr[0] "Qëndra e Kostove"
 msgstr[1] "Qëndrat e Kostove"
 
 #: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
-#: js/FreeTimeEditDialog.js:533
+#: js/FreeTimeEditDialog.js:535
 msgid "Enter description"
 msgstr "Vendosni Përshkrimin"
 
@@ -451,21 +451,21 @@ msgstr "JV"
 msgid "Loading calendar data..."
 msgstr "Duke ngarkuar të dhënat e kalendarit..."
 
-#: js/DatePicker.js:404
+#: js/DatePicker.js:411
 msgid "Year can not be changed"
 msgstr "Viti nuk mund të ndryshohet"
 
-#: js/DatePicker.js:405
+#: js/DatePicker.js:412
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr "Ju keni zgjedhur tashmë disa data prej një tjetër viti. Lutemi të krijoni të dhëna të reja për të shtuar data nga një tjetër vit!"
 
-#: js/DatePicker.js:464
+#: js/DatePicker.js:471
 msgid "No more vacation days"
 msgstr "Nuk ka më ditë lejesh të zakonshme"
 
-#: js/DatePicker.js:465
+#: js/DatePicker.js:472
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -609,11 +609,11 @@ msgstr "Ju duhet të zgjidhni të paktën një ditë për të ruajtur këtë lej
 msgid "No day selected"
 msgstr "Nuk është zgjedhur ndonjë ditë"
 
-#: js/FreeTimeEditDialog.js:447
+#: js/FreeTimeEditDialog.js:449
 msgid "Remaining"
 msgstr "Të mbetura"
 
-#: js/FreeTimeEditDialog.js:500
+#: js/FreeTimeEditDialog.js:502
 msgid "Select Days"
 msgstr "Zgjidhni Ditët"
 

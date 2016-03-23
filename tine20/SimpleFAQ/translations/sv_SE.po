@@ -18,28 +18,28 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:114
+#: Controller.php:119
 #, python-format
 msgid "%s's personal FAQs"
 msgstr "%s's personliga FAQs"
 
-#: Controller.php:164
+#: Controller.php:159
 msgid "Draft"
 msgstr "Utkast"
 
-#: Controller.php:165
+#: Controller.php:160
 msgid "released"
 msgstr "Släppt"
 
-#: Controller.php:166
+#: Controller.php:161
 msgid "obsolete"
 msgstr "Föråldrade"
 
-#: Controller.php:169
+#: Controller.php:164
 msgid "Internal"
 msgstr "Interna"
 
-#: Controller.php:170
+#: Controller.php:165
 msgid "Public"
 msgstr "Publik"
 
