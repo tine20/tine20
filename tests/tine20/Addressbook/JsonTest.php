@@ -1751,4 +1751,18 @@ Steuernummer 33/111/32212";
             $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
         }
     }
+
+    /**
+     * @see 0011704: PHP 7 can't decode empty JSON-strings
+     */
+    public function testEmptyPagingParamJsonDecode()
+    {
+        $filter = array(array(
+            'field'    => 'n_family',
+            'operator' => 'equals',
+            'value'    => 'somename'
+        ));
+        $result = $this->_instance->searchContacts($filter, '');
+        $this->assertEquals(0, $result['totalcount']);
+    }
 }
