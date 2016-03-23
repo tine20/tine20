@@ -24,6 +24,14 @@ class Addressbook_Export_DocTest extends TestCase
 {
     public function testExportLetter()
     {
+        // skip tests for php7
+        // ERROR: PHP Fatal error:  Cannot use PhpOffice\PhpWord\Shared\String as String because 'String' is a special
+        //  class name in /usr/local/share/tine20.git/tine20/vendor/phpoffice/phpword/src/PhpWord/TemplateProcessor.php
+        //  on line 23
+        if (PHP_VERSION_ID >= 70000) {
+            $this->markTestSkipped('FIXME in php7');
+        }
+
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'n_given', 'operator' => 'equals', 'value' => 'Robert')
         ));
