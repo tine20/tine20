@@ -235,17 +235,55 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
         } else {
             $blob = $this->blob;
         }
-        
-        if ($_maxSize && strlen($blob) > $_maxSize) {
-            $q = $_maxSize/strlen($blob);
-            $width = floor(sqrt(pow($this->width, 2) * $q));
-            $height = floor(sqrt(pow($this->height, 2) * $q));
-            
-            $this->resize($width, $height, self::RATIOMODE_PRESERVANDCROP);
-            return $this->getBlob($_mime, $_maxSize);
+
+        if ($_maxSize) {
+            $originalSize = strlen($blob);
+            if ($originalSize > $_maxSize) {
+
+                $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->id . $_mime . $_maxSize);
+                if (Tinebase_Core::getCache()->test($cacheId)) {
+                    $blob =  Tinebase_Core::getCache()->load($cacheId);
+                    return $blob;
+                }
+
+                // NOTE: resampling 1:1 through GD changes images size so
+                //       we always to through GD before furthor calculations
+                $qS = $_maxSize / strlen($blob);
+                $qD = $_mime != $this->mime ? sqrt($qS) : 1;
+                $qF = 1;
+                $i = 0;
+
+                do {
+                    // feedback fault
+                    $qD = $qD * $qF;
+
+                    $clone = clone $this;
+                    $clone->resize(
+                        floor($this->width * $qD),
+                        floor($this->height * $qD),
+                        self::RATIOMODE_PRESERVANDCROP
+                    );
+                    $blob = $clone->getBlob();
+                    $size = strlen($blob);
+
+                    // size factor achieved;
+                    $qSA = $size/$originalSize;
+
+                    // size fault factor
+                    $qF = sqrt($qS/$qSA);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " resized {$this->id}: qS: $qS qD: $qD qSA: $qSA sizeA: $size qF: $qF ");
+
+                // feedback size fault factor if we are still to big or more than 1% to small per attempt
+                } while ($qF > (1 + $i++*0.01) || $qF < 1);
+
+                Tinebase_Core::getCache()->save($blob, $cacheId, array(), null);
+            }
         }
-        
-        
+
+
+
         return $blob;
     }
     
