@@ -263,7 +263,6 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 sortable: true
             },
             columns:  [
-                //{id: 'type', header: '',        dataIndex: this.recordPrefix + 'type', width: 35, renderer: Tine.Tinebase.common.accountTypeRenderer},
                 {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: Tine.Tinebase.common.accountRenderer}
             ].concat(this.configColumns)
         });
