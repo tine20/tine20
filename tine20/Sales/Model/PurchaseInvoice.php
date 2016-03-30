@@ -102,6 +102,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             'due_in' => array(
                 'title' => 'Due in',            // _('Due in')
                 'type'  => 'integer',
+                'label' => 'Due in',            // _('Due in')
                 'default' => 10,
                 'shy' => TRUE,
             ),
