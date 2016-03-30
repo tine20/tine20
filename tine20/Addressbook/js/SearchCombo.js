@@ -136,21 +136,10 @@ Tine.Addressbook.SearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPicke
     setValue: function (value) {
         if (this.useAccountRecord) {
             if (value) {
-                var tinebaseApp = new Tine.Tinebase.Application({
-                    appName: 'Tinebase'
-                });
-                var showMail = tinebaseApp.featureEnabled('featureShowAccountEmail');
-
-                if (value.accountId) {
+                if(value.accountId) {
                     // account object
                     this.accountId = value.accountId;
                     value = value.accountDisplayName;
-                    if (showContactMail) {
-                        var email = value.accountEmailAddress;
-                        if (email !== '') {
-                            value += ' (' + email + ')';
-                        }
-                    }
                 } else if (typeof(value.get) == 'function') {
                     // account record
                     this.accountId = value.get('id');
