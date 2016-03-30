@@ -582,7 +582,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     {
         if (empty($fieldValue)) {
             // no need to continue here
-            return;
+            return array();
         }
 
         if (! isset($field['related_model']) || ! isset($field['filter'])) {
