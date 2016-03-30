@@ -476,10 +476,17 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getResolvedKeyfield($_property, $_keyfield, $_application)
     {
-         $i18nApplication = Tinebase_Translation::getTranslation($_application);
-         $config = Tinebase_Config::getAppConfig($_application);
-         $result = $config->get($_keyfield)->records->getById($_property);
-         return isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
+        $i18nApplication = Tinebase_Translation::getTranslation($_application);
+        $config = Tinebase_Config::getAppConfig($_application);
+
+        $keyfieldConfig = $config->get($_keyfield);
+        if ($keyfieldConfig) {
+            $result = $keyfieldConfig->records->getById($_property);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' '
+                . ' Could not find keyfield: ' . $_keyfield);
+        }
+        return isset($result) && isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
     }
     
     /**
