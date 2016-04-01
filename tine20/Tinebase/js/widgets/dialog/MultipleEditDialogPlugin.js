@@ -686,21 +686,23 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }, this);
 
         // cope with added relations
-        Ext.each(this.editDialog.relationsPanel.getData(), function(relation) {
-            var rrc = Tine.Tinebase.data.RecordMgr.get(relation['related_model']),
-                rr = new rrc(relation['related_record']),
-                modelName = rrc.getRecordName(),
-                title = rr.getTitle(),
-                type = relation['type'] || " ";
+        if (this.editDialog.relationsPanel) {
+            Ext.each(this.editDialog.relationsPanel.getData(), function (relation) {
+                var rrc = Tine.Tinebase.data.RecordMgr.get(relation['related_model']),
+                    rr = new rrc(relation['related_record']),
+                    modelName = rrc.getRecordName(),
+                    title = rr.getTitle(),
+                    type = relation['type'] || " ";
 
-            relation['own_id'] = "";
-            relation['related_record'] = "";
+                relation['own_id'] = "";
+                relation['related_record'] = "";
 
-            changes.push({name: '%add', value: Ext.encode(relation)});
-            this.changedHuman += '<li><span style="font-weight:bold">' + String.format(_('Add {0} Relation'), modelName) + ':</span> ';
-            this.changedHuman += Ext.util.Format.htmlEncode(title);
-            this.changedHuman += '</li>';
-        }, this);
+                changes.push({name: '%add', value: Ext.encode(relation)});
+                this.changedHuman += '<li><span style="font-weight:bold">' + String.format(_('Add {0} Relation'), modelName) + ':</span> ';
+                this.changedHuman += Ext.util.Format.htmlEncode(title);
+                this.changedHuman += '</li>';
+            }, this);
+        }
 
         this.changedHuman += '</ul>';
         var filter = this.selectionFilter;
