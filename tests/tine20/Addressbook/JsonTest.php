@@ -844,14 +844,20 @@ class Addressbook_JsonTest extends TestCase
         $ns = $xml->getNamespaces(true);
         $spreadsheetXml = $xml->children($ns['office'])->{'body'}->{'spreadsheet'};
         
-        $headerRowXml = $spreadsheetXml->children($ns['table'])->{'table'}->{'table-row'}->{1};
+        $headerRowXml = $spreadsheetXml->children($ns['table'])->{'table'}->xpath('table:table-row');
+        $headerRowXml = $headerRowXml[1];
+        $cells = $headerRowXml->xpath('table:table-cell');
+        $tag1 = $cells[1]->xpath('text:p');
+        $tag1 = $tag1[0];
+        $tag2 = $cells[2]->xpath('text:p');
+        $tag2 = $tag2[0];
         
         // the tags should exist in the header row
-        $this->assertEquals('tag1', (string) $headerRowXml->children($ns['table'])->{'table-cell'}->{1}->children($ns['text'])->{0});
-        $this->assertEquals('tag2', (string) $headerRowXml->children($ns['table'])->{'table-cell'}->{2}->children($ns['text'])->{0});
+        $this->assertEquals('tag1', (string) $tag1);
+        $this->assertEquals('tag2', (string) $tag2);
         
         // if there is no more header column, tag3 is not shown
-        $this->assertEquals(3, (string) $headerRowXml->children($ns['table'])->{'table-cell'}->count());
+        $this->assertEquals(3, count($cells));
     }
     
     /**
@@ -1744,5 +1750,19 @@ Steuernummer 33/111/32212";
         foreach($result['results'] as $contactData) {
             $this->assertCount(2, $contactData['tags'], $contactData['n_fn'] . ' tags failed');
         }
+    }
+
+    /**
+     * @see 0011704: PHP 7 can't decode empty JSON-strings
+     */
+    public function testEmptyPagingParamJsonDecode()
+    {
+        $filter = array(array(
+            'field'    => 'n_family',
+            'operator' => 'equals',
+            'value'    => 'somename'
+        ));
+        $result = $this->_instance->searchContacts($filter, '');
+        $this->assertEquals(0, $result['totalcount']);
     }
 }

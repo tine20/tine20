@@ -155,15 +155,11 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
     
         $ns = $xml->getNamespaces(true);
         $spreadsheetXml = $xml->children($ns['office'])->{'body'}->{'spreadsheet'};
+
+        $text = $spreadsheetXml->xpath('((.//table:table/table:table-row)[2]/table:table-cell)[4]/text:p');
+        $text = $text[0];
     
         // the product should be found here
-        $this->assertEquals('Debitor', (string) $spreadsheetXml->children(
-                $ns['table']
-            )->{'table'}->{'table-row'}->{1}->children(
-                $ns['table']
-            )->{'table-cell'}->{3}->children(
-                $ns['text']
-            )->{0}
-        );
+        $this->assertEquals('Debitor', (string)$text);
     }
 }

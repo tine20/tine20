@@ -1473,12 +1473,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testBrokenTimezoneInEvent()
     {
         $event = $this->_getEvent(true);
-        $event->originator_tz = 'AWST';
+        $event->originator_tz = 'AWSTTTT';
         try {
             $event = $this->_controller->create($event);
             $this->fail('should throw Tinebase_Exception_Record_Validation because of bad TZ: ' . print_r($event->toArray(), true));
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            $this->assertEquals('Bad Timezone: AWST', $terv->getMessage());
+            $this->assertEquals('Bad Timezone: AWSTTTT', $terv->getMessage());
         }
     }
 }
