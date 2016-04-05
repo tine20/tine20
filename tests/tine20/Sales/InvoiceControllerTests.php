@@ -9,7 +9,6 @@
  * 
  */
 
-
 /**
  * Test class for Sales Invoice Controller
  */
@@ -701,7 +700,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         )));
         
         // fetch user group
-        $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $group   = Tinebase_Group::getInstance()->getDefaultGroup();
         $groupId = $group->getId();
         
         // create new user
@@ -715,7 +714,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'accountEmailAddress'   => 'unittestx8@tine20.org',
         ));
         
-        $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
+        $user = Admin_Controller_User::getInstance()->create($user, 'pw5823H132', 'pw5823H132');
         $this->_testUser = Tinebase_Core::getUser();
 
         Tinebase_Core::set(Tinebase_Core::USER, $user);

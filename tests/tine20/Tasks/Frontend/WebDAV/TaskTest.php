@@ -24,18 +24,6 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
     protected $objects = array();
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Tasks WebDAV Task Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      */
@@ -161,6 +149,7 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
     
     /**
      * test get vcard
+     *
      * @depends testCreateTask
      */
     public function testGetVCalendar()
@@ -169,10 +158,12 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $vcalendar = stream_get_contents($task->get());
         
-        //var_dump($vcalendar);
-        
         $this->assertContains('SUMMARY:New Task', $vcalendar);
-        $this->assertContains('ORGANIZER;CN=', $vcalendar);
+
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY) {
+            // non-AD only because AD setup currently doesn't have user email address
+            $this->assertContains('ORGANIZER;CN=', $vcalendar);
+        }
     }
     
     /**

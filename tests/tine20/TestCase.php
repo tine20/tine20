@@ -109,7 +109,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+        if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
             $this->_deleteGroups();
         }
