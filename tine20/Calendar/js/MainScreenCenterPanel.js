@@ -1530,14 +1530,15 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 var eventInfos = [];
                 Ext.each(conflictEvents[busyAttender.id], function(fbInfo) {
                     var format = 'H:i';
+                    var eventInfo;
                     var dateFormat = Ext.form.DateField.prototype.format;
                     if (event.get('dtstart').format(dateFormat) != event.get('dtend').format(dateFormat) ||
                         Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat) != Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat))
                     {
-                        format = dateFormat + ' ' + format;
+                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format);
+                    } else {
+                        eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(dateFormat + ' ' + format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
                     }
-                    
-                    var eventInfo = Date.parseDate(fbInfo.dtstart, Date.patterns.ISO8601Long).format(format) + ' - ' + Date.parseDate(fbInfo.dtend, Date.patterns.ISO8601Long).format(format);
                     if (fbInfo.event && fbInfo.event.summary) {
                         eventInfo += ' : ' + fbInfo.event.summary;
                     }
