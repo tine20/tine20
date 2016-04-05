@@ -24,7 +24,7 @@ class Zend_Ldap_ConvertTest extends TestCase
 
     public function testHex32ToAsc()
     {
-        $result = $this->_getUit()->hex32ToAsc('0x0C');
-        $this->assertEquals('12', $result);
+        $result = $this->_getUit()->hex32ToAsc('\\4D');
+        $this->assertTrue('M' === $result, print_r($result, true) . ' is no string value "M"');
     }
 }
