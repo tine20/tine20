@@ -48,7 +48,7 @@
             <identifier>invoice_date</identifier>
         </column>
         <column>
-            <identifier>depreciate_status</identifier>
+            <identifier>deprecated_status</identifier>
         </column>
         <column>
             <identifier>total_number</identifier>

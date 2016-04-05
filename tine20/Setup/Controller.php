@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -1455,21 +1455,30 @@ class Setup_Controller
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
             $createdTables = array();
+
+            // traditional xml declaration
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                    $currentTable = $table->name;
-
-                    if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $currentTable);
-
-                    try {
-                        $this->_backend->createTable($table);
-                    } catch (Zend_Db_Statement_Exception $zdse) {
-                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
-                    } catch (Zend_Db_Adapter_Exception $zdae) {
-                        throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdae->getMessage());
-                    }
+                    $this->_createTable($table);
                     $createdTables[] = $table;
+                }
+            }
+
+            // do we have modelconfig
+            else {
+                // create tables using doctrine 2
+                $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
+                $models = $application->getModels(true /* MCv2only */);
+                Setup_SchemaTool::createSchema($_xml->name, $models);
+
+                // adopt to old workflow
+                foreach($models as $model) {
+                    $modelConfiguration = $model::getConfiguration();
+                    $createdTables[] = (object) array(
+                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                        'version' => $modelConfiguration->getVersion(),
+                    );
                 }
             }
     
@@ -1504,6 +1513,18 @@ class Setup_Controller
         }
     }
 
+    protected function _createTable($table)
+    {
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
+
+        try {
+            $this->_backend->createTable($table);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdae->getMessage());
+        }
+    }
     /**
      * look for import definitions and put them into the db
      *

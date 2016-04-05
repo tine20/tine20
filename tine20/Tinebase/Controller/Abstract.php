@@ -259,9 +259,9 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     /**
      * @return array
      *
-     * @todo maybe add param $mcv2only (new modelconfig with doctrine schema tool)
+     * @param bool $MCV2only filter for new modelconfig with doctrine schema tool
      */
-    public function getModels()
+    public function getModels($MCV2only = false)
     {
         if ($this->_models === null && ! empty($this->_applicationName)) {
             try {
@@ -289,7 +289,20 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
                     }
                 }
             }
+
             $this->_models = $models;
+        }
+
+        if ($MCV2only) {
+            $md = new Tinebase_Record_DoctrineMappingDriver();
+            $MCv2Models = array();
+            foreach($models as $model) {
+                if ($md->isTransient($model)) {
+                    $MCv2Models[] = $model;
+                }
+            }
+
+            return $MCv2Models;
         }
 
         return $this->_models;
