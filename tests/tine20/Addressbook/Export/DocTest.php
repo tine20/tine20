@@ -29,7 +29,7 @@ class Addressbook_Export_DocTest extends TestCase
         //  class name in /usr/local/share/tine20.git/tine20/vendor/phpoffice/phpword/src/PhpWord/TemplateProcessor.php
         //  on line 23
         if (PHP_VERSION_ID >= 70000) {
-            $this->markTestSkipped('FIXME in php7');
+            $this->markTestSkipped('FIXME 0011730: fix doc export for php7');
         }
 
         // make sure definition is imported
