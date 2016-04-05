@@ -338,27 +338,32 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
 
-        // no need to update this attribute, it's not allowed to change and even might not be updateable
-        unset($ldapData[$this->_userUUIDAttribute]);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-
-        $this->_ldap->update($ldapEntry['dn'], $ldapData);
-        
+        // do we need to rename the entry?
+        // TODO move to rename()
         $dn = Zend_Ldap_Dn::factory($ldapEntry['dn'], null);
         $rdn = $dn->getRdn();
-        
-        // do we need to rename the entry?
         if ($rdn['CN'] != $ldapData['cn']) {
             $newDN = $this->_generateDn($_account);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
         }
-        
+
+        // no need to update this attribute, it's not allowed to change and even might not be updateable
+        unset($ldapData[$this->_userUUIDAttribute]);
+
+        // remove cn as samba forbids updating the CN (even if it does not change...
+        // 0x43 (Operation not allowed on RDN; 00002016: Modify of RDN 'CN' on CN=...,CN=Users,DC=example,DC=org
+        // not permitted, must use 'rename' operation instead
+        unset($ldapData['cn']);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+
+        $this->_ldap->update($ldapEntry['dn'], $ldapData);
+
         // refetch user from ldap backend
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $_account, 'Tinebase_Model_FullUser');
 
@@ -381,12 +386,11 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             case 'objectsid':
                 return Tinebase_Ldap::decodeSid($accountId);
                 break;
-                
+
             default:
                 return $accountId;
                 break;
         }
-        
     }
     
     /**
@@ -429,7 +433,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @param string $_accountClass
      * @return Tinebase_Record_Abstract
      */
-    protected function _ldap2User(array $_userData, $_accountClass)
+    protected function _ldap2User(array $_userData, $_accountClass = 'Tinebase_Model_FullUser')
     {
         $errors = false;
         

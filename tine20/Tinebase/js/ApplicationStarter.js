@@ -86,11 +86,14 @@ Tine.Tinebase.ApplicationStarter = {
                     fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     break;
-                
             }
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
                 field.dateFormat = fieldDefinition.dateFormat;
+            }
+            
+            if (fieldDefinition.hasOwnProperty('label')) {
+                field.label = fieldDefinition.label;
             }
         }
         

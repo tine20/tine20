@@ -133,6 +133,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule_until'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        // instanceof Calendar_Model_EventFilter
         'rrule_constraints'     => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'originator_tz'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => false      ),
