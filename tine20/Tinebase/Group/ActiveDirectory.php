@@ -120,9 +120,9 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         $this->_domainSidBinary = $this->_domainConfig['objectsid'][0];
         $this->_domainSidPlain  = Tinebase_Ldap::decodeSid($this->_domainConfig['objectsid'][0]);
         
-        $domanNameParts    = array();
-        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $fooBar, $domanNameParts);
-        $this->_domainName = implode('.', $domanNameParts);
+        $domainNameParts    = array();
+        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $unusedPart, $domainNameParts);
+        $this->_domainName = implode('.', $domainNameParts);
     }
     
     /**
@@ -315,14 +315,19 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->getLdap()->update($dn, $ldapData);
-        
-        $newDn = "cn={$ldapData['cn']},{$this->_options['baseDn']}";
+
+        // rename?
+        $newDn = "cn={$ldapData['cn']},{$this->_options['groupsDn']}";
         if ($newDn != $dn) {
             $this->_ldap->rename($dn, $newDn);
         }
-        
+
+        // remove cn as samba forbids updating this
+        // 0x43 (Operation not allowed on RDN; 00002016: Modify of RDN 'CN' on CN=...,CN=Users,DC=example,DC=org
+        // not permitted, must use 'rename' operation instead
+        unset($ldapData['cn']);
+
+        $this->getLdap()->update($dn, $ldapData);
         
         $group = $this->getGroupByIdFromSyncBackend($_group);
         

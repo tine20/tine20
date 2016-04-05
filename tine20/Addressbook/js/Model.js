@@ -112,14 +112,32 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     },
     
     /**
-     * returns true prefered email if available
+     * returns true preferred email if available
      * @return {String}
+     *
+     * TODO fix typo (prefered -> preferred)
      */
-    getPreferedEmail: function(prefered) {
-        var prefered = prefered || 'email',
-            other = prefered == 'email' ? 'email_home' : 'email';
+    getPreferedEmail: function(preferred) {
+        var preferred = preferred || 'email',
+            other = preferred == 'email' ? 'email_home' : 'email';
             
-        return (this.get(prefered) || this.get(other));
+        return (this.get(preferred) || this.get(other));
+    },
+
+    getTitle: function() {
+        var result = this.get('n_fn');
+
+        var tinebaseApp = new Tine.Tinebase.Application({
+            appName: 'Tinebase'
+        });
+        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
+            var email = this.getPreferedEmail();
+            if (email !== '') {
+                result += ' (' + email + ')';
+            }
+        }
+
+        return result;
     }
 });
 
@@ -270,14 +288,14 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     containersName: 'Addressbooks',
     copyOmitFields: ['group_id'],
 
-    getPreferedEmail: function(prefered) {
+    getPreferedEmail: function(preferred) {
         var emails = this.get("emails");
         if (!this.get("email")) {
             return  this.get("emails");
         } else {
-            var prefered = prefered || 'email',
-            other = prefered == 'email' ? 'email_home' : 'email';
-            return (this.get(prefered) || this.get(other));
+            var preferred = preferred || 'email',
+            other = preferred == 'email' ? 'email_home' : 'email';
+            return (this.get(preferred) || this.get(other));
         }
     }
 });

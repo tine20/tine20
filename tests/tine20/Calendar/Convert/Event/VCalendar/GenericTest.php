@@ -768,7 +768,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
     public function testBrokenTimezoneInTineEvent()
     {
         $event = $this->testConvertRepeatingAllDayDailyEventToTine20Model();
-        $event->originator_tz = 'AWST'; // Australian Western Standard Time
+        $event->originator_tz = 'AWSTTTT'; // Australian Western Standard Time TTT
 
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
 
@@ -776,7 +776,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             $vevent = $this->_converter->fromTine20Model($event)->serialize();
             $this->fail('should throw Tinebase_Exception_Record_Validation because of bad TZ');
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            $this->assertEquals('Bad Timezone: AWST', $terv->getMessage());
+            $this->assertEquals('Bad Timezone: AWSTTTT', $terv->getMessage());
         }
     }
 }

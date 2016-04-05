@@ -518,11 +518,22 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        var type, iconCls, displayName;
+        var type, iconCls, displayName, email;
         
         if (accountObject.accountDisplayName) {
             type = 'user';
             displayName = accountObject.accountDisplayName;
+
+            // need to create a "dummy" app to call featureEnabled()
+            // TODO: should be improved
+            var tinebaseApp = new Tine.Tinebase.Application({
+                appName: 'Tinebase'
+            });
+            if (tinebaseApp.featureEnabled('featureShowAccountEmail') && accountObject.accountEmailAddress) {
+                // add email address if available
+                email = accountObject.accountEmailAddress;
+                displayName += ' (' + email + ')';
+            }
         } else if (accountObject.name) {
             type = 'group';
             displayName = accountObject.name;

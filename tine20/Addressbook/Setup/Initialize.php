@@ -37,14 +37,16 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             Tinebase_User::syncUsers(array('syncContactData' => TRUE));
         }
-        
+
+        $initialUserName = $initialAdminUserOptions['adminLoginName'];
+
         try {
-            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialAdminUserOptions['adminLoginName']);
+            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialUserName);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' Could not find initial admin account in user backend. Creating new one ...');
+                . ' Could not find initial admin account ' . $initialUserName . ' in user backend. Creating new one ...');
             Tinebase_User::createInitialAccounts($initialAdminUserOptions);
-            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialAdminUserOptions['adminLoginName']);
+            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialUserName);
         }
         
         Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
