@@ -1859,7 +1859,7 @@ Steuernummer 33/111/32212";
             'operator' => 'equals',
             'value'    => 'somename'
         ));
-        $result = $this->_instance->searchContacts($filter, '');
+        $result = $this->_uit->searchContacts($filter, '');
         $this->assertEquals(0, $result['totalcount']);
     }
 }
