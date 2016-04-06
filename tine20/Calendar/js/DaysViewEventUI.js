@@ -247,7 +247,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     },
 
     renderScrollerEvent: function(view, parallels, pos) {
-        var scrollerHeight = view.scroller.getHeight();
+        var mainBodyHeight = view.getMainBodyHeight();
 
         for (var currColNum=this.startColNum; currColNum<=this.endColNum; currColNum++) {
 
@@ -261,7 +261,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 height = this.startColNum == this.endColNum ?
                     view.getTimeHeightPct(this.dtStart, this.dtEnd) :
                     view.getTimeOffsetPct(this.dtEnd),
-                isShortEvent = (height * view.mainBody.getHeight()/100) < 24;
+                isShortEvent = (height * mainBodyHeight/100) < 24;
 
             this.domIds.push(domId);
 
