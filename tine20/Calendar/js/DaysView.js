@@ -241,7 +241,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         
         this.initTimeScale();
         this.initTemplates();
-        
+
         this.mon(Tine.Tinebase.appMgr, 'activate', this.onAppActivate, this);
         
         if (! this.selModel) {
@@ -499,7 +499,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     onRender: function(container, position) {
         Tine.Calendar.DaysView.superclass.onRender.apply(this, arguments);
-        
+
         this.templates.master.append(this.el.dom, {
             header: this.templates.header.applyTemplate({
                 daysHeader: this.getDayHeaders(),
@@ -1331,7 +1331,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     getTimeOffset: function(date) {
         if (this.mainBody) {
             var minutes = Ext.isDate(date) ? date.getTimePart() / Date.msMINUTE : date,
-                d = this.mainBody.getHeight() / (24 * 60);
+                d = this.getMainBodyHeight() / (24 * 60);
 
             return Math.round(d * minutes);
         }
@@ -1358,7 +1358,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     getTimeHeight: function(dtStart, dtEnd) {
         if (this.mainBody) {
-            var d = this.mainBody.getHeight() / (24 * 60);
+            var d = this.getMainBodyHeight() / (24 * 60);
             return Math.round(d * ((dtEnd.getTime() - dtStart.getTime()) / Date.msMINUTE));
         }
     },
@@ -1381,10 +1381,20 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @returns {number}
      */
     getHeightMinutes: function(height) {
-        var d = (24 * 60) / this.mainBody.getHeight();
+        var d = (24 * 60) / this.getMainBodyHeight();
         return Math.round(d * height);
     },
 
+    getMainBodyHeight: function() {
+        var height = this.mainBody.getHeight();
+
+        // hidden atm.
+        if (! height) {
+            height = parseInt(this.mainBody.dom.style.height, 10);
+        }
+
+        return height;
+    },
 
     /**
      * fetches elements from our generated dom
@@ -1467,9 +1477,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             return; // not rendered
         }
         
-        var csize = this.container.getSize(true);
-        var vw = csize.width;
-        
+        var csize = this.container.getSize(true),
+            vw = csize.width;
+        if (! vw) {
+            return; // hidden
+        }
+
         this.el.setSize(csize.width, csize.height);
         
         // layout whole day area -> take one third of the available height maximum

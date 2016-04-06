@@ -41,7 +41,6 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'defaultFilter'     => 'description',
 
         'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
 
