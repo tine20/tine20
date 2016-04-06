@@ -41,7 +41,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'defaultFilter'     => 'description',
         'titleProperty'     => 'description',
         'appName'           => 'Sales',
         'modelName'         => 'PurchaseInvoice',
