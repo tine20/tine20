@@ -299,7 +299,15 @@ class Zend_Locale_Format
 
         // Get correct signs for this locale
         $symbols = Zend_Locale_Data::getList($options['locale'], 'symbols');
-        @iconv_set_encoding('internal_encoding', 'UTF-8');
+
+        if (PHP_VERSION_ID > 50600) {
+            ini_set('default_charset', 'UTF-8');
+        } else {
+            // set default internal encoding
+            if (extension_loaded('iconv')) {
+                iconv_set_encoding('internal_encoding', "UTF-8");
+            }
+        }
 
         // Get format
         $format = $options['number_format'];
