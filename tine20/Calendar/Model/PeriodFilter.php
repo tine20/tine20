@@ -133,6 +133,7 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
                 array('field' => 'rrule',        'operator' => 'notnull', 'value' => NULL),
                 array('field' => 'dtstart',      'operator' => 'before',  'value' => $this->_until),
                 array('condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR, 'filters' => array(
+                    array('field' => 'rrule_until',  'operator' => 'equals',  'value' => $this->_from),
                     array('field' => 'rrule_until',  'operator' => 'after',   'value' => $this->_from),
                     array('field' => 'rrule_until',  'operator' => 'isnull',  'value' => NULL),
                 )),

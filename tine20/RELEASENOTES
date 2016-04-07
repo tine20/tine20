@@ -4,7 +4,7 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:     Egon (2016.03)
-Last change: 2016-03-14
+Last change: 2016-03-21
 
 1. Update to latest Version of Zend Framework
 ----
@@ -66,29 +66,40 @@ Last change: 2016-03-14
 * By setting the visible hours it is possible to zoom in and out in week and days view
 * Additional Information: 011642: add config for visible hours in day|week sheet view
 
+11. Calendar: Single Event Printing
+----
 
-11. Felamimail: PGP-Mail-Encryption via Mailvelope
+* 0006054: Single Event printable
+
+12. CRM: Configs now use new concept
+----
+
+* CRM status/source/type configs have been ported to new config style
+* see0011676: apply new config concept to CRM
+
+
+13. Felamimail: PGP-Mail-Encryption via Mailvelope
 ----
 
 * Additional Information: 0011384: use mailvelope API if available / https://forge.tine20.org/view.php?id=11384
 
-12. JavaScript Client: Allow custom JS files
+14. JavaScript Client: Allow custom JS files
 ----
 
 * Additional Information: 0011502: allow custom/additional javascript for FAT client / https://forge.tine20.org/view.php?id=11502
 
-13. Admin: new GUI for application config
+15. Admin: new GUI for application config
 ----
 
 * Allows to manage application config in a Applications/Settings module of Admin area
 
-14. Admin: user data deletion behavior
+16. Admin: user data deletion behavior
 ----
 
 * Added new config option to define handling of data of a deleted user (remove/keep data)
 * Additional Information: 0001500: User is deleted - his containers still exists / https://forge.tine20.org/view.php?id=1500
 
-15. User login failure behavior change
+17. User login failure behavior change
 ----
 
 * Users are no longer blocked if they try to login with wrong credentials
