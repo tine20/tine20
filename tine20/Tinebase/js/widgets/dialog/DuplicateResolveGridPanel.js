@@ -552,7 +552,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
 
         // remove duplicates (TODO should be simplified)
         Ext.each(records, function(value) {
-            if (recordIds.indexOf(value['id']) < 0) {
+            if (value && recordIds.indexOf(value['id']) < 0) {
                 result.push(value);
                 recordIds.push(value['id']);
             }
