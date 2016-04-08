@@ -570,6 +570,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *      <destination>RESPONSIBLE-n_fn</destination>
      *      <relation>1</relation>
      *      <filter>query</filter>
+     *      <filterValueAdd>RESPONSIBLE_adr_one_locality</filterValueAdd> // if this is found in import data,
+     *                                                                 // add it to filter value. for example to add
+     *                                                                 // locality to name for finding the right contact
      *      <operator>contains</operator>
      *      <related_model>Addressbook_Model_Contact</related_model>
      *      <related_field>n_family</related_field> // map data to this field if no existing record found
@@ -598,13 +601,35 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
             $filterModel = $field['related_model'] . 'Filter';
             $operator = isset($field['operator']) ? $field['operator'] : 'equals';
+
+            $filterValueToAdd = '';
+            if (isset($field['filterValueAdd']) && isset($data[$field['filterValueAdd']])) {
+                if ($field['filter'] === 'query') {
+                    $filterValueToAdd = ' ' . $data[$field['filterValueAdd']];
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' "filterValueAdd" Currently only working for query filter');
+                    }
+                }
+            }
+
             $filter = new $filterModel(array(
-                array('field' => $field['filter'], 'operator' => $operator, 'value' => $value)
+                array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
             ));
             $result = $controller->search($filter);
-            $record = (count($result) > 0) ? $result->getFirstRecord()->toArray()
-                : array((isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value);
-            
+            if (count($result) > 0) {
+                $record = $result->getFirstRecord()->toArray();
+            } else {
+                // create new related record
+                $record = array(
+                    (isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value
+                );
+                if (! empty($filterValueToAdd)) {
+                    $record[str_replace($field['destination'] . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
+                }
+            }
+
             $relation = array(
                 'type'  => $field['destination'], 
                 'related_record' => $record,
