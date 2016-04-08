@@ -170,7 +170,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
 
-        $this->prepareAndProcessParts($message);
+        $this->prepareAndProcessParts($message, $account);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
@@ -261,8 +261,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * prepare message parts that could be interesting for other apps
      * 
      * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
      */
-    public function prepareAndProcessParts(Felamimail_Model_Message $_message)
+    public function prepareAndProcessParts(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
     {
         $preparedParts = new Tinebase_Record_RecordSet('Felamimail_Model_PreparedMessagePart');
         
@@ -316,7 +317,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // PGP INLINE
         if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') !== false) {
-            preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/', $_message->body, $matches);
+            preg_match('/(-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----)/msU', $_message->body, $matches);
             $amored = Felamimail_Message::convertFromHTMLToText($matches[0]);
 
             $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(

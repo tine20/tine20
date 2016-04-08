@@ -1210,6 +1210,19 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertContains('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
     }
 
+    public function testMessagePGPInline()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../files/multipart_alternative_pgp_inline.eml');
+        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
+
+        $this->_foldersToClear = array('INBOX');
+        $message = $this->_searchForMessageBySubject('Re: mailvelope und tine20');
+
+        $fullMessage = $this->_json->getMessage($message['id']);
+        $this->assertFalse(empty($fullMessage['preparedParts']));
+    }
+
     /*********************** sieve tests ****************************/
     
     /**
