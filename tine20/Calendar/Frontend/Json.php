@@ -289,7 +289,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $controller = Calendar_Controller_Event::getInstance();
         
-        $decodedPagination = is_array($paging) ? $paging : Zend_Json::decode($paging);
+        $decodedPagination = $this->_prepareParameter($paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 
