@@ -267,7 +267,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 $children[] = $this->getChild(Tinebase_Model_Container::TYPE_SHARED);
                 
                 if ($this->_hasPersonalFolders) {
-                    $children[] = $this->getChild($this->_useIdAsName ? Tinebase_Core::getUser()->contact_id : Tinebase_Core::getUser()->accountDisplayName);
+                    $children[] = $this->getChild(
+                        $this->_useIdAsName ? Tinebase_Core::getUser()->contact_id :
+                        Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id)->n_fileas
+                    );
                     
                     $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(), array(
                         Tinebase_Model_Grants::GRANT_READ,
@@ -277,7 +280,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     foreach ($otherUsers as $user) {
                         if ($user->contact_id && $user->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
                             try {
-                                $children[] = $this->getChild($this->_useIdAsName ? $user->contact_id : $user->accountDisplayName);
+                                $folderId = $this->_useIdAsName ? $user->contact_id :
+                                    Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->n_fileas;
+
+                                $children[] = $this->getChild($folderId);
                             } catch (\Sabre\DAV\Exception\NotFound $sdavenf) {
                                 // ignore contacts not found
                             }
