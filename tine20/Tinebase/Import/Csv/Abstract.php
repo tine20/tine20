@@ -198,7 +198,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (isset($field['destinations']) && isset($field['destinations']['destination'])) {
                 $destinations = $field['destinations']['destination'];
                 $delimiter = isset($field['$separator']) && ! empty($field['$separator']) ? $field['$separator'] : ' ';
-                $values = explode($delimiter, $value, count($destinations));
+                $values = array_map('trim', explode($delimiter, $value, count($destinations)));
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' values: ' . print_r($values, true));
                 $i = 0;

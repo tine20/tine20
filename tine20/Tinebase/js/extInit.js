@@ -196,7 +196,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
  * @returns {String}
  */
 Ext.XTemplate.prototype.encode = function(value) {
-    return Ext.util.Format.htmlEncode(value);
+    return value ? Ext.util.Format.htmlEncode(value) : '';
 };
 
 /**
@@ -206,5 +206,5 @@ Ext.XTemplate.prototype.encode = function(value) {
  * @returns {String}
  */
 Ext.XTemplate.prototype.doubleEncode = function(value) {
-    return Tine.Tinebase.common.doubleEncode(value);
+    return value ? Tine.Tinebase.common.doubleEncode(value) : '';
 };
