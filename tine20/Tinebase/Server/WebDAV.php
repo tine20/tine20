@@ -72,6 +72,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            self::$_server->debugExceptions = true;
             $contentType = self::$_server->httpRequest->getHeader('Content-Type');
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType);
             
