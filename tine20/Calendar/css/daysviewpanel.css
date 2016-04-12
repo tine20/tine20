@@ -236,7 +236,7 @@
     border-radius: 8px;
     position: absolute;
     border: 1px solid #808080;
-    overflow-y: hidden;
+    overflow: hidden;
 
     text-align: left;
     color:black;
