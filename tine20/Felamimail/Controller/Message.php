@@ -139,11 +139,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message  $_id
-     * @param string                            $_partId
+     * @param string                           $_partId
+     * @param string                           $mimeType
      * @param boolean                          $_setSeen
      * @return Felamimail_Model_Message
      */
-    public function getCompleteMessage($_id, $_partId = NULL, $_setSeen = FALSE)
+    public function getCompleteMessage($_id, $_partId = NULL, $mimeType='configured', $_setSeen = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -160,7 +161,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_checkMessageAccount($message, $account);
         
-        $message = $this->_getCompleteMessageContent($message, $account, $_partId);
+        $message = $this->_getCompleteMessageContent($message, $account, $_partId, $mimeType);
 
         if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
             Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
@@ -199,13 +200,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
-     * @param string $_partId
+     * @param string                   $_partId
+     * @param string                   $mimeType
      */
-    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL)
+    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL, $mimeType='configured')
     {
-        $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
-            ? Zend_Mime::TYPE_HTML
-            : Zend_Mime::TYPE_TEXT;
+        if ($mimeType == 'configured') {
+            $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+                ? Zend_Mime::TYPE_HTML
+                : Zend_Mime::TYPE_TEXT;
+        }
         
         $headers     = $this->getMessageHeaders($_message, $_partId, true);
         $body        = $this->getMessageBody($_message, $_partId, $mimeType, $_account, true);

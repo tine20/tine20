@@ -622,3 +622,28 @@ Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {
         this.cmp.insertAtCursor('<hr width="' + w + '">');
     }
 });
+
+Ext.ux.form.HtmlEditor.PlainText = Ext.extend(Ext.util.Observable, {
+    // private
+    cmd: 'plain',
+    // private
+    init: function (cmp) {
+        this.cmp = cmp;
+        this.cmp.on('render', this.onRender, this);
+    },
+    // private
+    onRender: function () {
+        var cmp = this.cmp;
+        this.cmp.getToolbar().addFill();
+        var btn = this.cmp.getToolbar().addButton({
+            iconCls: 'x-edit-toggleFormat',
+            handler: function () {
+                this.cmp.fireEvent('toggleFormat', 'text/plain');
+            },
+            tooltip: {
+                title: _('Convert to pure text')
+            },
+            scope: this
+        });
+    }
+});

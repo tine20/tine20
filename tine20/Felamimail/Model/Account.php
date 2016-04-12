@@ -147,6 +147,16 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
             array('InArray', array(self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE)),
         ),
+        'compose_format'        => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
+            array('InArray', array(self::DISPLAY_HTML, self::DISPLAY_PLAIN)),
+        ),
+        'preserve_format'        => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => 1,
+            array('InArray', array(0,1)),
+        ),
     // namespaces
         'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
