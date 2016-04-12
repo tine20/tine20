@@ -380,6 +380,7 @@
         <table>
             <name>felamimail_cache_message</name>
             <version>10</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>id</name>
@@ -525,6 +526,7 @@
         <table>
             <name>felamimail_cache_msg_flag</name>
             <version>1</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -575,6 +577,7 @@
         <table>
             <name>felamimail_cache_message_to</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -610,6 +613,7 @@
         <table>
             <name>felamimail_cache_message_cc</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -645,6 +649,7 @@
         <table>
             <name>felamimail_cache_message_bcc</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>

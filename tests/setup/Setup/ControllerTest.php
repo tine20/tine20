@@ -315,4 +315,18 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $installableApplications = array_keys($installableApplications);
         $this->_uit->installApplications($installableApplications, $_options);
     }
+
+    /**
+     * @see 11574: backup should only dump structure of some tables
+     */
+    public function testGetBackupStructureOnlyTables()
+    {
+        require_once __DIR__ . '/Controller_Mock.php';
+
+        $setupControllerMock = new Setup_Controller_Mock();
+
+        $tables = $setupControllerMock->getBackupStructureOnlyTables();
+
+        $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
+    }
 }

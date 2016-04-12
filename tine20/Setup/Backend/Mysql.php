@@ -326,18 +326,35 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * Backup Database
      *
-     * @param $backupDir
+     * @param $option
      */
-    public function backup($backupDir)
+    public function backup($option)
     {
+        $backupDir = $option['backupDir'];
+
         // hide password from shell via my.cnf
         $mycnf = $backupDir . '/my.cnf';
         $this->_createMyConf($mycnf, $this->_config->database);
 
-        $cmd = "mysqldump --defaults-extra-file=$mycnf "
+        $ignoreTables = '';
+        if (count($option['structTables']) > 0) {
+            $structDump = 'mysqldump --defaults-extra-file=' . $mycnf . ' --no-data ' .
+                escapeshellarg($this->_config->database->dbname);
+            foreach($option['structTables'] as $table) {
+                $structDump .= ' ' . escapeshellarg($table);
+                $ignoreTables .= '--ignore-table=' . escapeshellarg($this->_config->database->dbname . '.' . $table) . ' ';
+            }
+        } else {
+            $structDump = false;
+        }
+
+        $cmd = ($structDump!==false?'{ ':'')
+              ."mysqldump --defaults-extra-file=$mycnf "
+              .$ignoreTables
               ."--single-transaction "
               ."--opt "
               . escapeshellarg($this->_config->database->dbname)
+              . ($structDump!==false?'; ' . $structDump . '; }':'')
               ." | bzip2 > $backupDir/tine20_mysql.sql.bz2";
 
         exec($cmd);
