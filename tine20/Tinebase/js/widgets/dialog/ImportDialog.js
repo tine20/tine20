@@ -698,7 +698,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     
                     this.fireEvent('finish', this, this.layout.activeItem);
                     
-                    if (Ext.isArray(response.exceptions) && response.exceptions.length > 0) {
+                    if (response.failcount > 0 && Ext.isArray(response.exceptions) && response.exceptions.length > 0) {
                         // show errors and fence finish/back btn
                         this.backButton.setDisabled(true);
                         this.finishButton.setHandler(function() {this.window.close()}, this);
@@ -707,7 +707,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                         this.exceptionStore.clearFilter(true);
                         
                         this.summaryPanelFailures.show();
-                        this.summaryPanelFailures.setTitle(String.format(_('{0} records had failures and where discarded.'), response.exceptions.length));
+                        this.summaryPanelFailures.setTitle(String.format(_('{0} records had failures and where discarded.'), response.failcount));
                     } else {
                         this.window.close();
                     }
