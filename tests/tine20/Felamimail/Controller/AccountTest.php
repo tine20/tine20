@@ -233,4 +233,38 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('', $account->signature, 'did not save empty signature');
     }
+
+    /**
+     * @see 0011810: credential cache decode fails sometimes
+     */
+    public function testSaveAccountAndCredentialCache()
+    {
+        $account = new Felamimail_Model_Account(array(
+            'from' => 'Admin Account, Tine 2.0',
+            'port' => '143',
+            'smtp_port' => '25',
+            'smtp_ssl' => 'none',
+            'sieve_port' => '2000',
+            'sieve_ssl' => 'none',
+            'signature' => 'Sent with love from the Tine 2.0 email client ...<br>Please visit <a href="http://www.tine20.com">http://www.tine20.com</a>',
+            'sent_folder' => 'Sent',
+            'trash_folder' => 'Trash',
+            'name' => 'test',
+            'user' => 'abcde@tine20.org',
+            'host' => 'mail.abc.de',
+            'email' => 'abcde@tine20.org',
+            'password' => 'abcde',
+            'organization' => '',
+            'ssl' => 'none',
+            'display_format' => 'html',
+            'signature_position' => 'below',
+            'smtp_auth' => 'login',
+        ));
+
+        $savedAccount = $this->_controller->create($account);
+
+        $savedAccount->resolveCredentials();
+        $this->assertEquals('abcde@tine20.org', $savedAccount->user);
+        $this->assertEquals('abcde', $savedAccount->password);
+    }
 }
