@@ -80,6 +80,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('is_billable').setValue(timeaccount.data.is_billable);
         }
     },
+    
+    /**
+     * Always set is_billable if timeaccount is billable. This is needed for copied sheets where the
+     * original is set to not billable
+     */
+    onAfterRecordLoad: function() {
+        Tine.Timetracker.TimesheetEditDialog.superclass.onAfterRecordLoad.call(this);
+        if (this.record.id == 0 && this.record.get('timeaccount_id') && this.record.get('timeaccount_id').is_billable) {
+            this.getForm().findField('is_billable').setValue(this.record.get('timeaccount_id').is_billable);
+        }
+    },
 
     /**
      * this gets called when initializing and if cleared checkbox is changed
