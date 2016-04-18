@@ -290,7 +290,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
         }
         
-        var r = this.findRecord(this.valueField, value),
+        var r = (value !== "") ? this.findRecord(this.valueField, /* id = */ value) : null,
             text = value;
         
         if (r){
