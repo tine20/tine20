@@ -124,7 +124,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * returns dialog
      * 
-     * NOTE: when this method gets called, all initalisation is done.
+     * NOTE: when this method gets called, all initialization is done.
      */
     getFormItems: function() {
         var lastRow = [new Tine.Addressbook.SearchCombo({
@@ -205,6 +205,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         allowBlank: false,
                         forceSelection: true,
                         name: 'timeaccount_id',
+                        lazyInit: false,
                         listeners: {
                             scope: this,
                             render: function(field){
