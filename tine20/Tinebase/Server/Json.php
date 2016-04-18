@@ -385,7 +385,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected static function _addModelConfigServices(Zend_Json_Server_Smd $smd)
     {
-        $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
+        // this is only done for authenticated users
+        $user = Tinebase_Core::getUser();
+        if (! $user) {
+            return;
+        }
+
+        $userApplications = $user->getApplications(/* $_anyRight */ TRUE);
 
         $cache = Tinebase_Core::getCache();
         $cacheId = '_addModelConfigServices' . sha1(Zend_Json_Encoder::encode($userApplications->getArrayOfIds()));
