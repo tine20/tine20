@@ -182,7 +182,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             } catch (Tinebase_Exception_NotFound $e) {
                 list($given, $last) = explode(' ', $fullName);
 
-                $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+                $group   = Tinebase_Group::getInstance()->getDefaultGroup();
                 $groupId = $group->getId();
                 
                 $emailDomain = $this->_getMailDomain();

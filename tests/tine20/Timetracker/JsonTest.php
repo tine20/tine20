@@ -913,7 +913,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $taController       = Timetracker_Controller_Timeaccount::getInstance();
         
         // fetch user group
-        $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $group   = Tinebase_Group::getInstance()->getDefaultGroup();
         $groupId = $group->getId();
         
         // create new user
@@ -1194,7 +1194,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         )));
         
         // fetch user group 
-        $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $group   = Tinebase_Group::getInstance()->getDefaultGroup();
         $groupId = $group->getId();
         
         // create new user 
