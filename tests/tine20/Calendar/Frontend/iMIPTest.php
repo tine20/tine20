@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test testOrganizerSendBy
@@ -43,18 +43,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
     * @var Felamimail_Controller_MessageTest
     */
     protected $_emailTestClass;
-        
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar iMIP Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -64,6 +52,11 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     protected function setUp()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
         
         Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, false);

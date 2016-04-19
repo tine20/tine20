@@ -39,18 +39,6 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     protected $_mailDomain = 'tine20.org';
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_Smtp_PostfixTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -63,7 +51,13 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         if (! array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())) {
             $this->markTestSkipped('Postfix SQL plugin not enabled');
         }
-        
+
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // error: Zend_Ldap_Exception: 0x44 (Already exists; 00002071: samldb: Account name (sAMAccountName)
+            // 'tine20phpunituser' already in use!): adding: cn=PHPUnit User Tine 2.0,cn=Users,dc=example,dc=org
+            $this->markTestSkipped('skipped for ad backends as it does not allow duplicate CNs');
+        }
+
         $this->objects['users'] = array();
         
         $this->_mailDomain = TestServer::getPrimaryMailDomain();

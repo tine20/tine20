@@ -741,7 +741,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
             ), true)
         );
 
-        $group = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Group::DEFAULT_USER_GROUP);
+        $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($container->getId(), 'group', $group->getId(), $this->_userGrants, true);
         Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
         Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['pwulf']->getId(),   $this->_adminGrants, true);

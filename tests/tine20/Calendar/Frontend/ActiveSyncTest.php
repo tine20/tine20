@@ -794,6 +794,10 @@ Zeile 3</AirSyncBase:Data>
 
     public function testStatusUpdate($syncrotonFolder = null)
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('only working in non-AD setups');
+        }
+
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
         }
