@@ -15,6 +15,9 @@
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
+    /**
+     * @group ServerTests
+     */
     public function testGetServiceMap()
     {
         $smd = Tinebase_Server_Json::getServiceMap();
@@ -64,5 +67,18 @@ class Tinebase_Server_JsonTests extends TestCase
             ),
             'returns' => 'string'
         ), $smdArray['services']['Inventory.deleteInventoryItems']);
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testGetAnonServiceMap()
+    {
+        // unset registry (and the user object)
+        Zend_Registry::_unsetInstance();
+
+        $smd = Tinebase_Server_Json::getServiceMap();
+        $smdArray = $smd->toArray();
+        $this->assertTrue(isset($smdArray['services']['Tinebase.ping']));
     }
 }
