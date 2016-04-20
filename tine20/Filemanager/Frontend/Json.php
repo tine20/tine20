@@ -90,7 +90,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNodes($filenames, $type, $tempFileIds, $forceOverwrite)
+    public function createNodes($filenames, $type, $tempFileIds = null, $forceOverwrite = false)
     {
         $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type, (array)$tempFileIds, $forceOverwrite);
         

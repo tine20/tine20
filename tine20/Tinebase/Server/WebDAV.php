@@ -72,6 +72,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            self::$_server->debugExceptions = true;
             $contentType = self::$_server->httpRequest->getHeader('Content-Type');
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType);
             
@@ -134,18 +135,24 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+
+        $contentType = self::$_server->httpRequest->getHeader('Content-Type');
+        $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && preg_match('/^text/', $contentType);
+
+        if ($logOutput) {
             ob_start();
         }
         
         self::$_server->exec();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+        if ($logOutput) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
             ob_end_flush();
+        } else {
+
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV response\n -- BINARY DATA --");
         }
-        
+
         Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
     }
     
