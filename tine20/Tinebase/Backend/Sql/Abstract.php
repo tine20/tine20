@@ -1248,7 +1248,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         );
         
         $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
-        
+
         // update custom fields
         if ($_record->has('customfields')) {
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
