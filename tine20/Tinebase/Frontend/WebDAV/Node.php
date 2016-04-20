@@ -34,16 +34,18 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode
     
     public function __construct($_path) 
     {
+        $this->_path      = $_path;
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $_path);
         
         try {
             $this->_node = Tinebase_FileSystem::getInstance()->stat($_path);
-        } catch (Tinebase_Exception_NotFound $tenf) {
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        
+        if (! $this->_node) {
             throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
         }
-        
-        $this->_path      = $_path;
     }
     
     public function getId()
