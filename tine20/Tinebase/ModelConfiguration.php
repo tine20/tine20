@@ -82,7 +82,7 @@ class Tinebase_ModelConfiguration {
      *
      * @var boolean
      */
-    protected $_autoGenerateSmd = NULL;
+    protected $_exposeJsonApi = NULL;
     
     /**
      * Human readable name of the container

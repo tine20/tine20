@@ -407,8 +407,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
 
                 foreach ($models as $model) {
-                    $config = $model::getConfiguration();
-                    if ($config && $config->autoGenerateSmd) {
+                    $config = function_exists($model . '::getConfiguration') ? $model::getConfiguration() : null;
+                    if ($config && $config->exposeJsonApi) {
                         $commonServiceOptions = array(
                             'envelope' => 'JSON-RPC-2.0',
                             'transport' => 'POST',
