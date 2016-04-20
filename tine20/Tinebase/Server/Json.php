@@ -374,7 +374,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $smd = $server->getServiceMap();
 
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            self::_addModelConfigServices($smd);
+            // TODO make it work
+            //self::_addModelConfigServices($smd);
         }
 
         return $smd;
