@@ -41,6 +41,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
         $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
+
+        // only for debugging
+        //Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " raw request: " . $request->__toString());
         
         // handle CORS requests
         if ($request->getHeaders()->has('ORIGIN') && !$request->getHeaders()->has('X-FORWARDED-HOST')) {
@@ -133,11 +136,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
         
-        $json = file_get_contents('php://input');
+        $json = $request->getContent();
         $json = Tinebase_Core::filterInputForDatabase($json);
-        
+
         if (substr($json, 0, 1) == '[') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' batched request');
             $isBatchedRequest = true;
             $requests = Zend_Json::decode($json);
         } else {
@@ -152,7 +156,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $_requests[0]["params"][$field] = "*******";
                 }
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' is JSON request. rawdata: ' . print_r($_requests, true));
         } 
         
         $response = array();
@@ -165,12 +170,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                    $this->_handleException($request, $exception) :
                    $this->_handle($request);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got empty request options: skip request.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Got empty request options: skip request.');
                 $response[] = NULL;
             }
         }
-        
-        header('Content-type: application/json');
+
+        if (! headers_sent()) {
+            header('Content-type: application/json');
+        }
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
     }
     
@@ -229,12 +237,23 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
             }
         }
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            // TODO pass classes here??
+            self::_addModelConfigMethods($server);
+        }
         
         if (isset($cache)) {
             $cache->save($server, $cacheId, array(), null);
         }
-        
+
         return $server;
+    }
+
+    protected static function _addModelConfigMethods(Zend_Json_Server $server)
+    {
+        $definitions = self::_getModelConfigMethods();
+        $server->loadFunctions($definitions);
     }
     
     /**
@@ -289,7 +308,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             
             $server = self::_getServer($classes);
-            
+
             $response = $server->handle($request);
             if ($response->isError()) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Got response error: '
@@ -373,105 +392,84 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             
         $smd = $server->getServiceMap();
 
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            // TODO make it work
-            //self::_addModelConfigServices($smd);
-        }
-
         return $smd;
     }
 
     /**
-     * add default modelconfig functions to service map
+     * get default modelconfig methods
      *
-     * @param Zend_Json_Server_Smd $smd
+     * @return array of Zend_Server_Method_Definition
      */
-    protected static function _addModelConfigServices(Zend_Json_Server_Smd $smd)
+    protected static function _getModelConfigMethods()
     {
         $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
 
-        $cache = Tinebase_Core::getCache();
-        $cacheId = '_addModelConfigServices' . sha1(Zend_Json_Encoder::encode($userApplications->getArrayOfIds()));
-        $services = $cache->load($cacheId);
-
-        if (! $services) {
-            $services = array();
-            foreach ($userApplications as $application) {
-                try {
-                    $controller = Tinebase_Core::getApplicationInstance($application->name);
-                    $models = $controller->getModels();
-                    if (!$models) {
-                        continue;
-                    }
-                } catch (Tinebase_Exception_NotFound $tenf) {
+        $definitions = array();
+        foreach ($userApplications as $application) {
+            try {
+                $controller = Tinebase_Core::getApplicationInstance($application->name);
+                $models = $controller->getModels();
+                if (!$models) {
                     continue;
                 }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
 
-                foreach ($models as $model) {
-                    $config = function_exists($model . '::getConfiguration') ? $model::getConfiguration() : null;
-                    if ($config && $config->exposeJsonApi) {
-                        $commonServiceOptions = array(
-                            'envelope' => 'JSON-RPC-2.0',
-                            'transport' => 'POST',
-                            'return' => 'array'
-                        );
+            foreach ($models as $model) {
+                $config = $model::getConfiguration();
+                if ($config && $config->exposeJsonApi) {
+                    // TODO replace this with generic method
+                    $simpleModelName = str_replace($application->name . '_Model_', '', $model);
 
-                        // TODO replace this with generic method
-                        $simpleModelName = str_replace($application->name . '_Model_', '', $model);
+                    $commonJsonApiMethods = array(
+                        'get' => array(
+                            'params' => array('string'),
+                            'help'   => 'get one ' . $simpleModelName . ' identified by $id',
+                            'plural' => false,
+                        ),
+                        'search' => array(
+                            'params' => array('array', 'array'),
+                            'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',
+                            'plural' => true,
+                        ),
+                        'save' => array(
+                            'params' => array('array'),
+                            'help'   => 'Save ' . $simpleModelName . '',
+                            'plural' => false,
+                        ),
+                        'delete' => array(
+                            'params' => array('array'),
+                            'help'   => 'Delete multiple ' . $simpleModelName . 's',
+                            'plural' => true,
+                        ),
+                    );
 
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.get' . $simpleModelName,
-                            'params' =>
-                                array(array(
-                                    'type' => 'string',
-                                    'name' => 'id',
-                                    'optional' => false,
-                                )),
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.save' . $simpleModelName,
-                            'params' =>
-                                array(array(
-                                    'type' => 'any',
-                                    'name' => 'recordData',
-                                    'optional' => false,
-                                )),
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.delete' . $simpleModelName . 's',
-                            'params' =>
-                                array(array(
-                                    'type' => 'array',
-                                    'name' => 'ids',
-                                    'optional' => false,
-                                )),
-                            'return' => 'string'
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.search' . $simpleModelName . 's',
-                            'params' =>
-                                array(array(
-                                    'type' => 'array',
-                                    'name' => 'filter',
-                                    'optional' => false,
-                                ), array(
-                                    'type' => 'array',
-                                    'name' => 'paging',
-                                    'optional' => false,
-                                )),
+                    foreach ($commonJsonApiMethods as $name => $method) {
+                        $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
+                        $definitions[$key] = new Zend_Server_Method_Definition(array(
+                            'name'            => $key,
+                            'prototypes'      => array(array(
+                                'returnType' => 'array',
+                                'parameters' => $method['params']
+                            )),
+                            'methodHelp'      => $method['help'],
+                            'invokeArguments' => array(),
+                            'object'          => null,
+                            'callback'        => array(
+                                'type'   => 'instance',
+                                'class'  => $application->name . '_Frontend_Json',
+                                'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
+                            ),
                         ));
                     }
                 }
             }
-
-            $cache->save($services, $cacheId);
         }
 
-        foreach ($services as $service) {
-            $smd->addService($service);
-        }
+        return $definitions;
     }
-    
+
     /**
      * check json key
      *

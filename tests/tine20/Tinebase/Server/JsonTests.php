@@ -44,7 +44,6 @@ class Tinebase_Server_JsonTests extends TestCase
                 array
                 (
                     'type' => 'array',
-                    'name' => 'recordData',
                     'optional' => false,
                 )
 
@@ -60,12 +59,11 @@ class Tinebase_Server_JsonTests extends TestCase
                 array
                 (
                     'type' => 'array',
-                    'name' => 'ids',
-                    'optional' => '',
+                    'optional' => false,
                 )
 
             ),
-            'returns' => 'string'
+            'returns' => 'array'
         ), $smdArray['services']['Inventory.deleteInventoryItems']);
     }
 
@@ -80,5 +78,48 @@ class Tinebase_Server_JsonTests extends TestCase
         $smd = Tinebase_Server_Json::getServiceMap();
         $smdArray = $smd->toArray();
         $this->assertTrue(isset($smdArray['services']['Tinebase.ping']));
+    }
+
+    /**
+     * @group ServerTests
+     *
+     * @see  0011760: create smd from model definition
+     */
+    public function testHandleRequestForDynamicAPI()
+    {
+        // handle jsonkey check
+        $jsonkey = 'myawsomejsonkey';
+        $_SERVER['HTTP_X_TINE20_JSONKEY'] = $jsonkey;
+        $coreSession = Tinebase_Session::getSessionNamespace();
+        $coreSession->jsonKey = $jsonkey;
+
+        $server = new Tinebase_Server_Json();
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+POST /index.php?requestType=JSON HTTP/1.1\r
+Host: localhost\r
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
+Content-Type: application/json\r
+X-Tine20-Transactionid: 18da265bc0eb66a36081bfd42689c1675ed68bab\r
+X-Requested-With: XMLHttpRequest\r
+Accept: */*\r
+Referer: http://tine20.vagrant/\r
+Accept-Encoding: gzip, deflate\r
+Accept-Language: en-US,en;q=0.8,de-DE;q=0.6,de;q=0.4\r
+\r
+{"jsonrpc":"2.0","method":"Inventory.searchInventoryItems","params":{"filter":[], "paging":{}},"id":6}
+EOS
+        );
+        ob_start();
+        $server->handle($request);
+        $out = ob_get_clean();
+        //echo $out;
+
+        $this->assertTrue(! empty($out), 'request should not be empty');
+        $this->assertNotContains('Not Authorised', $out);
+        $this->assertNotContains('Method not found', $out);
+        $this->assertNotContains('No Application Controller found', $out);
+        $this->assertNotContains('"error"', $out);
+        $this->assertNotContains('PHP Fatal error', $out);
+        $this->assertContains('"result"', $out);
     }
 }

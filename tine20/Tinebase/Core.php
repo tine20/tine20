@@ -450,10 +450,11 @@ class Tinebase_Core
      */
     public static function startCoreSession()
     {
-        Tinebase_Session::setSessionBackend();
-        
-        Zend_Session::start();
-        
+        if (! Tinebase_Session::isStarted()) {
+            Tinebase_Session::setSessionBackend();
+            Zend_Session::start();
+        }
+
         $coreSession = Tinebase_Session::getSessionNamespace();
         
         if (isset($coreSession->currentAccount)) {
@@ -497,11 +498,16 @@ class Tinebase_Core
      */
     public static function setupBuildConstants()
     {
+        if (defined('TINE20_BUILDTYPE')) {
+            // only define constants once
+            return;
+        }
         $config = self::getConfig();
-        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision());
+
+        define('TINE20_BUILDTYPE', strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME', Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
+        define('TINE20_RELEASETIME', 'none');
     }
     
     /**
@@ -811,8 +817,9 @@ class Tinebase_Core
                 . " Filesdir config value not set. tine20:// streamwrapper not registered, virtual filesystem not available.");
             return;
         }
-        
-        stream_wrapper_register('tine20', 'Tinebase_FileSystem_StreamWrapper');
+        if (! in_array('tine20', stream_get_wrappers())) {
+            stream_wrapper_register('tine20', 'Tinebase_FileSystem_StreamWrapper');
+        }
     }
     
     /**
@@ -1338,6 +1345,10 @@ class Tinebase_Core
      */
     public static function getCache()
     {
+        if (! self::get(self::CACHE) instanceof Zend_Cache_Core) {
+            self::$cacheStatus = null;
+            Tinebase_Core::setupCache();
+        }
         return self::get(self::CACHE);
     }
     

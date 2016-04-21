@@ -263,7 +263,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      */
     public function getModels()
     {
-        if ($this->_models === null) {
+        if ($this->_models === null && ! empty($this->_applicationName)) {
             try {
                 $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
             } catch (Exception $e) {

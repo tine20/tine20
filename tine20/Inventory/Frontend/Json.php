@@ -18,12 +18,7 @@
  */
 class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
-    /**
-     * the controller
-     *
-     * @var Inventory_Controller_InventoryItem
-     */
-    protected $_controller = NULL;
+    protected $_applicationName = 'Inventory';
     
     /**
      * the models handled by this frontend
@@ -39,61 +34,6 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_resolveUserFields = array(
         'Inventory_Model_InventoryItem' => array('created_by', 'last_modified_by')
     );
-
-    /**
-     * the constructor
-     *
-     */
-    public function __construct()
-    {
-        $this->_applicationName = 'Inventory';
-        $this->_controller = Inventory_Controller_InventoryItem::getInstance();
-    }
-
-    /**
-     * Search for records matching given arguments
-     *
-     * @param  array $filter
-     * @param  array $paging
-     * @return array
-     */
-    public function searchInventoryItems($filter, $paging)
-    {
-        return $this->_search($filter, $paging, $this->_controller, 'Inventory_Model_InventoryItemFilter', TRUE);
-    }
-
-    /**
-     * Return a single record
-     *
-     * @param   string $id
-     * @return  array record data
-     */
-    public function getInventoryItem($id)
-    {
-        return $this->_get($id, $this->_controller);
-    }
-
-    /**
-     * creates/updates a record
-     *
-     * @param  array $recordData
-     * @return array created/updated record
-     */
-    public function saveInventoryItem($recordData)
-    {
-        return $this->_save($recordData, $this->_controller, 'InventoryItem');
-    }
-
-    /**
-     * deletes existing records
-     *
-     * @param  array  $ids
-     * @return string
-     */
-    public function deleteInventoryItems($ids)
-    {
-        return $this->_delete($ids, $this->_controller);
-    }
 
     /**
      * get inventory import definitions
