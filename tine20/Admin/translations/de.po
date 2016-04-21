@@ -532,7 +532,7 @@ msgstr "Wert"
 #: js/config/GridPanel.js:220
 #, python-brace-format
 msgid "Default ({0})"
-msgstr "Default ({0})"
+msgstr "Standard ({0})"
 
 #: js/container/Container.js:46 js/container/GridPanel.js:98
 msgid "Container"
@@ -1114,3 +1114,7 @@ msgstr "Ihr Container wurde von %1$s geändert %2$sNotiz: %3$s"
 #: Config.php:33 Config.php:35
 msgid "Default IMAP user settings"
 msgstr "Standard IMAP-Benutzer-Einstellungen"
+
+#: js/customfield/EditDialog.js:209
+msgid "Default"
+msgstr "Standard"
