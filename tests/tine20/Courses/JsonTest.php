@@ -513,7 +513,7 @@ class Courses_JsonTest extends TestCase
                 'accountLastName'  => 'Höt',
         ), $courseData);
         
-        $this->assertEquals(2, count($result['results']));
+        $this->assertEquals(2, count($result['results']), 'should add 2 new members');
         
         $id = NULL;
         foreach ($result['results'] as $result) {
@@ -580,7 +580,7 @@ class Courses_JsonTest extends TestCase
     protected function _getCourseData()
     {
         return array(
-            'name'          => Tinebase_Record_Abstract::generateUID(),
+            'name'          => 'mycourse' . rand(0, 100),
             'description'   => 'blabla',
             'type'          => $this->_department->getId(),
             'internet'      => 'ON',
