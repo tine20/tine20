@@ -4,14 +4,9 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Courses_Frontend_Json
@@ -90,7 +85,11 @@ class Courses_JsonTest extends TestCase
         )));
         
         $this->_groupsToDelete = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
-        foreach (array(Courses_Config::INTERNET_ACCESS_GROUP_ON, Courses_Config::INTERNET_ACCESS_GROUP_FILTERED, Courses_Config::STUDENTS_GROUP) as $configgroup) {
+        foreach (array(
+                     Courses_Config::INTERNET_ACCESS_GROUP_ON,
+                     Courses_Config::INTERNET_ACCESS_GROUP_FILTERED,
+                     Courses_Config::STUDENTS_GROUP
+                 ) as $configgroup) {
             $this->_configGroups[$configgroup] = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group(array(
                 'name'   => $configgroup
             )));
@@ -105,7 +104,12 @@ class Courses_JsonTest extends TestCase
             'logonscript_postfix_member' => '.cmd',
             'baseprofilepath' => '\\\\jo\\profiles\\',
         )));
-        
+
+        // set some complex default pws (to make AD happy)
+        $pwConfig = Tinebase_Record_Abstract::generateUID(8) . 'B{]';
+        Courses_Config::getInstance()->set(Courses_Config::STUDENT_PASSWORD_SUFFIX, $pwConfig);
+        Courses_Config::getInstance()->set(Courses_Config::TEACHER_PASSWORD, $pwConfig);
+
         $this->_schemaConfig = Courses_Config::getInstance()->get(Courses_Config::STUDENTS_USERNAME_SCHEMA);
         $this->_usernameLengthConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::MAX_USERNAME_LENGTH);
         $this->_defaultDepartmentConfig = Courses_Config::getInstance()->get(Courses_Config::DEFAULT_DEPARTMENT);

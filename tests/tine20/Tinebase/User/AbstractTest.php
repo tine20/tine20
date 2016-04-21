@@ -5,18 +5,9 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_AbstractTest::main');
-}
 
 /**
  * Test class for Tinebase_User_Abstract
@@ -34,18 +25,6 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
      * @var array test objects
      */
     protected $_objects = array();
-
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_AbstractTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -70,10 +49,17 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test generation of loginnames
+     * test generation of login names
      */
     public function testGenerateUserName()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // error: Zend_Ldap_Exception: 0x44 (Already exists;
+            // Entry CN=Leonie Weiss,CN=Users,DC=example,DC=org already exists):
+            // adding: cn=Leonie Weiss,cn=Users,dc=example,dc=org
+            $this->markTestSkipped('skipped for ad backends as it does not allow duplicate CNs');
+        }
+
         $user = new Tinebase_Model_FullUser(array(
             'accountFirstName' => 'Leonie',
             'accountLastName'  => 'Weiss',
@@ -205,7 +191,7 @@ class Tinebase_User_AbstractTest extends PHPUnit_Framework_TestCase
                 'accountLoginName'      => 'dummy_'.$i,
                 'accountStatus'         => 'enabled',
                 'accountExpires'        => NULL,
-                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
                 'accountLastName'       => 'Dummy',
                 'accountFirstName'      => 'No.'.$i,
                 'accountEmailAddress'   => 'phpunit@metaways.de'

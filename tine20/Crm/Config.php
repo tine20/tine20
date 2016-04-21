@@ -117,7 +117,7 @@ class Crm_Config extends Tinebase_Config_Abstract
             //_('Possible lead types.')
             'description'           => 'Possible lead types.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-//            'options'               => array('recordModel' => 'Crm_Model_LeadType'),
+            'options'               => array('recordModel' => 'Crm_Model_LeadType'),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(

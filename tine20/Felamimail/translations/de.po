@@ -1163,3 +1163,9 @@ msgstr "Alle Entwürfe"
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
+
+msgid "Bad recipient address syntax"
+msgstr "Empfängeradressen fehlerhaft"
+
+msgid "Recipient address rejected"
+msgstr "Empfängeradresse abgelehnt"

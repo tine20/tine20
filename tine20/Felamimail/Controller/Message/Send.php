@@ -80,7 +80,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $message = sprintf($translation->_('Error: %s'), $e->getMessage());
+            if (preg_match('/^501 5\.1\.3/', $e->getMessage())) {
+                $messageText = $translation->_('Bad recipient address syntax');
+            } else if (preg_match('/^550 5\.1\.1 <(.*?)>/', $e->getMessage(), $match)) {
+                $messageText = '<' . $match[1] . '>: ' . $translation->_('Recipient address rejected');
+            } else {
+                $messageText = $e->getMessage();
+            }
+            $message = sprintf($translation->_('Error: %s'), $messageText);
             $tesg = new Tinebase_Exception_SystemGeneric($message);
             $tesg->setTitle($translation->_('Could not send message'));
             throw $tesg;

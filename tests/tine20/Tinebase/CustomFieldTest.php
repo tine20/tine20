@@ -77,12 +77,12 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
 
         $cf = $this->_instance->addCustomField($cf);
         
-        $record = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Clever', 'n_given' => 'Ben')));
+        $record = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array('n_family' => 'Cleverer', 'n_given' => 'Ben')));
         $cfName = $cf->name;
         $record->customfields = array($cfName => $record->toArray());
         
         $this->setExpectedException('Tinebase_Exception_Record_Validation');
-        $newRecord = Addressbook_Controller_Contact::getInstance()->update($record);
+        Addressbook_Controller_Contact::getInstance()->update($record);
     }
     
     /**

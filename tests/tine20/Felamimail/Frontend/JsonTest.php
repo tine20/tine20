@@ -570,12 +570,13 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageToSend = $this->_getMessageData($this->_account->email);
         $invalidEmail = 'invaliduser@' . $this->_mailDomain;
         $messageToSend['to'] = array($invalidEmail);
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
         
         try {
             $returned = $this->_json->saveMessage($messageToSend);
             $this->fail('Tinebase_Exception_SystemGeneric expected');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertContains('5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage(),
+            $this->assertContains('<' . $invalidEmail . '>: ' . $translation->_('Recipient address rejected'), $tesg->getMessage(),
                 'exception message did not match: ' . $tesg->getMessage());
         }
     }
@@ -1208,6 +1209,19 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
 
         $this->assertEquals('application/pgp-encrypted', $fullMessage['preparedParts'][0]['contentType']);
         $this->assertContains('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
+    }
+
+    public function testMessagePGPInline()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../files/multipart_alternative_pgp_inline.eml');
+        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
+
+        $this->_foldersToClear = array('INBOX');
+        $message = $this->_searchForMessageBySubject('Re: mailvelope und tine20');
+
+        $fullMessage = $this->_json->getMessage($message['id']);
+        $this->assertFalse(empty($fullMessage['preparedParts']));
     }
 
     /*********************** sieve tests ****************************/

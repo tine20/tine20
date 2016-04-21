@@ -378,7 +378,7 @@ class Tasks_JsonTest extends TestCase
                 'accountLoginName'      => 'creator',
                 'accountStatus'         => 'enabled',
                 'accountExpires'        => NULL,
-                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+                'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
                 'accountLastName'       => 'Tine 2.0',
                 'accountFirstName'      => 'Creator',
                 'accountEmailAddress'   => 'phpunit@metaways.de'

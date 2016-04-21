@@ -24,8 +24,14 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * @var array
      */
     protected $_defaultsSettings = array();
-    
-    
+
+    /**
+     * application models if given
+     *
+     * @var null
+     */
+    protected $_models = null;
+
     /**
      * holds the default Model of this application
      * @var string
@@ -248,5 +254,58 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     public function getModelsUsingPaths()
     {
         return $this->_modelsUsingPath;
+    }
+
+    /**
+     * @return array
+     *
+     * @todo maybe add param $mcv2only (new modelconfig with doctrine schema tool)
+     */
+    public function getModels()
+    {
+        if ($this->_models === null) {
+            try {
+                $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                return null;
+            }
+
+            $models = array();
+            foreach ($dir as $fileinfo) {
+                if (!$fileinfo->isDot() && !$fileinfo->isLink()) {
+                    if ($this->_isModelFile($fileinfo)) {
+                        $models[] = $this->_applicationName . '_Model_' . str_replace('.php', '', $fileinfo->getBasename());
+                    } else if ($fileinfo->isDir()) {
+                        // go (only) one level deeper
+                        $subdir = new DirectoryIterator($fileinfo->getPath() . '/' . $fileinfo->getFilename());
+                        foreach ($subdir as $subfileinfo) {
+                            if ($this->_isModelFile($subfileinfo)) {
+                                $this->_applicationName . '_Model_' . $fileinfo->getBasename() . '_'
+                                . str_replace('.php', '', $subfileinfo->getBasename());
+                            }
+                        }
+
+                    }
+                }
+            }
+            $this->_models = $models;
+        }
+
+        return $this->_models;
+    }
+
+    /**
+     * @param $fileinfo
+     * @return bool
+     */
+    protected function _isModelFile($fileinfo)
+    {
+        return (
+            ! $fileinfo->isDot() &&
+            ! $fileinfo->isLink() &&
+            $fileinfo->isFile() &&
+            ! preg_match('/filter\.php/i', $fileinfo->getBasename())
+        );
     }
 }

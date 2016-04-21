@@ -47,7 +47,7 @@ class Admin_ControllerTest extends TestCase
 //            'accountLoginName'      => 'tine20phpunit',
 //            'accountStatus'         => 'enabled',
 //            'accountExpires'        => NULL,
-//            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+//            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
 //            'accountLastName'       => 'Tine 2.0',
 //            'accountFirstName'      => 'PHPUnit',
 //            'accountEmailAddress'   => 'phpunit@metaways.de'
@@ -57,7 +57,7 @@ class Admin_ControllerTest extends TestCase
 //            'accountLoginName'      => 'tine20phpunit-updated',
 //            'accountStatus'         => 'disabled',
 //            'accountExpires'        => NULL,
-//            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->id,
+//            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
 //            'accountLastName'       => 'Tine 2.0 Updated',
 //            'accountFirstName'      => 'PHPUnit Updated',
 //            'accountEmailAddress'   => 'phpunit@tine20.org'
