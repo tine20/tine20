@@ -27,6 +27,10 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
      */
     protected function setUp()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('only working in non-AD setups');
+        }
+
         parent::setUp();
         
         $mockBackend = new Sabre\DAV\Auth\Backend\Mock();

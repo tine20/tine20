@@ -4,14 +4,9 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Admin
@@ -29,14 +24,8 @@ class Admin_CliTest extends TestCase
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Sets up the fixture.
-     * This method is called before a test is executed.
-     *
-     * @access protected
-     */
-    
+
+
     /**
      * config groups
      * 
@@ -47,7 +36,13 @@ class Admin_CliTest extends TestCase
      * @var Tinebase_Record_RecordSet
      */
     protected $_groupsToDelete = null;
-    
+
+    /**
+     * Sets up the fixture.
+     * This method is called before a test is executed.
+     *
+     * @access protected
+     */
     protected function setUp()
     {
         parent::setUp();

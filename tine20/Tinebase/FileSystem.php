@@ -371,6 +371,15 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
         $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
+
+        // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
+        if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
+            $updatedFileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+            header('X-OC-MTime: accepted');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$updatedFileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$updatedFileObject->id}");
+
+        }
         
         // sanitize file size, somehow filesize() seems to return empty strings on some systems
         if (empty($updatedFileObject->size)) {
@@ -842,8 +851,19 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             'contentytype'  => null,
         ));
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
+
+        // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
+        if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
+            $fileObject->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+            $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+            header('X-OC-MTime: accepted');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$name}");
+
+        }
+
         $fileObject = $this->_fileObjectBackend->create($fileObject);
-        
+
         $treeNode = new Tinebase_Model_Tree_Node(array(
             'name'          => $name,
             'object_id'     => $fileObject->getId(),
@@ -854,7 +874,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             ' ' . print_r($treeNode->toArray(), TRUE));
         
         $treeNode = $this->_treeNodeBackend->create($treeNode);
-        
+
         return $treeNode;
     }
     
@@ -1032,12 +1052,22 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function update(Tinebase_Model_Tree_Node $_node)
     {
         $currentNodeObject = $this->get($_node->getId());
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_node, 'update', $currentNodeObject);
-        
-        // update file object
         $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
+
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_node, 'update', $currentNodeObject);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'update', $fileObject);
+
+        // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
+        if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
+            $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
+            header('X-OC-MTime: accepted');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_node->name}");
+
+        }
+
+        // update file object
         $fileObject->description = $_node->description;
-        
         $this->_updateFileObject($fileObject, $_node->hash);
         
         return $this->_treeNodeBackend->update($_node);

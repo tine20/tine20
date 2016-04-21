@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -28,7 +28,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
-
     }
     
     /**
@@ -667,6 +666,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testAttendeeGroupMembersResolving()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('only working in non-AD setups');
+        }
+
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Group::getInstance()->getDefaultAdminGroup();
         
@@ -777,7 +780,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testAttendeeGroupMembersAddUser()
     {
         try {
-            // clenup if exists
+            // clean up if exists
             $cleanupUser = Tinebase_User::getInstance()->getFullUserByLoginName('testAttendeeGroupMembersAddUser');
             Tinebase_User::getInstance()->deleteUser($cleanupUser);
         } catch (Exception $e) {
@@ -802,17 +805,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         ));
         $persistentEvent = $this->_controller->create($event);
         
-        // create a new user
-        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
-//            'accountId'             => 'dflkjgldfgdfgd',
-            'accountLoginName'      => 'testAttendeeGroupMembersAddUser',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $defaultGroup->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
+        $newUser = $this->_createNewUser();
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
         }
@@ -868,17 +861,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         ));
         $persistentEvent = $this->_controller->create($event);
-        
-        // create a new user
-        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'testAttendeeGroupMembersAddUser',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $defaultGroup->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
+
+        $newUser = $this->_createNewUser();
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             Tinebase_ActionQueue::getInstance()->processQueue(10000);
         }
@@ -920,7 +904,22 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_id', $newUser->contact_id);
         $this->assertEquals(0, count($user), 'deleted user is attender of new event, but should not be');
     }
-    
+
+    protected function _createNewUser()
+    {
+        $pw = Tinebase_Record_Abstract::generateUID(10) . '*A53x';
+        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'testAttendeeGroupMembersAddUser',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )), $pw, $pw);
+        return $newUser;
+    }
+
     public function testRruleUntil()
     {
         $event = $this->_getEvent();

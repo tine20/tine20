@@ -51,7 +51,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     /**
      * config of courses
      *
-     * @var Zend_Config
+     * @var Courses_Config
      */
     protected $_config = NULL;
     
@@ -207,7 +207,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
                     . ' ' . $tenf);
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Removing member from course / group ' . $course->name . ' / group id: ' . $course->group_id);
-                $this->_groupController->removeGroupMemberFromSqlBackend($course->group_id, $memberId);
+                Tinebase_Group::getInstance()->removeGroupMemberFromSqlBackend($course->group_id, $memberId);
             }
         }
     }
@@ -275,7 +275,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created teacher account for course '
             . $course->name . ': ' . print_r($account->toArray(), true));
         
-        $password = $this->_config->get('teacher_password', $account->accountLoginName);
+        $password = $this->_config->get(Courses_Config::TEACHER_PASSWORD, $account->accountLoginName);
         $account = $this->_userController->create($account, $password, $password);
         $this->_groupController->addGroupMember(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $account->getId());
         

@@ -5,38 +5,24 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Tinebase_Group
  */
-class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
+class Tinebase_TranslationTest extends TestCase
 {
-    /**
-     * Runs the test methods of this class.
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_TranslationTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
     public function setUp()
     {
-        //Some tests may have changed the User Locale => restore defaults
+        // Some tests may have changed the User Locale => restore defaults
         Tinebase_Core::setupUserLocale();
     }
     
     public function tearDown()
     {
-        //Some tests may have changed the User Locale => restore defaults
+        // Some tests may have changed the User Locale => restore defaults
         Tinebase_Core::setupUserLocale();
     }
     
@@ -259,5 +245,19 @@ msgstr "изпълни"
         exec('for i in `ls ' . $tineRoot . '/*/translations/*.po`; do msgfmt -o - --strict $i 2>&1 1>/dev/null ; done', $output);
         
         $this->assertEquals(0, count($output), 'Found invalid translation file(s): ' . print_r($output, true));
+    }
+
+    /**
+     * check if lang helper is outputting usage information
+     *
+     * TODO add more langHelper functionality tests
+     */
+    public function testLangHelperUsageInfo()
+    {
+        $cmd = realpath(__DIR__ . '/../../../tine20/langHelper.php');
+        $cmd = TestServer::assembleCliCommand($cmd);
+        exec($cmd, $output);
+
+        $this->assertContains('langHelper.php [ options ]', $output[0]);
     }
 }

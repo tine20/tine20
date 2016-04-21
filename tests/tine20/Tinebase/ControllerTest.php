@@ -55,8 +55,9 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testMaintenanceModeLoginFail()
     {
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
-            $this->markTestSkipped('FIXME: Does not work with LDAP backend (full test suite run)');
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend (full test suite run)');
         }
 
         Tinebase_Config::getInstance()->maintenanceMode = 1;
