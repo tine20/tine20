@@ -197,6 +197,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var app = Tine.Tinebase.appMgr.get('Felamimail');
         
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
+            lazyInit: false,
             listeners: {
                 scope: this,
                 specialkey: this.onSearchComboSpecialkey,

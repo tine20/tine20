@@ -137,6 +137,7 @@ class Tinebase_User
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
+            'useStartTls' => false,
             'useRfc2307' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=user',

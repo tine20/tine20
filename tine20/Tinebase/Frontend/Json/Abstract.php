@@ -627,11 +627,46 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $formerFilter
      * @param string $plugin
      */
-    public static function addFilterModelPlugin($formerFilter, $plugin) {
+    public static function addFilterModelPlugin($formerFilter, $plugin)
+    {
         if (class_exists($plugin)) {
             self::$_filterPlugins[$formerFilter] = $plugin;
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__."::".__LINE__.":: Filter model plugin \"$plugin\" doesn't exists");
         }
+    }
+
+    /**
+     * magic method for json api
+     *
+     * @param string $method
+     * @param array  $args
+     */
+    public function __call($method, array $args)
+    {
+        // provides api for default application methods
+        if (preg_match('/^(get|save|search|delete)([a-z0-9]+)/i', $method, $matches)) {
+            $apiMethod = $matches[1];
+            $model = in_array($apiMethod, array('search', 'delete')) ? substr($matches[2],0,-1) : $matches[2];
+            $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
+            switch ($apiMethod) {
+                case 'get':
+                    return $this->_get($args[0], $modelController);
+                    break;
+                case 'save':
+                    return $this->_save($args[0], $modelController, $model);
+                    break;
+                case 'search':
+                    $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
+                    break;
+                case 'delete':
+                    return $this->_delete($args[0], $modelController);
+                    break;
+            }
+        }
+
+        // call plugin method (see Tinebase_Pluggable_Abstract)
+        return parent::__call($method, $args);
     }
 }

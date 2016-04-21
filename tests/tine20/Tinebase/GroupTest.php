@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -86,7 +86,7 @@ class Tinebase_GroupTest extends TestCase
      */
     public function testGetGroupById()
     {
-        $adminGroup = Tinebase_Group::getInstance()->getGroupByName('Administrators');
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         
         $group = Tinebase_Group::getInstance()->getGroupById($adminGroup->id);
         

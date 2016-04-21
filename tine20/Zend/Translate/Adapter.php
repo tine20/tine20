@@ -376,7 +376,7 @@ abstract class Zend_Translate_Adapter {
 
         if (isset(self::$_cache) and ($change == true)) {
             $id = 'Zend_Translate_' . $this->toString() . '_Options';
-            if (self::$_cacheTags) {
+            if (self::$_cacheTags && isset($this->_options['tag'])) {
                 self::$_cache->save($this->_options, $id, array($this->_options['tag']));
             } else {
                 self::$_cache->save($this->_options, $id);
@@ -640,7 +640,7 @@ abstract class Zend_Translate_Adapter {
             }
         }
 
-        if ($options['reload']) {
+        if (isset($options['reload']) && $options['reload']) {
             $read = true;
         }
 
@@ -652,7 +652,7 @@ abstract class Zend_Translate_Adapter {
             }
         }
 
-        if (empty($temp)) {
+        if (empty($temp) || ! is_array($temp)) {
             $temp = array();
         }
 

@@ -643,8 +643,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         if (isset($field['targetField'])&& isset($field['targetFieldData']) && isset($record)) {
             $unreplaced = $targetField = $field['targetFieldData'];
             foreach ($record as $key => $value) {
-                $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
-                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
+                if (preg_match('/' . preg_quote($key) . '/', $targetField) && is_scalar($value)) {
+                    $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
+                    $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
+                }
             }
             // remove unreplaced stuff
             $targetField = str_replace($unreplaced, '', $targetField);

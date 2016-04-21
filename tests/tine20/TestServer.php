@@ -186,7 +186,7 @@ class TestServer
         $cmd = preg_replace(array(
             '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
             '/--stderr /',
-            '/--colors /',
+            '/--colors{0,1} /',
             '/--verbose /',
             '/--stop-on-failure /',
             '/[\S]+\.php$/',

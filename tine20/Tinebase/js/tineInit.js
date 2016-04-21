@@ -128,8 +128,7 @@ Tine.Tinebase.tineInit = {
             fn: Tine.Tinebase.common.showDebugConsole
         }]);
     },
-    
-    
+
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
      * The default card is a splash screen.

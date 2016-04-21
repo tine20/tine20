@@ -79,9 +79,13 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         if (is_resource($data)) {
             stream_copy_to_stream($data, $handle);
         }
-        
+
+        // save file object
         Tinebase_FileSystem::getInstance()->fclose($handle);
-        
+
+        // save node
+        Tinebase_FileSystem::getInstance()->update($this->_node);
+
         return $this->getETag();
     }
 }

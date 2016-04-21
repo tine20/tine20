@@ -72,7 +72,14 @@ class Courses_Config extends Tinebase_Config_Abstract
     * @var string
     */
     const STUDENT_LOGINNAME_PREFIX = 'student_loginname_prefix';
-    
+
+    /**
+     * students loginname prefix
+     *
+     * @var string
+     */
+    const TEACHER_PASSWORD = 'teacher_password';
+
     /**
      * students password suffix
      *
@@ -148,11 +155,20 @@ class Courses_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => TRUE,
         ),
         self::STUDENT_PASSWORD_SUFFIX => array(
-                //_('Students password suffix')
-                'label'                 => 'Students password suffix',
-                'description'           => 'Students password suffix',
-                'type'                  => 'string',
-                'clientRegistryInclude' => TRUE,
+            //_('Students password suffix')
+            'label'                 => 'Students password suffix',
+            'description'           => 'Students password suffix',
+            'type'                  => 'string',
+            'clientRegistryInclude' => TRUE,
+        ),
+        self::TEACHER_PASSWORD => array(
+            //_('Teacher password')
+            'label'                 => 'Teacher password',
+            'description'           => 'Teacher password',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setBySetupModule'      => true,
+            'setByAdminModule'      => false,
         ),
         self::STUDENTS_USERNAME_SCHEMA => array(
         //_('Student username schema')
