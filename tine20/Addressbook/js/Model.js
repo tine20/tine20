@@ -254,7 +254,8 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
         {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
         {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
         {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+        {filtertype: 'tinebase.tag', app: app}
     ];
 };
 
