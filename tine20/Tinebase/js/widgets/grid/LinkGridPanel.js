@@ -173,8 +173,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
         // check if already in
         if (this.store.findExact('related_id', recordToAdd.id) === -1) {
             var recordType = record.get('type');
-            if (! Ext.isString(recordType) && recordType.default) {
-                record.set('type', recordType.default);
+            if (! Ext.isString(recordType) && recordType['default']) {
+                record.set('type', recordType['default']);
                 record.commit();
             }
             this.store.add([record]);
