@@ -437,7 +437,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * returns function parameter as object, decode Json if needed
      *
-     * Prepare function input to be an object. Input maybe already an array or (empty) text.
+     * Prepare function input to be an array. Input maybe already an array or (empty) text.
      * Starting PHP 7 Zend_Json::decode can't handle empty strings.
      *
      * @param  mixed $_dataAsArrayOrJson
@@ -445,15 +445,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _prepareParameter($_dataAsArrayOrJson)
     {
-        if (is_array($_dataAsArrayOrJson)) {
-            return $_dataAsArrayOrJson;
-        }
-        else if (trim($_dataAsArrayOrJson) == '') {
-            return Zend_Json::decode("{}");
-        }
-        else {
-            return Zend_Json::decode($_dataAsArrayOrJson);
-        }
+        return Tinebase_Helper::jsonDecode($_dataAsArrayOrJson);
     }
 
     /**
