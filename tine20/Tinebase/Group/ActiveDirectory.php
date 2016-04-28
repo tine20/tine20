@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,6 +17,9 @@
  */
 class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
 {
+    // TODO move more duplicated (in User/Group AD controllers) code into traits
+    use Tinebase_ActiveDirectory_DomainConfigurationTrait;
+
     /**
      * the ldap backend
      *
@@ -81,7 +84,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     protected $_userSearchScope      = Zend_Ldap::SEARCH_SCOPE_SUB;
     
     protected $_isReadOnlyBackend    = false;
-    
+
     /**
      * the constructor
      *
@@ -109,22 +112,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         }
         
         parent::__construct($_options);
-        
-        // get domain sid
-        $this->_domainConfig = $this->getLdap()->search(
-            'objectClass=domain',
-            $this->getLdap()->getFirstNamingContext(),
-            Zend_Ldap::SEARCH_SCOPE_BASE
-        )->getFirst();
-        
-        $this->_domainSidBinary = $this->_domainConfig['objectsid'][0];
-        $this->_domainSidPlain  = Tinebase_Ldap::decodeSid($this->_domainConfig['objectsid'][0]);
-        
-        $domainNameParts    = array();
-        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $unusedPart, $domainNameParts);
-        $this->_domainName = implode('.', $domainNameParts);
     }
-    
+
     /**
      * create a new group in sync backend
      *
@@ -154,8 +143,9 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if ($this->_options['useRfc2307']) {
             $ldapData['objectclass'][] = 'posixGroup';
             $ldapData['gidnumber']     = $this->_generateGidNumber();
-            
-            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $this->_domainName));
+
+            $domainConfig = $this->getDomainConfiguration();
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $domainConfig['domainName']));
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 
@@ -218,7 +208,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function getGroupMembershipsFromSyncBackend($_userId)
     {
-        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId; 
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         
         // find user in AD and retrieve memberOf attribute
         $filter = Zend_Ldap_Filter::andFilter(
@@ -240,10 +230,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             return array();
         }
         
-        // resolve primarygrouid to dn
+        // resolve primary group id to dn
+        $domainConfig = $this->getDomainConfiguration();
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
-            Zend_Ldap_Filter::equals('objectsid', Zend_Ldap::filterEscape($this->_domainSidPlain . '-' . $memberOfs['primarygroupid'][0]))
+            Zend_Ldap_Filter::equals('objectsid', Zend_Ldap::filterEscape($domainConfig['domainSidPlain'] . '-' . $memberOfs['primarygroupid'][0]))
         );
         
         $group = $this->getLdap()->search(
@@ -377,8 +368,6 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
         
-        $memberUidNumbers = $this->getGroupMembers($_groupId);
-        
         $ldapData = array(
             'member' => $accountMetaData['dn']
         );
@@ -406,7 +395,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
      */
     public function resolveGIdNumberToUUId($rid)
     {
-        $groupSid = $this->_domainSidPlain . '-' .  $rid;
+        $domainConfig = $this->getDomainConfiguration();
+        $groupSid = $domainConfig['domainSidPlain'] . '-' .  $rid;
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
@@ -488,7 +478,7 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
         if ($this->_isReadOnlyBackend) {
             return;
         }
-        
+
         $groupMetaData = $this->_getMetaData($_groupId);
         
         $membersMetaDatas = $this->_getAccountsMetaData((array)$_groupMembers, FALSE);
@@ -506,12 +496,11 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $group data: ' . print_r($groupMetaData, true));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $memebers: ' . print_r($membersMetaDatas, true));
-        
-        $groupDn = $this->_getDn($_groupId);
-        
+
+        $domainConfig = $this->getDomainConfiguration();
         $memberDn = array();
         foreach ($membersMetaDatas as $memberMetadata) {
-            if ($this->_domainSidPlain . '-' . $memberMetadata['primarygroupid'] == $groupMetaData['objectsid']) {
+            if ($domainConfig['domainSidPlain'] . '-' . $memberMetadata['primarygroupid'] == $groupMetaData['objectsid']) {
                 // skip this user => is already meber because of his primary group
                 continue;
             }
