@@ -1,6 +1,6 @@
 <?php
 /**
- * abstract calendar export class
+ * calendar export generic trait
  *
  * @package     Calendar
  * @subpackage  Export
@@ -16,6 +16,7 @@
  * @package     Calendar
  * @subpackage  Export
  *
+ * TODO rename trait to hint functionality? GenericTrait is not a good name ;)
  */
 trait Calendar_Export_GenericTrait
 {
@@ -101,6 +102,4 @@ trait Calendar_Export_GenericTrait
             }
         }
     }
-
-
 }

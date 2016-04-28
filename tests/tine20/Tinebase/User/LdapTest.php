@@ -274,7 +274,8 @@ class Tinebase_User_LdapTest extends TestCase
         sleep(1);
         Tinebase_User::syncUsers($syncOptions);
         $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $user->getId(), 'Tinebase_Model_FullUser');
-        $this->assertEquals($now->toString(), $user->accountExpires->toString(), 'expiry date should still be the same');
+        $this->assertTrue($now->toString() == $user->accountExpires->toString() ||
+            $now->subSecond(1)->toString() == $user->accountExpires->toString(), 'expiry date should still be the same');
 
         // set expired to -1 year -> user should be deleted
         $user->accountExpires = $now->subYear(1);

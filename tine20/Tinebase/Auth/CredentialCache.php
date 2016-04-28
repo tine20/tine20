@@ -252,7 +252,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     }
     
     /**
-     * decryptes username and password
+     * decrypts username and password
      *
      * @param  Tinebase_Model_CredentialCache $_cache
      * @return void
@@ -267,14 +267,19 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
         mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
-        
-        $cacheData = Zend_Json::decode(trim(mdecrypt_generic($td, $encryptedData)));
-        
-        $_cache->username = $cacheData['username'];
-        $_cache->password = $cacheData['password'];
-        
+
+        $jsonEncodedData = trim(mdecrypt_generic($td, $encryptedData));
+        $cacheData = Tinebase_Helper::jsonDecode($jsonEncodedData);
+
         mcrypt_generic_deinit($td);
         mcrypt_module_close($td);
+
+        if (! isset($cacheData['username']) && ! isset($cacheData['password'])) {
+            throw new Tinebase_Exception_NotFound('could not find valid credential cache');
+        }
+
+        $_cache->username = $cacheData['username'];
+        $_cache->password = $cacheData['password'];
     }
     
     /**

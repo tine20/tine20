@@ -364,7 +364,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
     public function testInvoiceRecreation()
     {
-        $this->markTestSkipped('FIXME: this fails randomly :(');
+        //$this->markTestSkipped('FIXME: this fails randomly :(');
 
         $result = $this->_createInvoiceUpdateRecreationFixtures();
 
@@ -416,16 +416,17 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, $pA->count());
         $pA = $pA->getFirstRecord();
         $pA->interval = 4;
+        sleep(1);
         Sales_Controller_ProductAggregate::getInstance()->update($pA);
         $contract4->title = $contract4->getTitle() . ' changed';
-        sleep(1);
         $this->_contractController->update($contract4);
+        sleep(1);
 
         $this->sharedTimesheet->id = NULL;
         $this->_timesheetController->create($this->sharedTimesheet);
 
         $result = $this->_invoiceController->checkForContractOrInvoiceUpdates();
-        $this->assertEquals(true, (count($result)===2||count($result)===3));
+        $this->assertEquals(2, count($result));
 
         $mapping = $this->_invoiceController->getAutoInvoiceRecreationResults();
         $this->assertEquals(true, isset($mapping[$oldInvoiceId0]));
