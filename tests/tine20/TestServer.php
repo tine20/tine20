@@ -195,6 +195,7 @@ class TestServer
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
             '/--exclude-group [\S]+\D/',
+            '/--coverage-[\S]+ [\S]+\D/',
             '/-c [\S]+\D/',
             '/--log-junit [\S]+\D/'
         ), array(
