@@ -1237,13 +1237,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testCreateFolderInFolderWithSameName()
     {
         $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
-        
-        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
-        $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+
+        $result = $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->assertTrue(isset($result['id']));
+        $result = $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+        $this->assertTrue(isset($result['id']), 'node has not been created');
         $e = new Tinebase_Exception('nothing');
         try {
             $this->_json->createNode($path . '/Test1/Test1/Test2', 'folder', NULL, FALSE);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->fail('The folder couldn\'t be found, so it hasn\'t ben created');
         }
         
@@ -1432,15 +1434,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $this->assertEquals(1, $result['totalcount']);
     }
-    
+
     /**
      * testDeleteDownloadLinks
      */
     public function testDeleteDownloadLinks()
     {
         $downloadLink = $this->testSaveDownloadLinkFile();
-        
-        $result = $this->_json->deleteDownloadLinks(array($downloadLink['id']));
+
+        $this->_json->deleteDownloadLinks(array($downloadLink['id']));
         try {
             Filemanager_Controller_DownloadLink::getInstance()->get($downloadLink['id']);
             $this->fail('link should have been deleted');

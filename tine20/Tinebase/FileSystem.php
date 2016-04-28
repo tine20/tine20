@@ -735,12 +735,12 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             }
         }
         
-        $missingPathParts = array_diff($this->_splitPath($path), $pathParts);
+        $missingPathParts = array_diff_assoc($this->_splitPath($path), $pathParts);
         
         foreach ($missingPathParts as $pathPart) {
             $node = $this->_treeNodeBackend->getChild($parentNode, $pathPart);
             
-            // keep track of current path posistion
+            // keep track of current path position
             array_push($pathParts, $pathPart);
             
             // add found path to statCache
