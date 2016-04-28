@@ -1604,8 +1604,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
             $i++;
         }
         $result = $this->_json->searchMessages($filter, '');
-        //print_r($result);
-        
+
         return $result;
     }
     
@@ -1618,6 +1617,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
     {
+        // give server some time to send and receive messages
+        sleep(1);
+
         $result = $this->_getMessages($_folderName);
         
         $message = array();
