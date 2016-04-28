@@ -140,12 +140,13 @@
         <property name="testinclude" value="AllTests.php" override="true" />
         <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library:${project.basedir}/library/zf1ext" override="true" />
         <property name="testadditionalparams" value="" override="true" />
+        <property name="testsuite" value="tine20" override="true" />
         
         <echo msg="Starting Tests..." />
         <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
         <echo msg="Setting include_path to ${includepath}" />
         
-        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/${testsuite}" passthru="true">
              <arg line="-d max_execution_time=0
              -d include_path=${includepath}
              --configuration ${testconfigdir}/phpunit.xml
@@ -183,7 +184,7 @@
 
     <!-- ============================================  -->
     <!-- Target: report                                -->
-    <!-- TODO remove code duplication (phpunit target) -->
+    <!-- TODO remove code duplication (phpunit target) OR remove this -->
     <!-- ============================================  -->
     <target name="report">
         <echo msg="Starting Tests..." />
