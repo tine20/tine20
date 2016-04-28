@@ -43,14 +43,14 @@ class Tinebase_Server_JsonTests extends TestCase
             (
                 array
                 (
-                    'type' => 'any',
+                    'type' => 'array',
                     'name' => 'recordData',
-                    'optional' => '',
+                    'optional' => false,
                 )
 
             ),
             'returns' => 'array'
-        ), $smdArray['services']['Inventory.saveInventoryItem']);
+        ), $smdArray['services']['Inventory.saveInventoryItem'], 'saveInventoryItem smd mismatch');
         $this->assertEquals(array
         (
             'envelope' => 'JSON-RPC-2.0',
