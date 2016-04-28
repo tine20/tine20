@@ -125,7 +125,8 @@ Tine.HumanResources.ExtraFreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                                     app: 'HumanResources',
                                     keyFieldName: 'extraFreetimeType',
                                     fieldLabel: this.app.i18n._('Type'),
-                                    name: 'type'
+                                    name: 'type',
+                                    showIcon: false
                                 }], [{
                                     fieldLabel: this.app.i18n._('Expiration date'),
                                     xtype: 'datefield',
