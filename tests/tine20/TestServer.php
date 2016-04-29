@@ -91,11 +91,13 @@ class TestServer
     public function setWhiteAndBlacklists()
     {
         if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
+            // TODO not sure if this is working - we need to validate that
             $filter = new PHP_CodeCoverage_Filter();
             $filter->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
             $filter->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
             $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
             $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/vendor');
         } else if ($this->isPhpunitVersionGreaterOrEquals("3.5.0")) {
             PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
             PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
