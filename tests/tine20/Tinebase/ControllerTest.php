@@ -61,30 +61,6 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Config::getInstance()->maintenanceMode = 0;
     }
-    
-    /**
-     * test login and logout in separate process
-     * 
-     * @runInSeparateProcess
-     */
-//    public function testLoginAndLogout()
-//    {
-//        $config = Zend_Registry::get('testConfig');
-//        
-//        $configData = @include('phpunitconfig.inc.php');
-//        $config = new Zend_Config($configData);
-//        
-//        $result = $this->_instance->login($config->username, $config->password, $config->ip, 'TineUnittest2');
-//        
-//        $this->assertTrue($result);
-//        
-//        // just call change pw for fun and coverage ;)
-//        $result = $this->_instance->changePassword($config->password, $config->password);
-//        
-//        $result = $this->_instance->logout($config->ip);
-//        
-//        $this->assertEquals('', session_id());
-//    }
 
     /**
      * testMaintenanceModeLoginFail
@@ -92,13 +68,17 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
     public function testMaintenanceModeLoginFail()
     {
         Tinebase_Config::getInstance()->maintenanceMode = 1;
-        $this->setExpectedException('Tinebase_Exception_MaintenanceMode');
 
-        $this->_instance->login(
-            'sclever',
-            Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
-            new \Zend\Http\PhpEnvironment\Request()
-        );
+        try {
+            $this->_instance->login(
+                'sclever',
+                Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
+                new \Zend\Http\PhpEnvironment\Request()
+            );
+            $this->fail('expecting exception: Tinebase_Exception_MaintenanceMode');
+        } catch (Tinebase_Exception $te) {
+            $this->assertTrue($te instanceof Tinebase_Exception_MaintenanceMode);
+        }
     }
 
     /**
