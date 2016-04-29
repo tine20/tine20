@@ -10,4 +10,11 @@
     <listeners>
         <listener class="LogListener" file="LogListener.php" />
     </listeners>
+    <filter>
+        <!-- code coverage blacklisting -->
+        <blacklist>
+            <directory>../../tine20/vendor</directory>
+            <directory>../../tine20/library</directory>
+        </blacklist>
+    </filter>
 </phpunit>

@@ -144,9 +144,13 @@ class Sales_Controller_Product extends Sales_Controller_NumberableAbstract
         
         $productIdsToChangeToInactive = $this->_getProductIdsForLifespanUpdate(/* $setToActive = */ false);
         $productIdsToChangeToActive   = $this->_getProductIdsForLifespanUpdate(/* $setToActive = */ true);
-        
-        $this->_backend->updateMultiple($productIdsToChangeToInactive, array('is_active' => false));
-        $this->_backend->updateMultiple($productIdsToChangeToActive,   array('is_active' => true));
+
+        if (count($productIdsToChangeToInactive) > 0) {
+            $this->_backend->updateMultiple($productIdsToChangeToInactive, array('is_active' => false));
+        }
+        if (count($productIdsToChangeToActive) > 0) {
+            $this->_backend->updateMultiple($productIdsToChangeToActive, array('is_active' => true));
+        }
     }
     
     /**
