@@ -49,7 +49,7 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Config::getInstance()->maintenanceMode = 0;
     }
-    
+
     /**
      * testMaintenanceModeLoginFail
      */
@@ -68,7 +68,7 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
                 Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()),
                 new \Zend\Http\PhpEnvironment\Request()
             );
-            $this->fail('expected maintenance mode exception');
+            $this->fail('expecting exception: Tinebase_Exception_MaintenanceMode');
         } catch (Tinebase_Exception_MaintenanceMode $temm) {
             $this->assertEquals('Installation is in maintenance mode. Please try again later', $temm->getMessage());
         }
