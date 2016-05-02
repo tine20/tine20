@@ -13,6 +13,7 @@
     <filter>
         <!-- code coverage blacklisting -->
         <blacklist>
+            <directory>.</directory>
             <directory>../../tine20/vendor</directory>
             <directory>../../tine20/library</directory>
         </blacklist>
