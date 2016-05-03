@@ -336,6 +336,11 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     
     /**
      * (non-PHPdoc)
+     *
+     * changed href from URI format /path/to/targetid to urn:uuid:id format due to el capitano ical client
+     * see:
+     * https://service.metaways.net/Ticket/Display.html?id=145985
+     *
      * @see \Sabre\CalDAV\IShareableCalendar::getShares()
      */
     public function getShares()
@@ -354,7 +359,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             
             switch ($grant->account_type) {
                 case 'anyone':
-                    $href       = '/principals/groups/anyone';
+                    // was: '/principals/groups/anyone'
+                    $href       = 'urn:uuid:anyone';
                     $commonName = 'Anyone';
                     break;
                 
@@ -364,20 +370,25 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         continue;
                     }
-                     
-                    $href       = '/principals/groups/' . $list->list_id;
+
+                    // was: '/principals/groups/'
+                    $href       = 'urn:uuid:' . $list->list_id;
                     $commonName = $list->name;
                     
                     break;
                     
                 case 'user':
+                    if ((string)$this->_container->owner_id === (string)$grant->account_id) {
+                        continue;
+                    }
                     try {
                         $contact = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         continue;
                     }
-                     
-                    $href       = '/principals/users/' . $contact->contact_id;
+
+                    // was: '/principals/users/'
+                    $href       = 'urn:uuid:' . $contact->contact_id;
                     $commonName = $contact->accountDisplayName;
                     break;
             }
