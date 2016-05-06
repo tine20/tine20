@@ -83,17 +83,13 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
         $recordController = Tinebase_Core::getApplicationInstance(get_class($record));
 
         // if we rebuild recursively, dont do any tree operation, just rebuild the paths for the record and be done with it
+        // so we dont need to know the old / current paths in that case
         if (false === $rebuildRecursively) {
-            // fetch full record + check acl
-            $record = $recordController->get($record->getId());
-
-            $currentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($record);
+            $currentPaths = $this->getPathsForRecords($record);
         }
 
-        $newPaths = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
-
-        // fetch all parent -> child relations and add to path
-        $newPaths->merge($this->_getPathsOfRecord($record, $rebuildRecursively));
+        // generate all paths for the current record
+        $newPaths = $this->_getPathsOfRecord($record, $rebuildRecursively);
 
         if (method_exists($recordController, 'generatePathForRecord')) {
             $newPaths->merge($recordController->generatePathForRecord($record));
@@ -131,7 +127,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
                 // path changed (a title was updated or similar)
                 if ($currentPath->path !== $newPath->path) {
                     // update ... set path = REPLACE(path, $currentPath->path, $newPath->path) where shadow_path LIKE '$shadowPath/%'
-                    $this->_backend->replacePathForShadowPathTree($shadowPath, $currentPath->path, $newPath->path);
+                    $this->_backend->replacePathForShadowPathTree($shadowPath, $newPath->path, $currentPath->path);
                 }
 
                 unset($newShadowPathOffset[$shadowPath]);
@@ -180,10 +176,10 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     /**
      * delete all record paths
      *
+     * no acl check done in here
+     *
      * @param $record
      * @return int
-     *
-     * TODO add acl check?
      */
     public function deletePathsForRecord($record)
     {
@@ -193,6 +189,8 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     /**
      * getPathsForRecords
      *
+     * no acl check done in here
+     *
      * @param Tinebase_Record_Interface|Tinebase_Record_RecordSet $records
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_NotFound
@@ -201,8 +199,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     {
         $ids = $records instanceof Tinebase_Record_Interface ? array($records->getId()) : $records->getArrayOfIds();
 
-        return $this->search(new Tinebase_Model_PathFilter(array(
-            array('field' => 'record_id', 'operator' => 'in', 'value' => $ids)
-        )));
+        return $this->_backend->getMultipleByProperty($ids, 'record_id');
     }
 }

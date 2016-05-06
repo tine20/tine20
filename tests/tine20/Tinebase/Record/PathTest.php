@@ -19,9 +19,25 @@ class Tinebase_Record_PathTest extends TestCase
      */
     protected $_fatherRecord = null;
 
+    protected $_oldConfig = null;
+
     protected function setUp()
     {
+        $mysqlSetup = new Setup_Backend_Mysql();
+        if (! Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql || true !== $mysqlSetup->supports('mysql >= 5.6.4')) {
+            $this->markTestSkipped('mysql 5.6.4 or higher required');
+        }
+
         $this->_uit = Tinebase_Record_Path::getInstance();
+
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $features = Tinebase_Cache_PerRequest::getInstance()->load('Tinebase_Config_Abstract', 'Tinebase_Config_Abstract::featureEnabled', 'Tinebase');
+            $features->{Tinebase_Config::FEATURE_SEARCH_PATH} = true;
+        }
+
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            throw new Exception('was not able to activate the feature search path');
+        }
         
         parent::setUp();
     }
@@ -32,12 +48,12 @@ class Tinebase_Record_PathTest extends TestCase
     public function testBuildRelationPathForRecord()
     {
         $contact = $this->_createFatherMotherChild();
-        $result = $this->_uit->generatePathForRecord($contact);
+        $result = $this->_uit->generatePathForRecord($contact, true);
         $this->assertTrue($result instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(2, count($result), 'should find 2 paths for record. paths:' . print_r($result->toArray(), true));
 
         // check both paths
-        $expectedPaths = array('/grandparent/father/tester', '/mother/tester');
+        $expectedPaths = array('/grandparent{t}/father{t}/tester', '/mother{t}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $result->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($result->toArray(), true));
@@ -45,7 +61,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         $result = $this->_uit->generatePathForRecord($this->_fatherRecord);
         $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $this->assertEquals('/grandparent/father', $result->getFirstRecord()->path);
+        $this->assertEquals('/grandparent{t}/father', $result->getFirstRecord()->path);
     }
 
     protected function _createFatherMotherChild()
@@ -93,7 +109,7 @@ class Tinebase_Record_PathTest extends TestCase
             'own_backend'            => 'Sql',
             'own_id'                 => 0,
             'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
-            'type'                   => '',
+            'type'                   => 't',
             'related_backend'        => 'Sql',
             'related_id'             => $record->getId(),
             'related_model'          => 'Addressbook_Model_Contact',
@@ -132,13 +148,12 @@ class Tinebase_Record_PathTest extends TestCase
             'members'               => array($contact->getId()),
             'memberroles'           => $memberroles,
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
-            'relations'             => array($this->_getParentRelationArray($this->_getFatherWithGrandfather()))
         ));
 
-        $recordPaths = $this->_uit->generatePathForRecord($contact);
+        $recordPaths = $this->_uit->generatePathForRecord($contact, true);
         $this->assertTrue($recordPaths instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(2, count($recordPaths), 'should find 2 path for record. paths:' . print_r($recordPaths->toArray(), true));
-        $expectedPaths = array('/grandparent/father/my test group/my role/tester', '/grandparent/father/my test group/my second role/tester');
+        $expectedPaths = array('/my test group/my role/tester', '/my test group/my second role/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));
@@ -159,7 +174,7 @@ class Tinebase_Record_PathTest extends TestCase
             'relations' => array($relation1)
         )));
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $recordPaths = $this->_uit->getPathsForRecords($contact, true);
         $this->assertEquals(1, count($recordPaths));
 
         $motherRecord = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
@@ -176,7 +191,7 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals(2, count($recordPaths));
 
         // check both paths
-        $expectedPaths = array('/grandparent/father/tester', '/mother/tester');
+        $expectedPaths = array('/grandparent{t}/father{t}/tester', '/mother{t}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));
@@ -192,6 +207,10 @@ class Tinebase_Record_PathTest extends TestCase
     {
         $contact = $this->testTriggerRebuildPathForRecords();
 
+        // due to full text we need to commit here!
+        //Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        //$this->_transactionId = null;
+
         // change contact name and check path in related records
         $this->_fatherRecord->n_family = 'stepfather';
         Addressbook_Controller_Contact::getInstance()->update($this->_fatherRecord);
@@ -200,11 +219,13 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals(2, count($recordPaths));
 
         // check both paths again
-        $expectedPaths = array('/grandparent/stepfather/tester', '/mother/tester');
+        $expectedPaths = array('/grandparent{t}/stepfather{t}/tester', '/mother{t}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));
         }
+
+        // TODO we should clean up here?!?
     }
 
     /**
@@ -233,7 +254,7 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals(1, count($recordPaths));
 
         // check remaining path again
-        $expectedPaths = array('/mother/tester');
+        $expectedPaths = array('/mother{t}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));
@@ -248,8 +269,6 @@ class Tinebase_Record_PathTest extends TestCase
         $this->testBuildGroupMemberPathForContact();
 
         $filterValues = array(
-            'father' => 2,
-            'grandparent' => 3,
             'my test group' => 1,
             'my role' => 1,
             'somemail@example.ru' => 1
@@ -282,16 +301,16 @@ class Tinebase_Record_PathTest extends TestCase
         $this->testBuildGroupMemberPathForContact();
 
         $adbJson = new Addressbook_Frontend_Json();
-        $filter = $this->_getPathFilterArray('father');
+        $filter = $this->_getPathFilterArray('my role');
 
         $result = $adbJson->searchContacts($filter, array());
 
-        $this->assertEquals(2, $result['totalcount'], print_r($result['results'], true));
+        $this->assertEquals(1, $result['totalcount'], print_r($result['results'], true));
         $firstRecord = $result['results'][0];
         $this->assertTrue(isset($firstRecord['paths']), 'paths should be set in record' . print_r($firstRecord, true));
         // sometimes only 1 path is resolved. this is a little bit strange ...
         $this->assertGreaterThan(0, count($firstRecord['paths']), print_r($firstRecord['paths'], true));
-        $this->assertContains('/grandparent', $firstRecord['paths'][0]['path'], 'could not find grandparent in paths of record' . print_r($firstRecord, true));
+        $this->assertContains('/my test group', $firstRecord['paths'][0]['path'], 'could not find my test group in paths of record' . print_r($firstRecord, true));
     }
 
     public function testPathWithDifferentTypeRelations()
@@ -314,7 +333,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         // check the 3 paths
         $this->assertEquals(3, count($recordPaths), 'paths: ' . print_r($recordPaths->toArray(), true));
-        $expectedPaths = array('/grandparent/father/tester', '/mother/tester', '/grandparent/father{type}/tester');
+        $expectedPaths = array('/grandparent{t}/father{t}/tester', '/mother{t}/tester', '/grandparent{t}/father{type}/tester');
         foreach ($expectedPaths as $expectedPath) {
             $this->assertTrue(in_array($expectedPath, $recordPaths->path), 'could not find path ' . $expectedPath . ' in '
                 . print_r($recordPaths->toArray(), true));

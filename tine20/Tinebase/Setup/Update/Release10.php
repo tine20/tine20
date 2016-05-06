@@ -359,4 +359,86 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.9');
     }
+
+    /**
+     * update to 10.10
+     *
+     * adding path filter feature switch & structure update
+     */
+    public function update_9()
+    {
+        $this->dropTable('path');
+
+        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>path</name>
+            <version>2</version>
+            <requirements>
+                <required>mysql >= 5.6.4</required>
+            </requirements>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>record_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>path</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>shadow_path</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>path</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>shadow_path</name>
+                    <fulltext>true</fulltext>
+                    <field>
+                        <name>shadow_path</name>
+                    </field>
+                </index>
+                <index>
+                    <name>record_id</name>
+                    <field>
+                        <name>record_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        $this->createTable('path', $declaration, 'Tinebase', 2);
+
+        $frontend = new Tinebase_Frontend_Cli();
+        $frontend->rebuildPaths(null);
+
+        $this->setApplicationVersion('Tinebase', '10.10');
+    }
 }

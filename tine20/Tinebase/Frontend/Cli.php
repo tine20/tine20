@@ -72,6 +72,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return -1;
         }
 
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' search paths are not enabled');
+            return -1;
+        }
+
         $applications = Tinebase_Application::getInstance()->getApplications();
         foreach($applications as $application) {
             try {

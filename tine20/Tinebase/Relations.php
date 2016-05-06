@@ -723,13 +723,13 @@ class Tinebase_Relations
         $this->_backend->removeApplication($applicationName);
     }
 
-    public function getRelationsOfRecordByDegree($record, $degree)
+    public function getRelationsOfRecordByDegree($record, $degree, $ignoreACL = FALSE)
     {
         // get relations if not yet present OR use relation search here
         if (empty($record->relations)) {
             $backendType = 'Sql';
             $modelName = get_class($record);
-            $record->relations = Tinebase_Relations::getInstance()->getRelations($modelName, $backendType, $record->getId());
+            $record->relations = $this->getRelations($modelName, $backendType, $record->getId(), NULL, array(), $ignoreACL);
         }
 
 

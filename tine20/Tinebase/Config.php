@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -145,6 +145,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
+
+    /**
+     * FEATURE_PATH
+     *
+     * @var string
+     */
+    const FEATURE_SEARCH_PATH = 'featureSearchPath';
 
     /**
      * user defined page title postfix for browser page title
@@ -851,12 +858,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'description'   => 'Save edit dialog size in state',
                     //_('Save edit dialog size in state')
                 ),
+                self::FEATURE_SEARCH_PATH => array(
+                    'label'         => 'Search Paths',
+                    'description'   => 'Search Paths'
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
                 self::FEATURE_CONTAINER_CUSTOM_SORT => true,
                 self::FEATURE_SHOW_ACCOUNT_EMAIL    => true,
                 self::FEATURE_REMEMBER_POPUP_SIZE   => true,
+                self::FEATURE_SEARCH_PATH           => true,
+
             ),
         ),
         self::CRONUSERID => array(

@@ -1082,7 +1082,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         // rebuild paths if relations where set or if pathPart changed
         if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
-            $this->_rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched);
+            $this->_rebuildRelationPaths($updatedRecord, $currentRecord, $relationsTouched);
         }
 
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
@@ -1106,19 +1106,22 @@ abstract class Tinebase_Controller_Record_Abstract
 
     /**
      * @param Tinebase_Record_Interface $updatedRecord
-     * @param Tinebase_Record_Interface $record
-     * @param Tinebase_Record_Interface $currentRecord
+     * @param Tinebase_Record_Interface $currentRecord the record before the update including relatedData / relations (but only those visible to the current user)
      * @param boolean $relationsTouched
      */
-    protected function _rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched)
+    protected function _rebuildRelationPaths($updatedRecord, $currentRecord, $relationsTouched)
     {
+        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            return;
+        }
+
         // rebuild own paths
         $this->buildPath($updatedRecord);
 
         // rebuild paths of children that have been added or removed
         if ($relationsTouched) {
             //we need to do this to reload the relations in the next line...
-            $record->relations = null;
+            $updatedRecord->relations = null;
             $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
             if (null === $currentRecord) {
                 $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
@@ -2244,8 +2247,9 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-<<<<<<< HEAD
-     * returns path of record
+     * returns paths of record
+     *
+     * ACL check will be disabled in this function to really take all relations into account
      *
      * @param Tinebase_Record_Interface     $record
      * @param boolean|int                   $depth
@@ -2261,7 +2265,13 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
 
-        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT);
+        // we want all relations / ignoreACL, so we need to force a reload of relations
+        $oldRelations = $record->relations;
+        $record->relations = null;
+        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT, true);
+        // restore normal relations again
+        $record->relations = $oldRelations;
+
         foreach ($parentRelations as $parent) {
 
             if (!is_object($parent->related_record)) {
@@ -2313,7 +2323,13 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $type = $this->_getTypeForPathPart($relation);
 
-        return $type . '/' . mb_substr(str_replace('/', '', trim($record->getTitle())), 0, 32);
+        /**
+         * TODO: test in all dbms for full text search
+         * example: Pfarrei Altona{PASTORAL}/Lise Müller
+         * search for "PASTORAL Müller" needs to return this ... if not, we may need to add spaces around the
+         * special chars, but probably not
+         */
+        return $type . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($record->getTitle())), 0, 1024);
     }
 
     protected function _getTypeForPathPart($relation)

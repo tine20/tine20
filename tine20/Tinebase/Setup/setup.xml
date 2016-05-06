@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.9</version>
+    <version>10.10</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3503,7 +3503,10 @@
         </table>
         <table>
             <name>path</name>
-            <version>1</version>
+            <version>2</version>
+            <requirements>
+                <required>mysql >= 5.6.4</required>
+            </requirements>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3520,13 +3523,13 @@
                 <field>
                     <name>path</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>65535</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>shadow_path</name>
                     <type>text</type>
-                    <length>255</length>
+                    <length>65535</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -3542,13 +3545,14 @@
                 </index>
                 <index>
                     <name>path</name>
+                    <fulltext>true</fulltext>
                     <field>
                         <name>path</name>
                     </field>
                 </index>
                 <index>
                     <name>shadow_path</name>
-                    <unique>true</unique>
+                    <fulltext>true</fulltext>
                     <field>
                         <name>shadow_path</name>
                     </field>
