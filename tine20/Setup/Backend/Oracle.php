@@ -73,17 +73,20 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
     protected $_autoincrementId = '';
     
     protected static $_sequence_postfix = '_s';
-    
+
     /**
      * takes the xml stream and creates a table
      *
-     * @param object $_table xml stream
+     * @param  Setup_Backend_Schema_Table_Abstract $_table xml stream
+     * @return boolean return true on success, false in case of graceful failure, due to missing requirements for example
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
         $this->_table = $_table->name;
         
-        parent::createTable($_table);
+        if (false === parent::createTable($_table) ) {
+            return false;
+        }
         
         if (!empty($this->_autoincrementId)) {
             $statement = $this->getIncrementSequence($_table->name);
@@ -107,7 +110,7 @@ class Setup_Backend_Oracle extends Setup_Backend_Abstract
             }         
         }
         
-
+        return true;
     }
     
     protected function _getIncrementSequenceName($_tableName)

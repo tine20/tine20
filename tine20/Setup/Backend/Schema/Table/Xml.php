@@ -21,6 +21,16 @@ class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
             $this->setName($_tableDefinition->name);
             $this->comment = (string) $_tableDefinition->comment;
             $this->version = (string) $_tableDefinition->version;
+
+            $this->requirements = array();
+            if ($_tableDefinition->requirements) {
+                $requirements = $_tableDefinition->requirements->xpath('./required');
+                if (is_array($requirements)) {
+                    foreach($requirements as $requirement) {
+                        $this->requirements[] = (string)$requirement;
+                    }
+                }
+            }
             
             foreach ($_tableDefinition->declaration->field as $field) {
                 $this->addField(Setup_Backend_Schema_Field_Factory::factory('Xml', $field));

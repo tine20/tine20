@@ -177,7 +177,10 @@ class Setup_Update_Abstract
         $app = Tinebase_Application::getInstance()->getApplicationByName($_application);
         Tinebase_Application::getInstance()->removeApplicationTable($app, $_tableName);
         
-        $this->_backend->createTable($_table);
+        if (false === $this->_backend->createTable($_table)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creation of table ' . $_tableName . ' gracefully failed');
+            return false;
+        }
         
         Tinebase_Application::getInstance()->addApplicationTable($app, $_tableName, $_version);
         

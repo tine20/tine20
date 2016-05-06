@@ -31,7 +31,8 @@ class ExampleApplication_TestCase extends TestCase
     protected function _getExampleRecord()
     {
         return new ExampleApplication_Model_ExampleRecord(array(
-            'name' => 'minimal example record by PHPUnit::ExampleApplication_JsonTest'
+            'name' => 'minimal example record by PHPUnit::ExampleApplication_JsonTest',
+            'description' => 'some words in the description for the fulltext search'
         ));
     }
     

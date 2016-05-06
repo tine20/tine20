@@ -452,6 +452,9 @@ class Tinebase_Application
      */
     public function addApplicationTable($_applicationId, $_name, $_version)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Add application table: ' . $_name);
+
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
         $applicationData = array(
