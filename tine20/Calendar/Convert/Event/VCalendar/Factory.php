@@ -23,6 +23,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
+    const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
     
@@ -65,6 +66,10 @@ class Calendar_Convert_Event_VCalendar_Factory
  
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Calendar_Convert_Event_VCalendar_EMClient($_version);
+                break;
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7:
+                return new Calendar_Convert_Event_VCalendar_EMClient7($_version);
                 break;
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID:
@@ -110,6 +115,11 @@ class Calendar_Convert_Event_VCalendar_Factory
         // EMClient
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
+            $version = $matches['version'];
+
+        // EMClient
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient7::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7;
             $version = $matches['version'];
 
         // Tine 2.0
