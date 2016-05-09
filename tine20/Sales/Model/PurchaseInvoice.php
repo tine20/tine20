@@ -106,26 +106,12 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'shy' => TRUE,
             ),
             'due_at' => array(
-                'type'  => 'date',
-                'label' => 'Due at',            // _('Due at')
-            ),
-            'pay_at' => array(
-                'type'  => 'date',
-                'label' => 'Pay at',            // _('Pay at')
-            ),
-            'overdue_at' => array(
-                'type'  => 'date',
-                'label' => 'Overdue at',        // _('Overdue at')
-                'shy'   => TRUE,
+                    'type'  => 'date',
+                    'label' => 'Due at',            // _('Due at')
             ),
             'payed_at' => array(
                 'type'  => 'date',
                 'label' => 'Payed at',          // _('Payed at')
-            ),
-            'dunned_at' => array(
-                'type'  => 'date',
-                'label' => 'Dunned at',    // _('Dunned at')
-                'shy'   => TRUE,
             ),
             'payment_method' => array(
                 'label'   => 'Payment_method', //_('Payment_method')
