@@ -38,7 +38,7 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
         {name: 'customer', omitDuplicateResolving: true, label: 'Customer', group: 'Relationen'},
         {name: 'partner', omitDuplicateResolving: true, label: 'Partner', group: 'Relationen'},
         {name: 'tasks', omitDuplicateResolving: true},
-        {name: 'relations', omitDuplicateResolving: true},
+        {name: 'relations', label: 'Relationen', group: 'Relationen'},
         {name: 'products', omitDuplicateResolving: true, label: 'Products', group: 'Relationen'},
         {name: 'tags', label: 'Tags'},
         {name: 'notes', omitDuplicateResolving: true},

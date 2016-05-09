@@ -99,13 +99,13 @@ class Tinebase_Relations
         // compute relations to add/delete
         $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreACL);
         $currentIds   = $currentRelations->getArrayOfIds();
-        $relationsIds = $relations->getArrayOfIds();
+        $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
 
-        // prevent two empty related_id s of the same relation type
+        // prevent two empty related_ids of the same relation type
         $emptyRelatedId = array();
         foreach ($toAdd as $idx) {
             if (empty($relations[$idx]->related_id)) {
@@ -174,7 +174,44 @@ class Tinebase_Relations
             }
         }
     }
-    
+
+    /**
+     * appends missing relation ids if related records + type match
+     *
+     * @param $relations
+     * @param $currentRelations
+     * @return mixed
+     */
+    protected function _getRelationIds($relations, $currentRelations)
+    {
+        $clonedRelations = clone $relations;
+
+        if (count($currentRelations) > 0) {
+            foreach ($clonedRelations as $relation) {
+                if ($relation->getId()) {
+                    continue;
+                }
+
+                // if relation has no id, maybe we have the same relation already in current relations
+                $subset = $currentRelations->filter('own_id', $relation->own_id)
+                    ->filter('related_id', $relation->related_id)
+                    ->filter('type', $relation->type);
+
+                if (count($subset) === 1) {
+                    // remove and add to make sure index is updated in record set
+                    $relations->removeRecord($relation);
+                    $relation->setId($subset->getFirstRecord()->getId());
+                    $relations->addRecord($relation);
+                    //$result[] = $subset->getFirstRecord()->getId();
+                }
+            }
+        }
+
+        $result = $relations->getArrayOfIds();
+
+        return $result;
+    }
+
     /**
      * returns the constraints config for the given models and their mirrored values (seen from the other side
      * 

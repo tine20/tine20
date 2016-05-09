@@ -1583,7 +1583,8 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         if ($_record->has('relations')) {
-            $this->_deleteLinkedRelations($_record);
+            // TODO check if this needs to be done, as we might already deleting this "from the other side"
+            $this->deleteLinkedRelations($_record);
         }
 
         if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
@@ -1594,30 +1595,36 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * delete linked relations
      * 
-     * @param Tinebase_Record_Interface $_record
-     * 
-     * TODO check if this needs to be done, as we might already deleting this "from the other side"
+     * @param Tinebase_Record_Interface $record
+     * @param array $modelsToDelete
+     * @param array $typesToDelete
      */
-    protected function _deleteLinkedRelations(Tinebase_Record_Interface $_record)
+    public function deleteLinkedRelations(Tinebase_Record_Interface $record, $modelsToDelete = array(), $typesToDelete = array())
     {
-        $relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $_record->getId());
-        if (empty($relations)) {
+        $relations = isset($record->relations) && $record->relations instanceof Tinebase_Record_RecordSet
+            ? $record->relations
+            : Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $record->getId());
+
+        if (count($relations) === 0) {
             return;
         }
 
-        // remove relations
-        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $_record->getId(), array());
+        // unset record relations
+        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $record->getId(), array());
 
-        if (empty($this->_relatedObjectsToDelete)) {
+        if (empty($modelsToDelete)) {
+            $modelsToDelete = $this->_relatedObjectsToDelete;
+        }
+        if (empty($modelsToDelete) && empty($typesToDelete)) {
             return;
         }
         
         // remove related objects
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting all '
-                . implode(',', $this->_relatedObjectsToDelete) . ' relations.');
+            . implode(',', $modelsToDelete) . ' relations.');
 
         foreach ($relations as $relation) {
-            if (in_array($relation->related_model, $this->_relatedObjectsToDelete)) {
+            if (in_array($relation->related_model, $modelsToDelete) || in_array($relation->type, $typesToDelete)) {
                 list($appName, $i, $itemName) = explode('_', $relation->related_model);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
 

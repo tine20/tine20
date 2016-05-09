@@ -494,6 +494,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param array $_properties
      * @return $this
+     *
+     * TODO implement
      */
     public function addIndices(array $_properties)
     {

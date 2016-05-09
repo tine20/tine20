@@ -17,6 +17,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
  * Abstract test class
  * 
  * @package     Tests
+ *
+ * TODO separation of concerns: split into multiple classes/traits with cleanup / fixture / ... functionality
  */
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -235,8 +237,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteUsers()
     {
-
-
         foreach ($this->_usernamesToDelete as $username) {
             try {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -247,6 +247,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Error while deleting user: ' . $e->getMessage());
             }
+        }
+    }
+
+    /**
+     * removes records and their relations
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    protected function _deleteRecordRelations($records, $modelsToDelete = array(), $typesToDelete = array())
+    {
+        $controller = Tinebase_Core::getApplicationInstance($records->getRecordClassName());
+
+        if (! method_exists($controller, 'deleteLinkedRelations')) {
+            return;
+        }
+
+        foreach ($records as $record) {
+            $controller->deleteLinkedRelations($record, $modelsToDelete, $typesToDelete);
         }
     }
 
