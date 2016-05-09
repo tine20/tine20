@@ -103,7 +103,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
             }
         }
     }
-    
+
     /**
      * inspect get user by property
      * 
@@ -114,16 +114,16 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
         if (! $_user instanceof Tinebase_Model_FullUser) {
             return;
         }
-        
+
         $imap = $this->_getImapConnection();
-        
+
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
-        
-        $quota = $imap->getQuotaRoot($mailboxString);
-        
+
+        $quota = $this->_adminGetQuota($imap, $mailboxString);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got quota: ' . print_r($quota, TRUE));
-        
+
         $emailUser = new Tinebase_Model_EmailUser(array(
             'emailUsername'  => $this->_appendDomain($_user->accountLoginName),
             'emailUserId'    => $this->_appendDomain($_user->accountLoginName),
@@ -133,13 +133,13 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
             'emailPort'     => $this->_config['port'],
             'emailSecure'   => $this->_config['ssl'],
         ));
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
-        
+
         $_user->imapUser  = $emailUser;
         $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
     }
-    
+
     /**
      * update/set email user password
      * 
@@ -293,4 +293,34 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
         
         return true;
     }
+
+    /**
+     * get quotas for specified mailbox for administrative purpose (instead of user's getquotaRoot)
+     *
+     * @param Zend_Mail_Protocol_Imap $_imap
+     * @param  string  $mailbox  the mailbox (user.example)
+     * @return array
+     */
+    protected function _adminGetQuota(Zend_Mail_Protocol_Imap $_imap = NULL, $mailbox)
+    {
+        $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
+        $imap->sendRequest('GETQUOTA', array($mailbox), $tag);
+
+        $result = array();
+
+        while (! $imap->readLine($tokens, $tag)) {
+            if ($tokens[0] == 'QUOTA') {
+                if (! empty($tokens[2]) && is_array($tokens[2])) {
+                    $result[strtoupper($tokens[2][0])] = array(
+                        'resource' => strtoupper($tokens[2][0]),
+                        'usage'    => $tokens[2][1],
+                        'limit'    => $tokens[2][2]
+                    );
+                }
+            }
+        }
+
+        return $result;
+    }
+
 }
