@@ -66,6 +66,22 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
                 'tel_work'
             ))
         ),
+        'telephone_normalized' => array(
+            'filter' => 'Tinebase_Model_Filter_Query',
+            'options' => array('fields' => array(
+                'tel_assistent_normalized',
+                'tel_car_normalized',
+                'tel_cell_normalized',
+                'tel_cell_private_normalized',
+                'tel_fax_normalized',
+                'tel_fax_home_normalized',
+                'tel_home_normalized',
+                'tel_other_normalized',
+                'tel_pager_normalized',
+                'tel_prefer_normalized',
+                'tel_work_normalized'
+            ))
+        ),
         'email_query'          => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array(

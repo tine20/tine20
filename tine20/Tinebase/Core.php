@@ -1392,11 +1392,11 @@ class Tinebase_Core
      */
     public static function getUserTimezone()
     {
-        if (!self::isRegistered(self::USERTIMEZONE) || self::get(self::USERTIMEZONE) == NULL) {
+        if (!self::isRegistered(self::USERTIMEZONE) || ($return = self::get(self::USERTIMEZONE)) === NULL) {
             return Tinebase_Core::setupUserTimezone();
         }
         
-        return self::get(self::USERTIMEZONE);
+        return $return;
     }
 
     /**
