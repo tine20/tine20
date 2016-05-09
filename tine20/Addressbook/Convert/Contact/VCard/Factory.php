@@ -23,6 +23,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_MACOSX         = 'macosx';
     const CLIENT_SOGO           = 'sogo';
     const CLIENT_EMCLIENT       = 'emclient';
+    const CLIENT_EMCLIENT7      = 'emclient7';
     const CLIENT_COLLABORATOR   = 'WebDAVCollaborator';
     const CLIENT_AKONADI        = 'akonadi';
     const CLIENT_TELEFONBUCH    = 'telefonbuch';
@@ -81,6 +82,11 @@ class Addressbook_Convert_Contact_VCard_Factory
                 
                 break;
                 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7:
+                return new Addressbook_Convert_Contact_VCard_EMClient7($_version);
+
+                break;
+
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR:
                 return new Addressbook_Convert_Contact_VCard_WebDAVCollaborator($_version);
                 break;
@@ -139,6 +145,11 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
         
+        // eM Client 7 addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient7::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7;
+            $version = $matches['version'];
+
         // Outlook WebDAV Collaborator
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR;
