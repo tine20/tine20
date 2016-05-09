@@ -62,6 +62,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         // tine 2.0 generic fields
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // modlog fields
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -69,6 +70,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         
         // list specific fields
         'name'                  => array('presence' => 'required'),
@@ -85,6 +87,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'emails'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'memberroles'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+
         // tine 2.0 generic fields
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),

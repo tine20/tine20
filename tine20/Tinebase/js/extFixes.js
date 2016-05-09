@@ -511,5 +511,7 @@ Ext.form.ComboBox.prototype.expand = Ext.form.ComboBox.prototype.expand.createSe
     Ext.WindowMgr.bringToFront(this.list);
 });
 Ext.form.ComboBox.prototype.collapse = Ext.form.ComboBox.prototype.collapse.createSequence(function() {
-    Ext.WindowMgr.unregister(this.list);
+    if (this.list) {
+        Ext.WindowMgr.unregister(this.list);
+    }
 });
