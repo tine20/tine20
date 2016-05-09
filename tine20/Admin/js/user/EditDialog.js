@@ -92,7 +92,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
             }
         }
-        
+        if (Tine.Admin.registry.get('manageImapEmailUser')) {
+            if (!this.emailRecord.get('emailMailQuota')) this.getForm().findField('emailMailQuota').setValue(null);
+        }
+
         // load stores for memberships
         if (this.record.id) {
             this.storeGroups.loadData(this.record.get('groups'));
