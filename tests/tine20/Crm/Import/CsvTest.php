@@ -60,10 +60,11 @@ class Crm_Import_CsvTest extends ImportTestCase
      * @param        $importFilename
      * @param string $definitionName
      * @param bool   $dryrun
+     * @param string $duplicateResolveStrategy
      * @return array
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _importHelper($importFilename, $definitionName = 'crm_tine_import_csv', $dryrun = true)
+    protected function _importHelper($importFilename, $definitionName = 'crm_tine_import_csv', $dryrun = true, $duplicateResolveStrategy = null)
     {
         $this->_testNeedsTransaction();
 
@@ -75,6 +76,10 @@ class Crm_Import_CsvTest extends ImportTestCase
             'container_id'  => $this->_testContainer->getId(),
             'dryrun' => $dryrun,
         );
+
+        if ($duplicateResolveStrategy) {
+            $options['duplicateResolveStrategy'] = $duplicateResolveStrategy;
+        }
 
         $result = $this->_doImport($options, $definitionName);
 

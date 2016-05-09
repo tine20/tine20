@@ -13,8 +13,16 @@
     <filter>
         <!-- code coverage blacklisting -->
         <blacklist>
+            <!-- skip tests -->
+            <directory>.</directory>
+            <!-- skip libraries -->
             <directory>../../tine20/vendor</directory>
             <directory>../../tine20/library</directory>
+            <directory>../../tine20/Zend</directory>
+            <!-- setup tests are separate -->
+            <directory>../../tine20/Setup</directory>
+            <!-- don't show config files -->
+            <directory>/etc</directory>
         </blacklist>
     </filter>
 </phpunit>

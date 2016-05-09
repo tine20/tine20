@@ -205,7 +205,10 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 foreach ($destinations as $destination) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' destination ' . $destination);
-                    $data[$destination] = $values[$i++];
+                    if (isset($values[$i])) {
+                        $data[$destination] = trim($values[$i]);
+                    }
+                    $i++;
                 }
             } else {
                 $data[$field['destination']] = $value;
