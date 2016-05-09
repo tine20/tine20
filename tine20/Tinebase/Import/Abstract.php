@@ -593,67 +593,102 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         }
         
         $values = (isset($field['separator'])) ? $this->_splitBySeparator($field['separator'], $fieldValue): array($fieldValue);
-        
+
         $relations = array();
-        
         foreach ($values as $value) {
-            // check if related record exists
-            $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
-            $filterModel = $field['related_model'] . 'Filter';
-            $operator = isset($field['operator']) ? $field['operator'] : 'equals';
-
-            $filterValueToAdd = '';
-            if (isset($field['filterValueAdd']) && isset($data[$field['filterValueAdd']])) {
-                if ($field['filter'] === 'query') {
-                    $filterValueToAdd = ' ' . $data[$field['filterValueAdd']];
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                            . ' "filterValueAdd" Currently only working for query filter');
-                    }
-                }
-            }
-
-            $filter = new $filterModel(array(
-                array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
-            ));
-            $result = $controller->search($filter);
-            if (count($result) > 0) {
-                $record = $result->getFirstRecord()->toArray();
-            } else {
-                // create new related record
-                $record = array(
-                    (isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value
-                );
-                if (! empty($filterValueToAdd)) {
-                    $record[str_replace($field['destination'] . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
-                }
-            }
-
-            $relation = array(
-                'type'  => $field['destination'], 
-                'related_record' => $record,
-                // TODO move this to product (modelconfig?)
-                'remark' => $field['destination'] == 'PRODUCT' ? array('quantity' => 1) : null
-            );
-            
+            $relation = $this->_getRelationForValue($value, $field, $data);
             $relations[] = $relation;
         }
 
-        if (isset($field['targetField'])&& isset($field['targetFieldData']) && isset($record)) {
-            $unreplaced = $targetField = $field['targetFieldData'];
-            foreach ($record as $key => $value) {
-                if (preg_match('/' . preg_quote($key) . '/', $targetField) && is_scalar($value)) {
-                    $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
-                    $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
-                }
-            }
-            // remove unreplaced stuff
-            $targetField = str_replace($unreplaced, '', $targetField);
-            $data[$field['targetField']] = $targetField;
+        // TODO how do we handle this with multiple relations/values?
+        if (isset($field['targetField']) && isset($field['targetFieldData']) && count($relations) > 0) {
+            $this->_setTargetFieldFromRelation($field, $data, $relations[0]);
         }
         
         return $relations;
+    }
+
+    protected function _setTargetFieldFromRelation($field, &$data, $relation)
+    {
+        $unreplaced = $targetField = $field['targetFieldData'];
+        $recordArray = $relation['related_record'];
+        foreach ($recordArray as $key => $value) {
+            if (preg_match('/' . preg_quote($key) . '/', $targetField) && is_scalar($value)) {
+                $targetField = preg_replace('/' . preg_quote($key) . '/', $value, $targetField);
+                $unreplaced = preg_replace('/^[, ]*' . preg_quote($key) . '/', '', $unreplaced);
+            }
+        }
+
+        // remove unreplaced stuff
+        $targetField = str_replace($unreplaced, '', $targetField);
+
+        // finally set the target field value
+        $data[$field['targetField']] = trim($targetField);
+    }
+
+    protected function _getRelationForValue($value, $field, $data)
+    {
+        // check if related record exists
+        $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
+        $filterModel = $field['related_model'] . 'Filter';
+        $operator = isset($field['operator']) ? $field['operator'] : 'equals';
+
+        $filterValueToAdd = '';
+        if (isset($field['filterValueAdd']) && isset($data[$field['filterValueAdd']])) {
+            if ($field['filter'] === 'query') {
+                $filterValueToAdd = ' ' . $data[$field['filterValueAdd']];
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' "filterValueAdd" Currently only working for query filter');
+                }
+            }
+        }
+
+        $filter = new $filterModel(array(
+            array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
+        ));
+        $result = $controller->search($filter, null, /* $_getRelations */ true);
+        $relation = $this->_getRelationData($result->getFirstRecord(), $field, $data, $value);
+
+        return $relation;
+    }
+
+    protected function _getRelationData($record, $field, $data, $value)
+    {
+        $relationType = $field['destination'];
+        $relation = array(
+            'type'          => $relationType,
+            'related_model' => $field['related_model'],
+            // TODO move this to product (modelconfig?)
+            'remark'        => $relationType == 'PRODUCT' ? array('quantity' => 1) : null,
+        );
+
+        if ($record) {
+            $relation['related_id'] = $record->getId();
+            $recordArray = $record->toArray();
+        } else {
+            // create new related record
+            $recordArray = array(
+                (isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value
+            );
+            if (! empty($filterValueToAdd)) {
+                $recordArray[str_replace($relationType . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
+            }
+        }
+
+        // add more data for this relation if available
+        foreach ($data as $key => $value) {
+            $regex = '/^' . preg_quote($relationType) . '_/';
+            if (preg_match($regex, $key)) {
+                $relatedField = preg_replace($regex, '', $key);
+                $recordArray[$relatedField] = trim($value);
+            }
+        }
+
+        $relation['related_record'] = $recordArray;
+
+        return $relation;
     }
 
     /**

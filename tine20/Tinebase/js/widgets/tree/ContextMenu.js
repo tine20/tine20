@@ -233,6 +233,12 @@ Tine.widgets.tree.ContextMenu = {
                     success: function(result, request){
                         var nodeData = Ext.util.JSON.decode(result.responseText);
 
+                        if (nodeData.length == 0) {
+                            Tine.log.err('Server returned empty node data!');
+                            Ext.MessageBox.hide();
+                            return;
+                        }
+
                         // TODO add + icon if it wasn't expandable before
                         if(nodeData.type == 'folder') {
                             var nodeData = Ext.util.JSON.decode(result.responseText);
@@ -481,16 +487,20 @@ Tine.widgets.tree.ContextMenu = {
     manageProperties: function() {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode,
-                grantsContainer;
-            if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
+                grantsContainer,
+                ctxNodeName;
+            if (node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
                 grantsContainer = node.attributes.nodeRecord.data.name;
             } else if(node.attributes.container) {
                 grantsContainer = node.attributes.container;
             }
+
+            ctxNodeName = grantsContainer.name ? grantsContainer.name : grantsContainer;
             
             var window = Tine.widgets.container.PropertiesDialog.openWindow({
-                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name)),
+                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(ctxNodeName)),
                 containerName: this.nodeName,
+                // TODO fix this in Filemanager! sub-nodes do not have a container...
                 grantContainer: grantsContainer,
                 app: this.scope.app.appName
             });
