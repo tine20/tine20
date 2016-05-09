@@ -361,8 +361,10 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
         $shares = $container->getShares();
-        
+
         $this->assertEquals(3, count($shares));
+        $this->assertEquals('urn:uuid:anyone', $shares[0]['href']);
+        $this->assertEquals('urn:uuid:' . Tinebase_Core::getUser()->contact_id, $shares[2]['href']);
     }
     
     /**
