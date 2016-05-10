@@ -25,7 +25,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     /**
      * @cfg {String} loadMaskText
-     * _('Loading events, please wait...')
+     * i18n._('Loading events, please wait...')
      */
     loadMaskText: 'Loading events, please wait...',
     
@@ -134,7 +134,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     initActions: function () {
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(Tine.Tinebase.translation._hidden('Edit {0}'), this.i18nRecordName),
+            text: this.i18nEditActionText ? this.app.i18n._hidden(this.i18nEditActionText) : String.format(i18n._hidden('Edit {0}'), this.i18nRecordName),
             disabled: true,
             handler: this.onEditInNewWindow.createDelegate(this, ["edit"]),
             iconCls: 'action_edit'
@@ -142,7 +142,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         this.action_addInNewWindow = new Ext.Action({
             requiredGrant: 'addGrant',
-            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
+            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._hidden('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, ["add"]),
             iconCls: 'action_add'
         });
@@ -172,10 +172,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.i18nDeleteActionText ? i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            pluralText: this.i18nDeleteActionText ? i18nDeleteActionText[1] : String.format(Tine.Tinebase.translation.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
-            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            singularText: this.i18nDeleteActionText ? i18nDeleteActionText[0] : String.format(i18n.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? i18nDeleteActionText[1] : String.format(i18n.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(i18n.n_hidden('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
@@ -631,7 +631,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
             
             addAction = {
-                text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
+                text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._hidden('Add {0}'), this.i18nRecordName),
                 handler: this.onEditInNewWindow.createDelegate(this, ["add", null, null, {dtStart: dtStart, is_all_day_event: datetime && datetime.is_all_day_event}]),
                 iconCls: 'action_add'
             };
@@ -1103,7 +1103,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         // else
         var i18nQuestion = String.format(this.app.i18n.ngettext('Do you really want to delete this event?', 'Do you really want to delete the {0} selected events?', selection.length), selection.length);
-        Ext.MessageBox.confirm(Tine.Tinebase.translation._hidden('Confirm'), i18nQuestion, function (btn) {
+        Ext.MessageBox.confirm(i18n._hidden('Confirm'), i18nQuestion, function (btn) {
             if (btn === 'yes') {
                 this.onDeleteRecordsConfirmNonRecur(panel, selection);
             } else {
@@ -1129,7 +1129,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             },
             failure: function () {
                 panel.getTopToolbar().onLoad();
-                Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), String.format(this.app.i18n.n_('Failed to delete event', 'Failed to delete the {0} events', selection.length), selection.length));
+                Ext.MessageBox.alert(i18n._hidden('Failed'), String.format(this.app.i18n.n_('Failed to delete event', 'Failed to delete the {0} events', selection.length), selection.length));
             }
         };
         

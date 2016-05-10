@@ -689,8 +689,8 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
      */
     onUploadFail: function () {
         Ext.MessageBox.alert(
-            _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator.')
+            i18n._('Upload Failed'),
+            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator.')
         ).setIcon(Ext.MessageBox.ERROR);
     },
     
@@ -799,7 +799,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
-                    _('Upload Failed'), 
+                    i18n._('Upload Failed'),
                     app.i18n._('Putting files in this folder is not allowed!')
                 ).setIcon(Ext.MessageBox.ERROR);
             

@@ -72,11 +72,11 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
      * @private
      */
     initComponent: function () {
-        this.title = _('Profile Information');
+        this.title = i18n._('Profile Information');
         this.items = [];
         
         this.applyAction = new Ext.Action({
-            text: _('Apply'),
+            text: i18n._('Apply'),
             disabled: true,
             iconCls: 'action_applyChanges',
             handler: this.applyConfig.createDelegate(this)
@@ -91,7 +91,7 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
     afterRender: function () {
         this.supr().afterRender.apply(this, arguments);
         
-        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Please Wait')});
+        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Please Wait')});
         if (! this.store) {
             (function () {
                 this.loadMask.show();
@@ -153,13 +153,13 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
         
         var cbs = [
             new Ext.ux.grid.CheckColumn({
-                header: _('Read'),
-                tooltip: _('The field is readable part of the profile'),
+                header: i18n._('Read'),
+                tooltip: i18n._('The field is readable part of the profile'),
                 dataIndex: 'readGrant',
                 width: 55
             }), new Ext.ux.grid.CheckColumn({
-                header: _('Edit'),
-                tooltip: _('The field is editable part of the profile'),
+                header: i18n._('Edit'),
+                tooltip: i18n._('The field is editable part of the profile'),
                 dataIndex: 'editGrant',
                 width: 55
             })
@@ -172,7 +172,7 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
             plugins: cbs,
             columns: [{
                 id: 'fieldName',
-                header: _('Field Name'),
+                header: i18n._('Field Name'),
                 dataIndex: 'fieldLabel'
             }].concat(cbs)
         });

@@ -80,7 +80,7 @@ Tine.Expressomail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
     onUploadSuccess : function(dialog, filename, resp_data, record) {
         if (resp_data.size > 16384) {
             // exceeded maximum image size for the signature
-            dialog.showMessage( _('Error'), _('Signature image size cannot exceed 16384 bytes.') );
+            dialog.showMessage( i18n._('Error'), i18n._('Signature image size cannot exceed 16384 bytes.') );
         }
         else {
             var cmp = dialog.cmp;

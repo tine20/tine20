@@ -53,9 +53,9 @@ Ext.extend(Ext.ux.ConnectionStatus, Ext.Button, {
     initComponent: function() {
         Ext.ux.ConnectionStatus.superclass.initComponent.call(this);
         
-        this.onlineText = '(' + _('online') + ')';
-        this.offlineText = '(' + _('offline') + ')';
-        this.unknownText = '(' + _('unknown') + ')';
+        this.onlineText = '(' + i18n._('online') + ')';
+        this.offlineText = '(' + i18n._('offline') + ')';
+        this.unknownText = '(' + i18n._('unknown') + ')';
         
         // M$ IE has not online/offline events yet
         if (Ext.isIE6 || Ext.isIE7 || ! window.navigator || window.navigator.onLine === undefined) {

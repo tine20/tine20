@@ -58,11 +58,11 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                 }
             },
             items: [{
-                fieldLabel: _('Username'), 
+                fieldLabel: i18n._('Username'),
                 name: 'username',
                 allowBlank: false
             },{
-                fieldLabel: _('Password'), 
+                fieldLabel: i18n._('Password'),
                 name: 'password',
                 inputType: 'password'
             }]
@@ -123,7 +123,7 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             }
             
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     }
 });

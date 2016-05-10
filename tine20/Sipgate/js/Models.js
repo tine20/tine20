@@ -94,8 +94,8 @@ Tine.Sipgate.Model.Account.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sipgate');
     
     return [ 
-        { label: _('Quick Search'), field: 'query', operators: ['contains'] },
-        { label: _('Created By'), field: 'created_by', valueType: 'user'},
+        { label: i18n._('Quick Search'), field: 'query', operators: ['contains'] },
+        { label: i18n._('Created By'), field: 'created_by', valueType: 'user'},
         {
             label: app.i18n._('Account-Type'),
             field: 'accounttype',
@@ -141,7 +141,7 @@ Tine.Sipgate.Model.Line.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sipgate');
     
     return [ 
-        { label: _('Quick Search'), field: 'query', operators: ['contains'] },
+        { label: i18n._('Quick Search'), field: 'query', operators: ['contains'] },
         { filtertype: 'sipgate.account' },
         { label: app.i18n._('Assigned to'), field: 'user_id', valueType: 'user'}
     ];
@@ -318,7 +318,7 @@ Tine.Sipgate.connectionBackend = new Tine.Tinebase.data.RecordProxy({
 Tine.Sipgate.Model.Connection.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Sipgate');
     return [ 
-        { label: _('Quick Search'), field: 'query', operators: ['contains'] },
+        { label: i18n._('Quick Search'), field: 'query', operators: ['contains'] },
         { filtertype: 'sipgate.line' },
         { filtertype: 'addressbook.contact' },
         {

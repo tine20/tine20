@@ -756,12 +756,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
         if (! folderName || folderName == '') {
             Ext.MessageBox.alert(
-                _('Failed'),
+                i18n._('Failed'),
                 String.format(this.app.i18n._('{0} account setting empty.'), folderField)
             );
         } else if (this.attachmentGrid.isUploading()) {
             Ext.MessageBox.alert(
-                _('Failed'),
+                i18n._('Failed'),
                 this.app.i18n._('Files are still uploading.')
             );
         } else {

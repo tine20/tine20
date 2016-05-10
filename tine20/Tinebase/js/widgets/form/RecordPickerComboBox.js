@@ -116,9 +116,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 
-        this.emptyText = this.emptyText || _('Search for records ...')
+        this.emptyText = this.emptyText || i18n._('Search for records ...')
 
-        this.loadingText = _('Searching...');
+        this.loadingText = i18n._('Searching...');
         
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
@@ -303,8 +303,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 // check if editDialog exists
                 if (this.editDialog && this.editDialog.record && r.getId() == this.editDialog.record.getId()) {
                     Ext.MessageBox.show({
-                        title: _('Failure'),
-                        msg: _('You tried to link a record with itself. This is not allowed!'),
+                        title: i18n._('Failure'),
+                        msg: i18n._('You tried to link a record with itself. This is not allowed!'),
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR  
                     });

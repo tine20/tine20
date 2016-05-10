@@ -29,7 +29,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        this.label = _('Relation');
+        this.label = i18n._('Relation');
         
         // @TODO wipe some models?
         var relatedModels = [];
@@ -73,7 +73,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         }
         
         this.ftb.setActiveSheet(filter.sheet);
-        filter.formFields.value.setText(_('Defined by ...'));
+        filter.formFields.value.setText(i18n._('Defined by ...'));
     },
     
     /**
@@ -89,7 +89,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             id: 'tw-ftb-frow-operatorcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
-            emptyText: _('select a operator'),
+            emptyText: i18n._('select a operator'),
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
@@ -116,7 +116,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      */
     valueRenderer: function(filter, el) {
         var value = new Ext.Button({
-            text: _('Define ...'),
+            text: i18n._('Define ...'),
             filter: filter,
             width: this.filterValueWidth,
             id: 'tw-ftb-frow-valuefield-' + filter.id,

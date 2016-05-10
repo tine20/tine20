@@ -54,10 +54,10 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
     initComponent: function() {
         // initialise i18n
         this.selHelperText = {
-            'main'         : _('{0} selected'),
-            'deselect'     : _('Unselect all'),
-            'selectall'    : _('Select all pages ({0} records)'),
-            'toggle'       : _('Toggle selection')
+            'main'         : i18n._('{0} selected'),
+            'deselect'     : i18n._('Unselect all'),
+            'selectall'    : i18n._('Select all pages ({0} records)'),
+            'toggle'       : i18n._('Toggle selection')
         };
 
         Ext.ux.grid.PagingToolbar.superclass.initComponent.call(this);

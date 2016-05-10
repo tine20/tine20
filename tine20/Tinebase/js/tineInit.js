@@ -769,11 +769,9 @@ Tine.Tinebase.tineInit = {
      */
     initLocale: function () {
         //Locale.setlocale(Locale.LC_ALL, '');
-        Tine.Tinebase.translation = new Locale.Gettext();
-        Tine.Tinebase.translation.textdomain('Tinebase');
-        window._ = function (msgid) {
-            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
-        };
+        window.i18n = new Locale.Gettext();
+        window.i18n.textdomain('Tinebase');
+
         Tine.Tinebase.prototypeTranslation();
     }
 };

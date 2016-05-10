@@ -697,7 +697,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 }, this);
 
                 if(notFound.length > 0){
-                    Ext.MessageBox.alert(_('Error'), this.app.i18n._("No valid certificate found for one or more of these email address.") 
+                    Ext.MessageBox.alert(i18n._('Error'), this.app.i18n._("No valid certificate found for one or more of these email address.")
                         + '\n' + notFound.join(',\n'), function(){
                         this.loadMask.hide();
                     },
@@ -1489,7 +1489,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 });
             }
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
 
@@ -2015,7 +2015,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
 
         if (this.record.get('add_contacts') && record.get('added_contacts')!=0) {
             if (record.get('added_contacts')==-1) {
-                Ext.Msg.alert( _('Add Contacts'),
+                Ext.Msg.alert( i18n._('Add Contacts'),
                                 this.app.i18n._('Error saving unknown contacts.') + ' ' +
                                 this.app.i18n._('One or more contacts have not been added to the folder ') + this.getUnknownContactsFolderName(), this.closePendingMessages, this);
             }
@@ -2159,7 +2159,7 @@ Tine.Expressomail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             }
         } else {
             this.loadMask.hide();
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            Ext.MessageBox.alert(i18n._('Errors'), this.getValidationErrorMessage());
             this.sending = false;
         }
     },

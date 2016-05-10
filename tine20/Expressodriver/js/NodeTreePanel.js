@@ -694,8 +694,8 @@ Ext.extend(Tine.Expressodriver.NodeTreePanel, Tine.widgets.container.TreePanel, 
      */
     onUploadFail: function () {
         Ext.MessageBox.alert(
-            _('Upload Failed'),
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + Tine.Tinebase.registry.get('maxFileUploadSize')
+            i18n._('Upload Failed'),
+            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
     },
 
@@ -718,7 +718,7 @@ Ext.extend(Tine.Expressodriver.NodeTreePanel, Tine.widgets.container.TreePanel, 
      */
     onBeforeFolderRename: function(node) {
         var app = Tine.Tinebase.appMgr.get('Expressodriver');
-        Ext.MessageBox.wait(_('Please wait'), app.i18n._('Renaming nodes...' ));
+        Ext.MessageBox.wait(i18n._('Please wait'), app.i18n._('Renaming nodes...' ));
     },
 
     /**
@@ -813,7 +813,7 @@ Ext.extend(Tine.Expressodriver.NodeTreePanel, Tine.widgets.container.TreePanel, 
 
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
-                    _('Upload Failed'),
+                    i18n._('Upload Failed'),
                     app.i18n._('Putting files in this folder is not allowed!')
                 ).setIcon(Ext.MessageBox.ERROR);
 

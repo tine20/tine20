@@ -348,7 +348,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -360,7 +360,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: false,
             singularText: this.app.i18n._('Publish'),
             folderText: this.app.i18n._('Publish'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Publish'),
             handler: this.onPublishFile,
             disabled: true,
@@ -693,8 +693,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onUploadFail: function () {
         Ext.MessageBox.alert(
-            _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator.') 
+            i18n._('Upload Failed'),
+            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator.')
         ).setIcon(Ext.MessageBox.ERROR);
         
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
@@ -844,7 +844,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
-                    _('Upload Failed'), 
+                    i18n._('Upload Failed'),
                     app.i18n._('Putting files in this folder is not allowed!')
             ).setIcon(Ext.MessageBox.ERROR);
             

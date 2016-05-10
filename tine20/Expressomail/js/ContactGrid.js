@@ -121,7 +121,7 @@ Tine.Expressomail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPane
             ' {checked}',
         '>');
         
-        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // _('None')
+        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // i18n._('None')
             columns.push({
                 header: this.expressomailApp.i18n._(type),
                 dataIndex: Ext.util.Format.lowercase(type),

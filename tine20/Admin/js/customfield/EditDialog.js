@@ -135,7 +135,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onApplyChanges: function () {
         if (this.fieldsWithStore.indexOf(this.fieldType) !== -1 && ! this[this.fieldType + 'Config']) {
-            Ext.Msg.alert(_('Errors'), this.app.i18n._('Please configure store for this field type'));
+            Ext.Msg.alert(i18n._('Errors'), this.app.i18n._('Please configure store for this field type'));
             return;
         }
         
@@ -271,7 +271,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 try {
                     var model = eval(this.items.get(1).getValue());
                 } catch (e) {
-                    Ext.Msg.alert(_('Errors'), self.app.i18n._('Given record class not found'));
+                    Ext.Msg.alert(i18n._('Errors'), self.app.i18n._('Given record class not found'));
                     return false;
                 }
                 
@@ -304,13 +304,13 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             items: this['init' + (this.fieldType.charAt(0).toUpperCase() + this.fieldType.substr(1)) + 'Store'](),
             fbar: ['->', {
-                text: _('Cancel'),
+                text: i18n._('Cancel'),
                 minWidth: 70,
                 scope: this,
                 handler: this.onStoreWindowClose,
                 iconCls: 'action_cancel'
             }, {
-                text: _('OK'),
+                text: i18n._('OK'),
                 minWidth: 70,
                 scope: this,
                 handler: this.onStoreWindowOK,

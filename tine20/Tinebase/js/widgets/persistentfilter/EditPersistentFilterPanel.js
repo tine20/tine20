@@ -66,14 +66,14 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
      */
     initActions : function() {
         this.action_save = new Ext.Action({
-            text : _('OK'),
+            text : i18n._('OK'),
             minWidth : 70,
             scope : this,
             handler : this.onSave,
             iconCls : 'action_saveAndClose'
         });
         this.action_cancel = new Ext.Action({
-            text : _('Cancel'),
+            text : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
@@ -137,7 +137,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
                 record.set('name', this.inputTitle.getValue());
             }
         } else {
-            Ext.Msg.alert(_('Favorite not saved'), this.inputTitle.getActiveError());
+            Ext.Msg.alert(i18n._('Favorite not saved'), this.inputTitle.getActiveError());
             return;
         }
 
@@ -192,7 +192,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputTitle = new Ext.form.TextField({
             value: title,
             allowBlank : false,
-            fieldLabel : _('Title'),
+            fieldLabel : i18n._('Title'),
             width : '97%',
             minLength : 1,
             maxLength : 40
@@ -201,7 +201,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputDescription = new Ext.form.TextField({
             value: description,
             allowBlank : true,
-            fieldLabel : _('Description'),
+            fieldLabel : i18n._('Description'),
             width : '97%',
             minLength : 0,
             maxLength : 255
@@ -210,7 +210,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         this.inputCheck = new Ext.form.Checkbox({
             checked: (record) ? record.isShared() : false,
             hideLabel: true,
-            boxLabel: _('Shared Favorite (visible by all users)'),
+            boxLabel: i18n._('Shared Favorite (visible by all users)'),
             disabled: ! this.hasRight(),
             listeners: {
                 'check': function(checkbox, value) {
@@ -259,20 +259,20 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         if (! this.grantsGrid) {
             var columns = [
                 new Ext.ux.grid.CheckColumn({
-                    header: _('Read'),
+                    header: i18n._('Read'),
                     dataIndex: 'readGrant',
-                    tooltip: _('The grant to see and use this filter'),
+                    tooltip: i18n._('The grant to see and use this filter'),
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: _('Edit'),
-                    tooltip: _('The grant to edit this filter'),
+                    header: i18n._('Edit'),
+                    tooltip: i18n._('The grant to edit this filter'),
                     dataIndex: 'editGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header: _('Delete'),
-                    tooltip: _('The grant to delete this filter'),
+                    header: i18n._('Delete'),
+                    tooltip: i18n._('The grant to delete this filter'),
                     dataIndex: 'deleteGrant',
                     width: 55
                 })
@@ -280,7 +280,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             
             this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
                 selectType: 'both',
-                title:  _('Permissions'),
+                title:  i18n._('Permissions'),
                 store: this.getGrantsStore(),
                 hasAccountPrefix: true,
                 configColumns: columns,

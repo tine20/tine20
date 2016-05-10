@@ -91,7 +91,7 @@ Tine.Timetracker.DurationField = Ext.extend(Ext.form.Field,  {
             /*
                 new Ext.ux.SliderTip({
                     getText: function(slider){
-                        return String.format(_('{0}'),  slider.getValue()/10).replace(/\ /, '&nbsp;');
+                        return String.format(i18n._('{0}'),  slider.getValue()/10).replace(/\ /, '&nbsp;');
                     }
                 })
             */

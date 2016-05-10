@@ -158,11 +158,11 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             },
             setValue: function(value) {
                 if (this.filter.get('operator') == 'specialNode' || this.filter.get('operator') == 'personalNode' ) {
-                    var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
+                    var operatorText = this.filter.data.operator === 'personalNode' ? i18n._('is personal of') : i18n._('is equal to');
                     
                     // use equals for node 'My containers'
                     if (value.path && value.path === Tine.Tinebase.container.getMyNodePath()) {
-                        operatorText = _('is equal to')
+                        operatorText = i18n._('is equal to')
                     }
                     this.filter.formFields.operator.setRawValue(operatorText);
                 }
@@ -268,7 +268,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
                 sortable: false
             },
             columns:  [
-                {id: 'name', header: String.format(_('Selected {0}'), this.containersName), dataIndex: 'name'}
+                {id: 'name', header: String.format(i18n._('Selected {0}'), this.containersName), dataIndex: 'name'}
             ]
         });
     },

@@ -266,8 +266,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.detailsToggleBtn = new Ext.Button({
             style: {'margin-top': '2px'},
             enableToggle: true,
-            text: _('show details'),
-            tooltip: _('Always show advanced filters'),
+            text: i18n._('show details'),
+            tooltip: i18n._('Always show advanced filters'),
             scope: this,
             handler: this.onDetailsToggle,
             stateful: stateful,
@@ -277,7 +277,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             },
             applyState: function(state) {
                 if (state.detailsButtonPressed) {
-                    this.setText(_('hide details'));
+                    this.setText(i18n._('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
             },
@@ -295,8 +295,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         this.advancedSearchButton = new Ext.Button({
             enableToggle: true,
             pressed: Tine.Tinebase.registry.get('preferences').get('advancedSearch') == 1,
-            text: _('Advanced search'),
-            tooltip: _('Search in related records as well.'),
+            text: i18n._('Advanced search'),
+            tooltip: i18n._('Search in related records as well.'),
             scope: this,
             handler: this.onAdvancedSearchToggle,
             hidden: !this.filterToolbarConfig.app.enableAdvancedSearch,
@@ -343,7 +343,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        btn.setText(btn.pressed ? _('hide details') : _('show details'));
+        btn.setText(btn.pressed ? i18n._('hide details') : i18n._('show details'));
         this[btn.pressed ? 'show' : 'hide']();
         this.quickFilter.setDisabled(btn.pressed);
         this.manageCriteriaText();
@@ -451,7 +451,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         moreCriterias = this.hidden ? moreCriterias : false;
         
         if (this.criteriaText && this.criteriaText.rendered) {
-            this.criteriaText.update(moreCriterias ? _(this.moreFiltersActiveText) : '');
+            this.criteriaText.update(moreCriterias ? i18n._(this.moreFiltersActiveText) : '');
         }
     },
     
@@ -559,7 +559,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         if (! alternateCriterias) {
             // reset criterias
 //            this.criteriaCount = 0;
-//            this.activeFilterPanel.setTitle(String.format(_('Criteria {0}'), ++this.criteriaCount));
+//            this.activeFilterPanel.setTitle(String.format(i18n._('Criteria {0}'), ++this.criteriaCount));
             this.activeFilterPanel.setTitle(this.activeFilterPanel.generateTitle());
             for (var id in this.filterPanels) {
                 if (this.filterPanels.hasOwnProperty(id)) {

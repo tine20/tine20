@@ -32,7 +32,7 @@ Tine.Tinebase.LicenseScreen = Ext.extend(Ext.Window, {
      */
     initComponent: function() {
 
-        this.title = _('License');
+        this.title = i18n._('License');
         
         this.items = {
             layout: 'fit',
@@ -48,7 +48,7 @@ Tine.Tinebase.LicenseScreen = Ext.extend(Ext.Window, {
                 }
             },
             buttons: [{
-                text: _('Ok'),
+                text: i18n._('Ok'),
                 iconCls: 'action_saveAndClose',
                 handler: this.close,
                 scope: this

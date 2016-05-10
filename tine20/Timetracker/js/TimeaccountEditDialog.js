@@ -269,36 +269,36 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book Own'),
                     dataIndex: 'bookOwnGrant',
-                    tooltip: _('The grant to add Timesheets to this Timeaccount'),
+                    tooltip: i18n._('The grant to add Timesheets to this Timeaccount'),
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('View All'),
-                    tooltip: _('The grant to view Timesheets of other users'),
+                    tooltip: i18n._('The grant to view Timesheets of other users'),
                     dataIndex: 'viewAllGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book All'),
-                    tooltip: _('The grant to add Timesheets for other users'),
+                    tooltip: i18n._('The grant to add Timesheets for other users'),
                     dataIndex: 'bookAllGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header:this.app.i18n. _('Manage Clearing'),
-                    tooltip: _('The grant to manage clearing of Timesheets'),
+                    header:this.app.i18n. i18n._('Manage Clearing'),
+                    tooltip: i18n._('The grant to manage clearing of Timesheets'),
                     dataIndex: 'manageBillableGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
-                    header:this.app.i18n. _('Export'),
-                    tooltip: _('The grant to export Timesheets of Timeaccount'),
+                    header:this.app.i18n. i18n._('Export'),
+                    tooltip: i18n._('The grant to export Timesheets of Timeaccount'),
                     dataIndex: 'exportGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Manage All'),
-                    tooltip: _('Includes all other grants'),
+                    tooltip: i18n._('Includes all other grants'),
                     dataIndex: 'adminGrant',
                     width: 55
                 })

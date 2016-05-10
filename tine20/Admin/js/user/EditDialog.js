@@ -282,7 +282,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return new Ext.grid.ColumnModel({
                     defaults: { sortable: true },
                     columns:  [
-                        {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
+                        {id: 'name', header: i18n._('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
                             return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + self.app.i18n.gettext('Primary group') + ')<span>') : record.data.name;
                         }}
                     ]
@@ -318,7 +318,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             autoExpandColumn: 'name',
             store: this.storeRoles,
             recordClass: Tine.Tinebase.Model.Role,
-            columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
+            columns: [{id: 'name', header: i18n.gettext('Name'), sortable: true, dataIndex: 'name'}],
             initActionsAndToolbars: function () {
                 // for now removed abillity to edit role membership
 //                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
@@ -733,14 +733,14 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     value: this.app.i18n.gettext('Passwords do not match!')
                 }],
                 buttons: [{
-                    text: _('Cancel'),
+                    text: i18n._('Cancel'),
                     iconCls: 'action_cancel',
                     scope: this,
                     handler: function () {
                         this.passwordConfirmWindow.hide();
                     }
                 }, {
-                    text: _('Ok'),
+                    text: i18n._('Ok'),
                     formBind: true,
                     iconCls: 'action_saveAndClose',
                     scope: this,

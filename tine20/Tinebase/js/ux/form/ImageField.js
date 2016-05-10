@@ -73,9 +73,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             });
         }
         
-        this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: _('Loading'), msgCls: 'x-mask-loading'});
+        this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
         this.textCt.setSize(this.width, this.height);
-        var clickToEditText = _('Click to edit');
+        var clickToEditText = i18n._('Click to edit');
         var tm = Ext.util.TextMetrics.createInstance(this.textCt);
         tm.setFixedWidth(this.width);
         this.textCt.applyStyles({
@@ -143,7 +143,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.loadMask.hide();
         }, this);
         img.on('error', function () {
-            Ext.MessageBox.alert(_('Image Failed'), _('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
             this.loadMask.hide();
         }, this);
     },
@@ -165,7 +165,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onFileSelect: function (fileSelector) {
         if (! fileSelector.isImage()) {
-            Ext.MessageBox.alert(_('Not An Image'), _('Please select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(i18n._('Not An Image'), i18n._('Please select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         
@@ -208,7 +208,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.uploader.un('uploadcomplete', this.onUploadComplete, this);
         this.uploader.un('uploadfailure', this.onUploadFail, this);
         
-        Ext.MessageBox.alert(_('Upload Failed'), _('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
     },
     /**
      * executed on image contextmenu
@@ -221,7 +221,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }
         this.browsePlugin.hideLayer();
         var upload = new Ext.menu.Item({
-            text: _('Change Image'),
+            text: i18n._('Change Image'),
             iconCls: 'action_uploadImage',
             handler: this.onFileSelect,
             scope: this,
@@ -229,7 +229,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         });
         this.ctxMenu = new Ext.menu.Menu({
             items: [upload, {
-                text: _('Crop Image'),
+                text: i18n._('Crop Image'),
                 iconCls: 'action_cropImage',
                 scope: this,
                 disabled: true, 
@@ -247,13 +247,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     var win = Tine.WindowFactory.getWindow({
                         width: 320,
                         height: 320,
-                        title: _('Crop Image'),
+                        title: i18n._('Crop Image'),
                         layout: 'fit',
                         items: dlg
                     });
                 }
             }, {
-                text: _('Delete Image'),
+                text: i18n._('Delete Image'),
                 iconCls: 'action_delete',
                 disabled: this.value === this.defaultImage,
                 scope: this,
@@ -262,7 +262,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                 }
                 
             }, {
-                text: _('Show Original Image'),
+                text: i18n._('Show Original Image'),
                 iconCls: 'action_originalImage',
                 disabled: this.value === this.defaultImage,
                 scope: this,

@@ -314,7 +314,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
     
     return [
-        {label: _('Quick Search'), field: 'query', operators: ['contains']},
+        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Summary'), field: 'summary'},
         {label: app.i18n._('Location'), field: 'location'},
         {label: app.i18n._('Description'), field: 'description'},
@@ -360,14 +360,14 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', '
     foreignRecordClass: 'Calendar.Event',
     linkType: 'foreignId', 
     filterName: 'ContactAttendeeFilter',
-    // _('Event (as attendee)')
+    // i18n._('Event (as attendee)')
     label: 'Event (as attendee)'
 });
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
     foreignRecordClass: 'Calendar.Event',
     linkType: 'foreignId', 
     filterName: 'ContactOrganizerFilter',
-    // _('Event (as organizer)')
+    // i18n._('Event (as organizer)')
     label: 'Event (as organizer)'
 });
 
@@ -377,7 +377,7 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', '
 //    foreignRecordClass: 'Calendar.Event',
 //    linkType: 'foreignId', 
 //    filterName: 'ContactAttendeeFilter',
-//    // _('Event attendee')
+//    // i18n._('Event attendee')
 //    label: 'Event attendee'
 //});
 

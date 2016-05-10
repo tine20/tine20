@@ -41,7 +41,7 @@ Tine.Sales.SupplierGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbarItems: function() {
         this.actions_export = new Ext.Action({
-            // _('Export Suppliers')
+            // i18n._('Export Suppliers')
             text: this.app.i18n._hidden('Export Suppliers'),
             iconCls: 'action_export',
             scope: this,

@@ -32,7 +32,7 @@ Tine.widgets.tree.ContextMenu = {
         /****************** create ITEMS array ****************/
               
         this.action_add = new Ext.Action({
-            text: String.format(_('Add {0}'), this.config.nodeName),
+            text: String.format(i18n._('Add {0}'), this.config.nodeName),
             iconCls: 'action_add',
             handler: this.addNode,
             requiredGrant: 'addGrant',
@@ -40,7 +40,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_rename = new Ext.Action({
-            text: String.format(_('Rename {0}'), this.config.nodeName),
+            text: String.format(i18n._('Rename {0}'), this.config.nodeName),
             iconCls: 'action_rename',
             handler: this.renameNode,
             scope: this.config,
@@ -49,7 +49,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_delete = new Ext.Action({
-            text: String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.config.nodeName),
+            text: String.format(i18n.ngettext('Delete {0}', 'Delete {0}', 1), this.config.nodeName),
             iconCls: 'action_delete',
             handler: this.deleteNode,
             scope: this.config,
@@ -58,7 +58,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_grants = new Ext.Action({
-            text: String.format(_('Manage {0} Permissions'), this.config.nodeName),
+            text: String.format(i18n._('Manage {0} Permissions'), this.config.nodeName),
             iconCls: 'action_managePermissions',
             handler: this.managePermissions,
             requiredGrant: 'editGrant',
@@ -66,7 +66,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_properties = new Ext.Action({
-            text: String.format(_('{0} Properties'), this.config.nodeName),
+            text: String.format(i18n._('{0} Properties'), this.config.nodeName),
             iconCls: 'action_manageProperties',
             handler: this.manageProperties,
             requiredGrant: 'readGrant',
@@ -75,7 +75,7 @@ Tine.widgets.tree.ContextMenu = {
         
         // TODO is edit grant required?
         this.action_changecolor = new Ext.Action({
-            text: String.format(_('Set {0} color'), this.config.nodeName),
+            text: String.format(i18n._('Set {0} color'), this.config.nodeName),
             iconCls: 'action_changecolor',
 //            requiredGrant: 'editGrant',
             allowMultiple: true,
@@ -89,7 +89,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_reload = new Ext.Action({
-            text: String.format(_('Reload {0}'), this.config.nodeName),
+            text: String.format(i18n._('Reload {0}'), this.config.nodeName),
             iconCls: 'x-tbar-loading',
             handler: this.reloadNode,
             scope: this.config
@@ -97,7 +97,7 @@ Tine.widgets.tree.ContextMenu = {
         
         // TODO move the next 5 to Filemanager!
         this.action_resume = new Ext.Action({
-            text: String.format(_('Resume upload'), config.nodeName),
+            text: String.format(i18n._('Resume upload'), config.nodeName),
             iconCls: 'action_resume',
             handler: this.onResume,
             scope: this.config,
@@ -106,14 +106,14 @@ Tine.widgets.tree.ContextMenu = {
         this.action_editFile = new Ext.Action({
             requiredGrant: 'editGrant',
             allowMultiple: false,
-            text: _('Edit Properties'),
+            text: i18n._('Edit Properties'),
             handler: this.onEditFile,
             iconCls: 'action_edit_file',
             actionType: 'edit',
             scope: this
         });
         this.action_pause = new Ext.Action({
-            text: String.format(_('Pause upload'), config.nodeName),
+            text: String.format(i18n._('Pause upload'), config.nodeName),
             iconCls: 'action_pause',
             handler: this.onPause,
             actionUpdater: this.isPauseEnabled,
@@ -121,7 +121,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_download = new Ext.Action({
-            text: String.format(_('Download'), config.nodeName),
+            text: String.format(i18n._('Download'), config.nodeName),
             iconCls: 'action_filemanager_save_all',
             handler: this.downloadFile,
             actionUpdater: this.isDownloadEnabled,
@@ -129,7 +129,7 @@ Tine.widgets.tree.ContextMenu = {
         });
         
         this.action_publish = new Ext.Action({
-            text: String.format(_('Publish'), config.nodeName),
+            text: String.format(i18n._('Publish'), config.nodeName),
             iconCls: 'action_publish',
             handler: this.publishFile,
             actionUpdater: true,
@@ -193,13 +193,13 @@ Tine.widgets.tree.ContextMenu = {
      * create tree node
      */
     addNode: function() {
-        Ext.MessageBox.prompt(String.format(_('New {0}'), this.nodeName), String.format(_('Please enter the name of the new {0}:'), this.nodeName), function(_btn, _text) {
+        Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.nodeName), String.format(i18n._('Please enter the name of the new {0}:'), this.nodeName), function(_btn, _text) {
             if( this.scope.ctxNode && _btn == 'ok') {
                 if (! _text) {
-                    Ext.Msg.alert(String.format(_('No {0} added'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
+                    Ext.Msg.alert(String.format(i18n._('No {0} added'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
                     return;
                 }
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), this.nodeName));
+                Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), this.nodeName));
                 var parentNode = this.scope.ctxNode;
                 
                 var params = {
@@ -279,14 +279,14 @@ Tine.widgets.tree.ContextMenu = {
     
             var node = this.scope.ctxNode;
             Ext.MessageBox.show({
-                title: String.format(_('Rename {0}'), this.nodeName),
-                msg: String.format(_('Please enter the new name of the {0}:'), this.nodeName),
+                title: String.format(i18n._('Rename {0}'), this.nodeName),
+                msg: String.format(i18n._('Please enter the new name of the {0}:'), this.nodeName),
                 buttons: Ext.MessageBox.OKCANCEL,
                 value: node.attributes.longName || node.text,
                 fn: function(_btn, _text){
                     if (_btn == 'ok') {
                         if (! _text) {
-                            Ext.Msg.alert(String.format(_('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
+                            Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
                         
@@ -360,7 +360,7 @@ Tine.widgets.tree.ContextMenu = {
             Tine.log.debug('Tine.widgets.tree.ContextMenu::deleteNode()');
             Tine.log.debug(node);
             
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
+            Ext.MessageBox.confirm(i18n._('Confirm'), String.format(i18n._('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
                 if ( _btn == 'yes') {
                     
                     var params = {
@@ -471,7 +471,7 @@ Tine.widgets.tree.ContextMenu = {
             }
             
             var window = Tine.widgets.container.GrantsDialog.openWindow({
-                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name)),
+                title: String.format(i18n._('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(grantsContainer.name)),
                 containerName: this.nodeName,
                 grantContainer: grantsContainer,
                 app: this.scope.app.appName
@@ -498,7 +498,7 @@ Tine.widgets.tree.ContextMenu = {
             ctxNodeName = grantsContainer.name ? grantsContainer.name : grantsContainer;
             
             var window = Tine.widgets.container.PropertiesDialog.openWindow({
-                title: String.format(_('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(ctxNodeName)),
+                title: String.format(i18n._('Properties for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(ctxNodeName)),
                 containerName: this.nodeName,
                 // TODO fix this in Filemanager! sub-nodes do not have a container...
                 grantContainer: grantsContainer,

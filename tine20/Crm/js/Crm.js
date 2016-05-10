@@ -21,7 +21,7 @@ Ext.ns('Tine.Crm');
 Tine.Crm.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Lead')
+     * auto hook text i18n._('New Lead')
      */
     addButtonText: 'New Lead',
     

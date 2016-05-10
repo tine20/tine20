@@ -29,7 +29,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  * register additional action for genericpickergridpanel
  */
 Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
-    text: 'Save locally',   // _('Save locally')
+    text: 'Save locally',   // i18n._('Save locally')
     iconCls: 'action_filemanager_save_all',
     requiredGrant: 'readGrant',
     actionType: 'download',

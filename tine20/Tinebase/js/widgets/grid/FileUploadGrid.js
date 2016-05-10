@@ -65,7 +65,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initComponent: function () {
-        this.i18nFileString = this.i18nFileString ? this.i18nFileString : _('File');
+        this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
         
         this.record = this.record || null;
         this.id = this.id + Ext.id();
@@ -118,8 +118,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         }
         
         Ext.MessageBox.alert(
-            _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + parseInt(dataSize, 10) / 1048576 + ' MB'
+            i18n._('Upload Failed'),
+            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + parseInt(dataSize, 10) / 1048576 + ' MB'
         ).setIcon(Ext.MessageBox.ERROR);
         
         this.getStore().remove(fileRecord);
@@ -183,7 +183,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.action_add = new Ext.Action(this.getAddAction());
 
         this.action_remove = new Ext.Action({
-            text: String.format(_('Remove {0}'), this.i18nFileString),
+            text: String.format(i18n._('Remove {0}'), this.i18nFileString),
             iconCls: 'action_remove',
             scope: this,
             disabled: true,
@@ -191,7 +191,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         
         this.action_pause = new Ext.Action({
-            text: _('Pause upload'),
+            text: i18n._('Pause upload'),
             iconCls: 'action_pause',
             scope: this,
             handler: this.onPause,
@@ -199,7 +199,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         
         this.action_resume = new Ext.Action({
-            text: _('Resume upload'),
+            text: i18n._('Resume upload'),
             iconCls: 'action_resume',
             scope: this,
             handler: this.onResume,
@@ -317,7 +317,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     getAddAction: function () {
         return {
-            text: String.format(_('Add {0}'), this.i18nFileString),
+            text: String.format(i18n._('Add {0}'), this.i18nFileString),
             iconCls: 'action_add',
             scope: this,
             plugins: [{
@@ -359,21 +359,21 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             id: 'name',
             dataIndex: 'name',
             width: 300,
-            header: _('name'),
+            header: i18n._('name'),
             renderer: Ext.ux.PercentRendererWithName
         }, {
             resizable: true,
             id: 'size',
             dataIndex: 'size',
             width: 70,
-            header: _('size'),
+            header: i18n._('size'),
             renderer: Ext.util.Format.fileSize
         }, {
             resizable: true,
             id: 'type',
             dataIndex: 'type',
             width: 70,
-            header: _('type')
+            header: i18n._('type')
             // TODO show type icon?
             //renderer: Ext.util.Format.fileSize
         }];

@@ -26,7 +26,7 @@ Ext.onReady(function(){
 Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Event')
+     * auto hook text i18n._('New Event')
      */
     addButtonText: 'New Event',
     

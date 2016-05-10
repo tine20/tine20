@@ -23,7 +23,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * @cfg defaut text for new attendee combo
-     * _('Click here to invite another attender...')
+     * i18n._('Click here to invite another attender...')
      */
     addNewAttendeeText: 'Click here to invite another attender...',
     
@@ -149,7 +149,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             width: 200,
             sortable: false,
             hidden: this.showNamesOnly || true,
-            header: Tine.Tinebase.translation._hidden('Saved in'),
+            header: i18n._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
             // disable for the moment, as updating calendarSelectWidget is not working in both directions

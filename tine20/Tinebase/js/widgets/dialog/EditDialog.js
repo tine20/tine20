@@ -407,7 +407,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             useModel,
             appName     = Ext.isString(application) ? application : application.get('name'),
             app         = Tine.Tinebase.appMgr.get(appName),
-            trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation,
+            trans       = app && app.i18n ? app.i18n : i18n,
             appModels   = Tine[appName].Model;
 
         if (appModels) {
@@ -436,7 +436,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: this.editGrant,
-            text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : _('Ok'),
+            text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : i18n._('Ok'),
             minWidth: 70,
             ref: '../btnSaveAndClose',
             scope: this,
@@ -447,7 +447,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     
         this.action_applyChanges = new Ext.Action({
             requiredGrant: this.editGrant,
-            text: _('Apply'),
+            text: i18n._('Apply'),
             minWidth: 70,
             ref: '../btnApplyChanges',
             scope: this,
@@ -456,7 +456,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_cancel = new Ext.Action({
-            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) : _('Cancel'),
+            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) : i18n._('Cancel'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
@@ -465,7 +465,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         this.action_delete = new Ext.Action({
             requiredGrant: 'deleteGrant',
-            text: _('delete'),
+            text: i18n._('delete'),
             minWidth: 70,
             scope: this,
             handler: this.onDelete,
@@ -504,7 +504,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.showContainerSelector) {
             this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector-' + Ext.id(),
-                fieldLabel: _('Saved in'),
+                fieldLabel: i18n._('Saved in'),
                 width: 300,
                 listWidth: 300,
                 name: this.recordClass.getMeta('containerProperty'),
@@ -532,7 +532,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.on('render', function() { this.getForm().add(this.containerSelectCombo); }, this);
             
             this.fbar = [
-                _('Saved in'),
+                i18n._('Saved in'),
                 this.containerSelectCombo
             ].concat(this.fbar);
         }
@@ -671,12 +671,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         
         if (this.copyRecord) {
             this.doCopyRecord();
-            this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
+            this.window.setTitle(String.format(i18n._('Copy {0}'), this.i18nRecordName));
         } else {
             if (! this.record.id) {
-                this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
+                this.window.setTitle(String.format(i18n._('Add New {0}'), this.i18nRecordName));
             } else {
-                this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
+                this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
             }
         }
         
@@ -747,7 +747,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         ]);
         
         if (this.loadMask !== false && this.i18nRecordName) {
-            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
+            this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
             this.loadMask.show();
         }
     },
@@ -895,7 +895,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }, function (message) {
             me.saving = false;
             me.loadMask.hide();
-            Ext.MessageBox.alert(_('Errors'), message);
+            Ext.MessageBox.alert(i18n._('Errors'), message);
         });
     },
 
@@ -929,16 +929,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @return {String}
      */
     getValidationErrorMessage: function() {
-        return _('Please fix the errors noted.');
+        return i18n._('Please fix the errors noted.');
     },
     
     /**
      * generic delete handler
      */
     onDelete: function(btn, e) {
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete this {0}?'), this.i18nRecordName), function(_button) {
+        Ext.MessageBox.confirm(i18n._('Confirm'), String.format(i18n._('Do you really want to delete this {0}?'), this.i18nRecordName), function(_button) {
             if(btn == 'yes') {
-                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Deleting {0}'), this.i18nRecordName)});
+                var deleteMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Deleting {0}'), this.i18nRecordName)});
                 deleteMask.show();
                 
                 this.recordProxy.deleteRecords(this.record, {
@@ -948,7 +948,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         this.window.close();
                     },
                     failure: function () {
-                        Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), this.i18nRecordName));
+                        Ext.MessageBox.alert(i18n._('Failed'), String.format(i18n._('Could not delete {0}.'), this.i18nRecordName));
                         Ext.MessageBox.hide();
                     }
                 });
@@ -1003,7 +1003,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }, this);
         
         // place in viewport
-        this.window.setTitle(String.format(_('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
+        this.window.setTitle(String.format(i18n._('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
         var mainCardPanel = this.findParentBy(function(p) {return p.isWindowMainCardPanel });
         mainCardPanel.add(resolveGridPanel);
         mainCardPanel.layout.setActiveItem(resolveGridPanel.id);

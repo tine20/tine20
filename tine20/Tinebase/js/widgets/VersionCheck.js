@@ -48,18 +48,18 @@ Tine.widgets.VersionCheck = function() {
             var versionString = availableVersion.get('codeName') + ' ' + availableVersion.get('packageString');
             if (availableVersion.get('critical') == true) {
                 Ext.MessageBox.show({
-                    title: _('New version of Tine 2.0 available'), 
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
-                                 _("It's a critical update and must be installed as soon as possible!"),
+                    title: i18n._('New version of Tine 2.0 available'),
+                    msg: String.format(i18n._('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
+                                 i18n._("It's a critical update and must be installed as soon as possible!"),
                     width: 500,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR
                 });
             } else {
                 Ext.MessageBox.show({
-                    title: _('New version of Tine 2.0 available'),
-                    msg: String.format(_('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
-                                 _('Please consider updating!'),
+                    title: i18n._('New version of Tine 2.0 available'),
+                    msg: String.format(i18n._('Version "{0}" of Tine 2.0 is available.'), versionString) + "\n" +
+                                 i18n._('Please consider updating!'),
                     width: 400,
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.INFO

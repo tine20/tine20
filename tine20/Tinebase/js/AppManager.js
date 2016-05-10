@@ -205,8 +205,8 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 // no global exception concept yet...
                 //throw Ext.Error('no apps enabled', 620);
                 Ext.MessageBox.show({
-                    title: _('Missing Applications'), 
-                    msg: _('There are no applications enabled for you. Please contact your administrator.'),
+                    title: i18n._('Missing Applications'),
+                    msg: i18n._('There are no applications enabled for you. Please contact your administrator.'),
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.WARNING
                 });

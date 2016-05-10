@@ -125,7 +125,7 @@ Tine.Sipgate.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordUpdate();
             this.recordProxy.validateAccount(this.record, this.onValidateSuccess, this.onRequestFailed, this);
         } else {
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            Ext.MessageBox.alert(i18n._('Errors'), this.getValidationErrorMessage());
         }
         
     },
@@ -338,7 +338,7 @@ Tine.Sipgate.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         if(!calledFromOnValidate && isValid) {
             if(!this.getForm().findField('is_valid').getValue()) {
-                Ext.MessageBox.alert(_('Errors'), this.app.i18n._('Please validate the account settings before saving!'));
+                Ext.MessageBox.alert(i18n._('Errors'), this.app.i18n._('Please validate the account settings before saving!'));
                 isValid = false;
             }
         }

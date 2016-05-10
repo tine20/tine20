@@ -80,7 +80,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
-                    text: _('Login')
+                    text: i18n._('Login')
                 }, {
                     xtype: 'tinelangchooser',
                     name: 'locale',
@@ -90,7 +90,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     xtype: 'textfield',
                     tabindex: 2,
                     width: 170,
-                    fieldLabel: _('Username'),
+                    fieldLabel: i18n._('Username'),
                     id: 'username',
                     name: 'username',
                     allowBlank: modSsl ? false : true,
@@ -108,7 +108,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     tabindex: 3,
                     width: 170,
                     inputType: 'password',
-                    fieldLabel: _('Password'),
+                    fieldLabel: i18n._('Password'),
                     id: 'password',
                     name: 'password',
                     //allowBlank: false,
@@ -125,7 +125,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         align: 'center',
                         marginTop: '10px'
                     },
-                    value: _('Certificate detected. Please, press Login button to proceed.'),
+                    value: i18n._('Certificate detected. Please, press Login button to proceed.'),
                     hidden: modSsl ? false : true
                 }, {
                     xtype: 'container',
@@ -156,7 +156,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 buttons: [{
                     xtype: 'button',
                     width: 120,
-                    text: _('Login'),
+                    text: i18n._('Login'),
                     scope: this,
                     handler: this.onLoginPress
                 }]
@@ -182,7 +182,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 packageString: 'unknown'
             };
             
-            var versionHtml = '<label class="tb-version-label">' + _('Version') + ':</label> ' +
+            var versionHtml = '<label class="tb-version-label">' + i18n._('Version') + ':</label> ' +
                               '<label class="tb-version-codename">' + version.codeName + '</label> ' +
                               '<label class="tb-version-packagestring">(' + version.packageString + ')</label>';
             this.versionPanel = new Ext.Container({
@@ -214,28 +214,28 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 defaults: {xtype: 'label'},
                 items: [{
                     cls: 'tb-login-big-label',
-                    html: String.format(_('{0} is made for you'), Tine.title)
+                    html: String.format(i18n._('{0} is made for you'), Tine.title)
                 }, {
-                    html: '<p>' + String.format(_('{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.'), Tine.title) + '</p>'
+                    html: '<p>' + String.format(i18n._('{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.'), Tine.title) + '</p>'
                 }, {
                     cls: 'tb-login-big-label-spacer',
                     html: '&nbsp;'
                 }, {
                     html: '<ul>' + 
-                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(_('{0} Homepage'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(_('{0} Forum'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(i18n._('{0} Forum'), Tine.title) + '</a></li>' +
                     '</ul><br/>'
                 }, {
                     cls: 'tb-login-big-label',
-                    html: _('Translations')
+                    html: i18n._('Translations')
                 }, {
-                    html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(_('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
+                    html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(i18n._('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
                 }, {
-                    html: '<p>' + String.format(_('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
+                    html: '<p>' + String.format(i18n._('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
                 }, {
                     html: '<br/><ul>' +
-                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + String.format(_('{0} Translation Howto'), Tine.title) + '</a></li>' +
-                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + _('Detailed Language Statistics') + '</a></li>'
+                        '<li><a target="_blank" href="http://www.tine20.org/wiki/index.php/Contributors/Howtos/Translations" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
+                        '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
                     + '</ul>'
                 }]
             });
@@ -255,7 +255,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 defaults: {xtype: 'label'},
                 items: [{
                     html: "<div class='tine-viewport-poweredby' style='position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;'>" + 
-                        _("Powered by:") + " <a target='_blank' href='" + Tine.weburl + "' title='" + _("online open source groupware and crm") + "'>" + Tine.title + "</a>"
+                        i18n._("Powered by:") + " <a target='_blank' href='" + Tine.weburl + "' title='" + i18n._("online open source groupware and crm") + "'>" + Tine.title + "</a>"
                 }]
             });
         }
@@ -305,20 +305,20 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         if (Ext.isDate(enddate) && enddate.getTime() > new Date().getTime() && 
                             Tine.clientVersion.packageString.indexOf(version) === 0) {
                             Tine.log.debug('Show survey panel');
-                            survey.data.lang_duration = String.format(_('about {0} minutes'), survey.data.duration);
+                            survey.data.lang_duration = String.format(i18n._('about {0} minutes'), survey.data.duration);
                             survey.data.link = 'https://versioncheck.tine20.net/surveyCheck/surveyCheck.php?participate';
                             
                             this.surveyPanel.add([{
                                 cls: 'tb-login-big-label',
-                                html: _('Tine 2.0 needs your help')
+                                html: i18n._('Tine 2.0 needs your help')
                             }, {
-                                html: '<p>' + _('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
+                                html: '<p>' + i18n._('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
                             }, {
                                 html: this.getSurveyTemplate().apply(survey.data)
                             }, {
                                 xtype: 'button',
                                 width: 120,
-                                text: _('participate!'),
+                                text: i18n._('participate!'),
                                 handler: function () {
                                     window.open(survey.data.link);
                                 }
@@ -340,8 +340,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 '<p><b>{title}</b></p>',
                 '<p><a target="_blank" href="{link}" border="0">{subtitle}</a></p>',
                 '<br/>',
-                '<p>', _('Languages'), ': {langs}</p>',
-                '<p>', _('Duration'), ': {lang_duration}</p>',
+                '<p>', i18n._('Languages'), ': {langs}</p>',
+                '<p>', i18n._('Duration'), ': {lang_duration}</p>',
                 '<br/>').compile();
         }
         
@@ -382,22 +382,22 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             if (browserSupport == 'incompatible') {
                 items = [{
                     cls: 'tb-login-big-label',
-                    html: _('Browser incompatible')
+                    html: i18n._('Browser incompatible')
                 }, {
-                    html: '<p>' + _('Your browser is not supported by Tine 2.0.') + '<br/><br/></p>'
+                    html: '<p>' + i18n._('Your browser is not supported by Tine 2.0.') + '<br/><br/></p>'
                 }];
             } else if (browserSupport == 'unknown') {
                 items = [{
                     cls: 'tb-login-big-label',
-                    html: _('Browser incompatible?')
+                    html: i18n._('Browser incompatible?')
                 }, {
-                    html: '<p>' + _('You are using an unrecognized browser. This could result in unexpected behaviour.') + '<br/><br/></p>'
+                    html: '<p>' + i18n._('You are using an unrecognized browser. This could result in unexpected behaviour.') + '<br/><br/></p>'
                 }];
             }
             
             if (browserSupport != 'compatible') {
                 this.browserIncompatiblePanel.add(items.concat([{
-                    html: '<p>' + _('You might try one of these browsers:') + '<br/>'
+                    html: '<p>' + i18n._('You might try one of these browsers:') + '<br/>'
                         + '<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a><br/>'
                         + '<a href="http://www.mozilla.com/firefox/" target="_blank">Mozilla Firefox</a><br/>'
                         + '<a href="http://www.apple.com/safari/download/" target="_blank">Apple Safari</a><br/>'    
@@ -457,7 +457,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             values = form.getValues();
             
         if (form.isValid()) {
-            Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
+            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
 
             Ext.Ajax.request({
                 scope: this,
@@ -471,15 +471,15 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 success:function(response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
-                        Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.title), _('Please wait!'));
+                        Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
                         window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope, response);
                     } else {
                         var modSsl = Tine.Tinebase.registry.get('modSsl');
-                        var resultMsg = modSsl ? _('There was an error verifying your certificate!!!') :
-                            _('Your username and/or your password are wrong!!!');
+                        var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!!!') :
+                            i18n._('Your username and/or your password are wrong!!!');
                         Ext.MessageBox.show({
-                            title: _('Login failure'),
+                            title: i18n._('Login failure'),
                             msg: resultMsg,
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.ERROR,
@@ -497,7 +497,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }
             });
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
     
@@ -512,7 +512,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         
         this.originalTitle = window.document.title;
         var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-        window.document.title = Ext.util.Format.stripTags(Tine.title + postfix + ' - ' + _('Please enter your login data'));
+        window.document.title = Ext.util.Format.stripTags(Tine.title + postfix + ' - ' + i18n._('Please enter your login data'));
     },
     
     onResize: function () {
@@ -540,9 +540,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     renderSurveyPanel: function (survey) {
         var items = [{
             cls: 'tb-login-big-label',
-            html: _('Tine 2.0 needs your help')
+            html: i18n._('Tine 2.0 needs your help')
         }, {
-            html: '<p>' + _('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
+            html: '<p>' + i18n._('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
         }];
     }
 });
