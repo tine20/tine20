@@ -161,7 +161,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         // add user to primary group and set primary group
         Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
         
-        // set primary goup id
+        // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
         
 
