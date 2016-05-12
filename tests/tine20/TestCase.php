@@ -330,7 +330,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getEmailAddress()
     {
-        $testConfig = Zend_Registry::get('testConfig');
+        $testConfig = TestServer::getInstance()->getConfig();
         return ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
     }
     
