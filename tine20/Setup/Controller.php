@@ -1353,7 +1353,7 @@ class Setup_Controller
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
     
-            $minimumRequirements = array('Tinebase', 'Addressbook', 'Admin');
+            $minimumRequirements = array('Addressbook', 'Tinebase', 'Admin');
             
             foreach ($minimumRequirements as $requiredApp) {
                 if (!in_array($requiredApp, $_applications) && !$this->isInstalled($requiredApp)) {

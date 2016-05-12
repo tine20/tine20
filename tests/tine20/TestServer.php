@@ -70,6 +70,8 @@ class TestServer
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
         Zend_Session::$_unitTestEnabled = TRUE;
+
+        Tinebase_Core::set('frameworkInitialized', true);
     }
     
     /**

@@ -100,8 +100,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
-        
-        $this->_personas = Zend_Registry::get('personas');
+
+        if (Zend_Registry::isRegistered('personas')) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
         
         $this->_originalTestUser = Tinebase_Core::getUser();
     }
