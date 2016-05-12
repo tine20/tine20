@@ -119,11 +119,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $importDefinitions = $this->_getImportDefinitions();
+        $allCalendarResources = Calendar_Controller_Resource::getInstance()->getAll()->toArray();
         
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
             'defaultImportDefinition'   => $importDefinitions['default'],
-            'importDefinitions'         => $importDefinitions
+            'importDefinitions'         => $importDefinitions,
+            'calendarResources'         => $allCalendarResources
         );
         
         return $registryData;
