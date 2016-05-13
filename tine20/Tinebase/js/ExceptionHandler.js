@@ -143,7 +143,12 @@ Tine.Tinebase.ExceptionHandler = function() {
         
         Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception:');
         Tine.log.debug(exception);
-        
+
+        if (Tine.Tinebase.tineInit.isReloading) {
+            Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception handling skipped because Tine 2.0 is reloading');
+            return;
+        }
+
         // TODO find a generic way for this, some kind of registry for each app to register sensitive information
         var request = (exception.request && Ext.isString(exception.request)) ? Ext.util.JSON.decode(exception.request) : null;
         if (request && request.method === 'Felamimail.saveMessage') {
