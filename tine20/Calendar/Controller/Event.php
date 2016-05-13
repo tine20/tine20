@@ -587,6 +587,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             . ' Updating events (range: ' . $range . ') belonging to recur exception event ' . $exdate->getId());
         
         $baseEvent = $this->getRecurBaseEvent($exdate);
+        /** @var Tinebase_Record_Diff $diff */
         $diff = $oldExdate->diff($exdate);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -623,6 +624,41 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     . ' No upcoming occurrences found.');
             }
         }
+    }
+
+    protected function _applyDTStartToBaseEventRRULE($_dtstart, $_baseEvent)
+    {
+        /** @var Calendar_Model_Rrule $rrule */
+        /*$rrule = $_baseEvent->rrule;
+        if (! $rrule instanceof Calendar_Model_Rrule) {
+            $rrule = new Calendar_Model_Rrule($rrule);
+        }
+
+        switch($rrule->freq)
+        {
+            case Calendar_Model_Rrule::FREQ_DAILY
+        }
+
+        if ($rrule->freq == Calendar_Model_Rrule::FREQ_WEEKLY) {
+
+        }
+
+        if ($rrule->freq == Calendar_Model_Rrule::FREQ_MONTHLY) {
+            if (!empty($rrule->byday)) {
+
+            } elseif(!empty($rrule->bymonthday)) {
+
+            }
+        }
+
+        if ($rrule->freq == Calendar_Model_Rrule::FREQ_YEARLY) {
+            // bymonthday + bymonth
+        }
+
+        switch($rrule->byday)
+        {
+
+        }*/
     }
     
     /**
@@ -853,7 +889,36 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public function updateRecurSeries($_recurInstance, $_checkBusyConflicts = FALSE)
     {
         $baseEvent = $this->getRecurBaseEvent($_recurInstance);
-        
+
+        $originalDtStart = $_recurInstance->getOriginalDtStart();
+        $originalDtStart->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
+        $dtStart = $_recurInstance->dtstart;
+        if (! $dtStart instanceof Tinebase_DateTime) {
+            $dtStart = new Tinebase_DateTime($dtStart);
+        }
+        $dtStart->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
+        $dtEnd = $_recurInstance->dtEnd;
+        if (! $dtEnd instanceof Tinebase_DateTime) {
+            $dtEnd = new Tinebase_DateTime($dtEnd);
+        }
+        $dtEnd->setTimezone(Tinebase_DateTime::TIMEZONE_UTC);
+
+        if ($originalDtStart->compare($dtStart) !== 0 ||
+            (($orgDiff = $baseEvent->dtend->diff($baseEvent->dtstart)) &&
+                ($newDiff = $dtEnd->diff($dtStart)) &&
+                (
+                    $orgDiff->days !== $newDiff->days ||
+                    $orgDiff->h !== $newDiff->h ||
+                    $orgDiff->m !== $newDiff->m ||
+                    $orgDiff->s !== $newDiff->s
+                )
+            )) {
+            if (strpos($baseEvent->rrule->byday, ',') !== false ||
+                strpos($baseEvent->rrule->bymonthday, ',') !== false ) {
+                throw new Tinebase_Exception_UnexpectedValue('dont change complex stuff like that');
+            }
+        }
+
         // replace baseEvent with adopted instance
         $newBaseEvent = clone $_recurInstance;
         $newBaseEvent->setId($baseEvent->getId());
@@ -1417,6 +1482,116 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' touch base event of a persistent exception');
             $baseEvent = $this->getRecurBaseEvent($_record);
             $this->_touch($baseEvent, TRUE);
+        }
+
+        if (empty($_record->recurid) && ! empty($_record->rrule) && (string)$_record->rrule == (string)$_oldRecord->rrule && $_record->dtstart->compare($_oldRecord->dtstart, 'Y-m-d') !== 0) {
+            // we are in a base event & dtstart changed the date & the rrule was not changed
+            // if easy rrule, try to adapt
+            $rrule = $_record->rrule;
+            if (! $rrule instanceof Calendar_Model_Rrule) {
+                $rrule = new Calendar_Model_Rrule($rrule);
+            } else {
+                $rrule = clone $rrule;
+            }
+
+            switch($rrule->freq)
+            {
+                case Calendar_Model_Rrule::FREQ_WEEKLY:
+                    // only do simple bydays
+                    if (empty($rrule->byday) || !isset(Calendar_Model_Rrule::$WEEKDAY_MAP[$rrule->byday])) {
+                        break;
+                    }
+
+                    // check old dtstart matches byday, if not, we abort
+                    if (strtolower($_oldRecord->dtstart->format('D')) !== Calendar_Model_Rrule::$WEEKDAY_MAP[$rrule->byday]) {
+                        break;
+                    }
+
+                    $rrule->byday = Calendar_Model_Rrule::$WEEKDAY_MAP_REVERSE[strtolower($_record->dtstart->format('D'))];
+                    $_record->rrule = $rrule;
+                    break;
+
+                case Calendar_Model_Rrule::FREQ_MONTHLY:
+                    // if there is no day specification, nothing to do
+                    if (empty($rrule->byday) && empty($rrule->bymonthday)) {
+                        break;
+                    }
+                    // only do simple rules
+                    if (!empty($rrule->byday) && (strpos(',', $rrule->byday) !== false)) {
+                        break;
+                    }
+                    if (!empty($rrule->bymonthday) && strpos(',', $rrule->bymonthday) !== false) {
+                        break;
+                    }
+                    if (!empty($rrule->byday) && !empty($rrule->bymonthday)) {
+                        break;
+                    }
+
+                    if (!empty($rrule->byday)) {
+                        $bydayPrefix = intval($rrule->byday);
+                        $byday = substr($rrule->byday, -2);
+
+                        // if we dont have a quantifier we abort
+                        if ($bydayPrefix === 0) {
+                            break;
+                        }
+
+                        // check old dtstart matches byday, if not we abort
+                        if (strtolower($_oldRecord->dtstart->format('D')) !== Calendar_Model_Rrule::$WEEKDAY_MAP[$byday]) {
+                            break;
+                        }
+
+                        $dtstartJ = $_oldRecord->dtstart->format('j');
+                        // check old dtstart matches bydayPrefix, if not we abort
+                        if ($bydayPrefix === -1) {
+                            if ($_oldRecord->dtstart->format('t') - $dtstartJ > 6) {
+                                break;
+                            }
+                        } else {
+                            if ($dtstartJ - (($bydayPrefix-1)*7) > 6 || $dtstartJ - (($bydayPrefix-1)*7) < 1) {
+                                break;
+                            }
+                        }
+
+                        if ($_record->dtstart->format('j') > 28 || ($bydayPrefix === -1 && $_record->dtstart->format('t') - $_record->dtstart->format('j') < 7)) {
+                            // keep -1 => last X
+                            $prefix = '-1';
+                        } else {
+                            $prefix = floor(($_record->dtstart->format('j') - 1) / 7) + 1;
+                        }
+
+                        $rrule->byday = $prefix . Calendar_Model_Rrule::$WEEKDAY_MAP_REVERSE[strtolower($_record->dtstart->format('D'))];
+                        $_record->rrule = $rrule;
+
+                    } else {
+
+                        // check old dtstart matches bymonthday, if not we abort
+                        if ($_oldRecord->dtstart->format('j') != $rrule->bymonthday) {
+                            break;
+                        }
+
+                        $rrule->bymonthday = $_record->dtstart->format('j');
+                        $_record->rrule = $rrule;
+                    }
+
+                    break;
+
+                case Calendar_Model_Rrule::FREQ_YEARLY:
+                    // only do simple rules
+                    if (! empty($rrule->byday) || empty($rrule->bymonth) || empty($rrule->bymonthday) || strpos($rrule->bymonth, ',') !== false ||
+                        strpos($rrule->bymonthday, ',') !== false ||
+                        // check old dtstart matches the date
+                        $_oldRecord->dtstart->format('j') != $rrule->bymonthday || $_oldRecord->dtstart->format('n') != $rrule->bymonth
+                    ) {
+                        break;
+                    }
+
+                    $rrule->bymonthday = $_record->dtstart->format('j');
+                    $rrule->bymonth = $_record->dtstart->format('n');
+                    $_record->rrule = $rrule;
+
+                    break;
+            }
         }
     }
     
