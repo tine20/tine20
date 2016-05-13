@@ -443,7 +443,23 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             }
         }
     }
-    
+
+    /**
+     * add user ids to default user group
+     *
+     * @param array $userIds
+     */
+    protected function _addToUserDefaultGroup($userIds)
+    {
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Adding ' . print_r($userIds, TRUE) . ' to default group (id ' . $defaultGroup->getId() . ')');
+
+        foreach ($userIds as $id) {
+            $this->_groupController->addGroupMember($defaultGroup->getId(), $id);
+        }
+    }
+
     /**
     * import course members
     *
@@ -474,6 +490,7 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $groupMembers = $this->_groupController->getGroupMembers($course->group_id);
         $this->_manageAccessGroups($groupMembers, $course);
         $this->_addToStudentGroup($groupMembers);
+        $this->_addToUserDefaultGroup($groupMembers);
         
         return $result;
     }
