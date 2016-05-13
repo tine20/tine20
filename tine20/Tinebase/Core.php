@@ -1502,6 +1502,31 @@ class Tinebase_Core
         
         return $hostname;
     }
+
+    /**
+     * returns requested url part
+     *
+     * @return string
+     */
+    public static function getUrl($part)
+    {
+        $request = new Zend_Controller_Request_Http();
+        $pathname = $request->getBasePath(); //window.location.pathname.replace('index.php', '');
+        $hostname = $request->getHttpHost();//window.location.host;
+        $protocol = $request->getScheme();//window.location.protocol;
+
+        switch ($part) {
+            case 'path':
+                $url = $pathname;
+                break;
+            case 'full':
+            default:
+                $url = $protocol . '://' . $hostname . $pathname;
+                break;
+        }
+
+        return $url;
+    }
     
     /**
      * Singleton instance
