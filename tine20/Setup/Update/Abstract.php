@@ -193,12 +193,22 @@ class Setup_Update_Abstract
     public function renameTable($_oldTableName, $_newTableName)
     {
         $this->_backend->renameTable($_oldTableName, $_newTableName);
-        
+        $this->renameTableInAppTables($_oldTableName, $_newTableName);
+    }
+
+    /**
+     * @param $_oldTableName
+     * @param $_newTableName
+     * @return int
+     */
+    public function renameTableInAppTables($_oldTableName, $_newTableName)
+    {
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_oldTableName),
         );
         $result = $applicationsTables->update(array('name' => $_newTableName), $where);
+        return $result;
     }
     
     /**

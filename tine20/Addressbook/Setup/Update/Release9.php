@@ -124,10 +124,10 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
             </declaration>
         </table>
         ');
-        $this->_backend->createTable($table, 'Addressbook', 'addressbook_list_member_role');
+        $this->_backend->createTable($table, 'Addressbook', 'adb_list_m_role');
         $this->setApplicationVersion('Addressbook', '9.4');
     }
-    
+
     /**
      * update to 9.5
      *
@@ -143,7 +143,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
                 <notnull>false</notnull>
             </field>');
         $this->_backend->addCol('addressbook_lists', $declaration);
-        
+
         $this->setTableVersion('addressbook_lists', 4);
         $this->setApplicationVersion('Addressbook', '9.5');
     }
@@ -170,5 +170,21 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Addressbook', '9.6');
+    }
+
+    /**
+     * update to 9.7
+     *
+     * - re-run update_3 if table adb_list_m_role does not exist
+     *
+     * @see 0011848: Tine 2.0 update-script creates table adb_list_m_role but registers table with diffent name
+     * @return void
+     */
+    public function update_6()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Rename table "adb_list_m_role" in application_tables');
+        $this->renameTableInAppTables('addressbook_list_member_role', 'adb_list_m_role');
+        $this->setApplicationVersion('Addressbook', '9.7');
     }
 }
