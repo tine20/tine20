@@ -128,6 +128,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $defaults['container_id'] = $this->getDefaultContainer();
         
         $registryData = array(
+            'defaultContainer' => $defaults['container_id'],
             'leadtypes'     => array(
                 'results' => $settings[Crm_Model_Config::LEADTYPES],
                 'totalcount' => count($settings[Crm_Model_Config::LEADTYPES])
