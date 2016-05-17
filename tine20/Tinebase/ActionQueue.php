@@ -199,4 +199,14 @@
     {
         return call_user_func_array(array($this->_queue, $name), $arguments);
     }
+
+     /**
+      * returns the class name of the used queue implementation
+      *
+      * @return string
+      */
+    public function getBackendType()
+    {
+        return get_class($this->_queue);
+    }
 }
