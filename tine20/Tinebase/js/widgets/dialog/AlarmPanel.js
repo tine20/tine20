@@ -31,19 +31,19 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     
     
     initComponent: function() {
-        this.title = _('Alarms');
+        this.title = i18n._('Alarms');
         
         this.alarmOptions = [
-            ['0',       _('0 minutes before')],
-            ['5',       _('5 minutes before')],
-            ['15',      _('15 minutes before')],
-            ['30',      _('30 minutes before')],
-            ['60',      _('1 hour before')],
-            ['120',     _('2 hours before')],
-            ['720',     _('12 hours before')],
-            ['1440',    _('1 day before')],
-            ['2880',    _('2 days before')],
-            ['custom',  _('Custom Datetime')]
+            ['0',       i18n._('0 minutes before')],
+            ['5',       i18n._('5 minutes before')],
+            ['15',      i18n._('15 minutes before')],
+            ['30',      i18n._('30 minutes before')],
+            ['60',      i18n._('1 hour before')],
+            ['120',     i18n._('2 hours before')],
+            ['720',     i18n._('12 hours before')],
+            ['1440',    i18n._('1 day before')],
+            ['2880',    i18n._('2 days before')],
+            ['custom',  i18n._('Custom Datetime')]
         ];
         
         this.items = this.alarmGrid = new Tine.widgets.grid.QuickaddGridPanel({
@@ -55,7 +55,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
             onNewentry: this.onNewentry.createDelegate(this),
             cm: new Ext.grid.ColumnModel([{
                 id: 'minutes_before', 
-                header: _('Alarm Time'), 
+                header: i18n._('Alarm Time'),
                 dataIndex: 'minutes_before', 
                 width: 200, 
                 hideable: false, 
@@ -167,7 +167,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
         });
         
         if (! string ) {
-            string = String.format(_('{0} minutes before'), value);
+            string = String.format(i18n._('{0} minutes before'), value);
         }
         
         return string;

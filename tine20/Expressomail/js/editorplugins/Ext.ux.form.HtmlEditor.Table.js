@@ -41,7 +41,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
     init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('render', this.onRender, this);
-        this.tableBorderOptions = [['none', _('None')], ['1px solid #000', _('Solid Thin')], ['2px solid #000', _('Solid Thick')], ['1px dashed #000', _('Dashed')], ['1px dotted #000', _('Dotted')]];
+        this.tableBorderOptions = [['none', i18n._('None')], ['1px solid #000', i18n._('Solid Thin')], ['2px solid #000', i18n._('Solid Thick')], ['1px dashed #000', i18n._('Dashed')], ['1px dotted #000', i18n._('Dotted')]];
     },
     // private
     onRender: function(){
@@ -50,7 +50,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
             handler: function(){
                 if (!this.tableWindow){
                     this.tableWindow = new Ext.Window({
-                        title: _(this.langTitle),
+                        title: i18n._(this.langTitle),
                         closeAction: 'hide',
                         width: 235,
                         items: [{
@@ -65,19 +65,19 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                                 xtype: 'numberfield',
                                 allowBlank: false,
                                 allowDecimals: false,
-                                fieldLabel: _(this.langRows),
+                                fieldLabel: i18n._(this.langRows),
                                 name: 'row',
                                 width: 60
                             }, {
                                 xtype: 'numberfield',
                                 allowBlank: false,
                                 allowDecimals: false,
-                                fieldLabel: _(this.langColumns),
+                                fieldLabel: i18n._(this.langColumns),
                                 name: 'col',
                                 width: 60
                             }, {
                                 xtype: 'combo',
-                                fieldLabel: _(this.langBorder),
+                                fieldLabel: i18n._(this.langBorder),
                                 name: 'border',
                                 forceSelection: true,
                                 mode: 'local',
@@ -93,7 +93,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                                 anchor: '-15'
                             }, {
                             	xtype: 'checkbox',
-                            	fieldLabel: _(this.langCellLabel),
+                            	fieldLabel: i18n._(this.langCellLabel),
                             	checked: this.showCellLocationText,
                             	listeners: {
                             		check: function(){
@@ -103,7 +103,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                             	}
                             }, {
                             	xtype: 'checkbox',
-                            	fieldLabel: _(this.lang100PcWidth),
+                            	fieldLabel: i18n._(this.lang100PcWidth),
                             	checked: this.set100PcWidth,
                             	listeners: {
                             		check: function(){
@@ -114,7 +114,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                             }]
                         }],
                         buttons: [{
-                            text: _(this.langInsert),
+                            text: i18n._(this.langInsert),
                             handler: function(){
                                 var frm = this.tableWindow.getComponent('insert-table').getForm();
                                 if (frm.isValid()) {
@@ -152,7 +152,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                             },
                             scope: this
                         }, {
-                            text: _(this.langCancel),
+                            text: i18n._(this.langCancel),
                             handler: function(){
                                 this.tableWindow.hide();
                             },
@@ -167,9 +167,9 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
             },
             scope: this,
             tooltip: {
-                title: _(this.langTitle)
+                title: i18n._(this.langTitle)
             },
-            overflowText: _(this.langTitle)
+            overflowText: i18n._(this.langTitle)
         });
     }
 });

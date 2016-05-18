@@ -59,7 +59,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             this.exception.traceHTML = trace;
         }
         
-        this.title = _('Abnormal End');
+        this.title = i18n._('Abnormal End');
         this.items = this.getReportForm();
         
         Tine.Tinebase.ExceptionDialog.superclass.initComponent.call(this);
@@ -100,13 +100,13 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     initButtons: function () {
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogButtonsOrderStyle') === 'Windows') {
             this.reportButtons = [{
-                text: _('Send Report'),
+                text: i18n._('Send Report'),
                 iconCls: 'action_saveAndClose',
                 enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
                 scope: this,
                 handler: this.onSendReport
             }, {
-                text: _('Cancel'),
+                text: i18n._('Cancel'),
                 iconCls: 'action_cancel',
                 scope: this,
                 handler: function() {
@@ -116,14 +116,14 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
         }
         else {
             this.reportButtons = [{
-                text: _('Cancel'),
+                text: i18n._('Cancel'),
                 iconCls: 'action_cancel',
                 scope: this,
                 handler: function() {
                     this.close();
                 }
             }, {
-                text: _('Send Report'),
+                text: i18n._('Send Report'),
                 iconCls: 'action_saveAndClose',
                 enabled: Tine.Tinebase.common.hasRight('report_bugs', 'Tinebase'),
                 scope: this,
@@ -151,15 +151,15 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 xtype: 'panel',
                 border: false,
                 html: '<div class="tb-exceptiondialog-text">' + 
-                        '<p>' + _('An error occurred, the program ended abnormal.') + '</p>' +
-                        '<p>' + _('The last action you made was potentially not performed correctly.') + '</p>' +
-                        '<p>' + _('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' + 
+                        '<p>' + i18n._('An error occurred, the program ended abnormal.') + '</p>' +
+                        '<p>' + i18n._('The last action you made was potentially not performed correctly.') + '</p>' +
+                        '<p>' + i18n._('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' +
                     '</div>'
             }, {
                 id: 'tb-exceptiondialog-description',
                 height: 60,
                 xtype: 'textarea',
-                fieldLabel: _('Description'),
+                fieldLabel: i18n._('Description'),
                 name: 'description',
                 anchor: '95%',
                 readOnly: false
@@ -167,7 +167,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 xtype: 'fieldset',
                 id: 'tb-exceptiondialog-send-contact',
                 anchor: '95%',
-                title: _('Send Contact Information'),
+                title: i18n._('Send Contact Information'),
                 autoHeight: true,
                 checkboxToggle: true,
                 items: [{
@@ -184,7 +184,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                 layout: 'form',
                 collapsible: true,
                 collapsed: this.releaseMode,
-                title: _('Details:'),
+                title: i18n._('Details:'),
                 defaults: {
                     xtype: 'textfield',
                     readOnly: true,
@@ -207,7 +207,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      */
     onSendReport: function () {
         if (! this.nonInteractive) {
-            Ext.MessageBox.wait(_('Sending report...'), _('Please wait a moment'));
+            Ext.MessageBox.wait(i18n._('Sending report...'), i18n._('Please wait a moment'));
         }
         var baseUrl = Tine.bugreportUrl;
         var hash = this.generateHash();
@@ -279,8 +279,8 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      */
     showTransmissionCompleted: function () {
         Ext.MessageBox.show({
-            title: _('Transmission Completed'),
-            msg: _('Your report has been sent. Thanks for your contribution') + '<br /><b>' + _('Please restart your browser now!') + '</b>',
+            title: i18n._('Transmission Completed'),
+            msg: i18n._('Your report has been sent. Thanks for your contribution') + '<br /><b>' + i18n._('Please restart your browser now!') + '</b>',
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO
         });

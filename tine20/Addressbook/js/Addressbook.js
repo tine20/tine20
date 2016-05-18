@@ -19,7 +19,7 @@ Ext.ns('Tine.Addressbook');
 Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Contact')
+     * auto hook text i18n._('New Contact')
      */
     addButtonText: 'New Contact',
     

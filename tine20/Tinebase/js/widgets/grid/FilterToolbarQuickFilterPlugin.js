@@ -178,8 +178,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.detailsToggleBtn = new Ext.Button({
             style: {'margin-top': '2px'},
             enableToggle: true,
-            text: _('show details'),
-            tooltip: _('Always show advanced filters'),
+            text: i18n._('show details'),
+            tooltip: i18n._('Always show advanced filters'),
             scope: this,
             handler: this.onDetailsToggle,
             stateful: stateful,
@@ -189,7 +189,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             },
             applyState: function(state) {
                 if (state.detailsButtonPressed) {
-                    this.setText( _('hide details'));
+                    this.setText( i18n._('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
             },
@@ -228,7 +228,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        btn.setText(btn.pressed ? _('hide details') : _('show details'));
+        btn.setText(btn.pressed ? i18n._('hide details') : i18n._('show details'));
         
         this.ftb[btn.pressed ? 'show' : 'hide']();
         
@@ -368,7 +368,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         
         
         if (! Ext.isEmpty(criterias)) {
-            text = String.format(Tine.Tinebase.translation.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criterias:', criterias.length), criterias.length) + 
+            text = String.format(i18n.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criterias:', criterias.length), criterias.length) +
                    '<br />' +
                    '&nbsp;' + criterias.join(', ');
         }

@@ -41,7 +41,7 @@ Tine.Sales.CustomerGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbarItems: function() {
         this.actions_export = new Ext.Action({
-            // _('Export Customers')
+            // i18n._('Export Customers')
             text: this.app.i18n._hidden('Export Customers'),
             iconCls: 'action_export',
             scope: this,

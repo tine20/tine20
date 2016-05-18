@@ -31,7 +31,7 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
         Tine.widgets.grid.MonthFilter.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get(this.appName);
-        this.label = this.label ? this.app.i18n._hidden(this.label) : _("Month");
+        this.label = this.label ? this.app.i18n._hidden(this.label) : i18n._("Month");
         
         this.operators = ['within', 'before', 'after', 'equals'];
     },
@@ -118,12 +118,12 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      */
     getDatePastOps: function() {
         return [
-            ['monthThis',       _('this month')],
-            ['monthLast',       _('last month')],
-            ['quarterThis',     _('this quarter')],
-            ['quarterLast',     _('last quarter')],
-            ['yearThis',        _('this year')],
-            ['yearLast',        _('last year')]
+            ['monthThis',       i18n._('this month')],
+            ['monthLast',       i18n._('last month')],
+            ['quarterThis',     i18n._('this quarter')],
+            ['quarterLast',     i18n._('last quarter')],
+            ['yearThis',        i18n._('this year')],
+            ['yearLast',        i18n._('last year')]
         ];
     },
     

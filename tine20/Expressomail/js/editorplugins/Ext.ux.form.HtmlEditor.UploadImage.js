@@ -66,8 +66,8 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             handler: this.onFileSelected,
             scope: this,
             url: this.url,
-            tooltip: {title: _(this.text_title)},
-            overflowText: _(this.text_title)
+            tooltip: {title: i18n._(this.text_title)},
+            overflowText: i18n._(this.text_title)
         }));
 
         this.body = Ext.getBody();
@@ -229,7 +229,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             result = true;
         }
         else {
-            this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_error_file_type_not_permitted),filename,this.permitted_extensions.join(', ')));
+            this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_error_file_type_not_permitted),filename,this.permitted_extensions.join(', ')));
             result = false;
         }
 
@@ -237,7 +237,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
     },
 
     fireUploadStartEvent : function() {
-        this.wait = Ext.MessageBox.wait(_(this.text_note_uploading), _('Please wait!'));
+        this.wait = Ext.MessageBox.wait(i18n._(this.text_note_uploading), i18n._('Please wait!'));
         this.fireEvent('uploadstart', this);
     },
 
@@ -263,7 +263,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
     onAjaxSuccess : function(response, options) {
         var json_response = {
             'success' : false,
-            'error' : _(this.text_note_upload_failed)
+            'error' : i18n._(this.text_note_upload_failed)
         }
         try {
             var rt = response.responseText;
@@ -323,7 +323,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             record : options.record,
             response : {
                 'success' : false,
-                'error' : _(this.text_note_upload_failed)
+                'error' : i18n._(this.text_note_upload_failed)
             }
         }
 
@@ -357,12 +357,12 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
 
     onUploadError : function(dialog, filename, resp_data, record) {
         var fileName = filename.replace(/[a-zA-Z]:[\\\/]fakepath[\\\/]/, '');
-        this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_note_upload_error),resp_data.maxsize));
+        this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_note_upload_error),resp_data.maxsize));
     },
 
     onUploadFailed : function(dialog, filename, resp_data, record) {
         var fileName = filename.replace(/[a-zA-Z]:[\\\/]fakepath[\\\/]/, '');
-        this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_note_upload_failed),resp_data.maxsize));
+        this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_note_upload_failed),resp_data.maxsize));
     },
 
     showMessage : function(title, message) {

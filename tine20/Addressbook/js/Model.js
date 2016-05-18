@@ -48,13 +48,13 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_two_countryname', label: 'Country (Private Address)', group: 'Private Address' }, //_('Country (Private Address)')
     {name: 'adr_two_lon', group: 'Private Address', omitDuplicateResolving: true},
     {name: 'adr_two_lat', group: 'Private Address', omitDuplicateResolving: true},
-    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication') 
+    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication')
     {name: 'tel_cell', label: 'Mobile', group: 'Company Communication' }, //_('Mobile')
     {name: 'tel_fax', label: 'Fax', group: 'Company Communication' }, //_('Fax')
     {name: 'tel_assistent', group: 'contact_infos', omitDuplicateResolving: true },
     {name: 'tel_car', group: 'contact_infos', omitDuplicateResolving: true },
     {name: 'tel_pager', group: 'contact_infos', omitDuplicateResolving: true },
-    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)') _('Private Communication') 
+    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)') _('Private Communication')
     {name: 'tel_fax_home', label: 'Fax (private)', group: 'Private Communication' }, //_('Fax (private)')
     {name: 'tel_cell_private', label: 'Mobile (private)', group: 'Private Communication' }, //_('Mobile (private)')
     {name: 'tel_other', group: 'contact_infos', omitDuplicateResolving: true },
@@ -154,7 +154,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: _('Quick Search'),                                                      field: 'query',              operators: ['contains']},
+        {label: i18n._('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
         {filtertype: 'addressbook.listRoleMember', app: app},
@@ -182,10 +182,10 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
         {label: app.i18n._('Country') + '  (' + app.i18n._('Private Address') + ')',    field: 'adr_two_countryname', valueType: 'country'},
         {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
     ];
 };
     
@@ -246,15 +246,15 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
     var typeStore = [['list', app.i18n._('List')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: _('Quick search'),                                                      field: 'query',              operators: ['contains']},
+        {label: i18n._('Quick search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
         {label: app.i18n._('Name'),                                               field: 'name' },
         {label: app.i18n._('Description'),                                                field: 'description'},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
@@ -311,7 +311,7 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
  */ 
 Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
     return [
-        {label: _('Quick search'),       field: 'query',              operators: ['contains']}
+        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };
 
@@ -341,6 +341,6 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
  */
 Tine.Addressbook.Model.ListRole.getFilterModel = function() {
     return [
-        {label: _('Quick search'),       field: 'query',              operators: ['contains']}
+        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };

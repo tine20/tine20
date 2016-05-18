@@ -27,7 +27,7 @@ Tine.widgets.tags.TagFilter = Ext.extend(Tine.widgets.grid.PickerFilter, {
         
         Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
         
-        this.label = _('Tag');
+        this.label = i18n._('Tag');
     }
 });
 Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.tag'] = Tine.widgets.tags.TagFilter;

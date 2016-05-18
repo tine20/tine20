@@ -49,7 +49,7 @@ Tine.HumanResources.ContractDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                     items.push({
                         xtype: 'ux.displayfield',
                         name: fieldConfig.key,
-                        fieldLabel: fieldConfig.hasOwnProperty('useGlobalTranslation') ? _(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
+                        fieldLabel: fieldConfig.hasOwnProperty('useGlobalTranslation') ? i18n._(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
                         renderer: Tine.widgets.grid.RendererManager.get(mc.appName, mc.modelName, fieldConfig.key),
                         htmlEncode: false
                     });

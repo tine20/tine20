@@ -60,7 +60,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             baseCls: 'ux-arrowcollapse',
             cls: 'ux-arrowcollapse-plain',
             collapsible: true,
-            collapsed: true,
+            collapsed: false,
             activeItem: 0,
             listeners: {
                 scope: this,
@@ -370,34 +370,36 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             recordClass: Tine.Calendar.Model.Event
         });
 
-        this.items = this.items.concat([{
-            layout: 'hbox',
-            //style: 'padding-top: 2px;',
-            items: [
-                {
-                    xtype: 'label',
-                    style: 'padding-top: 2px;',
-                    width: 70,
-                    text: this.app.i18n._('Except')
-                },
-                {
-                    // @IDEA: this could be a combo later
-                    // - if one attendee is busy
-                    // - if organizer is busy
-                    // - resources are busy
-                    // - ...
-                    xtype: 'label',
-                    style: 'padding-top: 2px;',
-                    width: 200,
-                    text: this.app.i18n._('during events in the calendars')
-                },
-                {
-                    xtype: 'label',
-                    width: 260,
-                    id: this.limitId + 'constraints'
-                },
-            ]
-        }]);
+        if (this.app.featureEnabled('featureRecurExcept')) {
+            this.items = this.items.concat([{
+                layout: 'hbox',
+                //style: 'padding-top: 2px;',
+                items: [
+                    {
+                        xtype: 'label',
+                        style: 'padding-top: 2px;',
+                        width: 70,
+                        text: this.app.i18n._('Except')
+                    },
+                    {
+                        // @IDEA: this could be a combo later
+                        // - if one attendee is busy
+                        // - if organizer is busy
+                        // - resources are busy
+                        // - ...
+                        xtype: 'label',
+                        style: 'padding-top: 2px;',
+                        width: 200,
+                        text: this.app.i18n._('during events in the calendars')
+                    },
+                    {
+                        xtype: 'label',
+                        width: 260,
+                        id: this.limitId + 'constraints'
+                    }
+                ]
+            }]);
+        };
 
         this.items = this.items.concat({
             layout: 'form',

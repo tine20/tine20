@@ -71,14 +71,14 @@ Tine.Sipgate.SmsEditDialog = Ext.extend(Ext.FormPanel, {
             iconCls : 'SmsIconCls'
         });
         this.action_cancel = new Ext.Action({
-            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : _('Cancel'),
+            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
             iconCls : 'action_cancel'
         });
         this.action_close = new Ext.Action({
-            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : _('Close'),
+            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : i18n._('Close'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,

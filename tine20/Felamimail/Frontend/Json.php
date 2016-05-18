@@ -184,9 +184,10 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * get message data
      *
      * @param  string $id
+     * @param  string $mimeType
      * @return array
      */
-    public function getMessage($id)
+    public function getMessage($id, $mimeType='configured')
     {
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
@@ -198,7 +199,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $partId    = null;
         }
         
-        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId, $partId, false);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId, $partId, $mimeType, false);
         $message->id = $id;
         
         return $this->_recordToJson($message);

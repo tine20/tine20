@@ -304,9 +304,10 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
     {
         $installableApplications = Setup_Controller::getInstance()->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
+        $testCredentials = Setup_TestServer::getInstance()->getTestCredentials();
         $this->_json->installApplications($installableApplications, array(
-            'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
-            'adminPassword'         => Tinebase_Core::get('testconfig')->password,
+            'adminLoginName'        => $testCredentials['username'],
+            'adminPassword'         => $testCredentials['password'],
         ));
     }
 }

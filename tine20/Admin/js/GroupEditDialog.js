@@ -219,7 +219,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             scope: this
         }]);
 
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.translation.gettext('Group'))});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(i18n._('Transferring {0}...'), this.translation.gettext('Group'))});
         
         if (this.group.id !== 0) {
             this.loadMask.show();

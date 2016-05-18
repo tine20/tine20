@@ -32,9 +32,9 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.title = [
             '<span ext:qtip="',
-            Ext.util.Format.htmlEncode(_('Show records that match to one of the following filters')),
+            Ext.util.Format.htmlEncode(i18n._('Show records that match to one of the following filters')),
             '">',
-            Ext.util.Format.htmlEncode(_('or alternatively')),
+            Ext.util.Format.htmlEncode(i18n._('or alternatively')),
             '</span>'
         ].join('');
         
@@ -48,17 +48,17 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
             path: '/',
 //            iconCls: this.filterPanel.activeFilterPanel.app ? this.filterPanel.activeFilterPanel.app.getIconCls() : '',
             expanded: true,
-//            text: _('or alternatively'),
-//            qtip: _('Show records that match to one of the following filters'),
+//            text: i18n._('or alternatively'),
+//            qtip: i18n._('Show records that match to one of the following filters'),
             children: [
                 this.createNode(this.filterPanel.activeFilterPanel),
-                {id: 'addFilterPanel', text: _('Add alternative filter'), iconCls: 'action_add', leaf: true}
+                {id: 'addFilterPanel', text: i18n._('Add alternative filter'), iconCls: 'action_add', leaf: true}
             ]
         };
         
         this.contextMenu = new Ext.menu.Menu({
             items: [{
-                text: _('Remove Filter'),
+                text: i18n._('Remove Filter'),
                 iconCls: 'action_remove',
                 scope: this,
                 handler: this.onCtxRemove

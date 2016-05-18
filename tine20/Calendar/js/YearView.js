@@ -80,12 +80,12 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
     startDate: new Date().clearTime(),
     /**
      * @cfg {String} newEventSummary
-     * _('New Event')
+     * i18n._('New Event')
      */
     newEventSummary: 'New Event',
     /**
      * @cfg String moreString
-     * _('{0} more...')
+     * i18n._('{0} more...')
      */
     moreString: '{0} more...',
     /**

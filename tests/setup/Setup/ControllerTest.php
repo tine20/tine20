@@ -25,18 +25,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     protected $_uit = null;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -55,11 +43,12 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $testCredentials = Setup_TestServer::getInstance()->getTestCredentials();
         $this->_installAllApplications(array(
             'defaultAdminGroupName' => 'Administrators',
             'defaultUserGroupName'  => 'Users',
-            'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
-            'adminPassword'         => Tinebase_Core::get('testconfig')->password,
+            'adminLoginName'        => $testCredentials['username'],
+            'adminPassword'         => $testCredentials['password'],
         ));
     }
        
@@ -173,11 +162,12 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testInstallGroupNameOptions()
     {
         $this->_uninstallAllApplications();
+        $testCredentials = Setup_TestServer::getInstance()->getTestCredentials();
         $this->_installAllApplications(array(
             'defaultAdminGroupName' => 'phpunit-admins',
             'defaultUserGroupName'  => 'phpunit-users',
-            'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
-            'adminPassword'         => Tinebase_Core::get('testconfig')->password,
+            'adminLoginName'        => $testCredentials['username'],
+            'adminPassword'         => $testCredentials['password'],
         ));
         $adminUser = Tinebase_Core::get('currentAccount');
         $this->assertEquals('phpunit-admins', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY));
@@ -324,5 +314,19 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $installableApplications = $this->_uit->getInstallableApplications();
         $installableApplications = array_keys($installableApplications);
         $this->_uit->installApplications($installableApplications, $_options);
+    }
+
+    /**
+     * @see 11574: backup should only dump structure of some tables
+     */
+    public function testGetBackupStructureOnlyTables()
+    {
+        require_once __DIR__ . '/Controller_Mock.php';
+
+        $setupControllerMock = new Setup_Controller_Mock();
+
+        $tables = $setupControllerMock->getBackupStructureOnlyTables();
+
+        $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
     }
 }

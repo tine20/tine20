@@ -25,11 +25,11 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
      */
     scope: null,
     /**
-     * @cfg {String} questionText defaults to _('What would you like to do?')
+     * @cfg {String} questionText defaults to i18n._('What would you like to do?')
      */
     questionText: null,
     /**
-     * @cfg {String} invalidText defaults to _('You need to select an option!')
+     * @cfg {String} invalidText defaults to i18n._('You need to select an option!')
      */
     invalidText: null,
     /**
@@ -78,7 +78,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                     xtype: 'label',
                     border: false,
                     cls: 'ext-mb-text',
-                    html: this.questionText || _('What would you like to do?')
+                    html: this.questionText || i18n._('What would you like to do?')
                 }, {
                     xtype: 'radiogroup',
                     hideLabel: true,
@@ -99,14 +99,14 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     initButtons: function() {
         this.fbar = ['->', {
             xtype: 'button',
-            text: _('Ok'),
+            text: i18n._('Ok'),
             minWidth: 70,
             scope: this,
             handler: this.onOk,
             iconCls: 'action_saveAndClose'
         }, {
             xtype: 'button',
-            text: _('Cancel'),
+            text: i18n._('Cancel'),
             minWidth: 70,
             scope: this,
             hidden: !this.allowCancel,
@@ -139,7 +139,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
         var option = selecedRadio ? selecedRadio.getGroupValue() : null;
         
         if (! option) {
-            field.markInvalid(this.invalidText || _('You need to select an option!'));
+            field.markInvalid(this.invalidText || i18n._('You need to select an option!'));
             return;
         }
         this.handler.call(this.scope, option);

@@ -154,7 +154,7 @@ Tine.Sales.CustomerDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                     '<div class="bordercorner_gray_2"></div>',
                     '<div class="bordercorner_gray_3"></div>',
                     '<div class="bordercorner_gray_4"></div>',
-                    '<div class="preview-panel-declaration">' + _('Description') + '</div>',
+                    '<div class="preview-panel-declaration">' + i18n._('Description') + '</div>',
                     '{[this.encode(values.description)]}',
                 '</div>',
             '</tpl>',

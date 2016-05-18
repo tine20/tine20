@@ -32,7 +32,7 @@ Tine.widgets.container.CalDAVContainerPropertiesHookField = Ext.extend(Ext.form.
      */
     onContainerAdded: function() {
         this.app = Tine.Tinebase.appMgr.get(this.appName);
-        this.fieldLabel = _('CalDAV URL');
+        this.fieldLabel = i18n._('CalDAV URL');
         
         this.propertiesDialog = this.findParentBy(function(p) {return !! p.grantContainer});
         this.grantContainer = this.propertiesDialog.grantContainer;

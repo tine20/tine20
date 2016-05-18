@@ -117,13 +117,13 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
                 layout: 'fit',
                 items: this.attendeeGridPanel,
                 buttons: [{
-                    text: _('Cancel'),
+                    text: i18n._('Cancel'),
                     minWidth: 70,
                     scope: this,
                     handler: function (btn) {win.close()},
                     iconCls: 'action_cancel'
                 }, {
-                    text: _('Ok'),
+                    text: i18n._('Ok'),
                     minWidth: 70,
                     scope: this,
                     handler: function(btn) {

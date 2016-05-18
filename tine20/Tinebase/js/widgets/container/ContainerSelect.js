@@ -132,10 +132,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         
         this.initStore();
         
-        this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(_('choose other {0}...'), this.containerName)}, 'other');
+        this.otherRecord = new Tine.Tinebase.Model.Container({id: 'other', name: String.format(i18n._('choose other {0}...'), this.containerName)}, 'other');
         this.store.add(this.otherRecord);
         
-        this.emptyText = String.format(_('Select a {0}'), this.containerName);
+        this.emptyText = String.format(i18n._('Select a {0}'), this.containerName);
         
         // init triggers (needs to be done before standard initTrigger template fn)
         if (! this.hideTrigger2) {
@@ -155,7 +155,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             
         }
         
-        //this.title = String.format(_('Recently used {0}:'), this.containersName);
+        //this.title = String.format(i18n._('Recently used {0}:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
         
@@ -481,10 +481,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
     initComponent: function(){
         Tine.widgets.container.selectionDialog.superclass.initComponent.call(this);
         
-        this.title = this.title ? this.title : String.format(_('please select a {0}'), this.containerName);
+        this.title = this.title ? this.title : String.format(i18n._('please select a {0}'), this.containerName);
         
         this.cancelAction = new Ext.Action({
-            text: _('Cancel'),
+            text: i18n._('Cancel'),
             iconCls: 'action_cancel',
             minWidth: 70,
             handler: this.onCancel,
@@ -493,7 +493,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         
         this.okAction = new Ext.Action({
             disabled: true,
-            text: _('Ok'),
+            text: i18n._('Ok'),
             iconCls: 'action_saveAndClose',
             minWidth: 70,
             handler: this.onOk,

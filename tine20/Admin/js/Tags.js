@@ -133,7 +133,7 @@ Tine.Admin.Tags.Main = {
         var TagsQuickSearchField = new Ext.ux.SearchField({
             id: 'TagsQuickSearchField',
             width: 240,
-            emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
+            emptyText: i18n._hidden('enter searchfilter')
         });
         
         TagsQuickSearchField.on('change', function () {
@@ -224,7 +224,7 @@ Tine.Admin.Tags.Main = {
             },
             columns: [
                 { id: 'color', header: this.translation.gettext('Color'), dataIndex: 'color', width: 25, renderer: function (color,meta,record) {
-                    return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  _('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
+                    return '<div style="margin-top:1px;width: 8px; height: 8px; background-color:' + color + '; border-radius:5px;border: 1px solid black;" title="' + record.get('name') + ' (' +  i18n._('Usage:&#160;') + record.get('occurrence') + ')">&#160;</div>';
                 }},
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 200 },
                 { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description', width: 500}

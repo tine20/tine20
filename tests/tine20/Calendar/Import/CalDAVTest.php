@@ -28,11 +28,12 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
      */
     protected function _getUit()
     {
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
         if ($this->_uit === null) {
             $caldavClientOptions = array(
                 'baseUri' => 'localhost',
                 'userName' => Tinebase_Core::getUser()->accountLoginName,
-                'password' => Zend_Registry::get('testConfig')->password, // TODO use credential cache?
+                'password' => $testCredentials['password'],
             );
             $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'MacOSX');
             $this->_uit->setVerifyPeer(false);

@@ -97,7 +97,7 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
 Tine.Crm.Model.Lead.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Crm'),
         filters = [
-            {label: _('Quick Search'),  field: 'query',    operators: ['contains']},
+            {label: i18n._('Quick Search'),  field: 'query',    operators: ['contains']},
             {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
             {
@@ -117,10 +117,10 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             },
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
-            {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-            {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-            {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-            {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+            {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+            {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
             
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
             {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'date'},
@@ -145,8 +145,8 @@ Tine.Crm.Model.LeadState = Tine.Tinebase.data.Record.create([
     { name: 'id' },
     { name: 'value' },
     { name: 'system' },
-    { name: 'probability', label: 'Probability', type: 'percentage' }, // _('Probability')
-    { name: 'endslead', label: 'X Lead', type: 'bool'} // _('X Lead')
+    { name: 'probability', label: 'Probability', type: 'percentage' }, // i18n._('Probability')
+    { name: 'endslead', label: 'X Lead', type: 'bool'} // i18n._('X Lead')
 ], {
     appName: 'Crm',
     modelName: 'LeadState',
@@ -159,7 +159,7 @@ Tine.Crm.Model.LeadSource = Tine.Tinebase.data.Record.create([
     { name: 'id' },
     { name: 'value' },
     { name: 'system' },
-    { name: 'archived', label: 'Archived', type: 'bool' } // _('Archived')
+    { name: 'archived', label: 'Archived', type: 'bool' } // i18n._('Archived')
 ], {
     appName: 'Crm',
     modelName: 'LeadSource',

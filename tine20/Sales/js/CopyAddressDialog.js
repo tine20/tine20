@@ -118,7 +118,7 @@ Tine.Sales.CopyAddressDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_update = new Ext.Action({
-            text : _('Ok'),
+            text : i18n._('Ok'),
             minWidth : 70,
             scope : this,
             handler: this.onOk,

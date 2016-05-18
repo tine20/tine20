@@ -5,5 +5,6 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false">
+         syntaxCheck="false"
+         bootstrap="bootstrap.php">
 </phpunit>

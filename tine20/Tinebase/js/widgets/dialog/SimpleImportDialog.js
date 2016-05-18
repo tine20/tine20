@@ -126,7 +126,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             example = options && options.example ? options.example : '';
             
         return {
-            title: _('Choose File and Format'),
+            title: i18n._('Choose File and Format'),
             layout: 'vbox',
             border: false,
             xtype: 'ux.displaypanel',
@@ -135,15 +135,15 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             items: [{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('Choose Import File'),
+                title: i18n._('Choose Import File'),
                 height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'tw.uploadbutton',
                     ref: '../../uploadButton',
-                    text: String.format(_('Select file containing your {0}'), this.recordClass.getRecordsName()),
+                    text: String.format(i18n._('Select file containing your {0}'), this.recordClass.getRecordsName()),
                     handler: this.onFileReady,
                     allowedTypes: this.allowedFileExtensions,
                     scope: this
@@ -151,11 +151,11 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             },{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('Set Import Options'),
+                title: i18n._('Set Import Options'),
                 height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + String.format(_('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
+                    html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
                 }, new Tine.widgets.container.selectionComboBox({
                     id: this.app.appName + 'EditDialogContainerSelector',
                     width: 300,
@@ -171,18 +171,18 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             {
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('What should the file you upload look like?'),
+                title: i18n._('What should the file you upload look like?'),
                 flex: 1,
                 items: [
                 {
                     xtype: 'label',
-                    html: '<p>' + _('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + _('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + _('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                    html: '<p>' + i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
                 }, {
                     xtype: 'combo',
                     ref: '../../definitionCombo',
@@ -203,7 +203,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
                 }, {
                     xtype: 'label',
                     ref: '../../exampleLink',
-                    html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+                    html: example ? ('<p><a href="' + example + '">' + i18n._('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
                 }, {
                     xtype: 'displayfield',
                     ref: '../../definitionDescription',
@@ -219,7 +219,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
             */
             onFinishButton: (function() {
                 if (! this.importMask) {
-                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Importing {0}'), this.recordClass.getRecordsName())});
+                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Importing {0}'), this.recordClass.getRecordsName())});
                 }
                 this.importMask.show();
 

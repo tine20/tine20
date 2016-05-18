@@ -36,7 +36,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
 
     root: null,
     
-    title: 'Modules', // _('Modules')
+    title: 'Modules', // i18n._('Modules')
 
     collapsible: true,
     baseCls: 'ux-arrowcollapse',
@@ -99,7 +99,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.stateId = this.app.name + (this.contentType ? this.contentType : '') + '-moduletree';
         Tine.widgets.ContentTypeTreePanel.superclass.initComponent.call(this);
         
-        this.setTitle(_(this.title));
+        this.setTitle(i18n._(this.title));
         
         var treeRoot = new Ext.tree.TreeNode({
             expanded: true,

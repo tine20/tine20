@@ -338,7 +338,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         formField.multiButton = new Ext.Element(document.createElement('img'));
         formField.multiButton.set({
             'src': Ext.BLANK_IMAGE_URL,
-            'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records')),
+            'ext:qtip': Ext.util.Format.htmlEncode(i18n._('Delete value from all selected records')),
             'class': 'tinebase-editmultipledialog-clearer',
             'style': 'left:' + left
             });
@@ -455,7 +455,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (this.multiButton) {
                 this.multiButton.addClass('undo');
                 this.multiButton.removeClass('hidden');
-                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Undo change for all selected records'))});
+                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(i18n._('Undo change for all selected records'))});
             }
         } else {    // If set back
             // Set arrow
@@ -472,7 +472,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (this.multiButton) {
                 this.multiButton.removeClass('undo');
                 this.multiButton.addClass('hidden');
-                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(_('Delete value from all selected records'))});
+                this.multiButton.set({'ext:qtip': Ext.util.Format.htmlEncode(i18n._('Delete value from all selected records'))});
             }
         }
         this.fireEvent('fieldchange');
@@ -530,7 +530,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.interRecord.dirty = false;
         this.interRecord.modified = {};
         
-        this.editDialog.window.setTitle(String.format(_('Edit {0} {1}'), this.totalRecordCount, this.editDialog.i18nRecordsName));
+        this.editDialog.window.setTitle(String.format(i18n._('Edit {0} {1}'), this.totalRecordCount, this.editDialog.i18nRecordsName));
 
         Tine.log.debug('loading of the following intermediate record completed:');
         Tine.log.debug(this.interRecord);
@@ -589,8 +589,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             Ext.QuickTips.register({
                 target: ff,
                 dismissDelay: 30000,
-                title: _('Different Values'),
-                text: _('This field has different values. Editing this field will overwrite the old values.'),
+                title: i18n._('Different Values'),
+                text: i18n._('This field has different values. Editing this field will overwrite the old values.'),
                 width: 200
             });
             
@@ -652,7 +652,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     onRecordUpdate: function() {
         if (!this.editDialog.isMultipleValid()) {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
             Ext.each(this.handleFields, function(item) {
                 if (item.activeError) {
                     if (!item.edited) item.activeError = null;
@@ -698,7 +698,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 relation['related_record'] = "";
 
                 changes.push({name: '%add', value: Ext.encode(relation)});
-                this.changedHuman += '<li><span style="font-weight:bold">' + String.format(_('Add {0} Relation'), modelName) + ':</span> ';
+                this.changedHuman += '<li><span style="font-weight:bold">' + String.format(i18n._('Add {0} Relation'), modelName) + ':</span> ';
                 this.changedHuman += Ext.util.Format.htmlEncode(title);
                 this.changedHuman += '</li>';
             }, this);
@@ -707,10 +707,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         this.changedHuman += '</ul>';
         var filter = this.selectionFilter;
         if (changes.length > 0) {
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
+            Ext.MessageBox.confirm(i18n._('Confirm'), String.format(i18n._('Do you really want to change these {0} records?') + this.changedHuman, this.totalRecordCount),
                 function(_btn) {
                 if (_btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'),_('Applying changes'));
+                    Ext.MessageBox.wait(i18n._('Please wait'),i18n._('Applying changes'));
                     Ext.Ajax.request({
                         url: 'index.php',
                         timeout: 3600000, // 1 hour

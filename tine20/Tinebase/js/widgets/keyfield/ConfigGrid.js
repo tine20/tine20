@@ -55,12 +55,12 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
         }
 
         this.keyFieldConfig = {};
-        this.configGettext = this.configApp ? this.configApp.i18n._ : _;
+        this.configGettext = this.configApp ? this.configApp.i18n._ : i18n._;
         this.initStore();
 
         this.defaultCheck = new Ext.ux.grid.CheckColumn({
             id: 'default',
-            header: _('Default'),
+            header: i18n._('Default'),
             dataIndex: 'default',
             sortable: false,
             align: 'center',
@@ -140,23 +140,23 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
                 this.defaultCheck,
                 {
                     id: 'id',
-                    header: _('ID'),
+                    header: i18n._('ID'),
                     dataIndex: 'id',
                     hideable: false,
                     sortable: false,
                     editor: new Ext.form.TextField({}),
                     quickaddField: new Ext.form.TextField({
-                        emptyText: _('Add a New ID...')
+                        emptyText: i18n._('Add a New ID...')
                     })
                 }, {
                     id: 'value',
-                    header: _('Value'),
+                    header: i18n._('Value'),
                     dataIndex: 'value',
                     hideable: false,
                     sortable: false,
                     editor: new Ext.form.TextField({}),
                     quickaddField: new Ext.form.TextField({
-                        emptyText: _('Add a New Value...')
+                        emptyText: i18n._('Add a New Value...')
                     })
 
                 }
@@ -168,7 +168,7 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
                     case 'color':
                         cols.push({
                             id: 'color',
-                            header: _('Color'),
+                            header: i18n._('Color'),
                             dataIndex: 'color',
                             sortable: false,
                             width: 50,
@@ -241,12 +241,12 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
     onNewentry: function (recordData) {
         // check if id exists in grid
         if (this.store.findExact('id', recordData.id) !== -1) {
-            Ext.Msg.alert(_('Error'), _('ID already exists'));
+            Ext.Msg.alert(i18n._('Error'), i18n._('ID already exists'));
             return false;
         }
 
         if (this.keyFieldOptions.parentField && ! String(recordData.id).match(/^.+:.+$/)) {
-            Ext.Msg.alert(_('Error'), _('ID needs to follow the syntax PARENTID:ID'));
+            Ext.Msg.alert(i18n._('Error'), i18n._('ID needs to follow the syntax PARENTID:ID'));
             return false;
         }
 

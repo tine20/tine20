@@ -85,7 +85,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (! this.record.id) {
             this.getForm().findField('feast_calendar_id').setValue(Tine.HumanResources.registry.get('defaultFeastCalendar'));
         } else {
-            this.window.setTitle(String.format(_('Edit {0}'), this.i18nRecordName));
+            this.window.setTitle(String.format(i18n._('Edit {0}'), this.i18nRecordName));
             this.getForm().findField('workingtime_template').setValue(null);
         }
         
@@ -277,25 +277,25 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             ],
                             
                             [Ext.apply({
-                                fieldLabel: _('Mon.'),
+                                fieldLabel: i18n._('Mon.'),
                                 name: 'weekdays_0'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Tue.'),
+                                fieldLabel: i18n._('Tue.'),
                                 name: 'weekdays_1'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Wed.'),
+                                fieldLabel: i18n._('Wed.'),
                                 name: 'weekdays_2'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Thu.'),
+                                fieldLabel: i18n._('Thu.'),
                                 name: 'weekdays_3'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Fri.'),
+                                fieldLabel: i18n._('Fri.'),
                                 name: 'weekdays_4'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Sat.'),
+                                fieldLabel: i18n._('Sat.'),
                                 name: 'weekdays_5'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: _('Sun.'),
+                                fieldLabel: i18n._('Sun.'),
                                 name: 'weekdays_6'
                             }, weekdayFieldDefaults)]
                         ]

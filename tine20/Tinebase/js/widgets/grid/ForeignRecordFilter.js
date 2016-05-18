@@ -58,7 +58,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     /**
      * @cfg {String} editDefinitionText untranslated edit definition button text
      */
-    editDefinitionText: 'Edit definition', // _('Edit definition')
+    editDefinitionText: 'Edit definition', // i18n._('Edit definition')
     
     /**
      * @cfg {Object} optional picker config
@@ -68,7 +68,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     /**
      * @cfg {String} startDefinitionText untranslated start definition button text
      */
-    startDefinitionText: 'Start definition', // _('Start definition')
+    startDefinitionText: 'Start definition', // i18n._('Start definition')
     
     /**
      * @property this filterModel is the generic filterRow
@@ -110,7 +110,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     initGeneric: function() {
             
-        this.label = _('Related to');
+        this.label = i18n._('Related to');
         
         var operators = [];
         
@@ -273,7 +273,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 
                 // change button text
                 if (filter.formFields.value && Ext.isFunction(filter.formFields.value.setText)) {
-                    filter.formFields.value.setText(_(this.editDefinitionText));
+                    filter.formFields.value.setText(i18n._(this.editDefinitionText));
                 }
             }
             
@@ -405,7 +405,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
-                emptyText: _('select a operator'),
+                emptyText: i18n._('select a operator'),
                 forceSelection: true,
                 typeAhead: true,
                 triggerAction: 'all',
@@ -515,7 +515,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 
                 if (! filter.formFields.value) {
                     value = new Ext.Button({
-                        text: _(this.startDefinitionText),
+                        text: i18n._(this.startDefinitionText),
                         filter: filter,
                         width: this.filterValueWidth,
                         id: 'tw-ftb-frow-valuefield-' + filter.id,

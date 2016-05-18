@@ -30,7 +30,7 @@ Ext.ns('Tine.Expressomail');
 Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
 
     /**
-     * auto hook text _('New Mail')
+     * auto hook text i18n._('New Mail')
      */
     addButtonText: 'New Mail',
 
@@ -104,7 +104,7 @@ Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
     verifyTrashToClean: function(account_id) {
         if(!account_id) return;
         if(!Tine.Expressomail.registry.get('preferences').get('deleteFromTrash')) return;
-        Ext.MessageBox.wait(_('Please wait'), _('Verifying trash folder'));
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Verifying trash folder'));
         var params = {
           method: 'Expressomail.deleteMsgsBeforeDate'
         };
@@ -1253,7 +1253,7 @@ Tine.Expressomail.addSecurityApplet = function (id, panel, region) {
     
     if (panel && typeof(panel.securityApplet) === 'undefined') {
         Tine.Expressomail.AppletLoadaded = false;
-        Ext.MessageBox.wait(app.i18n._('Loading Criptography Components...'), _('Please wait!'));
+        Ext.MessageBox.wait(app.i18n._('Loading Criptography Components...'), i18n._('Please wait!'));
         
         Tine.Expressomail.afterAppletLoad = function(){
             Tine.Expressomail.AppletLoadaded = true;

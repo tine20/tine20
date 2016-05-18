@@ -186,7 +186,7 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
             v += s;
         }
         return v;
-   }
+    }
 });
 
 /**

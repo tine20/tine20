@@ -157,7 +157,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     getToolbarItems: function(){
         this.exportButton = new Ext.Action({
-            text: _('Export'),
+            text: i18n._('Export'),
             iconCls: 'action_export',
             scope: this,
             requiredGrant: 'readGrant',

@@ -40,25 +40,25 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     hasAccountPrefix: true,
     recordClass: Tine.Tinebase.Model.Grant,
     
-    readGrantTitle: 'Read', // _('Read')
-    readGrantDescription: 'The grant to read records of this container', // _('The grant to read records of this container')
-    addGrantTitle: 'Add', // _('Add')
-    addGrantDescription: 'The grant to add records to this container', // _('The grant to add records to this container')
-    editGrantTitle: 'Edit', // _('Edit')
-    editGrantDescription: 'The grant to edit records in this container', // _('The grant to edit records in this container')
-    deleteGrantTitle: 'Delete', // _('Delete')
-    deleteGrantDescription: 'The grant to delete records in this container', // _('The grant to delete records in this container')
-    exportGrantTitle: 'Export', // _('Export')
-    exportGrantDescription: 'The grant to export records from this container', // _('The grant to export records from this container')
-    syncGrantTitle: 'Sync', // _('Sync')
-    syncGrantDescription: 'The grant to synchronise records with this container', // _('The grant to synchronise records with this container')
-    adminGrantTitle: 'Admin', // _('Admin')
-    adminGrantDescription: 'The grant to administrate this container', // _('The grant to administrate this container')
+    readGrantTitle: 'Read', // i18n._('Read')
+    readGrantDescription: 'The grant to read records of this container', // i18n._('The grant to read records of this container')
+    addGrantTitle: 'Add', // i18n._('Add')
+    addGrantDescription: 'The grant to add records to this container', // i18n._('The grant to add records to this container')
+    editGrantTitle: 'Edit', // i18n._('Edit')
+    editGrantDescription: 'The grant to edit records in this container', // i18n._('The grant to edit records in this container')
+    deleteGrantTitle: 'Delete', // i18n._('Delete')
+    deleteGrantDescription: 'The grant to delete records in this container', // i18n._('The grant to delete records in this container')
+    exportGrantTitle: 'Export', // i18n._('Export')
+    exportGrantDescription: 'The grant to export records from this container', // i18n._('The grant to export records from this container')
+    syncGrantTitle: 'Sync', // i18n._('Sync')
+    syncGrantDescription: 'The grant to synchronise records with this container', // i18n._('The grant to synchronise records with this container')
+    adminGrantTitle: 'Admin', // i18n._('Admin')
+    adminGrantDescription: 'The grant to administrate this container', // i18n._('The grant to administrate this container')
     
-    freebusyGrantTitle: 'Free Busy', // _('Free Busy')
-    freebusyGrantDescription: 'The grant to access free busy information of events in this calendar', // _('The grant to access free busy information of events in this calendar')
-    privateGrantTitle: 'Private', // _('Private')
-    privateGrantDescription: 'The grant to access records marked as private in this container', // _('The grant to access records marked as private in this container')
+    freebusyGrantTitle: 'Free Busy', // i18n._('Free Busy')
+    freebusyGrantDescription: 'The grant to access free busy information of events in this calendar', // i18n._('The grant to access free busy information of events in this calendar')
+    privateGrantTitle: 'Private', // i18n._('Private')
+    privateGrantDescription: 'The grant to access records marked as private in this container', // i18n._('The grant to access records marked as private in this container')
     
     
     /**
@@ -115,8 +115,8 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         
         Ext.each(grants, function(grant) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                header: _(this[grant + 'GrantTitle']),
-                tooltip: _(this[grant + 'GrantDescription']),
+                header: i18n._(this[grant + 'GrantTitle']),
+                tooltip: i18n._(this[grant + 'GrantDescription']),
                 dataIndex: grant + 'Grant',
                 width: 55
             }));

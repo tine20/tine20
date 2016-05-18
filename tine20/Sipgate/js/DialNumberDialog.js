@@ -86,7 +86,7 @@ Tine.Sipgate.DialNumberDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_cancel = new Ext.Action({
-            text : _('Cancel'),
+            text : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
@@ -94,7 +94,7 @@ Tine.Sipgate.DialNumberDialog = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_update = new Ext.Action({
-            text : _('Ok'),
+            text : i18n._('Ok'),
             minWidth : 70,
             scope : this,
             handler : this.onUpdate,
@@ -163,7 +163,7 @@ Tine.Sipgate.DialNumberDialog = Ext.extend(Ext.FormPanel, {
                         ref: '../../../../linePicker'
                     })],[
                     {
-                        fieldLabel:this.app.i18n. _('Number to call'),
+                        fieldLabel:this.app.i18n. i18n._('Number to call'),
                         name: 'number',
                         value: this.number ? this.number : Tine.Sipgate.registry.get('preferences').get('internationalPrefix'),
                         regex: /^\+?\d{5,}$/i,

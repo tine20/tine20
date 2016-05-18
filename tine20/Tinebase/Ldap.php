@@ -250,13 +250,18 @@ class Tinebase_Ldap extends Zend_Ldap
     
     /**
      * decode ActiveDirectory SID
-     * 
+     *
+     * @see https://msdn.microsoft.com/en-us/library/ff632068.aspx
+     *
      * @param  string  $binarySid  the binary encoded SID
      * @return string
+     *
+     * TODO should be moved to AD trait/abstract
      */
     public static function decodeSid($binarySid) 
     {
-        if (strpos($binarySid, '-') !== false) {
+        if (preg_match('/^S\-1/', $binarySid)) {
+            // already decoded
             return $binarySid;
         }
         

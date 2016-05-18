@@ -178,8 +178,8 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
 
         Ext.MessageBox.show(Ext.apply(defaults, {
-            title: _('Not Supported'),
-            msg: _('Your request is not supported by this version.'),
+            title: i18n._('Not Supported'),
+            msg: i18n._('Your request is not supported by this version.'),
             fn: function() {
                 Tine.Tinebase.common.reload();
             }

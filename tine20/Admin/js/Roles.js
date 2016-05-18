@@ -140,7 +140,7 @@ Tine.Admin.Roles.Main = {
         var RolesQuickSearchField = new Ext.ux.SearchField({
             id: 'RolesQuickSearchField',
             width:240,
-            emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
+            emptyText: i18n._hidden('enter searchfilter')
         });
         RolesQuickSearchField.on('change', function(){
             Ext.getCmp('AdminRolesGrid').getStore().load({
