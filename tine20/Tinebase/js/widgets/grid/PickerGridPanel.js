@@ -155,7 +155,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initActionsAndToolbars: function() {
         
         this.actionRemove = new Ext.Action({
-            text: _('Remove record'),
+            text: i18n._('Remove record'),
             disabled: true,
             scope: this,
             handler: this.onRemove,
@@ -259,9 +259,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var labelColumn = {
                 id: this.labelField,
                 // TODO use translated records name here
-                //header: String.format(_('Selected {0}'),
+                //header: String.format(i18n._('Selected {0}'),
                 //    this.recordClass.getMeta('recordsName')),
-                header: _('Records'),
+                header: i18n._('Records'),
                 dataIndex: this.labelField
             };
             if (this.labelRenderer != Ext.emptyFn) {

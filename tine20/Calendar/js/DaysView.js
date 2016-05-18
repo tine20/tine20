@@ -120,12 +120,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     wheelIncrement: 50,
     /**
      * @cfg {String} newEventSummary
-     * _('New Event')
+     * i18n._('New Event')
      */
     newEventSummary: 'New Event',
     /**
      * @cfg {String} dayFormatString
-     * _('{0}, the {1}. of {2}')
+     * i18n._('{0}, the {1}. of {2}')
      */
     dayFormatString: '{0}, the {1}. of {2}',
     /**

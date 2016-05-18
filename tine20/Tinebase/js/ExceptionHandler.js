@@ -143,7 +143,12 @@ Tine.Tinebase.ExceptionHandler = function() {
         
         Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception:');
         Tine.log.debug(exception);
-        
+
+        if (Tine.Tinebase.tineInit.isReloading) {
+            Tine.log.debug('Tine.Tinebase.ExceptionHandler::handleRequestException -> Exception handling skipped because Tine 2.0 is reloading');
+            return;
+        }
+
         // TODO find a generic way for this, some kind of registry for each app to register sensitive information
         var request = (exception.request && Ext.isString(exception.request)) ? Ext.util.JSON.decode(exception.request) : null;
         if (request && request.method === 'Felamimail.saveMessage') {
@@ -161,8 +166,8 @@ Tine.Tinebase.ExceptionHandler = function() {
                 Tine.Tinebase.registry.remove('currentAccount');
 
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Authorisation Required'), 
-                    msg: _('Your session timed out. You need to login again.'),
+                    title: i18n._('Authorisation Required'),
+                    msg: i18n._('Your session timed out. You need to login again.'),
                     fn: function() {
 
                         /*
@@ -194,8 +199,8 @@ Tine.Tinebase.ExceptionHandler = function() {
             // insufficient rights
             case 403:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Insufficient Rights'), 
-                    msg: _('Sorry, you are not permitted to perform this action'),
+                    title: i18n._('Insufficient Rights'),
+                    msg: i18n._('Sorry, you are not permitted to perform this action'),
                     icon: Ext.MessageBox.ERROR
                 }));
                 break;
@@ -203,8 +208,8 @@ Tine.Tinebase.ExceptionHandler = function() {
             // not found
             case 404:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Not Found'), 
-                    msg: _('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
+                    title: i18n._('Not Found'),
+                    msg: i18n._('Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view.'),
                     icon: Ext.MessageBox.ERROR
                 }));
                 break;
@@ -212,8 +217,8 @@ Tine.Tinebase.ExceptionHandler = function() {
             // concurrency conflict
             case 409:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Concurrent Updates'),
-                    msg: _('Someone else saved this record while you where editing the data. You need to reload and make your changes again.')
+                    title: i18n._('Concurrent Updates'),
+                    msg: i18n._('Someone else saved this record while you where editing the data. You need to reload and make your changes again.')
                 }));
                 break;
             
@@ -221,17 +226,17 @@ Tine.Tinebase.ExceptionHandler = function() {
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Service Unavailable'), 
-                    msg: _('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.')
+                    title: i18n._('Service Unavailable'),
+                    msg: i18n._('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.')
                 }));
                 break;
                 
             // invalid record exception
             case 505:
-                var message = exception.message ? '<br /><b>' + _('Server Message:') + '</b><br />' + exception.message : '';
+                var message = exception.message ? '<br /><b>' + i18n._('Server Message:') + '</b><br />' + exception.message : '';
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Invalid Data'),
-                    msg: _('Your input data is not valid. Please provide valid data.') + message
+                    title: i18n._('Invalid Data'),
+                    msg: i18n._('Your input data is not valid. Please provide valid data.') + message
                 }));
                 break;
             // server communication loss
@@ -243,14 +248,14 @@ Tine.Tinebase.ExceptionHandler = function() {
                 //       - so we defer the alert. In case of reload/redirect the deferd fn dosn't get executed
                 //         if the new contet/html arrives before the defer time is over.
                 //       - this might not always be the case due to network, service or session problems
-                (function() {alert(_('Connection lost, please check your network!'))}).defer(1000);
+                (function() {alert(i18n._('Connection lost, please check your network!'))}).defer(1000);
                 break;
                 
             // transaction aborted / timeout
             case 520:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Timeout'), 
-                    msg: _('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.')
+                    title: i18n._('Timeout'),
+                    msg: i18n._('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.')
                 }));
                 
                 break;
@@ -258,16 +263,16 @@ Tine.Tinebase.ExceptionHandler = function() {
             // empty response
             case 540:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('No Response'), 
-                    msg: _('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.')
+                    title: i18n._('No Response'),
+                    msg: i18n._('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.')
                 }));
                 break;
             
             // memory exhausted
             case 550: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Out of Resources'), 
-                    msg: _('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.')
+                    title: i18n._('Out of Resources'),
+                    msg: i18n._('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.')
                 }));
                 break;
                 
@@ -275,32 +280,32 @@ Tine.Tinebase.ExceptionHandler = function() {
                 
             case 600:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _(exception.title), 
-                    msg: _(exception.message)
+                    title: i18n._(exception.title),
+                    msg: i18n._(exception.message)
                 }));
                 break;
                 
             // user in no role
             case 610:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('No Role Memberships'), 
-                    msg: _('Your user account has no role memberships. Please contact your administrator.')
+                    title: i18n._('No Role Memberships'),
+                    msg: i18n._('Your user account has no role memberships. Please contact your administrator.')
                 }));
                 break;
                 
             // Tinebase_Exception_InvalidRelationConstraints
             case 912: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _(exception.title),
-                    msg: _(exception.message)
+                    title: i18n._(exception.title),
+                    msg: i18n._(exception.message)
                 }));
                 break;
                 
             // lost/insufficent permissions for api call or bad api call
             case -32601:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: _('Method Not Found / Insufficent Permissions'), 
-                    msg: _('You tried to access a function that is not available. Please reload your browser, try again or contact your administrator.')
+                    title: i18n._('Method Not Found / Insufficent Permissions'),
+                    msg: i18n._('You tried to access a function that is not available. Please reload your browser, try again or contact your administrator.')
                 }));
                 break;
             

@@ -487,8 +487,13 @@ class Tinebase_Timemachine_ModificationLog
     protected function _resolveScalarMergeUpdate(Tinebase_Record_Interface $newRecord, Tinebase_Model_ModificationLog $diff)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . " Merge current value into update data, as it was not changed in update request.");
-        $newRecord[$diff->modified_attribute] = $diff->new_value;
+            . ' Merge current value into update data, as it was not changed in update request.');
+        if ($newRecord->has($diff->modified_attribute)) {
+            $newRecord[$diff->modified_attribute] = $diff->new_value;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' It seems that the attribute ' . $diff->modified_attribute . ' no longer exists in this record. Skipping ...');
+        }
     }
 
     /**

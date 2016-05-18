@@ -51,22 +51,22 @@ Tine.Expressomail.AclsGrid = Ext.extend(Tine.widgets.account.PickerGridPanel, {
     initColumns: function() {
         this.configColumns = [
             new Ext.ux.grid.CheckColumn({
-                header: _('Read'),
-                tooltip: _('Read messages from folders'),
+                header: i18n._('Read'),
+                tooltip: i18n._('Read messages from folders'),
                 dataIndex: 'readacl',
                 width: 55
             }),
             new Ext.ux.grid.CheckColumn({
-                header: _('Write'),
-                tooltip: _('Write and delete messages from folders'),
+                header: i18n._('Write'),
+                tooltip: i18n._('Write and delete messages from folders'),
                 dataIndex: 'writeacl',
                 width: 55
             })
         ];
         if (this.enableSendAs) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Send as'),
-                tooltip: _('Send as folder owner'),
+                header: i18n._('Send as'),
+                tooltip: i18n._('Send as folder owner'),
                 dataIndex: 'sendacl',
                 width: 55,
             }));

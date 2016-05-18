@@ -133,6 +133,7 @@ Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCo
      */
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
+        value = value.map(function(v) {return String(v);});
         
         var keyfieldRecordText = [];
         this.currentValue = [];

@@ -155,19 +155,19 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
      */
     getAccountTypeSelector: function () {
         var userActionCfg = {
-            text: _('Search User'),
+            text: i18n._('Search User'),
             scope: this,
             iconCls: 'tinebase-accounttype-user',
             handler: this.onSwitchCombo.createDelegate(this, ['contact', 'tinebase-accounttype-user'])
         };
         var groupActionCfg = {
-            text: _('Search Group'),
+            text: i18n._('Search Group'),
             scope: this,
             iconCls: 'tinebase-accounttype-group',
             handler: this.onSwitchCombo.createDelegate(this, ['group', 'tinebase-accounttype-group'])
         };
         var anyoneActionCfg = {
-            text: _('Add Anyone'),
+            text: i18n._('Add Anyone'),
             scope: this,
             iconCls: 'tinebase-accounttype-addanyone',
             handler: this.onAddAnyone
@@ -210,7 +210,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     onAddAnyone: function() {
         var recordData = (this.recordDefaults !== null) ? this.recordDefaults : {};
         recordData[this.recordPrefix + 'type'] = 'anyone';
-        recordData[this.recordPrefix + 'name'] = _('Anyone');
+        recordData[this.recordPrefix + 'name'] = i18n._('Anyone');
         recordData[this.recordPrefix + 'id'] = 0;
         var record = new this.recordClass(recordData, 0);
         
@@ -226,7 +226,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
     getContactSearchCombo: function () {
         return new Tine.Addressbook.SearchCombo({
             accountsStore: this.store,
-            emptyText: _('Search for users ...'),
+            emptyText: i18n._('Search for users ...'),
             newRecordClass: this.recordClass,
             newRecordDefaults: this.recordDefaults,
             recordPrefix: this.recordPrefix,
@@ -248,7 +248,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             newRecordClass: this.recordClass,
             newRecordDefaults: this.recordDefaults,
             recordPrefix: this.recordPrefix,
-            emptyText: _('Search for groups ...'),
+            emptyText: i18n._('Search for groups ...'),
             onSelect: this.onAddRecordFromCombo
         });
     },
@@ -263,7 +263,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 sortable: true
             },
             columns:  [
-                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: Tine.Tinebase.common.accountRenderer}
+                {id: 'name', header: i18n._('Name'), dataIndex: this.recordPrefix + 'name', renderer: Tine.Tinebase.common.accountRenderer}
             ].concat(this.configColumns)
         });
     },

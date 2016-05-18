@@ -38,7 +38,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
     },
     
     initComponent: function() {
-        this.title = String.format(_('About {0}'), Tine.title);
+        this.title = String.format(i18n._('About {0}'), Tine.title);
         
         this.initAboutTpl();
         
@@ -53,12 +53,12 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             html: this.aboutTpl.applyTemplate({
                 logo: Tine.Tinebase.LoginPanel.prototype.loginLogo,
                 logoLink: Tine.weburl,
-                linkText: String.format(_('Learn more about {0}'), Tine.title),
+                linkText: String.format(i18n._('Learn more about {0}'), Tine.title),
                 codeName: version.codeName,
                 packageString: version.packageString
             }),
             buttons: [{
-                text: _('Ok'),
+                text: i18n._('Ok'),
                 iconCls: 'action_saveAndClose',
                 handler: this.close,
                 scope: this
@@ -68,16 +68,16 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
         // create links
         this.on('afterrender', function() {
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.license');
-            el.insertHtml('beforeBegin', ' ' + _('Released under different') + ' ');
-            el.insertHtml('beforeEnd', _('Open Source Licenses'));
+            el.insertHtml('beforeBegin', ' ' + i18n._('Released under different') + ' ');
+            el.insertHtml('beforeEnd', i18n._('Open Source Licenses'));
             el.on('click', function(){
                 var ls = new Tine.Tinebase.LicenseScreen();
                 ls.show();
             });
             
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-credits-license a.credits');
-            el.insertHtml('beforeBegin', ' ' + _('with the help of our') + ' ');
-            el.insertHtml('beforeEnd', _('Contributors'));
+            el.insertHtml('beforeBegin', ' ' + i18n._('with the help of our') + ' ');
+            el.insertHtml('beforeEnd', i18n._('Contributors'));
             el.on('click', function() {
                 var cs = new Tine.Tinebase.CreditsScreen();
                 cs.show();

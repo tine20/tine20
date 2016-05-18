@@ -32,7 +32,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
     
     initComponent: function () {
         this.value = Tine.Tinebase.registry.get('locale').language;
-        this.fieldLabel = this.fieldLabel ? this.fieldLabel : _('Language');
+        this.fieldLabel = this.fieldLabel ? this.fieldLabel : i18n._('Language');
         
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">' +
@@ -65,7 +65,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         var newLocale = localeRecord.get('locale');
         
         if (newLocale !== currentLocale) {
-            Ext.MessageBox.wait(_('setting new language...'), _('Please Wait'));
+            Ext.MessageBox.wait(i18n._('setting new language...'), i18n._('Please Wait'));
             
             Ext.Ajax.request({
                 scope: this,

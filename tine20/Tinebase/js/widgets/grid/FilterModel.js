@@ -177,20 +177,20 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      */
     getDatePastOps: function() {
         return [
-            ['dayThis',         _('today')], 
-            ['dayLast',         _('yesterday')], 
-            ['weekThis',        _('this week')], 
-            ['weekLast',        _('last week')],
-            ['weekBeforeLast',  _('the week before last')],
-            ['monthThis',       _('this month')],
-            ['monthLast',       _('last month')],
-            ['monthThreeLast',  _('last three months')],
-            ['monthSixLast',    _('last six months')],
-            ['anytime',         _('anytime')],
-            ['quarterThis',     _('this quarter')],
-            ['quarterLast',     _('last quarter')],
-            ['yearThis',        _('this year')],
-            ['yearLast',        _('last year')]
+            ['dayThis',         i18n._('today')],
+            ['dayLast',         i18n._('yesterday')],
+            ['weekThis',        i18n._('this week')],
+            ['weekLast',        i18n._('last week')],
+            ['weekBeforeLast',  i18n._('the week before last')],
+            ['monthThis',       i18n._('this month')],
+            ['monthLast',       i18n._('last month')],
+            ['monthThreeLast',  i18n._('last three months')],
+            ['monthSixLast',    i18n._('last six months')],
+            ['anytime',         i18n._('anytime')],
+            ['quarterThis',     i18n._('this quarter')],
+            ['quarterLast',     i18n._('last quarter')],
+            ['yearThis',        i18n._('this year')],
+            ['yearLast',        i18n._('last year')]
         ];
     },
     
@@ -201,11 +201,11 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      */
     getDateFutureOps: function() {
         return [
-            ['dayNext',         _('tomorrow')], 
-            ['weekNext',        _('next week')], 
-            ['monthNext',       _('next month')],
-            ['quarterNext',     _('next quarter')],
-            ['yearNext',        _('next year')]
+            ['dayNext',         i18n._('tomorrow')],
+            ['weekNext',        i18n._('next week')],
+            ['monthNext',       i18n._('next month')],
+            ['quarterNext',     i18n._('next quarter')],
+            ['yearNext',        i18n._('next year')]
         ];
     },
     
@@ -221,23 +221,23 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         var operatorStore = new Ext.data.JsonStore({
             fields: ['operator', 'label'],
             data: [
-                {operator: 'contains',      label: _('contains')},
-                {operator: 'notcontains',   label: _('contains not')},
-                {operator: 'regex',         label: _('reg. exp.')},
-                {operator: 'equals',        label: _('is equal to')},
-                {operator: 'equalsspecial', label: _('is equal to without (-, )')},
-                {operator: 'greater',       label: _('is greater than')},
-                {operator: 'less',          label: _('is less than')},
-                {operator: 'not',           label: _('is not')},
-                {operator: 'in',            label: _('one of')},
-                {operator: 'notin',         label: _('none of')},
-                {operator: 'before',        label: _('is before')},
-                {operator: 'after',         label: _('is after')},
-                {operator: 'within',        label: _('is within')},
-                {operator: 'inweek',        label: _('is in week no.')},
-                {operator: 'startswith',    label: _('starts with')},
-                {operator: 'endswith',      label: _('ends with')},
-                {operator: 'definedBy',     label: _('defined by')}
+                {operator: 'contains',      label: i18n._('contains')},
+                {operator: 'notcontains',   label: i18n._('contains not')},
+                {operator: 'regex',         label: i18n._('reg. exp.')},
+                {operator: 'equals',        label: i18n._('is equal to')},
+                {operator: 'equalsspecial', label: i18n._('is equal to without (-, )')},
+                {operator: 'greater',       label: i18n._('is greater than')},
+                {operator: 'less',          label: i18n._('is less than')},
+                {operator: 'not',           label: i18n._('is not')},
+                {operator: 'in',            label: i18n._('one of')},
+                {operator: 'notin',         label: i18n._('none of')},
+                {operator: 'before',        label: i18n._('is before')},
+                {operator: 'after',         label: i18n._('is after')},
+                {operator: 'within',        label: i18n._('is within')},
+                {operator: 'inweek',        label: i18n._('is in week no.')},
+                {operator: 'startswith',    label: i18n._('starts with')},
+                {operator: 'endswith',      label: i18n._('ends with')},
+                {operator: 'definedBy',     label: i18n._('defined by')}
             ].concat(this.getCustomOperators() || []),
             remoteSort: false,
             sortInfo: {
@@ -283,7 +283,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 id: 'tw-ftb-frow-operatorcombo-' + filter.id,
                 mode: 'local',
                 lazyInit: false,
-                emptyText: _('select a operator'),
+                emptyText: i18n._('select a operator'),
                 forceSelection: true,
                 typeAhead: true,
                 triggerAction: 'all',
@@ -407,7 +407,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             case 'user':
                 value = new Tine.Addressbook.SearchCombo(Ext.apply(commonOptions, {
                     listWidth: 350,
-                    emptyText: _('Search Account ...'),
+                    emptyText: i18n._('Search Account ...'),
                     userOnly: true,
                     name: 'organizer',
                     nameField: 'n_fileas',

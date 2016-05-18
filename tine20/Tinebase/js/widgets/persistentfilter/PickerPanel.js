@@ -118,7 +118,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
 
         this.filterNode = this.filterNode || new Ext.tree.AsyncTreeNode({
-            text : _('My favorites'),
+            text : i18n._('My favorites'),
             id : '_persistentFilters',
             leaf : false,
             expanded : true
@@ -296,17 +296,17 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         var menu = new Ext.menu.Menu({
             items : [{
-                text : _('Delete Favorite'),
+                text : i18n._('Delete Favorite'),
                 iconCls : 'action_delete',
                 hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'deleteGrant')),
                 handler : this.onDeletePersistentFilter.createDelegate(this, [node, e])
             }, {
-                text : _('Edit Favorite'),
+                text : i18n._('Edit Favorite'),
                 iconCls : 'action_edit',
                 hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'editGrant')),
                 handler : this.onEditPersistentFilter.createDelegate(this, [node, e])
             }, {
-                text : _('Overwrite Favorite'),
+                text : i18n._('Overwrite Favorite'),
                 iconCls : 'action_saveFilter',
                 hidden : ! (hasManageRight || this.hasGrant(node.attributes, 'editGrant')),
                 handler : this.onOverwritePersistentFilter.createDelegate(this, [node, e])
@@ -323,9 +323,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *            node
      */
     onDeletePersistentFilter : function(node) {
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the favorite "{0}"?'), node.text), function(_btn) {
+        Ext.MessageBox.confirm(i18n._('Confirm'), String.format(i18n._('Do you really want to delete the favorite "{0}"?'), node.text), function(_btn) {
             if (_btn == 'yes') {
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting Favorite "{0}"'), this.containerName, node.text));
+                Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Deleting Favorite "{0}"'), this.containerName, node.text));
 
                 var record = this.store.getById(node.id);
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
@@ -361,9 +361,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     onOverwritePersistentFilter : function(node) {
         
         var record = this.store.getById(node.id);
-        Ext.MessageBox.confirm(_('Overwrite?'), String.format(_('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn) {
+        Ext.MessageBox.confirm(i18n._('Overwrite?'), String.format(i18n._('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn) {
             if (_btn == 'yes') {
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));
+                Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Overwriting Favorite "{0}"'), node.text));
                 var ftb = this.getFilterToolbar();
                 record.set('filters', ftb.getAllFilterData());
                 
@@ -384,7 +384,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         // recheck that current ftb is saveable
         if (!ftb.isSaveAllowed()) {
-            Ext.Msg.alert(_('Could not save Favorite'), _('Your current view does not support favorites'));
+            Ext.Msg.alert(i18n._('Could not save Favorite'), i18n._('Your current view does not support favorites'));
             return;
         }
         this.getEditWindow(record);
@@ -392,9 +392,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     getEditWindow: function(record) {
         if (! record.get('id')) {
-            var title = _('Create Favorite');
+            var title = i18n._('Create Favorite');
         } else {
-            var title = _('Edit Favorite');
+            var title = i18n._('Edit Favorite');
         }
         
         var height = 160;
@@ -418,7 +418,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         });
 
         newWindow.on('update', function(win) {
-            Ext.MessageBox.wait(_('Please wait'), String.format(_('Saving Favorite "{0}"'), record.get('name')));
+            Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Saving Favorite "{0}"'), record.get('name')));
             this.createOrUpdateFavorite(newWindow.record);
         }, this);
         
@@ -618,7 +618,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
                 var addText = '';
                 var addClass = '';
                 if (isShared) {
-                    addText = _('(shared)');
+                    addText = i18n._('(shared)');
                     addClass = '-shared';
                 }
 

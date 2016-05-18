@@ -43,7 +43,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      * @private
      */
     initComponent: function() {
-        this.emptyText = this.emptyText ? this.emptyText : _('tag name');
+        this.emptyText = this.emptyText ? this.emptyText : i18n._('tag name');
         
         this.initStore();
         this.initTemplate();
@@ -131,12 +131,12 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
                     '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
                     '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
                         '{[this.encode(values.name)]}', 
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                         '</i>&nbsp;[{occurrence}]',
                         '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
                         
                         '&nbsp;{[this.encode(values.name)]}',
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                     '</div>',
                 '</div>', 
             '</tpl>',

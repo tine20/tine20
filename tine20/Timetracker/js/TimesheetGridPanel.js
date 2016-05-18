@@ -374,13 +374,13 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             '-',
             this.actions_exportTimesheet
 //            '-', {
-//            text: _('Mass Update'),
+//            text: i18n._('Mass Update'),
 //            iconCls: 'action_edit',
 //            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
 //            scope: this,
 //            menu: {
 //                items: [
-//                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
+//                    '<b class="x-ux-menu-title">' + i18n._('Update field:') + '</b>',
 //                    {
 //                        text: this.app.i18n._('Billable'),
 //                        field: 'is_billable',

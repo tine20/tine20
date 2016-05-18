@@ -25,7 +25,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     attendeeRenderer: function(attendeeData) {
         if (! attendeeData) {
-            return _('No Information');
+            return i18n._('No Information');
         }
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(attendeeData);
         

@@ -374,6 +374,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         keyFieldName: 'leadstates',
                                         fieldLabel: this.app.i18n._('Leadstate'),
                                         name: 'leadstate_id',
+                                        showIcon: false,
                                         listeners: {
                                             'select': function(combo, record, index) {
                                                 if (this.record.json.probability !== null) {
@@ -389,12 +390,14 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         app: 'Crm',
                                         keyFieldName: 'leadtypes',
                                         fieldLabel: this.app.i18n._('Leadtype'),
-                                        name: 'leadtype_id'
+                                        name: 'leadtype_id',
+                                        showIcon: false
                                     }), new Tine.Tinebase.widgets.keyfield.ComboBox({
                                         app: 'Crm',
                                         keyFieldName: 'leadsources',
                                         fieldLabel: this.app.i18n._('Leadsource'),
                                         name: 'leadsource_id',
+                                        showIcon: false,
                                         listeners: {
                                             scope: this,
                                             // When loading

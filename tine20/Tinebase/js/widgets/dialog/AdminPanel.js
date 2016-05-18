@@ -56,7 +56,7 @@ Tine.widgets.dialog.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        this.window.setTitle(String.format(_('Change settings for application {0}'), this.appName));
+        this.window.setTitle(String.format(i18n._('Change settings for application {0}'), this.appName));
         
         if (this.fireEvent('load', this) !== false) {
             var settings = this.record.get('settings'),
@@ -104,7 +104,7 @@ Tine.widgets.dialog.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
             activeTab: 0,
             border: false,
             items: [{
-                title: Tine.Tinebase.translation._('Defaults'),
+                title: i18n._('Defaults'),
                 autoScroll: true,
                 border: false,
                 frame: true,

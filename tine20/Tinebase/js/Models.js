@@ -444,7 +444,7 @@ Tine.Tinebase.Model.Department = Tine.Tinebase.data.Record.create([
 
 Tine.Tinebase.Model.Department.getFilterModel = function() {
     return [
-        {label: _('Name'),          field: 'name',       operators: ['contains']}
+        {label: i18n._('Name'),          field: 'name',       operators: ['contains']}
     ];
 };
 

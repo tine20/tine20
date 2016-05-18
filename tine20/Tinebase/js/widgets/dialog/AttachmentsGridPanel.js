@@ -60,8 +60,8 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     initComponent: function() {
         this.record = this.editDialog.record;
         this.app = this.editDialog.app;
-        this.title = this.i18nTitle = _('Attachments');
-        this.i18nFileString = _('Attachment');
+        this.title = this.i18nTitle = i18n._('Attachments');
+        this.i18nFileString = i18n._('Attachment');
         
         Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         
@@ -83,7 +83,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             id: 'name',
             dataIndex: 'name',
             width: 150,
-            header: _('Name'),
+            header: i18n._('Name'),
             renderer: Ext.ux.PercentRendererWithName,
             sortable: true
         }, {
@@ -91,7 +91,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             id: 'size',
             dataIndex: 'size',
             width: 50,
-            header: _('Size'),
+            header: i18n._('Size'),
             renderer: Ext.util.Format.fileSize,
             sortable: true
         }, {
@@ -99,11 +99,11 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             id: 'contenttype',
             dataIndex: 'contenttype',
             width: 80,
-            header: _('Content Type'),
+            header: i18n._('Content Type'),
             sortable: true
-        },{ id: 'creation_time',      header: _('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,     width: 80,
+        },{ id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,     width: 80,
             sortable: true },
-          { id: 'created_by',         header: _('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer, width: 80,
+          { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer, width: 80,
             sortable: true }
         ];
         
@@ -128,7 +128,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             requiredGrant: 'readGrant',
             allowMultiple: false,
             actionType: 'download',
-            text: _('Download'),
+            text: i18n._('Download'),
             handler: this.onDownload,
             iconCls: 'action_download',
             scope: this,

@@ -29,7 +29,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
-                title: _('Service Unavailable'),
+                title: i18n._('Service Unavailable'),
                 msg: String.format(app.i18n._('The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator.'),
                     '<a href="http://wiki.tine20.org/Admin_FAQ#The_message_.22filesdir_config_value_not_set.22_appears_in_the_logfile_and_I_can.27t_open_the_Filemanager" target="_blank">',
                     '</a>')

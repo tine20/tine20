@@ -20,7 +20,7 @@ Ext.ns('Tine', 'Tine.Example');
  */
 Tine.Example.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
-     * auto hook text _('New Example')
+     * auto hook text i18n._('New Example')
      */
     addButtonText: 'New Example'
 });

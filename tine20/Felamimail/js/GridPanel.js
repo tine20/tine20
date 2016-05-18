@@ -293,7 +293,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -574,16 +574,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
             
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(_('Answered'))});
+            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(i18n._('Answered'))});
         }   
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(_('Forwarded'))});
+            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(i18n._('Forwarded'))});
         }   
         if (record.hasFlag('Tine20')) {
-            icons.push({src: 'images/favicon.png', qtip: Ext.util.Format.htmlEncode(_('Tine20'))});
+            icons.push({src: 'images/favicon.png', qtip: Ext.util.Format.htmlEncode(i18n._('Tine20'))});
         }
 //        if (record.hasFlag('\\Recent')) {
-//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
+//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
 //        }   
         
         Ext.each(icons, function(icon) {

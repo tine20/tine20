@@ -207,7 +207,7 @@ Tine.Expressodriver.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
 
         }).createDelegate({items: items});
         var app = Tine.Tinebase.appMgr.get(this.appName);
-        Ext.MessageBox.wait(_('Please wait'), app.i18n._('Deleting nodes...' ));
+        Ext.MessageBox.wait(i18n._('Please wait'), app.i18n._('Deleting nodes...' ));
         return this.doXHTTPRequest(options);
     },
 
@@ -291,7 +291,7 @@ Tine.Expressodriver.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
         }
 
-        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(_('Please wait')) + '. ' + String.format(message, '' )});
+        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(i18n._('Please wait')) + '. ' + String.format(message, '' )});
         app.getMainScreen().getWestPanel().setDisabled(true);
         app.getMainScreen().getNorthPanel().setDisabled(true);
         this.loadMask.show();
@@ -517,7 +517,7 @@ Tine.Expressodriver.Model.Node.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Expressodriver');
 
     return [
-        {label : _('Quick Search'), field : 'query', operators : [ 'contains' ]},
+        {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
         {filtertype : 'tine.expressodriver.pathfiltermodel', app : app}
     ];
 };

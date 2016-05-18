@@ -15,9 +15,9 @@ Ext.ns('Tine.widgets', 'Tine.widgets.account');
  * @extends     Ext.Action
  */
 Tine.widgets.account.ChangeAccountAction = function(config) {
-    config.text = config.text ? config.text : _('Change user account');
+    config.text = config.text ? config.text : i18n._('Change user account');
     config.iconCls = 'tinebase-accounttype-group';
-    config.tooltip = _('Switch to another user\'s account');
+    config.tooltip = i18n._('Switch to another user\'s account');
     
     config.handler = this.handleClick.createDelegate(this);
     Ext.apply(this, config);
@@ -62,7 +62,7 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
         
         return [{
             xtype: 'label',
-            text: _('Switch to this user account:')
+            text: i18n._('Switch to this user account:')
         }, this.accountSelect
         ];
     },
@@ -75,7 +75,7 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
         }
         
         this.okButton = new Ext.Button({
-            text: _('Ok'),
+            text: i18n._('Ok'),
             minWidth: 70,
             scope: this,
             handler: this.onOk,
@@ -89,14 +89,14 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
             height: 150,
             padding: '5px',
             modal: true,
-            title: _('Select Account'),
+            title: i18n._('Select Account'),
             items: [{
                 xtype: 'form',
                 buttonAlign: 'right',
                 padding: '5px',
                 items: this.getFormItems(),
                 buttons: [{
-                    text: _('Cancel'),
+                    text: i18n._('Cancel'),
                     minWidth: 70,
                     scope: this,
                     handler: this.onCancel,
@@ -112,7 +112,7 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     
     onOk: function() {
         if (this.win) {
-            this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Changing user account ...')});
+            this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Changing user account ...')});
             this.loadMask.show();
         }
         

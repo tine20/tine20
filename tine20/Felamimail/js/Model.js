@@ -122,6 +122,17 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      */
     isObsoletedBy: function(record) {
         return record.mtime || record.ctime > this.ctime;
+    },
+
+    /**
+     * returns actual mimeType of the current body property
+     *
+     * NOTE: This is not the contents of body_content_type!
+     *       body_content_type is the type of the original message derrived by the message structure.
+     *       But the server transforms the original type into the requested format/diplay_format.
+     */
+    getBodyType: function() {
+        return String(this.get('body')).match(/^<html/) ? 'text/html' : 'text/plain';
     }
 });
 
@@ -210,10 +221,21 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      * fetches body and additional headers (which are needed for the preview panel) into given message
      * 
      * @param {Message} message
+     * @param {String} mimeType
      * @param {Function|Object} callback (NOTE: this has NOTHING to do with standard Ext request callback fn)
      */
-    fetchBody: function(message, callback) {
+    fetchBody: function(message, mimeType, callback) {
+
+        if (mimeType == 'configured') {
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
+            mimeType = account.get('display_format');
+            if (! mimeType.match(/^text\//)) {
+                mimeType = 'text/' + mimeType;
+            }
+        }
+
         return this.loadRecord(message, {
+            params: {mimeType: mimeType},
             timeout: 120000, // 2 minutes
             scope: this,
             success: function(response, options) {
@@ -350,6 +372,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'has_children_support', type: 'bool' },
     { name: 'delimiter' },
     { name: 'display_format' },
+    { name: 'compose_format' },
+    { name: 'preserve_format' },
     { name: 'ns_personal' },
     { name: 'ns_other' },
     { name: 'ns_shared' },
@@ -505,7 +529,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'unread_children', type: 'Array', defaultValue: [] } // client only / array of unread child ids
 ], {
     // translations for system folders:
-    // _('INBOX') _('Drafts') _('Sent') _('Templates') _('Junk') _('Trash')
+    // i18n._('INBOX') i18n._('Drafts') i18n._('Sent') i18n._('Templates') i18n._('Junk') i18n._('Trash')
 
     appName: 'Felamimail',
     modelName: 'Folder',

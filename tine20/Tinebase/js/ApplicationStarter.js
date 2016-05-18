@@ -307,7 +307,7 @@ Tine.Tinebase.ApplicationStarter = {
         }
         // prepare filter
         var filter = {
-            label: globalI18n ? _(label) : app.i18n._(label),
+            label: globalI18n ? i18n._(label) : app.i18n._(label),
             field: fieldKey
         };
         

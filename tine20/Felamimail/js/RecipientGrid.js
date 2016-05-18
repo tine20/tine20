@@ -387,7 +387,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initActions: function() {
         this.action_remove = new Ext.Action({
-            text: _('Remove'),
+            text: i18n._('Remove'),
             handler: this.onDelete,
             iconCls: 'action_delete',
             scope: this

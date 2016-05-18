@@ -136,7 +136,7 @@ Tine.Expressomail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return this.validationMessage;
         }
         else {
-            return _('Please fix the errors noted.');
+            return i18n._('Please fix the errors noted.');
         }
     },
     

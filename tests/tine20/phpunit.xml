@@ -22,7 +22,7 @@
             <!-- setup tests are separate -->
             <directory>../../tine20/Setup</directory>
             <!-- don't show config files -->
-            <directory>/etc</directory>
+            <directory>/etc/tine20</directory>
         </blacklist>
     </filter>
 </phpunit>

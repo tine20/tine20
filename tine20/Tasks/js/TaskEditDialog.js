@@ -202,7 +202,7 @@ Ext.namespace('Tine.Tasks');
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
                             fieldLabel: this.app.i18n._('Organizer'),
-                            emptyText: _('Add Responsible ...'),
+                            emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
                             allowEmpty: true

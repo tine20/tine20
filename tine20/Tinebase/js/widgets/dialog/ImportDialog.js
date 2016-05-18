@@ -224,7 +224,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             example = options && options.example ? options.example : '';
             
         return {
-            title: _('Choose File and Format'),
+            title: i18n._('Choose File and Format'),
             layout: 'vbox',
             border: false,
             xtype: 'ux.displaypanel',
@@ -233,15 +233,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             items: [{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('Choose Import File'),
+                title: i18n._('Choose Import File'),
                 height: 100,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'tw.uploadbutton',
                     ref: '../../uploadButton',
-                    text: String.format(_('Select file containing your {0}'), this.recordClass.getRecordsName()),
+                    text: String.format(i18n._('Select file containing your {0}'), this.recordClass.getRecordsName()),
                     handler: this.onFileReady,
                     allowedTypes: this.allowedFileExtensions,
                     scope: this
@@ -249,21 +249,21 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }, {
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
-                title: _('What should the file you upload look like?'),
+                title: i18n._('What should the file you upload look like?'),
                 flex: 1,
                 items: [/*{
                     xtype: 'label',
                     cls: 'tb-login-big-label',
-                    html: _('What should the file you upload look like?') + '<br />'
+                    html: i18n._('What should the file you upload look like?') + '<br />'
                 },*/ {
                     xtype: 'label',
-                    html: '<p>' + _('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + _('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + _('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
+                    html: '<p>' + i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
                 }, {
                     xtype: 'combo',
                     ref: '../../definitionCombo',
@@ -284,10 +284,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 }, {
                     xtype: 'label',
                     ref: '../../exampleLink',
-                    html: example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
+                    html: example ? ('<p><a href="' + example + '">' + i18n._('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
                 }, {
                     xtype: 'displayfield',
-//                    fieldLabel: _('Import description'),
+//                    fieldLabel: i18n._('Import description'),
                     ref: '../../definitionDescription',
                     height: 70,
                     value: description,
@@ -316,7 +316,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         this.selectedDefinition = record;
         
         this.definitionDescription.setValue(description);
-        this.exampleLink.setText(example ? ('<p><a href="' + example + '">' + _('Download example file') + '</a></p>') : '<p>&nbsp;</p>', false);
+        this.exampleLink.setText(example ? ('<p><a href="' + example + '">' + i18n._('Download example file') + '</a></p>') : '<p>&nbsp;</p>', false);
         
         this.manageButtons();
     },
@@ -337,7 +337,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         }
         
         return {
-            title: _('Set Import Options'),
+            title: i18n._('Set Import Options'),
             layout: 'fit',
             border: false,
             xtype: 'form',
@@ -345,7 +345,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             ref: '../optionsPanel',
             items: [{
                 xtype: 'label',
-                html: '<p>' + String.format(_('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
+                html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
             }, new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector',
                 width: 300,
@@ -403,7 +403,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
              */
             onNextButton: (function() {
                 if (! this.checkMask) {
-                    this.checkMask = new Ext.LoadMask(this.getEl(), {msg: _('Checking Import')});
+                    this.checkMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Checking Import')});
                 }
                 
                 this.checkMask.show();
@@ -432,7 +432,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         }
         
         return {
-            title: _('Resolve Conflicts'),
+            title: i18n._('Resolve Conflicts'),
             layout: 'vbox',
             border: false,
             xtype: 'form',
@@ -441,29 +441,29 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             items: [/*{
                 xtype: 'label',
                 ref: '../conflictsLabel',
-                rawText: '<p>' + _('There are {0} {1} that might already exist.') + '</p>',
+                rawText: '<p>' + i18n._('There are {0} {1} that might already exist.') + '</p>',
                 html: '<p></p>',
                 height: 20
             },*/ {
                 xtype: 'paging',
                 ref: '../conflictPagingToolbar',
                 pageSize: 1,
-                beforePageText: _('Conflict'),
-                firstText : _('First Conflict'),
-                prevText : _('Previous Conflict'),
-                nextText : _('Next Conflict'),
-                lastText : _('Last Conflict'),
+                beforePageText: i18n._('Conflict'),
+                firstText : i18n._('First Conflict'),
+                prevText : i18n._('Previous Conflict'),
+                nextText : i18n._('Next Conflict'),
+                lastText : i18n._('Last Conflict'),
                 store: this.exceptionStore,
                 doLoad: this.loadConflict.createDelegate(this),
                 onLoad: Ext.emptyFn,
                 listeners: {afterrender: function(t){t.refresh.hide();}},
                 items: [this.conflictIndexText = new Ext.Toolbar.TextItem({}), '->', {
-                    text: _('Conflict is resolved'),
+                    text: i18n._('Conflict is resolved'),
                     xtype: 'splitbutton',
                     scope: this,
                     handler: this.onResolveConflict,
                     menu: [{
-                        text: _('Resolve all conflicts'),
+                        text: i18n._('Resolve all conflicts'),
                         scope: this,
                         handler: this.onResolveAllConflict
                     }]
@@ -557,7 +557,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      */
     loadConflict: function(index) {
         if (! this.conflictMask) {
-            this.conflictMask = new Ext.LoadMask(this.getEl(), {msg: _('Processing Conflict Data'), hidden: true});
+            this.conflictMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Processing Conflict Data'), hidden: true});
         }
 
         // give DOM the time to show loadMask
@@ -582,7 +582,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             resolveStore.loadData(nextRecord.get('exception'), nextRecord.get('resolveStrategy') || resolveStore.resolveStrategy, nextRecord.get('resolvedRecord'));
         } else {
             resolveStore.removeAll();
-            this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + _('No conflict to resolve'));
+            this.duplicateResolveGridPanel.getView().mainBody.update('<br />  ' + i18n._('No conflict to resolve'));
             // defer navigation to complete this step before
             this.navigate.defer(200, this, [+1]);
         }
@@ -601,8 +601,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         p.next.setDisabled(ap == ps);
         p.last.setDisabled(ap == ps);
         this.conflictIndexText.setText(nextRecord ? 
-            String.format(_('(This is record {0} in your import file)'), nextRecord.get('index') + 1) :
-            _('No conflict to resolve')
+            String.format(i18n._('(This is record {0} in your import file)'), nextRecord.get('index') + 1) :
+            i18n._('No conflict to resolve')
         );
         
         this.conflictMask.hide();
@@ -626,12 +626,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
 //                    }
                     return Ext.util.Format.htmlEncode(Ext.encode(values.exception.clientRecord));
                 } else {
-                    return _('No Detail Informations');
+                    return i18n._('No Detail Informations');
                 }
             }})
         });
         return {
-            title: _('Summary'),
+            title: i18n._('Summary'),
             border: false,
             xtype: 'ux.displaypanel',
             frame: true,
@@ -660,8 +660,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     plugins: exceptionExpander,
                     columns: [
                         exceptionExpander,
-                        { id: 'index', header: _('Index'), width: 60, sortable: false, dataIndex: 'index'}, 
-                        { id: 'failure', header: _('Failure'), width: 60, sortable: false, dataIndex: 'message'}
+                        { id: 'index', header: i18n._('Index'), width: 60, sortable: false, dataIndex: 'index'},
+                        { id: 'failure', header: i18n._('Failure'), width: 60, sortable: false, dataIndex: 'message'}
                     ],
                     autoExpandColumn: 'failure'
                 }]
@@ -676,7 +676,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
              */
             onFinishButton: (function() {
                 if (! this.importMask) {
-                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Importing {0}'), this.recordClass.getRecordsName())});
+                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Importing {0}'), this.recordClass.getRecordsName())});
                 }
                 this.importMask.show();
                 
@@ -707,7 +707,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                         this.exceptionStore.clearFilter(true);
                         
                         this.summaryPanelFailures.show();
-                        this.summaryPanelFailures.setTitle(String.format(_('{0} records had failures and where discarded.'), response.failcount));
+                        this.summaryPanelFailures.setTitle(String.format(i18n._('{0} records had failures and where discarded.'), response.failcount));
                     } else {
                         this.window.close();
                     }
@@ -749,24 +749,24 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         
         var tags = this.tagsPanel.getFormField().getValue(),
             container = this.containerCombo.selectedContainer,
-            info = [String.format(_('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
+            info = [String.format(i18n._('In total we found {0} records in your import file.'), rsp.totalcount + rsp.duplicatecount + rsp.failcount)];
             
             if (totalcount) {
-                info.push(String.format(_('{0} of them will be added as new records into: "{1}".'), 
+                info.push(String.format(i18n._('{0} of them will be added as new records into: "{1}".'),
                     totalcount, 
                     Tine.Tinebase.common.containerRenderer(container).replace('<div', '<span').replace('</div>', '</span>')
                 ));
             }
             
             if (mergecount + discardcount) {
-                info.push(String.format(_('{0} of them where identified as duplicates.'), mergecount + discardcount));
+                info.push(String.format(i18n._('{0} of them where identified as duplicates.'), mergecount + discardcount));
                 
                 if (mergecount) {
-                    info.push(String.format(_('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
+                    info.push(String.format(i18n._('From the identified duplicates {0} will be merged into the existing records.'), mergecount));
                 }
                 
                 if (discardcount) {
-                    info.push(String.format(_('From the identified duplicates {0} will be discarded.'), discardcount));
+                    info.push(String.format(i18n._('From the identified duplicates {0} will be discarded.'), discardcount));
                 }
             }
             
@@ -782,7 +782,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                         tagNames.push(tag.name)
                     }
                 }, this);
-                info.push(String.format(_('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(', ')));
+                info.push(String.format(i18n._('All records will be tagged with: "{0}" so you can find them easily.'), tagNames.join(', ')));
             }
             
         this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
@@ -793,7 +793,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 return ! (record.get('code') == 629 && ! record.get('isResolved'));
             });
             this.summaryPanelFailures.show();
-            this.summaryPanelFailures.setTitle(String.format(_('{0} records have failures and will be discarded.'), failcount));
+            this.summaryPanelFailures.setTitle(String.format(i18n._('{0} records have failures and will be discarded.'), failcount));
             
         }
     }

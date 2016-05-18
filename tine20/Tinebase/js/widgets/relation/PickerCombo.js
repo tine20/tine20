@@ -90,7 +90,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
                     this.combo.reset();
                     this.combo.setValue(startRecord);
                     this.combo.selectedRecord = startRecord;
-                    this.combo.markInvalid(String.format(_('The {1} "{2}" is already used in the Field "{0}" and can be linked only once!'), fieldName, this.recordClass.getRecordName(), recordToAdd.get(this.recordClass.getMeta('titleProperty'))));
+                    this.combo.markInvalid(String.format(i18n._('The {1} "{2}" is already used in the Field "{0}" and can be linked only once!'), fieldName, this.recordClass.getRecordName(), recordToAdd.get(this.recordClass.getMeta('titleProperty'))));
                     return false;
                 }
 

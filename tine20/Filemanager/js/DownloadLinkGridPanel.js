@@ -68,7 +68,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         
         this.actionRemove = new Ext.Action({
-            text: _('Remove record'),
+            text: i18n._('Remove record'),
             disabled: true,
             scope: this,
             handler: this.onRemove,

@@ -161,7 +161,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }], [ this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
                                     columnWidth: 1,
                                     id: this.app.appName + 'EditDialogContainerSelector' + Ext.id(),
-                                    fieldLabel: _('Saved in'),
+                                    fieldLabel: i18n._('Saved in'),
                                     ref: '../../../../../../../../containerSelect',
                                     //width: 300,
                                     //listWidth: 300,
@@ -629,7 +629,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.saving = false;
             this.loadMask.hide();
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            Ext.MessageBox.alert(i18n._('Errors'), this.getValidationErrorMessage());
         }
     }
 });

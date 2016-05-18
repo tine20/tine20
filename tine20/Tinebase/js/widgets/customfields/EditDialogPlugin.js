@@ -152,7 +152,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 definition = cfConfig.get('definition');
                 fieldObj = Tine.widgets.customfields.Field.get(this.app, cfConfig, {anchor: '95%'}, this.editDialog);
                 uiConfig = definition.uiconfig ? definition.uiconfig : {};
-                group = uiConfig.group ? uiConfig.group : _('General');
+                group = uiConfig.group ? uiConfig.group : i18n._('General');
                 
                 Tine.log.debug('Tine.widgets.customfields.EditDialogPlugin::addCFTab() - Adding ' + cfConfig.get('name') + ' to group ' + group);
                 this.getFieldSet(group).add(fieldObj);
@@ -164,7 +164,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         }, this);
         
         this.cfTab  = new Ext.Panel({
-            title: _('Custom Fields'),
+            title: i18n._('Custom Fields'),
             layout: 'form',
             border: true,
             frame: true,

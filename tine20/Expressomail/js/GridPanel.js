@@ -470,7 +470,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -916,23 +916,23 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         if (value && value.match(/1/))  
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-signature.png', qtip: _('Assinado')});  // _('Signed')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-signature.png', qtip: i18n._('Assinado')});  // i18n._('Signed')
         }
         if (value && value.match(/2/))
         { 
-            icons.push({src: 'images/oxygen/16x16/actions/encrypted.png', qtip: _('Criptografado')});   //_('Encrypted')
+            icons.push({src: 'images/oxygen/16x16/actions/encrypted.png', qtip: i18n._('Criptografado')});   //_('Encrypted')
         }
         if (value && value.match(/3/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-zip.png', qtip: _('Compactado')});  //_('Compressed')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-zip.png', qtip: i18n._('Compactado')});  //_('Compressed')
         }
         if (value && value.match(/4/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: _('Apenas Certificados')});   //_('Certs Only')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: i18n._('Apenas Certificados')});   //_('Certs Only')
         }
         if (value && value.match(/5/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: _('pkcs7-mime')});
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: i18n._('pkcs7-mime')});
         }
 
         Ext.each(icons, function(icon) {
@@ -973,17 +973,17 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
        
         if (record.get('reading_conf')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-mark-task.png', qtip: Ext.util.Format.htmlEncode(_('Confirmação de Leitura'))});  //_('Reading Confirmation')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-mark-task.png', qtip: Ext.util.Format.htmlEncode(i18n._('Confirmação de Leitura'))});  //_('Reading Confirmation')
         }
 
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(_('Respondida'))}); //_('Answered')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(i18n._('Respondida'))}); //_('Answered')
         }
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(_('Encaminhada'))}); //_('Forwarded')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(i18n._('Encaminhada'))}); //_('Forwarded')
         }
 //        if (record.hasFlag('\\Recent')) {
-//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
+//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
 //        }
 
         Ext.each(icons, function(icon) {
@@ -2398,7 +2398,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date'))
             {
                 if (header == 'date') headers[header] = new Date(headers[header]).toLocaleString();
-                result += '<b>' + _(header) + ':</b> '
+                result += '<b>' + i18n._(header) + ':</b> '
                     + Ext.util.Format.htmlEncode(
                         (ellipsis)
                             ? Ext.util.Format.ellipsis(headers[header], 40)

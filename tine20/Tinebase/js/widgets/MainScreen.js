@@ -313,7 +313,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (favoritesPanel) {
             westPanelToolbar.addButton({
                 xtype: 'button',
-                text: _('Save current view as favorite'),
+                text: i18n._('Save current view as favorite'),
                 iconCls: 'action_saveFilter',
                 scope: this,
                 handler: function() {

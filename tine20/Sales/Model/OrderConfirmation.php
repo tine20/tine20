@@ -111,7 +111,7 @@ class Sales_Model_OrderConfirmation extends Tinebase_Record_Abstract
      */
     protected static $_relatableConfig = array(
         array('relatedApp' => 'Sales', 'relatedModel' => 'Contract', 'config' => array(
-            array('type' => 'CONTRACT', 'degree' => 'sibling', 'text' => 'Contract', 'max' => '1:0'),
+            array('type' => 'CONTRACT', 'degree' => 'sibling', 'text' => 'Contract', 'max' => '0:0'),
         ), 'defaultType' => ''
     ));
 }

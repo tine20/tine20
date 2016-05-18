@@ -89,7 +89,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     filterValueWidth: 200,
     
     /**
-     * @cfg {String} row prefix (defaults to _('Show'))
+     * @cfg {String} row prefix (defaults to i18n._('Show'))
      */
     rowPrefix: null,
     
@@ -110,7 +110,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * 
      * @type String
      */
-    conjunctionOperator: 'and', // _('and')
+    conjunctionOperator: 'and', // i18n._('and')
     
     header: false,
     border: false,
@@ -175,19 +175,19 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.actions = {
             addFilterRow: new Ext.Button({
                 //disabled: true,
-                tooltip: _('add new filter'),
+                tooltip: i18n._('add new filter'),
                 iconCls: 'action_addFilter',
                 scope: this,
                 handler: this.addFilter
             }),
             removeAllFilters: new Ext.Button({
-                tooltip: _('reset all filters'),
+                tooltip: i18n._('reset all filters'),
                 iconCls: 'action_delAllFilter',
                 scope: this,
                 handler: this.deleteAllFilters
             }),
             startSearch: new Ext.Button({
-                text: _('start search'),
+                text: i18n._('start search'),
                 iconCls: 'action_startFilter',
                 scope: this,
                 handler: function() {
@@ -195,14 +195,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
             }),
             saveFilter: new Ext.Button({
-                tooltip: _('save as favorite'),
+                tooltip: i18n._('save as favorite'),
                 iconCls: 'action_saveFilter',
                 handler: this.onSaveFilter.createDelegate(this)
             })
         };
 
         this.action_loadFilter = new Ext.Action({
-            text: _('Load a favorite'),
+            text: i18n._('Load a favorite'),
             hidden: true,
             iconCls: 'action-tinebase-favorite',
             scope: this,
@@ -367,7 +367,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
-            emptyText: _('select a field'),
+            emptyText: i18n._('select a field'),
             forceSelection: true,
             typeAhead: true,
             triggerAction: 'all',
@@ -405,7 +405,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         filter.deleteRowButton = new Ext.Button({
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
-            tooltip: _('Delete this filter'),
+            tooltip: i18n._('Delete this filter'),
             filter: filter,
             iconCls: 'action_delThisFilter',
             renderTo: fRow.child('td[class=tw-ftb-frow-mbutton]'),
@@ -443,7 +443,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             var tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
             if (tr) {
-                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = '<span style="width: 25px; display: inline-block">' + _(this.conjunctionOperator) + '<span>';
+                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = '<span style="width: 25px; display: inline-block">' + i18n._(this.conjunctionOperator) + '<span>';
             }
             
             if (filter.id == lastId) {
@@ -592,7 +592,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         }, this);
         
         if (this.rowPrefix === null) {
-            this.rowPrefix = _('Show');
+            this.rowPrefix = i18n._('Show');
         }
         
         this.initTemplates();

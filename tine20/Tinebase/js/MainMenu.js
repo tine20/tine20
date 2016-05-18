@@ -63,7 +63,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         // TODO add a bigger spacer here?
         { xtype: 'spacer' },
         {
-            text: String.format(_('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
+            text: String.format(i18n._('User: {0}'), Tine.Tinebase.registry.get('currentAccount').accountDisplayName),
             menu: this.getUserActions(),
             menuAlign: 'tr-br',
             iconCls: Tine.Tinebase.registry.get('userAccountChanged') ? 'renderer_accountUserChangedIcon' : 'renderer_accountUserIcon'
@@ -109,7 +109,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             if (Tine.Tinebase.registry.get('userAccountChanged')) {
                 this.action_returnToOriginalUser = new Tine.widgets.account.ChangeAccountAction({
                     returnToOriginalUser: true,
-                    text: _('Return to original user account')
+                    text: i18n._('Return to original user account')
                 });
                 this.userActions = this.userActions.concat(this.action_returnToOriginalUser);
                 
@@ -143,55 +143,55 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     initActions: function() {
         this.action_aboutTine = new Ext.Action({
-            text: String.format(_('About {0}'), Tine.title),
+            text: String.format(i18n._('About {0}'), Tine.title),
             handler: this.onAboutTine20,
             iconCls: 'action_about'
         });
         
         this.action_loadTutorial = new Ext.Action({
-            text: String.format(_('Help')),
+            text: String.format(i18n._('Help')),
             iconCls: 'action_loadTutorial',
             handler: this.onLoadTutorial,
             scope: this
         });
 
         this.action_showDebugConsole = new Ext.Action({
-            text: _('Debug Console (Ctrl + F11)'),
+            text: i18n._('Debug Console (Ctrl + F11)'),
             handler: Tine.Tinebase.common.showDebugConsole,
             iconCls: 'tinebase-action-debug-console'
         });
         
         this.action_showPreferencesDialog = new Ext.Action({
-            text: _('Preferences'),
+            text: i18n._('Preferences'),
             disabled: false,
             handler: this.onEditPreferences,
             iconCls: 'action_adminMode'
         });
 
         this.action_editProfile = new Ext.Action({
-            text: _('Edit Profile'),
+            text: i18n._('Edit Profile'),
             disabled: false,
             handler: this.onEditProfile,
             iconCls: 'tinebase-accounttype-user'
         });
         
         this.action_changePassword = new Ext.Action({
-            text: _('Change password'),
+            text: i18n._('Change password'),
             handler: this.onChangePassword,
             disabled: (! Tine.Tinebase.configManager.get('changepw')),
             iconCls: 'action_password'
         });
         
         this.action_logout = new Ext.Action({
-            text: _('Logout'),
-            tooltip:  String.format(_('Logout from {0}'), Tine.title),
+            text: i18n._('Logout'),
+            tooltip:  String.format(i18n._('Logout from {0}'), Tine.title),
             iconCls: 'action_logOut',
             handler: this.onLogout,
             scope: this
         });
         
         this.actionLearnMore = new Ext.Action({
-            text: String.format(_('Learn more about {0}'), Tine.title),
+            text: String.format(i18n._('Learn more about {0}'), Tine.title),
             tooltip: Tine.weburl,
             iconCls: 'tine-favicon',
             handler: function() {
@@ -201,8 +201,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         });
         
         this.action_notificationPermissions = new Ext.Action({
-            text: _('Allow desktop notifications'),
-            tooltip:  _('Request permissions for webkit desktop notifications.'),
+            text: i18n._('Allow desktop notifications'),
+            tooltip:  i18n._('Request permissions for webkit desktop notifications.'),
             iconCls: 'action_edit',
             disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
             handler: function() {
@@ -257,7 +257,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     onLogout: function() {
         if (Tine.Tinebase.registry.get('confirmLogout') != '0') {
-            Ext.MessageBox.confirm(_('Confirm'), _('Are you sure you want to logout?'), function(btn, text) {
+            Ext.MessageBox.confirm(i18n._('Confirm'), i18n._('Are you sure you want to logout?'), function(btn, text) {
                 if (btn == 'yes') {
                     this._doLogout();
                 }
@@ -271,7 +271,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      * logout user & redirect
      */
     _doLogout: function() {
-        Ext.MessageBox.wait(_('Logging you out...'), _('Please wait!'));
+        Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));
         Ext.Ajax.request( {
             params : {
                 method : Ext.isObject(Tine.Setup) ? 'Setup.logout' : 'Tinebase.logout'

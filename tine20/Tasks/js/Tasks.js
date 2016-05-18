@@ -36,7 +36,7 @@ Tine.widgets.grid.RendererManager.register(
 Tine.Tasks.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Task')
+     * auto hook text i18n._('New Task')
      */
     addButtonText: 'New Task'
 });

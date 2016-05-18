@@ -46,7 +46,7 @@ Tine.Admin.config.FieldManager = function() {
                             allowEmpty: false,
                             triggerAction: 'all',
                             editable: false,
-                            store: [[true, _('Yes')], [false, _('No')]]
+                            store: [[true, i18n._('Yes')], [false, i18n._('No')]]
                         }, options);
                         constr = Ext.form.ComboBox;
                         break;

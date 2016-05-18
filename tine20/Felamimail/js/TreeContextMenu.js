@@ -61,13 +61,13 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         disabled: true,
         handler: function() {
-            Ext.MessageBox.prompt(String.format(_('New {0}'), this.app.i18n._('Folder')), String.format(_('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), function(_btn, _text) {
+            Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.app.i18n._('Folder')), String.format(i18n._('Please enter the name of the new {0}:'), this.app.i18n._('Folder')), function(_btn, _text) {
                 if( this.ctxNode && _btn == 'ok') {
                     if (! _text) {
-                        Ext.Msg.alert(String.format(_('No {0} added'), this.app.i18n._('Folder')), String.format(_('You have to supply a {0} name!'), this.app.i18n._('Folder')));
+                        Ext.Msg.alert(String.format(i18n._('No {0} added'), this.app.i18n._('Folder')), String.format(i18n._('You have to supply a {0} name!'), this.app.i18n._('Folder')));
                         return;
                     }
-                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), this.app.i18n._('Folder')));
+                    Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), this.app.i18n._('Folder')));
                     var parentNode = this.ctxNode;
                     
                     var params = {

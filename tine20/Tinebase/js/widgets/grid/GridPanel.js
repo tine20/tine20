@@ -344,10 +344,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         this.i18nEmptyText = this.i18nEmptyText ||
             this.i18nContainersName
-            ? String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
-            : String.format(Tine.Tinebase.translation._("There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."), this.i18nRecordsName);
+            ? String.format(i18n._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
+            : String.format(i18n._("There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."), this.i18nRecordsName);
 
-        this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
+        this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(i18n.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(i18n.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
 
         this.editDialogConfig = this.editDialogConfig || {};
         this.editBuffer = [];
@@ -464,7 +464,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     var config = {
                         id: key,
                         dataIndex: (fieldConfig.type == 'relation') ? 'relations' : key,
-                        header: globalI18n ? _(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
+                        header: globalI18n ? i18n._(fieldConfig.label) : this.app.i18n._(fieldConfig.label),
                         hidden: fieldConfig.hasOwnProperty('shy') ? fieldConfig.shy : false,    // defaults to false
                         sortable: (fieldConfig.hasOwnProperty('sortable') && fieldConfig.sortable == false) ? false : true // defaults to true
                     };
@@ -574,11 +574,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             requiredGrant: 'readGrant',
             requiredMultipleGrant: 'editGrant',
             requiredMultipleRight: this.multipleEditRequiredRight,
-            text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
-            singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(_('Edit {0}'), this.i18nRecordName),
-            pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
+            text: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(i18n._('Edit {0}'), this.i18nRecordName),
+            singularText: this.i18nEditActionText ? this.i18nEditActionText[0] : String.format(i18n._('Edit {0}'), this.i18nRecordName),
+            pluralText:  this.i18nEditActionText ? this.i18nEditActionText[1] : String.format(i18n.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordsName),
             disabled: true,
-            translationObject: this.i18nEditActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nEditActionText ? this.app.i18n : i18n,
             actionType: 'edit',
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'edit'}]),
             iconCls: 'action_edit',
@@ -589,7 +589,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_editCopyInNewWindow = new Ext.Action({
             hidden: ! this.copyEditAction,
             requiredGrant: 'readGrant',
-            text: String.format(_('Copy {0}'), this.i18nRecordName),
+            text: String.format(i18n._('Copy {0}'), this.i18nRecordName),
             disabled: true,
             actionType: 'copy',
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'copy'}]),
@@ -600,7 +600,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_addInNewWindow = (this.addButton) ? new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(_('Add {0}'), this.i18nRecordName),
+            text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
             iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
             scope: this
@@ -608,7 +608,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.actions_print = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: _('Print Page'),
+            text: i18n._('Print Page'),
             disabled: false,
             handler: function() {
                 Ext.ux.Printer.print(this.getGrid());
@@ -638,7 +638,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.action_resolveDuplicates = new Ext.Action({
             requiredGrant: null,
-            text: String.format(_('Merge {0}'), this.i18nRecordsName),
+            text: String.format(i18n._('Merge {0}'), this.i18nRecordsName),
                 iconCls: 'action_resolveDuplicates',
                 scope: this,
                 handler: this.onResolveDuplicates,
@@ -674,10 +674,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
-            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(i18n.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(i18n.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(i18n.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
@@ -1127,7 +1127,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         // generic empty text
-        this.i18nEmptyText = Tine.Tinebase.translation.gettext('No data to display');
+        this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
         this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
@@ -1149,8 +1149,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
                 store: this.store,
                 displayInfo: true,
-                displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
-                emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
+                displayMsg: i18n._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
+                emptyMsg: String.format(i18n._("No {0} to display"), this.i18nRecordsName),
                 displaySelectionHelper: true,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
@@ -1204,7 +1204,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init view
         
         if (this.groupField && ! this.groupTextTpl) {
-            this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + _("Records") + '" : "' + _("Record") + '"]})';
+            this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + i18n._("Records") + '" : "' + i18n._("Record") + '"]})';
         }
         
         var viewClass = this.groupField ? Ext.grid.GroupingView : Ext.grid.GridView;
@@ -1410,7 +1410,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.newRecordAction = new Ext.Action({
-                text: _('New...'),
+                text: i18n._('New...'),
                 hidden: ! this.newRecordMenu.items.length,
                 iconCls: this.app.getIconCls(),
                 scope: this,
@@ -1429,7 +1429,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.addToRecordAction = new Ext.Action({
-                text: _('Add to...'),
+                text: i18n._('Add to...'),
                 hidden: ! this.addToRecordMenu.items.length,
                 iconCls: this.app.getIconCls(),
                 scope: this,
@@ -1477,10 +1477,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getModlogColumns: function() {
         var result = [
-            { id: 'creation_time',      header: _('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
-            { id: 'created_by',         header: _('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
-            { id: 'last_modified_time', header: _('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
-            { id: 'last_modified_by',   header: _('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true }
+            { id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
+            { id: 'last_modified_time', header: i18n._('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
+            { id: 'last_modified_by',   header: i18n._('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true }
         ];
 
         return result;
@@ -1872,8 +1872,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         if (sm.isFilterSelect && ! this.filterSelectionDelete) {
             Ext.MessageBox.show({
-                title: _('Not Allowed'), 
-                msg: _('You are not allowed to delete all pages at once'),
+                title: i18n._('Not Allowed'),
+                msg: i18n._('You are not allowed to delete all pages at once'),
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO
             });
@@ -1896,9 +1896,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             var i18nQuestion = this.i18nDeleteQuestion ?
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-                String.format(Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record ({0})?',
+                String.format(i18n.ngettext('Do you really want to delete the selected record ({0})?',
                     'Do you really want to delete the selected records ({0})?', records.length), recordNames);
-            Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
+            Ext.MessageBox.confirm(i18n._('Confirm'), i18nQuestion, function(btn) {
                 if (btn == 'yes') {
                     this.deleteRecords(sm, records);
                 }
@@ -1941,7 +1941,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {
-                        msg: String.format(_('Deleting {0}'), i18nItems) + ' ' + _('... This may take a long time!')
+                        msg: String.format(i18n._('Deleting {0}'), i18nItems) + ' ' + i18n._('... This may take a long time!')
                     });
                 }
                 this.deleteMask.show();

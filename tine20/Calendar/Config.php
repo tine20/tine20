@@ -145,6 +145,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const EVENT_VIEW = 'eventView';
+    
+    /**
+     * FEATURE_RECUR_EXCEPT
+     *
+     * @var string
+     */
+    const FEATURE_RECUR_EXCEPT = 'featureRecurExcept';
 
     /**
      * (non-PHPdoc)
@@ -368,12 +375,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     'label'         => 'Color Events By', //_('Color Events By')
                     'description'   => 'Choose event color by different criteria', //_('Choose event color by different criteria')
                 ),
+                self::FEATURE_RECUR_EXCEPT => array(
+                        'label'         => 'Recur Events Except', //_('Recur Events Except')
+                        'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SPLIT_VIEW                        => true,
                 self::FEATURE_YEAR_VIEW                         => false,
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
                 self::FEATURE_COLOR_BY                          => true,
+                self::FEATURE_RECUR_EXCEPT                      => false,
             ),
         ),
     );

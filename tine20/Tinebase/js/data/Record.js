@@ -262,25 +262,25 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getRecordName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            i18n = app && app.i18n ? app.i18n :i18n;
             
         return i18n.n_(p.recordName, p.recordsName, 1);
     };
     f.getRecordsName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            i18n = app && app.i18n ? app.i18n :i18n;
             
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getContainerName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            i18n = app && app.i18n ? app.i18n :i18n;
             
         return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n :Tine.Tinebase.translation;
+            i18n = app && app.i18n ? app.i18n :i18n;
             
         return i18n.n_(p.containerName, p.containersName, 50);
     };

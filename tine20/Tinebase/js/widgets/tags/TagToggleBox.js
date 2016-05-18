@@ -49,14 +49,14 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
 
     initActions : function() {
         this.action_update = new Ext.Action({
-                    text : (this.mode == 'detach') ? _('Detach Tags') : _('Attach Tags'),
+                    text : (this.mode == 'detach') ? i18n._('Detach Tags') : i18n._('Attach Tags'),
                     minWidth : 70,
                     scope : this,
                     handler : this.onUpdate,
                     iconCls : 'action_saveAndClose'
                 });
         this.action_cancel = new Ext.Action({
-                    text : _('Cancel'),
+                    text : i18n._('Cancel'),
                     minWidth : 70,
                     scope : this,
                     handler : this.onCancel,
@@ -109,12 +109,12 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
                     '<input class="tagcheckel" type="checkbox" style="margin-right:3px;float:left" id="{values.id}" /><div class="tb-grid-tags" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
                     '<div class="x-widget-tag-tagitem-text" style="margin-top:1px" ext:qtip="', 
                         '{[this.encode(values.name)]}', 
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                         '</i>&nbsp;[{occurrence}]',
                         '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
                         
                         '&nbsp;{[this.encode(values.name)]}&nbsp;({values.selection_occurrence})',
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                     '</div>',
                 '</div>', 
             '</tpl>',
@@ -137,8 +137,8 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
             autoScroll : true,
             store : this.store,
             tpl : this.tpl,
-            emptyText : _('No Tags to detach found in the selected records'),
-            loadingText : _('Please Wait...'),
+            emptyText : i18n._('No Tags to detach found in the selected records'),
+            loadingText : i18n._('Please Wait...'),
             style : 'background:#fff;'
         });
     },
@@ -149,7 +149,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
     // TODO: formitems could not be fetched by formpanel->getform->getvalues
     onUpdate: function() {
         
-        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Detaching Tags')});
+        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Detaching Tags')});
         this.loadMask.show();
         
         var els = Ext.select('input.tagcheckel');

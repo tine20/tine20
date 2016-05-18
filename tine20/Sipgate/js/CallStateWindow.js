@@ -103,7 +103,7 @@ Tine.Sipgate.CallStateWindow = Ext.extend(Ext.FormPanel, {
     
     initActions : function() {
         this.action_cancel = new Ext.Action({
-            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : _('Cancel'),
+            text : this.app.i18n._(this.cancelButtonText) ? this.app.i18n._(this.cancelButtonText) : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
