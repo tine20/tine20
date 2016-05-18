@@ -90,7 +90,7 @@ class Setup_Controller
      * the constructor
      *
      */
-    private function __construct()
+    protected function __construct()
     {
         // setup actions could take quite a while we try to set max execution time to unlimited
         Setup_Core::setExecutionLifeTime(0);
@@ -1358,7 +1358,7 @@ class Setup_Controller
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
     
-            $minimumRequirements = array('Tinebase', 'Addressbook', 'Admin');
+            $minimumRequirements = array('Addressbook', 'Tinebase', 'Admin');
             
             foreach ($minimumRequirements as $requiredApp) {
                 if (!in_array($requiredApp, $_applications) && !$this->isInstalled($requiredApp)) {
@@ -1897,13 +1897,48 @@ class Setup_Controller
             if (! $this->_backend) {
                 throw new Exception('db not configured, cannot backup');
             }
-            $this->_backend->backup($backupDir);
+
+            $backupOptions = array(
+                'backupDir'         => $backupDir,
+                'structTables'      => $this->_getBackupStructureOnlyTables(),
+            );
+
+            $this->_backend->backup($backupOptions);
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
         if ($options['files'] && $filesDir) {
             `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
         }
+    }
+
+    /**
+     * returns an array of all tables of all applications that should only backup the structure
+     *
+     * @return array
+     * @throws Setup_Exception_NotFound
+     */
+    protected function _getBackupStructureOnlyTables()
+    {
+        $tables = array();
+
+        // find tables that only backup structure
+        $applications = Tinebase_Application::getInstance()->getApplications();
+
+        /**
+         * @var $application Tinebase_Model_Application
+         */
+        foreach($applications as $application) {
+            $tableDef = $this->getSetupXml($application->name);
+            $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
+
+            foreach($structOnlys as $structOnly) {
+                $tableName = $structOnly->xpath('./../name/text()');
+                $tables[] = SQL_TABLE_PREFIX . $tableName[0];
+            }
+        }
+
+        return $tables;
     }
 
     /**

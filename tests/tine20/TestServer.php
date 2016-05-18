@@ -51,22 +51,9 @@ class TestServer
     public function initFramework()
     {
         $this->setWhiteAndBlacklists();
-        
-        // get config
-        $configData = @include('phpunitconfig.inc.php');
-        if ($configData === false) {
-            $configData = include('config.inc.php');
-        }
-        if ($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
-        }
-        $config = new Zend_Config($configData);
 
-        Zend_Registry::set('testConfig', $config);
+        $config = $this->getConfig();
 
-        $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
-        $_SERVER['REQUEST_URI'] = '';
-        
         Tinebase_Core::startCoreSession();
         
         Tinebase_Core::initFramework();
@@ -83,6 +70,8 @@ class TestServer
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
         Zend_Session::$_unitTestEnabled = TRUE;
+
+        Tinebase_Core::set('frameworkInitialized', true);
     }
     
     /**
@@ -150,10 +139,10 @@ class TestServer
      */
     public function setTestUserEmail()
     {
-        if (Zend_Registry::get('testConfig')->email) {
+        if ($this->getConfig()->email) {
             // set email of test user contact
             $testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-            $testUserContact->email = Zend_Registry::get('testConfig')->email;
+            $testUserContact->email = $this->getConfig()->email;
             Addressbook_Controller_Contact::getInstance()->update($testUserContact, FALSE);
         }
     }
@@ -165,6 +154,23 @@ class TestServer
      */
     public function getConfig()
     {
+        if (! Zend_Registry::isRegistered('testConfig')) {
+            // get config
+            $configData = @include('phpunitconfig.inc.php');
+            if ($configData === false) {
+                $configData = include('config.inc.php');
+            }
+            if ($configData === false) {
+                die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+            }
+            $config = new Zend_Config($configData);
+
+            Zend_Registry::set('testConfig', $config);
+
+            $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
+            $_SERVER['REQUEST_URI'] = '';
+        }
+
         return Zend_Registry::get('testConfig');
     }
     
