@@ -163,7 +163,7 @@ Tine.Sipgate.DialNumberDialog = Ext.extend(Ext.FormPanel, {
                         ref: '../../../../linePicker'
                     })],[
                     {
-                        fieldLabel:this.app.i18n. i18n._('Number to call'),
+                        fieldLabel:this.app.i18n._('Number to call'),
                         name: 'number',
                         value: this.number ? this.number : Tine.Sipgate.registry.get('preferences').get('internationalPrefix'),
                         regex: /^\+?\d{5,}$/i,
