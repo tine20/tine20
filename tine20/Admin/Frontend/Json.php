@@ -1124,12 +1124,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * deletes existing records
      *
-     * @param  array  $ids 
+     * @param  array $ids
+     * @param  array $context
      * @return array
      */
-    public function deleteCustomfields($ids)
+    public function deleteCustomfields($ids, array $context = array())
     {
-        return $this->_delete($ids, Admin_Controller_Customfield::getInstance());
+        $controller = Admin_Controller_Customfield::getInstance();
+        $controller->setRequestContext($context);
+
+        return $this->_delete($ids, $controller);
     }
 
     /****************************** Config ******************************/
