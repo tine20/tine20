@@ -641,7 +641,7 @@ Ext.ux.form.HtmlEditor.PlainText = Ext.extend(Ext.util.Observable, {
                 this.cmp.fireEvent('toggleFormat', 'text/plain');
             },
             tooltip: {
-                title: _('Convert to pure text')
+                title: i18n._('Convert to pure text')
             },
             scope: this
         });

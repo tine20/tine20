@@ -87,7 +87,6 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
         
         if (useSplit && attendee && this.calPanel == activeCalPanel) {
             Ext.apply(attendee.data, {
-                user_type: 'user',
                 status: 'ACCEPTED'
             });
             defaultData.attendee = [attendee.data];

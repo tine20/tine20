@@ -262,6 +262,11 @@ class Courses_JsonTest extends TestCase
         $this->assertEquals('lahmph', $user->accountLoginName);
         $this->assertEquals('lahmph@' . $maildomain, $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
+        $defaultGroupMembers = Tinebase_Group::getInstance()->getGroupMembers(
+            Tinebase_Group::getInstance()->getDefaultGroup()->getId()
+        );
+        $this->assertTrue(in_array($user->getId(), $defaultGroupMembers),
+            'user not added to default user group. memberships: ' . print_r($defaultGroupMembers, true));
     }
     
     /**
@@ -315,7 +320,7 @@ class Courses_JsonTest extends TestCase
         $this->assertTrue($userId !== NULL);
         
         $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
-        $this->assertEquals(3, count($groupMemberships), 'new user should have 3 group memberships');
+        $this->assertEquals(4, count($groupMemberships), 'new user should have 4 group memberships');
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::INTERNET_ACCESS_GROUP_ON]->getId(), $groupMemberships), $userId . ' not member of the internet group ' . print_r($groupMemberships, TRUE));
         
         $user = Tinebase_User::getInstance()->getFullUserById($userId);
