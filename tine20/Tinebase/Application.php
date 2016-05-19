@@ -99,7 +99,7 @@ class Tinebase_Application
     public function getApplicationById($_applicationId)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-        
+
         $application = $this->getApplications()->getById($applicationId);
         
         if (!$application) {
@@ -124,7 +124,7 @@ class Tinebase_Application
         if(empty($_applicationName) || ! is_string($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
-        
+
         $application = $this->getApplications()->find('name', $_applicationName);
         
         if (!$application) {

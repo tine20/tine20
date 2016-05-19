@@ -80,7 +80,7 @@ class Setup_Initialize
         $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
             $methodName = $method->name;
-            if (preg_match('/^_initialize.+/', $methodName)) {
+            if (strpos($methodName, '_initialize') === 0 && $methodName !== '_initialize') {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Calling init function ' . get_class($this) . '::' . $methodName);
                 
                 $this->$methodName($_application, $_options);

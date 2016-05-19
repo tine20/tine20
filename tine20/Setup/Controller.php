@@ -1656,6 +1656,8 @@ class Setup_Controller
             Tinebase_Application::getInstance()->deleteApplication($_application);
         }
 
+        Setup_Uninitialize::uninitialize($_application);
+
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Removed app: " . $_application->name);
     }
 

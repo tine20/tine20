@@ -34,4 +34,18 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Sales_Controller_Product::updateProductLifespan in scheduler.');
     }
+
+    /**
+     * remove update product lifespan task from scheduler
+     *
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function removeUpdateProductLifespanTask(Zend_Scheduler $_scheduler)
+    {
+        $_scheduler->removeTask('Sales_Controller_Product::updateProductLifespan');
+        $_scheduler->saveTask();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed task Sales_Controller_Product::updateProductLifespan from scheduler.');
+    }
 }

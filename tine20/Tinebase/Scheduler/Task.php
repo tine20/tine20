@@ -272,7 +272,16 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
                 . ' Running request: ' . $request->getControllerName() . '::' . $request->getActionName());
             
             try {
-                $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
+                $controllerName = $request->getControllerName();
+                list($appName) = explode('_', $controllerName);
+
+                if (true !== Tinebase_Application::getInstance()->isInstalled($appName)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Application ' . $appName . ' is not installed for scheduler job');
+                    return false;
+                }
+
+                $controller = Tinebase_Controller_Abstract::getController($controllerName);
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                     . ' Could not get controller for scheduler job: ' . $e->getMessage());
