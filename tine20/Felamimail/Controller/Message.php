@@ -245,7 +245,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $structure = isset($structure['messageStructure']) ? $structure['messageStructure'] : $structure;
             $message->parseStructure($structure);
         }
-        
+
+        $message->body_content_type_of_body_property_of_this_record = $mimeType;
+
         return $message;
     }
     

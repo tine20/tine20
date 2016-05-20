@@ -32,6 +32,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'flags' },
       { name: 'size' },
       { name: 'body',     defaultValue: undefined },
+      { name: 'body_content_type_of_body_property_of_this_record'},
       { name: 'headers' },
       { name: 'content_type' },
       { name: 'body_content_type' },
@@ -132,7 +133,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      *       But the server transforms the original type into the requested format/diplay_format.
      */
     getBodyType: function() {
-        return String(this.get('body')).match(/^<html/) ? 'text/html' : 'text/plain';
+        return this.get('body_content_type_of_body_property_of_this_record');
     }
 });
 
