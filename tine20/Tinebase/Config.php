@@ -367,6 +367,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var array of strings
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+    
+    const BRANDING_LOGO = 'branding_logo';
+    const BRANDING_FAVICON = 'branding_favicon';
+    const BRANDING_TITLE = 'branding_title';
+    const BRANDING_WEBURL = 'branding_weburl';
+    const BRANDING_DESCRIPTION = 'branding_description';
 
     /**
      * (non-PHPdoc)
@@ -856,6 +862,61 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_DESCRIPTION => array(
+                //_('custom description')
+                'label'                 => 'custom description',
+                //_('Custom description for branding.')
+                'description'           => 'Custom description for branding.',
+                'type'                  => 'string',
+                'default'               => '',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_WEBURL => array(
+                //_('custom weburl')
+                'label'                 => 'custom weburl',
+                //_('Custom weburl for branding.')
+                'description'           => 'Custom weburl for branding.',
+                'type'                  => 'string',
+                'default'               => '',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_TITLE => array(
+                //_('custom title')
+                'label'                 => 'custom title',
+                //_('Custom title for branding.')
+                'description'           => 'Custom ltitle for branding.',
+                'type'                  => 'string',
+                'default'               => '',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_LOGO => array(
+                //_('custom logo path')
+                'label'                 => 'custom logo path',
+                //_('Path to custom logo.')
+                'description'           => 'Path to custom logo.',
+                'type'                  => 'string',
+                'default'               => '',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
+        ),
+        self::BRANDING_FAVICON => array(
+                //_('custom favicon path')
+                'label'                 => 'custom favicon path',
+                //_('Path to custom favicon.')
+                'description'           => 'Path to custom favicon.',
+                'type'                  => 'string',
+                'default'               => '',
+                'clientRegistryInclude' => FALSE,
+                'setByAdminModule'      => FALSE,
+                'setBySetupModule'      => FALSE,
         ),
     );
     

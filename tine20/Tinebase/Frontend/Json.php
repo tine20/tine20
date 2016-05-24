@@ -749,6 +749,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'thousandSeparator' => $symbols['group'],
             'decimalSeparator'  => $symbols['decimal'],
             'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
+            'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
+            'brandingLogo'      => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO),
+            'brandingFavicon'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON),
+            'brandingTitle'   => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

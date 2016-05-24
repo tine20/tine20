@@ -51,7 +51,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             layout: 'fit',
             border: false,
             html: this.aboutTpl.applyTemplate({
-                logo: Tine.Tinebase.LoginPanel.prototype.loginLogo,
+                logo: Tine.logo,
                 logoLink: Tine.weburl,
                 linkText: String.format(i18n._('Learn more about {0}'), Tine.title),
                 codeName: version.codeName,

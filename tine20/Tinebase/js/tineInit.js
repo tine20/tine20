@@ -51,6 +51,8 @@ Tine.clientVersion.releaseTime      = 'none';
  * 
  * @type String
  */
+Tine.logo = 'images/tine_logo.png';
+Tine.favicon;
 Tine.title = 'Tine 2.0';
 Tine.weburl = 'https://www.tine20.org/en/the-project/contribute.html';
 Tine.helpUrl = 'http://www.tine20.org/wiki/index.php/Main_Page';
@@ -656,7 +658,13 @@ Tine.Tinebase.tineInit = {
         }
 
         Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
-
+        //Do we have a custom weburl for branding?
+        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl') ? Tine.Tinebase.registry.get('brandingWeburl') : Tine.weburl;
+        //DO we have a custom title for branding?
+        Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
+        Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
+        Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
+        
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
