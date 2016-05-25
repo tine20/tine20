@@ -20,83 +20,11 @@
 class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
     /**
-     * @var string application of this filter group
+     * if this is set, the filtergroup will be created using the configurationObject for this model
+     *
+     * @var string
      */
-    protected $_applicationName = 'Timetracker';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Timetracker_Model_Timesheet';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Timetracker_Model_TimesheetFilter';
-    
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'id'             => array(
-            'filter'  => 'Tinebase_Model_Filter_Id',
-            'options' => array('modelName' => 'Timetracker_Model_Timesheet')
-        ),
-        'query'          => array(
-            'filter'  => 'Tinebase_Model_Filter_Query',
-            'options' => array('fields' => array('description'))
-        ),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'duration'       => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'timeaccount_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId', 
-            'options' => array(
-                'filtergroup'       => 'Timetracker_Model_TimeaccountFilter', 
-                'controller'        => 'Timetracker_Controller_Timeaccount', 
-                'useTimesheetAcl'   => TRUE,
-                'showClosed'        => TRUE
-            )
-        ),
-        'invoice_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
-            'options' => array(
-                'filtergroup'       => 'Sales_Model_InvoiceFilter',
-                'controller'        => 'Sales_Controller_Invoice',
-            )
-        ),
-        'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
-        
-        'billed_in'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        
-        'is_billable_combined'  => array(
-            'filter' => 'Tinebase_Model_Filter_Bool', 
-            'options' => array(
-                'leftOperand'   => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)',
-                'requiredCols'  => array('is_billable_combined')
-            ),
-        ),
-        'is_billable'   => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'is_cleared'   => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'is_cleared_combined'   => array(
-            'filter' => 'Tinebase_Model_Filter_Bool', 
-            'options' => array(
-                'leftOperand' => "( (CASE WHEN timetracker_timesheet.is_cleared = '1' THEN 1 ELSE 0 END) | (CASE WHEN timetracker_timeaccount.status = 'billed' THEN 1 ELSE 0 END) )",
-                'requiredCols'  => array('is_cleared_combined'),
-            ),
-        ),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array(
-            'idProperty' => 'timetracker_timesheet.id',
-            'applicationName' => 'Timetracker',
-        )),
-        'customfield'    => array('filter' => 'Tinebase_Model_Filter_CustomField',  'options' => array('idProperty' => 'timetracker_timesheet.id')),
-    // modlog
-        'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-    );
+    protected $_configuredModel = 'Timetracker_Model_Timesheet';
     
     /**
      * is resolved

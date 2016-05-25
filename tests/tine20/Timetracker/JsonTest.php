@@ -58,7 +58,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // checks
         $this->assertEquals($timeaccount->description, $timeaccountData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']['accountId']);
         $this->assertTrue(is_array($timeaccountData['container_id']));
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
         $this->assertGreaterThan(0, count($timeaccountData['grants']));
@@ -83,7 +83,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // checks
         $this->assertEquals($timeaccount->description, $timeaccountData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountData['created_by']['accountId']);
         $this->assertTrue(is_array($timeaccountData['container_id']));
         $this->assertEquals(Tinebase_Model_Container::TYPE_SHARED, $timeaccountData['container_id']['type']);
 
@@ -107,7 +107,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // check
         $this->assertEquals($timeaccountData['id'], $timeaccountUpdated['id']);
         $this->assertEquals($timeaccountData['description'], $timeaccountUpdated['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountUpdated['last_modified_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timeaccountUpdated['last_modified_by']['accountId']);
 
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
@@ -206,9 +206,9 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']['accountId']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals(Tinebase_DateTime::now()->toString('Y-m-d'),  $timesheetData['start_date']);
+        $this->assertEquals(Tinebase_DateTime::now()->toString('Y-m-d') . ' 00:00:00',  $timesheetData['start_date']);
 
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
@@ -381,7 +381,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']['accountId']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheet['timeaccount_id'], $timesheetData['timeaccount_id']['id'], 'timeaccount is not resolved');
 
@@ -409,7 +409,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // check
         $this->assertEquals($timesheetData['id'], $timesheetUpdated['id']);
         $this->assertEquals($timesheetData['description'], $timesheetUpdated['description']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['last_modified_by']['accountId']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetUpdated['account_id']['accountId'], 'account is not resolved');
         $this->assertEquals($timesheetData['timeaccount_id'], $timesheetUpdated['timeaccount_id']['id'], 'timeaccount is not resolved');
 

@@ -38,6 +38,18 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_relatableModels = array('Timetracker_Model_Timeaccount');
 
     /**
+     * default model (needed for application starter -> defaultContentType)
+     * @var string
+     */
+    protected $_defaultModel = 'Timesheet';
+
+    /**
+     * All configured models
+     * @var array
+     */
+	protected $_configuredModels = array('Timesheet', 'Timeaccount');
+
+    /**
      * the constructor
      *
      */
@@ -230,7 +242,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchTimesheets($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter');
+        $result = $this->_search($filter, $paging, $this->_timesheetController, 'Timetracker_Model_TimesheetFilter', true);
         
         $result['totalcountbillable'] = $result['totalcount']['sum_is_billable_combined'];
         $result['totalsum']           = $result['totalcount']['sum_duration'];

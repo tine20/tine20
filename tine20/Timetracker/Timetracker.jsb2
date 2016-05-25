@@ -28,10 +28,6 @@
           "path": "js/"
         },
         {
-          "text": "TimeAccountFilterModel.js",
-          "path": "js/"
-        },
-        {
           "text": "TimeAccountStatusFilterModel.js",
           "path": "js/"
         },
@@ -44,7 +40,15 @@
           "path": "js/"
         },
         {
+          "text": "TimeaccountResponsibleFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "TimeaccountGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimeAccountFilterModel.js",
           "path": "js/"
         },
         {

@@ -230,6 +230,9 @@ msgstr "Detail"
 msgid "Export Timesheets"
 msgstr "Stundenzettel exportieren"
 
+msgid "Export Timeaccounts"
+msgstr "Zeitkonten exportieren"
+
 #: js/TimesheetGridPanel.js:334
 msgid "Export as ..."
 msgstr "Als ... exportieren"
@@ -297,6 +300,11 @@ msgstr "Stundenzettel sind abrechenbar"
 #: js/Models.js:149
 msgid "Time Account"
 msgid_plural "Time Accounts"
+msgstr[0] "Zeitkonto"
+msgstr[1] "Zeitkonten"
+
+msgid "Timeaccount"
+msgid_plural "Timeaccounts"
 msgstr[0] "Zeitkonto"
 msgstr[1] "Zeitkonten"
 
