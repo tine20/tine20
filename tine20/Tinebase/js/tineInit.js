@@ -121,7 +121,17 @@ Tine.Tinebase.tineInit = {
         }, this);
     },
 
+    checkWebpack: function() {
+        if (! window.postal) {
+            Ext.Msg.alert('webpack-dev-server missing?', 'you need to install and run webpack-dev-server!', function() {
+                Tine.Tinebase.common.reload();
+            });
+        }
+    },
+
     initPostal: function () {
+        if (! window.postal) return;
+
         var config = postal.fedx.transports.xwindow.configure();
         postal.fedx.transports.xwindow.configure( {
             localStoragePrefix: Tine.Tinebase.tineInit.lsPrefix + '.' + config.localStoragePrefix
@@ -801,6 +811,7 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.checkWebpack();
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();

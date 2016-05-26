@@ -1,13 +1,17 @@
 {
   "name": "tine20_tinebase",
+  "private": true,
   "dependencies": {
-    "babel": "5.x",
-    "babel-loader": "~4.0.0",
-    "lodash": "3.x",
     "jquery": "^2.1.4",
-    "postal": ">=2.0.0",
+    "lodash": "3.x",
+    "postal": "2.0.0",
     "postal.federation": ">=0.5.2",
-    "postal.xwindow": "tine20/postal.xwindow",
-    "postal.request-response": ">=0.3.1"
+    "postal.request-response": ">=0.3.1",
+    "postal.xwindow": "tine20/postal.xwindow"
+  },
+  "devDependencies": {
+    "unminified-webpack-plugin": "tine20/unminified-webpack-plugin",
+    "webpack": "https://registry.npmjs.org/webpack/-/webpack-1.13.0.tgz",
+    "webpack-dev-server": "^1.14.1"
   }
 }

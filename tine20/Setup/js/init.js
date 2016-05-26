@@ -88,4 +88,3 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     }
 });
 
-

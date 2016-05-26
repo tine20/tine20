@@ -1511,13 +1511,19 @@ class Tinebase_Core
     public static function getUrl($part)
     {
         $request = new Zend_Controller_Request_Http();
-        $pathname = $request->getBasePath(); //window.location.pathname.replace('index.php', '');
-        $hostname = $request->getHttpHost();//window.location.host;
-        $protocol = $request->getScheme();//window.location.protocol;
+        $pathname = $request->getBasePath();
+        $hostname = $request->getHttpHost();
+        $protocol = $request->getScheme();
 
         switch ($part) {
             case 'path':
                 $url = $pathname;
+                break;
+            case 'host':
+                $url = $hostname;
+                break;
+            case 'protocol':
+                $url = $protocol;
                 break;
             case 'full':
             default:

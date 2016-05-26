@@ -13,6 +13,14 @@
 <html>
   <head>
     <meta charset="utf-8">
+     <script src="Tinebase/js/node_modules/lodash/index.js"></script>
+     <script src="Tinebase/js/node_modules/jquery/dist/jquery.js"></script>
+     <script src="Tinebase/js/node_modules/postal/lib/postal.js"></script>
+     <script src="Tinebase/js/node_modules/postal.federation/lib/postal.federation.js"></script>
+     <script src="Tinebase/js/node_modules/postal.request-response/lib/postal.request-response.js"></script>
+     <script src="library/Store/store2.js"></script>
+     <script src="library/Store/store.bind.js"></script>
+     <script src="Tinebase/js/node_modules/postal.xwindow/lib/postal.xwindow.js"></script>
   </head>
   <body>
     <div>
@@ -26,15 +34,7 @@
 
     <div id="messages"></div>
 
-    <script src="Tinebase/js/node_modules/babel-core/browser-polyfill.js"></script>
-    <script src="Tinebase/js/node_modules/lodash/index.js"></script>
-    <script src="Tinebase/js/node_modules/jquery/dist/jquery.js"></script>
-    <script src="Tinebase/js/node_modules/postal/lib/postal.js"></script>
-    <script src="Tinebase/js/node_modules/postal.federation/lib/postal.federation.js"></script>
-    <script src="Tinebase/js/node_modules/postal.request-response/lib/postal.request-response.js"></script>
-    <script src="library/Store/store2.js"></script>
-    <script src="library/Store/store.bind.js"></script>
-    <script src="Tinebase/js/node_modules/postal.xwindow/lib/postal.xwindow.js"></script>
+
     <script>
         var config = postal.fedx.transports.xwindow.configure();
         postal.fedx.transports.xwindow.configure( {

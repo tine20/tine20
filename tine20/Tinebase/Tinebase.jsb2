@@ -74,30 +74,6 @@
           "path": "../library/Store/"
         },
         {
-          "text": "browser-polyfill.js",
-          "path": "js/node_modules/babel-core/"
-        },
-        {
-          "text": "index.js",
-          "path": "js/node_modules/lodash/"
-        },
-        {
-          "text": "postal.js",
-          "path": "js/node_modules/postal/lib/"
-        },
-        {
-          "text": "postal.federation.js",
-          "path": "js/node_modules/postal.federation/lib/"
-        },
-        {
-          "text": "postal.request-response.js",
-          "path": "js/node_modules/postal.request-response/lib/"
-        },
-        {
-          "text": "postal.xwindow.js",
-          "path": "js/node_modules/postal.xwindow/lib/"
-        },
-        {
           "text": "addressparser.js",
           "path": "../library/addressparser.js/"
         },
