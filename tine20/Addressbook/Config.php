@@ -35,9 +35,9 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
-    
+
     /**
-     * FEATURE_LIST_VIEW 
+     * FEATURE_LIST_VIEW
      *
      * @var string
      */
@@ -58,15 +58,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
            'clientRegistryInclude' => TRUE,
            'content'               => array(
                self::FEATURE_LIST_VIEW => array(
-                   'label'         => 'Addressbook List View', //_('Calendar Split View')
-                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Split day and week views by attendee)
+                   'label'         => 'Addressbook List View', //_('Addressbook List View')
+                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Shows an additional view for lists inside the addressbook)
                ),
            ),
            'default'               => array(
                self::FEATURE_LIST_VIEW => false,
            ),
         ),
-
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')
             'label'                 => 'Contact duplicate check fields',
