@@ -331,7 +331,7 @@ class Calendar_Frontend_iMIP
             )));
 
             $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
-            Calendar_Model_Attender::resolveAttendee($event['attendee']);
+            Calendar_Model_Attender::resolveAttendee($event['attendee'], true, $event);
 
             $_iMIP->existing_event = $event;
         }
