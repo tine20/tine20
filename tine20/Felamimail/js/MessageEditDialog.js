@@ -790,6 +790,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         this.window.setTitle(title);
         
+        var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
+        wrapTicket = ticketFn();
+        
+        this.fireEvent('load', this, this.record, ticketFn);
+        wrapTicket();
+        
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
         
