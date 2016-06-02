@@ -490,6 +490,42 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
+     * return shortened field
+     * might run as maxcharacters or maxlines or both
+     * will add "..." to shortened content
+     *
+     * @param String $_property
+     * @param String $_config
+     * @param String $_modus
+     * @return string
+     */
+    protected function _getShortenedField($_property, $_config, $_modus)
+    {
+        $result = $_property;
+        
+        if ($_modus == 'maxcharacters') {
+            $result = substr($result, 0, $_config);
+        }
+        
+        if ($_modus == 'maxlines') {
+            $lines = explode("\n", $result);
+            if(count($lines) > $_config) {
+                $result = '';
+                $lines = array_splice($lines, 0, $_config);
+                foreach($lines as $line) {
+                    $result = $result . $line . "\n";
+                }
+            }
+        }
+        
+        if ($result != $_property) {
+            $result = $result . '...';
+        }
+        
+        return $result;
+    }
+    
+    /**
      * 
      * return container name (or other field)
      * 
