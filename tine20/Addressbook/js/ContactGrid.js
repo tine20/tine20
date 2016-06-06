@@ -273,7 +273,7 @@ Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
  */
 Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
     return [
-        { id: 'tid', header: i18n._('Type'), dataIndex: 'tid', width: 30, renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false },
+        { id: 'type', header: i18n._('Type'), dataIndex: 'type', width: 30, renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false },
         { id: 'tags', header: i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
         { id: 'salutation', header: i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
         {
