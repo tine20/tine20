@@ -2,6 +2,7 @@
   "name": "tine20_tinebase",
   "private": true,
   "dependencies": {
+    "html2canvas": "^0.5.0-beta4",
     "jquery": "^2.1.4",
     "lodash": "3.x",
     "postal": "2.0.0",

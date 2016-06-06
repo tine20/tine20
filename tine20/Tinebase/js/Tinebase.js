@@ -15,3 +15,4 @@ postal = require('postal');
 require('postal.federation');
 require('postal.xwindow');
 require('postal.request-response');
+html2canvas = require('html2canvas');
