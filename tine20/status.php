@@ -10,8 +10,8 @@
 
 $values = array(
     'installed'     => true,
-    'version'       => '5.0.20',
-    'versionstring' => '5.0.11',
+    'version'       => '9.0.2.1',
+    'versionstring' => '9.0.2',
     'edition'       => ''
 );
 
