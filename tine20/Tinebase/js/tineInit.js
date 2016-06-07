@@ -120,29 +120,6 @@ Tine.Tinebase.tineInit = {
             e.browserEvent.dataTransfer.dropEffect = 'none';
         }, this);
     },
-
-    initPostal: function () {
-        var config = postal.fedx.transports.xwindow.configure();
-        postal.fedx.transports.xwindow.configure( {
-            localStoragePrefix: Tine.Tinebase.tineInit.lsPrefix + '.' + config.localStoragePrefix
-        } );
-        postal.instanceId('xwindow-' + _.random(0,1000));
-        postal.configuration.promise.createDeferred = function() {
-            return Promise.defer();
-        };
-        postal.configuration.promise.getPromise = function(dfd) {
-            return dfd.promise;
-        };
-        postal.fedx.addFilter( [
-            { channel: 'thirdparty', topic: '#', direction: 'both' },
-            //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
-        ] );
-        postal.fedx.signalReady();
-
-        postal.addWireTap( function( d, e ) {
-            Tine.log.debug( "ID: " + postal.instanceId() + " " + JSON.stringify( e, null, 4 ) );
-        } );
-    },
     
     initDebugConsole: function () {
         var map = new Ext.KeyMap(Ext.getDoc(), [{
@@ -801,7 +778,6 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();

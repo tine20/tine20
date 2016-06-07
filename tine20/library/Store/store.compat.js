@@ -103,24 +103,17 @@
      * NOTE: we only support the replace event yet and do no mapping computations
      */
     _.fn('on', function(event, fn, scope, key) {
-
-        // Ext.util.MixedCollection
-        if (['clear','add','replace','remove','sort'].indexOf[event] >= 0) {
-            if (event != 'replace') {
-                throw new Ext.Error('event ' + event + ' not implemented in store.compat');
-            }
-
-            return _on.call(this, key, function(e) {
-                if (!key || key == e.key) {
-                    if (e.oldValue != e.newValue) {
-                        return fn.call(scope||window, e.key, e.oldValue, e.newValue);
-                    }
-                }
-            });
+        if (event != 'replace') {
+            throw new Ext.Error('event ' + event + ' not implemented in store.compat');
         }
 
-        // fallback
-        return _on.call(this, event, fn);
+        _on.call(this, key, function(e) {
+            if (!key || key == e.key) {
+                if (e.oldValue != e.newValue) {
+                    return fn.call(scope||window, e.key, e.oldValue, e.newValue);
+                }
+            }
+        });
     });
 
     _.fn('add', _.storeAPI.set);

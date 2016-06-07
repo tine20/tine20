@@ -909,17 +909,4 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $this->_downloadFileNode($tmpFile, $tmpFile->path);
         exit;
     }
-
-    public function getPostalXWindow()
-    {
-        $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' getPostalXWindow');
-
-        header('Content-Type: text/html; charset=utf-8');
-        echo $view->render('postal.xwindow.php');
-        exit();
-    }
 }
