@@ -16,6 +16,17 @@ Tine.Felamimail.PGPDetailsPanel = Ext.extend(Ext.Component, {
             var armoredMsg = me.preparedPart.preparedData;
             mailvelope.createDisplayContainer('#' + body.dom.id, armoredMsg, keyring).then(function() {
                 me.detailsPanel.getLoadMask().hide();
+            })['catch'](function(error) {
+                Tine.log.warn(arguments);
+                var app = Tine.Tinebase.appMgr.get('Felamimail'),
+                    msg = app.i18n._('Mailvelope decryption Error [{0}]');
+
+                me.detailsPanel.getLoadMask().hide();
+                Ext.Msg.alert(String.format(msg, error.code), error.message, function() {
+                    me.detailsPanel.record.set('preparedParts', '');
+                    me.detailsPanel.currentId = '';
+                    me.detailsPanel.updateDetails(me.detailsPanel.record, body);
+                }, this);
             });
         })['catch'](function() {
             var app = Tine.Tinebase.appMgr.get('Felamimail'),
