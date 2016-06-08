@@ -1231,6 +1231,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
             record.set('editGrant', true);
             record.set('id', '');
+            record.view = sourceView;
 
             // remove attender ids
             Ext.each(record.data.attendee, function(attender) {

@@ -306,7 +306,6 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
         if (o.field == 'quantity') {
             // product does not bill an accountable -> return qty
             var ac = o.record.get('product_id').accountable;
-            var colModel = o.grid.getColumnModel();
 
             if (!(! ac || ac == 'Sales_Model_ProductAggregate' || ac == 'Sales_Model_Product')) {
                 return false; 

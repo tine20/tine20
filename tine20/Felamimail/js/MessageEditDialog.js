@@ -359,6 +359,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 var message = this.getMessageFromConfig();
                 if (message) {
                     if (message.bodyIsFetched() && account.get('preserve_format')) {
+                        // format of the received message. this is the format to perserve
                         format = message.get('body_content_type');
                     }
                     if (!message.bodyIsFetched() || format != message.getBodyType()) {
