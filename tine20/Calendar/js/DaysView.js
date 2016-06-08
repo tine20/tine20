@@ -588,7 +588,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             this.isScrolling = true;
 
             var topOffset = this.scroller ? this.getHeightMinutes(this.scroller.dom.scrollTop) : null;
-            if (topOffset) {
+            if (topOffset !== null) {
                 this.lastScrollTime = this.dayStart.clearTime(true).add(Date.MINUTE, topOffset);
             }
 
