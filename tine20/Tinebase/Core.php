@@ -1506,9 +1506,10 @@ class Tinebase_Core
     /**
      * returns requested url part
      *
+     * @param string $part
      * @return string
      */
-    public static function getUrl($part)
+    public static function getUrl($part = 'full')
     {
         $request = new Zend_Controller_Request_Http();
         $pathname = $request->getBasePath();

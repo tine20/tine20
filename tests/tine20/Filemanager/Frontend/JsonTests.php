@@ -1362,10 +1362,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->saveDownloadLink($downloadLinkData);
         
         $this->assertTrue(! empty($result['url']));
-        $this->assertEquals(Tinebase_Core::getHostname() . '/download/show/' . $result['id'], $result['url']);
+        $this->assertEquals($this->_getDownloadUrl($result['id']), $result['url']);
         $this->assertEquals(0, $result['access_count']);
         
         return $result;
+    }
+
+    protected function _getDownloadUrl($id)
+    {
+        return Tinebase_Core::getUrl() . '/download/show/' . $id;
     }
     
     /**
@@ -1379,7 +1384,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->saveDownloadLink($downloadLinkData);
         
         $this->assertTrue(! empty($result['url']));
-        $this->assertEquals(Tinebase_Core::getHostname() . '/download/show/' . $result['id'], $result['url']);
+        $this->assertEquals($this->_getDownloadUrl($result['id']), $result['url']);
         
         return $result;
     }
