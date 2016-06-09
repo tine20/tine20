@@ -805,6 +805,11 @@ Tine.Tinebase.tineInit = {
         window.i18n = new Locale.Gettext();
         window.i18n.textdomain('Tinebase');
 
+        window._ = function (msgid) {
+            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
+            return window.i18n.dgettext('Tinebase', msgid);
+        };
+
         Tine.Tinebase.prototypeTranslation();
     }
 };

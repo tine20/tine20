@@ -5,7 +5,8 @@ module.exports = {
     entry: './Tinebase.js',
     output: {
         path: './',
-        filename: 'Tinebase-libs-FAT.js'
+        filename: 'Tinebase-libs-FAT.js',
+        libraryTarget: "umd"
     },
     devServer: {
         port: 10443,

@@ -11,8 +11,15 @@
 /**
  * webpack entry
  */
-postal = require('postal');
+var lodash = require('lodash');
+var postal = require('postal');
 require('postal.federation');
 require('postal.xwindow');
 require('postal.request-response');
-html2canvas = require('html2canvas');
+var html2canvas = require('html2canvas');
+
+module.exports = {
+    postal: postal,
+    html2canvas: html2canvas,
+    lodash: lodash
+};
