@@ -42,6 +42,7 @@
                 echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT.css' />";
                 echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT.css' />";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-libs-FAT.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . ".js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . ".js'></script>";
@@ -51,6 +52,7 @@
                 echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT.css' />";
                 echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT.css' />";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT-debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-libs-FAT-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . "-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . "-debug.js'></script>";
