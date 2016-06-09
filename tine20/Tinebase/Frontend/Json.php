@@ -1144,15 +1144,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get all relations of a given record
      *
-     * @param  string       $_model         own model to get relations for
-     * @param  string       $_id            own id to get relations for
-     * @param  string       $_degree        only return relations of given degree
-     * @param  array        $_type          only return relations of given type
-     * @param  string       $_relatedModel  only return relations having this related model
+     * @param  string       $model         own model to get relations for
+     * @param  string       $id            own id to get relations for
+     * @param  string       $degree        only return relations of given degree
+     * @param  array        $type          only return relations of given type
+     * @param  string       $relatedModel  only return relations having this related model
      * @return array
      */
     public function getRelations($model, $id, $degree = NULL, $type = array(), $relatedModel = NULL)
     {
+        if (! is_array($type)) {
+            $type = array();
+        }
         $relations = Tinebase_Relations::getInstance()->getRelations($model, 'Sql', $id, $degree, $type, false, $relatedModel);
 
         // @TODO we still have no converter for relations :-(
