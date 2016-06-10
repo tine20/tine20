@@ -55,7 +55,7 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
         }
 
         this.keyFieldConfig = {};
-        this.configGettext = this.configApp ? this.configApp.i18n._ : i18n._;
+        this.configI18n = this.configApp ? this.configApp.i18n : i18n;
         this.initStore();
 
         this.defaultCheck = new Ext.ux.grid.CheckColumn({
@@ -192,7 +192,7 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
     getColumn: function(field) {
         var col = {
             id: field.name,
-            header: field.label ? this.configGettext(field.label) : field.name,
+            header: field.label ? this.configI18n._(field.label) : field.name,
             dataIndex: field.name,
             sortable: false,
             width: field.uiConfig && field.uiConfig.width ? field.uiConfig.width : 50
