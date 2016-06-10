@@ -168,7 +168,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     );
     
     /**
-     * name of fields that should be omited from modlog
+     * name of fields that should be omitted from modlog
      *
      * @var array list of modlog omit fields
      */
@@ -179,6 +179,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_EDIT,
         Tinebase_Model_Grants::GRANT_DELETE,
         Tinebase_Model_Grants::GRANT_PRIVATE,
+        'external_seq'
     );
     
     /**

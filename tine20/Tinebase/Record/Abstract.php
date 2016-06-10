@@ -141,7 +141,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     protected $_timeFields = array();
 
     /**
-     * name of fields that should be omited from modlog
+     * name of fields that should be omitted from modlog
      *
      * @var array list of modlog omit fields
      */
