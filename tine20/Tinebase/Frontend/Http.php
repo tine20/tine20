@@ -271,8 +271,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     
     /**
      * set headers for mainscreen
-     * 
-     * @todo allow to configure security headers?
      */
     protected function _setMainscreenHeaders()
     {
@@ -282,18 +280,30 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         header('Content-Type: text/html; charset=utf-8');
         
-        // set x-frame header against clickjacking
-        // @see https://developer.mozilla.org/en/the_x-frame-options_response_header
-        header('X-Frame-Options: SAMEORIGIN');
-        
+        // obsoleted by CSP see https://www.w3.org/TR/CSP2/#directive-frame-ancestors
+        //header('X-Frame-Options: SAMEORIGIN');
+
+        $frameAncestors = implode(' ' ,array_merge(
+            (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
+            array("'self'")
+        ));
+
         // set Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
+        $scriptSrcs = array("'self'", "'unsafe-eval'", 'https://versioncheck.tine20.net');
+        if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
+            $scriptSrcs[] = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ":10443";
+        }
+        $scriptSrc = implode(' ', $scriptSrcs);
         header("Content-Security-Policy: default-src 'self'");
-        header("Content-Security-Policy: script-src 'self' 'unsafe-eval' https://versioncheck.tine20.net");
+        header("Content-Security-Policy: script-src $scriptSrc");
+        header("Content-Security-Policy: frame-ancestors $frameAncestors");
+
         // headers for IE 10+11
         header("X-Content-Security-Policy: default-src 'self'");
-        header("X-Content-Security-Policy: script-src 'self' 'unsafe-eval' https://versioncheck.tine20.net");
-        
+        header("X-Content-Security-Policy: script-src $scriptSrc");
+        header("X-Content-Security-Policy: frame-ancestors $frameAncestors");
+
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
         
@@ -636,7 +646,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
                     break;
                 case 'js':
-                    $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
+                    $prefix = "{$application}/js/{$application}";
+                    $suffix = '-FAT' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : '') . '.js.inc';
+
+                    $webpackFile = "{$prefix}-libs{$suffix}";
+                    if (file_exists($webpackFile)) {
+                        $filesToWatch[] = $webpackFile;
+                    }
+                    $filesToWatch[] = "{$prefix}{$suffix}";
                     break;
                 case 'lang':
                     $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
@@ -908,5 +925,19 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $tmpFile = Tinebase_TempFile::getInstance()->getTempFile($tmpfileId);
         $this->_downloadFileNode($tmpFile, $tmpFile->path);
         exit;
+    }
+
+    public function getPostalXWindow()
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Tinebase/views');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' getPostalXWindow');
+
+        $this->_setMainscreenHeaders();
+
+        echo $view->render('postal.xwindow.php');
+        exit();
     }
 }

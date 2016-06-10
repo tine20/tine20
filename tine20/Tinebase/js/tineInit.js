@@ -120,6 +120,39 @@ Tine.Tinebase.tineInit = {
             e.browserEvent.dataTransfer.dropEffect = 'none';
         }, this);
     },
+
+    checkWebpack: function() {
+        if (! window.postal) {
+            Ext.Msg.alert('webpack-dev-server missing?', 'you need to install and run webpack-dev-server!', function() {
+                Tine.Tinebase.common.reload();
+            });
+        }
+    },
+
+    initPostal: function () {
+        if (! window.postal) return;
+
+        var config = postal.fedx.transports.xwindow.configure();
+        postal.fedx.transports.xwindow.configure( {
+            localStoragePrefix: Tine.Tinebase.tineInit.lsPrefix + '.' + config.localStoragePrefix
+        } );
+        postal.instanceId('xwindow-' + _.random(0,1000));
+        postal.configuration.promise.createDeferred = function() {
+            return Promise.defer();
+        };
+        postal.configuration.promise.getPromise = function(dfd) {
+            return dfd.promise;
+        };
+        postal.fedx.addFilter( [
+            { channel: 'thirdparty', topic: '#', direction: 'both' },
+            //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
+        ] );
+        postal.fedx.signalReady();
+
+        postal.addWireTap( function( d, e ) {
+            Tine.log.debug( "ID: " + postal.instanceId() + " " + JSON.stringify( e, null, 4 ) );
+        } );
+    },
     
     initDebugConsole: function () {
         var map = new Ext.KeyMap(Ext.getDoc(), [{
@@ -772,12 +805,19 @@ Tine.Tinebase.tineInit = {
         window.i18n = new Locale.Gettext();
         window.i18n.textdomain('Tinebase');
 
+        window._ = function (msgid) {
+            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
+            return window.i18n.dgettext('Tinebase', msgid);
+        };
+
         Tine.Tinebase.prototypeTranslation();
     }
 };
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.checkWebpack();
+    Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
