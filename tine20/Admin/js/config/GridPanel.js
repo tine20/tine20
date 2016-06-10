@@ -158,10 +158,14 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var def = o.record.get('default');
             def = String(def).match(/^[{\[]]/) ? def : Ext.encode(def);
 
-            if (o.value == def && o.record.get('source') == 'DEFAULT') {
-                o.record.set('value', Ext.encode(null));
-                // @TODO delete record if value === def
-                //o.record.set('source', 'DEFAULT');
+            if (o.value == def) {
+                o.record.cancelEdit();
+
+                if (o.record.get('source') != 'DEFAULT') {
+                    this.deleteRecords(this.grid.getSelectionModel(), [o.record]);
+                }
+
+                return;
             } else {
                 if (o.record.get('source') == 'DEFAULT') {
                     o.record.set('source', '');

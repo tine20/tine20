@@ -92,7 +92,7 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
      *
      */
     initStore: function() {
-        var recordClass = Tine.Tinebase.data.RecordMgr.get(this.keyFieldOptions.recordModel) || Tine.Tinebase.Model.KeyFieldRecord,
+        var recordClass = this.keyFieldOptions.recordModel && Tine.Tinebase.data.RecordMgr.get(this.keyFieldOptions.recordModel) || Tine.Tinebase.Model.KeyFieldRecord,
             fields = [].concat(recordClass.getFieldDefinitions());
 
         // add default field
