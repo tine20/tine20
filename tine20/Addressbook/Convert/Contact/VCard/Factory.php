@@ -140,16 +140,16 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_AKONADI;
             $version = $matches['version'];
             
+        // eM Client 7 addressbook
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient7::HEADER_MATCH, $_userAgent, $matches) && (floor($matches['version']) >= 7)) {
+            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7;
+            $version = $matches['version'];
+
         // eM Client addressbook
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
         
-        // eM Client 7 addressbook
-        } elseif (preg_match(Addressbook_Convert_Contact_VCard_EMClient7::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_EMCLIENT7;
-            $version = $matches['version'];
-
         // Outlook WebDAV Collaborator
         } elseif (preg_match(Addressbook_Convert_Contact_VCard_WebDAVCollaborator::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR;
