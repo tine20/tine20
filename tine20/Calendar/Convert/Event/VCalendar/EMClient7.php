@@ -18,7 +18,7 @@
 class Calendar_Convert_Event_VCalendar_EMClient7 extends Calendar_Convert_Event_VCalendar_Abstract
 {
     // eM Client 7 (beta) user agent is "MailClient/7.0.25432.0"
-    const HEADER_MATCH = '/MailClient\/(?P<version>.*)/';
+    const HEADER_MATCH = '/eM Client\/(?P<version>.*)/';
 
 }
 
