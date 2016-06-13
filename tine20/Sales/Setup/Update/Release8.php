@@ -90,104 +90,10 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
     {
         $adminGroup   = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($adminGroup->getId());
-        
         if (count($groupMembers) > 0) {
             $user = Tinebase_User::getInstance()->getUserById($groupMembers[0]);
-            Tinebase_Core::set(Tinebase_Core::USER, $user);
-        
-            // cleared, cleared_in, status gets deleted, if the update is not called on cli
-            $controller = Sales_Controller_Contract::getInstance();
-            
-            $table = new Zend_Db_Table(SQL_TABLE_PREFIX . 'sales_contracts', new Zend_Db_Table_Definition(array(
-                'id' => array('name' => 'id'),
-                'status' => array('name' => 'status'),
-                'cleared' => array('name' => 'cleared'),
-                'cleared_in' => array('name' => 'cleared_in'),
-                'description' => array('name' => 'description'),
-                'last_modified_time' => array('name' => 'last_modified_time')
-            )));
-            
-            $count = 50;
-            $offset = 0;
-            $more = true;
-            $updateDescription = $statusConfig = $clearedConfig = $setEndDate = array();
-            
-            $appId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
-            $pref = Tinebase_Core::getPreference('Tinebase');
-            Tinebase_Core::setupUserLocale($pref->locale);
-            $t = Tinebase_Translation::getTranslation('Sales', Tinebase_Core::getLocale());
-            
-            $config = Sales_Config::getInstance()->get('contractStatus');
-            foreach($config['records'] as $cfg) {
-                $statusConfig[$cfg['id']] = $cfg['value'];
-            }
-            
-            $config = Sales_Config::getInstance()->get('contractCleared');
-            
-            foreach($config['records'] as $cfg) {
-                $clearedConfig[$cfg['id']] = $cfg['value'];
-            }
-            
-            while($more) {
-                $results = $table->fetchAll(NULL, NULL, $count, $offset)->toArray();
-                foreach ($results as $row) {
-            
-                    if ($row['status'] == 'CLOSED') {
-                        $setEndDate[$row['id']] = $row['last_modified_time'];
-                    }
-            
-            
-                    $desc = $row['description'];
-                    $desc .= PHP_EOL . '---' . PHP_EOL . PHP_EOL;
-                    $contents = FALSE;
-            
-                    if (! empty($row['status'])) {
-                        $desc .= $t->_('Status') . ': ';
-                        $desc .= (isset($statusConfig[$row['status']]) ? $t->_($statusConfig[$row['status']]) : $row['status']);
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-                    if (! empty($row['cleared'])) {
-                        $desc .= $t->_('Cleared') . ': ';
-                        $desc .= (isset($clearedConfig[$row['cleared']]) ? $t->_($clearedConfig[$row['cleared']]) : $row['cleared']);
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-                    if (! empty($row['cleared_in'])) {
-                        $desc .= $t->_('Cleared In') . ': ';
-                        $desc .= $row['cleared_in'];
-                        $desc .= PHP_EOL;
-                        $contents = TRUE;
-                    }
-            
-                    if ($contents) {
-                        $updateDescription[$row['id']] = $desc . PHP_EOL;
-                    }
-                }
-            
-                if (count($updateDescription) > 50) {
-                    foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
-                        $contr->description = $updateDescription[$contr->getId()];
-                        $controller->update($contr, FALSE);
-                    }
-                    $updateDescription = array();
-                }
-            
-                if (count($results) < $count) {
-                    $more = FALSE;
-                } else {
-                    $offset = $offset + $count;
-                }
-            }
-            
-            try {
-                foreach ($controller->getMultiple(array_keys($updateDescription)) as $contr) {
-                    $contr->description = $updateDescription[$contr->getId()];
-                    $controller->update($contr, FALSE);
-                }
-            } catch (Tinebase_Exception_AccessDenied $tead) {
-                // could not update contracts ...
-                Tinebase_Exception::log($tead);
+            if ($user->hasRight('Sales', Sales_Acl_Rights::ADMIN)) {
+                $this->_updateContractsWithUser($user);
             }
         }
         
@@ -211,7 +117,7 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
         </field>'
         );
         
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             try {
                 $declaration = new Setup_Backend_Schema_Field_Xml($field);
                 $this->_backend->addCol('sales_contracts', $declaration);
@@ -243,6 +149,105 @@ class Sales_Setup_Update_Release8 extends Setup_Update_Abstract
             $this->setTableVersion('sales_contracts', 6);
         } else {
             $this->setTableVersion('sales_contracts', 7);
+        }
+    }
+
+    protected function _updateContractsWithUser($user)
+    {
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        // cleared, cleared_in, status gets deleted, if the update is not called on cli
+        $controller = Sales_Controller_Contract::getInstance();
+
+        $table = new Zend_Db_Table(SQL_TABLE_PREFIX . 'sales_contracts', new Zend_Db_Table_Definition(array(
+            'id' => array('name' => 'id'),
+            'status' => array('name' => 'status'),
+            'cleared' => array('name' => 'cleared'),
+            'cleared_in' => array('name' => 'cleared_in'),
+            'description' => array('name' => 'description'),
+            'last_modified_time' => array('name' => 'last_modified_time')
+        )));
+
+        $count = 50;
+        $offset = 0;
+        $more = true;
+        $updateDescription = $statusConfig = $clearedConfig = $setEndDate = array();
+
+        $pref = Tinebase_Core::getPreference('Tinebase');
+        Tinebase_Core::setupUserLocale($pref->locale);
+        $t = Tinebase_Translation::getTranslation('Sales', Tinebase_Core::getLocale());
+
+        $config = Sales_Config::getInstance()->get('contractStatus');
+        foreach ($config['records'] as $cfg) {
+            $statusConfig[$cfg['id']] = $cfg['value'];
+        }
+
+        $config = Sales_Config::getInstance()->get('contractCleared');
+
+        foreach ($config['records'] as $cfg) {
+            $clearedConfig[$cfg['id']] = $cfg['value'];
+        }
+
+        while ($more) {
+            $results = $table->fetchAll(NULL, NULL, $count, $offset)->toArray();
+            foreach ($results as $row) {
+
+                if ($row['status'] == 'CLOSED') {
+                    $setEndDate[$row['id']] = $row['last_modified_time'];
+                }
+
+
+                $desc = $row['description'];
+                $desc .= PHP_EOL . '---' . PHP_EOL . PHP_EOL;
+                $contents = FALSE;
+
+                if (! empty($row['status'])) {
+                    $desc .= $t->_('Status') . ': ';
+                    $desc .= (isset($statusConfig[$row['status']]) ? $t->_($statusConfig[$row['status']]) : $row['status']);
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
+                }
+                if (! empty($row['cleared'])) {
+                    $desc .= $t->_('Cleared') . ': ';
+                    $desc .= (isset($clearedConfig[$row['cleared']]) ? $t->_($clearedConfig[$row['cleared']]) : $row['cleared']);
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
+                }
+                if (! empty($row['cleared_in'])) {
+                    $desc .= $t->_('Cleared In') . ': ';
+                    $desc .= $row['cleared_in'];
+                    $desc .= PHP_EOL;
+                    $contents = TRUE;
+                }
+
+                if ($contents) {
+                    $updateDescription[$row['id']] = $desc . PHP_EOL;
+                }
+            }
+
+            if (count($updateDescription) > 50) {
+                foreach($controller->getMultiple(array_keys($updateDescription)) as $contr) {
+                    $contr->description = $updateDescription[$contr->getId()];
+                    $controller->update($contr, FALSE);
+                }
+                $updateDescription = array();
+            }
+
+            if (count($results) < $count) {
+                $more = FALSE;
+            } else {
+                $offset = $offset + $count;
+            }
+        }
+
+        try {
+            foreach ($controller->getMultiple(array_keys($updateDescription)) as $contr) {
+                $contr->description = $updateDescription[$contr->getId()];
+                $controller->update($contr, FALSE);
+            }
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            // could not update contracts ...
+            Tinebase_Exception::log($tead);
         }
     }
     
