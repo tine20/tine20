@@ -111,15 +111,15 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_Thunderbird::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
-        
-        // EMClient
-        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
+
+        // EMClient 7 calendar
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient7::HEADER_MATCH, $_userAgent, $matches) && (floor($matches['version']) >= 7)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7;
             $version = $matches['version'];
 
         // EMClient
-        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient7::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7;
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
 
         // Tine 2.0
