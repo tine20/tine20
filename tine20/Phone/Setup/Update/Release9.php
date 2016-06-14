@@ -18,7 +18,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
     public function update_0()
     {
         // we need at least addressbook version 9,7
-        if (version_compare($this->getApplicationVersion('Addressbook'), '9.7') < 0 ) {
+        if (version_compare($this->getApplicationVersion('Addressbook'), '9.8') < 0 ) {
             return;
         }
 
