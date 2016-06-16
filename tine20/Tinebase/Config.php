@@ -84,6 +84,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const CRONUSERID = 'cronuserid';
 
     /**
+     * setup user id
+     *
+     * @var string
+     */
+    const SETUPUSERID = 'setupuserid';
+
+    /**
      * FEATURE_SHOW_ADVANCED_SEARCH
      *
      * @var string

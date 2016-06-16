@@ -1,0 +1,61 @@
+{
+  "name": "tine20_tinebase",
+  "dependencies": {
+    "html2canvas": {
+      "version": "0.5.0-beta4",
+      "from": "https://registry.npmjs.org/html2canvas/-/html2canvas-0.5.0-beta4.tgz",
+      "resolved": "https://registry.npmjs.org/html2canvas/-/html2canvas-0.5.0-beta4.tgz"
+    },
+    "jquery": {
+      "version": "2.2.4",
+      "from": "jquery@>=2.1.4 <3.0.0",
+      "resolved": "https://registry.npmjs.org/jquery/-/jquery-2.2.4.tgz"
+    },
+    "lodash": {
+      "version": "3.10.1",
+      "from": "lodash@>=3.0.0 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
+    },
+    "postal": {
+      "version": "2.0.0",
+      "from": "https://registry.npmjs.org/postal/-/postal-2.0.0.tgz",
+      "resolved": "https://registry.npmjs.org/postal/-/postal-2.0.0.tgz",
+      "dependencies": {
+        "lodash": {
+          "version": "4.13.1",
+          "from": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.13.1.tgz"
+        }
+      }
+    },
+    "postal.federation": {
+      "version": "0.5.3",
+      "from": "postal.federation@>=0.5.2",
+      "resolved": "https://registry.npmjs.org/postal.federation/-/postal.federation-0.5.3.tgz"
+    },
+    "postal.request-response": {
+      "version": "0.3.1",
+      "from": "postal.request-response@>=0.3.1",
+      "resolved": "https://registry.npmjs.org/postal.request-response/-/postal.request-response-0.3.1.tgz",
+      "dependencies": {
+        "lodash": {
+          "version": "2.4.2",
+          "from": "lodash@>=2.4.1 <2.5.0",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.2.tgz"
+        }
+      }
+    },
+    "postal.xwindow": {
+      "version": "0.0.4",
+      "from": "tine20/postal.xwindow",
+      "resolved": "git://github.com/tine20/postal.xwindow.git#28f5762aae844d35596aff42c13faef113c3e2ae",
+      "dependencies": {
+        "store2": {
+          "version": "2.1.6",
+          "from": "store2@2.1.6",
+          "resolved": "https://registry.npmjs.org/store2/-/store2-2.1.6.tgz"
+        }
+      }
+    }
+  }
+}

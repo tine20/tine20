@@ -42,7 +42,7 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
     protected static $_modelConfiguration = array(
         'recordName'        => 'Call', // _('Call')
         'recordsName'       => 'Calls', // _('Calls')
-        'hasRelations'      => FALSE,
+        'hasRelations'      => TRUE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
         'hasTags'           => FALSE,
@@ -120,7 +120,19 @@ class Phone_Model_Call extends Tinebase_Record_Abstract
                 'label'      => 'Destination', // _('Destination')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter' => TRUE,
-            )
+            ),
+            'contact' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Contact',    // _('Contact')
+                    'config' => array(
+                        'appName'   => 'Addressbook',
+                        'modelName' => 'Contact',
+                        'type' => 'CALLER'
+                    )
+                )
+            ),
         )
     );
 }

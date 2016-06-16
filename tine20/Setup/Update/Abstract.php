@@ -406,4 +406,57 @@ class Setup_Update_Abstract
             }
         }
     }
+
+    /**
+     * try to get user for cronjob from config
+     *
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getSetupFromConfigOrCreateOnTheFly()
+    {
+        try {
+            $setupId = Tinebase_Config::getInstance()->get(Tinebase_Config::SETUPUSERID);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
+            $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId, 'Tinebase_Model_FullUser');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+
+            $setupUser = $this->_createSetupuser();
+            Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
+        }
+
+        return $setupUser;
+    }
+
+    /**
+     * create new setupuser
+     *
+     * @return Tinebase_Model_FullUser|null
+     */
+    protected function _createSetupuser()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Creating new setupuser.');
+
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $setupUser = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'setupuser',
+            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility'            => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup'   => $adminGroup->getId(),
+            'accountLastName'       => 'setupuser',
+            'accountDisplayName'    => 'setupuser',
+            'accountExpires'        => NULL,
+        ));
+        try {
+            $setupUser = Tinebase_User::getInstance()->addUser($setupUser);
+            Tinebase_Group::getInstance()->addGroupMember($setupUser->accountPrimaryGroup, $setupUser->getId());
+        } catch (Exception $e) {
+            // no setup user could be created
+            // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+            Tinebase_Exception::log($e);
+            $setupUser = null;
+        }
+
+        return $setupUser;
+    }
 }

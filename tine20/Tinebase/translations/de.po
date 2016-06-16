@@ -1440,6 +1440,10 @@ msgstr "Zeige"
 msgid "and"
 msgstr "und"
 
+#: js/widgets/grid/FilterToolbar.js:113
+msgid "or"
+msgstr "oder"
+
 #: js/widgets/grid/FilterToolbar.js:178
 msgid "add new filter"
 msgstr "neuen Filter hinzufügen"
