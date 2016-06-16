@@ -1534,7 +1534,7 @@ class Tinebase_Core
 
         return $url;
     }
-    
+
     /**
      * Singleton instance
      *
