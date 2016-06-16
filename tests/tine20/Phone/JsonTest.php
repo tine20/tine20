@@ -4,12 +4,8 @@
  * 
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- */
-
-/**
- * Test helper
  */
 
 /**
@@ -277,14 +273,15 @@ class Phone_JsonTest extends TestCase
             'source'                => '78',
             'destination'           => '050998877',
         ));
-        
+
+        $scleverContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_personas['sclever']->getId());
         $this->_objects['call4'] = new Phone_Model_Call(array(
             'id'                    => 'phpunitcallhistoryid4',
             'line_id'               => $this->_objects['line2']->getId(),
-            'phone_id'              => $this->_objects['phone2']->getId(),
+            'phone_id'              => $this->_objects['phone']->getId(),
             'direction'             => Phone_Model_Call::TYPE_INCOMING,
             'source'                => '78',
-            'destination'           => '05036998877',
+            'destination'           => $scleverContact->tel_work,
         ));
         
         $this->_objects['paging'] = array(
@@ -317,7 +314,9 @@ class Phone_JsonTest extends TestCase
         );
         
         $this->_objects['filter4'] = array(
-            array('field' => 'phone_id', 'operator' => 'AND', 'value' => array(array('field' => ':id', 'operator' => 'equals', 'value' => $this->_objects['phone2']->getId())))
+            array('field' => 'phone_id', 'operator' => 'AND', 'value' =>
+                array(array('field' => ':id', 'operator' => 'equals', 'value' =>
+                    $this->_objects['phone2']->getId())))
         );
         
         $this->_objects['filter5'] = array(
@@ -329,7 +328,9 @@ class Phone_JsonTest extends TestCase
         $phoneController->callStarted($this->_objects['call2']);
         $phoneController->callStarted($this->_objects['call2a']);
         $phoneController->callStarted($this->_objects['call3']);
-        $phoneController->callStarted($this->_objects['call4']);
+
+        // create with normal controller to make sure we get contact relation
+        Phone_Controller_Call::getInstance()->create($this->_objects['call4']);
     }
 
     /**
@@ -355,7 +356,7 @@ class Phone_JsonTest extends TestCase
         // search calls without phone_id filter -> at least one call will be returned
         $result = $this->_json->searchCalls($this->_objects['filter1'], $this->_objects['paging']);
         $this->assertGreaterThanOrEqual(1, $result['totalcount']);
-        $this->assertLessThanOrEqual(2, $result['totalcount']);
+        $this->assertLessThanOrEqual(3, $result['totalcount']);
         
         // search query -> '05036' -> the user has made 2 calls each with another phone, another made one call, 1 is correct then
         $result = $this->_json->searchCalls($this->_objects['filter2'], $this->_objects['paging']);
@@ -461,7 +462,6 @@ class Phone_JsonTest extends TestCase
     
     /**
      * try to get registry data
-     *
      */
     public function testGetRegistryData()
     {
@@ -473,7 +473,7 @@ class Phone_JsonTest extends TestCase
         $this->assertStringEndsWith('user phone', $data['Phones'][0]['description'], 'no description');
     }
     
-    // we need some mocks for asterisk backends...
+    // TODO we need some mocks for asterisk backends...
     public function _testDialNumber()
     {
         $number = '+494031703167';
@@ -485,5 +485,26 @@ class Phone_JsonTest extends TestCase
         $this->assertEquals('array', gettype($status));
         $this->assertTrue((isset($status['success']) || array_key_exists('success', $status)));
         $this->assertTrue($status['success']);
+    }
+
+    /**
+     * @see 0011934: show contacts in phone call grid
+     */
+    public function testContactRelations()
+    {
+        // search phone 2 calls (on should be linked to sclever)
+        $result = $this->_json->searchCalls($this->_objects['filter3'], $this->_objects['paging']);
+
+        $scleverCall = null;
+        foreach ($result['results'] as $call) {
+            if ($call['id'] == 'phpunitcallhistoryid4') {
+                $scleverCall = $call;
+            }
+        }
+
+        $this->assertTrue($scleverCall !== null);
+        $this->assertTrue(isset($scleverCall['relations']));
+        $this->assertEquals(1, count($scleverCall['relations']), print_r($scleverCall, true));
+        $this->assertEquals('Susan', $scleverCall['relations'][0]['related_record']['n_given'], print_r($scleverCall, true));
     }
 }

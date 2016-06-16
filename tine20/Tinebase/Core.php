@@ -1392,11 +1392,11 @@ class Tinebase_Core
      */
     public static function getUserTimezone()
     {
-        if (!self::isRegistered(self::USERTIMEZONE) || self::get(self::USERTIMEZONE) == NULL) {
+        if (!self::isRegistered(self::USERTIMEZONE) || ($return = self::get(self::USERTIMEZONE)) === NULL) {
             return Tinebase_Core::setupUserTimezone();
         }
         
-        return self::get(self::USERTIMEZONE);
+        return $return;
     }
 
     /**
@@ -1501,6 +1501,38 @@ class Tinebase_Core
         }
         
         return $hostname;
+    }
+
+    /**
+     * returns requested url part
+     *
+     * @param string $part
+     * @return string
+     */
+    public static function getUrl($part = 'full')
+    {
+        $request = new Zend_Controller_Request_Http();
+        $pathname = $request->getBasePath();
+        $hostname = $request->getHttpHost();
+        $protocol = $request->getScheme();
+
+        switch ($part) {
+            case 'path':
+                $url = $pathname;
+                break;
+            case 'host':
+                $url = $hostname;
+                break;
+            case 'protocol':
+                $url = $protocol;
+                break;
+            case 'full':
+            default:
+                $url = $protocol . '://' . $hostname . $pathname;
+                break;
+        }
+
+        return $url;
     }
     
     /**

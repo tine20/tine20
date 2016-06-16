@@ -110,8 +110,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * 
      * @type String
      */
-    conjunctionOperator: 'and', // i18n._('and')
-    
+    conjunctionOperator: 'and',
+    // _('and')
+    // _('or')
+
     header: false,
     border: false,
     monitorResize: true,

@@ -57,29 +57,13 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
             cropHeight = view.dayEndPx - dayStartPx + 20,
             scrollerHeight = view.cropDayTime ? cropHeight : fullHeight;
 
-
         daysViewPanel.id = this.panelId = Ext.id();
 
         // resize header/scroller to fullsize
-        header.style.height = [header.firstChild.style.height, header.style.height].sort().pop();
+        // @TODO: if you have a lot of allDayEvents, your scroller gets smaller,
+        //        this might be confusing in print
+        header.style.height = Math.max(header.firstChild.style.height, header.style.height);
         scroller.style.width = null;
-
-        //scroller.style.height =  scrollerHeight + 'px';
-
-        if (Ext.isGecko) {
-            console.warn('Printing with Firefox is a pain!');
-            var pch = 12,
-                d = view.mainBody.getHeight() / view.cropper.getHeight(),
-                t = view.mainBody.getHeight() / view.cropper.dom.scrollTop,
-                pbh = pch * d,
-                pbm = pbh/t;
-
-            // NOTE: as soon as the cropper does not fit to page, FF scrambles the layout
-            //       we might need to know page size and calculate cropper height
-            cropper.style.height = pch + 'cm';
-            body.style.height = pbh + 'cm';
-            body.style['margin-top'] = -1 * pbm + 'cm';
-        }
 
         return this.generateTitle(view) + node.innerHTML;
     },

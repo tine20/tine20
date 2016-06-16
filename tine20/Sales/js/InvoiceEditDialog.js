@@ -182,6 +182,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
             if (billingAddress) {
                 var companyName = this.record.get('customer') ? this.record.get('customer').name : null;
+                if (! companyName && this.record.get('customer_id') && this.record.get('customer_id').name) {
+                    companyName = this.record.get('customer_id').name;
+                }
+                if (! companyName && billingAddress.get('customer')) {
+                    companyName = billingAddress.get('customer') && billingAddress.get('customer').name
+                        ? billingAddress.get('customer').name
+                        : null;
+                }
                 this.form.findField('fixed_address').setValue(Tine.Sales.renderAddress(billingAddress, companyName));
             }
         }
@@ -246,7 +254,13 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.addressPicker.enable();
                 
                 if (record.get('billing_address_id')) {
-                    this.addressPicker.setValue(record.get('billing_address_id'));
+                    var billingAddress = record.get('billing_address_id');
+                    if (! billingAddress.data) {
+                        billingAddress = new Tine.Sales.Model.Address(billingAddress);
+                    }
+                    billingAddress.set('customer', foundCustomer);
+                    this.addressPicker.setValue(billingAddress);
+                    this.onAddressLoad(this.addressPicker, billingAddress);
                 }
             } else {
                 this.addressPicker.reset();

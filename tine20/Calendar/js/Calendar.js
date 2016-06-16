@@ -64,6 +64,14 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         if (Tine.Felamimail) {
             Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
         }
+
+        var subscription = postal.subscribe({
+            channel  : "thirdparty",
+            topic    : "data.changed",
+            callback : function(data, envelope) {
+                Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel().autoRefreshTask.delay(0);
+            }
+        });
     },
 
     registerCoreData: function() {

@@ -90,13 +90,12 @@ trait Calendar_Export_GenericTrait
         parent::_resolveRecords($_records);
 
         Calendar_Model_Attender::resolveAttendee($_records->attendee, false, $_records);
-        $organizers = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($_records->organizer), TRUE);
 
         foreach($_records as $record) {
             $attendee = $record->attendee->getName();
             $record->attendee = implode('& ', $attendee);
 
-            $organizer = $organizers->getById($record->organizer);
+            $organizer = $record->resolveOrganizer();
             if ($organizer) {
                 $record->organizer = $organizer->n_fileas;
             }

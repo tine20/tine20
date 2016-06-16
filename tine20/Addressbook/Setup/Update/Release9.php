@@ -185,6 +185,137 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Rename table "adb_list_m_role" in application_tables');
         $this->renameTableInAppTables('addressbook_list_member_role', 'adb_list_m_role');
+
         $this->setApplicationVersion('Addressbook', '9.7');
+    }
+
+    /**
+     * update to 9.8
+     *
+     * @see 0011934: show contacts in phone call grid
+     *
+     * @return void
+     */
+    public function update_7()
+    {
+        if ($this->getTableVersion('addressbook') < 19) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_assistent_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_car_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_cell_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_cell_private_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_fax_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_fax_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_other_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_pager_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_prefer_normalized</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>tel_work_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+
+            $this->setTableVersion('addressbook', 19);
+
+            // fill normalized columns with data
+            $db = Tinebase_Core::getDb();
+            $select = $db->select();
+            $columns = array('id', 'tel_assistent', 'tel_car', 'tel_cell', 'tel_cell_private', 'tel_fax', 'tel_fax_home', 'tel_home', 'tel_pager', 'tel_work', 'tel_other', 'tel_prefer');
+
+            // get all telephone columns
+            $select->from(SQL_TABLE_PREFIX . 'addressbook', $columns);
+            $result = $db->query($select);
+            $data = array();
+            array_shift($columns);
+
+            $results = $result->fetchAll(Zend_Db::FETCH_ASSOC);
+
+            foreach($results as $row) {
+                foreach($columns as $col) {
+                    if (!empty($row[$col])) {
+                        $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNoCountry((string)$row[$col]);
+                    }
+                }
+                if (count($data) > 0) {
+                    $db->update(SQL_TABLE_PREFIX . 'addressbook', $data, $db->quoteInto('id = ?', $row['id']));
+                    $data = array();
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Addressbook', '9.8');
     }
 }

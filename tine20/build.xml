@@ -37,7 +37,7 @@
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="prepare">
-        <foreach param="name" absparam="path" target="build-module">
+        <foreach param="name" absparam="path" target="prepared-build-module">
             <fileset dir=".">
                 <type type="dir" />
                 <include name="*" />
@@ -219,7 +219,33 @@
     <!-- Target: build-module                          -->
     <!-- ============================================  -->
     <target name="build-module" description="build single module" depends="prepare">
+        <phingcall target="prepared-build-module">
+            <property name="name" value="${name}" />
+            <property name="foo" value="baz" />
+        </phingcall>
+    </target>
+    <target name="prepared-build-module" description="build single module">
         <echo msg="Building ${name}" />
+
+        <!-- ensure npm -->
+        <if>
+            <available file="${project.basedir}/${name}/js/package.json"/>
+            <then>
+                <echo message="Starting npm..." />
+                <exec command="npm install" dir="${project.basedir}/${name}/js" passthru="true" />
+            </then>
+        </if>
+
+        <!-- do webpack build -->
+        <if>
+            <available file="${project.basedir}/${name}/js/webpack.config.js"/>
+            <then>
+                <echo message="Starting webpack..." />
+                <exec command="webpack --output-path ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+            </then>
+        </if>
+        <available file="${builddir}/${name}/js/webpack.config.js" property="webpack" value="Yes"/>
+
 
         <!-- do jsb2tk build -->
         <jsb2tk-build appName="${name}" />

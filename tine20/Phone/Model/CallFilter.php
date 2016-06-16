@@ -59,7 +59,7 @@ class Phone_Model_CallFilter extends Tinebase_Model_Filter_FilterGroup
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if ($this->getId() == 'OuterFilter') {
+        if ($this->getId() == 'OuterFilter' && ! $this->_ignoreAcl) {
             $phoneIdFilter = $this->_findFilter('phone_id');
             // set user phone ids as filter
             $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
