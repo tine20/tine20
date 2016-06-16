@@ -431,7 +431,7 @@ class Setup_Update_Abstract
     /**
      * create new setupuser
      *
-     * @return Tinebase_Model_FullUser
+     * @return Tinebase_Model_FullUser|null
      */
     protected function _createSetupuser()
     {
@@ -447,8 +447,15 @@ class Setup_Update_Abstract
             'accountDisplayName'    => 'setupuser',
             'accountExpires'        => NULL,
         ));
-        $setupUser = Tinebase_User::getInstance()->addUser($setupUser);
-        Tinebase_Group::getInstance()->addGroupMember($setupUser->accountPrimaryGroup, $setupUser->getId());
+        try {
+            $setupUser = Tinebase_User::getInstance()->addUser($setupUser);
+            Tinebase_Group::getInstance()->addGroupMember($setupUser->accountPrimaryGroup, $setupUser->getId());
+        } catch (Exception $e) {
+            // no setup user could be created
+            // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+            Tinebase_Exception::log($e);
+            $setupUser = null;
+        }
 
         return $setupUser;
     }
