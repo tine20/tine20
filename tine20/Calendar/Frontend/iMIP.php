@@ -347,13 +347,8 @@ class Calendar_Frontend_iMIP
             }
             $events = Calendar_Controller_MSEventFacade::getInstance()->search($filters);
 
-            // NOTE: cancelled attendees from ext. organizers don't have read grant
-            // find a better way to check grants
-            if (! $_getDeleted) {
-                $events = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE);
-            }
-            $event = $events->getFirstRecord();
-            Calendar_Model_Attender::resolveAttendee($event['attendee']);
+            $event = $events->filter(Tinebase_Model_Grants::GRANT_READ, TRUE)->getFirstRecord();
+            Calendar_Model_Attender::resolveAttendee($event['attendee'], true, $event);
 
             $_iMIP->existing_event = $event;
         }

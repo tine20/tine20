@@ -665,6 +665,10 @@
                 <name>application_id</name>
                 <value special="application_id">Addressbook</value>
             </field>
+            <field>
+                <name>model</name>
+                <value>Addressbook_Model_Contact</value>
+            </field>
         </record>
     </defaultRecords>
 </application>
