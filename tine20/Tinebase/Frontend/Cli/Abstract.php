@@ -388,12 +388,21 @@ class Tinebase_Frontend_Cli_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                 continue;
             }
-            
-            echo "Imported " . $result[$filename]['totalcount'] . " records. Import failed for " . $result[$filename]['failcount'] . " records. \n";
+
+            // TODO use a loop here
+            if (isset($result[$filename]['totalcount']) && ! empty($result[$filename]['totalcount'])) {
+                echo "Imported " . $result[$filename]['totalcount'] . " records.\n";
+            }
+            if (isset($result[$filename]['failcount']) && ! empty($result[$filename]['failcount'])) {
+                echo "Import failed for " . $result[$filename]['failcount'] . " records.\n";
+            }
             if (isset($result[$filename]['duplicatecount']) && ! empty($result[$filename]['duplicatecount'])) {
                 echo "Found " . $result[$filename]['duplicatecount'] . " duplicates.\n";
             }
-            
+            if (isset($result[$filename]['updatecount']) && ! empty($result[$filename]['updatecount'])) {
+                echo "Updated " . $result[$filename]['updatecount'] . " records.\n";
+            }
+
             // import (check if dry run)
             if ($_opts->d && $_opts->v) {
                 print_r($result[$filename]['results']->toArray());
