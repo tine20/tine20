@@ -932,6 +932,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.bodyCards.layout.setActiveItem(editor);
         }
 
+        // to make sure we have all recipients (for example when composing from addressbook with "all pages" filter)
+        var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
+        wrapTicket = ticketFn();
+        this.fireEvent('load', this, this.record, ticketFn);
+        wrapTicket();
+        
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
         

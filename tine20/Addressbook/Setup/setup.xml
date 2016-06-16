@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>9.7</version>
+    <version>9.8</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>18</version>
+            <version>19</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -344,6 +344,72 @@
                 </field>
                 <field>
                     <name>tel_work</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_assistent_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_car_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_cell_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_cell_private_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_fax_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_fax_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_other_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_pager_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_prefer_normalized</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_work_normalized</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>false</notnull>
@@ -810,6 +876,10 @@
             <field>
                 <name>application_id</name>
                 <value special="application_id">Addressbook</value>
+            </field>
+            <field>
+                <name>model</name>
+                <value>Addressbook_Model_Contact</value>
             </field>
         </record>
     </defaultRecords>

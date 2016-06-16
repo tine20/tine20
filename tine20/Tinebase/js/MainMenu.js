@@ -170,7 +170,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
 
         this.action_editProfile = new Ext.Action({
             text: i18n._('Edit Profile'),
-            disabled: false,
+            disabled: ! Tine.Tinebase.common.hasRight('manage_own_profile', 'Tinebase'),
             handler: this.onEditProfile,
             iconCls: 'tinebase-accounttype-user'
         });

@@ -39,4 +39,15 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(100, strlen($html));
     }
+
+    public function testgetPostalXWindow() {
+        if (headers_sent() || version_compare(PHPUnit_Runner_Version::id(), '3.3.0', '<')) {
+            $this->markTestSkipped('phpunit version < 3.3.0 cant cope with headers');
+        }
+        ob_start();
+        $this->_uit->getPostalXWindow();
+        $html = ob_get_clean();
+
+        $this->assertGreaterThan(100, strlen($html));
+    }
 }

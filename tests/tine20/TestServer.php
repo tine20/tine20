@@ -54,6 +54,10 @@ class TestServer
 
         $config = $this->getConfig();
 
+        // set some server vars. sabredav complains if REQUEST_URI is not set
+        $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
+        $_SERVER['REQUEST_URI'] = '';
+
         Tinebase_Core::startCoreSession();
         
         Tinebase_Core::initFramework();
@@ -166,12 +170,11 @@ class TestServer
             $config = new Zend_Config($configData);
 
             Zend_Registry::set('testConfig', $config);
-
-            $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
-            $_SERVER['REQUEST_URI'] = '';
+        } else {
+            $config = Zend_Registry::get('testConfig');
         }
 
-        return Zend_Registry::get('testConfig');
+        return $config;
     }
     
     /**

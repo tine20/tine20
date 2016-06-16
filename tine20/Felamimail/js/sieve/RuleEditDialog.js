@@ -98,6 +98,8 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.window.setTitle(title);
         
         this.getForm().loadRecord(this.record);
+
+        this.conditionsPanel.conjunctionOperator = this.record.get('conjunction') == 'anyof' ? 'or' : 'and';
         
         this.loadMask.hide();
     },
@@ -227,7 +229,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     /**
      * returns dialog
      * 
-     * NOTE: when this method gets called, all initalisation is done.
+     * NOTE: when this method gets called, all initialization is done.
      * 
      * @return {Object}
      * @private

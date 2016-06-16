@@ -783,7 +783,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             if (!array_key_exists($cacheId, self::$_attendeeEmailCache)) {
                 $this->_fillResolvedAttendeeCache($event);
                 
-                self::$_attendeeEmailCache[$cacheId] = !!$attender->getEmail();
+                self::$_attendeeEmailCache[$cacheId] = !!$attender->getEmail($event);
                 
                 // limit class cache to 100 entries
                 if (count(self::$_attendeeEmailCache) > 100) {

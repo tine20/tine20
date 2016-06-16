@@ -518,9 +518,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
         $this->assertContains('TZNAME:CET',          $vevent, $vevent);
         
     }
-    
+
     /**
-     * 
+     *
      * @depends testConvertToTine20Model
      */
     public function testConvertRepeatingEventFromTine20Model()
