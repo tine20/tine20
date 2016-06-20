@@ -384,8 +384,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $newLocalName = $this->_prepareFolderName($_newLocalName);
         $newGlobalName = $this->_buildNewGlobalName($newLocalName, $_oldGlobalName);
+
+        if ($_oldGlobalName === $newGlobalName) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' No change required, new name = old name.');
+            return $this->getByBackendAndGlobalName($account, $newGlobalName);
+        }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
         $this->_renameFolderOnIMAP($account, $newGlobalName, $_oldGlobalName);
         $folder = $this->_renameFolderInCache($account, $newGlobalName, $_oldGlobalName, $newLocalName);
