@@ -29,69 +29,8 @@
  * @package   Felamimail
  * @subpackage    Model
  */
-class Felamimail_Model_Account extends Tinebase_Record_Abstract
+class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
 {
-    /**
-     * secure connection setting for no secure connection
-     *
-     */
-    const SECURE_NONE = 'none';
-
-    /**
-     * secure connection setting for tls
-     *
-     */
-    const SECURE_TLS = 'tls';
-
-    /**
-     * secure connection setting for ssl
-     *
-     */
-    const SECURE_SSL = 'ssl';
-    
-    /**
-     * system account
-     *
-     */
-    const TYPE_SYSTEM = 'system';
-    
-    /**
-     * user defined account
-     *
-     */
-    const TYPE_USER = 'user';
-
-    /**
-     * display format: plain
-     *
-     */
-    const DISPLAY_PLAIN = 'plain';
-    
-    /**
-     * display format: html
-     *
-     */
-    const DISPLAY_HTML = 'html';
-    
-    /**
-     * signature position above quote
-     *
-     */
-    const SIGNATURE_ABOVE_QUOTE = 'above';
-    
-    /**
-     * signature position above quote
-     *
-     */
-    const SIGNATURE_BELOW_QUOTE = 'below';
-    
-    /**
-     * display format: content type
-     *
-     * -> depending on content_type => text/plain show as plain text
-     */
-    const DISPLAY_CONTENT_TYPE = 'content_type';
-    
     /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier

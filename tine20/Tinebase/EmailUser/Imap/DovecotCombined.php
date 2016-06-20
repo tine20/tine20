@@ -72,7 +72,7 @@ class Tinebase_EmailUser_Imap_DovecotCombined extends Tinebase_EmailUser_Sql imp
     
     protected $_defaults = array(
         'emailPort'   => 143,
-        'emailSecure' => Felamimail_Model_Account::SECURE_TLS
+        'emailSecure' => Tinebase_EmailUser_Model_Account::SECURE_TLS
     );
     
     /**

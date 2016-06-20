@@ -134,7 +134,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     
     protected $_defaults = array(
         'emailPort'   => 25,
-        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailSecure' => Tinebase_EmailUser_Model_Account::SECURE_TLS,
         'emailAuth'   => 'plain'
     );
     
