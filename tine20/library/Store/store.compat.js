@@ -105,7 +105,7 @@
     _.fn('on', function(event, fn, scope, key) {
 
         // Ext.util.MixedCollection
-        if (['clear','add','replace','remove','sort'].indexOf[event] >= 0) {
+        if (['clear','add','replace','remove','sort'].indexOf(event) >= 0) {
             if (event != 'replace') {
                 throw new Ext.Error('event ' + event + ' not implemented in store.compat');
             }

@@ -172,7 +172,7 @@ Considerations about offering the Tine 2.0 service in a public network
 should imply administrative tasks to ensure encrypted network
 communication between all related systems.
 
-(d) OpenStreeMap.org services
+(d) OpenStreetMap.org services
  Tine 2.0 uses a number of services offered by openStreetMap.org.
 OpenStreetMap.org is a community dedicated to mapping and geolocation
 related topics. As of the nature of web-services, Tine 2.0 needs to

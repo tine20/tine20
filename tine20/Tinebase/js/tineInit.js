@@ -125,7 +125,7 @@ Tine.Tinebase.tineInit = {
         if (! window.postal) {
             var wikiurl = 'https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack';
             Ext.Msg.alert('Webpack-dev-server missing?',
-                'You need to install and run webpack-dev-server! See ' + wikiurl + ' for instructions.', function() {
+                'You need to install and run webpack-dev-server! <a target="_blank" href="' + wikiurl + '">Installation instructions in the Wiki</a>.', function() {
                 Tine.Tinebase.common.reload();
             });
         }
