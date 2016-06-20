@@ -769,7 +769,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function updateFolder(Syncroton_Model_IFolder $folder)
     {
-        if (strpos($folderId, $this->_fakePrefix) === 0) {
+        if (strpos($folder->serverId, $this->_fakePrefix) === 0) {
             return $folder;
         }
         
