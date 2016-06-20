@@ -125,6 +125,8 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
         
         if (isValid) {
             Tine.Setup.registry.replace('acceptedTermsVersion', Tine.Setup.CurrentTermsVersion);
+        } else {
+            Tine.log.notice('Terms not accepted.');
         }
     }
 });
