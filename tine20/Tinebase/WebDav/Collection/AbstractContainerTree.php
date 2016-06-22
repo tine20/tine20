@@ -155,15 +155,15 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         } elseif ($this->_useIdAsName) {
                             // first try to fetch by uuid ...
                             try {
-                                $container = Tinebase_Container::getInstance()->getByProperty($name, 'uuid');
+                                $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
                             } catch (Tinebase_Exception_NotFound $tenf) {
                                 // ... if that fails by id
                                 $container = Tinebase_Container::getInstance()->getContainerById($name);
                             }
                         } else {
                             $container = Tinebase_Container::getInstance()->getContainerByName(
-                                $this->_getApplicationName(), 
-                                $name, 
+                                $this->_getApplicationName(),
+                                (string) $name,
                                 Tinebase_Model_Container::TYPE_SHARED
                             );
                         }
@@ -206,8 +206,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                             
                         } else { 
                             $container = Tinebase_Container::getInstance()->getContainerByName(
-                                $this->_getApplicationName(), 
-                                $name,
+                                $this->_getApplicationName(),
+                                (string) $name,
                                 Tinebase_Model_Container::TYPE_PERSONAL, 
                                 $accountId
                             );
