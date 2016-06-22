@@ -68,6 +68,13 @@
             </style>
         </column>
         <column>
+            <identifier>inventory_change</identifier>
+            <header>Inventory Change</header>
+            <style>
+                <column-width>6cm</column-width>
+            </style>
+        </column>
+        <column>
             <identifier>customer</identifier>
             <header>Customer</header>
             <!--type>customer</type-->
