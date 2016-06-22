@@ -77,10 +77,17 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         }
         
         $diff = $_record->diff($_oldRecord, array(
-            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags'
+            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags',
+            // see 0011962: contract end_date can't be changed if vacation has been added
+            // TODO fix json encoded field diff - this is only a workaround
+            // sadly, there is currently no test that breaks without this hotfix :(
+            'workingtime_json'
         ))->diff;
 
         if (! empty($diff)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . " Contract diff:" . print_r($diff, true));
+
             if ($this->getFreeTimes($_record)->filter('type', 'vacation')->count() > 0) {
                 throw new HumanResources_Exception_ContractNotEditable();
             }
@@ -110,14 +117,16 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'employee_id', 'operator' => 'equals', 'value' => $contract->employee_id)
         ));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . " FreeTime filter:" . print_r($freeTimeFilter->toArray(), true));
         
         $freeTimeController = HumanResources_Controller_FreeTime::getInstance();
         $results = $freeTimeController->search($freeTimeFilter);
         
         return $results;
     }
-    
-    
+
     /**
      * checks the start_date and end_date
      * 
@@ -134,6 +143,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             throw new HumanResources_Exception_ContractDates();
         }
     }
+
     /**
      * resolves the container array to the corresponding id
      * 
