@@ -36,13 +36,13 @@ Tine.Expressodriver.GridContextMenu = {
 
             Ext.MessageBox.show({
                 title: this.scope.app.i18n._('Rename') + ' ' + this.nodeName,
-                msg: String.format(_('Please enter the new name of the {0}:'), this.nodeName),
+                msg: String.format(i18n._('Please enter the new name of the {0}:'), this.nodeName),
                 buttons: Ext.MessageBox.OKCANCEL,
                 value: nodeText,
                 fn: function(_btn, _text){
                     if (_btn == 'ok') {
                         if (! _text) {
-                            Ext.Msg.alert(String.format(this.scope.app.i18n._('Not renamed {0}'), this.nodeName), String.format(_('You have to supply a {0} name!'), this.nodeName));
+                            Ext.Msg.alert(String.format(this.scope.app.i18n._('Not renamed {0}'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
                             return;
                         }
                         if (_text === nodeText) {
@@ -69,7 +69,7 @@ Tine.Expressodriver.GridContextMenu = {
                             params.destinationFilenames = [targetFilename + _text];
                             params.method = this.backend + '.moveNodes';
                         }
-                        Ext.MessageBox.wait(_('Please wait'), this.scope.app.i18n._('Renaming nodes...' ));
+                        Ext.MessageBox.wait(i18n._('Please wait'), this.scope.app.i18n._('Renaming nodes...' ));
                         Ext.Ajax.request({
                             params: params,
                             scope: this,
@@ -172,7 +172,7 @@ Tine.Expressodriver.GridContextMenu = {
                             params.filenames = filenames;
                             params.method = this.backend + ".deleteNodes";
                         }
-                        Ext.MessageBox.wait(_('Please wait'), this.scope.app.i18n._('Deleting nodes...' ));
+                        Ext.MessageBox.wait(i18n._('Please wait'), this.scope.app.i18n._('Deleting nodes...' ));
                         Ext.Ajax.request({
                             params: params,
                             scope: this,

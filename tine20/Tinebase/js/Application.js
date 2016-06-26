@@ -26,6 +26,9 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
     
     this.init();
+    if (Tine.CoreData && Tine.CoreData.Manager) {
+        this.registerCoreData();
+    }
     this.initAutoHooks();
 };
 
@@ -122,6 +125,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     init: Ext.emptyFn,
 
     /**
+     * template function for subclasses to register app core data
+     */
+    registerCoreData: Ext.emptyFn,
+
+    /**
      * init some auto hooks
      */
     initAutoHooks: function() {
@@ -170,8 +178,8 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
 
         Ext.MessageBox.show(Ext.apply(defaults, {
-            title: _('Not Supported'),
-            msg: _('Your request is not supported by this version.'),
+            title: i18n._('Not Supported'),
+            msg: i18n._('Your request is not supported by this version.'),
             fn: function() {
                 Tine.Tinebase.common.reload();
             }

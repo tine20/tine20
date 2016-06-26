@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -60,14 +60,15 @@ class Crm_Import_CsvTest extends ImportTestCase
      * @param        $importFilename
      * @param string $definitionName
      * @param bool   $dryrun
+     * @param string $duplicateResolveStrategy
      * @return array
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _importHelper($importFilename, $definitionName = 'crm_tine_import_csv', $dryrun = true)
+    protected function _importHelper($importFilename, $definitionName = 'crm_tine_import_csv', $dryrun = true, $duplicateResolveStrategy = null)
     {
         $this->_testNeedsTransaction();
 
-        $this->_testContainer = $this->_getTestContainer('Crm');
+        $this->_testContainer = $this->_getTestContainer('Crm', 'Crm_Model_Lead');
         $this->_filename = dirname(__FILE__) . '/files/' . $importFilename;
         $this->_deleteImportFile = false;
 
@@ -75,6 +76,10 @@ class Crm_Import_CsvTest extends ImportTestCase
             'container_id'  => $this->_testContainer->getId(),
             'dryrun' => $dryrun,
         );
+
+        if ($duplicateResolveStrategy) {
+            $options['duplicateResolveStrategy'] = $duplicateResolveStrategy;
+        }
 
         $result = $this->_doImport($options, $definitionName);
 

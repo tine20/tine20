@@ -40,7 +40,7 @@ Ext.ux.form.ComboBoxRecentsPlugin.prototype = {
             if (recents) {
                 var other = {};
                 other[recordType.getMeta('idProperty')] = 'other';
-                other[recordType.getMeta('titleProperty')] = String.format(_('choose other {0}...'), recordType.getRecordsName());
+                other[recordType.getMeta('titleProperty')] = String.format(i18n._('choose other {0}...'), recordType.getRecordsName());
                 recents.push(new recordClass(other));
                 
                 this.cmp.store.loadRecords(recents, {add: false}, true);

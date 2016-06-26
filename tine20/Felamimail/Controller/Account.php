@@ -307,6 +307,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             'signature',
             'signature_position',
             'display_format',
+            'compose_format',
+            'preserve_format',
             'has_children_support',
             'delimiter',
             'ns_personal',
@@ -891,9 +893,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             } 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $message);
         }
-        
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
+
+        $userCredentialCache = Tinebase_Core::getUserCredentialCache();
+        if ($userCredentialCache !== null) {
             Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($userCredentialCache);
         } else {
             Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 

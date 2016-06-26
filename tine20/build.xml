@@ -37,7 +37,7 @@
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="prepare">
-        <foreach param="name" absparam="path" target="build-module">
+        <foreach param="name" absparam="path" target="prepared-build-module">
             <fileset dir=".">
                 <type type="dir" />
                 <include name="*" />
@@ -138,14 +138,15 @@
     <!-- ============================================      -->
     <target name="phpunit-exec" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllTests.php" override="true" />
-        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library:${project.basedir}/library/zf1ext" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library:${project.basedir}/vendor/zendframework/zendframework1/library" override="true" />
         <property name="testadditionalparams" value="" override="true" />
+        <property name="testsuite" value="tine20" override="true" />
         
         <echo msg="Starting Tests..." />
         <echo msg="Using config file ${testconfigdir}/phpunit.xml" />
         <echo msg="Setting include_path to ${includepath}" />
         
-        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/tine20" passthru="true">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/../tests/${testsuite}" passthru="true">
              <arg line="-d max_execution_time=0
              -d include_path=${includepath}
              --configuration ${testconfigdir}/phpunit.xml
@@ -164,7 +165,7 @@
     <!-- ============================================      -->
     <target name="phpunit-serv" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllServerTests.php" override="true" />
-        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library/" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library/:${project.basedir}/library/zf1ext" override="true" />
         <property name="testadditionalparams" value="" override="true" />
 
         <echo msg="Starting Server Tests..." />
@@ -183,7 +184,7 @@
 
     <!-- ============================================  -->
     <!-- Target: report                                -->
-    <!-- TODO remove code duplication (phpunit target) -->
+    <!-- TODO remove code duplication (phpunit target) OR remove this -->
     <!-- ============================================  -->
     <target name="report">
         <echo msg="Starting Tests..." />
@@ -218,7 +219,33 @@
     <!-- Target: build-module                          -->
     <!-- ============================================  -->
     <target name="build-module" description="build single module" depends="prepare">
+        <phingcall target="prepared-build-module">
+            <property name="name" value="${name}" />
+            <property name="foo" value="baz" />
+        </phingcall>
+    </target>
+    <target name="prepared-build-module" description="build single module">
         <echo msg="Building ${name}" />
+
+        <!-- ensure npm -->
+        <if>
+            <available file="${project.basedir}/${name}/js/package.json"/>
+            <then>
+                <echo message="Starting npm..." />
+                <exec command="npm install" dir="${project.basedir}/${name}/js" passthru="true" />
+            </then>
+        </if>
+
+        <!-- do webpack build -->
+        <if>
+            <available file="${project.basedir}/${name}/js/webpack.config.js"/>
+            <then>
+                <echo message="Starting webpack..." />
+                <exec command="webpack --output-path ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+            </then>
+        </if>
+        <available file="${builddir}/${name}/js/webpack.config.js" property="webpack" value="Yes"/>
+
 
         <!-- do jsb2tk build -->
         <jsb2tk-build appName="${name}" />
@@ -371,7 +398,7 @@
     <!-- ============================================  -->
     <target name="tine-install">
         <property file="${configdir}/install.properties" />
-        <echo msg="Installing Tine 2.0" />
+        <echo msg="Installing Tine 2.0 with initial admin '${adminLoginName}'" />
         <exec command="php -d include_path=.:${configdir} setup.php \
             --install -- \
                 adminLoginName=${adminLoginName} \
@@ -383,7 +410,16 @@
                 authentication=${authentication} \
                 accounts=${accounts} \
                 sieve=${sieve}
-" passthru="true"/>
+" passthru="true" returnProperty="return"/>
+        <if>
+        <equals arg1="${return}" arg2="0" />
+        <then>
+            <echo message="Installation successful" />
+        </then>
+        <else>
+            <fail message="Installation failed" />
+        </else>
+        </if>
     </target>
 
     <!-- ============================================  -->

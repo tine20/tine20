@@ -227,7 +227,8 @@ class Tinebase_ApplicationTest extends TestCase
     }
     
     /**
-     * Test length name for table name and column name (Oracle Database limitation) 
+     * Test length name for table name and column name (Oracle Database limitation)
+     * Table name is less than 30 at least since Oracle 7
      * 
      * @see 0007452: use json encoded array for saving of policy settings
      */
@@ -247,7 +248,7 @@ class Tinebase_ApplicationTest extends TestCase
                 foreach ($xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
                     $currentTable = $table->name;
-                    $this->assertLessThan(29, strlen($currentTable), $applicationName." -> ". $table->name . "  (" . strlen($currentTable).")");
+                    $this->assertLessThan(30, strlen($currentTable), $applicationName." -> ". $table->name . "  (" . strlen($currentTable).")");
                     foreach ($table->fields as $field) {
                         $this->assertLessThan(31, strlen($field->name), $applicationName." -> ". $table->name . "  (" . strlen($field->name).")");
                     }

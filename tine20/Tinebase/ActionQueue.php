@@ -169,7 +169,7 @@
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . " queueing action: '{$action}'");
+            __METHOD__ . '::' . __LINE__ . " Queueing action: '{$action}'");
         
         return $this->_queue->send($message);
     }
@@ -198,5 +198,15 @@
     public function __call($name, $arguments)
     {
         return call_user_func_array(array($this->_queue, $name), $arguments);
+    }
+
+     /**
+      * returns the class name of the used queue implementation
+      *
+      * @return string
+      */
+    public function getBackendType()
+    {
+        return get_class($this->_queue);
     }
 }

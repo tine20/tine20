@@ -18,6 +18,12 @@
  * @package     Expressodriver
  * @subpackage  Exception
  */
-class Expressodriver_Exception extends Exception
+class Expressodriver_Exception extends Tinebase_Exception
 {
+    /**
+     * the name of the application, this exception belongs to
+     *
+     * @var string
+     */
+    protected $_appName = 'Expressodriver';
 }

@@ -110,7 +110,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                         // Service Unavailable! / configuration problem
                         case 503:
                             Ext.MessageBox.show({
-                                title: _('Configuration Problem'), 
+                                title: i18n._('Configuration Problem'),
                                 msg: exception.message,
                                 buttons: Ext.Msg.OK,
                                 icon: Ext.MessageBox.WARNING,

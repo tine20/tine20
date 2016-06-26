@@ -402,18 +402,6 @@ class Setup_ExtCheck
         foreach ($this->values as $key => $value) {
             if ($value['tag'] == 'ENVIROMENT') {
                 switch($value['attributes']['NAME']) {
-                    case 'Zend':
-                        $required = $value['attributes']['VERSION'];
-                        $zend = Zend_Version::VERSION;
-                        $operator = ($value['attributes']['OPERATOR'] == 'biggerThan') ? '>' : '<';
-                        $text = $value['attributes']['NAME'] . ' ' . $operator . ' ' . $required;
-                        if (version_compare($zend, $required, $operator)) {
-                            $data[] = array($text, 'SUCCESS');
-                        } else {
-                            $data[] = array($text . ' (version is ' . $zend . ')', 'FAILURE');
-                        }
-                        break;
-                        
                     case 'PHP':
                         if (version_compare($value['attributes']['VERSION'], phpversion(), '<=')) {
                             $data[] = array($value['attributes']['NAME'], 'SUCCESS');

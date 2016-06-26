@@ -36,6 +36,7 @@ class Expressomail_Controller extends Tinebase_Controller_Event
             Expressomail_Config::IMAPSEARCHMAXRESULTS => 1000,
             Expressomail_Config::AUTOSAVEDRAFTSINTERVAL => 15,
             Expressomail_Config::REPORTPHISHINGEMAIL => '',
+            Expressomail_Config::ENABLEMAILDIREXPORT => FALSE,
         );
     }
     

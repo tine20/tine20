@@ -37,14 +37,16 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             Tinebase_User::syncUsers(array('syncContactData' => TRUE));
         }
-        
+
+        $initialUserName = $initialAdminUserOptions['adminLoginName'];
+
         try {
-            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialAdminUserOptions['adminLoginName']);
+            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialUserName);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-                . ' Could not find initial admin account in user backend. Creating new one ...');
+                . ' Could not find initial admin account ' . $initialUserName . ' in user backend. Creating new one ...');
             Tinebase_User::createInitialAccounts($initialAdminUserOptions);
-            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialAdminUserOptions['adminLoginName']);
+            $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialUserName);
         }
         
         Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
@@ -166,7 +168,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         
         // give anyone read rights to the internal addressbook
-        // give Adminstrators group read/edit/admin rights to the internal addressbook
+        // give Administrators group read/edit/admin rights to the internal addressbook
         Tinebase_Container::getInstance()->addGrants($this->_getInternalAddressbook(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
@@ -205,7 +207,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
                     'adminPassword' => $loginConfig->password,
                 );
             } else {
-                throw Setup_Exception('Inital admin username and password are required');
+                throw new Setup_Exception('Inital admin username and password are required');
             }
         }
         

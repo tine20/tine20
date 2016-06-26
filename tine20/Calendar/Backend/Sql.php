@@ -93,6 +93,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
         $_record->rrule   = !empty($_record->rrule)   ? $_record->rrule   : NULL;
         $_record->recurid = !empty($_record->recurid) ? $_record->recurid : NULL;
+
+        $_record->rrule_constraints = $_record->rrule_constraints instanceof Calendar_Model_EventFilter ?
+            json_encode($_record->rrule_constraints->toArray()) : NULL;
         
         $event = parent::create($_record);
         $this->_saveExdates($_record);
@@ -393,13 +396,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $_record->rrule   = !empty($_record->rrule)   ? $_record->rrule   : NULL;
         $_record->recurid = !empty($_record->recurid) ? $_record->recurid : NULL;
+
+        $_record->rrule_constraints = $_record->rrule_constraints instanceof Calendar_Model_EventFilter ?
+            json_encode($_record->rrule_constraints->toArray()) : NULL;
         
         $event = parent::update($_record);
         $this->_saveExdates($_record);
         
         return $this->get($event->getId(), TRUE);
     }
-    
+
     /**
      * get the basic select object to fetch records from the database
      *  
@@ -606,6 +612,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @return Tinebase_Record_Abstract
      */
     protected function _rawDataToRecord(array $_rawData) {
+        $_rawData['rrule_constraints'] = Tinebase_Helper::is_json($_rawData['rrule_constraints']) ?
+            json_decode($_rawData['rrule_constraints'], true) : NULL;
+
         $event = parent::_rawDataToRecord($_rawData);
         
         $this->appendForeignRecordSetToRecord($event, 'attendee', 'id', Calendar_Backend_Sql_Attendee::FOREIGNKEY_EVENT, $this->_attendeeBackend);
@@ -625,6 +634,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $events->addIndices(array('rrule', 'recurid'));
         
         foreach ($_rawData as $rawEvent) {
+            $rawEvent['rrule_constraints'] = Tinebase_Helper::is_json($rawEvent['rrule_constraints']) ?
+                json_decode($rawEvent['rrule_constraints'], true) : NULL;
+
             $events->addRecord(new Calendar_Model_Event($rawEvent, true));
         }
         

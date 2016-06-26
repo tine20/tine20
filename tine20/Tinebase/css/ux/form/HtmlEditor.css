@@ -4,6 +4,7 @@
 .x-edit-indent {background: url(../../../../images/oxygen/16x16/actions/format-indent-more.png) 0 0 no-repeat !important;}
 .x-edit-outdent {background: url(../../../../images/oxygen/16x16/actions/format-indent-less.png) 0 0 no-repeat !important;}
 .x-edit-removeFormat {background: url(../../../../images/oxygen/16x16/actions/eraser.png) 0 0 no-repeat !important;}
+.x-edit-toggleFormat {background: url(../../../../images/oxygen/16x16/actions/draw-text.png) 0 0 no-repeat !important;}
 
 /*
     These are examples of styles for the button icons

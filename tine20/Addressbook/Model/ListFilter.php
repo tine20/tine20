@@ -45,7 +45,7 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
         'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-            'idProperty' => 'addressbook.id',
+            'idProperty' => 'addressbook_lists.id',
             'applicationName' => 'Addressbook',
         )),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
@@ -55,6 +55,7 @@ class Addressbook_Model_ListFilter extends Tinebase_Model_Filter_FilterGroup
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'list_type'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'showHidden'           => array('filter' => 'Addressbook_Model_ListHiddenFilter'),
     );
 }

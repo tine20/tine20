@@ -38,11 +38,14 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Customer();
         $this->_modelName = 'Sales_Model_Customer';
         $this->_doContainerACLChecks = FALSE;
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**

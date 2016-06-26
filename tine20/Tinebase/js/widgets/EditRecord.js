@@ -128,7 +128,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             this.recordContainerEl = this.footer.first().insertFirst({tag: 'div', style: {'position': 'relative', 'top': '4px', 'float': 'left'}});
             var ContainerForm = new Tine.widgets.container.selectionComboBox({
                 id: this.appName + 'EditRecordContainerSelector',
-                fieldLabel: _('Saved in'),
+                fieldLabel: i18n._('Saved in'),
                 width: 300,
                 name: this.containerProperty,
                 //itemName: this.containerItemName,
@@ -154,7 +154,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     initActions: function () {
         this.action_saveAndClose = new Ext.Action({
             requiredGrant: 'editGrant',
-            text: _('Ok'),
+            text: i18n._('Ok'),
             //tooltip: 'Save changes and close this window',
             minWidth: 70,
             //handler: this.onSaveAndClose,
@@ -165,7 +165,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
     
         this.action_applyChanges = new Ext.Action({
             requiredGrant: 'editGrant',
-            text: _('Apply'),
+            text: i18n._('Apply'),
             //tooltip: 'Save changes',
             minWidth: 70,
             handler: this.handlerApplyChanges,
@@ -175,7 +175,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_cancel = new Ext.Action({
-            text: _('Cancel'),
+            text: i18n._('Cancel'),
             //tooltip: 'Reject changes and close this window',
             minWidth: 70,
             handler: this.handlerCancel,
@@ -185,7 +185,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
         
         this.action_delete = new Ext.Action({
             requiredGrant: 'deleteGrant',
-            text: _('delete'),
+            text: i18n._('delete'),
             minWidth: 70,
             handler: this.handlerDelete,
             iconCls: 'action_delete',

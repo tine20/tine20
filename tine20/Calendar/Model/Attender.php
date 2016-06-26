@@ -137,9 +137,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @return string
      */
-    public function getEmail()
+    public function getEmail($event=null)
     {
-        $resolvedUser = $this->getResolvedUser();
+        $resolvedUser = $this->getResolvedUser($event);
         if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
             return '';
         }
@@ -233,11 +233,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * 
      * @return Tinebase_Record_Abstract
      */
-    public function getResolvedUser()
+    public function getResolvedUser($event=null)
     {
         $clone = clone $this;
         $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
-        self::resolveAttendee($resolvable);
+        self::resolveAttendee($resolvable, true, $event);
         
         if ($this->user_type === self::USERTYPE_RESOURCE) {
             $resource = $clone->user_id;
@@ -551,7 +551,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * resolves group members and adds/removes them if nesesary
      * 
-     * NOTE: If a user is listed as user and as groupmember, we supress the groupmember
+     * NOTE: If a user is listed as user and as groupmember, we suppress the groupmember
      * 
      * NOTE: The role to assign to a new group member is not always clear, as multiple groups
      *       might be the 'source' of the group member. To deal with this, we take the role of
@@ -581,10 +581,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         $allGroupMembersContactIds = array();
         foreach ($groupAttendee as $groupAttender) {
-            #$groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
-            #$groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
-            #$allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
-            
             $listId = null;
         
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {
@@ -901,11 +897,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $eventAttendee = $eventAttendees instanceof Tinebase_Record_RecordSet ? array($eventAttendees) : $eventAttendees;
-        $events = $_events instanceof Tinebase_Record_Abstract ? array($_events) : $_events;
-        
+
+
+        $events = !$_events ? array() : $_events;
+        $events = $_events instanceof Tinebase_Record_Abstract ? array($events) : $events;
+        $events = is_array($events) ? new Tinebase_Record_RecordSet('Calendar_Model_Event', $events) : $events;
+
         // set containing all attendee
         $allAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-        $typeMap = array();
+        $typeMap = array(self::USERTYPE_USER => array(), self::USERTYPE_GROUPMEMBER => array());
         
         // build type map 
         foreach ($eventAttendee as $attendee) {
@@ -934,15 +934,26 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendee, Tinebase_Core::getUser(), 'displaycontainer_id');
             }
         }
-        
+
+        $organizerIds = array();
+        foreach($events as $event) {
+            $organizerId = $event->organizer;
+            if (! $organizerId instanceof Addressbook_Model_Contact) {
+                $organizerIds[] = $organizerId;
+            }
+        }
+
+        $contactIds = array_merge($typeMap[self::USERTYPE_USER], $typeMap[self::USERTYPE_GROUPMEMBER], $organizerIds);
+        $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
+        $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds));
+        Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+
         // get all user_id entries
         foreach ($typeMap as $type => $ids) {
             switch ($type) {
                 case self::USERTYPE_USER:
                 case self::USERTYPE_GROUPMEMBER:
-                    $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(FALSE);
-                    $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids), TRUE);
-                    Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
+                    $typeMap[$type] = $contacts;
                     break;
                 case self::USERTYPE_GROUP:
                 case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
@@ -960,6 +971,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         // sort entries in
+        foreach($events as $event) {
+            if ($event->organizer && ! $event->organizer instanceof Addressbook_Model_Contact) {
+                $event->organizer = $contacts->getById($event->organizer);
+            }
+        }
+
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
@@ -991,19 +1008,24 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         
         foreach ($eventAttendee as $idx => $attendee) {
-            $event = is_array($events) && (isset($events[$idx]) || array_key_exists($idx, $events)) ? $events[$idx] : NULL;
-            
             foreach ($attendee as $attender) {
+                $event = $events->getById($attender->cal_event_id);
+
                 // keep authkey if user has editGrant to displaycontainer
-                if (isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id']) && (isset($attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) || array_key_exists(Tinebase_Model_Grants::GRANT_EDIT, $attender['displaycontainer_id']['account_grants'])) &&  $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
+                if (isset($attender['displaycontainer_id'])
+                    && !is_scalar($attender['displaycontainer_id'])
+                    && isset($attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT])
+                    && $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]
+                ) {
                     continue;
                 }
-                
+
                 // keep authkey if attender is a contact (no account) and user has editGrant for event
                 if ($attender->user_type == self::USERTYPE_USER
                     && $attender->user_id instanceof Tinebase_Record_Abstract
                     && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)
                     && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})
+                    && (!$event || !$event->hasExternalOrganizer())
                 ) {
                     continue;
                 }

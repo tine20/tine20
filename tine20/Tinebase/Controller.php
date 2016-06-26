@@ -486,24 +486,45 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * gets image info and data
      * 
-     * @param   string $_application application which manages the image
-     * @param   string $_identifier identifier of image/record
-     * @param   string $_location optional additional identifier
+     * @param   string $application application which manages the image
+     * @param   string $identifier identifier of image/record
+     * @param   string $location optional additional identifier
      * @return  Tinebase_Model_Image
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function getImage($_application, $_identifier, $_location = '')
+    public function getImage($application, $identifier, $location = '')
     {
-        $appController = Tinebase_Core::getApplicationInstance($_application);
-        if (!method_exists($appController, 'getImage')) {
-            throw new Tinebase_Exception_NotFound("$_application has no getImage function.");
+        if ($location === 'vfs') {
+            $node = Tinebase_FileSystem::getInstance()->get($identifier);
+            $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . Tinebase_FileSystem::getInstance()->getPathOfNode($node, /* $getPathAsString */ true);
+            $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($path));
+
+        } else if ($application == 'Tinebase' && $location == 'tempFile') {
+            $tempFile = Tinebase_TempFile::getInstance()->getTempFile($identifier);
+            $image = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
+
+        } else {
+            $appController = Tinebase_Core::getApplicationInstance($application);
+            if (!method_exists($appController, 'getImage')) {
+                throw new Tinebase_Exception_NotFound("$application has no getImage function.");
+            }
+            $image = $appController->getImage($identifier, $location);
         }
-        $image = $appController->getImage($_identifier, $_location);
-        
-        if (!$image instanceof Tinebase_Model_Image) {
-            throw new Tinebase_Exception_UnexpectedValue("$_application returned invalid image.");
+
+        if (! $image instanceof Tinebase_Model_Image) {
+            if (is_array($image)) {
+                $image = new Tinebase_Model_Image($image + array(
+                    'application' => $application,
+                    'id' => $identifier,
+                    'location' => $location
+                ));
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue('broken image');
+            }
         }
+
+
         return $image;
     }
     

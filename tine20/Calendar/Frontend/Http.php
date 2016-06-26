@@ -37,7 +37,9 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
         }
 
-        $filter = new Calendar_Model_EventFilter($decodedFilter);
+        $filter = new Calendar_Model_EventFilter();
+        $filter->setFromArrayInUsersTimezone($decodedFilter);
+
         parent::_export($filter, Zend_Json::decode($options), Calendar_Controller_Event::getInstance());
     }
 }

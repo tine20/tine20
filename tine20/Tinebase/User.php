@@ -137,6 +137,7 @@ class Tinebase_User
             'username' => '',
             'password' => '',
             'bindRequiresDn' => true,
+            'useStartTls' => false,
             'useRfc2307' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=user',
@@ -742,9 +743,10 @@ class Tinebase_User
         foreach ($users as $user) {
             try {
                 self::syncUser($user, $options);
-            } catch (Tinebase_Exception_NotFound $ten) {
+            } catch (Exception $e) {
                 Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
-                    . $ten->getMessage());
+                    . $e->getMessage() . PHP_EOL
+                    . $e->getTraceAsString());
             }
         }
 

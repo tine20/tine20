@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -16,28 +16,28 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:114
+#: Controller.php:119
 #, python-format
 msgid "%s's personal FAQs"
 msgstr "%s's FAQs pessoais"
 
-#: Controller.php:164
+#: Controller.php:159
 msgid "Draft"
 msgstr "Esboço"
 
-#: Controller.php:165
+#: Controller.php:160
 msgid "released"
 msgstr "liberado"
 
-#: Controller.php:166
+#: Controller.php:161
 msgid "obsolete"
 msgstr "obsoleto"
 
-#: Controller.php:169
+#: Controller.php:164
 msgid "Internal"
 msgstr "Interno"
 
-#: Controller.php:170
+#: Controller.php:165
 msgid "Public"
 msgstr "Público"
 
@@ -118,7 +118,7 @@ msgstr "Listas de FAQs"
 
 #: js/Model.js:74
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
 #: js/SearchCombo.js:8
 msgid "Search FAQ"

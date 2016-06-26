@@ -152,7 +152,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('employee_id', this.fixedFields.get('employee_id'));
         
         if (this.record.get('employee_id')) {
-            this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
+            this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
         }
         
         Tine.HumanResources.FreeTimeEditDialog.superclass.onRecordLoad.call(this);

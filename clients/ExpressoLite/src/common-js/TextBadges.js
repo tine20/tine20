@@ -24,8 +24,8 @@ var TextBadges = function(options) {
     var THIS       = this;
     var $ul        = null;
     var $input     = null;
-    var onBlurCB   = null; // user callbacks
-    var onRemoveCB = null;
+    var onBlurCB   = $.noop; // user callbacks
+    var onRemoveCB = $.noop;
 
     (function _Constructor() {
         $ul = $('#TextBadges_template > .TextBadges_ul').clone();
@@ -50,9 +50,7 @@ var TextBadges = function(options) {
             $badge.slideUp(userOpts.animationTime, function() {
                 $badge.remove();
                 $input.focus();
-                if (onRemoveCB !== null) {
-                    onRemoveCB(); // invoke user callback
-                }
+                onRemoveCB(); // invoke user callback
             });
         });
 
@@ -66,9 +64,7 @@ var TextBadges = function(options) {
             if (!$input.val().length) {
                 $input.attr('size', userOpts.inputSize); // reset to default
             }
-            if (onBlurCB !== null) {
-                onBlurCB($input.val()); // invoke user callback
-            }
+            onBlurCB($input.val()); // invoke user callback
         });
     }
 
@@ -106,9 +102,7 @@ var TextBadges = function(options) {
                 $input.attr('size', txtVal.length); // text may be too long, stretch input
             }
             $input.focus();
-            if (onRemoveCB !== null) {
-                onRemoveCB(); // invoke user callback
-            }
+            onRemoveCB(); // invoke user callback
         }
         return THIS;
     };

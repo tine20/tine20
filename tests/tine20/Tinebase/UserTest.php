@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_User_Abstract
@@ -245,8 +240,16 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
         $this->_assertPolicy('clever', 'pwPolicyForbidUsername');
         $this->_assertPolicy('cle', 'pwPolicyForbidUsername');
         $this->_assertPolicy('ver', 'pwPolicyForbidUsername');
-        $this->_assertPolicy('sclever123', '', TRUE); // valid
-        $this->_assertPolicy('', '', TRUE); // valid
+        $this->_assertPolicy('sClever123!', '', TRUE); // valid
+
+        // skip this test for AD backends because it has some strict pws policies
+        // TODO this should be improved: catch AD policy exceptions and convert to Tinebase_Exception_PasswordPolicyViolation
+        // like this:
+        //   Zend_Ldap_Exception: 0x13 (Constraint violation; 0000052D: Constraint violation -
+        //   check_password_restrictions: the password is too short. It should be equal or longer than 7 characters!)
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY) {
+            $this->_assertPolicy('', '', TRUE); // valid
+        }
     }
     
     /**
@@ -254,6 +257,10 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testPasswordPolicyUsernameNotSet()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('skipped for ad backends - see testPasswordPolicyUsername()');
+        }
+
         $this->_setPwPolicies(array(
             Tinebase_Config::PASSWORD_POLICY_FORBID_USERNAME => false
         ));

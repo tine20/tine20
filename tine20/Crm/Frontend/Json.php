@@ -123,24 +123,8 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $settings = $this->getSettings();
-        $defaults = $settings['defaults'];
-        $defaults['container_id'] = $this->getDefaultContainer();
-        
         $registryData = array(
-            'leadtypes'     => array(
-                'results' => $settings[Crm_Model_Config::LEADTYPES],
-                'totalcount' => count($settings[Crm_Model_Config::LEADTYPES])
-            ),
-            'leadstates'    => array(
-                'results' => $settings[Crm_Model_Config::LEADSTATES],
-                'totalcount' => count($settings[Crm_Model_Config::LEADSTATES])
-            ),
-            'leadsources'   => array(
-                'results' => $settings[Crm_Model_Config::LEADSOURCES],
-                'totalcount' => count($settings[Crm_Model_Config::LEADSOURCES])
-            ),
-            'defaults'      => $defaults,
+            'defaultContainer' => $this->getDefaultContainer(),
         );
 
         $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
@@ -163,20 +147,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $defaultContainerArray;
     }
-    
-    /**
-     * Returns settings for crm app
-     *
-     * @return  array record data
-     *
-     * @todo    return json store style with totalcount/result?
-     */
-    public function getSettings()
-    {
-        $result = Crm_Controller::getInstance()->getConfigSettings()->toArray();
-        
-        return $result;
-    }
 
     /**
      * creates/updates settings
@@ -187,7 +157,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $settings = new Crm_Model_Config($recordData);
         $result = Crm_Controller::getInstance()->saveConfigSettings($settings)->toArray();
-        
+
         return $result;
     }
 

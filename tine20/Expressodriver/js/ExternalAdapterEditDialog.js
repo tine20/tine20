@@ -45,7 +45,7 @@ Tine.Expressodriver.ExternalAdapterEditDialog = Ext.extend(Tine.widgets.dialog.E
             this.window.close();
 
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
     getFormItems: function() {

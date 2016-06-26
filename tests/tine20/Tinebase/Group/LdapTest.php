@@ -5,8 +5,10 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
+ *
+ * TODO extend TestCase to use generic cleanup
  */
 
 /**
@@ -101,7 +103,11 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting users: ' . print_r($this->objects['users']->toArray(), true));
 
-        $this->_userLDAP->deleteUsers($this->objects['users']->getArrayOfIds());
+        try {
+            $this->_userLDAP->deleteUsers($this->objects['users']->getArrayOfIds());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+
+        }
     }
     
     /**
@@ -168,9 +174,9 @@ class Tinebase_Group_LdapTest extends PHPUnit_Framework_TestCase
         $user = $this->_addUserToGroup($group);
         $this->_groupLDAP->setGroupMembers($group, array($user));
         
-        $groupMembers = $this->_groupLDAP->getGroupMembers($group);
+        $groupMemberships = $this->_groupLDAP->getGroupMembershipsFromSyncBackend($user);
         
-        $this->assertEquals(1, count($groupMembers));
+        $this->assertEquals(1, count($groupMemberships));
         
         $this->_groupLDAP->removeGroupMember($group, $user);
         

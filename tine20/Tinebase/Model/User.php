@@ -117,6 +117,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         'accountDisplayName'    => array('presence' => 'required'),
         'accountLastName'       => array('presence' => 'required'),
         'accountFirstName'      => array('allowEmpty' => true),
+        'accountEmailAddress'   => array('allowEmpty' => true),
         'accountFullName'       => array('presence' => 'required'),
         'contact_id'            => array('allowEmpty' => true),
         // @todo do we need this information in this model?

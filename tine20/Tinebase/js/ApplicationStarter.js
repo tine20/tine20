@@ -86,11 +86,14 @@ Tine.Tinebase.ApplicationStarter = {
                     fieldDefinition.config.modelName = fieldDefinition.config.modelName.replace(/_/, '');
                     field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
                     break;
-                
             }
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
                 field.dateFormat = fieldDefinition.dateFormat;
+            }
+            
+            if (fieldDefinition.hasOwnProperty('label')) {
+                field.label = fieldDefinition.label;
             }
         }
         
@@ -254,6 +257,7 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime':
                 filter.valueType = 'date';
                 break;
+            case 'float':
             case 'integer':
                 filter.valueType = 'number';
         }
@@ -303,7 +307,7 @@ Tine.Tinebase.ApplicationStarter = {
         }
         // prepare filter
         var filter = {
-            label: globalI18n ? _(label) : app.i18n._(label),
+            label: globalI18n ? i18n._(label) : app.i18n._(label),
             field: fieldKey
         };
         

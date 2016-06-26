@@ -744,9 +744,18 @@ class Expressomail_Controller_Message_Send extends Expressomail_Controller_Messa
             : Tinebase_Core::getUser()->accountFullName;
 
         isset($_message->from_name)?$from = $_message->from_name:$from = $from;
-
+        $user = Tinebase_Core::getUser();
+        try {
+            $allowedEmails = Expressomail_Session::getSessionNamespace()->allowedEmails[$user->accountId];
+        } catch (Zend_Session_Exception $zse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . "::" . __LINE__ .":: It was not possible to get Expressomail Session Namespace");
+            $allowedEmails = array($user->accountEmailAddress);
+        }
         $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
-
+        if (array_search($email, $allowedEmails) === FALSE) {
+            throw new Tinebase_Exception_Record_NotAllowed('You Can\'t send a email with this FROM address: '.$email);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'User with id: ' .$user->accountId. 'tried to send email with address not allowed:  ' . $email);
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
 
         $_mail->setFrom($email, $from);

@@ -92,7 +92,7 @@ Tine.Timetracker.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
             } else if (value > 0) {
                     value = value * 60;
             } else {
-                this.markInvalid(_('Not a valid time'));
+                this.markInvalid(i18n._('Not a valid time'));
                 return;
             }
         }

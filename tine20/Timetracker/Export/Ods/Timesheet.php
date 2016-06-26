@@ -88,7 +88,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
         
         switch($_param['type']) {
             case 'timeaccount':
-                $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->$_param['field'];
+                $value = $this->_resolvedRecords['timeaccounts'][$this->_resolvedRecords['timeaccounts']->getIndexById($_record->timeaccount_id)]->{$_param['field']};
                 break;
         }
         return $value;

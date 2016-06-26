@@ -17,28 +17,28 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:114
+#: Controller.php:119
 #, python-format
 msgid "%s's personal FAQs"
 msgstr "%s ของคำถามที่ถามบ่อย ส่วนตัว"
 
-#: Controller.php:164
+#: Controller.php:159
 msgid "Draft"
 msgstr "โครงร่าง"
 
-#: Controller.php:165
+#: Controller.php:160
 msgid "released"
 msgstr "ได้ปล่อย"
 
-#: Controller.php:166
+#: Controller.php:161
 msgid "obsolete"
 msgstr "เลิกใช้"
 
-#: Controller.php:169
+#: Controller.php:164
 msgid "Internal"
 msgstr "ภายใน"
 
-#: Controller.php:170
+#: Controller.php:165
 msgid "Public"
 msgstr "สาธารณะ"
 

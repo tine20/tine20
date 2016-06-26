@@ -133,6 +133,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'rrule_until'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
+        // instanceof Calendar_Model_EventFilter
+        'rrule_constraints'     => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'originator_tz'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
         'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => false      ),
 
@@ -168,7 +170,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     );
     
     /**
-     * name of fields that should be omited from modlog
+     * name of fields that should be omitted from modlog
      *
      * @var array list of modlog omit fields
      */
@@ -179,6 +181,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         Tinebase_Model_Grants::GRANT_EDIT,
         Tinebase_Model_Grants::GRANT_DELETE,
         Tinebase_Model_Grants::GRANT_PRIVATE,
+        'external_seq'
     );
     
     /**
@@ -610,7 +613,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             // rrule can be array or string
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters, $this->convertDates);
         }
-        
+
+        if (isset($_data['rrule_constraints']) && ! empty($_data['rrule_constraints']) && ! $_data['rrule_constraints'] instanceof Calendar_Model_EventFilter) {
+            // rrule can be array or string
+            $_data['rrule_constraints'] = new Calendar_Model_EventFilter($_data['rrule_constraints']);
+
+        }
+
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
             $_data['alarms'] = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', $_data['alarms'], TRUE, $this->convertDates);
         }

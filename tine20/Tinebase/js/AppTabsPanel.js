@@ -10,8 +10,6 @@ Ext.ns('Tine.Tinebase');
 /**
  * Main appStarter/picker tab panel
  * 
- * NOTE: Tab panels are not sortable yet {@see http://www.extjs.com/forum/showthread.php?p=55045#post55045}
- * 
  * @todo discuss: default app vs. last active tab
  * @todo discuss: have a set of default apps?
  * 
@@ -312,10 +310,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         var appName = this.id2appName(tab);
         var app = Tine.Tinebase.appMgr.get(appName);
         
-        // fixme
-        if (Ext.getCmp('treecards').rendered) {
-            Tine.Tinebase.appMgr.activate(app);
-        }
+        Tine.Tinebase.appMgr.activate(app);
     },
     
     /**

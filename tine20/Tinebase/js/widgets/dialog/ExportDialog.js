@@ -45,7 +45,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.app = Tine.Tinebase.appMgr.get(this.appName);
         
         this.recordClass = Tine.Tinebase.Model.ExportJob;
-        this.saveAndCloseButtonText = _('Export');
+        this.saveAndCloseButtonText = i18n._('Export');
         
 
         this.definitionsStore = new Ext.data.JsonStore({
@@ -81,7 +81,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        this.window.setTitle(String.format(_('Export {0} {1}'), this.record.get('count'), this.record.get('recordsName')));
+        this.window.setTitle(String.format(i18n._('Export {0} {1}'), this.record.get('count'), this.record.get('recordsName')));
     },
 
     /**
@@ -108,7 +108,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             items: [{
                 xtype: 'combo',
-                fieldLabel: _('Export definition'), 
+                fieldLabel: i18n._('Export definition'),
                 name:'export_definition_id',
                 store: this.definitionsStore,
                 displayField:'label',
@@ -117,7 +117,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
-                emptyText: _('Select Export Definition ...'),
+                emptyText: i18n._('Select Export Definition ...'),
                 valueField: 'id',
                 value: (this.definitionsStore.getCount() > 0) ? this.definitionsStore.getAt(0).id : null 
             }
@@ -147,7 +147,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.window.close();
             
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     }
 });

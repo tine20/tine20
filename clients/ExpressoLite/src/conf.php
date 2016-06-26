@@ -16,13 +16,29 @@ define('IOS_URL', ''); // app download links
 
 define('MAIL_BATCH', 50); // how many email entries loaded by default
 
-/* It is possible to make ExpressoLite activate PHP XDebug in the target
+/*
+ * WARNING: The following values are only meant to be used in the
+ * development environment for debug purposes. DO NOT USE THEM IN A
+ * PRODUCTION ENVIRONMENT!!!
+ */
+
+
+/*
+ * It is possible to make ExpressoLite activate PHP XDebug in the target
  * Tine backend server. To do this, configure a constant named
  * ACTIVATE_TINE_XDEBUG with the value true, like:
- *
+ * -------------
  * define('ACTIVATE_TINE_XDEBUG', true);
- *
- * WARNING: DO NOT DO THIS IN A PRODUCTION ENVIRONMENT. It is meant only for
- * debug purposes!
- *
+ * -------------
  */
+
+
+/*
+ * Expresso Lite has a special debugger module with several tools that are
+ * useful during development. To make it available, set the following
+ * constant with true
+ * -------------
+ * define('SHOW_DEBUGGER_MODULE', true);
+ * -------------
+ */
+

@@ -79,6 +79,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'name'              => array('presence' => 'required'),
         'type'              => array(array('InArray', array(self::TYPE_PERSONAL, self::TYPE_SHARED))),
         'backend'           => array('presence' => 'required'),
+        'order'             => array('allowEmpty' => true),
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent

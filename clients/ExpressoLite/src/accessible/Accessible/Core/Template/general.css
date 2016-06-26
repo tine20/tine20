@@ -97,3 +97,10 @@ input[type=submit]:focus, input[type=button]:focus, button:focus { background-co
 
 .clickableCell a { text-decoration:none; color:#1B2026; display:block; padding:5px 10px; }
 .clickableCell a:focus { background-color:#FF6536; color:white; text-decoration:underline; }
+
+    /* Anchor back to the top of page */
+.backToTop {
+    font-size:75%;
+    font-weight:600;
+    text-align:right;
+}

@@ -151,6 +151,9 @@ class Expressomail_Model_Account extends Tinebase_Record_Abstract
         'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ns_shared'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+    // shared seen flags
+        'shared_seen'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'shared_seen_support'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // user data
         'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => ''),
@@ -416,7 +419,7 @@ class Expressomail_Model_Account extends Tinebase_Record_Abstract
         if (! $this->{$userField} || ! ($this->{$passwordField} && ! $_onlyUsername)) {
             
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+            $userCredentialCache = Tinebase_Core::getUserCredentialCache();
             
             if ($userCredentialCache !== NULL) {
                 try {

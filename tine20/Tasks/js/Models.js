@@ -102,7 +102,7 @@ Tine.Tasks.Model.Task.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Tasks');
 
     return [
-        {label: _('Quick Search'),                  field: 'query',    operators: ['contains']},
+        {label: i18n._('Quick Search'),                  field: 'query',    operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Model.Task},
         {label: app.i18n._('Summary'),         field: 'summary' },
         {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
@@ -117,10 +117,10 @@ Tine.Tasks.Model.Task.getFilterModel = function() {
         },
         {label: app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
     ];
 };
 

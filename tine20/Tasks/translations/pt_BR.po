@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-04-27 11:21+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -169,7 +169,7 @@ msgstr "Lista dos A Fazer"
 
 #: js/Models.js:105
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
 #: js/Models.js:120
 msgid "Last Modified Time"

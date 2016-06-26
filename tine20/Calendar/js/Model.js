@@ -52,6 +52,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'mute' },
     { name: 'is_all_day_event', type: 'bool'},
     { name: 'rrule_until', type: 'date', dateFormat: Date.patterns.ISO8601Long },
+    { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
     {name: 'readGrant'   , type: 'bool'},
@@ -198,7 +199,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         transp: 'OPAQUE',
         editGrant: true,
         organizer: organizer,
-        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer)
+        attendee: Tine.Calendar.Model.Event.getDefaultAttendee(organizer, container)
     };
     
     if (prefs.get('defaultalarmenabled')) {
@@ -208,7 +209,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
     return data;
 };
 
-Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
+Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
     var app = Tine.Tinebase.appMgr.get('Calendar'),
         mainScreen = app.getMainScreen(),
         centerPanel = mainScreen.getCenterPanel(),
@@ -219,7 +220,8 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me', // one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee']
-        defaultAttendee = [];
+        defaultAttendee = []
+        calendarResources = app.getRegistry().get('calendarResources');
         
     // shift -> change intelligent <-> me
     if (Ext.EventObject.shiftKey) {
@@ -259,24 +261,49 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer) {
             
         case 'calendarOwner':
             var addedOwnerIds = [];
-            Ext.each(filteredContainers, function(container){
-                if (container.ownerContact) {
+            
+            Ext.each(filteredContainers, function(filteredContainer){
+                if (filteredContainer.ownerContact && filteredContainer.type && filteredContainer.type == 'personal') {
                     var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                         user_type: 'user',
-                        user_id: container.ownerContact
+                        user_id: filteredContainer.ownerContact
                     });
                     
                     if (attendeeData.user_id.id == organizer.id){
                         attendeeData.status = 'ACCEPTED';
                     }
-
-                    if (addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+                    
+                    if (addedOwnerIds.indexOf(filteredContainer.ownerContact.id) < 0) {
                         defaultAttendee.push(attendeeData);
-                        addedOwnerIds.push(container.ownerContact.id);
+                        addedOwnerIds.push(filteredContainer.ownerContact.id);
                     }
+                } else if (filteredContainer.type && filteredContainer.type == 'shared' && calendarResources) {
+                    Ext.each(calendarResources, function(calendarResource) {
+                        if (calendarResource.container_id == filteredContainer.id) {
+                            var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                                user_type: 'resource',
+                                user_id: calendarResource,
+                                status: calendarResource.status
+                            });
+                            defaultAttendee.push(attendeeData);
+                        }
+                    }, this);
                 }
             }, this);
             
+            if (container.ownerContact && addedOwnerIds.indexOf(container.ownerContact.id) < 0) {
+                var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                    user_type: 'user',
+                    user_id: container.ownerContact
+                });
+                
+                if (container.ownerContact.id == organizer.id){
+                    attendeeData.status = 'ACCEPTED';
+                }
+                
+                defaultAttendee.push(attendeeData);
+                addedOwnerIds.push(container.ownerContact.id);
+            }
             break;
     }
     
@@ -287,7 +314,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Calendar');
     
     return [
-        {label: _('Quick Search'), field: 'query', operators: ['contains']},
+        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Summary'), field: 'summary'},
         {label: app.i18n._('Location'), field: 'location'},
         {label: app.i18n._('Description'), field: 'description'},
@@ -333,14 +360,14 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', '
     foreignRecordClass: 'Calendar.Event',
     linkType: 'foreignId', 
     filterName: 'ContactAttendeeFilter',
-    // _('Event (as attendee)')
+    // i18n._('Event (as attendee)')
     label: 'Event (as attendee)'
 });
 Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', 'Contact', {
     foreignRecordClass: 'Calendar.Event',
     linkType: 'foreignId', 
     filterName: 'ContactOrganizerFilter',
-    // _('Event (as organizer)')
+    // i18n._('Event (as organizer)')
     label: 'Event (as organizer)'
 });
 
@@ -350,7 +377,7 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.register('Addressbook', '
 //    foreignRecordClass: 'Calendar.Event',
 //    linkType: 'foreignId', 
 //    filterName: 'ContactAttendeeFilter',
-//    // _('Event attendee')
+//    // i18n._('Event attendee')
 //    label: 'Event attendee'
 //});
 
@@ -717,10 +744,13 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     {name: 'email'},
     {name: 'is_location', type: 'bool'},
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
+    {name: 'busy_type', type: 'keyField', keyFieldConfigName: 'freebusyTypes'},
     {name: 'suppress_notification', type: 'bool'},
     {name: 'tags'},
     {name: 'notes'},
-    {name: 'grants'}
+    {name: 'grants'},
+    { name: 'relations',   omitDuplicateResolving: true},
+    { name: 'customfields', omitDuplicateResolving: true}
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

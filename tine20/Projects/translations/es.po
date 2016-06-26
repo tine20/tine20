@@ -31,7 +31,7 @@ msgstr "Gestionar proyectos favoritos compartidos"
 msgid "Create new shared project favorites"
 msgstr "Crear un nuevo proyecto compartido favorito"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Proyecto"
@@ -47,39 +47,39 @@ msgstr[1] "Listas de Proyectos"
 msgid "Project lists"
 msgstr "Listas de Proyectos"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr "Búsqueda Rápida"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Título"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Número"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "Descripción"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Estado"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "Fecha última modificación"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "Última modificación por"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "Fecha de Creación"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "Creado por"
 
@@ -91,7 +91,7 @@ msgstr "Asistentes"
 msgid "Role"
 msgstr "Cargo"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "Escribir descripción"
 

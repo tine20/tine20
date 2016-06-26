@@ -226,7 +226,7 @@ Tine.Sipgate.LineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     onSyncLine: function() {
         this.loadMask = new Ext.LoadMask(this.grid.getEl(), {
-                        msg: _('Synchronizing...')
+                        msg: i18n._('Synchronizing...')
                     });
         this.loadMask.show();    
         var sel = this.grid.getSelectionModel().getSelections();

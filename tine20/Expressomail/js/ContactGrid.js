@@ -121,13 +121,14 @@ Tine.Expressomail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPane
             ' {checked}',
         '>');
         
-        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // _('None')
+        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // i18n._('None')
             columns.push({
                 header: this.expressomailApp.i18n._(type),
                 dataIndex: Ext.util.Format.lowercase(type),
                 width: 50,
                 hidden: false,
-                renderer: this.typeRadioRenderer.createDelegate(this, [type], 0)
+                renderer: this.typeRadioRenderer.createDelegate(this, [type], 0),
+                searchable: false
             });
             
         }, this);

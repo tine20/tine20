@@ -54,7 +54,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function(){
-        this.title =  _('Tags') + ' (0)';
+        this.title =  i18n._('Tags') + ' (0)';
         this.app = Ext.isString(this.app) ? Tine.Tinebase.appMgr.get(this.app) : this.app;
         
         // init recordTagsStore
@@ -111,12 +111,12 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     text: '',
                     width: 16,
                     iconCls: 'action_add',
-                    tooltip: _('Add a new personal tag'),
+                    tooltip: i18n._('Add a new personal tag'),
                     scope: this,
                     hidden: !Tine.Tinebase.common.hasRight('use_personal_tags', this.app.appName),
                     handler: function() {
-                        Ext.Msg.prompt(_('Add New Personal Tag'),
-                                       _('Please note: You create a personal tag. Only you can see it!') + ' <br />' + _('Enter tag name:'),
+                        Ext.Msg.prompt(i18n._('Add New Personal Tag'),
+                                       i18n._('Please note: You create a personal tag. Only you can see it!') + ' <br />' + i18n._('Enter tag name:'),
                             function(btn, text) {
                                 if (btn == 'ok'){
                                     this.onTagAdd(text);
@@ -135,7 +135,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
                     '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
                         '{[this.encode(values.name)]}', 
-                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                        '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                         '</i>&nbsp;[{occurrence}]',
                         '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
                         
@@ -157,7 +157,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             overClass:'x-widget-tag-tagitem-over',
             selectedClass:'x-widget-tag-tagitem-selected',
             itemSelector:'div.x-widget-tag-tagitem',
-            emptyText: _('No Tags to display')
+            emptyText: i18n._('No Tags to display')
         });
         this.dataView.on('contextmenu', function(dataView, selectedIdx, node, event){
             if (!this.dataView.isSelected(selectedIdx)) {
@@ -180,7 +180,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 items: [
                     new Ext.Action({
                         scope: this,
-                        text: Tine.Tinebase.translation.ngettext('Detach tag', 'Detach tags', selectedTags.length),
+                        text: i18n.ngettext('Detach tag', 'Detach tags', selectedTags.length),
                         iconCls: 'x-widget-tag-action-detach',
                         handler: function() {
                             for (var i=0,j=selectedTags.length; i<j; i++){
@@ -190,17 +190,17 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     }),
                     '-',
                     {
-                        text: _('Edit tag'),
+                        text: i18n._('Edit tag'),
                         disabled: !(selectedTag && allowDelete),
                         menu: {
                             items: [
                                 new Ext.Action({
-                                    text: _('Rename Tag'),
+                                    text: i18n._('Rename Tag'),
                                     selectedTag: selectedTag,
                                     scope: this,
                                     handler: function(action) {
                                         var tag = action.selectedTag;
-                                        Ext.Msg.prompt(_('Rename Tag') + ' "'+ tag.get('name') +'"', _('Please enter a new name:'), function(btn, text){
+                                        Ext.Msg.prompt(i18n._('Rename Tag') + ' "'+ tag.get('name') +'"', i18n._('Please enter a new name:'), function(btn, text){
                                             if (btn == 'ok'){
                                                 tag.set('name', text);
                                                 this.onTagUpdate(tag);
@@ -209,12 +209,12 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                     }
                                 }),
                                 new Ext.Action({
-                                    text: _('Edit Description'),
+                                    text: i18n._('Edit Description'),
                                     selectedTag: selectedTag,
                                     scope: this,
                                     handler: function(action) {
                                         var tag = action.selectedTag;
-                                        Ext.Msg.prompt(_('Description for tag') + ' "'+ tag.get('name') +'"', _('Please enter new description:'), function(btn, text){
+                                        Ext.Msg.prompt(i18n._('Description for tag') + ' "'+ tag.get('name') +'"', i18n._('Please enter new description:'), function(btn, text){
                                             if (btn == 'ok'){
                                                 tag.set('description', text);
                                                 this.onTagUpdate(tag);
@@ -223,7 +223,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                     }
                                 }),
                                 new Ext.Action({
-                                    text: _('Change Color'),
+                                    text: i18n._('Change Color'),
                                     iconCls: 'action_changecolor',
                                     scope: this,
                                     menu: new Ext.menu.ColorMenu({
@@ -252,7 +252,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     new Ext.Action({
                         disabled: !allowDelete,
                         scope: this,
-                        text: Tine.Tinebase.translation.ngettext('Delete Tag', 'Delete Tags', selectedTags.length),
+                        text: i18n.ngettext('Delete Tag', 'Delete Tags', selectedTags.length),
                         iconCls: 'action_delete',
                         handler: function() {
                             var tagsToDelete = [];
@@ -265,12 +265,12 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             
                             // @todo use correct strings: Realy -> Really / disapear -> disappear
                             Ext.MessageBox.confirm(
-                                Tine.Tinebase.translation.ngettext('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length), 
-                                Tine.Tinebase.translation.ngettext('the selected tag will be deleted and disapear for all entries', 
+                                i18n.ngettext('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length),
+                                i18n.ngettext('the selected tag will be deleted and disapear for all entries',
                                                         'The selected tags will be removed and disapear for all entries', selectedTags.length), 
                                 function(btn) {
                                     if (btn == 'yes'){
-                                        Ext.MessageBox.wait(_('Please wait a moment...'), Tine.Tinebase.translation.ngettext('Deleting Tag', 'Deleting Tags', selectedTags.length));
+                                        Ext.MessageBox.wait(i18n._('Please wait a moment...'), i18n.ngettext('Deleting Tag', 'Deleting Tags', selectedTags.length));
                                         Ext.Ajax.request({
                                             params: {
                                                 method: 'Tinebase.deleteTags', 
@@ -286,7 +286,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                                 Ext.MessageBox.hide();
                                             },
                                             failure: function ( result, request) {
-                                                Ext.MessageBox.alert(_('Failed'), _('Could not delete Tag(s).'));
+                                                Ext.MessageBox.alert(i18n._('Failed'), i18n._('Could not delete Tag(s).'));
                                             },
                                             scope: this 
                                         });
@@ -330,8 +330,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     onTagAdd: function(tagName) {
         if (tagName.length < 3) {
             Ext.Msg.show({
-               title: _('Notice'),
-               msg: _('The minimum tag length is three.'),
+               title: i18n._('Notice'),
+               msg: i18n._('The minimum tag length is three.'),
                buttons: Ext.Msg.OK,
                animEl: 'elId',
                icon: Ext.MessageBox.INFO
@@ -378,7 +378,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             this.el.unmask();
                         },
                         failure: function ( result, request) {
-                            Ext.MessageBox.alert(_('Failed'), _('Could not create tag.'));
+                            Ext.MessageBox.alert(i18n._('Failed'), i18n._('Could not create tag.'));
                             this.el.unmask();
                         },
                         scope: this 
@@ -392,8 +392,8 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
     onTagUpdate: function(tag) {
         if (tag.get('name').length < 3) {
             Ext.Msg.show({
-               title: _('Notice'),
-               msg: _('The minimum tag length is three.'),
+               title: i18n._('Notice'),
+               msg: i18n._('The minimum tag length is three.'),
                buttons: Ext.Msg.OK,
                animEl: 'elId',
                icon: Ext.MessageBox.INFO
@@ -411,7 +411,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     this.el.unmask();
                 },
                 failure: function ( result, request) {
-                    Ext.MessageBox.alert(_('Failed'), _('Could not update tag.'));
+                    Ext.MessageBox.alert(i18n._('Failed'), i18n._('Could not update tag.'));
                     this.el.unmask();
                 },
                 scope: this 
@@ -424,7 +424,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
      */
     onChange: function() {
         if (this.recordTagsStore) {
-            this.title = _('Tags') + ' (' + this.recordTagsStore.getCount() + ')';
+            this.title = i18n._('Tags') + ' (' + this.recordTagsStore.getCount() + ')';
             if (this.header) {
                 this.setTitle(this.title);
             }
@@ -506,11 +506,11 @@ Tine.widgets.tags.TagEditDialog = Ext.extend(Ext.Window, {
                 },
                 {
                     name: 'description',
-                    fieldLabel: _('Description')
+                    fieldLabel: i18n._('Description')
                 },
                 {
                     name: 'color',
-                    fieldLabel: _('Color')
+                    fieldLabel: i18n._('Color')
                 }
             ]
             

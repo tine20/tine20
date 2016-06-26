@@ -118,6 +118,9 @@ class Expressomail_Setup_Initialize extends Setup_Initialize
         $property_reportPhishingEmail = $properties[Expressomail_Config::REPORTPHISHINGEMAIL];
         $default_value_reportPhishingEmail = $property_reportPhishingEmail['default'];
         $config[Expressomail_Config::REPORTPHISHINGEMAIL] = $default_value_reportPhishingEmail;
+        $property_enableMailDirExport = $properties[Expressomail_Config::ENABLEMAILDIREXPORT];
+        $default_value_enableMailDirExport = $property_enableMailDirExport['default'];
+        $config[Expressomail_Config::ENABLEMAILDIREXPORT] = $default_value_enableMailDirExport;
     	Expressomail_Controller::getInstance()->saveConfigSettings($config);
     }
 

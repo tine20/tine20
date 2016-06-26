@@ -44,24 +44,34 @@ Ext.ux.Printer = function() {
     getRenderer: function(xtype) {
       return this.renderers[xtype];
     },
-    
+
+    findRenderer: function(component) {
+        var xtypes = component.getXTypes().split('/'),
+            renderer = undefined;
+
+        //iterate backwards over the xtypes of this component, dispatching to the most specific renderer
+        for (var i = xtypes.length - 1; i >= 0; i--){
+            var xtype    = xtypes[i],
+                renderer = this.getRenderer(xtype);
+
+            if (renderer != undefined) {
+                break;
+            }
+        }
+
+        return renderer;
+    },
+
     /**
      * Prints the passed grid. Reflects on the grid's column model to build a table, and fills it using the store
      * @param {Ext.Component} component The component to print
      */
     print: function(component) {
-      var xtypes = component.getXTypes().split('/');
-      
-      //iterate backwards over the xtypes of this component, dispatching to the most specific renderer
-      for (var i = xtypes.length - 1; i >= 0; i--){
-        var xtype    = xtypes[i],        
-            renderer = this.getRenderer(xtype);
-        
+        var renderer = this.findRenderer(component);
+
         if (renderer != undefined) {
           renderer.print(component);
-          break;
         }
-      }
     }
   };
 }();

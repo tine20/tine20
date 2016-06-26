@@ -25,11 +25,11 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
      */
     scope: null,
     /**
-     * @cfg {String} questionText defaults to _('What would you like to do?')
+     * @cfg {String} questionText defaults to i18n._('What would you like to do?')
      */
     questionText: null,
     /**
-     * @cfg {String} invalidText defaults to _('You need to select an option!')
+     * @cfg {String} invalidText defaults to i18n._('You need to select an option!')
      */
     invalidText: null,
     /**
@@ -90,7 +90,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
         
         var noBtn = {
             xtype: 'button',
-            text: _('No'),
+            text: i18n._('No'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
@@ -99,7 +99,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
         
         var yesBtn = {
             xtype: 'button',
-            text: _('Yes'),
+            text: i18n._('Yes'),
             minWidth: 70,
             scope: this,
             handler: this.onOk,

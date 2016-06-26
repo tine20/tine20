@@ -1540,93 +1540,6 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
     }
 
     /**
-     *
-     * @param array $source
-     * @param resource | string $inputStream
-     * @param string $flag
-     * @throws Zend_Mail_Protocol_Exception
-     */
-    public function parseAndSendMessage($source, $inputStream, $flag=NULL)
-    {
-        $originalMessage = $this->getCompleteMessage($source['itemId'], null, false);
-
-        $user = Tinebase_Core::getUser();
-
-        if (! is_resource($inputStream)) {
-            $stream = fopen("php://temp", 'r+');
-            fwrite($stream, $inputStream);
-            $inputStream = $stream;
-            rewind($inputStream);
-        }
-        $incomingMessage = new Zend_Mail_Message(
-                array(
-                        'file' => $inputStream
-                )
-        );
-
-        $headers = $incomingMessage->getHeaders();
-
-        $body = ($headers['content-transfer-encoding'] == 'base64')
-        ? base64_decode($incomingMessage->getContent())
-        : $incomingMessage->getContent();
-        $isTextPlain = strpos($headers['content-type'],'text/plain');
-        $bodyLines = preg_split('/\r\n|\r|\n/', $body);
-        $body = '';
-        if ($isTextPlain !== false) {
-            foreach ($bodyLines as &$line) {
-                $body .= htmlentities($line) . '<br>';
-            }
-        } else {
-            foreach ($bodyLines as &$line) {
-                $body .= $line . '<br>';
-            }
-        }
-        $body = '<div>'.$body.'</div>';
-
-        $bodyOrigin = $originalMessage['body'];
-        preg_match("/<body[^>]*>(.*?)<\/body>/is", $bodyOrigin, $matches);
-        $bodyOrigin = (count($matches)>1) ? $matches[1] : $bodyOrigin;
-        $body .= '<div>'.$bodyOrigin.'</div>';
-
-        $attachments = array();
-        foreach ($originalMessage['attachments'] as &$att) {
-            try {
-                $att['name'] = $att['filename'];
-                $att['type'] = $att['content-type'];
-            } catch (Exception $e) {}
-            array_push($attachments, $att);
-        }
-
-        $recordData = array();
-        $recordData['note'] = '';
-        $recordData['content_type'] = 'text/html';
-        $recordData['account_id'] = $originalMessage->account_id;
-        $recordData['to'] = is_array($headers['to']) ? $headers['to'] : array($headers['to']);
-        $recordData['cc'] = array();
-        $recordData['bcc'] = array();
-        $recordData['subject'] = $headers['subject'];
-        $recordData['body'] = $body;
-        //$recordData['flags'] = array_merge($incomingMessage->getFlags(), $originalMessage['flags']);
-        $recordData['flags'] = ($flag != NULL) ? $flag : '';
-        $recordData['original_id'] = $source['itemId'];
-        $recordData['embedded_images'] = array();
-        $recordData['attachments'] = $attachments;
-        $recordData['from_email'] = $user->accountEmailAddress;
-        $recordData['from_name'] = $user->accountFullName;
-        $recordData['customfields'] = array();
-
-        $message = new Expressomail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-
-        try {
-            Expressomail_Controller_Message_Send::getInstance()->sendMessage($message);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
-            throw $zmpe;
-        }
-    }
-
-    /**
      * parse phishing notification
      *
      * @param Object $message
@@ -1691,7 +1604,7 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
     private function getFormattedGmtDateTime()
     {
         // calculate timezone in "GMT-HH:MM" format
-        $dtz = new DateTimeZone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
+        $dtz = new DateTimeZone(Tinebase_Core::getUserTimezone());
         $time = new DateTime('now', $dtz);
         $offset = $dtz->getOffset( $time );
         $sign = ($offset < 0 ) ? "-" : "+";

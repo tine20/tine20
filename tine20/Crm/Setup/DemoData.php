@@ -304,15 +304,20 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createSharedLeads()
     {
-        $contacts = Addressbook_Controller_Contact::getInstance()->getAll();
-        $addresses = $contacts->filter('type', 'contact');
+        $contactController = Addressbook_Controller_Contact::getInstance();
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'contact'),
+        ));
         $pagination = new Tinebase_Model_Pagination();
         $pagination->start = 0;
         $pagination->limit = 100;
-        $addresses->limitByPagination($pagination);
-        $users = $contacts->filter('type', 'user');
-        
-        unset($contacts);
+        $addresses = $contactController->search($filter, $pagination);
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'user'),
+        ));
+        $users = $contactController->search($filter);
         
         $userids = $users->getId();
         

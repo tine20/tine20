@@ -23,9 +23,10 @@ return function(options) {
 
     var THIS             = this;
     var $templateView    = null; // jQuery object with our HTML template
-    var curDate          = DateCalc.today();
-    var onWeekChangeCB   = null; // user callbacks
-    var onEventClickedCB = null;
+    var curDate          = DateCalc.today(); // week currently displayed
+    var curCalendarId    = '';   // ID of calendar currently displayed
+    var onWeekChangedCB  = $.noop; // user callbacks
+    var onEventClickedCB = $.noop;
 
     THIS.load = function() {
         return $('#Week_template').length ? // load once
@@ -40,7 +41,8 @@ return function(options) {
         return THIS;
     };
 
-    THIS.show = function(when) {
+    THIS.show = function(calendarId, when) {
+        curCalendarId = calendarId;
         curDate = when;
         if ($templateView === null) {
             $templateView = $('#Week_template .Week_container').clone();
@@ -61,7 +63,7 @@ return function(options) {
     };
 
     THIS.onEventClicked = function(callback) {
-        onEventClickedCB = callback; // onEventClicked(events)
+        onEventClickedCB = callback; // onEventClicked(eventsOfDay, clickedEvent)
         return THIS;
     };
 
@@ -70,9 +72,7 @@ return function(options) {
             $(this).blur();
             curDate = DateCalc.prevWeek(DateCalc.sundayOfWeek(curDate));
             _LoadEventsOfCurWeek().done(function() {
-                if (onWeekChangedCB !== null) {
-                    onWeekChangedCB(); // invoke user callback
-                }
+                onWeekChangedCB(); // invoke user callback
             });
         });
 
@@ -80,16 +80,13 @@ return function(options) {
             $(this).blur();
             curDate = DateCalc.nextWeek(DateCalc.sundayOfWeek(curDate));
             _LoadEventsOfCurWeek().done(function() {
-                if (onWeekChangedCB !== null) {
-                    onWeekChangedCB(); // invoke user callback
-                }
+                onWeekChangedCB(); // invoke user callback
             });
         });
 
         $templateView.on('click', '.Week_event', function() {
-            if (onEventClickedCB !== null) {
-                onEventClickedCB([ $(this).data('event') ]); // invoke user callback
-            }
+            var objEv = $(this).data('event');
+            onEventClickedCB([ objEv ], objEv); // invoke user callback
         });
     }
 
@@ -97,7 +94,7 @@ return function(options) {
         var defer = $.Deferred();
         var $loading = $('#Week_template .Week_loading').clone(); // put throbber
         $templateView.hide().after($loading);
-        userOpts.events.loadWeek(DateCalc.sundayOfWeek(curDate)).done(function() {
+        userOpts.events.loadWeek(curCalendarId, DateCalc.sundayOfWeek(curDate)).done(function() {
             $loading.remove();
             _RenderCells();
             $templateView.show();
@@ -159,26 +156,55 @@ return function(options) {
             }
 
             // Events of the week day.
-            var events = userOpts.events.inDay(runDate);
+            var events = userOpts.events.inDay(curCalendarId, runDate);
+            _CalcOverlay(events);
             var cyHour = $templateView.find('.Week_eachHour:first').outerHeight();
+
             for (var e = 0; e < events.length; ++e) {
                 var $ev = $('#Week_template .Week_event').clone();
                 $ev.text(events[e].summary);
                 $ev.attr('title', events[e].summary);
+                var cx = (100 / 7) / (events[e].overlay.shares + 1); // percent
                 var y = events[e].from.getHours() + events[e].from.getMinutes() / 60;
                 var cy = DateCalc.hourDiff(events[e].until, events[e].from);
                 $ev.css({
                     top: (y * cyHour)+'px',
                     height: (cy * cyHour)+'px',
-                    'background-color': events[e].color
+                    'background-color': events[e].color,
+                    'margin-left': events[e].overlay.ident ? (cx * events[e].overlay.ident)+'%' : 0,
+                    width: cx+'%'
                 });
+                delete events[e].overlay; // remove overlay info from event
                 $ev.data('event', events[e]);
                 $day.append($ev);
             }
 
-            /// Advance to tomorrow.
+            // Advance to tomorrow.
             runDate.setDate(runDate.getDate() + 1);
             $divgridHours.append($day);
+        }
+    }
+
+    function _CalcOverlay(events) {
+        for (var i = 0; i < events.length; ++i) { // add overlay info to each weekday event
+            events[i].overlay = {
+                shares: 0, // how many events sharing the same vertical pos
+                ident: 0 // left-identation of cell
+            };
+        }
+
+        for (var i = 0; i < events.length - 1; ++i) {
+            var ev1 = events[i];
+            for (var j = i + 1; j < events.length; ++j) {
+                var ev2 = events[j];
+                var overlayed = (ev2.from >= ev1.from && ev2.from <= ev1.until) ||
+                    (ev2.until >= ev1.from && ev2.until <= ev1.until);
+                if (overlayed) {
+                    ++ev1.overlay.shares;
+                    ++ev2.overlay.shares;
+                    ++ev2.overlay.ident;
+                }
+            }
         }
     }
 };

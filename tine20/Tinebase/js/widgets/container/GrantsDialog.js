@@ -49,7 +49,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * @private
      */
     initComponent: function() {
-        this.containerName = this.containerName ? this.containerName : _('Folder');
+        this.containerName = this.containerName ? this.containerName : i18n._('Folder');
 
         this.grantsStore =  new Ext.data.JsonStore({
             baseParams: {
@@ -92,7 +92,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * @private
      */
     onApplyChanges: function(closeWindow) {
-        Ext.MessageBox.wait(_('Please wait'), _('Updating Grants'));
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Updating Grants'));
         
         var grants = [];
         this.grantsStore.each(function(_record){
@@ -122,8 +122,8 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
                 
                 if (responseText.data.code == 505) {
                     Ext.Msg.show({
-                       title:   _('Error'),
-                       msg:     _('You are not allowed to remove all admins for this container!'),
+                       title:   i18n._('Error'),
+                       msg:     i18n._('You are not allowed to remove all admins for this container!'),
                        icon:    Ext.MessageBox.ERROR,
                        buttons: Ext.Msg.OK
                     });

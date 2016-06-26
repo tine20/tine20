@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -17,6 +17,9 @@
  */
 class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 {
+    // TODO move more duplicated (in User/Group AD controllers) code into traits
+    use Tinebase_ActiveDirectory_DomainConfigurationTrait;
+
     const ACCOUNTDISABLE = 2;
     const NORMAL_ACCOUNT = 512;
 
@@ -108,21 +111,6 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $this->_rowNameMapping['accountHomeDirectory'] = 'unixhomedirectory';
             $this->_rowNameMapping['accountLoginShell']    = 'loginshell';
         }
-        
-        // get domain sid
-        $this->_domainConfig = $this->_ldap->search(
-            'objectClass=domain',
-            $this->_ldap->getFirstNamingContext(),
-            Zend_Ldap::SEARCH_SCOPE_BASE
-        )->getFirst();
-        
-        $this->_domainSidBinary = $this->_domainConfig['objectsid'][0];
-        $this->_domainSidPlain  = Tinebase_Ldap::decodeSid($this->_domainConfig['objectsid'][0]);
-        
-        $domanNameParts    = array();
-        $keys = null; // not really needed
-        Zend_Ldap_Dn::explodeDn($this->_domainConfig['distinguishedname'][0], $keys, $domanNameParts);
-        $this->_domainName = implode('.', $domanNameParts);
     }
     
     /**
@@ -162,7 +150,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         // add user to primary group and set primary group
         Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
         
-        // set primary goup id
+        // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
         
 
@@ -338,27 +326,32 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
 
-        // no need to update this attribute, it's not allowed to change and even might not be updateable
-        unset($ldapData[$this->_userUUIDAttribute]);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-
-        $this->_ldap->update($ldapEntry['dn'], $ldapData);
-        
+        // do we need to rename the entry?
+        // TODO move to rename()
         $dn = Zend_Ldap_Dn::factory($ldapEntry['dn'], null);
         $rdn = $dn->getRdn();
-        
-        // do we need to rename the entry?
         if ($rdn['CN'] != $ldapData['cn']) {
             $newDN = $this->_generateDn($_account);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
         }
-        
+
+        // no need to update this attribute, it's not allowed to change and even might not be updateable
+        unset($ldapData[$this->_userUUIDAttribute]);
+
+        // remove cn as samba forbids updating the CN (even if it does not change...
+        // 0x43 (Operation not allowed on RDN; 00002016: Modify of RDN 'CN' on CN=...,CN=Users,DC=example,DC=org
+        // not permitted, must use 'rename' operation instead
+        unset($ldapData['cn']);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $ldapEntry['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+
+        $this->_ldap->update($ldapEntry['dn'], $ldapData);
+
         // refetch user from ldap backend
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $_account, 'Tinebase_Model_FullUser');
 
@@ -381,12 +374,11 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             case 'objectsid':
                 return Tinebase_Ldap::decodeSid($accountId);
                 break;
-                
+
             default:
                 return $accountId;
                 break;
         }
-        
     }
     
     /**
@@ -429,7 +421,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @param string $_accountClass
      * @return Tinebase_Record_Abstract
      */
-    protected function _ldap2User(array $_userData, $_accountClass)
+    protected function _ldap2User(array $_userData, $_accountClass = 'Tinebase_Model_FullUser')
     {
         $errors = false;
         
@@ -470,7 +462,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
         
         /*
-        $maxPasswordAge = abs(bcdiv($this->_domainConfig['maxpwdage'][0], '10000000'));
+        $domainConfig = $this->getDomainConfiguration();
+        $maxPasswordAge = abs(bcdiv($domainConfig['maxpwdage'][0], '10000000'));
         if ($maxPasswordAge > 0 && isset($accountArray['accountLastPasswordChange'])) {
             $accountArray['accountExpires'] = clone $accountArray['accountLastPasswordChange'];
             $accountArray['accountExpires']->addSecond($maxPasswordAge);
@@ -568,9 +561,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
             }
         }
-        
+
+        $domainConfig = $this->getDomainConfiguration();
         $ldapData['name'] = $ldapData['cn'];
-        $ldapData['userPrincipalName'] =  $_user->accountLoginName . '@' . $this->_domainName;
+        $ldapData['userPrincipalName'] =  $_user->accountLoginName . '@' . $domainConfig['domainName'];
         
         if ($this->_options['useRfc2307']) {
             // homedir is an required attribute
@@ -584,7 +578,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             }
             $ldapData['gidnumber'] = Tinebase_Group::getInstance()->resolveGidNumber($_user->accountPrimaryGroup);
             
-            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $this->_domainName));
+            $ldapData['msSFU30NisDomain'] = Tinebase_Helper::array_value(0, explode('.', $domainConfig['domainName']));
         }
         
         if (isset($_user->sambaSAM) && $_user->sambaSAM instanceof Tinebase_Model_SAMUser) {

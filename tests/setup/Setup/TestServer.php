@@ -5,19 +5,18 @@
  * @package     setup tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  */
 
 /**
  * helper class
- *
  */
-class Setup_TestServer
+class Setup_TestServer extends TestServer
 {
     /**
-     * holdes the instance of the singleton
+     * holds the instance of the singleton
      *
      * @var Setup_TestServer
      */
@@ -46,11 +45,17 @@ class Setup_TestServer
     }
 
     /**
-     * init the test framework
+     * init the test frameworks
      *
      */
     public function initFramework()
     {
         Setup_Core::initFramework();
+
+        //$this->getConfig();
+
+        Tinebase_Core::startCoreSession();
+
+        Tinebase_Core::set('frameworkInitialized', true);
     }
 }

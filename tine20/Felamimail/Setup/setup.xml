@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>9.1</version>
+    <version>9.2</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>20</version>
+            <version>21</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -101,6 +101,17 @@
                     <type>text</type>
                     <length>64</length>
                     <default>html</default>
+                </field>
+                <field>
+                    <name>compose_format</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>html</default>
+                </field>
+                <field>
+                    <name>preserve_format</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>ns_personal</name>
@@ -380,6 +391,7 @@
         <table>
             <name>felamimail_cache_message</name>
             <version>10</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>id</name>
@@ -525,6 +537,7 @@
         <table>
             <name>felamimail_cache_msg_flag</name>
             <version>1</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -575,6 +588,7 @@
         <table>
             <name>felamimail_cache_message_to</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -610,6 +624,7 @@
         <table>
             <name>felamimail_cache_message_cc</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>
@@ -645,6 +660,7 @@
         <table>
             <name>felamimail_cache_message_bcc</name>
             <version>2</version>
+            <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
                     <name>message_id</name>

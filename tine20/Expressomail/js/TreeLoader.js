@@ -81,7 +81,8 @@ Tine.Expressomail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         Ext.apply(attr, {
             leaf: !attr.has_children,
             expandable: attr.has_children,
-            cls: 'x-tree-node-collapsed',
+            cls: Boolean(attr.sharing_with.length) ? 'x-tree-node-collapsed-overlay-share'
+                                    : 'x-tree-node-collapsed',
             folder_id: attr.id,
             folderNode: true,
             allowDrop: true,
@@ -91,31 +92,39 @@ Tine.Expressomail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         // show standard folders icons 
         if (account) {
             if (account.get('trash_folder') === attr.globalname) {
-                if (attr.cache_totalcount > 0) {
-                    attr.cls = 'expressomail-node-trash-full';
+                if (attr.cache_totalcount > 1) {
+                    attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-trash-full-overlay-share'
+                                                : 'expressomail-node-trash-full';
                 } else {
-                    attr.cls = 'expressomail-node-trash';
+                    attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-trash-overlay-share'
+                                                : 'expressomail-node-trash';
                 }
             }
             if (account.get('sent_folder') === attr.globalname) {
-                attr.cls = 'expressomail-node-sent';
+                attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-sent-overlay-share'
+                                            : 'expressomail-node-sent';
             }
             if (account.get('drafts_folder') === attr.globalname) {
-                attr.cls = 'expressomail-node-drafts';
+                attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-drafts-overlay-share'
+                                            : 'expressomail-node-drafts';
             }
             if (account.get('templates_folder') === attr.globalname) {
-                attr.cls = 'expressomail-node-templates';
+                attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-templates-overlay-share'
+                                            : 'expressomail-node-templates';
             }
         }
         if (attr.globalname.match(/^inbox$/i)) {
-            attr.cls = 'expressomail-node-inbox';
+            attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-inbox-overlay-share'
+                                        : 'expressomail-node-inbox';
             attr.text = this.app.i18n._hidden('INBOX');
         }
         if (attr.globalname.match(/^junk$/i)) {
-            attr.cls = 'expressomail-node-junk';
+            attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-junk-overlay-share'
+                                        : 'expressomail-node-junk';
         }
         if (attr.globalname.match(/^inbox\/arquivo remoto$/i) || attr.globalname.match(/^inbox\/arquivo remoto\//i)) {
-            attr.cls = 'expressomail-node-remote';
+            attr.cls = Boolean(attr.sharing_with.length) ? 'expressomail-node-remote-overlay-share'
+                                        : 'expressomail-node-remote';
         }
 
         if (! attr.is_selectable) {
@@ -133,35 +142,48 @@ Ext.override(Ext.tree.TreeNodeUI, {
                 rc1,
                 rc2,
                 cls = n.isLast() ? "x-tree-elbow-end" : "x-tree-elbow",
-                hasChild = n.hasChildNodes();
+                hasChild = n.hasChildNodes(),
+                is_sharing = Boolean(Ext.isEmpty(n.attributes.sharing_with)
+                            ? 0 : n.attributes.sharing_with.length);
             if(hasChild || n.attributes.expandable){
                 if(n.expanded){
                     cls += "-minus";
-                    c1 = "x-tree-node-collapsed";
-                    c2 = "x-tree-node-expanded";
-                    rc1 = "expressomail-node-remote";
-                    rc2 = "expressomail-node-remote-open";
+                    c1 = is_sharing ? "x-tree-node-collapsed-overlay-share" : "x-tree-node-collapsed";
+                    c2 = is_sharing ? "x-tree-node-expanded-overlay-share" : "x-tree-node-expanded";
+                    rc1 = is_sharing ? "expressomail-node-remote-overlay-share" : "expressomail-node-remote";
+                    rc2 = is_sharing ? "expressomail-node-remote-open-overlay-share" : "expressomail-node-remote-open";
                 }else{
                     cls += "-plus";
-                    c1 = "x-tree-node-expanded";
-                    c2 = "x-tree-node-collapsed";
-                    rc1 = "expressomail-node-remote-open";
-                    rc2 = "expressomail-node-remote";
+                    c1 = is_sharing ? "x-tree-node-expanded-overlay-share" : "x-tree-node-expanded";
+                    c2 = is_sharing ? "x-tree-node-collapsed-overlay-share" : "x-tree-node-collapsed";
+                    rc1 = is_sharing ? "expressomail-node-remote-open-overlay-share" : "expressomail-node-remote-open";
+                    rc2 = is_sharing ? "expressomail-node-remote-overlay-share" : "expressomail-node-remote";
                 }
+
                 if(this.wasLeaf){
-                    this.removeClass("x-tree-node-leaf");
+                    if (!is_sharing) {
+                        Ext.fly(this.elNode).removeClass("x-tree-node-leaf");
+                    }
                     this.wasLeaf = false;
+                } else {
+                    if (is_sharing && !Ext.fly(this.elNode).hasClass("x-tree-node-leaf")) {
+                        Ext.fly(this.elNode).addClass("x-tree-node-leaf");
+                    } else if (!is_sharing && Ext.fly(this.elNode).hasClass("x-tree-node-leaf")) {
+                        Ext.fly(this.elNode).removeClass("x-tree-node-leaf");
+                    }
                 }
                 if(this.c1 != c1 || this.c2 != c2){
-                    Ext.fly(this.elNode).replaceClass(c1, c2);
-                    if (Ext.fly(this.elNode).hasClass(rc1)) {
-                        Ext.fly(this.elNode).replaceClass(rc1, rc2);
+                        Ext.fly(this.elNode).replaceClass(c1, c2);
+                        if (Ext.fly(this.elNode).hasClass(rc1)) {
+                            Ext.fly(this.elNode).replaceClass(rc1, rc2);
+                        }
+                        this.c1 = c1; this.c2 = c2;
                     }
-                    this.c1 = c1; this.c2 = c2;
-                }
             }else{
                 if(!this.wasLeaf){
-                    Ext.fly(this.elNode).replaceClass("x-tree-node-expanded", "x-tree-node-collapsed");
+                    Ext.fly(this.elNode).replaceClass(
+                        is_sharing ? "x-tree-node-expanded-overlay-share" : "x-tree-node-expanded",
+                        is_sharing ? "x-tree-node-collapsed-overlay-share" : "x-tree-node-collapsed");
                     delete this.c1;
                     delete this.c2;
                     this.wasLeaf = true;

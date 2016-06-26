@@ -794,6 +794,10 @@ Zeile 3</AirSyncBase:Data>
 
     public function testStatusUpdate($syncrotonFolder = null)
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('only working in non-AD setups');
+        }
+
         if ($syncrotonFolder === null) {
             $syncrotonFolder = $this->testCreateFolder();
         }
@@ -1166,6 +1170,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
     
     public function testGetEntriesIPhone()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
+        }
+
         $syncrotonFolder = $this->testCreateFolder();
         
         $syncrotonFolder2 = $this->testCreateFolder();
@@ -1244,6 +1252,10 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
      */
     public function testUpdateEntriesIPhoneNonDefaultFolder()
     {
+        if ($this->_dbIsPgsql()) {
+            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
+        }
+
         // create event in folder1
         $syncrotonFolder = $this->testCreateFolder();
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());

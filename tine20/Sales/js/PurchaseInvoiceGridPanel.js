@@ -41,7 +41,7 @@ Tine.Sales.PurchaseInvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbarItems: function() {
         this.actions_export = new Ext.Action({
-            // _('Export Invoices')
+            // i18n._('Export Invoices')
             text: this.app.i18n._hidden('Export Invoices'),
             iconCls: 'action_export',
             scope: this,

@@ -30,9 +30,9 @@ var Dialog = function(options) {
     }, options);
 
     var THIS          = this;
-    var onUserCloseCB = null; // user callbacks
-    var onCloseCB     = null;
-    var onResizeCB    = null;
+    var onUserCloseCB = $.noop; // user callbacks
+    var onCloseCB     = $.noop;
+    var onResizeCB    = $.noop;
     var $targetDiv    = userOpts.$elem;
     var $tpl          = null;
     var stackId       = 0; // in phones, popups can be stacked
@@ -100,10 +100,7 @@ var Dialog = function(options) {
                             height: prevMaxPos.cy+'px'
                         });
                     }
-
-                    if (onResizeCB !== null) {
-                        onResizeCB(); // invoke user callback
-                    }
+                    onResizeCB(); // invoke user callback
                 } else { // if minimized, simply restore; never happens because mousedown comes first
                     THIS.toggleMinimize();
                 }
@@ -129,9 +126,7 @@ var Dialog = function(options) {
                     destCss.height = newSz.cy+'px';
                 }
                 $tpl.css(destCss);
-                if (onResizeCB !== null) {
-                    onResizeCB();
-                }
+                onResizeCB();
             });
 
             $(document).on('mouseup.Dialog', function(ev) {
@@ -147,9 +142,7 @@ var Dialog = function(options) {
 
         $tpl.find('.Dialog_backBtn input,.Dialog_closeCage input').on('click', function(ev) {
             ev.stopImmediatePropagation();
-            if (onUserCloseCB !== null) {
-                onUserCloseCB(); // invoke user callback, user must call close() himself
-            }
+            onUserCloseCB(); // invoke user callback, user must call close() himself
         });
     }
 
@@ -227,9 +220,7 @@ var Dialog = function(options) {
             $tpl = null;
             UrlStack.pop('#Dialog'+stackId);
             --stackId;
-            if (onCloseCB !== null) {
-                onCloseCB(); // invoke user callback
-            }
+            onCloseCB(); // invoke user callback
             defer.resolve();
         });
         return defer.promise();

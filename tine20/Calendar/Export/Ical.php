@@ -163,7 +163,7 @@ class Calendar_Export_Ical
                 
                 // qCal only support DURATION ;-(
                 $diffSeconds  = $_event->dtstart->php52compat_diff($alarm->alarm_time);
-                $valarm->addProperty(new qCal_Property_Trigger($diffSeconds));
+                $valarm->addProperty(new qCal_Property_Trigger($diffSeconds->getTimestamp()));
                 
 //                if (is_numeric($alarm->minutes_before)) {
 //                    $valarm->addProperty(new qCal_Property_Trigger("-PT{$alarm->minutes_before}M"));

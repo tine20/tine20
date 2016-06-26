@@ -1078,6 +1078,17 @@ class Expressodriver_Controller_Node
                 $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
                 $userCredentialCache = Tinebase_Core::getUserCredentialCache();
                 $credentialsBackend->getCachedCredentials($userCredentialCache);
+
+                $password = !(empty($userCredentialCache->password)) ?
+                        $userCredentialCache->password :
+                        Expressodriver_Session::getSessionNamespace()->password[$adapterName];
+
+                if (empty($password)) {
+                    $exception = new Expressodriver_Exception_CredentialsRequired();
+                    $exception->setAdapterName($adapterName);
+                    throw $exception;
+                }
+
                 $username = $adapter['useEmailAsLoginName']
                         ? Tinebase_Core::getUser()->accountEmailAddress
                         : Tinebase_Core::getUser()->accountLoginName;
@@ -1085,7 +1096,7 @@ class Expressodriver_Controller_Node
                 $options = array(
                     'host' => $adapter['url'],
                     'user' => $username,
-                    'password' => $userCredentialCache->password,
+                    'password' => $password,
                     'root' => '/',
                     'name' => $adapter['name'],
                     'useCache' => $config['default']['useCache'],

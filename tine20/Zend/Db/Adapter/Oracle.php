@@ -1,8 +1,8 @@
 <?php
 /**
  * Zend Framework
- * 
- * Copied from Zend Framework version 1.9.1
+ *
+ * Copied from Zend Framework version 1.12.17
  * Enable positioned parameters in Oracle adapter
  *
  *
@@ -19,9 +19,9 @@
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Oracle.php 16920 2009-07-21 13:32:28Z ralph $
+ * @version    $Id$
  */
 
 /**
@@ -38,7 +38,7 @@ require_once 'Zend/Db/Statement/Oracle.php';
  * @category   Zend
  * @package    Zend_Db
  * @subpackage Adapter
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
@@ -85,7 +85,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     /**
      * @var integer
      */
-    protected $_execute_mode = OCI_COMMIT_ON_SUCCESS;
+    protected $_execute_mode = null;
 
     /**
      * Default class name for a DB statement.
@@ -128,6 +128,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             throw new Zend_Db_Adapter_Oracle_Exception('The OCI8 extension is required for this adapter but the extension is not loaded');
         }
 
+        $this->_setExecuteMode(OCI_COMMIT_ON_SUCCESS);
+
         // if set host, port and dbname create string connection or use tnsnames.ora name or string connection
         if (! empty($this->_config['host']) && ! empty($this->_config['port']) && ! empty($this->_config['dbname'])) {
             if (isset($this->_config['isSID']) && $this->_config['isSID']) {
@@ -138,13 +140,13 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         }
 
         $connectionFuncName = ($this->_config['persistent'] == true) ? 'oci_pconnect' : 'oci_connect';
-        
+
         $this->_connection = @$connectionFuncName(
                 $this->_config['username'],
                 $this->_config['password'],
                 $this->_config['dbname'],
                 $this->_config['charset']);
-                
+
         // check the connection
         if (!$this->_connection) {
             /**
@@ -172,8 +174,9 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function isConnected()
     {
         return ((bool) (is_resource($this->_connection)
-                     && get_resource_type($this->_connection) == 'oci8 connection'));
-    }
+                    && (get_resource_type($this->_connection) == 'oci8 connection'
+                     || get_resource_type($this->_connection) == 'oci8 persistent connection')));
+        }
 
     /**
      * Force the connection to close.
@@ -387,7 +390,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     TC.DATA_SCALE, TC.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION, TC.CHAR_LENGTH
                 FROM ALL_TAB_COLUMNS TC
                 LEFT JOIN (ALL_CONS_COLUMNS CC JOIN ALL_CONSTRAINTS C
-                  ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND CC.OWNER = C.OWNER AND C.CONSTRAINT_TYPE = 'P'))
+                    ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND CC.OWNER = C.OWNER AND C.CONSTRAINT_TYPE = 'P'))
                   ON TC.TABLE_NAME = CC.TABLE_NAME AND TC.COLUMN_NAME = CC.COLUMN_NAME
                 WHERE UPPER(TC.TABLE_NAME) = UPPER(:TBNAME)";
             $bind[':TBNAME'] = $tableName;
@@ -410,7 +413,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $bind[':SCNAME'] = $schemaName;
             }
             $sql="SELECT TC.TABLE_NAME, TC.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
-                    TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH, 
+                    TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
                     TC.DATA_SCALE, TC.DATA_PRECISION, CC.CONSTRAINT_TYPE, CC.POSITION, TC.CHAR_LENGTH
                 FROM ALL_TAB_COLUMNS TC, ($subSql) CC
                 WHERE UPPER(TC.TABLE_NAME) = UPPER(:TBNAME)
@@ -461,8 +464,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 'DATA_TYPE'        => $row[$data_type],
                 'DEFAULT'          => $row[$data_default],
                 'NULLABLE'         => (bool) ($row[$nullable] == 'Y'),
-                //'LENGTH'           => $row[$data_length], 
-                'LENGTH'           => $row[$char_length],                 
+                //'LENGTH'           => $row[$data_length],
+                'LENGTH'           => $row[$char_length],
                 'SCALE'            => $row[$data_scale],
                 'PRECISION'        => $row[$data_precision],
                 'UNSIGNED'         => null, // @todo
@@ -494,7 +497,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected function _commit()
     {
         $this->_transactionOpen = false;
-        
+
         if (!oci_commit($this->_connection)) {
             /**
              * @see Zend_Db_Adapter_Oracle_Exception
@@ -514,7 +517,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected function _rollBack()
     {
         $this->_transactionOpen = false;
-        
+
         if (!oci_rollback($this->_connection)) {
             /**
              * @see Zend_Db_Adapter_Oracle_Exception
@@ -666,7 +669,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $lobs[] = $column;
             }
         }
-        
+
         // If there are no blob columns then use the normal insert procedure
         if ( !isset($lobs)) {
             $i = 0;
@@ -685,21 +688,21 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     } else {
                         $vals[] = ':'.$col.$i;
                     }
-                    
+
                     unset($bind[$col]);
                     $bind[':'.$col.$i] = $val;
                 }
                 $i++;
             }
-                // build the statement
-                $sql = "INSERT INTO "
-                     . $this->quoteIdentifier($table, true)
-                     . ' (' . implode(', ', $cols) . ') '
-                     . 'VALUES (' . implode(', ', $vals) . ')';
-        
-                // execute the statement and return the number of affected rows
-                $stmt = $this->query($sql, $bind);
-                $result = $stmt->rowCount();
+            // build the statement
+            $sql = "INSERT INTO "
+                . $this->quoteIdentifier($table, true)
+                . ' (' . implode(', ', $cols) . ') '
+                . 'VALUES (' . implode(', ', $vals) . ')';
+
+            // execute the statement and return the number of affected rows
+            $stmt = $this->query($sql, $bind);
+            $result = $stmt->rowCount();
         } else {
             // There are blobs in the $bind array so insert them separately
             $ociTypes = array('BLOB' => OCI_B_BLOB, 'CLOB' => OCI_B_CLOB);
@@ -710,15 +713,15 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             $vals = array();
             $lobData = array();
             $returning = array();
-            
+
             foreach ($bind as $col => $val) {
                 $cols[] = $this->quoteIdentifier($col, true);
                 if (in_array($col, $lobs)) {
-                    
+
                     $lobs[array_search($col, $lobs)] = $this->quoteIdentifier($col, true);
                     $vals[] = 'EMPTY_' . $columns[$col]['DATA_TYPE'] . '()';
                     $lobData[':'.$col.$i] = array('ociType' => $ociTypes[$columns[$col]['DATA_TYPE']],
-                                                  'data'    => $val);
+                        'data'    => $val);
                     unset($bind[$col]);
                     $lobDescriptors[':'.$col.$i] = oci_new_descriptor($this->_connection, OCI_D_LOB);
                     $returning[] = ':'.$col.$i;
@@ -733,17 +736,17 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 }
                 $i++;
             }
-            
+
             // build the statement
             $sql = "INSERT INTO "
-                 . $this->quoteIdentifier($table, true)
-                 . ' (' . implode(', ', $cols) . ') '
-                 . 'VALUES (' . implode(', ', $vals) . ') '
-                 . 'RETURNING ' . implode(', ', $lobs) . ' '
-                 . 'INTO '  . implode(', ', $returning);
-                 
+                . $this->quoteIdentifier($table, true)
+                . ' (' . implode(', ', $cols) . ') '
+                . 'VALUES (' . implode(', ', $vals) . ') '
+                . 'RETURNING ' . implode(', ', $lobs) . ' '
+                . 'INTO '  . implode(', ', $returning);
+
             //Tinebase_Core::getLogger()->debug("SQL INSERT\n" . $sql);
-            
+
             // Execute the statement
             $stmt = new Zend_Db_Statement_Oracle($this, $sql);
 
@@ -754,26 +757,26 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     $stmt->bindParam($name, $bind[$name]);
                 }
             }
-            
+
             $this->_setExecuteMode(OCI_DEFAULT);
             //Execute without committing
             $stmt->execute();
-            
+
             $this->_setExecuteMode(OCI_COMMIT_ON_SUCCESS);
             $result = $stmt->rowCount();
-            
+
             // Write the LOB data & free the descriptor
             if (isset($lobDescriptors)) {
                 foreach ( $lobDescriptors as $name => $lobDescriptor) {
                     $lobDescriptor->write($lobData[$name]['data']);
                     $lobDescriptor->free();
                 }
-            }        
+            }
         }
 
         return $result;
     }
-    
+
     /**
      * Updates table rows with specified data based on a WHERE clause.
      *
@@ -829,9 +832,9 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
          * Build the UPDATE statement
          */
         $sql = "UPDATE "
-             . $this->quoteIdentifier($table, true)
-             . ' SET ' . implode(', ', $set)
-             . (($where) ? " WHERE $where" : '');
+            . $this->quoteIdentifier($table, true)
+            . ' SET ' . implode(', ', $set)
+            . (($where) ? " WHERE $where" : '');
 
         /**
          * Execute the statement and return the number of affected rows
@@ -857,7 +860,6 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             case 'named':
                 return true;
             case 'positional':
-                return $this->_supportPositionalParameters;
             default:
                 return false;
         }
@@ -885,30 +887,30 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     }
 
     ############################ Override methods - not included in default Zend Framework class #################
-    
+
 
     /*
      * Enable emulation of positional parameters? (@see supportsParameters()}
-     * 
+     *
      * @var bool
      */
     protected $_supportPositionalParameters = false;
 
     /**
      * setter for {@see $_supportPositionalParameters}
-     * 
+     *
      * @param bool $value
      * @return void
      */
     public function supportPositionalParameters($value) {
         $this->_supportPositionalParameters = (bool)$value;
     }
-    
+
     protected $_namedParamPrefix = 'param';
-    
+
     /**
      * Setter for {@see $_namedParamPrefix}
-     * 
+     *
      * @param String $value
      * @return void
      */
@@ -916,11 +918,11 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         $alnumFilter = new Zend_Filter_Alnum();
         $this->_namedParamPrefix = $alnumFilter->filter($value);
     }
-    
+
     /**
-     * 
+     *
      * Override method - converts positional to named parameters before calling parent's query method
-     * 
+     *
      * Prepares and executes an SQL statement with bound data.
      *
      * @param  mixed  $sql  The SQL statement with placeholders.
@@ -933,18 +935,18 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         list ($sql, $bind) = $this->_positionalToNamedParameters($sql, $bind);
         return parent::query($sql, $bind);
     }
-    
-    
+
+
     /**
      * @todo There is a problem when {@param $sql} contains field values with question-marks that should not be replaced
      *       and at the same time the {@param $bind} array is not empty.
      *       in phpunit the test could be expressed like this:
-     *       <pre> 
+     *       <pre>
      *       $db->query('INSERT INTO ' . $db->quoteIdentifier($tableName) . ' (' . $db->quoteIdentifier('name') . ', ' . $db->quoteIdentifier('test') . ') VALUES (' . $db->quote($value, 'text') . ', ?)', array('test value for col 2'));
      *       $result = $db->fetchCol($db->select()->from($tableName, 'name'));
      *       $this->assertEquals($value, $result[1]);
      *       </pre>
-     * 
+     *
      * @param  mixed  $sql  The SQL statement with placeholders.
      *                      May be a string or Zend_Db_Select.
      * @param  mixed  $bind An array of data to bind to the placeholders.
@@ -959,7 +961,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
             $sql = $sql->assemble();
         }
-        
+
         $keyCounter = 0;
         $quotedQuestionMarksCounter = 0;
         foreach ($bind as $key => $value)
@@ -967,7 +969,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             if (is_int($key)) {
                 unset($bind[$key]);
                 $bind[$this->_namedParamPrefix . $keyCounter] = $value;
-                
+
                 $position = 0;
                 while (false !== ($position = strpos($sql, '?', $quotedQuestionMarksCounter))) {
                     if ($this->_isQuoted($sql, $position)) {
@@ -977,7 +979,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                     }
                 }
                 $sql = substr_replace($sql, ':' . $this->_namedParamPrefix . $keyCounter, $position, 1);
-                
+
                 $keyCounter++;
             }
         }
@@ -986,20 +988,20 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     }
 
     /**
-     * Determine whether a character at position {@param $position} in the string {@param $string} 
-     * is within a pair of quotation marks or not. 
-     * 
+     * Determine whether a character at position {@param $position} in the string {@param $string}
+     * is within a pair of quotation marks or not.
+     *
      * @param String $string
      * @param int $position
      * @param String | optional $quoteChar
      * @param String | optional $escapeChar
-     * 
+     *
      * @return bool
      */
     protected function _isQuoted($string, $position, $quoteChar = "'", $escapeChar = '\\')
     {
         $subString = substr($string, 0, $position);
-        
+
         $unescapedQuoteCharsCount = 0;
         while (false !== ($position = strpos($subString, $quoteChar))) {
             //test if quotation mark is escaped
@@ -1013,8 +1015,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
             $subString = substr($subString, $position+1);
         }
-        
+
         return (bool)($unescapedQuoteCharsCount % 2);
     }
-        
 }

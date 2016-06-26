@@ -88,7 +88,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     initActions: function() {
         this.deleteAction = new Ext.Action({
-            text: _('Remove'),
+            text: i18n._('Remove'),
             iconCls: 'actionDelete',
             handler : this.onDelete,
             scope: this,

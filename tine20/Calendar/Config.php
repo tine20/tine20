@@ -37,6 +37,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const ATTENDEE_ROLES = 'attendeeRoles';
 
     /**
+     * FreeBusy Types Available
+     *
+     * @var string
+     */
+    const FREEBUSY_TYPES = 'freebusyTypes';
+
+    /**
      * Crop days view
      *
      * @var string
@@ -138,6 +145,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const EVENT_VIEW = 'eventView';
+    
+    /**
+     * FEATURE_RECUR_EXCEPT
+     *
+     * @var string
+     */
+    const FEATURE_RECUR_EXCEPT = 'featureRecurExcept';
 
     /**
      * (non-PHPdoc)
@@ -242,6 +256,24 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 'default' => 'REQ'
             )
         ),
+        self::FREEBUSY_TYPES => array(
+            //_('Free/Busy Types Available')
+            'label'                 => 'Free/Busy Types Available',
+            //_('Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.')
+            'description'           => 'Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_FREE, 'value' => 'Free', 'system' => true), //_('Free')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY, 'value' => 'Busy', 'system' => true), //_('Busy')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY_TENTATIVE, 'value' => 'Tentative', 'system' => true), //_('Tentative')
+                    array('id' => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE, 'value' => 'Unavailable', 'system' => true), //_('Unavailable')
+                ),
+                'default' => Calendar_Model_FreeBusy::FREEBUSY_BUSY
+            )
+        ),
         self::MAX_FILTER_PERIOD_CALDAV => array(
         //_('Filter timeslot for CalDAV events')
             'label'                 => 'Filter timeslot for events',
@@ -343,12 +375,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     'label'         => 'Color Events By', //_('Color Events By')
                     'description'   => 'Choose event color by different criteria', //_('Choose event color by different criteria')
                 ),
+                self::FEATURE_RECUR_EXCEPT => array(
+                        'label'         => 'Recur Events Except', //_('Recur Events Except')
+                        'description'   => 'Recur Events except on certain dates', //_('Recur Events except on certain dates')
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SPLIT_VIEW                        => true,
                 self::FEATURE_YEAR_VIEW                         => false,
                 self::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS    => true,
-                self::FEATURE_COLOR_BY    => true,
+                self::FEATURE_COLOR_BY                          => true,
+                self::FEATURE_RECUR_EXCEPT                      => false,
             ),
         ),
     );

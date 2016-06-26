@@ -55,7 +55,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     initComponent: function () {
         this.record = this.editDialog.record;
         this.app = this.editDialog.app;
-        this.title = this.i18nTitle = _('Notes');
+        this.title = this.i18nTitle = i18n._('Notes');
 
         this.id = this.id + Ext.id();
 
@@ -94,7 +94,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         var columns = [
             {
                 id: 'note_type_id',
-                header: _('Type'),
+                header: i18n._('Type'),
                 dataIndex: 'note_type_id',
                 renderer: Tine.widgets.activities.getTypeIcon,
                 width: 30
@@ -103,18 +103,18 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 id: 'note',
                 dataIndex: 'note',
                 width: 500,
-                header: _('Note'),
+                header: i18n._('Note'),
                 sortable: true,
                 renderer: this.renderMultipleLines
             },
             {
                 id: 'created_by',
-                header: _('Created By'),
+                header: i18n._('Created By'),
                 dataIndex: 'created_by'
             },
             {
                 id: 'creation_time',
-                header: _('Creation time'),
+                header: i18n._('Creation time'),
                 dataIndex: 'creation_time',
                 width: 120,
                 renderer: Tine.Tinebase.common.dateTimeRenderer
@@ -238,14 +238,14 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     initToolbarAndContextMenu: function () {
         this.action_add = new Ext.Action({
-            text: String.format(_('Add {0}'), this.i18nTitle),
+            text: String.format(i18n._('Add {0}'), this.i18nTitle),
             iconCls: 'action_add',
             scope: this,
             handler: this.addNote
         });
 
         this.action_edit = new Ext.Action({
-            text: String.format(_('Edit {0}'), this.i18nTitle),
+            text: String.format(i18n._('Edit {0}'), this.i18nTitle),
             iconCls: 'action_edit',
             scope: this,
             disabled: true,
@@ -254,7 +254,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
 
         this.action_remove = new Ext.Action({
-            text: String.format(_('Remove {0}'), this.i18nTitle),
+            text: String.format(i18n._('Remove {0}'), this.i18nTitle),
             iconCls: 'action_remove',
             scope: this,
             disabled: true,
@@ -340,7 +340,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 {
                     xtype: 'textarea',
                     name: 'notification',
-                    fieldLabel: _('Enter new note:'),
+                    fieldLabel: i18n._('Enter new note:'),
                     labelSeparator: '',
                     allowBlank: false,
                     value: note || '',
@@ -366,7 +366,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         };
 
         this.cancelAction = new Ext.Action({
-            text: _('Cancel'),
+            text: i18n._('Cancel'),
             iconCls: 'action_cancel',
             minWidth: 70,
             handler: this.onCancel,
@@ -374,7 +374,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
 
         this.okAction = new Ext.Action({
-            text: _('Ok'),
+            text: i18n._('Ok'),
             iconCls: 'action_saveAndClose',
             minWidth: 70,
             handler: this.onOk,
@@ -390,7 +390,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         }
 
         this.window = Tine.WindowFactory.getWindow({
-            title: _('Add Note'),
+            title: i18n._('Add Note'),
             width: 500,
             height: 260,
             modal: true,

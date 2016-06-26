@@ -126,15 +126,16 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * 
      * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
      * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the original record if one exists
      * @param   boolean $returnUpdatedRelatedData
      * @return  Tinebase_Record_Interface
      */
-    protected function _setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData = false)
+    protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
     {
         $updatedRecord->grants = $record->grants;
         $this->setGrants($updatedRecord);
         
-        return parent::_setRelatedData($updatedRecord, $record, $returnUpdatedRelatedData);
+        return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData);
     }
     
     /**

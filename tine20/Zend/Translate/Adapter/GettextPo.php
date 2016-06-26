@@ -40,14 +40,11 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
     /**
      * Generates the  adapter
      *
-     * @param  string              $data     Translation data
-     * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
-     *                                       see Zend_Locale for more information
-     * @param  array               $options  OPTIONAL Options to set
+     * @param  array               $options  Options to set
      */
-    public function __construct($data, $locale = null, array $options = array())
+    public function __construct(array $options = array())
     {
-        parent::__construct($data, $locale, $options);
+        parent::__construct($options);
     }
 
 
@@ -63,6 +60,17 @@ class Zend_Translate_Adapter_GettextPo extends Zend_Translate_Adapter {
      */
      protected function _loadTranslationData($filename, $locale, array $options = array())
     {
+        if(is_array($filename))
+        {
+            /*if (isset($filename['locale'])) {
+                $locale = $filename['locale'];
+            }*/
+            if (isset($filename['content'])) {
+                $filename = $filename['content'];
+            } else {
+                throw new Zend_Translate_Exception('unsupported parameter format for $filename: ' . print_r($filename, true));
+            }
+        }
         //Ignore files except .po
         if (!preg_match('/\.po$/', $filename)) {
             throw new Zend_Translate_Exception('unsupported file format');

@@ -460,7 +460,34 @@ class Calendar_JsonTests extends Calendar_TestCase
         $midnightInUTC = new Tinebase_DateTime($queryResult['rrule_until']);
         $this->assertEquals(Tinebase_DateTime::now()->setTime(23,59,59)->toString(), $midnightInUTC->setTimezone(Tinebase_Core::getUserTimezone(), TRUE)->toString());
     }
-    
+
+    /**
+     * testCreateRecurEventWithConstrains
+     */
+    public function testCreateRecurEventWithConstrains()
+    {
+        $conflictEventData = $this->testCreateEvent();
+
+        $eventData = $this->testCreateEvent();
+        $eventData['rrule'] = array(
+            'freq'       => 'WEEKLY',
+            'interval'   => 1,
+            'byday'      => 'WE',
+        );
+        $eventData['rrule_constraints'] = array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($eventData['container_id'])),
+        );
+
+        $updatedEventData = $this->_uit->saveEvent($eventData);
+
+        $this->assertTrue(is_array($updatedEventData['rrule_constraints']));
+        $this->assertEquals('personal',$updatedEventData['rrule_constraints'][0]['value'][0]['type'], 'filter is not resolved');
+        $this->assertEquals(1, count($updatedEventData['exdate']));
+        $this->assertEquals('2009-03-25 06:00:00', $updatedEventData['exdate'][0]);
+
+        return $updatedEventData;
+    }
+
     /**
     * testSearchRecuringIncludes
     */
@@ -1434,7 +1461,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $eventData['attendee'][$adminIndex]['status'] = Calendar_Model_Attender::STATUS_TENTATIVE;
         $event = $this->_uit->saveEvent($eventData);
         
-        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 2);
+        $loggedMods = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
+            Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            new Calendar_Model_Attender($eventData['attendee'][$adminIndex]), 2);
         $this->assertEquals(1, count($loggedMods), 'attender modification has not been logged');
         
         $eventData['attendee'] = $currentAttendee;
@@ -1598,7 +1627,7 @@ class Calendar_JsonTests extends Calendar_TestCase
                 'own_model' => 'Calendar_Model_Event',
                 'own_backend' => 'Sql',
                 'own_id' => 0,
-                'own_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'type' => '',
                 'related_backend' => 'Sql',
                 'related_id' => $contact->getId(),

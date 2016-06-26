@@ -17,6 +17,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
  * Abstract test class
  * 
  * @package     Tests
+ *
+ * TODO separation of concerns: split into multiple classes/traits with cleanup / fixture / ... functionality
  */
 abstract class TestCase extends PHPUnit_Framework_TestCase
 {
@@ -98,8 +100,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
-        
-        $this->_personas = Zend_Registry::get('personas');
+
+        if (Zend_Registry::isRegistered('personas')) {
+            $this->_personas = Zend_Registry::get('personas');
+        }
         
         $this->_originalTestUser = Tinebase_Core::getUser();
     }
@@ -109,7 +113,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+        if (in_array(Tinebase_User::getConfiguredBackend(), array(Tinebase_User::LDAP, Tinebase_User::ACTIVEDIRECTORY))) {
             $this->_deleteUsers();
             $this->_deleteGroups();
         }
@@ -206,6 +210,10 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteGroups()
     {
+        if (! is_array($this->_groupIdsToDelete)) {
+            return;
+        }
+
         foreach ($this->_groupIdsToDelete as $groupId) {
             if ($this->_removeGroupMembers) {
                 foreach (Tinebase_Group::getInstance()->getGroupMembers($groupId) as $userId) {
@@ -231,8 +239,6 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _deleteUsers()
     {
-
-
         foreach ($this->_usernamesToDelete as $username) {
             try {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -243,6 +249,24 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Error while deleting user: ' . $e->getMessage());
             }
+        }
+    }
+
+    /**
+     * removes records and their relations
+     *
+     * @param Tinebase_Record_RecordSet $records
+     */
+    protected function _deleteRecordRelations($records, $modelsToDelete = array(), $typesToDelete = array())
+    {
+        $controller = Tinebase_Core::getApplicationInstance($records->getRecordClassName());
+
+        if (! method_exists($controller, 'deleteLinkedRelations')) {
+            return;
+        }
+
+        foreach ($records as $record) {
+            $controller->deleteLinkedRelations($record, $modelsToDelete, $typesToDelete);
         }
     }
 
@@ -308,7 +332,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getEmailAddress()
     {
-        $testConfig = Zend_Registry::get('testConfig');
+        $testConfig = TestServer::getInstance()->getConfig();
         return ($testConfig->email) ? $testConfig->email : Tinebase_Core::getUser()->accountEmailAddress;
     }
     
@@ -484,5 +508,68 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected function _setUser($user)
     {
         Tinebase_Core::set(Tinebase_Core::USER, $user);
+    }
+
+    /**
+     * call handle cli function with params
+     *
+     * @param array $_params
+     */
+    protected function _cliHelper($command, $_params)
+    {
+        $opts = new Zend_Console_Getopt(array($command => $command));
+        $opts->setArguments($_params);
+        ob_start();
+        $this->_cli->handle($opts, false);
+        $out = ob_get_clean();
+        return $out;
+    }
+
+    /**
+     * test record json api
+     *
+     * @param $modelName
+     */
+    protected function _testSimpleRecordApi($modelName)
+    {
+        $uit = $this->_getUit();
+        if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
+            throw new Exception('only allowed for json frontend tests suites');
+        }
+
+        $newRecord = array(
+            'name' => 'my test ' . $modelName,
+            'description' => 'my test description'
+        );
+        $savedRecord = call_user_func(array($uit, 'save' . $modelName), $newRecord);
+
+        $this->assertEquals('my test ' . $modelName, $savedRecord['name'], print_r($savedRecord, true));
+        $savedRecord['description'] = 'my updated description';
+
+        $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
+        $this->assertEquals('my updated description', $updatedRecord['description']);
+
+        $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
+        $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
+        $this->assertEquals(1, $result['totalcount']);
+
+        call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
+        try {
+            call_user_func(array($uit, 'get' . $modelName), $updatedRecord['id']);
+            $this->fail('should delete Record');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+        }
+    }
+
+    /**
+     * returns true if main db adapter is postgresql
+     *
+     * @return bool
+     */
+    protected function _dbIsPgsql()
+    {
+        $db = Tinebase_Core::getDb();
+        return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
     }
 }

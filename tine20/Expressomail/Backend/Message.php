@@ -254,7 +254,7 @@ class Expressomail_Backend_Message //extends Tinebase_Backend_Sql_Abstract
                         }
                         break;
                     case 'received' :  // => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-                        if (!empty($value))
+                        if (!empty($value) && $filter instanceof Expressomail_Model_Filter_DateTime)
                         {
                             $return[] = $filter->getFilterImap();
                         }

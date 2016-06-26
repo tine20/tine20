@@ -31,17 +31,7 @@ class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
     protected $_modelName = 'Contact';
     
     protected $_defaultExportname = 'adb_default_doc';
-    
-    
-    protected function _onAfterExportRecords($result)
-    {
-        $user = Tinebase_Core::getUser();
-        
-        $this->_docTemplate->setValue('date', Tinebase_DateTime::now()->format('Y-m-d'));
-        $this->_docTemplate->setValue('account_n_given', $user->accountFirstName);
-        $this->_docTemplate->setValue('account_n_family', $user->accountLastName);
-    }
-    
+
     public function processIteration($_records)
     {
         $record = $_records->getFirstRecord();

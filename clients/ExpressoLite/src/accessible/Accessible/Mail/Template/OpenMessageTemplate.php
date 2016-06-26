@@ -20,16 +20,15 @@
     <title>Leitura de mensagem - ExpressoBr Acessível</title>
 </head>
 <body>
-
 <div id="top" name="top">
     <div id="anchors" name="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="#emailHeader" accesskey="1">Ir para o cabeçalho do email [1]</a></li>
                 <li><a href="#emailContent" accesskey="2">Ir para o corpo da mensagem [2]</a></li>
-                <?php IF (count($VIEW->attachmentsForExhibition) > 0) : ?>
+                <?php IF ($VIEW->message->has_attachment) : ?>
                 <li><a href="#emailAttachments" accesskey="3">Ir para anexos de email [3]</a></li>
-                <?php ENDIF?>
+                <?php ENDIF; ?>
                 <li><a href="#emailActions" accesskey="4">Ir para ações de email [4]</a></li>
                 <li><a href="<?= $VIEW->lnkBack ?>" accesskey="v">Voltar para <?= $VIEW->folderName?> [v]</a></li>
             </ul>
@@ -67,6 +66,16 @@
     </div>
 </div>
 
+<!--
+ * This element is a top page anchor link, it can be repeated on template files.
+ * But only one link element, of these repeated, should contain 'accesskey="t"' attribute.
+ -->
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top" accesskey="t">voltar ao topo [t]</a></li>
+    </ul>
+</div>
+
 <div id="emailContent" name="emailContent">
     <h2 class="anchorsTitle">Mensagem</h2>
     <div id="composePanelBody" name="composePanelBody" class="contentAlign">
@@ -74,6 +83,12 @@
         <br/><br/>
         <blockquote><?= $VIEW->message->body->quoted ?></blockquote>
     </div>
+</div>
+
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 
 <?php IF ($VIEW->message->has_attachment) : ?>
@@ -92,6 +107,12 @@
         </ul>
     </div>
 </div>
+
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
+</div>
 <?php ENDIF; ?>
 
 <div id="emailActions" name="emailActions">
@@ -105,7 +126,13 @@
             <li><a href="<?= $VIEW->lnkDelete ?>">Apagar</a></li>
             <li><a href="<?= $VIEW->lnkMoveMsgToFolder ?>">Mover mensagem</a></li>
         </ul>
-    <div>
+    </div>
+</div>
+
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 
 </body>

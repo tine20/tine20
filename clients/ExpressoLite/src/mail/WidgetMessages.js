@@ -29,9 +29,9 @@ return function(options) {
     var $targetDiv   = userOpts.$elem; // shorthand
     var curFolder    = null; // folder object currently loaded
     var menu         = null; // context menu object
-    var onViewCB     = null; // user callbacks
-    var onMarkReadCB = null;
-    var onMoveCB     = null;
+    var onViewCB     = $.noop; // user callbacks
+    var onMarkReadCB = $.noop;
+    var onMoveCB     = $.noop;
 
     function _EnlargeMugshot($img, bEnlarge) {
         var defer = $.Deferred();
@@ -189,9 +189,7 @@ return function(options) {
                 }
                 $elem.children('.Messages_top1,.Messages_top2')
                     .toggleClass('Messages_read', asRead).toggleClass('.Messages_unread', !asRead);
-                if (onMarkReadCB !== null) {
-                    onMarkReadCB(curFolder, headline); // invoke user callback
-                }
+                onMarkReadCB(curFolder, headline); // invoke user callback
             });
         }
     }
@@ -232,9 +230,7 @@ return function(options) {
                         destFolder.messages.length = 0; // force cache rebuild
                         destFolder.threads.length = 0;
                     }
-                    if (onMoveCB !== null) {
-                        onMoveCB(destFolder, origThread);
-                    }
+                    onMoveCB(destFolder, origThread);
                 });
             });
         }
@@ -280,9 +276,7 @@ return function(options) {
                             curFolder.searchedFolder.messages.length = 0; // force cache rebuild
                             curFolder.searchedFolder.threads.length = 0;
                         }
-                        if (onMoveCB !== null) {
-                            onMoveCB(null, origThread);
-                        }
+                        onMoveCB(null, origThread);
                     });
                 });
             }
@@ -411,9 +405,7 @@ return function(options) {
                     if (headline.unread) {
                         _MarkRead($divUnit, true);
                     }
-                    if (onViewCB !== null) {
-                        onViewCB(curFolder, headline); // invoke user callback
-                    }
+                    onViewCB(curFolder, headline); // invoke user callback
                     if (onDone !== undefined) {
                         onDone();
                     }

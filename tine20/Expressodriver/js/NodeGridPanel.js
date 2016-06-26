@@ -342,7 +342,7 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -383,9 +383,41 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getContextMenu: function(grid, row, e) {
         var r = this.store.getAt(row),
-            type = r ? r.get('type') : null;
+            type = r ? r.get('type') : null,
+            pathParts = r ? r.get('path') : null;
 
-        return type === 'folder' ? this.folderContextMenu : this.contextMenu;
+        var isRootFolder = pathParts ? pathParts.split('/').length < 3 : false;
+        if (isRootFolder) {
+            return;
+        } else if (type === 'folder') {
+            return this.folderContextMenu;
+        } else {
+            return this.contextMenu;
+        }
+    },
+
+    /**
+     * called on row context click
+     *
+     * @param {Ext.grid.GridPanel} grid
+     * @param {Number} row
+     * @param {Ext.EventObject} e
+     */
+    onRowContextMenu: function(grid, row, e) {
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if (!selModel.isSelected(row)) {
+            // disable preview update if config option is set to false
+            this.updateOnSelectionChange = this.updateDetailsPanelOnCtxMenu;
+            selModel.selectRow(row);
+        }
+
+        var contextMenu = this.getContextMenu(grid, row, e);
+        if (contextMenu) {
+            contextMenu.showAt(e.getXY())
+        }
+        // reset preview update
+        this.updateOnSelectionChange = true;
     },
 
     /**
@@ -492,7 +524,7 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
                     return;
                 }
-                Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), nodeName));
+                Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), nodeName));
                 var filename = currentFolderNode.attributes.path + '/' + _text;
                 Tine.Expressodriver.fileRecordBackend.createFolder(filename);
 
@@ -627,8 +659,8 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onUploadFail: function () {
         Ext.MessageBox.alert(
-            _('Upload Failed'),
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' '
+            i18n._('Upload Failed'),
+            i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' '
             + Tine.Tinebase.common.byteRenderer(Tine.Tinebase.registry.get('maxFileUploadSize'))
         ).setIcon(Ext.MessageBox.ERROR);
 
@@ -779,7 +811,7 @@ Tine.Expressodriver.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
-                    _('Upload Failed'),
+                    i18n._('Upload Failed'),
                     app.i18n._('Putting files in this folder is not allowed!')
             ).setIcon(Ext.MessageBox.ERROR);
 

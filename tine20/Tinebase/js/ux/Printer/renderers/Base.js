@@ -9,6 +9,11 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    * @cfg {String} printStrategy window or iframe
    */
   printStrategy: 'iframe',
+
+  /**
+   * @cfg {Boll} useHtml2Canvas
+   */
+  useHtml2Canvas: true,
   
   debug: false,
   
@@ -43,26 +48,18 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    */
   windowPrint: function(component) {
     var name = component && component.getXType
-             ? String.format("print_{0}_{1}", component.getXType().replace(/(\.|-)/g, '_'), component.id.replace(/(\.|-)/g, '_'))
+             ? String.format("print_{0}_{1}", String(component.getXType()).replace(/(\.|-)/g, '_'), component.id.replace(/(\.|-)/g, '_'))
              : "print";
-             
+
     var win = window.open('', name);
     
     win.document.write(this.generateHTML(component));
     win.document.close();
 
-    this.onBeforePrint(win.document, component);
-
     // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
-    if (Ext.isGecko) {
-        win.print();
-        if (! this.debug) {
-            win.close();
-        }
-        return;
-    }
+    return this.doPrint(win);
     
-    this.doPrintOnStylesheetLoad.defer(10, this, [win]);
+    this.doPrintOnStylesheetLoad.defer(10, this, [win, component]);
   },
   
   /**
@@ -81,7 +78,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         position: 'absolute',
         width: '210mm',
         height: '297mm',
-        top: '-10000px', 
+        top: '-10000px',
         left: '-10000px'
       }
     });
@@ -98,14 +95,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     doc.write(this.generateHTML(component));
     doc.close();
 
-    this.onBeforePrint(doc, component);
-
-    this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow]);
-//    frame.contentWindow.focus();
-//    frame.contentWindow.print();
-//    
-//    // NOTE: remving frame crashes chrome
-//    setTimeout(function(){Ext.removeNode(frame);}, 100);
+    this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow, component]);
   },
   
   /**
@@ -113,19 +103,38 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    * 
    * @param {window} win
    */
-  doPrintOnStylesheetLoad: function(win) {
+  doPrintOnStylesheetLoad: function(win, component) {
     var el = win.document.getElementById('csscheck'),
         comp = el.currentStyle || getComputedStyle(el, null);
     if (comp.display !== "none") {
-      this.doPrintOnStylesheetLoad.defer(10, this, [win]);
-      return;
+      return this.doPrintOnStylesheetLoad.defer(10, this, [win, component]);
     }
-    win.print();
-    if (! this.debug) {
+
+    this.onBeforePrint(win.document, component);
+
+    this.doPrint(win);
+  },
+
+  doPrint: function(win) {
+    if (this.useHtml2Canvas) {
+      var me = this;
+      html2canvas(win.document.body, {
+        grabMouse: false,
+        onrendered: function (canvas) {
+          var screenshot = canvas.toDataURL();
+          me.useHtml2Canvas = false;
+          win.document.body.innerHTML = '<img style="display: block; width: 100%" />';
+          win.document.body.firstChild.onload = me.doPrint.createDelegate(me, [win]);
+          win.document.body.firstChild.src = screenshot;
+        }
+      });
+    } else {
+      win.print();
+      if (!this.debug) {
         win.close();
+      }
     }
   },
-  
   /**
    * Generates the HTML Markup which wraps whatever this.generateBody produces
    * @param {Ext.Component} component The component to generate HTML for

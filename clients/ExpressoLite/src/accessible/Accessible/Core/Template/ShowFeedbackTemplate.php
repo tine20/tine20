@@ -41,8 +41,17 @@
                 <li><a href="<?= $BUTTON->url ?>"><?= $BUTTON->value ?></a></li>
             <?php ENDFOREACH; ?>
         </ul>
-    <div>
+    </div>
+</div>
 
+<!--
+ * This element is a top page anchor link, it can be repeated on template files.
+ * But only one link element, of these repeated, should contain 'accesskey="t"' attribute.
+ -->
+<div class="backToTop links systemLinks contentAlign">
+    <ul>
+        <li><a href="#top" accesskey="t">voltar ao topo [t]</a></li>
+    </ul>
 </div>
 
 </body>

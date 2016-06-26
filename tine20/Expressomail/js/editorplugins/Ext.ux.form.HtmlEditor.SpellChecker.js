@@ -70,10 +70,10 @@ Ext.ux.form.HtmlEditor.SpellChecker = Ext.extend(Ext.util.Observable, {
             },
             scope: this,
             tooltip: {
-                title: _(this.langTitle),
-                text: _(this.langText)
+                title: i18n._(this.langTitle),
+                text: i18n._(this.langText)
             },
-            overflowText: _(this.langTitle)
+            overflowText: i18n._(this.langTitle)
         });
         this.spellchecker = new Ext.GoogieSpell("Expressomail/images/editorplugins/", "Expressomail.CheckSpelling",this);
 
@@ -119,11 +119,11 @@ function GoogieSpell(img_dir, server_url, parentObj) {
     this.edit_layer_dbl_click = true;
 
     this.lang_chck_spell = "Check spelling";
-    this.lang_revert = _("Reverter para"); //_("Revert to")
-    this.lang_close = _("Close");
-    this.lang_rsm_edt = _("Continuar editando"); //_("Resume editing")
-    this.lang_no_error_found = _("Nenhum erro ortográfico encontrado"); //_("No spelling errors found")
-    this.lang_no_suggestions = _("Sem sugestões"); //_("No suggestions")
+    this.lang_revert = i18n._("Reverter para"); //_("Revert to")
+    this.lang_close = i18n._("Close");
+    this.lang_rsm_edt = i18n._("Continuar editando"); //_("Resume editing")
+    this.lang_no_error_found = i18n._("Nenhum erro ortográfico encontrado"); //_("No spelling errors found")
+    this.lang_no_suggestions = i18n._("Sem sugestões"); //_("No suggestions")
     
     //Counters
     this.cnt_errors = 0;
@@ -625,7 +625,7 @@ GoogieSpell.prototype.flashNoSpellingErrorState = function() {
     Ext.getCmp('spellchecker_button').toggle();
     this.parentObj.cmp.disableItems(false);
     this.resumeEditing();
-    Ext.MessageBox.alert(_('Spell Checker'), _('Nenhum erro ortográfico encontrado')); //_("No spelling errors found")
+    Ext.MessageBox.alert(i18n._('Spell Checker'), i18n._('Nenhum erro ortográfico encontrado')); //_("No spelling errors found")
 }
 
 GoogieSpell.prototype.resumeEditingState = function() {
@@ -897,7 +897,7 @@ Ext.GoogieSpell = Ext.extend(GoogieSpell, {
             this.checkSpellingState();
         }
         else {
-            Ext.MessageBox.alert(_('Errors'), _("Área de edição não encontrada."));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._("Área de edição não encontrada."));
         }
     },
     getEditAreaValue: function(ta){
@@ -968,14 +968,14 @@ Ext.GoogieSpell = Ext.extend(GoogieSpell, {
                     }
                 }
                 else {
-                    var err_desc = r_text.description ? r_text.description : _("Erro inesperado na verificação ortográfica. Tente novamente mais tarde.");
-                    Ext.MessageBox.alert(_('Spell Checker'), err_desc);
+                    var err_desc = r_text.description ? r_text.description : i18n._("Erro inesperado na verificação ortográfica. Tente novamente mais tarde.");
+                    Ext.MessageBox.alert(i18n._('Spell Checker'), err_desc);
                 }
                 this.btnEl.dom.style.backgroundImage = '';
             },
             failure: function(res_txt, req) {
                 this.btnEl.removeClass("loading-indicator");
-                Ext.MessageBox.alert(_('Spell Checker'), _("Um erro ocorreu no servidor. Tente novamente mais tarde."));
+                Ext.MessageBox.alert(i18n._('Spell Checker'), i18n._("Um erro ocorreu no servidor. Tente novamente mais tarde."));
 
                 me.checkSpellingState();
                 this.btnEl.dom.style['background-image'] = btn_image;

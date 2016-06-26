@@ -30,7 +30,7 @@ msgstr ""
 msgid "Create new shared project favorites"
 msgstr ""
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
@@ -46,39 +46,39 @@ msgstr[1] ""
 msgid "Project lists"
 msgstr "Projektide nimekiri"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr ""
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Pealkiri"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Number"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "Kirjeldus"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Staatus"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr ""
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "Loomise aeg"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr "Osaleja"
 msgid "Role"
 msgstr "Roll"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "Sisesta kirjeldus"
 

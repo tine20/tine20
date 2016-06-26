@@ -71,7 +71,7 @@ Tine.SimpleFAQ.Model.Faq.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get("SimpleFAQ");
     
     return [
-        {label: _('Quick Search'), field: 'query', operators: ['contains']},
+        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.SimpleFAQ.Model.Faq},
         {filtertype: 'simplefaq.faqstatus', app: app},
         {filtertype: 'simplefaq.faqtype', app: app},

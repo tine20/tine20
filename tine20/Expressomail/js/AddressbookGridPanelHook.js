@@ -133,7 +133,7 @@ Ext.apply(Tine.Expressomail.AddressbookGridPanelHook.prototype, {
             mailAddresses = [];
             Ext.MessageBox.show({
                 title: '',
-                msg: _('Number of contacts exceeds the maximum of 50 permitted.'),
+                msg: i18n._('Number of contacts exceeds the maximum of 50 permitted.'),
                 buttons: Ext.MessageBox.OK,
                 scope: this,
                 icon: Ext.MessageBox.ERROR

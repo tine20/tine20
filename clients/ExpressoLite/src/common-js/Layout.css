@@ -60,8 +60,6 @@
 @media (min-width:1025px) { #Layout_logo { left:18px; } } /* desktop */
 
 #Layout_userMail { padding-top:10px; padding-bottom:6px; color:#777; }
-#Layout_loggingOff { display:none; font-style:italic; padding:10px 20px; }
-#Layout_throbber { display:inline-block; width:16px; height:16px; background:url(../img/chromiumthrobber.svg); }
 
 #Layout_modules { margin-top:8px; margin-bottom:18px; padding:4px 0; color:#444;
     border-top:1px solid #DCE8F0; border-bottom:1px solid #DCE8F0; }
@@ -72,6 +70,7 @@
 
 #Layout_leftContent { padding-bottom:26px; }
 
+#Layout_module_debugger { display: none; }
 
 /* --- Container for middle & right section --- */
 
@@ -107,6 +106,19 @@
 }
 
 
+/* --- Logoff dark screen --- */
+
+#Layout_logoffScreen { display:none; }
+#Layout_logoffDarkCover { width:100%; height:100%; display:inline-block; position:absolute;
+    background-color:black; opacity:.4; }
+#Layout_logoffText { position:absolute; background:white; opacity:.95; padding-top:24px; text-align:center;
+    width:200px; height:70px; left:calc(50% - 100px); top:calc(50% - 35px); border-top:2px solid #0061AA;
+    box-shadow:3px 3px 18px #666; font-style:italic; color:#444;
+    -moz-user-select:none; -webkit-user-select:none; user-select:none; }
+#Layout_throbber { display:inline-block; width:16px; height:16px;
+    background:url(../img/chromiumthrobber.svg); }
+
+
 /* --- Sprite icons --- */
 
 .Layout_icon32 { background-image:url('../img/layout-icons32.png'); display:inline-block; width:32px; height:32px; }
@@ -118,3 +130,4 @@
 .Layout_iconEmail    { background-position:0 -160px; }
 .Layout_iconAddress  { background-position:0 -192px; }
 .Layout_iconCalendar { background-position:0 -224px; }
+.Layout_iconDebugger { background-position:0 -256px; }

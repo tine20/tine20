@@ -30,7 +30,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Calendar.Model.Event,
     recordProxy: Tine.Calendar.backend,
     showContainerSelector: false,
-    tbarItems: [],
     displayNotes: true,
 
     mode: 'local',
@@ -162,7 +161,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }], [ this.containerSelectCombo = new Tine.widgets.container.selectionComboBox({
                                     columnWidth: 1,
                                     id: this.app.appName + 'EditDialogContainerSelector' + Ext.id(),
-                                    fieldLabel: _('Saved in'),
+                                    fieldLabel: i18n._('Saved in'),
                                     ref: '../../../../../../../../containerSelect',
                                     //width: 300,
                                     //listWidth: 300,
@@ -305,6 +304,11 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('mute', button.pressed);
     },
 
+    onPrint: function(printMode) {
+        var renderer = new Tine.Calendar.Printer.EventRenderer();
+        renderer.print(this.record);
+    },
+
     initComponent: function() {
         this.addEvents(
             /**
@@ -315,14 +319,20 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             'dtStartChange'
         );
 
-        this.tbarItems = new Ext.Button(new Ext.Action({
+        this.tbarItems = [new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
             iconCls: 'notes_noteIcon',
             disabled: false,
             scope: this,
             enableToggle: true
-        }));
+        })), new Ext.Button(new Ext.Action({
+            text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Print Event'),
+            handler: this.onPrint,
+            iconCls:'action_print',
+            disabled: false,
+            scope: this
+        }))];
 
         var organizerCombo;
         this.attendeeGridPanel = new Tine.Calendar.AttendeeGridPanel({
@@ -619,7 +629,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.saving = false;
             this.loadMask.hide();
-            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
+            Ext.MessageBox.alert(i18n._('Errors'), this.getValidationErrorMessage());
         }
     }
 });

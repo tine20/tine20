@@ -50,8 +50,8 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
         for (var grant in this.grantContainer.account_grants) {
             if (this.grantContainer.account_grants.hasOwnProperty(grant) && this.grantContainer.account_grants[grant] && Tine.widgets.container.GrantsGrid.prototype[grant + 'Title']) {
                 this.myGrants.push({
-                    title: _(Tine.widgets.container.GrantsGrid.prototype[grant + 'Title']),
-                    description: _(Tine.widgets.container.GrantsGrid.prototype[grant + 'Description'])
+                    title: i18n._(Tine.widgets.container.GrantsGrid.prototype[grant + 'Title']),
+                    description: i18n._(Tine.widgets.container.GrantsGrid.prototype[grant + 'Description'])
                 })
             }
         }
@@ -87,7 +87,7 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
             activeTab: 0,
             border: false,
             items:[{
-                title: _('Properties'),
+                title: i18n._('Properties'),
                 border: false,
                 frame: true,
                 layout: 'form',
@@ -104,19 +104,19 @@ Tine.widgets.container.PropertiesDialog = Ext.extend(Tine.widgets.dialog.EditDia
                     xtype: 'textfield',
                     anchor: '100%',
                     readOnly: true,
-                    fieldLabel: _('Name'),
+                    fieldLabel: i18n._('Name'),
                     value: this.grantContainer.name
                 }, {
                     xtype: 'colorfield',
                     width: 40,
                     readOnly: true,
-                    fieldLabel: _('Color'),
+                    fieldLabel: i18n._('Color'),
                     value: this.grantContainer.color
                 }, {
                     xtype: 'label',
                     anchor: '100%',
                     readOnly: true,
-                    fieldLabel: _('My Grants'),
+                    fieldLabel: i18n._('My Grants'),
                     html: this.myGrantsTemplate.applyTemplate(this.myGrants)
                 }]
             }]

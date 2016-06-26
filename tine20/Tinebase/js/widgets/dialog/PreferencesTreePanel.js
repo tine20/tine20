@@ -64,7 +64,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // general preferences are tree root
         var treeRoot = new Ext.tree.TreeNode({
-            text: _('General Preferences'),
+            text: i18n._('General Preferences'),
             id: 'Tinebase',
             draggable: false,
             allowDrop: false,
@@ -84,7 +84,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         // add "My Profile"
         if (Tine.Tinebase.common.hasRight('manage_own_profile', 'Tinebase')) {
             var profileNode = new Ext.tree.TreeNode({
-                text: _('My Profile'),
+                text: i18n._('My Profile'),
                 cls: 'file',
                 iconCls: 'tinebase-accounttype-user',
                 id: 'Tinebase.UserProfile',

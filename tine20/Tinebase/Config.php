@@ -84,11 +84,32 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const CRONUSERID = 'cronuserid';
 
     /**
+     * setup user id
+     *
+     * @var string
+     */
+    const SETUPUSERID = 'setupuserid';
+
+    /**
      * FEATURE_SHOW_ADVANCED_SEARCH
      *
      * @var string
      */
     const FEATURE_SHOW_ADVANCED_SEARCH = 'featureShowAdvancedSearch';
+
+    /**
+     * FEATURE_CONTAINER_CUSTOM_SORT
+     *
+     * @var string
+     */
+    const FEATURE_CONTAINER_CUSTOM_SORT = 'featureContainerCustomSort';
+
+    /**
+     * FEATURE_SHOW_ACCOUNT_EMAIL
+     *
+     * @var string
+     */
+    const FEATURE_SHOW_ACCOUNT_EMAIL = 'featureShowAccountEmail';
 
     /**
      * user defined page title postfix for browser page title
@@ -461,9 +482,21 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'description'   => 'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
                 ),
+                self::FEATURE_CONTAINER_CUSTOM_SORT => array(
+                    'label'         => 'Container Custom Sort', //_('Container Custom Sort')
+                    'description'   => 'Allows to sort containers by setting the sort order in Admin/Container',
+                    //_('Allows to sort containers by setting the sort order in Admin/Container')
+                ),
+                self::FEATURE_SHOW_ACCOUNT_EMAIL => array(
+                    'label'         => 'Show Account Email Address', //_('Show Account Email Address')
+                    'description'   => 'Show email address in account picker and attendee grids',
+                    //_('Show email address in account picker and attendee grids')
+                ),
             ),
             'default'               => array(
-                self::FEATURE_SHOW_ADVANCED_SEARCH => false,
+                self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
+                self::FEATURE_CONTAINER_CUSTOM_SORT => true,
+                self::FEATURE_SHOW_ACCOUNT_EMAIL => true,
             ),
         ),
         self::CRONUSERID => array(

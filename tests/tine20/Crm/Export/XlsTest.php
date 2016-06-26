@@ -63,6 +63,13 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
      */
     public function testExportXls()
     {
+        // skip tests for php7
+        // PHP Fatal error:  'break' not in the 'loop' or 'switch' context in /usr/local/share/tine20.git/tine20/vendor/codeplex/phpexcel/PHPExcel/Calculation/Functions.php on line 574
+        if (PHP_VERSION_ID >= 70000) {
+            $this->markTestSkipped('FIXME in php7');
+        }
+        
+        $translate = Tinebase_Translation::getTranslation('Crm');
         $excelObj = $this->_instance->generate();
         
         // output as csv
@@ -79,7 +86,7 @@ class Crm_Export_XlsTest extends Crm_Export_AbstractTest
         $this->assertEquals(1, preg_match("/PHPUnit/",                          $export), 'no name');
         $this->assertEquals(1, preg_match("/Description/",                      $export), 'no description');
         $this->assertEquals(1, preg_match('/' . preg_quote(Tinebase_Core::getUser()->accountDisplayName) . '/',          $export), 'no creator');
-        $this->assertEquals(1, preg_match('/open/',                             $export), 'no leadstate');
+        $this->assertEquals(1, preg_match('/' . $translate->_('open') . '/',    $export), 'no leadstate');
         
         unlink($csvFilename);
     }

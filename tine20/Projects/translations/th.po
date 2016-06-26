@@ -30,7 +30,7 @@ msgstr "จัดการ โคงการร่วมที่ใช้บ�
 msgid "Create new shared project favorites"
 msgstr "สร้าง โครงการร่วมใหม่ที่ใช้บ่อย"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "โครงการ"
@@ -44,39 +44,39 @@ msgstr[0] "รายชื่อโครงการ"
 msgid "Project lists"
 msgstr "รายชื่อโครงการ"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "คำนำหน้าชื่อ"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "ลำดับ"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "สถานะ"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "เวลาที่ปรับปรุงครั้งล่าสุด"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "ปรับปรุงครั้งล่าสุด โดย"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "เวลาที่สร้างขึ้น"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "สร้าง โดย"
 
@@ -88,7 +88,7 @@ msgstr "ผู้เข้าร่วม"
 msgid "Role"
 msgstr "หน้าที่"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "ใส่ คำอธิบาย"
 

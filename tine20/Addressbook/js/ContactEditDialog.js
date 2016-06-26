@@ -89,20 +89,20 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 style:'padding-right: 5px;',
                                 items: [[
                                     new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                    fieldLabel: this.app.i18n._('Salutation'),
-                                    name: 'salutation',
-                                    app: 'Addressbook',
-                                    keyFieldName: 'contactSalutation',
-                                    value: '',
-                                    columnWidth: 0.35,
-                                    listeners: {
-                                        scope: this,
-                                        'select': function (combo, record, index) {
-                                            var jpegphoto = this.getForm().findField('jpegphoto');
-                                            // set new empty photo depending on chosen salutation only if user doesn't have own image
-                                            jpegphoto.setDefaultImage(record.json.image);
+                                        fieldLabel: this.app.i18n._('Salutation'),
+                                        name: 'salutation',
+                                        app: 'Addressbook',
+                                        keyFieldName: 'contactSalutation',
+                                        value: '',
+                                        columnWidth: 0.35,
+                                        listeners: {
+                                            scope: this,
+                                            'select': function (combo, record, index) {
+                                                var jpegphoto = this.getForm().findField('jpegphoto');
+                                                // set new empty photo depending on chosen salutation only if user doesn't have own image
+                                                jpegphoto.setDefaultImage(record.json.image);
+                                            }
                                         }
-                                    }
                                 }), {
                                     columnWidth: 0.65,
                                     fieldLabel: this.app.i18n._('Title'),

@@ -18,32 +18,32 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.Model');
  * Lead Record Definition
  */ 
 Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
-        {name: 'id',            type: 'string'},
-        {name: 'lead_name',     type: 'string'},
-        {name: 'leadstate_id',  type: 'int'},
-        {name: 'leadtype_id',   type: 'int'},
-        {name: 'leadsource_id', type: 'int'},
-        {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'description',   type: 'string'},
-        {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'turnover',      type: 'float'},
-        {name: 'probability',   type: 'int'},
-        {name: 'probableTurnover',   type: 'int'},
-        {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'resubmission_date', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+        {name: 'id',            type: 'string', omitDuplicateResolving: true},
+        {name: 'lead_name',     type: 'string', label: 'Lead name', group: 'Lead'},
+        {name: 'leadstate_id',  type: 'int', omitDuplicateResolving: true},
+        {name: 'leadtype_id',   type: 'int', omitDuplicateResolving: true},
+        {name: 'leadsource_id', type: 'int', omitDuplicateResolving: true},
+        {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long, label: 'Start', group: 'Lead'},
+        {name: 'description',   type: 'string', label: 'Description', group: 'Lead'},
+        {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long, label: 'End', group: 'Lead'},
+        {name: 'turnover',      type: 'float', omitDuplicateResolving: true},
+        {name: 'probability',   type: 'int', omitDuplicateResolving: true},
+        {name: 'probableTurnover',   type: 'int', omitDuplicateResolving: true},
+        {name: 'end_scheduled', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true},
+        {name: 'resubmission_date', type: 'date', dateFormat: Date.patterns.ISO8601Long, omitDuplicateResolving: true},
 
-        {name: 'lastread'},
-        {name: 'lastreader'},
-        {name: 'responsible'},
-        {name: 'customer'},
-        {name: 'partner'},
-        {name: 'tasks'},
-        {name: 'relations'},
-        {name: 'products'},
-        {name: 'tags'},
-        {name: 'notes'},
+        {name: 'lastread', omitDuplicateResolving: true},
+        {name: 'lastreader', omitDuplicateResolving: true},
+        {name: 'responsible', omitDuplicateResolving: true},
+        {name: 'customer', omitDuplicateResolving: true, label: 'Customer', group: 'Relationen'},
+        {name: 'partner', omitDuplicateResolving: true, label: 'Partner', group: 'Relationen'},
+        {name: 'tasks', omitDuplicateResolving: true},
+        {name: 'relations', label: 'Relationen', group: 'Relationen'},
+        {name: 'products', omitDuplicateResolving: true, label: 'Products', group: 'Relationen'},
+        {name: 'tags', label: 'Tags'},
+        {name: 'notes', omitDuplicateResolving: true},
         {name: 'customfields', omitDuplicateResolving: true},
-        {name: 'attachments'}
+        {name: 'attachments', omitDuplicateResolving: true}
     ]), {
     appName: 'Crm',
     modelName: 'Lead',
@@ -68,19 +68,14 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.gener
  *  
  * @return {Object} default data
  * @static
- * 
- * TODO generalize default container id handling?
- */ 
+ */
 Tine.Crm.Model.Lead.getDefaultData = function() {
     
-    var defaults = Tine.Crm.registry.get('defaults');
     var app = Tine.Tinebase.appMgr.get('Crm');
     
     var data = {
         start: new Date().clearTime(),
-        leadstate_id: defaults.leadstate_id,
-        leadtype_id: defaults.leadtype_id,
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaults.container_id),
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         probability: 0,
         turnover: 0,
         relations: [{
@@ -102,18 +97,30 @@ Tine.Crm.Model.Lead.getDefaultData = function() {
 Tine.Crm.Model.Lead.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Crm'),
         filters = [
-            {label: _('Quick Search'),  field: 'query',    operators: ['contains']},
+            {label: i18n._('Quick Search'),  field: 'query',    operators: ['contains']},
             {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Crm.Model.Lead},
             {label: app.i18n._('Lead name'),   field: 'lead_name' },
-            {filtertype: 'crm.leadstate', app: app},
+            {
+                label: app.i18n._('Leadstate'),
+                field: 'leadstate_id',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'leadstates'
+            },
             {label: app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
-            {filtertype: 'crm.leadsource', app: app},
+            {
+                label: app.i18n._('Leadsource'),
+                field: 'leadsource_id',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'leadsources'
+            },
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
-            {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-            {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-            {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-            {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+            {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+            {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
             
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
             {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'date'},
@@ -133,37 +140,31 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
     return filters;
 }
 
-/**
- * @namespace Tine.Crm.Model
- * @class Tine.Crm.Model.Settings
- * @extends Tine.Tinebase.data.Record
- * 
- * Settings Record Definition
- * 
- * TODO         generalize this
- */ 
-Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
-        {name: 'id'},
-        {name: 'defaults'},
-        {name: 'leadstates'},
-        {name: 'leadtypes'},
-        {name: 'leadsources'},
-        {name: 'default_leadstate_id',  type: 'int'},
-        {name: 'default_leadtype_id',   type: 'int'},
-    ], {
+// custom keyFieldRecord
+Tine.Crm.Model.LeadState = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'value' },
+    { name: 'system' },
+    { name: 'probability', label: 'Probability', type: 'percentage' }, // i18n._('Probability')
+    { name: 'endslead', label: 'X Lead', type: 'bool'} // i18n._('X Lead')
+], {
     appName: 'Crm',
-    modelName: 'Settings',
+    modelName: 'LeadState',
     idProperty: 'id',
-    titleProperty: 'title',
-    // ngettext('Settings', 'Settings', n);
-    recordName: 'Settings',
-    recordsName: 'Settingss',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'Settings',
-    containersName: 'Settings',
-    getTitle: function() {
-        return this.recordName;
-    }
+    titleProperty: 'value'
+});
+
+// custom keyFieldRecord
+Tine.Crm.Model.LeadSource = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'value' },
+    { name: 'system' },
+    { name: 'archived', label: 'Archived', type: 'bool' } // i18n._('Archived')
+], {
+    appName: 'Crm',
+    modelName: 'LeadSource',
+    idProperty: 'id',
+    titleProperty: 'value'
 });
 
 Tine.Crm.Model.getRandomUnusedId = function(store) {

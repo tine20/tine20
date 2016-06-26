@@ -298,7 +298,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
         }
         
-        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(_('Please wait')) + '. ' + String.format(message, '' )});
+        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(i18n._('Please wait')) + '. ' + String.format(message, '' )});
         app.getMainScreen().getWestPanel().setDisabled(true);
         app.getMainScreen().getNorthPanel().setDisabled(true);
         this.loadMask.show();
@@ -523,7 +523,7 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Filemanager');
        
     return [
-        {label : _('Quick Search'), field : 'query', operators : [ 'contains' ]}, 
+        {label : i18n._('Quick Search'), field : 'query', operators : [ 'contains' ]},
 //        {label: app.i18n._('Type'), field: 'type'}, // -> should be a combo
         {label: app.i18n._('Contenttype'), field: 'contenttype'},
         {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},

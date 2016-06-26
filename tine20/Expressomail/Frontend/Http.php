@@ -31,7 +31,7 @@ class Expressomail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $file = new Zend_Form_Element_File('file');
         $maxsize = $file->getMaxFileSize();
 
-        $sessionId = Tinebase_Core::getSessionId();
+        $sessionId = Tinebase_Core::get(Tinebase_Session::SESSIONID);
         if(move_uploaded_file($_FILES['upload']['tmp_name'], $tmpFile)) {
             $image_id = str_replace(Tinebase_Core::getTempDir().'/','',$tmpFile);
             $image_size = filesize($tmpFile);
@@ -83,7 +83,7 @@ class Expressomail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $contentType = mime_content_type(Tinebase_Core::getTempDir().'/'.$tempImageId);
         $image = file_get_contents(Tinebase_Core::getTempDir().'/'.$tempImageId);
         
-        $serverETag = sha1($fileData);
+        $serverETag = sha1($image);
 
         // cache for 3600 seconds
         $maxAge = 3600;

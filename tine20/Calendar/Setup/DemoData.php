@@ -134,7 +134,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'color'          => '#00FF00'
         ), true));
 
-        $group = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Group::DEFAULT_USER_GROUP);
+        $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'group', $group->getId(), $this->_userGrants, true);
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
 

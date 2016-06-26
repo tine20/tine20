@@ -224,11 +224,13 @@ Tine.Admin = function () {
             if (node === null|| node.disabled) {
                 return false;
             }
-            
-            var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-            
-            Tine.Tinebase.MainScreen.setActiveModulePanel(new Ext.Panel({html:'', border: false, frame: false}), true);
-            
+
+            Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(
+                Tine.Tinebase.appMgr.get('Admin').getMainScreen().moduleCardPanel,
+                new Ext.Panel({html:'', border: false, frame: false}),
+                true
+            );
+
             switch (node.attributes.dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();

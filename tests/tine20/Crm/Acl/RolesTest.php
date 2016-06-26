@@ -5,15 +5,10 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Acl_Roles
@@ -37,14 +32,14 @@ class Crm_Acl_RolesTest extends TestCase
         
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'tine20phpunit',
-            'accountDisplayName'    => 'tine20phpunit',
+            'accountLoginName'      => 'crmtine20phpunit',
+            'accountDisplayName'    => 'crmtine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
+            'accountFirstName'      => 'crmPHPUnit',
+            'accountEmailAddress'   => 'crmphpunit@metaways.de'
         ));
         $this->objects['role'] = new Tinebase_Model_Role(array(
             'id'                    => 10,
@@ -60,7 +55,7 @@ class Crm_Acl_RolesTest extends TestCase
         // add account for group / role member tests
         $this->objects['user'] = Tinebase_User::getInstance()->addUser($this->objects['user']);
         Tinebase_Group::getInstance()->addGroupMember($this->objects['user']->accountPrimaryGroup, $this->objects['user']);
-        
+
         return;
     }
 

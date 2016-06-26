@@ -103,6 +103,13 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $d3 = clone $d2;
         $d3->addMinute(20);
         $i = 1;
+
+        // sclever + john smith numbers
+        $phoneNumbers = array(
+            '+4412733766373',
+            '+4412732354999',
+            '+441273236734',
+        );
         
         while ($i<20) {
             $call = array(
@@ -116,7 +123,7 @@ class Voipmanager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'ringing'      => $i,
                 'direction'    => ($i%2) ? 'in' : 'out',
                 'source'       => '+49123456789',
-                'destination'  => '+44' . $i . $i . $i . $i,
+                'destination'  => $phoneNumbers[rand(0,2)],
             );
             Phone_Controller_Call::getInstance()->create(new Phone_Model_Call($call));
             

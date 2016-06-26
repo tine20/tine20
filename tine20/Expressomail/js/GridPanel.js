@@ -68,6 +68,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     fetchtry: 0,
 
     saveOnDestroy: {},
+    updateDetailsDelay: 500,
 
     /**
      * @private grid cfg
@@ -134,14 +135,57 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Expressomail.GridPanel.superclass.initComponent.call(this)
 
-        this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
+        this.grid.getSelectionModel().on('rowselect', this.onRowSelectionDelay, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
 
         this.initPagingToolbar();
 
         this.saveOnDestroy = {};
     },
-    
+
+    /**
+     * init grid
+     * @private
+     */
+    initGrid: function() {
+        Tine.Expressomail.GridPanel.superclass.initGrid.call(this);
+        this.selectionModel.events.selectionchange.clearListeners();
+        this.selectionModel.on('selectionchange', this.onSelectionChangeDelay, this);
+    },
+
+    /**
+     * called when a selection gets changed
+     *
+     * @param {SelectionModel} sm
+     */
+    onSelectionChangeDelay: function(sm) {
+        this.actionUpdater.updateActions(sm);
+        this.ctxNode = this.selectionModel.getSelections();
+        if (this.updateOnSelectionChange && this.detailsPanel) {
+            if (this.selectionChangeDelayedTask) {
+                this.selectionChangeDelayedTask.cancel();
+            }
+            this.selectionChangeDelayedTask = new Ext.util.DelayedTask(this.detailsPanel.onDetailsUpdate, this.detailsPanel, [sm]);
+            this.selectionChangeDelayedTask.delay(this.updateDetailsDelay);
+        }
+    },
+
+    /**
+     * called when a row gets selected
+     *
+     * @param {SelectionModel} sm
+     * @param {Number} rowIndex
+     * @param {Tine.Expressomail.Model.Message} record
+     * @param {Number} retryCount
+     */
+    onRowSelectionDelay: function(sm, rowIndex, record, retryCount) {
+        if (this.rowSelectionDelayedTask) {
+            this.rowSelectionDelayedTask.cancel();
+        }
+        this.rowSelectionDelayedTask = new Ext.util.DelayedTask(this.onRowSelection, this, [sm, rowIndex, record, retryCount]);
+        this.rowSelectionDelayedTask.delay(this.updateDetailsDelay);
+    },
+
     /**
      * get load mask
      * 
@@ -243,18 +287,6 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * skip initial till we know the INBOX id
      */
     initialLoad: function() {
-        var account = this.app.getActiveAccount(),
-            accountId = account ? account.id : null,
-            inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname').match(/^inbox$/i);
-            }, this).first() : null;
-
-        if (! inbox) {
-            this.initialLoad.defer(100, this, arguments);
-            return;
-        }
-
-        return Tine.Expressomail.GridPanel.superclass.initialLoad.apply(this, arguments);
     },
 
     /**
@@ -438,7 +470,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true,
             singularText: this.app.i18n._('Delete'),
             pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
@@ -884,23 +916,23 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         if (value && value.match(/1/))  
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-signature.png', qtip: _('Assinado')});  // _('Signed')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-signature.png', qtip: i18n._('Assinado')});  // i18n._('Signed')
         }
         if (value && value.match(/2/))
         { 
-            icons.push({src: 'images/oxygen/16x16/actions/encrypted.png', qtip: _('Criptografado')});   //_('Encrypted')
+            icons.push({src: 'images/oxygen/16x16/actions/encrypted.png', qtip: i18n._('Criptografado')});   //_('Encrypted')
         }
         if (value && value.match(/3/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-zip.png', qtip: _('Compactado')});  //_('Compressed')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-zip.png', qtip: i18n._('Compactado')});  //_('Compressed')
         }
         if (value && value.match(/4/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: _('Apenas Certificados')});   //_('Certs Only')
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: i18n._('Apenas Certificados')});   //_('Certs Only')
         }
         if (value && value.match(/5/))
         {
-            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: _('pkcs7-mime')});
+            icons.push({src: 'images/oxygen/16x16/mimetypes/application-pkcs7-mime.png', qtip: i18n._('pkcs7-mime')});
         }
 
         Ext.each(icons, function(icon) {
@@ -941,17 +973,17 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = '';
        
         if (record.get('reading_conf')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-mark-task.png', qtip: Ext.util.Format.htmlEncode(_('Confirmação de Leitura'))});  //_('Reading Confirmation')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-mark-task.png', qtip: Ext.util.Format.htmlEncode(i18n._('Confirmação de Leitura'))});  //_('Reading Confirmation')
         }
 
         if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(_('Respondida'))}); //_('Answered')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-reply-sender.png', qtip: Ext.util.Format.htmlEncode(i18n._('Respondida'))}); //_('Answered')
         }
         if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(_('Encaminhada'))}); //_('Forwarded')
+            icons.push({src: 'images/oxygen/16x16/actions/mail-forward.png', qtip: Ext.util.Format.htmlEncode(i18n._('Encaminhada'))}); //_('Forwarded')
         }
 //        if (record.hasFlag('\\Recent')) {
-//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: _('Recent')});
+//            icons.push({src: 'images/oxygen/16x16/actions/knewstuff.png', qtip: i18n._('Recent')});
 //        }
 
         Ext.each(icons, function(icon) {
@@ -1622,13 +1654,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.detailsPanel.addListener('dblwindow', this.openDblClickWindow, this);
         }
         else {
-            if(this.detailsPanel.record.bodyIsFetched()){
-                this.openDblClickWindow(grid, row, e);
-            }else{
-                this.detailsPanel.getLoadMask().hide();
-                this.getLoadMask().show();
-                this.detailsPanel.addListener('dblwindow', this.openDblClickWindow, this);
-            }
+            this.openDblClickWindow(grid, row, e);
         }
     },
     
@@ -1797,6 +1823,9 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         try { // because editwindow could be closed yet
             editwindow.record.commit(true);
+            if (!editwindow.record.get('initial_id')) {
+                editwindow.record.set('initial_id', record.get('draft_id'));
+            }
             editwindow.record.set('draft_id', record.get('original_id'));
             editwindow.setMessageOnTitle(editwindow.notifyClear);
             editwindow.setSaveDraftsDelayedTask();
@@ -2369,7 +2398,7 @@ Tine.Expressomail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date'))
             {
                 if (header == 'date') headers[header] = new Date(headers[header]).toLocaleString();
-                result += '<b>' + _(header) + ':</b> '
+                result += '<b>' + i18n._(header) + ':</b> '
                     + Ext.util.Format.htmlEncode(
                         (ellipsis)
                             ? Ext.util.Format.ellipsis(headers[header], 40)

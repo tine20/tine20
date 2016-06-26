@@ -360,11 +360,16 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveMessage($recordData)
     {
+        $recordData = $this->updateRecordIds($recordData);
+
         $message = new Expressomail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
 
+        if (! $message->original_id) {
+            $message->original_id = $message->draft_id;
+        }
         try {
             $result = Expressomail_Controller_Message_Send::getInstance()->sendMessage($message);
             $result = $this->_recordToJson($result);
@@ -407,10 +412,15 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveDraftInFolder($folderName, $recordData)
     {
+        $recordData = $this->updateRecordIds($recordData);
+
         $message = new Expressomail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
 
         $draft_id = ($message->draft_id);
+        if (! $message->original_id) {
+            $message->original_id = $draft_id;
+        }
         $message = Expressomail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
 
         if ($draft_id) {
@@ -420,6 +430,36 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->getDraftMessage($message->original_id, $message->draft_id);
 
         return $result;
+    }
+
+    /**
+     * update recorddata ids that maybe are outdated after last draft save
+     *
+     * @param  array $recordData
+     * @return array
+     */
+    private function updateRecordIds($recordData)
+    {
+        if ($recordData['initial_id']) {
+            $replaceIds = array();
+            if(count($recordData['embedded_images'])>0)
+            {
+                for ($index = 0; $index < count($recordData['embedded_images']); $index++)
+                {
+                    try {
+                        $replaceIds[$index] = $recordData['embedded_images'][$index]['id'];
+                        $recordData['embedded_images'][$index]['id'] = $recordData['draft_id'];
+                    } catch (Exception $exc) {
+                    }
+                }
+            }
+            foreach($replaceIds as $id) {
+                $recordData['body'] = str_replace('src="index.php?method=Expressomail.downloadAttachment&amp;messageId='.$id, 'src="index.php?method=Expressomail.downloadAttachment&amp;messageId='.$recordData['draft_id'], $recordData['body']);
+            }
+            // update content
+            $recordData['body'] = str_replace($recordData['initial_id'], $recordData['draft_id'], $recordData['body']);
+        }
+        return $recordData;
     }
 
     /**
@@ -821,6 +861,7 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $supportedFlags = Expressomail_Controller_Message_Flags::getInstance()->getSupportedFlags();
         $extraSenderAccounts = array();
+        $allowedEmails = array();
         foreach ($accounts['results'] as $key => $account) {
             try {
                 // build a imap backend so the system folder can be created if necessary
@@ -850,6 +891,7 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getTraceAsString());
                     }
                 }
+                $allowedEmails[] = $accountModel->email;
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exception: ' . $e->getMessage());
@@ -873,7 +915,14 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             unset($account['smtp_auth']);
             $accounts['results'][$key] = $account;
         }
-        
+
+        $user = Tinebase_Core::getUser();
+        $allowedEmails = is_array($user->smtpUser->emailAliases)?array_merge($allowedEmails, $user->smtpUser->emailAliases):$allowedEmails;
+        foreach ($extraSenderAccounts['results'] as $account) {
+            $allowedEmails[] = $account['accountEmailAddress'];
+        }
+
+        Expressomail_Session::getSessionNamespace()->allowedEmails[$user->accountId] = $allowedEmails;
         $result = array(
                 'extraSenderAccounts' => $extraSenderAccounts,
                 'accounts' => $accounts,
@@ -892,21 +941,54 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     'cookieValue' => $_COOKIE[$balanceIdCookieName] 
             );
         }
+        $result['allowedDomais'] = Expressomail_Controller_Sieve::getInstance()->getAllowedSieveRedirectDomains();
+
         $result['vacationTemplates'] = $this->getVacationMessageTemplates();
 
         $config = Tinebase_Core::getConfig();
-        $result['useKeyEscrow'] = $config->certificate->active && $config->certificate->useKeyEscrow;
+        if(isset($config->certificate)
+                && is_object($config->certificate)) {
+            $result['useKeyEscrow'] = $config->certificate->active && $config->certificate->useKeyEscrow;
+        } else {
+            $result['useKeyEscrow'] = false;
+        }
+
 
         $config = Expressomail_Controller::getInstance()->getConfigSettings(false);
         // add autoSaveDraftsInterval to client registry
         $result['autoSaveDraftsInterval'] = $config->autoSaveDraftsInterval;
         // add reportPhishingEmail to client registry
         $result['reportPhishingEmail'] = $config->reportPhishingEmail;
+        // add mail folders export feature to client registry
+        $result['enableMailDirExport'] = $config->enableMailDirExport;
 
         return $result;
     }
 
-    
+    /*
+     * Returns export mail folder scheduler action forr expressomail.
+     *
+     * @param string $account
+     * @param string $folder
+     *
+     * @return array
+     */
+    public function schedulerFolder($folder){
+
+        $result = Expressomail_Controller_Scheduler::getInstance()->addNewScheduler($folder);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($result, true));
+        if(!$result['msg']){
+            return array(
+                'status'    => 'success'
+            );
+        } else{
+            return array(
+                'error'     => 0,
+                'status'    => 'failure',
+                'message'   => $result['msg']
+            );
+        }
+    }
 
     /**
      * check spelling

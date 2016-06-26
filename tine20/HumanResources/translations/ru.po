@@ -1,12 +1,12 @@
 # 
 # Translators:
 # Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2014
-# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2015
+# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-04 01:31+0000\n"
+"PO-Revision-Date: 2016-03-15 11:28+0000\n"
 "Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr ""
 
 #: Exception/ContractDates.php:31
 msgid "The start date of the contract must be before the end date!"
-msgstr ""
+msgstr "Дата начала контракта должна быть перед датой окончания!"
 
 #: Exception/NoContract.php:26
 msgid "No contract could be found."
@@ -131,7 +131,7 @@ msgstr "Счет"
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
 #: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
-#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:519
+#: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:521
 #: js/AccountEditDialog.js:161
 msgid "Description"
 msgstr "Описание"
@@ -336,7 +336,7 @@ msgstr[3] "Свободное время"
 msgid "Type"
 msgstr "Тип"
 
-#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:369
+#: Model/FreeTime.php:82 js/FreeTimeEditDialog.js:371
 msgid "Status"
 msgstr "Статус"
 
@@ -383,7 +383,7 @@ msgstr[2] "Затраты"
 msgstr[3] "Затраты"
 
 #: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
-#: js/FreeTimeEditDialog.js:533
+#: js/FreeTimeEditDialog.js:535
 msgid "Enter description"
 msgstr "Введите описание"
 
@@ -468,21 +468,21 @@ msgstr "НЕД"
 msgid "Loading calendar data..."
 msgstr "Загрузка данных календаря..."
 
-#: js/DatePicker.js:404
+#: js/DatePicker.js:411
 msgid "Year can not be changed"
 msgstr ""
 
-#: js/DatePicker.js:405
+#: js/DatePicker.js:412
 msgid ""
 "You have already selected some dates from another year. Please create a new "
 "record to add dates from another year!"
 msgstr ""
 
-#: js/DatePicker.js:464
+#: js/DatePicker.js:471
 msgid "No more vacation days"
 msgstr ""
 
-#: js/DatePicker.js:465
+#: js/DatePicker.js:472
 msgid ""
 "The Employee has no more possible vacation days left for this year. Create a"
 " new vacation and use another personal account the vacation should be taken "
@@ -630,11 +630,11 @@ msgstr ""
 msgid "No day selected"
 msgstr "День не выбран"
 
-#: js/FreeTimeEditDialog.js:447
+#: js/FreeTimeEditDialog.js:449
 msgid "Remaining"
 msgstr "Осталось"
 
-#: js/FreeTimeEditDialog.js:500
+#: js/FreeTimeEditDialog.js:502
 msgid "Select Days"
 msgstr "Выбрать дни"
 
@@ -807,7 +807,7 @@ msgstr "Все сотрудники"
 
 #: Setup/Initialize.php:40 Setup/Update/Release7.php:144
 msgid "All available employees"
-msgstr ""
+msgstr "Все доступные сотрудники"
 
 #: Setup/Initialize.php:52
 msgid "All accounts"

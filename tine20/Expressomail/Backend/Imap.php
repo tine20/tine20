@@ -1197,12 +1197,13 @@ class Expressomail_Backend_Imap extends Zend_Mail_Storage_Imap
      * get folder Acls
      *
      * @param  Zend_Mail_Storage_Folder|string $globalName global name of folder or instance for subfolder
+     * @param  bool $returnOwnerACL true if it will return owner's ACL
      * @return array with folder values
      */
-    public function getFolderAcls($_globalName)
+    public function getFolderAcls($_globalName, $returnOwnerACL = FALSE)
     {
         $this->_currentFolder = $_globalName;
-        $result = $this->_protocol->getFolderAcls($this->_currentFolder);
+        $result = $this->_protocol->getFolderAcls($this->_currentFolder, $returnOwnerACL);
         return $result;
     }
 
@@ -1253,5 +1254,65 @@ class Expressomail_Backend_Imap extends Zend_Mail_Storage_Imap
     public function getUserNameSpace()
     {
         return $this->_userNameSpace;
+    }
+
+    /**
+     * Set shared seen value to imap
+     *
+     * @param string $value
+     * @return boolean return operation's success status
+     */
+    public function setSharedSeen($value)
+    {
+        $stringValue = $value ? '"true"' : '"false"';
+        $annotation[] = '"INBOX"';
+        $annotation[] = '"/vendor/cmu/cyrus-imapd/sharedseen"';
+        $annotation[] = '("value.shared" ' . $stringValue . ')';
+
+        return $this->_protocol->requestAndResponse('SETANNOTATION', $annotation);
+    }
+
+    /**
+     * Get Shared seen value
+     *
+     * @return boolean shared seen value
+     */
+    public function getSharedSeen()
+    {
+        $annotation[] = '"INBOX"';
+        $annotation[] = '"/vendor/cmu/cyrus-imapd/sharedseen"';
+        $annotation[] = '"value.shared"';
+        $result = $this->_protocol->requestAndResponse('GETANNOTATION', $annotation);
+
+        if (is_array($result) && isset($result[0][3][1])) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Shared Seen value from Imap ' . $result[0][3][1]);
+            return strtolower($result[0][3][1]) === 'true' ? TRUE : FALSE;
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Imap command failed when getting sharedseen value!');
+            return FALSE;
+        }
+    }
+
+    /**
+     * Getting cyrus  murder backend hostname
+     *
+     * @return mixed
+     */
+    public function getCyrusMurderBackend()
+    {
+        $annotation[] = '"INBOX"';
+        $annotation[] = '"/vendor/cmu/cyrus-imapd/server"';
+        $annotation[] = '"value.shared"';
+
+        $result = $this->_protocol->requestAndResponse('GETANNOTATION', $annotation);
+        if (is_array($result) && isset($result[0][3][1])) {
+            return $result[0][3][1];
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Imap command failed when getting cyrus murder backend hostname!');
+            return FALSE;
+        }
     }
 }

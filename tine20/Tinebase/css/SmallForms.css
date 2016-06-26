@@ -38,6 +38,11 @@
     margin-bottom: 4px;
 }
 
+.x-form-label-top .x-form-check-wrap input
+{
+    margin-bottom: 9px;
+}
+
 .x-form-cb-label {
     top: 1px;
 }

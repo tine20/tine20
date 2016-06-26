@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "ListRoleMemberFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "Model.js",
           "path": "js/"
         },
@@ -44,6 +48,10 @@
           "path": "js/"
         },
         {
+          "text": "ListRoleEditDialog.js",
+          "path": "js/"
+        },
+        {
           "text": "ListGrid.js",
           "path": "js/"
         },
@@ -52,7 +60,15 @@
           "path": "js/"
         },
         {
-          "text": "ListMemberGridPanel.js",
+          "text": "ListMemberRoleLayerCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListMemberRoleGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListRoleGridPanel.js",
           "path": "js/"
         },
         {
@@ -60,7 +76,11 @@
           "path": "js/"
         },
         {
-          "text": "SearchCombo.js",
+          "text": "ContactSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "ListSearchCombo.js",
           "path": "js/"
         },
         {
@@ -70,7 +90,11 @@
         {
           "text": "CardDAVContainerPropertiesHookField.js",
           "path": "js/"
-        }
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+          }
       ]
     },
     {

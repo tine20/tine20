@@ -394,16 +394,7 @@ class Tinebase_Application
         
         return $rows;
     }
-    
-    /**
-     * get models for an application
-     * @param string $applicationId
-     */
-    public function getApplicationModels($applicationId)
-    {
-        return $this->getApplicationById($applicationId)->getModels();
-    }
-    
+
     /**
      * remove table from application_tables table
      *

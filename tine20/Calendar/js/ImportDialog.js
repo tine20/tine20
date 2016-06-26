@@ -136,15 +136,15 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             baseCls: 'ux-subformpanel',
             id: 'uploadPanel',
             hidden: true,
-            title: _('Choose Import File'),
+            title: i18n._('Choose Import File'),
             height: 100,
             items: [{
                 xtype: 'label',
-                html: '<p>' + _('Please choose the file that contains the records you want to add to Tine 2.0') + '</p><br />'
+                html: '<p>' + i18n._('Please choose the file that contains the records you want to add to Tine 2.0') + '</p><br />'
             }, {
                 xtype: 'tw.uploadbutton',
                 ref: '../../uploadButton',
-                text: String.format(_('Select file containing your {0}'), this.recordClass.getRecordsName()),
+                text: String.format(i18n._('Select file containing your {0}'), this.recordClass.getRecordsName()),
                 handler: this.onFileReady,
                 allowedTypes: this.allowedFileExtensions,
                 scope: this
@@ -381,7 +381,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var types = [
             ['remote_ics', this.app.i18n._('Remote / ICS')],
-            ['remote_caldav', _('Remote / CalDAV (BETA)')],
+            ['remote_caldav', i18n._('Remote / CalDAV (BETA)')],
             ['upload', this.app.i18n._('Upload')]
         ]
         
@@ -472,7 +472,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
             */
             onFinishButton: (function() {
                 if (! this.importMask) {
-                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(_('Importing {0}'), this.recordClass.getRecordsName())});
+                    this.importMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Importing {0}'), this.recordClass.getRecordsName())});
                 }
                 this.importMask.show();
 

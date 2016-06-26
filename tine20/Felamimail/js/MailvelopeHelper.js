@@ -14,7 +14,9 @@ Tine.Felamimail.mailvelopeHelper = function() {
                     reject();
                 }).defer(5000);
             })]
-        ),
+        )['catch'](function() {
+            Tine.log.info('mailvelope not available');
+        }),
 
         getKeyring: function() {
             return this.mailvelopeLoaded.then(function() {

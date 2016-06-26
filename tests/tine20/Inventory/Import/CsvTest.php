@@ -94,7 +94,7 @@ class Inventory_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->_deletePersonalInventoryItems = TRUE;
         
         // There are two test entries, so check for 3 imported entries because one is scripted in the postMappingHook :)
-        $this->assertEquals(3, $result['totalcount']);
+        $this->assertEquals(3, $result['totalcount'], 'import exceptions: ' . print_r($result['exceptions']->toArray(), true));
         
         $translation = Tinebase_Translation::getTranslation('Tinebase');
         $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");

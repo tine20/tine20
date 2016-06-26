@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2014-04-25 12:47+0000\n"
+"PO-Revision-Date: 2015-12-03 17:17+0000\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tine20/tine20/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgstr "Gerenciar favoritos em projetos compartilhados"
 msgid "Create new shared project favorites"
 msgstr "Criar um novo favorito no projeto"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projeto"
@@ -46,39 +46,39 @@ msgstr[1] "Listas de Projetos"
 msgid "Project lists"
 msgstr "Listas de Projetos"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
-msgstr ""
+msgstr "Busca Rápida"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Título"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Número"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "Descrição"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Situação"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "Hora da última modificação"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "Modificado por"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "Data de Criação"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "Criado por"
 
@@ -90,7 +90,7 @@ msgstr "Participante"
 msgid "Role"
 msgstr "Perfil"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "Digitar a Descrição"
 

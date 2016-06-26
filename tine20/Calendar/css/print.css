@@ -128,6 +128,20 @@ div.page
     background:#F9F9F9 url(../../library/ExtJS/resources/images/default/grid/grid3-hrow.gif) repeat-x scroll 0 top;
 }
 
+.cal-daysviewpanel-header {
+    page-break-after: avoid;
+}
+
+.cal-daysviewpanel-body,
+.cal-daysviewpanel-cropper,
+.cal-daysviewpanel-scroller {
+    page-break-before: avoid;
+}
+
+.cal-daysviewpanel-scroller {
+    border-top: none;
+    display: inline;
+}
 /* .cal-daysviewpanel-header-inner {
     background: none;
 } */
@@ -191,4 +205,33 @@ div.page
     width: 1% !important;
 }
 
+/* ------------ single record ------------ */
 
+.print-single-details-row:nth-of-type(odd) {
+    background: #e0e0e0;
+}
+
+.customfield-rendered-label,
+.cal-print-single-label {
+    font-style: italic;
+    display: inline-block;
+    width: 6cm;
+}
+
+.cal-print-single-block {
+    margin-left: 0.5cm;
+}
+
+.cal-print-single-summary .cal-print-single-value {
+    font-weight: bold;
+}
+
+.cal-print-single {
+    margin-left: 1cm;
+    margin-right: 1cm;
+}
+
+.cal-print-single-logo {
+    text-align: right;
+    margin-bottom: 1cm;
+}

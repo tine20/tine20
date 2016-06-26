@@ -30,14 +30,21 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_SALUTATION = 'contactSalutation';
     
     /**
+     * fields for list type
+     *
+     * @var string
+     */
+    const LIST_TYPE = 'listType';
+    
+    /**
      * config for address parsing rules file
      * 
      * @var string
      */
     const CONTACT_ADDRESS_PARSE_RULES_FILE = 'parseRulesFile';
-    
+
     /**
-     * FEATURE_LIST_VIEW 
+     * FEATURE_LIST_VIEW
      *
      * @var string
      */
@@ -58,15 +65,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
            'clientRegistryInclude' => TRUE,
            'content'               => array(
                self::FEATURE_LIST_VIEW => array(
-                   'label'         => 'Addressbook List View', //_('Calendar Split View')
-                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Split day and week views by attendee)
+                   'label'         => 'Addressbook List View', //_('Addressbook List View')
+                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Shows an additional view for lists inside the addressbook)
                ),
            ),
            'default'               => array(
                self::FEATURE_LIST_VIEW => false,
            ),
         ),
-
         self::CONTACT_DUP_FIELDS => array(
                                    //_('Contact duplicate check fields')
             'label'                 => 'Contact duplicate check fields',
@@ -107,6 +113,21 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
+        ),
+        self::LIST_TYPE => array(
+                //_('List types available')
+                'label'                 => 'List types available',
+                //_('List types available.')
+                'description'           => 'List types available.',
+                'type'                  => 'keyFieldConfig',
+                'clientRegistryInclude' => TRUE,
+                'setByAdminModule'      => true,
+                'default'               => array(
+                    'records' => array(
+                        array('id' => 'DEPARTMENT',    'value' => 'Department'), //_('Department')
+                        array('id' => 'MAILINGLIST',    'value' => 'Mailing list'), //_('Mailing list')
+                    ),
+            )
         ),
     );
     

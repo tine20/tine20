@@ -30,7 +30,7 @@ Ext.ns('Tine.Felamimail');
 Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Mail')
+     * auto hook text i18n._('New Mail')
      */
     addButtonText: 'New Mail',
     
@@ -170,7 +170,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     registerProtocolHandler: function() {
-        var text = String.format(_('{0} as default mailer'), Tine.title),
+        var text = String.format(i18n._('{0} as default mailer'), Tine.title),
             enabled = true; //Tine.Tinebase.configManager.get('registerMailToHandler', 'Felamimail');
         Tine.Felamimail.registerProtocolHandlerAction.setText(text);
 

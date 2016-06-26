@@ -1,0 +1,40 @@
+<!--
+ * Expresso Lite
+ * WidgetEditEvent template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2016 Serpro (http://www.serpro.gov.br)
+-->
+
+<section id="EditEvent_template">
+    <section class="EditEvent_panel"><!-- will be shown into a non-modal window -->
+        <div><div class="EditEvent_label">Título:</div><input type="text"
+            class="EditEvent_field EditEvent_title"/></div>
+        <div><div class="EditEvent_label">Pessoas:</div><div
+            class="EditEvent_field EditEvent_people"/></div></div>
+        <div><div class="EditEvent_label">Local:</div><input type="text"
+            class="EditEvent_field EditEvent_location"/></div>
+        <div><div class="EditEvent_label">Opções:</div><label
+            class="EditEvent_checkboxWrap EditEvent_wholeDay"><input type="checkbox"/>dia inteiro</label>
+            <label class="EditEvent_checkboxWrap EditEvent_noBlock"><input type="checkbox"/>sem bloqueio</label>
+            <label class="EditEvent_checkboxWrap EditEvent_notifyPeople"><input type="checkbox"/>notificar participantes</label></div>
+        <div><div class="EditEvent_label">Início:</div><input type="text"
+            class="EditEvent_fieldShort EditEvent_ymdStart" placeholder="ex.: 2000-12-31"/>
+            <div class="EditEvent_labelShort">Hora:</div><input type="text"
+            class="EditEvent_fieldShort EditEvent_hmStart" placeholder="ex.: 06:30"/></div>
+        <div><div class="EditEvent_label">Término:</div><input type="text"
+            class="EditEvent_fieldShort EditEvent_ymdEnd" placeholder="ex.: 2000-12-31"/>
+            <div class="EditEvent_labelShort">Hora:</div><input type="text"
+            class="EditEvent_fieldShort EditEvent_hmEnd" placeholder="ex.: 06:30"/></div>
+        <div class="EditEvent_label EditEvent_descriptionLabel">Descrição do evento:</div>
+        <textarea rows="5" class="EditEvent_description"/></textarea>
+        <div class="EditEvent_footer"><input type="button" class="EditEvent_save"
+            value="&nbsp; criar &nbsp;" title="Criar evento"/></div>
+    </section>
+    <section class="EditEvent_savingThrobber">
+        <span>Aguarde...</span>
+        <img class="EditEvent_throbber" src="../img/chromiumthrobber.svg"/>
+    </section>
+</section>

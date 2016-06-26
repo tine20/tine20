@@ -1,0 +1,28 @@
+/*!
+ * Expresso Lite
+ * Styles for WidgetComponentTest object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+#WidgetComponentTest_templates {
+    display: none;
+}
+
+.WidgetComponentTest_formField {
+    margin: 5px;
+}
+
+#parameters_div {
+    padding-bottom: 5px;
+}
+
+#resultAreaContainer {
+     width: 80%;
+     overflow-x: scroll;
+     min-height: 300px;
+     border: 1px solid #000;
+}

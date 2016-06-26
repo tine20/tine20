@@ -209,6 +209,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 foreach ($unsetFields as $field) {
                     unset($userArray['emailUser'][$field]);
                 }
+
+                if(isset($userArray['imapUser']['emailMailSize']) && ($userArray['imapUser']['emailMailQuota'] !== null)) {
+                    $userArray['emailUser']['emailMailSize'] = $userArray['imapUser']['emailMailSize'];
+                    $userArray['emailUser']['emailMailQuota'] = $userArray['imapUser']['emailMailQuota'];
+                }
             }
             
             // add primary group to account for the group selection combo box
@@ -629,7 +634,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * save group data from edit form
      *
      * @param   array $groupData        group data
-     * @param   array $groupMembers     group members
+     * @param   array $groupMembers     group members (array of ids)
      * 
      * @return  array
      */

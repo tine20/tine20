@@ -38,7 +38,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
 
     initComponent: function() {
 
-        this.title = _('The record you try to add might already exist.');
+        this.title = i18n._('The record you try to add might already exist.');
 
         this.view = new Ext.grid.GroupingView({
             forceFit:true,
@@ -209,21 +209,21 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
         var valueRendererDelegate = this.valueRenderer.createDelegate(this);
 
         this.cm = new Ext.grid.ColumnModel([{
-            header: _('Field Group'), 
+            header: i18n._('Field Group'),
             width:50, 
             sortable: true, 
             dataIndex:'group', 
             id: 'group', 
             menuDisabled:true
         }, {
-            header: _('Field Name'), 
+            header: i18n._('Field Name'),
             width:50, 
             sortable: true, 
             dataIndex:'i18nFieldName', 
             id: 'i18nFieldName', 
             menuDisabled:true
         }, {
-            header: _('My Value'), 
+            header: i18n._('My Value'),
             width:50, 
             resizable:false, 
             dataIndex: 'clientValue', 
@@ -231,7 +231,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             menuDisabled:true, 
             renderer: valueRendererDelegate
         }, {
-            header: _('Existing Value'), 
+            header: i18n._('Existing Value'),
             width:50, 
             resizable:false, 
             dataIndex: 'value' + this.store.duplicateIdx, 
@@ -239,7 +239,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             menuDisabled:true, 
             renderer: valueRendererDelegate
         }, {
-            header: _('Final Value'), 
+            header: i18n._('Final Value'),
             width:50, 
             resizable:false, 
             dataIndex: 'finalValue', 
@@ -256,12 +256,12 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
     initToolbar: function() {
         this.tbar = [{
             xtype: 'label',
-            text: _('Action:') + ' '
+            text: i18n._('Action:') + ' '
         }, {
             xtype: 'combo',
             ref: '../actionCombo',
             typeAhead: true,
-            width: 250,
+            width: 350,
             triggerAction: 'all',
             lazyRender:true,
             mode: 'local',
@@ -272,10 +272,10 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
                 id: 0,
                 fields: ['value', 'text'],
                 data: [
-                    ['mergeTheirs', _('Merge, keeping existing details')],
-                    ['mergeMine',   _('Merge, keeping my details')],
-                    ['discard',     _('Keep existing record and discard mine')],
-                    ['keep',        _('Keep both records')]
+                    ['mergeTheirs', i18n._('Merge, keeping existing details')],
+                    ['mergeMine',   i18n._('Merge, keeping my details')],
+                    ['discard',     i18n._('Keep existing record and discard mine')],
+                    ['keep',        i18n._('Keep both records')]
                 ]
             }),
             listeners: {
@@ -552,7 +552,7 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
 
         // remove duplicates (TODO should be simplified)
         Ext.each(records, function(value) {
-            if (recordIds.indexOf(value['id']) < 0) {
+            if (value && recordIds.indexOf(value['id']) < 0) {
                 result.push(value);
                 recordIds.push(value['id']);
             }

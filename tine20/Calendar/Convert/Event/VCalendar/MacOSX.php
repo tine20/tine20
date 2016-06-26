@@ -23,6 +23,8 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     // Mac_OS_X/10.9 (13A603) CalendarAgent/174
     // Mac+OS+X/10.10 (14A389) CalendarAgent/315"
     const HEADER_MATCH = '/(?J)((CalendarStore.*Mac OS X\/(?P<version>\S+) )|(^Mac[ _+]OS[ _+]X\/(?P<version>\S+).*CalendarAgent))/';
+
+    const INTELLIGROUP = 'INTELLIGROUP';
     
     protected $_supportedFields = array(
         'seq',
@@ -45,7 +47,28 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
         #'rrule_until',
         'originator_tz',
     );
-    
+
+    /**
+     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
+     *
+     * @param  Tinebase_Record_RecordSet  $_records
+     * @return Sabre\VObject\Component
+     */
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    {
+        $oldGroupValue = static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP];
+
+        // rewrite GROUP TO INTELLIGROUP
+        static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP] = self::INTELLIGROUP;
+
+        $result = parent::fromTine20RecordSet($_records);
+
+        // restore old value
+        static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP] = $oldGroupValue;
+
+        return $result;
+    }
+
     /**
      * get attendee array for given contact
      * 
@@ -69,6 +92,11 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
             if (isset($calAddress['ROLE']) && $calAddress['ROLE'] == 'CHAIR') {
                 return NULL;
             }
+        }
+
+        // rewrite INTELLIGROUP TO GROUP
+        if (self::INTELLIGROUP === $newAttendee['userType']) {
+            $newAttendee['userType'] = static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP];
         }
         
         return $newAttendee;

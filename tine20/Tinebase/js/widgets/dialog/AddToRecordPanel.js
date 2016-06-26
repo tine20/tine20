@@ -100,7 +100,7 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_cancel = new Ext.Action({
-            text : _('Cancel'),
+            text : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
@@ -108,7 +108,7 @@ Tine.widgets.dialog.AddToRecordPanel = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_update = new Ext.Action({
-            text : _('Ok'),
+            text : i18n._('Ok'),
             minWidth : 70,
             scope : this,
             handler : this.onUpdate,

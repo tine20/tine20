@@ -87,7 +87,7 @@ Tine.Sales.AdminPanel = Ext.extend(Ext.FormPanel, {
      * @param {} position
      */
     onRender : function(ct, position) {
-        this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading...')});
+        this.loadMask = new Ext.LoadMask(ct, {msg: i18n._('Loading...')});
         Tine.Sales.AdminPanel.superclass.onRender.call(this, ct, position);
 
         // generalized keybord map for edit dlgs

@@ -50,7 +50,7 @@ Tine.Tinebase.widgets.keyfield.ConfigField = Ext.extend(Ext.ux.form.LayerCombo, 
     getItems: function () {
 
         this.configGrid = new Tine.Tinebase.widgets.keyfield.ConfigGrid({
-            title: _('Key Field Records'),
+            title: i18n._('Key Field Records'),
             height: this.layerHeight - 40 || 'auto',
             configRecord: this.configRecord,
             onStoreChange: Ext.emptyFn

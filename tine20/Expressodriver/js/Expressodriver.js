@@ -43,7 +43,7 @@ Tine.Expressodriver.Application = Ext.extend(Tine.Tinebase.Application, {
  * register additional action for genericpickergridpanel
  */
 Tine.widgets.relation.MenuItemManager.register('Expressodriver', 'Node', {
-    text: 'Save locally',   // _('Save locally')
+    text: 'Save locally',   // i18n._('Save locally')
     iconCls: 'action_expressodriver_save_all',
     requiredGrant: 'readGrant',
     actionType: 'download',

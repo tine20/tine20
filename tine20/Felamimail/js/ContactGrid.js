@@ -116,7 +116,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             ' {checked}',
         '>');
         
-        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // _('None')
+        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // i18n._('None')
             columns.push({
                 header: this.felamimailApp.i18n._(type),
                 dataIndex: Ext.util.Format.lowercase(type),

@@ -92,7 +92,7 @@ summaryRenderer: function(v, params, data){
             if(cf.summaryType || cf.summaryRenderer){
                 p.value = (cf.summaryRenderer || c.renderer)(o.data[c.name], p, o);
             }else{
-                p.value = i == 0 ? '<div style="position:relative" ext:model="' + o.data.model + '" ext:qtip="' + _('Export Records from these Positions') + '" class="x-menu-item-icon action_export">&nbsp;</div>' : '';
+                p.value = i == 0 ? '<div style="position:relative" ext:model="' + o.data.model + '" ext:qtip="' + i18n._('Export Records from these Positions') + '" class="x-menu-item-icon action_export">&nbsp;</div>' : '';
             }
             if(p.value == undefined || p.value === "") p.value = "&#160;";
             buf[buf.length] = this.cellTpl.apply(p);

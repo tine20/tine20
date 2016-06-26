@@ -284,12 +284,12 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 width: 200,
                 dataIndex: 'data',
                 renderer: function(value) {
-                    return (value.account_id) ? _('unknown') : value;
+                    return (value.account_id) ? i18n._('unknown') : value;
                 }
             }];
             
             var action_resetPwd = new Ext.Action({
-                text: _('Reset Password'),
+                text: i18n._('Reset Password'),
                 scope: this,
                 handler: function(_button, _event) {
                     this.loadMask.show();

@@ -48,6 +48,11 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
      */
     public function run()
     {
+        if ('Tinebase_ActionQueue_Backend_Direct' === Tinebase_ActionQueue::getInstance()->getBackendType()) {
+            $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Tinebase_ActionQueue_Backend_Direct used. There is nothing to do for the worker! Configure Redis backend for example if you want to make use of the worker.');
+            exit(1);
+        }
+
         while (true) {
             
             // manage the number of children

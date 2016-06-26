@@ -66,7 +66,7 @@ Tine.widgets.customfields.Renderer = function(){
                             case 'boolean':
                                 return Tine.Tinebase.common.booleanRenderer(customfields[cfName]);
                             default:
-                                return Ext.util.Format.htmlEncode(customfields[cfName]);
+                                return Ext.util.Format.htmlEncode(customfields[cfName] || "");
                         }
                     };
                 }
@@ -87,7 +87,23 @@ Tine.widgets.customfields.Renderer = function(){
             
             return renderer(id);
         },
-        
+
+        renderAll: function(app, model, data) {
+            var cfDefs = Tine.widgets.customfields.ConfigManager.getConfigs(app, model),
+                html = '';
+
+            Ext.each(cfDefs, function(cfDef) {
+                var renderedValue = this.render(app, cfDef, data);
+
+                html += '<div class="customfield-rendered-row print-single-details-row">' +
+                    '<span class="customfield-rendered-label">'+ cfDef.get('definition').label + '</span>' +
+                    '<span class="customfield-rendered-value">'+ renderedValue + '</span>' +
+                '</div>';
+            }, this);
+
+            return html;
+        },
+
         /**
          * register a custom renderer
          * 

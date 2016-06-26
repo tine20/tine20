@@ -27,13 +27,14 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
      * @var string
      */
     protected static $_defaultModel = 'Inventory_Model_InventoryItem';
-    
+
     /**
      * the constructor
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Inventory';
     }
     

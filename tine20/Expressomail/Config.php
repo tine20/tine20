@@ -64,6 +64,13 @@ class Expressomail_Config extends Tinebase_Config_Abstract
     const MAX_CONTACT_ADD_TO_UNKNOWN = 'maxContactAddToUnknown';
 
     /**
+     * Activate users to export mail dir compressed data
+     *
+     * @var boolean
+     */
+    const ENABLEMAILDIREXPORT = 'enableMailDirExport';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -124,6 +131,15 @@ class Expressomail_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => TRUE,
             'default'               => 10,
         ),
+        self::ENABLEMAILDIREXPORT => array(
+            'label'                 => 'Enable mail folders for exportation',
+            'description'           => 'Enable mail folders for exportation (compressed)',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => FALSE,
+        ),
     );
     
     /**
@@ -183,8 +199,8 @@ class Expressomail_Config extends Tinebase_Config_Abstract
      */
     public function clearCache($appFilter = null)
     {
-    	parent::clearCache();
-	    $cache = Tinebase_Core::getCache();
-	    $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(Expressomail_Config::EXPRESSOMAIL_SETTINGS));
+        parent::clearCache();
+        $cache = Tinebase_Core::getCache();
+        $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array(Expressomail_Config::EXPRESSOMAIL_SETTINGS));
     }
 }

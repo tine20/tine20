@@ -107,6 +107,12 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @property transId
      */
     transId: null,
+
+    /**
+     * TODO is this really needed?
+     */
+    onDestroyRecords: Ext.emptyFn,
+    removeFromBatch: Ext.emptyFn,
     
     /**
      * Aborts any outstanding request.

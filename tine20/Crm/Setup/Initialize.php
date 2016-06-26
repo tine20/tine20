@@ -28,9 +28,9 @@ class Crm_Setup_Initialize extends Setup_Initialize
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
             'model'             => 'Crm_Model_LeadFilter',
         );
-        
-        $closedStatus = Crm_Controller::getInstance()->getConfigSettings()->getEndedLeadstates(TRUE);
-        
+
+        $closedStatus = Crm_Config::getInstance()->get(Crm_Config::LEAD_STATES)->records->filter('endslead', true)->id;
+
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,
             'description'       => "All leads I have read grants for", // _("All leads I have read grants for")

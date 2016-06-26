@@ -65,6 +65,15 @@
 <?php if (count($this->updates) > 0): ?>
   <b><?php echo $this->lang_updatedFields ?></b><br />
   <?php foreach ($this->updates as $update): ?>
-    <?php echo sprintf($this->lang_updatedFieldMsg, $update->modified_attribute, $update->old_value, $update->new_value) ?><br />
+    <?php echo sprintf($this->lang_updatedFieldMsg, $update['modified_attribute'], $update['old_value'], $update['new_value']) ?><br />
+  <?php endforeach; ?>
+<?php endif;?>
+
+<br>
+
+<?php if (count($this->tags) > 0): ?>
+  <b><?php echo $this->lang_tags ?></b><br />
+  <?php foreach ($this->tags as $tag): ?>
+    <?php echo $tag->name ?><br />
   <?php endforeach; ?>
 <?php endif;?>

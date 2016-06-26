@@ -5,8 +5,8 @@
  *
  * @package   ExpressoLite\Backend
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author    Fabiano Kuss <fabiano.kuss@serpro.gov.br>
- * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
+ * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
 namespace ExpressoLite\Backend\Request;
@@ -25,28 +25,62 @@ class SearchEvents extends LiteRequest
 
         $from = $this->param('from');
         $until = $this->param('until');
+        $calendarId = $this->param('calendarId');
 
         $response = $this->jsonRpc('Calendar.searchEvents', (object) array(
-            'filter' => array(
-                (object) array( // search on all catalogs
-                    'field' => 'period',
-                    'operator' => 'within',
-                    'value' => array(
-                        'from' => $from,
-                        'until' => $until
-                    )
+            'filter' => array( (object) array(
+                'condition' => 'OR',
+                'filters' => array( (object) array(
+                    'condition' => 'AND',
+                    'filters' => $this->buildSearchFilters($calendarId, 'LIST_DECLINED')
+                ))
+            ), (object) array(
+                'field' => 'period',
+                'operator' => 'within',
+                'value' => (object) array(
+                    'from' => $from,
+                    'until' => $until
                 )
-            ),
-            'paging' => (object) array(
-                'dir' => 'ASC',
-                'limit' => $limit,
-                'start' => $start
-            )
+            )),
+            'paging' => (object) array()
         ));
+
         return (object) array(
             'totalCount' => $response->result->totalcount,
             'events' => $this->formatEvents($response->result->results)
         );
+    }
+
+    /**
+     * Builds the filter to be used in searchEvents Tine request.
+     *
+     * @param string  $calendarId        ID of calendar to be searched.
+     * @param string $listDeclinedEvents 'LIST_DECLINED' or 'DONT_LIST_DECLINED' flag.
+     *
+     * @return array[stdClass] Formatted filter to be used in searchEvents Tine request.
+     */
+    private function buildSearchFilters($calendarId, $listDeclinedEvents)
+    {
+        $filters = array();
+
+        if ($listDeclinedEvents === 'DONT_LIST_DECLINED') {
+            $filters[] = (object) array(
+                'field' => 'attender_status',
+                'operator' => 'notin',
+                'value' => array('DECLINED')
+            );
+        }
+
+
+        $filters[] = (object) array(
+            'field' => 'container_id',
+            'operator' => 'in',
+            'value' => array( (object) array(
+                'id' => $calendarId
+            ))
+        );
+
+        return $filters;
     }
 
     /**
@@ -64,6 +98,7 @@ class SearchEvents extends LiteRequest
                 'id' => $e->id,
                 'from' => $this->parseTimeZone($e->dtstart, $e->originator_tz),
                 'until' => $this->parseTimeZone($e->dtend, $e->originator_tz),
+                'wholeDay' => $e->is_all_day_event === '1',
                 'summary' => $e->summary,
                 'description' => $e->description,
                 'location' => $e->location,

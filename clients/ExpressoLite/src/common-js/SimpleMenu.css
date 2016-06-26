@@ -1,0 +1,26 @@
+/*!
+ * Expresso Lite
+ * Styles for SimpleMenu object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ */
+
+.SimpleMenu_list {padding:0; list-style-type:none;}
+
+.SimpleMenu_list > li { cursor:pointer; width:100%;
+    -moz-user-select:none; -webkit-user-select:none; user-select:none; }
+.SimpleMenu_list > li:hover { background-color:#F5F5F5; }
+.SimpleMenu_list > li > span { padding:10px 2px; display:inline-block; }
+
+@media (min-width:1025px) { /* desktop */
+    .SimpleMenu_list > li { padding:0px 4px; }
+}
+
+@media (max-width:1024px) { /* mobile */
+    .SimpleMenu_list > li { padding:8px 4px; }
+}
+
+.SimpleMenu_selected { background-color:#D9E8FB; }

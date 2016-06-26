@@ -30,7 +30,7 @@ msgstr "Menaxho prefenecialet e projekteve të ndarë"
 msgid "Create new shared project favorites"
 msgstr "Krijo preferenciale të reja të projekteve të ndarë"
 
-#: js/Model.js:35 js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120
+#: js/Model.js:35 js/ProjectEditDialog.js:106 js/ProjectEditDialog.js:119
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
@@ -46,39 +46,39 @@ msgstr[1] "Lista Projekti"
 msgid "Project lists"
 msgstr "Lista Projekti"
 
-#: js/Model.js:74
+#: js/Model.js:73
 msgid "Quick Search"
 msgstr "Kërkim i Shpejtë"
 
-#: js/Model.js:75 js/ProjectEditDialog.js:132 js/ProjectGridPanel.js:128
+#: js/Model.js:74 js/ProjectEditDialog.js:131 js/ProjectGridPanel.js:128
 msgid "Title"
 msgstr "Titull"
 
-#: js/Model.js:76 js/ProjectEditDialog.js:137 js/ProjectGridPanel.js:121
+#: js/Model.js:75 js/ProjectEditDialog.js:136 js/ProjectGridPanel.js:121
 msgid "Number"
 msgstr "Numër"
 
-#: js/Model.js:77 js/ProjectEditDialog.js:178
+#: js/Model.js:76 js/ProjectEditDialog.js:177
 msgid "Description"
 msgstr "Përshkrim"
 
-#: js/Model.js:79 js/ProjectEditDialog.js:143 js/ProjectGridPanel.js:134
+#: js/Model.js:78 js/ProjectEditDialog.js:142 js/ProjectGridPanel.js:134
 msgid "Status"
 msgstr "Status"
 
-#: js/Model.js:88
+#: js/Model.js:87
 msgid "Last Modified Time"
 msgstr "Koha modifikimit të fundit"
 
-#: js/Model.js:89
+#: js/Model.js:88
 msgid "Last Modified By"
 msgstr "Modifikimi i fundit nga"
 
-#: js/Model.js:90
+#: js/Model.js:89
 msgid "Creation Time"
 msgstr "Koha e Krijimit"
 
-#: js/Model.js:91
+#: js/Model.js:90
 msgid "Created By"
 msgstr "Krijuar nga"
 
@@ -90,7 +90,7 @@ msgstr "Vijues"
 msgid "Role"
 msgstr "Roli"
 
-#: js/ProjectEditDialog.js:192
+#: js/ProjectEditDialog.js:191
 msgid "Enter description"
 msgstr "Vendosni përshkrimin"
 

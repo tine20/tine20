@@ -29,7 +29,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
 
     initComponent: function() {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
-        this.title = (this.title !== null) ? this.title : String.format(_('Change Password For "{0}"'), this.currentAccount.accountDisplayName);
+        this.title = (this.title !== null) ? this.title : String.format(i18n._('Change Password For "{0}"'), this.currentAccount.accountDisplayName);
         
         this.items = new Ext.FormPanel({
             bodyStyle: 'padding:5px;',
@@ -44,25 +44,25 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             },
             items: [{
                 id: 'oldPassword',
-                fieldLabel: _('Old Password'), 
+                fieldLabel: i18n._('Old Password'),
                 name:'oldPassword'
             },{
                 id: 'newPassword',
-                fieldLabel: _('New Password'), 
+                fieldLabel: i18n._('New Password'),
                 name:'newPassword'
             },{
                 id: 'newPasswordSecondTime',
-                fieldLabel: _('Repeat new Password'), 
+                fieldLabel: i18n._('Repeat new Password'),
                 name:'newPasswordSecondTime'
             }],
             buttons: [{
-                text: _('Cancel'),
+                text: i18n._('Cancel'),
                 iconCls: 'action_cancel',
                 handler: function() {
                     Ext.getCmp('changePassword_window').close();
                 }
             }, {
-                text: _('Ok'),
+                text: i18n._('Ok'),
                 iconCls: 'action_saveAndClose',
                 handler: function() {
                     var form = Ext.getCmp('changePasswordPanel').getForm();
@@ -71,8 +71,8 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                         values = form.getValues();
                         if (values.newPassword == values.newPasswordSecondTime) {
                             Ext.Ajax.request({
-                                waitTitle: _('Please Wait!'),
-                                waitMsg: _('changing password...'),
+                                waitTitle: i18n._('Please Wait!'),
+                                waitMsg: i18n._('changing password...'),
                                 params: {
                                     method: 'Tinebase.changePassword',
                                     oldPassword: values.oldPassword,
@@ -83,8 +83,8 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                     if (response.success) {
                                         Ext.getCmp('changePassword_window').close();
                                         Ext.MessageBox.show({
-                                            title: _('Success'),
-                                            msg: _('Your password has been changed.'),
+                                            title: i18n._('Success'),
+                                            msg: i18n._('Your password has been changed.'),
                                             buttons: Ext.MessageBox.OK,
                                             icon: Ext.MessageBox.INFO
                                         });
@@ -96,7 +96,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                         });
                                     } else {
                                         Ext.MessageBox.show({
-                                            title: _('Failure'),
+                                            title: i18n._('Failure'),
                                             msg: response.errorMessage,
                                             buttons: Ext.MessageBox.OK,
                                             icon: Ext.MessageBox.ERROR  
@@ -106,8 +106,8 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                             });
                         } else {
                             Ext.MessageBox.show({
-                                title: _('Failure'),
-                                msg: _('The new passwords mismatch, please correct them.'),
+                                title: i18n._('Failure'),
+                                msg: i18n._('The new passwords mismatch, please correct them.'),
                                 buttons: Ext.MessageBox.OK,
                                 icon: Ext.MessageBox.ERROR 
                             });

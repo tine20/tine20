@@ -108,7 +108,7 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_export = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'export',
-            text: String.format(_('Export Records from these Positions') + ' ({0})', this.i18nModelsName),
+            text: String.format(i18n._('Export Records from these Positions') + ' ({0})', this.i18nModelsName),
             handler: this.onExport.createDelegate(this),
             iconCls: 'action_export',
             scope: this

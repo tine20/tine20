@@ -111,6 +111,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $defaultCalendarArray = Tinebase_Container::getInstance()->getContainerById($defaultCalendarId)->toArray();
             $defaultCalendarArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultCalendarId)->toArray();
+            $defaultCalendarArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($defaultCalendarArray['owner_id'])->toArray();
         } catch (Exception $e) {
             // remove default cal pref
             Tinebase_Core::getPreference('Calendar')->deleteUserPref(Calendar_Preference::DEFAULTCALENDAR);
@@ -118,11 +119,13 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $importDefinitions = $this->_getImportDefinitions();
+        $allCalendarResources = Calendar_Controller_Resource::getInstance()->getAll()->toArray();
         
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
             'defaultImportDefinition'   => $importDefinitions['default'],
-            'importDefinitions'         => $importDefinitions
+            'importDefinitions'         => $importDefinitions,
+            'calendarResources'         => $allCalendarResources
         );
         
         return $registryData;
@@ -288,7 +291,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $controller = Calendar_Controller_Event::getInstance();
         
-        $decodedPagination = is_array($paging) ? $paging : Zend_Json::decode($paging);
+        $decodedPagination = $this->_prepareParameter($paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
 

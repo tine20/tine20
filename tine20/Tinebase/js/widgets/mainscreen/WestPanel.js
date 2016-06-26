@@ -299,7 +299,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                 
                 var containersName = containerTreePanel.recordClass
                     ? containerTreePanel.recordClass.getContainersName()
-                    : _('containers');
+                    : i18n._('containers');
                 
                 // recheck if container tree is a container tree as in apps not dealing
                 // with containers we don't want a collapsed arrow header
@@ -326,7 +326,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
             if (this.hasFavoritesPanel) {
                 // favorites panel
                 items.unshift(Ext.apply(this.getFavoritesPanel(), {
-                    title: _('Favorites')
+                    title: i18n._('Favorites')
                 }, this.defaults));
             }
             

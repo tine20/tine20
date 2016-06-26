@@ -186,7 +186,7 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_cancel = new Ext.Action({
-            text : _('Cancel'),
+            text : i18n._('Cancel'),
             minWidth : 70,
             handler : this.callbackOnCancel,
             scope: this.callbackOnCancelScope,
@@ -194,7 +194,7 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
         });
         
         this.action_update = new Ext.Action({
-            text : _('Ok'),
+            text : i18n._('Ok'),
             minWidth : 70,
             scope : this,
             handler: this.onOk,
@@ -217,9 +217,9 @@ Tine.widgets.dialog.ExceptionHandlerDialog.openWindow = function(config) {
         if (config.exception.hasOwnProperty('title') && config.exception.title) {
             var title = app.i18n._hidden(config.exception.title);
         } else if(config.exception.hasOwnProperty('number') && config.exception.number) {
-            var title = String.format(_('{1} - Exception {0}'), config.exception.code, app.getTitle());
+            var title = String.format(i18n._('{1} - Exception {0}'), config.exception.code, app.getTitle());
         } else {
-            var title = String.format(_('{0} - Unknown Exception'), app.getTitle());
+            var title = String.format(i18n._('{0} - Unknown Exception'), app.getTitle());
         }
     }
     

@@ -99,6 +99,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
      */
     protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
     {
-        return Tinebase_Config::getOptionString($_record, preg_replace('/_id/', '', $_fieldName));
+        $keyFieldName = preg_replace('/_id/', 's', $_fieldName);
+        return Crm_Config::getInstance()->get($keyFieldName)->getTranslatedValue($_record->$_fieldName);
     }
 }

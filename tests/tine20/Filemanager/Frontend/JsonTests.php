@@ -1045,7 +1045,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'own_model'              => 'Filemanager_Model_Node',
             'own_backend'            => 'Sql',
             'own_id'                 => $node['id'],
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'type'                   => 'FILE',
             'related_backend'        => 'Sql',
             'related_model'          => 'Addressbook_Model_Contact',
@@ -1237,13 +1237,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
     public function testCreateFolderInFolderWithSameName()
     {
         $path = '/personal/' .Tinebase_Core::getUser()->accountLoginName . '/' . $this->_getPersonalFilemanagerContainer()->name;
-        
-        $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
-        $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+
+        $result = $this->_json->createNode($path . '/Test1', 'folder', NULL, FALSE);
+        $this->assertTrue(isset($result['id']));
+        $result = $this->_json->createNode($path . '/Test1/Test1', 'folder', NULL, FALSE);
+        $this->assertTrue(isset($result['id']), 'node has not been created');
         $e = new Tinebase_Exception('nothing');
         try {
             $this->_json->createNode($path . '/Test1/Test1/Test2', 'folder', NULL, FALSE);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->fail('The folder couldn\'t be found, so it hasn\'t ben created');
         }
         
@@ -1360,10 +1362,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->saveDownloadLink($downloadLinkData);
         
         $this->assertTrue(! empty($result['url']));
-        $this->assertEquals(Tinebase_Core::getHostname() . '/download/show/' . $result['id'], $result['url']);
+        $this->assertEquals($this->_getDownloadUrl($result['id']), $result['url']);
         $this->assertEquals(0, $result['access_count']);
         
         return $result;
+    }
+
+    protected function _getDownloadUrl($id)
+    {
+        return Tinebase_Core::getUrl() . '/download/show/' . $id;
     }
     
     /**
@@ -1377,7 +1384,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $result = $this->_json->saveDownloadLink($downloadLinkData);
         
         $this->assertTrue(! empty($result['url']));
-        $this->assertEquals(Tinebase_Core::getHostname() . '/download/show/' . $result['id'], $result['url']);
+        $this->assertEquals($this->_getDownloadUrl($result['id']), $result['url']);
         
         return $result;
     }
@@ -1432,15 +1439,15 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $this->assertEquals(1, $result['totalcount']);
     }
-    
+
     /**
      * testDeleteDownloadLinks
      */
     public function testDeleteDownloadLinks()
     {
         $downloadLink = $this->testSaveDownloadLinkFile();
-        
-        $result = $this->_json->deleteDownloadLinks(array($downloadLink['id']));
+
+        $this->_json->deleteDownloadLinks(array($downloadLink['id']));
         try {
             Filemanager_Controller_DownloadLink::getInstance()->get($downloadLink['id']);
             $this->fail('link should have been deleted');

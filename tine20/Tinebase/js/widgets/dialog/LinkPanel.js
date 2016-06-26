@@ -43,7 +43,7 @@ Tine.widgets.dialog.LinkPanel = Ext.extend(Ext.Panel, {
      * @private
      */
     initComponent: function() {
-        this.title = _('Links');
+        this.title = i18n._('Links');
         
         this.store = new Ext.data.JsonStore({
             id: 'id',

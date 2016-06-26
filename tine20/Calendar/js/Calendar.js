@@ -26,7 +26,7 @@ Ext.onReady(function(){
 Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
-     * auto hook text _('New Event')
+     * auto hook text i18n._('New Event')
      */
     addButtonText: 'New Event',
     
@@ -64,6 +64,23 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         if (Tine.Felamimail) {
             Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
         }
+
+        var subscription = postal.subscribe({
+            channel  : "thirdparty",
+            topic    : "data.changed",
+            callback : function(data, envelope) {
+                Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel().autoRefreshTask.delay(0);
+            }
+        });
+    },
+
+    registerCoreData: function() {
+        Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourcesGridPanel, {
+            // prevent adding of another toolbar above grid
+            initLayout: function () {
+                this.supr().initLayout.call(this);
+            }
+        });
     }
 });
 
@@ -106,15 +123,18 @@ Ext.extend(Tine.Calendar.MainScreen, Tine.widgets.MainScreen, {
         
         return this.contentPanel;
     },
-    
+
     /**
-     * Set toolbar panel in Tinebase.MainScreen
+     * get north panel for given contentType
+     *
+     * @param {String} contentType
+     * @return {Ext.Panel}
      */
-    showNorthPanel: function() {
+    getNorthPanel: function(contentType) {
         if (! this.actionToolbar) {
             this.actionToolbar = this.contentPanel.getActionToolbar();
         }
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+        return this.actionToolbar;
     }
 });

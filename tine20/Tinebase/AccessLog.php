@@ -196,7 +196,8 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         try {
             $loginRecord = $this->_backend->getByProperty($sessionId, 'sessionid');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find access log login record for session id ' . $_sessionId);
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not find access log login record for session id ' . $sessionId);
             return null;
         }
         
@@ -208,7 +209,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
 
     /**
      * clear access log table
-     * - if $date param is ommitted, the last 60 days of access log are kept, the rest will be removed
+     * - if $date param is omitted, the last 60 days of access log are kept, the rest will be removed
      * 
      * @param Tinebase_DateTime $date
      * @return integer deleted rows

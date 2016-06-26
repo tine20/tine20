@@ -176,7 +176,19 @@ abstract class Tinebase_Export_Abstract
      * @return mixed filename/generated object/...
      */
     abstract public function generate();
-    
+
+    /**
+     * output to stdout
+     *
+     * @return void
+     */
+//    abstract public function write();
+
+    /**
+     * @param string|ressource $file
+     */
+//    abstract public function save($file);
+
     /**
      * get custom field names for this app
      * 
@@ -222,7 +234,7 @@ abstract class Tinebase_Export_Abstract
     {
         return 'export_' . strtolower($_appName) . '.' . $_format;
     }
-    
+
     /**
      * export records
      */
@@ -435,7 +447,7 @@ abstract class Tinebase_Export_Abstract
         
         for ($i = 0; $i < $config->columns->column->count(); $i++) {
             $column = $config->columns->column->{$i};
-            if ($column->separateColumns) {
+            if ($column && $column->separateColumns) {
                 $this->_addMatrixHeaders($config, $config->columns->column->{$i});
                 unset($config->columns->column->{$i});
             }
@@ -464,10 +476,53 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _getResolvedKeyfield($_property, $_keyfield, $_application)
     {
-         $i18nApplication = Tinebase_Translation::getTranslation($_application);
-         $config = Tinebase_Config::getAppConfig($_application);
-         $result = $config->get($_keyfield)->records->getById($_property);
-         return isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
+        $i18nApplication = Tinebase_Translation::getTranslation($_application);
+        $config = Tinebase_Config::getAppConfig($_application);
+
+        $keyfieldConfig = $config->get($_keyfield);
+        if ($keyfieldConfig) {
+            $result = $keyfieldConfig->records->getById($_property);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' '
+                . ' Could not find keyfield: ' . $_keyfield);
+        }
+        return isset($result) && isset($result->value) ? $i18nApplication->translate($result->value) : $_property;
+    }
+    
+    /**
+     * return shortened field
+     * might run as maxcharacters or maxlines or both
+     * will add "..." to shortened content
+     *
+     * @param String $_property
+     * @param String $_config
+     * @param String $_modus
+     * @return string
+     */
+    protected function _getShortenedField($_property, $_config, $_modus)
+    {
+        $result = $_property;
+        
+        if ($_modus == 'maxcharacters') {
+            $result = substr($result, 0, $_config);
+        }
+        
+        if ($_modus == 'maxlines') {
+            $lines = explode("\n", $result);
+            if(count($lines) > $_config) {
+                $result = '';
+                $lines = array_splice($lines, 0, $_config);
+                foreach($lines as $line) {
+                    $result = $result . $line . "\n";
+                }
+            }
+        }
+        
+        if ($result != $_property) {
+            $result = $result . '...';
+        }
+        
+        return $result;
     }
     
     /**
@@ -494,7 +549,7 @@ abstract class Tinebase_Export_Abstract
      * @param boolean $onlyFirstRelation
      * @return string
      */
-    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE)
+    protected function _addRelations(Tinebase_Record_Abstract $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
     {
         $record->relations->addIndices(array('type'));
         $matchingRelations = $record->relations->filter('type', $relationType);
@@ -505,7 +560,13 @@ abstract class Tinebase_Export_Abstract
         $resultArray = array();
         foreach ($matchingRelations as $relation) {
             if ($recordField !== NULL) {
-                $resultArray[] = $relation->related_record->{$recordField};
+                if ($keyfield !== NULL && $application !== NULL) {
+                    // special case where we want to translate a keyfield
+                    $result = $this->_getResolvedKeyfield($relation->related_record->{$recordField}, $keyfield, $application);
+                } else {
+                    $result = $relation->related_record->{$recordField};
+                }
+                $resultArray[] = $result;
             } else {
                 $resultArray[] = $this->_getRelationSummary($relation->related_record);
             }
@@ -610,5 +671,20 @@ abstract class Tinebase_Export_Abstract
         }
         
         return $value;
+    }
+
+    /**
+     * get field config by name
+     *
+     * @param  string $fieldName
+     * @return Zend_Config
+     */
+    public function getFieldConfig($fieldName)
+    {
+        foreach($this->_config->columns->column as $column) {
+            if ($column->identifier == $fieldName) {
+                return $column;
+            }
+        }
     }
 }

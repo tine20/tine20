@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -142,82 +142,94 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
-        'adr_one_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_region'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_street'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_street2'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_lon'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_one_lat'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_countryname'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_locality'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_postalcode'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_region'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_street'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_street2'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_lon'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'adr_two_lat'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'assistent'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'bday'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'calendar_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'email'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'email_home'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'jpegphoto'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'freebusy_uri'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'role'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'salutation'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'url'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'url_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_family'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_fileas'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_fn'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_given'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_middle'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_prefix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'n_suffix'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'org_unit'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'pubkey'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'room'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_assistent'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_car'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_cell_private'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_fax_home'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_home'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_pager'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_other'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tel_prefer'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'geo'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_countryname'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_locality'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_postalcode'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_region'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_street'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_street2'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_one_lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_countryname'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_locality'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_postalcode'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_region'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_street'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_street2'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'adr_two_lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'assistent'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'bday'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'calendar_uri'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'email'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'email_home'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'jpegphoto'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'freebusy_uri'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'id'                            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'account_id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'note'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'container_id'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'role'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'salutation'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'title'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'url'                           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'url_home'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_family'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_fileas'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_fn'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_given'                       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_middle'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_prefix'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'n_suffix'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_name'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'org_unit'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'pubkey'                        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'room'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_assistent'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_car'                       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell_private'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax'                       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax_home'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_home'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_pager'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_work'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_other'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_prefer'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_assistent_normalized'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_car_normalized'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell_normalized'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_cell_private_normalized'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax_normalized'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_fax_home_normalized'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_home_normalized'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_pager_normalized'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_work_normalized'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_other_normalized'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tel_prefer_normalized'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'tz'                            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'geo'                           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog fields
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+        'created_by'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'creation_time'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_by'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'last_modified_time'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'is_deleted'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_time'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'deleted_by'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'seq'                           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // tine 2.0 generic fields
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-        'type'                  => array(
+        'tags'                          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'notes'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'relations'                     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'attachments'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'customfields'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE         => array()),
+        'type'                          => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTACTTYPE_CONTACT,
             array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
-        )
+        ),
+        'paths'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -240,6 +252,19 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     protected $_modlogOmitFields = array(
         'jpegphoto',
     );
+
+    /**
+     * list of telephone country codes
+     *
+     * source of country codes:
+     * $json = json_decode(file_get_contents('https://raw.github.com/mledoze/countries/master/countries.json'));
+     * foreach($json as $val) { foreach($val->callingCode as $cc) $data['+'.$cc] = true;}
+     * ksort($data);
+     * echo 'array(\'' . join('\',\'', array_keys($data)) . '\');';
+     *
+     * @var array list of telephone country codes
+     */
+    protected static $countryCodes = array('+1','+7','+20','+27','+30','+31','+32','+33','+34','+36','+39','+40','+41','+43','+44','+45','+46','+47','+48','+49','+51','+52','+53','+54','+55','+56','+57','+58','+60','+61','+62','+63','+64','+65','+66','+76','+77','+81','+82','+84','+86','+90','+91','+92','+93','+94','+95','+98','+211','+212','+213','+216','+218','+220','+221','+222','+223','+224','+225','+226','+227','+228','+229','+230','+231','+232','+233','+234','+235','+236','+237','+238','+239','+240','+241','+242','+243','+244','+245','+246','+248','+249','+250','+251','+252','+253','+254','+255','+256','+257','+258','+260','+261','+262','+263','+264','+265','+266','+267','+268','+269','+291','+297','+298','+299','+350','+351','+352','+353','+354','+355','+356','+357','+358','+359','+370','+371','+372','+373','+374','+375','+376','+377','+378','+379','+380','+381','+382','+383','+385','+386','+387','+389','+420','+421','+423','+500','+501','+502','+503','+504','+505','+506','+507','+508','+509','+590','+591','+592','+593','+594','+595','+596','+597','+598','+670','+672','+673','+674','+675','+676','+677','+678','+679','+680','+681','+682','+683','+685','+686','+687','+688','+689','+690','+691','+692','+850','+852','+853','+855','+856','+880','+886','+960','+961','+962','+963','+964','+965','+966','+967','+968','+970','+971','+972','+973','+974','+975','+976','+977','+992','+993','+994','+995','+996','+998','+1242','+1246','+1264','+1268','+1284','+1340','+1345','+1441','+1473','+1649','+1664','+1670','+1671','+1684','+1721','+1758','+1767','+1784','+1787','+1809','+1829','+1849','+1868','+1869','+1876','+1939','+4779','+5999','+3906698');
     
     /**
     * overwrite constructor to add more filters
@@ -343,9 +368,59 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 $resolved = $this->_resolveAutoValues(array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family')));
                 parent::__set('n_fn', $resolved['n_fn']);
                 parent::__set('n_fileas', $resolved['n_fileas']);
+                break;
+            default:
+                // normalize telephone numbers
+                if (!empty($_value) && strpos($_name, 'tel_') === 0 && strpos($_name, '_normalized') === false) {
+                    parent::__set($_name . '_normalized', static::normalizeTelephoneNoCountry($_value));
+                }
+                break;
         }
         
         parent::__set($_name, $_value);
+    }
+
+    /**
+     * normalizes telephone numbers and removes country part
+     * result will be of format 0xxxxxxxxx (only digits)
+     *
+     * @param  string $telNumber
+     * @return string|null
+     */
+    public static function normalizeTelephoneNoCountry($telNumber)
+    {
+        $val = trim($telNumber);
+
+        // replace leading + with 00
+        if ($val[0] === '+') {
+            $val = '00' . mb_substr($val, 1);
+        }
+
+        // remove any non digit characters
+        $val = preg_replace('/\D+/u', '', $val);
+
+        // if not at least 5 digits, stop where
+        if (strlen($val) < 5)
+            return null;
+
+        // replace 00 with +
+        if ($val[0] === '0' && $val[1] === '0') {
+            $val = '+' . mb_substr($val, 2);
+        }
+
+        // normalize to remove leading country codes and make the number start with 0
+        if ($val[0] === '+') {
+            $val = str_replace(static::$countryCodes, '0', $val);
+        } elseif($val[0] !== '0') {
+            $val = '0' . $val;
+        }
+
+        // in case the country codes was not recognized...
+        if ($val[0] === '+') {
+            $val = '0' . mb_substr($val, 1);
+        }
+
+        return $val;
     }
 
     /**
@@ -397,12 +472,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * set small contact image
      *
      * @param $newPhotoBlob
+     * @param $maxSize
      */
-    public function setSmallContactImage($newPhotoBlob)
+    public function setSmallContactImage($newPhotoBlob, $maxSize = self::SMALL_PHOTO_SIZE)
     {
         if ($this->getId()) {
             try {
-                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId())->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId())->getBlob('image/jpeg', $maxSize);
             } catch (Exception $e) {
                 // no current photo
             }
@@ -421,13 +497,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     /**
      * return small contact image for sync
      *
+     * @param $maxSize
+     *
      * @return string
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function getSmallContactImage()
+    public function getSmallContactImage($maxSize = self::SMALL_PHOTO_SIZE)
     {
         $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $this->getId());
-        return $image->getBlob('image/jpeg', self::SMALL_PHOTO_SIZE);
+        return $image->getBlob('image/jpeg', $maxSize);
+    }
+
+    /**
+     * get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->n_fn;
     }
 }

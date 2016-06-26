@@ -80,7 +80,7 @@ abstract class Tinebase_Pluggable_Abstract
             ), $args);
         } else {
             throw new Tinebase_Exception(
-                'Plugin ' . $method . ' was not found in haystack');
+                'Plugin ' . $method . ' was not found in haystack of class ' . get_class($this));
         }
     }
 }

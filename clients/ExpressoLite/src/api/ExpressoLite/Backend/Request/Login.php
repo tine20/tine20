@@ -8,11 +8,13 @@
  * @package   ExpressoLite\Backend
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Charles Wust <charles.wust@serpro.gov.br>
- * @copyright Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2014-2016 Serpro (http://www.serpro.gov.br)
  */
 namespace ExpressoLite\Backend\Request;
 
 use ExpressoLite\Exception\CaptchaRequiredException;
+use ExpressoLite\Backend\LiteRequestProcessor;
+use ExpressoLite\Backend\Request\GetUserInfo;
 
 class Login extends LiteRequest
 {
@@ -67,13 +69,12 @@ class Login extends LiteRequest
         // Its better to check if the tine user matches Expresso Lite user
         // right away
 
+        $lrp = new LiteRequestProcessor();
+        $userInfoData = $lrp->executeRequest('GetUserInfo');
+
         return (object) array(
             'success' => $result,
-            'userInfo' => (object) array (
-                'mailAddress' => $this->tineSession->getAttribute('Expressomail.email'),
-                'mailSignature' => $this->tineSession->getAttribute('Expressomail.signature'),
-                'mailBatch' => MAIL_BATCH,
-            )
+            'userInfo' => $userInfoData
         );
     }
 

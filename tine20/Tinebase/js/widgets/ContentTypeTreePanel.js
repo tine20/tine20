@@ -36,7 +36,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
 
     root: null,
     
-    title: 'Modules', // _('Modules')
+    title: 'Modules', // i18n._('Modules')
 
     collapsible: true,
     baseCls: 'ux-arrowcollapse',
@@ -99,7 +99,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
         this.stateId = this.app.name + (this.contentType ? this.contentType : '') + '-moduletree';
         Tine.widgets.ContentTypeTreePanel.superclass.initComponent.call(this);
         
-        this.setTitle(_(this.title));
+        this.setTitle(i18n._(this.title));
         
         var treeRoot = new Ext.tree.TreeNode({
             expanded: true,
@@ -176,7 +176,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             
             child.on('click', function() {
                 this.app.getMainScreen().activeContentType = modelName;
-                this.app.getMainScreen().show();
+                this.app.getMainScreen().activate();
             }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
@@ -250,7 +250,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 this.stateApplied = true;
                 var contentType = node.id.split('-')[1];
                 this.app.getMainScreen().activeContentType = contentType ? contentType : '';
-                this.app.getMainScreen().show();
+                this.app.getMainScreen().activate();
             } else {
                 this.stateApplied = false;
             }

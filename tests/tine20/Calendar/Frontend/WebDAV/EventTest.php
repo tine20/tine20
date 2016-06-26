@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,6 +24,11 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
      */
     public function setUp()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
         parent::setUp();
         
         $this->objects['initialContainer'] = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -449,7 +454,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = stream_get_contents($event->get());
         
         //var_dump($vcalendar);
-        
+
         $this->assertContains('SUMMARY:New Event', $vcalendar);
         $this->assertContains('ORGANIZER;CN=', $vcalendar);
     }

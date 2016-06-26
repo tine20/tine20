@@ -127,6 +127,9 @@ class AjaxProcessor {
                 401 => 'Unauthorized',
                 500 => 'Internal Server Error'
         );
+        ob_start();
+        var_dump($httpError);
+        error_log("Error: " . ob_get_clean());
         header ( 'Content-type:text/html; charset=UTF-8' );
         header ( sprintf ( 'HTTP/1.1 %d %s', $httpError->code, $description [$httpError->code] ) );
         die ( $httpError->message ); // note: a standard HTML object will be sent, see Firebug output

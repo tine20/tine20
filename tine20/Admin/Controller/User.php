@@ -125,7 +125,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      *
      * @param   string $_accountId  account id
      * @param   string $_status     status to set
-     * @return  array with success flag
+     * @return  int
      */
     public function setAccountStatus($_accountId, $_status)
     {
@@ -284,8 +284,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            Tinebase_Exception::log($e);
             throw $e;
         }
         

@@ -33,7 +33,7 @@ Tine.widgets.dialog.PreferencesCardPanel = Ext.extend(Ext.Panel, {
     },
     
     initComponent: function() {
-        this.title = _('Preferences');
+        this.title = i18n._('Preferences');
         Tine.widgets.dialog.PreferencesCardPanel.superclass.initComponent.call(this);
     }
 });
@@ -182,7 +182,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             }, this);
 
         } else {
-            this.html = '<div class="x-grid-empty">' + _('There are no preferences for this application.') + "</div>";
+            this.html = '<div class="x-grid-empty">' + i18n._('There are no preferences for this application.') + "</div>";
         }
         
         Ext.QuickTips.init();
@@ -204,7 +204,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
         //       in their description don't get translated. Thus we (re) translate them here
         //       as the js translations are much better
         var app = Tine.Tinebase.appMgr.get(this.appName),
-            gt  = app ? app.i18n._.createDelegate(app.i18n) : _;
+            gt  = app ? app.i18n._.createDelegate(app.i18n) : i18n._.createDelegate(i18n);
         
         if (this.items && this.items.items) {
             for (var i=0; i < this.items.items.length; i++) {

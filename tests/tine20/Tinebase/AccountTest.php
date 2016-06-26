@@ -143,12 +143,13 @@ class Tinebase_AccountTest extends TestCase
     public function testUpdateAccount()
     {
         $account = $this->testAddAccount();
-        
+
         $account->accountLoginName = 'tine20phpunit-updated';
         $account->accountStatus    = Tinebase_User::STATUS_DISABLED;
         $account->accountLastName  = 'Tine 2.0 Updated';
         $account->accountFirstName = 'PHPUnit Updated';
-        
+
+        $this->_usernamesToDelete[] = $account->accountLoginName;
         $testAccount = Tinebase_User::getInstance()->updateUser($account);
         
         $this->assertEquals('tine20phpunit-updated',        $testAccount->accountLoginName);

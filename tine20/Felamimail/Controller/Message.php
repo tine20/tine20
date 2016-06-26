@@ -139,11 +139,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message  $_id
-     * @param string                            $_partId
+     * @param string                           $_partId
+     * @param string                           $mimeType
      * @param boolean                          $_setSeen
      * @return Felamimail_Model_Message
      */
-    public function getCompleteMessage($_id, $_partId = NULL, $_setSeen = FALSE)
+    public function getCompleteMessage($_id, $_partId = NULL, $mimeType='configured', $_setSeen = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -160,7 +161,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_checkMessageAccount($message, $account);
         
-        $message = $this->_getCompleteMessageContent($message, $account, $_partId);
+        $message = $this->_getCompleteMessageContent($message, $account, $_partId, $mimeType);
 
         if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
             Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
@@ -170,7 +171,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
 
-        $this->prepareAndProcessParts($message);
+        $this->prepareAndProcessParts($message, $account);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
         
@@ -199,13 +200,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
-     * @param string $_partId
+     * @param string                   $_partId
+     * @param string                   $mimeType
      */
-    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL)
+    protected function _getCompleteMessageContent(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, $_partId = NULL, $mimeType='configured')
     {
-        $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
-            ? Zend_Mime::TYPE_HTML
-            : Zend_Mime::TYPE_TEXT;
+        if ($mimeType == 'configured') {
+            $mimeType = ($_account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $_account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE)
+                ? Zend_Mime::TYPE_HTML
+                : Zend_Mime::TYPE_TEXT;
+        }
         
         $headers     = $this->getMessageHeaders($_message, $_partId, true);
         $body        = $this->getMessageBody($_message, $_partId, $mimeType, $_account, true);
@@ -241,7 +245,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $structure = isset($structure['messageStructure']) ? $structure['messageStructure'] : $structure;
             $message->parseStructure($structure);
         }
-        
+
+        $message->body_content_type_of_body_property_of_this_record = $mimeType;
+
         return $message;
     }
     
@@ -261,8 +267,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * prepare message parts that could be interesting for other apps
      * 
      * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
      */
-    public function prepareAndProcessParts(Felamimail_Model_Message $_message)
+    public function prepareAndProcessParts(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
     {
         $preparedParts = new Tinebase_Record_RecordSet('Felamimail_Model_PreparedMessagePart');
         
@@ -316,7 +323,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // PGP INLINE
         if (strpos($_message->body, '-----BEGIN PGP MESSAGE-----') !== false) {
-            preg_match('/-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----/', $_message->body, $matches);
+            preg_match('/(-----BEGIN PGP MESSAGE-----.*-----END PGP MESSAGE-----)/msU', $_message->body, $matches);
             $amored = Felamimail_Message::convertFromHTMLToText($matches[0]);
 
             $preparedParts->addRecord(new Felamimail_Model_PreparedMessagePart(array(
@@ -731,8 +738,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_transformBodyTags($config);
         
         // add uri filter
-        $uri = $config->getDefinition('URI');
-        $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
+        // TODO could be improved by adding on demand button if loading external resources is allowed
+        //   or only load uris of known recipients
+        if (Felamimail_Config::getInstance()->get(Felamimail_Config::FILTER_EMAIL_URIS)) {
+            $uri = $config->getDefinition('URI');
+            $uri->addFilter(new Felamimail_HTMLPurifier_URIFilter_TransformURI(), $config);
+        }
         
         // add cid uri scheme
         require_once(dirname(dirname(__FILE__)) . '/HTMLPurifier/URIScheme/cid.php');

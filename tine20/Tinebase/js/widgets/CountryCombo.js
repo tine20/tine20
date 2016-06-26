@@ -31,7 +31,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
      */
     initComponent: function() {
         this.store = this.getCountryStore();
-        this.emptyText = _('Select a country...');
+        this.emptyText = i18n._('Select a country...');
         
         Tine.widgets.CountryCombo.superclass.initComponent.call(this);
     },

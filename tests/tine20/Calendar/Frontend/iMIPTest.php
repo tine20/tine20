@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add test testOrganizerSendBy
@@ -43,18 +43,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
     * @var Felamimail_Controller_MessageTest
     */
     protected $_emailTestClass;
-        
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Calendar iMIP Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -64,6 +52,11 @@ class Calendar_Frontend_iMIPTest extends TestCase
      */
     protected function setUp()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
         Calendar_Controller_Event::getInstance()->sendNotifications(true);
         
         Calendar_Config::getInstance()->set(Calendar_Config::DISABLE_EXTERNAL_IMIP, false);
@@ -336,7 +329,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         
         $this->_iMIPFrontend->prepareComponent($iMIP);
         $this->_eventIdsToDelete[] = $iMIP->event->getId();
-        
+
         // assert external organizer
         $this->assertEquals('l.kneschke@caldav.org', $iMIP->event->organizer->email, 'wrong organizer');
         $this->assertTrue(empty($iMIP->event->organizer->account_id), 'organizer must not have an account');
@@ -346,6 +339,13 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->assertTrue(!! $ownAttendee, 'own attendee missing');
         $this->assertEquals(5, count($iMIP->event->attendee), 'all attendee must be keeped');
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttendee->status, 'must be ACCEPTED');
+
+        // assert no status authkey for external attendee
+        foreach($iMIP->event->attendee as $attendee) {
+            if (!$attendee->user_id->account_id) {
+                $this->assertFalse(!!$attendee->user_id->status_authkey, 'authkey should be skipped');
+            }
+        }
         
         // assert REPLY message to organizer only
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
@@ -445,7 +445,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $result = $this->_iMIPFrontendMock->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
         
         $event = $this->_iMIPFrontend->getExistingEvent($iMIP, true);
-        
+
         $attender = Calendar_Model_Attender::getOwnAttender($event->attendee);
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
     }

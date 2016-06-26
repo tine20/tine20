@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:15+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -17,10 +17,30 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:151
+#: Export/definitions/cal_default_doc_sheet.xml:10
+msgid "Default Calendar Sheet Export"
+msgstr ""
+
+#: Export/definitions/cal_default_doc_sheet.xml:12
+msgid "Export Events as Calendar Sheet"
+msgstr ""
+
+#: Export/definitions/cal_default_ods.xml:7
+msgid "Default Event Data Export"
+msgstr ""
+
+#: Export/definitions/cal_default_ods.xml:9
+msgid "Export event data into ods spreadsheet"
+msgstr ""
+
+#: Controller.php:292
 #, python-format
 msgid "%s's personal calendar"
 msgstr "%s ของปฏิทินส่วนตัว"
+
+#: Controller.php:392 js/Model.js:747
+msgid "Resources"
+msgstr "แหล่งที่มา"
 
 #: Exception/ExdateContainer.php:26
 msgid "Different Calendar"
@@ -67,8 +87,7 @@ msgstr ""
 msgid "Every %s day"
 msgstr "ทุกๆ %s วัน"
 
-#: Model/Rrule.php:344 js/RrulePanel.js:84 js/Calendar-FAT-debug.js:10696
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:344 js/RrulePanel.js:94
 msgid "Daily"
 msgstr "ทุกวัน"
 
@@ -113,33 +132,23 @@ msgstr "ทุกปี วันที่ %1$s ของ %2$s"
 msgid "second to last"
 msgstr "ที่สองถึงสุดท้าย"
 
-#: Model/Rrule.php:431 js/RrulePanel.js:574 js/RrulePanel.js:755
-#: js/Calendar-FAT-debug.js:11186 js/Calendar-FAT-debug.js:11367
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:431 js/RrulePanel.js:646 js/RrulePanel.js:827
 msgid "last"
 msgstr "ลำดับสุดท้าย"
 
-#: Model/Rrule.php:437 js/RrulePanel.js:570 js/RrulePanel.js:751
-#: js/Calendar-FAT-debug.js:11182 js/Calendar-FAT-debug.js:11363
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:437 js/RrulePanel.js:642 js/RrulePanel.js:823
 msgid "first"
 msgstr "ลำดับที่หนึ่ง"
 
-#: Model/Rrule.php:440 js/RrulePanel.js:571 js/RrulePanel.js:752
-#: js/Calendar-FAT-debug.js:11183 js/Calendar-FAT-debug.js:11364
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:440 js/RrulePanel.js:643 js/RrulePanel.js:824
 msgid "second"
 msgstr "ลำดับที่สอง"
 
-#: Model/Rrule.php:443 js/RrulePanel.js:572 js/RrulePanel.js:753
-#: js/Calendar-FAT-debug.js:11184 js/Calendar-FAT-debug.js:11365
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:443 js/RrulePanel.js:644 js/RrulePanel.js:825
 msgid "third"
 msgstr "ลำดับที่สาม"
 
-#: Model/Rrule.php:446 js/RrulePanel.js:573 js/RrulePanel.js:754
-#: js/Calendar-FAT-debug.js:11185 js/Calendar-FAT-debug.js:11366
-#: js/Calendar-FAT.js:6
+#: Model/Rrule.php:446 js/RrulePanel.js:645 js/RrulePanel.js:826
 msgid "fourth"
 msgstr "ลำดับที่สี่"
 
@@ -163,135 +172,114 @@ msgstr "ที่"
 msgid "th"
 msgstr "ที่"
 
-#: Model/Attender.php:163
+#: Model/Attender.php:213
 msgid "unknown"
 msgstr "ไม่รู้จัก"
 
-#: Model/Attender.php:470
+#: Model/Attender.php:529
 msgid ""
 "This contact has been automatically added by the system as an event attender"
 msgstr "ระบบได้เพิ่มการติดต่อนี้เข้าไปในเหตุการณ์ของผู้ร่วมอย่างอัตโนมัติ"
 
-#: Model/Attender.php:473
+#: Model/Attender.php:532
 msgid "The email address has been shortened:"
 msgstr "ที่อยู่อีเมลได้ถูกย่อลง"
 
-#: Model/Event.php:367
+#: Model/Event.php:368
 msgid "Start"
 msgstr "เริ่มต้น"
 
-#: Model/Event.php:368 js/RrulePanel.js:335 js/Calendar-FAT-debug.js:10947
-#: js/Calendar-FAT.js:6
+#: Model/Event.php:369 js/RrulePanel.js:404
 msgid "End"
 msgstr "สิ้นสุด"
 
-#: Model/Event.php:369 js/EventDetailsPanel.js:270 js/GridView.js:216
-#: js/Calendar-FAT-debug.js:4766 js/Calendar-FAT-debug.js:5683
-#: js/Calendar-FAT.js:6
+#: Model/Event.php:370 js/EventDetailsPanel.js:272 js/GridView.js:218
 msgid "Blocking"
 msgstr "การจัดกลุ่มระเบียน"
 
-#: Model/Event.php:370
+#: Model/Event.php:371
 msgid "Classification"
 msgstr "การแยกประเภท"
 
-#: Model/Event.php:371 js/ResourceEditDialog.js:95 js/EventEditDialog.js:266
-#: js/Model.js:293 js/GridView.js:250 js/Calendar-FAT-debug.js:839
-#: js/Calendar-FAT-debug.js:4800 js/Calendar-FAT-debug.js:8373
-#: js/Calendar-FAT-debug.js:11698 js/Calendar-FAT.js:6
+#: Model/Event.php:372 js/ResourceEditDialog.js:100 js/EventEditDialog.js:261
+#: js/Model.js:308 js/GridView.js:252 js/Printer/EventRecord.js:20
 msgid "Description"
 msgstr "การอธิบาย"
 
-#: Model/Event.php:372 js/ResourcesGridPanel.js:54 js/EventDetailsPanel.js:280
-#: js/EventEditDialog.js:127 js/Model.js:292 js/GridView.js:237
-#: js/Calendar-FAT-debug.js:838 js/Calendar-FAT-debug.js:4787
-#: js/Calendar-FAT-debug.js:5693 js/Calendar-FAT-debug.js:8239
-#: js/Calendar-FAT-debug.js:11576 js/Calendar-FAT.js:6
+#: Model/Event.php:373 js/ResourcesGridPanel.js:55 js/EventDetailsPanel.js:282
+#: js/EventEditDialog.js:126 js/Model.js:307 js/GridView.js:239
+#: js/Printer/EventRecord.js:27
 msgid "Location"
 msgstr "สถานที่"
 
-#: Model/Event.php:373 js/EventDetailsPanel.js:284 js/EventEditDialog.js:330
-#: js/Model.js:312 js/GridView.js:243 js/Calendar-FAT-debug.js:858
-#: js/Calendar-FAT-debug.js:4793 js/Calendar-FAT-debug.js:5697
-#: js/Calendar-FAT-debug.js:8447 js/Calendar-FAT-debug.js:10234
-#: js/Calendar-FAT.js:6 js/PerspectiveCombo.js:127 Config.php:201
+#: Model/Event.php:374 js/EventDetailsPanel.js:286 js/EventEditDialog.js:341
+#: js/Model.js:327 js/GridView.js:245 js/PerspectiveCombo.js:127
+#: js/Printer/EventRecord.js:17 Config.php:208
 msgid "Organizer"
 msgstr "ผู้นัดหมาย"
 
-#: Model/Event.php:374
+#: Model/Event.php:375
 msgid "Priority"
 msgstr "ลำดับความสำคัญ"
 
-#: Model/Event.php:375 js/ContactEventsGridPanel.js:126
-#: js/EventEditDialog.js:183 js/GridView.js:262 js/AttendeeGridPanel.js:213
-#: js/AddToEventPanel.js:88 js/Calendar-FAT-debug.js:4812
-#: js/Calendar-FAT-debug.js:8295 js/Calendar-FAT-debug.js:8972
-#: js/Calendar-FAT-debug.js:12229 js/Calendar-FAT-debug.js:12616
-#: js/Calendar-FAT.js:6
+#: Model/Event.php:376 js/ContactEventsGridPanel.js:126
+#: js/EventEditDialog.js:182 js/AttendeeGridPanel.js:213
+#: js/AddToEventPanel.js:88
 msgid "Status"
 msgstr "สถานะ"
 
-#: Model/Event.php:376 js/ContactEventsGridPanel.js:113
-#: js/EventEditDialog.js:82 js/Model.js:291 js/GridView.js:232
-#: js/Calendar-FAT-debug.js:837 js/Calendar-FAT-debug.js:4782
-#: js/Calendar-FAT-debug.js:8194 js/Calendar-FAT-debug.js:12216
-#: js/Calendar-FAT.js:6
+#: Model/Event.php:377 js/ContactEventsGridPanel.js:113
+#: js/EventEditDialog.js:81 js/Model.js:306 js/GridView.js:234
+#: js/Printer/EventRecord.js:13
 msgid "Summary"
 msgstr "ข้อสรุป"
 
-#: Model/Event.php:377
+#: Model/Event.php:378
 msgid "Url"
 msgstr "Url"
 
-#: Model/Event.php:378
+#: Model/Event.php:379
 msgid "Recurrance rule"
 msgstr "กฎเกี่ยวกับการซ้ำซ้อน"
 
-#: Model/Event.php:379
+#: Model/Event.php:380
 msgid "Is all day event"
 msgstr "คือเหตุการณ์ทั้งวัน"
 
-#: Model/Event.php:380
+#: Model/Event.php:381
 msgid "Organizer timezone"
 msgstr "โซนเวลาของผู้นัดหมาย"
 
-#: Model/Event.php:405
+#: Model/Event.php:406
 msgid "No"
 msgstr "ไม่ใช่"
 
-#: Model/Event.php:405
+#: Model/Event.php:406
 msgid "Yes"
 msgstr "ใช่"
 
-#: js/calendarRenderer.js:30 js/Calendar-FAT-debug.js:12674
-#: js/Calendar-FAT.js:6
+#: js/calendarRenderer.js:30
 msgid ""
 "This event is originally stored in a calendar you don't have access to."
 msgstr "เหตุการณ์นี้ได้รับการบันทึกแรกเริ่มในปฏิทินที่คุณไม่สามารถเข้าไปดูได้"
 
-#: js/calendarRenderer.js:31 js/Calendar-FAT-debug.js:12675
-#: js/Calendar-FAT.js:6
+#: js/calendarRenderer.js:31
 #, python-brace-format
 msgid "This event is originally stored in {0}"
 msgstr "เหตุการณ์นี้ได้รับการบันทึกแรกเริ่มใน {0}"
 
-#: js/calendarRenderer.js:33 js/Calendar-FAT-debug.js:12677
-#: js/Calendar-FAT.js:6
+#: js/calendarRenderer.js:33
 #, python-brace-format
 msgid "This event is additionally displayed in your personal calendar {0}"
 msgstr "เหตุการณ์นี้จะเพิ่มเข้าไปอัตโนมัติในปฏิทิน {0} ส่วนตัวของคุณ"
 
-#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:460
+#: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:304 js/Model.js:489
 #: js/AttendeeGridPanel.js:89 js/EventContextAttendeesItem.js:112
-#: js/WestPanel.js:90 js/Calendar-FAT-debug.js:1006
-#: js/Calendar-FAT-debug.js:5715 js/Calendar-FAT-debug.js:7831
-#: js/Calendar-FAT-debug.js:7991 js/Calendar-FAT-debug.js:8848
-#: js/Calendar-FAT-debug.js:9810 js/Calendar-FAT.js:6 Config.php:200
+#: js/WestPanel.js:90 js/Printer/EventRecord.js:41 Config.php:207
 msgid "Attendee"
 msgstr "ผู้เข้าร่วม"
 
-#: js/AttendeeFilterModel.js:100 js/Calendar-FAT-debug.js:9875
-#: js/Calendar-FAT.js:6
+#: js/AttendeeFilterModel.js:100
 msgid "Select Attendee"
 msgstr "เลือก ผู้เข้าร่วม"
 
@@ -300,98 +288,113 @@ msgid "Colors"
 msgstr ""
 
 #: js/ColorManager.js:177
-msgid "Color by Calendar"
+msgid "Color by Organizer Calendar"
 msgstr ""
 
 #: js/ColorManager.js:182
+msgid "Color by Attendee Calendar"
+msgstr ""
+
+#: js/ColorManager.js:187
+msgid "Color by Tags"
+msgstr ""
+
+#: js/ColorManager.js:192
 msgid "Color by Attendee Role"
 msgstr ""
 
-#: js/RrulePanel.js:34 js/Calendar-FAT-debug.js:10646 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:34
 msgid "Recurrances"
 msgstr "ความซ้ำซ้อน"
 
-#: js/RrulePanel.js:42 js/Calendar-FAT-debug.js:10654 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:42
 msgid "No recurring rule defined"
 msgstr "ไม่ได้มีกฎเกี่ยวกับการซ้ำซ้อนระบุไว้"
 
-#: js/RrulePanel.js:77 js/Calendar-FAT-debug.js:10689 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:71 js/EventEditDialog.js:113 js/Printer/EventRecord.js:24
+msgid "Details"
+msgstr "รายละเอียด"
+
+#: js/RrulePanel.js:87
 msgid "None"
 msgstr "ไม่มีเลย"
 
-#: js/RrulePanel.js:91 js/Calendar-FAT-debug.js:10703 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:101
 msgid "Weekly"
 msgstr "ทุกสัปดาห์"
 
-#: js/RrulePanel.js:98 js/Calendar-FAT-debug.js:10710 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:108
 msgid "Monthly"
 msgstr "ทุกเดือน"
 
-#: js/RrulePanel.js:105 js/Calendar-FAT-debug.js:10717 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:115
 msgid "Yearly"
 msgstr "ทุกปี"
 
-#: js/RrulePanel.js:192 js/Calendar-FAT-debug.js:10804 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:211
 msgid "Exceptions of reccuring events can't have recurrences themselves."
 msgstr "ข้อยกเว้นเกี่ยวกับเหตุการณ์ที่ซ้ำซ้อนไม่สามารถมีสิ่งที่ซ้ำซ้อนอยู่ในตัวมันเองได้"
 
-#: js/RrulePanel.js:254 js/Calendar-FAT-debug.js:10866 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:284
 msgid "at"
 msgstr "ณ"
 
-#: js/RrulePanel.js:266 js/Calendar-FAT-debug.js:10878 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:296
 msgid "never"
 msgstr "ไม่เลย"
 
-#: js/RrulePanel.js:275 js/Calendar-FAT-debug.js:10887 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:305
 #, python-brace-format
 msgid "after {0} occurrences"
 msgstr "หลังจากเกิดขึ้น {0} ครั้ง"
 
-#: js/RrulePanel.js:396 js/Calendar-FAT-debug.js:11008 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:381
+msgid "Except"
+msgstr ""
+
+#: js/RrulePanel.js:392
+msgid "during events in the calendars"
+msgstr ""
+
+#: js/RrulePanel.js:468
 msgid "Until has to be after event start"
 msgstr "จนถึง ต้องไปอยู่"
 
-#: js/RrulePanel.js:406 js/RrulePanel.js:409 js/RrulePanel.js:412
-#: js/RrulePanel.js:415 js/Calendar-FAT-debug.js:11018
-#: js/Calendar-FAT-debug.js:11021 js/Calendar-FAT-debug.js:11024
-#: js/Calendar-FAT-debug.js:11027 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:478 js/RrulePanel.js:481 js/RrulePanel.js:484
+#: js/RrulePanel.js:487
 msgid "The event is longer than the recurring interval"
 msgstr ""
 
-#: js/RrulePanel.js:446 js/Calendar-FAT-debug.js:11058 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:518
 #, python-brace-format
 msgid "Every {0}. Day"
 msgstr "ทุกๆ {0} วัน"
 
-#: js/RrulePanel.js:479 js/Calendar-FAT-debug.js:11091 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:551
 #, python-brace-format
 msgid "Every {0}. Week at"
 msgstr "ทุกๆ {0} สัปดาห์ เมื่อ"
 
-#: js/RrulePanel.js:545 js/Calendar-FAT-debug.js:11157 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:617
 #, python-brace-format
 msgid "Every {0}. Month"
 msgstr "ทุกๆ {0} เดือน"
 
-#: js/RrulePanel.js:551 js/RrulePanel.js:600 js/RrulePanel.js:732
-#: js/RrulePanel.js:782 js/Calendar-FAT-debug.js:11163
-#: js/Calendar-FAT-debug.js:11212 js/Calendar-FAT-debug.js:11344
-#: js/Calendar-FAT-debug.js:11394 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:623 js/RrulePanel.js:672 js/RrulePanel.js:804
+#: js/RrulePanel.js:854
 msgid "at the"
 msgstr "เมื่อ"
 
-#: js/RrulePanel.js:725 js/Calendar-FAT-debug.js:11337 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:797
 #, python-brace-format
 msgid "Every {0}. Year"
 msgstr "ทุกๆ {0} ปี"
 
-#: js/RrulePanel.js:823 js/RrulePanel.js:831 js/Calendar-FAT-debug.js:11435
-#: js/Calendar-FAT-debug.js:11443 js/Calendar-FAT.js:6
+#: js/RrulePanel.js:895 js/RrulePanel.js:903
 msgid "of"
 msgstr "ของ"
 
-#: js/AdminPanel.js:46 js/Calendar-FAT-debug.js:1303 js/Calendar-FAT.js:6
+#: js/AdminPanel.js:46
 msgid "Manage Resources"
 msgstr "จัดการ แหล่งที่มา"
 
@@ -399,175 +402,166 @@ msgstr "จัดการ แหล่งที่มา"
 msgid "Originally"
 msgstr "โดยเริ่มแรก"
 
-#: js/ImportDialog.js:112 js/Calendar-FAT-debug.js:12797 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:112
 msgid "Import Definition Success!"
 msgstr "นำเข้าคำจำกัดความ ประสบความสำเร็จ!"
 
-#: js/ImportDialog.js:113 js/Calendar-FAT-debug.js:12798 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:113
 msgid ""
 "The Ical Import definition has been created successfully! Please wait some "
 "minutes to get the events synced by the cronjob."
 msgstr ""
 
-#: js/ImportDialog.js:139 js/Calendar-FAT-debug.js:12824 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:139
 msgid "Choose Import File"
 msgstr "เลือก ไฟล์นำเข้า"
 
-#: js/ImportDialog.js:143 js/Calendar-FAT-debug.js:12828 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:143
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
 msgstr "กรุณาเลือกไฟล์ที่มีบันทึกที่คุณต้องการจะเพิ่มใน Tine 2.0"
 
-#: js/ImportDialog.js:147 js/Calendar-FAT-debug.js:12832 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:147
 #, python-brace-format
 msgid "Select file containing your {0}"
 msgstr "เลือกไฟล์ที่มี {0} ของคุณ"
 
-#: js/ImportDialog.js:162 js/Calendar-FAT-debug.js:12847 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:162
 msgid "once"
 msgstr "ครั้งเดียว"
 
-#: js/ImportDialog.js:163 js/Calendar-FAT-debug.js:12848 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:163
 msgid "hourly"
 msgstr "ทุกชั่วโมง"
 
-#: js/ImportDialog.js:164 js/Calendar-FAT-debug.js:12849 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:164
 msgid "daily"
 msgstr "ทุกวัน"
 
-#: js/ImportDialog.js:165 js/Calendar-FAT-debug.js:12850 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:165
 msgid "weekly"
 msgstr "ทุกสัปดาห์"
 
-#: js/ImportDialog.js:178 js/Calendar-FAT-debug.js:12863 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:178
 msgid "Choose Remote Location"
 msgstr "เลือกที่ตั้งที่ห่างไกล"
 
-#: js/ImportDialog.js:182 js/Calendar-FAT-debug.js:12867 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:182
 msgid "Please choose a remote location you want to add to Tine 2.0"
 msgstr "กรุณาเลือกสถานที่ที่ห่างไกลที่คุณต้องการจะเพิ่มใน Tine 2.0"
 
-#: js/ImportDialog.js:198 js/Calendar-FAT-debug.js:12883 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:198
 msgid "Username"
 msgstr ""
 
-#: js/ImportDialog.js:215 js/Calendar-FAT-debug.js:12900 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:215
 msgid "Password"
 msgstr ""
 
-#: js/ImportDialog.js:232 js/Calendar-FAT-debug.js:12917 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:232
 msgid "Refresh time"
 msgstr ""
 
-#: js/ImportDialog.js:264 js/Calendar-FAT-debug.js:12949 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:264
 msgid "General Settings"
 msgstr "ค่าติดตั้งทั่วไป"
 
-#: js/ImportDialog.js:269 js/Calendar-FAT-debug.js:12954 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:269
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
 msgstr ""
 
-#: js/ImportDialog.js:288 js/Calendar-FAT-debug.js:12973 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:288
 msgid "or"
 msgstr "หรือ"
 
-#: js/ImportDialog.js:329 js/Calendar-FAT-debug.js:13014 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:329
 msgid "What should the file you upload look like?"
 msgstr ""
 
-#: js/ImportDialog.js:334 js/Calendar-FAT-debug.js:13019 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:334
 msgid ""
 "Tine 2.0 does not understand all kind of files you might want to upload. You"
 " will have to manually adjust your file so Tine 2.0 can handle it."
 msgstr ""
 
-#: js/ImportDialog.js:337 js/Calendar-FAT-debug.js:13022
+#: js/ImportDialog.js:337
 msgid ""
 "Following you find a list of all supported import formats and a sample file,"
 " how Tine 2.0 expects your file to look like."
 msgstr ""
 
-#: js/ImportDialog.js:340 js/Calendar-FAT-debug.js:13025 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:340
 msgid "Please select the import format of the file you want to upload"
 msgstr ""
 
-#: js/ImportDialog.js:361 js/Calendar-FAT-debug.js:13046 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:361
 msgid "Download example file"
 msgstr ""
 
-#: js/ImportDialog.js:383 js/Calendar-FAT-debug.js:13068 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:383
 msgid "Remote / ICS"
 msgstr ""
 
-#: js/ImportDialog.js:384 js/Calendar-FAT-debug.js:13069 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:384
 msgid "Remote / CalDAV (BETA)"
 msgstr ""
 
-#: js/ImportDialog.js:385 js/Calendar-FAT-debug.js:13070 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:385
 msgid "Upload"
 msgstr ""
 
-#: js/ImportDialog.js:398 js/Calendar-FAT-debug.js:13083 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:398
 msgid "Choose File and Format"
 msgstr ""
 
-#: js/ImportDialog.js:407 js/Calendar-FAT-debug.js:13092 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:407
 msgid "Select type of source"
 msgstr "เลือก ประเภทของแหล่งข้อมูล"
 
-#: js/ImportDialog.js:411 js/Calendar-FAT-debug.js:13096 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:411
 msgid "Please select the type of source you want to add to Tine 2.0"
 msgstr "กรุณาเลือกประเภทของแหล่งข้อมูลที่คุณต้องการจะเพิ่มไปยัง Tine 2.0"
 
-#: js/ImportDialog.js:475 js/Calendar-FAT-debug.js:13160 js/Calendar-FAT.js:6
+#: js/ImportDialog.js:475
 #, python-brace-format
 msgid "Importing {0}"
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:69 js/Calendar-FAT-debug.js:12323
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:69
 msgid "Checking Calendar Data..."
 msgstr "กำลังตรวจสอบข้อมูลปฏิทิน"
 
-#: js/iMIPDetailsPanel.js:95 js/Calendar-FAT-debug.js:12349
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:95
 msgid "Reply to Recurring Event"
 msgstr "ตอบสนองต่อเหตุการณ์ซ้ำซ้อน"
 
-#: js/iMIPDetailsPanel.js:96 js/Calendar-FAT-debug.js:12350
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:96
 msgid "You are responding to an recurring event. What would you like to do?"
 msgstr "คุณกำลังตอบสนองต่อเหตุการณ์ที่ซ้ำซ้อน คุณจะทำอะไร?"
 
-#: js/iMIPDetailsPanel.js:100 js/Calendar-FAT-debug.js:12354
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:100
 msgid "Respond to whole series"
 msgstr "ตอบสนองต่อทุกชุด"
 
-#: js/iMIPDetailsPanel.js:101 js/Calendar-FAT-debug.js:12355
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:101
 msgid "Do not respond"
 msgstr "ไม่ตอบสนอง"
 
-#: js/iMIPDetailsPanel.js:198 js/Calendar-FAT-debug.js:12452
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:198
 msgid "The event of this message does not exist"
 msgstr "เหตุการณ์ในข้อความนี้ไม่มีอยู่"
 
-#: js/iMIPDetailsPanel.js:203 js/Calendar-FAT-debug.js:12457
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:203
 msgid "The sender is not authorised to update the event"
 msgstr "ผู้ส่งไม่ได้รับอนุญาตให้ปรับปรุงเหตุการณ์"
 
-#: js/iMIPDetailsPanel.js:208 js/Calendar-FAT-debug.js:12462
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:208
 msgid "This message is already processed"
 msgstr "ข้อความนี้ได้ถูกดำเนินการแล้ว"
 
-#: js/iMIPDetailsPanel.js:213 js/Calendar-FAT-debug.js:12467
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:213
 msgid "You are not an attendee of this event"
 msgstr "คุณไม่ได้เป็นผุ้เข้าร่วมในเหตุการณ์นี้"
 
@@ -579,1007 +573,933 @@ msgstr ""
 msgid "This event has been canceled."
 msgstr ""
 
-#: js/iMIPDetailsPanel.js:225 js/Calendar-FAT-debug.js:12471
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:225
 msgid "Unsupported message"
 msgstr "ข้อความที่ไม่ได้รับการสนับสนุน"
 
-#: js/iMIPDetailsPanel.js:235 js/Calendar-FAT-debug.js:12481
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:235
 msgid "This is an event invitation for someone else."
 msgstr "นี่เป็นการเชิญให้ร่วมเหตุการณ์สำหรับผู้อื่น"
 
-#: js/iMIPDetailsPanel.js:237 js/Calendar-FAT-debug.js:12483
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:237
 msgid "You have already replied to this event invitation."
 msgstr "คุณได้ตอบกลับไปยังคำเชิญเข้าร่วมเหตุการณ์นี้แล้ว"
 
-#: js/iMIPDetailsPanel.js:239 js/Calendar-FAT-debug.js:12485
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:239
 msgid "You received an event invitation. Set your response to:"
 msgstr "คุณได้รับคำเชิญเข้าร่วมเหตุการณ์ ตั้งค่าการตอบรับไปยัง:"
 
-#: js/iMIPDetailsPanel.js:247 js/Calendar-FAT-debug.js:12493
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:247
 msgid "An invited attendee responded to the invitation."
 msgstr "ผุ้เข้าร่วมที่ได้รับเชิญได้ตอบกลับเรื่องคำเชิญแล้ว"
 
-#: js/iMIPDetailsPanel.js:255 js/Calendar-FAT-debug.js:12497
-#: js/Calendar-FAT.js:6
+#: js/iMIPDetailsPanel.js:255
 msgid "Unsupported method"
 msgstr "วิธีการที่ไม่สนับสนุน"
 
-#: js/Calendar.js:29 js/MonthView.js:83 js/YearView.js:83
-#: js/Calendar-FAT-debug.js:2071 js/Calendar-FAT-debug.js:3677
-#: js/Calendar-FAT-debug.js:8026 js/DaysView.js:115
+#: js/DaysViewEventUI.js:114
+msgid "private classification"
+msgstr "การแยกประเภทส่วนบุคคล"
+
+#: js/DaysViewEventUI.js:121 js/EventDetailsPanel.js:100
+msgid "recurring event"
+msgstr "เหตุการณ์ซ้ำซ้อน"
+
+#: js/DaysViewEventUI.js:126 js/EventDetailsPanel.js:102
+msgid "recurring event exception"
+msgstr "ข้อยกเว้นเมื่อเหตุการณ์ซ้ำซ้อน"
+
+#: js/DaysViewEventUI.js:135
+msgid "has alarm"
+msgstr "มีการแจ้งเตือน"
+
+#: js/DaysViewEventUI.js:142
+msgid "has attachments"
+msgstr "มีสิ่งที่แนบมาด้วย"
+
+#: js/Calendar.js:29 js/MonthView.js:83 js/YearView.js:83 js/DaysView.js:123
 msgid "New Event"
 msgstr "เหตุการณ์ใหม่"
 
-#: js/Calendar.js:39 js/Model.js:73 js/Calendar-FAT-debug.js:620
-#: js/Calendar-FAT-debug.js:8036 js/Calendar-FAT.js:6 Setup/setup.xml:4
+#: js/Calendar.js:39 js/Model.js:74 Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "ปฏิทิน"
 
-#: js/ContactEventsGridPanel.js:50 js/Model.js:69 js/Model.js:464
-#: js/Calendar-FAT-debug.js:616 js/Calendar-FAT-debug.js:1010
-#: js/Calendar-FAT-debug.js:12153 js/Calendar-FAT.js:6
+#: js/ContactEventsGridPanel.js:50 js/Model.js:70 js/Model.js:493
 msgid "Events"
 msgstr "เหตุการณ์"
 
-#: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:260
-#: js/EventEditDialog.js:133 js/GridView.js:198 js/Calendar-FAT-debug.js:4748
-#: js/Calendar-FAT-debug.js:5673 js/Calendar-FAT-debug.js:8245
-#: js/Calendar-FAT-debug.js:12222 js/Calendar-FAT.js:6 Preference.php:127
+#: js/ContactEventsGridPanel.js:119 js/EventDetailsPanel.js:262
+#: js/EventEditDialog.js:132 js/GridView.js:200 js/Printer/EventRecord.js:31
+#: Preference.php:145
 msgid "Start Time"
 msgstr "เวลาที่เริ่ม"
 
-#: js/MonthView.js:88 js/WestPanel.js:55 js/Calendar-FAT-debug.js:3682
-#: js/Calendar-FAT-debug.js:7956 js/Calendar-FAT.js:6
+#: js/MonthView.js:88 js/WestPanel.js:55
 msgid "WK"
 msgstr "สัปดาห์"
 
-#: js/MonthView.js:93 js/YearView.js:88 js/Calendar-FAT-debug.js:3687
+#: js/MonthView.js:93 js/YearView.js:88
 #, python-brace-format
 msgid "{0} more..."
 msgstr "เพิ่มขึ้น {0}"
 
-#: js/ResourcesGridPanel.js:43 js/ResourceEditDialog.js:68
-#: js/AttendeeGridPanel.js:205 js/Calendar-FAT-debug.js:8964
-#: js/Calendar-FAT-debug.js:11565 js/Calendar-FAT-debug.js:11671
-#: js/Calendar-FAT.js:6
+#: js/ResourcesGridPanel.js:44 js/ResourceEditDialog.js:68
+#: js/AttendeeGridPanel.js:205
 msgid "Name"
 msgstr "ชื่อ"
 
-#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:73
-#: js/Calendar-FAT-debug.js:11571 js/Calendar-FAT-debug.js:11676
-#: js/Calendar-FAT.js:6
+#: js/ResourcesGridPanel.js:50 js/ResourceEditDialog.js:73
 msgid "Email"
 msgstr "อีเมล"
 
+#: js/ResourcesGridPanel.js:62
+msgid "Default Status"
+msgstr ""
+
+#: js/ResourcesGridPanel.js:68 js/ResourceEditDialog.js:92
+msgid "Busy Type"
+msgstr ""
+
 #: js/ResourceEditDialog.js:79 js/ResourceEditDialog.js:80
-#: js/Calendar-FAT-debug.js:11682 js/Calendar-FAT-debug.js:11683
-#: js/Calendar-FAT.js:6
 msgid "Is a location"
 msgstr "คือสถานที่"
 
-#: js/ResourceEditDialog.js:86 js/Calendar-FAT-debug.js:11689
-#: js/Calendar-FAT.js:6
+#: js/ResourceEditDialog.js:86
 msgid "Default attendee status"
 msgstr ""
 
-#: js/ResourceEditDialog.js:91 js/Calendar-FAT-debug.js:11694
-#: js/Calendar-FAT.js:6
+#: js/ResourceEditDialog.js:96
 msgid "Suppress notification"
 msgstr ""
 
-#: js/ResourceEditDialog.js:96 js/Calendar-FAT-debug.js:11699
-#: js/Calendar-FAT.js:6
+#: js/ResourceEditDialog.js:101
 msgid "Enter description..."
 msgstr "ใส่ คำอธิบาย"
 
-#: js/ResourceEditDialog.js:121 js/Calendar-FAT-debug.js:11731
-#: js/Calendar-FAT.js:6
+#: js/ResourceEditDialog.js:126
 msgid "Grants"
 msgstr "อนุญาต"
 
-#: js/EventDetailsPanel.js:28 js/Model.js:476 js/AttendeeGridPanel.js:585
-#: js/AttendeeGridPanel.js:603 js/AttendeeGridPanel.js:620
-#: js/AttendeeGridPanel.js:632 js/Calendar-FAT-debug.js:1022
-#: js/Calendar-FAT-debug.js:5441 js/Calendar-FAT-debug.js:9344
-#: js/Calendar-FAT-debug.js:9362 js/Calendar-FAT-debug.js:9379
-#: js/Calendar-FAT-debug.js:9391 js/Calendar-FAT.js:6
+#: js/EventDetailsPanel.js:28 js/Model.js:505 js/AttendeeGridPanel.js:572
+#: js/AttendeeGridPanel.js:590 js/AttendeeGridPanel.js:607
+#: js/AttendeeGridPanel.js:619
 msgid "No Information"
 msgstr "ไม่มีข้อมูล"
 
-#: js/EventDetailsPanel.js:66 js/Calendar-FAT-debug.js:5479
-#: js/Calendar-FAT.js:6
+#: js/EventDetailsPanel.js:68
 msgid "Unknown date"
 msgstr "ไม่ระบุวัน"
 
-#: js/EventDetailsPanel.js:69 js/Calendar-FAT-debug.js:5482
-#: js/Calendar-FAT.js:6
+#: js/EventDetailsPanel.js:71
 #, python-brace-format
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} นาฬิกา"
 
-#: js/EventDetailsPanel.js:98 js/Calendar-FAT-debug.js:1645
-#: js/Calendar-FAT-debug.js:5511 js/Calendar-FAT.js:6 js/EventUI.js:248
-msgid "recurring event"
-msgstr "เหตุการณ์ซ้ำซ้อน"
-
-#: js/EventDetailsPanel.js:100 js/Calendar-FAT-debug.js:1650
-#: js/Calendar-FAT-debug.js:5513 js/Calendar-FAT.js:6 js/EventUI.js:253
-msgid "recurring event exception"
-msgstr "ข้อยกเว้นเมื่อเหตุการณ์ซ้ำซ้อน"
-
-#: js/EventDetailsPanel.js:265 js/EventEditDialog.js:148 js/GridView.js:204
-#: js/Calendar-FAT-debug.js:4754 js/Calendar-FAT-debug.js:5678
-#: js/Calendar-FAT-debug.js:8260 js/Calendar-FAT.js:6 Preference.php:131
+#: js/EventDetailsPanel.js:267 js/EventEditDialog.js:147 js/GridView.js:206
+#: js/Printer/EventRecord.js:35 Preference.php:149
 msgid "End Time"
 msgstr "เวลาที่สิ้นสุด"
 
-#: js/EventDetailsPanel.js:275 js/EventEditDialog.js:203 js/GridView.js:224
-#: js/Calendar-FAT-debug.js:4774 js/Calendar-FAT-debug.js:5688
-#: js/Calendar-FAT-debug.js:8315 js/Calendar-FAT.js:6 Config.php:223
-#: Setup/Update/Release5.php:94
+#: js/EventDetailsPanel.js:277 js/EventEditDialog.js:202 js/GridView.js:226
+#: Config.php:230 Config.php:264 Setup/Update/Release5.php:94
 msgid "Tentative"
 msgstr "เบื้องต้น"
 
-#: js/EventEditDialog.js:98 js/Calendar-FAT-debug.js:8210 js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:97
 msgid "View"
 msgstr "ดู"
 
-#: js/EventEditDialog.js:114 js/Calendar-FAT-debug.js:8226
-#: js/Calendar-FAT.js:6
-msgid "Details"
-msgstr "รายละเอียด"
-
-#: js/EventEditDialog.js:142 js/GridView.js:210 js/SearchCombo.js:201
-#: js/Calendar-FAT-debug.js:534 js/Calendar-FAT-debug.js:4760
-#: js/Calendar-FAT-debug.js:8254 js/Calendar-FAT-debug.js:11851
-#: js/Calendar-FAT.js:6 js/Printer/Base.js:74
+#: js/EventEditDialog.js:141 js/GridView.js:212 js/SearchCombo.js:201
+#: js/Printer/Base.js:74
 msgid "whole day"
 msgstr "ทั้งวัน"
 
-#: js/EventEditDialog.js:165 js/Calendar-FAT-debug.js:8277
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:164
 msgid "Saved in"
 msgstr "ได้บันทึกใน"
 
-#: js/EventEditDialog.js:187 js/Calendar-FAT-debug.js:8299
-#: js/Calendar-FAT-debug.js:10191 js/Calendar-FAT.js:6
-#: js/PerspectiveCombo.js:84
+#: js/EventEditDialog.js:186 js/PerspectiveCombo.js:84
 msgid "non-blocking"
 msgstr "ไม่ได้บล็อค"
 
-#: js/EventEditDialog.js:217 js/GridView.js:183 js/Calendar-FAT-debug.js:4733
-#: js/Calendar-FAT-debug.js:8329 js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:216 js/GridView.js:185
 msgid "Private"
 msgstr "ส่วนตัว"
 
-#: js/EventEditDialog.js:280 js/Calendar-FAT-debug.js:8387
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:275
 msgid "Enter description"
 msgstr "ใส่ คำอธิบาย"
 
-#: js/EventEditDialog.js:318 js/Calendar-FAT-debug.js:8435
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:323
 msgid "Mute Notification"
 msgstr ""
 
-#: js/EventEditDialog.js:549 js/Calendar-FAT-debug.js:8666
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:330
+msgid "Print Event"
+msgstr ""
+
+#: js/EventEditDialog.js:560
 msgid "End date is not valid"
 msgstr "วันที่สิ้นสุดไม่ถูกต้อง"
 
-#: js/EventEditDialog.js:552 js/Calendar-FAT-debug.js:8669
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:563
 msgid "End date must be after start date"
 msgstr "วันที่สิ้นสุดต้องตามหลังวันที่เริ่มต้น"
 
-#: js/EventEditDialog.js:558 js/Calendar-FAT-debug.js:8675
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:569
 msgid "End time is not allowed to be after the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:594 js/Calendar-FAT-debug.js:8711
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:605
 msgid "Start date is not valid"
 msgstr "วันที่เริ่มต้นไม่ถูกต้อง"
 
-#: js/EventEditDialog.js:601 js/Calendar-FAT-debug.js:8718
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:612
 msgid "Start date is not allowed to be before the configured time."
 msgstr ""
 
-#: js/EventEditDialog.js:621 js/Calendar-FAT-debug.js:8738
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:632
 msgid "Errors"
 msgstr "ข้อผิดพลาด"
 
-#: js/Model.js:69 js/Model.js:464 js/SearchCombo.js:79
-#: js/Calendar-FAT-debug.js:412 js/Calendar-FAT-debug.js:616
-#: js/Calendar-FAT-debug.js:1010 js/Calendar-FAT.js:6
+#: js/Model.js:70 js/Model.js:493 js/SearchCombo.js:79
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "เหตุการณ์"
 
-#: js/Model.js:73 js/Calendar-FAT-debug.js:620
+#: js/Model.js:74
 msgid "Calendars"
 msgstr "ปฏิทิน"
 
-#: js/Model.js:290 js/Calendar-FAT-debug.js:836 js/Calendar-FAT.js:6
+#: js/Model.js:305
 msgid "Quick Search"
 msgstr "ค้นหาอย่างรวดเร็ว"
 
-#: js/Model.js:297 js/Calendar-FAT-debug.js:843 js/Calendar-FAT.js:6
+#: js/Model.js:312
 msgid "Attendee Status"
 msgstr "สถานะผู้เข้าร่วม"
 
-#: js/Model.js:306 js/Calendar-FAT-debug.js:852 js/Calendar-FAT.js:6
+#: js/Model.js:321
 msgid "Attendee Role"
 msgstr "หน้าที่ผู้เข้าร่วม"
 
-#: js/Model.js:322 js/Calendar-FAT-debug.js:868
+#: js/Model.js:351
 msgid "Event (as attendee)"
 msgstr "เหตุการณ์ (ในฐานะ ผู้เข้าร่วม)"
 
-#: js/Model.js:329 js/Calendar-FAT-debug.js:875
+#: js/Model.js:358
 msgid "Event (as organizer)"
 msgstr "เหตุการณ์ (ในฐานะ ผู้นัดหมาย)"
 
-#: js/Model.js:339 js/Calendar-FAT-debug.js:885
+#: js/Model.js:368
 msgid "Event attendee"
 msgstr "ผู้เข้าร่วมเหตุการณ์"
 
-#: js/Model.js:460 js/Calendar-FAT-debug.js:1006
+#: js/Model.js:489
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "ผู้เข้าร่วม"
 
-#: js/Model.js:688 js/AttendeeGridPanel.js:197 js/Calendar-FAT-debug.js:1234
-#: js/Calendar-FAT-debug.js:8956 js/Calendar-FAT.js:6
+#: js/Model.js:747 js/AttendeeGridPanel.js:197
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "แหล่งที่มา"
 
-#: js/Model.js:688 js/Calendar-FAT-debug.js:1234
-msgid "Resources"
-msgstr "แหล่งที่มา"
-
-#: js/GridView.js:191 js/Calendar-FAT-debug.js:4741 js/Calendar-FAT.js:6
+#: js/GridView.js:193
 msgid "Tags"
 msgstr "ป้ายกำกับ"
 
-#: js/AttendeeGridPanel.js:26 js/Calendar-FAT-debug.js:8785
+#: js/AttendeeGridPanel.js:26
 msgid "Click here to invite another attender..."
 msgstr "คลิ๊กที่นี่เพื่อเชิญผู้เข้าร่วมท่านอื่น..."
 
 #: js/AttendeeGridPanel.js:139 js/AddToEventPanel.js:78
-#: js/Calendar-FAT-debug.js:8898 js/Calendar-FAT-debug.js:12606
-#: js/Calendar-FAT.js:6
 msgid "Role"
 msgstr "หน้าที่"
 
-#: js/AttendeeGridPanel.js:153 js/Calendar-FAT-debug.js:8912
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:153
 msgid "This is the calendar where the attender has saved this event in"
 msgstr "นี่เป็นปฏิทินที่ผู้เข้าร่วมจัดเก็บเหตุการณ์นี้ไว้"
 
-#: js/AttendeeGridPanel.js:186 js/Calendar-FAT-debug.js:8945
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:186
 msgid "Type"
 msgstr "ประเภท"
 
-#: js/AttendeeGridPanel.js:187 js/Calendar-FAT-debug.js:8946
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:187
 msgid "Click icon to change"
 msgstr "กดที่เครื่องหมายเพื่อเปลี่ยน"
 
-#: js/AttendeeGridPanel.js:195 js/Calendar-FAT-debug.js:8954
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:195
 msgid "User"
 msgstr "ผู้ใช้"
 
-#: js/AttendeeGridPanel.js:196 js/Calendar-FAT-debug.js:8955
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:196
 msgid "Group"
 msgstr "กลุ่ม"
 
-#: js/AttendeeGridPanel.js:198 js/Calendar-FAT-debug.js:8957
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:198
 msgid "Member of group"
 msgstr "สมาชิกของกลุ่ม"
 
-#: js/AttendeeGridPanel.js:410 js/Calendar-FAT-debug.js:9169
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:409
 msgid "Remove Attender"
 msgstr "เอาผู้เข้าร่วมออก"
 
-#: js/AttendeeGridPanel.js:423 js/Calendar-FAT-debug.js:9182
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:422
 msgid "Compose email"
 msgstr "เขียนอีเมล"
 
-#: js/AttendeeGridPanel.js:590 js/Calendar-FAT-debug.js:9349
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:577
 msgid "(as a group member)"
 msgstr "(ในฐานะสมาชิกกลุ่ม)"
 
-#: js/AttendeeGridPanel.js:681 js/Calendar-FAT-debug.js:9440
-#: js/Calendar-FAT.js:6
+#: js/AttendeeGridPanel.js:668
 msgid "External Attendee"
 msgstr "ผู้เข้าร่วมจากภายนอก"
 
-#: js/SearchCombo.js:70 js/Calendar-FAT-debug.js:403 js/Calendar-FAT.js:6
+#: js/SearchCombo.js:70
 msgid "no events found"
 msgstr "ไม่พบเหตุการณ์"
 
-#: js/SearchCombo.js:71 js/Calendar-FAT-debug.js:404 js/Calendar-FAT.js:6
+#: js/SearchCombo.js:71
 msgid "Searching..."
 msgstr "กำลังค้นหา"
 
-#: js/SearchCombo.js:80 js/Calendar-FAT-debug.js:413 js/Calendar-FAT.js:6
+#: js/SearchCombo.js:80
 msgid "Search Event"
 msgstr "ค้นหาเหตุการณ์"
 
-#: js/EventContextAttendeesItem.js:63 js/Calendar-FAT-debug.js:7782
-#: js/Calendar-FAT.js:6
+#: js/EventContextAttendeesItem.js:63
 msgid "Additional Attendees ..."
 msgstr ""
 
-#: js/EventContextAttendeesItem.js:120 js/Calendar-FAT-debug.js:7839
-#: js/Calendar-FAT.js:6
+#: js/EventContextAttendeesItem.js:120
 msgid "Cancel"
 msgstr ""
 
-#: js/EventContextAttendeesItem.js:126 js/Calendar-FAT-debug.js:7845
-#: js/Calendar-FAT.js:6
+#: js/EventContextAttendeesItem.js:126
 msgid "Ok"
 msgstr ""
 
-#: js/WestPanel.js:32 js/Calendar-FAT-debug.js:7933 js/Calendar-FAT.js:6
+#: js/WestPanel.js:32
 msgid "Mini Calendar"
 msgstr "ปฏิทินย่อ"
 
-#: js/AddToEventPanel.js:35 js/Calendar-FAT-debug.js:12563
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:35
 msgid "Please choose the Event to add the contacts to"
 msgstr "กรุณาเลือกเหตุการณ์เพื่อเพิ่มการติดต่อ"
 
-#: js/AddToEventPanel.js:79 js/Calendar-FAT-debug.js:12607
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:79
 msgid "Select Role"
 msgstr "เลือก หน้าที่"
 
-#: js/AddToEventPanel.js:89 js/Calendar-FAT-debug.js:12617
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:89
 msgid "Select Status"
 msgstr "เลือก สถานะ"
 
-#: js/AddToEventPanel.js:109 js/Calendar-FAT-debug.js:12637
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:109
 #, python-brace-format
 msgid "Adding {0} Attendee to event"
 msgstr "กำลังเพิ่มผู้เข้าร่วม {0} คนในเหตุการณ์นี้"
 
-#: js/Calendar-FAT-debug.js:1638 js/Calendar-FAT.js:6 js/EventUI.js:241
-msgid "private classification"
-msgstr "การแยกประเภทส่วนบุคคล"
-
-#: js/Calendar-FAT-debug.js:1659 js/Calendar-FAT.js:6 js/EventUI.js:262
-msgid "has alarm"
-msgstr "มีการแจ้งเตือน"
-
-#: js/Calendar-FAT-debug.js:1666 js/Calendar-FAT.js:6 js/EventUI.js:269
-msgid "has attachments"
-msgstr "มีสิ่งที่แนบมาด้วย"
-
-#: js/Calendar-FAT-debug.js:2076 js/DaysView.js:120
+#: js/DaysView.js:128
 #, python-brace-format
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, ที่ {1} จาก {2}"
 
-#: js/Calendar-FAT-debug.js:2724 js/Calendar-FAT.js:6 js/DaysView.js:768
+#: js/DaysView.js:798
 msgid "The summary must not be longer than 255 characters."
 msgstr "ข้อสรุปต้องไม่มากไปกว่า 255 ตัวอักษร"
 
-#: js/Calendar-FAT-debug.js:2726 js/Calendar-FAT.js:6 js/DaysView.js:770
+#: js/DaysView.js:800
 msgid "The summary must have at least 1 character."
 msgstr "ข้อสรุปต้องมีอย่างน้อยที่สุด 1 ตัวอักษร"
 
-#: js/Calendar-FAT-debug.js:2763 js/Calendar-FAT.js:6 js/DaysView.js:807
+#: js/DaysView.js:837
 msgid "Summary too Long"
 msgstr "ข้อสรุปยาวเกินไป"
 
-#: js/Calendar-FAT-debug.js:2773 js/Calendar-FAT.js:6 js/DaysView.js:817
+#: js/DaysView.js:847
 msgid "Summary too Short"
 msgstr "ข้อสรุปสั้นเกินไป"
 
-#: js/Calendar-FAT-debug.js:5258 js/Calendar-FAT-debug.js:6088
-#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:279
-#: js/PagingToolbar.js:300
-msgid "Week"
-msgstr "สัปดาห์"
+#: js/EventContextTagsItem.js:63
+msgid "Additional Tags ..."
+msgstr ""
 
-#: js/Calendar-FAT-debug.js:5837 js/MainScreenCenterPanel.js:28
+#: js/PerspectiveCombo.js:110
+msgid "Displayed in"
+msgstr "ได้แสดงใน"
+
+#: js/Printer/DaysView.js:120
+#, python-brace-format
+msgid "Week {0} :"
+msgstr "สัปดาห์ที่ {0}"
+
+#: js/MainScreenCenterPanel.js:28
 msgid "Loading events, please wait..."
 msgstr "กำลังโหลดเหตุการณ์ กรุณารอสักครู่"
 
-#: js/Calendar-FAT-debug.js:5961 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:152
 msgid "Cut event"
 msgstr ""
 
-#: js/Calendar-FAT-debug.js:5968 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:159
 msgid "Copy Event to clipboard"
 msgstr ""
 
-#: js/Calendar-FAT-debug.js:5975 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:166
 msgid "Stop cut / copy & paste"
 msgstr ""
 
-#: js/Calendar-FAT-debug.js:5996 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:187
 msgid "Print Page"
 msgstr "พิมพ์หน้า"
 
-#: js/Calendar-FAT-debug.js:6005 js/Calendar-FAT-debug.js:6069
-#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:196
-#: js/MainScreenCenterPanel.js:260
+#: js/MainScreenCenterPanel.js:196 js/MainScreenCenterPanel.js:230
 msgid "Grid"
 msgstr "ขอบ"
 
-#: js/Calendar-FAT-debug.js:6009 js/Calendar-FAT-debug.js:6054
-#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:200
-#: js/MainScreenCenterPanel.js:245
+#: js/MainScreenCenterPanel.js:200 js/MainScreenCenterPanel.js:215
 msgid "Sheet"
 msgstr "แผ่น"
 
-#: js/Calendar-FAT-debug.js:6022 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:213
-msgid "Export Events"
-msgstr ""
-
-#: js/Calendar-FAT-debug.js:6030 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:221
-msgid "Export as ODS"
-msgstr ""
-
-#: js/Calendar-FAT-debug.js:6037 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:228
-msgid "Export as ..."
-msgstr ""
-
-#: js/Calendar-FAT-debug.js:6079 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:270
+#: js/MainScreenCenterPanel.js:240
 msgid "Day"
 msgstr "วัน"
 
-#: js/Calendar-FAT-debug.js:6097 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:288
+#: js/MainScreenCenterPanel.js:249 js/PagingToolbar.js:300
+msgid "Week"
+msgstr "สัปดาห์"
+
+#: js/MainScreenCenterPanel.js:258
 msgid "Month"
 msgstr "เดือน"
 
-#: js/Calendar-FAT-debug.js:6107 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:307
+#: js/MainScreenCenterPanel.js:267 js/PagingToolbar.js:465
+msgid "Year"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:299
 msgid "Import Events"
 msgstr "นำเข้า เหตุการณ์"
 
-#: js/Calendar-FAT-debug.js:6179 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:381
+#: js/MainScreenCenterPanel.js:310
+msgid "Export Events"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:380
 #, python-brace-format
 msgid "Paste event \"{0}\""
 msgstr "วาง เหตุการณ์ \"{0}\""
 
-#: js/Calendar-FAT-debug.js:6496 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:696
+#: js/MainScreenCenterPanel.js:697
 msgid "Set my response"
 msgstr "ตั้งค่าการตอบสนองของฉัน"
 
-#: js/Calendar-FAT-debug.js:6525 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:725
+#: js/MainScreenCenterPanel.js:726
 #, python-brace-format
 msgid "Copy {0}"
 msgstr "คัดลอก {0}"
 
-#: js/Calendar-FAT-debug.js:6541 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:741
+#: js/MainScreenCenterPanel.js:742
 msgid "Updating event in the past"
 msgstr "ปรับปรุงเหตุการณ์ที่ผ่านมา"
 
-#: js/Calendar-FAT-debug.js:6542 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:742
+#: js/MainScreenCenterPanel.js:743
 msgid "Update this event"
 msgstr "ปรับปรุงเหตุการณ์นี้"
 
-#: js/Calendar-FAT-debug.js:6543 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:743
+#: js/MainScreenCenterPanel.js:744
 msgid "Do not update this event"
 msgstr "ไม่ต้องปรังปรุงเหตุการณ์นี้"
 
-#: js/Calendar-FAT-debug.js:6547 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:747
+#: js/MainScreenCenterPanel.js:748
 msgid "Creating event in the past"
 msgstr "กำลังสร้างเหตุการณ์ที่ผ่านมา"
 
-#: js/Calendar-FAT-debug.js:6548 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:748
+#: js/MainScreenCenterPanel.js:749
 msgid "Create this event"
 msgstr "สร้างเหตุการณ์นี้"
 
-#: js/Calendar-FAT-debug.js:6549 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:749
+#: js/MainScreenCenterPanel.js:750
 msgid "Do not create this event"
 msgstr "ไม่ต้องสร้างเหตุการณ์นี้"
 
-#: js/Calendar-FAT-debug.js:6679 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:879
+#: js/MainScreenCenterPanel.js:880
 msgid "Update this event only"
 msgstr "ปรับปรุงเหตุการณ์นี้เท่านั้น"
 
-#: js/Calendar-FAT-debug.js:6680 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:880
+#: js/MainScreenCenterPanel.js:881
 msgid "Update this and all future events"
 msgstr "ปรับปรุงเหตุการณ์นี้และทุก ๆ เหตุการณ์ในอนาคต"
 
-#: js/Calendar-FAT-debug.js:6683 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:883
+#: js/MainScreenCenterPanel.js:884
 msgid "Update whole series"
 msgstr "ปรับปรุงทุกชุดทั้งหมด"
 
-#: js/Calendar-FAT-debug.js:6684 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:884
+#: js/MainScreenCenterPanel.js:885
 msgid "Update nothing"
 msgstr "ไม่ได้ปรับปรุงใด ๆ"
 
-#: js/Calendar-FAT-debug.js:6687 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:887
+#: js/MainScreenCenterPanel.js:888
 msgid "Update Event"
 msgstr "ปรับปรุงเหตุการณ์"
 
-#: js/Calendar-FAT-debug.js:6832 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1032
+#: js/MainScreenCenterPanel.js:1033
 msgid "Please Change Selection"
 msgstr "กรุณาเปลี่ยนที่ทำการเลือกไว้"
 
-#: js/Calendar-FAT-debug.js:6833 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1033
+#: js/MainScreenCenterPanel.js:1034
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
 msgstr "สิ่งที่คุณเลือกมีเหตุการณ์ที่ซ้ำซ้อนกันอยู่ เหตุการณ์ที่ซ้ำซ้อนกันจะต้องลบออกทีละรายการ\n "
 
-#: js/Calendar-FAT-debug.js:6846 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1046
+#: js/MainScreenCenterPanel.js:1047
 msgid "Delete Event"
 msgstr "ลบเหตุการณ์"
 
-#: js/Calendar-FAT-debug.js:6850 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1050
+#: js/MainScreenCenterPanel.js:1051
 msgid "Delete this event only"
 msgstr "ลบเหตุการณ์นี้เท่านั้น"
 
-#: js/Calendar-FAT-debug.js:6851 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1051
+#: js/MainScreenCenterPanel.js:1052
 msgid "Delete this and all future events"
 msgstr "ลบเหตุการณ์นี้และทุก ๆ เหตุการณ์ในอนาคต"
 
-#: js/Calendar-FAT-debug.js:6852 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1052
+#: js/MainScreenCenterPanel.js:1053
 msgid "Delete whole series"
 msgstr "ลบหมดทุกชุด"
 
-#: js/Calendar-FAT-debug.js:6853 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1053
+#: js/MainScreenCenterPanel.js:1054
 msgid "Delete nothing"
 msgstr "ไม่ได้ลบสิ่งใด"
 
-#: js/Calendar-FAT-debug.js:6904 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1104
+#: js/MainScreenCenterPanel.js:1105
 #, python-brace-format
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "คุณแน่ใจว่าคุณต้องการลบ {0} เหตุการณ์ที่เลือก?"
 
-#: js/Calendar-FAT-debug.js:7166 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1366
+#: js/MainScreenCenterPanel.js:1402
 msgid "Could not Print"
 msgstr "ไม่สามารถพิมพ์ออกได้"
 
-#: js/Calendar-FAT-debug.js:7166 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1366
+#: js/MainScreenCenterPanel.js:1402
 msgid "Sorry, your current view does not support printing."
 msgstr "ขอโทษที่การดู ณ ปัจจุบันของคุณไม่สนับสนุนการพิมพ์"
 
-#: js/Calendar-FAT-debug.js:7319 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1519
+#: js/MainScreenCenterPanel.js:1549 Config.php:265
+msgid "Unavailable"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:1561
 msgid "Scheduling Conflict"
 msgstr "จัดแจงข้อขัดแย้ง"
 
-#: js/Calendar-FAT-debug.js:7321 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1521
+#: js/MainScreenCenterPanel.js:1563
 msgid "The following attendee are busy at the requested time:"
 msgstr "ผู้เข้าร่วมรายต่อไปนี้ไม่ว่าง ณ เวลาที่กำหนด"
 
-#: js/Calendar-FAT-debug.js:7325 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1525
+#: js/MainScreenCenterPanel.js:1567
 msgid "Ignore Conflict"
 msgstr "เพิกเฉยข้อขัดแย้ง"
 
-#: js/Calendar-FAT-debug.js:7326 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1526
+#: js/MainScreenCenterPanel.js:1568
 msgid "Edit Event"
 msgstr "จัดการเหตุการณ์"
 
-#: js/Calendar-FAT-debug.js:7327 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:1527
+#: js/MainScreenCenterPanel.js:1569
 msgid "Cancel this action"
 msgstr "ยกเลิกการกระทำนี้"
 
-#: js/Calendar-FAT-debug.js:7635 js/Calendar-FAT.js:6
-#: js/EventContextTagsItem.js:63
-msgid "Additional Tags ..."
-msgstr ""
-
-#: js/Calendar-FAT-debug.js:9500 js/AttendeeFilterGrid.js:28
+#: js/AttendeeFilterGrid.js:28
 msgid "Add attendee"
 msgstr "เพิ่มผู้เข้าร่วม"
 
-#: js/Calendar-FAT-debug.js:9519 js/Calendar-FAT.js:6
 #: js/AttendeeFilterGrid.js:47
 msgid "Sort Attendee"
 msgstr "แยกประเภทผู้เข้าร่วม"
 
-#: js/Calendar-FAT-debug.js:9532 js/Calendar-FAT.js:6
 #: js/AttendeeFilterGrid.js:60
 msgid "Check to filter for this attendee"
 msgstr "ทำสัญลักษณ์เพื่อกรองให้ผู้เข้าร่วมคนนี้"
 
-#: js/Calendar-FAT-debug.js:10217 js/Calendar-FAT.js:6
-#: js/PerspectiveCombo.js:110
-msgid "Displayed in"
-msgstr "ได้แสดงใน"
-
-#: js/Calendar-FAT-debug.js:12018 js/Calendar-FAT.js:6
-#: js/Printer/DaysView.js:108
-#, python-brace-format
-msgid "Week {0} :"
-msgstr "สัปดาห์ที่ {0}"
-
-#: js/MainScreenCenterPanel.js:297 js/PagingToolbar.js:465
-msgid "Year"
-msgstr ""
-
-#: Controller/EventNotifications.php:401
+#: Controller/EventNotifications.php:438
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "แจ้งเตือน เหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
-#: Controller/EventNotifications.php:404
+#: Controller/EventNotifications.php:441
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "คำเชิญเข้าร่วมเหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
-#: Controller/EventNotifications.php:413
+#: Controller/EventNotifications.php:450
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:421
+#: Controller/EventNotifications.php:458
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถูกยกเลิก"
 
-#: Controller/EventNotifications.php:429
+#: Controller/EventNotifications.php:466
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "เหตุการณ์ \"%1$s\" ได้เปลี่ยนจาก %2$s ไปเป็น %3$s"
 
-#: Controller/EventNotifications.php:436
+#: Controller/EventNotifications.php:473
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "เหตุการณ์ \"%1$s\" เมื่อ %2$s ได้ถูกปรับปรุง"
 
-#: Controller/EventNotifications.php:447
+#: Controller/EventNotifications.php:484
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s ได้ยอมรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:451
+#: Controller/EventNotifications.php:488
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s ได้ปฏิเสธเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:455
+#: Controller/EventNotifications.php:492
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "การตอบรับที่ยังไม่แน่นอนจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:459
+#: Controller/EventNotifications.php:496
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "ไม่มีการตอบรับจาก %1$s สำหรับเหตุการณ์ \"%2$s\" เมื่อ %3$s"
 
-#: Controller/EventNotifications.php:463
+#: Controller/EventNotifications.php:500
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "มีการเปลี่ยนแปลงเกี่ยวกับผู้เข้าร่วมสำหรับเหตุการณ์ \"%1$s\" เมื่อ %2$s"
 
-#: Preference.php:41
+#: Controller/EventNotifications.php:516
+msgid "Resource Management"
+msgstr ""
+
+#: Preference.php:46
 msgid "All my events"
 msgstr "เหตุการณ์ทั้งหมดของฉัน"
 
-#: Preference.php:128
+#: Preference.php:146
 msgid "Position on the left time axis, day and week view should start with"
 msgstr "เนื่องด้วยตำแหน่งบนเส้นเวลาที่เหลือ การดูแบบวันและแบบสัปดาห์ควรเริ่มต้นด้วย"
 
-#: Preference.php:132
+#: Preference.php:150
 msgid "Position on the left time axis, day and week view should end with"
 msgstr ""
 
-#: Preference.php:135
+#: Preference.php:153
 msgid "Default Start Time"
 msgstr ""
 
-#: Preference.php:136
+#: Preference.php:154
 msgid ""
 "Scroll position on the left time axis, day and week view should start with"
 msgstr ""
 
-#: Preference.php:139
+#: Preference.php:157
+msgid "Visible Time"
+msgstr ""
+
+#: Preference.php:158
+msgid "Time to be displayed at once"
+msgstr ""
+
+#: Preference.php:161
 msgid "Default Calendar"
 msgstr "ปฏิทินหลัก"
 
-#: Preference.php:140
+#: Preference.php:162
 msgid "The default calendar for invitations and new events"
 msgstr "ปฏิทินหลักสำหรับคำเชิญและเหตุการณ์ใหม่"
 
-#: Preference.php:143
+#: Preference.php:165
 msgid "Default Favorite"
 msgstr "ค่าที่ชอบหลัก"
 
-#: Preference.php:144
+#: Preference.php:166
 msgid "The default favorite which is loaded on calendar startup"
 msgstr "ค่าที่ชอบหลักจะโหลดทันทีเมื่อเริ่มเปิดปฏิทิน"
 
-#: Preference.php:147
+#: Preference.php:169
 msgid "Get Notification Emails"
 msgstr "ได้อีเมลแจ้งเตือน"
 
-#: Preference.php:148
+#: Preference.php:170
 msgid ""
 "The level of actions you want to be notified about. Please note that "
 "organizers will get notifications for all updates including attendee answers"
 " unless this preference is set to \"Never\""
 msgstr "ระดับของการกระทำที่คุณต้องการรับทราบ พึงระลึกว่าผู้ทำการนัดหมายจะได้รับการแจ้งเตือนเกี่ยวกับทุก ๆ อัพเดท รวมถึงทุก ๆ คำตอบของผู้เข้า นอกเสียจากว่าจะมีตั้งค่าเป็น \"ไม่เลย\""
 
-#: Preference.php:151
+#: Preference.php:173
 msgid "Send Notifications Emails of own Actions"
 msgstr "ส่งอีเมลแจ้งเตือนของการกระทำของตัวเอง"
 
-#: Preference.php:152
+#: Preference.php:174
 msgid "Get notifications emails for actions you did yourself"
 msgstr "ได้อีเมลแจ้งเตือนสำหรับสิ่งที่คุณได้ทำด้วยตัวคุณเอง"
 
-#: Preference.php:155
+#: Preference.php:177
+msgid "Send Alarm Notifications Emails"
+msgstr ""
+
+#: Preference.php:178
+msgid "Get event alarms via email"
+msgstr ""
+
+#: Preference.php:181
 msgid "Enable Standard Alarm"
 msgstr "ตั้งการเตือนมาตรฐานได้"
 
-#: Preference.php:156
+#: Preference.php:182
 msgid "New events get a standard alarm as defined below"
 msgstr "เหตุการณ์ใหม่ ๆ จะได้รับการเตือนที่ตั้งเป็นมาตรฐานได้ดังที่กำหนดไว้เบื้องล่างนี้"
 
-#: Preference.php:159
+#: Preference.php:185
 msgid "Standard Alarm Time"
 msgstr "เวลาเตือนมาตรฐาน"
 
-#: Preference.php:160
+#: Preference.php:186
 msgid "Minutes before the event starts"
 msgstr "จำนวนนาทีก่อนเหตุการณ์จะเริ่ม"
 
-#: Preference.php:163
+#: Preference.php:189
 msgid "Default Attendee Strategy"
 msgstr ""
 
-#: Preference.php:164
+#: Preference.php:190
 msgid "Default Attendee Strategy for new events"
 msgstr ""
 
-#: Preference.php:167
+#: Preference.php:193
 msgid "Time Increment"
 msgstr ""
 
-#: Preference.php:168
+#: Preference.php:194
 msgid "Increment of event time steps"
 msgstr ""
 
-#: Preference.php:171
+#: Preference.php:197
 msgid "Default set Events to privat"
 msgstr ""
 
-#: Preference.php:172
+#: Preference.php:198
 msgid "If enabled every created event is always privat."
 msgstr ""
 
-#: Preference.php:251
+#: Preference.php:201
+msgid "First Day of Week"
+msgstr ""
+
+#: Preference.php:202
+msgid "On what day the week should be starting"
+msgstr ""
+
+#: Preference.php:285
 msgid "Never"
 msgstr "ไม่เลย"
 
-#: Preference.php:251
+#: Preference.php:285
 msgid "On invitation and cancellation only"
 msgstr "เฉพาะเรื่องคำเชิญและการยกเลิกเท่านั้น"
 
-#: Preference.php:251
+#: Preference.php:285
 msgid "On time changes"
 msgstr "ตามการเปลี่ยนแปลงตามกำหนดการ"
 
-#: Preference.php:251
+#: Preference.php:285
 msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Preference.php:251
+#: Preference.php:285
 msgid "On attendee responses too"
 msgstr "ตามที่ผู้เข้าร่วมตอบรับด้วย"
 
-#: Config.php:148
+#: Config.php:155
 msgid "Fixed Calendars"
 msgstr "ปฏิทินหลัก"
 
-#: Config.php:150
+#: Config.php:157
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
 msgstr ""
 
-#: Config.php:157
+#: Config.php:164
 msgid "Crop Days"
 msgstr ""
 
-#: Config.php:159 Config.php:183
+#: Config.php:166 Config.php:190
 msgid "Crop calendar view configured start and endtime."
 msgstr ""
 
-#: Config.php:169
+#: Config.php:176
 msgid "Crop Days Limit Override"
 msgstr ""
 
-#: Config.php:171
+#: Config.php:178
 msgid "Allow events outside start and endtime."
 msgstr ""
 
-#: Config.php:181
+#: Config.php:188
 msgid "Week View Mouse Wheel Increment"
 msgstr ""
 
-#: Config.php:193 Config.php:195
+#: Config.php:200 Config.php:202
 msgid "Default View for Events"
 msgstr ""
 
-#: Config.php:210
+#: Config.php:217
 msgid "Attendee Status Available"
 msgstr "สถานะผู้เข้าร่วม ว่าง"
 
-#: Config.php:212
+#: Config.php:219
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:220 Setup/Update/Release5.php:91
+#: Config.php:227 Setup/Update/Release5.php:91
 msgid "No response"
 msgstr "ไม่มีการตอบรับ"
 
-#: Config.php:221 Setup/Update/Release5.php:92
+#: Config.php:228 Setup/Update/Release5.php:92
 msgid "Accepted"
 msgstr "ได้ยอมรับแล้ว"
 
-#: Config.php:222 Setup/Update/Release5.php:93
+#: Config.php:229 Setup/Update/Release5.php:93
 msgid "Declined"
 msgstr "ได้ปฏิเสธแล้ว"
 
-#: Config.php:229
+#: Config.php:236
 msgid "Attendee Roles Available"
 msgstr "หน้าที่ของผู้เข้าร่วม ว่าง"
 
-#: Config.php:231
+#: Config.php:238
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or synchronisation."
 msgstr ""
 
-#: Config.php:239 Setup/Update/Release5.php:77
+#: Config.php:246 Setup/Update/Release5.php:77
 msgid "Required"
 msgstr "ได้ต้องการ"
 
-#: Config.php:240 Setup/Update/Release5.php:78
+#: Config.php:247 Setup/Update/Release5.php:78
 msgid "Optional"
 msgstr "ตามแต่จะเลือก"
 
-#: Config.php:246
+#: Config.php:253
+msgid "Free/Busy Types Available"
+msgstr ""
+
+#: Config.php:255
+msgid ""
+"Possible free/busy types. Please note that additional free/busy types might "
+"impact other calendar systems on export or synchronisation."
+msgstr ""
+
+#: Config.php:262
+msgid "Free"
+msgstr ""
+
+#: Config.php:263
+msgid "Busy"
+msgstr ""
+
+#: Config.php:271
 msgid "Filter timeslot for CalDAV events"
 msgstr "ตัวกรองช่วงเวลาสำหรับเหตุการณ์ CalDAV"
 
-#: Config.php:248
+#: Config.php:273
 msgid ""
 "For how long in the past (in months) the events should be synchronized."
 msgstr "ระยะเวลานานแค่ไหนในอดีต (เป็นเดือน) ที่เหตุการณ์ควรจะได้รับการอัพเดท"
 
-#: Config.php:257
+#: Config.php:282
 msgid "Timeslot for event notifications"
 msgstr ""
 
-#: Config.php:259
+#: Config.php:284
 msgid ""
 "For how long in the past (in weeks) event notifications should be sent."
 msgstr ""
 
-#: Config.php:268
+#: Config.php:293
 msgid "Default filter period (from) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:270
+#: Config.php:295
 msgid "For how long in the past (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:279
+#: Config.php:304
 msgid "Default filter period (until) for events fetched via JSON API"
 msgstr ""
 
-#: Config.php:281
+#: Config.php:306
 msgid "For how long in the future (in months) the events should be fetched."
 msgstr ""
 
-#: Config.php:290 Config.php:292
+#: Config.php:315 Config.php:317
 msgid "Disable iMIP for external organizers"
 msgstr ""
 
-#: Config.php:301
+#: Config.php:326
 msgid "(CalDAV) Skip double events from personal or shared calendar"
 msgstr ""
 
-#: Config.php:303
+#: Config.php:328
 msgid ""
 "(CalDAV) Skip double events from personal or shared calendar (\"personal\" >"
 " Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
 msgstr ""
 
-#: Config.php:312
+#: Config.php:337
 msgid ""
 "Send notifications to every user with edit permissions of the added "
 "resources"
 msgstr ""
 
-#: Config.php:322
+#: Config.php:347
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:324
+#: Config.php:349
 msgid "Enabled Features in Calendar Application."
 msgstr ""
 
-#: Config.php:331
+#: Config.php:356
 msgid "Calendar Split View"
 msgstr ""
 
-#: Config.php:332
+#: Config.php:357
 msgid "Split day and week views by attendee"
 msgstr ""
 
-#: Config.php:335
+#: Config.php:360
 msgid "Calendar Year View"
 msgstr ""
 
-#: Config.php:336
+#: Config.php:361
 msgid "Adds year view to Calendar"
 msgstr ""
 
-#: Config.php:339
+#: Config.php:364
 msgid "Calendar Extended Context Menu Actions"
 msgstr ""
 
-#: Config.php:340
+#: Config.php:365
 msgid "Adds extended actions to event context menus"
 msgstr ""
 
-#: Config.php:343
+#: Config.php:368
 msgid "Color Events By"
 msgstr ""
 
-#: Config.php:344
+#: Config.php:369
 msgid "Choose event color by different criteria"
 msgstr ""
 

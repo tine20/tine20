@@ -52,8 +52,9 @@ Tine.clientVersion.releaseTime      = 'none';
  * @type String
  */
 Tine.title = 'Tine 2.0';
-Tine.weburl = 'https://www.tine20.org/en/the-project/contribute.html';
-Tine.helpUrl = 'http://wiki.tine20.org/Main_Page';
+Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
+Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
+Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
  * quiet logging in release mode
@@ -119,6 +120,41 @@ Tine.Tinebase.tineInit = {
             e.browserEvent.dataTransfer.dropEffect = 'none';
         }, this);
     },
+
+    checkWebpack: function() {
+        if (! window.postal) {
+            var wikiurl = 'https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack';
+            Ext.Msg.alert('Webpack-dev-server missing?',
+                'You need to install and run webpack-dev-server! <a target="_blank" href="' + wikiurl + '">Installation instructions in the Wiki</a>.', function() {
+                Tine.Tinebase.common.reload();
+            });
+        }
+    },
+
+    initPostal: function () {
+        if (! window.postal) return;
+
+        var config = postal.fedx.transports.xwindow.configure();
+        postal.fedx.transports.xwindow.configure( {
+            localStoragePrefix: Tine.Tinebase.tineInit.lsPrefix + '.' + config.localStoragePrefix
+        } );
+        postal.instanceId('xwindow-' + _.random(0,1000));
+        postal.configuration.promise.createDeferred = function() {
+            return Promise.defer();
+        };
+        postal.configuration.promise.getPromise = function(dfd) {
+            return dfd.promise;
+        };
+        postal.fedx.addFilter( [
+            { channel: 'thirdparty', topic: '#', direction: 'both' },
+            //{ channel: 'postal.request-response', topic: '#', direction: 'both' }
+        ] );
+        postal.fedx.signalReady();
+
+        postal.addWireTap( function( d, e ) {
+            Tine.log.debug( "ID: " + postal.instanceId() + " " + JSON.stringify( e, null, 4 ) );
+        } );
+    },
     
     initDebugConsole: function () {
         var map = new Ext.KeyMap(Ext.getDoc(), [{
@@ -127,8 +163,7 @@ Tine.Tinebase.tineInit = {
             fn: Tine.Tinebase.common.showDebugConsole
         }]);
     },
-    
-    
+
     /**
      * Each window has exactly one viewport containing a card layout in its lifetime
      * The default card is a splash screen.
@@ -647,7 +682,9 @@ Tine.Tinebase.tineInit = {
      */
     clearRegistry: function() {
         Tine.log.info('tineInit::clearRegistry');
-        store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
+        if (Ext.isFunction(store.namespace)) {
+            store.namespace(Tine.Tinebase.tineInit.lsPrefix).clearAll();
+        }
     },
 
     /**
@@ -767,17 +804,22 @@ Tine.Tinebase.tineInit = {
      */
     initLocale: function () {
         //Locale.setlocale(Locale.LC_ALL, '');
-        Tine.Tinebase.translation = new Locale.Gettext();
-        Tine.Tinebase.translation.textdomain('Tinebase');
+        window.i18n = new Locale.Gettext();
+        window.i18n.textdomain('Tinebase');
+
         window._ = function (msgid) {
-            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
+            Tine.log.warn('_() is deprecated, please use i18n._ instead' + new Error().stack);
+            return window.i18n.dgettext('Tinebase', msgid);
         };
+
         Tine.Tinebase.prototypeTranslation();
     }
 };
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.checkWebpack();
+    Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();

@@ -241,8 +241,8 @@ Ext.ux.PopupWindow.close = function(win) {
     //        }
     //
     //        win.Ext.MessageBox.alert(
-    //            _('Window can be closed'),
-    //            String.format(_('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+    //            i18n._('Window can be closed'),
+    //            String.format(i18n._('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
     //            function() {
     //                win.close();
     //            }

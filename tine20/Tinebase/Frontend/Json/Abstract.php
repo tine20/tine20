@@ -189,7 +189,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
-        $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
+        $decodedPagination = $this->_prepareParameter($_paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
         $filter = $this->_decodeFilter($_filter, $_filterModel);
         
@@ -217,7 +217,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = FALSE)
     {
         $filterModel = $this->_getPluginForFilterModel($_filterModel);
-        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
+        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
         if (is_array($decodedFilter)) {
             $filter = new $filterModel(array());
@@ -308,7 +308,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
         $this->_longRunningRequest();
-        $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
+        $decodedData   = $this->_prepareParameter($_data);
         $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
         
         $result = $_controller->updateMultiple($filter, $decodedData);
@@ -371,7 +371,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     protected function _delete($_ids, Tinebase_Controller_Record_Interface $_controller, $additionalArguments = array())
     {
         if (! is_array($_ids) && strpos($_ids, '[') !== false) {
-            $_ids = Zend_Json::decode($_ids);
+            $_ids = $this->_prepareParameter($_ids);
         }
         $args = array_merge(array($_ids), $additionalArguments);
         call_user_func_array(array($_controller, 'delete'), $args);
@@ -432,6 +432,20 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return array(
             'status'    => 'success'
         );
+    }
+
+    /**
+     * returns function parameter as object, decode Json if needed
+     *
+     * Prepare function input to be an array. Input maybe already an array or (empty) text.
+     * Starting PHP 7 Zend_Json::decode can't handle empty strings.
+     *
+     * @param  mixed $_dataAsArrayOrJson
+     * @return array
+     */
+    protected function _prepareParameter($_dataAsArrayOrJson)
+    {
+        return Tinebase_Helper::jsonDecode($_dataAsArrayOrJson);
     }
 
     /**
@@ -605,11 +619,46 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $formerFilter
      * @param string $plugin
      */
-    public static function addFilterModelPlugin($formerFilter, $plugin) {
+    public static function addFilterModelPlugin($formerFilter, $plugin)
+    {
         if (class_exists($plugin)) {
             self::$_filterPlugins[$formerFilter] = $plugin;
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__."::".__LINE__.":: Filter model plugin \"$plugin\" doesn't exists");
         }
+    }
+
+    /**
+     * magic method for json api
+     *
+     * @param string $method
+     * @param array  $args
+     */
+    public function __call($method, array $args)
+    {
+        // provides api for default application methods
+        if (preg_match('/^(get|save|search|delete)([a-z0-9]+)/i', $method, $matches)) {
+            $apiMethod = $matches[1];
+            $model = in_array($apiMethod, array('search', 'delete')) ? substr($matches[2],0,-1) : $matches[2];
+            $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
+            switch ($apiMethod) {
+                case 'get':
+                    return $this->_get($args[0], $modelController);
+                    break;
+                case 'save':
+                    return $this->_save($args[0], $modelController, $model);
+                    break;
+                case 'search':
+                    $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
+                    break;
+                case 'delete':
+                    return $this->_delete($args[0], $modelController);
+                    break;
+            }
+        }
+
+        // call plugin method (see Tinebase_Pluggable_Abstract)
+        return parent::__call($method, $args);
     }
 }

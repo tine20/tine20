@@ -115,8 +115,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
-        
-        this.loadingText = _('Searching...');
+
+        this.emptyText = this.emptyText || i18n._('Search for records ...')
+
+        this.loadingText = i18n._('Searching...');
         
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
@@ -135,7 +137,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     initTemplate: function() {
         if (! this.tpl) {
-            this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
+            this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" ext:qtip="{[this.doubleEncode(values.description)]}">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
                 getTitle: (function(id) {
                     var record = this.getStore().getById(id),
                         title = record ? record.getTitle() : '&nbsp';
@@ -212,6 +214,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
         }
         this.store.baseParams.filter = filter;
+        this.tpl.lastQuery = qevent.query;
     },
     
     /**
@@ -290,7 +293,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             }
         }
         
-        var r = this.findRecord(this.valueField, value),
+        var r = (value !== "") ? this.findRecord(this.valueField, /* id = */ value) : null,
             text = value;
         
         if (r){
@@ -300,8 +303,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 // check if editDialog exists
                 if (this.editDialog && this.editDialog.record && r.getId() == this.editDialog.record.getId()) {
                     Ext.MessageBox.show({
-                        title: _('Failure'),
-                        msg: _('You tried to link a record with itself. This is not allowed!'),
+                        title: i18n._('Failure'),
+                        msg: i18n._('You tried to link a record with itself. This is not allowed!'),
                         buttons: Ext.MessageBox.OK,
                         icon: Ext.MessageBox.ERROR  
                     });

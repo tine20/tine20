@@ -126,7 +126,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'price_total' => 12.9,
                 'relations' => array(array(
                         'own_model' => 'Sales_Model_PurchaseInvoice',
-                        'own_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Sales_Model_Supplier',
                         'related_record' => $customerData,
                         'type' => 'SUPPLIER'

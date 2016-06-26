@@ -152,10 +152,11 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
      * get acls for a folder
      *
      * @param  string $box which folder to get the acls
+     * @param  bool $returnOwnerACL true if it will return owner's ACL
      * @return bool|array false if error, array with all users and the acls of this user for this folder.
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function getFolderAcls($box = 'INBOX'){
+    public function getFolderAcls($box = 'INBOX', $returnOwnerACL = FALSE){
 
         $this->sendRequest("GETACL", array($this->escapeString($box)), $tag);
 
@@ -172,6 +173,7 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 $writeacl = false;
                 $readacl = false;
                 $sendacl = false;
+                $administer = false;
 
                 if(stristr($result[$i+1],'w')){
                     $writeacl = true;
@@ -182,26 +184,38 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 if(stristr($result[$i+1],'p')){
                     $sendacl = true;
                 }
-                try{
-                if($this->_useUidAsLogin()){
-                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($result[$i])->toArray();
-                }else{
-                    $user = Tinebase_User::getInstance()->getFullUserByEmailAddress($result[$i])->toArray();
+                if (stristr($result[$i+1],'a')) {
+                    $administer = true;
                 }
-                $current = Tinebase_Core::getUser()->toArray();
+                try{
+                    if($this->_useUidAsLogin()){
+                        $user = Tinebase_User::getInstance()->getFullUserByLoginName($result[$i])->toArray();
+                    }else{
+                        $user = Tinebase_User::getInstance()->getFullUserByEmailAddress($result[$i])->toArray();
+                    }
+                    $current = Tinebase_Core::getUser()->toArray();
 
-                if($current['accountId'] == $user['accountId'])
-                    continue;
+                    if(!$returnOwnerACL && $current['accountId'] === $user['accountId']) {
+                        continue;
+                    }
 
-                $account_name = Array('accountId' => $user['accountId'],
-                                     'accountDisplayName' => $user['accountDisplayName'],
-                                     'accountFullName' => $user['accountFullName'],
-                                     'accountFirstName' => $user['accountFirstName'],
-                                     'accountLastName' => $user['accountLastName'],
-                                     'contact_id' => $user['contact_id']);
+                    $account_name = Array('accountId' => $user['accountId'],
+                                         'accountLoginName' => $user['accountLoginName'],
+                                         'accountDisplayName' => $user['accountDisplayName'],
+                                         'accountFullName' => $user['accountFullName'],
+                                         'accountFirstName' => $user['accountFirstName'],
+                                         'accountLastName' => $user['accountLastName'],
+                                         'contact_id' => $user['contact_id']);
 
 
-                $results[] = Array('account_name' => $account_name, 'account_id' => $user['accountLoginName'], 'readacl' => $readacl, 'writeacl' => $writeacl, 'sendacl' => $sendacl);
+                    $results[] = Array(
+                        'account_name' => $account_name,
+                        'account_id' => $user['accountLoginName'],
+                        'readacl' => $readacl,
+                        'writeacl' => $writeacl,
+                        'sendacl' => $sendacl,
+                        'administer' => $administer,
+                    );
                 }catch(Exception $e){
 
                 }
@@ -291,8 +305,8 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
     public function setFolderAcls($box, $acls)
     {
 
-        $folderList = $this->listMailbox('INBOX');
-        $currentAcls = $this->getFolderAcls('INBOX');
+        $folderList = $this->listMailbox($box);
+        $currentAcls = $this->getFolderAcls($box);
         $currentAcls = $currentAcls['results'];
 
         foreach($currentAcls as $index => $currentAcl){
@@ -320,7 +334,7 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                     $login = $tmpUser['accountEmailAddress'];
                 }
             }else{
-                $tmpUser =  Tinebase_User::getInstance()->getFullUserById($user[account_name]['accountId'])->toArray();
+                $tmpUser =  Tinebase_User::getInstance()->getFullUserById($user['account_name']['accountId'])->toArray();
                 if($this->_useUidAsLogin()){
                     $login = $tmpUser['accountLoginName'];
                 }else{

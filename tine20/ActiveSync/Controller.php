@@ -56,11 +56,14 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
      * reset sync for user
      *
      * @param mixed $user
-     * @param array $classesToReset
+     * @param array|string $classesToReset
      * @return boolean
      */
     public function resetSyncForUser($user, $classesToReset)
     {
+        if (is_string($classesToReset)) {
+            $classesToReset = array($classesToReset);
+        }
 
         if (! $user instanceof Tinebase_Model_User) {
             try {

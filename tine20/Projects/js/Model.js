@@ -39,7 +39,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     // ngettext('Project list', 'Project lists', n);
     containerName: 'Project list',
     containersName: 'Project lists'
-    // _('Project lists')
+    // i18n._('Project lists')
 });
 
 /**
@@ -52,8 +52,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
  */ 
 Tine.Projects.Model.Project.getDefaultData = function() {
     var app = Tine.Tinebase.appMgr.get('Projects');
-    var defaultsContainer = Tine.Projects.registry.get('defaultContainer');
-    
+
     return {
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         status: 'IN-PROCESS'
@@ -71,7 +70,7 @@ Tine.Projects.Model.Project.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Projects');
     
     return [ 
-        {label: _('Quick Search'),    field: 'query',       operators: ['contains']},
+        {label: i18n._('Quick Search'),    field: 'query',       operators: ['contains']},
         {label: app.i18n._('Title'),    field: 'title'},
         {label: app.i18n._('Number'),    field: 'number'},
         {label: app.i18n._('Description'),    field: 'description'},
@@ -85,10 +84,10 @@ Tine.Projects.Model.Project.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Projects.Model.Project},
         {filtertype: 'tine.projects.attendee', app: app},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
     ];
 };
 

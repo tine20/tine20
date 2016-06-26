@@ -27,12 +27,15 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Sales_Backend_PurchaseInvoice();
         $this->_duplicateCheckFields = array(
             array('number'),
             array('date', 'price_total'),
         );
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**
@@ -114,7 +117,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
             'own_model'       => 'Sales_Model_PurchaseInvoice',
             'own_backend'     => Tasks_Backend_Factory::SQL,
             'own_id'          => NULL,
-            'own_degree'      => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'  => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_backend' => Tasks_Backend_Factory::SQL,
             'type'            => 'PURCHASE_INVOICE'
         );

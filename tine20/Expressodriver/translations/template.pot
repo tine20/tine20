@@ -46,19 +46,19 @@ msgstr ""
 msgid "Last Modified"
 msgstr ""
 
-#: js/NodeTreePanel.js:697 js/NodeTreePanel.js:816 js/NodeGridPanel.js:630
-#: js/NodeGridPanel.js:782
+#: js/NodeTreePanel.js:697 js/NodeTreePanel.js:816 js/NodeGridPanel.js:662
+#: js/NodeGridPanel.js:814
 msgid "Upload Failed"
 msgstr ""
 
-#: js/NodeTreePanel.js:698 js/NodeGridPanel.js:631
+#: js/NodeTreePanel.js:698 js/NodeGridPanel.js:663
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator. Max upload size:"
 msgstr ""
 
 #: js/NodeTreePanel.js:721 js/GridContextMenu.js:72 js/GridContextMenu.js:175
-#: js/Model.js:210 js/Model.js:294 js/NodeGridPanel.js:495
+#: js/Model.js:210 js/Model.js:294 js/NodeGridPanel.js:527
 msgid "Please wait"
 msgstr ""
 
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Renaming nodes..."
 msgstr ""
 
-#: js/NodeTreePanel.js:817 js/NodeGridPanel.js:783
+#: js/NodeTreePanel.js:817 js/NodeGridPanel.js:815
 msgid "Putting files in this folder is not allowed!"
 msgstr ""
 
@@ -109,7 +109,7 @@ msgstr ""
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/GridContextMenu.js:45 js/NodeGridPanel.js:492
+#: js/GridContextMenu.js:45 js/NodeGridPanel.js:524
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
@@ -118,7 +118,7 @@ msgstr ""
 msgid "You have to supply a different name!"
 msgstr ""
 
-#: js/GridContextMenu.js:154 js/NodeGridPanel.js:533
+#: js/GridContextMenu.js:154 js/NodeGridPanel.js:565
 msgid "Do you really want to delete the following files?"
 msgstr ""
 
@@ -162,6 +162,54 @@ msgstr ""
 
 #: js/Model.js:520
 msgid "Quick Search"
+msgstr ""
+
+#: js/CredentialsDialog.js:33
+msgid "Credentials for Expressodriver"
+msgstr ""
+
+#: js/CredentialsDialog.js:49
+msgid "Password"
+msgstr ""
+
+#: js/CredentialsDialog.js:53
+msgid "Repeat Password"
+msgstr ""
+
+#: js/CredentialsDialog.js:57
+msgid "Cancel"
+msgstr ""
+
+#: js/CredentialsDialog.js:63
+msgid "Ok"
+msgstr ""
+
+#: js/CredentialsDialog.js:72
+msgid "Please Wait!"
+msgstr ""
+
+#: js/CredentialsDialog.js:73
+msgid "changing password..."
+msgstr ""
+
+#: js/CredentialsDialog.js:84
+msgid "Success"
+msgstr ""
+
+#: js/CredentialsDialog.js:85
+msgid "Authentication success."
+msgstr ""
+
+#: js/CredentialsDialog.js:101
+msgid "Credentials error"
+msgstr ""
+
+#: js/CredentialsDialog.js:111
+msgid "Failure"
+msgstr ""
+
+#: js/CredentialsDialog.js:112
+msgid "The new passwords mismatch, please correct them."
 msgstr ""
 
 #: js/ExceptionHandler.js:36
@@ -248,20 +296,20 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: js/NodeGridPanel.js:488
+#: js/NodeGridPanel.js:520
 msgid "New Folder"
 msgstr ""
 
-#: js/NodeGridPanel.js:488
+#: js/NodeGridPanel.js:520
 msgid "Please enter the name of the new folder:"
 msgstr ""
 
-#: js/NodeGridPanel.js:492
+#: js/NodeGridPanel.js:524
 #, python-brace-format
 msgid "No {0} added"
 msgstr ""
 
-#: js/NodeGridPanel.js:495
+#: js/NodeGridPanel.js:527
 #, python-brace-format
 msgid "Creating {0}..."
 msgstr ""

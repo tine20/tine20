@@ -18,6 +18,11 @@
  */
 class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
 {
+    /**
+     * Constant for Expressomail Model folder cache id
+     */
+    const EXPRESSOMAIL_MODEL_FOLDER = 'Expressomail_Model_Folder';
+
      private $_accounts = null;
      const IMAPDELIMITER = '/';
      public static $SYSTEM_FOLDERS_DEFAULT = array('Sent', 'Trash', 'Drafts', 'Templates');
@@ -37,6 +42,16 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
               $accounts[$account['id']] = new Expressomail_Model_Account($account,true);
         }
         $this->_accounts = $accounts;
+    }
+
+
+    /**
+     * Gets a folder cache id
+     * @param integer $folderId
+     */
+    public function getFolderCacheId($folderId)
+    {
+        return Tinebase_Helper::arrayToCacheId(array(self::EXPRESSOMAIL_MODEL_FOLDER, $folderId));
     }
 
     /*************************** abstract functions ****************************/
@@ -333,7 +348,7 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
     public function get($_id, $_useCache = TRUE)
     {
         $cache = Tinebase_Core::getCache();
-        $cacheKey = 'Expressomail_Model_Folder_'.$_id;
+        $cacheKey = $this->getFolderCacheId($_id);
         $folderFromCache = $_useCache ? $cache->load($cacheKey) : FALSE;
         if ($folderFromCache) {
             return $folderFromCache;
@@ -342,9 +357,12 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
         $folderDecoded = self::decodeFolderUid($_id);
         if (isset($folderDecoded['accountId'])){
             $imap = Expressomail_Backend_ImapFactory::factory($folderDecoded['accountId'],TRUE);
+            $account = Expressomail_Controller_Account::getInstance()->get($folderDecoded['accountId']);
+            $ns_other = preg_replace('/\/$/', '', $account->ns_other);
+            $delimiter = $account->delimiter;
             $folder = $imap->getFolders('',$folderDecoded['globalName'],
             $this->_accounts[$folderDecoded['accountId']]);
-            //$status = $imap->examineFolder($folderDecoded['globalName']);
+            $acls = $imap->getFolderAcls($folderDecoded['globalName'], TRUE);
             $status = $imap->getFolderStatus($folderDecoded['globalName']);
             if($status === FALSE){
                 // we can not access folder, create Model as unselectable
@@ -371,8 +389,9 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                     'cache_job_startuid' => 0,
                     'cache_job_actions_est' => 0,
                     'cache_job_actions_done' => 0
-                ),true); 
+                ),true);
 
+                $newFolder->setSharingValues($acls);
                 $cache->save($newFolder, $cacheKey);
                 return $newFolder;
             }
@@ -418,7 +437,13 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                     }
             }
 
-            $expressomailSession = Expressomail_Session::getSessionNamespace();
+            try {
+                $expressomailSession = Expressomail_Session::getSessionNamespace();
+            } catch (Zend_Session_Exception $zse) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . "::" . __LINE__ .
+                        ":: It was not possible to get Expressomail Session Namespace");
+                $expressomailSession = null;
+            }
             $userNameSpace = $imap->getUserNameSpace() . self::IMAPDELIMITER;
             $arrDecodedFolder = explode(self::IMAPDELIMITER, $folderDecoded['globalName']);
             if (
@@ -438,7 +463,9 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                             . ' Getting quota from IMAP for ' . $folderDecoded['globalName']);
                 }
                 $quota = $imap->getQuota($folderDecoded['globalName']);
-                $expressomailSession->quota[$folderDecoded['globalName']] = $quota;
+                if ($expressomailSession instanceof Zend_Session_Namespace && Tinebase_Session::isWritable()) {
+                    $expressomailSession->quota[$folderDecoded['globalName']] = $quota;
+                }
             }else {
                 if($arrDecodedFolder[0] === 'INBOX' && isset($arrDecodedFolder[1]) && $arrDecodedFolder[1] === 'Arquivo Remoto'){
                     $globalNameFolder = $arrDecodedFolder[0] . self::IMAPDELIMITER . $arrDecodedFolder[1];
@@ -453,7 +480,13 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Getting quota from Session for ' . $folderDecoded['globalName']);
                 }
-                $quota = isset($expressomailSession->quota[$globalNameFolder]) ? $expressomailSession->quota[$globalNameFolder] : 0;
+
+                $quota = 0;
+                if(($expressomailSession instanceof Zend_Session_Namespace)
+                        && isset($expressomailSession->quota)
+                        && isset($expressomailSession->quota[$globalNameFolder])) {
+                    $quota = $expressomailSession->quota[$globalNameFolder];
+                }
             }
 
             $return = new Expressomail_Model_Folder(array(
@@ -483,8 +516,9 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                     'quota_limit'   => !empty($quota) ? $quota['STORAGE']['limit'] : 0,
                 ),true);
 
-             $cache->save($return, $cacheKey);
-             return $return;
+            $return->setSharingValues($acls);
+            $cache->save($return, $cacheKey);
+            return $return;
         }
     }
     

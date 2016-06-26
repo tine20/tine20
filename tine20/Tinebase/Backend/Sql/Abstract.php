@@ -1292,7 +1292,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         );
         
         $this->_db->update($this->_tablePrefix . $this->_tableName, $recordArray, $where);
-        
+
         // update custom fields
         if ($_record->has('customfields')) {
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
@@ -1366,7 +1366,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * @return void
       * @return int The number of affected rows.
       */
-    public function delete($_id) 
+    public function delete($_id)
     {
         if (empty($_id)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');

@@ -245,6 +245,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $this->getLdap()->bind();
             } catch (Zend_Ldap_Exception $zle) {
                 // @todo move this to Tinebase_Ldap?
+                Tinebase_Exception::log($zle);
                 throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
             }
         }

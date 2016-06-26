@@ -45,7 +45,7 @@ Tine.widgets.form.RecordPickerManager = function() {
                 var defaultconfig = {
                     recordClass: Tine.Tinebase.data.RecordMgr.get(appName, modelName),
                     recordProxy: Tine[appName][modelName.toLowerCase() + 'Backend'],
-                    loadingText: _('Searching...')
+                    loadingText: i18n._('Searching...')
                 };
                 Ext.apply(defaultconfig, config);
                 return new Tine.Tinebase.widgets.form.RecordPickerComboBox(defaultconfig);

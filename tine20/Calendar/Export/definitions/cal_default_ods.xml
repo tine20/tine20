@@ -4,8 +4,10 @@
     <name>cal_default_ods</name>
     <type>export</type>
     <plugin>Calendar_Export_Ods</plugin>
-    <label>Default OpenDocument Export</label>
-    <description>default ods event export definition</description>
+    <!-- _('Default Event Data Export') -->
+    <label>Default Event Data Export</label>
+    <!-- _('Export event data into ods spreadsheet') -->
+    <description>Export event data into ods spreadsheet</description>
     <header>1</header>
     <headers>
         <header>{date}</header>

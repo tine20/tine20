@@ -23,7 +23,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * @cfg defaut text for new attendee combo
-     * _('Click here to invite another attender...')
+     * i18n._('Click here to invite another attender...')
      */
     addNewAttendeeText: 'Click here to invite another attender...',
     
@@ -149,7 +149,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             width: 200,
             sortable: false,
             hidden: this.showNamesOnly || true,
-            header: Tine.Tinebase.translation._hidden('Saved in'),
+            header: i18n._hidden('Saved in'),
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
             // disable for the moment, as updating calendarSelectWidget is not working in both directions
@@ -336,11 +336,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 
                 case 'group':
                 case 'memberOf':
-                colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                colModel.config[o.column].setEditor(new Tine.Addressbook.ListSearchCombo({
                     minListWidth: 350,
                     blurOnSelect: true,
-                    sortBy: 'name',
-                    recordClass: Tine.Addressbook.Model.List,
+                    groupOnly: true,
                     getValue: function() {
                         return this.selectedRecord ? this.selectedRecord.data : null;
                     }
@@ -553,24 +552,56 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return this.app.i18n._(this.addNewAttendeeText);
         }
     },
-    
+
+    /**
+     * render attender user name
+     *
+     * @param name
+     * @returns {*}
+     */
     renderAttenderUserName: function(name) {
         name = name || "";
+        var result = "",
+            email = "";
+
         if (typeof name.get == 'function' && name.get('n_fileas')) {
-            return Ext.util.Format.htmlEncode(name.get('n_fileas'));
+            result = name.get('n_fileas');
+        } else if (name.n_fileas) {
+            result = name.n_fileas;
+        } else if (name.accountDisplayName) {
+            result = name.accountDisplayName;
+        } else if (Ext.isString(name) && ! name.match('^[0-9a-f-]{40,}$') && ! parseInt(name, 10)) {
+            // how to detect hash/string ids
+            result = name;
         }
-        if (name.n_fileas) {
-            return Ext.util.Format.htmlEncode(name.n_fileas);
+
+        // add email address if available
+        // need to create a "dummy" app to call featureEnabled()
+        // TODO: should be improved
+        var tinebaseApp = new Tine.Tinebase.Application({
+            appName: 'Tinebase'
+        });
+        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
+            if (typeof name.getPreferedEmail == 'function') {
+                email = name.getPreferedEmail();
+            } else if (name.email) {
+                email = name.email;
+            } else if (name.accountEmailAddress) {
+                email = name.accountEmailAddress;
+            }
+            if (email !== '') {
+                result += ' (' + email + ')';
+            }
         }
-        if (name.accountDisplayName) {
-            return Ext.util.Format.htmlEncode(name.accountDisplayName);
+
+        if (result === '') {
+            result = Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information')
+        } else {
+            result = Ext.util.Format.htmlEncode(result)
         }
-        // how to detect hash/string ids
-        if (Ext.isString(name) && ! name.match('^[0-9a-f-]{40,}$') && ! parseInt(name, 10)) {
-            return Ext.util.Format.htmlEncode(name);
-        }
+
         // NOTE: this fn gets also called from other scopes
-        return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+        return result;
     },
     
     renderAttenderGroupmemberName: function(name) {

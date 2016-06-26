@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>9.0</version>
+    <version>9.8</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>18</version>
+            <version>19</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -349,6 +349,72 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>tel_assistent_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_car_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_cell_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_cell_private_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_fax_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_fax_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_home_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_other_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_pager_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_prefer_normalized</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>tel_work_normalized</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>created_by</name>
                     <type>text</type>
                     <length>40</length>
@@ -495,7 +561,7 @@
         </table>
         <table>
             <name>addressbook_lists</name>
-            <version>2</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -534,6 +600,12 @@
                     <default>list</default>
                 </field>
                 <field>
+                    <name>list_type</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>created_by</name>
                     <type>text</type>
                     <length>40</length>
@@ -565,18 +637,17 @@
                     <name>deleted_time</name>
                     <type>datetime</type>
                 </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
                     <field>
                         <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>name</name>
                     </field>
                 </index>
             </declaration>
@@ -597,7 +668,6 @@
                     <length>40</length> 
                     <notnull>true</notnull>
                 </field>
-
                 <index>
                     <name>list_id-contact_id</name>
                     <primary>true</primary>
@@ -642,7 +712,149 @@
                 </index>
             </declaration>
         </table>
-    </tables>    
+        <table>
+            <name>addressbook_list_role</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <!-- addressbook list member roles / NOTE: had to use a very short name because of index length restrictions :( -->
+            <name>adb_list_m_role</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>list_role_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>adb_list_m_role::list_id--addressbook_lists::id</name>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook_lists</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>adb_list_m_role::contact_id--addressbook::id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>adb_list_m_role::list_role_id--addressbook_list_role::id</name>
+                    <field>
+                        <name>list_role_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook_list_role</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
+    </tables>
     <defaultRecords>
         <record>
             <table>
@@ -664,6 +876,10 @@
             <field>
                 <name>application_id</name>
                 <value special="application_id">Addressbook</value>
+            </field>
+            <field>
+                <name>model</name>
+                <value>Addressbook_Model_Contact</value>
             </field>
         </record>
     </defaultRecords>

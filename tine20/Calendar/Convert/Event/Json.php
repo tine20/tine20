@@ -58,6 +58,10 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         foreach ($events as $event) {
             if ($event->rrule) {
                 $event->rrule = Calendar_Model_Rrule::getRruleFromString($event->rrule);
+
+                if ($event->rrule_constraints instanceof Calendar_Model_EventFilter) {
+                    $event->rrule_constraints = $event->rrule_constraints->toArray(true);
+                }
             }
         }
     }
@@ -122,19 +126,11 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         if (Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
         }
-        
+
         Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
         Calendar_Convert_Event_Json::resolveRrule($_records);
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
-        self::resolveMultipleIdFields($_records, array(
-            'Addressbook_Model_Contact' => array(
-                'options' => array('ignoreAcl' => TRUE),
-                'fields'  => array('organizer'),
-            ),
-            'recursive' => array('attachments' => 'Tinebase_Model_Tree_Node')
-        ));
-
         Calendar_Convert_Event_Json::resolveGrantsOfExternalOrganizers($_records);
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
         $_records->sortByPagination($_pagination);

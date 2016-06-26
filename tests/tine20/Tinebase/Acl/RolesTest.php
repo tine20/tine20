@@ -35,7 +35,7 @@ class Tinebase_Acl_RolesTest extends TestCase
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit',
             'accountEmailAddress'   => 'phpunit@metaways.de'

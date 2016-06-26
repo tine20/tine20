@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -37,18 +37,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     protected $_config;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -60,7 +48,13 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         if (!isset($this->_config['backend']) || !('Imap_' . ucfirst($this->_config['backend']) == Tinebase_EmailUser::IMAP_DOVECOT) || $this->_config['active'] != true) {
             $this->markTestSkipped('Dovecot MySQL backend not configured or not enabled');
         }
-        
+
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // error: Zend_Ldap_Exception: 0x44 (Already exists; 00002071: samldb: Account name (sAMAccountName)
+            // 'tine20phpunituser' already in use!): adding: cn=PHPUnit User Tine 2.0,cn=Users,dc=example,dc=org
+            $this->markTestSkipped('skipped for ad backends as it does not allow duplicate CNs');
+        }
+
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         
         $personas = Zend_Registry::get('personas');
@@ -139,9 +133,9 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailLastLogin'   => null,
             'emailMailSize'    => 0,
             'emailSieveSize'   => null,
-            'emailPort'        => 143,
-            'emailSecure'      => 'tls',
-            'emailHost'        => 'localhost'
+            'emailPort'        => $this->_config['port'],
+            'emailSecure'      => $this->_config['ssl'],
+            'emailHost'        => $this->_config['host']
         ), $additionalExpectations), $this->_objects['user']->imapUser->toArray());
     }
     

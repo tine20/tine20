@@ -304,8 +304,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     {
         $locale = Tinebase_Core::getLocale();
         $weekInfo = Zend_Locale_Data::getList($locale, 'week');
-        
-        $result = ($weekInfo['firstDay'] == 'sun') ? 0 : 1;
+
+        if (!isset($weekInfo['firstDay'])) {
+            $result = 1;
+        } else {
+            $result = ($weekInfo['firstDay'] === 'sun') ? 0 : 1;
+        }
         
         return $result;
     }

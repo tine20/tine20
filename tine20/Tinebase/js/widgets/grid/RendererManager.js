@@ -51,7 +51,7 @@ Tine.widgets.grid.RendererManager = function() {
                 renderer = Tine.Tinebase.common.tagsRenderer;
             } else if (fieldName == 'notes') {
                 // @TODO
-                renderer = function(value) {return value ? _('has notes') : '';};
+                renderer = function(value) {return value ? i18n._('has notes') : '';};
             } else if (fieldName == 'relations') {
                 renderer = Tine.Tinebase.common.relationsRenderer;
             } else if (fieldName == 'customfields') {

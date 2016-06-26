@@ -60,26 +60,6 @@
           "path": "js/"
         },
         {
-          "text": "LeadState.js",
-          "path": "js/"
-        },
-        {
-          "text": "LeadStateFilterModel.js",
-          "path": "js/"
-        },
-          {
-              "text": "LeadSourceFilterModel.js",
-              "path": "js/"
-          },
-        {
-          "text": "LeadSource.js",
-          "path": "js/"
-        },
-        {
-          "text": "LeadType.js",
-          "path": "js/"
-        },
-        {
           "text": "Contact.js",
           "path": "js/"
         },

@@ -119,8 +119,8 @@ Tine.Expressomail.ImportEmlDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     var responseText = Ext.util.JSON.decode(response.responseText);
                     if (responseText.data.code == 505) {
                         Ext.Msg.show({
-                            title: _('Error'),
-                            msg: _('Error import message eml!'),
+                            title: i18n._('Error'),
+                            msg: i18n._('Error import message eml!'),
                             icon: Ext.MessageBox.ERROR,
                             buttons: Ext.Msg.OK
                         });
@@ -134,7 +134,7 @@ Tine.Expressomail.ImportEmlDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
         }, this);
 
-        Ext.MessageBox.wait(_('Please wait'), _('Loading'));
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Loading'));
         var files = fileSelector.getFileList();
         Ext.each(files, function(file) {
             var fileRecord = uploader.upload(file);

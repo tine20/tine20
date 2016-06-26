@@ -99,6 +99,11 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     
     public function testSearchPrincipalsByEMail()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
             '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress)
         );
@@ -109,11 +114,16 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     
     public function testSearchPrincipalsByFirstName()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            // account email addresses are empty with AD backend
+            $this->markTestSkipped('skipped for ad backend');
+        }
+
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
             '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => Tinebase_Core::getUser()->accountFirstName)
         );
         
-        $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);
+        $this->assertEquals(1, count($uris), 'could not find user by first name ' . Tinebase_Core::getUser()->accountFirstName);
         $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
     }
     

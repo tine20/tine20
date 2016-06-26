@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:15+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Thai (http://www.transifex.com/tine20/tine20/language/th/)\n"
 "MIME-Version: 1.0\n"
@@ -228,7 +228,7 @@ msgid "To (Email CC)"
 msgstr "ถึง (อีเมล CC)"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1110 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr "หัวเรื่อง"
@@ -324,7 +324,7 @@ msgstr[0] "{0} ข้อความที่ยังไม่ได้อ่�
 msgid "Message not available."
 msgstr "ข้อความไม่มีอยู่ "
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1012
 msgid "From"
 msgstr "จาก"
 
@@ -344,7 +344,7 @@ msgstr "วันที่"
 msgid "Show or hide header information"
 msgstr "แสดงหรือซ่อนหัวข้อของข้อมูล"
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:945 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "สิ่งที่แนบมาด้วย"
 
@@ -529,106 +529,125 @@ msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "รายชื่อป้ายต่างๆ"
 
-#: js/MessageEditDialog.js:144
+#: js/MessageEditDialog.js:154
 msgid "Send"
 msgstr "ส่ง"
 
-#: js/MessageEditDialog.js:152
+#: js/MessageEditDialog.js:162
 msgid "Search Recipients"
 msgstr "ค้นหาผู้รับ"
 
-#: js/MessageEditDialog.js:160
+#: js/MessageEditDialog.js:170
 msgid "Save As Draft"
 msgstr "บันทึกเป็นโครงร่าง"
 
-#: js/MessageEditDialog.js:168
+#: js/MessageEditDialog.js:178
 msgid "Save As Template"
 msgstr "บันทึกเป็นแม่แบบ"
 
-#: js/MessageEditDialog.js:177
+#: js/MessageEditDialog.js:187
 msgid "Save Email Note"
 msgstr "บันทึกเป็นบันทึกอีเมล"
 
-#: js/MessageEditDialog.js:185
+#: js/MessageEditDialog.js:195
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the"
 " recipient(s) contact(s)."
 msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อบันทึกข้อความอีเมลแบบข้อความที่ได้แนบไว้กับการติดต่อ(s) กับผู้รับ(s)"
 
-#: js/MessageEditDialog.js:189
+#: js/MessageEditDialog.js:199
 msgid "Reading Confirmation"
 msgstr "การยืนยันการอ่าน"
 
-#: js/MessageEditDialog.js:197
+#: js/MessageEditDialog.js:207
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr "ใช้ปุ่มเปิดปิดนี้เพื่อรับการยืนยันการอ่าน"
 
-#: js/MessageEditDialog.js:215
+#: js/MessageEditDialog.js:211
+msgid "Encrypt Email"
+msgstr ""
+
+#: js/MessageEditDialog.js:221
+msgid "Encrypt email using Mailvelope"
+msgstr ""
+
+#: js/MessageEditDialog.js:239
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "กดปุ่สำหรับค้นหาและเพิ่มผู้รับจากสมุดที่อยู่"
 
-#: js/MessageEditDialog.js:402
-#, python-brace-format
-msgid "On {0}, {1} wrote"
-msgstr "บน {0}, {1} ได้เขียนแล้ว"
+#: js/MessageEditDialog.js:426
+msgid "Encrypted Content"
+msgstr ""
 
-#: js/MessageEditDialog.js:422
-msgid "Original message"
-msgstr "ข้อความดั้งเดิม"
-
-#: js/MessageEditDialog.js:608 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:638 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr "กำลังโหลดที่อยู่อีเมล"
 
-#: js/MessageEditDialog.js:659
+#: js/MessageEditDialog.js:689
 msgid "Fwd:"
 msgstr "ส่งต่อ:"
 
-#: js/MessageEditDialog.js:662
+#: js/MessageEditDialog.js:692
 #, python-brace-format
 msgid "{0} Message"
 msgstr "{0} ข้อความ"
 
-#: js/MessageEditDialog.js:716 js/MessageEditDialog.js:721
+#: js/MessageEditDialog.js:746 js/MessageEditDialog.js:751
 msgid "Failed"
 msgstr "ได้ล้มเหลว"
 
-#: js/MessageEditDialog.js:717
+#: js/MessageEditDialog.js:747
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "ค่าติดตั้งบัญชี {0} ว่าง"
 
-#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
+#: js/MessageEditDialog.js:752 js/MessageEditDialog.js:1153
 msgid "Files are still uploading."
 msgstr "ยังคงอัปโหลดไฟล์อยู่"
 
-#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
+#: js/MessageEditDialog.js:842
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr "บน {0}, {1} ได้เขียนแล้ว"
+
+#: js/MessageEditDialog.js:847
+msgid "Original message"
+msgstr "ข้อความดั้งเดิม"
+
+#: js/MessageEditDialog.js:885 js/MessageEditDialog.js:1120
 msgid "Compose email:"
 msgstr "เขียนอีเมล:"
 
-#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:1081 Controller/Message/Send.php:288
 msgid "Body"
 msgstr "ข้อความ"
 
-#: js/MessageEditDialog.js:1072
+#: js/MessageEditDialog.js:1178
 msgid "Empty subject"
 msgstr "ล้างหัวเรื่อง"
 
-#: js/MessageEditDialog.js:1073
+#: js/MessageEditDialog.js:1179
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "คุณแน่ใจว่าต้องการส่งข้อความที่ไม่มีหัวเรื่อง"
 
-#: js/MessageEditDialog.js:1094
+#: js/MessageEditDialog.js:1201
 msgid "Add Note"
 msgstr "เพิ่มบันทึก"
 
-#: js/MessageEditDialog.js:1095
+#: js/MessageEditDialog.js:1202
 msgid "Edit Email Note Text:"
 msgstr "แก้ไขข้อความบันทึกในอีเมล"
 
-#: js/MessageEditDialog.js:1118
+#: js/MessageEditDialog.js:1230
 msgid "No recipients set."
 msgstr "ไม่ได้ตั้งผู้รับ"
+
+#: js/MessageEditDialog.js:1252
+#, python-brace-format
+msgid ""
+"Cannot encrypt message. Public keys for the following recipients are "
+"missing: {0}"
+msgstr ""
 
 #: js/RecipientGrid.js:233
 msgid "Click here to set To/CC/BCC."
@@ -736,6 +755,15 @@ msgstr "โควต้าของคุณ"
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} ว่าง (ทั้งหมด: {1})"
+
+#: js/PGPDetailsPanel.js:22
+#, python-brace-format
+msgid "To decrypt this message please install {0} with API support enabled"
+msgstr ""
+
+#: js/PGPDetailsPanel.js:25
+msgid "PGP encrypted Message"
+msgstr ""
 
 #: js/RecipientPickerDialog.js:63
 msgid "(new message)"
@@ -1080,42 +1108,52 @@ msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
-#: Config.php:53
+#: Config.php:60
 msgid "Vacation Templates Container ID"
 msgstr "รหัสตัวบรรจุแม่แบบพักร้อน"
 
-#: Config.php:62
+#: Config.php:69
 msgid "Custom Vacation Message"
 msgstr "จัดทำข้อความพักร้อน"
 
-#: Config.php:64
+#: Config.php:71
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "ผู้ใช้สามารถตั้งข้อความพักร้อนด้วยตัวเองสำหรับบัญชีระบบได้"
 
-#: Config.php:73
+#: Config.php:80
 msgid "Cache email body"
 msgstr "แคชข้อความของอีเมล"
 
-#: Config.php:75
+#: Config.php:82
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr "ควรให้ข้อความของอีเมลมีการจัดเก็บ (แนะนำสำหรับการติดต่อระบบ IMAP ที่ล่าช้า)"
 
-#: Config.php:84
+#: Config.php:91
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:86
+#: Config.php:93
 msgid "Enabled features in Felamimail application."
 msgstr ""
 
-#: Config.php:93
+#: Config.php:100
 msgid "Tine 2.0 Flag"
 msgstr ""
 
-#: Config.php:94
+#: Config.php:101
 msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
+#: Config.php:109
+msgid "Filter E-Mail URIs"
+msgstr ""
+
+#: Config.php:111
+msgid ""
+"Should the email body uris be filtered. Only anchors with URIs are allowed "
+"if this is turned on.)"
 msgstr ""
 
 #: Setup/Initialize.php:44

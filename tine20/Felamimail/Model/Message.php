@@ -130,12 +130,20 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'flags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'timestamp'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'body'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // this is: refactor body and content type handling / or names
+        'body_content_type_of_body_property_of_this_record' => array(
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_PLAIN,
+            array('InArray', array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)),
+        ),
         'structure'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'text_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'html_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'has_attachment'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // this is: content_type_of_envelope
         'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        // this is: body_content_type_from_message_structrue
         'body_content_type'     => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_PLAIN,

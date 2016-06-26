@@ -56,7 +56,20 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
     {
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_ldapEntry, true));
         $accountArray = $this->_defaults;
-        
+
+        if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
+            $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+            $accountArray = array_merge($accountArray, array(
+                'emailHost'        => $smtpConfig['hostname'],
+                'emailPort'        => $smtpConfig['port'],
+                'emailSecure'      => $smtpConfig['ssl'],
+                'emailAuth'        => $smtpConfig['auth'],
+            ));
+        } else {
+            $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+
+        }
+
         if ($this instanceof Tinebase_EmailUser_Smtp_Interface) {
             $accountArray = array_merge($accountArray, array(
                 'emailForwardOnly' => false,

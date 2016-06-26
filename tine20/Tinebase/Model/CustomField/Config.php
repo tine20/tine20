@@ -67,7 +67,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
             if (is_string($_data['definition'])) {
                 $_data['definition'] = Zend_Json::decode($_data['definition']);
             }
-            
+
             if (is_array($_data['definition'])) {
                 $_data['definition'] = new Tinebase_Config_Struct($_data['definition']);
             }

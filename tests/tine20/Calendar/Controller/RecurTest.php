@@ -1000,6 +1000,27 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $savedEvent = Calendar_Controller_Event::getInstance()->create($newEvent, /* $checkBusyConflicts = */ true);
     }
 
+    public function testRecurEventWithConstrainsBackgroundComputation()
+    {
+        $constrainEvent = $this->_getRecurEvent();
+        $constrainEvent->rrule_constraints = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array($constrainEvent['container_id'])),
+        ));
+        $constrainEvent = Calendar_Controller_Event::getInstance()->create($constrainEvent);
+
+        // create conflicting event
+        $conflictEvent = $this->_getRecurEvent();
+        $conflictEvent->rrule->until = $conflictEvent->dtstart->getClone()->addDay(5);
+        $conflictEvent = Calendar_Controller_Event::getInstance()->create($conflictEvent);
+
+        // run background job
+        Calendar_Controller_Event::getInstance()->updateConstraintsExdates();
+
+        // check exdates
+        $constrainEvent = Calendar_Controller_Event::getInstance()->get($constrainEvent->getId());
+        $this->assertCount(6, $constrainEvent->exdate);
+    }
+
     /**
      * returns a simple recure event
      *

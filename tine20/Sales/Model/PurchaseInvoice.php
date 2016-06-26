@@ -41,7 +41,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'defaultFilter'     => 'description',
         'titleProperty'     => 'description',
         'appName'           => 'Sales',
         'modelName'         => 'PurchaseInvoice',
@@ -102,30 +101,17 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             'due_in' => array(
                 'title' => 'Due in',            // _('Due in')
                 'type'  => 'integer',
+                'label' => 'Due in',            // _('Due in')
                 'default' => 10,
                 'shy' => TRUE,
             ),
             'due_at' => array(
-                'type'  => 'date',
-                'label' => 'Due at',            // _('Due at')
-            ),
-            'pay_at' => array(
-                'type'  => 'date',
-                'label' => 'Pay at',            // _('Pay at')
-            ),
-            'overdue_at' => array(
-                'type'  => 'date',
-                'label' => 'Overdue at',        // _('Overdue at')
-                'shy'   => TRUE,
+                    'type'  => 'date',
+                    'label' => 'Due at',            // _('Due at')
             ),
             'payed_at' => array(
                 'type'  => 'date',
                 'label' => 'Payed at',          // _('Payed at')
-            ),
-            'dunned_at' => array(
-                'type'  => 'date',
-                'label' => 'Dunned at',    // _('Dunned at')
-                'shy'   => TRUE,
             ),
             'payment_method' => array(
                 'label'   => 'Payment_method', //_('Payment_method')
@@ -139,6 +125,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'type'    => 'float',
                 'specialType' => 'percent',
                 'default' => 0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy'     => TRUE,
             ),
             'discount_until' => array(

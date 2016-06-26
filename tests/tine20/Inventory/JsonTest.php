@@ -5,14 +5,9 @@
  * @package     Inventory
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Inventory_JsonTest
@@ -234,5 +229,28 @@ class Inventory_JsonTest extends Inventory_TestCase
         }
         
         return $result;
+    }
+
+    /**
+     * saveRecordWithImage
+     */
+    public function testSaveRecordWithImage()
+    {
+        // create TEMPFILE and save in inv item
+        $imageFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/cancel.gif';
+        $tempImage = Tinebase_TempFile::getInstance()->createTempFile($imageFile);
+        $imageUrl = Tinebase_Model_Image::getImageUrl('Tinebase', $tempImage->getId(), 'tempFile');
+
+        $invItem = $this->_getInventoryItem()->toArray();
+        $invItem['image'] = $imageUrl;
+        $savedInvItem = $this->_json->saveInventoryItem($invItem);
+
+        //$savedInvItem = $this->_json->getInventoryItem($savedInvItem['id']);
+        $this->assertTrue(! empty($savedInvItem['image']), 'image url is empty');
+        $this->assertTrue(preg_match('/location=vfs&id=([a-z0-9]*)/', $savedInvItem['image']) == 1, print_r($savedInvItem, true));
+
+        // check if favicon is delivered
+        $image = Tinebase_Model_Image::getImageFromImageURL($savedInvItem['image']);
+        $this->assertEquals(52, $image->width);
     }
 }

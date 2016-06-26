@@ -123,7 +123,30 @@ class Tinebase_Helper
         
         return $revision;
     }
-    
+
+    /**
+     * Convert array values including keys (optional) to cache Id
+     * @param array $values
+     * @param boolean $includeKeys
+     * @return string
+     */
+    public static function arrayToCacheId($values, $includeKeys = false)
+    {
+        $ctx = hash_init('md5');
+
+        $values = (array) $values;
+
+        foreach ($values as $id => $value) {
+            if (is_array($value)) {
+                $value = self::arrayToCacheId($value, $includeKeys);
+            }
+
+            hash_update($ctx, ($includeKeys ? $id : null) . (string)$value);
+        }
+
+        return hash_final($ctx);
+    }
+
     /**
      * get release Codename
      *
@@ -304,5 +327,26 @@ class Tinebase_Helper
         }
         
         return $exists;
+    }
+
+    /**
+     * decode json string or
+     *
+     * Prepare function input to be an array. Input maybe already an array or (empty) text.
+     * Starting PHP 7 Zend_Json::decode can't handle empty strings.
+     *
+     * @param $jsonOrArray
+     * @return mixed
+     * @throws Zend_Json_Exception
+     */
+    public static function jsonDecode($jsonOrArray)
+    {
+        if (is_array($jsonOrArray)) {
+            return $jsonOrArray;
+        } else if (trim($jsonOrArray) == '') {
+            return Zend_Json::decode("{}");
+        } else {
+            return Zend_Json::decode($jsonOrArray);
+        }
     }
 }

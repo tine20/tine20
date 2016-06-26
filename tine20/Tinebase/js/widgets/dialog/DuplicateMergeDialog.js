@@ -76,7 +76,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_cancel = new Ext.Action({
-            text : _('Cancel'),
+            text : i18n._('Cancel'),
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
@@ -84,7 +84,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
         });
 
         this.action_update = new Ext.Action({
-            text : _('OK'),
+            text : i18n._('OK'),
             minWidth : 70,
             scope : this,
             handler : this.onUpdate,
@@ -133,7 +133,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug('Tine.widgets.dialog.DuplicateMergeDialog::onUpdate() - removeRecords:');
         Tine.log.debug(removeRecords);
         
-        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Merging Records...')});
+        this.loadMask = new Ext.LoadMask(this.getEl(), {msg: i18n._('Merging Records...')});
         this.loadMask.show();
         
         this.recordProxy.saveRecord(updateRecord, {
@@ -172,7 +172,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
         if(step == 'update') {
              Tine.Tinebase.ExceptionHandler.handleRequestException(failure, function() { if (this.loadMask) this.loadMask.hide(); }, this);
         } else {
-             Ext.MessageBox.alert(_('Merge Failed'), String.format(_('The merge succeeded, but the duplicate {0} could not be deleted.'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); if (this.loadMask) this.loadMask.hide();}, this);
+             Ext.MessageBox.alert(i18n._('Merge Failed'), String.format(i18n._('The merge succeeded, but the duplicate {0} could not be deleted.'), this.recordClass.getRecordName()), function() { Tine.Tinebase.ExceptionHandler.handleRequestException(failure); if (this.loadMask) this.loadMask.hide();}, this);
         }
     },
     /**
@@ -211,20 +211,20 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
                                 id: 0,
                                 fields: ['value', 'text'],
                                 data: [
-                                    ['mergeMine', String.format(_('Merge {0}, prefer First'), recordsName)],
-                                    ['mergeTheirs', String.format(_('Merge {0}, prefer Second'), recordsName)]
+                                    ['mergeMine', String.format(i18n._('Merge {0}, prefer First'), recordsName)],
+                                    ['mergeTheirs', String.format(i18n._('Merge {0}, prefer Second'), recordsName)]
                                 ]
                             });
                             this.actionCombo.setWidth(400);
                             this.onStoreLoad();
                 
                             // change title
-                            this.setTitle(String.format(_('Merge {0}'), recordsName));
+                            this.setTitle(String.format(i18n._('Merge {0}'), recordsName));
                             
                             // change column headers
-                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('clientValue'), String.format(_('First {0}'), recordName));
-                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('value0'), String.format(_('Second {0}'), recordName));
-                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('finalValue'), String.format(_('Final {0}'), recordName));
+                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('clientValue'), String.format(i18n._('First {0}'), recordName));
+                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('value0'), String.format(i18n._('Second {0}'), recordName));
+                            this.getColumnModel().setColumnHeader(this.getColumnModel().getIndexById('finalValue'), String.format(i18n._('Final {0}'), recordName));
                         }
                     }
                     })]

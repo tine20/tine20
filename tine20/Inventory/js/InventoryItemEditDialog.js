@@ -125,15 +125,15 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                     emptyText: this.app.i18n._('Enter description')
                                 }]
                             ]
-                        }/*,
+                        },
                             new Ext.ux.form.ImageField({
-                                name: 'jpegphoto',
+                                name: 'image',
                                 width: 160,
                                 height: 150,
                                 style: {
                                     'margin-top': '17px'
                                 }
-                            })*/
+                            })
                         ]
                     },
                     {

@@ -305,9 +305,9 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if (condition.header == filterModel.field) {
                     header = filterModel.label;
                     if (condition.header == 'size') {
-                        comperator = (condition.comperator == 'over') ? _('is greater than') : _('is less than');
+                        comperator = (condition.comperator == 'over') ? i18n._('is greater than') : i18n._('is less than');
                     } else {
-                        comperator = _(condition.comperator);
+                        comperator = i18n._(condition.comperator);
                     }
                     found = true;
                 }

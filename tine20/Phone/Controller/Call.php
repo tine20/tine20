@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -53,7 +53,79 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        // resolve telephone number to contacts if possible
+        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry($this->resolveInternalNumber($_record->destination));
+        if (null !== $telNumber) {
+            $filter = new Addressbook_Model_ContactFilter(array(
+                array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
+            ));
+
+            $controller = Addressbook_Controller_Contact::getInstance();
+            $contacts = $controller->search($filter);
+
+            $relations = $_record->relations;
+            foreach ($contacts as $contact) {
+                $relations[] = array(
+                    'related_model' => 'Addressbook_Model_Contact',
+                    'related_id' => $contact->getId(),
+                    'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                    'type' => 'CALLER',
+                );
+            }
+            $_record->relations = $relations;
+        }
+    }
+
+    /**
+     * normalize number
+     *
+     * @param $number
+     * @return string
+     */
+    public function resolveInternalNumber($number)
+    {
+        $number = preg_replace('/[^\d\+]/', '', $number);
+        if (empty($number)) {
+            return $number;
+        }
+
+        $config = Phone_Config::getInstance();
+        $localPrefix = $config->get(Phone_Config::LOCAL_PREFIX);
+
+        // if the number does not start with the local prefix, its an internal number. prefix and return
+        if (strpos($number, $localPrefix) !== 0) {
+
+            //if the number is longer than 5 digits, its actually an international number with/out + *sight*
+            if (strlen($number) > 5) {
+                if ($number[0] !== '+')
+                    $number = '+' . $number;
+                return $number;
+            } else {
+                return $config->get(Phone_Config::OWN_NUMBER_PREFIX) . $number;
+            }
+        } else {
+            // cut local prefix
+            $number = substr($number, strlen($localPrefix));
+        }
+
+        // if its a local number, prefix area code and return
+        if (preg_match($config->get(Phone_Config::LOCAL_CALL_REGEX), $number)) {
+            return $config->get(Phone_Config::AREA_CODE) . $number;
+        }
+
+        return $number;
+    }
+
     /**
      * get list of records
      *

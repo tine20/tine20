@@ -43,6 +43,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
+        'exposeJsonApi'     => TRUE,
 
         'createModule'    => TRUE,
 
@@ -144,6 +145,13 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'      => NULL,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
+            'image' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label' => 'Image', // _('Image')
+                'inputFilters' => array('Zend_Filter_Empty' => NULL),
+                // is saved in vfs, only image files allowed
+                'type' => 'image'
+            ),
         )
-     );
+    );
 }

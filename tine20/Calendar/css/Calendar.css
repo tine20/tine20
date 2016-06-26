@@ -1,4 +1,4 @@
-.CalendarIconCls {
+.CalendarIconCls, .CalendarEvent {
     background-image:url(../../images/oxygen/16x16/apps/korganizer.png);
 }
 .x-btn-medium .CalendarIconCls {
@@ -88,7 +88,7 @@
     background-image:url(../../images/oxygen/32x32/actions/view-calendar-month.png) !important;
 }
 
-.cal-resource {
+.cal-resource, .CalendarResource {
     background-image:url(../../images/oxygen/16x16/devices/video-projector.png) !important;
 }
 .x-btn-medium .cal-resource {
@@ -207,6 +207,12 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 .cal-conflict-eventinfos {
     margin-left: 15px;
+}
+
+.cal-conflict-eventinfos-unavailable {
+    padding-left: 5px;
+    font-style: italic;
+    color: red;
 }
 
 /**** status icons ****/

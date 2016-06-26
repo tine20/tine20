@@ -30,7 +30,7 @@ Ext.ns('Tine.Expressomail');
 Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
 
     /**
-     * auto hook text _('New Mail')
+     * auto hook text i18n._('New Mail')
      */
     addButtonText: 'New Mail',
 
@@ -104,7 +104,7 @@ Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
     verifyTrashToClean: function(account_id) {
         if(!account_id) return;
         if(!Tine.Expressomail.registry.get('preferences').get('deleteFromTrash')) return;
-        Ext.MessageBox.wait(_('Please wait'), _('Verifying trash folder'));
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Verifying trash folder'));
         var params = {
           method: 'Expressomail.deleteMsgsBeforeDate'
         };
@@ -601,7 +601,17 @@ Tine.Expressomail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {value} newValue
      */
     onPreferenceChange: function (key, oldValue, newValue) {
+        if (Tine.Tinebase.tineInit.isReloading || oldValue === "") { // Fix for IE errors on preferences initialization
+            return;
+        }
         switch (key) {
+            case 'emailsPerPage':
+                app = Tine.Tinebase.appMgr.get('Expressomail');
+                centerPanel = app.getMainScreen().getCenterPanel();
+                centerPanel.defaultPaging.limit = newValue;
+                centerPanel.filterToolbar.onFilterChange();
+
+                break;
             case 'enableEncryptedMessage':
                 // reload mainscreen
                 var reload = new Ext.util.DelayedTask(function(){window.location.reload(false);},this);
@@ -1067,6 +1077,15 @@ Tine.Expressomail.handleRequestException = function(exception) {
             }
             break;
 
+        case 915: // Expressomail_Exception_IMAPCommandFailed
+            Ext.Msg.show({
+               title:   app.i18n._('Imap Command Failed'),
+               msg:     exception.message ? exception.message : app.i18n._('Imap Command Failed.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+
         case 920: // Expressomail_Exception_SMTP
             Ext.Msg.show({
                title:   app.i18n._('SMTP Error'),
@@ -1129,11 +1148,26 @@ Tine.Expressomail.fixIEUserAgent = function()
             result = re.exec(navigator.userAgent)[0],
             original = result.substring(1, result.length -1),
             elements = original.split('; '),
-            newUserAgent = '';
-        for(var i = 0; i < 4; i++){
-            newUserAgent = newUserAgent+elements[i]+'; ';
-        }
-        return navigator.userAgent.replace(original,newUserAgent.substr(0,newUserAgent.length -2));
+            newUserAgent = '(',
+            selectionItems = [
+                'compatible',
+                'Trident\\/\\d+\\.\\d+',
+                'MSIE \\d+\\.\\d+',
+                'Windows NT \\d+\\.\\d+',
+                'rv:\\d+\\.\\d+',
+                'WOW64',
+                'Win64',
+                'IA64',
+                'x64'
+            ],
+            ieRegexp = new RegExp('('+selectionItems.join('|')+')');
+        Ext.each(elements, function(element){
+            if (ieRegexp.test(element)){
+                newUserAgent = newUserAgent+element+'; ';
+            }
+        });
+        newUserAgent = newUserAgent.replace(/;\s$/, ')');
+        return navigator.userAgent.replace(re, newUserAgent);
     }
 }
 
@@ -1219,7 +1253,7 @@ Tine.Expressomail.addSecurityApplet = function (id, panel, region) {
     
     if (panel && typeof(panel.securityApplet) === 'undefined') {
         Tine.Expressomail.AppletLoadaded = false;
-        Ext.MessageBox.wait(app.i18n._('Loading Criptography Components...'), _('Please wait!'));
+        Ext.MessageBox.wait(app.i18n._('Loading Criptography Components...'), i18n._('Please wait!'));
         
         Tine.Expressomail.afterAppletLoad = function(){
             Tine.Expressomail.AppletLoadaded = true;

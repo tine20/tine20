@@ -32,6 +32,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DAYSVIEW_DEFAULT_STARTTIME = 'daysviewdefaultstarttime';
 
     /**
+     * time in minutes to be visible in dayviews at once
+     */
+    const DAYSVIEW_TIME_VISIBLE = 'daysviewtimevisible';
+
+    /**
      * default calendar all newly created/invited events are placed in
      */
     const DEFAULTCALENDAR = 'defaultCalendar';
@@ -104,6 +109,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $allPrefs = array(
             self::DAYSVIEW_STARTTIME,
             self::DAYSVIEW_ENDTIME,
+            self::DAYSVIEW_TIME_VISIBLE,
             self::DEFAULTCALENDAR,
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
@@ -146,6 +152,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DAYSVIEW_DEFAULT_STARTTIME => array(
                 'label'         => $translate->_('Default Start Time'),
                 'description'   => $translate->_('Scroll position on the left time axis, day and week view should start with'),
+            ),
+            self::DAYSVIEW_TIME_VISIBLE => array(
+                'label'         => $translate->_('Visible Time'),
+                'description'   => $translate->_('Time to be displayed at once'),
             ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
@@ -258,6 +268,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             case self::DAYSVIEW_DEFAULT_STARTTIME:
                 $preference->value      = '08:00';
                 $preference->options = $this->_createTimespanDataXML(0, 23);
+                break;
+            case self::DAYSVIEW_TIME_VISIBLE:
+                $preference->value      = '10:00';
+                $preference->options = $this->_createTimespanDataXML(1, 24);
                 break;
             case self::DEFAULTCALENDAR:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);

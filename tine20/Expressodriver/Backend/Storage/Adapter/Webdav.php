@@ -18,6 +18,15 @@
  */
 class Expressodriver_Backend_Storage_Adapter_Webdav extends Expressodriver_Backend_Storage_Abstract implements Expressodriver_Backend_Storage_Adapter_Interface, Expressodriver_Backend_Storage_Capabilities
 {
+    /**
+     * Constant for Expresso drive cache key
+     */
+    const GETEXPRESSODRIVEETAGS = 'getExpressodriveEtags';
+
+    /**
+     * Constant for Expresso drive cache entry tag
+     */
+    const EXPRESSODRIVEETAGS = 'expressodriverEtags';
 
     /**
      * @var string password
@@ -689,15 +698,20 @@ class Expressodriver_Backend_Storage_Adapter_Webdav extends Expressodriver_Backe
     private function getNodesFromCache($path, $etag)
     {
         $cache = Tinebase_Core::get('cache');
-        $cacheId = Tinebase_Helper::convertCacheId('getExpressodriveEtags' . sha1(Tinebase_Core::getUser()->getId() . $this->encodePath($path)));
+        $cacheId = Tinebase_Helper::arrayToCacheId(
+                array(
+                    self::GETEXPRESSODRIVEETAGS,
+                    sha1(Tinebase_getUser()->getId()) . $this->encodePath($path)
+                )
+            );
         $result = $cache->load($cacheId);
         if (!$result) {
             $result = $this->getNodesFromBackend($path);
-            $cache->save($result, $cacheId, array('expressodriverEtags'), $this->cacheLifetime);
+            $cache->save($result, $cacheId, array(self::EXPRESSODRIVEETAGS), $this->cacheLifetime);
         } else {
             if ($result[0]['hash'] != $etag) {
                 $result = $this->getNodesFromBackend($path);
-                $cache->save($result, $cacheId, array('expressodriverEtags'), $this->cacheLifetime);
+                $cache->save($result, $cacheId, array(self::EXPRESSODRIVEETAGS), $this->cacheLifetime);
             }
         }
         return $result;
@@ -748,5 +762,28 @@ class Expressodriver_Backend_Storage_Adapter_Webdav extends Expressodriver_Backe
             'account_grants' => $this->getGrants($file)
         );
         return $filetmp;
+    }
+
+    /**
+     * check if webdav credentials are valid
+     *
+     * @param string $url
+     * @param string $username
+     * @param string $password
+     * @return boolean
+     */
+    public function checkCredentials($url, $username, $password)
+    {
+        $arr = explode('://', $url, 2);
+        list($webdavauth_protocol, $webdavauth_url_path) = $arr;
+        $url = $webdavauth_protocol.'://'.urlencode($username).':'.urlencode($password).'@'.$webdavauth_url_path;
+
+        $headers = get_headers($url);
+        if ($headers == false) {
+            return false;
+        }
+        $returncode = substr($headers[0], 9, 3);
+
+        return substr($returncode, 0, 1) === '2';
     }
 }

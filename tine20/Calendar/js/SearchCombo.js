@@ -68,7 +68,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         }
 
         this.listEmptyText = this.app.i18n._('no events found');
-        this.loadingText = _('Searching...');
+        this.loadingText = i18n._('Searching...');
 
         this.recordClass = Tine.Calendar.Model.Event;
         this.recordProxy = Tine.Calendar.backend;

@@ -1,12 +1,12 @@
 # 
 # Translators:
 # Michal Wojcik <sardyna12@gmail.com>, 2013
-# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015
+# Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>, 2012-2013,2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:15+0000\n"
+"PO-Revision-Date: 2016-03-17 10:50+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Polish (http://www.transifex.com/tine20/tine20/language/pl/)\n"
 "MIME-Version: 1.0\n"
@@ -229,7 +229,7 @@ msgid "To (Email CC)"
 msgstr "Do (CC e-mail)"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1110 js/GridPanel.js:482
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr "Temat"
@@ -313,7 +313,7 @@ msgstr "Ostatnia aktualizacja:"
 #: js/TreePanel.js:732
 #, python-brace-format
 msgid "Fetching messages... ({0} done)"
-msgstr ""
+msgstr "Pobieranie wiadomości... ({0} pobrane)"
 
 #: js/TreePanel.js:748
 #, python-brace-format
@@ -327,7 +327,7 @@ msgstr[2] "{0} nieprzeczytanych wiadomości"
 msgid "Message not available."
 msgstr "Wiadomość niedostępna."
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1012
 msgid "From"
 msgstr "Od"
 
@@ -347,7 +347,7 @@ msgstr "Data"
 msgid "Show or hide header information"
 msgstr "Pokaż lub ukryj informacje nagłówkowe"
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:945 js/GridPanel.js:468
 msgid "Attachments"
 msgstr "Załączniki"
 
@@ -361,11 +361,11 @@ msgstr "Do"
 
 #: js/GridPanelHook.js:62
 msgid "CC"
-msgstr ""
+msgstr "DW"
 
 #: js/GridPanelHook.js:75
 msgid "BCC"
-msgstr ""
+msgstr "UDW"
 
 #: js/RecipientPickerFavoritePanel.js:43
 msgid "Recipient filter"
@@ -550,106 +550,125 @@ msgstr[0] "Lista flag"
 msgstr[1] "listy flag"
 msgstr[2] "listy flag"
 
-#: js/MessageEditDialog.js:144
+#: js/MessageEditDialog.js:154
 msgid "Send"
 msgstr "Wyślij"
 
-#: js/MessageEditDialog.js:152
+#: js/MessageEditDialog.js:162
 msgid "Search Recipients"
 msgstr "Znajdź adresatów"
 
-#: js/MessageEditDialog.js:160
+#: js/MessageEditDialog.js:170
 msgid "Save As Draft"
 msgstr "Zapisz jako szkic"
 
-#: js/MessageEditDialog.js:168
+#: js/MessageEditDialog.js:178
 msgid "Save As Template"
 msgstr "Zapisz jako szablon"
 
-#: js/MessageEditDialog.js:177
+#: js/MessageEditDialog.js:187
 msgid "Save Email Note"
 msgstr "Zapisz e-mail w notatce"
 
-#: js/MessageEditDialog.js:185
+#: js/MessageEditDialog.js:195
 msgid ""
 "Activate this toggle button to save the email text as a note attached to the"
 " recipient(s) contact(s)."
 msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do adresata/adresatów z listy kontaktów."
 
-#: js/MessageEditDialog.js:189
+#: js/MessageEditDialog.js:199
 msgid "Reading Confirmation"
 msgstr "Potwierdzenie przeczytania"
 
-#: js/MessageEditDialog.js:197
+#: js/MessageEditDialog.js:207
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr "Naciśnij ten przycisk, aby odbierać potwierdzenie przeczytania."
 
-#: js/MessageEditDialog.js:215
+#: js/MessageEditDialog.js:211
+msgid "Encrypt Email"
+msgstr ""
+
+#: js/MessageEditDialog.js:221
+msgid "Encrypt email using Mailvelope"
+msgstr ""
+
+#: js/MessageEditDialog.js:239
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Kliknij, aby znaleźć i dodać adresatów z książki adresowej."
 
-#: js/MessageEditDialog.js:402
-#, python-brace-format
-msgid "On {0}, {1} wrote"
-msgstr "Dnia {0}, {1} napisał(a)"
+#: js/MessageEditDialog.js:426
+msgid "Encrypted Content"
+msgstr ""
 
-#: js/MessageEditDialog.js:422
-msgid "Original message"
-msgstr "Oryginalna wiadomość"
-
-#: js/MessageEditDialog.js:608 js/ContactGrid.js:357
+#: js/MessageEditDialog.js:638 js/ContactGrid.js:357
 msgid "Loading Mail Addresses"
 msgstr "Ładowanie adresów e-mail"
 
-#: js/MessageEditDialog.js:659
+#: js/MessageEditDialog.js:689
 msgid "Fwd:"
 msgstr "Prześlij dalej:"
 
-#: js/MessageEditDialog.js:662
+#: js/MessageEditDialog.js:692
 #, python-brace-format
 msgid "{0} Message"
 msgstr "Wiadomość {0}"
 
-#: js/MessageEditDialog.js:716 js/MessageEditDialog.js:721
+#: js/MessageEditDialog.js:746 js/MessageEditDialog.js:751
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/MessageEditDialog.js:717
+#: js/MessageEditDialog.js:747
 #, python-brace-format
 msgid "{0} account setting empty."
 msgstr "{0} puste ustawienia konta"
 
-#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
+#: js/MessageEditDialog.js:752 js/MessageEditDialog.js:1153
 msgid "Files are still uploading."
 msgstr "Trwa aktualizacja plików"
 
-#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
+#: js/MessageEditDialog.js:842
+#, python-brace-format
+msgid "On {0}, {1} wrote"
+msgstr "Dnia {0}, {1} napisał(a)"
+
+#: js/MessageEditDialog.js:847
+msgid "Original message"
+msgstr "Oryginalna wiadomość"
+
+#: js/MessageEditDialog.js:885 js/MessageEditDialog.js:1120
 msgid "Compose email:"
 msgstr "Nowa wiadomość:"
 
-#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:1081 Controller/Message/Send.php:288
 msgid "Body"
 msgstr "wiadomość"
 
-#: js/MessageEditDialog.js:1072
+#: js/MessageEditDialog.js:1178
 msgid "Empty subject"
 msgstr "Brak tematu"
 
-#: js/MessageEditDialog.js:1073
+#: js/MessageEditDialog.js:1179
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Czy na pewno mam wysłać wiadomość bez tematu?"
 
-#: js/MessageEditDialog.js:1094
+#: js/MessageEditDialog.js:1201
 msgid "Add Note"
 msgstr "Dodaj notatkę"
 
-#: js/MessageEditDialog.js:1095
+#: js/MessageEditDialog.js:1202
 msgid "Edit Email Note Text:"
 msgstr "Edytuj tekst wiadomości:"
 
-#: js/MessageEditDialog.js:1118
+#: js/MessageEditDialog.js:1230
 msgid "No recipients set."
 msgstr "Nie zdefiniowano odbiorcy"
+
+#: js/MessageEditDialog.js:1252
+#, python-brace-format
+msgid ""
+"Cannot encrypt message. Public keys for the following recipients are "
+"missing: {0}"
+msgstr ""
 
 #: js/RecipientGrid.js:233
 msgid "Click here to set To/CC/BCC."
@@ -730,7 +749,7 @@ msgstr "Przesłane dalej"
 
 #: js/GridPanel.js:583
 msgid "Tine20"
-msgstr ""
+msgstr "Tine20"
 
 #: js/GridPanel.js:586
 msgid "Recent"
@@ -757,6 +776,15 @@ msgstr "Twoja kwota"
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} dostępnych (w sumie: {1})"
+
+#: js/PGPDetailsPanel.js:22
+#, python-brace-format
+msgid "To decrypt this message please install {0} with API support enabled"
+msgstr ""
+
+#: js/PGPDetailsPanel.js:25
+msgid "PGP encrypted Message"
+msgstr ""
 
 #: js/RecipientPickerDialog.js:63
 msgid "(new message)"
@@ -1094,49 +1122,59 @@ msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
 
 #: Preference.php:133
 msgid ".eml file Attachment in forwarded mails"
-msgstr ""
+msgstr "Załącznik w formacie .eml w przekazywanych wiadomościach"
 
 #: Preference.php:134
 msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-msgstr ""
+msgstr "Dołącz plik w formacie .eml do przekazywanej wiadomości. W przeciwnym razie oddziel załączniki."
 
-#: Config.php:53
+#: Config.php:60
 msgid "Vacation Templates Container ID"
 msgstr "ID kontenera szablonów nieobecności"
 
-#: Config.php:62
+#: Config.php:69
 msgid "Custom Vacation Message"
 msgstr "Wiadomość o nieobecności"
 
-#: Config.php:64
+#: Config.php:71
 msgid "User is allowed to set custom vacation message for system account"
 msgstr "Użytkownik ma prawo ustawiać wiadomość o nieobecności dla konta systemowego"
 
-#: Config.php:73
+#: Config.php:80
 msgid "Cache email body"
 msgstr "Zachowaj treść listu w pamięci cache."
 
-#: Config.php:75
+#: Config.php:82
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr "Czy zapisywać treści listów w pamięci cache (zalecane w przypadku wolnych połączeń z serwerami IMAP)"
 
-#: Config.php:84
+#: Config.php:91
 msgid "Enabled Features"
-msgstr ""
-
-#: Config.php:86
-msgid "Enabled features in Felamimail application."
-msgstr ""
+msgstr "Aktywne funkcje"
 
 #: Config.php:93
+msgid "Enabled features in Felamimail application."
+msgstr "Aktywne funkcje w aplikacji Felamimail"
+
+#: Config.php:100
 msgid "Tine 2.0 Flag"
+msgstr "Flaga Tine 2.0"
+
+#: Config.php:101
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr "Dodaj flagę Tine 2.0 do wysyłanych wiadomości"
+
+#: Config.php:109
+msgid "Filter E-Mail URIs"
 msgstr ""
 
-#: Config.php:94
-msgid "Add a Tine 2.0 flag to sent messages"
+#: Config.php:111
+msgid ""
+"Should the email body uris be filtered. Only anchors with URIs are allowed "
+"if this is turned on.)"
 msgstr ""
 
 #: Setup/Initialize.php:44

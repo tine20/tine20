@@ -387,8 +387,9 @@ Tine.Expressomail.MessageDisplayDialog.openWindow = function (config) {
     var record = (Ext.isString(config.record)) ? Ext.util.JSON.decode(config.record) : config.record,
         id = (record && record.id) ? record.id : 0,
         window = Tine.WindowFactory.getWindow({
-            width: 800,
-            height: 700,
+            width: 700,
+            height: 650,
+            multiple: true,
             name: 'TineExpressomailMessageDisplayDialog_' + id,
             contentPanelConstructor: 'Tine.Expressomail.MessageDisplayDialog',
             contentPanelConstructorConfig: config

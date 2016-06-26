@@ -148,7 +148,7 @@ Tine.widgets.dialog.AddRelationsEditDialogPlugin.prototype = {
                 }
                 var relation = {
                     own_backend: "Sql",
-                    own_degree: "sibling",
+                    related_degree: "sibling",
                     own_id: this.editDialog.record.get(ownIdProperty),
                     own_model: this.editDialog.app.name + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
                     related_backend: "Sql",

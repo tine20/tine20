@@ -99,13 +99,13 @@ class Tinebase_Relations
         // compute relations to add/delete
         $currentRelations = $this->getRelations($_model, $_backend, $_id, NULL, array(), $_ignoreACL);
         $currentIds   = $currentRelations->getArrayOfIds();
-        $relationsIds = $relations->getArrayOfIds();
+        $relationsIds = $this->_getRelationIds($relations, $currentRelations);
         
         $toAdd = $relations->getIdLessIndexes();
         $toDel = array_diff($currentIds, $relationsIds);
         $toUpdate = array_intersect($currentIds, $relationsIds);
 
-        // prevent two empty related_id s of the same relation type
+        // prevent two empty related_ids of the same relation type
         $emptyRelatedId = array();
         foreach ($toAdd as $idx) {
             if (empty($relations[$idx]->related_id)) {
@@ -174,7 +174,44 @@ class Tinebase_Relations
             }
         }
     }
-    
+
+    /**
+     * appends missing relation ids if related records + type match
+     *
+     * @param $relations
+     * @param $currentRelations
+     * @return mixed
+     */
+    protected function _getRelationIds($relations, $currentRelations)
+    {
+        $clonedRelations = clone $relations;
+
+        if (count($currentRelations) > 0) {
+            foreach ($clonedRelations as $relation) {
+                if ($relation->getId()) {
+                    continue;
+                }
+
+                // if relation has no id, maybe we have the same relation already in current relations
+                $subset = $currentRelations->filter('own_id', $relation->own_id)
+                    ->filter('related_id', $relation->related_id)
+                    ->filter('type', $relation->type);
+
+                if (count($subset) === 1) {
+                    // remove and add to make sure index is updated in record set
+                    $relations->removeRecord($relation);
+                    $relation->setId($subset->getFirstRecord()->getId());
+                    $relations->addRecord($relation);
+                    //$result[] = $subset->getFirstRecord()->getId();
+                }
+            }
+        }
+
+        $result = $relations->getArrayOfIds();
+
+        return $result;
+    }
+
     /**
      * returns the constraints config for the given models and their mirrored values (seen from the other side
      * 
@@ -651,7 +688,7 @@ class Tinebase_Relations
     public function transferRelations($sourceId, $destinationId, $model)
     {
         if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
-            throw new Tinebase_Exception_AccessDenied('Non admins of Tinebase aren\'t allowed to perform his operation!');
+            throw new Tinebase_Exception_AccessDenied('Only Admins are allowed to perform his operation!');
         }
         
         return $this->_backend->transferRelations($sourceId, $destinationId, $model);
@@ -679,5 +716,25 @@ class Tinebase_Relations
     public function removeApplication($applicationName)
     {
         $this->_backend->removeApplication($applicationName);
+    }
+
+    public function getRelationsOfRecordByDegree($record, $degree)
+    {
+        // get relations if not yet present OR use relation search here
+        if (empty($record->relations)) {
+            $backendType = 'Sql';
+            $modelName = get_class($record);
+            $record->relations = Tinebase_Relations::getInstance()->getRelations($modelName, $backendType, $record->getId());
+        }
+
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        foreach ($record->relations as $relation) {
+            if ($relation->related_degree === $degree) {
+                $result->addRecord($relation);
+            }
+        }
+
+        return $result;
     }
 }

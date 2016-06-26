@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:16+0000\n"
+"PO-Revision-Date: 2016-03-17 10:51+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: Korean (Korea) (http://www.transifex.com/tine20/tine20/language/ko_KR/)\n"
 "MIME-Version: 1.0\n"
@@ -76,6 +76,10 @@ msgstr ""
 
 #: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:283
 msgid "Depreciate"
+msgstr ""
+
+#: Model/InventoryItem.php:149
+msgid "Image"
 msgstr ""
 
 #: js/InventoryItemGridPanel.js:37

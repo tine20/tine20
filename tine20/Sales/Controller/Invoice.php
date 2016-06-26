@@ -108,12 +108,15 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Invoice();
         $this->_modelName = 'Sales_Model_Invoice';
         $this->_doContainerACLChecks = FALSE;
         $this->_cachedProducts = new Tinebase_Record_RecordSet('Sales_Model_Product');
+        // TODO this should be done automatically if model has customfields (hasCustomFields)
+        $this->_resolveCustomFields = true;
     }
     
     /**
@@ -189,7 +192,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'type'                   => 'INVOICE_ITEM'
         );
@@ -482,7 +485,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Contract',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingContract->getId(),
@@ -495,7 +498,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'own_model'              => 'Sales_Model_Invoice',
             'own_backend'            => Tasks_Backend_Factory::SQL,
             'own_id'                 => NULL,
-            'own_degree'             => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Customer',
             'related_backend'        => Tasks_Backend_Factory::SQL,
             'related_id'             => $this->_currentBillingCustomer['id'],
@@ -562,8 +565,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
 
         //get ids of invoices of which the contract was changed
         $ids = $this->getInvoicesWithChangedContract((null!==$contract?$contract->getId():null));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($ids) . ' invoices with a contract change after creation time');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($ids) . ' invoices with a contract change after creation time');
         }
         $excludeIds = array();
         $contracts = array();
@@ -582,6 +585,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 continue;
             }
             $this->checkForRecreation($ids, $tmpContract);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' checkForRecreation result: ' . print_r($this->_autoInvoiceIterationResults, 1));
+            }
             $result = array_merge($result, $this->_autoInvoiceIterationResults);
         }
 
@@ -613,8 +619,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         $p = new Tinebase_Model_Pagination(array('sort' => 'creation_time', 'dir' => 'ASC'));
 
         $invoices = $this->search($f, $p, /* $_getRelations = */ false, /* only ids */ true);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($invoices) . ' invoices which are not yet cleared');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($invoices) . ' invoices which are not yet cleared');
         }
 
         foreach($invoices as $id)
@@ -699,8 +705,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
 
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . count($billableAccountables) . ' accountables that need to be checked for: ' . $id);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' . count($billableAccountables) . ' accountables that need to be checked for: ' . $id);
         }
 
 
@@ -718,8 +724,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         list($invoicePositions, $earliestStartDate, $latestEndDate) = $this->_findInvoicePositionsAndInvoiceInterval($billableAccountables);
 
         if ($invoicePositions->count() > 0 ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' found ' . $invoicePositions->count() . ' updates for: ' . $id);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' . $invoicePositions->count() . ' updates for: ' . $id);
             }
             if ($invoice->start_date->isLater($earliestStartDate)) {
                 $invoice->start_date = $earliestStartDate;
@@ -746,8 +752,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 {
                     if ($oldPosition->accountable_id == $position->accountable_id && $oldPosition->month == $position->month)
                     {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' updating invoice position: ' . $oldPosition->id . ' with model: ' . $oldPosition->model . ' and accountable_id: ' . $oldPosition->accountable_id . ' in month: ' . $oldPosition->month . ' for invoice: ' . $id);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating invoice position: ' . $oldPosition->id . ' with model: ' . $oldPosition->model . ' and accountable_id: ' . $oldPosition->accountable_id . ' in month: ' . $oldPosition->month . ' for invoice: ' . $id);
                         }
                         //update the $invoice->price_net, price_gross too?!?
                         $oldPosition->quantity += $position->quantity;
@@ -758,8 +764,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 // add a new invoice position
                 if (false===$found) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' adding invoice position with model: ' . $position->model . ' and accountable_id: ' . $position->accountable_id . ' in month: ' . $position->month . ' for invoice: ' . $id);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' adding invoice position with model: ' . $position->model . ' and accountable_id: ' . $position->accountable_id . ' in month: ' . $position->month . ' for invoice: ' . $id);
                     }
                     $position->invoice_id = $invoice->getId();
                     $ipc->create($position);
@@ -785,9 +791,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         //we should delete from recent to old
         //we should create from old to recent
         //then compare correctly...
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             $forTrace = $contract->id . ' ' . print_r($ids, true);
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' for: ' . $forTrace);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' for: ' . $forTrace);
         }
 
         $this->_autoInvoiceIterationDetailResults = array();
@@ -900,8 +906,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
 
         if (true === $somethingChanged) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' something changed for: ' . $forTrace);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' something changed for: ' . $forTrace);
             }
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
@@ -915,8 +921,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             }
 
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' nothing changed for: ' . $forTrace);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' nothing changed for: ' . $forTrace);
             }
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
@@ -1007,7 +1013,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $this->_currentMonthToBill: ' . $this->_currentMonthToBill
                     . ' $this->_currentBillingDate ' . $this->_currentBillingDate);
                 foreach ($productAggregates as $productAggregate) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $productAggregate->id . ' ' . $productAggregate->last_autobill);
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $productAggregate->id . ' ' . $productAggregate->last_autobill . ' ' . $productAggregate->interval);
                 }
             }
             
@@ -1106,6 +1112,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
                 
                 $doSleep = true;
+            } elseif (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' $invoicePositions->count() == false');
             }
             
             $this->_currentMonthToBill->addMonth(1);

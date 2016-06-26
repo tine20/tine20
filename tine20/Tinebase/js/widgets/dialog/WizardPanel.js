@@ -172,28 +172,28 @@ Tine.widgets.dialog.WizardPanel = Ext.extend(Ext.Panel, {
      */
     initFooterBar: function() {
         this.fbar = ['->',{
-            text: _('Back'),
+            text: i18n._('Back'),
             minWidth: 70,
             ref: '../backButton',
             iconCls: 'action_previous',
             scope: this,
             handler: this.onBackButton
         }, {
-            text: _('Next'),
+            text: i18n._('Next'),
             minWidth: 70,
             ref: '../nextButton',
             iconCls: 'action_next',
             scope: this,
             handler: this.onNextButton
         }, {
-            text: _('Cancel'),
+            text: i18n._('Cancel'),
             minWidth: 70,
             ref: '../cancelButton',
             iconCls: 'action_cancel',
             scope: this,
             handler: this.onCancelButton
         }, {
-            text: _('Finish'),
+            text: i18n._('Finish'),
             minWidth: 70,
             ref: '../finishButton',
             iconCls: 'action_saveAndClose',

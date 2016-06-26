@@ -42,19 +42,22 @@
 
 .Month_dayDisplay, .Month_dayContent { display:inline-block; width:100%; }
 .Month_dayDisplay { color:#777; height:1em; }
-@media (max-width:1024px) { .Month_dayDisplay { font-size:80%; } } /* mobile */
+@media (max-width:1024px) { .Month_dayDisplay { font-size:75%; } } /* mobile */
 @media (min-width:1025px) { .Month_dayDisplay { font-size:90%; } } /* desktop */
 
 .Month_dayContent { height:calc(100% - 1em); overflow-x:hidden; overflow-y:auto; }
-@media (max-width:1024px) { .Month_dayContent { font-size:80%; } } /* mobile */
-@media (min-width:1025px) { .Month_dayContent { } } /* desktop */
+@media (max-width:1024px) { .Month_dayContent { font-size:75%; } } /* mobile */
+@media (min-width:1025px) { .Month_dayContent { font-size:90%; } } /* desktop */
 
 .Month_dayOutside { background-color:#F9F9F9; }
 .Month_dayOutside .Month_dayDisplay { color:#BBB; }
-.Month_dayToday { background-color:#EEF5FF; }
-.Month_dayToday .Month_dayDisplay { font-weight:bold; }
+.Month_dayToday { border:1px solid #0061AA; }
+.Month_dayToday .Month_dayDisplay { font-weight:bold; color:#0061AA; }
 
-.Month_event { display:inline-block; margin-bottom:2px; white-space:nowrap; cursor:pointer; }
+.Month_daySelected { background-color:#EEF5FF; }
+
+.Month_event { display:inline-block; width:100%; margin-bottom:2px;
+    white-space:nowrap; cursor:pointer; }
 @media (max-width:1024px) { /* mobile */
     .Month_eventHour { display:none; }
     .Month_eventName { }
@@ -64,5 +67,8 @@
     .Month_eventName { }
 }
 .Month_eventDeclined { text-decoration:line-through; }
+.Month_eventEcho { opacity:.3; }
+.Month_eventEchoLastDay { font-style:italic; }
+.Month_eventHover { background-color:#0061AA; color:white !important; }
 
 .Month_loading { text-align:center; margin:10px; color:#888; font-style:italic; }

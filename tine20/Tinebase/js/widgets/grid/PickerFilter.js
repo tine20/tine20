@@ -307,7 +307,7 @@ Tine.widgets.grid.PickerFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
      * @return Ext.grid.ColumnModel
      */
     getColumnModel: function() {
-        var labelColumn = {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
+        var labelColumn = {id: this.labelField, header: String.format(i18n._('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
         if (this.labelRenderer != Ext.emptyFn) {
             labelColumn.renderer = this.labelRenderer;
         }

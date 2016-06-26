@@ -16,14 +16,14 @@ require.config({
 require(['jquery',
     'common-js/App',
     'common-js/Layout',
-    'addressbook/WidgetCatalogMenu',
+    'common-js/SimpleMenu',
     'addressbook/WidgetContactList',
     'addressbook/WidgetContactDetails'
 ],
-function($, App, Layout, WidgetCatalogMenu, WidgetContactList, WidgetContactDetails) {
+function($, App, Layout, SimpleMenu, WidgetContactList, WidgetContactDetails) {
 window.Cache = {
     layout: null,
-    widgetCatalogMenu: null,
+    simpleMenu: null,
     widgetContactList: null,
     widgetContactDetails: null
 };
@@ -66,17 +66,17 @@ App.Ready(function() {
         });
 
 
-        Cache.widgetCatalogMenu = new WidgetCatalogMenu({
+        Cache.simpleMenu = new SimpleMenu({
             $parentContainer: $('#tipoContatoDiv')
         });
 
-        Cache.widgetCatalogMenu
-        .addOption('Catálogo Corporativo', function () {
+        Cache.simpleMenu
+        .addOption('Catálogo Corporativo', 'corporate', function () {
             Cache.layout.setLeftMenuVisibleOnPhone(false)
             .done(function() {
                 Cache.widgetContactList.changeToCorporateCatalog();
             });
-        }).addOption('Catálogo Pessoal', function () {
+        }).addOption('Catálogo Pessoal', 'personal', function () {
             Cache.layout.setLeftMenuVisibleOnPhone(false)
             .done(function() {
                 Cache.widgetContactList.changeToPersonalCatalog();
@@ -104,7 +104,7 @@ App.Ready(function() {
             Cache.widgetContactList.load(),
             Cache.layout.load()
         ).done(function() {
-            Cache.widgetContactList.changeToCorporateCatalog();
+            Cache.simpleMenu.selectFirstOption();
         });
     })();
 }); // App.Ready

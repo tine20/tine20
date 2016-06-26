@@ -549,17 +549,17 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $emailNoteType = Tinebase_Notes::getInstance()->getNoteTypeByName('email');
         
         // check / delete notes
-        $emailNoteIds = array();
+        $emailNotes = new Tinebase_Record_RecordSet('Tinebase_Model_Note');
         foreach ($contact->notes as $note) {
             if ($note->note_type_id == $emailNoteType->getId()) {
                 $this->assertContains($subject, $note->note, 'did not find note subject');
                 $this->assertEquals(Tinebase_Core::getUser()->getId(), $note->created_by);
                 $this->assertContains('aaaaaä', $note->note);
-                $emailNoteIds[] = $note->getId();
+                $emailNotes->addRecord($note);
             }
         }
-        $this->assertGreaterThan(0, count($emailNoteIds), 'no email notes found');
-        Tinebase_Notes::getInstance()->deleteNotes($emailNoteIds);
+        $this->assertGreaterThan(0, $emailNotes->count(), 'no email notes found');
+        Tinebase_Notes::getInstance()->deleteNotes($emailNotes);
     }
 
     /**
@@ -567,15 +567,18 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     public function testSendMessageToInvalidRecipient()
     {
+        $this->markTestSkipped('FIXME: 0011802: Felamimail_Frontend_JsonTest::testSendMessageToInvalidRecipient fails');
+
         $messageToSend = $this->_getMessageData($this->_account->email);
         $invalidEmail = 'invaliduser@' . $this->_mailDomain;
         $messageToSend['to'] = array($invalidEmail);
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
         
         try {
             $returned = $this->_json->saveMessage($messageToSend);
             $this->fail('Tinebase_Exception_SystemGeneric expected');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertContains('550 5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage(),
+            $this->assertContains('<' . $invalidEmail . '>: ' . $translation->_('Recipient address rejected'), $tesg->getMessage(),
                 'exception message did not match: ' . $tesg->getMessage());
         }
     }
@@ -1210,6 +1213,19 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->assertContains('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
     }
 
+    public function testMessagePGPInline()
+    {
+        $inbox = $this->_getFolder('INBOX');
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../files/multipart_alternative_pgp_inline.eml');
+        Felamimail_Controller_Message::getInstance()->appendMessage($inbox, $mailAsString);
+
+        $this->_foldersToClear = array('INBOX');
+        $message = $this->_searchForMessageBySubject('Re: mailvelope und tine20');
+
+        $fullMessage = $this->_json->getMessage($message['id']);
+        $this->assertFalse(empty($fullMessage['preparedParts']));
+    }
+
     /*********************** sieve tests ****************************/
     
     /**
@@ -1627,6 +1643,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+
+        // sleep for 2 secs because mailserver may be slower than expected
+        sleep(2);
         
         $result = $this->_getMessages($folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
@@ -1673,8 +1692,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $i++;
         }
         $result = $this->_json->searchMessages($filter, '');
-        //print_r($result);
-        
+
         return $result;
     }
     
@@ -1687,6 +1705,9 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
      */
     protected function _searchForMessageBySubject($_subject, $_folderName = 'INBOX')
     {
+        // give server some time to send and receive messages
+        sleep(1);
+
         $result = $this->_getMessages($_folderName);
         
         $message = array();

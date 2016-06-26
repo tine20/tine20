@@ -30,12 +30,13 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     newRecordIcon: 'cal-resource',
     
-    initFilterPanel: function() {},
+    initFilterPanel: Ext.emptyFn,
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
         this.gridConfig = {
+            autoExpandColumn: 'name'
         };
         
         this.gridConfig.columns = [{
@@ -51,10 +52,22 @@ Tine.Calendar.ResourcesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sortable: true,
             dataIndex: 'email'
         }, new Ext.ux.grid.CheckColumn({
-            header: _('Location'),
+            header: this.app.i18n._('Location'),
             dataIndex: 'is_location',
             width: 55
-        })];
+        }), {
+            id: 'status',
+            dataIndex: 'status',
+            width: 140,
+            header: this.app.i18n._('Default Status'),
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'attendeeStatus')
+        }, {
+            id: 'busy_type',
+            dataIndex: 'busy_type',
+            width: 140,
+            header: this.app.i18n._('Busy Type'),
+            renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'freebusyTypes')
+        }];
         
         this.supr().initComponent.call(this);
     },

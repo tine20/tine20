@@ -144,7 +144,7 @@ msgstr "Tipo de conteúdo"
 
 #: js/Expressodriver.js:36
 msgid "Expressodriver"
-msgstr "Expressodriver"
+msgstr "Expresso Drive"
 
 #: js/Expressodriver.js:91
 msgid "Service Unavailable"
@@ -261,3 +261,19 @@ msgstr "Deletando itens..."
 #: js/ExternalAdapter:156
 msgid "Use e-mail as login name"
 msgstr "Usar e-mail como login"
+
+#: js/CredentialsDialog:33
+msgid "Credentials for Expressodriver"
+msgstr "Credenciais para o Expresso Drive"
+
+#: js/CredentialsDialog:85
+msgid "Authentication success."
+msgstr "Autenticação realizada com sucesso."
+
+#: js/CredentialsDialog:96
+msgid "Credentials error"
+msgstr "Erro de credenciais"
+
+#: js/CredentialsDialog:97
+msgid "Invalid Credentials"
+msgstr "Credenciais inválidas"

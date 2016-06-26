@@ -100,9 +100,9 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
                 sortable: true
             },
             columns:  [
-                {   id: 'name', header: _('Name'), dataIndex: 'related_record', renderer: this.relatedRecordRender, scope: this}, {
+                {   id: 'name', header: i18n._('Name'), dataIndex: 'related_record', renderer: this.relatedRecordRender, scope: this}, {
                     id: 'type', 
-                    header: (this.typeColumnHeader) ? this.typeColumnHeader : _('Type'), 
+                    header: (this.typeColumnHeader) ? this.typeColumnHeader : i18n._('Type'),
                     dataIndex: 'type', 
                     width: 100, 
                     sortable: true,
@@ -172,6 +172,11 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
 
         // check if already in
         if (this.store.findExact('related_id', recordToAdd.id) === -1) {
+            var recordType = record.get('type');
+            if (! Ext.isString(recordType) && recordType['default']) {
+                record.set('type', recordType['default']);
+                record.commit();
+            }
             this.store.add([record]);
         }
         

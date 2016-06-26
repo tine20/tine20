@@ -307,7 +307,7 @@ Tine.Tinebase.common = {
                         qtipText += ' | ' + Tine.Tinebase.common.doubleEncode(tags[i].description);
                     }
                     if (tags[i].occurrence) {
-                        qtipText += ' (' + _('Usage:&#160;') + tags[i].occurrence + ')';
+                        qtipText += ' (' + i18n._('Usage:&#160;') + tags[i].occurrence + ')';
                     }
                     result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
                 }
@@ -328,12 +328,12 @@ Tine.Tinebase.common = {
                 '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
                 '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
                     '{[this.encode(values.name)]}', 
-                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                     '</i>&nbsp;[{occurrence}]',
                     '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
                     
                     '&nbsp;{[this.encode(values.name)]}',
-                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + _('personal') + ')</i></tpl>',
+                    '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                 '</div>',
             {
                 encode: function(value) {
@@ -346,7 +346,7 @@ Tine.Tinebase.common = {
             }).compile();
         }
         
-        var result =  _('No Information');
+        var result =  i18n._('No Information');
         
         if (tag && Ext.isFunction(tag.beginEdit)) {
             // support records
@@ -384,7 +384,7 @@ Tine.Tinebase.common = {
             ).compile();
         }
         
-        var result =  _('No Information');
+        var result =  i18n._('No Information');
         
         // support container records
         if (container && Ext.isFunction(container.beginEdit)) {
@@ -454,9 +454,9 @@ Tine.Tinebase.common = {
         }
         
         if (! format || ! Ext.isString(format)) {
-            s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
-            Hs = String.format(Tine.Tinebase.translation.ngettext('{0} hour', '{0} hours', H), H);
-            //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
+            s = String.format(i18n.ngettext('{0} minute', '{0} minutes', i), i);
+            Hs = String.format(i18n.ngettext('{0} hour', '{0} hours', H), H);
+            //var ds = String.format(i18n.ngettext('{0} workday', '{0} workdays', d), d);
             
             if (i === 0) {
                 s = Hs;
@@ -483,7 +483,7 @@ Tine.Tinebase.common = {
             m = Math.floor(seconds / 60),
             result = '';
         
-        var secondResult = String.format(Tine.Tinebase.translation.ngettext('{0} second', '{0} seconds', s), s);
+        var secondResult = String.format(i18n.ngettext('{0} second', '{0} seconds', s), s);
         
         if (m) {
             result = Tine.Tinebase.common.minutesRenderer(m);
@@ -518,11 +518,22 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        var type, iconCls, displayName;
+        var type, iconCls, displayName, email;
         
         if (accountObject.accountDisplayName) {
             type = 'user';
             displayName = accountObject.accountDisplayName;
+
+            // need to create a "dummy" app to call featureEnabled()
+            // TODO: should be improved
+            var tinebaseApp = new Tine.Tinebase.Application({
+                appName: 'Tinebase'
+            });
+            if (tinebaseApp.featureEnabled('featureShowAccountEmail') && accountObject.accountEmailAddress) {
+                // add email address if available
+                email = accountObject.accountEmailAddress;
+                displayName += ' (' + email + ')';
+            }
         } else if (accountObject.name) {
             type = 'group';
             displayName = accountObject.name;
@@ -535,7 +546,7 @@ Tine.Tinebase.common = {
         }
         
         if (displayName == 'Anyone') {
-            displayName = _(displayName);
+            displayName = i18n._(displayName);
             type = 'group';
         }
         
@@ -573,6 +584,30 @@ Tine.Tinebase.common = {
         var translationString = String.format("{0}",(value == 1) ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
         
         return translationString.substr(0, translationString.indexOf(':'));
+    },
+
+    /**
+     * i18n renderer
+     *
+     * NOTE: needs to be bound to i18n object!
+     *
+     * renderer: Tine.Tinebase.common.i18nRenderer.createDelegate(this.app.i18n)
+     * @param original
+     */
+    i18nRenderer: function(original) {
+        return this._hidden(original);
+    },
+
+    /**
+     * color renderer
+     *
+     * @param color
+     */
+    colorRenderer: function(color) {
+        // normalize
+        color = String(color).replace('#', '');
+
+        return '<div style="background-color: #' + Ext.util.Format.htmlEncode(color) + '">&#160;</div>';
     },
 
     /**
@@ -810,5 +845,22 @@ Tine.Tinebase.common = {
             return Tine[appName].Model[modelName];
         }
         return modelName;
+    },
+
+    /**
+     * Confirm application restart
+     *
+     * @param Boolean closewindow
+     */
+    confirmApplicationRestart: function (closewindow) {
+        Ext.Msg.confirm(i18n._('Confirm'), i18n._('Restart application to apply new configuration?'), function (btn) {
+            if (btn == 'yes') {
+                // reload mainscreen to make sure registry gets updated
+                Tine.Tinebase.common.reload();
+                if (closewindow) {
+                    window.close();
+                }
+            }
+        }, this);
     }
 };

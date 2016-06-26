@@ -122,6 +122,20 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             return $this->_getMatrixCellValue($_field, $_record);
         }
         
+        // Shorten this field?
+        if (isset($_field->maxcharacters) || isset($_field->maxlines)) {
+            $result = $_record->{$_field->identifier};
+            if (isset($_field->maxcharacters)) {
+                $result = $this->_getShortenedField($result, $_field->maxcharacters, 'maxcharacters');
+                
+            }
+            if (isset($_field->maxlines)) {
+                $result = $this->_getShortenedField($result, $_field->maxlines, 'maxlines');
+            }
+        return $result;
+        }
+
+        
         switch($_field->type) {
             case 'datetime':
                 $result = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_record->{$_field->identifier});
@@ -164,7 +178,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     $_record,
                     /* $relationType = */       $_field->identifier,
                     /* $recordField = */        $_field->field,
-                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false
+                    /* $onlyFirstRelation = */  isset($_field->onlyfirst) ? $_field->onlyfirst : false,
+                    /* $keyfield = */            isset($_field->keyfield) ? $_field->keyfield : NULL,
+                    /* $application = */        isset($_field->application) ? $_field->application : NULL
                 );
                 break;
             case 'notes':

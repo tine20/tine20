@@ -15,7 +15,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.tags');
  * @extends     Ext.Action
  */
 Tine.widgets.tags.TagsMassAttachAction = function(config) {
-    config.text = config.text ? config.text : _('Add Tags');
+    config.text = config.text ? config.text : i18n._('Add Tags');
     config.iconCls = 'action_tag';
     config.handler = config.handler ? config.handler : this.handleClick.createDelegate(this);
     config.scope = config.scope ? config.scope : this.handleClick.createDelegate(this);
@@ -66,7 +66,6 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
     getFormItems: function() {
         return new Tine.widgets.grid.PickerGridPanel({
             height: 'auto',
-            searchComboClass: Tine.widgets.tags.TagCombo,
             searchComboConfig: {app: this.app},
             recordClass: Tine.Tinebase.Model.Tag,
             store: this.store,
@@ -91,7 +90,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             padding: '5px',
             modal: true,
             closeAction: 'hide', // mhh not working :-(
-            title: _('Select Tags'),
+            title: i18n._('Select Tags'),
             items: [{
                 xtype: 'form',
                 buttonAlign: 'right',
@@ -99,13 +98,13 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                 layout: 'fit',
                 items: this.getFormItems(),
                 buttons: [{
-                    text: _('Cancel'),
+                    text: i18n._('Cancel'),
                     minWidth: 70,
                     scope: this,
                     handler: this.onCancel,
                     iconCls: 'action_cancel'
                 }, {
-                    text: _('Ok'),
+                    text: i18n._('Ok'),
                     ref: '../../../okButton',
                     disabled: this.store ? !this.store.getCount() : true,
                     minWidth: 70,
@@ -132,7 +131,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             return;
         }
         
-        this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: _('Attaching Tag')});
+        this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Attaching Tag')});
         this.loadMask.show();
         
         var filter = this.selectionModel.getSelectionFilter();

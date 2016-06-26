@@ -42,6 +42,27 @@
             </style>
         </column>
         <column>
+            <identifier>price_net</identifier>
+            <header>Price Net</header>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>price_tax</identifier>
+            <header>Price Tax</header>
+            <style>
+                <column-width>2cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>price_gross</identifier>
+            <header>Price Gross</header>
+            <style>
+                <column-width>4cm</column-width>
+            </style>
+        </column>
+        <column>
             <identifier>customer</identifier>
             <header>Customer</header>
             <!--type>customer</type-->
@@ -55,6 +76,13 @@
             <!--type>address</type-->
             <style>
                 <column-width>20cm</column-width>
+            </style>
+        </column>
+        <column>
+            <identifier>debitor</identifier>
+            <header>Debitor</header>
+            <style>
+                <column-width>4cm</column-width>
             </style>
         </column>
         <column>

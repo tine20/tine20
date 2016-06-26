@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,6 +23,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * where the etag is checked
      */
     const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
+
+    /**
+     * photo size
+     *
+     * @var integer
+     */
+    protected $_maxPhotoSize = Addressbook_Model_Contact::SMALL_PHOTO_SIZE;
     
     /**
      * the version string
@@ -37,6 +44,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     public function __construct($_version = null)
     {
         $this->_version = $_version;
+
+        if (isset($_REQUEST['max_photo_size'])) {
+            $this->_maxPhotoSize = (int) $_REQUEST['max_photo_size'];
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' maxPhotoSize set to ' . $this->_maxPhotoSize);
+        }
     }
     
     /**
@@ -216,7 +230,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         $contact->setFromArray($data);
 
         if (isset($jpegphoto)) {
-            $contact->setSmallContactImage($jpegphoto);
+            $contact->setSmallContactImage($jpegphoto, $this->_maxPhotoSize);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -406,7 +420,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     {
         if (! empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             try {
-                $jpegData = $record->getSmallContactImage();
+                $jpegData = $record->getSmallContactImage($this->_maxPhotoSize);
                 $card->add('PHOTO',  $jpegData, array('TYPE' => 'JPEG', 'ENCODING' => 'b'));
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) 

@@ -22,11 +22,10 @@ class Voipmanager_Server_PluginTests extends TestCase
      */
     public function testServerUserAgentSnom()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php?frontend=activesync HTTP/1.1\r
-Host: localhost\r
-User-Agent: Mozilla/4.0 (compatible; snom320-SIP 8.4.35 1.1.3-n)\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "Host: localhost\r\n".
+            "User-Agent: Mozilla/4.0 (compatible; snom320-SIP 8.4.35 1.1.3-n)"
         );
         
         $server = Tinebase_Core::getDispatchServer($request);
@@ -39,11 +38,10 @@ EOS
      */
     public function testServerUserAgentAsterisk()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php?frontend=activesync HTTP/1.1\r
-Host: localhost\r
-User-Agent: asterisk-libcurl-agent/1.0\r
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+            "POST /index.php HTTP/1.1\r\n".
+            "Host: localhost\r\n".
+            "User-Agent: asterisk-libcurl-agent/1.0"
         );
         
         $server = Tinebase_Core::getDispatchServer($request);

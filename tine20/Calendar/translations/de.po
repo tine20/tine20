@@ -1682,3 +1682,33 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+msgid "Print Event"
+msgstr "Termin Drucken"
+
+msgid "Unavailable"
+msgstr "Nicht Verfügbar"
+
+msgid "Busy Type"
+msgstr "Belegt Typ"
+
+msgid "Default Status"
+msgstr "Standard Status"
+
+msgid "Free"
+msgstr "Frei"
+
+msgid "Busy"
+msgstr "Belegt"
+
+msgid "Except"
+msgstr "Außer"
+
+msgid "during events in the calendars"
+msgstr "während Terminen in den Kalendern"
+
+msgid "Visible Time"
+msgstr "Angezeigte Zeit"
+
+msgid "Time to be displayed at once"
+msgstr "Wie viele Zeit auf einmal angezeigt werden sollen"

@@ -57,7 +57,7 @@ class Tinebase_ImageHelper
         
         $imgInfo = @getimagesize($tmpPath);
         unlink($tmpPath);
-        if (! in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
+        if (! in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
             throw new Tinebase_Exception_UnexpectedValue('given blob does not contain valid image data.');
         }
         if (! (isset($imgInfo['channels']) || array_key_exists('channels', $imgInfo))) {
@@ -85,10 +85,20 @@ class Tinebase_ImageHelper
             return false;
         }
         $imgInfo = getimagesize($_file);
-        if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], array('image/png', 'image/jpeg', 'image/gif'))) {
+        if (isset($imgInfo['mime']) && in_array($imgInfo['mime'], self::getSupportedImageMimeTypes())) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * returns supported image mime types
+     *
+     * @return array
+     */
+    public static function getSupportedImageMimeTypes()
+    {
+        return array('image/png', 'image/jpeg', 'image/gif');
     }
     
     /**
@@ -126,5 +136,4 @@ class Tinebase_ImageHelper
         
         return file_get_contents($tempFile->path);
     }
-    
 }

@@ -41,6 +41,10 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: Model/ExampleRecord.php:66 js/ExampleRecordEditDialog.js:79
+msgid "Reason"
+msgstr ""
+
 #: js/ExampleRecordEditDialog.js:50
 msgid "ExampleRecord"
 msgstr ""
@@ -61,26 +65,62 @@ msgstr ""
 msgid "The default container for new records"
 msgstr ""
 
-#: Config.php:31
+#: Config.php:33
 msgid "Status Available"
 msgstr ""
 
-#: Config.php:33
+#: Config.php:35
 msgid ""
 "Possible status. Please note that additional status might impact other "
 "ExampleApplication systems on export or syncronisation."
 msgstr ""
 
-#: Config.php:42
+#: Config.php:44
 msgid "Completed"
 msgstr ""
 
-#: Config.php:43
+#: Config.php:45
 msgid "Cancelled"
 msgstr ""
 
-#: Config.php:44
+#: Config.php:46
 msgid "In process"
+msgstr ""
+
+#: Config.php:53
+msgid "Reasons Available"
+msgstr ""
+
+#: Config.php:55
+msgid "Possible status reasons."
+msgstr ""
+
+#: Config.php:66
+msgid "Change"
+msgstr ""
+
+#: Config.php:67
+msgid "Documentation"
+msgstr ""
+
+#: Config.php:68
+msgid "Requirement Changed"
+msgstr ""
+
+#: Config.php:69
+msgid "Not Possible"
+msgstr ""
+
+#: Config.php:70
+msgid "Implementation"
+msgstr ""
+
+#: Config.php:71
+msgid "Review"
+msgstr ""
+
+#: Config.php:72
+msgid "Integration"
 msgstr ""
 
 #: Setup/setup.xml:4

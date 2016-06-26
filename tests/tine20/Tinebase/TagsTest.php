@@ -26,15 +26,6 @@ class Tinebase_TagsTest extends TestCase
     protected $_instance;
 
     /**
-     * Runs the test methods of this class.
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_TagsTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * (non-PHPdoc)
      * @see PHPUnit_Framework_TestCase::setUp()
      */
@@ -260,9 +251,15 @@ class Tinebase_TagsTest extends TestCase
      * testMergeDuplicateTags
      * 
      * @see 0007354: function for merging duplicate tags
+     *
+     * TODO test should be improved: it is very dependent on the current number of contacts in the adb
      */
     public function testMergeDuplicateTags()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('AD setup has different number of contacts');
+        }
+
         $sharedTag1 = $this->_createSharedTag();
         // sleep to make sure, $sharedTag1 is always chosen as 'master'
         sleep(1);

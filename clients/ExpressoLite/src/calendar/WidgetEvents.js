@@ -36,7 +36,7 @@ return function(options) {
         return THIS;
     };
 
-    THIS.render = function(events) {
+    THIS.render = function(eventsOfDay, eventClicked) {
         var defer = $.Deferred();
         if ($panel === null) {
             $panel = $('#Events_template .Events_panel').clone();
@@ -44,14 +44,23 @@ return function(options) {
             _SetEvents();
         }
         THIS.clear();
-        _FormatHeader(events);
-        var $units = [];
-        for (var i = 0; i < events.length; ++i) {
-            $units.push(_BuildUnit(events[i]));
+        _FormatHeader(eventsOfDay);
+        var units = [];
+        for (var i = 0; i < eventsOfDay.length; ++i) {
+            units.push(_BuildUnit(eventsOfDay[i]));
         }
-        $panel.find('.Events_canvas')
-            .append($units)
-            .hide()
+        $panel.find('.Events_canvas').append(units);
+        if (eventClicked !== undefined) {
+            var evClk = eventClicked.isEcho ? eventClicked.origEvent : eventClicked;
+            for (var i = 0; i < units.length; ++i) {
+                var evDay = eventsOfDay[i].isEcho ? eventsOfDay[i].origEvent : eventsOfDay[i];
+                if (evDay.id !== evClk.id) {
+                    units[i].find('.Events_content')
+                        .hide(); // if there's a clicked event, all others will be hidden
+                }
+            }
+        }
+        $panel.hide()
             .fadeIn(250, function() { defer.resolve(); });
         return defer.promise();
     };
@@ -59,6 +68,13 @@ return function(options) {
     function _SetEvents() {
         $panel.on('click', '.Events_showPeople', function() {
             $(this).parent().nextAll('.Events_peopleList').slideToggle(200);
+        });
+
+        $panel.on('click', '.Events_topContainer', function() {
+            var $evContent = $(this).next();
+            $evContent.slideToggle(200, function() {
+                $evContent.find('.Events_peopleList').hide();
+            });
         });
     }
 
@@ -71,25 +87,33 @@ return function(options) {
 
     function _BuildUnit(event) {
         var $unit = $('#Events_template .Events_unit').clone();
-        $unit.find('.Events_summary').css('color', event.color);
-        $unit.find('.Events_summary .Events_time').text(DateCalc.makeHourMinuteStr(event.from));
-        $unit.find('.Events_summary .Events_text').text(event.summary);
-        $unit.find('.Events_summary .Events_userFlag').append(_BuildConfirmationIcon(event));
+        var objEv = event.isEcho ? event.origEvent : event;
+        $unit.find('.Events_summary').css('color', objEv.color);
+        if (!objEv.wholeDay) {
+            $unit.find('.Events_summary .Events_time').text(DateCalc.makeHourMinuteStr(event.from));
+        }
+        $unit.find('.Events_summary .Events_text').text(objEv.summary);
+        $unit.find('.Events_summary .Events_userFlag').append(_BuildConfirmationIcon(objEv));
+        if (event.isEcho) {
+            $unit.find('.Events_summary')
+                .find('.Events_time,.Events_text,.Events_userFlag')
+                .addClass('Events_headerEcho');
+        }
 
-        $unit.find('.Events_description .Events_text').html(event.description.replace(/\n/g, '<br/>'));
+        $unit.find('.Events_description .Events_text').html(objEv.description.replace(/\n/g, '<br/>'));
         $unit.find('.Events_when .Events_text').text(
             DateCalc.makeHourMinuteStr(event.from) +
             ' - ' +
-            DateCalc.makeHourMinuteStr(event.until)
+            DateCalc.makeHourMinuteStr(objEv.until)
         );
-        $unit.find('.Events_location .Events_text').text(event.location);
-        $unit.find('.Events_organizer .Events_text').text(event.organizer.name);
-        $unit.find('.Events_personOrg').text(_FormatUserOrg(event.organizer));
+        $unit.find('.Events_location .Events_text').text(objEv.location);
+        $unit.find('.Events_organizer .Events_text').text(objEv.organizer.name);
+        $unit.find('.Events_personOrg').text(_FormatUserOrg(objEv.organizer));
 
         var $btnShowPeople = $unit.find('.Events_people .Events_showPeople');
-        $btnShowPeople.val($btnShowPeople.val() +' ('+event.attendees.length+')');
+        $btnShowPeople.val($btnShowPeople.val() +' ('+objEv.attendees.length+')');
 
-        $unit.find('.Events_people .Events_peopleList').append(_BuildPeople(event)).hide();
+        $unit.find('.Events_people .Events_peopleList').append(_BuildPeople(objEv)).hide();
         $unit.data('event', event);
 
         var menu = new ContextMenu({ $btn:$unit.find('.Events_dropdown') });

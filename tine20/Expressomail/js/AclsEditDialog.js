@@ -42,6 +42,9 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     loadRecord: false,
     tbarItems: [],
     evalAcls: false,
+    enableSendAs: false,
+
+    node: null,
 
     /**
      * @private
@@ -79,7 +82,7 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * on dialog show
      */
     onShow: function() {
-        this.aclsLoadMask = new Ext.LoadMask(this.ownerCt.container, {msg: _('Loading ...')});
+        this.aclsLoadMask = new Ext.LoadMask(this.ownerCt.container, {msg: i18n._('Loading ...')});
         this.aclStore.load();
     },
 
@@ -96,7 +99,8 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         this.aclsGrid = new  Tine.Expressomail.AclsGrid({
-            store: this.aclStore
+            store: this.aclStore,
+            enableSendAs: this.enableSendAs
         });
 
         return this.aclsGrid;
@@ -106,12 +110,16 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onApplyChanges: function(button, event, closeWindow) {
-        Ext.MessageBox.wait(_('Please wait'), _('Updating Grants'));
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Updating Grants'));
 
         var acls = [];
         this.aclStore.each(function(_record){
+            // sendacl only makes sense with INBOX
+            if (!this.enableSendAs) {
+                _record.data.sendacl = false;
+            }
             acls.push(_record.data);
-        });
+        }, this);
 
         Ext.Ajax.request({
             params: {
@@ -138,8 +146,8 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
                 if (responseText.data.code == 505) {
                     Ext.Msg.show({
-                       title:   _('Error'),
-                       msg:     _('You are not allowed to remove all admins for this container!'),
+                       title:   i18n._('Error'),
+                       msg:     i18n._('You are not allowed to remove all admins for this container!'),
                        icon:    Ext.MessageBox.ERROR,
                        buttons: Ext.Msg.OK
                     });
@@ -151,6 +159,7 @@ Tine.Expressomail.AclsEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         });
+        this.fireEvent('save', this.aclStore);
     }
 });
 

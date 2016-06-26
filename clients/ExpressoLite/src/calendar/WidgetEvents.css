@@ -16,10 +16,12 @@
 .Events_unit { margin:14px 4px; border-top:1px solid #CCC; }
 .Events_label { font-weight:bold; }
 .Events_summary { padding:5px; width:calc(100% - 42px); }
-.Events_topContainer { background-color:#F4F4F4; padding:3px; }
+.Events_topContainer { background-color:#F4F4F4; padding:3px; cursor:pointer; }
 .Events_dropdown { float:right; cursor:pointer; }
 .Events_content { margin:4px; padding:5px; }
 .Events_time { font-weight:bold; }
+.Events_text { }
+.Events_headerEcho { opacity:.3; }
 .Events_declined { text-decoration:line-through; }
 .Events_showPeopleWrapper { padding:12px; }
 .Events_peopleList { }

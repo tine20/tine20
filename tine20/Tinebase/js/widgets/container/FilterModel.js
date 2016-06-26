@@ -158,11 +158,11 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
             },
             setValue: function(value) {
                 if (this.filter.get('operator') == 'specialNode' || this.filter.get('operator') == 'personalNode' ) {
-                    var operatorText = this.filter.data.operator === 'personalNode' ? _('is personal of') : _('is equal to');
+                    var operatorText = this.filter.data.operator === 'personalNode' ? i18n._('is personal of') : i18n._('is equal to');
                     
                     // use equals for node 'My containers'
                     if (value.path && value.path === Tine.Tinebase.container.getMyNodePath()) {
-                        operatorText = _('is equal to')
+                        operatorText = i18n._('is equal to')
                     }
                     this.filter.formFields.operator.setRawValue(operatorText);
                 }
@@ -248,6 +248,9 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     initComponent: function() {
+        this.containerName = this.containerName == 'container' && this.recordClass ? this.recordClass.getContainerName() : this.containerName;
+        this.containersName = this.containersName == 'containers' && this.recordClass ? this.recordClass.getContainersName() : this.containersName;
+
         this.on('beforecollapse', this.onBeforeCollapse, this);
         this.store = new Ext.data.SimpleStore({
             fields: this.recordClass
@@ -265,7 +268,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
                 sortable: false
             },
             columns:  [
-                {id: 'name', header: String.format(_('Selected  {0}'), this.containersName), dataIndex: 'name'}
+                {id: 'name', header: String.format(i18n._('Selected {0}'), this.containersName), dataIndex: 'name'}
             ]
         });
     },
@@ -353,12 +356,17 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
      * @return {Ext.form.Field} this
      */
     setValue: function(value) {
+        this.value = value;
         value = Ext.isArray(value) ? value : [value];
+
         this.currentValue = [];
         
         this.store.removeAll();
         var containerNames = [];
         Ext.each(value, function(containerData) {
+            // ignore broken value
+            if (! containerData) return;
+
             // ignore server name for node 'My containers'
             if (containerData.path && containerData.path === Tine.Tinebase.container.getMyNodePath()) {
                 containerData.name = null;

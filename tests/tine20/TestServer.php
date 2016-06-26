@@ -51,22 +51,13 @@ class TestServer
     public function initFramework()
     {
         $this->setWhiteAndBlacklists();
-        
-        // get config
-        $configData = @include('phpunitconfig.inc.php');
-        if ($configData === false) {
-            $configData = include('config.inc.php');
-        }
-        if ($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
-        }
-        $config = new Zend_Config($configData);
 
-        Zend_Registry::set('testConfig', $config);
+        $config = $this->getConfig();
 
+        // set some server vars. sabredav complains if REQUEST_URI is not set
         $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
         $_SERVER['REQUEST_URI'] = '';
-        
+
         Tinebase_Core::startCoreSession();
         
         Tinebase_Core::initFramework();
@@ -83,6 +74,8 @@ class TestServer
         
         // this is needed for session handling in unittests (deactivate Zend_Session::writeClose and others)
         Zend_Session::$_unitTestEnabled = TRUE;
+
+        Tinebase_Core::set('frameworkInitialized', true);
     }
     
     /**
@@ -91,11 +84,13 @@ class TestServer
     public function setWhiteAndBlacklists()
     {
         if ($this->isPhpunitVersionGreaterOrEquals("3.6.0")) {
+            // TODO not sure if this is working - we need to validate that
             $filter = new PHP_CodeCoverage_Filter();
             $filter->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
             $filter->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
             $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
             $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+            $filter->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/vendor');
         } else if ($this->isPhpunitVersionGreaterOrEquals("3.5.0")) {
             PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
             PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
@@ -148,10 +143,10 @@ class TestServer
      */
     public function setTestUserEmail()
     {
-        if (Zend_Registry::get('testConfig')->email) {
+        if ($this->getConfig()->email) {
             // set email of test user contact
             $testUserContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-            $testUserContact->email = Zend_Registry::get('testConfig')->email;
+            $testUserContact->email = $this->getConfig()->email;
             Addressbook_Controller_Contact::getInstance()->update($testUserContact, FALSE);
         }
     }
@@ -163,7 +158,23 @@ class TestServer
      */
     public function getConfig()
     {
-        return Zend_Registry::get('testConfig');
+        if (! Zend_Registry::isRegistered('testConfig')) {
+            // get config
+            $configData = @include('phpunitconfig.inc.php');
+            if ($configData === false) {
+                $configData = include('config.inc.php');
+            }
+            if ($configData === false) {
+                die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
+            }
+            $config = new Zend_Config($configData);
+
+            Zend_Registry::set('testConfig', $config);
+        } else {
+            $config = Zend_Registry::get('testConfig');
+        }
+
+        return $config;
     }
     
     /**
@@ -186,7 +197,7 @@ class TestServer
         $cmd = preg_replace(array(
             '@' . preg_quote($_SERVER['SCRIPT_NAME']) . '@',
             '/--stderr /',
-            '/--colors /',
+            '/--colors{0,1} /',
             '/--verbose /',
             '/--stop-on-failure /',
             '/[\S]+\.php$/',
@@ -195,6 +206,7 @@ class TestServer
             '/--filter [\S]+\D/',
             '/--configuration [\S]+\D/',
             '/--exclude-group [\S]+\D/',
+            '/--coverage-[\S]+ [\S]+\D/',
             '/-c [\S]+\D/',
             '/--log-junit [\S]+\D/'
         ), array(

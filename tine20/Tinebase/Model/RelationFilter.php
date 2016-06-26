@@ -43,7 +43,7 @@ class Tinebase_Model_RelationFilter extends Tinebase_Model_Filter_FilterGroup
         'own_model'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'own_backend'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'own_id'                 => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'own_degree'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'related_degree'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'related_model'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'related_backend'        => array('filter' => 'Tinebase_Model_Filter_Text'),
         'related_id'             => array('filter' => 'Tinebase_Model_Filter_Id'),

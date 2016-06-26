@@ -48,13 +48,13 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_two_countryname', label: 'Country (Private Address)', group: 'Private Address' }, //_('Country (Private Address)')
     {name: 'adr_two_lon', group: 'Private Address', omitDuplicateResolving: true},
     {name: 'adr_two_lat', group: 'Private Address', omitDuplicateResolving: true},
-    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication') 
+    {name: 'tel_work', label: 'Phone', group: 'Company Communication' }, //_('Phone') _('Company Communication')
     {name: 'tel_cell', label: 'Mobile', group: 'Company Communication' }, //_('Mobile')
     {name: 'tel_fax', label: 'Fax', group: 'Company Communication' }, //_('Fax')
     {name: 'tel_assistent', group: 'contact_infos', omitDuplicateResolving: true },
     {name: 'tel_car', group: 'contact_infos', omitDuplicateResolving: true },
     {name: 'tel_pager', group: 'contact_infos', omitDuplicateResolving: true },
-    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)') _('Private Communication') 
+    {name: 'tel_home', label: 'Phone (private)', group: 'Private Communication' }, //_('Phone (private)') _('Private Communication')
     {name: 'tel_fax_home', label: 'Fax (private)', group: 'Private Communication' }, //_('Fax (private)')
     {name: 'tel_cell_private', label: 'Mobile (private)', group: 'Private Communication' }, //_('Mobile (private)')
     {name: 'tel_other', group: 'contact_infos', omitDuplicateResolving: true },
@@ -75,7 +75,9 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'relations', omitDuplicateResolving: true},
     {name: 'customfields', omitDuplicateResolving: true},
     {name: 'attachments', omitDuplicateResolving: true},
-    {name: 'type', omitDuplicateResolving: true}
+    {name: 'paths', omitDuplicateResolving: true},
+    {name: 'type', omitDuplicateResolving: true},
+    {name: 'memberroles', omitDuplicateResolving: true}
 ]);
 
 /**
@@ -110,14 +112,32 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     },
     
     /**
-     * returns true prefered email if available
+     * returns true preferred email if available
      * @return {String}
+     *
+     * TODO fix typo (prefered -> preferred)
      */
-    getPreferedEmail: function(prefered) {
-        var prefered = prefered || 'email',
-            other = prefered == 'email' ? 'email_home' : 'email';
+    getPreferedEmail: function(preferred) {
+        var preferred = preferred || 'email',
+            other = preferred == 'email' ? 'email_home' : 'email';
             
-        return (this.get(prefered) || this.get(other));
+        return (this.get(preferred) || this.get(other));
+    },
+
+    getTitle: function() {
+        var result = this.get('n_fn');
+
+        var tinebaseApp = new Tine.Tinebase.Application({
+            appName: 'Tinebase'
+        });
+        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
+            var email = this.getPreferedEmail();
+            if (email !== '') {
+                result += ' (' + email + ')';
+            }
+        }
+
+        return result;
     }
 });
 
@@ -134,9 +154,10 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: _('Quick Search'),                                                      field: 'query',              operators: ['contains']},
+        {label: i18n._('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
+        {filtertype: 'addressbook.listRoleMember', app: app},
         {label: app.i18n._('Title'),                                                    field: 'n_prefix' },
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
@@ -161,10 +182,10 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
         {label: app.i18n._('Country') + '  (' + app.i18n._('Private Address') + ')',    field: 'adr_two_countryname', valueType: 'country'},
         {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
     ];
 };
     
@@ -181,22 +202,28 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
  * list model
  */
 Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
-   {name: 'id'},
-   {name: 'container_id'},
-   {name: 'created_by'},
-   {name: 'creation_time'},
-   {name: 'last_modified_by'},
-   {name: 'last_modified_time'},
-   {name: 'is_deleted'},
-   {name: 'deleted_time'},
-   {name: 'deleted_by'},
-   {name: 'name'},
-   {name: 'description'},
-   {name: 'members'},
-   {name: 'email'},
-   {name: 'type'},
-   {name: 'group_id'},
-   {name: 'emails'}
+    {name: 'id'},
+    {name: 'container_id'},
+    {name: 'created_by'},
+    {name: 'creation_time'},
+    {name: 'last_modified_by'},
+    {name: 'last_modified_time'},
+    {name: 'is_deleted'},
+    {name: 'deleted_time'},
+    {name: 'deleted_by'},
+    {name: 'name'},
+    {name: 'description'},
+    {name: 'members'},
+    {name: 'memberroles'},
+    {name: 'email'},
+    {name: 'type'},
+    {name: 'list_type'},
+    {name: 'group_id'},
+    {name: 'emails'},
+    {name: 'notes', omitDuplicateResolving: true},
+    {name: 'relations', omitDuplicateResolving: true},
+    {name: 'customfields', omitDuplicateResolving: true},
+    {name: 'tags'}
 ], {
     appName: 'Addressbook',
     modelName: 'List',
@@ -219,15 +246,16 @@ Tine.Addressbook.Model.List.getFilterModel = function() {
     var typeStore = [['list', app.i18n._('List')], ['user', app.i18n._('User Account')]];
     
     return [
-        {label: _('Quick search'),                                                      field: 'query',              operators: ['contains']},
+        {label: i18n._('Quick search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
         {label: app.i18n._('Name'),                                               field: 'name' },
         {label: app.i18n._('Description'),                                                field: 'description'},
-        {label: _('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: _('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: _('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: _('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+        {filtertype: 'tinebase.tag', app: app}
     ];
 };
 
@@ -247,7 +275,7 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
    {name: 'n_fileas'},
    {name: 'emails'},
    {name: 'email'},
-   {name: 'email_home'},
+   {name: 'email_home'}
 ], {
     appName: 'Addressbook',
     modelName: 'EmailAddress',
@@ -261,14 +289,14 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     containersName: 'Addressbooks',
     copyOmitFields: ['group_id'],
 
-    getPreferedEmail: function(prefered) {
+    getPreferedEmail: function(preferred) {
         var emails = this.get("emails");
         if (!this.get("email")) {
             return  this.get("emails");
         } else {
-            var prefered = prefered || 'email',
-            other = prefered == 'email' ? 'email_home' : 'email';
-            return (this.get(prefered) || this.get(other));
+            var preferred = preferred || 'email',
+            other = preferred == 'email' ? 'email_home' : 'email';
+            return (this.get(preferred) || this.get(other));
         }
     }
 });
@@ -282,11 +310,37 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
  * @return {Array} filterModel definition
  */ 
 Tine.Addressbook.Model.EmailAddress.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Addressbook');
-    
-    var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
-    
     return [
-        {label: _('Quick search'),       field: 'query',              operators: ['contains']}
+        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
+    ];
+};
+
+/**
+ * ListRole model
+ */
+Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'members'},
+    {name: 'description'}
+], {
+    appName: 'Addressbook',
+    modelName: 'ListRole',
+    titleProperty: 'name',
+    // ngettext('List Role', List Roles', n); gettext('List Roles');
+    recordName: 'List Role',
+    recordsName: 'List Roles'
+});
+
+/**
+ * get filtermodel of ListRole model
+ *
+ * @namespace Tine.Addressbook.Model
+ * @static
+ * @return {Array} filterModel definition
+ */
+Tine.Addressbook.Model.ListRole.getFilterModel = function() {
+    return [
+        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];
 };

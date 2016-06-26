@@ -99,6 +99,28 @@ class Expressomail_Controller_Sieve extends Tinebase_Controller_Abstract
     }
     
     /**
+     * Get the allowed domais to a sieve redirect
+     *
+     * @return array
+     */
+    public function getAllowedSieveRedirectDomains(){
+        $sieveConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SIEVE, new Tinebase_Config_Struct())->toArray();
+        if($sieveConfig['limitDomains'] == 1){
+            $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+            $domains = $smtpConfig['primarydomain'];
+            $domains .= (array_key_exists('secondarydomains', $smtpConfig))&&$smtpConfig['secondarydomains']  ? ',' . $smtpConfig['secondarydomains'] : '';
+            $domains .= (array_key_exists('obligatorydomains', $smtpConfig))&&$smtpConfig['obligatorydomains']  ? ',' . $smtpConfig['obligatorydomains'] : '';
+            $domains .= $sieveConfig['allowedDomains'] != ''?','.$sieveConfig['allowedDomains']:'';
+            $domains = strtolower($domains);
+            $domains = str_replace(' ', '', $domains);
+            //return explode(',',$domains);
+            return $domains;
+        }else{
+            return '';
+        }
+
+    }
+    /**
      * get vacation for account
      * 
      * @param string|Expressomail_Model_Account $_accountId
@@ -508,6 +530,16 @@ class Expressomail_Controller_Sieve extends Tinebase_Controller_Abstract
             if ($account->email === $_rule->action_argument) {
                 throw new Expressomail_Exception_Sieve('It is not allowed to redirect emails to self (' . $account->email . ')! Please change the recipient.');
             }
+            $domains = $this->getAllowedSieveRedirectDomains();
+            if($domains){
+                $domain = substr($_rule->action_argument, strpos($_rule->action_argument, '@')+1);
+                $domains = str_replace(' ','',$domains);
+                $domains = str_replace('.','\\.',$domains);
+                $domains = str_replace(',','|',$domains);
+                if(preg_match('/'.$domains.'/', $domain) != 1){
+                    throw new Expressomail_Exception_Sieve('It is not allowed to redirect to this domain  '.$_rule->action_argument);
+                }
+            }
         }
     }
     
@@ -591,7 +623,7 @@ class Expressomail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _doMessageSubstitutions(Expressomail_Model_Sieve_Vacation $vacation, $message)
     {
-        $timezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $timezone = Tinebase_Core::getUserTimezone();
         $representatives = ($vacation->contact_ids) ? Addressbook_Controller_Contact::getInstance()->getMultiple($vacation->contact_ids) : array();
         if ($vacation->contact_ids && count($representatives) > 0) {
             // sort representatives

@@ -27,7 +27,14 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
      * @var string
      */
     protected static $_defaultModel = 'Calendar_Model_Event';
-    
+
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Calendar';
+
     /**
      * don't clone. Use the singleton.
      *
@@ -364,5 +371,28 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     public function onUpdateGroup($_groupId)
     {
         Calendar_Controller_Event::getInstance()->onUpdateGroup($_groupId);
+    }
+
+    /**
+     * get core data for this application
+     *
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getCoreDataForApplication()
+    {
+        $result = parent::getCoreDataForApplication();
+
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+
+        if (Tinebase_Core::getUser()->hasRight($application, Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'cal_resources',
+                'application_id' => $application,
+                'model' => 'Calendar_Model_Resource',
+                'label' => 'Resources' // _('Resources')
+            )));
+        }
+
+        return $result;
     }
 }

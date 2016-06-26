@@ -13,6 +13,7 @@ namespace ExpressoLite\TineTunnel;
 
 use \DateTime;
 use ExpressoLite\Exception\RpcException;
+use ExpressoLite\Exception\CurlNotInstalledException;
 
 class Request
 {
@@ -130,6 +131,10 @@ class Request
      */
     public function send($method = self::GET)
     {
+        if (!function_exists('curl_init')) {
+            throw new CurlNotInstalledException();
+        }
+
         $this->checkMandatoryProperties();
 
         $curl = curl_init($this->url);
