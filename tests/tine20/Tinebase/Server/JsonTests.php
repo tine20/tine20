@@ -45,6 +45,7 @@ class Tinebase_Server_JsonTests extends TestCase
                 (
                     'type' => 'array',
                     'optional' => false,
+                    'name' => 'recordData'
                 )
 
             ),
@@ -60,6 +61,7 @@ class Tinebase_Server_JsonTests extends TestCase
                 (
                     'type' => 'array',
                     'optional' => false,
+                    'name' => 'ids'
                 )
 
             ),

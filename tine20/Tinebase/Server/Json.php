@@ -424,22 +424,46 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
                     $commonJsonApiMethods = array(
                         'get' => array(
-                            'params' => array('string'),
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'string',
+                                    'name' => 'id',
+                                )),
+                            ),
                             'help'   => 'get one ' . $simpleModelName . ' identified by $id',
                             'plural' => false,
                         ),
                         'search' => array(
-                            'params' => array('array', 'array'),
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'filter',
+                                )),
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'pagination',
+                                )),
+                            ),
                             'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',
                             'plural' => true,
                         ),
                         'save' => array(
-                            'params' => array('array'),
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'recordData',
+                                )),
+                            ),
                             'help'   => 'Save ' . $simpleModelName . '',
                             'plural' => false,
                         ),
                         'delete' => array(
-                            'params' => array('array'),
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'ids',
+                                )),
+                            ),
                             'help'   => 'Delete multiple ' . $simpleModelName . 's',
                             'plural' => true,
                         ),
