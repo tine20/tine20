@@ -11,7 +11,7 @@
  */
 
 /**
- * tasks vtodo convert factory class
+ * addressbook vcard convert factory class
  *
  * @package     Tasks
  * @subpackage  Convert
@@ -24,7 +24,6 @@ class Tasks_Convert_Task_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
-	const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     
     /**
      * cache parsed user-agent strings
@@ -45,27 +44,35 @@ class Tasks_Convert_Task_VCalendar_Factory
         switch ($_backend) {
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC:
                 return new Tasks_Convert_Task_VCalendar_Generic($_version);
-                             
+                
+                break;
+                
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_IPHONE:
                 return new Tasks_Convert_Task_VCalendar_Iphone($_version);
-                                
+                
+                break;
+                
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_KDE:
                 return new Tasks_Convert_Task_VCalendar_KDE($_version);
+                
+                break;
                 
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_MACOSX:
                 return new Tasks_Convert_Task_VCalendar_MacOSX($_version);
                 
+                break;
+                
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_THUNDERBIRD:
                 return new Tasks_Convert_Task_VCalendar_Thunderbird($_version);
                  
+                break;
+                
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Tasks_Convert_Task_VCalendar_EMClient($_version);
-                
-			case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
-                return new Tasks_Convert_Task_VCalendar_CalDAVSynchronizer($_version);
-                
+                 
+                break;
+                     
         }
-		return new Tasks_Convert_Task_VCalendar_Generic($_version);
     }
     
     /**
@@ -102,11 +109,6 @@ class Tasks_Convert_Task_VCalendar_Factory
          // EMClient       
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT;
-            $version = $matches['version'];
-			
-		// CalDAVSynchronizer
-        } elseif (preg_match(Tasks_Convert_Task_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
             $version = $matches['version'];
         
         } else {

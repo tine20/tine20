@@ -26,7 +26,6 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
-	const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     
     /**
      * cache parsed user-agent strings
@@ -47,37 +46,39 @@ class Calendar_Convert_Event_VCalendar_Factory
         switch ($_backend) {
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC:
                 return new Calendar_Convert_Event_VCalendar_Generic($_version);
+                break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
                 return new Calendar_Convert_Event_VCalendar_Iphone($_version);
-
+                break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
                 return new Calendar_Convert_Event_VCalendar_KDE($_version);
-
+                break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_MACOSX:
                 return new Calendar_Convert_Event_VCalendar_MacOSX($_version);
+                break;
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD:
                 return new Calendar_Convert_Event_VCalendar_Thunderbird($_version);
+                break;
  
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Calendar_Convert_Event_VCalendar_EMClient($_version);
+                break;
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_EMCLIENT7:
                 return new Calendar_Convert_Event_VCalendar_EMClient7($_version);
+                break;
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID:
                 return new Calendar_Convert_Event_VCalendar_DavDroid($_version);
-
-            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
-                return new Calendar_Convert_Event_VCalendar_CalDAVSynchronizer($_version);
+                break;
 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE:
                 return new Calendar_Convert_Event_VCalendar_Tine($_version);
         }
-        return new Calendar_Convert_Event_VCalendar_Generic($_version);
     }
     
     /**
@@ -128,14 +129,9 @@ class Calendar_Convert_Event_VCalendar_Factory
 
         // DavDroid
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_DAVDROID;
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_TINE;
             $version = $matches['version'];
 
-        // CalDAVSynchronizer
-        } elseif (preg_match(Calendar_Convert_Event_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
-            $version = $matches['version'];
-			
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
             $version = null;
