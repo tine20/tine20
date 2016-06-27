@@ -386,7 +386,10 @@ class Tinebase_Core
                 $controllerName = $controllerNameModel;
             }
         } else if (! class_exists($controllerName)) {
-            throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Use generic application controller');
+
+            $controller = new Tinebase_Application_Controller($appName);
         }
         
         if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
@@ -394,12 +397,14 @@ class Tinebase_Core
                 . ' User ' . Tinebase_Core::getUser()->accountDisplayName . '/' . Tinebase_Core::getUser()->getId() . ' has no right to access ' . $appName);
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Getting instance of ' . $controllerName);
-        
-        $controller = call_user_func(array($controllerName, 'getInstance'));
-        self::$appInstanceCache[$cacheKey] = $controller;
+
+        if (! isset($controller)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Getting instance of ' . $controllerName);
+
+            $controller = call_user_func(array($controllerName, 'getInstance'));
+            self::$appInstanceCache[$cacheKey] = $controller;
+        }
         
         return $controller;
     }

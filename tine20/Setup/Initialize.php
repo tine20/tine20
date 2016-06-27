@@ -37,11 +37,17 @@ class Setup_Initialize
     {
         $applicationName = $_application->name;
         $classname = "{$applicationName}_Setup_Initialize";
-        $instance = new $classname;
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
-        
-        $instance->_initialize($_application, $_options);
+
+        if (class_exists($classname)) {
+            $instance = new $classname;
+
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
+
+            $instance->_initialize($_application, $_options);
+        } else {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping init of application: '
+                . $applicationName . '. Class ' . $classname . ' not found.');
+        }
     }
     
     /**

@@ -447,7 +447,8 @@ class Setup_Controller
         $setupXML = $this->_baseDir . ucfirst($_applicationName) . '/Setup/setup.xml';
 
         if (!file_exists($setupXML)) {
-            throw new Setup_Exception_NotFound(ucfirst($_applicationName) . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
+            throw new Setup_Exception_NotFound(ucfirst($_applicationName)
+                . '/Setup/setup.xml not found. If application got renamed or deleted, re-run setup.php.');
         }
         
         $xml = simplexml_load_file($setupXML);
@@ -1373,9 +1374,10 @@ class Setup_Controller
         
         // get xml and sort apps first
         $applications = array();
-        foreach($_applications as $applicationName) {
+        foreach ($_applications as $applicationName) {
             if ($this->isInstalled($applicationName)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " skipping installation of application {$applicationName} because it is already installed");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
             }
