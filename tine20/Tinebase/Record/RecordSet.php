@@ -95,11 +95,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
-     * add Tinebase_Record_Interface like object to internal list
+     * add Tinebase_Record_Interface like object to internal list (it is not inserted if record is already in set)
      *
      * @param Tinebase_Record_Interface $_record
      * @param integer $_index
-     * @return int index in set of inserted record
+     * @return int index in set of inserted record or index of existing record
      */
     public function addRecord(Tinebase_Record_Interface $_record, $_index = NULL)
     {
@@ -107,12 +107,20 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             throw new Tinebase_Exception_Record_NotAllowed('Attempt to add/set record of wrong record class ('
                 . get_class($_record) . ') Should be ' . $this->_recordClass);
         }
+
+        $recordId = $_record->getId();
+
+        if ($recordId && isset($this->_idMap[$recordId]) && isset($this->_listOfRecords[$this->_idMap[$recordId]])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Record (id ' . $recordId . ') already in set - we don\'t want duplicates)');
+            return $this->_idMap[$recordId];
+        }
+
         $this->_listOfRecords[] = $_record;
         end($this->_listOfRecords);
         $index = ($_index !== NULL) ? $_index : key($this->_listOfRecords);
         
         // maintain indices
-        $recordId = $_record->getId();
         if ($recordId) {
             $this->_idMap[$recordId] = $index;
         } else {
@@ -127,7 +135,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function removeAll()
     {
-        foreach($this->_listOfRecords as $record) {
+        foreach ($this->_listOfRecords as $record) {
             $this->removeRecord($record);
         }
     }
@@ -763,12 +771,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     
     /**
      * translate all member records of this set
-     * 
      */
     public function translate()
     {
         foreach ($this->_listOfRecords as $record) {
             $record->translate();
         }
-    }    
+    }
 }

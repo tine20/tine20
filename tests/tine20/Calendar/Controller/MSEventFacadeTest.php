@@ -241,6 +241,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $newPersistentException->dtstart->addDay(2)->addHour(2);
         $newPersistentException->dtend->addDay(2)->addHour(2);
         $newPersistentException->summary = 'new exception';
+        $newPersistentException->setId(null);
         $event->exdate->addRecord($newPersistentException);
         
         $newDeletedInstance = clone $event->exdate->filter('is_deleted', 1)->getFirstRecord();
@@ -248,6 +249,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $newDeletedInstance->dtend->addDay(2);
         $newDeletedInstance->recurid = clone $newDeletedInstance->dtstart;
         $newDeletedInstance->is_deleted = TRUE;
+        $newPersistentException->setId(null);
         $event->exdate->addRecord($newDeletedInstance);
         
         $this->_fixConcurrency($event);
