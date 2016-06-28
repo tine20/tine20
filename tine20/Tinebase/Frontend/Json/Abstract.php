@@ -96,10 +96,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $ret = NULL;
         if ($this->_configuredModels) {
-            foreach ($this->_configuredModels as $modelName) {
-                $recordClass = $this->_applicationName . '_Model_' . $modelName;
-                $ret[$modelName] = $recordClass::getConfiguration()->getFrontendConfiguration();
-            }
+            return Tinebase_ModelConfiguration::getFrontendConfigForModels($this->_configuredModels, $this->_applicationName);
         }
         
         return $ret;

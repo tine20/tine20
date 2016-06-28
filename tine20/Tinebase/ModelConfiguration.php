@@ -964,6 +964,27 @@ class Tinebase_ModelConfiguration {
         $this->_filterModel['query'] = $queryFilterData;
     }
 
+    /**
+     * get modelconfig for an array of models
+     *
+     * @param array $models
+     * @param string $appname
+     * @return array
+     */
+    public static function getFrontendConfigForModels($models, $appname = null)
+    {
+        $modelconfig = array();
+        foreach ($models as $modelName) {
+            $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
+            $config = $recordClass::getConfiguration();
+            if ($config) {
+                $modelconfig[$modelName] = $config->getFrontendConfiguration();
+            }
+        }
+
+        return $modelconfig;
+    }
+
     public function getIdProperty()
     {
         return $this->_idProperty;

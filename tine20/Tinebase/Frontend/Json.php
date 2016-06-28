@@ -838,70 +838,115 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             foreach ($userApplications as $application) {
-                $jsonAppName = $application->name . '_Frontend_Json';
-                
-                if (class_exists($jsonAppName)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
-                    }
-                    
-                    try {
-                        $applicationJson = new $jsonAppName();
-                        $registryData[$application->name] = ((isset($registryData[$application->name]) || array_key_exists($application->name, $registryData)))
-                            ? array_merge_recursive($registryData[$application->name], $applicationJson->getRegistryData()) 
-                            : $applicationJson->getRegistryData();
-                    
-                    } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
-                        if (! $e instanceof Tinebase_Exception_AccessDenied && ! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
-                            Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
-                        }
-                        unset($registryData[$application->name]);
-                        continue;
-                    }
-                    
-                    $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
-                    $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
-                    $registryData[$application->name]['models'] = $applicationJson->getModelsConfiguration();
-                    $registryData[$application->name]['defaultModel'] = $applicationJson->getDefaultModel();
-                    
-                    foreach ($applicationJson->getRelatableModels() as $relModel) {
-                        $registryData[$relModel['ownApp']]['relatableModels'][] = $relModel;
-                    }
+                $appRegistry = array();
+                $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                $appRegistry['config'] = isset($clientConfig[$application->name])
+                    ? $clientConfig[$application->name]->toArray()
+                    : array();
 
-                    // @todo do we need this for all apps?
-                    $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
-                    $registryData[$application->name]['exportDefinitions'] = array(
-                        'results'               => $exportDefinitions->toArray(),
-                        'totalcount'            => count($exportDefinitions),
-                    );
-                    
-                    $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
-                    Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
-                    $registryData[$application->name]['customfields'] = $customfields->toArray();
-                    
-                    // add preferences for app
-                    $appPrefs = Tinebase_Core::getPreference($application->name);
-                    if ($appPrefs !== NULL) {
-                        $allPrefs = $appPrefs->getAllApplicationPreferences();
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                            . ' ' . print_r($allPrefs, TRUE));
-                        
-                        foreach ($allPrefs as $pref) {
-                            try {
-                                $registryData[$application->name]['preferences'][$pref] = $appPrefs->{$pref};
-                            } catch (Exception $e) {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get ' . $pref . '  preference: ' . $e);
-                            }
-                        }
-                    }
+                // @todo do we need this for all apps?
+                $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+                $appRegistry['exportDefinitions'] = array(
+                    'results'               => $exportDefinitions->toArray(),
+                    'totalcount'            => count($exportDefinitions),
+                );
+
+                $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+                Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
+                $appRegistry['customfields'] = $customfields->toArray();
+
+                // add preferences for app
+                $prefRegistry = $this->_getAppPreferencesForRegistry($application);
+                $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
+
+                $customAppRegistry = $this->_getCustomAppRegistry($application);
+                if (empty($customAppRegistry)) {
+                    // TODO always get this from app controller (and remove from _getCustomAppRegistry)
+                    $appController = Tinebase_Core::getApplicationInstance($application->name);
+                    $models = $appController->getModels();
+                    $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
+                    $appRegistry['defaultModel'] = $appController::getDefaultModel();
+
+                } else {
+                    $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);
                 }
+
+                $registryData[$application->name] = $appRegistry;
             }
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
         
+        return $registryData;
+    }
+
+    /**
+     * get app preferences for registry
+     *
+     * @param Tinebase_Model_Application $application
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getAppPreferencesForRegistry(Tinebase_Model_Application $application)
+    {
+        $registryData = array();
+        $appPrefs = Tinebase_Core::getPreference($application->name);
+        if ($appPrefs !== NULL) {
+            $allPrefs = $appPrefs->getAllApplicationPreferences();
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($allPrefs, TRUE));
+
+            foreach ($allPrefs as $pref) {
+                try {
+                    $registryData['preferences'][$pref] = $appPrefs->{$pref};
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get ' . $pref . '  preference: ' . $e);
+                }
+            }
+        }
+
+        return $registryData;
+    }
+
+    /**
+     * get registry data from application frontend json class
+     *
+     * @param Tinebase_Model_Application $application
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getCustomAppRegistry(Tinebase_Model_Application $application)
+    {
+        $jsonAppName = $application->name . '_Frontend_Json';
+        if (! class_exists($jsonAppName)) {
+            return array();
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Getting registry data for app ' . $application->name);
+        }
+
+        try {
+            $applicationJson = new $jsonAppName();
+            $registryData = $applicationJson->getRegistryData();
+
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            if (! $e instanceof Tinebase_Exception_AccessDenied && ! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name . ': ' . $e);
+                Tinebase_Application::getInstance()->setApplicationState(array($application->getId()), Tinebase_Application::DISABLED);
+            }
+            return array();
+        }
+
+        // TODO get this from app controller / modelconfig
+        foreach ($applicationJson->getRelatableModels() as $relModel) {
+            $registryData[$relModel['ownApp']]['relatableModels'][] = $relModel;
+        }
+        $registryData['models'] = $applicationJson->getModelsConfiguration();
+        $registryData['defaultModel'] = $applicationJson->getDefaultModel();
+
         return $registryData;
     }
     

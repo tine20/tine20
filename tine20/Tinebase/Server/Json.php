@@ -238,9 +238,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
 
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            // TODO pass classes here??
-            self::_addModelConfigMethods($server);
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+            $definitions = self::_getModelConfigMethods();
+            $server->loadFunctions($definitions);
         }
         
         if (isset($cache)) {
@@ -250,12 +250,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         return $server;
     }
 
-    protected static function _addModelConfigMethods(Zend_Json_Server $server)
-    {
-        $definitions = self::_getModelConfigMethods();
-        $server->loadFunctions($definitions);
-    }
-    
     /**
      * handler for JSON api requests
      * @todo session expire handling
@@ -278,35 +272,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             
             $this->_methods[] = $method;
-            
-            $classes = array();
-            
-            // add json apis which require no auth
-            $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-            
-            // register additional Json apis only available for authorised users
-            if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
-                
-                $applicationParts = explode('.', $method);
-                $applicationName = ucfirst($applicationParts[0]);
-                
-                switch($applicationName) {
-                    // additional Tinebase json apis
-                    case 'Tinebase_Container':
-                        $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
-                        break;
-                    case 'Tinebase_PersistentFilter':
-                        $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
-                        break;
-                        
-                    default;
-                        if(Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
-                            $classes[$applicationName.'_Frontend_Json'] = $applicationName;
-                        }
-                        break;
-                }
-            }
-            
+
+            $classes = self::_getServerClasses();
             $server = self::_getServer($classes);
 
             $response = $server->handle($request);
@@ -370,21 +337,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     public static function getServiceMap()
     {
-        $classes = array();
-        
-        $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-        
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
-            $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
-            
-            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
-            foreach($userApplications as $application) {
-                $jsonAppName = $application->name . '_Frontend_Json';
-                $classes[$jsonAppName] = $application->name;
-            }
-        }
-        
+        $classes = self::_getServerClasses();
         $server = self::_getServer($classes);
         
         $server->setTarget('index.php')
@@ -393,6 +346,36 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $smd = $server->getServiceMap();
 
         return $smd;
+    }
+
+    /**
+     * get frontend classes for json server
+     *
+     * @return array
+     */
+    protected static function _getServerClasses()
+    {
+        $classes = array();
+
+        $classes['Tinebase_Frontend_Json'] = 'Tinebase';
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
+            $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
+
+            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+            foreach ($userApplications as $application) {
+                $jsonAppName = $application->name . '_Frontend_Json';
+                if (class_exists($jsonAppName)) {
+                    $classes[$jsonAppName] = $application->name;
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Got frontend classes: ' . print_r($classes, true));
+
+        return $classes;
     }
 
     /**
@@ -490,6 +473,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
 
         return $definitions;
     }
