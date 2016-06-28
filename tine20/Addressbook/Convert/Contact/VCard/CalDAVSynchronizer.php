@@ -11,13 +11,7 @@
  */
 
 /**
-2015/05/12 by Ingo Ratsdorf ingo@envirology.co.nz
-
-*/
-
-
-/**
- * class to convert a SOGO vcard to contact model and back again
+ * class to convert a CalDAVSynchronizer vcard to contact model and back again
  *
  * @package     Addressbook
  * @subpackage  Convert
@@ -148,7 +142,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
                 $telField = 'tel_car';
             // ASSISTENT
             } elseif ($property['TYPE']->has('assistant')) {
-                // not yet supported by CalkDAVSynchronizer
+                // not yet supported by CalDAVSynchronizer
                 $telField = 'tel_assistent';
             } else {
 	    // OTHER
