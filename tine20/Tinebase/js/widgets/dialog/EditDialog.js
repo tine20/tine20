@@ -1113,12 +1113,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRequestFailed: function(exception) {
         this.saving = false;
-        
-        if (exception.code == 629) {
+
+        if (this.exceptionHandlingMap && this.exceptionHandlingMap[exception.code] && typeof this.exceptionHandlingMap[exception.code] === 'function') {
+            this.exceptionHandlingMap[exception.code](exception);
+
+        } else if (exception.code == 629) {
             this.onDuplicateException.apply(this, arguments);
+
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
+
         this.loadMask.hide();
     },
     
