@@ -19,10 +19,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   
   constructor: function(config) {
     Ext.apply(this, config);
-    
-    if (this.debug) {
-        this.printStrategy = 'window';
-    }
+
     Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
   },
 
@@ -69,18 +66,28 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   iframePrint: function(component) {
     var id = Ext.id(),
     doc = document,
-    frame = doc.createElement('iframe');
-        
+    frame = doc.createElement('iframe'),
+    style = {
+      position: 'absolute',
+      'background-color': '#FFFFFF',
+      width: '210mm',
+      height: '297mm',
+      top: '-10000px',
+      left: '-10000px'
+    };
+
+    if (this.debug) {
+      Ext.apply(style, {
+        top: '0px',
+        left: '0px',
+        'z-index': 10000000
+      });
+    }
+
     Ext.fly(frame).set({
       id: id,
       name: id,
-      style: {
-        position: 'absolute',
-        width: '210mm',
-        height: '297mm',
-        top: '-10000px',
-        left: '-10000px'
-      }
+      style: style
     });
     
     doc.body.appendChild(frame);
