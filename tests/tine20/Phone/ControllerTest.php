@@ -35,6 +35,8 @@ class Phone_ControllerTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_backend = Phone_Controller::getInstance();
 
         $this->_objects['call'] = new Phone_Model_Call(array(
@@ -48,19 +50,12 @@ class Phone_ControllerTest extends TestCase
     }
 
     /**
-     * test start
+     * test a whole call cycle - start, connect, disconnect
      * 
      */
-    public function testStartCall()
+    public function testWholeCall()
     {
-        // remove old call
-        try {
-            $call = $this->_backend->getCall($this->_objects['call']->getId());
-            $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
-            $backend->delete($this->_objects['call']->getId());
-        } catch (Exception $e) {
-            // do nothing
-        }
+        // start call
         $call = $this->_backend->callStarted($this->_objects['call']);
         
         $this->assertEquals($this->_objects['call']->destination, $call->destination);
@@ -68,37 +63,25 @@ class Phone_ControllerTest extends TestCase
         
         // sleep for 2 secs (ringing...)
         sleep(2);
-    }
 
-    /**
-     * test connect
-     * 
-     */
-    public function testConnected()
-    {
+        // connect call
         $call = $this->_backend->getCall($this->_objects['call']->getId());
         $ringing = $call->ringing;
-        
+
         $connectedCall = $this->_backend->callConnected($call);
 
         $this->assertEquals($this->_objects['call']->destination, $connectedCall->destination);
         $this->assertEquals(-1, $call->start->compare($call->connected));
-        
+
         // sleep for 5 secs (talking...)
         sleep(5);
-    }
 
-    /**
-     * test disconnect
-     * 
-     */
-    public function testDisconnected()
-    {
+        // disconnect call
         $call = $this->_backend->getCall($this->_objects['call']->getId());
         $duration = $call->duration;
 
         $disconnectedCall = $this->_backend->callDisconnected($call);
-        
+
         $this->assertGreaterThan($duration, $disconnectedCall->duration);
         $this->assertLessThan(10, $disconnectedCall->ringing, 'wrong ringing duration');
         $this->assertLessThan(15, $disconnectedCall->duration, 'wrong duration');
