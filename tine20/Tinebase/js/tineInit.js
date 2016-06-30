@@ -600,22 +600,21 @@ Tine.Tinebase.tineInit = {
                     for (var app in registryData) {
                         if (registryData.hasOwnProperty(app)) {
                             var appData = registryData[app];
-                            if (Tine[app]) {
-                                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
+                            Ext.ns('Tine.' + app);
+                            Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
 
-                                for (var key in appData) {
-                                    if (appData.hasOwnProperty(key)) {
-                                        if (key === 'preferences') {
-                                            Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-                                            for (var pref in appData[key]) {
-                                                if (appData[key].hasOwnProperty(pref)) {
-                                                    Tine[app].preferences.set(pref, appData[key][pref]);
-                                                }
+                            for (var key in appData) {
+                                if (appData.hasOwnProperty(key)) {
+                                    if (key === 'preferences') {
+                                        Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
+                                        for (var pref in appData[key]) {
+                                            if (appData[key].hasOwnProperty(pref)) {
+                                                Tine[app].preferences.set(pref, appData[key][pref]);
                                             }
-
-                                        } else {
-                                            Tine[app].registry.set(key, appData[key]);
                                         }
+
+                                    } else {
+                                        Tine[app].registry.set(key, appData[key]);
                                     }
                                 }
                             }
@@ -630,10 +629,9 @@ Tine.Tinebase.tineInit = {
         } else {
             for (var app,i=0;i<userApplications.length;i++) {
                 app = userApplications[i].name;
-                if (Tine[app]) {
-                  Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
-                  Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-                }
+                Ext.ns('Tine.' + app);
+                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
+                Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
             }
 
             Tine.Tinebase.tineInit.onRegistryLoad();

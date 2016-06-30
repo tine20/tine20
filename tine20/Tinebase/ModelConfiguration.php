@@ -976,6 +976,7 @@ class Tinebase_ModelConfiguration {
         $modelconfig = array();
         foreach ($models as $modelName) {
             $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
+            $modelName = preg_replace('/^.+_Model_/', '', $modelName);
             $config = $recordClass::getConfiguration();
             if ($config) {
                 $modelconfig[$modelName] = $config->getFrontendConfiguration();
