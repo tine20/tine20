@@ -71,7 +71,12 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {String}
      */
     getIconCls: function(target) {
-        return this.appName + 'IconCls';
+        var iconCls = this.appName + 'IconCls';
+        if (! Ext.util.CSS.getRule('.' + iconCls)) {
+            iconCls = 'ApplicationIconCls';
+        }
+
+        return iconCls;
     },
     
     /**

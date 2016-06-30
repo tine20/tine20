@@ -556,9 +556,13 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // add model to global add splitbutton if set
                     if (modelConfig.hasOwnProperty('splitButton') && modelConfig.splitButton == true) {
+                        var iconCls = appName + modelName;
+                        if (! Ext.util.CSS.getRule('.' + iconCls)) {
+                            iconCls = 'ApplicationIconCls';
+                        }
                         Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
                             text: Tine[appName].i18n._('New ' + modelName), 
-                            iconCls: appName + modelName,
+                            iconCls: iconCls,
                             scope: Tine.Tinebase.appMgr.get(appName),
                             handler: (function() {
                                 var ms = this.getMainScreen(),
