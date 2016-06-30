@@ -489,6 +489,12 @@ class Tinebase_Application
      */
     public function removeApplicationData(Tinebase_Model_Application $_application)
     {
+        try {
+            Tinebase_FileSystem::getInstance()->rmdir($_application->getId(), true);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // nothing to do
+        }
+
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
@@ -513,9 +519,9 @@ class Tinebase_Application
                 case 'config':
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
-                  case 'customfield':
-                      $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
-                      break;
+                case 'customfield':
+                    $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    break;
                 default:
                     if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
                         try {

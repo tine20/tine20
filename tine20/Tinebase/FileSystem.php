@@ -1204,15 +1204,29 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Scanning database for deleted files ...');
-        
+
         // get all file objects from db and check filesystem existance
+        $filter = new Tinebase_Model_Tree_FileObjectFilter();
+        $start = 0;
+        $limit = 500;
         $toDeleteIds = array();
-        $fileObjects = $this->_fileObjectBackend->getAll();
-        foreach ($fileObjects as $fileObject) {
-            if ($fileObject->type == Tinebase_Model_Tree_FileObject::TYPE_FILE && $fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
-                $toDeleteIds[] = $fileObject->getId();
+
+        do {
+            $pagination = new Tinebase_Model_Pagination(array(
+                'start' => $start,
+                'limit' => $limit,
+                'sort' => 'id',
+            ));
+
+            $fileObjects = $this->_fileObjectBackend->search($filter, $pagination);
+            foreach ($fileObjects as $fileObject) {
+                if ($fileObject->type == Tinebase_Model_Tree_FileObject::TYPE_FILE && $fileObject->hash && !file_exists($fileObject->getFilesystemPath())) {
+                    $toDeleteIds[] = $fileObject->getId();
+                }
             }
-        }
+
+            $start += $limit;
+        } while ($fileObjects->count() >= $limit);
         
         $nodeIdsToDelete = $this->_treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'     => 'object_id',
