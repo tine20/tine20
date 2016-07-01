@@ -433,7 +433,7 @@ Tine.Tinebase.ApplicationStarter = {
                     // create model
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
-                            Ext.copyTo({}, modelConfig, 
+                            Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
                                'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group')
                         );
                         Tine[appName].Model[modelName].getFilterModel = function() {
@@ -511,6 +511,12 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // create editDialog openWindow function only if edit dialog exists
                     var editDialogName = modelName + 'EditDialog';
+                    if (! Tine[appName].hasOwnProperty(editDialogName)) {
+                        Tine[appName][editDialogName] = Ext.extend(Tine.widgets.dialog.EditDialog, {
+                            displayNotes: Tine[appName].Model[modelName].hasField('notes')
+                        });
+                    }
+
                     
                     if (Tine[appName].hasOwnProperty(editDialogName)) {
                         var edp = Tine[appName][editDialogName].prototype;

@@ -365,6 +365,123 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     /**
+     * generic form layout
+     */
+    getFormItems: function() {
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            border: false,
+            defaults: {
+                hideMode: 'offsets'
+            },
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            items:[
+                {
+                    title: this.i18nRecordName,
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    items: [{
+                        region: 'center',
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1/2
+                        },
+                        items: this.getRecordFormItems()
+                    }].concat(this.getEastPanel())
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: this.modelName
+                })
+            ]
+        };
+    },
+
+    getEastPanel: function() {
+        var items = [];
+        if (this.recordClass.hasField('description')) {
+            items.push(new Ext.Panel({
+                title: i18n._('Description'),
+                iconCls: 'descriptionIcon',
+                layout: 'form',
+                labelAlign: 'top',
+                border: false,
+                items: [{
+                    style: 'margin-top: -4px; border 0px;',
+                    labelSeparator: '',
+                    xtype: 'textarea',
+                    name: 'description',
+                    hideLabel: true,
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100% 100%',
+                    emptyText: i18n._('Enter description'),
+                    requiredGrant: 'editGrant'
+                }]
+            }));
+        }
+
+        if (this.recordClass.hasField('tags')) {
+            items.push(new Tine.widgets.tags.TagPanel({
+                app: this.appName,
+                border: false,
+                bodyStyle: 'border:1px solid #B5B8C8;'
+            }));
+        }
+
+        return items.length ? {
+            layout: 'accordion',
+            animate: true,
+            region: 'east',
+            width: 210,
+            split: true,
+            collapsible: true,
+            collapseMode: 'mini',
+            header: false,
+            margins: '0 5 0 5',
+            border: true,
+            items: items
+        } : [];
+    },
+
+    getRecordFormItems: function() {
+        // @TODO move to Tine.widgets.form.RecordForm to cope with group and sort
+        var items = [],
+            fieldNames = this.recordClass.getFieldNames(),
+            modelConfig = this.recordClass.getModelConfiguration(),
+            fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields'];
+
+        Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
+        fieldsToExclude.push(this.recordClass.getMeta('idProperty'));
+
+        Ext.each(fieldNames, function(fieldName) {
+            var fieldDefinition = modelConfig.fields[fieldName];
+            // exclude: genericFields, idProperty, wellKnown(description, tags, customfields, relations, attachments, notes)
+            if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
+                var field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, fieldDefinition.fieldName);
+                if (field) {
+                    // apply basic layout
+                    field.columnWidth = 1;
+                    items.push([field]);
+                }
+            }
+        }, this);
+
+        return items;
+    },
+
+    /**
      * fix fields (used for preselecting form fields when called in dependency to another record)
      * @return {Boolean}
      */

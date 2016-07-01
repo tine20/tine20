@@ -306,6 +306,9 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
         var appName = (Ext.isObject(app) && app.hasOwnProperty('name')) ? app.name : app;
         return appName + '_Model_' + model;
     };
+    f.getModelConfiguration = function() {
+        return p.modelConfiguration;
+    };
     
     // sanitize containerProperty label
     var containerProperty = f.getMeta('containerProperty');
