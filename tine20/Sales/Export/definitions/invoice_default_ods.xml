@@ -44,6 +44,8 @@
         <column>
             <identifier>price_net</identifier>
             <header>Price Net</header>
+            <type>currency</type>
+            <columnStyle>currencyEURCell</columnStyle>
             <style>
                 <column-width>4cm</column-width>
             </style>
@@ -51,6 +53,7 @@
         <column>
             <identifier>price_tax</identifier>
             <header>Price Tax</header>
+            <type>number</type>
             <style>
                 <column-width>2cm</column-width>
             </style>
@@ -58,6 +61,8 @@
         <column>
             <identifier>price_gross</identifier>
             <header>Price Gross</header>
+            <type>currency</type>
+            <columnStyle>currencyEURCell</columnStyle>
             <style>
                 <column-width>4cm</column-width>
             </style>
