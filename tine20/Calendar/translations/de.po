@@ -1412,7 +1412,7 @@ msgstr "Inkrement der Zeiteinheit für Termine"
 
 #: Preference.php:171
 msgid "Default set Events to privat"
-msgstr "Setze standartmäßig Termine auf privat"
+msgstr "Setze standardmäßig Termine auf privat"
 
 #: Preference.php:172
 msgid "If enabled every created event is always privat."
@@ -1682,3 +1682,6 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+msgid "Send Alarm Notifications Emails"
+msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
