@@ -362,6 +362,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     });
             }, this);
         }
+
+        this.window.relayEvents(this, ['resize']);
     },
 
     /**
