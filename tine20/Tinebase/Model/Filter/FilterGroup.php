@@ -169,7 +169,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected $_filterObjects = array();
     
     /**
-     * @var array spechial options
+     * @var array special options
      */
     protected $_options = NULL;
     
@@ -569,6 +569,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setLabel($_label)
     {
         $this->_label = $_label;
+    }
+
+    /**
+     * set configured model
+     *
+     * @param $configuredModel
+     */
+    public function setConfiguredModel($configuredModel)
+    {
+        $this->_configuredModel = $configuredModel;
     }
     
     /**

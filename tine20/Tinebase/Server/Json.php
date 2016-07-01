@@ -454,6 +454,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
                     foreach ($commonJsonApiMethods as $name => $method) {
                         $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
+                        $appJsonFrontendClass = $application->name . '_Frontend_Json';
+                        if (class_exists($appJsonFrontendClass)) {
+                            $class = $appJsonFrontendClass;
+                            $object = null;
+                        } else {
+                            $class = 'Tinebase_Frontend_Json_Generic';
+                            $object = new Tinebase_Frontend_Json_Generic($application->name);
+                        }
                         $definitions[$key] = new Zend_Server_Method_Definition(array(
                             'name'            => $key,
                             'prototypes'      => array(array(
@@ -462,10 +470,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                             )),
                             'methodHelp'      => $method['help'],
                             'invokeArguments' => array(),
-                            'object'          => null,
+                            'object'          => $object,
                             'callback'        => array(
                                 'type'   => 'instance',
-                                'class'  => $application->name . '_Frontend_Json',
+                                'class'  => $class,
                                 'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
                             ),
                         ));
