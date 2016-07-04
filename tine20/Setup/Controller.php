@@ -1055,8 +1055,7 @@ class Setup_Controller
         if (count($allGroupListIds) > 0) {
             $listsSQLBackend->delete($allGroupListIds);
         }
-        
-        
+
         $roles = Tinebase_Acl_Roles::getInstance();
         $roles->deleteAllRoles();
         

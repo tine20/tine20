@@ -23,7 +23,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      *
      * @var array
      */
-    protected $_userRoleRights = array(
+    static protected $_userRoleRights = array(
         Tinebase_Acl_Rights::RUN,
         Tinebase_Acl_Rights::REPORT_BUGS,
         Tinebase_Acl_Rights::MANAGE_OWN_STATE,

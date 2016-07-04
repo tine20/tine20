@@ -296,7 +296,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         if ($MCV2only) {
             $md = new Tinebase_Record_DoctrineMappingDriver();
             $MCv2Models = array();
-            foreach($models as $model) {
+            foreach ((array)$this->_models as $model) {
                 if ($md->isTransient($model)) {
                     $MCv2Models[] = $model;
                 }

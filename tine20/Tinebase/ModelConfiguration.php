@@ -1078,7 +1078,8 @@ class Tinebase_ModelConfiguration {
                 try {
                     // prepend table name to id prop because of ambiguous ids
                     // TODO find a better way to get table name, maybe we should put it in the modelconfig?
-                    $backend = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName)->getBackend();
+                    $backend = Tinebase_Core::getApplicationInstance(
+                        $this->_applicationName, $this->_modelName, /* $_ignoreACL */ true)->getBackend();
                     $tableName = $backend->getTableName();
                     $this->_filterModel['customfield'] = array(
                         'filter' => 'Tinebase_Model_Filter_CustomField', 

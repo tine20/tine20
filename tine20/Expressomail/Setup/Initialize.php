@@ -21,7 +21,7 @@ class Expressomail_Setup_Initialize extends Setup_Initialize
     *
     * @var array
     */
-    protected $_userRoleRights = array(
+    static protected $_userRoleRights = array(
         Tinebase_Acl_Rights::RUN,
         Expressomail_Acl_Rights::MANAGE_ACCOUNTS,
     );
