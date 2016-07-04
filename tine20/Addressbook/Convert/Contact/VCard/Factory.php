@@ -29,6 +29,7 @@ class Addressbook_Convert_Contact_VCard_Factory
     const CLIENT_TELEFONBUCH    = 'telefonbuch';
     const CLIENT_DAVDROID       = 'davdroid';
     const CLIENT_CARDDAVSYNC    = 'org.dmfs.carddav.sync';
+    const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     
     /**
      * cache parsed user-agent strings
@@ -99,6 +100,10 @@ class Addressbook_Convert_Contact_VCard_Factory
                 return new Addressbook_Convert_Contact_VCard_CardDAVSync($_version);
 		    break;
 
+            case Addressbook_Convert_Contact_VCard_Factory::CLIENT_CALDAVSYNCHRONIZER:
+                return new Addressbook_Convert_Contact_VCard_CalDAVSynchronizer($_version);
+		    break;
+
             case Addressbook_Convert_Contact_VCard_Factory::CLIENT_TELEFONBUCH:
                 return new Addressbook_Convert_Contact_VCard_Telefonbuch($_version);
         }
@@ -165,6 +170,11 @@ class Addressbook_Convert_Contact_VCard_Factory
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_CARDDAVSYNC;
             $version = $matches['version'];
         
+        // CalDAVSynchronizer
+        } elseif (preg_match(Addressbook_Convert_Contact_VCard_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
+            $version = $matches['version'];
+
         // generic client
         } else {
             $backend = Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC;
