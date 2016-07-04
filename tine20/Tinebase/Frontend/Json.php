@@ -865,7 +865,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $appController = Tinebase_Core::getApplicationInstance($application->name);
                     $models = $appController->getModels();
                     $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                    $appRegistry['defaultModel'] = $appController::getDefaultModel();
+                    $appRegistry['defaultModel'] = $appController->getDefaultModel();
 
                 } else {
                     $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);

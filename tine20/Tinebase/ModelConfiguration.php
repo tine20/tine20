@@ -1138,7 +1138,7 @@ class Tinebase_ModelConfiguration {
     }
     
     /**
-     * returns the filterconfiguration needed in the filtergroup for this model
+     * returns the filter configuration needed in the filtergroup for this model
      * 
      * @return array
      */

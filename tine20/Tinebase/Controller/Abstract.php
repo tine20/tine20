@@ -180,11 +180,18 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     
     /**
      * returns the default model of this application
+     *
      * @return string
      */
-    public static function getDefaultModel()
+    public function getDefaultModel()
     {
-        return static::$_defaultModel;
+        if (static::$_defaultModel !== null) {
+            return static::$_defaultModel;
+        }
+
+        // no default model defined, using first model of app...
+        $models = $this->getModels();
+        return (count($models) > 0) ? $models[0] : null;
     }
     
     /**
