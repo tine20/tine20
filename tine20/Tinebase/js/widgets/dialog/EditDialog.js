@@ -387,7 +387,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     border: false,
                     frame: true,
                     layout: 'border',
-                    items: [{
+                    items: [Ext.applyIf(this.getRecordFormItems(), {
                         region: 'center',
                         xtype: 'columnform',
                         labelAlign: 'top',
@@ -397,8 +397,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             labelSeparator: '',
                             columnWidth: 1/2
                         },
-                        items: this.getRecordFormItems()
-                    }].concat(this.getEastPanel())
+                    })].concat(this.getEastPanel())
                 }, new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     record_id: this.record.id,
@@ -456,29 +455,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     getRecordFormItems: function() {
-        // @TODO move to Tine.widgets.form.RecordForm to cope with group and sort
-        var items = [],
-            fieldNames = this.recordClass.getFieldNames(),
-            modelConfig = this.recordClass.getModelConfiguration(),
-            fieldsToExclude = ['description', 'tags', 'notes', 'attachments', 'relations', 'customfields'];
-
-        Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
-        fieldsToExclude.push(this.recordClass.getMeta('idProperty'));
-
-        Ext.each(fieldNames, function(fieldName) {
-            var fieldDefinition = modelConfig.fields[fieldName];
-            // exclude: genericFields, idProperty, wellKnown(description, tags, customfields, relations, attachments, notes)
-            if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0 && ! fieldDefinition.shy) {
-                var field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, fieldDefinition.fieldName);
-                if (field) {
-                    // apply basic layout
-                    field.columnWidth = 1;
-                    items.push([field]);
-                }
-            }
-        }, this);
-
-        return items;
+        return new Tine.widgets.form.RecordForm({
+            recordClass: this.recordClass
+        });
     },
 
     /**

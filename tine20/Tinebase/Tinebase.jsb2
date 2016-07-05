@@ -842,6 +842,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "RecordForm.js",
+          "path": "js/widgets/form/"
+        },
+        {
           "text": "Model.js",
           "path": "js/widgets/persistentfilter/"
         },
