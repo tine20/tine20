@@ -271,30 +271,15 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     public function getModels($MCV2only = false)
     {
         if ($this->_models === null && ! empty($this->_applicationName)) {
-            try {
-                $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-                return null;
-            }
 
-            $models = array();
-            foreach ($dir as $fileinfo) {
-                if (!$fileinfo->isDot() && !$fileinfo->isLink()) {
-                    if ($this->_isModelFile($fileinfo)) {
-                        $models[] = $this->_applicationName . '_Model_' . str_replace('.php', '', $fileinfo->getBasename());
-                    } else if ($fileinfo->isDir()) {
-                        // go (only) one level deeper
-                        $subdir = new DirectoryIterator($fileinfo->getPath() . '/' . $fileinfo->getFilename());
-                        foreach ($subdir as $subfileinfo) {
-                            if ($this->_isModelFile($subfileinfo)) {
-                                $this->_applicationName . '_Model_' . $fileinfo->getBasename() . '_'
-                                . str_replace('.php', '', $subfileinfo->getBasename());
-                            }
-                        }
+            $cache = Tinebase_Core::getCache();
+            $cacheId = Tinebase_Helper::convertCacheId('getModels' . $this->_applicationName);
+            $models = $cache->load($cacheId);
 
-                    }
-                }
+            if (! $models) {
+                $models = $this->_getModelsFromAppDir();
+                // cache for a long time only on prod
+                $cache->save($models, $cacheId, array(), TINE20_BUILDTYPE === 'DEVELOPMENT' ? 1 : 3600);
             }
 
             $this->_models = $models;
@@ -316,16 +301,70 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     }
 
     /**
+     * get models from application directory
+     *
+     * @return array|null
+     */
+    protected function _getModelsFromAppDir()
+    {
+        try {
+            $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            return null;
+        }
+
+        $models = array();
+        foreach ($dir as $fileinfo) {
+            if (!$fileinfo->isDot() && !$fileinfo->isLink()) {
+                if ($this->_isModelFile($fileinfo)) {
+                    $models[] = $this->_applicationName . '_Model_' . str_replace('.php', '', $fileinfo->getBasename());
+                } else if ($fileinfo->isDir()) {
+                    // go (only) one level deeper
+                    $subdir = new DirectoryIterator($fileinfo->getPath() . '/' . $fileinfo->getFilename());
+                    foreach ($subdir as $subfileinfo) {
+                        if ($this->_isModelFile($subfileinfo)) {
+                            $models[] = $this->_applicationName . '_Model_' . $fileinfo->getBasename() . '_'
+                                . str_replace('.php', '', $subfileinfo->getBasename());
+                        }
+                    }
+
+                }
+            }
+        }
+
+        foreach ($models as $key => $model) {
+            if (class_exists($model)) {
+                $reflection = new ReflectionClass($model);
+                $interfaces = $reflection->getInterfaceNames();
+                if (! in_array('Tinebase_Record_Interface', $interfaces)) {
+                    unset($models[$key]);
+                }
+            } else {
+                // interface, no php class, ...
+                unset($models[$key]);
+            }
+        }
+
+        return $models;
+    }
+
+    /**
+     * returns true if $fileinfo describes a model file
+     *
      * @param $fileinfo
      * @return bool
      */
     protected function _isModelFile($fileinfo)
     {
-        return (
+        $isModel = (
             ! $fileinfo->isDot() &&
             ! $fileinfo->isLink() &&
             $fileinfo->isFile() &&
-            ! preg_match('/filter\.php/i', $fileinfo->getBasename())
+            ! preg_match('/filter\.php/i', $fileinfo->getBasename()) &&
+            ! preg_match('/abstract\.php/i', $fileinfo->getBasename())
         );
+
+        return $isModel;
     }
 }
