@@ -1147,6 +1147,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.textEditor = new Ext.Panel({
             layout: 'fit',
             mimeType: 'text/plain',
+            cls: 'felamimail-edit-text-plain',
             flex: 1,  // Take up all *remaining* vertical space
             setValue: function(v) {return this.items.get(0).setValue(v);},
             getValue: function() {return this.items.get(0).getValue();},
