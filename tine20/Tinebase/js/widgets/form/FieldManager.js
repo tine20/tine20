@@ -79,8 +79,8 @@ Tine.widgets.form.FieldManager = function() {
             field.disabled = !! (fieldDefinition.readOnly || fieldDefinition.disabled);
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
 
-            if (fieldDefinition.default) {
-                field.default = i18n._hidden(fieldDefinition.default);
+            if (fieldDefinition['default']) {
+                field['default'] = i18n._hidden(fieldDefinition['default']);
             }
 
             switch(fieldType) {
