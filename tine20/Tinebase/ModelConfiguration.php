@@ -80,7 +80,14 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_containerUsesFilter = TRUE;
-    
+
+    /**
+     * set this to false, if personal containers should be ommited
+     *
+     * @var boolean
+     */
+    protected $_hasPersonalContainer = TRUE;
+
     /**
      * The property of the title, if any
      *
@@ -594,7 +601,8 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig',
+        'hasPersonalContainer'
     );
 
     /**

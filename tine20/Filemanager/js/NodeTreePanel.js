@@ -221,15 +221,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         
         return this.filterPlugin;
     },
-    
-    /**
-     * returns the personal root path
-     * @returns {String}
-     */
-    getRootPath: function() {
-        return Tine.Tinebase.container.getMyFileNodePath();
-    },
-    
+
     /**
      * returns params for async request
      * 
