@@ -375,7 +375,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $updatedFileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$updatedFileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$updatedFileObject->id}");
 
@@ -856,7 +856,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $fileObject->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
             $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$name}");
 
@@ -1061,7 +1061,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_node->name}");
 

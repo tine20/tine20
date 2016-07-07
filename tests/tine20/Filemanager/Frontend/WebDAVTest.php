@@ -187,11 +187,12 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     public function testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file()
     {
         $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+        $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
         
-        $etag = $parent->createFile('tine_logo.png', fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
+        $etag = $parent->createFile('tine_logo.png', fopen($filename, 'r'));
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
-        
+
         $this->assertInstanceOf('Filemanager_Frontend_WebDAV_File', $node, 'wrong node class');
         $this->assertTrue(is_resource($node->get()));
         $this->assertEquals('tine_logo.png', $node->getName());
@@ -199,6 +200,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEquals('image/png', $node->getContentType());
         $this->assertEquals('"7424e2c16388bf388af1c4fe44c1dd67d31f468b"', $node->getETag());
         $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
+        $this->assertTrue(fread($node->get(), 10000) == file_get_contents($filename), 'content not saved');
         
         return $node;
     }
@@ -206,13 +208,36 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     public function testUpdateFile()
     {
         $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
-        
-        $etag = $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
-        
+        $eTag = $node->getETag();
+
+        $updateFile = dirname(__FILE__) . '/../../Tinebase/files/tine_logo_setup.png';
+
+        $updatedEtag = $node->put(fopen($updateFile, 'r'));
+
         $this->assertEquals('Filemanager_Frontend_WebDAV_File', get_class($node), 'wrong type');
-        $this->assertTrue(preg_match('/"\w+"/', $etag) === 1);
+        $this->assertNotEquals($eTag, $updatedEtag, 'eTag did not changed');
+        $this->assertTrue(preg_match('/"\w+"/', $updatedEtag) === 1);
+
+        $this->assertTrue(fread($node->get(), 10000) == file_get_contents($updateFile), 'content not updated');
     }
-    
+
+    public function testUpdateFileWithOCMTime()
+    {
+        $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
+        $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
+        $updateFile = dirname(__FILE__) . '/../../Tinebase/files/tine_logo_setup.png';
+
+        $mtime = Tinebase_DateTime::now()->subDay(1);
+        $_SERVER['HTTP_X_OC_MTIME'] = $mtime->getTimestamp();
+
+        $node->put(fopen($updateFile, 'r'));
+
+        unset($_SERVER['HTTP_X_OC_MTIME']);
+
+        $savedMTime = new Tinebase_DateTime($node->getLastModified());
+        $this->assertEquals($mtime, $savedMTime, 'X_OC_MTIME not saved');
+    }
+
     /**
      * test chunked upload from OwnCloud clients
      * 
