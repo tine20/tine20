@@ -219,7 +219,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
         defaultResourceData = Tine.Calendar.Model.Attender.getDefaultResourceData(),
         filteredContainers = westPanel.getContainerTreePanel().getFilterPlugin().getFilter().value || [],
         prefs = app.getRegistry().get('preferences'),
-        defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me', // one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee']
+        defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
         defaultAttendee = []
         calendarResources = app.getRegistry().get('calendarResources');
         
@@ -238,6 +238,8 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
     }
     
     switch(defaultAttendeeStrategy) {
+        case 'none':
+            break;
         case 'me':
             defaultAttendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',

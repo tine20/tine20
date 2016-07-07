@@ -324,24 +324,29 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->options    = '';
                 break;
             case self::DEFAULTATTENDEE_STRATEGY:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
                 $preference->value      = 'me';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
                         <option>
-                            <label>Me</label>
+                            <label>' . $translate->_('Me') . '</label>
                             <value>me</value>
                         </option>
                         <option>
-                            <label>Intelligent</label>
+                            <label>' . $translate->_('Intelligent') . '</label>
                             <value>intelligent</value>
                         </option>
                         <option>
-                            <label>Calendar owner</label>
+                            <label>' . $translate->_('Calendar owner') . '</label>
                             <value>calendarOwner</value>
                         </option>
                         <option>
-                            <label>Filtered attendee</label>
+                            <label>' . $translate->_('Filtered attendee') . '</label>
                             <value>filteredAttendee</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('None') . '</label>
+                            <value>none</value>
                         </option>
                     </options>';
                 break;
