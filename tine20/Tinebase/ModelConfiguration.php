@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -31,6 +31,20 @@ class Tinebase_ModelConfiguration {
      * @var string
      */
     protected $_idProperty = 'id';
+
+    /**
+     * table definition
+     *
+     * @var array
+     */
+    protected $_table = array();
+
+    /**
+     * model version
+     *
+     * @var integer
+     */
+    protected $_version = null;
     
     // legacy
     protected $_identifier;
@@ -66,7 +80,14 @@ class Tinebase_ModelConfiguration {
      * @var boolean
      */
     protected $_containerUsesFilter = TRUE;
-    
+
+    /**
+     * set this to false, if personal containers should be ommited
+     *
+     * @var boolean
+     */
+    protected $_hasPersonalContainer = TRUE;
+
     /**
      * The property of the title, if any
      *
@@ -284,11 +305,11 @@ class Tinebase_ModelConfiguration {
      * boolean                   Boolean             boolean  bool                          bool              Tinebase_Model_Filter_Bool
      * integer                   Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 number
      * integer     bytes         Bytes               integer  integer                       int               Tinebase_Model_Filter_Int
-     * integer     usMoney       Dollar in Cent      integer  integer                       int               Tinebase_Model_Filter_Int
-     * integer     euMoney       Euro in Cent        integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     seconds       Seconds             integer  integer                       int               Tinebase_Model_Filter_Int
      * integer     minutes       Minutes             integer  integer                       int               Tinebase_Model_Filter_Int
      * float                     Float               float    float                         float             Tinebase_Model_Filter_Int
+     * float       usMoney       Dollar in Cent      float    float                         int               Tinebase_Model_Filter_Int
+     * float       euMoney       Euro in Cent        float    float                         int               Tinebase_Model_Filter_Int
      * json                      Json String         text     string                        array             Tinebase_Model_Filter_Text
      * container                 Container           string   Tine.Tinebase.Model.Container Tinebase_Model_Container                                    tine.widget.container.filtermodel
      * tag tinebase.tag
@@ -304,7 +325,7 @@ class Tinebase_ModelConfiguration {
      * the key will be used for the classname of a singleton (callable by getInstance),
      * the value will be used as method name.
      * 
-     * * record/foreign (legacy) 1:1 - Relation      text     Tine.<APP>.Model.<MODEL>      Tinebase_Record_Abstract  Tinebase_Model_Filter_ForeignId   Tine.widgets.grid.ForeignRecordFilter
+     * * record                  1:1 - Relation      text     Tine.<APP>.Model.<MODEL>      Tinebase_Record_Abstract  Tinebase_Model_Filter_ForeignId   Tine.widgets.grid.ForeignRecordFilter
      * * records                 1:n - Relation      -        Array of Record.data Objects  Tinebase_Record_RecordSet -                                 -
      * * relation                m:m - Relation      -        Tinebase.Model.Relation       Tinebase_Model_Relation   Tinebase_Model_Filter_Relation
      * * keyfield                String              string   <as defined>                  string            Tinebase_Model_Filter_Text
@@ -580,7 +601,8 @@ class Tinebase_ModelConfiguration {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
-        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig'
+        'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig',
+        'hasPersonalContainer'
     );
 
     /**
@@ -694,13 +716,16 @@ class Tinebase_ModelConfiguration {
         $this->_modelName   = $modelClassConfiguration['modelName'];
         $this->_idProperty  = $this->_identifier = (isset($modelClassConfiguration['idProperty']) || array_key_exists('idProperty', $modelClassConfiguration)) ? $modelClassConfiguration['idProperty'] : 'id';
 
+        $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
+        $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
+
         // some cruid validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
         
         $this->_filters = array();
-        $this->_fields[$this->_idProperty] = array('label' => NULL, 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true));
+        $this->_fields[$this->_idProperty] = array('id' => true, 'label' => NULL, 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'length' => 40);
 
         if ($this->_hasCustomFields) {
             $this->_fields['customfields'] = array('label' => NULL, 'type' => 'custom', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
@@ -712,6 +737,8 @@ class Tinebase_ModelConfiguration {
 
         if ($this->_containerProperty) {
             $this->_fields[$this->_containerProperty] = array(
+                'nullable'         => true,
+                'unsigned'         => true,
                 'label'            => $this->_containerUsesFilter ? $this->_containerName : NULL,
                 'shy'              => true,
                 'type'             => 'container',
@@ -755,16 +782,16 @@ class Tinebase_ModelConfiguration {
         if ($this->_modlogActive) {
             // notes are needed if modlog is active
             $this->_fields['notes']              = array('label' => NULL,                 'type' => 'note',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL), 'useGlobalTranslation' => TRUE);
-            $this->_fields['created_by']         = array('label' => 'Created By',         'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE);
-            $this->_fields['creation_time']      = array('label' => 'Creation Time',      'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE);
-            $this->_fields['last_modified_by']   = array('label' => 'Last Modified By',   'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE);
-            $this->_fields['last_modified_time'] = array('label' => 'Last Modified Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE);
-            $this->_fields['seq']                = array('label' => NULL,                 'type' => 'integer',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE);
+            $this->_fields['created_by']         = array('label' => 'Created By',         'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
+            $this->_fields['creation_time']      = array('label' => 'Creation Time',      'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            $this->_fields['last_modified_by']   = array('label' => 'Last Modified By',   'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
+            $this->_fields['last_modified_time'] = array('label' => 'Last Modified Time', 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            $this->_fields['seq']                = array('label' => NULL,                 'type' => 'integer',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'shy' => true, 'useGlobalTranslation' => TRUE, 'default' => 0, 'unsigned' => true);
             
             // don't show deleted information
-            $this->_fields['deleted_by']         = array('label' => NULL, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE);
-            $this->_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE);
-            $this->_fields['is_deleted']         = array('label' => NULL, 'type' => 'boolean',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE);
+            $this->_fields['deleted_by']         = array('label' => NULL, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
+            $this->_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
+            $this->_fields['is_deleted']         = array('label' => NULL, 'type' => 'boolean',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'default' => false);
 
         } elseif ($this->_hasNotes) {
             $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));
@@ -774,6 +801,8 @@ class Tinebase_ModelConfiguration {
         $queryFilters = array();
         
         foreach ($this->_fields as $fieldKey => &$fieldDef) {
+            $fieldDef['fieldName'] = $fieldKey;
+
             // set default type to string, if no type is given
             if (! (isset($fieldDef['type']) || array_key_exists('type', $fieldDef))) {
                 $fieldDef['type'] = 'string';
@@ -793,6 +822,10 @@ class Tinebase_ModelConfiguration {
                 $this->_useGroups = TRUE;
             }
 
+            if ($fieldDef['type'] == 'keyfield') {
+                $fieldDef['length'] = 40;
+            }
+
             if ($fieldDef['type'] == 'virtual') {
                 $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $fieldDef['key'] = $fieldKey;
@@ -804,7 +837,8 @@ class Tinebase_ModelConfiguration {
                 $this->_virtualFields[] = $fieldDef;
                 continue;
             }
-            
+
+
             // set default value
             // TODO: implement complex default values
             if ((isset($fieldDef['default']))) {
@@ -939,6 +973,53 @@ class Tinebase_ModelConfiguration {
     }
 
     /**
+     * get modelconfig for an array of models
+     *
+     * @param array $models
+     * @param string $appname
+     * @return array
+     */
+    public static function getFrontendConfigForModels($models, $appname = null)
+    {
+        $modelconfig = array();
+        foreach ($models as $modelName) {
+            $recordClass = $appname ? $appname . '_Model_' . $modelName : $modelName;
+            $modelName = preg_replace('/^.+_Model_/', '', $modelName);
+            $config = $recordClass::getConfiguration();
+            if ($config) {
+                $modelconfig[$modelName] = $config->getFrontendConfiguration();
+            }
+        }
+
+        return $modelconfig;
+    }
+
+    public function getIdProperty()
+    {
+        return $this->_idProperty;
+    }
+
+    public function getTable()
+    {
+        return $this->_table;
+    }
+
+    public function getVersion()
+    {
+        return $this->_version;
+    }
+
+    public function getApplName()
+    {
+        return $this->_appName;
+    }
+
+    public function getModelName()
+    {
+        return $this->_modelName;
+    }
+
+    /**
      * populate model config properties
      * 
      * @param string $fieldKey
@@ -974,6 +1055,7 @@ class Tinebase_ModelConfiguration {
             case 'user':
                 $fieldDef['config'] = array(
                     'refIdField'              => 'id',
+                    'length'                  => 40,
                     'appName'                 => 'Addressbook',
                     'modelName'               => 'Contact',
                     'recordClassName'         => 'Addressbook_Model_Contact',
@@ -993,6 +1075,7 @@ class Tinebase_ModelConfiguration {
                 $fieldDef['config']['controllerClassName'] = (isset($fieldDef['config']['controllerClassName']) || array_key_exists('controllerClassName', $fieldDef['config'])) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
                 $fieldDef['config']['filterClassName']     = (isset($fieldDef['config']['filterClassName']) || array_key_exists('filterClassName', $fieldDef['config']))     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($fieldDef['type'] == 'record') {
+                    $fieldDef['config']['length'] = 40;
                     $this->_recordFields[$fieldKey] = $fieldDef;
                 } else {
                     $fieldDef['config']['dependentRecords'] = (isset($fieldDef['config']['dependentRecords']) || array_key_exists('dependentRecords', $fieldDef['config'])) ? $fieldDef['config']['dependentRecords'] : FALSE;
@@ -1003,7 +1086,8 @@ class Tinebase_ModelConfiguration {
                 try {
                     // prepend table name to id prop because of ambiguous ids
                     // TODO find a better way to get table name, maybe we should put it in the modelconfig?
-                    $backend = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName)->getBackend();
+                    $backend = Tinebase_Core::getApplicationInstance(
+                        $this->_applicationName, $this->_modelName, /* $_ignoreACL */ true)->getBackend();
                     $tableName = $backend->getTableName();
                     $this->_filterModel['customfield'] = array(
                         'filter' => 'Tinebase_Model_Filter_CustomField', 
@@ -1062,7 +1146,7 @@ class Tinebase_ModelConfiguration {
     }
     
     /**
-     * returns the filterconfiguration needed in the filtergroup for this model
+     * returns the filter configuration needed in the filtergroup for this model
      * 
      * @return array
      */

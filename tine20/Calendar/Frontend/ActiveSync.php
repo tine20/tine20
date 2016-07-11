@@ -284,7 +284,8 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 case 'attendee':
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
+                        // note: might comparing an integer with a string here (at least with pgsql)
+                        $this->_syncFolderId       != $this->_getDefaultContainerId()) {
                         
                         continue;
                     }

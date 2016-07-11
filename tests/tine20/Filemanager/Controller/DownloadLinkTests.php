@@ -102,9 +102,11 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         Filemanager_Controller_Node::getInstance()->createNodes($directories, Tinebase_Model_Tree_Node::TYPE_FOLDER);
         
         $fileList = $this->_getUit()->getFileList($downloadLink, array());
-        
+
         $this->assertGreaterThan(1, count($fileList));
         $this->assertNotNull($fileList->filter('name', 'one')->getFirstRecord());
+
+        return $fileList;
     }
     
     /**
@@ -156,5 +158,21 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
         $downloadLink = $this->_getUit()->get($initialDownloadLink->getId());
 
         $this->assertEquals(2, $downloadLink->access_count);
+    }
+
+    public function testDownloadLinkAlternativeURL()
+    {
+        Filemanager_Config::getInstance()->set(Filemanager_Config::PUBLIC_DOWNLOAD_URL, 'https://download.example.com/');
+        $downloadLink = $this->testCreateDownloadLink();
+
+        $this->assertContains('example', $downloadLink->url);
+    }
+
+    public function testDownloadListAlternativeURL()
+    {
+        Filemanager_Config::getInstance()->set(Filemanager_Config::PUBLIC_DOWNLOAD_URL, 'https://download.example.com/');
+        $fileList = $this->testGetFileList();
+
+        $this->assertContains('example', $fileList[0]->path);
     }
 }

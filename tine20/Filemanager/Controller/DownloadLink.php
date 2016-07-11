@@ -191,16 +191,15 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      * @param Tinebase_Model_Tree_Node $node
      * @return Tinebase_Record_RecordSet
      * 
-     * @todo move basePath calculation to view. In the controller we should start the path with $download-getId().
+     * @todo move basePath calculation to view. In the controller we should start the path with $download->getId().
      */
     public function getFileList(Filemanager_Model_DownloadLink $download, $splittedPath, $node = null)
     {
         if ($node === null) {
             $node = $this->getNode($download, $splittedPath);
         }
-        
-        $basePath = '/download/show/' . $download->getId() . '/';
-        
+
+        $basePath = $download->getDownloadUrl() . '/';
         if (count($splittedPath) > 0) {
             $basePath .= implode('/', $splittedPath) . '/';
         }

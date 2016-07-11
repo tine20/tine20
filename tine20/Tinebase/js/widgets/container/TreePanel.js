@@ -102,17 +102,24 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     useContainerColor: false,
     /**
-     * @cfg {Boolean} useContainerColor
+     * @cfg {Boolean} useProperties
      * use container properties
      */
     useProperties: true,
-    
+
+    /**
+     * @property {Object}
+     * modelConfiguration of recordClass (if available)
+     */
+    modelConfiguration: null,
+
     useArrows: true,
     border: false,
     autoScroll: true,
     enableDrop: true,
     ddGroup: 'containerDDGroup',
-    
+    hasPersonalContainer: true,
+
     /**
      * @fixme not needed => all events hand their events over!!!
      * 
@@ -135,6 +142,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (this.allowMultiSelection) {
             this.selModel = new Ext.tree.MultiSelectionModel({});
         }
+
+        if (this.recordClass) {
+            this.modelConfiguration = this.recordClass.getModelConfiguration();
+        }
+
+        if (this.modelConfiguration) {
+            this.hasPersonalContainer = this.modelConfiguration.hasPersonalContainer !== false;
+        }
         
         var containerName = this.recordClass ? this.recordClass.getContainerName() : 'container';
         var containersName = this.recordClass ? this.recordClass.getContainersName() : 'containers';
@@ -147,23 +162,30 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             getParams: this.onBeforeLoad.createDelegate(this),
             inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
         });
-        
+
+        var extraItems = this.getExtraItems();
         this.root = {
             path: '/',
             cls: 'tinebase-tree-hide-collapsetool',
             expanded: true,
             children: [{
-                path: this.getRootPath(),
-                id: 'personal'
+                path: Tine.Tinebase.container.getMyNodePath(),
+                id: 'personal',
+                hidden: !this.hasPersonalContainer
             }, {
                 path: '/shared',
                 id: 'shared'
             }, {
                 path: '/personal',
-                id: 'otherUsers'
-            }].concat(this.getExtraItems())
+                id: 'otherUsers',
+                hidden: !this.hasPersonalContainer
+            }].concat(extraItems)
         };
-        
+
+        if (!this.hasPersonalContainer && ! extraItems.length) {
+            this.rootVisible = false;
+        }
+
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
@@ -199,16 +221,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
     },
-    
-    /**
-     * delivers the personal root node path
-     * 
-     * @returns personal root node path
-     */
-    getRootPath: function() {
-        return Tine.Tinebase.container.getMyNodePath();
-    },
-    
+
     /**
      * template fn for subclasses to set default path
      * 

@@ -810,12 +810,15 @@ Tine.Tinebase.common = {
      */
     html2text: function(html) {
         text = html.replace(/\n/g, ' ')
-            .replace(/(<br[ /]*>)/g, '\n')
-            .replace(/(<li>)/g, '\n * ')
-            .replace(/<(blockquote|div|dl|dt|dd|form|h1|h2|h3|h4|h5|h6|hr|p|pre|table|tr|td|li|section|header|footer)>/g, '\n')
+            .replace(/(<br[^>]*>)/g, '\n--br')
+            .replace(/(<li[^>]*>)/g, '\n * ')
+            .replace(/<(blockquote|div|dl|dt|dd|form|h1|h2|h3|h4|h5|h6|hr|p|pre|table|tr|td|li|section|header|footer)[^>]*>(?!\s*\<\/\1\>)/g, '\n--block')
             .replace(/<style(.+?)\/style>/g, '')
             .replace(/<(.+?)>/g, '')
             .replace(/&nbsp;/g, ' ')
+            .replace(/--block(\n--block)+/g, '--block')
+            .replace(/--block\n--br/g, '')
+            .replace(/(--block|--br)/g, '');
 
         return Ext.util.Format.htmlDecode(text);
     },
@@ -864,3 +867,14 @@ Tine.Tinebase.common = {
         }, this);
     }
 };
+
+/*
+var s = '<blockquote class="felamimail-body-blockquote"><div>Hello,</div><div><br></div><div>...</div></blockquote>';
+if (Tine.Tinebase.common.html2text(s) != "\nHello,\n\n...") console.error('ignore empty div: "' + Tine.Tinebase.common.html2text(s) + '"');
+
+var s = '<font face="tahoma, arial, helvetica, sans-serif" style="font-size: 11px; font-family: tahoma, arial, helvetica, sans-serif;"><span style="font-size: 11px;">​<font color="#808080">Dipl.-Phys. Cornelius Weiss</font></span></font><div style="font-size: 11px; font-family: tahoma, arial, helvetica, sans-serif;"><font face="tahoma, arial, helvetica, sans-serif" color="#808080"><span style="font-size: 11px;">Team Leader Software Engineering</span></font></div>';
+if (Tine.Tinebase.common.html2text(s) != "​Dipl.-Phys. Cornelius Weiss\nTeam Leader Software Engineering") console.error('cope with styled div tag: '  + Tine.Tinebase.common.html2text(s));
+
+var s = '<div><div><span><font><br></font></span></div></div>';
+if (Tine.Tinebase.common.html2text(s) != "\n") console.error('cope with nested blocks: "' + Tine.Tinebase.common.html2text(s) + '"');
+*/

@@ -318,4 +318,30 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '9.8');
     }
+
+    /**
+     * update to 9.9
+     *
+     * addressbook f_fn length => 255
+     *
+     * @return void
+     */
+    public function update_8()
+    {
+        if ($this->getTableVersion('addressbook') == 19) {
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>n_fn</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>');
+            $this->_backend->alterCol('addressbook', $declaration);
+
+            $this->setTableVersion('addressbook', 20);
+        }
+
+        $this->setApplicationVersion('Addressbook', '9.9');
+    }
 }

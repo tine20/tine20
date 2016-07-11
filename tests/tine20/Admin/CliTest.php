@@ -325,9 +325,9 @@ class Admin_CliTest extends TestCase
     {
         // check output
         if ($username == 'hmoster') {
-            $this->assertEquals("Imported 3 records. Import failed for 0 records. \n", $out);
+            $this->assertEquals("Imported 3 records.\n", $out);
         } else {
-            $this->assertEquals("Imported 1 records. Import failed for 2 records. \n", $out);
+            $this->assertEquals("Imported 1 records.\nImport failed for 2 records.\n", $out);
         }
         
         // check if users (with their data) have been added to tine20
@@ -459,7 +459,7 @@ class Admin_CliTest extends TestCase
         ob_start();
         $this->_cli->importGroups($opts);
         $out = ob_get_clean();
-        $this->assertStringStartsWith('Imported 0 records.', $out);
+        $this->assertTrue($out === '');
         
         $expected = array('men' => 3, 'women' => 2,  'lowperformers' => 2, 'highperformers' => 3);
         $this->_testImportGroupsHelper($expected);

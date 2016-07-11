@@ -41,6 +41,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $this->_body    = $body !== null ? $body : fopen('php://input', 'r');
         
         $request = $request instanceof \Zend\Http\Request ? $request : new \Zend\Http\PhpEnvironment\Request();
+
+        // only for debugging
+        //Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " raw request: " . $request->__toString());
         
         // handle CORS requests
         if ($request->getHeaders()->has('ORIGIN') && !$request->getHeaders()->has('X-FORWARDED-HOST')) {
@@ -133,11 +136,12 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
         
-        $json = file_get_contents('php://input');
+        $json = $request->getContent();
         $json = Tinebase_Core::filterInputForDatabase($json);
-        
+
         if (substr($json, 0, 1) == '[') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' batched request');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' batched request');
             $isBatchedRequest = true;
             $requests = Zend_Json::decode($json);
         } else {
@@ -152,7 +156,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $_requests[0]["params"][$field] = "*******";
                 }
             }
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' is JSON request. rawdata: ' . print_r($_requests, true));
         } 
         
         $response = array();
@@ -165,12 +170,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                    $this->_handleException($request, $exception) :
                    $this->_handle($request);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got empty request options: skip request.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Got empty request options: skip request.');
                 $response[] = NULL;
             }
         }
-        
-        header('Content-type: application/json');
+
+        if (! headers_sent()) {
+            header('Content-type: application/json');
+        }
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
     }
     
@@ -229,14 +237,19 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 }
             }
         }
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+            $definitions = self::_getModelConfigMethods();
+            $server->loadFunctions($definitions);
+        }
         
         if (isset($cache)) {
             $cache->save($server, $cacheId, array(), null);
         }
-        
+
         return $server;
     }
-    
+
     /**
      * handler for JSON api requests
      * @todo session expire handling
@@ -259,37 +272,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             
             $this->_methods[] = $method;
-            
-            $classes = array();
-            
-            // add json apis which require no auth
-            $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-            
-            // register additional Json apis only available for authorised users
-            if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
-                
-                $applicationParts = explode('.', $method);
-                $applicationName = ucfirst($applicationParts[0]);
-                
-                switch($applicationName) {
-                    // additional Tinebase json apis
-                    case 'Tinebase_Container':
-                        $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
-                        break;
-                    case 'Tinebase_PersistentFilter':
-                        $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
-                        break;
-                        
-                    default;
-                        if(Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
-                            $classes[$applicationName.'_Frontend_Json'] = $applicationName;
-                        }
-                        break;
-                }
-            }
-            
+
+            $classes = self::_getServerClasses();
             $server = self::_getServer($classes);
-            
+
             $response = $server->handle($request);
             if ($response->isError()) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Got response error: '
@@ -351,21 +337,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     public static function getServiceMap()
     {
-        $classes = array();
-        
-        $classes['Tinebase_Frontend_Json'] = 'Tinebase';
-        
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
-            $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
-            
-            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
-            foreach($userApplications as $application) {
-                $jsonAppName = $application->name . '_Frontend_Json';
-                $classes[$jsonAppName] = $application->name;
-            }
-        }
-        
+        $classes = self::_getServerClasses();
         $server = self::_getServer($classes);
         
         $server->setTarget('index.php')
@@ -373,105 +345,149 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             
         $smd = $server->getServiceMap();
 
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-            // TODO make it work
-            //self::_addModelConfigServices($smd);
-        }
-
         return $smd;
     }
 
     /**
-     * add default modelconfig functions to service map
+     * get frontend classes for json server
      *
-     * @param Zend_Json_Server_Smd $smd
+     * @return array
      */
-    protected static function _addModelConfigServices(Zend_Json_Server_Smd $smd)
+    protected static function _getServerClasses()
+    {
+        $classes = array();
+
+        $classes['Tinebase_Frontend_Json'] = 'Tinebase';
+
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
+            $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
+
+            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+            foreach ($userApplications as $application) {
+                $jsonAppName = $application->name . '_Frontend_Json';
+                if (class_exists($jsonAppName)) {
+                    $classes[$jsonAppName] = $application->name;
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Got frontend classes: ' . print_r($classes, true));
+
+        return $classes;
+    }
+
+    /**
+     * get default modelconfig methods
+     *
+     * @return array of Zend_Server_Method_Definition
+     */
+    protected static function _getModelConfigMethods()
     {
         $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
 
-        $cache = Tinebase_Core::getCache();
-        $cacheId = '_addModelConfigServices' . sha1(Zend_Json_Encoder::encode($userApplications->getArrayOfIds()));
-        $services = $cache->load($cacheId);
-
-        if (! $services) {
-            $services = array();
-            foreach ($userApplications as $application) {
-                try {
-                    $controller = Tinebase_Core::getApplicationInstance($application->name);
-                    $models = $controller->getModels();
-                    if (!$models) {
-                        continue;
-                    }
-                } catch (Tinebase_Exception_NotFound $tenf) {
+        $definitions = array();
+        foreach ($userApplications as $application) {
+            try {
+                $controller = Tinebase_Core::getApplicationInstance($application->name);
+                $models = $controller->getModels();
+                if (!$models) {
                     continue;
                 }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
 
-                foreach ($models as $model) {
-                    $config = function_exists($model . '::getConfiguration') ? $model::getConfiguration() : null;
-                    if ($config && $config->exposeJsonApi) {
-                        $commonServiceOptions = array(
-                            'envelope' => 'JSON-RPC-2.0',
-                            'transport' => 'POST',
-                            'return' => 'array'
-                        );
+            foreach ($models as $model) {
+                $config = $model::getConfiguration();
+                if ($config && $config->exposeJsonApi) {
+                    // TODO replace this with generic method
+                    $simpleModelName = str_replace($application->name . '_Model_', '', $model);
 
-                        // TODO replace this with generic method
-                        $simpleModelName = str_replace($application->name . '_Model_', '', $model);
-
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.get' . $simpleModelName,
-                            'params' =>
-                                array(array(
+                    $commonJsonApiMethods = array(
+                        'get' => array(
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
                                     'type' => 'string',
                                     'name' => 'id',
-                                    'optional' => false,
                                 )),
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.save' . $simpleModelName,
-                            'params' =>
-                                array(array(
-                                    'type' => 'any',
-                                    'name' => 'recordData',
-                                    'optional' => false,
-                                )),
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.delete' . $simpleModelName . 's',
-                            'params' =>
-                                array(array(
-                                    'type' => 'array',
-                                    'name' => 'ids',
-                                    'optional' => false,
-                                )),
-                            'return' => 'string'
-                        ));
-                        $services[] = array_merge($commonServiceOptions, array(
-                            'name' => $application->name . '.search' . $simpleModelName . 's',
-                            'params' =>
-                                array(array(
+                            ),
+                            'help'   => 'get one ' . $simpleModelName . ' identified by $id',
+                            'plural' => false,
+                        ),
+                        'search' => array(
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
                                     'type' => 'array',
                                     'name' => 'filter',
-                                    'optional' => false,
-                                ), array(
-                                    'type' => 'array',
-                                    'name' => 'paging',
-                                    'optional' => false,
                                 )),
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'pagination',
+                                )),
+                            ),
+                            'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',
+                            'plural' => true,
+                        ),
+                        'save' => array(
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'recordData',
+                                )),
+                            ),
+                            'help'   => 'Save ' . $simpleModelName . '',
+                            'plural' => false,
+                        ),
+                        'delete' => array(
+                            'params' => array(
+                                new Zend_Server_Method_Parameter(array(
+                                    'type' => 'array',
+                                    'name' => 'ids',
+                                )),
+                            ),
+                            'help'   => 'Delete multiple ' . $simpleModelName . 's',
+                            'plural' => true,
+                        ),
+                    );
+
+                    foreach ($commonJsonApiMethods as $name => $method) {
+                        $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
+                        $appJsonFrontendClass = $application->name . '_Frontend_Json';
+                        if (class_exists($appJsonFrontendClass)) {
+                            $class = $appJsonFrontendClass;
+                            $object = null;
+                        } else {
+                            $class = 'Tinebase_Frontend_Json_Generic';
+                            $object = new Tinebase_Frontend_Json_Generic($application->name);
+                        }
+                        $definitions[$key] = new Zend_Server_Method_Definition(array(
+                            'name'            => $key,
+                            'prototypes'      => array(array(
+                                'returnType' => 'array',
+                                'parameters' => $method['params']
+                            )),
+                            'methodHelp'      => $method['help'],
+                            'invokeArguments' => array(),
+                            'object'          => $object,
+                            'callback'        => array(
+                                'type'   => 'instance',
+                                'class'  => $class,
+                                'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
+                            ),
                         ));
                     }
                 }
             }
-
-            $cache->save($services, $cacheId);
         }
 
-        foreach ($services as $service) {
-            $smd->addService($service);
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
+
+        return $definitions;
     }
-    
+
     /**
      * check json key
      *

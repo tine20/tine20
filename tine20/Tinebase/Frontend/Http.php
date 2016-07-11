@@ -259,7 +259,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         
         foreach($orderedApplications as $appName) {
-            $view->jsb2tk->register("$baseDir/$appName/$appName.jsb2", $appName);
+            $jsb2File = "$baseDir/$appName/$appName.jsb2";
+            if (is_readable($jsb2File)){
+                $view->jsb2tk->register($jsb2File, $appName);
+            }
         }
         
         $view->registryData = array();

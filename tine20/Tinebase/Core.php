@@ -386,7 +386,10 @@ class Tinebase_Core
                 $controllerName = $controllerNameModel;
             }
         } else if (! class_exists($controllerName)) {
-            throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Use generic application controller');
+
+            $controller = new Tinebase_Application_Controller($appName);
         }
         
         if (! $_ignoreACL && is_object(Tinebase_Core::getUser()) && ! Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights_Abstract::RUN)) {
@@ -394,12 +397,14 @@ class Tinebase_Core
                 . ' User ' . Tinebase_Core::getUser()->accountDisplayName . '/' . Tinebase_Core::getUser()->getId() . ' has no right to access ' . $appName);
             throw new Tinebase_Exception_AccessDenied('No right to access application ' . $appName);
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Getting instance of ' . $controllerName);
-        
-        $controller = call_user_func(array($controllerName, 'getInstance'));
-        self::$appInstanceCache[$cacheKey] = $controller;
+
+        if (! isset($controller)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Getting instance of ' . $controllerName);
+
+            $controller = call_user_func(array($controllerName, 'getInstance'));
+            self::$appInstanceCache[$cacheKey] = $controller;
+        }
         
         return $controller;
     }
@@ -450,10 +455,11 @@ class Tinebase_Core
      */
     public static function startCoreSession()
     {
-        Tinebase_Session::setSessionBackend();
-        
-        Zend_Session::start();
-        
+        if (! Tinebase_Session::isStarted()) {
+            Tinebase_Session::setSessionBackend();
+            Zend_Session::start();
+        }
+
         $coreSession = Tinebase_Session::getSessionNamespace();
         
         if (isset($coreSession->currentAccount)) {
@@ -497,11 +503,16 @@ class Tinebase_Core
      */
     public static function setupBuildConstants()
     {
+        if (defined('TINE20_BUILDTYPE')) {
+            // only define constants once
+            return;
+        }
         $config = self::getConfig();
-        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision());
+
+        define('TINE20_BUILDTYPE', strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME', Tinebase_Helper::getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
+        define('TINE20_RELEASETIME', 'none');
     }
     
     /**
@@ -811,8 +822,9 @@ class Tinebase_Core
                 . " Filesdir config value not set. tine20:// streamwrapper not registered, virtual filesystem not available.");
             return;
         }
-        
-        stream_wrapper_register('tine20', 'Tinebase_FileSystem_StreamWrapper');
+        if (! in_array('tine20', stream_get_wrappers())) {
+            stream_wrapper_register('tine20', 'Tinebase_FileSystem_StreamWrapper');
+        }
     }
     
     /**
@@ -1338,6 +1350,10 @@ class Tinebase_Core
      */
     public static function getCache()
     {
+        if (! self::get(self::CACHE) instanceof Zend_Cache_Core) {
+            self::$cacheStatus = null;
+            Tinebase_Core::setupCache();
+        }
         return self::get(self::CACHE);
     }
     
@@ -1605,6 +1621,9 @@ class Tinebase_Core
     /**
      * Search server plugins from applications configuration
      *
+     * @return array
+     *
+     * TODO add feature switch for this
      */
     protected static function _searchServerPlugins()
     {
@@ -1615,32 +1634,21 @@ class Tinebase_Core
         ) {
             return $plugins;
         }
-        
-        // get list of available applications
-        $applications = array();
-        
-        $d = dir(realpath(__DIR__ . '/../'));
-        
-        while (false !== ($entry = $d->read())) {
-           if ($entry[0] == '.') {
-               continue;
-           }
-           
-           if (ctype_upper($entry[0]) && is_dir($d->path . DIRECTORY_SEPARATOR . $entry)) {
-                $applications[] = $entry;
-           }
+
+        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+            return array();
         }
         
-        $d->close();
+        // get list of available applications
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         
         // get list of plugins
         $plugins = array();
-        
         foreach ($applications as $application) {
             $config = $application . '_Config';
             
             try {
-                if (class_exists($config)) {
+                if (@class_exists($config)) {
                     $reflectedClass = new ReflectionClass($config);
                     
                     if ($reflectedClass->isSubclassOf('Tinebase_Config_Abstract')) {

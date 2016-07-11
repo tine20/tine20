@@ -473,11 +473,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
             account = account ? account :this.app.getAccountStore().getById(accountId),
             signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
-            signature = Tine.Felamimail.getSignature(accountId);
-
-        if (format == 'text/plain') {
-            signature = Tine.Tinebase.common.html2text(signature);
-        }
+            signature = this.getSignature(account, format);
 
         if (signaturePosition == 'below') {
             this.msgBody += signature;
@@ -485,7 +481,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.msgBody = signature + '<br/><br/>' + this.msgBody;
         }
     },
-    
+
+    /**
+     * get account signature
+     *
+     * @param {Tine.Felamimail.Model.Account} account
+     * @param {String} format
+     */
+    getSignature: function(account, format) {
+        var accountId = account ? this.record.get('account_id') : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'),
+            account = account ? account :this.app.getAccountStore().getById(accountId),
+            signaturePosition = (account && account.get('signature_position')) ? account.get('signature_position') : 'below',
+            signature = Tine.Felamimail.getSignature(accountId);
+
+        if (format == 'text/plain') {
+            signature = Tine.Tinebase.common.html2text(signature);
+        }
+
+        return signature;
+    },
+
     /**
      * inits / sets sender of message
      */
@@ -803,7 +818,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onToggleEncrypt: function(btn, e) {
         btn.setIconClass(btn.pressed ? 'felamimail-action-encrypt' : 'felamimail-action-decrypt');
 
-        var text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body'),
+        var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+            text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body'),
             format = this.record.getBodyType(),
             textEditor = format == 'text/html' ? this.htmlEditor : this.textEditor;
 
@@ -815,7 +831,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 quotedMailHeader = '';
 
             if (this.quotedPGPMessage) {
-                textMsg = '';
+                textMsg = this.getSignature(account, 'text/plain');
                 quotedMailHeader = Ext.util.Format.htmlDecode(me.getQuotedMailHeader('text/plain'));
                 quotedMailHeader = quotedMailHeader.replace(/\n/, "\n>");
 
@@ -826,6 +842,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     predefinedText: textMsg,
                     quotedMailHeader: quotedMailHeader,
                     quotedMail: me.quotedPGPMessage,
+                    keepAttachments: true,
                     quota: 32*1024*1024
                 }).then(function(editor) {
                     me.mailvelopeEditor = editor;
@@ -1130,6 +1147,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.textEditor = new Ext.Panel({
             layout: 'fit',
             mimeType: 'text/plain',
+            cls: 'felamimail-edit-text-plain',
             flex: 1,  // Take up all *remaining* vertical space
             setValue: function(v) {return this.items.get(0).setValue(v);},
             getValue: function() {return this.items.get(0).getValue();},
@@ -1301,7 +1319,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Boolean}
      */
-    validateRecipients: function() {
+        validateRecipients: function() {
         var me = this;
         return new Promise(function (fulfill, reject) {
             var to = me.record.get('to'),
@@ -1340,6 +1358,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             return me.mailvelopeEditor.encrypt(all).then(function (armoredMessage) {
                                 me.record.set('body', armoredMessage);
                                 me.record.set('content_type', 'text/plain');
+                                // NOTE: Server would spoil MIME structure with attachments
+                                me.record.set('attachments', '');
+                                me.record.set('has_attachment', false);
                                 fulfill(true);
                             });
                         }

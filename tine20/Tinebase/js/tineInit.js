@@ -51,6 +51,8 @@ Tine.clientVersion.releaseTime      = 'none';
  * 
  * @type String
  */
+Tine.logo = 'images/tine_logo.png';
+Tine.favicon;
 Tine.title = 'Tine 2.0';
 Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
 Tine.helpUrl = 'https://wiki.tine20.org/Main_Page';
@@ -600,22 +602,21 @@ Tine.Tinebase.tineInit = {
                     for (var app in registryData) {
                         if (registryData.hasOwnProperty(app)) {
                             var appData = registryData[app];
-                            if (Tine[app]) {
-                                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
+                            Ext.ns('Tine.' + app);
+                            Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
 
-                                for (var key in appData) {
-                                    if (appData.hasOwnProperty(key)) {
-                                        if (key === 'preferences') {
-                                            Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-                                            for (var pref in appData[key]) {
-                                                if (appData[key].hasOwnProperty(pref)) {
-                                                    Tine[app].preferences.set(pref, appData[key][pref]);
-                                                }
+                            for (var key in appData) {
+                                if (appData.hasOwnProperty(key)) {
+                                    if (key === 'preferences') {
+                                        Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
+                                        for (var pref in appData[key]) {
+                                            if (appData[key].hasOwnProperty(pref)) {
+                                                Tine[app].preferences.set(pref, appData[key][pref]);
                                             }
-
-                                        } else {
-                                            Tine[app].registry.set(key, appData[key]);
                                         }
+
+                                    } else {
+                                        Tine[app].registry.set(key, appData[key]);
                                     }
                                 }
                             }
@@ -630,10 +631,9 @@ Tine.Tinebase.tineInit = {
         } else {
             for (var app,i=0;i<userApplications.length;i++) {
                 app = userApplications[i].name;
-                if (Tine[app]) {
-                  Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
-                  Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
-                }
+                Ext.ns('Tine.' + app);
+                Tine[app].registry = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.registry');
+                Tine[app].preferences = store.namespace(Tine.Tinebase.tineInit.lsPrefix + '.' + app + '.preferences');
             }
 
             Tine.Tinebase.tineInit.onRegistryLoad();
@@ -658,7 +658,13 @@ Tine.Tinebase.tineInit = {
         }
 
         Tine.helpUrl = Tine.Tinebase.registry.get('helpUrl') || Tine.helpUrl;
-
+        //Do we have a custom weburl for branding?
+        Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl') ? Tine.Tinebase.registry.get('brandingWeburl') : Tine.weburl;
+        //DO we have a custom title for branding?
+        Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
+        Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
+        Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
+        
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')

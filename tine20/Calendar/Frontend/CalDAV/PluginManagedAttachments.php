@@ -85,7 +85,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
      * @param array $returnedProperties
      * @return void
      */
-    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties) {
+    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+    {
         if ($node instanceof \Sabre\DAVACL\IPrincipal) {
             // dropbox-home-URL property
             $scheduleProp = '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL';
@@ -251,7 +252,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
      * 
      * @param  Calendar_Model_Event $event
      * @param  array $rid
-     * @param  Function $method
+     * @param  callable $method
      * @return Tinebase_Record_RecordSet affectedEvents
      */
     protected function _iterateByRid($event, $rid, $method)
@@ -269,8 +270,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
                 }
             }
         }
-        foreach($affectedEvents as $record) {
-            if ($method($record) === false) break;
+        foreach ($affectedEvents as $record) {
+            if ($method($record) === false) {
+                break;
+            }
         }
         
         return $affectedEvents;

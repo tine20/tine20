@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>9.2</version>
+    <version>9.3</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -949,7 +949,7 @@
         </table>
         <table>
             <name>sales_sales_invoices</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1016,6 +1016,12 @@
                 <field>
                     <name>sales_tax</name>
                     <type>float</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>inventory_change</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
                     <notnull>false</notnull>
                 </field>
                 <field>

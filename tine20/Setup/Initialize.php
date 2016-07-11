@@ -22,7 +22,7 @@ class Setup_Initialize
      * 
      * @var array
      */
-    protected $_userRoleRights = array(
+    static protected $_userRoleRights = array(
         Tinebase_Acl_Rights::RUN
     );
     
@@ -37,15 +37,22 @@ class Setup_Initialize
     {
         $applicationName = $_application->name;
         $classname = "{$applicationName}_Setup_Initialize";
-        $instance = new $classname;
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
-        
-        $instance->_initialize($_application, $_options);
+
+        if (class_exists($classname)) {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Initializing application: ' . $applicationName);
+
+            $instance = new $classname;
+            $instance->_initialize($_application, $_options);
+        } else {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping custom init of application: '
+                . $applicationName . '. Class ' . $classname . ' not found.');
+
+            self::createInitialRights($_application);
+        }
     }
     
     /**
-     * Call {@see _createInitialRights} on an instance of the concrete Setup_Initialize class for the given {@param $_application}  
+     * Call {@see createInitialRights} on an instance of the concrete Setup_Initialize class for the given {@param $_application}
      * 
      * @param Tinebase_Model_Application $_application
      * @param array | optional $_options
@@ -56,7 +63,7 @@ class Setup_Initialize
         $applicationName = $_application->name;
         $classname = "{$applicationName}_Setup_Initialize";
         $instance = new $classname;
-        $instance->_createInitialRights($_application);
+        $instance::createInitialRights($_application);
     }
     
     /**
@@ -68,14 +75,15 @@ class Setup_Initialize
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
-        $this->_createInitialRights($_application);
-        
+        self::initializeApplicationRights($_application);
+
         $reflectionClass = new ReflectionClass($this);
         $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
             $methodName = $method->name;
-            if (preg_match('/^_initialize.+/', $methodName)) {
-                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Calling init function ' . get_class($this) . '::' . $methodName);
+            if (strpos($methodName, '_initialize') === 0 && $methodName !== '_initialize') {
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Calling init function '
+                    . get_class($this) . '::' . $methodName);
                 
                 $this->$methodName($_application, $_options);
             }
@@ -90,10 +98,13 @@ class Setup_Initialize
      * @param Tinebase_Application $application
      * @return void
      */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
+    public static function createInitialRights(Tinebase_Model_Application $_application)
     {
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial rights for application '
+            . $_application->name);
+
         $allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
-        $userRights = $this->_userRoleRights;
+        $userRights = static::$_userRoleRights;
         
         if (in_array(Tinebase_Acl_Rights::USE_PERSONAL_TAGS, $allRights)) {
             $userRights[] = Tinebase_Acl_Rights::USE_PERSONAL_TAGS;

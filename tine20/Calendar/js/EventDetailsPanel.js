@@ -62,13 +62,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @return {String}
      */
     datetimeRenderer: function(dt) {
-        var app = Tine.Tinebase.appMgr.get('Calendar');
-
-        if (! dt) {
-            return app.i18n._('Unknown date');
-        }
-        
-        return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+        return Tine.Calendar.Model.Event.datetimeRenderer(dt);
     },
     
     transpRenderer: function(transp) {

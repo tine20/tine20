@@ -44,8 +44,8 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
         
         $quotedDisplayContainerIdentifier = $_backend->getAdapter()->quoteIdentifier('attendee.displaycontainer_id');
         
-        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
-        $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
+        $_select->orWhere($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
     }
     
     /**
@@ -60,7 +60,7 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
         $this->_options['ignoreAcl'] = TRUE;
         $this->_resolve();
         
-        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
     }
     
     /**
@@ -77,7 +77,7 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
         
         $quotedDisplayContainerIdentifier = $_backend->getAdapter()->quoteIdentifier('attendee.displaycontainer_id');
         
-        $_select->where($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? " " : $this->_containerIds);
+        $_select->where($quotedDisplayContainerIdentifier  .  ' IN (?)', empty($this->_containerIds) ? new Zend_Db_Expr('NULL') : $this->_containerIds);
     }
     
     public function setRequiredGrants(array $_grants)

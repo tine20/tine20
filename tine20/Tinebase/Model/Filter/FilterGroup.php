@@ -169,7 +169,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected $_filterObjects = array();
     
     /**
-     * @var array spechial options
+     * @var array special options
      */
     protected $_options = NULL;
     
@@ -219,9 +219,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                 . ' Filter config: ' . print_r($filterConfig, TRUE));
-            
+
             foreach ($filterConfig as $prop => $val) {
                 $this->{$prop} = $val;
             }
@@ -229,7 +229,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $this->_modelName = $this->_applicationName . '_Model_' . $this->_modelName;
         }
     }
-    
+
     /**
      * clone filters after creating clone of filter group
      */
@@ -259,7 +259,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
                     . ' Adding FilterGroup: ' . $this->_className);
                 
-                if (empty($this->_className)) {
+                if (empty($this->_className) || ! class_exists($this->_className)) {
                     $this->_className = get_class($this);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
                         . ' _className was not set, using get_class: ' . $this->_className);
@@ -569,6 +569,18 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     public function setLabel($_label)
     {
         $this->_label = $_label;
+    }
+
+    /**
+     * set configured model
+     *
+     * @param $configuredModel
+     */
+    public function setConfiguredModel($configuredModel)
+    {
+        $this->_configuredModel = $configuredModel;
+
+        $this->_createFromModelConfiguration();
     }
     
     /**

@@ -815,7 +815,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
      * test contract dates on update dependent
      * must not throw the HumanResources_Exception_ContractNotEditable exception
      */
-    
     public function testContractDates()
     {
         $employmentBegin = Tinebase_DateTime::now()->setDate(2014, 1, 2)->setTimezone(Tinebase_Core::getUserTimezone())->setTime(0,0,0);
@@ -846,6 +845,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     
     /**
      * test adding a contract with manually setting the end_date of the contract before
+     *
+     * @see 0011962: contract end_date can't be changed if vacation has been added
      */
     public function testAddContract()
     {
@@ -897,16 +898,23 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         // no exception should be thrown
         $employeeJson = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals(2, count($employeeJson['contracts']));
+
+        $endDate = '2013-05-30 00:00:00';
+        $employeeJson['contracts'][0]['end_date'] = $endDate;
+        $employeeJson['contracts'][0]['workingtime_json'] = '{"days": [8,8,8,8,8,0,0]}';
+        $recordData = $this->_json->saveEmployee($employeeJson);
+        $this->assertEquals($endDate, $recordData['contracts'][0]['end_date']);
         
-        // an exception should be thrown
         $employeeJson['contracts'][0]['vacation_days'] = 31;
-        $this->setExpectedException('HumanResources_Exception_ContractNotEditable');
-        
-        $employeeJson = $this->_json->saveEmployee($employeeJson);
+        try {
+            $employeeJson = $this->_json->saveEmployee($employeeJson);
+            $this->fail('an exception should be thrown');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable);
+        }
     }
     
     /**
-<<<<<<< HEAD
      * @see: https://forge.tine20.org/mantisbt/view.php?id=10122
      */
     public function testAlternatingContracts()

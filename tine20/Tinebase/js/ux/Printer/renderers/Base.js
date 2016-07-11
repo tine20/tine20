@@ -19,10 +19,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   
   constructor: function(config) {
     Ext.apply(this, config);
-    
-    if (this.debug) {
-        this.printStrategy = 'window';
-    }
+
     Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
   },
 
@@ -69,18 +66,28 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   iframePrint: function(component) {
     var id = Ext.id(),
     doc = document,
-    frame = doc.createElement('iframe');
-        
+    frame = doc.createElement('iframe'),
+    style = {
+      position: 'absolute',
+      'background-color': '#FFFFFF',
+      width: '210mm',
+      height: '297mm',
+      top: '-10000px',
+      left: '-10000px'
+    };
+
+    if (this.debug) {
+      Ext.apply(style, {
+        top: '0px',
+        left: '0px',
+        'z-index': 10000000
+      });
+    }
+
     Ext.fly(frame).set({
       id: id,
       name: id,
-      style: {
-        position: 'absolute',
-        width: '210mm',
-        height: '297mm',
-        top: '-10000px',
-        left: '-10000px'
-      }
+      style: style
     });
     
     doc.body.appendChild(frame);
@@ -118,7 +125,15 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   doPrint: function(win) {
     if (this.useHtml2Canvas) {
       var me = this;
+
+      var canvas = win.document.createElement("canvas");
+      canvas.width = win.innerWidth;
+      canvas.height = win.innerHeight;
+
+      me.setDPI(canvas, 300);
+
       html2canvas(win.document.body, {
+        canvas: canvas,
         grabMouse: false,
         onrendered: function (canvas) {
           var screenshot = canvas.toDataURL();
@@ -135,6 +150,21 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
       }
     }
   },
+
+  setDPI: function (canvas, dpi) {
+    // Set up CSS size if it's not set up already
+    if (!canvas.style.width)
+      canvas.style.width = canvas.width + 'px';
+    if (!canvas.style.height)
+      canvas.style.height = canvas.height + 'px';
+
+    var scaleFactor = dpi / 96;
+    canvas.width = Math.ceil(canvas.width * scaleFactor);
+    canvas.height = Math.ceil(canvas.height * scaleFactor);
+    var ctx = canvas.getContext('2d');
+    ctx.scale(scaleFactor, scaleFactor);
+  },
+
   /**
    * Generates the HTML Markup which wraps whatever this.generateBody produces
    * @param {Ext.Component} component The component to generate HTML for

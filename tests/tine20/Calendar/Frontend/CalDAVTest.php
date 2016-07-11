@@ -27,10 +27,6 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetChildren()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
         
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
@@ -51,17 +47,32 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetChild()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $child = $collection->getChild($this->_getCalendarTestContainer()->getId());
         
         $this->assertTrue($child instanceof Calendar_Frontend_WebDAV_Container);
     }
-    
+
+    /**
+     * testGetChildrenWithSharedFolder
+     *
+     * @see 0011078: CalDav calender not working after upgrade from 2013.10 (postgresql)
+     */
+    public function testGetChildrenWithSharedFolder()
+    {
+        $this->_getCalendarTestContainer(Tinebase_Model_Container::TYPE_SHARED);
+        $calendarRoot = \Sabre\CalDAV\Plugin::CALENDAR_ROOT;
+        $_SERVER['REQUEST_URI'] = '/tine20/' . $calendarRoot;
+        $collection = new Calendar_Frontend_WebDAV($calendarRoot, true);
+
+        $children = $collection->getChildren();
+
+        $this->assertTrue(is_array($children));
+        $this->assertTrue(count($children) > 0);
+        $this->assertTrue($children[0] instanceof Calendar_Frontend_WebDAV);
+    }
+
     /**
      * test get calendar inbox
      */
@@ -87,10 +98,6 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetTasksChild()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
         
         $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
@@ -111,14 +118,10 @@ class Calendar_Frontend_CalDAVTest extends TestCase
      */
     public function testGetTasksChildMacOSX()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
         
-        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true);
-        $children = $this->testGetChildren();
+        new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true);
+        $this->testGetChildren();
     }
     
     /**
@@ -221,15 +224,16 @@ class Calendar_Frontend_CalDAVTest extends TestCase
     }
     
     /**
-     * 
+     * fetch test calendar for app
+     *
      * @return Tinebase_Model_Container
      */
-    protected function _getCalendarTestContainer()
+    protected function _getCalendarTestContainer($type = Tinebase_Model_Container::TYPE_PERSONAL)
     {
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => Tinebase_Record_Abstract::generateUID(),
             'model'             => 'Calendar_Model_Event',
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'type'              => $type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
         )));

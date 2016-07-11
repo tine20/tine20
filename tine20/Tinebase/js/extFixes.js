@@ -608,13 +608,22 @@ Ext.util.CSS = function(){
                 rules = {};
             }
             try{// try catch for cross domain access issue
-                var ssRules = ss.cssRules || ss.rules;
+                var ssRules = ss.cssRules || ss.rules,
+                    sel,
+                    selParts;
                 for(var j = ssRules.length-1; j >= 0; --j){
                     // nested rules
                     if (ssRules[j].styleSheet) {
                         Ext.util.CSS.cacheStyleSheet(ssRules[j].styleSheet);
                     } else {
-                        rules[ssRules[j].selectorText.toLowerCase()] = ssRules[j];
+                        sel = ssRules[j].selectorText.toLowerCase();
+                        rules[sel] = ssRules[j];
+                        selParts = sel.split(', ');
+                        if (selParts.length > 1) {
+                            for(var p = selParts.length-1; p >= 0; --p){
+                                rules[selParts[p]] = ssRules[j];
+                            }
+                        }
                     }
                 }
             }catch(e){}
