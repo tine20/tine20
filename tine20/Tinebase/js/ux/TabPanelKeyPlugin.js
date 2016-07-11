@@ -24,7 +24,8 @@ Ext.ux.TabPanelKeyPlugin.prototype = {
         
     init : function(panel) {
         this.panel = panel;
-        this.panel.onRender = this.panel.onRender.createSequence(this.onRender, this);
+        this.panel.on('afterrender', this.onRender, this);
+        this.panel.on('add', this.onItemAdd, this);
     },
     
     /**
@@ -41,17 +42,27 @@ Ext.ux.TabPanelKeyPlugin.prototype = {
         
         for (var index = 0; index < tabCount; index++) {
             var item = this.panel.items.items[index];
-            if(item.disabled !== true) {
-                new Ext.KeyMap(this.panel.el, [{
-                    key: index + 49,
-                    ctrl: true,
-                    scope: this,
-                    fn: this.switchTab
-                }]);
-            }
+            this.registerKeyMap(item, index);
         }
     },
-    
+
+    onItemAdd: function(panel, item, index) {
+        this.registerKeyMap(item, index);
+    },
+
+    registerKeyMap: function(item, index, el) {
+        el = el || Ext.getBody();
+
+        if(item.disabled !== true) {
+            new Ext.KeyMap(el, [{
+                key: index + 49,
+                ctrl: true,
+                scope: this,
+                fn: this.switchTab
+            }]);
+        }
+    },
+
     /**
      * switch to tab
      * @param Integer code

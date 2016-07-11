@@ -83,8 +83,8 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         // save file object
         Tinebase_FileSystem::getInstance()->fclose($handle);
 
-        // save node
-        Tinebase_FileSystem::getInstance()->update($this->_node);
+        // refetch data
+        $this->_node = Tinebase_FileSystem::getInstance()->stat($this->_path);
 
         return $this->getETag();
     }

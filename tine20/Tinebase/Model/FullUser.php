@@ -318,7 +318,9 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     
     /**
      * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Tinebase_DateTime::now())
-     * 
+     *
+     * TODO switch check AUTH backend?
+     *
      * @return boolean
      */
     public function mustChangePassword()
@@ -326,17 +328,19 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         switch (Tinebase_User::getConfiguredBackend()) {
             case Tinebase_User::ACTIVEDIRECTORY:
                 return $this->_sambaSamPasswordChangeNeeded();
-                
                 break;
                 
             case Tinebase_User::LDAP:
                 return $this->_sambaSamPasswordChangeNeeded();
-                
                 break;
                 
             default:
-                return $this->_sqlPasswordChangeNeeded();
-                
+                if (Tinebase_Auth::getConfiguredBackend() === Tinebase_Auth::SQL) {
+                    return $this->_sqlPasswordChangeNeeded();
+                } else {
+                    // no pw change needed for non-sql auth backends
+                    return false;
+                }
                 break;
         }
     }

@@ -336,7 +336,22 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($organizerfilter['value']), 'organizer should be resolved: ' . print_r($organizerfilter, TRUE));
         $this->assertEquals(Tinebase_Core::getUser()->contact_id, $organizerfilter['value']['id']);
     }
-    
+
+    /**
+     * testSearchEventsWithSharedContainerFilter
+     *
+     * @see 0011968: shared calendars filter leads to sql error with pgsql
+     */
+    public function testSearchEventsWithSharedContainerFilter()
+    {
+        $filter = $this->_getEventFilterArray();
+        $pathFilterValue = array("path" => "/shared");
+        $filter[0]['value'] = $pathFilterValue;
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+
+        $this->assertEquals($pathFilterValue, $searchResultData['filter'][0]['value'], print_r($searchResultData['filter'], true));
+    }
+
     /**
      * search event with alarm
      */
