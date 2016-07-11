@@ -166,7 +166,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     {
         return self::$_server ? self::$_server->httpRequest : new Sabre\HTTP\Request();
     }
-    
+
+    /**
+     * helper to return response
+     *
+     * @return Sabre\HTTP\Response
+     */
+    public static function getResponse()
+    {
+        return self::$_server ? self::$_server->httpResponse : new Sabre\HTTP\Response();
+    }
+
     /**
     * returns request method
     *
