@@ -37,7 +37,7 @@
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="prepare">
-        <foreach param="name" absparam="path" target="build-module">
+        <foreach param="name" absparam="path" target="prepared-build-module">
             <fileset dir=".">
                 <type type="dir" />
                 <include name="*" />
@@ -52,6 +52,7 @@
                 <exclude name="styles" />
                 <exclude name="themes" />
                 <exclude name="vendor" />
+                <exclude name="userdata" />
                 <exclude name="Tool" />
                 <exclude name="Zend" />
             </fileset>
@@ -219,6 +220,11 @@
     <!-- Target: build-module                          -->
     <!-- ============================================  -->
     <target name="build-module" description="build single module" depends="prepare">
+        <phingcall target="prepared-build-module">
+            <property name="name" value="${name}" />
+        </phingcall>
+    </target>
+    <target name="prepared-build-module" description="build single module">
         <echo msg="Building ${name}" />
 
         <!-- do jsb2tk build -->
