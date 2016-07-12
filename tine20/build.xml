@@ -52,6 +52,7 @@
                 <exclude name="styles" />
                 <exclude name="themes" />
                 <exclude name="vendor" />
+                <exclude name="userdata" />
                 <exclude name="Tool" />
                 <exclude name="Zend" />
             </fileset>
@@ -221,7 +222,6 @@
     <target name="build-module" description="build single module" depends="prepare">
         <phingcall target="prepared-build-module">
             <property name="name" value="${name}" />
-            <property name="foo" value="baz" />
         </phingcall>
     </target>
     <target name="prepared-build-module" description="build single module">
