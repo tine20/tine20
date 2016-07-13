@@ -175,6 +175,14 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
+            'inventory_change' => array(
+                    'label' => 'Inventory Change', // _('Inventory Change')
+                    'type'  => 'float',
+                    'specialType' => 'euMoney',
+                    'default' => 0,
+                    'inputFilters' => array('Zend_Filter_Empty' => 0),
+                    'shy' => TRUE,
+            ),
             'positions' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Positions', // _('Positions')

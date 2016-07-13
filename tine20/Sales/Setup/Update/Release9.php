@@ -35,4 +35,24 @@ class Sales_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Sales', '9.2');
     }
+    /**
+     * update to 9.3
+     * - Add Best. Verdg. FE/UE
+     */
+    public function update_2()
+    {
+        if ($this->getTableVersion('sales_sales_invoice') < 6) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>inventory_change</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                    <notnull>false</notnull>
+                </field>
+        ');
+            $this->_backend->addCol('sales_sales_invoice', $declaration);
+            $this->setTableVersion('sales_sales_invoice', 6);
+        }
+        $this->setApplicationVersion('Sales', '9.3');
+    }
 }

@@ -426,7 +426,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     handler: function() {
                         var email = Tine.Felamimail.getEmailStringFromContact(new Tine.Addressbook.Model.Contact(attender.get('user_id')));
                         var record = new Tine.Felamimail.Model.Message({
-                            subject: this.record.get('summary'),
+                            subject: this.record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(this.record.get('dtstart')),
                             to: [email]
                         }, 0);
                         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({

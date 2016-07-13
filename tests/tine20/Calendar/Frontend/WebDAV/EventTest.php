@@ -247,12 +247,21 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $record = $event->getRecord();
         $exdate = $record->exdate[0];
         $this->assertEquals('New Event', $record->summary);
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $exdate->organizer,
-            'organizer mismatch, expected :' . print_r(Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id)->toArray(), TRUE) .
-            'got: ' . print_r(Addressbook_Controller_Contact::getInstance()->get($exdate->organizer)->toArray(), TRUE));
-        $this->assertTrue(in_array(Tinebase_Core::getUser()->contact_id, $exdate->attendee->user_id), 'user contact id not found in exdate attendee: ' . print_r($exdate->attendee->toArray(), TRUE));
+
+        $organizer = (is_object($exdate->organizer)) ? $exdate->organizer->getId() : $exdate->organizer;
+        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $organizer,
+            'organizer mismatch, expected :'
+                . print_r(Addressbook_Controller_Contact::getInstance()->get(
+                    Tinebase_Core::getUser()->contact_id
+                )->toArray(), TRUE) .
+            'got: '
+                . print_r(Addressbook_Controller_Contact::getInstance()->get($exdate->organizer)->toArray(), TRUE));
+        $this->assertTrue(in_array(Tinebase_Core::getUser()->contact_id, $exdate->attendee->user_id),
+            'user contact id not found in exdate attendee: ' . print_r($exdate->attendee->toArray(), TRUE));
+
         foreach ($exdate->attendee as $attender) {
-            $this->assertTrue(! empty($attender->displaycontainer_id), 'displaycontainer_id not set for attender: ' . print_r($attender->toArray(), TRUE));
+            $this->assertTrue(! empty($attender->displaycontainer_id),
+                'displaycontainer_id not set for attender: ' . print_r($attender->toArray(), TRUE));
         }
     }
     

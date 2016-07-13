@@ -401,6 +401,20 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         });
         
+        this.inventoryChange = new Ext.ux.form.NumberField({
+            name: 'inventory_change',
+            xtype: 'numberfield',
+            decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+            decimalPrecision: 2,
+            suffix: ' €',
+            fieldLabel: this.app.i18n._('Inventory Change'),
+            columnWidth: 1/4,
+            listeners: {
+                scope: this,
+                blur: this.calcGross.createDelegate(this)
+            }
+        });
+        
         var items = [{
             title: this.app.i18n._('Invoice'),
             autoScroll: true,
@@ -550,6 +564,9 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 this.salesTaxField,
                                 this.priceTaxField,
                                 this.priceGrossField
+                            ],
+                            [
+                                this.inventoryChange
                             ]
                         ]
                     }]

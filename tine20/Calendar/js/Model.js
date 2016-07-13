@@ -341,6 +341,16 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
     ];
 };
 
+Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
+    var app = Tine.Tinebase.appMgr.get('Calendar');
+
+    if (! dt) {
+        return app.i18n._('Unknown date');
+    }
+
+    return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+};
+
 // register grants for calendar containers
 Tine.widgets.container.GrantsManager.register('Calendar_Model_Event', function(container) {
     var grants = Tine.widgets.container.GrantsManager.defaultGrants();

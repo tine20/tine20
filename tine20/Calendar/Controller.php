@@ -243,6 +243,11 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         } else {
             $containerName = $emailAddress;
         }
+
+        if (empty($containerName)) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' event organizer does not have an email address');
+            throw new Tinebase_Exception_UnexpectedValue('event organizer does not have an email address');
+        }
         
         try {
             $container = Tinebase_Container::getInstance()->getContainerByName('Calendar', $containerName, Tinebase_Model_Container::TYPE_SHARED);

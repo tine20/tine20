@@ -155,7 +155,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $view->path = '/' . implode('/', $path);
         
         $view->file = $node;
-        $view->file->path = '/download/get/' . $download->getId() . '/' . implode('/', $path);
+        $view->file->path = $download->getDownloadUrl('get') . '/' . implode('/', $path);
         
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('file.phtml'));

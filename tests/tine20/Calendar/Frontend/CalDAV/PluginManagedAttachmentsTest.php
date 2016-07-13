@@ -123,10 +123,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $agenda = 'HELLO WORLD';
         $request->setBody($agenda);
 
-        $this->server->httpRequest = $request;
-        $this->server->exec();
-        
-        $vcalendar = stream_get_contents($this->response->body);
+        $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         
         $baseAttachments = Tinebase_FileSystem_RecordAttachments::getInstance()
             ->getRecordAttachments($event->getRecord());
@@ -156,10 +153,6 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      */
     public function testOverwriteAttachment()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();
@@ -178,12 +171,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         
         $agenda = 'GODDBYE WORLD';
         $request->setBody($agenda);
-        
-        $this->server->httpRequest = $request;
-        $this->server->exec();
 
-        $vcalendar = stream_get_contents($this->response->body);
-        //         echo $vcalendar;
+        $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()
         ->getRecordAttachments($event->getRecord());
@@ -196,10 +185,6 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     
     public function testUpdateAttachment()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();
@@ -220,25 +205,15 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $agenda = 'GODDBYE WORLD';
         $request->setBody($agenda);
         
-        $this->server->httpRequest = $request;
-        $this->server->exec();
-        
-        $vcalendar = stream_get_contents($this->response->body);
-//         echo $vcalendar;
-        
-//         $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
+        $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         $this->assertContains('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
          $this->assertNotContains($attachmentNode->hash, $vcalendar, 'old managed-id');
         //@TODO assert URI
-        //@TODO /fetch attachement & assert contents
+        //@TODO /fetch attachment & assert contents
     }
     
     public function testRemoveAttachment()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011668: fix Calendar_Frontend_* Tests with postgresql backend');
-        }
-
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
 
         $event = $this->calDAVTests->createEventWithAttachment();
@@ -256,17 +231,30 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
                 'HTTP_DEPTH'     => '0',
         ));
         
-        $this->server->httpRequest = $request;
-        $this->server->exec();
-        
-        $vcalendar = stream_get_contents($this->response->body);
-//         echo $vcalendar;
-        
-//         $this->assertEquals('HTTP/1.1 204 No Content', $this->response->status);
+        $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         $this->assertNotContains('ATTACH;MANAGED-ID=', $vcalendar, $vcalendar);
         
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($event->getRecord());
         $this->assertEquals(0, $attachments->count());
+    }
+
+    /**
+     * exec request and get vcalendar
+     *
+     * @param Sabre\HTTP\Request $request
+     * @return string
+     */
+    protected function _execAndGetVCalendarFromRequest($request)
+    {
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertTrue(is_resource($this->response->body), 'expecting a resource, got: ' . $this->response->body);
+        $vcalendar = stream_get_contents($this->response->body);
+
+//         echo $vcalendar;
+
+        return $vcalendar;
     }
     
     public function testCreateRecurringExceptionWithManagedBaseAttachment()

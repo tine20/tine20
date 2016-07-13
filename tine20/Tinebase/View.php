@@ -22,6 +22,7 @@ class Tinebase_View
         $extJS     = 'ext-all.css';
         $themePath = 'tine20';
         $favicon   = 'images/favicon.ico';
+        $title     = 'Tine 2.0';
         
         $themeConfig = Tinebase_Core::getConfig()->theme;
         
@@ -40,11 +41,16 @@ class Tinebase_View
                 }
             }
         }
+        //Do we have a branding favicon?
+        $favicon = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON) ? Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON) : $favicon;
+        //Do we have a branding title?
+        $title = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) ? Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) : $title;
         
         $result = array(
-            $favicon,
-            '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/' . $extJS . '" />',
-            '<link rel="stylesheet" type="text/css" href="themes/' . $themePath . '/resources/css/' . $themePath . '.css" />'
+            'favicon'   => $favicon,
+            'extJs'     => '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/' . $extJS . '" />',
+            'themePath' => '<link rel="stylesheet" type="text/css" href="themes/' . $themePath . '/resources/css/' . $themePath . '.css" />',
+            'title'     => $title
         );
         
         return $result;

@@ -90,6 +90,10 @@
           "path": "js/widgets/form/"
         },
         {
+          "text": "FieldManager.js",
+          "path": "js/widgets/form/"
+        },
+        {
           "text": "AddToRecordPanel.js",
           "path": "js/widgets/dialog/"
         },
@@ -255,6 +259,10 @@
         },
         {
           "text": "DateTimeField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "BooleanCombo.js",
           "path": "js/ux/form/"
         },
         {
@@ -831,6 +839,10 @@
         },
         {
           "text": "UidTriggerField.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "RecordForm.js",
           "path": "js/widgets/form/"
         },
         {

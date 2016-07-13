@@ -118,7 +118,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      * @return Tinebase_Record
      * @access public
      */
-    public function getRecord( $_id,  Tinebase_DateTime $_at );
+    public function getRecord( $_id,  Tinebase_DateTime $_at )
+    {
+    }
     
     /**
      * Returns a set of records as they where at a given point in history
@@ -128,7 +130,9 @@ abstract class Tinebase_Timemachine_Abstract implements Tinebase_Timemachine_Int
      * @return Tinebase_Record_RecordSet
      * @access public
      */
-    public function getRecords( array $_ids,  Tinebase_DateTime $_at );
+    public function getRecords( array $_ids,  Tinebase_DateTime $_at )
+    {
+    }
     
     /**
      * Returns instance of Tinebase_Timemachine_ModificationLog

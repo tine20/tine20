@@ -117,11 +117,11 @@ div.page
 }
 
 .cal-daysviewpanel-body-daycolumn-today {
-    background-color: #FFFFFF;
+    background-color: transparent;
 }
 
 .cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row {
-    color: #FFFFFF;
+    color: transparent;
 }
 
 .cal-daysviewpanel-dayheader-today, .cal-daysviewpanel-dayheader-day-wrap:hover {
@@ -234,4 +234,16 @@ div.page
 .cal-print-single-logo {
     text-align: right;
     margin-bottom: 1cm;
+}
+
+/* ------------ tags (from)
+ tinebase ------------ */
+.tb-grid-tags {
+    width: 8px;
+    height: 8px;
+    border: 1px solid black;
+    float: left;
+    margin-right: 2px;
+    margin-top: 1px;
+    border-radius: 5px;
 }

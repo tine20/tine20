@@ -41,7 +41,7 @@ class Tinebase_EmailUser_Smtp_LdapUniventionMailSchema extends Tinebase_EmailUse
     
     protected $_defaults = array(
         'emailPort'   => 25,
-        'emailSecure' => Felamimail_Model_Account::SECURE_TLS,
+        'emailSecure' => Tinebase_EmailUser_Model_Account::SECURE_TLS,
         'emailAuth'   => 'login'
     );
     

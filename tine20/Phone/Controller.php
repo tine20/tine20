@@ -180,8 +180,42 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         } else {
             $_call->callerid = $_call->line_id;
         }
-        
+
         $call = $backend->create($_call);
+
+        // resolve telephone number to contacts if possible
+        $phoneController = Phone_Controller_Call::getInstance();
+        $telNumber = Addressbook_Model_Contact::normalizeTelephoneNoCountry($phoneController->resolveInternalNumber($call->destination));
+        if (null !== $telNumber) {
+            $filter = new Addressbook_Model_ContactFilter(array(
+                array('field' => 'telephone_normalized', 'operator' => 'equals', 'value' => $telNumber),
+            ));
+
+            $controller = Addressbook_Controller_Contact::getInstance();
+            $oldAclChecks = $controller->doContainerACLChecks();
+            $controller->doContainerACLChecks(false);
+            $contacts = $controller->search($filter);
+
+            $relationBackend = new Tinebase_Relation_Backend_Sql();
+            foreach ($contacts as $contact) {
+
+                // we dont add the relations to the call record as this is called by the phone server, so no need to return the relations
+                $relationBackend->addRelation(
+                    new Tinebase_Model_Relation(array(
+                        'own_model' => 'Phone_Model_Call',
+                        'own_id' => $call->getId(),
+                        'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'related_model' => 'Addressbook_Model_Contact',
+                        'related_id' => $contact->getId(),
+                        'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'type' => 'CALLER',
+                    ))
+                );
+            }
+
+            $controller->doContainerACLChecks($oldAclChecks);
+        }
         
         return $call;
     }

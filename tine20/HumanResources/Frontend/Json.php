@@ -212,7 +212,7 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (! empty($recordData['contracts'])) {
             
             for ($i = 0; $i < count($recordData['contracts']); $i++) {
-                if (is_array($recordData['contracts'][$i]['feast_calendar_id'])) {
+                if (isset($recordData['contracts'][$i]) && is_array($recordData['contracts'][$i]['feast_calendar_id'])) {
                     $recordData['contracts'][$i]['feast_calendar_id'] = $recordData['contracts'][$i]['feast_calendar_id']['id'];
                 }
             }

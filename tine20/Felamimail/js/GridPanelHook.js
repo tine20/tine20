@@ -154,6 +154,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     mailAddresses: null,
     subject: null,
     subjectField: null,
+    subjectFn: null,
     
     /**
      * get addressbook contact grid panel
@@ -328,6 +329,8 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         action.setDisabled(this.getMailAddresses(records).length == 0);
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
+        } else if (Ext.isFunction(this.subjectFn)) {
+            this.subject = this.subjectFn(records[0]);
         }
     }
 });

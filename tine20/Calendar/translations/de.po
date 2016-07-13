@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012
 # Björn Balazs <transifex@lazs.de>, 2013
@@ -276,9 +276,10 @@ msgstr "Ja"
 
 #: js/calendarRenderer.js:30 js/Calendar-FAT-debug.js:12674
 #: js/Calendar-FAT.js:6
-msgid ""
-"This event is originally stored in a calendar you don't have access to."
-msgstr "Der Ursprungstermin ist in einem Kalender gespeichert, auf den Sie keinen Zugriff haben."
+msgid "This event is originally stored in a calendar you don't have access to."
+msgstr ""
+"Der Ursprungstermin ist in einem Kalender gespeichert, auf den Sie keinen "
+"Zugriff haben."
 
 #: js/calendarRenderer.js:31 js/Calendar-FAT-debug.js:12675
 #: js/Calendar-FAT.js:6
@@ -290,7 +291,8 @@ msgstr "Der Ursprungstermin ist in {0} gespeichert"
 #: js/Calendar-FAT.js:6
 #, python-brace-format
 msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Der Termin wird zusätzlich in Ihrem persönlichen Kalender {0} angezeigt"
+msgstr ""
+"Der Termin wird zusätzlich in Ihrem persönlichen Kalender {0} angezeigt"
 
 #: js/AttendeeFilterModel.js:35 js/EventDetailsPanel.js:302 js/Model.js:460
 #: js/AttendeeGridPanel.js:89 js/EventContextAttendeesItem.js:112
@@ -352,7 +354,9 @@ msgstr "Jährlich"
 
 #: js/RrulePanel.js:192 js/Calendar-FAT-debug.js:10804 js/Calendar-FAT.js:6
 msgid "Exceptions of reccuring events can't have recurrences themselves."
-msgstr "Ausnahmen von Wiederholungsterminen können keine eigenen Wiederholungen haben."
+msgstr ""
+"Ausnahmen von Wiederholungsterminen können keine eigenen Wiederholungen "
+"haben."
 
 #: js/RrulePanel.js:254 js/Calendar-FAT-debug.js:10866 js/Calendar-FAT.js:6
 msgid "at"
@@ -426,7 +430,9 @@ msgstr "Definition erfolgreich importiert!"
 msgid ""
 "The Ical Import definition has been created successfully! Please wait some "
 "minutes to get the events synced by the cronjob."
-msgstr "Die Ical Importdefinition wurde erfolgreich erstellt! Bitte warten Sie einige Minuten, bis die Termine vom Cronjob synchronisiert wurden."
+msgstr ""
+"Die Ical Importdefinition wurde erfolgreich erstellt! Bitte warten Sie "
+"einige Minuten, bis die Termine vom Cronjob synchronisiert wurden."
 
 #: js/ImportDialog.js:139 js/Calendar-FAT-debug.js:12824 js/Calendar-FAT.js:6
 msgid "Choose Import File"
@@ -435,7 +441,9 @@ msgstr "Importdatei wählen"
 #: js/ImportDialog.js:143 js/Calendar-FAT-debug.js:12828 js/Calendar-FAT.js:6
 msgid ""
 "Please choose the file that contains the records you want to add to Tine 2.0"
-msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 hinzufügen wollen"
+msgstr ""
+"Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 "
+"hinzufügen wollen"
 
 #: js/ImportDialog.js:147 js/Calendar-FAT-debug.js:12832 js/Calendar-FAT.js:6
 #, python-brace-format
@@ -486,7 +494,9 @@ msgstr "Allgemeine Einstellungen"
 msgid ""
 "Container name / New or existing if it already exists you need permissions "
 "to add to."
-msgstr "Ein neuer Container Name oder ein bereits Vorhandener für den man über Schreibrechte verfügt."
+msgstr ""
+"Ein neuer Container Name oder ein bereits Vorhandener für den man über "
+"Schreibrechte verfügt."
 
 #: js/ImportDialog.js:288 js/Calendar-FAT-debug.js:12973 js/Calendar-FAT.js:6
 msgid "or"
@@ -498,19 +508,25 @@ msgstr "Wie soll die Datei, die Sie hochladen, aussehen?"
 
 #: js/ImportDialog.js:334 js/Calendar-FAT-debug.js:13019 js/Calendar-FAT.js:6
 msgid ""
-"Tine 2.0 does not understand all kind of files you might want to upload. You"
-" will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr "Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von Tine 2.0 verarbeitet werden kann."
+"Tine 2.0 does not understand all kind of files you might want to upload. You "
+"will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+"Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen "
+"möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von "
+"Tine 2.0 verarbeitet werden kann."
 
 #: js/ImportDialog.js:337 js/Calendar-FAT-debug.js:13022
 msgid ""
-"Following you find a list of all supported import formats and a sample file,"
-" how Tine 2.0 expects your file to look like."
-msgstr "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
+"Following you find a list of all supported import formats and a sample file, "
+"how Tine 2.0 expects your file to look like."
+msgstr ""
+"Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine "
+"Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
 
 #: js/ImportDialog.js:340 js/Calendar-FAT-debug.js:13025 js/Calendar-FAT.js:6
 msgid "Please select the import format of the file you want to upload"
-msgstr "Bitte wählen Sie das Import-Format für die Datei, die Sie hochladen wollen"
+msgstr ""
+"Bitte wählen Sie das Import-Format für die Datei, die Sie hochladen wollen"
 
 #: js/ImportDialog.js:361 js/Calendar-FAT-debug.js:13046 js/Calendar-FAT.js:6
 msgid "Download example file"
@@ -538,7 +554,9 @@ msgstr "Wählen Sie den Typ der Quelle aus"
 
 #: js/ImportDialog.js:411 js/Calendar-FAT-debug.js:13096 js/Calendar-FAT.js:6
 msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 hinzufügen wollen"
+msgstr ""
+"Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 "
+"hinzufügen wollen"
 
 #: js/ImportDialog.js:475 js/Calendar-FAT-debug.js:13160 js/Calendar-FAT.js:6
 #, python-brace-format
@@ -616,7 +634,9 @@ msgstr "Sie haben bereits auf diese Einladung geantwortet."
 #: js/iMIPDetailsPanel.js:239 js/Calendar-FAT-debug.js:12485
 #: js/Calendar-FAT.js:6
 msgid "You received an event invitation. Set your response to:"
-msgstr "Sie haben eine Einladung zu einem Termin erhalten. Setzen Sie Ihre Antwort auf:"
+msgstr ""
+"Sie haben eine Einladung zu einem Termin erhalten. Setzen Sie Ihre Antwort "
+"auf:"
 
 #: js/iMIPDetailsPanel.js:247 js/Calendar-FAT-debug.js:12493
 #: js/Calendar-FAT.js:6
@@ -750,8 +770,7 @@ msgstr "Vorläufig"
 msgid "View"
 msgstr "Ansicht"
 
-#: js/EventEditDialog.js:114 js/Calendar-FAT-debug.js:8226
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:114 js/Calendar-FAT-debug.js:8226 js/Calendar-FAT.js:6
 msgid "Details"
 msgstr "Details"
 
@@ -762,8 +781,7 @@ msgstr "Details"
 msgid "whole day"
 msgstr "ganztägig"
 
-#: js/EventEditDialog.js:165 js/Calendar-FAT-debug.js:8277
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:165 js/Calendar-FAT-debug.js:8277 js/Calendar-FAT.js:6
 msgid "Saved in"
 msgstr "Gespeichert in"
 
@@ -778,43 +796,35 @@ msgstr "nicht-blockierend"
 msgid "Private"
 msgstr "Privat"
 
-#: js/EventEditDialog.js:280 js/Calendar-FAT-debug.js:8387
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:280 js/Calendar-FAT-debug.js:8387 js/Calendar-FAT.js:6
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an."
 
-#: js/EventEditDialog.js:318 js/Calendar-FAT-debug.js:8435
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:318 js/Calendar-FAT-debug.js:8435 js/Calendar-FAT.js:6
 msgid "Mute Notification"
 msgstr "Benachrichtigungen unterdrücken"
 
-#: js/EventEditDialog.js:549 js/Calendar-FAT-debug.js:8666
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:549 js/Calendar-FAT-debug.js:8666 js/Calendar-FAT.js:6
 msgid "End date is not valid"
 msgstr "Endzeitpunkt ist ungültig."
 
-#: js/EventEditDialog.js:552 js/Calendar-FAT-debug.js:8669
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:552 js/Calendar-FAT-debug.js:8669 js/Calendar-FAT.js:6
 msgid "End date must be after start date"
 msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
 
-#: js/EventEditDialog.js:558 js/Calendar-FAT-debug.js:8675
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:558 js/Calendar-FAT-debug.js:8675 js/Calendar-FAT.js:6
 msgid "End time is not allowed to be after the configured time."
 msgstr "Die Endzeit darf nicht hinter der konfigurierten Zeit liegen."
 
-#: js/EventEditDialog.js:594 js/Calendar-FAT-debug.js:8711
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:594 js/Calendar-FAT-debug.js:8711 js/Calendar-FAT.js:6
 msgid "Start date is not valid"
 msgstr "Zeitpunkt den Beginns ist ungültig."
 
-#: js/EventEditDialog.js:601 js/Calendar-FAT-debug.js:8718
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:601 js/Calendar-FAT-debug.js:8718 js/Calendar-FAT.js:6
 msgid "Start date is not allowed to be before the configured time."
 msgstr "Das Startdatum darf nicht vor der konfigurierten Zeit liegen."
 
-#: js/EventEditDialog.js:621 js/Calendar-FAT-debug.js:8738
-#: js/Calendar-FAT.js:6
+#: js/EventEditDialog.js:621 js/Calendar-FAT-debug.js:8738 js/Calendar-FAT.js:6
 msgid "Errors"
 msgstr "Fehler"
 
@@ -966,18 +976,16 @@ msgstr "Ok"
 msgid "Mini Calendar"
 msgstr "Mini Kalender"
 
-#: js/AddToEventPanel.js:35 js/Calendar-FAT-debug.js:12563
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:35 js/Calendar-FAT-debug.js:12563 js/Calendar-FAT.js:6
 msgid "Please choose the Event to add the contacts to"
-msgstr "Bitte einen Termin auswählen, dem die Kontakte hinzugefügt werden sollen"
+msgstr ""
+"Bitte einen Termin auswählen, dem die Kontakte hinzugefügt werden sollen"
 
-#: js/AddToEventPanel.js:79 js/Calendar-FAT-debug.js:12607
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:79 js/Calendar-FAT-debug.js:12607 js/Calendar-FAT.js:6
 msgid "Select Role"
 msgstr "Rolle wählen"
 
-#: js/AddToEventPanel.js:89 js/Calendar-FAT-debug.js:12617
-#: js/Calendar-FAT.js:6
+#: js/AddToEventPanel.js:89 js/Calendar-FAT-debug.js:12617 js/Calendar-FAT.js:6
 msgid "Select Status"
 msgstr "Status wählen"
 
@@ -1021,8 +1029,7 @@ msgid "Summary too Short"
 msgstr "Zu kurzes Thema"
 
 #: js/Calendar-FAT-debug.js:5258 js/Calendar-FAT-debug.js:6088
-#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:279
-#: js/PagingToolbar.js:300
+#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:279 js/PagingToolbar.js:300
 msgid "Week"
 msgstr "Woche"
 
@@ -1174,7 +1181,9 @@ msgstr "Bitte ändern Sie Ihre Auswahl."
 msgid ""
 "Your selection contains recurring events. Recuring events must be deleted "
 "seperatly!"
-msgstr "Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht werden!"
+msgstr ""
+"Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht "
+"werden!"
 
 #: js/Calendar-FAT-debug.js:6846 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:1046
@@ -1328,11 +1337,15 @@ msgstr "Alle meine Termine"
 
 #: Preference.php:128
 msgid "Position on the left time axis, day and week view should start with"
-msgstr "Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten beginnen sollen"
+msgstr ""
+"Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten "
+"beginnen sollen"
 
 #: Preference.php:132
 msgid "Position on the left time axis, day and week view should end with"
-msgstr "Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten enden sollen"
+msgstr ""
+"Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten enden "
+"sollen"
 
 #: Preference.php:135
 msgid "Default Start Time"
@@ -1341,7 +1354,9 @@ msgstr "Default Startzeit"
 #: Preference.php:136
 msgid ""
 "Scroll position on the left time axis, day and week view should start with"
-msgstr "Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten beginnen sollen"
+msgstr ""
+"Position auf der linken Zeit-Achse an der Tages- und Wochen-Ansichten "
+"beginnen sollen"
 
 #: Preference.php:139
 msgid "Default Calendar"
@@ -1366,9 +1381,13 @@ msgstr "Empfangen von Benachrichtigungs-E-Mails"
 #: Preference.php:148
 msgid ""
 "The level of actions you want to be notified about. Please note that "
-"organizers will get notifications for all updates including attendee answers"
-" unless this preference is set to \"Never\""
-msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte beachten Sie, dass Organisatoren eines Termins über alle Änderungen einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange diese Option nicht auf \"Niemals\" gestellt ist."
+"organizers will get notifications for all updates including attendee answers "
+"unless this preference is set to \"Never\""
+msgstr ""
+"Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte "
+"beachten Sie, dass Organisatoren eines Termins über alle Änderungen "
+"einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange "
+"diese Option nicht auf \"Niemals\" gestellt ist."
 
 #: Preference.php:151
 msgid "Send Notifications Emails of own Actions"
@@ -1376,7 +1395,8 @@ msgstr "Sende Benachrichtigungen über eigene Änderungen"
 
 #: Preference.php:152
 msgid "Get notifications emails for actions you did yourself"
-msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
+msgstr ""
+"Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
 
 #: Preference.php:155
 msgid "Enable Standard Alarm"
@@ -1412,7 +1432,7 @@ msgstr "Inkrement der Zeiteinheit für Termine"
 
 #: Preference.php:171
 msgid "Default set Events to privat"
-msgstr "Setze standartmäßig Termine auf privat"
+msgstr "Setze standardmäßig Termine auf privat"
 
 #: Preference.php:172
 msgid "If enabled every created event is always privat."
@@ -1446,7 +1466,9 @@ msgstr "Feste Kalender"
 msgid ""
 "Calendars always selected regardless of all filter parameters. A valid use "
 "case might be to force the display of an certain holiday calendar."
-msgstr "Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein Schulferien-Kalender."
+msgstr ""
+"Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein "
+"Schulferien-Kalender."
 
 #: Config.php:157
 msgid "Crop Days"
@@ -1480,7 +1502,10 @@ msgstr "Verfügbare Teilnehmerstatus"
 msgid ""
 "Possible event attendee status. Please note that additional attendee status "
 "might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Teilnehmerstatus. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgstr ""
+"Verfügbare Teilnehmerstatus. Bitte beachten Sie, dass zusätzliche Werte beim "
+"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
+"werden könnten."
 
 #: Config.php:220 Setup/Update/Release5.php:91
 msgid "No response"
@@ -1502,7 +1527,10 @@ msgstr "Verfügbare Teilnehmerrollen"
 msgid ""
 "Possible event attendee roles. Please note that additional attendee roles "
 "might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Teilnehmerrollen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
+msgstr ""
+"Verfügbare Teilnehmerrollen. Bitte beachten Sie, dass zusätzliche Werte beim "
+"Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt "
+"werden könnten."
 
 #: Config.php:239 Setup/Update/Release5.php:77
 msgid "Required"
@@ -1517,30 +1545,36 @@ msgid "Filter timeslot for CalDAV events"
 msgstr "Maximales Alter für CalDAV Termine"
 
 #: Config.php:248
-msgid ""
-"For how long in the past (in months) the events should be synchronized."
-msgstr "Maximales Alter für Termine die synchronisiert werden dürfen (in Monaten)."
+msgid "For how long in the past (in months) the events should be synchronized."
+msgstr ""
+"Maximales Alter für Termine die synchronisiert werden dürfen (in Monaten)."
 
 #: Config.php:257
 msgid "Timeslot for event notifications"
 msgstr "Alter für Termineerinnerungen"
 
 #: Config.php:259
-msgid ""
-"For how long in the past (in weeks) event notifications should be sent."
-msgstr "Für wie lange in der Vergangenheit (in Wochen) Termin Benachrichtigungen  versendet werden sollen."
+msgid "For how long in the past (in weeks) event notifications should be sent."
+msgstr ""
+"Für wie lange in der Vergangenheit (in Wochen) Termin Benachrichtigungen  "
+"versendet werden sollen."
 
 #: Config.php:268
 msgid "Default filter period (from) for events fetched via JSON API"
-msgstr "Standard Filter Zeitraum (von) für Termine, die über die JSON API geholt werden."
+msgstr ""
+"Standard Filter Zeitraum (von) für Termine, die über die JSON API geholt "
+"werden."
 
 #: Config.php:270
 msgid "For how long in the past (in months) the events should be fetched."
-msgstr "Für wie weit in der Vergangenheit (in Monaten) Termine geholt werden sollen."
+msgstr ""
+"Für wie weit in der Vergangenheit (in Monaten) Termine geholt werden sollen."
 
 #: Config.php:279
 msgid "Default filter period (until) for events fetched via JSON API"
-msgstr "Standard Filter Zeitraum (bis) für Termine, die über die JSON API geholt werden."
+msgstr ""
+"Standard Filter Zeitraum (bis) für Termine, die über die JSON API geholt "
+"werden."
 
 #: Config.php:281
 msgid "For how long in the future (in months) the events should be fetched."
@@ -1552,20 +1586,26 @@ msgstr "Deaktiviere iMIP für externe Organisatoren"
 
 #: Config.php:301
 msgid "(CalDAV) Skip double events from personal or shared calendar"
-msgstr "(CalDAV) Doppelte Termine aus persönlichen oder geteilten Kalendern überspringen"
+msgstr ""
+"(CalDAV) Doppelte Termine aus persönlichen oder geteilten Kalendern "
+"überspringen"
 
 #: Config.php:303
 msgid ""
-"(CalDAV) Skip double events from personal or shared calendar (\"personal\" >"
-" Skip events from personal calendar or \"shared\" > Skip events from shared "
+"(CalDAV) Skip double events from personal or shared calendar (\"personal\" > "
+"Skip events from personal calendar or \"shared\" > Skip events from shared "
 "calendar)"
-msgstr "(CalDAV) Doppelte Termine aus persönlichen oder geteilten Kalendern überspringen (\"personal\" > Termine aus Persönlichen Kalendern überspringen oder \"shared\" > Termine aus geteilten Kalendern überspringen)"
+msgstr ""
+"(CalDAV) Doppelte Termine aus persönlichen oder geteilten Kalendern "
+"überspringen (\"personal\" > Termine aus Persönlichen Kalendern überspringen "
+"oder \"shared\" > Termine aus geteilten Kalendern überspringen)"
 
 #: Config.php:312
 msgid ""
-"Send notifications to every user with edit permissions of the added "
-"resources"
-msgstr "Sende Benachrichtigungen zu allen Benutzern mit Bearbeitungsrecht an der Ressource"
+"Send notifications to every user with edit permissions of the added resources"
+msgstr ""
+"Sende Benachrichtigungen zu allen Benutzern mit Bearbeitungsrecht an der "
+"Ressource"
 
 #: Config.php:322
 msgid "Enabled Features"
@@ -1682,6 +1722,9 @@ msgstr "\"%2$s\" Antwort von %1$s"
 #: views/eventNotification.php:68
 msgid "Event details"
 msgstr "Termin Details"
+
+msgid "Send Alarm Notifications Emails"
+msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
 
 msgid "Print Event"
 msgstr "Termin Drucken"

@@ -28,6 +28,28 @@ Ext.ns('Ext.ux');
  */
 Ext.ux.PopupWindow = function(config) {
     Ext.apply(this, config);
+    this.contentPanelConstructorConfig = this.contentPanelConstructorConfig || {};
+
+    this.addEvents({
+        /**
+         * @event beforecolse
+         * @desc Fires before the Window is closed. A handler can return false to cancel the close.
+         * @param {Ext.ux.PopupWindow}
+         */
+        "beforeclose" : true,
+        /**
+         * @event render
+         * @desc  Fires after the viewport in the popup window is rendered
+         * @param {Ext.ux.PopupWindow}
+         */
+        "render" : true,
+        /**
+         * @event close
+         * @desc  Fired, when the window got closed
+         */
+        "close" : true
+    });
+
     Ext.ux.PopupWindow.superclass.constructor.call(this);
 };
 
@@ -69,7 +91,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     /**
      * @cfg {Object} Config object to pass to itemContructor
      */
-    contentPanelConstructorConfig: {},
+    contentPanelConstructorConfig: null,
     /**
      * @property {Browser Window}
      */
@@ -78,7 +100,9 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      * @property {Ext.ux.PopupWindowMgr}
      */
     windowManager: null,
-    
+
+    renderTo: 'useRenderFn',
+
     /**
      * @private
      */
@@ -88,62 +112,56 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         }
         
         this.windowManager = Ext.ux.PopupWindowMgr;
+
+        this.stateful = true;
+        this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
+        this.on('resize', this.saveState, this, {delay:100});
+
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
         
         //limit the window size
         this.width = Math.min(screen.availWidth, this.width);
         this.height = Math.min(screen.availHeight, this.height);
+    },
 
+    render: function() {
         // open popup window first to save time
         if (! this.popup) {
             this.popup = Tine.Tinebase.common.openWindow(this.name, this.url, this.width, this.height);
         }
-        
+
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
-        
+
         // does not work on reload!
         //this.popup.PopupWindow = this;
-        
+
         // strange problems in FF
         //this.injectFramework(this.popup);
 
-        this.addEvents({
-            /**
-             * @event beforecolse
-             * @desc Fires before the Window is closed. A handler can return false to cancel the close.
-             * @param {Ext.ux.PopupWindow}
-             */
-            "beforeclose" : true,
-            /**
-             * @event render
-             * @desc  Fires after the viewport in the popup window is rendered
-             * @param {Ext.ux.PopupWindow} 
-             */
-            "render" : true,
-            /**
-             * @event close
-             * @desc  Fired, when the window got closed
-             */
-            "close" : true
-        });
-        
-        // NOTE: Do not register unregister with this events, 
+        // NOTE: Do not register unregister with this events,
         //       as it would be broken on window reloads!
         /*
-        if (this.popup.addEventListener) {
-            this.popup.addEventListener('load', this.onLoad, true);
-            this.popup.addEventListener('unload', this.onClose, true);
-        } else if (this.popup.attachEvent) {
-            this.popup.attachEvent('onload', this.onLoad);
-            this.popup.attachEvent('onunload', this.onClose);
-        } else {
-            this.popup.onload = this.onLoad;
-            this.popup.onunload = this.onClose;
-        }
-        */
+         if (this.popup.addEventListener) {
+         this.popup.addEventListener('load', this.onLoad, true);
+         this.popup.addEventListener('unload', this.onClose, true);
+         } else if (this.popup.attachEvent) {
+         this.popup.attachEvent('onload', this.onLoad);
+         this.popup.attachEvent('onunload', this.onClose);
+         } else {
+         this.popup.onload = this.onLoad;
+         this.popup.onunload = this.onClose;
+         }
+         */
     },
-    
+
+    getState : function() {
+        return {
+            width: this.popup.innerWidth,
+            height: this.popup.innerHeight
+        };
+    },
+
     /**
      * rename window name
      * 

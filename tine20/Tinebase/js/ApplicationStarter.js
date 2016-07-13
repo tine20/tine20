@@ -433,7 +433,7 @@ Tine.Tinebase.ApplicationStarter = {
                     // create model
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
                         Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], 
-                            Ext.copyTo({}, modelConfig, 
+                            Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
                                'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,containerProperty,containerName,containersName,group')
                         );
                         Tine[appName].Model[modelName].getFilterModel = function() {
@@ -511,6 +511,12 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // create editDialog openWindow function only if edit dialog exists
                     var editDialogName = modelName + 'EditDialog';
+                    if (! Tine[appName].hasOwnProperty(editDialogName)) {
+                        Tine[appName][editDialogName] = Ext.extend(Tine.widgets.dialog.EditDialog, {
+                            displayNotes: Tine[appName].Model[modelName].hasField('notes')
+                        });
+                    }
+
                     
                     if (Tine[appName].hasOwnProperty(editDialogName)) {
                         var edp = Tine[appName][editDialogName].prototype;
@@ -556,9 +562,13 @@ Tine.Tinebase.ApplicationStarter = {
                     
                     // add model to global add splitbutton if set
                     if (modelConfig.hasOwnProperty('splitButton') && modelConfig.splitButton == true) {
+                        var iconCls = appName + modelName;
+                        if (! Ext.util.CSS.getRule('.' + iconCls)) {
+                            iconCls = 'ApplicationIconCls';
+                        }
                         Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
                             text: Tine[appName].i18n._('New ' + modelName), 
-                            iconCls: appName + modelName,
+                            iconCls: iconCls,
                             scope: Tine.Tinebase.appMgr.get(appName),
                             handler: (function() {
                                 var ms = this.getMainScreen(),

@@ -384,7 +384,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
-        
+
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
@@ -567,7 +567,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     initActions: function() {
-
+        this.newRecordIcon =  this.newRecordIcon!== null ? this.newRecordIcon : this.app.appName + 'IconCls';
+        if (! Ext.util.CSS.getRule('.' + this.newRecordIcon)) {
+            this.newRecordIcon = 'ApplicationIconCls';
+        }
+        
         var services = Tine.Tinebase.registry.get('serviceMap').services;
         
         this.action_editInNewWindow = new Ext.Action({
@@ -602,7 +606,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
             handler: this.onEditInNewWindow.createDelegate(this, [{actionType: 'add'}]),
-            iconCls: (this.newRecordIcon !== null) ? this.newRecordIcon : this.app.appName + 'IconCls',
+            iconCls: this.newRecordIcon,
             scope: this
         }) : null;
 
