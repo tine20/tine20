@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/Contacts'
 ],
 function($, App,Contacts) {
-    App.LoadCss('addressbook/WidgetContactDetails.css');
+    App.loadCss('addressbook/WidgetContactDetails.css');
     return function(options) {
         var userOpts = $.extend({
             $parentContainer: null
@@ -61,7 +62,7 @@ function($, App,Contacts) {
                 $mainDiv.find('#WidgetContactDetails_mugshot').attr('src', 'data:image/jpeg;base64,' + hex2bin(fullContact.mugshot));
             }
             $mainDiv.find('#WidgetContactDetails_mugshotThrobber').hide();
-            $mainDiv.find('#WidgetContactDetails_mugshot').css('visibility', '').hide().fadeIn(200);
+            $mainDiv.find('#WidgetContactDetails_mugshot').css('visibility', '').velocity('fadeIn', { duration:200 });
 
             $throbber.hide();
 
@@ -78,13 +79,13 @@ function($, App,Contacts) {
                     $newField.appendTo($otherFieldsDiv);
                 }
             }
-            $otherFieldsDiv.fadeIn(200);
+            $otherFieldsDiv.velocity('fadeIn', { duration:200 });
         }
 
         function createTelLink(number) {
             if (!number) {
                 return '';
-            } else if (App.IsPhone()) {
+            } else if (App.isPhone()) {
                 return number ? '<a class="phoneNumber" href="tel:' + number + '">' + number + '</a>' : '';
             } else {
                 return number;
@@ -117,7 +118,7 @@ function($, App,Contacts) {
         THIS.showDetails = function (contact) {
             $mainDiv.show();
             showContactDetailsFormTopInfo(contact);
-            App.Post('getContact', {id: contact.id})
+            App.post('getContact', {id: contact.id})
             .done(function(fullContact) {
                 showContactDetailsFormAdditionalInfo(fullContact);
             });

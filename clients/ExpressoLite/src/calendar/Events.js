@@ -5,10 +5,11 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'calendar/DateCalc'
 ],
@@ -60,13 +61,13 @@ return function() {
         if (period === null) {
             defer.resolve(); // period already cached
         } else {
-            App.Post('searchEvents', {
+            App.post('searchEvents', {
                 from: DateCalc.makeQueryStr(period.from),
                 until: DateCalc.makeQueryStr(period.pastUntil),
                 calendarId: calendarId
             }).fail(function(resp) {
-                window.alert('Erro na consulta dos eventos.\n' +
-                    resp.responseText);
+                App.errorMessage('Erro na consulta dos eventos.', resp);
+                THIS.clearMonthCache(calendarId, DateCalc.firstOfMonth(from));
                 defer.reject();
             }).done(function(resp) {
                 _StoreEvents(calendarId, resp.events);
@@ -123,12 +124,24 @@ return function() {
 
     THIS.setConfirmation = function(eventId, confirmation) {
         var defer = $.Deferred();
-        App.Post('setEventConfirmation', {
+        App.post('setEventConfirmation', {
             id: eventId,
             confirmation: confirmation
         }).fail(function(resp) {
-            window.alert('Erro na consulta dos eventos.\n' +
-                resp.responseText);
+            App.errorMessage('Erro na consulta dos eventos.', resp);
+            defer.reject();
+        }).done(function(resp) {
+            defer.resolve();
+        });
+        return defer.promise();
+    };
+
+    THIS.remove = function(eventId) {
+        var defer = $.Deferred();
+        App.post('deleteEvent', {
+            id: eventId
+        }).fail(function(resp) {
+            App.errorMessage('Erro ao remover evento.', resp);
             defer.reject();
         }).done(function(resp) {
             defer.resolve();
@@ -203,7 +216,7 @@ return function() {
         event.attendees.sort(function(a, b) { // alphabetically
             return a.name.localeCompare(b.name);
         });
-        var ourMail = App.GetUserInfo('mailAddress');
+        var ourMail = App.getUserInfo('mailAddress');
         var curUserAttendee = null;
         var bucket = {
             'ACCEPTED': [],

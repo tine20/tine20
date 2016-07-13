@@ -8,11 +8,12 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App'
 ],
 function($, App) {
-App.LoadCss('mail/WidgetFolders.css');
+App.loadCss('mail/WidgetFolders.css');
 return function(options) {
     var userOpts = $.extend({
         $elem: null, // jQuery object for the target DIV
@@ -77,11 +78,10 @@ return function(options) {
         var folder = $li.data('folder');
         var $counter = $li.find('.Folders_counter:first').replaceWith($('#icons .throbber').clone());
 
-        App.Post('updateMessageCache', { folderId:folder.id })
+        App.post('updateMessageCache', { folderId:folder.id })
         .always(function() { $li.find('.throbber:first').replaceWith($counter); })
         .fail(function(resp) {
-            window.alert('Erro na consulta dos emails de "'+folder.localName+'".\n' +
-                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            App.errorMessage('Erro na consulta dos emails de "'+folder.localName+'".', resp);
             defer.reject();
         }).done(function(stats) {
             var hasChanged = (folder.totalMails !== stats.totalMails) ||
@@ -132,11 +132,10 @@ return function(options) {
         if (parentFolder === null) { // root folder
             $divLoading.appendTo($targetDiv);
 
-            App.Post('searchFolders')
+            App.post('searchFolders')
             .always(function() { $divLoading.remove(); })
             .fail(function(resp) {
-                window.alert('Erro na primeira consulta das pastas.\n' +
-                    'Atualize a página para tentar novamente.\n' + resp.responseText);
+                App.errorMessage('Erro na primeira consulta das pastas.', resp);
                 defer.reject();
             }).done(function(folders) {
                 userOpts.folderCache.length = 0;
@@ -148,11 +147,10 @@ return function(options) {
             var $li = _FindFolderLi(parentFolder);
             $divLoading.appendTo($li);
 
-            App.Post('searchFolders', { parentFolder:parentFolder.globalName })
+            App.post('searchFolders', { parentFolder:parentFolder.globalName })
             .always(function() { $divLoading.remove(); })
             .fail(function(resp) {
-                window.alert('Erro na consulta das subpastas de '+parentFolder.localName+'\n' +
-                    resp.responseText);
+                App.errorMessage('Erro na consulta das subpastas de ' + parentFolder.localName + '.', resp);
                 defer.reject();
             }).done(function(subfolders) {
                 parentFolder.subfolders.length = 0;
@@ -259,11 +257,10 @@ return function(options) {
                 var $counter = $li.find('.Folders_counter:first')
                     .replaceWith($('#icons .throbber').clone());
 
-                App.Post('updateMessageCache', { folderId:curFolder.id })
+                App.post('updateMessageCache', { folderId:curFolder.id })
                 .always(function() { $li.find('.throbber:first').replaceWith($counter); })
                 .fail(function(resp) {
-                    window.alert('Erro ao atualizar a pasta "'+curFolder.localName+'".\n' +
-                        'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                    App.errorMessage('Erro ao atualizar a pasta "' + curFolder.localName + '".', resp);
                 }).done(function(stats) {
                     var hasChanged = (curFolder.totalMails !== stats.totalMails) ||
                         (curFolder.unreadMails !== stats.unreadMails);

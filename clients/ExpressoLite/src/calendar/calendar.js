@@ -8,17 +8,16 @@
  * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
-require.config({
-    baseUrl: '..',
-    paths: { jquery: 'common-js/jquery.min' }
-});
+require.config({ baseUrl:'..', });
 
-require(['jquery',
+require([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/UrlStack',
     'common-js/Layout',
     'common-js/SimpleMenu',
     'common-js/Contacts',
+    'common-js/SplashScreen',
     'calendar/DateCalc',
     'calendar/Events',
     'calendar/WidgetMonth',
@@ -26,7 +25,7 @@ require(['jquery',
     'calendar/WidgetEvents',
     'calendar/WidgetEditEvent'
 ],
-function($, App, UrlStack, Layout, SimpleMenu, Contacts, DateCalc, Events,
+function($, App, UrlStack, Layout, SimpleMenu, Contacts, SplashScreen, DateCalc, Events,
     WidgetMonth, WidgetWeek, WidgetEvents, WidgetEditEvent) {
 window.Cache = {
     events: null, // Events object
@@ -38,13 +37,14 @@ window.Cache = {
     wndEditEvent: null, // WidgetEditEvent object, modeless popup
     curView: '', // 'month'|'week'
     curCalendar: null, // calendar object
-    curDate: DateCalc.today() // current date being displayed
+    curDate: DateCalc.today(), // current date being displayed
+    splashScreen: null // splash screen for displaying offline message
 };
 
-App.Ready(function() {
+App.ready(function() {
     // Initialize page objects.
     Cache.layout = new Layout({
-        userMail: App.GetUserInfo('mailAddress'),
+        userMail: App.getUserInfo('mailAddress'),
         $menu: $('#leftColumn'),
         $middle: $('#middleBody'),
         $right: $('#rightBody')
@@ -56,6 +56,7 @@ App.Ready(function() {
     Cache.viewWeek = new WidgetWeek({ events:Cache.events, $elem: $('#middleBody') });
     Cache.viewEvents = new WidgetEvents({ events:Cache.events, $elem: $('#rightBody') });
     Cache.wndEditEvent = new WidgetEditEvent({ });
+    Cache.splashScreen = new SplashScreen({ });
 
     // Some initial work.
     UrlStack.keepClean();
@@ -67,12 +68,18 @@ App.Ready(function() {
         Cache.viewMonth.load(),
         Cache.viewWeek.load(),
         Cache.viewEvents.load(),
-        Cache.wndEditEvent.load()
+        Cache.wndEditEvent.load(),
+        Cache.splashScreen.load()
     ).done(function() {
         $('#btnRefresh,#btnCreateEvent').css('display', 'none');
         Cache.layout.setLeftMenuVisibleOnPhone(true).done(function() {
             LoadUserCalendars().done(function() {
                 $('#btnRefresh,#btnCreateEvent').css('display', '');
+            }).fail(function() {
+                Cache.layout.setLeftMenuVisibleOnPhone(false).done(function() {
+                    Cache.layout.hideTop();
+                    Cache.splashScreen.showNoInternetMessage();
+                });
             });
         });
 
@@ -80,7 +87,7 @@ App.Ready(function() {
         Cache.layout
             .onKeepAlive(function() { })
             .onHideRightPanel(function() { Cache.viewMonth.clearDaySelected(); })
-            .onSearch(function() { }); // when user performs a search
+            .onSearch(function() { alert('Busca no calendário não implementada nesta versão.'); }); // when user performs a search
         Cache.chooseViewMenu
             .addOption('Ver mês', 'month', function() { SetCalendarView('month'); })
             .addOption('Ver semana', 'week', function() { SetCalendarView('week'); });
@@ -90,6 +97,8 @@ App.Ready(function() {
         Cache.viewWeek
             .onWeekChanged(UpdateCurrentWeekName)
             .onEventClicked(EventClicked);
+        Cache.viewEvents
+            .onRemoved(EventRemoved);
         Cache.wndEditEvent
             .onEventSaved(UpdateAfterSaving);
         $('#btnRefresh').on('click', RefreshEvents);
@@ -100,10 +109,9 @@ App.Ready(function() {
 function LoadUserCalendars() {
     var defer = $.Deferred();
     $('#chooseViewMenu,#chooseCalendarMenu').hide();
-    App.Post('getCalendars')
+    App.post('getCalendars')
         .fail(function(resp) {
-            window.alert('Erro ao carregar calendários pessoais.\n' +
-                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            App.errorMessage('Erro ao carregar calendários pessoais.', resp);
             defer.reject();
         }).done(function(cals) {
             $('#loadCalendars').hide();
@@ -217,6 +225,11 @@ function CreateEvent() {
 function EventClicked(eventsOfDay, eventClicked) {
     Cache.layout.setRightPanelVisible(true);
     Cache.viewEvents.render(eventsOfDay, eventClicked);
+}
+
+function EventRemoved(event) {
+    Cache.layout.setRightPanelVisible(false);
+    $('#btnRefresh').trigger('click');
 }
 
 function UpdateAfterSaving() {

@@ -5,94 +5,161 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2013-2016 Serpro (http://www.serpro.gov.br)
  */
 
-require.config({
-    paths: { jquery: 'common-js/jquery.min' }
-});
-
-require(['jquery',
-    'common-js/App'
+require([
+    'common-js/jQuery',
+    'common-js/App',
+    'common-js/Cordova',
+    'common-js/SplashScreen'
 ],
-function($, App) {
-    App.Ready(function() {
-        var isBrowserValid = ValidateBrowser([
-            { name:'Firefox', version:24 },
-            { name:'Chrome', version:25 },
-            { name:'Safari', version:7 }
-        ]);
-        if (!isBrowserValid) {
-            $('body,#unsupportedMsg').show();
-            $('#frmLogin').hide();
-            return false; // won't load anything else
-        }
+function($, App, Cordova, SplashScreen) {
+    window.Cache = {
+        splashScreen: null
+    };
 
-        App.Post('checkSessionStatus')
-        .done(function(response) {
-            if (response.status !== 'active') {
-                Init(); // no active session, do normal initialization
+    App.ready(function() {
+        Cache.splashScreen = new SplashScreen();
+
+        $.when( // using $.when just to be consistent with other modules
+            Cache.splashScreen.load()
+        ).done(function() {
+            if (Cordova) {
+                Cache.splashScreen.showThrobber();
+                if (Cordova.HasInternetConnection()) {
+                    CheckSessionStatus();
+                } else {
+                    HandlePhoneWithoutInternet();
+                }
             } else {
-                App.GoToFolder('./mail'); // there is an active session, go to mail module
+                var isBrowserValid = ValidateBrowserMinimumVersion([ // warning: the list order matters
+                    { name:'SamsungBrowser', version:4 }, // Samsung Android browser
+                    { name:'Firefox', version:38 },
+                    { name:'CriOS', version:34 }, // Chrome on iOS
+                    { name:'Version', version:7 }, // Safari
+                    { name:'Chrome', version:34 }
+                ]);
+
+                if (!isBrowserValid) {
+                    $('#main-screen,#unsupportedMsg').show();
+                    $('#frmLogin').hide();
+                } else {
+                    CheckSessionStatus();
+                }
+            }
+        });
+    });
+
+    function CheckSessionStatus() {
+        App.post('checkSessionStatus')
+        .done(function(response) {
+            if (response.status == 'active') {
+                App.goToFolder('./mail'); // there is an active session, go to mail module
+            } else {
+                if (Cordova) {
+                    // no active session, but since we have Cordova
+                    // we may have the credentials to start a new session
+                    Cordova.GetCurrentAccount().done(function(account) {
+                        if (account != null) {
+                            TryImplicitLogin(account.login, account.password);
+                        } else {
+                            Init(); //no credential found, proceed with usual init
+                        }
+                    }).fail(function (error) {
+                        // This should not happen, but in case something goes wrong,
+                        // at least we'll have some information to work on
+                        App.errorMessage('Ocorreu um erro ao tentar localizar as credenciais do usuário.\n' +
+                            'Realize o login novamente.');
+                        console.log('Cordova.GetCurrentAccount failed: ' + error);
+                        Init();
+                    });
+                } else {
+                    Init();
+                }
             }
         }).fail(function(error) {
             window.alert('Ocorreu um erro ao realizar a conexão com o Expresso.\n'+
                 'É possível que o sistema esteja fora do ar.');
         });
-    });
+    }
 
-    function Init() {
-        var user = App.GetCookie('user');
-        if (user !== null) {
-            $('#user').val(user);
+    function HandlePhoneWithoutInternet() {
+        // For now, the only thing we can do is to show a message for the user.
+        // However, once we have e-mail data stored for offline access, we will
+        // be able to redirect to mail module to show that data (only if the
+        // user has a stored credential, of course)
+
+        Cache.splashScreen.showNoInternetMessage();
+    }
+
+    function TryImplicitLogin(user, pwd) {
+        function CordovaLoginFailed() {
+            window.alert('Não foi possível se reconectar ao Expresso com as credencias armazenadas.\n' +
+                'É necessário realizar o login novamente.');
+            Init();
         }
 
-        if (location.href.indexOf('#') !== -1)
-            history.pushState('', '', location.pathname);
-
-        $(document.body).fadeIn(300, function() {
-            LoadServerStatus(); // async
-            $('#user').focus();
-            $('#frmLogin').submit(DoLogin);
-            $('#frmChangePwd').submit(DoChangePassword);
+        // Use the credential to perform an implicit login.
+        // This will be transparent to the user,
+        // since no fields are yet being displayed on screen
+        App.post('login', {
+            user: user,
+            pwd: pwd
+        })
+        .fail(CordovaLoginFailed)
+        .done(function(response) {
+            if (!response.success) {
+                CordovaLoginFailed();
+            } else {
+                //since the only visible thing right now is the splash screen,
+                //just go straight to the mail module, without any fancy animations
+                App.goToFolder('./mail');
+            }
         });
     }
 
-    function ValidateBrowser(minBrowsers) {
-        var ua = navigator.userAgent;
-        for (var m = 0; m < minBrowsers.length; ++m) {
-            var bname = minBrowsers[m].name,
-                bver = minBrowsers[m].version;
-            var browserPrefixIndex = ua.indexOf(bname+'/');
-            if (browserPrefixIndex !== -1) {
-                // We found the browser within the user agent, let's check its version.
-                var ver;
-                if (bname !== 'Safari') {
-                    ver = ua.substr(browserPrefixIndex + (bname+'/').length);
-                    if (ver.indexOf(' ') !== -1) {
-                        ver = ver.substr(0, ver.indexOf(' '));
-                    }
-                } else {
-                    // Safari is a bit of a special case, its major version is
-                    // expressed after the Version\ prefix.
-                    var versionPrefixIndex = ua.indexOf('Version/');
-                    if (versionPrefixIndex !== -1) {
-                        ver = ua.substr(versionPrefixIndex + 'Version/'.length);
-                        if (ver.indexOf(' ') !== -1) {
-                            ver = ver.substr(0, ver.indexOf(' '));
-                        }
-                    } else {
-                        bver = '-1'; // may happen when using Google Chrome on iPhone
-                    }
+    function Init() {
+        function ShowScreen() {
+            $('#main-screen').velocity('fadeIn', {
+                duration: 300,
+                complete: function() {
+                    LoadServerStatus(); // async
+                    $('#user').focus();
+                    $('#frmLogin').submit(DoLogin);
+                    $('#frmChangePwd').submit(DoChangePassword);
                 }
-                return (bver <= parseInt(ver));
+            });
+        }
+
+        if (Cordova) {
+            Cache.splashScreen.moveUpAndClose().done(ShowScreen);
+        } else {
+            var user = App.getCookie('user');
+            if (user !== null) {
+                $('#user').val(user);
+            }
+
+            if (location.href.indexOf('#') !== -1)
+                history.pushState('', '', location.pathname);
+
+            ShowScreen();
+        }
+    }
+
+    function ValidateBrowserMinimumVersion(allowedBrowsers) {
+        var ua = navigator.userAgent;
+        for (var i = 0; i < allowedBrowsers.length; ++i) {
+            var navData = ua.match(new RegExp(allowedBrowsers[i].name+'/(\\d+)\\.'));
+            if (navData !== null) {
+                return parseInt(navData[1]) >= allowedBrowsers[i].version;
             }
         }
         return false;
     }
 
     function LoadServerStatus() {
-        App.Post('getAllRegistryData')
+        App.post('getAllRegistryData')
         .fail(function(resp) {
             window.alert('Erro ao consultar a versão atual do Expresso.\n'+
                 'É possível que o Expresso esteja fora do ar.');
@@ -117,7 +184,7 @@ function($, App) {
                 $('#iosBadge').attr('href', data.liteConfig.iosUrl);
             }
 
-            $('#externalLinks,#versionInfo').fadeIn(400);
+            $('#externalLinks,#versionInfo').velocity('fadeIn', { duration:400 });
         });
     }
 
@@ -136,13 +203,13 @@ function($, App) {
         }
 
         if (!ValidateLogin()) return false;
-        $('#universalAccess,#externalLinks').fadeOut(200);
+        $('#universalAccess,#externalLinks').velocity('fadeOut', { duration:200 });
         $('#btnLogin').hide();
         $('#frmLogin input').prop('disabled', true);
         $('#frmLogin .throbber').show().children('span').text('Efetuando login...');
 
         function RestoreLoginState() {
-            if (!App.IsPhone()) $('#universalAccess').show();
+            if (!App.isPhone()) $('#universalAccess').show();
             $('#externalLinks').show();
             $('#btnLogin').show();
             $('#frmLogin input').prop('disabled', false);
@@ -150,7 +217,7 @@ function($, App) {
             $('#user').focus();
         }
 
-        App.Post('login', {
+        App.post('login', {
             user:$('#user').val(),
             pwd:$('#pwd').val(),
             captcha: $('#captcha').val()
@@ -178,10 +245,19 @@ function($, App) {
                 RestoreLoginState();
             } else {
                 for (var i in response.userInfo) {
-                    App.SetUserInfo(i, response.userInfo[i]);
+                    App.setUserInfo(i, response.userInfo[i]);
                 }
-                App.SetCookie('user', $('#user').val(), 30); // store for 30 days
-                RedirectToMailModule();
+                App.setCookie('user', $('#user').val(), 30); // store for 30 days
+
+                if (Cordova) {
+                    Cordova.SaveAccount($('#user').val(), $('#pwd').val())
+                    .fail(function() {
+                        console.log('O login foi bem sucedido, mas não foi possível armazenar as credencias do usuário neste dispositivo.');
+                    })
+                    .always(RedirectToMailModule);
+                } else {
+                    RedirectToMailModule();
+                }
             }
         });
         return false;
@@ -214,7 +290,7 @@ function($, App) {
                 $('#cpNewPwd').focus();
             }
 
-            App.Post('changeExpiredPassword', {
+            App.post('changeExpiredPassword', {
                 userName: $('#user').val(), // from login form
                 oldPassword: $('#cpOldPwd').val(),
                 newPassword: $('#cpNewPwd').val()
@@ -233,7 +309,7 @@ function($, App) {
         $(document.body).css('overflow', 'hidden');
         $('#versionInfo, #frmLogin .throbber').hide();
 
-        if (App.IsPhone()) {
+        if (App.isPhone()) {
             var animTime = 300;
             $('#credent').css({
                     position: 'fixed',
@@ -241,7 +317,7 @@ function($, App) {
                     top: $('#credent').offset().top
                 })
                 .appendTo(document.body)
-                .animate({ left:-$(window).width() }, { duration:animTime, queue:false });
+                .velocity({ left:-$(window).width() }, { duration:animTime, queue:false });
             $('#frmLogin').css({
                     position: 'fixed',
                     display: 'block',
@@ -249,22 +325,22 @@ function($, App) {
                     top: $('#frmLogin').offset().top
                 })
                 .appendTo(document.body)
-                .animate({ left:$(window).width() }, {
+                .velocity({ left:$(window).width() }, {
                     duration: animTime,
                     queue: false,
                     complete: function() {
-                        App.GoToFolder('./mail');
+                        App.goToFolder('./mail');
                     }
                 });
         } else {
             var animTime = 600;
-            $('#topgray').animate({ opacity:0 }, { duration:animTime, queue:false });
-            $('#thebg').animate({ left:-$(window).width(), opacity:0 }, { duration:animTime, queue:false });
-            $('#credent').animate({ top:$(window).height() }, {
+            $('#topgray').velocity({ opacity:0 }, { duration:animTime, queue:false });
+            $('#thebg').velocity({ left:-$(window).width(), opacity:0 }, { duration:animTime, queue:false });
+            $('#credent').velocity({ top:$(window).height() }, {
                 duration: animTime,
                 queue: false,
                 complete: function() {
-                    App.GoToFolder('./mail');
+                    App.goToFolder('./mail');
                 }
             });
         }

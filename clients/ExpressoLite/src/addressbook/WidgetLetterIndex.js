@@ -9,11 +9,12 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App'
 ],
 function($, App) {
-    App.LoadCss('addressbook/WidgetLetterIndex.css');
+    App.loadCss('addressbook/WidgetLetterIndex.css');
 
     return function(options) {
         var userOpts = $.extend({
@@ -126,7 +127,7 @@ function($, App) {
             regenerateHtmlTable();
 
             $(window).resize(function(){
-                if (App.IsPhone()) {
+                if (App.isPhone()) {
                     if (($(window).height() < userOpts.reducedCharsThreshold && displayMode === 'full') ||
                         ($(window).height() >= userOpts.reducedCharsThreshold && displayMode === 'reduced')) {
                         regenerateHtmlTable();

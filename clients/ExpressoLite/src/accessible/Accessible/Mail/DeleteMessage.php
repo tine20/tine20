@@ -28,6 +28,26 @@ class DeleteMessage extends Handler
      */
     const TRASH_FOLDER = 'INBOX/Trash';
 
+    /**
+     * @var SINGLE_MESSAGE_FROM_TRASH.
+     */
+    const SINGLE_MESSAGE_FROM_TRASH = 'Mensagem apagada com sucesso';
+
+    /**
+     * @var MULTIPLE_MESSAGE_FROM_TRASH.
+     */
+    const MULTIPLE_MESSAGE_FROM_TRASH = 'Mensagens apagadas com sucesso';
+
+    /**
+     * @var SINGLE_MESSAGE_TO_TRASH.
+     */
+    const SINGLE_MESSAGE_TO_TRASH = 'Mensagem movida para a lixeira com sucesso';
+
+    /**
+     * @var MULTIPLE_MESSAGE_TO_TRASH.
+     */
+    const MULTIPLE_MESSAGE_TO_TRASH = 'Mensagens movidas para a lixeira com sucesso';
+
     public function execute($params)
     {
         $folders = TineSessionRepository::getTineSession()->getAttribute('folders');
@@ -41,13 +61,11 @@ class DeleteMessage extends Handler
 
         $liteRequestProcessor = new LiteRequestProcessor();
         $message = $liteRequestProcessor->executeRequest('DeleteMessages', (object) array(
-            'messages' => $params->messageId,
+            'messages' => $params->messageIds,
             'forever' => $isTrashFolder ? '1' : '0'
         ));
 
-        $outMsg = ($isTrashFolder) ?
-            'Mensagem apagada com sucesso.' :
-            'Mensagem movida para lixeira.';
+        $outMsg = $this->getFormattedFeedbackMsg($params->messageIds, $isTrashFolder);
 
         Dispatcher::processRequest('Core.ShowFeedback', (object) array (
             'typeMsg' => ShowFeedback::MSG_SUCCESS,
@@ -60,5 +78,29 @@ class DeleteMessage extends Handler
                 )
             )
         ));
+    }
+
+    /**
+     * Format feedback message for deleting message action.
+     *
+     * @param string $messageIds Message ids concatenated by comma
+     * @param boolean $isTrashFolder Indicate whether the current folder
+     *                               is the trash or not
+     *
+     * @return string Formatted feedback message according to the number
+     *                of messages and the current folder
+     */
+    private function getFormattedFeedbackMsg($messageIds, $isTrashFolder)
+    {
+        if ($isTrashFolder) {
+            $formattedMsg = count(explode(',', $messageIds)) > 1 ?
+                self::MULTIPLE_MESSAGE_FROM_TRASH :
+                self::SINGLE_MESSAGE_FROM_TRASH;
+        } else {
+            $formattedMsg = count(explode(',', $messageIds)) > 1 ?
+                self::MULTIPLE_MESSAGE_TO_TRASH :
+                self::SINGLE_MESSAGE_TO_TRASH;
+        }
+        return $formattedMsg;
     }
 }

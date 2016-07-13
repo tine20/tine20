@@ -85,8 +85,16 @@ class Main extends Handler
             'lnkConfirmMessageAction' => $this->makeUrl('Mail.ConfirmMessageAction', array(
                 'folderId' => $curFolder->id,
                 'folderName' => $curFolder->localName,
-                'page' => $params->page,
-            ))
+                'page' => $params->page
+            )),
+            'lnkCalendar' => $this->makeUrl('Calendar.Main'),
+            'action_delete' => ProcessMessageAction::ACTION_DELETE,
+            'lnkEmptyTrash' => $this->makeUrl('Mail.EmptyTrashConfirm', array(
+                'actionProcess' => ProcessMessageAction::ACTION_EMPTY_TRASH,
+                'folderId' => $curFolder->id,
+                'folderName' => $curFolder->localName
+            )),
+            'isTrashCurrentFolder' => $this->isTrashCurrentFolder($curFolder)
         ));
     }
 
@@ -174,5 +182,17 @@ class Main extends Handler
             ));
         }
         return $headlines;
+    }
+
+    /**
+     * Verify if the current email folder is the trash.
+     *
+     * @param stdClass $currFolder The current folder object
+     * @return boolean True if the current folder is the trash folder,
+     *                 false otherwise
+     */
+    private function isTrashCurrentFolder($currFolder)
+    {
+        return $currFolder->globalName === DeleteMessage::TRASH_FOLDER;
     }
 }

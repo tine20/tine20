@@ -8,7 +8,8 @@
  * @copyright Copyright (c) 2013-2016 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App'
 ],
 function($, App) {
@@ -57,7 +58,7 @@ function($, App) {
 
     Contacts.loadPersonal = function() {
         var defer = $.Deferred();
-        App.Post('getPersonalContacts').done(function(contacts) {
+        App.post('getPersonalContacts').done(function(contacts) {
             _WriteContactsList(contacts);
             defer.resolve();
         });
@@ -75,11 +76,11 @@ function($, App) {
         }
 
         if (addrs.length) {
-            App.Post('searchContactsByEmail', {
+            App.post('searchContactsByEmail', {
                 emails: addrs.join(','),
                 getPicture: '1'
             }).fail(function(resp) {
-                window.alert('Erro ao trazer a foto de um contato.\n' + resp.responseText);
+                App.errorMessage('Erro ao trazer a foto de um contato.', resp);
             }).done(function(contacts) {
                 var people = _ReadContactsList();
                 for (var i = 0; i < contacts.length; ++i) {

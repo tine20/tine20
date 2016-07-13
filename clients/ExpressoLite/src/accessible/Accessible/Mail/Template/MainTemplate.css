@@ -12,7 +12,7 @@
 #menu ul { margin-left:-30px; margin-right:10px; }
 
 /* --- HEADLINES --- */
-#headlinesTable { width:calc(100% - 20px); }
+#headlinesTable { width:calc(100% - 20px); border:1; }
 #headlinesTable { border:1px solid #FFF; border-collapse:collapse; }
 #headlinesTable caption { padding:5px 10px; font-weight:bold; }
 

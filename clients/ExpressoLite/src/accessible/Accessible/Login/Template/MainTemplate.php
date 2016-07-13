@@ -21,8 +21,18 @@
 </head>
 <body>
 
-<div id="credent" name="credent">
-    <img id="logo_top" name="logo_top" src="../img/logo-expressobr-top.png" alt="Logotipo do ExpressoBr Acessível"/>
+<div id="top" class="onlyForScreenReaders">
+    <div id="anchors" class="links systemLinks">
+        <nav class="contentAlign">
+            <ul>
+                <li><a href="#credent" accesskey="1">Ir para o formulário [1]</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<div id="credent">
+    <h2><img id="logo_top" src="../img/logo-expressobr-top.png" alt="Logotipo do ExpressoBr Acessível"/></h2>
     <form action="." id="frmLogin" name="frmLogin"  class="form" method="post">
         <input type="hidden" id="r" name="r" value="Login.Login">
         <div class="frmLoginFields">
@@ -35,13 +45,13 @@
              <input id="pwd" name="pwd" type="password" placeholder="Digite a senha" tabindex="2" required="required" />
         </div>
 
-        <div id="frmLoginSubmit" name="formLoginSubmit">
+        <div id="frmLoginSubmit">
              <input type="submit" value="login" tabindex="3"/>
         </div>
     </form>
 </div>
 
-<div id="expressoBrAccess" name="expressoBrAccess">
+<div id="expressoBrAccess">
     <a title="Ir para o ExpressoBr" accesskey="e" href="../">Ir para o ExpressoBr [e]</a>
 </div>
 

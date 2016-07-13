@@ -20,8 +20,8 @@
 </head>
 <body>
 
-<div id="top" name="top">
-    <div id="anchors" name="anchors" class="links systemLinks">
+<div id="top">
+    <div id="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="<?= $VIEW->destinationUrl ?>" accesskey="v"><?= $VIEW->destinationText ?> [v]</a></li>
@@ -31,10 +31,10 @@
 </div>
 
 <h2 class="anchorsTitle">Mensagens</h2>
-<div id="feedback" name="feedback" class="<?= $VIEW->typeMsg ?>" >
+<div id="feedback" class="<?= $VIEW->typeMsg ?>" >
     <p id="feedbackMessage" name="feedbackMessage"> <?= $VIEW->message ?> </p>
 
-    <div id="buttons" name="buttons" class="links linkAsButton">
+    <div id="buttons" class="links linkAsButton">
         <hr />
         <ul>
             <?php FOREACH ($VIEW->buttons AS $BUTTON) : ?>

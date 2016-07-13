@@ -8,13 +8,14 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/Contacts',
     'common-js/UrlStack'
 ],
 function($, App, Contacts, UrlStack) {
-App.LoadCss('common-js/ContactsAutocomplete.css');
+App.loadCss('common-js/ContactsAutocomplete.css');
 var ContactsAutocomplete = function(options) {
     var userOpts = $.extend({
         $txtField: null, // field to which the popup grabs the text events
@@ -154,14 +155,14 @@ var ContactsAutocomplete = function(options) {
                     $outp.empty();
                 }
 
-                App.Post('searchContactsByToken', { token:token, start:start })
+                App.post('searchContactsByToken', { token:token, start:start })
                 .always(function() {
                     $field.prop('disabled', false);
                     $tpl.find('.ContactsAutocomplete_count').show();
                     $btn.show();
                     $tpl.find('.ContactsAutocomplete_throbber').hide();
                 }).fail(function(resp) {
-                    window.alert('Erro na pesquisa de contatos no catálogo do Expresso.\n'+resp.responseText);
+                    App.errorMessage('Erro na pesquisa de contatos no catálogo do Expresso.', resp);
                 }).done(function(resp) {
                     var entries = _FormatMoreResults(resp.contacts);
                     $outp.empty().append(entries.entries);
@@ -206,7 +207,7 @@ var ContactsAutocomplete = function(options) {
             .val('Mais resultados...').show(); // maybe hidden after a search with no more results
         $tpl.find('.ContactsAutocomplete_count').text('');
 
-        if (App.IsPhone()) {
+        if (App.isPhone()) {
             UrlStack.push('#AutocompAddr', function() {
                 THIS.hide();
                 userOpts.$txtField.focus();
@@ -273,7 +274,7 @@ var ContactsAutocomplete = function(options) {
     }
 
     function _ScrollPageToPutTextAtTop() {
-        if (App.IsPhone()) { // scroll page to text field to save vertical screen space
+        if (App.isPhone()) { // scroll page to text field to save vertical screen space
             userOpts.$contentPanel.scrollTop(0);
             userOpts.$contentPanel.scrollTop(userOpts.$txtField.offset().top -
                 userOpts.$contentPanel.offset().top);
@@ -283,7 +284,7 @@ var ContactsAutocomplete = function(options) {
     THIS.hide = function() {
         if ($.contains(document.documentElement, $tpl[0])) {
             $tpl.detach();
-            if (App.IsPhone()) {
+            if (App.isPhone()) {
                 UrlStack.pop('#AutocompAddr');
             }
         }
@@ -304,7 +305,7 @@ ContactsAutocomplete.Load = function() {
     // Static method, since this class can be instantiated ad-hoc.
     return $('#ContactsAutocomplete_template').length ?
         $.Deferred().resolve().promise() :
-        App.LoadTemplate('../common-js/ContactsAutocomplete.html');
+        App.loadTemplate('../common-js/ContactsAutocomplete.html');
 };
 
 return ContactsAutocomplete;

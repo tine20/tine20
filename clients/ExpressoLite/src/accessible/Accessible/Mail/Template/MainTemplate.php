@@ -20,8 +20,8 @@
 </head>
 <body>
 
-<div id="top" name="top" >
-    <div id="anchors" name="anchors" class="links systemLinks">
+<div id="top">
+    <div id="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="#menu" accesskey="1">Ir para o menu [1]</a></li>
@@ -37,13 +37,17 @@
     </div>
 </div>
 
-<div id="menu" name="menu">
+<div id="menu">
     <h2 class="anchorsTitle">Menu</h2>
     <div class="links systemLinks">
         <ul>
-            <li><a href="<?= $VIEW->lnkRefreshFolder ?>" accesskey="a">Atualizar lista de emails da pasta <?= $VIEW->curFolder->localName ?> [a]</span></a></li>
+            <li><a href="<?= $VIEW->lnkCalendar ?>" accesskey="c">Módulo Calendário [c]</a></li>
+            <li><a href="<?= $VIEW->lnkRefreshFolder ?>" accesskey="a">Atualizar lista de emails da pasta <?= $VIEW->curFolder->localName ?> [a]</a></li>
             <li><a href="<?= $VIEW->lnkChangeFolder ?>" accesskey="p">Selecionar outra pasta [p]</a></li>
-            <li><a href="<?= $VIEW->lnkComposeMessage ?>" accesskey="n">Escrever novo email [n]</span></a></li>
+            <li><a href="<?= $VIEW->lnkComposeMessage ?>" accesskey="n">Escrever novo email [n]</a></li>
+            <?php IF($VIEW->isTrashCurrentFolder) : ?>
+                <li><a href="<?= $VIEW->lnkEmptyTrash ?>" accesskey="x">Esvaziar pasta lixeira [x]</span></a></li>
+            <?php ENDIF; ?>
             <li><a href="<?= $VIEW->lnkLogoff ?>" title="Sair do expressobr acessível" accesskey="s">Sair do sistema [s]</a></li>
         </ul>
     </div>
@@ -60,10 +64,10 @@
 </div>
 
 <form action="<?= $VIEW->lnkConfirmMessageAction ?>" method="post">
-<div id="headlines" name="headlines">
+<div id="headlines">
     <h2 class="anchorsTitle">Lista de emails</h2>
     <?php IF ($VIEW->curFolder->totalMails > 0) : ?>
-        <table id="headlinesTable" border="1" class="clickableCell contentAlign">
+        <table id="headlinesTable" class="clickableCell contentAlign">
             <caption>
                 A pasta <?= $VIEW->curFolder->localName ?> contém <?= $VIEW->curFolder->totalMails ?> emails,
                 <?php IF ($VIEW->curFolder->unreadMails > 0) : ?>
@@ -73,9 +77,9 @@
             </caption>
             <thead>
                 <tr>
-                    <th id="id">Número</th>
+                    <th id="id" aria-hidden="true">Número</th>
                     <th id="senderSubject">Remetente / Assunto</th>
-                    <th id="date">Data</th>
+                    <th id="date" aria-hidden="true">Data</th>
                     <th id="observations">Observações</th>
                     <th id="mark" aria-hidden="true">Marcar</th>
                 </tr>
@@ -86,20 +90,27 @@
                 FOREACH ($VIEW->headlines AS $HEADLINE) :
                 ?>
                 <tr class="<?= $HEADLINE->unread ? 'markUnread' : '' ?>">
-                    <td headers="id" class="alignCenter">
+                    <td headers="id" class="alignCenter" aria-hidden="true">
                         <span><?= $SEQ ?></span>
                     </td>
                     <td headers="senderSubject" class="alignLeft">
                         <a href="<?= $HEADLINE->lnkOpen ?>" title="Abrir mensagem <?= $SEQ ?>">
-                            De: <span> <?= $HEADLINE->from->name ?></span>
-                            <br />
-                            <span ><?= $HEADLINE->subject ?></span>
+                            <span aria-hidden="true"> <!-- NOT READ BY SCREEN READER -->
+                                De: <span> <?= $HEADLINE->from->name ?></span><br />
+                                <?= $HEADLINE->subject ?>
+                            </span>
+                            <span class="onlyForScreenReaders"> <!-- THIS IS NOT VISIBLE -->
+                                 Assunto: <?= $HEADLINE->subject ?>,
+                                 Enviado por:<?= $HEADLINE->from->name ?>,
+                                 <?= $HEADLINE->received ?>,
+                                 Abrir mensagem <?= $SEQ; ?>
+                            </span>
                         </a>
                     </td>
-                    <td headers="date" class="alignCenter">
+                    <td headers="date" class="alignCenter" aria-hidden="true">
                         <span><?= $HEADLINE->received ?></span>
                     </td>
-                    <td headers="observations" class="alignLeft">
+                    <td headers="observations" class="alignLeft" aria-hidden="true"> <!-- NOT READ BY SCREEN READER -->
                         <?php IF ($HEADLINE->hasAttachment) : ?>
                         <div class="flags flag-attach" title="Este email contém anexo">&nbsp;</div>
                         <?php ENDIF; ?>
@@ -127,10 +138,11 @@
 </div>
 
 <?php IF ($VIEW->curFolder->totalMails > 0) : ?>
-<div id="actions" name="actions">
+<div id="actions">
     <h2 class="anchorsTitle">Ações</h2>
     <div class="contentAlign">
         <button type="submit" name="actionProcess" value="<?= $VIEW->action_mark_unread ?>">Marcar como não lido</button>
+        <button type="submit" name="actionProcess" value="<?= $VIEW->action_delete ?>">Apagar marcados</button>
     </div>
 </div>
 
@@ -143,7 +155,7 @@
 </form>
 
 <?php IF ($VIEW->curFolder->totalMails > $VIEW->requestLimit) : ?>
-<div id="pagination" name="pagination">
+<div id="pagination">
     <h2 class="anchorsTitle">Paginação</h2>
     <div class="links linkAsButton">
         <ul>

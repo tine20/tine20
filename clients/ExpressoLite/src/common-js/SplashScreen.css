@@ -1,0 +1,21 @@
+/*!
+ * Expresso Lite
+ * Styles for SplashScreen object.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Charles Wust <charles.wust@serpro.gov.br>
+ * @copyright Copyright (c) 2016 Serpro (http://www.serpro.gov.br)
+ */
+
+#SplashScreen_template {
+    display:none;
+}
+
+#SplashScreen_screenDiv {
+    position:absolute;
+    z-index: 10;
+    width: 100%;
+    top: calc(50% - 48px - 8px);
+    text-align: center;
+}

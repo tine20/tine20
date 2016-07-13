@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'calendar/DateCalc'
 ],
 function($, App, DateCalc) {
-App.LoadCss('calendar/WidgetMonth.css');
+App.loadCss('calendar/WidgetMonth.css');
 return function(options) {
     var userOpts = $.extend({
         events: null, // Events cache object
@@ -31,7 +32,7 @@ return function(options) {
     THIS.load = function() {
         return $('#Month_template').length ? // load once
             $.Deferred().resolve().promise() :
-            App.LoadTemplate('WidgetMonth.html');
+            App.loadTemplate('WidgetMonth.html');
     };
 
     THIS.hide = function() {
@@ -74,22 +75,28 @@ return function(options) {
     function _SetWidgetEvents() {
         $templateView.find('.Month_prev').on('click', function() {
             $(this).blur();
+            var oldDate = curDate;
             curDate = DateCalc.prevMonth(DateCalc.firstOfMonth(curDate));
             _LoadEventsOfCurMonth().done(function() {
                 onMonthChangedCB(); // invoke user callback
+            }).fail(function() {
+                curDate = oldDate;
             });
         });
 
         $templateView.find('.Month_next').on('click', function() {
             $(this).blur();
+            var oldDate = curDate;
             curDate = DateCalc.nextMonth(DateCalc.firstOfMonth(curDate));
             _LoadEventsOfCurMonth().done(function() {
                 onMonthChangedCB(); // invoke user callback
+            }).fail(function() {
+                curDate = oldDate;
             });
         });
 
         $templateView.on('click', '.Month_event', function() {
-            if (!App.IsPhone()) { // single event click works only on desktop
+            if (!App.isPhone()) { // single event click works only on desktop
                 THIS.clearDaySelected();
                 var $ev = $(this);
                 var $day = $ev.parents('.Month_day');
@@ -99,7 +106,7 @@ return function(options) {
         });
 
         $templateView.on('click', '.Month_day', function() {
-            if (App.IsPhone()) { // whole day click works only on phones
+            if (App.isPhone()) { // whole day click works only on phones
                 THIS.clearDaySelected();
                 var $day = $(this);
                 $day.addClass('Month_daySelected');
@@ -128,10 +135,15 @@ return function(options) {
             $loading.remove();
         }).done(function() {
             _RenderCells();
-            $templateView.fadeIn(userOpts.animationTime, function() {
-                defer.resolve();
+            $templateView.velocity('fadeIn', {
+                duration: userOpts.animationTime,
+                complete: function() {
+                    defer.resolve();
+                }
             });
         }).fail(function() {
+            $templateView.show();
+            //restore previous view
             defer.reject();
         });
         return defer.promise();

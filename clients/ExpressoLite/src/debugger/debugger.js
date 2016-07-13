@@ -8,12 +8,10 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-require.config({
-    baseUrl: '..',
-    paths: { jquery: 'common-js/jquery.min' }
-});
+require.config({ baseUrl:'..' });
 
-require(['jquery',
+require([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/Layout',
     'common-js/SimpleMenu',
@@ -49,7 +47,7 @@ $(document).ready(function() {
 
     function initLayout() {
         Cache.layout = new Layout({
-            userMail: App.GetUserInfo('mailAddress'),
+            userMail: App.getUserInfo('mailAddress'),
             $menu: $('#leftMenu'),
             $middle: $('#mainContent')
         });
@@ -59,7 +57,7 @@ $(document).ready(function() {
             window.alert('Busca não disponível no módulo Debugger');
         })
         .onKeepAlive(function() {
-            App.Post('checkSessionStatus');
+            App.post('checkSessionStatus');
             // we just want to keep the session alive,
             // so no need for onDone
         });
