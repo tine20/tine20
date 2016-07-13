@@ -375,7 +375,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $updatedFileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$updatedFileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$updatedFileObject->id}");
 
@@ -856,7 +856,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $fileObject->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
             $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$name}");
 
@@ -1060,7 +1060,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         // quick hack for 2014.11 - will be resolved correctly in 2015.11-develop
         if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
             $fileObject->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
-            header('X-OC-MTime: accepted');
+            Tinebase_Server_WebDAV::getResponse()->setHeader('X-OC-MTime', 'accepted');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$fileObject->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_node->name}");
 
@@ -1204,15 +1204,29 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Scanning database for deleted files ...');
-        
+
         // get all file objects from db and check filesystem existance
+        $filter = new Tinebase_Model_Tree_FileObjectFilter();
+        $start = 0;
+        $limit = 500;
         $toDeleteIds = array();
-        $fileObjects = $this->_fileObjectBackend->getAll();
-        foreach ($fileObjects as $fileObject) {
-            if ($fileObject->type == Tinebase_Model_Tree_FileObject::TYPE_FILE && $fileObject->hash && ! file_exists($fileObject->getFilesystemPath())) {
-                $toDeleteIds[] = $fileObject->getId();
+
+        do {
+            $pagination = new Tinebase_Model_Pagination(array(
+                'start' => $start,
+                'limit' => $limit,
+                'sort' => 'id',
+            ));
+
+            $fileObjects = $this->_fileObjectBackend->search($filter, $pagination);
+            foreach ($fileObjects as $fileObject) {
+                if ($fileObject->type == Tinebase_Model_Tree_FileObject::TYPE_FILE && $fileObject->hash && !file_exists($fileObject->getFilesystemPath())) {
+                    $toDeleteIds[] = $fileObject->getId();
+                }
             }
-        }
+
+            $start += $limit;
+        } while ($fileObjects->count() >= $limit);
         
         $nodeIdsToDelete = $this->_treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'     => 'object_id',

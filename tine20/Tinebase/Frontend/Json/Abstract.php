@@ -96,10 +96,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     {
         $ret = NULL;
         if ($this->_configuredModels) {
-            foreach ($this->_configuredModels as $modelName) {
-                $recordClass = $this->_applicationName . '_Model_' . $modelName;
-                $ret[$modelName] = $recordClass::getConfiguration()->getFrontendConfiguration();
-            }
+            return Tinebase_ModelConfiguration::getFrontendConfigForModels($this->_configuredModels, $this->_applicationName);
         }
         
         return $ret;
@@ -220,14 +217,38 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : $this->_prepareParameter($_filter);
 
         if (is_array($decodedFilter)) {
-            $filter = new $filterModel(array());
+            $filter = $this->_getFilterObject($filterModel);
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
             $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
         } else if ($_throwExceptionIfEmpty) {
             throw new Tinebase_Exception_InvalidArgument('Filter must not be empty!');
         } else {
-            $filter = new $filterModel(array());
+            $filter = $this->_getFilterObject($filterModel);
+        }
+
+        return $filter;
+    }
+
+    /**
+     * get the filter group object
+     *
+     * @param $filterModel
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _getFilterObject($filterModel)
+    {
+        if (! class_exists($filterModel)) {
+            $configuredModel = preg_replace('/Filter$/', '', $filterModel);
+
+            // TODO check if model class exists?
+            //if (class_exists($configuredModel))
+
+            // use generic filter model
+            $filter = new Tinebase_Model_Filter_FilterGroup();
+            $filter->setConfiguredModel($configuredModel);
+        } else {
+            $filter = new $filterModel();
         }
 
         return $filter;
@@ -608,7 +629,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _getPluginForFilterModel($filterModel)
     {
-        if(isset(self::$_filterPlugins[$filterModel])) {
+        if (isset(self::$_filterPlugins[$filterModel])) {
             return self::$_filterPlugins[$filterModel];
         }
         return $filterModel;

@@ -362,6 +362,104 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     });
             }, this);
         }
+
+        this.window.relayEvents(this, ['resize']);
+    },
+
+    /**
+     * generic form layout
+     */
+    getFormItems: function() {
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            activeTab: 0,
+            border: false,
+            defaults: {
+                hideMode: 'offsets'
+            },
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            items:[
+                {
+                    title: this.i18nRecordName,
+                    autoScroll: true,
+                    border: false,
+                    frame: true,
+                    layout: 'border',
+                    items: [Ext.applyIf(this.getRecordFormItems(), {
+                        region: 'center',
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        formDefaults: {
+                            xtype:'textfield',
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1/2
+                        },
+                    })].concat(this.getEastPanel())
+                }, new Tine.widgets.activities.ActivitiesTabPanel({
+                    app: this.appName,
+                    record_id: this.record.id,
+                    record_model: this.modelName
+                })
+            ]
+        };
+    },
+
+    getEastPanel: function() {
+        var items = [];
+        if (this.recordClass.hasField('description')) {
+            items.push(new Ext.Panel({
+                title: i18n._('Description'),
+                iconCls: 'descriptionIcon',
+                layout: 'form',
+                labelAlign: 'top',
+                border: false,
+                items: [{
+                    style: 'margin-top: -4px; border 0px;',
+                    labelSeparator: '',
+                    xtype: 'textarea',
+                    name: 'description',
+                    hideLabel: true,
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100% 100%',
+                    emptyText: i18n._('Enter description'),
+                    requiredGrant: 'editGrant'
+                }]
+            }));
+        }
+
+        if (this.recordClass.hasField('tags')) {
+            items.push(new Tine.widgets.tags.TagPanel({
+                app: this.appName,
+                border: false,
+                bodyStyle: 'border:1px solid #B5B8C8;'
+            }));
+        }
+
+        return items.length ? {
+            layout: 'accordion',
+            animate: true,
+            region: 'east',
+            width: 210,
+            split: true,
+            collapsible: true,
+            collapseMode: 'mini',
+            header: false,
+            margins: '0 5 0 5',
+            border: true,
+            items: items
+        } : [];
+    },
+
+    getRecordFormItems: function() {
+        return new Tine.widgets.form.RecordForm({
+            recordClass: this.recordClass
+        });
     },
 
     /**
@@ -1017,12 +1115,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     onRequestFailed: function(exception) {
         this.saving = false;
-        
-        if (exception.code == 629) {
+
+        if (this.exceptionHandlingMap && this.exceptionHandlingMap[exception.code] && typeof this.exceptionHandlingMap[exception.code] === 'function') {
+            this.exceptionHandlingMap[exception.code](exception);
+
+        } else if (exception.code == 629) {
             this.onDuplicateException.apply(this, arguments);
+
         } else {
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
         }
+
         this.loadMask.hide();
     },
     

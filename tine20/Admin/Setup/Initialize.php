@@ -19,13 +19,13 @@ class Admin_Setup_Initialize extends Setup_Initialize
     
     /**
      * Override method because admin app requires special rights
-     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
+     * @see tine20/Setup/Setup_Initialize::createInitialRights($_application)
      * 
      * @todo make hard coded role name ('admin role') configurable
      */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
+    public static function createInitialRights(Tinebase_Model_Application $_application)
     {
-        //do not call parent::_createInitialRights(); because this app is fopr admins only
+        //do not call parent::createInitialRights(); because this app is for admins only
         
         $roles = Tinebase_Acl_Roles::getInstance();
         $adminRole = $roles->getRoleByName('admin role');

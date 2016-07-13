@@ -326,6 +326,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     onChoseOther: function() {
         this.collapse();
         this.dlg = new Tine.widgets.container.selectionDialog({
+            recordClass: this.recordClass,
             allowNodeSelect: this.allowNodeSelect,
             containerName: this.containerName,
             containersName: this.containersName,
@@ -443,6 +444,10 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      */
     allowNodeSelect: false,
     /**
+     * @cfg {Tine.data.Record} recordClass
+     */
+    recordClass: false,
+    /**
      * @cfg {string} containerName
      * name of container (singular)
      */
@@ -506,6 +511,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         }
 
         this.tree = new Tine.widgets.container.TreePanel({
+            recordClass: this.recordClass,
             allowMultiSelection: false,
             containerName: this.TriggerField.containerName,
             containersName: this.TriggerField.containersName,

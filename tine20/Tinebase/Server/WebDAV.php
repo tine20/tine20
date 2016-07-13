@@ -108,7 +108,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         
         $aclPlugin = new \Sabre\DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-        $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
+        $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS);
         
         $aclPlugin->principalSearchPropertySet = array(
             '{DAV:}displayname'                                                   => 'Display name',
@@ -133,6 +133,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
+        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
 
@@ -165,7 +166,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     {
         return self::$_server ? self::$_server->httpRequest : new Sabre\HTTP\Request();
     }
-    
+
+    /**
+     * helper to return response
+     *
+     * @return Sabre\HTTP\Response
+     */
+    public static function getResponse()
+    {
+        return self::$_server ? self::$_server->httpResponse : new Sabre\HTTP\Response();
+    }
+
     /**
     * returns request method
     *

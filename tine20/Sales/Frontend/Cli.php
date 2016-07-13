@@ -46,6 +46,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function create_auto_invoices($_opts)
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' create_auto_invoices ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         $executionLifeTime = Tinebase_Core::setExecutionLifeTime(3600*8);
         
         $this->_addOutputLogWriter();
@@ -141,6 +146,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function transferContractsToOrderConfirmation()
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' transferContractsToOrderConfirmation ran allthoug feature ' . Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE . ' is disabled');
+            return false;
+        }
+
         $contractController = Sales_Controller_Contract::getInstance();
         $ocController = Sales_Controller_OrderConfirmation::getInstance();
         $rel = Tinebase_Relations::getInstance();
@@ -234,6 +244,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     public function setLastAutobill()
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' setLastAutobill ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         $cc = Sales_Controller_Contract::getInstance();
         $pc = Sales_Controller_ProductAggregate::getInstance();
         
@@ -277,6 +292,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function removeUnbilledAutoInvoices(Sales_Model_Contract $contract = NULL)
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' removeUnbilledAutoInvoices ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         $c = Sales_Controller_Invoice::getInstance();
         
         $f = new Sales_Model_InvoiceFilter(array(
@@ -319,6 +339,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function transferBillingInformation()
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' transferBillingInformation ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         Sales_Controller_Contract::getInstance()->transferBillingInformation();
     }
     
@@ -327,6 +352,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateBillingInformation()
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' updateBillingInformation ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         Sales_Controller_Contract::getInstance()->transferBillingInformation(TRUE);
     }
     
@@ -335,6 +365,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateLastAutobillOfProductAggregates()
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' updateLastAutobillOfProductAggregates ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
+            return false;
+        }
+
         Sales_Controller_Contract::getInstance()->updateLastAutobillOfProductAggregates();
     }
 }

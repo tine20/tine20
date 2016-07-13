@@ -99,7 +99,7 @@ class Tinebase_Application
     public function getApplicationById($_applicationId)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
-        
+
         $application = $this->getApplications()->getById($applicationId);
         
         if (!$application) {
@@ -124,7 +124,7 @@ class Tinebase_Application
         if(empty($_applicationName) || ! is_string($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
-        
+
         $application = $this->getApplications()->find('name', $_applicationName);
         
         if (!$application) {
@@ -489,6 +489,12 @@ class Tinebase_Application
      */
     public function removeApplicationData(Tinebase_Model_Application $_application)
     {
+        try {
+            Tinebase_FileSystem::getInstance()->rmdir($_application->getId(), true);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // nothing to do
+        }
+
         $dataToDelete = array(
             'container'     => array('tablename' => ''),
             'config'        => array('tablename' => ''),
@@ -513,9 +519,9 @@ class Tinebase_Application
                 case 'config':
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());
                     break;
-                  case 'customfield':
-                      $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
-                      break;
+                case 'customfield':
+                    $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
+                    break;
                 default:
                     if ((isset($info['tablename']) || array_key_exists('tablename', $info)) && ! empty($info['tablename'])) {
                         try {

@@ -94,6 +94,18 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
+
+    protected static $_i = 0;
+
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        static::$_i += 1;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' ' . $this->_i);
+
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * converts a string or Addressbook_Model_List to a list id

@@ -23,6 +23,7 @@ class Tinebase_WebDav_AllTests
         $suite->addTestSuite('Tinebase_WebDav_Plugin_OwnCloudTest');
         $suite->addTestSuite('Tinebase_WebDav_Plugin_PrincipalSearchTest');
         $suite->addTestSuite('Tinebase_WebDav_Plugin_SyncTokenTest');
+        $suite->addTestSuite('Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest');
         $suite->addTestSuite('Tinebase_WebDav_RootTest');
 
         return $suite;

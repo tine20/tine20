@@ -73,8 +73,25 @@ class Filemanager_Model_DownloadLink extends Tinebase_Record_Abstract
         
         // always set url here (or is there a better place?)
         if ($this->getId()) {
-            $this->url = Tinebase_Core::getUrl() . '/download/show/' . $this->getId();
+            $this->url = $this->getDownloadUrl();
         }
+    }
+
+    /**
+     * get download url for link
+     *
+     * @param string $action one of show|get
+     * @return string
+     */
+    public function getDownloadUrl($action = 'show')
+    {
+        $baseURL = Filemanager_Config::getInstance()->get(
+            Filemanager_Config::PUBLIC_DOWNLOAD_URL,
+            Tinebase_Core::getUrl() . '/download'
+        );
+        $downloadURL = $baseURL . '/' . $action . '/' . $this->getId();
+
+        return $downloadURL;
     }
     
     /**

@@ -1,5 +1,6 @@
 Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
     paperHeight: 155,
+    useHtml2Canvas: false,
 
     generateBody: function(view) {
         var daysHtml = this.splitDays(view.store, view.dateMesh[0], view.dateMesh.length),

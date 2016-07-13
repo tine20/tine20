@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -435,17 +435,17 @@ class Setup_Update_Abstract
      */
     protected function _createSetupuser()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Creating new setupuser.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new setupuser.');
 
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         $setupUser = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'setupuser',
-            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-            'visibility'            => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
-            'accountPrimaryGroup'   => $adminGroup->getId(),
-            'accountLastName'       => 'setupuser',
-            'accountDisplayName'    => 'setupuser',
-            'accountExpires'        => NULL,
+            'accountLoginName' => 'setupuser',
+            'accountStatus' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility' => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup' => $adminGroup->getId(),
+            'accountLastName' => 'setupuser',
+            'accountDisplayName' => 'setupuser',
+            'accountExpires' => NULL,
         ));
         try {
             $setupUser = Tinebase_User::getInstance()->addUser($setupUser);
@@ -458,5 +458,36 @@ class Setup_Update_Abstract
         }
 
         return $setupUser;
+    }
+
+    /**
+     * update schema of modelconfig enabled app
+     *
+     * @param string $appName
+     * @param array $modelNames
+     * @throws Setup_Exception_NotFound
+     */
+    public function updateSchema($appName, $modelNames)
+    {
+        $updateRequired = false;
+        $setNewVersions = array();
+        foreach($modelNames as $modelName) {
+            $modelConfig = $modelName::getConfiguration();
+            $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());
+            $currentVersion = $this->getTableVersion($tableName);
+            $schemaVersion = $modelConfig->getVersion();
+            if ($currentVersion < $schemaVersion) {
+                $updateRequired = true;
+                $setNewVersions[$tableName] = $schemaVersion;
+            }
+        }
+
+        if ($updateRequired) {
+            Setup_SchemaTool::updateSchema($appName, $modelNames);
+
+            foreach($setNewVersions as $table => $version) {
+                $this->setTableVersion($table, $version);
+            }
+        }
     }
 }

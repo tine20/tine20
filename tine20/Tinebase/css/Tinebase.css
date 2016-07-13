@@ -7,6 +7,16 @@ html, body {
     height:100%;
 }
 
+.ApplicationIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/preferences-plugin.png); !important;
+}
+.x-btn-medium .ApplicationIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/preferences-plugin.png); !important;
+}
+.x-btn-large .ApplicationIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/preferences-plugin.png); !important;
+}
+
 /* ----- actions -------------------------------------------------------------*/
 .action_add {
     background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;

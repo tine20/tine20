@@ -77,7 +77,7 @@
         </field>
         <field>
             <source>Abgeschrieben</source>
-            <destination>depreciate_status</destination>
+            <destination>deprecated_status</destination>
         </field>
         
         <field>

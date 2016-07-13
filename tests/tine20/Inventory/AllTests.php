@@ -28,6 +28,7 @@ class Inventory_AllTests
         $suite->addTestSuite('Inventory_JsonTest');
         $suite->addTestSuite('Inventory_ControllerTest');
         $suite->addTestSuite('Inventory_Import_AllTests');
+        $suite->addTestSuite('Inventory_DoctrineModelTest');
         return $suite;
     }
 }

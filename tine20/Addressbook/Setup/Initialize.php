@@ -154,25 +154,25 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             )),
         ))));
     }
-    
-    /**
-     * Override method because this app requires special rights
-     * @see tine20/Setup/Setup_Initialize#_createInitialRights($_application)
-     * 
-     */
-    protected function _createInitialRights(Tinebase_Model_Application $_application)
-    {
-        parent::_createInitialRights($_application);
 
+    /**
+     * init grants of internal addressbook
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _initializeInternalAddressbook()
+    {
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
-        
+
         // give anyone read rights to the internal addressbook
         // give Administrators group read/edit/admin rights to the internal addressbook
-        Tinebase_Container::getInstance()->addGrants($this->_getInternalAddressbook(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
+        $internalAddressbook = $this->_getInternalAddressbook();
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
         ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($this->_getInternalAddressbook(), Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
+        Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
             Tinebase_Model_Grants::GRANT_READ,
             Tinebase_Model_Grants::GRANT_EDIT,
             Tinebase_Model_Grants::GRANT_ADMIN
