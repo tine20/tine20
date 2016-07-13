@@ -37,7 +37,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @throws Tinebase_Record_Exception
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
-    
+
+    /**
+     * returns the configuration object
+     *
+     * @return Tinebase_ModelConfiguration|NULL
+     */
+    public static function getConfiguration();
+
     /**
      * sets identifier of record
      * 

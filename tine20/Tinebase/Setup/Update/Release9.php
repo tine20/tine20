@@ -203,4 +203,55 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->createTable('path', $declaration);
         $this->setApplicationVersion('Tinebase', '9.7');
     }
+
+    /**
+     * update to 9.8
+     *
+     * @see xxx: add numberables
+     */
+    public function update_7()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+            <name>numberable</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>shard</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>shard_number</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>shard</name>
+                    </field>
+                    <field>
+                        <name>number</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>');
+
+        $this->createTable('numberable', $declaration);
+        $this->setApplicationVersion('Tinebase', '9.8');
+    }
 }

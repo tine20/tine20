@@ -614,6 +614,9 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($_duplicateCheck) {
                 $this->_duplicateCheck($_record);
             }
+
+            $this->_setAutoincrementValues($_record);
+
             $createdRecord = $this->_backend->create($_record);
             $this->_inspectAfterCreate($createdRecord, $_record);
             $this->_setRelatedData($createdRecord, $_record, null, TRUE);
@@ -636,7 +639,76 @@ abstract class Tinebase_Controller_Record_Abstract
         
         return $this->get($createdRecord);
     }
-    
+
+    protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
+    {
+        $className = get_class($_record);
+        $configuration = $_record->getConfiguration();
+        if (null === $configuration) {
+            return;
+        }
+
+        foreach ($configuration->getAutoincrementFields() as $fieldDef) {
+            $createNewValue = false;
+            $checkValue = false;
+            $freeOldValue = false;
+            $numberable = null;
+
+            // if new record field is not set and if there is no old record, we assign a new value
+            if (!isset($_record->{$fieldDef['fieldName']})) {
+                if (null === $_oldRecord) {
+                    $createNewValue = true;
+                }
+
+            } else {
+
+                // if new record field is set to empty string, we assign a new value
+                if (empty($_record->{$fieldDef['fieldName']})) {
+                    $createNewValue = true;
+
+                // if new record field is populated and it differs from the old record value, we need to check the value
+                } elseif (null !== $_oldRecord) {
+                    if ($_record->{$fieldDef['fieldName']} != $_oldRecord->{$fieldDef['fieldName']}) {
+                        $checkValue = true;
+                    }
+
+                // if new record field is populated and there is no old record, we need to check the value
+                } else {
+                    $checkValue = true;
+                }
+            }
+
+            if (true === $checkValue || true === $createNewValue) {
+                $numberable = Tinebase_Numberable::getNumberable($className, $fieldDef['fieldName'], $fieldDef);
+            }
+
+            if (true === $checkValue) {
+                if (false === $numberable->insert($_record->{$fieldDef['fieldName']})) {
+                    // if the check failed and we have an old value, we keep on using the old value
+                    if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
+                        $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
+                    // else we create a new one
+                    } else {
+                        $createNewValue = true;
+                    }
+                } else {
+                    $freeOldValue = true;
+                }
+            }
+
+            if (true === $createNewValue) {
+                $_record->{$fieldDef['fieldName']} = $numberable->getNext();
+                if (null !== $_oldRecord && !empty($_oldRecord->{$fieldDef['fieldName']})) {
+                    $freeOldValue = true;
+                }
+            }
+
+            if (true === $freeOldValue) {
+                $numberable->free($_oldRecord->{$fieldDef['fieldName']});
+            }
+        }
+    }
+
     /**
      * handle record exception
      * 
@@ -911,6 +983,8 @@ abstract class Tinebase_Controller_Record_Abstract
 //             if ($_duplicateCheck) {
 //                 $this->_duplicateCheck($_record);
 //             }
+
+            $this->_setAutoincrementValues($_record, $currentRecord);
             
             $updatedRecord = $this->_backend->update($_record);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

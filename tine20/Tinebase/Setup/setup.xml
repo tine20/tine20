@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>9.7</version>
+    <version>9.8</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3477,6 +3477,46 @@
                     <name>record_id</name>
                     <field>
                         <name>record_id</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>numberable</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>
+                <field>
+                    <name>bucket</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>bucket_number</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>bucket</name>
+                    </field>
+                    <field>
+                        <name>number</name>
                     </field>
                 </index>
             </declaration>
