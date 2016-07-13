@@ -65,7 +65,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
         var newLocale = localeRecord.get('locale');
         
         if (newLocale !== currentLocale) {
-            Ext.MessageBox.wait(i18n._('setting new language...'), i18n._('Please Wait'));
+            Ext.MessageBox.wait(i18n._('Setting new language...'), i18n._('Please Wait'));
             
             Ext.Ajax.request({
                 scope: this,

@@ -36,6 +36,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
    * @param {Ext.Component} component The component to print
    */
   print: function(component) {
+    this.mask = new Ext.LoadMask(Ext.getBody(), {msg: i18n._("Preparing print, please wait...")});
+    this.mask.show();
+
     return this[this.printStrategy + 'Print'](component);
   },
   
@@ -145,6 +148,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
       });
     } else {
       win.print();
+      this.mask.hide();
       if (!this.debug) {
         win.close();
       }

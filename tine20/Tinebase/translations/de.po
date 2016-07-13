@@ -581,7 +581,7 @@ msgid "Timezone"
 msgstr "Zeitzone"
 
 #: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
+msgid "Setting new timezone..."
 msgstr "Neue Zeitzone setzen..."
 
 #: js/widgets/account/PickerGridPanel.js:158
@@ -1333,7 +1333,7 @@ msgid "Language"
 msgstr "Sprache"
 
 #: js/widgets/LangChooser.js:68
-msgid "setting new language..."
+msgid "Setting new language..."
 msgstr "neue Sprache wird eingestellt..."
 
 #: js/widgets/CountryCombo.js:34

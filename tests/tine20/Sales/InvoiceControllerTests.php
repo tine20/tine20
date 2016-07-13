@@ -24,7 +24,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      */
     protected function setUp()
     {
-        if ($this->_dbIsPgsql()) {
+        if ($this->_dbIsPgsql() || ! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
         }
 
