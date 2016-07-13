@@ -80,6 +80,11 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
     const CONTENT_TYPE_MESSAGE_DELIVERYSTATUS = 'message/delivery-status';
 
     /**
+     * content type message/disposition-notification
+     */
+    const CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION = 'message/disposition-notification';
+
+    /**
      * content type text/calendar
      */
     const CONTENT_TYPE_CALENDAR = 'text/calendar';
@@ -704,13 +709,26 @@ class Expressomail_Model_Message extends Tinebase_Record_Abstract implements Tin
                 // found the alternative body part
                 $result[$foundParts[$alternativeType]] = $_structure['parts'][$foundParts[$alternativeType]];
             }
-            // Add CONTENT_TYPE_MESSAGE_RFC822 and CONTENT_TYPE_MESSAGE_DELIVERYSTATUS
+            // Add CONTENT_TYPE_MESSAGE_RFC822 and CONTENT_TYPE_MESSAGE_DELIVERYSTATUS and CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION
             // parts if Content-Type == message/report
             if ($_structure['subType'] == 'report') {
-                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]] =
-                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]];
-                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]] =
-                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]];
+                    foreach($foundParts as $type => $partIndex){
+
+                        switch ($type){
+                            case self::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION:
+                                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION]] =
+                                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION]];
+                                break;
+                            case self::CONTENT_TYPE_MESSAGE_RFC822:
+                                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]] =
+                                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_RFC822]];
+                                break;
+                            case self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS:
+                                $result[$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]] =
+                                    $_structure['parts'][$foundParts[self::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS]];
+                                break;
+                        }
+                    }
             }
 
         } else {

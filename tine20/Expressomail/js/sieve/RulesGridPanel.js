@@ -309,9 +309,9 @@ Tine.Expressomail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
                 if (condition.header == filterModel.field || (condition.header === 'From' && filterModel.field == 'fromheader')) {
                     header = filterModel.label;
                     if (condition.header == 'size') {
-                        comperator = (condition.comperator == 'over') ? i18n._('is greater than') : i18n._('is less than');
+                        comperator = (condition.comperator == 'over') ? _('is greater than') : _('is less than');
                     } else {
-                        comperator = i18n._(condition.comperator);
+                        comperator = _(condition.comperator);
                     }
                     found = true;
                 }

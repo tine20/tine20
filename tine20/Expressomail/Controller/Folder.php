@@ -611,6 +611,16 @@ class Expressomail_Controller_Folder extends Tinebase_Controller_Abstract implem
         $imap = Expressomail_Backend_ImapFactory::factory($_account);
         $return = $imap->setFolderAcls(Expressomail_Model_Folder::encodeFolderName($foldername),$_acls);
 
+        // clean all folders data related to $_accountId from cache
+        $cache = Tinebase_Core::getCache();
+        $cache->clean(
+            Zend_Cache::CLEANING_MODE_MATCHING_TAG,
+            array(
+                Expressomail_Backend_Folder::EXPRESSOMAIL_MODEL_FOLDER,
+                $_accountId,
+            )
+        );
+
         return $return;
     }
 

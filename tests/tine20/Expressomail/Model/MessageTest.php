@@ -98,9 +98,9 @@ class Expressomail_Model_MessageTest extends PHPUnit_Framework_TestCase
         
         $result = Expressomail_Message::convertFromTextToHTML($plaintextMessage);
         
-        $this->assertEquals('blabla<br /><blockquote class="felamimail-body-blockquote">lalülüüla<br /><br />'
-            . '<blockquote class="felamimail-body-blockquote"><blockquote class="felamimail-body-blockquote">lala<br />'
-            . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br /><blockquote class="felamimail-body-blockquote">jojo<br /></blockquote>jojo<br />', $result);
+        $this->assertEquals('blabla<br /><blockquote class="expressomail-body-blockquote">lalülüüla<br /><br />'
+            . '<blockquote class="expressomail-body-blockquote"><blockquote class="expressomail-body-blockquote">lala<br />'
+            . '</blockquote><br />xyz<br /></blockquote></blockquote><br /><br /><blockquote class="expressomail-body-blockquote">jojo<br /></blockquote>jojo<br />', $result);
     }
     
     /**

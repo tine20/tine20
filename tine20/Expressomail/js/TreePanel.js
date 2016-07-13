@@ -815,12 +815,7 @@ Ext.extend(Tine.Expressomail.TreePanel, Ext.tree.TreePanel, {
                 var parentId = newRecord.get('parent_path').split('/').pop(),
                     parentNode = this.getNodeById(parentId);
                 parentNode.sort(this.sortFolders); // sort childnodes from parent
-                
-               // if renamed node is the selectedNode, so select it and reload messages
-               if(node.id == selectedNode.id){
-                   sm.select(selectedNode, Ext.EventObject, true);
-               }
-                
+                sm.select(selectedNode, Ext.EventObject, true);
             }, [node], this, this.folderStore);
 
             Tine.log.debug('Renamed folder:' + newRecord.get('globalname'));

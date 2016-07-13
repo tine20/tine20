@@ -3424,6 +3424,7 @@ msgid "Sieve Filter Rules for {0}"
 msgstr "Regras de filtro Sieve para {0}"
 
 #: js/sieve/VacationEditDialog.js:156
+#: Expressomail/Model/MessageDispositionNotificationPart.php:268
 msgid "Status"
 msgstr "Estado"
 
@@ -4206,6 +4207,7 @@ msgid "Delivery Status Notification Message"
 msgstr "Mensagem de Notificação de Status de Entrega"
 
 #: Expressomail/Model/DeliveryStatusNotificationMessagePart.php:371
+#: Expressomail/Model/MessageDispositionNotificationPart.php:258
 msgid "Recipient"
 msgstr "Destinatário"
 
@@ -4346,3 +4348,60 @@ msgstr "A pasta especificada não existe no sistema de e-mail!"
 #: js/TreeContextMenu.js:312
 msgid "<b>NOTE:</b> if you choose a folder root, all child folders will be included too.<br/>"
 msgstr "<b>NOTA:</b> se você escolher uma pasta raiz, todas as subpastas serão incluídas também.<br/>"
+
+#: Config.php:144
+msgid "IMAP Backend"
+msgstr "Backend IMAP"
+
+#: Config.php:149
+msgid "Sieve Backend"
+msgstr "Backend Sieve"
+
+#: Expressomail/Backend/Message.php:442
+msgid "{0} - Automatically rejected mail"
+msgstr "{0} - Mensagem rejeitada automaticamente"
+
+#: Expressomail/Backend/Message.php:443
+msgid "Mail Sieve Subsystem"
+msgstr "Subsistema de filtragem de mensagens"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:307
+msgid "Message Disposition Notification"
+msgstr "Notificação de Disposição de Mensagem"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:263
+msgid "Action Type"
+msgstr "Tipo da ação"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:273
+msgid "Custom User Message"
+msgstr "Mensagem personalizada do usuário"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:109
+msgid "Unknown Action"
+msgstr "Ação desconhecida"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:118
+msgid "Message was deleted"
+msgstr "A mensagem foi apagada"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:121
+msgid "Unknown Type"
+msgstr "Tipo desconhecido"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:146
+#: Expressomail/Model/MessageDispositionNotificationPart.php:165
+msgid "Unknown Mode"
+msgstr "Modo desconhecido"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:156
+msgid "Automatic Action Performed"
+msgstr "Ação automática do sistema"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:159
+msgid "Manual Action Performed"
+msgstr "Ação manual realizada"
+
+#: Expressomail/Model/MessageDispositionNotificationPart.php:323
+msgid "Automatically rejected mail"
+msgstr "Mensagem rejeitada automaticamente"

@@ -28,6 +28,10 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
         'to'                => 'to'
     );
 
+    /**
+     *
+     * @var boolean
+     */
     protected $_debugEmail = false;
 
     /**
@@ -105,81 +109,37 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
     protected $_contentController;
 
     /**
-     * Reply/Forward message with special treatment
-     *
-     * @param string $messageId
-     * @param Zend_Mail_Message $incomingMessage
-     * @param string $flag
-     * @throws Zend_Mail_Protocol_Exception
+     * Class that override default strategy to forward messages
+     * 
+     * @var string
      */
-    public function parseAndSendMessage($messageId, $incomingMessage, $flag = NULL)
+    protected static $_forwardStrategy = NULL;
+
+    /**
+     * Class that override default strategy to reply messages
+     *
+     * @var string
+     */
+    protected static $_replyStrategy = NULL;
+
+    /**
+     * Define a class that override default strategy to forward messages
+     * 
+     * @param string $forwardStrategy
+     */
+    public static function setForwardStrategy($forwardStrategy)
     {
-        $originalMessage = Expressomail_Controller_Message::getInstance()->getCompleteMessage($messageId, null, false);
+        self::$_forwardStrategy = $forwardStrategy;
+    }
 
-        $user = Tinebase_Core::getUser();
-
-        $headers = $incomingMessage->getHeaders();
-
-        $body = ($headers['content-transfer-encoding'] == 'base64')
-            ? base64_decode($incomingMessage->getContent())
-            : $incomingMessage->getContent();
-        $isTextPlain = strpos($headers['content-type'],'text/plain');
-        $bodyLines = preg_split('/\r\n|\r|\n/', $body);
-        $body = '';
-        if ($isTextPlain !== false) {
-            foreach ($bodyLines as &$line) {
-                $body .= htmlentities($line) . '<br />';
-            }
-        } else {
-            foreach ($bodyLines as &$line) {
-                $body .= $line . '<br />';
-            }
-        }
-        $body = '<div>' . $body . '</div>';
-
-        $bodyOrigin = $originalMessage['body'];
-        preg_match("/<body[^>]*>(.*?)<\/body>/is", $bodyOrigin, $matches);
-        $bodyOrigin = (count($matches)>1) ? $matches[1] : $bodyOrigin;
-        $body .= '<div>' . $bodyOrigin . '</div>';
-
-        $attachments = array();
-        foreach ($originalMessage['attachments'] as &$att) {
-            try {
-                $att['name'] = $att['filename'];
-                $att['type'] = $att['content-type'];
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not get some attachment attributes for message: ' . $messageId);
-            }
-            array_push($attachments, $att);
-        }
-
-        $recordData = array();
-        $recordData['note'] = '';
-        $recordData['content_type'] = 'text/html';
-        $recordData['account_id'] = $originalMessage->account_id;
-        $recordData['to'] = is_array($headers['to']) ? $headers['to'] : array($headers['to']);
-        $recordData['cc'] = array();
-        $recordData['bcc'] = array();
-        $recordData['subject'] = $headers['subject'];
-        $recordData['body'] = $body;
-        //$recordData['flags'] = array_merge($incomingMessage->getFlags(), $originalMessage['flags']);
-        $recordData['flags'] = ($flag != NULL) ? $flag : '';
-        $recordData['original_id'] = $messageId;
-        $recordData['embedded_images'] = array();
-        $recordData['attachments'] = $attachments;
-        $recordData['from_email'] = $user->accountEmailAddress;
-        $recordData['from_name'] = $user->accountFullName;
-        $recordData['customfields'] = array();
-
-        $message = new Expressomail_Model_Message();
-        $message->setFromJsonInUsersTimezone($recordData);
-
-        try {
-            Expressomail_Controller_Message_Send::getInstance()->sendMessage($message);
-        } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
-            throw $zmpe;
-        }
+    /**
+     * Define a class that override default strategy to reply messages
+     * 
+     * @param unknown $replyStrategy
+     */
+    public static function setReplyStrategy($replyStrategy)
+    {
+        self::$_replyStrategy = $replyStrategy;
     }
 
     /**
@@ -188,6 +148,47 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
      */
     public function forwardEmail($source, $inputStream, $saveInSent, $replaceMime)
     {
+        if (is_null(self::$_forwardStrategy)){
+            $this->sendReplyForward($source, $inputStream, $saveInSent, $replaceMime, Zend_Mail_Storage::FLAG_PASSED);
+        } else {
+            call_user_func_array(array(self::$_forwardStrategy,'forwardEmail'), array($source, $inputStream, $saveInSent, $replaceMime, $this));
+        }
+    }
+
+    /**
+     * (non-PHPdoc)
+     * @see Syncroton_Data_IDataEmail::replyEmail()
+     */
+    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
+    {
+        if (is_null(self::$_replyStrategy)){
+            $this->sendReplyForward($source, $inputStream, $saveInSent, $replaceMime, Zend_Mail_Storage::FLAG_ANSWERED);
+        } else {
+            call_user_func_array(array(self::$_replyStrategy, 'replyEmail'), array($source, $inputStream, $saveInSent, $replaceMime, $this));
+        }
+    }
+
+    /**
+     * send email from smart reply or smart forward resquest
+     *
+     * @param array $source
+     * @param string $inputStream
+     * @param bool $saveInSent
+     * @param bool $replaceMime
+     * @param string $flag
+     */
+    public function sendReplyForward($source, $inputStream, $saveInSent, $replaceMime, $flag)
+    {
+        $controller = Expressomail_Controller_ActiveSync::getInstance();
+
+        if (is_resource($inputStream)) {
+            $inputStream = stream_get_contents($inputStream);
+        }
+        $cleanIncoming = preg_replace('/(\r\n|\r|\n)/s', PHP_EOL, $inputStream);
+
+        $incomingDecodedMime = $controller->getHtmlBodyAndAttachmentData($cleanIncoming);
+        $decodedBody = '<div>' . $incomingDecodedMime['body'] . '</div>';
+
         $messageId = $this->getMessageIdFromSource($source);
 
         if (! is_resource($inputStream)) {
@@ -197,28 +198,23 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
             rewind($inputStream);
         }
 
-         if ($this->_debugEmail == true) {
+        if ($this->_debugEmail == true) {
              $debugStream = fopen("php://temp", 'r+');
              stream_copy_to_stream($inputStream, $debugStream);
              rewind($debugStream);
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                  __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
 
-             // replace original stream with debug stream, as php://input can't be rewinded
+             //replace original stream with debug stream, as php://input can't be rewinded
              $inputStream = $debugStream;
              rewind($inputStream);
-         }
+        }
 
         $incomingMessage = new Zend_Mail_Message(
             array(
                 'file' => $inputStream
             )
         );
-
-        if (! $incomingMessage->isMultipart()) {
-            $this->parseAndSendMessage($messageId, $incomingMessage, Zend_Mail_Storage::FLAG_PASSED);
-            return;
-        }
 
         $defaultAccountId = Tinebase_Core::getPreference('Expressomail')->{Expressomail_Preference::DEFAULTACCOUNT};
 
@@ -229,36 +225,30 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
             throw new Syncroton_Exception('no email account configured');
         }
 
-        if(empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
             throw new Syncroton_Exception('no email address set for current user');
         }
 
         $fmailMessage = Expressomail_Controller_Message::getInstance()->get($messageId);
-        $fmailMessage->flags = Zend_Mail_Storage::FLAG_PASSED;
+        $fmailMessage->flags = $flag;
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . " source: " . $messageId . "saveInSent: " . $saveInSent);
+        $mail = Tinebase_Mail::createFromZMM($incomingMessage);
 
-        if ($replaceMime === FALSE) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                 __METHOD__ . '::' . __LINE__ . " Adding RFC822 attachment and appending body to forward message.");
+        $rfc822 = Expressomail_Controller_Message::getInstance()->getMessagePart($fmailMessage);
+        $originalDecodedMime = $controller->getHtmlBodyAndAttachmentData($rfc822->getContent(), $flag != Zend_Mail_Storage::FLAG_PASSED);
+        $decodedBody = $decodedBody . '<div><br></div><div>' . $originalDecodedMime['body'] . '</div>';
 
-            $rfc822 = Expressomail_Controller_Message::getInstance()->getMessagePart($fmailMessage);
-            $rfc822->type = Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
-            $rfc822->filename = 'forwarded_email.eml';
-            $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
-            $replyBody = Expressomail_Controller_Message::getInstance()->getMessageBody($fmailMessage, NULL, 'text/plain');
-        } else {
-            $rfc822 = NULL;
-            $replyBody = NULL;
+        $mail->setBodyText('');
+        $mail->setBodyHtml($decodedBody);
+
+        if (isset($incomingDecodedMime['attachmentData']) && count($incomingDecodedMime['attachmentData']) > 0) {
+            $controller->addAttachments($mail, $incomingDecodedMime['attachmentData']);
+        }
+        if (isset($originalDecodedMime['attachmentData']) && count($originalDecodedMime['attachmentData']) > 0) {
+            $controller->addAttachments($mail, $originalDecodedMime['attachmentData']);
         }
 
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
-        if ($rfc822) {
-            $mail->addAttachment($rfc822);
-        }
-
-        Expressomail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, $saveInSent, $fmailMessage);
+        Expressomail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
 
     /**
@@ -357,81 +347,6 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
         ));
 
         return $syncrotonFileReference;
-    }
-
-    /**
-     * (non-PHPdoc)
-     * @see Syncroton_Data_IDataEmail::replyEmail()
-     */
-    public function replyEmail($source, $inputStream, $saveInSent, $replaceMime)
-    {
-        $messageId = $this->getMessageIdFromSource($source);
-
-        if (! is_resource($inputStream)) {
-            $stream = fopen("php://temp", 'r+');
-            fwrite($stream, $inputStream);
-            $inputStream = $stream;
-            rewind($inputStream);
-        }
-
-        if ($this->_debugEmail == true) {
-             $debugStream = fopen("php://temp", 'r+');
-             stream_copy_to_stream($inputStream, $debugStream);
-             rewind($debugStream);
-             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                 __METHOD__ . '::' . __LINE__ . " email to send:" . stream_get_contents($debugStream));
-
-             //replace original stream wirh debug stream, as php://input can't be rewinded
-             $inputStream = $debugStream;
-             rewind($inputStream);
-        }
-
-        $incomingMessage = new Zend_Mail_Message(
-            array(
-                'file' => $inputStream
-            )
-        );
-
-        if (! $incomingMessage->isMultipart()) {
-            $this->parseAndSendMessage($messageId, $incomingMessage, Zend_Mail_Storage::FLAG_ANSWERED);
-            return;
-        }
-
-        $defaultAccountId = Tinebase_Core::getPreference('Expressomail')->{Expressomail_Preference::DEFAULTACCOUNT};
-
-        try {
-            $account = Expressomail_Controller_Account::getInstance()->get($defaultAccountId);
-        } catch (Tinebase_Exception_NotFound $ten) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no email account configured");
-            throw new Syncroton_Exception('no email account configured');
-        }
-
-        if (empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            throw new Syncroton_Exception('no email address set for current user');
-        }
-
-        $fmailMessage = Expressomail_Controller_Message::getInstance()->get($messageId);
-        $fmailMessage->flags = Zend_Mail_Storage::FLAG_ANSWERED;
-
-        if ($replaceMime === false) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Adding RFC822 attachment and appending body to forward message.");
-
-            $rfc822 = Expressomail_Controller_Message::getInstance()->getMessagePart($fmailMessage);
-            $rfc822->type = Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
-            $rfc822->filename = 'replied_email.eml';
-            $rfc822->encoding = Zend_Mime::ENCODING_7BIT;
-            $replyBody = Expressomail_Controller_Message::getInstance()->getMessageBody($fmailMessage, null, 'text/plain');
-        } else {
-            $rfc822 = null;
-            $replyBody = null;
-        }
-
-        $mail = Tinebase_Mail::createFromZMM($incomingMessage, $replyBody);
-        if ($rfc822) {
-            $mail->addAttachment($rfc822);
-        }
-
-        Expressomail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
     }
 
     /**
@@ -1309,7 +1224,7 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
      * @param array|string $source
      * @return string
      */
-    protected function getMessageIdFromSource($source)
+    public function getMessageIdFromSource($source)
     {
         $serverId = is_array($source) ? $source['itemId'] : $source;
         $folderId = is_array($source) ? $source['collectionId'] : NULL;
@@ -1323,5 +1238,14 @@ class Expressomail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract impl
         $folder = $folderBackend->getFolder($this->_device, $folderId);
         return $this->getBigContentId($folder->id, $serverId);
 
+    }
+
+    /**
+     *
+     * @return boolean
+     */
+    public function debugEmail()
+    {
+        return $this->_debugEmail;
     }
 }

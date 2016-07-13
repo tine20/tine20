@@ -36,15 +36,16 @@ class Expressomail_AllTests
         // only call Felamimail tests if imap is configured in config.inc.php
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
         if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
-#           $suite->addTestSuite('Expressomail_Controller_Cache_MessageTest');
-            $suite->addTestSuite('Expressomail_JsonTest');
-#           $suite->addTestSuite('Expressomail_Controller_FolderTest');
-#           $suite->addTestSuite('Expressomail_Controller_MessageTest');
-#           $suite->addTestSuite('Expressomail_Controller_AccountTest');
-#           $suite->addTestSuite('Expressomail_Model_MessageTest');
-#           $suite->addTestSuite('Expressomail_Model_AccountTest');
+            //$suite->addTestSuite('Expressomail_Controller_Cache_MessageTest'); TODO: Fix this test. (task13912)
+            //$suite->addTestSuite('Expressomail_JsonTest'); TODO: Fix this test. (task13912)
+            $suite->addTestSuite('Expressomail_Controller_FolderTest');
+            //$suite->addTestSuite('Expressomail_Controller_MessageTest'); TODO: Fix this test. (task13912)
+            //$suite->addTestSuite('Expressomail_Controller_AccountTest'); TODO: Fix this test. (task13912)
+            $suite->addTestSuite('Expressomail_Model_MessageTest');
+            $suite->addTestSuite('Expressomail_Model_AccountTest');
+            $suite->addTestSuite('Expressomail_Frontend_ActiveSyncTest');
         }
-#        $suite->addTestSuite('Expressomail_Sieve_Backend_ScriptTest');
+        //$suite->addTestSuite('Expressomail_Sieve_Backend_ScriptTest'); TODO: Fix this test. (task13912)
         
         return $suite;
     }

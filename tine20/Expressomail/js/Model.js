@@ -689,7 +689,7 @@ Tine.Expressomail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'unread_children', type: 'Array', defaultValue: [] } // client only / array of unread child ids
 ], {
     // translations for system folders:
-    // i18n._('INBOX') i18n._('Drafts') i18n._('Sent') i18n._('Templates') i18n._('Junk') i18n._('Trash')
+    // _('INBOX') _('Drafts') _('Sent') _('Templates') _('Junk') _('Trash')
 
     appName: 'Expressomail',
     modelName: 'Folder',

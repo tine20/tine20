@@ -5,8 +5,10 @@
  * @package     Expressomail
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cassiano Dal Pizzol <cassiano.dalpizzol@serpro.gov.br>
+ * @author      Bruno Costa Vieira <bruno.vieira-costa@serpro.gov.br>
+ * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>
+ * @copyright   Copyright (c) 2009-2016 SERPRO (http://www.serpro.gov.br)
  *
  */
 
@@ -16,38 +18,8 @@
  * @package     Expressomail
  * @subpackage  Backend
  */
-class Expressomail_Backend_Imap extends Zend_Mail_Storage_Imap
+class Expressomail_Backend_Imap extends Expressomail_Backend_Imap_Abstract
 {
-    
-    const ACLREAD = 1;
-    
-    const ACLWRITE = 2;
-    
-    const ACLSENDAS = 4;
-    
-    const DEFAULT_IMAP_QUOTA = 51200;// 50MB = 51200KB
-    
-    /**
-     * protocol handler
-     * @var null|Expressomail_Protocol_Imap
-     */
-    protected $_protocol;
-
-    /**
-     * wheter to use UID as message identifier
-     *
-     * @var bool
-     */
-    protected $_useUid;
-
-    /**
-     * Stores the default user namespace
-     *
-     * @var string
-     * @TODO: Create a setter for the namespace to facilitate the manipulation
-     */
-    protected $_userNameSpace = 'user';
-
     /**
      * create instance with parameters
      * Supported parameters are

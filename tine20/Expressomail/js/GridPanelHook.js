@@ -57,7 +57,7 @@ Tine.Expressomail.GridPanelHook = function(config) {
     if (Tine.Expressomail.registry.get('preferences').get('enableEncryptedMessage') == '1' && Tine.Tinebase.registry.get('preferences').get('windowtype')=='Ext') {
         this.composeMailAction_encrypted = new Ext.Action({
             actionType: 'add',
-            text: this.app.i18n._('Compose email (encrypted)'),
+            text: this.app.i18n._('Compose email') + ' (' + this.app.i18n._('encrypted') + ')',
             iconCls: this.app.getIconCls(),
             disabled: true,
             scope: this,
