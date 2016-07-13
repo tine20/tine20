@@ -363,7 +363,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, this);
         }
 
-        this.window.relayEvents(this, ['resize']);
+        if (Ext.isFunction(this.window.relayEvents)) {
+            this.window.relayEvents(this, ['resize']);
+        }
     },
 
     /**
