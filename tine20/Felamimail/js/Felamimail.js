@@ -157,7 +157,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             foreignAppName: 'Calendar',
             modelName: 'Event',
             subjectFn: function(record) {
-                return record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(record.get('dtstart'));
+                return record ? record.get('summary') + ' - ' + Tine.Calendar.Model.Event.datetimeRenderer(record.get('dtstart')) : '';
             },
             addMailFromRecord: function(mailAddresses, record) {
                 Ext.each(record.get('attendee'), function(attender) {
