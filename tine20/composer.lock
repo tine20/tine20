@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "bca4c331ae7bebaaac6bc00ec330930d",
-    "content-hash": "ecd95c963cbc906059240ce9ae0a9c27",
+    "hash": "feeb992c226b6bb0f91d7a17911dfa52",
+    "content-hash": "bb2e4e82df2e5ee597c9133109608553",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/markushausammann/PHPExcel.git",
-                "reference": "1.7.8"
+                "reference": "6236b1e1513dda38a68a5ac22bbab5fc2b7942fd"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/markushausammann/PHPExcel/zipball/6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
-                "reference": "1.7.8",
+                "reference": "6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
                 "shasum": ""
             },
             "require": {
@@ -55,6 +55,7 @@
                 "php",
                 "spreadsheet"
             ],
+            "abandoned": "phpoffice/phpexcel",
             "time": "2012-11-21 10:55:52"
         },
         {
@@ -1143,6 +1144,31 @@
             "description": "Library to sync mobile phones",
             "homepage": "http://www.syncroton.org",
             "time": "2015-09-22 09:21:43"
+        },
+        {
+            "name": "tine20/composerapploader",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://git.tine20.org/git/composerapploader",
+                "reference": "b9e480b6c26f6556ca742e96badfeb1ebd59ecb7"
+            },
+            "require": {
+                "composer-plugin-api": ">=1.0.0"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Tine20\\ComposerAppLoader\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tine20\\ComposerAppLoader\\": "src/"
+                }
+            },
+            "time": "2016-07-14 11:55:28"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -2546,7 +2572,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/ee4cdda66aff834c8125e8f2c15932461667c521",
+                "url": "https://api.github.com/repos/symfony/config/zipball/41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
                 "reference": "41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
                 "shasum": ""
             },
@@ -2754,7 +2780,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d9d21cfcc3e202ee34777d6da38897695d4d208d",
+                "url": "https://api.github.com/repos/symfony/process/zipball/6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
                 "reference": "6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
                 "shasum": ""
             },
@@ -3596,7 +3622,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "tine20/composerapploader": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
