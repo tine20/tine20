@@ -68,7 +68,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
         
         Tine.Filemanager.NodeTreePanel.superclass.initComponent.call(this);
-        
+
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'fileDDGroup',
@@ -203,6 +203,26 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
             handler : this.dropIntoTree
         });
     },
+
+    // TODO we should use getRoot of the superclass - this currently does not work (personal folders)
+    getRoot: function(extraItems)
+    {
+        return {
+            path: '/',
+            cls: 'tinebase-tree-hide-collapsetool',
+            expanded: true,
+            children: [{
+                path: this.getRootPath(),
+                id: 'personal'
+            }, {
+                path: '/shared',
+                id: 'shared'
+            }, {
+                path: '/personal',
+                id: 'otherUsers'
+            }]
+        };
+    },
     
     /**
      * Tine.widgets.tree.FilterPlugin
@@ -220,6 +240,14 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         }
         
         return this.filterPlugin;
+    },
+
+    /**
+     * returns the personal root path
+     * @returns {String}
+     */
+    getRootPath: function() {
+        return Tine.Tinebase.container.getMyFileNodePath();
     },
 
     /**
@@ -279,7 +307,7 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
         attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
     },
-    
+
     /**
      * initiates tree context menues
      * 
