@@ -83,6 +83,9 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     {
         parent::__construct($_dbAdapter, $_options);
 
+        /**
+         * TODO move this code somewhere and make it optionally. Maybe even make it a new controller / frontend action and request the data async
+         */
         if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_LIST_VIEW)) {
             $this->_additionalColumns['emails'] = new Zend_Db_Expr('(' .
                 $this->_db->select()
@@ -127,7 +130,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
             return $list;
         }
         
-        $newMembers = $this->_getIdsFromMixed($_newMembers);
+        $newMembers = Tinebase_Record_RecordSet::getIdsFromMixed($_newMembers);
         $idsToAdd   = array_diff($newMembers, $list->members);
         
         $listId     = Tinebase_Record_Abstract::convertId($_listId, $this->_modelName);
@@ -166,19 +169,19 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      * remove members from list
      * 
      * @param  mixed  $_listId
-     * @param  mixed  $_newMembers
+     * @param  mixed  $_membersToRemove
      * @return Addressbook_Model_List
      */
-    public function removeListMember($_listId, $_oldMembers)
+    public function removeListMember($_listId, $_membersToRemove)
     {
         $list = $this->get($_listId);
         
-        if (empty($_oldMembers)) {
+        if (empty($_membersToRemove)) {
             return $list;
         }
         
-        $oldMembers  = $this->_getIdsFromMixed($_oldMembers);
-        $idsToRemove = array_intersect($list->members, $oldMembers);
+        $removeMembers  = Tinebase_Record_RecordSet::getIdsFromMixed($_membersToRemove);
+        $idsToRemove = array_intersect($list->members, $removeMembers);
         $listId      = Tinebase_Record_Abstract::convertId($_listId, $this->_modelName);
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
