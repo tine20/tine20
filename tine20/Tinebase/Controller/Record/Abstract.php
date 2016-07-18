@@ -2334,7 +2334,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
     protected function _getTypeForPathPart($relation)
     {
-        return ($relation && ! empty($relation->type)) ? '{' . $relation->type . '}' : '';
+        return ($relation && ! empty($relation->type)) ? '{' . str_replace(array('/', '{', '}', ' '), '', $relation->type) . '}' : '';
     }
 
     /**
@@ -2348,7 +2348,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $type = $this->_getTypeForPathPart($relation);
 
-        return $type . '/' . $record->getId();
+        return $type . '/{' . $record->getApplication() . '}' . $record->getId();
     }
 
     /**

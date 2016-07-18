@@ -354,6 +354,14 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
+     * deletes all entries
+     */
+    public function deleteAll()
+    {
+        $this->_db->delete($this->_tablePrefix . $this->_tableName);
+    }
+
+    /**
      * delete rows by property
      *
      * @param string|array $_value

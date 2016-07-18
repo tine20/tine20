@@ -23,8 +23,7 @@ class Tinebase_Record_PathTest extends TestCase
 
     protected function setUp()
     {
-        $mysqlSetup = new Setup_Backend_Mysql();
-        if (! Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Mysql || true !== $mysqlSetup->supports('mysql >= 5.6.4')) {
+        if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
             $this->markTestSkipped('mysql 5.6.4 or higher required');
         }
 
