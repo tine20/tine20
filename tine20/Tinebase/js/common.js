@@ -22,13 +22,21 @@ Tine.Tinebase.common = {
      * 
      * @param {string}     windowName
      * @param {string}     url
-     * @param {int}     width
-     * @param {int}     height
+     * @param width
+     * @param height
      */
     openWindow: function (windowName, url, width, height) {
+        var dualScreenLeft,
+            dualScreenTop,
+            w,
+            h,
+            left,
+            top;
+
+
         // M$ IE has its internal location bar in the viewport
         if (Ext.isIE) {
-            height = height + 20;
+            height += 20;
         }
         
         // chrome counts window decoration and location bar to window height
@@ -37,28 +45,23 @@ Tine.Tinebase.common = {
         }
         
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
-        
-        var    w, h, x, y, leftPos, topPos, popup;
 
-        if (document.all) {
-            w = document.body.clientWidth;
-            h = document.body.clientHeight;
-            x = window.screenTop;
-            y = window.screenLeft;
-        } else {
-            if (window.innerWidth) {
-                w = window.innerWidth;
-                h = window.innerHeight;
-                x = window.screenX;
-                y = window.screenY;
-            }
-        }
-        leftPos = ((w - width) / 2) + y;
-        topPos = ((h - height) / 2) + x;
-        
+        // thanks to http://www.nigraphic.com/blog/java-script/how-open-new-window-popup-center-screen
+
+        // Determine offsets in case of dualscreen
+        dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+        dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+        // Window should be opened on mid of tine window
+        w = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+        h = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+        // Determine correct left and top values including dual screen setup
+        left = ((w / 2) - (width / 2)) + dualScreenLeft;
+        top = ((h / 2) - (height / 2)) + dualScreenTop;
 
         try {
-            popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + topPos + ',left=' + leftPos +
+            popup = window.open(url, windowName, 'width=' + width + ',height=' + height + ',top=' + top + ',left=' + left +
                 ',directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no');
             
             return popup;
@@ -72,7 +75,7 @@ Tine.Tinebase.common = {
         }
         
         if (! popup) {
-            var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + topPos + ",left=" + leftPos +
+            var openCode = "window.open('http://127.0.0.1/tine20/tine20/" + url + "','" + windowName + "','width=" + width + ",height=" + height + ",top=" + top + ",left=" + left +
             ",directories=no,toolbar=no,location=no,menubar=no,scrollbars=no,status=no,resizable=yes,dependent=no')";
         
             var exception = {
@@ -82,16 +85,6 @@ Tine.Tinebase.common = {
             
             Tine.log.debug('openCode: ' + openCode);
             popup = openCode;
-            
-//            if(Tine.Tinebase.MainScreen.fireEvent('windowopenexception', exception) !== false){
-//                // show message 'your popupblocker ... please click here'
-//                // mhh how to make this syncron???
-//                
-//                // todo: review code in Ext.ux.PopupWindow...
-//                popup = window;
-//            } else {
-//                popup = exception.popup;
-//            }
         }
         
         return popup;
