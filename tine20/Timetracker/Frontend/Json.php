@@ -288,6 +288,44 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * Return registry data
+     *
+     * @return array
+     * @throws \Tinebase_Exception_InvalidArgument
+     */
+    public function getRegistryData()
+    {
+        $appPrefs = Tinebase_Core::getPreference($this->_applicationName);
+
+        // Get preference
+        $quickTagPreferences = $appPrefs->search(
+            new Tinebase_Model_PreferenceFilter([
+                'name' => Timetracker_Preference::QUICKTAG
+            ])
+        );
+
+        // There could be only one result, if not do nothing.
+        if ($quickTagPreferences->count() !== 1) {
+            return array();
+        }
+
+        $quickTagPreference = $quickTagPreferences->getFirstRecord();
+
+        if ($quickTagPreference->value === false) {
+            return array();
+        }
+
+        // Resolve tag by it's id
+        $tag = Tinebase_Tags::getInstance()->get($quickTagPreference->value);
+
+        $pref = array();
+        $pref['quicktagId'] = $quickTagPreference->value;
+        $pref['quicktagName'] = $tag->name;
+
+        return $pref;
+    }
+
+    /**
      * Search for records matching given arguments
      *
      * @param  array $filter
