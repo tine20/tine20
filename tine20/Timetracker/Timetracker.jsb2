@@ -24,6 +24,18 @@
           "path": "js/"
         },
         {
+          "text": "TimeaccountFavoritesPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimesheetWestPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimeaccountWestPanel.js",
+          "path": "js/"
+        },
+        {
           "text": "TimeaccountPickerCombo.js",
           "path": "js/"
         },

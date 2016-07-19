@@ -77,8 +77,3 @@ Tine.Timetracker.registerAccountables = function() {
 };
 
 Tine.Timetracker.registerAccountables();
-
-// disables container tree in WestPanel
-Tine.Timetracker.TimeaccountWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
-    hasContainerTreePanel: false
-});

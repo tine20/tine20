@@ -390,6 +390,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Timetracker_Model_TimeaccountGrants',
                 'Timetracker_Model_Timesheet',
                 'Timetracker_Model_Timeaccount',
+                'Timetracker_Model_TimeaccountFavorite'
             ),
             'Tinebase' => array(
                 'Tinebase_Model_AccessLog',
