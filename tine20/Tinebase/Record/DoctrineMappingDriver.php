@@ -35,7 +35,9 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         'record'    => 'string',
         'keyfield'  => 'string',
         'user'      => 'string',
-        'boolean'   => 'boolean',
+        // NOTE 1: smallint is not working somehow ...
+        // NOTE 2: we need int here because otherwise we need to typecast values for pgsql
+        'boolean'   => 'integer',
     );
 
     /**

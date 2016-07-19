@@ -17,11 +17,6 @@ class Inventory_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        // update according to current modelconfigV2 definition using doctrine2
-        // NOTE: depending on update action you might need to move this to a later update
-        //       as your update case might be gone ofter this got executetd in an previoud (this) update
-        $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
-
         $this->setApplicationVersion('Inventory', '10.0');
     }
 }
