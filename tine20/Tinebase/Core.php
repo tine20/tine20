@@ -1622,8 +1622,6 @@ class Tinebase_Core
      * Search server plugins from applications configuration
      *
      * @return array
-     *
-     * TODO add feature switch for this
      */
     protected static function _searchServerPlugins()
     {
@@ -1636,12 +1634,24 @@ class Tinebase_Core
         }
 
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            return array();
+            // get apps by scanning directory
+            $applications = array();
+            $d = dir(dirname(__DIR__));
+            while (false !== ($entry = $d->read())) {
+                if ($entry[0] == '.') {
+                    continue;
+                }
+
+                if (ctype_upper($entry[0]) && is_dir($d->path . DIRECTORY_SEPARATOR . $entry)) {
+                    $applications[] = $entry;
+                }
+            }
+            $d->close();
+        } else {
+            // get list of available applications
+            $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         }
-        
-        // get list of available applications
-        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        
+
         // get list of plugins
         $plugins = array();
         foreach ($applications as $application) {
