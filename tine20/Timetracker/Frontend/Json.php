@@ -255,10 +255,12 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * creates/updates a record
      *
      * @param  array $recordData
+     * @param  array $context
      * @return array created/updated record
      */
-    public function saveTimesheet($recordData)
+    public function saveTimesheet($recordData, array $context = array())
     {
+        $this->_timesheetController->setRequestContext($context);
         return $this->_save($recordData, $this->_timesheetController, 'Timesheet');
     }
 

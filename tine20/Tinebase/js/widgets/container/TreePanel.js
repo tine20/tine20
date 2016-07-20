@@ -164,24 +164,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         });
 
         var extraItems = this.getExtraItems();
-        this.root = {
-            path: '/',
-            cls: 'tinebase-tree-hide-collapsetool',
-            expanded: true,
-            children: [{
-                path: Tine.Tinebase.container.getMyNodePath(),
-                id: 'personal',
-                hidden: !this.hasPersonalContainer
-            }, {
-                path: '/shared',
-                id: 'shared'
-            }, {
-                path: '/personal',
-                id: 'otherUsers',
-                hidden: !this.hasPersonalContainer
-            }].concat(extraItems)
-        };
-
+        this.root = this.getRoot(extraItems);
         if (!this.hasPersonalContainer && ! extraItems.length) {
             this.rootVisible = false;
         }
@@ -220,6 +203,27 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
+    },
+
+    getRoot: function(extraItems)
+    {
+        return {
+            path: '/',
+            cls: 'tinebase-tree-hide-collapsetool',
+            expanded: true,
+            children: [{
+                path: Tine.Tinebase.container.getMyNodePath(),
+                id: 'personal',
+                hidden: !this.hasPersonalContainer
+            }, {
+                path: '/shared',
+                id: 'shared'
+            }, {
+                path: '/personal',
+                id: 'otherUsers',
+                hidden: !this.hasPersonalContainer
+            }].concat(extraItems)
+        };
     },
 
     /**
