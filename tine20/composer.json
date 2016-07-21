@@ -37,7 +37,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",
-        "phing/phing": "2.*"
+        "phing/phing": "2.*",
+        "tedivm/jshrink": "~1.0"
     },
     "autoload": {
         "files": [],
