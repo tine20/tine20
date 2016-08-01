@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "75cf1c9f581c78e9234c4f1a42f409db",
-    "content-hash": "5c1590fda92e6eb88bec36328133ff96",
+    "hash": "4a8e4c7bf475adcf034960bdc0c1c3d6",
+    "content-hash": "b03d1e868294ab515ee07fab96d0ea0b",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -1481,11 +1481,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.18",
+            "version": "1.12.18pl1",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "ac1c8368339fbc360ce469d5a328043ecb521160"
+                "reference": "4e152f77208eb82a0a4c9abc36f122309681b6b8"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1502,7 +1502,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2016-07-04 10:55:28"
+            "time": "2016-07-31 15:41:22"
         }
     ],
     "packages-dev": [
@@ -2059,6 +2059,12 @@
         }
     ],
     "aliases": [
+        {
+            "alias": "1.12.18",
+            "alias_normalized": "1.12.18.0",
+            "version": "1.12.18.0-patch1",
+            "package": "zendframework/zendframework1"
+        },
         {
             "alias": "2.1.313",
             "alias_normalized": "2.1.313.0",
