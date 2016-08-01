@@ -166,7 +166,7 @@
     <!-- ============================================      -->
     <target name="phpunit-serv" depends="clean, phpunit-prepare">
         <property name="testinclude" value="AllServerTests.php" override="true" />
-        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library/:${project.basedir}/library/zf1ext" override="true" />
+        <property name="includepath" value=".:/usr/share/php/:${configdir}:${project.basedir}:${project.basedir}/library/:${project.basedir}/vendor/zendframework/zendframework1/library" override="true" />
         <property name="testadditionalparams" value="" override="true" />
 
         <echo msg="Starting Server Tests..." />
