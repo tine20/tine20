@@ -268,6 +268,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         
         $this->_clearCache();
         $this->_backendValue->deleteByProperty($cfId, 'customfield_id');
+        $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
         $this->_backendConfig->delete($cfId);
     }
     

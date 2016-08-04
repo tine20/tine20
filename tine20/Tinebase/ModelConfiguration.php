@@ -791,7 +791,13 @@ class Tinebase_ModelConfiguration {
             // don't show deleted information
             $this->_fields['deleted_by']         = array('label' => NULL, 'type' => 'user',     'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'length' => 40, 'nullable' => true);
             $this->_fields['deleted_time']       = array('label' => NULL, 'type' => 'datetime', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'nullable' => true);
-            $this->_fields['is_deleted']         = array('label' => NULL, 'type' => 'boolean',  'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true), 'useGlobalTranslation' => TRUE, 'default' => false);
+            $this->_fields['is_deleted']         = array(
+                'label'   => NULL,
+                'type'    => 'integer',
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'useGlobalTranslation' => TRUE,
+                'default' => 0
+            );
 
         } elseif ($this->_hasNotes) {
             $this->_fields['notes'] = array('label' => NULL, 'type' => 'note', 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL));

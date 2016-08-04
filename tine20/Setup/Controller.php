@@ -501,9 +501,8 @@ class Setup_Controller
                 $messages[] = $message;
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
 
-                list($fromMajorVersion, $fromMinorVersion) = explode('.', $_application->version);
-        
-                $minor = $fromMinorVersion;
+                $version = $_application->getMajorAndMinorVersion();
+                $minor = $version['minor'];
                 
                 $className = ucfirst($_application->name) . '_Setup_Update_Release' . $_majorVersion;
                 if(! class_exists($className)) {

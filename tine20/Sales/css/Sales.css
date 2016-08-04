@@ -51,6 +51,10 @@
     background-image:url("../../images/oxygen/22x22/actions/edit-redo.png") !important;
 }
 
+.x-btn-medium .action_merge {
+    background-image:url("../../images/oxygen/22x22/actions/go-down.png") !important;
+}
+
 .x-btn-medium .action_bill {
     background-image:url("../../images/oxygen/22x22/categories/applications-office.png") !important;
 }
@@ -61,6 +65,10 @@
 
 .action_rebill {
     background-image:url("../../images/oxygen/16x16/actions/edit-redo.png") !important;
+}
+
+.action_merge {
+    background-image:url("../../images/oxygen/16x16/actions/go-down.png") !important;
 }
 
 .action_bill {
