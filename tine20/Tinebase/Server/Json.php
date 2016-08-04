@@ -210,8 +210,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     'logger'                    => Tinebase_Core::getLogger(),
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
-                $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
-                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon');
+                $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
+                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon'));
                 
                 $server = $cache->load($cacheId);
                 if ($server instanceof Zend_Json_Server) {
