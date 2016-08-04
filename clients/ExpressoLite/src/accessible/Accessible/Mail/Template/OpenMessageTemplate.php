@@ -20,8 +20,8 @@
     <title>Leitura de mensagem - ExpressoBr Acessível</title>
 </head>
 <body>
-<div id="top" name="top">
-    <div id="anchors" name="anchors" class="links systemLinks">
+<div id="top">
+    <div id="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="#emailHeader" accesskey="1">Ir para o cabeçalho do email [1]</a></li>
@@ -36,7 +36,7 @@
     </div>
 </div>
 
-<div id="emailHeader" name="emailHeader">
+<div id="emailHeader">
     <h2 class="anchorsTitle">Cabeçalho</h2>
     <div class="contentAlign">
         <div><span class="fieldName">Assunto:</span> <?= $VIEW->message->subject ?></div>
@@ -76,12 +76,12 @@
     </ul>
 </div>
 
-<div id="emailContent" name="emailContent">
+<div id="emailContent">
     <h2 class="anchorsTitle">Mensagem</h2>
-    <div id="composePanelBody" name="composePanelBody" class="contentAlign">
-        <?= $VIEW->message->body->message ?>
+    <div id="composePanelBody" class="contentAlign">
+        <?= $VIEW->bodyMessage ?>
         <br/><br/>
-        <blockquote><?= $VIEW->message->body->quoted ?></blockquote>
+        <blockquote><?= $VIEW->quotedMessage ?></blockquote>
     </div>
 </div>
 
@@ -92,9 +92,9 @@
 </div>
 
 <?php IF ($VIEW->message->has_attachment) : ?>
-<div id="emailAttachments" name="emailAttachments" >
+<div id="emailAttachments">
     <h2 class="anchorsTitle">Anexos</h2>
-    <div id="attachments" name="attachments" class="links systemLinks">
+    <div id="attachments" class="links systemLinks">
         <ul>
             <?php FOREACH ($VIEW->attachmentsForExhibition as $ATTACH) : ?>
                 <li>
@@ -115,7 +115,7 @@
 </div>
 <?php ENDIF; ?>
 
-<div id="emailActions" name="emailActions">
+<div id="emailActions">
     <h2 class="anchorsTitle">Ações</h2>
     <div class="links linkAsButton">
         <ul>
@@ -123,8 +123,8 @@
             <li><a href="<?= $VIEW->lnkReplyAll ?>">Responder a todos</a></li>
             <li><a href="<?= $VIEW->lnkForward ?>">Encaminhar</a></li>
             <li><a href="<?= $VIEW->lnkMark ?>">Marcar como não lida</a></li>
-            <li><a href="<?= $VIEW->lnkDelete ?>">Apagar</a></li>
             <li><a href="<?= $VIEW->lnkMoveMsgToFolder ?>">Mover mensagem</a></li>
+            <li><a href="<?= $VIEW->lnkDelete ?>" title="apagar essa mensagem">Apagar</a></li>
         </ul>
     </div>
 </div>

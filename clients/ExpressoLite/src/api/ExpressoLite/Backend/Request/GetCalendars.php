@@ -48,7 +48,7 @@ class GetCalendars extends LiteRequest
             $clean[] = (object) array( // sanitize calendar object
                 'id' => $c->id,
                 'name' => $c->name,
-                'owner' => $c->owner->accountDisplayName,
+                'owner' => isset($c->owner) ? $c->owner->accountDisplayName : '',
                 'color' => $c->color
             );
         }

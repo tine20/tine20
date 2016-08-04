@@ -8,6 +8,7 @@
  * @author      Cassiano Dal Pizzol <cassiano.dalpizzol@serpro.gov.br>
  * @author      Bruno Costa Vieira <bruno.vieira-costa@serpro.gov.br>
  * @author      Mario Cesar Kolling <mario.kolling@serpro.gov.br>
+ * @author      Fernando Alberto Reuter Wendt <fernando-alberto.wendt@serpro.gov.br>
  * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
  *
  * @todo organize the folderMap Code, put into a singleton class to use it globally????
@@ -437,8 +438,10 @@ class Expressomail_Backend_Message //extends Tinebase_Backend_Sql_Abstract
             $bodyParts = $message->getBodyParts($message->structure);
             foreach ($bodyParts as $partId => $partStructure) {
                 if ($partStructure['contentType'] === Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                    $translate = Tinebase_Translation::getTranslation('Expressomail');
                     $partHeaders = Expressomail_Controller_Message::getInstance()->getMessageHeaders($message, $partId, true);
-                    $message->subject = $partHeaders['subject'] . ' - ' . $message->subject;
+                    $message->subject = $partHeaders['subject'] . ' - ' . $translate->_($message->subject);
+                    $message->from_name = $translate->_($message->from_name);
                 }
             }
         }

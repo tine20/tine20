@@ -9,13 +9,15 @@
  * @copyright Copyright (c) 2014-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/UrlStack',
-    'common-js/ContextMenu'
+    'common-js/ContextMenu',
+    'common-js/Cordova'
 ],
-function($, App, UrlStack, ContextMenu) {
-App.LoadCss('common-js/Layout.css');
+function($, App, UrlStack, ContextMenu, Cordova) {
+App.loadCss('common-js/Layout.css');
 return function(options) {
     var userOpts = $.extend({
         userMail: '',   // string with user email, for displaying purposes
@@ -35,7 +37,7 @@ return function(options) {
 
     THIS.load = function() {
         var defer = $.Deferred();
-        App.LoadTemplate('../common-js/Layout.html').done(function() {
+        App.loadTemplate('../common-js/Layout.html').done(function() {
             $('#Layout_userMail').text(userOpts.userMail);
             userOpts.$menu.appendTo('#Layout_leftContent'); // detach from page, attach to DIV
             userOpts.$middle.appendTo('#Layout_middleContent');
@@ -47,13 +49,23 @@ return function(options) {
             contextMenu = new ContextMenu({ $btn:$('#Layout_context') });
             THIS.setContextMenuVisible(false); // initially hidden
 
-            if (App.GetUserInfo('showDebuggerModule') === 'show') {
+            if (App.getUserInfo('showDebuggerModule') === 'show') {
                 $('#Layout_module_debugger').show();
             }
 
             THIS.setRightPanelVisible(false);
             _SetCurrentModuleAsBold();
-            defer.resolve();
+
+            $(document.body).css('overflow', 'hidden');
+            $('#Layout_template').css('top','-'+$(document).height()+'px');
+            $('#Layout_template').velocity({ top:0 }, {
+                duration: 250,
+                queue: false,
+                complete: function() {
+                    $(document.body).css('overflow', '');
+                    defer.resolve();
+                }
+            });
         });
         return defer.promise();
     };
@@ -93,7 +105,7 @@ return function(options) {
         var defer = $.Deferred();
         var $leftSec = $('#Layout_left');
 
-        if (!App.IsPhone()) {
+        if (!App.isPhone()) {
             window.setTimeout(function() { defer.resolve(); }, 10);
         } else if (isVisible) { // show left menu on phones, does nothing on desktops
             _DarkBackground(true);
@@ -103,7 +115,7 @@ return function(options) {
                 display: 'block'
             });
             $leftSec.scrollTop(0);
-            $leftSec.animate({ left:'0' }, userOpts.showMenuTime, function() {
+            $leftSec.velocity({ left:'0' }, userOpts.showMenuTime, function() {
                 UrlStack.push('#leftMenu', function() { THIS.setLeftMenuVisibleOnPhone(false); });
                 defer.resolve();
             });
@@ -112,7 +124,7 @@ return function(options) {
             UrlStack.pop('#leftMenu');
             var cx = $leftSec.outerWidth();
             $leftSec.css('left', '0');
-            $leftSec.animate({ left:'-'+cx+'px' }, userOpts.hideMenuTime, function() {
+            $leftSec.velocity({ left:'-'+cx+'px' }, userOpts.hideMenuTime, function() {
                 $leftSec.css({
                     left: '',
                     display: '' // reverting from "block"
@@ -135,6 +147,10 @@ return function(options) {
     THIS.setTitle = function(title) {
         $('#Layout_title').html(title);
         return THIS;
+    };
+
+    THIS.hideTop = function() {
+        $('#Layout_top').hide();
     };
 
     THIS.onKeepAlive = function(callback) {
@@ -169,7 +185,7 @@ return function(options) {
 
         $('#Layout_btnSearch').on('click', function() {
             if (onSearchCB !== null) {
-                var searchTerm = App.IsPhone() ?
+                var searchTerm = App.isPhone() ?
                     window.prompt('Busca') : $('#Layout_txtSearch').val();
                 if (searchTerm !== null) {
                     onSearchCB(searchTerm);
@@ -184,29 +200,56 @@ return function(options) {
         $('#Layout_logoff').on('click', function(ev) { // logoff the whole application
             ev.stopImmediatePropagation();
             $('#Layout_logoffScreen').show();
-            App.Post('logoff')
-            .done(function(data) {
-                $('body').css('overflow', 'hidden');
-                $('#Layout_logoffText').animate({ top:$(window).height() / 4 }, 200, function() {
-                    $('#Layout_logoffText').animate({ top:$(window).height() }, 300, function() {
-                        App.ReturnToLoginScreen();
+
+            function DoLogoff() {
+                App.post('logoff')
+                .done(function(data) {
+                    $('body').css('overflow', 'hidden');
+                    $('#Layout_logoffText').velocity({ top:$(window).height() / 4 }, 200, function() {
+                        $('#Layout_logoffText').velocity({ top:$(window).height() }, 300, function() {
+                            App.returnToLoginScreen();
+                        });
                     });
+                }).fail(function(error) {
+                    console.error('Logout error: ' + error.responseText);
+                    location.href = '.';
+                    // server side processing will usually invalidate the current
+                    // session even if it throws an error. So, it's reasonably
+                    // safe to fail silently and go back to the login screen
                 });
-            }).fail(function(error) {
-                console.error('Logout error: ' + error.responseText);
-                location.href = '.';
-                // server side processing will usually invalidate the current
-                // session even if it throws an error. So, it's reasonably
-                // safe to fail silently and go back to the login screen
-            });
+            }
+
+            if (Cordova) {
+                Cordova.ClearAllCredentials()
+                .fail(function() {
+                    // This should never happen, but in case something
+                    // goes wrong, at least we'll have a message to investigate
+                    console.log('Could not clear user credentials');
+                })
+                .always(DoLogoff);
+            } else {
+                DoLogoff();
+            }
         });
 
         $('#Layout_modules li,#Layout_modules a').on('click', function(ev) { // click on a module
             ev.preventDefault();
             ev.stopImmediatePropagation();
-            var href = $(this).attr('href') !== undefined ?
-                $(this).attr('href') : $(this).find('a').attr('href');
-            App.GoToFolder(href);
+            var $elem = $(this);
+            var dur = 350; // ms
+            $(document.body).css('overflow', 'hidden');
+            _DarkBackground(false);
+            $('#Layout_left').velocity({ left:-$('#Layout_left').outerWidth() }, { duration:dur, queue:false });
+            $('#Layout_top').velocity({ left:$(document).width() }, { duration:dur, queue:false });
+            $('#Layout_center').velocity({ top:$(document).height() }, {
+                duration: dur,
+                queue: false,
+                complete: function() {
+                    var href = $elem.attr('href') !== undefined ?
+                        $elem.attr('href') : $elem.find('a').attr('href');
+                    App.goToFolder(href);
+                }
+            });
         });
 
         $(document).ajaxComplete(function AjaxComplete() {

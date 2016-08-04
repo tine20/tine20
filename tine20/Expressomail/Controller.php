@@ -30,14 +30,23 @@ class Expressomail_Controller extends Tinebase_Controller_Event
     /**
      * constructor (get current user)
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = "Expressomail";
-        $this->_defaultsSettings = array(
-            Expressomail_Config::IMAPSEARCHMAXRESULTS => 1000,
-            Expressomail_Config::AUTOSAVEDRAFTSINTERVAL => 15,
-            Expressomail_Config::REPORTPHISHINGEMAIL => '',
-            Expressomail_Config::ENABLEMAILDIREXPORT => FALSE,
+
+        $configKeys = array(
+            Expressomail_Config::IMAPSEARCHMAXRESULTS,
+            Expressomail_Config::AUTOSAVEDRAFTSINTERVAL,
+            Expressomail_Config::REPORTPHISHINGEMAIL,
+            Expressomail_Config::ENABLEMAILDIREXPORT,
+            Expressomail_Config::IMAPBACKEND,
+            Expressomail_Config::SIEVEBACKEND
         );
+
+        foreach($configKeys as $configKey) {
+            $definition = Expressomail_Config::getInstance()->getDefinition($configKey);
+            $this->_defaultsSettings[$configKey] = $definition['default'];
+        }
     }
     
     /**

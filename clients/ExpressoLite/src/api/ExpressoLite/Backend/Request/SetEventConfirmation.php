@@ -43,21 +43,10 @@ class SetEventConfirmation extends LiteRequest
      */
     private function getRawEventById($eventId)
     {
-        $response = $this->jsonRpc('Calendar.searchEvents', (object) array(
-            'filter' => array(
-                (object) array(
-                    'field' => 'id',
-                    'operator' => 'equals',
-                    'value' => $eventId
-                )
-            ),
-            'paging' => (object) array(
-                'dir' => 'ASC',
-                'limit' => 1, // IDs are unique
-                'start' => 0
-            )
-        ));
-        return $response->result->results[0];
+        $response = $this->jsonRpc('Calendar.getEvent', (object) array(
+            'id' => $eventId)
+        );
+        return $response->result;
     }
 
     /**

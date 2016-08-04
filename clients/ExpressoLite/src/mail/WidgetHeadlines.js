@@ -8,14 +8,15 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/DateFormat',
     'common-js/Contacts',
     'mail/ThreadMail'
 ],
 function($, App, DateFormat, Contacts, ThreadMail) {
-App.LoadCss('mail/WidgetHeadlines.css');
+App.loadCss('mail/WidgetHeadlines.css');
 return function(options) {
     var userOpts = $.extend({
         $elem: null,    // jQuery object for the target DIV
@@ -181,7 +182,7 @@ return function(options) {
     function _AnimateFirstHeadlines($divs, $loading) {
         var defer = $.Deferred();
         window.setTimeout(function() {
-            $loading.animate({
+            $loading.velocity({
                 'margin-top': ($targetDiv.height() - 20)+'px'
             }, 200, function() {
                 $loading.remove();
@@ -195,10 +196,13 @@ return function(options) {
                         break;
                     }
                 }
-                $targetDiv.css('display', 'none').fadeIn(150, function() {
-                    $targetDiv.css('height', '')
-                        .append($divs.slice(iLast + 1)); // append remaning
-                    defer.resolve(); // finally resolve deferred
+                $targetDiv.css('display', 'none').velocity('fadeIn', {
+                    duration: 150,
+                    complete: function() {
+                        $targetDiv.css('height', '')
+                            .append($divs.slice(iLast + 1)); // append remaning
+                        defer.resolve(); // finally resolve deferred
+                    }
                 });
             });
         }, 50);
@@ -207,8 +211,6 @@ return function(options) {
 
     function _RedrawDiv($div) {
         var $newDiv = _BuildDiv($div.data('thread'), curFolder.globalName === 'INBOX/Sent');
-        //~ if (!$div.children('.Headlines_check').is(':visible'))
-            //~ $newDiv.find('.Headlines_check').hide();
         if ($div.hasClass('Headlines_entryCurrent')) {
             $newDiv.addClass('Headlines_entryCurrent');
         }
@@ -226,14 +228,13 @@ return function(options) {
             $div.find('.Headlines_check > [class^=icoCheck]').replaceWith(
                 $('#icons .throbber').clone().css('padding', '8px') ); // replace checkbox with throbber
 
-            App.Post('getMessage', {
+            App.post('getMessage', {
                 id: headline.id,
-                ajaxUrl: App.GetAjaxUrl()
+                ajaxUrl: App.getAjaxUrl()
             }).always(function() {
                 $div.find('.throbber').replaceWith($check); // restore checkbox
             }).fail(function(resp) {
-                window.alert('Erro ao carregar email.\n' +
-                    'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                App.errorMessage('Erro ao carregar email.', resp);
             }).done(function(msg) {
                 headline.attachments = msg.attachments; // cache
                 headline.body = msg.body;
@@ -245,7 +246,7 @@ return function(options) {
     }
 
     THIS.load = function() {
-        return App.LoadTemplate('WidgetHeadlines.html');
+        return App.loadTemplate('WidgetHeadlines.html');
     };
 
     THIS.markRead = function(asRead) {
@@ -274,14 +275,13 @@ return function(options) {
                 $('#icons .throbber').clone().css('padding', '8px') ); // replace checkbox with throbber
             var relevantIds = $.map(relevantHeadlines, function(elem) { return elem.id; });
 
-            App.Post('markAsRead', { asRead:(asRead?1:0), ids:relevantIds.join(',') })
+            App.post('markAsRead', { asRead:(asRead?1:0), ids:relevantIds.join(',') })
             .always(function() {
                 $checkedDivs.find('.throbber').replaceWith($check); // restore checkbox
                 THIS.clearChecked();
                 onMarkReadCB(curFolder);
             }).fail(function(resp) {
-                window.alert('Erro ao alterar o flag de leitura das mensagens.\n' +
-                    'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                App.errorMessage('Erro ao alterar o estado de leitura das mensagens.', resp);
             }).done(function() {
                 if (curFolder.searchedFolder !== undefined) { // if a search result
                     curFolder.searchedFolder.messages.length = 0; // force cache rebuild
@@ -323,16 +323,15 @@ return function(options) {
         destFolder.messages.length = 0; // force cache rebuild
         destFolder.threads.length = 0;
 
-        App.Post('moveMessages', { messages:msgIds.join(','), folder:destFolder.id })
+        App.post('moveMessages', { messages:msgIds.join(','), folder:destFolder.id })
         .fail(function(resp) {
-            window.alert('Erro ao mover email.\n' +
-                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            App.errorMessage('Erro ao mover email.', resp);
         }).done(function() {
             if (curFolder.searchedFolder !== undefined) { // if a search result
                 curFolder.searchedFolder.messages.length = 0; // force cache rebuild
                 curFolder.searchedFolder.threads.length = 0;
             }
-            $checkedDivs.slideUp(200).promise('fx').done(function() {
+            $checkedDivs.velocity('slideUp', { duration:200 }).promise('fx').done(function() {
                 $checkedDivs.remove();
                 onMoveCB(destFolder);
             });
@@ -361,13 +360,12 @@ return function(options) {
             headlines[i].flagged = willStar; // update cache
         }
 
-        App.Post('markAsHighlighted', { ids:msgIds.join(','), asHighlighted:(willStar?'1':'0') })
+        App.post('markAsHighlighted', { ids:msgIds.join(','), asHighlighted:(willStar?'1':'0') })
         .always(function() {
             $checkedDivs.find('.Headlines_loading').replaceWith(
                 (willStar ? $('#icons .icoHigh1') : $('#icons .icoHigh0')).clone() );
         }).fail(function(resp) {
-            window.alert('Erro ao alterar o flag de destaque das mensagens.\n' +
-                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            App.errorMessage('Erro ao alterar o flag de destaque das mensagens.', resp);
         }).done(function() {
             THIS.clearChecked();
         });
@@ -403,16 +401,15 @@ return function(options) {
             var msgIds = $.map(headlines, function(elem) { return elem.id; });
             ThreadMail.RemoveHeadlinesFromFolder(msgIds, curFolder);
 
-            App.Post('deleteMessages', { messages:msgIds.join(','), forever:1 })
+            App.post('deleteMessages', { messages:msgIds.join(','), forever:1 })
             .fail(function(resp) {
-                window.alert('Erro ao apagar email.\n' +
-                    'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                App.errorMessage('Erro ao apagar email.', resp);
             }).done(function(status) {
                 if (curFolder.searchedFolder !== undefined) { // if a search result
                     curFolder.searchedFolder.messages.length = 0; // force cache rebuild
                     curFolder.searchedFolder.threads.length = 0;
                 }
-                $checkedDivs.slideUp(200).promise('fx').done(function() {
+                $checkedDivs.velocity('slideUp', { duration:200 }).promise('fx').done(function() {
                     $checkedDivs.remove();
                     onMoveCB(null);
                 });
@@ -432,12 +429,12 @@ return function(options) {
             $targetDiv.css('height', '100%'); // important for _AnimateFirstHeadlines()
             var $loading = _CreateDivLoading('Carregando mensagens...').appendTo($targetDiv);
             if (!curFolder.messages.length) { // not cached yet
-                App.Post('searchHeadlines', {
+                App.post('searchHeadlines', {
                     folderIds: curFolder.id,
                     start: 0,
                     limit: howMany
                 }).fail(function(resp) {
-                    window.alert('Erro na consulta dos emails de "'+curFolder.localName+'"\n'+resp.responseText);
+                    App.errorMessage('Erro na consulta dos emails de "'+curFolder.localName+'".', resp);
                     $targetDiv.children('.Headlines_loading').remove();
                     defer.reject();
                 }).done(function(headlines) {
@@ -471,19 +468,19 @@ return function(options) {
 
         var theCurFolderId = isSearchAfterSearch ?
             curFolder.searchedFolder.id : curFolder.id;
-        App.Post('searchHeadlines', {
+        App.post('searchHeadlines', {
             what: text,
             folderIds: theCurFolderId, // multiple folder IDs separated by commas
             start: 0,
             limit: howMany
         }).fail(function(resp) {
             if (resp.responseText.indexOf('please refine') !== -1) {
-                $loading.remove();
                 window.alert('A busca por "'+text+'" retornou muitos resultados.\n'+
                     'Pesquise por um termo mais específico.');
             } else {
-                window.alert('Erro na busca por "'+text+'".\n'+resp.responseText);
+                App.errorMessage('Erro na busca por "'+text+'".', resp);
             }
+            $loading.remove();
             defer.reject();
         }).done(function(resFolder) { // returns a virtual folder with search result, ID/globalName are null
             resFolder.searchedFolder = isSearchAfterSearch ? curFolder.searchedFolder : curFolder; // cache current folder being searched
@@ -508,14 +505,14 @@ return function(options) {
 
         var thisIsASearch = (curFolder.searchedFolder !== undefined); // actually a search result?
 
-        App.Post('searchHeadlines', {
+        App.post('searchHeadlines', {
             what: thisIsASearch ? curFolder.searchedText : '',
             folderIds: thisIsASearch ? curFolder.searchedFolder.id : curFolder.id,
             start: curFolder.messages.length,
             limit: howMany
         }).always(function() { $divLoading.remove(); })
         .fail(function(resp) {
-            window.alert('Erro ao trazer mais emails de "'+curFolder.localName+'"\n'+resp.responseText);
+            App.errorMessage('Erro ao trazer mais emails de "'+curFolder.localName+'".', resp);
         }).done(function(mails2) {
             if (thisIsASearch) {
                 mails2 = mails2.messages; // search returns more data than we need for loadMore()
@@ -549,11 +546,10 @@ return function(options) {
             headl0 = $current.data('thread')[0]; // 1st headline of thread being read
         }
 
-        App.Post('searchHeadlines', { folderIds:curFolder.id, start:0, limit:howMany })
+        App.post('searchHeadlines', { folderIds:curFolder.id, start:0, limit:howMany })
         .always(function() { $divLoading.remove(); })
         .fail(function(resp) {
-            window.alert('Erro na consulta dos emails de "'+curFolder.localName+'".\n' +
-                'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+            App.errorMessage('Erro na consulta dos emails de "' + curFolder.localName + '".', resp);
         }).done(function(headlines) {
             ThreadMail.Merge(curFolder.messages, ThreadMail.ParseTimestamps(headlines)); // insert into cache
             curFolder.threads = (curFolder.globalName === 'INBOX/Drafts') ?
@@ -634,10 +630,13 @@ return function(options) {
             var $div = $(div);
             if ($div.data('thread') === thread) { // compare references
                 if (!thread.length) { // headline entry will be deleted
-                    $div.slideUp(200, function() {
-                        $div.remove();
-                        if (onDone !== undefined && onDone !== null) {
-                            onDone();
+                    $div.velocity('slideUp', {
+                        duration: 200,
+                        complete: function() {
+                            $div.remove();
+                            if (onDone !== undefined && onDone !== null) {
+                                onDone();
+                            }
                         }
                     });
                 } else { // headline entry will be just updated

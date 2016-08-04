@@ -218,6 +218,12 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             'fulltext' => array(
                 'type' => 'string',
             ),
+            
+            'merge_invoices' => array(
+                'type'    => 'boolean',
+                'label'   => 'Merge', // _('Merge')
+                'default' => false,
+            ),
         )
     );
 

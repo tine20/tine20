@@ -10,6 +10,8 @@
 
 #templates { display:none; }
 
+#main-screen { width:100%; height:100% }
+
 #universalAccess { position:absolute; top:20px; left:16px; z-index:1;
     width:130px; height:24px; text-align:right; line-height:24px;
     background:url("img/universal-access.png") no-repeat; }
@@ -27,7 +29,7 @@
 }
 
 #credent { background:url("img/logo-expressobr-bottom.png") no-repeat bottom; }
-#unsupportedMsg { margin-top:65px; color:#333; }
+#unsupportedMsg { margin-top:40px; color:#333; }
 @media (max-width:1024px) { /* mobile */
     #credent { width:100%; height:100%; text-align:center; min-height:500px; }
     #logo-top { margin-top:16px; }

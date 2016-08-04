@@ -66,8 +66,8 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             handler: this.onFileSelected,
             scope: this,
             url: this.url,
-            tooltip: {title: i18n._(this.text_title)},
-            overflowText: i18n._(this.text_title)
+            tooltip: {title: _(this.text_title)},
+            overflowText: _(this.text_title)
         }));
 
         this.body = Ext.getBody();
@@ -229,7 +229,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             result = true;
         }
         else {
-            this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_error_file_type_not_permitted),filename,this.permitted_extensions.join(', ')));
+            this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_error_file_type_not_permitted),filename,this.permitted_extensions.join(', ')));
             result = false;
         }
 
@@ -237,7 +237,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
     },
 
     fireUploadStartEvent : function() {
-        this.wait = Ext.MessageBox.wait(i18n._(this.text_note_uploading), i18n._('Please wait!'));
+        this.wait = Ext.MessageBox.wait(_(this.text_note_uploading), _('Please wait!'));
         this.fireEvent('uploadstart', this);
     },
 
@@ -263,7 +263,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
     onAjaxSuccess : function(response, options) {
         var json_response = {
             'success' : false,
-            'error' : i18n._(this.text_note_upload_failed)
+            'error' : _(this.text_note_upload_failed)
         }
         try {
             var rt = response.responseText;
@@ -323,7 +323,7 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
             record : options.record,
             response : {
                 'success' : false,
-                'error' : i18n._(this.text_note_upload_failed)
+                'error' : _(this.text_note_upload_failed)
             }
         }
 
@@ -332,14 +332,19 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
         this.fireUploadCompleteEvent();
     },
 
+    getBaseFilename: function(filename) {
+        var parts = filename.split(/[\\\/]/);
+        return parts.pop();
+    },
+
     onUploadSuccess : function(dialog, filename, resp_data, record) {
-        var fileName = filename.replace(/[a-zA-Z]:[\\\/]fakepath[\\\/]/, '');
+        filename = this.getBaseFilename(filename);
         var html;
         if (this.isLocal) {
-            html = '<img alt="'+fileName+'" src="https://local.expressov3.serpro.gov.br:8998/'+resp_data.tempFile.eid+'"/>';
+            html = '<img alt="'+filename+'" src="https://local.expressov3.serpro.gov.br:8998/'+resp_data.tempFile.eid+'"/>';
         }
         else {
-            html = '<img alt="'+fileName+'" src="index.php?method=Expressomail.showTempImage&tempImageId='+resp_data.id+'"/>';
+            html = '<img alt="'+filename+'" src="index.php?method=Expressomail.showTempImage&tempImageId='+resp_data.id+'"/>';
         }
         if (!dialog.cmp.activated) {
             dialog.cmp.getEditorBody().focus();
@@ -356,13 +361,11 @@ Ext.ux.form.HtmlEditor.UploadImage = Ext.extend(Ext.util.Observable, {
     },
 
     onUploadError : function(dialog, filename, resp_data, record) {
-        var fileName = filename.replace(/[a-zA-Z]:[\\\/]fakepath[\\\/]/, '');
-        this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_note_upload_error),resp_data.maxsize));
+        this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_note_upload_error),resp_data.maxsize));
     },
 
     onUploadFailed : function(dialog, filename, resp_data, record) {
-        var fileName = filename.replace(/[a-zA-Z]:[\\\/]fakepath[\\\/]/, '');
-        this.showMessage(i18n._(this.text_error_msgbox_title),String.format(i18n._(this.text_note_upload_failed),resp_data.maxsize));
+        this.showMessage(_(this.text_error_msgbox_title),String.format(_(this.text_note_upload_failed),resp_data.maxsize));
     },
 
     showMessage : function(title, message) {

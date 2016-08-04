@@ -338,7 +338,7 @@ msgstr "Keine Wiederholungsregel definiert"
 
 #: js/RrulePanel.js:77 js/Calendar-FAT-debug.js:10689 js/Calendar-FAT.js:6
 msgid "None"
-msgstr "Einmalig"
+msgstr "Keine"
 
 #: js/RrulePanel.js:91 js/Calendar-FAT-debug.js:10703 js/Calendar-FAT.js:6
 msgid "Weekly"
@@ -1432,7 +1432,7 @@ msgstr "Inkrement der Zeiteinheit für Termine"
 
 #: Preference.php:171
 msgid "Default set Events to privat"
-msgstr "Setze standardmäßig Termine auf privat"
+msgstr "Setze standartmäßig Termine auf privat"
 
 #: Preference.php:172
 msgid "If enabled every created event is always privat."
@@ -1723,9 +1723,6 @@ msgstr "\"%2$s\" Antwort von %1$s"
 msgid "Event details"
 msgstr "Termin Details"
 
-msgid "Send Alarm Notifications Emails"
-msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
-
 msgid "Print Event"
 msgstr "Termin Drucken"
 
@@ -1755,3 +1752,18 @@ msgstr "Angezeigte Zeit"
 
 msgid "Time to be displayed at once"
 msgstr "Wie viele Zeit auf einmal angezeigt werden sollen"
+
+msgid "Me"
+msgstr "Meine"
+
+msgid "Intelligent"
+msgstr "Intelligent"
+
+msgid "Calendar owner"
+msgstr "Kalender Besitzer"
+
+msgid "Filtered attendee"
+msgstr "Gefilterte Teilnehmer"
+
+msgid "Send Alarm Notifications Emails"
+msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"

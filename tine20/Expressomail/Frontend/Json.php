@@ -919,7 +919,9 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $user = Tinebase_Core::getUser();
         $allowedEmails = is_array($user->smtpUser->emailAliases)?array_merge($allowedEmails, $user->smtpUser->emailAliases):$allowedEmails;
         foreach ($extraSenderAccounts['results'] as $account) {
-            $allowedEmails[] = $account['accountEmailAddress'];
+            if (array_key_exists('accountEmailAddress', $account)) {
+                $allowedEmails[] = $account['accountEmailAddress'];
+            }
         }
 
         Expressomail_Session::getSessionNamespace()->allowedEmails[$user->accountId] = $allowedEmails;
@@ -961,6 +963,10 @@ class Expressomail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['reportPhishingEmail'] = $config->reportPhishingEmail;
         // add mail folders export feature to client registry
         $result['enableMailDirExport'] = $config->enableMailDirExport;
+
+        $result['availableImapBackends'] = array_keys(Expressomail_Backend_ImapProxy::getAvailableBackends());
+
+        $result['availableSieveBackends'] = array_keys(Expressomail_Backend_SieveFactory::getAvailableBackends());
 
         return $result;
     }

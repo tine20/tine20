@@ -8,11 +8,12 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App'
 ],
 function($, App) {
-App.LoadCss('common-js/SimpleMenu.css');
+App.loadCss('common-js/SimpleMenu.css');
 return function(options) {
     var userOpts = $.extend({
         $parentContainer: null

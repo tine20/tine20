@@ -14,20 +14,18 @@
 @media (max-width:1024px) { .EditEvent_panel { padding:5px; overflow-y:scroll; } } /* mobile */
 @media (min-width:1025px) { .EditEvent_panel { padding:9px; overflow-y:auto; } } /* desktop */
 
-.EditEvent_label,
-.EditEvent_labelShort { display:inline-block; width:55px; color:#777; font-size:90%; font-style:italic; }
-.EditEvent_label { }
-.EditEvent_labelShort { text-align:center; }
+.EditEvent_label { display:inline-block; width:55px; color:#777; font-size:90%; font-style:italic; }
+.EditEvent_field { width:calc(100% - 55px); padding:4px; }
+.EditEvent_fieldShort { margin-left:2px; display:inline-block; }
 
-.EditEvent_field,
-.EditEvent_fieldShort { margin-bottom:6px; padding:4px; }
-.EditEvent_field { width:calc(100% - 55px); }
-.EditEvent_fieldShort { width:120px; display:inline-block; }
-
-.EditEvent_checkboxWrap { display:inline-block; margin-bottom:6px; padding:4px; }
+.EditEvent_checkboxWrap { display:inline-block; padding:4px; }
 .EditEvent_people { display:inline-block; vertical-align:middle; min-height:26px;
-    border:1px solid #BBB; cursor:text; margin-bottom:6px; padding:1px; }
+    border:1px solid #BBB; cursor:text; padding:1px; }
 .EditEvent_descriptionLabel { width:100%; margin-top:5px; }
-.EditEvent_description { width:100%; margin-bottom:6px; padding:4px; }
+.EditEvent_description { width:100%; padding:4px; }
+
+@media (max-width:1024px) { .EditEvent_bottomMargin { margin-bottom:10px; } } /* mobile */
+@media (min-width:1025px) { .EditEvent_bottomMargin { margin-bottom:6px; } } /* desktop */
+
 .EditEvent_savingThrobber { text-align:center; font-style:italic; color:#555; margin-top:20px; }
 .EditEvent_footer { margin-top:3px; text-align:center; padding-bottom:10px; }

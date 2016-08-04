@@ -8,7 +8,10 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery'], function($) {
+define([
+    'common-js/jQuery'
+],
+function($) {
 return function(options) {
     var userOpts = $.extend({
         url: '',

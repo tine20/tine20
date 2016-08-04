@@ -770,7 +770,14 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
             . ' Get Message body (part: ' . $_partId . ') of message id ' . $message->getId() . ' (content type ' . $_contentType . ')');
 
         if ($_partId == NULL && $message->content_type === Expressomail_Model_Message::CONTENT_TYPE_MULTIPART_REPORT) {
-            $messageBody = $this->_getMultipartReportMessageBody($message, $_partId, $_contentType, $_account);
+            $reportType = $this->_getMultipartReportType($message);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' message is a multipart content type. Check its subtype print user friendly message:' . print_r($reportType,true));
+
+            //Message Disposition Notification (MDN) and Delivery Status Notification (DSN) have different behaviors. Default is delivery
+            ($reportType === Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION) ?
+                $messageBody = $this->_getMultipartReportNotificationMessageBody($message, $_partId, $_contentType, $_account) :
+                $messageBody = $this->_getMultipartReportMessageBody($message, $_partId, $_contentType, $_account);
         } else {
             $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
         }
@@ -1621,4 +1628,62 @@ class Expressomail_Controller_Message extends Tinebase_Controller_Record_Abstrac
         return $formattedDateTime . ' ' . $gmt;
     }
 
+    /**
+     * Get message multipart report subtype
+     *
+     * @param $messageReport
+     * @return string $_defaultType
+     */
+    private function _getMultipartReportType($_messageReport){
+        $_parts = $_messageReport['structure']['parts'];
+        $_defaultType = Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DELIVERYSTATUS;
+
+        foreach ($_parts as $_partId){
+            if ($_partId['contentType'] === Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION){
+                $_defaultType = Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION;
+                break;
+            }
+        }
+        return $_defaultType;
+    }
+
+    /**
+     * Get multipart report notification message body
+     *
+     * @param Expressomail_Model_Message $_message
+     * @return string Expressomail_Model_MessageDispositionNotificationPart->getHTMLFormatted $_mdnMessage
+     */
+    private function _getMultipartReportNotificationMessageBody(Expressomail_Model_Message $_message, $_partId, $_contentType, $_account = NULL)
+    {
+        $_structure = $_message->getPartStructure($_partId);
+        $_bodyParts = $_message->getBodyParts($_structure, $_contentType);
+
+        // test if we have all the parts
+        if (empty($_bodyParts)
+            || count($_bodyParts) < 2 || count($_bodyParts) > 3
+            || (!isset($_bodyParts[2]['contentType'])
+                && $_bodyParts[2]['contentType'] !== Expressomail_Model_Message::CONTENT_TYPE_MESSAGE_DISPOSITION_NOTIFICATION
+            )
+        ){
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__. ' Malformed MDN Message.');
+            return '';
+        }
+
+        // MDN message assembly needs 2 original message parts to handle
+        //First is part 2 to get original message send data
+        $_bodyPart = $this->getMessagePart($_message, 2, FALSE, $_structure);
+        //Second is part 1 to get SIEVE automatic message data
+        $_bodyPart2 = $this->getMessagePart($_message, 1, FALSE, $_structure);
+
+        $_mdnMessage = new Expressomail_Model_MessageDispositionNotificationPart(
+                $this->_getDecodedBodyContent($_bodyPart, $_structure));
+
+        $_mdnSieve = new Expressomail_Model_MessageDispositionNotificationPart(
+                $this->_getDecodedBodyContent($_bodyPart2, $_structure));
+
+        $_userMessage = $_mdnSieve->getCustomMessage();
+
+        //Put them together to assebly user friendly message
+        return $_mdnMessage->getHTMLFormatted($_userMessage);
+    }
 }

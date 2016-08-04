@@ -8,27 +8,31 @@
  * @copyright Copyright (c) 2016 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/Dialog',
     'common-js/TextBadges',
     'common-js/ContactsAutocomplete',
-    'calendar/DateCalc'
+    'calendar/DateCalc',
+    'calendar/WidgetChooseDate'
 ],
-function($, App, Dialog, TextBadges, ContactsAutocomplete, DateCalc) {
-App.LoadCss('calendar/WidgetEditEvent.css');
+function($, App, Dialog, TextBadges, ContactsAutocomplete, DateCalc, WidgetChooseDate) {
+App.loadCss('calendar/WidgetEditEvent.css');
 return function(options) {
     var userOpts = $.extend({
     }, options);
 
-    var THIS           = this;
-    var $tpl           = null; // jQuery object with our HTML template
-    var popup          = null; // Dialog object, created on show()
-    var txtBadges      = null; // TextBadges object
-    var autocomp       = null; // ContactsAutocomplete object
-    var curCalendar    = null; // calendar object to save event into
-    var isSaving       = false; // a "save" async request is running
-    var onEventSavedCB = $.noop;
+    var THIS            = this;
+    var $tpl            = null; // jQuery object with our HTML template
+    var popup           = null; // Dialog object, created on show()
+    var txtBadges       = null; // TextBadges object
+    var autocomp        = null; // ContactsAutocomplete object
+    var datePickerStart = null; // WidgetChooseDate objects
+    var datePickerEnd   = null;
+    var curCalendar     = null; // calendar object to save event into
+    var isSaving        = false; // a "save" async request is running
+    var onEventSavedCB  = $.noop;
 
     function _NameFromAddr(addr) {
         var name = addr.substr(0, addr.indexOf('@')).toLowerCase();
@@ -40,6 +44,18 @@ return function(options) {
     }
 
     function _GetFieldValues() {
+        function tineDateTime(datePicker, suffix) { // Tine format datetime: '2016-02-29 06:30:00'
+            var dt = datePicker.getCurDate();
+            if ($tpl.find('.EditEvent_wholeDay > :checkbox').prop('checked')) {
+                dt.setHours(suffix === 'Start' ? 0 : 23);
+                dt.setMinutes(suffix === 'Start' ? 0 : 59);
+            } else {
+                dt.setHours($tpl.find('.EditEvent_hour'+suffix+' :selected').text());
+                dt.setMinutes($tpl.find('.EditEvent_min'+suffix+' :selected').text());
+            }
+            return dt; // DateTime object
+        }
+
         var vals = {
             calendarId: curCalendar.id,
             title: $tpl.find('.EditEvent_title').val(),
@@ -48,19 +64,10 @@ return function(options) {
             isWholeDay: $tpl.find('.EditEvent_wholeDay > :checkbox').prop('checked') ? 1 : 0,
             isBlocking: $tpl.find('.EditEvent_noBlock > :checkbox').prop('checked') ? 0 : 1,
             notifyPeople: $tpl.find('.EditEvent_notifyPeople > :checkbox').prop('checked') ? 1 : 0,
-            ymdStart: $tpl.find('.EditEvent_ymdStart').val(),
-            hmStart: $tpl.find('.EditEvent_hmStart').val(),
-            ymdEnd: $tpl.find('.EditEvent_ymdEnd').val(),
-            hmEnd: $tpl.find('.EditEvent_hmEnd').val(),
+            dtStart: tineDateTime(datePickerStart, 'Start'),
+            dtEnd: tineDateTime(datePickerEnd, 'End'),
             description: $tpl.find('.EditEvent_description').val()
         };
-
-        vals.dtStart = vals.ymdStart+' ' + // Tine format datetime: '2016-02-29 06:30:00'
-            (vals.isWholeDay ? '00:00' : vals.hmStart) +
-            ':00';
-        vals.dtEnd = vals.ymdEnd+' ' +
-            (vals.isWholeDay ? '23:59' : vals.hmEnd) +
-            ':00';
 
         return vals;
     }
@@ -72,38 +79,8 @@ return function(options) {
             return false;
         }
 
-        function goodYearMonthDay(ymd, what, objSuffix) { // temporary: should go away with a decent datetime widget
-            if (ymd.match(/\d{4}-\d{2}-\d{2}/) === null) {
-                alert('Data de '+what+' possui formato inválido.\n' +
-                    'O formato aceito é: 2000-12-31');
-                $tpl.find('.EditEvent_'+objSuffix).focus();
-                return false;
-            }
-            return true;
-        }
-        function goodHourMinute(hm, what, objSuffix) {
-            if (hm.match(/\d{2}:\d{2}/) === null) {
-                alert('Hora de '+what+' possui formato inválido.\n' +
-                    'O formato aceito é: 06:30');
-                $tpl.find('.EditEvent_'+objSuffix).focus();
-                return false;
-            }
-            return true;
-        }
-
-        if (!goodYearMonthDay(fields.ymdStart, 'início', 'ymdStart') ||
-            !goodYearMonthDay(fields.ymdEnd, 'término', 'ymdEnd') ||
-            (!fields.isWholeDay && !goodHourMinute(fields.hmStart, 'início', 'hmStart')) ||
-            (!fields.isWholeDay && !goodHourMinute(fields.hmEnd, 'término', 'hmEnd')) )
-        {
-            return false;
-        }
-
-        if ((fields.isWholeDay && DateCalc.createFromYmd(fields.ymdStart) > DateCalc.createFromYmd(fields.ymdEnd)) ||
-            (!fields.isWholeDay && DateCalc.strToDate(fields.dtStart) >= DateCalc.strToDate(fields.dtEnd)) )
-        {
-            alert('A data de término deve ser posterior à data de início.');
-            $tpl.find('.EditEvent_ymdEnd').focus();
+        if (fields.dtStart > fields.dtEnd) {
+            alert('A data e/ou hora de término deve ser posterior à data e à hora de início.');
             return false;
         }
 
@@ -134,11 +111,15 @@ return function(options) {
             txtBadges.removeLastBadge();
         });
 
+        datePickerStart.onSelect(function(dt) {
+            if (dt > datePickerEnd.getCurDate()) {
+                datePickerEnd.setCurDate(dt);
+            }
+        });
+
         $tpl.find('.EditEvent_wholeDay > :checkbox').on('change', function() {
             var isWholeDay = $(this).prop('checked');
-            $tpl.find('.EditEvent_hmStart').prev().toggle(!isWholeDay);
             $tpl.find('.EditEvent_hmStart').toggle(!isWholeDay);
-            $tpl.find('.EditEvent_hmEnd').prev().toggle(!isWholeDay);
             $tpl.find('.EditEvent_hmEnd').toggle(!isWholeDay);
         });
 
@@ -153,17 +134,19 @@ return function(options) {
 
             var fields = _GetFieldValues();
             if (_ValidateFieldValues(fields)) {
+                fields.dtStart = DateCalc.makeQueryStrWithHourMinute(fields.dtStart); // from DateTime to string
+                fields.dtEnd = DateCalc.makeQueryStrWithHourMinute(fields.dtEnd);
+
                 isSaving = true;
                 popup.removeCloseButton();
                 popup.setCaption('Salvando evento...');
                 $tpl.empty();
                 $tpl.append($('#EditEvent_template .EditEvent_savingThrobber').clone());
 
-                App.Post('saveEvent',
+                App.post('saveEvent',
                     fields
                 ).fail(function(resp) {
-                    window.alert('Erro ao salvar o evento.\n' +
-                        resp.responseText);
+                    App.errorMessage('Erro ao salvar o evento.', resp);
                 }).always(function() {
                     isSaving = false;
                     $tpl.find('.EditEvent_savingThrobber').remove();
@@ -179,12 +162,13 @@ return function(options) {
         var defer = $.Deferred();
         ( $('#EditEvent_template').length ? // load once
             $.Deferred().resolve().promise() :
-            App.LoadTemplate('WidgetEditEvent.html')
+            App.loadTemplate('WidgetEditEvent.html')
         ).done(function() {
             $.when(
                 Dialog.Load(),
                 TextBadges.Load(),
-                ContactsAutocomplete.Load()
+                ContactsAutocomplete.Load(),
+                WidgetChooseDate.Load()
             ).done(function() {
                 defer.resolve();
             });
@@ -220,6 +204,25 @@ return function(options) {
                 $txtField: txtBadges.getInputField(),
                 $anchorElem: $tpl.find('.EditEvent_people'),
                 $contentPanel: $tpl
+            });
+
+            datePickerStart = new WidgetChooseDate({
+                $elem: $tpl.find('.EditEvent_ymdStart')
+            });
+
+            datePickerEnd = new WidgetChooseDate({
+                $elem: $tpl.find('.EditEvent_ymdEnd')
+            });
+
+            for (var i = 6; i <= 21; ++i) {
+                $tpl.find('.EditEvent_hourStart,.EditEvent_hourEnd').append(
+                    $('<option>'+DateCalc.pad2(i)+'</option>'));
+            }
+            $tpl.find('.EditEvent_hourStart').val('08');
+            $tpl.find('.EditEvent_hourEnd').val('09');
+            ['00','15','30','45'].forEach(function(val) {
+                $tpl.find('.EditEvent_minStart,.EditEvent_minEnd').append(
+                    $('<option>'+val+'</option>'));
             });
 
             _SetEvents();

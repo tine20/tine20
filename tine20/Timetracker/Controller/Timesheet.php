@@ -243,20 +243,32 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
+        if (!$this->_doContainerACLChecks) {
+            return true;
+        }
+
+        $isAdmin = false;
         // users with MANAGE_TIMEACCOUNTS have all grants here
         if ( $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
-             || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            return TRUE;
+            || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            $isAdmin = true;
         }
-        
-        // only TA managers are allowed to alter TS of closed TAs
+
+        // only TA managers are allowed to alter TS of closed TAs, but they have to confirm first that they really want to do it
         if ($_action != 'get') {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
             if (! $timeaccount->is_open) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' This Timeaccount is already closed!');
+
+                if ($isAdmin === true) {
+                    if (is_array($this->_requestContext) && isset($this->_requestContext['skipClosedCheck']) && $this->_requestContext['skipClosedCheck']) {
+                        return true;
+                    }
+                }
+
                 if ($_throw) {
-                    throw new Tinebase_Exception_AccessDenied('This Timeaccount is already closed!');
+                    throw new Timetracker_Exception_ClosedTimeaccount();
                 }
                 return FALSE;
             }
@@ -267,6 +279,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $this->_fieldGrants['is_billable']['requiredGrant'] = Tinebase_Model_Grants::GRANT_ADMIN;
             }
         }
+
+        if ($isAdmin === true) {
+            return true;
+        }
+
         
         $hasGrant = FALSE;
         

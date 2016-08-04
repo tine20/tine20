@@ -20,9 +20,9 @@
 </head>
 <body>
 
-<div id="top" name="top">
+<div id="top">
     <div id="logomark"></div>
-    <div id="anchors" name="anchors" class="links systemLinks">
+    <div id="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="#folders" accesskey="1">Ir para listagem de pastas [1]</a></li>
@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<div id="folders" name="folders">
+<div id="folders">
 <h2 class="anchorsTitle">Pastas</h2>
     <div class="links systemLinks">
         <ul >

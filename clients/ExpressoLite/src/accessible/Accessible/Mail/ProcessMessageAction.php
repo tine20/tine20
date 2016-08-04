@@ -26,6 +26,16 @@ class ProcessMessageAction extends Handler
     const ACTION_MARK_UNREAD = 'Marcar como não lido';
 
     /**
+     * @var ACTION_DELETE.
+     */
+    const ACTION_DELETE = 'Apagar selecionados';
+
+    /**
+     * @var ACTION_EMPTY_TRASH
+     */
+    const ACTION_EMPTY_TRASH = 'Esvaziar pasta lixeira';
+
+    /**
      * @see Accessible\Handler::execute
      */
     public function execute($params)
@@ -38,22 +48,29 @@ class ProcessMessageAction extends Handler
         }
 
         // check wich action to be executed
-        if($params->actionProcess === self::ACTION_MARK_UNREAD) {
+        if ($params->actionProcess === self::ACTION_MARK_UNREAD) {
             Dispatcher::processRequest('Mail.MarkMessageAsUnread', $params);
-        } else {
-            // action does not exist
-            Dispatcher::processRequest('Core.ShowFeedback', (object) array (
-                'typeMsg' => ShowFeedback::MSG_ERROR,
-                'message' => 'Ação requisitada não existe',
-                'destinationText' => 'Voltar para ' . $params->folderName,
-                'destinationUrl' => (object) array(
-                    'action' => 'Mail.Main',
-                    'params' => array (
-                        'folderId' => $params->folderId,
-                        'page' => $params->page
-                    )
-                )
-            ));
+            return;
         }
+
+        // check wich action to be executed
+        if ($params->actionProcess === self::ACTION_DELETE) {
+            Dispatcher::processRequest('Mail.DeleteMessage', $params);
+            return ;
+        }
+
+        // Action requested does not exist
+        Dispatcher::processRequest('Core.ShowFeedback', (object) array (
+            'typeMsg' => ShowFeedback::MSG_ERROR,
+            'message' => 'Ação requisitada não existe',
+            'destinationText' => 'Voltar para ' . $params->folderName,
+            'destinationUrl' => (object) array(
+                'action' => 'Mail.Main',
+                'params' => array (
+                    'folderId' => $params->folderId,
+                    'page' => $params->page
+                )
+            )
+        ));
     }
 }

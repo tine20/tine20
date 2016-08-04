@@ -11,23 +11,23 @@
 <section id="EditEvent_template">
     <section class="EditEvent_panel"><!-- will be shown into a non-modal window -->
         <div><div class="EditEvent_label">Título:</div><input type="text"
-            class="EditEvent_field EditEvent_title"/></div>
+            class="EditEvent_field EditEvent_title EditEvent_bottomMargin"/></div>
         <div><div class="EditEvent_label">Pessoas:</div><div
-            class="EditEvent_field EditEvent_people"/></div></div>
+            class="EditEvent_field EditEvent_people EditEvent_bottomMargin"/></div></div>
         <div><div class="EditEvent_label">Local:</div><input type="text"
-            class="EditEvent_field EditEvent_location"/></div>
+            class="EditEvent_field EditEvent_location EditEvent_bottomMargin"/></div>
         <div><div class="EditEvent_label">Opções:</div><label
-            class="EditEvent_checkboxWrap EditEvent_wholeDay"><input type="checkbox"/>dia inteiro</label>
-            <label class="EditEvent_checkboxWrap EditEvent_noBlock"><input type="checkbox"/>sem bloqueio</label>
-            <label class="EditEvent_checkboxWrap EditEvent_notifyPeople"><input type="checkbox"/>notificar participantes</label></div>
-        <div><div class="EditEvent_label">Início:</div><input type="text"
-            class="EditEvent_fieldShort EditEvent_ymdStart" placeholder="ex.: 2000-12-31"/>
-            <div class="EditEvent_labelShort">Hora:</div><input type="text"
-            class="EditEvent_fieldShort EditEvent_hmStart" placeholder="ex.: 06:30"/></div>
-        <div><div class="EditEvent_label">Término:</div><input type="text"
-            class="EditEvent_fieldShort EditEvent_ymdEnd" placeholder="ex.: 2000-12-31"/>
-            <div class="EditEvent_labelShort">Hora:</div><input type="text"
-            class="EditEvent_fieldShort EditEvent_hmEnd" placeholder="ex.: 06:30"/></div>
+            class="EditEvent_checkboxWrap EditEvent_wholeDay EditEvent_bottomMargin"><input type="checkbox"/>dia inteiro</label>
+            <label class="EditEvent_checkboxWrap EditEvent_noBlock EditEvent_bottomMargin"><input type="checkbox"/>sem bloqueio</label>
+            <label class="EditEvent_checkboxWrap EditEvent_notifyPeople EditEvent_bottomMargin"><input type="checkbox"/>notificar participantes</label></div>
+        <div><div class="EditEvent_label">Início:</div><div
+            class="EditEvent_fieldShort EditEvent_ymdStart EditEvent_bottomMargin"></div> &nbsp;
+            <span class="EditEvent_hmStart"><select class="EditEvent_fieldShort EditEvent_hourStart"></select> :
+            <select class="EditEvent_fieldShort EditEvent_minStart"></select></span></div>
+        <div><div class="EditEvent_label">Término:</div><div
+            class="EditEvent_fieldShort EditEvent_ymdEnd EditEvent_bottomMargin"></div> &nbsp;
+            <span class="EditEvent_hmEnd"><select class="EditEvent_fieldShort EditEvent_hourEnd"></select> :
+            <select class="EditEvent_fieldShort EditEvent_minEnd"></select></span></div>
         <div class="EditEvent_label EditEvent_descriptionLabel">Descrição do evento:</div>
         <textarea rows="5" class="EditEvent_description"/></textarea>
         <div class="EditEvent_footer"><input type="button" class="EditEvent_save"

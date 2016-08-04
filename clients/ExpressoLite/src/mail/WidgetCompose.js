@@ -8,7 +8,8 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/DateFormat',
     'common-js/Dialog',
@@ -18,7 +19,7 @@ define(['jquery',
     'mail/WidgetAttacher'
 ],
 function($, App, DateFormat, Dialog, TextBadges, ContactsAutocomplete, ThreadMail, WidgetAttacher) {
-App.LoadCss('mail/WidgetCompose.css');
+App.loadCss('mail/WidgetCompose.css');
 return function(options) {
     var userOpts = $.extend({
         address: 'user@domain', // user email address
@@ -44,10 +45,9 @@ return function(options) {
                 .append('Atualizando rascunho... ')
                 .append($('#Compose_template .Compose_throbber').clone()) );
 
-            App.Post('deleteMessages', { messages:draftMsgObj.id, forever:1 })
+            App.post('deleteMessages', { messages:draftMsgObj.id, forever:1 })
             .fail(function(resp) {
-                window.alert('Erro ao apagar o rascunho antigo.\n' +
-                    'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                App.errorMessage('Erro ao apagar o rascunho antigo.', resp);
             }).done(function(status) {
                 var draftFolder = ThreadMail.FindFolderByGlobalName('INBOX/Drafts', userOpts.folderCache);
                 --draftFolder.totalMails;
@@ -59,7 +59,7 @@ return function(options) {
     }
 
     function _ResizeWriteField() {
-        if (App.IsPhone()) return; // phones will scroll dialog vertically
+        if (App.isPhone()) return; // phones will scroll dialog vertically
         var cy = popup.getContentArea().cy;
         var cyUsed = 0;
         $tpl.children(':visible:not(.Compose_body)').each(function(idx, elem) {
@@ -421,10 +421,9 @@ return function(options) {
                     fwdMsg = msg.fwd,
                     draftMsg = msg.draft; // cache to send to callback, since they'll soon be nulled by a close()
 
-                App.Post('saveMessage', message)
+                App.post('saveMessage', message)
                 .fail(function(resp) {
-                    window.alert('Erro ao enviar email.\n' +
-                        'Sua interface está inconsistente, pressione F5.\n'+resp.responseText);
+                    App.errorMessage('Erro ao enviar email.', resp);
                     isSending = false;
                     popup.close();
                 }).done(function(status) {
@@ -451,10 +450,9 @@ return function(options) {
                 popup.toggleMinimize();
                 var draftFolder = ThreadMail.FindFolderByGlobalName('INBOX/Drafts', userOpts.folderCache);
 
-                App.Post('saveMessageDraft', $.extend({ draftFolderId:draftFolder.id }, message))
+                App.post('saveMessageDraft', $.extend({ draftFolderId:draftFolder.id }, message))
                 .fail(function(resp) {
-                    window.alert('Erro ao salvar rascunho.\n' +
-                        'Sua interface está inconsistente, pressione F5.\n' + resp.responseText);
+                    App.errorMessage('Erro ao salvar rascunho.', resp);
                     isSending = false;
                     popup.close();
                 }).done(function(status) {
@@ -530,7 +528,7 @@ return function(options) {
             $contentPanel: $tpl
         });
 
-        if (!App.IsPhone()) {
+        if (!App.isPhone()) {
             $tpl.find('.Compose_subject').removeAttr('placeholder');
         }
 
@@ -544,7 +542,7 @@ return function(options) {
         var defer = $.Deferred();
         ( $('#Compose_template').length ? // load once
             $.Deferred().resolve().promise() :
-            App.LoadTemplate('WidgetCompose.html')
+            App.loadTemplate('WidgetCompose.html')
         ).done(function() {
             $.when(
                 Dialog.Load(),

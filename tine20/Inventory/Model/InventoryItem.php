@@ -32,7 +32,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 7,
+        'version'           => 8,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
@@ -185,11 +185,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'nullable'   => true,
             ),
             'deprecated_status' => array(
-                'type'         => 'boolean',
+                'type'         => 'integer',
                 'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 //'label'        => 'Deprecate', // _('Deprecate')
                 'label'        => NULL,
-                'default'      => false,
+                'default'      => 0,
             ),
             'image' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

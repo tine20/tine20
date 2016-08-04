@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'calendar/DateCalc'
 ],
 function($, App, DateCalc) {
-App.LoadCss('calendar/WidgetWeek.css');
+App.loadCss('calendar/WidgetWeek.css');
 return function(options) {
     var userOpts = $.extend({
         events: null, // Events cache object
@@ -31,7 +32,7 @@ return function(options) {
     THIS.load = function() {
         return $('#Week_template').length ? // load once
             $.Deferred().resolve().promise() :
-            App.LoadTemplate('WidgetWeek.html');
+            App.loadTemplate('WidgetWeek.html');
     };
 
     THIS.hide = function() {
@@ -100,8 +101,11 @@ return function(options) {
             $templateView.show();
             $templateView.find('.Week_grid').scrollTop( // scroll so that 8:00 is first row shown
                 $templateView.find('.Week_eachHour:first').outerHeight() * 8);
-            $templateView.hide().fadeIn(userOpts.animationTime, function() {
-                defer.resolve();
+            $templateView.velocity('fadeIn', {
+                duration: userOpts.animationTime,
+                complete: function() {
+                    defer.resolve();
+                }
             });
         }).fail(function() {
             defer.reject();

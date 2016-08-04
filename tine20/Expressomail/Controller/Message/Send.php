@@ -76,6 +76,7 @@ class Expressomail_Controller_Message_Send extends Expressomail_Controller_Messa
         $account = Expressomail_Controller_Account::getInstance()->get($_message->account_id);
         $this->_resolveOriginalMessage($_message);
         $mail = $this->createMailForSending($_message, $account);
+        date_default_timezone_set(Tinebase_Core::getUserTimezone());//fetch date header to use GMT
         $this->_sendMailViaTransport($mail, $account, $_message, true);
 
         // get an array with all recipients

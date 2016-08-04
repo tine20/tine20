@@ -26,6 +26,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     evalGrants: false,
     useInvoice: false,
     displayNotes: true,
+    context: { 'skipClosedCheck': false },
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -279,6 +280,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
+     * returns additional save params
+     *
+     * @returns {{checkBusyConflicts: boolean}}
+     */
+    getAdditionalSaveParams: function() {
+        return {
+            context: this.context
+        };
+    },
+    
+    /**
      * show error if request fails
      * 
      * @param {} response
@@ -295,11 +307,33 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
             );
+        } else if (response.code && response.code == 403) {
+            //Time Account is closed
+            console.warn(this.grants);
+            if(Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+                this.onClosedWarning.apply(this, arguments);
+            } else {
+                Ext.MessageBox.alert(
+                    this.app.i18n._('Closed Timeaccount Warning!'), 
+                    String.format(this.app.i18n._('The selected Time Account is already closed.'))
+                );
+            }
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);
         }
         this.loadMask.hide();
+    },
+    
+    onClosedWarning: function() {
+        Ext.Msg.confirm(this.app.i18n._('Closed Timeaccount Warning!'),
+            this.app.i18n._('The selected Time Account is already closed. Do you wish to continue anyway?'),
+            function(btn) {
+                if (btn == 'yes') {
+                    this.context = { 'skipClosedCheck': true };
+                    this.onApplyChanges(true);
+                }
+            }, this);
     }
 });
 

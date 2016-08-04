@@ -144,7 +144,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         $ts = new Timetracker_Model_Timesheet($data, TRUE);
 
         if ($_forceCreation) {
-            $tsRec = $this->_json->saveTimesheet($ts->toArray(), $_forceCreation);
+            $tsRec = $this->_json->saveTimesheet($ts->toArray());
             $this->_lastCreatedRecord = $tsRec;
         }
 

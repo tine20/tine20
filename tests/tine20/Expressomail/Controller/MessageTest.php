@@ -4,7 +4,7 @@
  *
  * @package     Expressomail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  *
@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Expressomail_Controller
  */
-class Expressomail_Controller_MessageTest extends TestCase
+class Expressomail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Felamimail_Controller_Message
@@ -61,6 +61,18 @@ class Expressomail_Controller_MessageTest extends TestCase
     protected $_accountsToDelete = array();
     
     /**
+     * Runs the test methods of this class.
+     *
+     * @access public
+     * @static
+     */
+    public static function main()
+    {
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Expressomail Message Controller Tests');
+        PHPUnit_TextUI_TestRunner::run($suite);
+    }
+
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -71,7 +83,9 @@ class Expressomail_Controller_MessageTest extends TestCase
         $this->_account    = Expressomail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Expressomail_Controller_Message::getInstance();
         $this->_imap       = Expressomail_Backend_ImapFactory::factory($this->_account);
-        
+        if ($this->_testFolderName !== 'INBOX') {
+            $this->_testFolderName = 'INBOX/' . $this->_testFolderName;
+        }
         $this->_folder     = $this->getFolder($this->_testFolderName);
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_createdMessages = new Tinebase_Record_RecordSet('Expressomail_Model_Message');
@@ -1191,7 +1205,9 @@ class Expressomail_Controller_MessageTest extends TestCase
      */
     protected function _getTestEmailAddress()
     {
-        return $this->_getEmailAddress();
+        $testConfig = Zend_Registry::get('testConfig');
+        $email = ($testConfig->email) ? $testConfig->email : 'unittest@tine20.org';
+        return $email;
     }
     
     /**
@@ -1474,27 +1490,89 @@ class Expressomail_Controller_MessageTest extends TestCase
             array('field' => 'folder_id', 'operator' => 'equals', 'value' => $_folderId)
         ));
     }
-    
+
     /**
      * get folder
      *
-     * @return Felamimail_Model_Folder
+     * @return Expressomail_Model_Folder
      */
     public function getFolder($_folderName = null, $_account = NULL)
     {
         $folderName = ($_folderName !== null) ? $_folderName : $this->_testFolderName;
         $account = ($_account !== NULL) ? $_account : $this->_account;
-        
-        $filter = new Expressomail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'equals', 'value' => '',),
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
-        ));
+
+        if ($_folderName == 'INBOX') {
+            $filter = new Expressomail_Model_FolderFilter(array(
+                array('field' => 'globalname', 'operator' => 'equals', 'value' => '',),
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
+            ));
+        } else {
+            $filter = new Expressomail_Model_FolderFilter(array(
+                array('field' => 'globalname', 'operator' => 'startswith', 'value' => 'INBOX'),
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId()),
+            ));
+        }
         $result = Expressomail_Controller_Folder::getInstance()->search($filter);
-        $folder = $result->filter('localname', $folderName)->getFirstRecord();
+        $folder = $result->filter(strpos($_folderName, '/') === FALSE ? 'localname' : 'globalname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            $folder = Expressomail_Controller_Folder::getInstance()->create($account, $_folderName);
+            $_folderName = strpos($_folderName, 'INBOX/') == 0 ? substr($_folderName, 5) : $_folderName;
+            $folder = Expressomail_Controller_Folder::getInstance()->create($account, $_folderName, 'INBOX');
         }
 
         return $folder;
     }
+
+    /**
+     * search message by header (X-Tine20TestMessage) and add it to cache
+     *
+     * @param string $_testHeaderValue
+     * @param Expressomail_Model_Folder $_folder
+     * @param boolean $assert
+     * @param string $testHeader
+     * @return Expressomail_Model_Message|NULL
+     */
+    public function searchAndCacheMessage($_testHeaderValue, $_folder = NULL, $assert = TRUE, $testHeader = 'X-Tine20TestMessage')
+    {
+        $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
+        $message = $this->_searchMessage($_testHeaderValue, $folder, $assert, $testHeader);
+
+        if ($message === NULL && ! $assert) {
+            return NULL;
+        }
+
+//        $cachedMessage = $this->_cache->addMessage($message, $folder);
+//        if ($cachedMessage === FALSE) {
+//            // try to add message again (it had a duplicate)
+//            $this->_cache->clear($folder);
+//            $cachedMessage = $this->_cache->addMessage($message, $folder);
+//        }
+//
+//        if ($assert) {
+//            $this->assertTrue($cachedMessage instanceof Expressomail_Model_Message, 'could not add message to cache');
+//        }
+//
+//        $this->_createdMessages->addRecord($cachedMessage);
+//
+//        return $cachedMessage;
+
+        $expressoMessage = new Expressomail_Model_Message(array(
+            'account_id'    => $_folder->account_id,
+            'messageuid'    => $message['uid'],
+            'folder_id'     => $_folder->getId(),
+            'timestamp'     => Tinebase_DateTime::now(),
+            'received'      => Expressomail_Message::convertDate($message['received']),
+            'size'          => $message['size'],
+            'flags'         => $message['flags'],
+        ));
+
+        $expressoMessage->parseStructure($message['structure']);
+        $expressoMessage->parseHeaders($message['header']);
+        $expressoMessage->parseBodyParts();
+
+        $attachments = Expressomail_Controller_Message::getInstance()->getAttachments($expressoMessage);
+        $expressoMessage->has_attachment = (count($attachments) > 0) ? true : false;
+
+        return $expressoMessage;
+    }
+
 }

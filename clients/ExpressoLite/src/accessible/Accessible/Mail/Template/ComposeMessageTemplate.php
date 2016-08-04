@@ -16,13 +16,12 @@
     <link type="text/css" rel="stylesheet" href="./Accessible/Core/Template/general.css" />
     <link type="text/css" rel="stylesheet" href="./Accessible/Mail/Template/ComposeMessageTemplate.css" />
     <title><?= $VIEW->actionText ?> mensagem - ExpressoBr Acessível</title>
-    <title>Seleção de pasta - ExpressoBr Acessível</title>
 </head>
 <body>
 
-<div id="top" name="top">
+<div id="top">
     <div id="logomark"></div>
-    <div id="anchors" name="anchors" class="links systemLinks">
+    <div id="anchors" class="links systemLinks">
         <nav class="contentAlign">
             <ul>
                 <li><a href="#compose" accesskey="1">Ir para preencher campos [1]</a></li>
@@ -35,7 +34,7 @@
 
 <form action="<?= $VIEW->lnkSendMessageAction ?>" method="post" enctype="multipart/form-data">
 
-<div id="compose" name="compose">
+<div id="compose">
     <h2 class="anchorsTitle"><?= $VIEW->actionText ?> mensagem</h2>
     <div class="dialogEmail contentAlign">
         <input type="hidden" name="folderId" value="<?= $VIEW->folderId ?>" />
@@ -70,14 +69,18 @@
         </div>
 
         <?php IF ($VIEW->signature !== '') : ?>
-        <div class="composeSign"><?= $VIEW->signature ?></div>
+        <div class="composeSign">
+            <?= $VIEW->signature ?>
+        </div>
         <?php ENDIF; ?>
 
         <?php IF ($VIEW->quotedBody !== '') : ?>
-            <label for="quotedBody">Mensagem citada:</label>
-            <div class="messageText" name="quotedBody" id="quotedBody">
+        <div>
+            <label>Mensagem citada:</label>
+            <div class="messageText"id="quotedBody">
                 <?= $VIEW->quotedBody ?>
             </div>
+        </div>
         <?php ENDIF; ?>
     </div>
 </div>
@@ -92,10 +95,10 @@
     </ul>
 </div>
 
-<div id="emailAttachments" name="emailAttachments" >
+<div id="emailAttachments">
     <h2 class="anchorsTitle">Anexos</h2>
     <?php IF (!EMPTY($VIEW->existingAttachments)) : ?>
-        <div id="attachments" name="attachments" class="links systemLinks">
+        <div id="attachments" class="links systemLinks">
             <ul>
                 <?php FOREACH ($VIEW->existingAttachments as $ATTACH) : ?>
                     <div class ="existingAttachsForExhibition">

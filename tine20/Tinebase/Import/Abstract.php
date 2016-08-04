@@ -634,9 +634,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         $operator = isset($field['operator']) ? $field['operator'] : 'equals';
 
         $filterValueToAdd = '';
-        if (isset($field['filterValueAdd']) && isset($data[$field['filterValueAdd']])) {
+        if (isset($field['filterValueAdd'])) {
             if ($field['filter'] === 'query') {
-                $filterValueToAdd = ' ' . $data[$field['filterValueAdd']];
+                $filters = explode(',', $field['filterValueAdd']);
+                foreach ($filters as $newFilter) {
+                    if(isset($data[$newFilter])) {
+                        $filterValueToAdd = $filterValueToAdd . ' ' . $data[$newFilter];
+                    }
+                }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__

@@ -71,6 +71,16 @@ class Expressomail_Config extends Tinebase_Config_Abstract
     const ENABLEMAILDIREXPORT = 'enableMailDirExport';
 
     /**
+     * @var string
+     */
+    const IMAPBACKEND = 'imapBackend';
+
+    /**
+     * @var string
+     */
+    const SIEVEBACKEND = 'sieveBackend';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -139,6 +149,24 @@ class Expressomail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,
+        ),
+        self::IMAPBACKEND => array(
+            'label'                 => 'Backend IMAP',
+            'description'           => 'Backend IMAP',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => Expressomail_Backend_ImapProxy::IMAP,
+        ),
+        self::SIEVEBACKEND              => array(
+            'label'                 => 'Sieve Backend',
+            'description'           => 'Sieve Backend',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => Expressomail_Backend_SieveFactory::SIEVE,
         ),
     );
     
