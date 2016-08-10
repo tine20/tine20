@@ -582,7 +582,7 @@ class Setup_Frontend_Cli
             die('Install Tinebase first.');
         }
         
-        echo "Please enter a username. If the user already exists, he is reactivated and you can reset the password.\n";
+        echo "Please enter a username. An existing user is reactivated and you can reset the password.\n";
         $username = strtolower(Tinebase_Server_Cli::promptInput('Username'));
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
         

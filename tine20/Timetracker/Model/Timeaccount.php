@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        update validators (default values, mandatory fields)
  * @todo        add setFromJson with relation handling
@@ -34,6 +34,192 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var string
      */
     protected $_application = 'Timetracker';
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = array(
+        'containerName'     => 'Timeaccount',
+        'containersName'    => 'Timeaccounts',
+        'recordName'        => 'Timeaccount',
+        'recordsName'       => 'Timeaccounts', // ngettext('Timeaccount', 'Timeaccounts', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
+        'createModule'      => TRUE,
+        'containerProperty' => 'container_id',
+        'multipleEdit'      => TRUE,
+        'requiredRight'     => 'manage',
+
+        'titleProperty'     => 'title',
+        'appName'           => 'Timetracker',
+        'modelName'         => 'Timeaccount',
+
+        'filterModel'       => array(
+            'contract'          => array(
+                'filter'            => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'title'             => 'Contract', // _('Contract')
+                'options'           => array(
+                    'controller'        => 'Sales_Controller_Contract',
+                    'filtergroup'       => 'Sales_Model_ContractFilter',
+                    'own_filtergroup'   => 'Timetracker_Model_TimeaccountFilter',
+                    'own_controller'    => 'Timetracker_Controller_Timeaccount',
+                    'related_model'     => 'Sales_Model_Contract',
+                ),
+                'jsConfig'          => array('filtertype' => 'timetracker.timeaccountcontract')
+            ),
+            'responsible'       => array(
+                'filter'            => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'title'             => 'Responsible',
+                'options'           => array(
+                    'controller'        => 'Addressbook_Controller_Contact',
+                    'filtergroup'       => 'Addressbook_Model_ContactFilter',
+                    'own_filtergroup'   => 'Timetracker_Model_TimeaccountFilter',
+                    'own_controller'    => 'Timetracker_Controller_Timeaccount',
+                    'related_model'     => 'Addressbook_Model_Contact',
+                ),
+                'jsConfig'          => array('filtertype' => 'timetracker.timeaccountresponsible')
+            )
+        ),
+
+        'fields'            => array(
+            'account_grants'    => array(
+                'label'                 => NULL,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'title'             => array(
+                'label'                 => 'Title', //_('Title')
+                'duplicateCheckGroup'   => 'title',
+                'queryFilter'           => TRUE,
+                'showInDetailsPanel'    => TRUE,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+            ),
+            'number'            => array(
+                'label'                 => 'Number', //_('Number')
+                'duplicateCheckGroup'   => 'number',
+                'queryFilter'           => TRUE,
+                'showInDetailsPanel'    => TRUE,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'description'       => array(
+                'label'                 => 'Description', // _('Description')
+                'type'                  => 'text',
+                'showInDetailsPanel'    => TRUE,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'budget'            => array(
+                'type'                  => 'float',
+                'inputFilters'          => array('Zend_Filter_Digits', 'Zend_Filter_Empty' => NULL),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'budget_unit'       => array(
+                'shy'                   => TRUE,
+                'default'               => 'hours',
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
+            ),
+            'price'             => array(
+                'type'                  => 'integer',
+                'inputFilters'          => array('Zend_Filter_PregReplace' => array('/,/', '.'), 'Zend_Filter_Empty' => NULL),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+            ),
+            'price_unit'        => array(
+                'shy'                   => TRUE,
+                'default'               => 'hours',
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
+            ),
+            'is_open'           => array(
+                // is_open = Status, status = Billed
+                'label'                 => 'Status', //_('Status')
+                'type'                  => 'boolean',
+                'default'               => 1,
+                'inputFilters'          => array('Zend_Filter_Empty' => 0),
+                'filterDefinition'      => array(
+                    'filter'                => 'Tinebase_Model_Filter_Bool',
+                    'jsConfig'              => array('filtertype' => 'timetracker.timeaccountstatus')
+                ),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+            ),
+            'is_billable'       => array(
+                'type'                  => 'boolean',
+                'default'               => TRUE,
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
+            ),
+            'billed_in'         => array(
+                'label'                 => "Cleared in", // _("Cleared in"),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'invoice_id'        => array(
+                'label'                 => 'Invoice', // _('Invoice')
+                'type'                  => 'record',
+                'inputFilters'          => array('Zend_Filter_Empty' => NULL),
+                'config'                => array(
+                    'appName'               => 'Sales',
+                    'modelName'             => 'Invoice',
+                    'idProperty'            => 'id'
+                ),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'status'            => array(
+                // is_open = Status, status = Billed
+                'label'                 => 'Billed', //_('Billed')
+                'type'                  => 'string',
+                'filterDefinition'      => array(
+                    'filter'                => 'Tinebase_Model_Filter_Text',
+                    'jsConfig'              => array('filtertype' => 'timetracker.timeaccountbilled')
+                ),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
+            ),
+            'cleared_at'        => array(
+                'label'                 => "Cleared at", // _("Cleared at")
+                'type'                  => 'datetime',
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'deadline'          => array(
+                'label'                 => 'Booking deadline', // _('Booking deadline')
+                'type'                  => 'string',
+                'validators'            => array(
+                                            Zend_Filter_Input::ALLOW_EMPTY      => true,
+                                            Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
+                                                array('InArray', array(self::DEADLINE_NONE, self::DEADLINE_LASTWEEK)),
+                                            )
+            ),
+            'grants'            => array(
+                'label'                 => NULL,
+                'type'                  => 'records',
+                'config'                => array(
+                    'appName'               => 'Timetracker',
+                    'modelName'             => 'TimeaccountGrants',
+                    'idProperty'            => 'id'
+                ),
+                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'responsible'       => array(
+                'type'                  => 'virtual',
+                'config'                => array(
+                    'type'                  => 'relation',
+                    'label'                 => 'Responsible',    // _('Responsible')
+                    'config'                => array(
+                        'appName'               => 'Addressbook',
+                        'modelName'             => 'Contact',
+                        'type'                  => 'RESPONSIBLE'
+                    )
+                )
+            ),
+
+        )
+    );
 
     /**
      * @see Tinebase_Record_Abstract
@@ -80,84 +266,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * = booking timesheets allowed until monday midnight for the last week
      */
     const DEADLINE_LASTWEEK = 'lastweek';
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'account_grants'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'budget'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'budget_unit'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
-        'price'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
-        'price_unit'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
-        'is_open'               => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'is_billable'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
-        'billed_in'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'invoice_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
-        'cleared_at'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // how long can users book timesheets for this timeaccount 
-        'deadline'              => array(
-            Zend_Filter_Input::ALLOW_EMPTY      => true, 
-            Zend_Filter_Input::DEFAULT_VALUE    => self::DEADLINE_NONE,
-            array('InArray', array(self::DEADLINE_NONE, self::DEADLINE_LASTWEEK)),
-        ),    
-    // modlog information
-        'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_by'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'last_modified_time'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'is_deleted'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_time'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'deleted_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'seq'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // relations (linked Timetracker_Model_Timeaccount records) and other metadata
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'grants'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-       
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-
-    /**
-     * name of fields containing datetime or an array of datetime information
-     *
-     * @var array list of datetime fields
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-        'cleared_at'
-    );
-    
-    /**
-     * overwrite constructor to add more filters
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     */
-    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
-    {
-        $this->_filters['budget']  = new Zend_Filter_Empty(0);
-        $this->_filters['price'] = array(new Zend_Filter_PregReplace('/,/', '.'), new Zend_Filter_Empty(NULL));
-        $this->_filters['is_open'] = new Zend_Filter_Empty(0);
-        $this->_filters['invoice_id']  = array(new Zend_Filter_Empty(NULL));
-        
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
-    }
 
     /**
      * set from array data

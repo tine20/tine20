@@ -313,27 +313,32 @@
         </copy>
 
         <!-- translations -->
-        <translation-build appName="${name}" />
-        <jsMin targetDir="${builddir}/${name}/js" failOnError="false">
-            <fileset dir="${builddir}/${name}/js">
-                <include name="*-lang-*-debug.js"/>
-            </fileset>
-        </jsMin>
+        <if>
+            <available file="${builddir}/${name}/js" type="dir" property="has_jsdir"/>
+            <then>
+                <echo message="Building translations..." />
+                <translation-build appName="${name}" />
+                <jsMin targetDir="${builddir}/${name}/js" failOnError="false">
+                    <fileset dir="${builddir}/${name}/js">
+                        <include name="*-lang-*-debug.js"/>
+                    </fileset>
+                </jsMin>
 
-        <copy toDir="${project.basedir}/${name}/js">
-            <fileset dir="${builddir}/${name}/js">
-                <include name="*-lang-*-debug.js" />
-            </fileset>
-        </copy>
+                <copy toDir="${project.basedir}/${name}/js">
+                    <fileset dir="${builddir}/${name}/js">
+                        <include name="*-lang-*-debug.js" />
+                    </fileset>
+                </copy>
 
-        <copy toDir="${project.basedir}/${name}/js">
-            <fileset dir="${builddir}/${name}/js">
-                <include name="*-lang-*-debug-min.js" />
-            </fileset>
+                <copy toDir="${project.basedir}/${name}/js">
+                    <fileset dir="${builddir}/${name}/js">
+                        <include name="*-lang-*-debug-min.js" />
+                    </fileset>
 
-            <mapper type="regexp" from="^(.*)-debug-min.js" to="\1.js"/>
-        </copy>
-
+                    <mapper type="regexp" from="^(.*)-debug-min.js" to="\1.js"/>
+                </copy>
+            </then>
+        </if>
     </target>
 
     <!-- ============================================  -->

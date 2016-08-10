@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -29,113 +29,19 @@ Ext.namespace('Tine.Timetracker');
  * Create a new Tine.Timetracker.TimesheetGridPanel
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
-    /**
-     * record class
-     * @cfg {Tine.Timetracker.Model.Timesheet} recordClass
-     */
-    recordClass: Tine.Timetracker.Model.Timesheet,
-    
-    /**
-     * @private grid cfg
-     */
-    defaultSortInfo: {field: 'start_date', direction: 'DESC'},
-    gridConfig: {
-        autoExpandColumn: 'description'
-    },
-    copyEditAction: true,
-    multipleEdit: true,
-    multipleEditRequiredRight: 'manage_timeaccounts',
-    
-    /**
-     * @private
-     */
-    initComponent: function() {
-        this.recordProxy = Tine.Timetracker.timesheetBackend;
 
+    initComponent: function() {
         this.defaultFilters = [
             {field: 'start_date', operator: 'within', value: 'weekThis'},
             {field: 'account_id', operator: 'equals', value: Tine.Tinebase.registry.get('currentAccount')}
         ];
-        this.gridConfig.cm = this.getColumnModel();
+
         this.initDetailsPanel();
         
         // only eval grants in action updater if user does not have the right to manage timeaccounts
         this.evalGrants = ! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
-    },
-    
-    /**
-     * returns cm
-     * 
-     * @return Ext.grid.ColumnModel
-     * @private
-     */
-    getColumnModel: function(){
-        var columns = [
-            { id: 'tags',               header: this.app.i18n._('Tags'),                width: 50,  dataIndex: 'tags', sortable: false,
-                renderer: Tine.Tinebase.common.tagsRenderer },
-            { id: 'start_date',         header: this.app.i18n._("Date"),                width: 120, dataIndex: 'start_date',
-                renderer: Tine.Tinebase.common.dateRenderer },
-            { id: 'start_time',         header: this.app.i18n._("Start time"),          width: 100, dataIndex: 'start_time',            hidden: true,
-                renderer: Tine.Tinebase.common.timeRenderer },
-            { id: 'timeaccount_id',     header: this.app.i18n._('Time Account (Number - Title)'), width: 500, dataIndex: 'timeaccount_id',
-                renderer: this.rendererTimeaccountId },
-            { id: 'timeaccount_closed', header: this.app.i18n._("Time Account closed"), width: 100, dataIndex: 'timeaccount_closed',    hidden: true,
-                renderer: this.rendererTimeaccountClosed },
-            { id: 'description',        header: this.app.i18n._("Description"),         width: 400, dataIndex: 'description',           hidden: true },
-            { id: 'is_billable',        header: this.app.i18n._("Billable"),            width: 100, dataIndex: 'is_billable_combined',
-                renderer: Tine.Tinebase.common.booleanRenderer },
-            { id: 'is_cleared',         header: this.app.i18n._("Cleared"),             width: 100, dataIndex: 'is_cleared_combined',   hidden: true,
-                renderer: Tine.Tinebase.common.booleanRenderer },
-            { id: 'billed_in',          header: this.app.i18n._("Cleared in"),          width: 150, dataIndex: 'billed_in',             hidden: true },
-            { id: 'invoice_id',          header: this.app.i18n._("Invoice"),          width: 150, dataIndex: 'invoice_id', hidden: true,
-              renderer: function(value, row, record) {
-                if (! value) {
-                    return '';
-                }
-                var i = record.get('invoice_id');
-                
-                return (i.number ? i.number + ' - ' : '') + i.description;
-              }
-            },
-            { id: 'account_id',         header: this.app.i18n._("Account"),             width: 350, dataIndex: 'account_id',
-                renderer: Tine.Tinebase.common.usernameRenderer },
-            { id: 'duration',           header: this.app.i18n._("Duration"),            width: 150, dataIndex: 'duration',
-                renderer: Tine.Tinebase.common.minutesRenderer }
-        ].concat(this.getModlogColumns());
-        
-        return new Ext.grid.ColumnModel({
-            defaults: {
-                sortable: true,
-                resizable: true
-            },
-            // add custom fields
-            columns: columns.concat(this.getCustomfieldColumns())
-        });
-    },
-    
-    /**
-     * timeaccount renderer -> returns timeaccount title
-     * 
-     * @param {Array} timeaccount
-     * @return {String}
-     */
-    rendererTimeaccountId: function(timeaccount) {
-        return new Tine.Timetracker.Model.Timeaccount(timeaccount).getTitle();
-    },
-    
-    /**
-     * is timeaccount closed -> returns yes/no if timeaccount is closed
-     * 
-     * @param {} a
-     * @param {} b
-     * @param {Tine.Timetracker.Model.Timesheet} record
-     * @return {String}
-     */
-    rendererTimeaccountClosed: function(a, b, record) {
-        var isopen = (record.data.timeaccount_id.is_open == '1');
-        return Tine.Tinebase.common.booleanRenderer(!isopen);
     },
 
     /**
@@ -286,7 +192,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                     break;
                                 default:
                                     value += type;
-                            }                           
+                            }
                         } else {
                             value = Ext.util.Format.htmlEncode(value);
                         }
@@ -302,7 +208,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             })
         });
     },
-    
+
     /**
      * @private
      */
@@ -314,6 +220,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             requiredGrant: 'exportGrant',
             disabled: true,
             allowMultiple: true,
+            actionUpdater: this.updateExportAction,
             menu: {
                 items: [
                     new Tine.widgets.grid.ExportButton({
@@ -348,7 +255,24 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
     },
-    
+
+    updateExportAction: function(action, grants, records) {
+        var exportGrant = true;
+        Ext.each(records, function(record) {
+            var c = record.get('timeaccount_id').container_id;
+            if (c.hasOwnProperty('account_grants')) {
+                if (! c.account_grants.exportGrant) {
+                    exportGrant = false;
+                    return false;
+                }
+            }
+        });
+
+        var disable = ! exportGrant;
+        action.setDisabled(disable);
+        return false;
+    },
+
     /**
      * add custom items to action toolbar
      * 
@@ -373,33 +297,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var items = [
             '-',
             this.actions_exportTimesheet
-//            '-', {
-//            text: i18n._('Mass Update'),
-//            iconCls: 'action_edit',
-//            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
-//            scope: this,
-//            menu: {
-//                items: [
-//                    '<b class="x-ux-menu-title">' + i18n._('Update field:') + '</b>',
-//                    {
-//                        text: this.app.i18n._('Billable'),
-//                        field: 'is_billable',
-//                        scope: this,
-//                        handler: this.onMassUpdate
-//                    }, {
-//                        text: this.app.i18n._('Cleared'),
-//                        field: 'is_cleared',
-//                        scope: this,
-//                        handler: this.onMassUpdate
-//                    }, {
-//                        text: this.app.i18n._('Cleared in'),
-//                        field: 'billed_in',
-//                        scope: this,
-//                        handler: this.onMassUpdate
-//                    }
-//                ]
-//            }
-//        }
         ];
         
         return items;

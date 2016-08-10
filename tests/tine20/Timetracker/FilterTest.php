@@ -164,6 +164,7 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
             'account_id' => Tinebase_Core::getUser()->getId(),
             'description' => 'lazy boring',
             'start_date' => $date,
+            'duration' => 30,
         ));
         
         $r->setTimezone('UTC');
