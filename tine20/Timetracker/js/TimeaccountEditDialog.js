@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -21,12 +21,14 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     recordProxy: Tine.Timetracker.timeaccountBackend,
     useInvoice: false,
     displayNotes: true,
+
+    windowWidth: 800,
+    windowHeight: 500,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      */
     updateToolbars: function() {
-
     },
     
     initComponent: function() {
@@ -37,6 +39,15 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             && Tine.Sales.Model.Invoice;
         Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
+
+    isMultipleValid: function() {
+        return true;
+    },
+
+    /**
+     * containerProperty (all contracts in one container) exists, so overwrite creating selector here
+     */
+    initContainerSelector: Ext.emptyFn,
     
     onRecordLoad: function() {
         // make sure grants grid is initialized
@@ -335,18 +346,3 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('status', 'not yet billed');
     }
 });
-
-/**
- * Timetracker Edit Popup
- */
-Tine.Timetracker.TimeaccountEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 500,
-        name: Tine.Timetracker.TimeaccountEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Timetracker.TimeaccountEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};

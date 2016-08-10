@@ -61,7 +61,7 @@ class Timetracker_Controller extends Tinebase_Controller_Abstract
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Timetracker_Controller();
+            self::$_instance = new self();
         }
         return self::$_instance;
     }

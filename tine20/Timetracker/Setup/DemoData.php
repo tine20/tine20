@@ -21,7 +21,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Sales');
+    protected static $_requiredApplications = array('Admin', 'Sales', 'HumanResources');
     
     /**
      * holds the instance of the singleton
@@ -308,11 +308,13 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     
     /**
      * returns the cost center for the current account
+     *
+     * @return HumanResources_Model_CostCenter|Sales_Model_CostCenter
      */
     protected function _getCurrentUsersCostCenter()
     {
         $employee = $this->_getCurrentUsersEmployee();
-        $salesCC =  HumanResources_Controller_CostCenter::getInstance()->getValidCostCenter($employee->getId(), NULL, TRUE);
+        $salesCC = HumanResources_Controller_CostCenter::getInstance()->getValidCostCenter($employee->getId(), NULL, TRUE);
         return $salesCC;
     }
     

@@ -588,7 +588,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             return array();
         }
 
-        if (! isset($field['related_model']) || ! isset($field['filter'])) {
+        if (! isset($field['related_model'])) {
             throw new Tinebase_Exception_UnexpectedValue('field config missing');
         }
         
@@ -628,11 +628,22 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
     protected function _getRelationForValue($value, $field, $data)
     {
+        $existingRelation = null;
+        if (isset($field['filter'])) {
+            $existingRelation = $this->_findExistingRelation($value, $field, $data);
+        }
+        $relation = $this->_getRelationData($existingRelation, $field, $data, $value);
+        
+        return $relation;
+    }
+    
+    protected function _findExistingRelation($value, $field, $data)
+    {
         // check if related record exists
         $controller = Tinebase_Core::getApplicationInstance($field['related_model']);
         $filterModel = $field['related_model'] . 'Filter';
         $operator = isset($field['operator']) ? $field['operator'] : 'equals';
-
+        
         $filterValueToAdd = '';
         if (isset($field['filterValueAdd'])) {
             if ($field['filter'] === 'query') {
@@ -645,18 +656,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' "filterValueAdd" Currently only working for query filter');
+                    . ' "filterValueAdd" Currently only working for query filter');
                 }
             }
         }
-
+        
         $filter = new $filterModel(array(
-            array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
+                array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
         ));
         $result = $controller->search($filter, null, /* $_getRelations */ true);
-        $relation = $this->_getRelationData($result->getFirstRecord(), $field, $data, $value);
-
-        return $relation;
+        return $result->getFirstRecord();
     }
 
     protected function _getRelationData($record, $field, $data, $value)

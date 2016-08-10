@@ -56,7 +56,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Timetracker_Controller_Timeaccount();
+            self::$_instance = new self();
         }
         
         return self::$_instance;
