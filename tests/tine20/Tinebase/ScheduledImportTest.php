@@ -117,15 +117,28 @@ class Tinebase_ScheduledImportTest extends TestCase
         $this->_uit->runNextScheduledImport();
         $all = $cc->search($filter);
         $this->assertEquals($seq, $all->getFirstRecord()->seq);
-        
-        // setting manual timestamp to force run again
-        $record->timestamp = $record->timestamp->subHour(1)->subSecond(1);
-        
-        $this->_uit->update($record);
-        
+
+        $this->_runAgain($record);
+
         $this->_uit->runNextScheduledImport();
         $all = $cc->search($filter);
         $this->assertEquals(7, $all->count());
+    }
+
+    /**
+     * make import run again
+     *
+     * @param Tinebase_Model_Import|array $record
+     */
+    protected function _runAgain($record)
+    {
+        if (! $record instanceof Tinebase_Model_Import) {
+            $record = new Tinebase_Model_Import($record);
+        }
+
+        // setting manual timestamp to force run again
+        $record->timestamp = $record->timestamp->subHour(1)->subSecond(1);
+        $this->_uit->update($record);
     }
 
     /**
@@ -160,5 +173,26 @@ class Tinebase_ScheduledImportTest extends TestCase
         $result = $this->_uit->search($filter);
 
         $this->assertEquals(0, count($result), 'no imports should be found: ' . print_r($result->toArray(), true));
+    }
+
+    /**
+     * @see 0012082: deactivate failing scheduled imports
+     */
+    public function testDeactivatingImport()
+    {
+        // create invalid import
+        $import1 = $this->createScheduledImport();
+
+        // run 5 (maxfailcount) times
+        for ($i = 1; $i <= Tinebase_Controller_ScheduledImport::MAXFAILCOUNT; $i++) {
+            $importRun = $this->_uit->runNextScheduledImport();
+            $this->assertTrue(isset($importRun['failcount']), 'failcount should exist (import run ' . $i . ')');
+            $this->assertEquals($i, $importRun['failcount'], 'failcount should increase: ' . print_r($importRun, true));
+            $this->_runAgain($importRun);
+        }
+
+        // check if import is deactivated
+        $importRun = $this->_uit->runNextScheduledImport();
+        $this->assertTrue($importRun === null, 'import should not run: ' . print_r($importRun, true));
     }
 }
