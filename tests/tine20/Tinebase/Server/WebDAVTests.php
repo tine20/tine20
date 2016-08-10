@@ -68,13 +68,12 @@ EOS
         
         $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1
-Host: localhost
-Depth: 0
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7
-Authorization: Basic $hash
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+"PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r\n"
+. "Host: localhost\r\n"
+. "Depth: 0\r\n"
+. "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r\n"
+. "Authorization: Basic $hash\r\n"
         );
         
         $_SERVER['REQUEST_METHOD'] = $request->getMethod();
@@ -96,8 +95,11 @@ EOS
         $result = ob_get_contents();
         
         ob_end_clean();
+
+        print_r($request->getHeader('HTTP_AUTHORIZATION'));
+        print_r($request->getHeaders());
         
-        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30));
+        $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
     }
     
     /**
@@ -255,14 +257,13 @@ EOS
         
         $this->assertInstanceOf('Tinebase_Model_FullUser', $account);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-PROPFIND /principals/users/{$account->contact_id}/ HTTP/1.1
-Host: localhost
-Depth: 0
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7
-
-<?xml version="1.0" encoding="UTF-8"?><D:propfind xmlns:D="DAV:" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+"PROPFIND /principals/users/{$account->contact_id}/ HTTP/1.1\r\n"
+. "Host: localhost\r\n"
+. "Depth: 0\r\n"
+. "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r\n"
+. "\r\n"
+. "<?xml version=\"1.0\" encoding=\"UTF-8\"?><D:propfind xmlns:D=\"DAV:\" xmlns:C=\"urn:ietf:params:xml:ns:caldav\"><D:prop><C:calendar-home-set/><C:calendar-user-address-set/><C:schedule-inbox-URL/><C:schedule-outbox-URL/></D:prop></D:propfind>\r\n"
         );
         
         $_SERVER['REQUEST_METHOD'] = $request->getMethod();
@@ -382,18 +383,18 @@ EOS
             ->getFirstRecord()
             ->getId();
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-PROPFIND /calendars/{$account->contact_id}/{$containerId}/ HTTP/1.1
-Host: localhost
-Depth: 1
-Content-Type: application/xml; charset="utf-8"
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7
-
-<?xml version="1.0" encoding="UTF-8"?>
-<D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><D:resourcetype/><D:owner/><D:current-user-principal/><D:supported-report-set/><C:supported-calendar-component-set/><CS:getctag/></D:prop></D:propfind>
-EOS
+        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+"PROPFIND /calendars/{$account->contact_id}/{$containerId}/ HTTP/1.1" . "\r\n"
+. "Host: localhost" . "\r\n"
+. "Depth: 1" . "\r\n"
+. 'Content-Type: application/xml; charset="utf-8"' . "\r\n"
+. "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7" . "\r\n"
+. "\r\n"
+. '<?xml version="1.0" encoding="UTF-8"?>' . "\r\n"
+. '<D:propfind xmlns:D="DAV:" xmlns:CS="http://calendarserver.org/ns/" xmlns:C="urn:ietf:params:xml:ns:caldav"><D:prop><D:resourcetype/><D:owner/><D:current-user-principal/><D:supported-report-set/><C:supported-calendar-component-set/><CS:getctag/></D:prop></D:propfind>'
+. "\r\n"
         );
-        
+
         $_SERVER['REQUEST_METHOD'] = $request->getMethod();
         $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
         $_SERVER['HTTP_DEPTH']     = '0';
