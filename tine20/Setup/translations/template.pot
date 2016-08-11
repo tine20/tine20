@@ -102,9 +102,9 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:378
 #: js/EmailPanel.js:195 js/EmailPanel.js:306 js/EmailPanel.js:420
-#: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:321
-#: js/ConfigManagerPanel.js:341 js/ConfigManagerPanel.js:382
-#: js/ConfigManagerPanel.js:441
+#: js/ConfigManagerPanel.js:234 js/ConfigManagerPanel.js:330
+#: js/ConfigManagerPanel.js:350 js/ConfigManagerPanel.js:391
+#: js/ConfigManagerPanel.js:450
 msgid "Port"
 msgstr ""
 
@@ -136,8 +136,8 @@ msgstr ""
 
 #: js/AuthenticationPanel.js:375 js/EmailPanel.js:182 js/EmailPanel.js:302
 #: js/EmailPanel.js:416 js/ConfigManagerPanel.js:229
-#: js/ConfigManagerPanel.js:317 js/ConfigManagerPanel.js:337
-#: js/ConfigManagerPanel.js:378 js/ConfigManagerPanel.js:437
+#: js/ConfigManagerPanel.js:326 js/ConfigManagerPanel.js:346
+#: js/ConfigManagerPanel.js:387 js/ConfigManagerPanel.js:446
 msgid "Hostname"
 msgstr ""
 
@@ -365,7 +365,7 @@ msgstr ""
 msgid "Save config and install"
 msgstr ""
 
-#: js/AuthenticationPanel.js:710 js/ConfigManagerPanel.js:518
+#: js/AuthenticationPanel.js:710 js/ConfigManagerPanel.js:527
 msgid "Save config"
 msgstr ""
 
@@ -701,74 +701,74 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:270
+#: js/ConfigManagerPanel.js:279
 msgid "Caching"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:281 js/ConfigManagerPanel.js:398
+#: js/ConfigManagerPanel.js:290 js/ConfigManagerPanel.js:407
 msgid "Lifetime (seconds)"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:304 js/ConfigManagerPanel.js:423
+#: js/ConfigManagerPanel.js:313 js/ConfigManagerPanel.js:432
 msgid "Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:349
+#: js/ConfigManagerPanel.js:358
 msgid "Queue"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:390
+#: js/ConfigManagerPanel.js:399
 msgid "Session"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:449
+#: js/ConfigManagerPanel.js:458
 msgid "Temporary files"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:457
+#: js/ConfigManagerPanel.js:466
 msgid "Temporary Files Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:462
+#: js/ConfigManagerPanel.js:471
 msgid "Filestore directory"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:470
+#: js/ConfigManagerPanel.js:479
 msgid "Filestore Path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:475
+#: js/ConfigManagerPanel.js:484
 msgid "Addressbook Map panel"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:483
+#: js/ConfigManagerPanel.js:492
 msgid "Map panel"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:485
+#: js/ConfigManagerPanel.js:494
 msgid "disabled"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:485
+#: js/ConfigManagerPanel.js:494
 msgid "enabled"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:490
+#: js/ConfigManagerPanel.js:499
 msgid "Use Custom Theme"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:500
+#: js/ConfigManagerPanel.js:509
 msgid "Theme path"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:503
+#: js/ConfigManagerPanel.js:512
 msgid "Use blue theme as base"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:516
+#: js/ConfigManagerPanel.js:525
 msgid "Config file is not writable"
 msgstr ""
 
-#: js/ConfigManagerPanel.js:535
+#: js/ConfigManagerPanel.js:544
 msgid "Download config file"
 msgstr ""

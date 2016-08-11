@@ -22,12 +22,12 @@ msgstr ""
 msgid "Leadstate"
 msgstr ""
 
-#: Export/Pdf.php:79 js/LeadEditDialog.js:391 js/LeadGridDetailsPanel.js:222
+#: Export/Pdf.php:79 js/LeadEditDialog.js:392 js/LeadGridDetailsPanel.js:222
 msgid "Leadtype"
 msgstr ""
 
 #: Export/Pdf.php:82 js/LeadGridPanel.js:155 js/Model.js:112
-#: js/LeadEditDialog.js:396 js/LeadGridDetailsPanel.js:227
+#: js/LeadEditDialog.js:398 js/LeadGridDetailsPanel.js:227
 msgid "Leadsource"
 msgstr ""
 
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Probability"
 msgstr ""
 
-#: Export/Pdf.php:91 js/LeadEditDialog.js:442 js/LeadGridDetailsPanel.js:212
+#: Export/Pdf.php:91 js/LeadEditDialog.js:445 js/LeadGridDetailsPanel.js:212
 #: Controller/Lead.php:208
 msgid "Start"
 msgstr ""
@@ -194,7 +194,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: js/Product.js:139 js/LeadEditDialog.js:480
+#: js/Product.js:139 js/LeadEditDialog.js:483
 msgid "Description"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Partner"
 msgstr ""
 
-#: js/LeadGridPanel.js:159 js/Model.js:125 js/LeadEditDialog.js:448
+#: js/LeadGridPanel.js:159 js/Model.js:125 js/LeadEditDialog.js:451
 #: js/LeadGridDetailsPanel.js:217
 msgid "Estimated end"
 msgstr ""
@@ -236,7 +236,7 @@ msgstr ""
 msgid "Probable Turnover"
 msgstr ""
 
-#: js/LeadGridPanel.js:161 js/Model.js:126 js/LeadEditDialog.js:429
+#: js/LeadGridPanel.js:161 js/Model.js:126 js/LeadEditDialog.js:432
 msgid "Resubmission Date"
 msgstr ""
 
@@ -324,11 +324,11 @@ msgstr ""
 msgid "Enter lead name"
 msgstr ""
 
-#: js/LeadEditDialog.js:420
+#: js/LeadEditDialog.js:423
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:494
+#: js/LeadEditDialog.js:497
 msgid "Enter description"
 msgstr ""
 

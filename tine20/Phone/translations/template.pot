@@ -61,6 +61,10 @@ msgstr ""
 msgid "Destination"
 msgstr ""
 
+#: Model/Call.php:128
+msgid "Contact"
+msgstr ""
+
 #: Model/MyPhone.php:32 js/DialerPanel.js:53
 msgid "Phone"
 msgstr ""
@@ -151,6 +155,31 @@ msgstr ""
 
 #: js/DialerPanel.js:125
 msgid "Not possible to dial."
+msgstr ""
+
+#: Config.php:44 Config.php:46
+msgid "local prefix for outgoing calls"
+msgstr ""
+
+#: Config.php:53 Config.php:55
+msgid "telephone area code"
+msgstr ""
+
+#: Config.php:61
+msgid "regex for local calls"
+msgstr ""
+
+#: Config.php:63
+msgid ""
+"identifies if a calling number is a local call without leading area code"
+msgstr ""
+
+#: Config.php:70
+msgid "own telephone number"
+msgstr ""
+
+#: Config.php:72
+msgid "own telephone number to prefix to internal calls"
 msgstr ""
 
 #: Setup/Initialize.php:33 Setup/Update/Release7.php:30

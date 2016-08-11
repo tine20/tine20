@@ -44,31 +44,32 @@ msgstr ""
 msgid "unknown"
 msgstr ""
 
-#: ModelConfiguration.php:41 ModelConfiguration.php:50
-#: ModelConfiguration.php:82 ModelConfiguration.php:91
+#: ModelConfiguration.php:55 ModelConfiguration.php:64
+#: ModelConfiguration.php:111 ModelConfiguration.php:120
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ModelConfiguration.php:164 ModelConfiguration.php:252
+#: ModelConfiguration.php:193 ModelConfiguration.php:281
+#: WebDav/PrincipalBackend.php:654 WebDav/PrincipalBackend.php:660
 msgid "Group"
 msgstr ""
 
-#: ModelConfiguration.php:209
+#: ModelConfiguration.php:238
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:195
 msgid "Title"
 msgstr ""
 
-#: ModelConfiguration.php:213
+#: ModelConfiguration.php:242
 msgid "New Car"
 msgstr ""
 
-#: ModelConfiguration.php:380 ModelConfiguration.php:383
+#: ModelConfiguration.php:409 ModelConfiguration.php:412
 msgid "Banking Information"
 msgstr ""
 
-#: ModelConfiguration.php:384
+#: ModelConfiguration.php:413
 msgid "Private Information"
 msgstr ""
 
@@ -186,11 +187,11 @@ msgstr ""
 msgid "enter searchfilter"
 msgstr ""
 
-#: js/ux/PopupWindow.js:244
+#: js/ux/PopupWindow.js:262
 msgid "Window can be closed"
 msgstr ""
 
-#: js/ux/PopupWindow.js:245
+#: js/ux/PopupWindow.js:263
 #, python-brace-format
 msgid ""
 "This Window can be closed now. To avoid this message please deactivate your "
@@ -207,6 +208,10 @@ msgstr ""
 
 #: js/ux/Percentage.js:229
 msgid "(paused)"
+msgstr ""
+
+#: js/ux/Printer/renderers/Base.js:39
+msgid "Preparing print, please wait..."
 msgstr ""
 
 #: js/ux/grid/GroupingGridPlugin.js:95
@@ -241,13 +246,13 @@ msgstr ""
 
 #: js/ux/form/LayerCombo.js:190 js/PasswordChangeDialog.js:65
 #: js/LicenseScreen.js:51 js/widgets/account/ChangeAccountAction.js:78
-#: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:496
+#: js/widgets/EditRecord.js:157 js/widgets/container/ContainerSelect.js:501
 #: js/widgets/tags/TagsMassAttachAction.js:107
 #: js/widgets/ActivitiesGridPanel.js:377
 #: js/widgets/dialog/AddToRecordPanel.js:111
 #: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:109
-#: js/widgets/dialog/EditDialog.js:439
+#: js/widgets/dialog/EditDialog.js:541
 #: js/widgets/dialog/ExceptionHandlerDialog.js:197 js/CreditsScreen.js:53
 #: js/AboutDialog.js:61
 msgid "Ok"
@@ -256,7 +261,7 @@ msgstr ""
 #: js/ux/form/LayerCombo.js:197 js/ExceptionDialog.js:109
 #: js/ExceptionDialog.js:119 js/PasswordChangeDialog.js:59
 #: js/widgets/account/ChangeAccountAction.js:99 js/widgets/EditRecord.js:178
-#: js/widgets/container/ContainerSelect.js:487
+#: js/widgets/container/ContainerSelect.js:492
 #: js/widgets/tags/TagToggleBox.js:59
 #: js/widgets/tags/TagsMassAttachAction.js:101
 #: js/widgets/ActivitiesGridPanel.js:369
@@ -266,7 +271,7 @@ msgstr ""
 #: js/widgets/dialog/AddToRecordPanel.js:103
 #: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:117
-#: js/widgets/dialog/EditDialog.js:459
+#: js/widgets/dialog/EditDialog.js:561
 #: js/widgets/dialog/ExceptionHandlerDialog.js:189
 msgid "Cancel"
 msgstr ""
@@ -325,11 +330,23 @@ msgstr ""
 msgid "choose other {0}..."
 msgstr ""
 
+#: js/ux/form/HtmlEditor.js:644
+msgid "Convert to pure text"
+msgstr ""
+
 #: js/ux/form/RecordsComboBox.js:26
 msgid "Software Version"
 msgstr ""
 
-#: js/ExceptionDialog.js:62 Frontend/Http.php:459
+#: js/ux/form/BooleanCombo.js:29 js/widgets/dialog/FileListDialog.js:102
+msgid "Yes"
+msgstr ""
+
+#: js/ux/form/BooleanCombo.js:29 js/widgets/dialog/FileListDialog.js:93
+msgid "No"
+msgstr ""
+
+#: js/ExceptionDialog.js:62 Frontend/Http.php:472
 msgid "Abnormal End"
 msgstr ""
 
@@ -337,7 +354,7 @@ msgstr ""
 msgid "Send Report"
 msgstr ""
 
-#: js/ExceptionDialog.js:154 Frontend/Http.php:460
+#: js/ExceptionDialog.js:154 Frontend/Http.php:473
 msgid "An error occurred, the program ended abnormal."
 msgstr ""
 
@@ -355,6 +372,7 @@ msgstr ""
 #: js/widgets/relation/GenericPickerGridPanel.js:458
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:204
 #: js/widgets/dialog/SimpleRecordEditDialog.js:59
+#: js/widgets/dialog/EditDialog.js:420
 msgid "Description"
 msgstr ""
 
@@ -391,7 +409,7 @@ msgid "Profile Information"
 msgstr ""
 
 #: js/AdminPanel.js:79 js/widgets/EditRecord.js:168
-#: js/widgets/dialog/EditDialog.js:450
+#: js/widgets/dialog/EditDialog.js:552
 msgid "Apply"
 msgstr ""
 
@@ -443,8 +461,60 @@ msgid ""
 "There are no applications enabled for you. Please contact your administrator."
 msgstr ""
 
-#: js/ApplicationStarter.js:557
+#: js/ApplicationStarter.js:570
 msgid "New "
+msgstr ""
+
+#: js/node_modules/babel-polyfill/browser.js:1
+#: js/node_modules/babel-polyfill/dist/polyfill.min.js:1
+#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:570
+msgid "delete"
+msgstr ""
+
+#: js/node_modules/babel-polyfill/browser.js:1
+#: js/node_modules/babel-polyfill/dist/polyfill.min.js:1
+msgid "has"
+msgstr ""
+
+#: js/node_modules/babel-polyfill/browser.js:1
+#: js/node_modules/babel-polyfill/dist/polyfill.min.js:1
+msgid "get"
+msgstr ""
+
+#: js/node_modules/postal/node_modules/lodash/mixin.js:38
+#: js/node_modules/postal/node_modules/lodash/mixin.js:42
+#: js/node_modules/postal/node_modules/lodash/core.js:3621
+#: js/node_modules/postal/node_modules/lodash/core.js:3625
+#: js/node_modules/postal/node_modules/lodash/lodash.js:14898
+#: js/node_modules/postal/node_modules/lodash/lodash.js:14902
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.compat.js:6238
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.compat.js:6242
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.underscore.js:4275
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.underscore.js:4279
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.js:5888
+#: js/node_modules/postal.request-response/node_modules/lodash/dist/lodash.js:5892
+#: js/node_modules/postal.request-response/node_modules/lodash/lodash.js:6255
+#: js/node_modules/postal.request-response/node_modules/lodash/lodash.js:6259
+#: js/node_modules/lodash/utility/mixin.js:37
+#: js/node_modules/lodash/utility/mixin.js:41
+#: js/node_modules/lodash/index.js:11319 js/node_modules/lodash/index.js:11323
+msgid "fred"
+msgstr ""
+
+#: js/node_modules/postal/node_modules/lodash/thru.js:15
+#: js/node_modules/postal/node_modules/lodash/core.js:1718
+#: js/node_modules/postal/node_modules/lodash/lodash.js:7992
+#: js/node_modules/lodash/index.js:5917
+#: js/node_modules/lodash/chain/thru.js:13
+msgid "  abc  "
+msgstr ""
+
+#: js/node_modules/babel/node_modules/babel-core/browser.min.js:22
+msgid "(?="
+msgstr ""
+
+#: js/node_modules/babel/node_modules/babel-core/browser.min.js:22
+msgid "(?:"
 msgstr ""
 
 #: js/Container.js:123
@@ -513,57 +583,57 @@ msgstr ""
 msgid "The new passwords mismatch, please correct them."
 msgstr ""
 
-#: js/common.js:310
+#: js/common.js:303
 msgid "Usage:&#160;"
 msgstr ""
 
-#: js/common.js:331 js/common.js:336 js/widgets/tags/TagToggleBox.js:112
+#: js/common.js:324 js/common.js:329 js/widgets/tags/TagToggleBox.js:112
 #: js/widgets/tags/TagToggleBox.js:117 js/widgets/tags/TagCombo.js:134
 #: js/widgets/tags/TagCombo.js:139 js/widgets/tags/TagsPanel.js:138
 msgid "personal"
 msgstr ""
 
-#: js/common.js:349 js/common.js:387
+#: js/common.js:342 js/common.js:380
 msgid "No Information"
 msgstr ""
 
-#: js/common.js:457
+#: js/common.js:450
 #, python-brace-format
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/common.js:458
+#: js/common.js:451
 #, python-brace-format
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/common.js:459
+#: js/common.js:452
 #, python-brace-format
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/common.js:486
+#: js/common.js:479
 #, python-brace-format
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/common.js:845 js/widgets/tree/ContextMenu.js:357
+#: js/common.js:852 js/widgets/tree/ContextMenu.js:363
 #: js/widgets/persistentfilter/PickerPanel.js:326
-#: js/widgets/grid/GridPanel.js:1901
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:708
-#: js/widgets/dialog/EditDialog.js:939 js/MainMenu.js:260
+#: js/widgets/grid/GridPanel.js:1905
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:710
+#: js/widgets/dialog/EditDialog.js:1041 js/MainMenu.js:260
 msgid "Confirm"
 msgstr ""
 
-#: js/common.js:845
+#: js/common.js:852
 msgid "Restart application to apply new configuration?"
 msgstr ""
 
@@ -580,7 +650,7 @@ msgid "Timezone"
 msgstr ""
 
 #: js/widgets/TimezoneChooser.js:77
-msgid "setting new timezone..."
+msgid "Setting new timezone..."
 msgstr ""
 
 #: js/widgets/account/PickerGridPanel.js:158
@@ -607,7 +677,7 @@ msgstr ""
 msgid "Search for groups ..."
 msgstr ""
 
-#: js/widgets/account/PickerGridPanel.js:267
+#: js/widgets/account/PickerGridPanel.js:266
 #: js/widgets/container/PropertiesDialog.js:107
 #: js/widgets/grid/LinkGridPanel.js:103
 #: js/widgets/dialog/AttachmentsGridPanel.js:86
@@ -635,28 +705,24 @@ msgstr ""
 msgid "Changing user account ..."
 msgstr ""
 
-#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:507
-#: js/widgets/dialog/EditDialog.js:535
+#: js/widgets/EditRecord.js:131 js/widgets/dialog/EditDialog.js:609
+#: js/widgets/dialog/EditDialog.js:637
 msgid "Saved in"
 msgstr ""
 
-#: js/widgets/EditRecord.js:188 js/widgets/dialog/EditDialog.js:468
-msgid "delete"
-msgstr ""
-
 #: js/widgets/tree/ContextMenu.js:35 js/widgets/ActivitiesGridPanel.js:241
-#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:603
+#: js/widgets/grid/FileUploadGrid.js:320 js/widgets/grid/GridPanel.js:607
 #, python-brace-format
 msgid "Add {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:276
+#: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:282
 #, python-brace-format
 msgid "Rename {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:677
-#: js/widgets/grid/GridPanel.js:678 js/widgets/grid/GridPanel.js:680
+#: js/widgets/tree/ContextMenu.js:52 js/widgets/grid/GridPanel.js:681
+#: js/widgets/grid/GridPanel.js:682 js/widgets/grid/GridPanel.js:684
 #, python-brace-format
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
@@ -719,7 +785,7 @@ msgstr ""
 msgid "No {0} added"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:199 js/widgets/tree/ContextMenu.js:283
+#: js/widgets/tree/ContextMenu.js:199 js/widgets/tree/ContextMenu.js:289
 #, python-brace-format
 msgid "You have to supply a {0} name!"
 msgstr ""
@@ -728,7 +794,7 @@ msgstr ""
 #: js/widgets/persistentfilter/PickerPanel.js:328
 #: js/widgets/persistentfilter/PickerPanel.js:366
 #: js/widgets/persistentfilter/PickerPanel.js:421
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:711 js/LoginPanel.js:460
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:713 js/LoginPanel.js:456
 msgid "Please wait"
 msgstr ""
 
@@ -737,27 +803,27 @@ msgstr ""
 msgid "Creating {0}..."
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:277
+#: js/widgets/tree/ContextMenu.js:283
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:283
+#: js/widgets/tree/ContextMenu.js:289
 #, python-brace-format
 msgid "Not renamed {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:357
+#: js/widgets/tree/ContextMenu.js:363
 #, python-brace-format
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:468
+#: js/widgets/tree/ContextMenu.js:474
 #, python-brace-format
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:492
+#: js/widgets/tree/ContextMenu.js:501
 #, python-brace-format
 msgid "Properties for {0} \"{1}\""
 msgstr ""
@@ -772,7 +838,7 @@ msgstr ""
 msgid "Recently used {0}:"
 msgstr ""
 
-#: js/widgets/container/ContainerSelect.js:484
+#: js/widgets/container/ContainerSelect.js:489
 #, python-brace-format
 msgid "please select a {0}"
 msgstr ""
@@ -794,23 +860,23 @@ msgstr ""
 msgid "My Grants"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:142
+#: js/widgets/container/TreePanel.js:157
 msgid "container"
 msgid_plural "containers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/container/TreePanel.js:547
+#: js/widgets/container/TreePanel.js:564
 #, python-brace-format
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:548
+#: js/widgets/container/TreePanel.js:565
 #, python-brace-format
 msgid "{0} grant is required for desired action"
 msgstr ""
 
-#: js/widgets/container/TreePanel.js:549
+#: js/widgets/container/TreePanel.js:566
 msgid "Insufficient Grants"
 msgstr ""
 
@@ -934,7 +1000,7 @@ msgid "Note"
 msgstr ""
 
 #: js/widgets/ActivitiesPanel.js:79 js/widgets/ActivitiesGridPanel.js:112
-#: js/widgets/grid/GridPanel.js:1481
+#: js/widgets/grid/GridPanel.js:1485
 #: js/widgets/dialog/AttachmentsGridPanel.js:106
 msgid "Created By"
 msgstr ""
@@ -1101,7 +1167,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: js/widgets/tags/TagsPanel.js:289 js/widgets/tags/TagsPanel.js:381
-#: js/widgets/tags/TagsPanel.js:414 js/widgets/dialog/EditDialog.js:951
+#: js/widgets/tags/TagsPanel.js:414 js/widgets/dialog/EditDialog.js:1053
 msgid "Failed"
 msgstr ""
 
@@ -1134,8 +1200,8 @@ msgid "Creation time"
 msgstr ""
 
 #: js/widgets/ActivitiesGridPanel.js:248 js/widgets/grid/GridPanel.js:350
-#: js/widgets/grid/GridPanel.js:577 js/widgets/grid/GridPanel.js:578
-#: js/widgets/grid/GridPanel.js:579
+#: js/widgets/grid/GridPanel.js:581 js/widgets/grid/GridPanel.js:582
+#: js/widgets/grid/GridPanel.js:583
 #, python-brace-format
 msgid "Edit {0}"
 msgid_plural "Edit {0}"
@@ -1231,7 +1297,7 @@ msgid ""
 msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:457
-#: js/widgets/grid/GridPanel.js:1207
+#: js/widgets/grid/GridPanel.js:1211
 msgid "Record"
 msgstr ""
 
@@ -1244,7 +1310,7 @@ msgid "Dependency"
 msgstr ""
 
 #: js/widgets/relation/GenericPickerGridPanel.js:462
-#: js/widgets/grid/GridPanel.js:1480
+#: js/widgets/grid/GridPanel.js:1484
 #: js/widgets/dialog/AttachmentsGridPanel.js:104
 msgid "Creation Time"
 msgstr ""
@@ -1323,7 +1389,7 @@ msgid "Language"
 msgstr ""
 
 #: js/widgets/LangChooser.js:68
-msgid "setting new language..."
+msgid "Setting new language..."
 msgstr ""
 
 #: js/widgets/CountryCombo.js:34
@@ -1422,39 +1488,43 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:92 js/widgets/grid/FilterToolbar.js:595
+#: js/widgets/grid/FilterToolbar.js:92 js/widgets/grid/FilterToolbar.js:597
 msgid "Show"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:113
+#: js/widgets/grid/FilterToolbar.js:114
 msgid "and"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:178
+#: js/widgets/grid/FilterToolbar.js:115
+msgid "or"
+msgstr ""
+
+#: js/widgets/grid/FilterToolbar.js:180
 msgid "add new filter"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:184
+#: js/widgets/grid/FilterToolbar.js:186
 msgid "reset all filters"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:190
+#: js/widgets/grid/FilterToolbar.js:192
 msgid "start search"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:198
+#: js/widgets/grid/FilterToolbar.js:200
 msgid "save as favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:205
+#: js/widgets/grid/FilterToolbar.js:207
 msgid "Load a favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:370
+#: js/widgets/grid/FilterToolbar.js:372
 msgid "select a field"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:408
+#: js/widgets/grid/FilterToolbar.js:410
 msgid "Delete this filter"
 msgstr ""
 
@@ -1506,7 +1576,7 @@ msgstr ""
 msgid "Remove record"
 msgstr ""
 
-#: js/widgets/grid/PickerGridPanel.js:264 js/widgets/grid/GridPanel.js:1207
+#: js/widgets/grid/PickerGridPanel.js:264 js/widgets/grid/GridPanel.js:1211
 msgid "Records"
 msgstr ""
 
@@ -1561,72 +1631,72 @@ msgid ""
 "view-options or change the module you search in."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:592 js/widgets/dialog/EditDialog.js:674
+#: js/widgets/grid/GridPanel.js:596 js/widgets/dialog/EditDialog.js:776
 #, python-brace-format
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:611
+#: js/widgets/grid/GridPanel.js:615
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:641
+#: js/widgets/grid/GridPanel.js:645
 #: js/widgets/dialog/DuplicateMergeDialog.js:222
 #, python-brace-format
 msgid "Merge {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1130
+#: js/widgets/grid/GridPanel.js:1134
 msgid "No data to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1152
+#: js/widgets/grid/GridPanel.js:1156
 #, python-brace-format
 msgid "Displaying records {0} - {1} of {2}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1153
+#: js/widgets/grid/GridPanel.js:1157
 #, python-brace-format
 msgid "No {0} to display"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1413
+#: js/widgets/grid/GridPanel.js:1417
 msgid "New..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1432
+#: js/widgets/grid/GridPanel.js:1436
 msgid "Add to..."
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1482
+#: js/widgets/grid/GridPanel.js:1486
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1483
+#: js/widgets/grid/GridPanel.js:1487
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1875
+#: js/widgets/grid/GridPanel.js:1879
 msgid "Not Allowed"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1876
+#: js/widgets/grid/GridPanel.js:1880
 msgid "You are not allowed to delete all pages at once"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1899
+#: js/widgets/grid/GridPanel.js:1903
 #, python-brace-format
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/grid/GridPanel.js:1944 js/widgets/dialog/EditDialog.js:941
+#: js/widgets/grid/GridPanel.js:1948 js/widgets/dialog/EditDialog.js:1043
 #, python-brace-format
 msgid "Deleting {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1944
+#: js/widgets/grid/GridPanel.js:1948
 msgid "... This may take a long time!"
 msgstr ""
 
@@ -2000,28 +2070,28 @@ msgstr ""
 #: js/widgets/dialog/PreferencesDialog.js:248
 #: js/widgets/dialog/PreferencesDialog.js:277
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:898 js/LoginPanel.js:500
+#: js/widgets/dialog/EditDialog.js:1000 js/LoginPanel.js:496
 msgid "Errors"
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditDialogPlugin.js:655
 #: js/widgets/dialog/ExportDialog.js:150
 #: js/widgets/dialog/CredentialsDialog.js:126
-#: js/widgets/dialog/EditDialog.js:932 js/LoginPanel.js:500
+#: js/widgets/dialog/EditDialog.js:1034 js/LoginPanel.js:496
 msgid "Please fix the errors noted."
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:700
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:701
 #, python-brace-format
 msgid "Add {0} Relation"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:708
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:710
 #, python-brace-format
 msgid "Do you really want to change these {0} records?"
 msgstr ""
 
-#: js/widgets/dialog/MultipleEditDialogPlugin.js:711
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:713
 msgid "Applying changes"
 msgstr ""
 
@@ -2270,12 +2340,12 @@ msgstr ""
 msgid "Saving of preferences failed."
 msgstr ""
 
-#: js/widgets/dialog/CredentialsDialog.js:61 js/LoginPanel.js:93
+#: js/widgets/dialog/CredentialsDialog.js:61 js/LoginPanel.js:89
 #: views/deactivationNotification.php:12
 msgid "Username"
 msgstr ""
 
-#: js/widgets/dialog/CredentialsDialog.js:65 js/LoginPanel.js:111
+#: js/widgets/dialog/CredentialsDialog.js:65 js/LoginPanel.js:107
 msgid "Password"
 msgstr ""
 
@@ -2299,32 +2369,36 @@ msgstr ""
 msgid "My Profile"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:677
+#: js/widgets/dialog/EditDialog.js:434
+msgid "Enter description"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:779
 #, python-brace-format
 msgid "Add New {0}"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:679
+#: js/widgets/dialog/EditDialog.js:781
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:750
+#: js/widgets/dialog/EditDialog.js:852
 #, python-brace-format
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:939
+#: js/widgets/dialog/EditDialog.js:1041
 #, python-brace-format
 msgid "Do you really want to delete this {0}?"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:951
+#: js/widgets/dialog/EditDialog.js:1053
 #, python-brace-format
 msgid "Could not delete {0}."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:1006
+#: js/widgets/dialog/EditDialog.js:1108
 #, python-brace-format
 msgid "Resolve Duplicate {0} Suspicion"
 msgstr ""
@@ -2337,14 +2411,6 @@ msgstr ""
 #: js/widgets/dialog/ExceptionHandlerDialog.js:222
 #, python-brace-format
 msgid "{0} - Unknown Exception"
-msgstr ""
-
-#: js/widgets/dialog/FileListDialog.js:93
-msgid "No"
-msgstr ""
-
-#: js/widgets/dialog/FileListDialog.js:102
-msgid "Yes"
 msgstr ""
 
 #: js/widgets/dialog/MultipleEditResultSummary.js:146
@@ -2410,11 +2476,11 @@ msgstr ""
 msgid "Reload config"
 msgstr ""
 
-#: js/Application.js:181
+#: js/Application.js:186
 msgid "Not Supported"
 msgstr ""
 
-#: js/Application.js:182
+#: js/Application.js:187
 msgid "Your request is not supported by this version."
 msgstr ""
 
@@ -2478,118 +2544,118 @@ msgstr ""
 msgid "Logging you out..."
 msgstr ""
 
-#: js/MainMenu.js:274 js/LoginPanel.js:474
+#: js/MainMenu.js:274 js/LoginPanel.js:470
 msgid "Please wait!"
 msgstr ""
 
-#: js/ExceptionHandler.js:164 Frontend/Http.php:433
+#: js/ExceptionHandler.js:169 Frontend/Http.php:446
 msgid "Authorisation Required"
 msgstr ""
 
-#: js/ExceptionHandler.js:165
+#: js/ExceptionHandler.js:170
 msgid "Your session timed out. You need to login again."
 msgstr ""
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:202
 msgid "Insufficient Rights"
 msgstr ""
 
-#: js/ExceptionHandler.js:198
+#: js/ExceptionHandler.js:203
 msgid "Sorry, you are not permitted to perform this action"
 msgstr ""
 
-#: js/ExceptionHandler.js:206
+#: js/ExceptionHandler.js:211
 msgid "Not Found"
 msgstr ""
 
-#: js/ExceptionHandler.js:207
+#: js/ExceptionHandler.js:212
 msgid ""
 "Sorry, your request could not be completed because the required data could "
 "not be found. In most cases this means that someone already deleted the "
 "data. Please refresh your current view."
 msgstr ""
 
-#: js/ExceptionHandler.js:215
+#: js/ExceptionHandler.js:220
 msgid "Concurrent Updates"
 msgstr ""
 
-#: js/ExceptionHandler.js:216
+#: js/ExceptionHandler.js:221
 msgid ""
 "Someone else saved this record while you where editing the data. You need to "
 "reload and make your changes again."
 msgstr ""
 
-#: js/ExceptionHandler.js:224
+#: js/ExceptionHandler.js:229
 msgid "Service Unavailable"
 msgstr ""
 
-#: js/ExceptionHandler.js:225
+#: js/ExceptionHandler.js:230
 msgid ""
 "The server is currently unable to handle the request due to a temporary "
 "overloading, maintenance or misconfiguration of the server. Please try again "
 "or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:231
+#: js/ExceptionHandler.js:236
 msgid "Server Message:"
 msgstr ""
 
-#: js/ExceptionHandler.js:233
+#: js/ExceptionHandler.js:238
 msgid "Invalid Data"
 msgstr ""
 
-#: js/ExceptionHandler.js:234
+#: js/ExceptionHandler.js:239
 msgid "Your input data is not valid. Please provide valid data."
 msgstr ""
 
-#: js/ExceptionHandler.js:246
+#: js/ExceptionHandler.js:251
 msgid "Connection lost, please check your network!"
 msgstr ""
 
-#: js/ExceptionHandler.js:252
+#: js/ExceptionHandler.js:257
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:253
+#: js/ExceptionHandler.js:258
 msgid ""
 "Sorry, some timeout occured while processing your request. Please reload "
 "your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:261
+#: js/ExceptionHandler.js:266
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:262
+#: js/ExceptionHandler.js:267
 msgid ""
 "Sorry, the Server did not respond any data. Please reload your browser, try "
 "again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:269
+#: js/ExceptionHandler.js:274
 msgid "Out of Resources"
 msgstr ""
 
-#: js/ExceptionHandler.js:270
+#: js/ExceptionHandler.js:275
 msgid ""
 "Sorry, the Server stated a \"memory exhausted\" condition. Please contact "
 "your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:286
+#: js/ExceptionHandler.js:291
 msgid "No Role Memberships"
 msgstr ""
 
-#: js/ExceptionHandler.js:287
+#: js/ExceptionHandler.js:292
 msgid ""
 "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:302
+#: js/ExceptionHandler.js:307
 msgid "Method Not Found / Insufficent Permissions"
 msgstr ""
 
-#: js/ExceptionHandler.js:303
+#: js/ExceptionHandler.js:308
 msgid ""
 "You tried to access a function that is not available. Please reload your "
 "browser, try again or contact your administrator."
@@ -2649,24 +2715,24 @@ msgstr ""
 msgid "Contributors"
 msgstr ""
 
-#: js/LoginPanel.js:83 js/LoginPanel.js:159
+#: js/LoginPanel.js:79 js/LoginPanel.js:155
 msgid "Login"
 msgstr ""
 
-#: js/LoginPanel.js:128
+#: js/LoginPanel.js:124
 msgid "Certificate detected. Please, press Login button to proceed."
 msgstr ""
 
-#: js/LoginPanel.js:185
+#: js/LoginPanel.js:181
 msgid "Version"
 msgstr ""
 
-#: js/LoginPanel.js:217
+#: js/LoginPanel.js:213
 #, python-brace-format
 msgid "{0} is made for you"
 msgstr ""
 
-#: js/LoginPanel.js:219
+#: js/LoginPanel.js:215
 #, python-brace-format
 msgid ""
 "{0} wants to make business collaboration easier and more enjoyable - for "
@@ -2674,120 +2740,120 @@ msgid ""
 "get help."
 msgstr ""
 
-#: js/LoginPanel.js:225
+#: js/LoginPanel.js:221
 #, python-brace-format
 msgid "{0} Homepage"
 msgstr ""
 
-#: js/LoginPanel.js:226
+#: js/LoginPanel.js:222
 #, python-brace-format
 msgid "{0} Forum"
 msgstr ""
 
-#: js/LoginPanel.js:230
+#: js/LoginPanel.js:226
 msgid "Translations"
 msgstr ""
 
-#: js/LoginPanel.js:232
+#: js/LoginPanel.js:228
 #, python-brace-format
 msgid "Translation state of {0}: {1}%."
 msgstr ""
 
-#: js/LoginPanel.js:234
+#: js/LoginPanel.js:230
 #, python-brace-format
 msgid ""
 "If the state of your language is not satisfying, or if you miss a language, "
 "please consider becoming a {0} translator."
 msgstr ""
 
-#: js/LoginPanel.js:237
+#: js/LoginPanel.js:233
 #, python-brace-format
 msgid "{0} Translation Howto"
 msgstr ""
 
-#: js/LoginPanel.js:238
+#: js/LoginPanel.js:234
 msgid "Detailed Language Statistics"
 msgstr ""
 
-#: js/LoginPanel.js:258
+#: js/LoginPanel.js:254
 msgid "Powered by:"
 msgstr ""
 
-#: js/LoginPanel.js:258
+#: js/LoginPanel.js:254
 msgid "online open source groupware and crm"
 msgstr ""
 
-#: js/LoginPanel.js:308
+#: js/LoginPanel.js:304
 #, python-brace-format
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:313 js/LoginPanel.js:543
+#: js/LoginPanel.js:309 js/LoginPanel.js:539
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:315 js/LoginPanel.js:545
+#: js/LoginPanel.js:311 js/LoginPanel.js:541
 msgid ""
 "We regularly need your feedback to make the next Tine 2.0 releases fit your "
 "needs even better. Help us and yourself by participating:"
 msgstr ""
 
-#: js/LoginPanel.js:321
+#: js/LoginPanel.js:317
 msgid "participate!"
 msgstr ""
 
-#: js/LoginPanel.js:343
+#: js/LoginPanel.js:339
 msgid "Languages"
 msgstr ""
 
-#: js/LoginPanel.js:344
+#: js/LoginPanel.js:340
 msgid "Duration"
 msgstr ""
 
-#: js/LoginPanel.js:385
+#: js/LoginPanel.js:381
 msgid "Browser incompatible"
 msgstr ""
 
-#: js/LoginPanel.js:387
+#: js/LoginPanel.js:383
 msgid "Your browser is not supported by Tine 2.0."
 msgstr ""
 
-#: js/LoginPanel.js:392
+#: js/LoginPanel.js:388
 msgid "Browser incompatible?"
 msgstr ""
 
-#: js/LoginPanel.js:394
+#: js/LoginPanel.js:390
 msgid ""
 "You are using an unrecognized browser. This could result in unexpected "
 "behaviour."
 msgstr ""
 
-#: js/LoginPanel.js:400
+#: js/LoginPanel.js:396
 msgid "You might try one of these browsers:"
 msgstr ""
 
-#: js/LoginPanel.js:460
+#: js/LoginPanel.js:456
 msgid "Logging you in..."
 msgstr ""
 
-#: js/LoginPanel.js:474
+#: js/LoginPanel.js:470
 #, python-brace-format
 msgid "Login successful. Loading {0}..."
 msgstr ""
 
-#: js/LoginPanel.js:479
+#: js/LoginPanel.js:475
 msgid "There was an error verifying your certificate!!!"
 msgstr ""
 
-#: js/LoginPanel.js:480
+#: js/LoginPanel.js:476
 msgid "Your username and/or your password are wrong!!!"
 msgstr ""
 
-#: js/LoginPanel.js:482
+#: js/LoginPanel.js:478
 msgid "Login failure"
 msgstr ""
 
-#: js/LoginPanel.js:515
+#: js/LoginPanel.js:511
 msgid "Please enter your login data"
 msgstr ""
 
@@ -2888,7 +2954,7 @@ msgstr ""
 msgid "%s's personal "
 msgstr ""
 
-#: Frontend/Http.php:434
+#: Frontend/Http.php:447
 msgid "Your session is not valid. You need to login again."
 msgstr ""
 
@@ -2903,368 +2969,416 @@ msgid ""
 "container as the default addressbook for internal contacts!"
 msgstr ""
 
-#: Config.php:373
+#: Config.php:393
 msgid "Account Deletion Event"
 msgstr ""
 
-#: Config.php:375
+#: Config.php:395
 msgid "Configure what should happen to data of deleted users"
 msgstr ""
 
-#: Config.php:384
+#: Config.php:404
 msgid "System IMAP"
 msgstr ""
 
-#: Config.php:386
+#: Config.php:406
 msgid "System IMAP server configuration."
 msgstr ""
 
-#: Config.php:395
+#: Config.php:415
 msgid "System SMTP"
 msgstr ""
 
-#: Config.php:397
+#: Config.php:417
 msgid "System SMTP server configuration."
 msgstr ""
 
-#: Config.php:406
+#: Config.php:426
 msgid "System SIEVE"
 msgstr ""
 
-#: Config.php:408
+#: Config.php:428
 msgid "System SIEVE server configuration."
 msgstr ""
 
-#: Config.php:417
+#: Config.php:437
 msgid "Authentication Backend"
 msgstr ""
 
-#: Config.php:419
+#: Config.php:439
 msgid "Backend adapter for user authentication."
 msgstr ""
 
-#: Config.php:427
+#: Config.php:447
 msgid "Authentication Configuration"
 msgstr ""
 
-#: Config.php:429
+#: Config.php:449
 msgid "Authentication backend configuration."
 msgstr ""
 
-#: Config.php:438
+#: Config.php:458
 msgid "User Backend"
 msgstr ""
 
-#: Config.php:440
+#: Config.php:460
 msgid "Backend adapter for user data."
 msgstr ""
 
-#: Config.php:448
+#: Config.php:468
 msgid "User Configuration"
 msgstr ""
 
-#: Config.php:450
+#: Config.php:470
 msgid "User backend configuration."
 msgstr ""
 
-#: Config.php:459
+#: Config.php:479
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:467
+#: Config.php:487
 msgid "Show Advanced Search"
 msgstr ""
 
-#: Config.php:469
+#: Config.php:489
 msgid ""
 "Show toggle button to switch on or off the advanced search for the "
 "quickfilter"
 msgstr ""
 
-#: Config.php:472
+#: Config.php:492
 msgid "Container Custom Sort"
 msgstr ""
 
-#: Config.php:474
+#: Config.php:494
 msgid "Allows to sort containers by setting the sort order in Admin/Container"
 msgstr ""
 
-#: Config.php:483
+#: Config.php:497
+msgid "Show Account Email Address"
+msgstr ""
+
+#: Config.php:499
+msgid "Show email address in account picker and attendee grids"
+msgstr ""
+
+#: Config.php:509
 msgid "Cronuser ID"
 msgstr ""
 
-#: Config.php:485
+#: Config.php:511
 msgid "User ID of the cron user."
 msgstr ""
 
-#: Config.php:493
+#: Config.php:519
 msgid "Title Postfix"
 msgstr ""
 
-#: Config.php:495
+#: Config.php:521
 msgid "Postfix string appended to the title of this installation."
 msgstr ""
 
-#: Config.php:503
+#: Config.php:529
 msgid "Redirect URL"
 msgstr ""
 
-#: Config.php:505
+#: Config.php:531
 msgid "Redirect to this URL after logout."
 msgstr ""
 
-#: Config.php:513
+#: Config.php:539
 msgid "Redirect to Referrer"
 msgstr ""
 
-#: Config.php:515
+#: Config.php:541
 msgid "Redirect to referrer after logout."
 msgstr ""
 
-#: Config.php:523
+#: Config.php:549
 msgid "Redirect Always"
 msgstr ""
 
-#: Config.php:525
+#: Config.php:551
 msgid "Redirect to configured redirect URL also for login."
 msgstr ""
 
-#: Config.php:533
+#: Config.php:559
 msgid "Allowed Origins"
 msgstr ""
 
-#: Config.php:535
+#: Config.php:561
 msgid "Allowed Origins for the JSON API."
 msgstr ""
 
-#: Config.php:543
+#: Config.php:569
 msgid "Accepted Terms Version"
 msgstr ""
 
-#: Config.php:545
+#: Config.php:571
 msgid "Accepted version number of the terms and conditions document."
 msgstr ""
 
-#: Config.php:553
+#: Config.php:579
 msgid "Use Geolocation Services"
 msgstr ""
 
-#: Config.php:555
+#: Config.php:581
 msgid "Use of external Geolocation services is allowed."
 msgstr ""
 
-#: Config.php:563
+#: Config.php:589
 msgid "Disable LDAP TLS Certificate Check"
 msgstr ""
 
-#: Config.php:565
+#: Config.php:591
 msgid "LDAP TLS Certificate should not be checked"
 msgstr ""
 
-#: Config.php:574
+#: Config.php:600
 msgid "Configure hook class for user sync"
 msgstr ""
 
-#: Config.php:576
+#: Config.php:602
 msgid "Allows to change data after fetching user from sync backend"
 msgstr ""
 
-#: Config.php:584
+#: Config.php:610
 msgid "Sync contact data from sync backend"
 msgstr ""
 
-#: Config.php:586
+#: Config.php:612
 msgid "Sync user contact data from sync backend"
 msgstr ""
 
-#: Config.php:595
+#: Config.php:621
 msgid "IP Session Validator"
 msgstr ""
 
-#: Config.php:597
+#: Config.php:623
 msgid "Destroy session if the users IP changes."
 msgstr ""
 
-#: Config.php:605
+#: Config.php:631
 msgid "UA Session Validator"
 msgstr ""
 
-#: Config.php:607
+#: Config.php:633
 msgid "Destroy session if the users user agent string changes."
 msgstr ""
 
-#: Config.php:615
+#: Config.php:641
 msgid "Files Directory"
 msgstr ""
 
-#: Config.php:617
+#: Config.php:643
 msgid "Directory with web server write access for user files."
 msgstr ""
 
-#: Config.php:625 Config.php:627
+#: Config.php:651 Config.php:653
 msgid "Reuse last username logged"
 msgstr ""
 
-#: Config.php:635 Config.php:637
+#: Config.php:661 Config.php:663
 msgid "User may change password"
 msgstr ""
 
-#: Config.php:646 Config.php:648
+#: Config.php:672 Config.php:674
 msgid "Enable password policy"
 msgstr ""
 
-#: Config.php:656
+#: Config.php:682
 msgid "Only ASCII"
 msgstr ""
 
-#: Config.php:658
+#: Config.php:684
 msgid "Only ASCII characters are allowed in passwords."
 msgstr ""
 
-#: Config.php:666
+#: Config.php:692
 msgid "Minimum length"
 msgstr ""
 
-#: Config.php:668
+#: Config.php:694
 msgid "Minimum password length"
 msgstr ""
 
-#: Config.php:676
+#: Config.php:702
 msgid "Minimum word chars"
 msgstr ""
 
-#: Config.php:678
+#: Config.php:704
 msgid "Minimum word chars in password"
 msgstr ""
 
-#: Config.php:686
+#: Config.php:712
 msgid "Minimum uppercase chars"
 msgstr ""
 
-#: Config.php:688
+#: Config.php:714
 msgid "Minimum uppercase chars in password"
 msgstr ""
 
-#: Config.php:696
+#: Config.php:722
 msgid "Minimum special chars"
 msgstr ""
 
-#: Config.php:698
+#: Config.php:724
 msgid "Minimum special chars in password"
 msgstr ""
 
-#: Config.php:706
+#: Config.php:732
 msgid "Minimum numbers"
 msgstr ""
 
-#: Config.php:708
+#: Config.php:734
 msgid "Minimum numbers in password"
 msgstr ""
 
-#: Config.php:716
+#: Config.php:742
 msgid "Forbid part of username"
 msgstr ""
 
-#: Config.php:718
+#: Config.php:744
 msgid "Forbid part of username in password"
 msgstr ""
 
-#: Config.php:726
+#: Config.php:752
 msgid "Automatic bugreports"
 msgstr ""
 
-#: Config.php:728
+#: Config.php:754
 msgid ""
 "Always send bugreports, even on timeouts and other exceptions / failures."
 msgstr ""
 
-#: Config.php:736
+#: Config.php:762
 msgid "Last sessions cleanup run"
 msgstr ""
 
-#: Config.php:738
+#: Config.php:764
 msgid "Stores the timestamp of the last sessions cleanup task run."
 msgstr ""
 
-#: Config.php:746
+#: Config.php:772
 msgid "Warn after X login failures"
 msgstr ""
 
-#: Config.php:748
+#: Config.php:774
 msgid "Maximum allowed login failures before writing warn log messages"
 msgstr ""
 
-#: Config.php:757
+#: Config.php:783
 msgid "Disable Anyone Account"
 msgstr ""
 
-#: Config.php:759
+#: Config.php:785
 msgid "Disallow anyone account in grant configurations"
 msgstr ""
 
-#: Config.php:767
+#: Config.php:793
 msgid "Alarms sent each job"
 msgstr ""
 
-#: Config.php:769
+#: Config.php:795
 msgid ""
 "Allows to configure the maximum number of alarm notifications in each run of "
 "sendPendingAlarms (0 = no limit)"
 msgstr ""
 
-#: Config.php:777
+#: Config.php:803
 msgid "Account deactivation notfication"
 msgstr ""
 
-#: Config.php:779
+#: Config.php:805
 msgid ""
 "Send E-Mail to user if the account is deactivated or the user tries to login "
 "with deactivated account"
 msgstr ""
 
-#: Config.php:787
+#: Config.php:813
 msgid "Role change allowed"
 msgstr ""
 
-#: Config.php:789
+#: Config.php:815
 msgid ""
 "Allows to configure which user is allowed to switch to another users account"
 msgstr ""
 
-#: Config.php:797 Config.php:799
+#: Config.php:823 Config.php:825
 msgid "Max username length"
 msgstr ""
 
-#: Config.php:806
+#: Config.php:832
 msgid "conf.d folder name"
 msgstr ""
 
-#: Config.php:808 Config.php:819
+#: Config.php:834 Config.php:845
 msgid ""
 "Folder for additional config files (conf.d) - NOTE: this is only used if set "
 "in config.inc.php!"
 msgstr ""
 
-#: Config.php:817
+#: Config.php:843
 msgid "Maintenance mode enabled"
 msgstr ""
 
-#: Config.php:830
+#: Config.php:856
 msgid "Custom Javascript includes for Fat-Client"
 msgstr ""
 
-#: Config.php:832
+#: Config.php:858
 msgid ""
 "An array of javascript files to include for the fat client. This files might "
 "be stored outside the docroot of the webserver."
 msgstr ""
 
-#: Import/Csv/Abstract.php:236
+#: Config.php:867
+msgid "custom description"
+msgstr ""
+
+#: Config.php:869
+msgid "Custom description for branding."
+msgstr ""
+
+#: Config.php:878
+msgid "custom weburl"
+msgstr ""
+
+#: Config.php:880
+msgid "Custom weburl for branding."
+msgstr ""
+
+#: Config.php:889
+msgid "custom title"
+msgstr ""
+
+#: Config.php:891
+msgid "Custom title for branding."
+msgstr ""
+
+#: Config.php:900
+msgid "custom logo path"
+msgstr ""
+
+#: Config.php:902
+msgid "Path to custom logo."
+msgstr ""
+
+#: Config.php:911
+msgid "custom favicon path"
+msgstr ""
+
+#: Config.php:913
+msgid "Path to custom favicon."
+msgstr ""
+
+#: Import/Csv/Abstract.php:239
 #, python-format
 msgid "The following fields weren't imported: %s"
 msgstr ""
 
-#: Import/Csv/Abstract.php:237
+#: Import/Csv/Abstract.php:240
 msgid "N/A"
 msgstr ""
 
@@ -3273,7 +3387,7 @@ msgstr ""
 msgid "Exception ({0})"
 msgstr ""
 
-#: WebDav/PrincipalBackend.php:536
+#: WebDav/PrincipalBackend.php:541
 msgid "Shared folders"
 msgstr ""
 

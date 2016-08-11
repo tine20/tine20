@@ -122,7 +122,7 @@ msgid "Account"
 msgstr ""
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
-#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
+#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:153
 #: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:521
 #: js/AccountEditDialog.js:161
 msgid "Description"
@@ -351,7 +351,7 @@ msgstr[1] ""
 msgid "Days"
 msgstr ""
 
-#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:130
+#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:131
 msgid "Expiration date"
 msgstr ""
 
@@ -362,7 +362,7 @@ msgid_plural "Cost Centers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
+#: js/ExtraFreeTimeEditDialog.js:167 js/EmployeeEditDialog.js:441
 #: js/FreeTimeEditDialog.js:535
 msgid "Enter description"
 msgstr ""
