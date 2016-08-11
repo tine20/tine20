@@ -1,17 +1,20 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - HumanResources\n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2012-09-19 09:12+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/tine20/tine20/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Controller.php:74
 msgid "You do not have admin rights on HumanResources"
@@ -90,7 +93,8 @@ msgstr ""
 
 #: Acl/Rights.php:94
 msgid ""
-"Edit birthday, account data and other private information of employee records"
+"Edit birthday, account data and other private information of employee "
+"records"
 msgstr ""
 
 #: Model/Employee.php:35 Model/Contract.php:49 Model/FreeTime.php:49
@@ -100,6 +104,7 @@ msgid "Employee"
 msgid_plural "Employees"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Employee.php:50 js/EmployeeEditDialog.js:382
 msgid "Banking Information"
@@ -122,7 +127,7 @@ msgid "Account"
 msgstr ""
 
 #: Model/Employee.php:83 Model/Account.php:89 Model/FreeTime.php:77
-#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:153
+#: Model/ExtraFreeTime.php:64 js/ExtraFreeTimeEditDialog.js:152
 #: js/EmployeeEditDialog.js:427 js/FreeTimeEditDialog.js:521
 #: js/AccountEditDialog.js:161
 msgid "Description"
@@ -259,6 +264,7 @@ msgid "Personal account"
 msgid_plural "Personal accounts"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Account.php:52
 msgid "Quick search"
@@ -282,6 +288,7 @@ msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Contract.php:61 Model/CostCenter.php:72 js/ContractEditDialog.js:230
 msgid "Start Date"
@@ -308,12 +315,14 @@ msgid "Free Day"
 msgid_plural "Free Days"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/FreeTime.php:34
 msgid "Free Time"
 msgid_plural "Free Times"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/FreeTime.php:71 Model/ExtraFreeTime.php:58
 #: js/ExtraFreeTimeEditDialog.js:127
@@ -346,12 +355,13 @@ msgid "Extra free time"
 msgid_plural "Extra free times"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: Model/ExtraFreeTime.php:70 js/ExtraFreeTimeEditDialog.js:122
 msgid "Days"
 msgstr ""
 
-#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:131
+#: Model/ExtraFreeTime.php:74 js/ExtraFreeTimeEditDialog.js:130
 msgid "Expiration date"
 msgstr ""
 
@@ -361,8 +371,9 @@ msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
-#: js/ExtraFreeTimeEditDialog.js:167 js/EmployeeEditDialog.js:441
+#: js/ExtraFreeTimeEditDialog.js:166 js/EmployeeEditDialog.js:441
 #: js/FreeTimeEditDialog.js:535
 msgid "Enter description"
 msgstr ""
@@ -429,6 +440,7 @@ msgid "Export {0}"
 msgid_plural "Export {0}"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/EmployeeGridPanel.js:54
 msgid "Export as ODS"
@@ -462,8 +474,8 @@ msgstr ""
 
 #: js/DatePicker.js:472
 msgid ""
-"The Employee has no more possible vacation days left for this year. Create a "
-"new vacation and use another personal account the vacation should be taken "
+"The Employee has no more possible vacation days left for this year. Create a"
+" new vacation and use another personal account the vacation should be taken "
 "from."
 msgstr ""
 
@@ -477,6 +489,7 @@ msgid "Working Time"
 msgid_plural "Working Times"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/ContractEditDialog.js:258
 msgid "Choose the template"
@@ -572,6 +585,7 @@ msgid "CostCenter"
 msgid_plural "CostCenters"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/CostCenterGridPanel.js:128
 msgid "Startdate"

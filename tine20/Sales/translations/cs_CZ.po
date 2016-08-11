@@ -1,33 +1,32 @@
 # 
 # Translators:
-# sao sang <saosangmo@yahoo.com>, 2013,2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-03-17 14:39+0000\n"
-"Last-Translator: sao sang <saosangmo@yahoo.com>\n"
-"Language-Team: Vietnamese (http://www.transifex.com/tine20/tine20/language/vi/)\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/tine20/tine20/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: vi\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: Export/Ods/Invoice.php:125
 msgid "CLEARED"
-msgstr "ĐÃ XÓA"
+msgstr ""
 
 #: Export/Ods/Invoice.php:128
 msgid "INVOICE"
-msgstr "HÓA ĐƠN"
+msgstr ""
 
 #: Controller.php:91 Controller.php:117
 msgid "You do not have admin rights on Sales"
-msgstr "Bạn không có quyền quản trị trên hệ thống Kinh doanh"
+msgstr ""
 
 #: Exception/DeleteUsedBillingAddress.php:26
 msgid "Address as Billing Address in Use"
@@ -97,11 +96,11 @@ msgstr ""
 
 #: Acl/Rights.php:196
 msgid "manage products"
-msgstr "quản lý sản phẩm"
+msgstr ""
 
 #: Acl/Rights.php:197
 msgid "add, edit and delete products"
-msgstr "thêm, xóa, sửa sản phẩm"
+msgstr ""
 
 #: Acl/Rights.php:200
 msgid "manage contracts"
@@ -202,6 +201,8 @@ msgstr ""
 msgid "Customer"
 msgid_plural "Customers"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Customer.php:51 Model/Supplier.php:51 js/CustomerEditDialog.js:182
 #: js/SupplierEditDialog.js:158 js/CustomerDetailsPanel.js:123
@@ -232,7 +233,7 @@ msgstr ""
 #: js/SupplierEditDialog.js:181 js/CustomerDetailsPanel.js:126
 #: js/SupplierDetailsPanel.js:126
 msgid "Name"
-msgstr "Tên"
+msgstr ""
 
 #: Model/Customer.php:73 Model/Supplier.php:71 js/CustomerEditDialog.js:354
 #: js/SupplierEditDialog.js:316 js/CustomerDetailsPanel.js:127
@@ -250,7 +251,7 @@ msgstr ""
 #: js/PurchaseInvoiceEditDialog.js:529 js/SupplierDetailsPanel.js:157
 #: js/OrderConfirmationEditDialog.js:148
 msgid "Description"
-msgstr "Mo tả"
+msgstr ""
 
 #: Model/Customer.php:86 Model/Contract.php:102 Model/Contract.php:174
 #: Model/Supplier.php:84 js/CustomerEditDialog.js:214
@@ -357,20 +358,24 @@ msgstr ""
 #: Model/Division.php:34
 msgid "Division"
 msgid_plural "Divisions"
-msgstr[0] "one: Bộ phận\nother: Bộ phận"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Division.php:50 Model/OrderConfirmation.php:67 Model/Contract.php:121
 #: Model/Offer.php:80 Model/InvoicePosition.php:64 js/DivisionEditDialog.js:92
 #: js/OfferEditDialog.js:107 js/ContractEditDialog.js:210
 #: js/ExceptionHandler.js:96 js/OrderConfirmationEditDialog.js:107
 msgid "Title"
-msgstr "Tiêu đề"
+msgstr ""
 
 #: Model/OrderConfirmation.php:33 Model/Offer.php:62
 #: js/OrderConfirmationFilterModel.js:30
 msgid "Order Confirmation"
 msgid_plural "Order Confirmations"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/OrderConfirmation.php:49 Model/OrderConfirmation.php:81
 #: Model/Contract.php:44 Model/ProductAggregate.php:68 Model/Invoice.php:54
@@ -379,7 +384,9 @@ msgstr[0] ""
 #: js/ContractFilterModel.js:30 js/OrderConfirmationEditDialog.js:112
 msgid "Contract"
 msgid_plural "Contracts"
-msgstr[0] "one:Hợp đồng\nother:Hợp đồng"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/OrderConfirmation.php:62 Model/Contract.php:116 Model/Offer.php:75
 #: Model/Product.php:48 Model/CostCenter.php:50 js/OfferEditDialog.js:102
@@ -387,13 +394,15 @@ msgstr[0] "one:Hợp đồng\nother:Hợp đồng"
 #: js/CostCenterGridPanel.js:56 js/ExceptionHandler.js:91
 #: js/OrderConfirmationEditDialog.js:102 Config.php:183 Config.php:251
 msgid "Number"
-msgstr "Số"
+msgstr ""
 
 #: Model/Contract.php:78 Model/PurchaseInvoice.php:64
 #: Model/PurchaseInvoice.php:201 Model/Invoice.php:123 Model/CostCenter.php:34
 msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Contract.php:141 js/InvoiceEditDialog.js:466
 #: js/BillingAddressGridPanel.js:39 js/InvoiceDetailsPanel.js:115
@@ -415,7 +424,7 @@ msgstr ""
 #: Model/Contract.php:198 Model/Contract.php:260 Model/PurchaseInvoice.php:261
 #: js/ContractEditDialog.js:273 js/PurchaseInvoiceEditDialog.js:495
 msgid "Lead Cost Center"
-msgstr "Trung tâm giá"
+msgstr ""
 
 #: Model/Contract.php:208 js/ContractEditDialog.js:197
 msgid "Products"
@@ -423,21 +432,23 @@ msgstr ""
 
 #: Model/Contract.php:246
 msgid "Responsible"
-msgstr "Chịu trách nhiệm"
+msgstr ""
 
 #: Model/Contract.php:248
 msgid "Partner"
-msgstr "Đối tác"
+msgstr ""
 
 #: Model/Contract.php:264
 msgid "Time Account"
-msgstr "Tài khoản theo thời gian"
+msgstr ""
 
 #: Model/Address.php:33 Model/Invoice.php:89 Model/Invoice.php:100
 #: js/AddressEditDialog.js:191 js/AddressEditDialog.js:201
 msgid "Address"
 msgid_plural "Addresss"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Address.php:97 js/AddressEditDialog.js:178
 msgid "Number Debit"
@@ -447,6 +458,8 @@ msgstr ""
 msgid "Purchase Invoice"
 msgid_plural "Purchase Invoices"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/PurchaseInvoice.php:52 Model/PurchaseInvoice.php:226
 #: Model/PurchaseInvoice.php:245 Model/Supplier.php:35 Model/Supplier.php:251
@@ -455,6 +468,8 @@ msgstr[0] ""
 msgid "Supplier"
 msgid_plural "Suppliers"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/PurchaseInvoice.php:76 Model/PurchaseInvoice.php:214
 #: Model/PurchaseInvoice.php:253 js/PurchaseInvoiceApproverFilterModel.js:30
@@ -544,13 +559,17 @@ msgstr ""
 msgid "Offer"
 msgid_plural "Offers"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Product.php:32 Model/ProductAggregate.php:39
 #: Model/ProductAggregate.php:56 js/ProductAggregateGridPanel.js:56
 #: js/ProductAggregateGridPanel.js:224
 msgid "Product"
 msgid_plural "Products"
-msgstr[0] "one:Sản phẩm\nother:Sản phẩm"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Product.php:64 js/ProductEditDialog.js:102
 msgid "Purchaseprice"
@@ -562,11 +581,11 @@ msgstr ""
 
 #: Model/Product.php:80 js/ProductEditDialog.js:88
 msgid "Category"
-msgstr "Danh mục"
+msgstr ""
 
 #: Model/Product.php:86 js/ProductEditDialog.js:98
 msgid "Manufacturer"
-msgstr "Nhà sản xuất"
+msgstr ""
 
 #: Model/Product.php:91 js/ProductEditDialog.js:191
 msgid "Accountable"
@@ -620,6 +639,8 @@ msgstr ""
 msgid "Invoice"
 msgid_plural "Invoices"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/Invoice.php:106 js/InvoiceEditDialog.js:419
 #: js/InvoiceDetailsPanel.js:101 js/PurchaseInvoiceDetailsPanel.js:101
@@ -643,7 +664,7 @@ msgstr ""
 #: js/InvoiceDetailsPanel.js:131 js/PurchaseInvoiceDetailsPanel.js:131
 #: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:152
 msgid "Cleared"
-msgstr "Đã xóa"
+msgstr ""
 
 #: Model/Invoice.php:138 Model/InvoicePosition.php:49
 #: js/InvoiceEditDialog.js:425 js/InvoiceDetailsPanel.js:102
@@ -662,12 +683,14 @@ msgstr ""
 #: Model/CostCenter.php:57 js/CostCenterEditDialog.js:115
 #: js/CostCenterGridPanel.js:62
 msgid "Remark"
-msgstr "Đánh dấu lại"
+msgstr ""
 
 #: Model/InvoicePosition.php:33
 msgid "Invoice Position"
 msgid_plural "Invoice Positions"
 msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/InvoicePosition.php:73
 msgid "Month"
@@ -739,15 +762,15 @@ msgstr ""
 
 #: js/AdminPanel.js:61 js/BillingDateDialog.js:127
 msgid "Cancel"
-msgstr "Hủy"
+msgstr ""
 
 #: js/AdminPanel.js:69
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: js/AdminPanel.js:90
 msgid "Loading..."
-msgstr "Đang tải"
+msgstr ""
 
 #: js/AdminPanel.js:142
 msgid "Euro (€)"
@@ -877,11 +900,11 @@ msgstr ""
 
 #: js/ProductEditDialog.js:132 js/ContractEditDialog.js:285
 msgid "Enter description..."
-msgstr "Nhập vào mô tả"
+msgstr ""
 
 #: js/ContractEditDialog.js:94
 msgid "Please use a decimal number here!"
-msgstr "Xin sử dụng 1 số thập phân tại đây!"
+msgstr ""
 
 #: js/SupplierEditDialog.js:41
 msgid "Either postalcode or postbox is required!"
@@ -1038,7 +1061,7 @@ msgstr ""
 
 #: Controller/NumberableAbstract.php:99
 msgid "The number you have tried to set is already in use!"
-msgstr "Số bạn đang đặt đã tồn tại!"
+msgstr ""
 
 #: Config.php:145
 msgid "Auto Invoice Contract Interval"
@@ -1058,31 +1081,31 @@ msgstr ""
 
 #: Config.php:165
 msgid "Contract Number Creation"
-msgstr "Tạo số hợp đồng"
+msgstr ""
 
 #: Config.php:167
 msgid "Should the contract number be set manually or be auto-created?"
-msgstr "Sẽ tự động hay tự nhập"
+msgstr ""
 
 #: Config.php:170 Config.php:238
 msgid "automatically"
-msgstr "tự động"
+msgstr ""
 
 #: Config.php:171 Config.php:239
 msgid "manually"
-msgstr "tự nhập"
+msgstr ""
 
 #: Config.php:178
 msgid "Contract Number Validation"
-msgstr "Phê chuẩn số hợp đồng"
+msgstr ""
 
 #: Config.php:180 Config.php:248
 msgid "The Number can be validated as text or number."
-msgstr "Số có thể được phê chuẩn khi là chữ hoặc số"
+msgstr ""
 
 #: Config.php:184 Config.php:252
 msgid "Text"
-msgstr "Chữ"
+msgstr ""
 
 #: Config.php:191
 msgid "Own Currency"
@@ -1226,7 +1249,7 @@ msgstr ""
 
 #: Setup/Initialize.php:34 Setup/Update/Release5.php:63
 msgid "My Products"
-msgstr "Sản phẩm của tôi"
+msgstr ""
 
 #: Setup/Initialize.php:35
 msgid "Products created by me"
@@ -1234,11 +1257,11 @@ msgstr ""
 
 #: Setup/Initialize.php:51 Setup/Update/Release5.php:84
 msgid "My Contracts"
-msgstr "Hợp đồng của tôi"
+msgstr ""
 
 #: Setup/Initialize.php:52 Setup/Update/Release5.php:85
 msgid "Contracts created by myself"
-msgstr "Hợp đồng tạo bởi tôi"
+msgstr ""
 
 #: Setup/Initialize.php:68 Setup/Update/Release8.php:515
 msgid "All Customers"
@@ -1258,7 +1281,7 @@ msgstr ""
 
 #: Setup/Update/Release8.php:146
 msgid "Status"
-msgstr "Trạng thái"
+msgstr ""
 
 #: Setup/Update/Release8.php:158
 msgid "Cleared In"
@@ -1330,4 +1353,4 @@ msgstr ""
 
 #: Setup/Update/Release5.php:64
 msgid "Products created by myself"
-msgstr "Sản phẩm tạo bởi tôi"
+msgstr ""

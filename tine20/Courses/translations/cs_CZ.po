@@ -1,17 +1,20 @@
+# 
+# Translators:
 msgid ""
 msgstr ""
-"Project-Id-Version: Tine 2.0 - Courses\n"
+"Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"PO-Revision-Date: 2012-04-02 13:31+0000\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/tine20/tine20/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: en\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Acl/Rights.php:108
 msgid "Add new user"
@@ -66,6 +69,7 @@ msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/CourseEditDialog.js:204
 msgid "Course Name"
@@ -79,7 +83,7 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
-#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:96
 msgid "Internet Access"
 msgstr ""
 
@@ -104,6 +108,7 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/Models.js:71
 msgid "Quick Search"
@@ -114,6 +119,7 @@ msgid "Course Type"
 msgid_plural "Course Types"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: js/AddMemberDialog.js:63
 msgid "First Name"
@@ -156,69 +162,65 @@ msgstr ""
 msgid "The default favorite which is loaded on Classes startup"
 msgstr ""
 
-#: Config.php:105
+#: Config.php:98
 msgid "Internet access options."
 msgstr ""
 
-#: Config.php:112
+#: Config.php:105
 msgid "On"
 msgstr ""
 
-#: Config.php:113
+#: Config.php:106
 msgid "Off"
 msgstr ""
 
-#: Config.php:114
+#: Config.php:107
 msgid "Filtered"
 msgstr ""
 
-#: Config.php:119 Config.php:121
+#: Config.php:112 Config.php:114
 msgid "Internet Access Group (ON)"
 msgstr ""
 
-#: Config.php:127 Config.php:129
+#: Config.php:120 Config.php:122
 msgid "Internet Access Group (FILTERED)"
 msgstr ""
 
-#: Config.php:135 Config.php:137
+#: Config.php:128 Config.php:130
 msgid "Students Group"
 msgstr ""
 
-#: Config.php:143 Config.php:145
+#: Config.php:136 Config.php:138
 msgid "Students Import Definition"
 msgstr ""
 
-#: Config.php:151
+#: Config.php:144
 msgid "Students login name prefix"
 msgstr ""
 
-#: Config.php:158
+#: Config.php:151
 msgid "Students password suffix"
 msgstr ""
 
-#: Config.php:165
-msgid "Teacher password"
-msgstr ""
-
-#: Config.php:174
+#: Config.php:158
 msgid "Student username schema"
 msgstr ""
 
-#: Config.php:176
+#: Config.php:160
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr ""
 
-#: Config.php:183 Config.php:185
+#: Config.php:167 Config.php:169
 msgid "Samba user settings"
 msgstr ""
 
-#: Config.php:194
+#: Config.php:178
 msgid "Default department"
 msgstr ""
 
-#: Config.php:196
+#: Config.php:180
 msgid "The default department for new Courses"
 msgstr ""
 
