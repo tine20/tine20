@@ -1,19 +1,17 @@
 # 
 # Translators:
-# Aleksey Ubozhenko <aleksdem@aleksdem.com>, 2013-2015
-# Nikolay Parukhin <parukhin@gmail.com>, 2012-2013,2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-03-17 13:22+0000\n"
-"Last-Translator: Nikolay Parukhin <parukhin@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.com/tine20/tine20/language/ru/)\n"
+"PO-Revision-Date: 2012-10-04 15:23+0000\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Czech (Czech Republic) (http://www.transifex.com/tine20/tine20/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -21,197 +19,195 @@ msgstr ""
 #: Model/InventoryItem.php:35
 msgid "Inventory item"
 msgid_plural "Inventory items"
-msgstr[0] "предметы из инвентаризации"
-msgstr[1] "предметы из инвентаризации"
-msgstr[2] "предметы из инвентаризации"
-msgstr[3] "предметы из инвентаризации"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: Model/InventoryItem.php:39
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
-msgstr[0] "лист инвентаризации"
-msgstr[1] "листы инвентаризации"
+msgstr[0] ""
+msgstr[1] ""
 msgstr[2] ""
-msgstr[3] "листы инвентаризации"
 
 #: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
 msgid "Name"
-msgstr "Название"
+msgstr ""
 
 #: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:197
 msgid "Status"
-msgstr "Состояние"
+msgstr ""
 
 #: Model/InventoryItem.php:66
 msgid "Inventory ID"
-msgstr "Инвентарный №"
+msgstr ""
 
 #: Model/InventoryItem.php:70 js/InventoryItemEditDialog.js:121
 msgid "Description"
-msgstr "Описание"
+msgstr ""
 
 #: Model/InventoryItem.php:74 js/InventoryItemEditDialog.js:155
 msgid "Location"
-msgstr "Расположение"
+msgstr ""
 
 #: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:277
 msgid "Invoice date"
-msgstr "Дата счёта"
+msgstr ""
 
 #: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:271
 msgid "Invoice"
-msgstr "Счёт"
+msgstr ""
 
 #: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:251
 msgid "Price"
-msgstr "Цена"
+msgstr ""
 
 #: Model/InventoryItem.php:104
 msgid "Cost Center"
-msgstr "Затраты"
+msgstr ""
 
 #: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
-msgstr "Гарантия"
+msgstr ""
 
 #: Model/InventoryItem.php:123
 msgid "Item added"
-msgstr "Пункт добавлен"
+msgstr ""
 
 #: Model/InventoryItem.php:130
 msgid "Item removed"
-msgstr "пункт удалён"
+msgstr ""
 
 #: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:283
 msgid "Depreciate"
-msgstr "Не используется"
+msgstr ""
 
 #: Model/InventoryItem.php:149
 msgid "Image"
-msgstr "Изображение"
+msgstr ""
 
 #: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
-msgstr "Экспорт инвентаризации"
+msgstr ""
 
 #: js/InventoryItemGridPanel.js:46
 msgid "Export as ODS"
-msgstr "Экспортировать как ODS"
+msgstr ""
 
 #: js/InventoryItemGridPanel.js:53
 msgid "Export as CSV"
-msgstr "Экспортировать как CSV"
+msgstr ""
 
 #: js/InventoryItemGridPanel.js:60
 msgid "Export as ..."
-msgstr "Экспортировать как..."
+msgstr ""
 
 #: js/InventoryItemGridPanel.js:72
 msgid "Import items"
-msgstr "Добавить предметы"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:42
 msgid "The active number must be less than or equal total number."
-msgstr "Этот номер должен быть меньше или равным общему."
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:68
 msgid "General"
-msgstr "Общее"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:92
 msgid "ID"
-msgstr "№"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:125
 msgid "Enter description"
-msgstr "Введите описание"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:162
 msgid "Added"
-msgstr "Добавлен"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:174
 msgid "Removed"
-msgstr "Удалено"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:181
 msgid "Total number"
-msgstr "Общее число"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:189
 msgid "Available number"
-msgstr "Доступный номер"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:230
 msgid "Accounting"
-msgstr "Учёт"
+msgstr ""
 
 #: js/InventoryItemEditDialog.js:258
 msgid "Cost centre"
-msgstr "Затраты"
+msgstr ""
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
-msgstr "Контейнер по-умолчанию для инвентаризации"
+msgstr ""
 
 #: Preference.php:61
 msgid "The default container for new items"
-msgstr "Контейнер по-умолчанию для новых предметов"
+msgstr ""
 
 #: Config.php:31
 msgid "Inventory Status Available"
-msgstr "Доступен статус инвенторизации"
+msgstr ""
 
 #: Config.php:33
 msgid "Possible status."
-msgstr "Возможное состояние."
+msgstr ""
 
 #: Config.php:40
 msgid "ordered"
-msgstr "заказан"
+msgstr ""
 
 #: Config.php:41
 msgid "available"
-msgstr "доступен"
+msgstr ""
 
 #: Config.php:42
 msgid "defect"
-msgstr "повреждён"
+msgstr ""
 
 #: Config.php:43
 msgid "missing"
-msgstr "утерян"
+msgstr ""
 
 #: Config.php:44
 msgid "removed"
-msgstr "списан"
+msgstr ""
 
 #: Config.php:45
 msgid "unknown"
-msgstr "неизвестно"
+msgstr ""
 
 #: Import/definitions/inv_tine_import_csv.xml:13
 msgid "Inventory CSV import"
-msgstr "Импорт файла CSV"
+msgstr ""
 
 #: Import/definitions/inv_tine_import_csv.xml:20
 msgid "Import list (###CURRENTDATE###)"
-msgstr "Импорт списка (###CURRENTDATE###)"
+msgstr ""
 
 #: Import/definitions/inv_tine_import_csv.xml:22
 msgid ""
 "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by "
 "###USERFULLNAME###"
-msgstr "Предметы импортированы ###CURRENTDATE### в ###CURRENTTIME### пользователем ###USERFULLNAME###"
+msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Inventory"
-msgstr "инвентарь"
+msgstr ""
 
 #: Setup/Initialize.php:34 Setup/Update/Release7.php:127
 msgid "All Inventory Items"
-msgstr "Все предметы из инвентаризации"
+msgstr ""
 
 #: Setup/Initialize.php:35 Setup/Update/Release7.php:128
 msgid "All existing Inventory Items"
-msgstr "Все существующие предметы из инвентаризации"
+msgstr ""
