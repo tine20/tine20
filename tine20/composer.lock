@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ec05b1621982d234080ae6de8022685a",
-    "content-hash": "a5f1311184c5ce946ce0a4814797a8cb",
+    "hash": "a572b5d66862ea9828caace85f28af6a",
+    "content-hash": "c6972ff452252a45e53f83b1e7a19c9b",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -1146,6 +1146,31 @@
             "time": "2015-09-22 09:21:43"
         },
         {
+            "name": "tine20/composerapploader",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://git.tine20.org/git/composerapploader",
+                "reference": "b9e480b6c26f6556ca742e96badfeb1ebd59ecb7"
+            },
+            "require": {
+                "composer-plugin-api": ">=1.0.0"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Tine20\\ComposerAppLoader\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tine20\\ComposerAppLoader\\": "src/"
+                }
+            },
+            "time": "2016-07-14 11:55:28"
+        },
+        {
             "name": "zendframework/zend-escaper",
             "version": "2.4.10",
             "source": {
@@ -1456,11 +1481,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "dev-master",
+            "version": "1.12.18pl1",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "ed4c9e2fbbe062c521fe310164d8d8dd22ba51c8"
+                "reference": "4e152f77208eb82a0a4c9abc36f122309681b6b8"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1477,7 +1502,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2016-07-04 10:56:42"
+            "time": "2016-07-31 15:41:22"
         }
     ],
     "packages-dev": [
@@ -1985,13 +2010,59 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2016-06-29 05:29:29"
+        },
+        {
+            "name": "tedivm/jshrink",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tedious/JShrink.git",
+                "reference": "688527a2e854d7935f24f24c7d5eb1b604742bf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tedious/JShrink/zipball/688527a2e854d7935f24f24c7d5eb1b604742bf9",
+                "reference": "688527a2e854d7935f24f24c7d5eb1b604742bf9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "0.4.0",
+                "phpunit/phpunit": "4.0.*",
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JShrink": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Robert Hafner",
+                    "email": "tedivm@tedivm.com"
+                }
+            ],
+            "description": "Javascript Minifier built in PHP",
+            "homepage": "http://github.com/tedious/JShrink",
+            "keywords": [
+                "javascript",
+                "minifier"
+            ],
+            "time": "2015-07-04 07:35:09"
         }
     ],
     "aliases": [
         {
             "alias": "1.12.18",
             "alias_normalized": "1.12.18.0",
-            "version": "9999999-dev",
+            "version": "1.12.18.0-patch1",
             "package": "zendframework/zendframework1"
         },
         {
@@ -2003,7 +2074,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "zendframework/zendframework1": 20
+        "tine20/composerapploader": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

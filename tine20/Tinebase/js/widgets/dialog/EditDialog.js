@@ -220,6 +220,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     displayNotes: false,
 
+    useMultiple: false,
+
     //private
     initComponent: function() {
         this.relationPanelRegistry = this.relationPanelRegistry ? this.relationPanelRegistry : [];
@@ -363,7 +365,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, this);
         }
 
-        this.window.relayEvents(this, ['resize']);
+        if (Ext.isFunction(this.window.relayEvents)) {
+            this.window.relayEvents(this, ['resize']);
+        }
     },
 
     /**

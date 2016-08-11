@@ -41,6 +41,7 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'id'                => array('filter' => 'Tinebase_Model_Filter_Id'),
         'application_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),

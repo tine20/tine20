@@ -8,53 +8,54 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-require.config({
-    baseUrl: '..',
-    paths: { jquery: 'common-js/jquery.min' }
-});
+require.config({ baseUrl:'..', });
 
-require(['jquery',
+require([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/UrlStack',
     'common-js/Layout',
     'common-js/ContextMenu',
     'common-js/Contacts',
+    'common-js/SplashScreen',
     'mail/ThreadMail',
     'mail/WidgetCompose',
     'mail/WidgetFolders',
     'mail/WidgetHeadlines',
     'mail/WidgetMessages'
 ],
-function($, App, UrlStack, Layout, ContextMenu, Contacts, ThreadMail,
+function($, App, UrlStack, Layout, ContextMenu, Contacts, SplashScreen, ThreadMail,
     WidgetCompose, WidgetFolders, WidgetHeadlines, WidgetMessages) {
 window.Cache = {
-    MAILBATCH: App.GetUserInfo('mailBatch'),
+    MAILBATCH: App.getUserInfo('mailBatch'),
     folders: [], // all folder objects
     layout: null, // renders the main page layout
     treeFolders: null, // folder rendering widget
     listHeadlines: null, // headlines list rendering widget
     subjectMenu: null, // dropdown menu at right of subject text
     listMessages: null, // messages list rendering widget
-    wndCompose: null // compose modeless popup
+    wndCompose: null, // compose modeless popup
+    splashScreen: null //splash screen for displaying offline message
 };
 
-App.Ready(function() {
+App.ready(function() {
     // Initialize page objects.
     Cache.layout = new Layout({
-        userMail: App.GetUserInfo('mailAddress'),
+        userMail: App.getUserInfo('mailAddress'),
         $menu: $('#leftColumn'),
         $middle: $('#middleBody'),
         $right: $('#rightBody')
     });
     Cache.wndCompose = new WidgetCompose({
-        address: App.GetUserInfo('mailAddress'),
-        signature: App.GetUserInfo('mailSignature'),
+        address: App.getUserInfo('mailAddress'),
+        signature: App.getUserInfo('mailSignature'),
         folderCache: Cache.folders
     });
     Cache.treeFolders = new WidgetFolders({ $elem:$('#foldersArea'), folderCache:Cache.folders });
     Cache.listHeadlines = new WidgetHeadlines({ $elem:$('#headlinesArea'), folderCache:Cache.folders });
     Cache.listMessages = new WidgetMessages({ $elem:$('#messagesArea'), folderCache:Cache.folders, wndCompose:Cache.wndCompose });
     Cache.subjectMenu = new ContextMenu({ $btn:$('#subjectMenu') }); // actions for the whole opened thread
+    Cache.splashScreen = new SplashScreen({ });
 
     // Some initial work.
     UrlStack.keepClean();
@@ -67,7 +68,8 @@ App.Ready(function() {
         Cache.treeFolders.load(),
         Cache.listHeadlines.load(),
         Cache.listMessages.load(),
-        Cache.wndCompose.load()
+        Cache.wndCompose.load(),
+        Cache.splashScreen.load()
     ).done(function() {
         $('#btnUpdateFolders,#btnCompose').css('display', 'none');
         Cache.layout.setLeftMenuVisibleOnPhone(true).done(function() {
@@ -75,6 +77,11 @@ App.Ready(function() {
                 Cache.treeFolders.expand(Cache.folders[0]).done(function() { // expand 1st folder (probably inbox)...
                     Cache.treeFolders.setCurrent(Cache.folders[0]); // ...and select it
                     $('#btnUpdateFolders,#btnCompose').css('display', '');
+                });
+            }).fail(function() {
+                Cache.layout.setLeftMenuVisibleOnPhone(false).done(function () {
+                    Cache.layout.hideTop();
+                    Cache.splashScreen.showNoInternetMessage();
                 });
             });
         });
@@ -111,7 +118,7 @@ App.Ready(function() {
 function UpdatePageTitle() {
     var folder = Cache.treeFolders.getCurrent();
     var counter = (folder.unreadMails > 0) ? '('+folder.unreadMails+') ' : '';
-    document.title = counter+folder.localName+' - '+App.GetUserInfo('mailAddress')+' - ExpressoBr';
+    document.title = counter+folder.localName+' - '+App.getUserInfo('mailAddress')+' - ExpressoBr';
     Cache.layout.setTitle(Cache.layout.isRightPanelVisible() ?
         'voltar' :
         folder.localName+(folder.unreadMails ? ' ('+folder.unreadMails+')' : '')

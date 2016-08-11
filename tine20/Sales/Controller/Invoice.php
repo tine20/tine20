@@ -145,8 +145,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * 
      * @param Tinebase_Record_RecordSet $contracts
      * @param Tinebase_DateTime $currentDate
+     * @param boolean $merge
      */
-    public function processAutoInvoiceIteration($contracts, $currentDate)
+    public function processAutoInvoiceIteration($contracts, $currentDate, $merge)
     {
         Timetracker_Controller_Timeaccount::getInstance()->resolveCustomfields(FALSE);
         Timetracker_Controller_Timesheet::getInstance()->resolveCustomfields(FALSE);
@@ -162,7 +163,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
             try {
-                $this->_createAutoInvoicesForContract($contract, clone $currentDate);
+                $this->_createAutoInvoicesForContract($contract, clone $currentDate, $merge);
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             } catch (Exception $e) {
                 Tinebase_TransactionManager::getInstance()->rollBack();
@@ -933,8 +934,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * 
      * @param Sales_Model_Contract $contract
      * @param Tinebase_DateTime $currentDate
+     * @param boolean $merge
      */
-    protected function _createAutoInvoicesForContract(Sales_Model_Contract $contract, Tinebase_DateTime $currentDate)
+    protected function _createAutoInvoicesForContract(Sales_Model_Contract $contract, Tinebase_DateTime $currentDate, $merge = false)
     {
         // set this current billing date (user timezone)
         $this->_currentBillingDate = clone $currentDate;
@@ -1006,6 +1008,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         }
         
         $doSleep = false;
+        
+        if ( ($merge || $contract->merge_invoices) && $this->_currentMonthToBill->isEarlier($this->_currentBillingDate) ) {
+            $this->_currentMonthToBill = clone $this->_currentBillingDate;
+        }
         
         while ( $this->_currentMonthToBill->isEarlierOrEquals($this->_currentBillingDate) ) {
             
@@ -1125,8 +1131,9 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * 
      * @param Tinebase_DateTime $currentDate
      * @param Sales_Model_Contract $contract
+     * @param boolean $merge
      */
-    public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL)
+    public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL, $merge = false)
     {
         $this->_autoInvoiceIterationResults  = array();
         $this->_autoInvoiceIterationDetailResults = array();
@@ -1149,7 +1156,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'function'   => 'processAutoInvoiceIteration',
         ));
         
-        $iterator->iterate($currentDate);
+        $iterator->iterate($currentDate, $merge);
 
         unset($this->_autoInvoiceIterationDetailResults);
 

@@ -41,7 +41,7 @@ class Sales_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        if ($this->getTableVersion('sales_sales_invoice') < 6) {
+        if ($this->getTableVersion('sales_sales_invoices') < 6) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>inventory_change</name>
@@ -50,8 +50,8 @@ class Sales_Setup_Update_Release9 extends Setup_Update_Abstract
                     <notnull>false</notnull>
                 </field>
         ');
-            $this->_backend->addCol('sales_sales_invoice', $declaration);
-            $this->setTableVersion('sales_sales_invoice', 6);
+            $this->_backend->addCol('sales_sales_invoices', $declaration);
+            $this->setTableVersion('sales_sales_invoices', 6);
         }
         $this->setApplicationVersion('Sales', '9.3');
     }

@@ -106,19 +106,36 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
     }    
     
     /**
-     * return the major version of the appliaction
+     * return the version of the application
      *
-     * @return  int the major version
+     * @return  array with minor and major version
      * @throws  Tinebase_Exception_InvalidArgument
+     */
+    public function getMajorAndMinorVersion()
+    {
+        if (empty($this->version)) {
+            throw new Tinebase_Exception_InvalidArgument('No version set.');
+        }
+
+        if (strpos($this->version, '.') === false) {
+            $minorVersion = 0;
+            $majorVersion = $this->version;
+        } else {
+            list($majorVersion, $minorVersion) = explode('.', $this->version);
+        }
+
+        return array('major' => $majorVersion, 'minor' => $minorVersion);
+    }
+
+    /**
+     * get major app version
+     *
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getMajorVersion()
     {
-        if(empty($this->version)) {
-            throw new Tinebase_Exception_InvalidArgument('No version set.');
-        }
-        
-        list($majorVersion, $minorVersion) = explode('.', $this->version);
-        
-        return $majorVersion;
+        $versions = $this->getMajorAndMinorVersion();
+        return $versions['major'];
     }
 }

@@ -121,8 +121,11 @@ class SearchEvents extends LiteRequest
      */
     private function parseTimeZone($strTime, $strZone)
     {
+        $timeZone = $this->isParamSet('timeZone') ?
+            $this->param('timeZone') :
+            'UTC';
         $d = new DateTime($strTime, new DateTimeZone($strZone));
-        $d->setTimezone(new DateTimeZone('UTC'));
+        $d->setTimezone(new DateTimeZone($timeZone));
         return $d->format('Y-m-d H:i:s');
     }
 

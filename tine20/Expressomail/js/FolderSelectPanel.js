@@ -72,7 +72,7 @@ Tine.Expressomail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     initActions: function() {
         this.action_cancel = new Ext.Action({
-            text: i18n._('Cancel'),
+            text: _('Cancel'),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
@@ -81,7 +81,7 @@ Tine.Expressomail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         
         this.action_ok = new Ext.Action({
             disabled: true,
-            text: i18n._('Ok'),
+            text: _('Ok'),
             iconCls: 'action_saveAndClose',
             minWidth: 70,
             handler: this.onOk,

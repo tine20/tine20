@@ -8,15 +8,16 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App'
 ],
 function($, App) {
-App.LoadCss('common-js/TextBadges.css');
+App.loadCss('common-js/TextBadges.css');
 var TextBadges = function(options) {
     var userOpts = $.extend({
         $target: null, // DIV where our field will be rendered
-        animationTime: (App.IsPhone() ? 250 : 200),
+        animationTime: (App.isPhone() ? 250 : 200),
         inputType: 'text',
         inputSize: 20
     }, options);
@@ -47,10 +48,13 @@ var TextBadges = function(options) {
 
         $ul.on('click', '.TextBadges_badgeLi', function() {
             var $badge = $(this);
-            $badge.slideUp(userOpts.animationTime, function() {
-                $badge.remove();
-                $input.focus();
-                onRemoveCB(); // invoke user callback
+            $badge.velocity('slideUp', {
+                duration: userOpts.animationTime,
+                complete: function() {
+                    $badge.remove();
+                    $input.focus();
+                    onRemoveCB(); // invoke user callback
+                }
             });
         });
 
@@ -75,9 +79,12 @@ var TextBadges = function(options) {
             .text(text)
             .attr('title', fullVal)
             .insertBefore($input.parent())
-            .hide()
-            .slideDown(userOpts.animationTime, function() {
-                defer.resolve();
+            .velocity('slideDown', {
+                display: 'inline-block',
+                duration: userOpts.animationTime,
+                complete: function() {
+                    defer.resolve();
+                }
             });
         return defer.promise();
     };
@@ -131,7 +138,7 @@ TextBadges.Load = function() {
     // Static method, since this class can be instantiated ad-hoc.
     return $('#TextBadges_template').length ?
         $.Deferred().resolve().promise() :
-        App.LoadTemplate('../common-js/TextBadges.html');
+        App.loadTemplate('../common-js/TextBadges.html');
 };
 
 return TextBadges;

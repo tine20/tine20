@@ -4,93 +4,50 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.ns('Tine.Timetracker');
 
-/**
- * @namespace   Tine.Timetracker
- * @class       Tine.Timetracker.Application
- * @extends     Tine.Tinebase.Application
- * Timetracker Application Object <br>
- * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- */
-Tine.Timetracker.Application = Ext.extend(Tine.Tinebase.Application, {
-    init: function() {
-        Tine.Timetracker.Application.superclass.init.apply(this, arguments);
-        
-        Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
-            text: this.i18n._('New Timesheet'), 
-            iconCls: 'TimetrackerTimesheet',
-            scope: this,
-            handler: function() {
-                var ms = this.getMainScreen(),
-                    cp = ms.getCenterPanel('Timesheet');
-                    
-                cp.onEditInNewWindow.call(cp, {});
-            }
-        });
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeaccount_closed', function(row, index, record) {
+    var isopen = (record.data.timeaccount_id.is_open == '1');
+    return Tine.Tinebase.common.booleanRenderer(!isopen);
+});
+
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeaccount_id', function(row, index, record) {
+    var record = new Tine.Timetracker.Model.Timeaccount(record.get('timeaccount_id'));
+    var closedText = record.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
+    return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
+});
+
+Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timeaccount', function(record) {
+    var closedText = record.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
+    return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
+});
+
+Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timesheet', function(record) {
+    var timeaccount = record.get('timeaccount_id'),
+        description = Ext.util.Format.ellipsis(record.get('description'), 30, true),
+        timeaccountTitle = '';
+
+    if (timeaccount) {
+        if (typeof(timeaccount.get) !== 'function') {
+            timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
+        }
+        timeaccountTitle = timeaccount.getTitle();
     }
+
+    timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
+    return timeaccountTitle + description;
 });
 
-/**
- * @namespace   Tine.Timetracker
- * @class       Tine.Timetracker.MainScreen
- * @extends     Tine.widgets.MainScreen
- * MainScreen of the Timetracker Application <br>
- * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @constructor
- */
-Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    activeContentType: 'Timesheet',
-    contentTypes: [
-        {modelName: 'Timesheet',   requiredRight: null,     singularContainerMode: true},
-        {modelName: 'Timeaccount', requiredRight: 'manage', singularContainerMode: true}]
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'status', function(row, index, record) {
+    return Tine.Tinebase.appMgr.get('Timetracker').i18n._hidden(record.get('status'));
 });
 
-/**
- * default filter panels
- */
-Tine.Timetracker.TimesheetFilterPanel = function(config) {
-    Ext.apply(this, config);
-    Tine.Timetracker.TimesheetFilterPanel.superclass.constructor.call(this);
-};
-
-Ext.extend(Tine.Timetracker.TimesheetFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
-    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimesheetFilter'}]
-});
-
-Tine.Timetracker.TimeaccountFilterPanel = function(config) {
-    Ext.apply(this, config);
-    Tine.Timetracker.TimeaccountFilterPanel.superclass.constructor.call(this);
-};
-
-Ext.extend(Tine.Timetracker.TimeaccountFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
-    filter: [{field: 'model', operator: 'equals', value: 'Timetracker_Model_TimeaccountFilter'}]
-});
-
-
-
-/**
- * default timesheets backend
- */
-Tine.Timetracker.timesheetBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Timetracker',
-    modelName: 'Timesheet',
-    recordClass: Tine.Timetracker.Model.Timesheet
-});
-
-/**
- * default timeaccounts backend
- */
-Tine.Timetracker.timeaccountBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Timetracker',
-    modelName: 'Timeaccount',
-    recordClass: Tine.Timetracker.Model.Timeaccount
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'is_open', function(row, index, record) {
+    var i18n = Tine.Tinebase.appMgr.get('Timetracker').i18n;
+    return record.get('is_open') ? i18n._('open') : i18n._('closed');
 });
 
 // add renderer for invoice position gridpanel
@@ -120,3 +77,8 @@ Tine.Timetracker.registerAccountables = function() {
 };
 
 Tine.Timetracker.registerAccountables();
+
+// disables container tree in WestPanel
+Tine.Timetracker.TimeaccountWestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
+    hasContainerTreePanel: false
+});

@@ -19,6 +19,16 @@
 class Expressomail_Backend_ImapProxy
 {
     /**
+     * Default Imap Backend
+     */
+    const IMAP = 'Imap';
+
+    /**
+     * Default Imap backend class name
+     */
+    const EXPRESSOMAIL_BACKEND_IMAP = 'Expressomail_Backend_Imap';
+
+    /**
      * imap backend
      * @var Expressomail_Backend_Imap
      */
@@ -30,6 +40,14 @@ class Expressomail_Backend_ImapProxy
      * @var object
      */
     private $_params = array();
+
+    /**
+     * Stores all availableBackends
+     * @var array
+     */
+    protected static $_availableBackends = array(
+        self::IMAP => self::EXPRESSOMAIL_BACKEND_IMAP
+    );
     
     /**
      * the constructor
@@ -63,7 +81,23 @@ class Expressomail_Backend_ImapProxy
         $params->ssl      = isset($params->ssl)      ? $params->ssl      : false;
 
         $this->_params = $params;
-        $this->_backend = new Expressomail_Backend_Imap($params,$_readOnly);
+
+        $expressomailConfig = Expressomail_Config::getInstance();
+        $imapBackendConfigDefinition = $expressomailConfig->getDefinition(Expressomail_Config::IMAPBACKEND);
+
+        $backendClassName = self::$_availableBackends[$imapBackendConfigDefinition['default']];
+        $expressomailSettings = $expressomailConfig->get(Expressomail_Config::EXPRESSOMAIL_SETTINGS);
+        $backendName = isset($expressomailSettings[Expressomail_Config::IMAPBACKEND]) ?
+                $expressomailSettings[Expressomail_Config::IMAPBACKEND] :
+                $imapBackendConfigDefinition['default'];
+        if($backendName != $imapBackendConfigDefinition['default']) {
+            if(Tinebase_Helper::checkClassExistence(self::$_availableBackends[$backendName], true) &&
+                    Tinebase_Helper::checkSubClassOf(self::$_availableBackends[$backendName], 'Expressomail_Backend_Imap_Interface', true)) {
+                $backendClassName = self::$_availableBackends[$backendName];
+            }
+        }
+
+        $this->_backend = new $backendClassName($params,$_readOnly);
     }
     
     /**
@@ -76,5 +110,37 @@ class Expressomail_Backend_ImapProxy
     public function __call($_name, $_arguments)
     {
         return call_user_func_array(array($this->_backend, $_name), $_arguments);
+    }
+
+    /**
+     * Adds a custom backend of imap
+     * @param string $backendName
+     * @param string $backendClassName
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @todo put this in Tinebase_Plugin_Manager
+     */
+    public static function addCustomBackend($backendName, $backendClassName)
+    {
+        if(isset(self::$_availableBackends[$backendName])) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . "::" . __LINE__ . ":: Backend with name $backendName already added");
+            throw new Tinebase_Exception_InvalidArgument("Backend with name $backendName already added");
+        }
+
+        if(in_array($backendClassName, self::$_availableBackends)) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . "::" . __LINE__ . ":: Backend class $backendClassName already added");
+            throw new Tinebase_Exception_InvalidArgument("Backend class $backendClassName already added");
+        }
+
+        self::$_availableBackends[$backendName] = $backendClassName;
+    }
+
+    /**
+     * Return all available backends
+     * @return array
+     */
+    public static function getAvailableBackends()
+    {
+        return self::$_availableBackends;
     }
 }

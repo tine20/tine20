@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2014-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/UrlStack'
 ],
 function($, App, UrlStack) {
-App.LoadCss('common-js/ContextMenu.css');
+App.loadCss('common-js/ContextMenu.css');
 return function(options) {
     var userOpts = $.extend({
         $btn: null // jQuery object for the target button
@@ -37,9 +38,12 @@ return function(options) {
             $btn.removeClass('ContextMenu_hoverBtn');
 
             if ($('.ContextMenu_darkCover').length) { // shown on phone only
-                $('.ContextMenu_darkCover').fadeOut(200, function() {
-                    $('.ContextMenu_darkCover').remove();
-                    defer.resolve();
+                $('.ContextMenu_darkCover').velocity('fadeOut', {
+                    duration: 200,
+                    complete: function() {
+                        $('.ContextMenu_darkCover').remove();
+                        defer.resolve();
+                    }
                 });
             } else {
                 defer.resolve();
@@ -86,7 +90,7 @@ return function(options) {
 
     $btn.add($ul).on('mouseenter.ContextMenu', function() {
         var szPage = { cx:$(window).width(), cy:$(window).height() };
-        if (App.IsPhone()) {
+        if (App.isPhone()) {
             return; // we're in phone, no mouseover event
         }
 
@@ -112,7 +116,7 @@ return function(options) {
     });
 
     $btn.add($ul).on('mouseleave.ContextMenu', function() {
-        if (!App.IsPhone()) {
+        if (!App.isPhone()) {
             _HidePopup();
         }
     });
@@ -120,7 +124,7 @@ return function(options) {
     $btn.on('click.ContextMenu', function(ev) {
         ev.stopImmediatePropagation();
         var szPage = { cx:$(window).width(), cy:$(window).height() };
-        if (!App.IsPhone()) {
+        if (!App.isPhone()) {
             return; // we're in desktop, no click event
         }
 
@@ -150,8 +154,11 @@ return function(options) {
             height: szUl.cy+'px',
             display: 'none',
             'box-shadow': 'none' // fadeIn renders better
-        }).fadeIn(200, function() {
-            $ul.css('box-shadow', '');
+        }).velocity('fadeIn', {
+            duration: 200,
+            complete: function() {
+                $ul.css('box-shadow', '');
+            }
         });
 
         $btn.addClass('ContextMenu_hoverBtn');

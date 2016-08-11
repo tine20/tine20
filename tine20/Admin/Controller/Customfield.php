@@ -104,7 +104,9 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
      */
     public function delete($ids)
     {
-        $this->_checkCFUsage($ids);
+        if (!is_array($this->_requestContext) || !isset($this->_requestContext['skipUsageCheck']) || !$this->_requestContext['skipUsageCheck']) {
+            $this->_checkCFUsage($ids);
+        }
         foreach ((array) $ids as $id) {
             $this->_customfieldController->deleteCustomField($id);
         }
@@ -130,8 +132,19 @@ class Admin_Controller_Customfield extends Tinebase_Controller_Record_Abstract
         if ($result->count() > 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ' . count($result) . ' records still have custom field values.');
+
+            $foundIds = array_values(array_unique($result->customfield_id));
+
+            $filter = new Tinebase_Model_CustomField_ConfigFilter(array(array(
+                'field'     => 'id',
+                'operator'  => 'in',
+                'value'     => (array) $foundIds
+            )));
+
+            $result = $this->search($filter);
+            $names = $result->name;
             
-            throw new Tinebase_Exception_SystemGeneric('Customfield is still in use!');
+            throw new Tinebase_Exception_Record_StillInUse('Customfields: ' . join(', ', $names) . ' are still in use! Are you sure you want to delete them?');
         }
     }
     

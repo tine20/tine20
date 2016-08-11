@@ -87,6 +87,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeGroupLists()
     {
+        Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
         foreach (Tinebase_Group::getInstance()->getGroups() as $group) {
             $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
             $group->container_id = $this->_getInternalAddressbook()->getId();

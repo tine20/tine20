@@ -128,6 +128,14 @@ var DateCalc = {
             DateCalc.pad2(when.getDate()) + ' 00:00:00'; // format to be used in requests
     },
 
+    makeQueryStrWithHourMinute: function(when) {
+        return when.getFullYear() + '-' +
+            DateCalc.pad2(when.getMonth() + 1) + '-' +
+            DateCalc.pad2(when.getDate()) + ' ' +
+            DateCalc.pad2(when.getHours()) + ':' +
+            DateCalc.pad2(when.getMinutes()) + ':00';
+    },
+
     makeHourMinuteStr: function(when) {
         return DateCalc.pad2(when.getHours()) + ':' +
             DateCalc.pad2(when.getMinutes());
@@ -137,6 +145,12 @@ var DateCalc = {
         return DateCalc.weekDayName(when.getDay())+', ' +
             when.getDate()+' de ' +
             DateCalc.monthName(when.getMonth())+' de '+
+            when.getFullYear();
+    },
+
+    makeDayMonthYearStr: function(when) {
+        return DateCalc.pad2(when.getDate())+'/' +
+            DateCalc.pad2(when.getMonth() + 1)+'/' +
             when.getFullYear();
     },
 

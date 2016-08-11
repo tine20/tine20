@@ -277,6 +277,15 @@ class Timetracker_ControllerTest extends TestCase
         )));
         
         $this->_grantTestHelper($grants, 'searchTS', 1);
+
+        $filter = $this->_getTimesheetFilter();
+
+		$be = new Timetracker_Backend_Timesheet();
+        $result = $be->search($filter)->toArray();
+        $this->assertArrayHasKey('is_billable_combined', $result[0]);
+
+        $result = $this->_timesheetController->search($filter)->toArray();
+        $this->assertArrayHasKey('is_billable_combined', $result[0]);
     }
 
     /**
@@ -423,7 +432,8 @@ class Timetracker_ControllerTest extends TestCase
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'timeaccount_id'    => $timeaccount->getId(),
             'description'       => 'blabla',
-            'start_date'        => Tinebase_DateTime::now()->toString('Y-m-d')
+            'start_date'        => Tinebase_DateTime::now()->toString('Y-m-d'),
+            'duration'          => 30,
         ), TRUE);
     }
 

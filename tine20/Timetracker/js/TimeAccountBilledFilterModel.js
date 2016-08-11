@@ -32,7 +32,6 @@ Tine.Timetracker.TimeAccountBilledFilterModel = Ext.extend(Tine.widgets.grid.Fil
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        // value
         var value = new Ext.form.ComboBox({
             filter: filter,
             width: 200,

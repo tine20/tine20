@@ -131,9 +131,31 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconAlign: 'top'
         });
         
-        var additionalActions = [this.actions_export, this.actions_reversal, this.actions_rebill];
+        this.actions_merge = new Ext.Action({
+            text: this.app.i18n._('Merge Invoices'),
+            iconCls: 'action_merge',
+            scope: this,
+            disabled: true,
+            allowMultiple: false,
+            handler: this.onMergeInvoice,
+            actionUpdater: function(action, grants, records) {
+                if (records.length == 1 && records[0].get('type') == 'INVOICE' && records[0].get('cleared') != 'CLEARED') {
+                    action.enable();
+                } else {
+                    action.disable();
+                }
+            }
+        });
+
+        var mergeButton = Ext.apply(new Ext.Button(this.actions_merge), {
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
+        });
+        
+        var additionalActions = [this.actions_export, this.actions_reversal, this.actions_rebill, this.actions_merge];
         this.actionUpdater.addActions(additionalActions);
-        return [exportButton, reversalButton, rebillButton];
+        return [exportButton, reversalButton, rebillButton, mergeButton];
     },
     
     /**
@@ -188,6 +210,35 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
+    onMergeInvoice: function(action, event) {
+        var rows = this.getGrid().getSelectionModel().getSelections();
+        
+        if (rows.length != 1) {
+            return;
+        }
+        
+        this.billMask.show();
+        
+        var that = this;
+        
+        var req = Ext.Ajax.request({
+            url : 'index.php',
+            params : { 
+                method: 'Sales.mergeInvoice', 
+                id:     rows[0].id 
+            },
+            success : function(result, request) {
+                that.billMask.hide();
+                that.getGrid().store.reload();
+            },
+            failure : function(exception) {
+                that.billMask.hide();
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            },
+            scope: that
+        });
+    },
+    
     /**
      * add custom items to context menu
      * 
@@ -198,7 +249,8 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             '-',
             this.actions_export,
             this.actions_reversal,
-            this.actions_rebill
+            this.actions_rebill,
+            this.actions_merge
             ];
         
         return items;

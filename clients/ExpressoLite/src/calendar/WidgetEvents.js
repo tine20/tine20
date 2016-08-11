@@ -5,29 +5,31 @@
  * @package   Lite
  * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author    Rodrigo Dias <rodrigo.dias@serpro.gov.br>
- * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
+ * @copyright Copyright (c) 2015-2016 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/ContextMenu',
     'calendar/DateCalc'
 ],
 function($, App, ContextMenu, DateCalc) {
-App.LoadCss('calendar/WidgetEvents.css');
+App.loadCss('calendar/WidgetEvents.css');
 return function(options) {
     var userOpts = $.extend({
         events: null, // Events cache object
         $elem: null // jQuery object for the target DIV
     }, options);
 
-    var THIS   = this;
-    var $panel = null;
+    var THIS        = this;
+    var $panel      = null;
+    var onRemovedCB = $.noop; // user callback
 
     THIS.load = function() {
         return $('#Events_template').length ? // load once
             $.Deferred().resolve().promise() :
-            App.LoadTemplate('WidgetEvents.html');
+            App.loadTemplate('WidgetEvents.html');
     };
 
     THIS.clear = function() {
@@ -60,20 +62,33 @@ return function(options) {
                 }
             }
         }
-        $panel.hide()
-            .fadeIn(250, function() { defer.resolve(); });
+        $panel.velocity('fadeIn', {
+            duration: 250,
+            complete: function() {
+                defer.resolve();
+            }
+        });
         return defer.promise();
+    };
+
+    THIS.onRemoved = function(callback) {
+        onRemovedCB = callback; // onRemoved(event)
+        return THIS;
     };
 
     function _SetEvents() {
         $panel.on('click', '.Events_showPeople', function() {
-            $(this).parent().nextAll('.Events_peopleList').slideToggle(200);
+            var $ppl = $(this).parent().nextAll('.Events_peopleList');
+            $ppl.velocity($ppl.is(':visible') ? 'slideUp' : 'slideDown', { duration:200 });
         });
 
         $panel.on('click', '.Events_topContainer', function() {
             var $evContent = $(this).next();
-            $evContent.slideToggle(200, function() {
-                $evContent.find('.Events_peopleList').hide();
+            $evContent.velocity($evContent.is(':visible') ? 'slideUp' : 'slideDown', {
+                duration: 200,
+                complete: function() {
+                    $evContent.find('.Events_peopleList').hide();
+                }
             });
         });
     }
@@ -100,13 +115,24 @@ return function(options) {
                 .addClass('Events_headerEcho');
         }
 
-        $unit.find('.Events_description .Events_text').html(objEv.description.replace(/\n/g, '<br/>'));
+        if (objEv.description) {
+            $unit.find('.Events_description .Events_text').html(objEv.description.replace(/\n/g, '<br/>'));
+        } else {
+            $unit.find('.Events_description .Events_text').append($('.Events_noDescription').clone());
+        }
+
         $unit.find('.Events_when .Events_text').text(
             DateCalc.makeHourMinuteStr(event.from) +
             ' - ' +
             DateCalc.makeHourMinuteStr(objEv.until)
         );
-        $unit.find('.Events_location .Events_text').text(objEv.location);
+
+        if (objEv.location) {
+            $unit.find('.Events_location .Events_text').text(objEv.location);
+        } else {
+            $unit.find('.Events_location .Events_text').append($('.Events_noLocation').clone());
+        }
+
         $unit.find('.Events_organizer .Events_text').text(objEv.organizer.name);
         $unit.find('.Events_personOrg').text(_FormatUserOrg(objEv.organizer));
 
@@ -127,6 +153,9 @@ return function(options) {
         var menu = $unit.data('dropdown');
         var ev = $unit.data('event');
         menu.purge();
+
+        menu.addOption('Apagar', function() { _Remove($unit); });
+        menu.addHeader('Assinalar resposta...');
 
         if (ev.confirmation !== 'ACCEPTED') {
             menu.addOption('Confirmar participação', function() { _SetConfirmation($unit, 'ACCEPTED'); });
@@ -197,6 +226,18 @@ return function(options) {
                 $unit.find('.Events_summary .Events_userFlag, .Events_person .Events_personFlag:first')
                     .empty()
                     .append(_BuildConfirmationIcon(event)); // update confirmation icons
+            });
+        }
+    }
+
+    function _Remove($unit) {
+        var event = $unit.data('event');
+        if (window.confirm('Deseja excluir o evento\n"'+event.summary+'"?')) {
+            $unit.find('.Events_dropdown').remove();
+            $('#Events_template .Events_throbber').clone()
+                .appendTo($unit.find('.Events_summary'));
+            userOpts.events.remove(event.id).done(function() {
+                onRemovedCB(event);
             });
         }
     }

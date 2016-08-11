@@ -16,59 +16,11 @@
 class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
     /**
-     * @var string application of this filter group
+     * if this is set, the filtergroup will be created using the configurationObject for this model
+     *
+     * @var string
      */
-    protected $_applicationName = 'Timetracker';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Timetracker_Model_Timeaccount';
-    
-    /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
-     */
-    protected $_className = 'Timetracker_Model_TimeaccountFilter';
-        
-    /**
-     * @var array filter model fieldName => definition
-     */
-    protected $_filterModel = array(
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('modelName' => 'Timetracker_Model_Timeaccount')),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('number', 'title'))),
-        'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'budget'         => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'deadline'       => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
-            'idProperty' => 'timetracker_timeaccount.id',
-            'applicationName' => 'Timetracker',
-        )),
-        'invoice_id' => array('filter' => 'Tinebase_Model_Filter_ForeignId',
-            'options' => array(
-                'filtergroup'       => 'Sales_Model_InvoiceFilter',
-                'controller'        => 'Sales_Controller_Invoice',
-            )
-        ),
-        'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
-        'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'cleared_at'           => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'is_open'              => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'contract'    => array('filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord', 'options' => array(
-            'controller' => 'Sales_Controller_Contract',
-            'filtergroup' => 'Sales_Model_ContractFilter',
-            'own_filtergroup' => 'Timetracker_Model_TimeaccountFilter',
-            'own_controller' => 'Timetracker_Controller_Timeaccount',
-            'related_model' => 'Sales_Model_Contract',
-        ))
-    );
+	protected $_configuredModel = 'Timetracker_Model_Timeaccount';
     
     /**
      * @var array one of these grants must be met

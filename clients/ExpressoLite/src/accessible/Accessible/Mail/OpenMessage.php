@@ -16,6 +16,7 @@ use Accessible\Handler;
 use ExpressoLite\Backend\LiteRequestProcessor;
 use ExpressoLite\Backend\TineSessionRepository;
 use Accessible\Core\DateUtils;
+use Accessible\Core\MessageUtils;
 
 class OpenMessage extends Handler
 {
@@ -43,6 +44,8 @@ class OpenMessage extends Handler
         $this->showTemplate('OpenMessageTemplate', (object) array(
             'folderName' => $params->folderName,
             'message' => $message,
+            'bodyMessage' => MessageUtils::getSanitizedBodyContent($message->body->message),
+            'quotedMessage' => MessageUtils::getSanitizedBodyContent($message->body->quoted),
             'formattedDate' => DateUtils::getFormattedDate(strtotime($message->received), true),
             'page' => $params->page,
             'lnkBack' => $this->makeUrl('Mail.Main', array(
@@ -51,7 +54,7 @@ class OpenMessage extends Handler
             )),
             'lnkDelete' => $this->makeUrl('Mail.DeleteMessage', array(
                 'folderName' => $params->folderName,
-                'messageId' => $params->messageId,
+                'messageIds' => $params->messageId,
                 'folderId' => $params->folderId
             )),
             'lnkMark' => $this->makeUrl('Mail.MarkMessageAsUnread', array(

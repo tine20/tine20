@@ -1,0 +1,11 @@
+/*!
+ * Expresso Lite
+ * CSS for OpenCalendarTemplate.php template.
+ *
+ * @package   Lite
+ * @license   http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author    Diogo Dantas <diogo.santos@serpro.gov.br>
+ * @copyright Copyright (c) 2016 Serpro (http://www.serpro.gov.br)
+ */
+
+#calendars ul { margin-left:-30px; margin-right:10px; }

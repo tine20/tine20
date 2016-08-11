@@ -264,7 +264,16 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             }, Ext.applyIf({
                 name: 'logger_priority',
                 fieldLabel: this.app.i18n._('Priority'),
-                store: [[0, 'Emergency'], [1, 'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug'], [8, 'Trace']]
+                store: [
+                    [0, 'Emergency (0)'],
+                    [1, 'Alert (1)'],
+                    [2, 'Critical (2)'],
+                    [3, 'Error (3)'],
+                    [4, 'Warning (4)'],
+                    [5, 'Notice (5)'],
+                    [6, 'Informational (6)'],
+                    [7, 'Debug (7)']
+                ]
             }, commonComboConfig)]
         }, {
             title: this.app.i18n._('Caching'),

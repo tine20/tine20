@@ -58,6 +58,26 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * @var array|null
      */
     protected $_modelsUsingPath = null;
+
+    /**
+     * request context information
+     *
+     * @var array|null
+     */
+    protected $_requestContext = null;
+
+    public function setRequestContext(array $context)
+    {
+        $this->_requestContext = $context;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getRequestContext()
+    {
+        return $this->_requestContext;
+    }
     
     /**
      * generic check admin rights function

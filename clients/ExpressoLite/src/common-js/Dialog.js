@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2013-2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/UrlStack'
 ],
 function($, App, UrlStack) {
-App.LoadCss('common-js/Dialog.css');
+App.loadCss('common-js/Dialog.css');
 var Dialog = function(options) {
     var userOpts = $.extend({
         $elem: null, // jQuery object for the target DIV
@@ -72,7 +73,7 @@ var Dialog = function(options) {
         $tpl.find('.Dialog_bar').on('dblclick', function(ev) {
             ev.stopImmediatePropagation();
             var wnd = { cx:$(window).outerWidth(), cy:$(window).outerHeight() };
-            if (!App.IsPhone()) { // on phones doubleclick does nothing
+            if (!App.isPhone()) { // on phones doubleclick does nothing
                 if ($tpl.find('.Dialog_content').is(':visible')) { // not minimized
                     var isMaximized = ($tpl.offset().left === userOpts.marginLeftMaximized) &&
                         ($tpl.offset().top === userOpts.marginMaximized) &&
@@ -151,14 +152,14 @@ var Dialog = function(options) {
         $tpl = $('#Dialog_template .Dialog_box').clone();
         $tpl.find('.Dialog_title').html(userOpts.caption);
 
-        var szCss = App.IsPhone() ?
+        var szCss = App.isPhone() ?
             { width:'100%', height:'100%' } : // on phones, go fullscreen
             { width:userOpts.width+'px',
                 height:Math.max(userOpts.height, userOpts.minHeight)+'px' }; // on desktop, user chooses size
         $tpl.css(szCss).appendTo(document.body);
         $tpl.find('.Dialog_content').append($targetDiv);
 
-        if (App.IsPhone()) {
+        if (App.isPhone()) {
             $tpl.find('.Dialog_minCage,.Dialog_closeCage,.Dialog_resz').hide();
             ++stackId;
             UrlStack.push('#Dialog'+stackId, function() {
@@ -166,7 +167,7 @@ var Dialog = function(options) {
             });
 
             $tpl.offset({ left:$(window).outerWidth() }) // slide from right
-                .animate({ left:'0px' }, 300, function() { defer.resolve(); });
+                .velocity({ left:'0px' }, 300, function() { defer.resolve(); });
         } else {
             $tpl.css({
                 'min-width': userOpts.minWidth+'px',
@@ -184,7 +185,7 @@ var Dialog = function(options) {
 
             var yOff = $tpl.offset().top;
             $tpl.offset({ top:-$tpl.outerHeight() }) // slide from above
-                .animate({ top:yOff+'px' }, 200, function() {
+                .velocity({ top:yOff+'px' }, 200, function() {
                     if (userOpts.modal) {
                         $('#Dialog_template .Dialog_coverAllScreen')
                             .clone().insertBefore($tpl);
@@ -211,10 +212,10 @@ var Dialog = function(options) {
         if (userOpts.modal) {
             $('.Dialog_coverAllScreen:last').remove();
         }
-        var animMove = App.IsPhone() || THIS.isMinimized() ?
+        var animMove = App.isPhone() || THIS.isMinimized() ?
             { left: $(window).outerWidth()+'px' } : // slide to right
             { top: $(window).outerHeight()+'px' }; // slide to bottom
-        $tpl.animate(animMove, 200, function() {
+        $tpl.velocity(animMove, 200, function() {
             $targetDiv.detach(); // element is up to user
             $tpl.remove();
             $tpl = null;
@@ -287,7 +288,7 @@ Dialog.Load = function() {
     // Static method, since this class can be instantied ad-hoc.
     return $('#Dialog_template').length ?
         $.Deferred().resolve().promise() :
-        App.LoadTemplate('../common-js/Dialog.html');
+        App.loadTemplate('../common-js/Dialog.html');
 };
 
 return Dialog;

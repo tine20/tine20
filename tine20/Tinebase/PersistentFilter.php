@@ -175,6 +175,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
             'account_id'        => $record->account_id,
             'application_id'    => $record->application_id,
             'name'              => $record->name,
+            'model'             => $record->model,
         )));
         
         if (count($existing) > 0) {

@@ -541,12 +541,12 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         unset($ids);
         while (!$this->readLine($tokens, $tag, true)) {
             preg_match("/OK \[(\w+) (\d+)\] Ok/", $tokens, $matches);
-            if ($matches[1] === 'HIGHESTMODSEQ') {
+            if (isset($matches[1]) && $matches[1] === 'HIGHESTMODSEQ') {
                 $result['HIGHESTMODSEQ'] = (int)$matches[2];
             }
 
             preg_match("/(\d+) (\w+) \((\w+) \(([^)]+|(?))\) MODSEQ \((\d+)\)\)/", $tokens, $matches);
-            if ($matches[2] === 'FETCH' && $matches[3] === 'FLAGS') {
+            if (isset($matches[2]) && isset($matches[3]) && $matches[2] === 'FETCH' && $matches[3] === 'FLAGS') {
                 $message['MSGID'] = (int)$matches[1];
                 $message['FLAGS'] = $matches[4];
                 $result['messages'][$matches[1]] = $message;
@@ -558,7 +558,7 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
         
         preg_match("/(\w+) Completed/", $tokens, $matches);
         // last line has response code
-        if ($matches[1] === 'OK' || $matches[1] === 'NO') {
+        if (isset($matches[1]) && ($matches[1] === 'OK' || $matches[1] === 'NO')) {
             $result['STATUS'] = $matches[1];
         } else $result['STATUS'] = null;
         
@@ -567,7 +567,7 @@ class Expressomail_Protocol_Imap extends Zend_Mail_Protocol_Imap
             $this->sendRequest('FETCH', array($params), $tag2);
             while (!$this->readLine($tokens, $tag2, true)) {
                 preg_match("/(\d+) (\w+) \(UID (\d+)\)/", $tokens, $matches);
-                if ($matches[2] === 'FETCH') {
+                if (isset($matches[2]) && $matches[2] === 'FETCH') {
                     $result['messages'][$matches[1]]['UID'] = $matches[3]; 
                 }
             }

@@ -210,7 +210,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     'logger'                    => Tinebase_Core::getLogger(),
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
-                $cacheId = '_handle_' . sha1(Zend_Json_Encoder::encode($classes));
+                $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
+                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon'));
                 
                 $server = $cache->load($cacheId);
                 if ($server instanceof Zend_Json_Server) {
@@ -238,7 +239,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
 
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+        if (self::userIsRegistered()) {
             $definitions = self::_getModelConfigMethods();
             $server->loadFunctions($definitions);
         }
@@ -359,7 +360,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $classes['Tinebase_Frontend_Json'] = 'Tinebase';
 
-        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+        if (self::userIsRegistered()) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
 
@@ -385,7 +386,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected static function _getModelConfigMethods()
     {
-        $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
+        // get all apps user has RUN right for
+        $userApplications = Tinebase_Core::getUser()->getApplications();
 
         $definitions = array();
         foreach ($userApplications as $application) {
@@ -395,7 +397,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 if (!$models) {
                     continue;
                 }
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
                 continue;
             }
 
@@ -510,7 +513,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && $jsonKey !== Tinebase_Core::get('jsonKey')) {
         
-            if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            if (! self::userIsRegistered()) {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
                     ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' .
                     $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
@@ -533,5 +536,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     public function getRequestMethod()
     {
         return (! empty($this->_methods)) ? implode('|', $this->_methods) : NULL;
+    }
+
+    public static function userIsRegistered()
+    {
+        return Tinebase_Core::isRegistered(Tinebase_Core::USER)
+            && is_object(Tinebase_Core::getUser());
     }
 }

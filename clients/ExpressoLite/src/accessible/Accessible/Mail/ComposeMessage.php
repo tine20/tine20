@@ -14,6 +14,7 @@ namespace Accessible\Mail;
 use Accessible\Handler;
 use ExpressoLite\Backend\LiteRequestProcessor;
 use ExpressoLite\Backend\TineSessionRepository;
+use Accessible\Core\MessageUtils;
 
 class ComposeMessage extends Handler
 {
@@ -146,12 +147,13 @@ class ComposeMessage extends Handler
         }
 
         $formatedDate = date('d/m/Y H:i', strtotime($msg->received));
+        $bodyMessage = MessageUtils::getSanitizedBodyContent($msg->body->message);
+        $quotedMessage = MessageUtils::getSanitizedBodyContent($msg->body->quoted);
+
         if ((isset($params->reply) || isset($params->replyAll)) && $msg !== null) {
             return '<br />Em ' . $formatedDate . ', ' .
                 $msg->from_name . ' escreveu:' .
-                '<blockquote>' . $msg->body->message . '<br />' .
-                ($msg->body->quoted !== null ? $msg->body->quoted : '') .
-                '</blockquote>';
+                '<blockquote>' . $bodyMessage . '<br />' . $quotedMessage . '</blockquote>';
         } else if (isset($params->forward) && $msg !== null) {
             return '<br />-----Mensagem original-----<br />' .
                 '<b>Assunto:</b> ' . $msg->subject . '<br />' .
@@ -159,8 +161,7 @@ class ComposeMessage extends Handler
                 '<b>Para:</b> ' . implode(', ', $msg->to) . '<br />' .
                 (!empty($msg->cc) ? '<b>Cc:</b> ' . implode(', ', $msg->cc) . '<br />' : '') .
                 '<b>Data:</b> ' . $formatedDate . '<br /><br />' .
-                $msg->body->message . '<br />' .
-                ($msg->body->quoted !== null ? $msg->body->quoted : '');
+                $bodyMessage . '<br />' . $quotedMessage;
         }
         return '';
     }

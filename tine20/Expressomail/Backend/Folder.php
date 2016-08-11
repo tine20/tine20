@@ -370,6 +370,16 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                 $auxlocalname = explode(self::IMAPDELIMITER, $globalname);
                 $localname = array_pop($auxlocalname);
                 $translate = Tinebase_Translation::getTranslation("Expressomail");
+                if(preg_match("/^user\/[0-9]{11}$/",$globalname)){
+                    try{
+                        $aux = Tinebase_User::getInstance()->getFullUserByLoginName($localname)->toArray();
+                        $localname = $aux["accountFullName"];
+                    }
+                    catch(Exception $exc){
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . "::" . __LINE__ .
+                        ":: Account with loginName $localname not found in the system for loginName to accountFullName translation.");
+                    }
+                }
 
                 $newFolder = new Expressomail_Model_Folder(array(
                     'id' => $_id,
@@ -392,7 +402,15 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                 ),true);
 
                 $newFolder->setSharingValues($acls);
-                $cache->save($newFolder, $cacheKey);
+                // Saving cache with tags relating to model and account_id for bulky cleaning
+                $cache->save(
+                    $newFolder,
+                    $cacheKey,
+                    array(
+                        self::EXPRESSOMAIL_MODEL_FOLDER,
+                        $newFolder->account_id,
+                    )
+                );
                 return $newFolder;
             }
 
@@ -517,7 +535,15 @@ class Expressomail_Backend_Folder //extends Tinebase_Backend_Sql_Abstract
                 ),true);
 
             $return->setSharingValues($acls);
-            $cache->save($return, $cacheKey);
+            // Saving cache with tags relating to model and account_id for bulky cleaning
+            $cache->save(
+                $return,
+                $cacheKey,
+                array(
+                    self::EXPRESSOMAIL_MODEL_FOLDER,
+                    $return->account_id,
+                )
+            );
             return $return;
         }
     }

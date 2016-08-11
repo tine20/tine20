@@ -8,12 +8,13 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-define(['jquery',
+define([
+    'common-js/jQuery',
     'common-js/App',
     'addressbook/WidgetLetterIndex'
 ],
 function($, App, WidgetLetterIndex) {
-    App.LoadCss('addressbook/WidgetContactList.css');
+    App.loadCss('addressbook/WidgetContactList.css');
 
     return function(options) {
         var userOpts = $.extend({
@@ -119,7 +120,7 @@ function($, App, WidgetLetterIndex) {
 
             showLoadingThrobber();
 
-            App.Post('getContactsByFilter', {
+            App.post('getContactsByFilter', {
                 containerPath: currentSearchFilter.catalog.containerPath,
                 query:         currentSearchFilter.query,
                 start:         currentSearchFilter.pageStart,
@@ -135,7 +136,7 @@ function($, App, WidgetLetterIndex) {
                         if (currentSearchFilter.pageStart < result.totalCount) {
                             showPagingFooter(result.totalCount);
                         }
-                        $mainSection.fadeIn(150);
+                        $mainSection.velocity('fadeIn', { duration:150 });
                     });
                 } else {
                     if (currentSearchFilter.pageStart == 0) {
@@ -210,7 +211,7 @@ function($, App, WidgetLetterIndex) {
 
             var $message = $mainSection.find('.message');
 
-            $message.animate(
+            $message.velocity(
                 {'margin-top': (userOpts.$parentContainer.height() - 20)+'px'},
                 200,
                 function() {
@@ -242,7 +243,7 @@ function($, App, WidgetLetterIndex) {
         function loadCatalogs() {
             var defer = $.Deferred();
 
-            App.Post('getContactCatalogsCategories')
+            App.post('getContactCatalogsCategories')
             .done(function(result) {
                 catalogs = result;
                 defer.resolve();
@@ -252,7 +253,7 @@ function($, App, WidgetLetterIndex) {
         }
 
         function showTitle(catalogLabel) {
-            document.title = catalogLabel + ' - '+App.GetUserInfo('mailAddress')+' - ExpressoBr';
+            document.title = catalogLabel + ' - '+App.getUserInfo('mailAddress')+' - ExpressoBr';
             Cache.layout.setTitle(catalogLabel);
         }
 

@@ -1352,3 +1352,6 @@ msgstr "Von mir erstellte Produkte"
 
 msgid "Inventory Change"
 msgstr "Best. Verdg. FE/UE"
+
+msgid "Merge Invoices"
+msgstr "Zusammenfassen"

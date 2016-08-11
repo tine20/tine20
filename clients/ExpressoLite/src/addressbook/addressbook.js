@@ -8,12 +8,10 @@
  * @copyright Copyright (c) 2015 Serpro (http://www.serpro.gov.br)
  */
 
-require.config({
-    baseUrl: '..',
-    paths: { jquery: 'common-js/jquery.min' }
-});
+require.config({ baseUrl:'..' });
 
-require(['jquery',
+require([
+    'common-js/jQuery',
     'common-js/App',
     'common-js/Layout',
     'common-js/SimpleMenu',
@@ -28,7 +26,7 @@ window.Cache = {
     widgetContactDetails: null
 };
 
-App.Ready(function() {
+App.ready(function() {
     function showDetailView() {
         if (!Cache.layout.isRightPanelVisible()) {
             Cache.layout.setRightPanelVisible(true);
@@ -45,7 +43,7 @@ App.Ready(function() {
 
     (function constructor() {
         Cache.layout = new Layout({
-            userMail: App.GetUserInfo('mailAddress'),
+            userMail: App.getUserInfo('mailAddress'),
             $menu: $('#leftMenu'),
             $middle: $('#contactListSection'),
             $right: $('#contactDetailsSection')
@@ -60,7 +58,7 @@ App.Ready(function() {
             showListView();
         })
         .onKeepAlive(function () {
-            App.Post('checkSessionStatus');
+            App.post('checkSessionStatus');
             // we just want to keep the session alive,
             // so no need for onDone
         });
@@ -107,6 +105,6 @@ App.Ready(function() {
             Cache.simpleMenu.selectFirstOption();
         });
     })();
-}); // App.Ready
+}); // App.ready
 
 }); // require

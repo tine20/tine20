@@ -71,7 +71,7 @@ abstract class Handler
     {
         $retUrl = './?r=' . $action;
         foreach ($params as $key => $val) {
-            $retUrl .= '&' . $key . '=' . $val;
+            $retUrl .= '&' . urlencode($key) . '=' . urlencode($val);
         }
         return $retUrl;
     }

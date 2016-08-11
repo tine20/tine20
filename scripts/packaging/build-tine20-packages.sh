@@ -11,14 +11,16 @@ BASEDIR=`readlink -f ./tine20build`
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Elena"
+CODENAME="Egon"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
-GITBRANCH="2015.07"
+GITBRANCH="2016.03"
 PACKAGEDIR=""
 
 PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
+
+ADDITIONALRELEASEFILES="CoreData"
 
 #
 # checkout url to local directory
@@ -27,15 +29,56 @@ function checkout()
 {
     echo "checkout files from git url $1 to $TEMPDIR/tine20 ... "
     rm -rf $TEMPDIR/tine20
-    rm -rf $TEMPDIR/debian
-    rm -rf $TEMPDIR/fedora
-    rm -rf $TEMPDIR/Univention
-    
-    rm -rf $TEMPDIR/tine20.git
-    mkdir $TEMPDIR/tine20.git
-    cd $TEMPDIR/tine20.git
-    
-    git clone "$1" .
+
+    # try to use REPOCACHEDIR
+    if [ -n "$REPOCACHEDIR" ]; then
+        if [ "$1" == "http://gerrit.tine20.com/customers/p/tine20.com.git" ]; then
+            REPODIR="${REPOCACHEDIR}/tine20.com"
+        elif [ "$1" == "http://git.tine20.org/git/tine20" ]; then
+            REPODIR="${REPOCACHEDIR}/tine20.org"
+        else
+            echo "unknown git repository: $1"
+            exit 1
+        fi
+
+        echo "using repodir $REPODIR for git checkout/clone"
+
+        # create repodir and clone repo
+        if [ ! -d $REPODIR ]; then
+            mkdir -p $REPODIR
+            cd $REPODIR
+            git clone "$1" .
+
+            RETVAL=$?
+            if [ $RETVAL -ne 0 ]; then
+                echo "git clone $1 failed!"
+                exit
+            fi
+        fi
+
+        cd $REPODIR
+        CPDIR="${REPODIR}/tine20"
+        git fetch
+
+        RETVAL=$?
+        if [ $RETVAL -ne 0 ]; then
+            echo "git fetch failed!"
+            exit
+        fi
+
+    # ok use old algorithm, clone from scratch...
+    else
+        rm -rf $TEMPDIR/tine20.git
+        mkdir $TEMPDIR/tine20.git
+        cd $TEMPDIR/tine20.git
+        git clone "$1" .
+        RETVAL=$?
+        if [ $RETVAL -ne 0 ]; then
+            echo "git clone $1 failed!"
+            exit
+        fi
+        CPDIR=${TEMPDIR}/tine20.git/tine20
+    fi
 
     if [ -n "$GITBRANCH" ]; then
         echo "checkout refspec"
@@ -46,7 +89,8 @@ function checkout()
             echo "refspec $GITBRANCH not found. Either define a valid release name or a valid git refspec (-b)"
             exit
         fi
-    elif [ -n "$RELEASE" ]; then   
+
+    elif [ -n "$RELEASE" ]; then
         echo "checkout release tag"
         git checkout refs/tags/${RELEASE/\~/-}
         RETVAL=$?
@@ -59,7 +103,14 @@ function checkout()
         echo "You must either define a release (-r) or a branch (-b)"
         exit
     fi
-    
+
+    git pull
+    RETVAL=$?
+    if [ $RETVAL -ne 0 ]; then
+        echo "git pull failed!"
+        exit
+    fi
+
     REVISION=$(git describe --tags)
     if [ "$RELEASE" == "" ]; then
         RELEASE=${REVISION}
@@ -67,12 +118,8 @@ function checkout()
 
     cd - > /dev/null
 
-    mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
-    mv $TEMPDIR/tine20.git/scripts/packaging/debian $TEMPDIR/debian
-    mv $TEMPDIR/tine20.git/scripts/packaging/fedora $TEMPDIR/fedora
-    mv $TEMPDIR/tine20.git/scripts/packaging/Univention $TEMPDIR/Univention
-    rm -Rf $TEMPDIR/tine20.git
-    
+    cp -r $CPDIR $TEMPDIR/
+
     echo "done"
 }
 
@@ -81,10 +128,10 @@ function createDirectories()
 {
     echo -n "creating directory structure $BASEDIR ... "
     test -d $BASEDIR || mkdir -p $BASEDIR
-    
+
     test -d $MISCPACKAGESDIR || mkdir -p $MISCPACKAGESDIR
     test -d $TEMPDIR || mkdir -p $TEMPDIR
-    
+
     echo "done"
 }
 
@@ -104,7 +151,7 @@ function getOptions()
             ;;
           "r")
             # release
-            RELEASE=$OPTARG 
+            RELEASE=$OPTARG
             ;;
           "?")
             echo "Unknown option $OPTARG"
@@ -125,19 +172,19 @@ function activateReleaseMode()
 {
     # utc datetime, like this: 2013-09-24 14:27:06
     local DATETIME=`date -u "+%F %T"`
-    
+
     # set buildtype to DEBUG for beta releases
-    if [[ $RELEASE == *beta* ]]; then  
+    if [[ $RELEASE == *beta* ]]; then
         local BUILDTYPE="DEBUG";
     else
         local BUILDTYPE="RELEASE";
     fi
-    
+
     echo "RELEASE: $RELEASE REVISION: $REVISION CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
-    
+
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
-    
+
     sed -i -e "s#'TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s#'TINE20SETUP_CODENAME',       Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
     sed -i -e "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
@@ -145,11 +192,12 @@ function activateReleaseMode()
     sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'TINE20SETUP_RELEASETIME',   'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     sed -i -e "s/Tinebase_Helper::getDevelopmentRevision()/Tinebase_Helper::getCodename()/" $TEMPDIR/tine20/build.xml
-    
+
     sed -i -e "s/Tine.clientVersion.buildRevision[^;]*/Tine.clientVersion.buildRevision = '$REVISION'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.codeName[^;]*/Tine.clientVersion.codeName = '$CODENAME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.packageString[^;]*/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.releaseTime[^;]*/Tine.clientVersion.releaseTime = '$DATETIME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
+
 }
 
 function buildLangStats()
@@ -161,19 +209,25 @@ function buildLangStats()
 
 function buildClient()
 {
-    echo -n "building javascript clients ... "
-    $TEMPDIR/tine20/vendor/bin/phing -f $TEMPDIR/tine20/build.xml build
-    echo "done"
+    if [ -x $TEMPDIR/tine20/vendor/bin/phing ]
+    then
+        echo -n "building javascript clients ... "
+        $TEMPDIR/tine20/vendor/bin/phing -f $TEMPDIR/tine20/build.xml build
+        echo "done"
+    else
+        echo "no phing binary found. exiting"
+        exit
+    fi
 }
 
 function createArchives()
 {
     echo "building Tine 2.0 single archives... "
     CLIENTBUILDFILTER="FAT"
-    
+
     for FILE in `ls $TEMPDIR/tine20`; do
         UCFILE=`echo ${FILE} | tr '[A-Z]' '[a-z]'`
-        
+
         if [ -d "$TEMPDIR/tine20/$FILE/translations" ]; then
             case $FILE in
                 Addressbook)
@@ -186,7 +240,7 @@ function createArchives()
                     # handled in Tinebase
                     ;;
 
-                Calendar)      
+                Calendar)
                     echo " $FILE"
                     echo -n "  cleanup "
                     (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
@@ -205,20 +259,20 @@ function createArchives()
                     (cd $TEMPDIR/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     (cd $TEMPDIR/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
-                    
+
                     # Tinebase/js/ux/Printer/print.css
                     (cd $TEMPDIR/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
                     # Tinebase/js/ux/data/windowNameConnection*
                     (cd $TEMPDIR/tine20/Tinebase/js/ux/data; rm -rf $(ls | grep -v windowNameConnection))
                     (cd $TEMPDIR/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
-                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-"))
+                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-" | grep -v node_modules))
                     (cd $TEMPDIR/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
-                    
+
                     # cleanup ExtJS
                     (cd $TEMPDIR/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
                     (cd $TEMPDIR/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
                     (cd $TEMPDIR/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
-                    
+
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
 
@@ -227,37 +281,50 @@ function createArchives()
 
                     # cleanup jsb2tk
                     (cd $TEMPDIR/tine20/library/jsb2tk;  rm -rf JSBuilder2 tests)
-                    
+
                     # save langStats
                     (mv $TEMPDIR/tine20/langstatistics.json $TEMPDIR/tine20/Tinebase/translations/langstatistics.json)
-                    
+
                     # remove composer dev requires
                     composer install --no-dev -d $TEMPDIR/tine20
-                    
+
+                    # remove npm dev requires
+                    if [ -e $TEMPDIR/tine20/Tinebase/js/package.json ]
+                    then
+                      cd Tinebase/js
+                      npm prune --production
+                      cd ../..
+                    fi
+
                     rm -rf $TEMPDIR/tine20/vendor/phpdocumentor
                     rm -rf $TEMPDIR/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
-                    
+
                     find $TEMPDIR/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
                     find $TEMPDIR/tine20/vendor -name .git       -type d -print0 | xargs -0 rm -rf
                     find $TEMPDIR/tine20/vendor -name docs       -type d -print0 | xargs -0 rm -rf
                     find $TEMPDIR/tine20/vendor -name examples   -type d -print0 | xargs -0 rm -rf
                     find $TEMPDIR/tine20/vendor -name tests      -type d -print0 | xargs -0 rm -rf
-                    
+
                     composer dumpautoload -d $TEMPDIR/tine20
-                    
+
                     rm -rf $TEMPDIR/tine20/composer.*
-                    
+
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library vendor docs fonts themes" 
+                    local FILES="Addressbook Admin Setup Tinebase images library vendor docs fonts themes"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES init_plugins.php chrome_web_app.json"
-                    
+                    local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES init_plugins.php favicon.ico"
+
+                    # allow to pass files to build as a global var
+                    if [ -n "$ADDITIONALRELEASEFILES" ]; then
+                        local FILES="$FILES $ADDITIONALRELEASEFILES"
+                    fi
+
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
-                    
+
                     echo ""
                     ;;
-                    
+
                 *)
                     echo " $FILE"
                     echo -n "  cleanup "
@@ -268,7 +335,7 @@ function createArchives()
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILE)
                     ;;
             esac
-            
+
         fi
     done
 }
@@ -278,32 +345,44 @@ function createSpecialArchives()
     echo "building Tine 2.0 allinone archive... "
     rm -rf $TEMPDIR/allinone
     mkdir $TEMPDIR/allinone
-    
-    for ARCHIVENAME in activesync calendar tinebase crm felamimail filemanager projects sales tasks timetracker; do
-        (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
+
+    for ARCHIVENAME in activesync calendar coredata tinebase crm felamimail filemanager sales tasks timetracker; do
+        if [ -e "$BASEDIR/packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2" ]; then
+            (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
+        fi
     done
-    
+
     (cd $TEMPDIR/allinone; tar cjf ../../packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 .)
     (cd $TEMPDIR/allinone; zip -qr ../../packages/tine20/$RELEASE/tine20-allinone_$RELEASE.zip     .)
-    
+
 
     echo "building Tine 2.0 voip archive... "
     rm -rf $TEMPDIR/voip
     mkdir $TEMPDIR/voip
-    
+
     for ARCHIVENAME in phone voipmanager; do
         (cd $TEMPDIR/voip; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
     done
-    
+
     (cd $TEMPDIR/voip; tar cjf ../../packages/tine20/$RELEASE/tine20-voip_$RELEASE.tar.bz2 .)
     (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE/tine20-voip_$RELEASE.zip     .)
 }
 
 function setupComposer()
 {
-    wget -O $MISCPACKAGESDIR/composer.phar https://getcomposer.org/composer.phar
-    chmod ugo+x $MISCPACKAGESDIR/composer.phar
-    (cd $MISCPACKAGESDIR; ln -sf composer.phar composer)
+    if [ -x "/usr/local/bin/composer" ]; then
+        echo "using existing composer binary"
+    else
+        wget -O $MISCPACKAGESDIR/composer.phar https://getcomposer.org/composer.phar
+        chmod ugo+x $MISCPACKAGESDIR/composer.phar
+        (cd $MISCPACKAGESDIR; ln -sf composer.phar composer)
+    fi
+
+    # sometimes we lose packages or external repos can't be reached
+    # try to find a local vendor.zip and extract that (symlinks have to be preserved in zip with -y)
+    if [ -e $BASEDIR/../vendor.zip ]; then
+         unzip $BASEDIR/../vendor.zip -d $TEMPDIR/tine20
+    fi
 
     composer install -d $TEMPDIR/tine20
 }
@@ -326,13 +405,13 @@ function packageTranslations()
 function buildChecksum()
 {
     echo -n "calculating SHA1 checksums... "
-    
+
     test -e $PACKAGEDIR/sha1sum_$RELEASE.txt && rm $PACKAGEDIR/sha1sum_$RELEASE.txt
-    
+
     for fileName in $PACKAGEDIR/*; do
         (cd $PACKAGEDIR; sha1sum `basename $fileName`) >> $PACKAGEDIR/sha1sum_$RELEASE.txt 2>&1
     done
-    
+
     echo "done"
 }
 
@@ -340,14 +419,14 @@ function prepareDebianPackaging()
 {
     PACKAGEDIR="$BASEDIR/packages/debian/$RELEASE"
     rm -rf $PACKAGEDIR
-    
+
     # Replace all matches of - with .
     DEBIANVERSION=${RELEASE//-/.}
 
     mkdir -p "$PACKAGEDIR/tine20-$DEBIANVERSION"
-    
+
     echo -n "preparing debian packaging directory in $PACKAGEDIR/tine20-$DEBIANVERSION ... "
-    
+
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2
@@ -363,14 +442,14 @@ function prepareUniventionPackaging()
 {
     PACKAGEDIR="$BASEDIR/packages/univention/$RELEASE"
     rm -rf $PACKAGEDIR
-    
+
     # Replace all matches of - with .
     DEBIANVERSION=${RELEASE//-/.}
 
     mkdir -p "$PACKAGEDIR/tine20-$DEBIANVERSION"
-    
+
     echo -n "preparing univention packaging directory in $PACKAGEDIR/tine20-$DEBIANVERSION ... "
-    
+
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2
     tar -C $PACKAGEDIR/tine20-$DEBIANVERSION -xf $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2
@@ -386,16 +465,16 @@ function prepareFedoraPackaging()
 {
     PACKAGEDIR="$BASEDIR/packages/fedora/$RELEASE"
     rm -rf $PACKAGEDIR
-    
+
     # Replace all matches of - with .
     RPMVERSION=${RELEASE//-/.}
 
     mkdir -p "$PACKAGEDIR/tine20-$RPMVERSION"
-    
+
     echo -n "preparing fedora packaging directory in $PACKAGEDIR/tine20-$RPMVERSION ... "
-    
+
     cp -r $BASEDIR/temp/fedora/* $PACKAGEDIR/tine20-$RPMVERSION/
-    
+
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-courses_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
     cp $BASEDIR/packages/tine20/$RELEASE/tine20-humanresources_$RELEASE.tar.bz2 $PACKAGEDIR/tine20-$RPMVERSION/SOURCES/
@@ -416,6 +495,3 @@ createArchives
 createSpecialArchives
 packageTranslations
 buildChecksum
-prepareDebianPackaging
-prepareFedoraPackaging
-prepareUniventionPackaging

@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -26,6 +26,11 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     evalGrants: false,
     useInvoice: false,
     displayNotes: true,
+    context: { 'skipClosedCheck': false },
+
+    windowWidth: 800,
+    windowHeight: 500,
+
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -34,7 +39,29 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.onTimeaccountUpdate();
         Tine.Timetracker.TimesheetEditDialog.superclass.updateToolbars.call(this, record, 'timeaccount_id');
     },
-    
+
+    onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+
+        if (! this.record.id) {
+            // @todo: this should be handled by default values
+            this.record.set('account_id', Tine.Tinebase.registry.get('currentAccount'));
+            this.record.set('start_date', new Date());
+        }
+
+        Tine.Timetracker.TimesheetEditDialog.superclass.onRecordLoad.call(this);
+
+        // TODO get timeaccount from filter if set
+        var timeaccount = this.record.get('timeaccount_id');
+        if (timeaccount) {
+            this.onTimeaccountUpdate(null, new Tine.Timetracker.Model.Timeaccount(timeaccount));
+        }
+    },
+
     /**
      * this gets called when initializing and if a new timeaccount is chosen
      * 
@@ -66,10 +93,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
 
         if (timeaccount) {
-            notBillable = notBillable || timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0";
+            notBillable = notBillable || timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0";
             
             // clearable depends on timeaccount is_billable as well (changed by ps / 2009-09-01, behaviour was inconsistent)
-            notClearable = notClearable || timeaccount.data.is_billable == "0" || this.record.get('timeaccount_id').is_billable == "0";
+            notClearable = notClearable || timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0";
         }
         
         this.getForm().findField('is_billable').setDisabled(notBillable);
@@ -113,7 +140,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices')
             && Tine.Sales.Model.Invoice;
         
-        Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.apply(this, arguments);
+        Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.call(this);
     },
 
     /**
@@ -279,6 +306,17 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     /**
+     * returns additional save params
+     *
+     * @returns {{checkBusyConflicts: boolean}}
+     */
+    getAdditionalSaveParams: function() {
+        return {
+            context: this.context
+        };
+    },
+    
+    /**
      * show error if request fails
      * 
      * @param {} response
@@ -295,25 +333,32 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
             );
+        } else if (response.code && response.code == 403) {
+            //Time Account is closed
+            console.warn(this.grants);
+            if(Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+                this.onClosedWarning.apply(this, arguments);
+            } else {
+                Ext.MessageBox.alert(
+                    this.app.i18n._('Closed Timeaccount Warning!'), 
+                    String.format(this.app.i18n._('The selected Time Account is already closed.'))
+                );
+            }
         } else {
             // call default exception handler
             Tine.Tinebase.ExceptionHandler.handleRequestException(response);
         }
         this.loadMask.hide();
+    },
+    
+    onClosedWarning: function() {
+        Ext.Msg.confirm(this.app.i18n._('Closed Timeaccount Warning!'),
+            this.app.i18n._('The selected Time Account is already closed. Do you wish to continue anyway?'),
+            function(btn) {
+                if (btn == 'yes') {
+                    this.context = { 'skipClosedCheck': true };
+                    this.onApplyChanges(true);
+                }
+            }, this);
     }
 });
-
-/**
- * Timetracker Edit Popup
- */
-Tine.Timetracker.TimesheetEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 500,
-        name: Tine.Timetracker.TimesheetEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Timetracker.TimesheetEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};

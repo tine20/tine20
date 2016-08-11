@@ -99,7 +99,7 @@ class HumanResources_CliTests extends HumanResources_TestCase
         $this->assertEquals(0, $result, 'import failed: ' . $out);
         
         if ($checkOutput) {
-            $this->assertContains("Imported 2 records. Import failed for 0 records. \n", $out);
+            $this->assertContains("Imported 2 records.", $out);
         }
     }
     
