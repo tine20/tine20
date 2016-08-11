@@ -1157,11 +1157,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 if ($resolveStrategy === 'keep') {
                     $updatedRecord = $this->_importAndResolveConflict($ted->getClientRecord(), $resolveStrategy);
                     $this->_importResult['totalcount']++;
+                    $this->_importResult['results']->addRecord($updatedRecord);
                 } else {
-                    $updatedRecord = $this->_importAndResolveConflict($firstDuplicateRecord, $resolveStrategy, $ted->getClientRecord());
-                    $this->_importResult['updatecount']++;
+                    // check the diff
+                    if ($firstDuplicateRecord->diff($ted->getClientRecord(), array('id', 'creation_time', 'seq'))->isEmpty()) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Records are already the same. Nothing to do here.");
+                    } else {
+                        $updatedRecord = $this->_importAndResolveConflict($firstDuplicateRecord, $resolveStrategy, $ted->getClientRecord());
+                        $this->_importResult['updatecount']++;
+                        $this->_importResult['results']->addRecord($updatedRecord);
+
+                    }
                 }
-                $this->_importResult['results']->addRecord($updatedRecord);
+
             } catch (Exception $newException) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . " Resolving failed. Don't try to resolve duplicates this time");
