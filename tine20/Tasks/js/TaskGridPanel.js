@@ -81,7 +81,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var columns = [{id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}];
         
-        if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('view', 'Crm')) {
+        if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('run', 'Crm')) {
             columns.push({
                 id: 'lead',
                 header: this.app.i18n._('Lead name'),
