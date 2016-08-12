@@ -3,12 +3,13 @@
 # Michael Spahn <michael@spahn.me>, 2014
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014-2015
+# pschuele <p.schuele@metaways.de>, 2012-2013
+# sstamer <s.stamer@metaways.de>, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-10-19 10:14+0000\n"
+"PO-Revision-Date: 2016-08-11 13:15+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -68,45 +69,41 @@ msgstr "Klassenmitglieder importieren"
 msgid "Add new member"
 msgstr "Neues Mitglied hinzufügen"
 
-#: js/CourseEditDialog.js:190 js/Models.js:43 Controller/Course.php:121
+#: js/CourseEditDialog.js:188 js/Models.js:43 Controller/Course.php:121
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
 msgstr[1] "Klassen"
 
-#: js/CourseEditDialog.js:206
+#: js/CourseEditDialog.js:204
 msgid "Course Name"
 msgstr "Klassenname"
 
-#: js/CourseEditDialog.js:213
+#: js/CourseEditDialog.js:211
 msgid "Course / School Type"
 msgstr "Schultyp"
 
-#: js/CourseEditDialog.js:223
+#: js/CourseEditDialog.js:221
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/CourseEditDialog.js:229 js/Models.js:74 Config.php:96
+#: js/CourseEditDialog.js:227 js/Models.js:74 Config.php:103
 msgid "Internet Access"
 msgstr "Internetzugang"
 
-#: js/CourseEditDialog.js:239
-msgid "Fileserver Access"
-msgstr "Zugriff auf Fileserver gesperrt"
-
-#: js/CourseEditDialog.js:271
+#: js/CourseEditDialog.js:256
 msgid "Members"
 msgstr "Mitglieder"
 
-#: js/CourseEditDialog.js:298
+#: js/CourseEditDialog.js:283
 msgid "Login"
 msgstr "Login"
 
-#: js/CourseEditDialog.js:302
+#: js/CourseEditDialog.js:287
 msgid "unknown"
 msgstr "unbekannt"
 
-#: js/CourseEditDialog.js:307
+#: js/CourseEditDialog.js:292
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
 
@@ -167,65 +164,69 @@ msgstr "Alle Klassen"
 msgid "The default favorite which is loaded on Classes startup"
 msgstr "Standardfilter, der beim Starten der Klassenverwaltung geladen wird"
 
-#: Config.php:98
+#: Config.php:105
 msgid "Internet access options."
 msgstr "Internet Zugangsoptionen"
 
-#: Config.php:105
+#: Config.php:112
 msgid "On"
 msgstr "An"
 
-#: Config.php:106
+#: Config.php:113
 msgid "Off"
 msgstr "Aus"
 
-#: Config.php:107
+#: Config.php:114
 msgid "Filtered"
 msgstr "Gefiltert"
 
-#: Config.php:112 Config.php:114
+#: Config.php:119 Config.php:121
 msgid "Internet Access Group (ON)"
 msgstr "Internet Zugangsgruppe (AN)"
 
-#: Config.php:120 Config.php:122
+#: Config.php:127 Config.php:129
 msgid "Internet Access Group (FILTERED)"
 msgstr "Internet Zugangsgruppe (GEFILTERT)"
 
-#: Config.php:128 Config.php:130
+#: Config.php:135 Config.php:137
 msgid "Students Group"
 msgstr "Studentengruppe"
 
-#: Config.php:136 Config.php:138
+#: Config.php:143 Config.php:145
 msgid "Students Import Definition"
 msgstr "Schülerimportdefinition"
 
-#: Config.php:144
+#: Config.php:151
 msgid "Students login name prefix"
 msgstr "Studenten-Loginnamen Prefix"
 
-#: Config.php:151
+#: Config.php:158
 msgid "Students password suffix"
 msgstr "Schüler Passwort Suffix"
 
-#: Config.php:158
+#: Config.php:165
+msgid "Teacher password"
+msgstr "Lehrer Passwort"
+
+#: Config.php:174
 msgid "Student username schema"
 msgstr "Benutzernamensschema für Schüler"
 
-#: Config.php:160
+#: Config.php:176
 msgid ""
 "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 "
 "chars of firstname"
 msgstr "Benutzernamensschema für Schüler (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
-#: Config.php:167 Config.php:169
+#: Config.php:183 Config.php:185
 msgid "Samba user settings"
 msgstr "Samba-Benutzereinstellungen"
 
-#: Config.php:178
+#: Config.php:194
 msgid "Default department"
 msgstr "Standard Abteilung"
 
-#: Config.php:180
+#: Config.php:196
 msgid "The default department for new Courses"
 msgstr "Die standard Abteilung für neue Kurse"
 
