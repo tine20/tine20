@@ -1258,7 +1258,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     
     /**
      * try to update a Timesheet with a closed TimeAccount
-     *
      */
     public function testUpdateClosedTimeaccount()
     {
@@ -1271,14 +1270,15 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         ));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray(), array('skipClosedCheck' => true));
         
-        Timetracker_ControllerTest::removeManageAllRight();
-        
-        $this->setExpectedException('Timetracker_Exception_ClosedTimeaccount');
-        
         // update Timesheet
         $timesheetData['description'] = "blubbblubb";
         $timesheetData['account_id'] = $timesheetData['account_id']['accountId'];
         $timesheetData['timeaccount_id'] = $timesheetData['timeaccount_id']['id'];
-        $timesheetUpdated = $this->_json->saveTimesheet($timesheetData);
+        try {
+            $timesheetUpdated = $this->_json->saveTimesheet($timesheetData, array('skipClosedCheck' => false));
+            $this->fail('Failed asserting that exception of type "Timetracker_Exception_ClosedTimeaccount" is thrown.');
+        } catch (Timetracker_Exception_ClosedTimeaccount $tect) {
+            $this->assertEquals('This Timeaccount is already closed!', $tect->getMessage());
+        }
     }
 }
