@@ -636,15 +636,15 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Exception $e
      * @throws Exception
      * 
-     * @todo invent hooking mechanism for database/backend independant exception handling (like lock timeouts)
+     * @todo invent hooking mechanism for database/backend independent exception handling (like lock timeouts)
      */
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+            . ' Exception: ' . $e->getMessage());
+
         if ($e instanceof Zend_Db_Statement_Exception && preg_match('/Lock wait timeout exceeded/', $e->getMessage())) {
             throw new Tinebase_Exception_Backend_Database_LockTimeout($e->getMessage());
         }
