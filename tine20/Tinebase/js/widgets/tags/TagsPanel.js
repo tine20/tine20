@@ -265,9 +265,9 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             
                             // @todo use correct strings: Realy -> Really / disapear -> disappear
                             Ext.MessageBox.confirm(
-                                i18n.ngettext('Realy Delete Selected Tag?', 'Realy Delete Selected Tags?', selectedTags.length),
-                                i18n.ngettext('the selected tag will be deleted and disapear for all entries',
-                                                        'The selected tags will be removed and disapear for all entries', selectedTags.length), 
+                                i18n.ngettext('Really delete selected tag?', 'Really delete selected tags?', selectedTags.length),
+                                i18n.ngettext('The selected tag will be deleted and disappear for all entries',
+                                                        'The selected tags will be removed and disappear for all entries', selectedTags.length), 
                                 function(btn) {
                                     if (btn == 'yes'){
                                         Ext.MessageBox.wait(i18n._('Please wait a moment...'), i18n.ngettext('Deleting Tag', 'Deleting Tags', selectedTags.length));
