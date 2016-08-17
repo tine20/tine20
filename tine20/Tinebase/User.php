@@ -548,12 +548,12 @@ class Tinebase_User
             Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
             $contact = self::_user2Contact($syncedUser, $contact);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' new contact: ' . print_r($contact->toArray(), true)
                 . ' orig contact:' . print_r($originalContact->toArray(), true));
 
-            // TODO allow to diff jpegphoto, too / maybe this should only be done when called via CLI/cronjob
-            $diff = $contact->diff($originalContact, array('jpegphoto'));
+            $syncPhoto = isset($options['syncContactPhoto']) && $options['syncContactPhoto'];
+            $diff = $contact->diff($originalContact, $syncPhoto ? array() : array('jpegphoto'));
             if (! $diff->isEmpty() || ($originalContact->jpegphoto == 0 && ! empty($contact->jpegphoto))) {
                 // add modlog info
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');

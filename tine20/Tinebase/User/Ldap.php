@@ -502,7 +502,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account);
             }
             
-            $newDN = $this->_generateDn($_account);
+            $newDN = $this->generateDn($_account);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
             
@@ -539,7 +539,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $plugin->inspectAddUser($user, $ldapData);
         }
 
-        $dn = $this->_generateDn($user);
+        $dn = $this->generateDn($user);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
@@ -685,10 +685,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @param  Tinebase_Model_FullUser $_account
      * @return string
      */
-    protected function _generateDn(Tinebase_Model_FullUser $_account)
+    public function generateDn(Tinebase_Model_FullUser $_account)
     {
         $baseDn = $this->_baseDn;
-
         $uidProperty = array_search('uid', $this->_rowNameMapping);
         $newDn = "uid={$_account->$uidProperty},{$baseDn}";
 
@@ -923,22 +922,20 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             'adr_one_region'        => 'st',
         );
 
-        foreach ($_userData as $key => $value) {
-            if (is_int($key)) {
-                continue;
-            }
-
-            $keyMapping = array_search($key, $rowNameMapping);
-
-            if ($keyMapping !== FALSE) {
-                switch($keyMapping) {
+        $overwrittenFields = Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS)->toArray();
+        foreach ($rowNameMapping as $tineKey => $ldapKey) {
+            if (isset($_userData[$ldapKey])) {
+                switch ($tineKey) {
                     case 'bday':
-                        $_contact->$keyMapping = Tinebase_DateTime::createFromFormat('Y-m-d', $value[0]);
+                        $_contact->$tineKey = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0]);
                         break;
                     default:
-                        $_contact->$keyMapping = $value[0];
+                        $_contact->$tineKey = $_userData[$ldapKey][0];
                         break;
                 }
+            } else if (in_array($tineKey, $overwrittenFields)) {
+                // should empty values in ldap overwrite tine values
+                $_contact->$tineKey = '';
             }
         }
     }

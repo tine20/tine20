@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_User_Ldap
@@ -38,8 +33,20 @@ class Tinebase_User_LdapTest extends TestCase
             $this->markTestSkipped('LDAP backend not enabled');
         }
         $this->_backend = Tinebase_User::factory(Tinebase_User::LDAP);
+
+        parent::setUp();
     }
-    
+
+    /**
+     * tear down tests
+     */
+    protected function tearDown()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS, array());
+
+        parent::tearDown();
+    }
+
     /**
      * try to add an user
      * 
@@ -215,14 +222,58 @@ class Tinebase_User_LdapTest extends TestCase
     
     /**
      * execute Tinebase_User::syncUser
+     *
+     * TODO test bday
      */
-    public function testSyncUser()
+    public function testSyncUsersContactData()
     {
-        $user = $this->testAddUser();
-        
-        Tinebase_User::syncUser($user, Tinebase_Application::getInstance()->isInstalled('Addressbook'));
+        Tinebase_Config::getInstance()->set(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS, array(
+            'tel_work',
+            'jpegphoto'
+        ));
+
+        // add user in LDAP
+        $user = $this->_backend->addUserToSyncBackend(self::getTestRecord());
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+
+        $syncedUser = Tinebase_User::syncUser($user);
+
+        // check if user is synced
+        $this->assertEquals(Tinebase_Model_User::VISIBILITY_DISPLAYED, $syncedUser->visibility,
+            print_r($syncedUser->toArray(), true));
+
+        // add+remove phone data in ldap and check if it is removed in adb, too
+        $syncOptions = array(
+            'syncContactData' => true,
+            'syncContactPhoto' => true,
+        );
+        $ldap = $this->_backend->getLdap();
+        $dn = $this->_backend->generateDn($syncedUser);
+        $number = '040-428457634';
+        $jpegImage = file_get_contents(dirname(dirname(dirname(dirname(__DIR__))))
+            . '/tine20/Admin/Setup/DemoData/persona_sclever.jpg');
+        $ldap->updateProperty($dn, array(
+            'telephonenumber' => $number,
+            'jpegphoto'       => $jpegImage,
+            //'birthdate'       => '2000-09-09'
+        ));
+        $syncedUser = Tinebase_User::syncUser($user, $syncOptions);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($syncedUser->getId());
+        $this->assertEquals($number, $contact->tel_work);
+        $this->assertEquals(1, $contact->jpegphoto);
+        //$this->assertEquals('2000-09-09 00:00:00', $contact->bday->toString());
+
+        // remove number + photo and sync again
+        $ldap->updateProperty($dn, array(
+            'telephonenumber' => '',
+            'jpegphoto'       => '',
+        ));
+        $syncedUser = Tinebase_User::syncUser($user, $syncOptions);
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($syncedUser->getId());
+        $this->assertEquals('', $contact->tel_work);
+        $this->assertEquals(0, $contact->jpegphoto);
     }
-        
+
     /**
      * @return Tinebase_Model_FullUser
      */

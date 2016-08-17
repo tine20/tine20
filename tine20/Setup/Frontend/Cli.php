@@ -314,6 +314,10 @@ class Setup_Frontend_Cli
             $options['deleteUsers'] = true;
         }
 
+        if ($_opts->syncontactphoto) {
+            $options['syncContactPhoto'] = true;
+        }
+
         Tinebase_User::syncUsers($options);
     }
     
