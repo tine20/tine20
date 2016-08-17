@@ -185,6 +185,11 @@ Tine.Voipmanager.LineGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
             if (line.data.asteriskline_id.id == recordToAdd.data.id) {
                 found = true;
             }
+            if (line.get('linenumber') == record.get('linenumber')) {
+                // use next linenumber
+                // TODO should be improved, maybe server should decide which (free) linenumber should be used
+                record.set('linenumber', line.get('linenumber') + 1);
+            }
         }, this);
         
         if (! found) {
