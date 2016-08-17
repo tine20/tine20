@@ -112,6 +112,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_SHOW_ACCOUNT_EMAIL = 'featureShowAccountEmail';
 
     /**
+     * FEATURE_REMEMBER_POPUP_SIZE
+     *
+     * @var string
+     */
+    const FEATURE_REMEMBER_POPUP_SIZE = 'featureRememberPopupSize';
+
+    /**
      * user defined page title postfix for browser page title
      * 
      * @var string
@@ -498,11 +505,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'description'   => 'Show email address in account picker and attendee grids',
                     //_('Show email address in account picker and attendee grids')
                 ),
+                self::FEATURE_REMEMBER_POPUP_SIZE => array(
+                    'label'         => 'Remeber Popup Size', //_('Remeber Popup Size')
+                    'description'   => 'Save edit dialog size in state',
+                    //_('Save edit dialog size in state')
+                ),
             ),
             'default'               => array(
                 self::FEATURE_SHOW_ADVANCED_SEARCH  => true,
                 self::FEATURE_CONTAINER_CUSTOM_SORT => true,
-                self::FEATURE_SHOW_ACCOUNT_EMAIL => true,
+                self::FEATURE_SHOW_ACCOUNT_EMAIL    => true,
+                self::FEATURE_REMEMBER_POPUP_SIZE   => true,
             ),
         ),
         self::CRONUSERID => array(
