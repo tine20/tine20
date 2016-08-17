@@ -35,6 +35,8 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
 
     onBeforePrint: function(document, view) {
         if (this.printMode == 'sheet') {
+            this.useHtml2Canvas = true;
+
             if (view.cropDayTime) {
                 var node = document.getElementById(this.panelId),
                     cropper = node.getElementsByClassName('cal-daysviewpanel-cropper')[0],
