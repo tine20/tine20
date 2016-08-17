@@ -490,6 +490,10 @@ Tine.Calendar.Printer.SplitViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         this.viewArray = [];
 
         this.paperHeight = viewRenderer.paperHeight;
+        // Splitview creates a new renderer so we need to set this again
+        // This is a hack! This is ugly but we have no better idea...fix it.
+        this.useHtml2Canvas = this.printMode == 'sheet' && splitView.calPanel.view.cls != "cal-monthview";
+        
         
         splitView.attendeeViews.each(function(v, i) {
             var renderer = new v.printRenderer({printMode: this.printMode});
