@@ -368,7 +368,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     try {
                         $list       = Tinebase_Group::getInstance()->getGroupById($grant->account_id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
-                        continue;
+                        continue 2;
                     }
 
                     // was: '/principals/groups/'
@@ -379,12 +379,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     
                 case 'user':
                     if ((string)$this->_container->owner_id === (string)$grant->account_id) {
-                        continue;
+                        continue 2;
                     }
                     try {
                         $contact = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $grant->account_id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
-                        continue;
+                        continue 2;
                     }
 
                     // was: '/principals/users/'
