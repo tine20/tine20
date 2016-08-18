@@ -50,7 +50,8 @@ class Tinebase_AccessLogTest extends TestCase
 
         $accessLog = $this->_uit->setLogout();
 
-        $this->assertEquals(Tinebase_DateTime::now()->toString(), $accessLog->lo->toString(),
-            'logout time mismatch/empty: ' . print_r($accessLog, true));
+        $now = Tinebase_DateTime::now();
+        $this->assertTrue($now->toString() === $accessLog->lo->toString() || $now->subSecond(1)->toString() === $accessLog->lo->toString(),
+            'logout time mismatch/empty: ' . print_r($accessLog->toArray(), true));
     }
 }
