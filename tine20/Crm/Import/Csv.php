@@ -187,23 +187,18 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
 
             $autoTaskForResponsible = clone($autoTask);
-            $responsiblePersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-                Tinebase_Core::getUser(),
-                'Tasks_Model_Task',
-                $user->getId(),
-                Tinebase_Model_Grants::GRANT_ADD
-            )->getFirstRecord();
-            if (! $responsiblePersonalContainer) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Could not find personal container of user with ADD grant');
+            $responsibleContainer = Tinebase_Container::getInstance()->getDefaultContainer('Tasks_Model_Task', $user->getId(), 'defaultTaskList');
+            if (! $responsibleContainer) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not find default container of user with ADD grant');
                 continue;
             }
-            $autoTaskForResponsible->container_id = $responsiblePersonalContainer->getId();
+            $autoTaskForResponsible->container_id = $responsibleContainer->getId();
             $autoTaskForResponsible->organizer = $responsible->account_id;
             Tasks_Controller_Task::getInstance()->create($autoTaskForResponsible);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Created auto task for user ' . $user->getId() . ' in container ' . $responsiblePersonalContainer->name);
+                . ' Created auto task for user ' . $user->getId() . ' in container ' . $responsibleContainer->name);
         }
     }
 

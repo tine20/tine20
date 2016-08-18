@@ -753,7 +753,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *  - allows now to use different models with default container in one application
      *
      * @param   string|Tinebase_Record_Interface    $recordClass
-     * @param   string|Tinebase_Model_User          $accountId
+     * @param   string|Tinebase_Model_User          $accountId use current user if omitted
      * @param   string                              $defaultContainerPreferenceName
      * @return  Tinebase_Model_Container
      * 
@@ -763,9 +763,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     {
         // legacy handling
         $meta = $this->_resolveRecordClassArgument($recordClass);
+
+        $account = ($accountId !== NULL)
+            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId)
+            : Tinebase_Core::getUser();
         
         if ($defaultContainerPreferenceName !== NULL) {
-            $defaultContainerId = Tinebase_Core::getPreference($meta['appName'])->getValue($defaultContainerPreferenceName);
+            $defaultContainerId = Tinebase_Core::getPreference($meta['appName'])->getValueForUser($defaultContainerPreferenceName, $account->getId());
             try {
                 $result = $this->getContainerById($defaultContainerId);
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -781,9 +785,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        $account = ($accountId !== NULL)
-            ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $accountId)
-            : Tinebase_Core::getUser();
         $result = $this->getPersonalContainer($account, $recordClass, $account, Tinebase_Model_Grants::GRANT_ADD)->getFirstRecord();
         
         if ($result === NULL) {
