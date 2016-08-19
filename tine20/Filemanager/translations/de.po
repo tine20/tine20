@@ -1,15 +1,17 @@
 # 
 # Translators:
+# corneliusweiss <mail@corneliusweiss.de>, 2012
 # Ettore Atalan <atalanttore@googlemail.com>, 2014
 # corneliusweiss <mail@corneliusweiss.de>, 2012
 # pschuele <p.schuele@metaways.de>, 2013
 # pschuele <p.schuele@metaways.de>, 2012
-# sstamer <s.stamer@metaways.de>, 2014-2015
+# pschuele <p.schuele@metaways.de>, 2012-2013
+# sstamer <s.stamer@metaways.de>, 2014-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:19+0000\n"
+"PO-Revision-Date: 2016-08-11 14:34+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +23,7 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:101
+#: Controller.php:104
 #, python-format
 msgid "%s's personal files"
 msgstr "Persönliche Dateien von %s"
@@ -124,18 +126,18 @@ msgstr "Beschreibung"
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
-#: js/NodeTreePanel.js:692 js/NodeTreePanel.js:802 js/NodeGridPanel.js:696
+#: js/NodeTreePanel.js:712 js/NodeTreePanel.js:822 js/NodeGridPanel.js:696
 #: js/NodeGridPanel.js:847
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
 
-#: js/NodeTreePanel.js:693 js/NodeGridPanel.js:697
+#: js/NodeTreePanel.js:713 js/NodeGridPanel.js:697
 msgid ""
 "Could not upload file. Filesize could be too big. Please notify your "
 "Administrator."
 msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator."
 
-#: js/NodeTreePanel.js:803 js/NodeGridPanel.js:848
+#: js/NodeTreePanel.js:823 js/NodeGridPanel.js:848
 msgid "Putting files in this folder is not allowed!"
 msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
 
@@ -348,3 +350,13 @@ msgstr "Gemeinsame Ordner"
 #: Controller/Node.php:333
 msgid "Other users folders"
 msgstr "Ordner anderer Benutzer"
+
+#: Config.php:26
+msgid "Public Download URL"
+msgstr "Öffentliche Download URL"
+
+#: Config.php:28
+msgid ""
+"Possible status. Please note that additional status might impact other "
+"Filemanager systems on export or syncronisation."
+msgstr ""

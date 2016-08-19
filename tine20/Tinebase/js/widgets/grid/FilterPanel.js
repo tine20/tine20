@@ -106,12 +106,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.initQuickFilterField();
 
-        // need to create a "dummy" app to call featureEnabled()
-        // TODO: should be improved
-        var tinebaseApp = new Tine.Tinebase.Application({
-            appName: 'Tinebase'
-        });
-        this.advancedSearchEnabled = (tinebaseApp.featureEnabled('featureShowAdvancedSearch'));
+        this.advancedSearchEnabled = Tine.Tinebase.featureEnabled('featureShowAdvancedSearch');
 
         this.items = [{
             region: 'east',
