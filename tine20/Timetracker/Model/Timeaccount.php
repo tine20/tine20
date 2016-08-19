@@ -580,9 +580,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     protected function _disableTimesheetChecks($tsController)
     {
         $tsController->doCheckDeadLine(false);
-        $tsController->doContainerACLChecks(false);
         $tsController->doRightChecks(false);
         $tsController->doRelationUpdate(false);
+        $tsController->setRequestContext(array('skipClosedCheck' => true));
     }
     
     /**
@@ -593,9 +593,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     protected function _enableTimesheetChecks($tsController)
     {
         $tsController->doCheckDeadLine(true);
-        $tsController->doContainerACLChecks(true);
         $tsController->doRightChecks(true);
         $tsController->doRelationUpdate(true);
+        $tsController->setRequestContext(array('skipClosedCheck' => false));
     }
     
     /**

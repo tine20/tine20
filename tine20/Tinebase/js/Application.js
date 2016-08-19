@@ -212,3 +212,11 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     onDeActivate: Ext.emptyFn
     
 });
+
+Tine.Tinebase.featureEnabled = function(featureName) {
+    // need to create a "dummy" app to call featureEnabled()
+    var tinebaseApp = new Tine.Tinebase.Application({
+        appName: 'Tinebase'
+    });
+    return tinebaseApp.featureEnabled(featureName);
+};

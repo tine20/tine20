@@ -365,7 +365,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, this);
         }
 
-        if (Ext.isFunction(this.window.relayEvents)) {
+        if (Ext.isFunction(this.window.relayEvents) && Tine.Tinebase.featureEnabled('featureRememberPopupSize')) {
             this.window.relayEvents(this, ['resize']);
         }
     },
