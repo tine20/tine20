@@ -1,14 +1,14 @@
 =TINE 2.0 RELEASENOTES=
                     
-  Release:     Egon (2016.03)
-  Last change: 2016-04-21
+  Release:     Egon (2016.11)
+  Last change: 2016-08-17
 
 ==1. Update to latest Version of Zend Framework==
 
 
-* Current ZF Version used: 1.12.17
-* All ZF classes in tine20/library/Zend and tine20/library/zf1ext have been removed
-* Overwritten ZF classes are now in tine20/Zend
+* Current ZF 1 Version used: 1.12.18
+* All ZF 1 classes in tine20/Zend, tine20/library/Zend and tine20/library/zf1ext have been removed
+* Overwritten ZF 1 classes are now in our own ZF repository and will be put into tine20/vendor/zendframework/zendframework
 * Additional Information: 0011160: Update to latest ZF1 / https://forge.tine20.org/view.php?id=11160
 
 ==2. Update libraries managed by composer==

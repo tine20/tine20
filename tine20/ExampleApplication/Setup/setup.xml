@@ -5,6 +5,7 @@
     <version>0.1</version>
     <order>60</order>
     <status>disabled</status>
+    <!-- TODO switch to doctrine config -->
     <tables>
         <table>
             <name>example_application_record</name>
@@ -38,6 +39,12 @@
                 <!-- keyfield 'reason' -->
                 <field>
                     <name>reason</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <!-- autoincrement 'number' -->
+                <field>
+                    <name>number</name>
                     <type>text</type>
                     <length>40</length>
                 </field>
@@ -80,6 +87,17 @@
                     <type>integer</type>
                     <notnull>true</notnull>
                     <default>0</default>
+                </field>
+                <field>
+                    <name>number_str</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>number_int</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>id</name>

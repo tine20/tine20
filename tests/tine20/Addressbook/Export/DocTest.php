@@ -4,7 +4,7 @@
  *
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -15,23 +15,11 @@ use \PhpOffice\PhpWord;
  *
  * @package     Addressbook
  * @subpackage  Export
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
- *
  */
 class Addressbook_Export_DocTest extends TestCase
 {
     public function testExportLetter()
     {
-        // skip tests for php7
-        // ERROR: PHP Fatal error:  Cannot use PhpOffice\PhpWord\Shared\String as String because 'String' is a special
-        //  class name in /usr/local/share/tine20.git/tine20/vendor/phpoffice/phpword/src/PhpWord/TemplateProcessor.php
-        //  on line 23
-        if (PHP_VERSION_ID >= 70000) {
-            $this->markTestSkipped('FIXME 0011730: fix doc export for php7');
-        }
-
         // make sure definition is imported
         $definitionFile = __DIR__ . '/../../../../tine20/Addressbook/Export/definitions/adb_default_doc.xml';
         $app = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
@@ -50,6 +38,7 @@ class Addressbook_Export_DocTest extends TestCase
     }
 
     // read and write sucks
+    // TODO make this work or remove it
     public function _testReadWriteCycleSucks()
     {
         PhpWord\Settings::setTempDir(Tinebase_Core::getTempDir());

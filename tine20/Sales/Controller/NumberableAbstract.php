@@ -6,11 +6,12 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
+ * @deprecated see 0012004: add numberable property for containers
  * @todo: make this more general (tinebase)
+ * @todo: replace with new "numberable properties" / 0012004: add numberable property for containers
  *
  */
-
 abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_Record_Abstract
 {
     /**
