@@ -92,8 +92,8 @@ class Crm_Import_CsvTest extends ImportTestCase
     public function testAutoTaskImport()
     {
         Crm_Config::getInstance()->set(Crm_Config::LEAD_IMPORT_AUTOTASK, true);
-        $personalContainerOfSClever = $this->_getPersonalContainer('Tasks', $this->_personas['sclever']);
-        $this->_setPersonaGrantsForTestContainer($personalContainerOfSClever->getId(), 'sclever', true, false);
+        $defaultContainerOfSClever = Tinebase_Container::getInstance()->getDefaultContainer('Tasks_Model_Task', $this->_personas['sclever'], 'defaultTaskList');
+        $this->_setPersonaGrantsForTestContainer($defaultContainerOfSClever->getId(), 'sclever', true, false);
 
         $result = $this->testImport(/* dry run = */ false);
         foreach ($result['results'] as $lead) {
@@ -104,9 +104,9 @@ class Crm_Import_CsvTest extends ImportTestCase
             }
         }
 
-        $tasks = $this->_searchTestTasks($personalContainerOfSClever->getId());
+        $tasks = $this->_searchTestTasks($defaultContainerOfSClever->getId());
         $this->assertEquals(1, count($tasks), 'could not find task in sclevers container: '
-            . print_r($personalContainerOfSClever->toArray(), true));
+            . print_r($defaultContainerOfSClever->toArray(), true));
         $task = $tasks->getFirstRecord();
         $this->assertEquals($this->_personas['sclever']['accountId'], $task->organizer);
         $this->assertEquals('IN-PROCESS', $task->status);

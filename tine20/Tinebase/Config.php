@@ -171,7 +171,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const LDAP_DISABLE_TLSREQCERT = 'ldapDisableTlsReqCert';
-    
+
+    /**
+     * overwritten ldap fields
+     *
+     * @var string
+     */
+    const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
+
     /**
      * configure hook class for user sync
      *
@@ -608,6 +615,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
             'default'               => false
+        ),
+        // TODO should this be added to LDAP config array/struct?
+        // TODO does this depend on LDAP readonly option?
+        self::LDAP_OVERWRITE_CONTACT_FIELDS => array(
+            //_('Contact fields overwritten by LDAP')
+            'label'                 => 'Contact fields overwritten by LDAP',
+            //_('These fields are overwritten during LDAP sync if empty')
+            'description'           => 'These fields are overwritten during LDAP sync if empty',
+            'type'                  => 'array',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => array()
         ),
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')
