@@ -1465,20 +1465,23 @@ class Setup_Controller
                 }
             }
 
-            // do we have modelconfig
+            // do we have modelconfig + doctrine
             else {
-                // create tables using doctrine 2
                 $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
                 $models = $application->getModels(true /* MCv2only */);
-                Setup_SchemaTool::createSchema($_xml->name, $models);
 
-                // adopt to old workflow
-                foreach($models as $model) {
-                    $modelConfiguration = $model::getConfiguration();
-                    $createdTables[] = (object) array(
-                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                        'version' => $modelConfiguration->getVersion(),
-                    );
+                if (count($models) > 0) {
+                    // create tables using doctrine 2
+                    Setup_SchemaTool::createSchema($_xml->name, $models);
+
+                    // adopt to old workflow
+                    foreach ($models as $model) {
+                        $modelConfiguration = $model::getConfiguration();
+                        $createdTables[] = (object)array(
+                            'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                            'version' => $modelConfiguration->getVersion(),
+                        );
+                    }
                 }
             }
     

@@ -306,6 +306,12 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         }
 
         if ($MCV2only) {
+            if (! Setup_Core::isDoctrineAvailable()) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Doctrine not available, could not get modelconfig v2 models for application (php version id: ' . PHP_VERSION_ID . ')');
+                return array();
+            }
+
             $md = new Tinebase_Record_DoctrineMappingDriver();
             $MCv2Models = array();
             foreach ((array)$this->_models as $model) {

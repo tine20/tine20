@@ -49,21 +49,35 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     /**
      * test creation of an ExampleRecord
      */
-    public function testCreateExampleRecord()
+    public function testCreateExampleRecord($expectedNumber = 1)
     {
-        $ExampleRecord = $this->_getExampleRecord();
+        $exampleRecord = $this->_getExampleRecord();
         
-        $this->assertTrue($ExampleRecord instanceof ExampleApplication_Model_ExampleRecord, 'We have no record the record is instance of wrong object');
+        $this->assertTrue($exampleRecord instanceof ExampleApplication_Model_ExampleRecord, 'We have no record the record is instance of wrong object');
         
-        $ExampleRecordArray = $ExampleRecord->toArray();
-        $this->assertTrue(is_array($ExampleRecordArray), '$ExampleRecordArray is not an array');
+        $exampleRecordArray = $exampleRecord->toArray();
+        $this->assertTrue(is_array($exampleRecordArray), '$exampleRecordArray is not an array');
         
-        $returnedRecord = $this->_json->saveExampleRecord($ExampleRecordArray);
+        $returnedRecord = $this->_json->saveExampleRecord($exampleRecordArray);
         
         $returnedGet = $this->_json->getExampleRecord($returnedRecord['id'], 0 , '');
-        $this->assertEquals($ExampleRecord['name'], $returnedGet['name']);
+        $this->assertEquals($exampleRecord['name'], $returnedGet['name']);
+        $this->assertEquals('ER-' . $expectedNumber, $returnedGet['number_str']);
         
         return $returnedRecord;
+    }
+
+    /**
+     * testAutoIncrementNumber
+     *
+     * @see 0012004: add numberable property for containers
+     */
+    public function testAutoIncrementNumber()
+    {
+        $this->testCreateExampleRecord();
+        $exampleRecord2 = $this->_getExampleRecord();
+        $returnedRecord = $this->_json->saveExampleRecord($exampleRecord2->toArray());
+        $this->assertEquals('ER-2', $returnedRecord['number_str']);
     }
     
     /**
@@ -104,7 +118,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     {
         $exampleRecordWithTag = $this->testCreateExampleRecord();
         // create a second record with no tag
-        $this->testCreateExampleRecord();
+        $this->testCreateExampleRecord(2);
         
         $exampleRecordWithTag['tags'] = array(array(
             'name'    => 'supi',

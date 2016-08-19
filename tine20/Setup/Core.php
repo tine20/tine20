@@ -294,4 +294,14 @@ class Setup_Core extends Tinebase_Core
         // disable caching for setup
         parent::setupCache(false);
     }
+
+    /**
+     * returns TRUE if doctrine is available for model config v2 stuff
+     *
+     * @return bool
+     */
+    public static function isDoctrineAvailable()
+    {
+        return PHP_VERSION_ID >= 50500 && interface_exists('Doctrine\Common\Persistence\Mapping\Driver\MappingDriver');
+    }
 }

@@ -13,7 +13,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   /**
    * @cfg {Boll} useHtml2Canvas
    */
-  useHtml2Canvas: true,
+  useHtml2Canvas: false,
   
   debug: false,
   

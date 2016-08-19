@@ -441,7 +441,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $customers          = Sales_Controller_Customer::getInstance()->getAll('number');
         $orderconfirmations = Sales_Controller_OrderConfirmation::getInstance()->getAll('number');
 
-        foreach($customers as $customer) {
+        foreach ($customers as $customer) {
             $oc = $orderconfirmations->getByIndex($i);
             $i++;
             $relations = array(array(
@@ -463,16 +463,15 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'related_id'             => $oc->getId(),
                 'type'                   => 'OFFER'
             ));
-            $customer = $customers->getById($relation->own_id);
-            $offer = Sales_Controller_Offer::getInstance()->create(new Sales_Model_Offer(array(
+            Sales_Controller_Offer::getInstance()->create(new Sales_Model_Offer(array(
                 'number' => $i,
                 'title'  => self::$_de ? ('Angebot für Kunde ' . $customer->name) : ('Offer for Customer' . $customer->name),
                 'description' => 'Created by Tine 2.0 DemoData',
                 'relations' => $relations
             )));
         }
-        
     }
+
     /**
      * returns a new product
      * return Sales_Model_Product

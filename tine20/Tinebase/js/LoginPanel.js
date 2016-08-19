@@ -472,8 +472,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         this.onLogin.call(this.scope, response);
                     } else {
                         var modSsl = Tine.Tinebase.registry.get('modSsl');
-                        var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!!!') :
-                            i18n._('Your username and/or your password are wrong!!!');
+                        var resultMsg = modSsl ? i18n._('There was an error verifying your certificate!') :
+                            i18n._('Your username and/or your password are wrong!');
                         Ext.MessageBox.show({
                             title: i18n._('Login failure'),
                             msg: resultMsg,

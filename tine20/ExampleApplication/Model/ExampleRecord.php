@@ -15,6 +15,8 @@
  * 
  * @package     ExampleApplication
  * @subpackage  Model
+ *
+ * TODO switch to doctrine
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {
@@ -66,6 +68,37 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'label' => 'Reason', // _('Reason')
                 'type' => 'keyfield',
                 'name' => 'exampleReason'
+            ),
+            'number_str' => array(
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'       => 'Number', // _('Number')
+                'queryFilter' => TRUE,
+                'type' => 'numberableStr',
+                'config' => array(
+                    Tinebase_Numberable::CONF_STEPSIZE          => 1,
+                    Tinebase_Numberable::CONF_BUCKETKEY         => 'ExampleApplication_Model_ExampleRecord#number_str',
+                    Tinebase_Numberable_String::CONF_PREFIX     => 'ER-',
+                    Tinebase_Numberable_String::CONF_ZEROFILL   => 0,
+                    // TODO implement that
+//                    'filters' => '', // group/filters - use to link with container for example
+//                    'allowClientSet' => '', // force?
+//                    'allowDuplicate' => '',
+//                    'duplicateResolve' => array(
+//                        'inc/2 (recursive)' => '',
+//                        'next free' => '',
+//                        'exception' => '',
+//                    ),
+                )
+            ),
+            'number_int' => array(
+                'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'       => 'Number', // _('Number')
+                'queryFilter' => TRUE,
+                'type' => 'numberableInt',
+                'config' => array(
+                    Tinebase_Numberable::CONF_STEPSIZE          => 1,
+                    Tinebase_Numberable::CONF_BUCKETKEY          => 'ExampleApplication_Model_ExampleRecord#number_int',
+                )
             ),
         )
     );

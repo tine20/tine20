@@ -570,6 +570,11 @@ class Tinebase_ModelConfiguration {
     protected $_defaultData = array();
 
     /**
+     * holds the fields of type autoincrement (will be auto set by field configuration)
+     */
+    protected $_autoincrementFields = array();
+
+    /**
      * holds the fields / groups to check for duplicates (will be auto set by field configuration)
     */
     protected $_duplicateCheckFields = NULL;
@@ -830,9 +835,8 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
-            }
 
-            if ($fieldDef['type'] == 'virtual') {
+            } elseif ($fieldDef['type'] == 'virtual') {
                 $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $fieldDef['key'] = $fieldKey;
                 $fieldDef['sortable'] = FALSE;
@@ -842,6 +846,9 @@ class Tinebase_ModelConfiguration {
                 }
                 $this->_virtualFields[] = $fieldDef;
                 continue;
+
+            } elseif($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
+                $this->_autoincrementFields[] = $fieldDef;
             }
 
 
@@ -998,6 +1005,11 @@ class Tinebase_ModelConfiguration {
         }
 
         return $modelconfig;
+    }
+
+    public function getAutoincrementFields()
+    {
+        return $this->_autoincrementFields;
     }
 
     public function getIdProperty()

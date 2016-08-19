@@ -1,14 +1,17 @@
 # 
 # Translators:
+# Michael Spahn <michael@spahn.me>, 2012-2013
 # Michael Spahn <michael@spahn.me>, 2013
 # Michael Spahn <michael@spahn.me>, 2012
 # pschuele <p.schuele@metaways.de>, 2013
+# pschuele <p.schuele@metaways.de>, 2013
+# sstamer <s.stamer@metaways.de>, 2015-2016
 # sstamer <s.stamer@metaways.de>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2015-11-18 13:16+0000\n"
+"PO-Revision-Date: 2016-08-11 13:12+0000\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -20,69 +23,73 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Model/InventoryItem.php:35
+#: Model/InventoryItem.php:37
 msgid "Inventory item"
 msgid_plural "Inventory items"
 msgstr[0] "Inventar Gegenstand"
 msgstr[1] "Inventargegenstände"
 
-#: Model/InventoryItem.php:39
+#: Model/InventoryItem.php:41
 msgid "Inventory item list"
 msgid_plural "Inventory item lists"
 msgstr[0] "Inventarliste"
 msgstr[1] "Inventarlisten"
 
-#: Model/InventoryItem.php:55 js/InventoryItemEditDialog.js:101
+#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:101
 msgid "Name"
 msgstr "Name"
 
-#: Model/InventoryItem.php:60 js/InventoryItemEditDialog.js:197
+#: Model/InventoryItem.php:84 js/InventoryItemEditDialog.js:197
 msgid "Status"
 msgstr "Status"
 
-#: Model/InventoryItem.php:66
+#: Model/InventoryItem.php:93
 msgid "Inventory ID"
 msgstr "Inventar ID"
 
-#: Model/InventoryItem.php:70 js/InventoryItemEditDialog.js:121
+#: Model/InventoryItem.php:99 js/InventoryItemEditDialog.js:121
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Model/InventoryItem.php:74 js/InventoryItemEditDialog.js:155
+#: Model/InventoryItem.php:106 js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Standort"
 
-#: Model/InventoryItem.php:78 js/InventoryItemEditDialog.js:277
+#: Model/InventoryItem.php:110 js/InventoryItemEditDialog.js:277
 msgid "Invoice date"
 msgstr "Rechnungsdatum"
 
-#: Model/InventoryItem.php:93 js/InventoryItemEditDialog.js:271
+#: Model/InventoryItem.php:138 js/InventoryItemEditDialog.js:271
 msgid "Invoice"
 msgstr "Rechnung"
 
-#: Model/InventoryItem.php:98 js/InventoryItemEditDialog.js:251
+#: Model/InventoryItem.php:146 js/InventoryItemEditDialog.js:251
 msgid "Price"
 msgstr "Preis"
 
-#: Model/InventoryItem.php:104
+#: Model/InventoryItem.php:152
 msgid "Cost Center"
 msgstr "Kostenstelle"
 
-#: Model/InventoryItem.php:116 js/InventoryItemEditDialog.js:168
+#: Model/InventoryItem.php:165 js/InventoryItemEditDialog.js:168
 msgid "Warranty"
 msgstr "Garantie"
 
-#: Model/InventoryItem.php:123
+#: Model/InventoryItem.php:173
 msgid "Item added"
 msgstr "Aufgenommen"
 
-#: Model/InventoryItem.php:130
+#: Model/InventoryItem.php:181
 msgid "Item removed"
 msgstr "Entfernt"
 
-#: Model/InventoryItem.php:143 js/InventoryItemEditDialog.js:283
-msgid "Depreciate"
-msgstr "Abschreibung"
+#: Model/InventoryItem.php:190
+msgid "Deprecate"
+msgstr ""
+
+#: Model/InventoryItem.php:196
+msgid "Image"
+msgstr "Bild"
 
 #: js/InventoryItemGridPanel.js:37
 msgid "Export Inventory"
@@ -143,6 +150,10 @@ msgstr "Buchhaltung"
 #: js/InventoryItemEditDialog.js:258
 msgid "Cost centre"
 msgstr "Kostenstelle"
+
+#: js/InventoryItemEditDialog.js:283
+msgid "Depreciate"
+msgstr "Abschreibung"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"
