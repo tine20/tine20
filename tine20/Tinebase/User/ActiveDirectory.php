@@ -148,7 +148,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             $plugin->inspectAddUser($_user, $ldapData);
         }
 
-        $dn = $this->_generateDn($_user);
+        $dn = $this->generateDn($_user);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
@@ -352,7 +352,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         // do we need to rename the entry?
         if ($rdn['CN'] != $ldapData['cn']) {
-            $newDN = $this->_generateDn($_account);
+            $newDN = $this->generateDn($_account);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
@@ -414,7 +414,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @param  Tinebase_Model_FullUser $_account
      * @return string
      */
-    protected function _generateDn(Tinebase_Model_FullUser $_account)
+    public function generateDn(Tinebase_Model_FullUser $_account)
     {
         $newDn = "cn={$_account->accountFullName},{$this->_baseDn}";
 
