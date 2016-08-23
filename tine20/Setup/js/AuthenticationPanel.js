@@ -334,7 +334,17 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             fieldLabel: this.app.i18n._('Start TLS'),
                             store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                             value: '0'
-                        }, commonComboConfig), 
+                        }, commonComboConfig),
+                        Ext.applyIf({
+                            name: 'authentication_Ldap_useSsl',
+                            fieldLabel: this.app.i18n._('SSL'),
+                            store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                            value: '0'
+                        }, commonComboConfig),
+                        {
+                            name: 'authentication_Ldap_port',
+                            fieldLabel: this.app.i18n._('Port')
+                        },
                         {
                             name: 'authentication_Ldap_baseDn',
                             fieldLabel: this.app.i18n._('Base DN')
@@ -608,6 +618,16 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '1'
             }, commonComboConfig),
+            Ext.applyIf({
+                name: 'accounts_' + type + '_useSsl',
+                fieldLabel: this.app.i18n._('SSL'),
+                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                value: '0'
+            }, commonComboConfig),
+            {
+                name: 'accounts_' + type + '_port',
+                fieldLabel: this.app.i18n._('Port')
+            },
             Ext.applyIf({
                 hidden: type === 'ActiveDirectory' ,
                 name: 'accounts_' + type + '_pwEncType',
