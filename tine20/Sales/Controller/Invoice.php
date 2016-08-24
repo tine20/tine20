@@ -745,6 +745,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $positions = $ipc->search($f);
             $positions->setTimezone(Tinebase_Core::getUserTimezone());
 
+            $relations = null;
+
             foreach ($invoicePositions as $position)
             {
                 $found = false;
@@ -770,7 +772,19 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     }
                     $position->invoice_id = $invoice->getId();
                     $ipc->create($position);
+
+                    if (null === $relations) {
+                        $relations = $invoice->relations->toArray();
+                    }
+                    $relations[] = array_merge(array(
+                                'related_model'  => $position->model,
+                                'related_id'     => $position->accountable_id,
+                            ), $this->_getRelationDefaults());
                 }
+            }
+
+            if (null !== $relations) {
+                $invoice->relations = $relations;
             }
 
             $this->update($invoice);
