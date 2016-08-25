@@ -34,6 +34,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     loginMethod: 'Tinebase.login',
     
     /**
+     * @cfg {String} loginLogo logo to show
+     */
+    loginLogo: null,
+    
+    /**
      * @cfg {String} onLogin callback after successfull login
      */
     onLogin: Ext.emptyFn,
@@ -57,10 +62,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * @return {Ext.FromPanel}
      */
     getLoginPanel: function () {
-
-        var modSsl = Tine.Tinebase.registry.get('modSsl');
         //Do we have a cutom Logo for branding?
-
+        var modSsl = Tine.Tinebase.registry.get('modSsl')
+            logo = this.loginLogo ? this.loginLogo : Tine.logo;
+        
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
@@ -72,7 +77,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     xtype: 'container',
                     cls: 'tb-login-lobobox',
                     border: false,
-                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + Tine.logo + '" /></a>'
+                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + logo + '" /></a>'
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
