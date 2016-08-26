@@ -26,6 +26,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     recordProxy: Tine.Admin.customfieldBackend,
     defaultSortInfo: {field: 'name', direction: 'ASC'},
     evalGrants: false,
+    copyEditAction: true,
     gridConfig: {
         autoExpandColumn: 'name'
     },
