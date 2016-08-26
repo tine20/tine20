@@ -1040,6 +1040,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                         . ' Merged record: ' . print_r($record->toArray(), TRUE));
                     
                     $record = call_user_func(array($this->_controller, $this->_options['updateMethod']), $recordToUpdate, FALSE);
+                    $this->_importResult['updatecount']++;
+                } else {
+                    $this->_importResult['duplicatecount']++;
                 }
                 
                 break;
@@ -1165,9 +1168,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                             . " Records are already the same. Nothing to do here.");
                     } else {
                         $updatedRecord = $this->_importAndResolveConflict($firstDuplicateRecord, $resolveStrategy, $ted->getClientRecord());
-                        $this->_importResult['updatecount']++;
                         $this->_importResult['results']->addRecord($updatedRecord);
-
                     }
                 }
 
