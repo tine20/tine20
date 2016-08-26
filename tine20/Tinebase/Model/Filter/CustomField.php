@@ -117,7 +117,8 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         // make sure $correlationName is a string
         $correlationName = Tinebase_Record_Abstract::generateUID(30);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom field filter: ' . print_r($this->_value, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+            ' Adding custom field filter: ' . print_r($this->_value, true));
         
         $db = Tinebase_Core::getDb();
         $idProperty = $db->quoteIdentifier($this->_options['idProperty']);
