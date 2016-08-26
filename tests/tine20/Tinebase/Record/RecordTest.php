@@ -112,12 +112,14 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'string' => 'test',
             'test_1' => 25,
             'test_2' => 99,
-            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'set1' => new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord'),
         ), true);
         
         $record2 = clone $record1;
         $record2->string = 'anders';
         $record2->test_1 = 26;
+        $record2->set2 = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
         $diff = $record1->diff($record2)->diff;
         $this->assertEquals(2, count($diff), 'expected difference in string & test_1: ' . print_r($diff, TRUE));
         $this->assertEquals('anders', $diff['string']);
