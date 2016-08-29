@@ -448,21 +448,21 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $toConvert = $this->_properties[$field];
             }
 
-            foreach ($toConvert as $field => &$value) {
+            foreach ($toConvert as $convertField => &$value) {
                 if (! method_exists($value, 'setTimezone')) {
-                    throw new Tinebase_Exception_Record_Validation($field . 'must be a method setTimezone');
+                    throw new Tinebase_Exception_Record_Validation($convertField . ' must be a method setTimezone');
                 } 
                 $value->setTimezone($_timezone);
             } 
         }
         
         if ($_recursive) {
-            foreach ($this->_properties as $property => $value) {
-                if ($value && is_object($value) && 
-                        (in_array('Tinebase_Record_Interface', class_implements($value)) || 
-                        $value instanceof Tinebase_Record_Recordset) ) {
-                       
-                    $value->setTimezone($_timezone, TRUE);
+            foreach ($this->_properties as $property => $propValue) {
+                if ($propValue && is_object($propValue) &&
+                        (in_array('Tinebase_Record_Interface', class_implements($propValue)) ||
+                            $propValue instanceof Tinebase_Record_Recordset) ) {
+
+                    $propValue->setTimezone($_timezone, TRUE);
                 }
             }
         }
@@ -679,7 +679,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     */
     public function __toString()
     {
-       return print_r($this->toArray(), TRUE);
+       return (string) print_r($this->toArray(), true);
     }
     
     /**
@@ -994,7 +994,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 continue;
             } else if (empty($ownField) && empty($recordField)) {
                 continue;
+            } else if ((empty($ownField)    && $recordField instanceof Tinebase_Record_RecordSet && count($recordField) == 0)
+                ||     (empty($recordField) && $ownField    instanceof Tinebase_Record_RecordSet && count($ownField) == 0) )
+            {
+                continue;
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
+                ' Found diff for ' . $fieldName .'(this/other):' . print_r($ownField, true) . '/' . print_r($recordField, true) );
             
             $diff[$fieldName] = $recordField;
         }

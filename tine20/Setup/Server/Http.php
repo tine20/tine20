@@ -32,7 +32,8 @@ class Setup_Server_Http implements Tinebase_Server_Interface
         
         Setup_Core::initFramework();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is http request. method: ' . $this->getRequestMethod());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            .' is http request. method: ' . $this->getRequestMethod());
 
         $server = new Tinebase_Http_Server();
         $server->setClass('Setup_Frontend_Http', 'Setup');

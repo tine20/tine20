@@ -52,6 +52,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FILTER_EMAIL_URIS = 'filterEmailUris';
 
     /**
+     * allow self signed tls cert for IMAP connection
+     *
+     * @see 0009676: activate certificate check for TLS/SSL
+     * @var string
+     */
+    const IMAP_ALLOW_SELF_SIGNED_TLS_CERT = 'imapAllowSelfSignedTlsCert';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -115,6 +123,16 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => true,
+        ),
+        self::IMAP_ALLOW_SELF_SIGNED_TLS_CERT => array(
+            //_('Allow self signed TLS cert for IMAP connection')
+            'label'                 => 'Allow self signed TLS cert for IMAP connection',
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => false,
         ),
     );
     

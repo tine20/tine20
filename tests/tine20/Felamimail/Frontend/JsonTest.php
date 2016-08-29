@@ -933,6 +933,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), $testFolder->getId());
 
+        // sleep for 2 secs because mailserver may be slower than expected
+        sleep(2);
+
         $inboxAfter = $this->_getFolder('INBOX');
         
         // check if count was decreased correctly

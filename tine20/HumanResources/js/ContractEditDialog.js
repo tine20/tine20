@@ -277,25 +277,25 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             ],
                             
                             [Ext.apply({
-                                fieldLabel: i18n._('Mon.'),
+                                fieldLabel: this.app.i18n._('Mon.'),
                                 name: 'weekdays_0'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Tue.'),
+                                fieldLabel: this.app.i18n._('Tue.'),
                                 name: 'weekdays_1'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Wed.'),
+                                fieldLabel: this.app.i18n._('Wed.'),
                                 name: 'weekdays_2'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Thu.'),
+                                fieldLabel: this.app.i18n._('Thu.'),
                                 name: 'weekdays_3'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Fri.'),
+                                fieldLabel: this.app.i18n._('Fri.'),
                                 name: 'weekdays_4'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Sat.'),
+                                fieldLabel: this.app.i18n._('Sat.'),
                                 name: 'weekdays_5'
                             }, weekdayFieldDefaults), Ext.apply({
-                                fieldLabel: i18n._('Sun.'),
+                                fieldLabel: this.app.i18n._('Sun.'),
                                 name: 'weekdays_6'
                             }, weekdayFieldDefaults)]
                         ]

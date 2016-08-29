@@ -275,24 +275,48 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      * testImportDuplicateResolve
      * 
      * @see 0009316: add duplicate resolving to cli import
+     *
+     * @param bool $withCustomfields
+     * @return array
      */
-    public function testImportDuplicateResolve()
+    public function testImportDuplicateResolve($withCustomfields = false)
     {
         $definition = $this->_getDefinitionFromFile('adb_import_csv_duplicate.xml');
         
-        $this->_filename = dirname(__FILE__) . '/files/import_duplicate_1.csv';
+        $this->_filename = dirname(__FILE__) . ($withCustomfields ? '/files/import_duplicate_1_cf.csv' : '/files/import_duplicate_1.csv');
         $this->_deleteImportFile = FALSE;
         
         $this->_doImport(array(), $definition);
         $this->_deletePersonalContacts = TRUE;
 
-        $this->_filename = dirname(__FILE__) . '/files/import_duplicate_2.csv';
+        $this->_filename = dirname(__FILE__) .($withCustomfields ? '/files/import_duplicate_2_cf.csv' : '/files/import_duplicate_2.csv');
         
         $result = $this->_doImport(array(), $definition);
         
         $this->assertEquals(1, $result['updatecount'], 'should have updated 1 contact');
+        $this->assertEquals(0, $result['totalcount']);
+        $this->assertEquals(0, $result['failcount']);
         $this->assertEquals('joerg@home.com', $result['results'][0]->email_home, 'duplicates resolving did not work: ' . print_r($result['results']->toArray(), true));
         $this->assertEquals('Jörg', $result['results'][0]->n_given, 'wrong encoding: ' . print_r($result['results']->toArray(), true));
+
+        return $result;
+    }
+
+    /**
+     * testImportDuplicateResolveCustomfields
+     */
+    public function testImportDuplicateResolveCustomfields()
+    {
+        $this->_createCustomField('customfield1');
+        $this->_createCustomField('customfield2');
+
+        $result = $this->testImportDuplicateResolve(/* $withCustomfields */ true);
+
+        // check customfields in result
+        $joerg = $result['results'][0]->toArray();
+        $this->assertTrue(isset($joerg['customfields']), 'cfs missing: ' .  print_r($joerg, true));
+        $this->assertFalse(isset($joerg['customfields']['customfield1']), print_r($joerg, true));
+        $this->assertEquals('cf2-2', $joerg['customfields']['customfield2']);
     }
 
     /**
