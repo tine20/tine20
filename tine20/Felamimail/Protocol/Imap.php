@@ -126,7 +126,7 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 
         $errno  =  0;
         $errstr = '';
-        $this->_socket = @fsockopen($host, $port, $errno, $errstr, self::TIMEOUT_CONNECTION);
+        $this->_socket = $this->_openSocket($host, $port, $errno, $errstr);
         if (!$this->_socket) {
             /**
              * @see Zend_Mail_Protocol_Exception
@@ -154,6 +154,35 @@ class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
                 throw new Zend_Mail_Protocol_Exception('cannot enable TLS');
             }
         }
+    }
+
+    /**
+     * open socket connection
+     *
+     * @param $host
+     * @param $port
+     * @param $errno
+     * @param $errstr
+     * @return resource
+     */
+    protected function _openSocket($host, $port, &$errno, &$errstr)
+    {
+        if (Felamimail_Config::getInstance()->get(Felamimail_Config::IMAP_ALLOW_SELF_SIGNED_TLS_CERT)) {
+            $result = @stream_socket_client($host.':'.$port, $errno, $errstr, self::TIMEOUT_CONNECTION, STREAM_CLIENT_CONNECT, stream_context_create(
+                array(
+                    'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    )
+                )
+            ));
+        } else {
+            $result = @fsockopen($host, $port, $errno, $errstr, self::TIMEOUT_CONNECTION);
+        }
+
+
+        return $result;
     }
     
     /**
