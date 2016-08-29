@@ -26,7 +26,6 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
     protected $_filters = array(
         'date_stringtrim' => 'StringTrim',
         'stringtrim'      => 'StringTrim'
-        
     );
 
     /**
@@ -62,6 +61,8 @@ class Tinebase_Record_DummyRecord extends Tinebase_Record_Abstract
         'date_multiple'   => array(),
         'leadstate'       => array('allowEmpty' => false, 'Alpha' ),
         'inarray'         => array(array('InArray', array('value1', 'value2')), 'allowEmpty' => true),
+        'set1'            => array('allowEmpty' => true),
+        'set2'            => array('allowEmpty' => true),
     );
 
     /**

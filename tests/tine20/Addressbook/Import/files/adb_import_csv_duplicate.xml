@@ -11,7 +11,7 @@
     <label>Simple CSV import</label>
     <description>simple import</description>
     <extension>csv</extension>
-    <duplicateResolveStrategy>mergeTheirs</duplicateResolveStrategy>
+    <duplicateResolveStrategy>mergeMine</duplicateResolveStrategy>
     <mapping>
         <field>
             <source>adr_one_countryname</source>
@@ -100,6 +100,14 @@
         <field>
             <source>tel_work</source>
             <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>customfield1</source>
+            <destination>customfield1</destination>
+        </field>
+        <field>
+            <source>customfield2</source>
+            <destination>customfield2</destination>
         </field>
     </mapping>
 </config>
