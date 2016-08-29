@@ -63,10 +63,11 @@ class Setup_Core extends Tinebase_Core
      */
     public static function startSetupSession ()
     {
-        Tinebase_Session::setSessionBackend();
-        
-        Zend_Session::start();
-        
+        if (! Setup_Session::isStarted()) {
+            Setup_Session::setSessionBackend();
+            Zend_Session::start();
+        }
+
         $setupSession = Setup_Session::getSessionNamespace();
         
         if (isset($setupSession->setupuser)) {

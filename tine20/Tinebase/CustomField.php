@@ -285,7 +285,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
  
         $filterValues = array(array(
             'field'     => 'application_id', 
-            'operator'  => 'equals', 
+            'operator'  => 'equals',
             'value'     => $applicationId
         ));
             
@@ -484,6 +484,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 $value = $customField->value;
             }
             $recordCfs[$config->name] = $value;
+        }
+
+        // sort customfields by key
+        if (is_array($recordCfs)) {
+            ksort($recordCfs);
         }
         
         $record->customfields = $recordCfs;
