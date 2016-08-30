@@ -63,7 +63,12 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
             $record->setKeyFieldRecordModel($_options['recordModel']);
         }
 
-        $record->setFromArray($_data);
+        if (is_array($_data)) {
+            $record->setFromArray($_data);
+        } else if (is_string($_data)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                . __LINE__ . ' Did not get an array to set keyfield config. Got this: ' . $_data);
+        }
         return $record;
     }
     
