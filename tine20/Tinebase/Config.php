@@ -360,6 +360,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var array of strings
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
+    
+    /**
+     * @var boolean
+     */
+    const USE_LOGINNAME_AS_FOLDERNAME = 'useLoginnameAsFoldername';
 
     /**
      * @var array of strings
@@ -872,6 +877,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        self::USE_LOGINNAME_AS_FOLDERNAME => array(
+        //_('Use login name instead of full name')
+            'label'                 => 'Use login name instead of full name',
+        //_('Use login name instead of full name for webdav.')
+            'description'           => 'Use login name instead of full name for webdav.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => FALSE,
+        )
     );
     
     /**
