@@ -527,16 +527,14 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
-            $this->_updatePrimaryGroupsOfUsers($groupIds);
-            
+
             $this->deleteGroupsInSqlBackend($groupIds);
             if ($this instanceof Tinebase_Group_Interface_SyncAble) {
                 $this->deleteGroupsInSyncBackend($groupIds);
             }
-            
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
+
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Exception::log($e);
@@ -572,6 +570,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function deleteGroupsInSqlBackend($groupIds)
     {
+        $this->_updatePrimaryGroupsOfUsers($groupIds);
+
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('group_id') . ' IN (?)', (array) $groupIds);
         $this->groupMembersTable->delete($where);
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' IN (?)', (array) $groupIds);
