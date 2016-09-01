@@ -67,6 +67,28 @@ class Tinebase_Server_JsonTests extends TestCase
             ),
             'returns' => 'array'
         ), $smdArray['services']['Inventory.deleteInventoryItems']);
+
+        $this->assertEquals(array
+        (
+            'envelope' => 'JSON-RPC-2.0',
+            'transport' => 'POST',
+            'parameters' => array
+            (
+                array
+                (
+                    'type' => 'array',
+                    'optional' => false,
+                    'name' => 'filter'
+                ),
+                array
+                (
+                    'type' => 'array',
+                    'optional' => false,
+                    'name' => 'paging'
+                )
+            ),
+            'returns' => 'array'
+        ), $smdArray['services']['Inventory.searchInventoryItems']);
     }
 
     /**
