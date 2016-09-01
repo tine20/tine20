@@ -740,11 +740,14 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 $data
             ), true)
         );
-
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($container->getId(), 'group', $group->getId(), $this->_userGrants, true);
-        Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
-        Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['pwulf']->getId(),   $this->_adminGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
+        if (isset($this->_personas['pwulf'])) {
+            Tinebase_Container::getInstance()->addGrants($container->getId(), 'user', $this->_personas['pwulf']->getId(), $this->_adminGrants, true);
+        }
         
         if ($setAsThisSharedContainer) {
             $this->_sharedContainer = $container;

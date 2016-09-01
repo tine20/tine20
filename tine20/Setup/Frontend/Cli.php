@@ -353,7 +353,7 @@ class Setup_Frontend_Cli
             } else {
                 try {
                     $containerController->deleteContainer($container, true);
-                } catch (Tinebase_Exception_NotFound $e) {
+                } catch (Exception $e) {
                 }
             }
         }
