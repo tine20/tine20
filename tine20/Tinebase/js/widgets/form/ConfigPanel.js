@@ -83,7 +83,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     onSaveConfig: function() {
         if (this.isValid()) {
             var configData = this.form2config();
-            
+
             this.loadMask.show();
             Ext.Ajax.request({
                 scope: this,
@@ -190,7 +190,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         
         var configData = {};
         var keyParts, keyPart, keyGroup, dataPath;
-        for (key in formData) {
+        for (var key in formData) {
             keyParts = key.split('_');
             dataPath = configData;
             

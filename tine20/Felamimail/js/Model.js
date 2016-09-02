@@ -229,9 +229,14 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
 
         if (mimeType == 'configured') {
             var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
-            mimeType = account.get('display_format');
-            if (! mimeType.match(/^text\//)) {
-                mimeType = 'text/' + mimeType;
+            if (account) {
+                mimeType = account.get('display_format');
+                if (!mimeType.match(/^text\//)) {
+                    mimeType = 'text/' + mimeType;
+                }
+            } else {
+                // no account found, might happen for .eml emails
+                mimeType = 'text/plain';
             }
         }
 

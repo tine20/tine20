@@ -3,6 +3,7 @@
     <name>Sipgate</name>
     <version>2.1</version>
     <order>25</order>
+    <status>disabled</status>
     <depends>
         <application>Admin</application>
         <application>Addressbook</application>

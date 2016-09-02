@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7eda7cd093eab9cd041a6b175c4f8879",
-    "content-hash": "db3c77741bea7113ffe6fbf1e770d000",
+    "hash": "825e06643aedbf9c0043406cb61f1e9d",
+    "content-hash": "086d1089cbd84856687905c2c0671442",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1253,7 +1253,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "b9e480b6c26f6556ca742e96badfeb1ebd59ecb7"
+                "reference": "00200ee5b5e8e0b5c02ccd4d07c53e19c71ebde7"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1270,7 +1270,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2016-07-14 11:55:28"
+            "time": "2016-09-02 09:26:20"
         },
         {
             "name": "zendframework/zend-escaper",

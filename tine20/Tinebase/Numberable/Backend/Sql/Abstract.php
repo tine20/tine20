@@ -99,7 +99,11 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
             }
         }
 
-        $newId = $this->_db->lastInsertId();
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $newId = $this->_db->query('SELECT currval(pg_get_serial_sequence(\'' . $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName) . '\', \'id\'))')->fetchColumn();
+        } else {
+            $newId = $this->_db->lastInsertId();
+        }
         $stmt = $this->_db->select()->from($this->_tablePrefix . $this->_tableName, array($this->_numberableColumn))
             ->where('id = '.$newId)->query();
         $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
