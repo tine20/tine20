@@ -427,7 +427,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                                 )),
                                 new Zend_Server_Method_Parameter(array(
                                     'type' => 'array',
-                                    'name' => 'pagination',
+                                    'name' => 'paging',
                                 )),
                             ),
                             'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',

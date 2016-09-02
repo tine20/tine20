@@ -12,7 +12,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
 {
     /**
      * update to 9.1
-     * 
+     *
      * @see 0011178: allow to lock preferences for individual users
      */
     public function update_0()
@@ -97,7 +97,8 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         // delete index unique-fields
         try {
             $this->_backend->dropIndex('relations', 'unique-fields');
-        } catch (Exception $e) {}
+        } catch (Exception $e) {
+        }
         $declaration = new Setup_Backend_Schema_Index_Xml('
             <index>
                 <name>unique-fields</name>
@@ -205,11 +206,36 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * adds failcount+lastfail to scheduled imports
+     *
+     * @see 0012082: deactivate failing scheduled imports
+     */
+    public function update_7()
+    {
+        if ($this->getTableVersion('import') < 2) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>failcount</name>
+                    <type>integer</type>
+                </field>');
+            $this->_backend->addCol('import', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>lastfail</name>
+                    <type>text</type>
+                </field>');
+            $this->_backend->addCol('import', $declaration);
+        }
+
+        $this->setTableVersion('import', '2');
+        $this->setApplicationVersion('Tinebase', '9.8');
+    }
+
+    /**
      * update to 9.8
      *
      * @see xxx: add numberables
      */
-    public function update_7()
+    public function update_8()
     {
         $declaration = new Setup_Backend_Schema_Table_Xml('<table>
             <name>numberable</name>
@@ -252,6 +278,6 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         </table>');
 
         $this->createTable('numberable', $declaration);
-        $this->setApplicationVersion('Tinebase', '9.8');
+        $this->setApplicationVersion('Tinebase', '9.9');
     }
 }
