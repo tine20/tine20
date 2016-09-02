@@ -245,9 +245,10 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
                     <name>id</name>
                     <type>integer</type>
                     <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
                 </field>
                 <field>
-                    <name>shard</name>
+                    <name>bucket</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>false</notnull>
@@ -265,10 +266,10 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
                     </field>
                 </index>
                 <index>
-                    <name>shard_number</name>
+                    <name>bucket_number</name>
                     <unique>true</unique>
                     <field>
-                        <name>shard</name>
+                        <name>bucket</name>
                     </field>
                     <field>
                         <name>number</name>
