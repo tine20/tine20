@@ -984,6 +984,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         this.record.data.attachments = [];
         var attachmentData = null;
+
+        var format = this.bodyCards.layout.activeItem.mimeType;
+        if (format.match(/^text/)) {
+            var editor = format == 'text/html' ? this.htmlEditor : this.textEditor;
+
+            this.record.set('content_type', format);
+            this.record.set('body', editor.getValue());
+        }
         
         this.attachmentGrid.store.each(function(attachment) {
             this.record.data.attachments.push(Ext.ux.file.Upload.file.getFileData(attachment));
@@ -1281,14 +1289,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this
             )
             return;
-        }
-
-        var format = this.bodyCards.layout.activeItem.mimeType;
-        if (format.match(/^text/)) {
-            var editor = format == 'text/html' ? this.htmlEditor : this.textEditor;
-
-            this.record.set('content_type', format);
-            this.record.set('body', editor.getValue());
         }
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - call parent');

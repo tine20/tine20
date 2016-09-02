@@ -826,7 +826,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $registryData = array();
         
         if (Tinebase_Core::getUser()) {
-            $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+            $userApplications = Tinebase_Core::getUser()->getApplications(/* $_anyRight */ TRUE);
             $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
@@ -860,8 +860,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $appRegistry['customfields'] = $customfields->toArray();
 
                 // add preferences for app
-                $prefRegistry = $this->_getAppPreferencesForRegistry($application);
-                $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
+                try {
+                    $prefRegistry = $this->_getAppPreferencesForRegistry($application);
+                    $appRegistry = array_merge_recursive($appRegistry, $prefRegistry);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    // do not add prefs if user has no run right
+                }
 
                 $customAppRegistry = $this->_getCustomAppRegistry($application);
                 if (empty($customAppRegistry)) {
