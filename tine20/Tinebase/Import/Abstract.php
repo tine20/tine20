@@ -843,7 +843,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         $tag = NULL;
         
-        if (isset($_tagData['id'])) {
+        if (isset($_tagData['id']) && ! empty($_tagData['id'])) {
             try {
                 $tag = Tinebase_Tags::getInstance()->get($_tagData['id']);
                 return $tag;
@@ -1108,11 +1108,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _handleImportException(Exception $e, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
-        Tinebase_Exception::log($e);
-        
         if ($e instanceof Tinebase_Exception_Duplicate) {
             $exception = $this->_handleDuplicateExceptions($e, $recordIndex, $record, $allowToResolveDuplicates);
         } else {
+            Tinebase_Exception::log($e);
+
             $this->_importResult['failcount']++;
             $exception = array(
                 'code'         => $e->getCode(),

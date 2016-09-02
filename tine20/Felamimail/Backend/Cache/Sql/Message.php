@@ -107,21 +107,27 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
     {
         if ($_mode == 'create') {
-            
             foreach ($this->_foreignTables as $key => $foreign) {
                 if (!isset($_record->{$key}) || empty($_record->{$key})) {
                     continue;
                 }
-                
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field . ': ' . print_r($_record->{$_field}, TRUE));
-                
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__
+                    . '::' . __LINE__ . ' ' . $key . ': ' . print_r($_record->{$key}, TRUE));
+
                 foreach ($_record->{$key} as $data) {
                     if ($key == 'flags') {
                         $data = array(
                             'flag'      => $data,
                             'folder_id' => $_record->folder_id
                         );
+                    } else {
+                        // need to filter input as 'name' could contain invalid chars (emojis, ...) here
+                        foreach ($data as $field => $value) {
+                            $data[$field] = Tinebase_Core::filterInputForDatabase($data[$field]);
+                        }
                     }
+
                     $data['message_id'] = $_record->getId();
                     $this->_db->insert($this->_tablePrefix . $foreign['table'], $data);
                 }

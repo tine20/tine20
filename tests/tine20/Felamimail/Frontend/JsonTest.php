@@ -931,6 +931,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         )), $testFolder->getId());
 
+        // sleep for 2 secs because mailserver may be slower than expected
+        sleep(2);
+
         $inboxAfter = $this->_getFolder('INBOX');
         
         // check if count was decreased correctly
@@ -1639,15 +1642,21 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     {
         $messageToSend = $this->_getMessageData();
         $messageToSend['headers'] = array_merge($messageToSend['headers'], $addtionalHeaders);
-        $returned = $this->_json->saveMessage($messageToSend);
+        $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
-        // sleep for 2 secs because mailserver may be slower than expected
-        sleep(2);
-        
-        $result = $this->_getMessages($folderName);
-        $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
-        
+        $i = 0;
+        while ($i < 5) {
+            $result = $this->_getMessages($folderName);
+            $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
+            if (! empty($message)) {
+                break;
+            }
+            // sleep for 1 sec because mailserver may be slower than expected
+            sleep(1);
+            $i++;
+        }
+
         $this->assertTrue(! empty($message), 'Sent message not found.');
         
         return $message;
