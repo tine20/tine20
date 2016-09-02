@@ -23,7 +23,7 @@
     }],
     "require": {
         "zendframework/zendframework1": "1.12.18pl1 as 1.12.18",
-        "tine20/composerapploader": "dev-master",
+        "tine20/composerapploader": "dev-master#00200ee5b5e8e0b5c02ccd4d07c53e19c71ebde7",
         "syncroton/syncroton": "1.1.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",

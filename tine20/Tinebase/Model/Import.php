@@ -91,6 +91,8 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
         'sourcetype'         => array('presence' => 'required'),
         'options'            => array('allowEmpty' => true),
         'source'             => array('allowEmpty' => true),
+        'failcount'          => array('allowEmpty' => true, 'default' => 0),
+        'lastfail'           => array('allowEmpty' => true),
         'created_by'         => array('allowEmpty' => true),
         'creation_time'      => array('allowEmpty' => true),
         'last_modified_by'   => array('allowEmpty' => true),
