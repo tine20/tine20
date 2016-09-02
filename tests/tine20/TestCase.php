@@ -530,7 +530,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      *
      * @param $modelName
      */
-    protected function _testSimpleRecordApi($modelName)
+    protected function _testSimpleRecordApi($modelName, $nameField = 'name', $descriptionField = 'description')
     {
         $uit = $this->_getUit();
         if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
@@ -538,16 +538,16 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         }
 
         $newRecord = array(
-            'name' => 'my test ' . $modelName,
-            'description' => 'my test description'
+            $nameField          => 'my test ' . $modelName,
+            $descriptionField   => 'my test description'
         );
         $savedRecord = call_user_func(array($uit, 'save' . $modelName), $newRecord);
 
-        $this->assertEquals('my test ' . $modelName, $savedRecord['name'], print_r($savedRecord, true));
-        $savedRecord['description'] = 'my updated description';
+        $this->assertEquals('my test ' . $modelName, $savedRecord[$nameField], print_r($savedRecord, true));
+        $savedRecord[$descriptionField] = 'my updated description';
 
         $updatedRecord = call_user_func(array($uit, 'save' . $modelName), $savedRecord);
-        $this->assertEquals('my updated description', $updatedRecord['description']);
+        $this->assertEquals('my updated description', $updatedRecord[$descriptionField]);
 
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $updatedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());

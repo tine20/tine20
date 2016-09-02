@@ -23,6 +23,8 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
      * @var Tinebase_Controller_ScheduledImport
      */
     private static $instance = null;
+
+    const MAXFAILCOUNT = 5;
     
     /**
      * the constructor
@@ -68,9 +70,12 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             return $this->_doScheduledImport($record)->toArray();
         }
         
-        return NULL;
+        return null;
     }
 
+    /**
+     * @return Tinebase_Model_ImportFilter
+     */
     public function getScheduledImportFilter()
     {
         $timestampBefore = null;
@@ -87,6 +92,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $aWeekAgo->subWeek(1);
 
         $filter = new Tinebase_Model_ImportFilter(array(array(
+                array('field' => 'failcount', 'operator' => 'greater', 'value' => 5),
+            ),
+            array(
             'condition' => 'OR', 'filters' => array(
                 array('field' => 'timestamp', 'operator' => 'isnull', 'value' => null),
                 array('condition' => 'AND', 'filters' => array(
@@ -116,7 +124,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
      * 
      * @param interval
      * @param recursive
-     * @return Object
+     * @return Tinebase_Model_Import|null
      */
     protected function _getNextScheduledImport()
     {
@@ -124,21 +132,30 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
 
         // Always sort by timestamp to ensure first in first out
         $pagination = new Tinebase_Model_Pagination(array(
-            'limit'     => 1,
+            'limit'     => 50,
             'sort'      => 'timestamp',
             'dir'       => 'ASC'
         ));
 
-        $record = $this->search($filter, $pagination)->getFirstRecord();
-        
-        if (! $record) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' No ScheduledImport could be found.');
-            }
+        $records = $this->search($filter, $pagination);
 
-            return NULL;
+        foreach ($records as $record) {
+            // TODO add failcount to filter in getScheduledImportFilter as
+            //   no more valid imports are run if we have 50+ failing imports
+            if ($record->failcount < self::MAXFAILCOUNT) {
+                return $record;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' Too many failures, skipping import');
+                }
+            }
         }
-        return $record;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' No valid ScheduledImport could be found.');
+        }
+
+        return null;
     }
     
     /**
@@ -197,13 +214,16 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             try {
                 $importer = new $importer($options);
                 $importer->import($toImport);
+                $record->failcount = 0;
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
                         . ' Import failed.');
                 }
-                // TODO log failure message in import record
                 Tinebase_Exception::log($e);
+
+                $record->lastfail = $e->getMessage();
+                $record->failcount = $record->failcount + 1;
             }
 
             if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || !$record->timestamp instanceof Tinebase_DateTime) {
@@ -222,7 +242,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                     break;
             }
 
-            // update record
             $record = $this->update($record);
             
         } else {

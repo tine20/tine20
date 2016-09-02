@@ -74,11 +74,11 @@ class Setup_Server_Json extends Tinebase_Server_Json
                         )
                ) {
                 if (! Setup_Core::isRegistered(Setup_Core::USER)) {
-                    Setup_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
                     
                     throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
                 } else {
-                    Setup_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
+                    Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                         ' affected account: ' . print_r(Setup_Core::getUser(), true) .
                         ' request: ' . print_r($_REQUEST, true)
                     );

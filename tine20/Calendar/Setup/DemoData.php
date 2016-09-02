@@ -113,8 +113,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach($this->_personas as $loginName => $persona) {
             $this->_calendars[$loginName] = Tinebase_Container::getInstance()->getContainerById(Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $persona->getId()));
 
-            Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
-            Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+            if (isset($this->_personas['sclever'])) {
+                Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+            }
+            if (isset($this->_personas['rwright'])) {
+                Tinebase_Container::getInstance()->addGrants($this->_calendars[$loginName]->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+            }
 
         }
     }
@@ -136,7 +140,9 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $group = Tinebase_Group::getInstance()->getDefaultGroup();
         Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'group', $group->getId(), $this->_userGrants, true);
-        Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($this->sharedCalendar->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
 
         // create some resorces as well
         $this->_ressources = array();
@@ -165,7 +171,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $tuesday = clone $this->_tuesday;
         $wednesday = clone $this->_wednesday;
         $thursday = clone $this->_thursday;
-        $friday = clone $this->_friday;
         $lastMonday = clone $this->_lastMonday;
         $lastFriday = clone $this->_lastFriday;
 
@@ -179,27 +184,14 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $defaultData = array(
             'container_id' => $this->sharedCalendar->getId(),
             Tinebase_Model_Grants::GRANT_EDIT    => true,
-
-            'attendee' => array(
-                array_merge($defaultAttendeeData,
-                    array('user_id'  => $this->_personas['pwulf']->toArray())
-                ),
-                array_merge($defaultAttendeeData,
-                    array('user_id'  => $this->_personas['sclever']->toArray())
-                ),
-                array_merge($defaultAttendeeData,
-                    array('user_id'  => $this->_personas['jsmith']->toArray())
-                ),
-                array_merge($defaultAttendeeData,
-                    array('user_id'  => $this->_personas['jmcblack']->toArray())
-                ),
-                array_merge($defaultAttendeeData,
-                    array('user_id'  => $this->_personas['rwright']->toArray())
-                ),
-            )
-
-
         );
+        $defaultData['attendee'] = array();
+        foreach ($this->_personas as $persona) {
+            $defaultData['attendee'][] = array_merge($defaultAttendeeData,
+                array('user_id'  => $persona->toArray())
+            );
+        }
+
         $lastMonday->add(date_interval_create_from_date_string('20 weeks'));
         $rruleUntilMondayMeeting = $lastMonday->format('d-m-Y') . ' 16:00:00';
         
@@ -208,7 +200,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultData,
                 array(
                     'summary'     => static::$_de ? 'Mittagspause' : 'lunchtime',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 12:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 13:00:00',
                 )),
@@ -386,7 +378,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Schwimmen gehen' : 'go swimming',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 17:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 18:00:00',
                 )
@@ -394,7 +386,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Auto aus der Werkstatt abholen' : 'fetch car from the garage',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $thursday->format('d-m-Y') . ' 15:00:00',
                     'dtend'       => $thursday->format('d-m-Y') . ' 16:00:00',
                 )
@@ -402,7 +394,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Oper mit Lucy' : 'Got to the Opera with Lucy',
-                    'description' => static::$_de ? 'Brighton Centre' : 'Brighton Centre',
+                    'description' => 'Brighton Centre',
                     'dtstart'     => $sunday->format('d-m-Y') . ' 20:00:00',
                     'dtend'       => $sunday->format('d-m-Y') . ' 21:30:00',
                 )
@@ -423,8 +415,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'color'          => '#00CCFF'
         ), true));
 
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
+        if (isset($this->_personas['rwright'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        }
 
         $defaultEventData = array(
             'container_id' => $cal->getId(),
@@ -435,7 +431,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             array_merge_recursive($defaultEventData,
                 array(
                     'summary'     => static::$_de ? 'Projektbesprechung Projekt Epsilon mit John' : 'Project Epsilon Meeting with John',
-                    'description' => static::$_de ? '' : '',
+                    'description' => '',
                     'dtstart'     => $monday->format('d-m-Y') . ' 08:00:00',
                     'dtend'       => $monday->format('d-m-Y') . ' 09:30:00',
                 )
@@ -555,8 +551,13 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'color'          => '#00CCFF'
         ), true));
 
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
+
+        if (isset($this->_personas['rwright'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        }
 
         $defaultEventData['container_id'] = $cal->getId();
         $defaultEventData['attendee'][] = array(
@@ -711,7 +712,9 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'color'          => '#00CCFF'
         ), true));
 
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
 
         $defaultEventData = array(
             'container_id' => $cal->getId(),
@@ -1036,8 +1039,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'color'          => '#00CCFF'
         ), true));
 
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
-        Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        if (isset($this->_personas['sclever'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['sclever']->getId(), $this->_secretaryGrants, true);
+        }
+        if (isset($this->_personas['rwright'])) {
+            Tinebase_Container::getInstance()->addGrants($cal->getId(), 'user', $this->_personas['rwright']->getId(), $this->_controllerGrants, true);
+        }
 
         $defaultEventData = array(
             'container_id' => $cal->getId(),

@@ -24,20 +24,22 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      * @var array modelConfigType => Doctrine2Type
      */
     protected static $_typeMap= array(
-        'string'    => 'string',
-        'text'      => 'text',
-        'datetime'  => 'datetime',
-        'date'      => 'datetime',
-        'time'      => 'datetime',
-        'integer'   => 'integer',
-        'json'      => 'text',
-        'container' => 'integer',
-        'record'    => 'string',
-        'keyfield'  => 'string',
-        'user'      => 'string',
+        'string'        => 'string',
+        'text'          => 'text',
+        'datetime'      => 'datetime',
+        'date'          => 'datetime',
+        'time'          => 'datetime',
+        'integer'       => 'integer',
+        'numberableInt' => 'integer',
+        'numberableStr' => 'string',
+        'json'          => 'text',
+        'container'     => 'integer',
+        'record'        => 'string',
+        'keyfield'      => 'string',
+        'user'          => 'string',
         // NOTE 1: smallint is not working somehow ...
         // NOTE 2: we need int here because otherwise we need to typecast values for pgsql
-        'boolean'   => 'integer',
+        'boolean'       => 'integer',
     );
 
     /**

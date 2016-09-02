@@ -216,9 +216,15 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $customerRecords = new Tinebase_Record_RecordSet('Sales_Model_Customer');
         
         foreach ($customers as $customer) {
-            $customer['cpextern_id'] = $addresses->getByIndex($i)->getId();
+            $contactExtern = $addresses->getByIndex($i);
+            if ($contactExtern) {
+                $customer['cpextern_id'] = $contactExtern->getId();
+            }
             $i++;
-            $customer['cpintern_id'] = $addresses->getByIndex($i)->getId();
+            $contactIntern = $addresses->getByIndex($i);
+            if ($contactIntern) {
+                $customer['cpintern_id'] = $contactIntern->getId();
+            }
             $i++;
             $customer['iban'] = Tinebase_Record_Abstract::generateUID(20);
             $customer['bic'] = Tinebase_Record_Abstract::generateUID(12);

@@ -265,7 +265,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                         . ' _className was not set, using get_class: ' . $this->_className);
                 }
                 
-                $filtergroup = new $this->_className($filterData['filters'], $filterData['condition'], $this->_options);
+                $filtergroup = new $this->_className(array(), $filterData['condition'], $this->_options);
+                if ($this->_className === 'Tinebase_Model_Filter_FilterGroup') {
+                    // generic modelconfig filter group, need to set model
+                    $filtergroup->setConfiguredModel($this->_configuredModel);
+                }
+                $filtergroup->setFromArray($filterData['filters']);
                 if (isset($filterData['id'])) {
                     $filtergroup->setId($filterData['id']);
                 }

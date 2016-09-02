@@ -62,6 +62,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         
         $returnedGet = $this->_json->getExampleRecord($returnedRecord['id'], 0 , '');
         $this->assertEquals($exampleRecord['name'], $returnedGet['name']);
+        $this->assertTrue(isset($returnedGet['number_str']), 'number_str missing');
         $this->assertEquals('ER-' . $expectedNumber, $returnedGet['number_str']);
         
         return $returnedRecord;
