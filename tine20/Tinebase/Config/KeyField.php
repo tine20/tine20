@@ -142,6 +142,10 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      */
     public function getValue($id)
     {
+        if (! $this->records instanceof Tinebase_Record_RecordSet) {
+            return '';
+        }
+
         $record = $this->records->filter('id', $id)->getFirstRecord();
         if (! $record) {
             $record = $this->getKeyfieldDefault();
