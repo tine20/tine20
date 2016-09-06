@@ -78,6 +78,16 @@
     background-image:url(../../images/oxygen/32x32/actions/mail-mark-read.png) !important;
 }
 
+.action_file {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+.x-btn-medium .action_file {
+    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
+}
+.x-btn-large .action_file {
+    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+}
+
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
@@ -184,12 +194,12 @@
 
 .preview-panel-felamimail {
     padding: 5px;
-    overflow: 'hidden';
+    overflow: hidden;
 }
 
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
-    overflow: 'hidden';
+    overflow: hidden;
 }
 
 .preview-panel-felamimail-attachments {
@@ -201,7 +211,7 @@
 /* note: el tyle of html areas underling textarea are copied to iframe*/
 .felamimail-message-body-html, 
 .preview-panel-felamimail-body {
-    overflow: 'auto';
+    overflow: auto;
     font-size: 13px;
 }
 
@@ -227,7 +237,7 @@
 .preview-panel-felamimail-body .x-form-textarea {
     margin-top: 5px;
     font: normal 13px courier;
-    border: 0px;
+    border: 0;
 }
 
 .felamimail-edit-text-plain .x-form-textarea {
@@ -362,7 +372,7 @@
 .felamimail-node-statusbox {
     padding-right: 5px;
     position: absolute;
-    right: 0px;
+    right: 0;
 }
 
 .felamimail-node-statusbox-progress {
@@ -392,7 +402,7 @@
     color: black;
     line-height: 16px;
     margin-top: 1px;
-    padding: 0px 5px;
+    padding: 0 5px;
 }
 
 .x-tree-selected .felamimail-node-statusbox-unread {

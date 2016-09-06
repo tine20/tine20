@@ -279,11 +279,12 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     
     /**
      * open a temp file
-     * 
+     *
+     * @param boolean $createTempFile
      * @throws Tinebase_Exception
      * @return resource
      */
-    public function openTempFile()
+    public function openTempFile($createTempFile = true)
     {
         $path = self::getTempPath();
         
@@ -294,8 +295,10 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (! $handle) {
             throw new Tinebase_Exception('Could not create temp file in ' . dirname($path));
         }
-        
-        $this->createTempFile($path);
+
+        if ($createTempFile) {
+            $this->createTempFile($path);
+        }
         
         return $handle;
     }

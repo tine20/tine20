@@ -17,9 +17,7 @@ Ext.ux.file.BrowsePlugin = function(config) {
 };
 
 /**
- * @TODO: 
- *         
- *         proxy mouse events
+ * @TODO: proxy mouse events
  */
 Ext.ux.file.BrowsePlugin.prototype = {
     /**
@@ -215,7 +213,9 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * clean up
      */
     onDestroy: function() {
-        this.floatingLayer.remove();
+        if (this.floatingLayer) {
+            this.floatingLayer.remove();
+        }
         this.floatingLayer = null;
         this.input_file = null;
         if (this.dropEl) {

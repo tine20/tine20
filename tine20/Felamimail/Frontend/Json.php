@@ -8,7 +8,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -261,6 +261,28 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_recordToJson($result);
         
         return $result;
+    }
+
+    /**
+     * file messages into Filemanager / MailFiler
+     *
+     * @param array $filterData
+     * @param string $targetApp
+     * @param string $targetPath
+     * @return array
+     */
+    public function fileMessages($filterData, $targetApp, $targetPath)
+    {
+        // close session to allow other requests
+        Tinebase_Session::writeClose(true);
+
+        $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
+        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $targetApp, $targetPath);
+
+        return array(
+            'totalcount' => ($result === false) ? 0 : $result,
+            'success'    => ($result !== false),
+        );
     }
     
     /**

@@ -37,6 +37,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const CACHE_EMAIL_BODY = 'cacheEmailBody';
 
     /**
+     * delete archived mail
+     *
+     * @var string
+     */
+    const DELETE_ARCHIVED_MAIL = 'deleteArchivedMail';
+
+    /**
      * Tine 2.0 flag feature
      *
      * @var string
@@ -86,6 +93,16 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => 1,
+        ),
+        self::DELETE_ARCHIVED_MAIL => array(
+            //_('Delete Archived Mail')
+            'label'                 => 'Delete Archived Mail',
+            'description'           => 'Delete Archived Mail',
+            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => false,
         ),
         self::ENABLED_FEATURES => array(
             //_('Enabled Features')
