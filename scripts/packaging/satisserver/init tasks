@@ -1,0 +1,15 @@
+git init .
+git remote add tine20com https://gerrit.tine20.com/customers/tine20.com
+git remote add tine20org https://gerrit.tine20.org/tine20/tine20
+
+git fetch tine20com
+git fetch tine20org
+git branch -a
+git show remotes/tine20com/2016.11-develop:tine20/composer.json > ./foo1
+
+cronjobs:
+# try to build conf file, if successfull, rebuild satis
+0 */4 * * * php /home/ubuntu/updateTine20Conf.php > /home/ubuntu/tine20.conf && /home/ubuntu/satis/bin/satis build /home/ubuntu/tine20.conf /home/ubuntu/tine20Mirror
+
+# check that there are json files newer than 10 days, then delete all files older than 10 days
+23 3 * * * /bin/bash -c 'expr `find /home/ubuntu/tine20Mirror/include/ -mtime -10 -type f | grep -c json` ">" 0 && find /home/ubuntu/tine20Mirror/include/ -mtime +10 -type f | xargs rm' > /dev/null
