@@ -1118,3 +1118,9 @@ msgstr "Standard IMAP-Benutzer-Einstellungen"
 #: js/customfield/EditDialog.js:209
 msgid "Default"
 msgstr "Standard"
+
+msgid "This custom field is still in use!"
+msgstr "Ein Zusatzfeld ist noch in Benutzung!"
+
+msgid "Are you sure you want to delete them?"
+msgstr "Sind Sie sicher, dass Sie es löschen möchten?"

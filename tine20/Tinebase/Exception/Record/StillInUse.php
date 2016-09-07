@@ -18,4 +18,14 @@
  */
 class Tinebase_Exception_Record_StillInUse extends Tinebase_Exception
 {
+    /**
+     * the constructor
+     *
+     * @param string $_message
+     * @param int $_code (default: 703)
+     */
+    public function __construct($_message, $_code = 703)
+    {
+        parent::__construct($_message, $_code);
+    }
 }
