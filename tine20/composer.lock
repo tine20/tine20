@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "34cf6f6858c13aa6a897124d4d990a7d",
-    "content-hash": "eb93e145acf52f2a7fdff1acb6407033",
+    "hash": "8ea441d7e4b25356003f60fc1227c96e",
+    "content-hash": "57a2ee22474a5fa88186da5eb49d49e3",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/markushausammann/PHPExcel.git",
-                "reference": "1.7.8"
+                "reference": "6236b1e1513dda38a68a5ac22bbab5fc2b7942fd"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/markushausammann/PHPExcel/zipball/6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
-                "reference": "1.7.8",
+                "reference": "6236b1e1513dda38a68a5ac22bbab5fc2b7942fd",
                 "shasum": ""
             },
             "require": {
@@ -55,6 +55,7 @@
                 "php",
                 "spreadsheet"
             ],
+            "abandoned": "phpoffice/phpexcel",
             "time": "2012-11-21 10:55:52"
         },
         {
@@ -395,19 +396,18 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.1.2",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "c3b115fe17c6b4b9a5b9bef8f7dc3c281a8d4dcf"
+                "reference": "31d151de7cba6fa95ffd34efffd85444ccab0b2d"
             },
             "require": {
                 "php": ">=5.3.0",
-                "zendframework/zendframework1": ">=1.9.1"
+                "zendframework/zendframework1": "1.12.*"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpdocumentor/phpdocumentor": "2.1.*",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -422,9 +422,9 @@
             "license": [
                 "LGPL-3"
             ],
-            "description": "Library to sync mobile phones",
+            "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2015-09-22 09:21:43"
+            "time": "2016-09-07 12:25:24"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -1950,7 +1950,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
+                "url": "https://api.github.com/repos/symfony/config/zipball/ee4cdda66aff834c8125e8f2c15932461667c521",
                 "reference": "41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
                 "shasum": ""
             },
@@ -2277,7 +2277,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
+                "url": "https://api.github.com/repos/symfony/process/zipball/d9d21cfcc3e202ee34777d6da38897695d4d208d",
                 "reference": "6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
                 "shasum": ""
             },
