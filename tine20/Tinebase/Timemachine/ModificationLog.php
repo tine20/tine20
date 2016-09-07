@@ -703,7 +703,7 @@ class Tinebase_Timemachine_ModificationLog
      */
     protected function _getCommonModlog($_model, $_backend, $_updateMetaData = array(), $_recordId = NULL)
     {
-        if (empty($_updateMetaData)) {
+        if (empty($_updateMetaData) || ! isset($_updateMetaData['last_modified_by']) ||  ! isset($_updateMetaData['last_modified_time'])) {
             list($currentAccountId, $currentTime) = Tinebase_Timemachine_ModificationLog::getCurrentAccountIdAndTime();
         } else {
             $currentAccountId = $_updateMetaData['last_modified_by'];
