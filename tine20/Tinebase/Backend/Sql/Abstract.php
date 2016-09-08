@@ -1180,7 +1180,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 $idsToRemove = array();
                 
                 if (!empty($_record->$modelName)) {
-                    $idsToAdd = $this->_getIdsFromMixed($_record->$modelName);
+                    $idsToAdd = Tinebase_Record_RecordSet::getIdsFromMixed($_record->$modelName);
                 }
                 
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -1223,33 +1223,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
         }
-    }
-
-    /**
-     * convert recordset, array of ids or records to array of ids
-     * 
-     * @param  mixed  $_mixed
-     * @return array
-     */
-    protected function _getIdsFromMixed($_mixed)
-    {
-        if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
-            $ids = $_mixed->getArrayOfIds();
-            
-        } elseif (is_array($_mixed)) { // array
-            foreach ($_mixed as $mixed) {
-                if ($mixed instanceof Tinebase_Record_Abstract) {
-                    $ids[] = $mixed->getId();
-                } else {
-                    $ids[] = $mixed;
-                }
-            }
-            
-        } else { // string
-            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
-        }
-        
-        return $ids;
     }
     
     /**

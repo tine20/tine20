@@ -100,12 +100,15 @@ class Calendar_Frontend_iMIP
             $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_status);
         } else {
             $preconditionCheckSuccessful = TRUE;
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " No preconditions check fn found for method " . $method);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . " No preconditions check fn found for method " . $method);
         }
         
         $_iMIP->preconditionsChecked = TRUE;
         
         if ($_throwException && ! $preconditionCheckSuccessful) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_iMIP->event instanceof Calendar_Model_Event) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Event: ' . print_r($_iMIP->event->toArray(), true));
             throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
         }
         

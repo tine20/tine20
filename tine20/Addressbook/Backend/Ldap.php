@@ -14,7 +14,7 @@
 /**
  * contacts ldap backend
  * 
- * NOTE: LDAP charset is allways UTF-8 (RFC2253) so we don't have to cope with
+ * NOTE: LDAP charset is always UTF-8 (RFC2253) so we don't have to cope with
  *       charset conversions here ;-)
  * 
  * @package     Addressbook

@@ -795,4 +795,31 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $record->translate();
         }
     }
+
+    /**
+     * convert recordset, array of ids or records to array of ids
+     *
+     * @param  mixed  $_mixed
+     * @return array
+     */
+    public static function getIdsFromMixed($_mixed)
+    {
+        if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
+            $ids = $_mixed->getArrayOfIds();
+
+        } elseif (is_array($_mixed)) { // array
+            foreach ($_mixed as $mixed) {
+                if ($mixed instanceof Tinebase_Record_Abstract) {
+                    $ids[] = $mixed->getId();
+                } else {
+                    $ids[] = $mixed;
+                }
+            }
+
+        } else { // string
+            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
+        }
+
+        return $ids;
+    }
 }

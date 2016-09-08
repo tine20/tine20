@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dff39568365f10df883d063e2fa3718f",
-    "content-hash": "f97848576f56976d07b2e2a229ac3514",
+    "hash": "54935eb2f908ae818bf78f3388dd8afc",
+    "content-hash": "e8faf6266f3919e23695d0621723279c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1216,19 +1216,18 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.1.2",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "c3b115fe17c6b4b9a5b9bef8f7dc3c281a8d4dcf"
+                "reference": "31d151de7cba6fa95ffd34efffd85444ccab0b2d"
             },
             "require": {
                 "php": ">=5.3.0",
-                "zendframework/zendframework1": ">=1.9.1"
+                "zendframework/zendframework1": "1.12.*"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpdocumentor/phpdocumentor": "2.1.*",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -1243,9 +1242,9 @@
             "license": [
                 "LGPL-3"
             ],
-            "description": "Library to sync mobile phones",
+            "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2015-09-22 09:21:43"
+            "time": "2016-09-07 12:25:24"
         },
         {
             "name": "tine20/composerapploader",
