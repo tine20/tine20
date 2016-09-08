@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "825e06643aedbf9c0043406cb61f1e9d",
-    "content-hash": "086d1089cbd84856687905c2c0671442",
+    "hash": "54935eb2f908ae818bf78f3388dd8afc",
+    "content-hash": "e8faf6266f3919e23695d0621723279c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1216,19 +1216,18 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.1.2",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "c3b115fe17c6b4b9a5b9bef8f7dc3c281a8d4dcf"
+                "reference": "31d151de7cba6fa95ffd34efffd85444ccab0b2d"
             },
             "require": {
                 "php": ">=5.3.0",
-                "zendframework/zendframework1": ">=1.9.1"
+                "zendframework/zendframework1": "1.12.*"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpdocumentor/phpdocumentor": "2.1.*",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -1243,17 +1242,17 @@
             "license": [
                 "LGPL-3"
             ],
-            "description": "Library to sync mobile phones",
+            "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2015-09-22 09:21:43"
+            "time": "2016-09-07 12:25:24"
         },
         {
             "name": "tine20/composerapploader",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "00200ee5b5e8e0b5c02ccd4d07c53e19c71ebde7"
+                "reference": "8465fcaa278fb2e10917bd7de71db945300f063d"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -2175,9 +2174,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "tine20/composerapploader": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

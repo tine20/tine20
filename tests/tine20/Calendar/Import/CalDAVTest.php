@@ -124,4 +124,14 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $updatedEvent = $events->filter('etag', '"aa3621a20e9045d8679075db57e881dd"')->getFirstRecord();
         $this->assertEquals('test update', $updatedEvent->summary);
     }
+    
+    /**
+     * testBrokenXml
+     */
+    public function testBrokenXml()
+    {
+        $brokenBody = file_get_contents(dirname(__FILE__) . '/files/broken_ics.xml');
+        $result = $this->_getUit()->parseMultiStatus($brokenBody);
+        $this->assertTrue(is_array($result));
+    }
 }

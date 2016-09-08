@@ -175,22 +175,44 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      *
      * @param  mixed $_listId
      * @param  mixed $_newMembers
+     * @param  boolean $_addToGroup
      * @return Addressbook_Model_List
      */
-    public function addListMember($_listId, $_newMembers)
+    public function addListMember($_listId, $_newMembers, $_addToGroup = true)
     {
         try {
             $list = $this->get($_listId);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            $list = $this->_fixEmptyContainerId($_listId);
+            $this->_fixEmptyContainerId($_listId);
             $list = $this->get($_listId);
         }
 
         $this->_checkGrant($list, 'update', TRUE, 'No permission to add list member.');
+        $this->_checkGroupGrant($list, TRUE, 'No permission to add list member.');
 
         $list = $this->_backend->addListMember($_listId, $_newMembers);
 
+        if (true === $_addToGroup && ! empty($list->group_id)) {
+            foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_newMembers) as $userId) {
+                Admin_Controller_Group::getInstance()->addGroupMember($list->group_id, $userId, false);
+            }
+        }
+
         return $this->get($list->getId());
+    }
+
+    protected function _checkGroupGrant($_list, $_throw = false, $_msg = '')
+    {
+        if (! empty($_list->group_id)) {
+            if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                if ($_throw) {
+                    throw new Tinebase_Exception_AccessDenied($_msg);
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -233,15 +255,24 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      * remove members from list
      *
      * @param  mixed $_listId
-     * @param  mixed $_newMembers
+     * @param  mixed $_removeMembers
+     * @param  boolean $_removeFromGroup
      * @return Addressbook_Model_List
      */
-    public function removeListMember($_listId, $_newMembers)
+    public function removeListMember($_listId, $_removeMembers, $_removeFromGroup = true)
     {
         $list = $this->get($_listId);
 
         $this->_checkGrant($list, 'update', TRUE, 'No permission to remove list member.');
-        $list = $this->_backend->removeListMember($_listId, $_newMembers);
+        $this->_checkGroupGrant($list, TRUE, 'No permission to remove list member.');
+
+        $list = $this->_backend->removeListMember($_listId, $_removeMembers);
+
+        if (true === $_removeFromGroup && ! empty($list->group_id)) {
+            foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_removeMembers) as $userId) {
+                Admin_Controller_Group::getInstance()->removeGroupMember($list->group_id, $userId, false);
+            }
+        }
 
         return $this->get($list->getId());
     }
@@ -254,8 +285,16 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        if (isset($record->type) && $record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
-            throw new Addressbook_Exception_InvalidArgument('can not add list of type ' . Addressbook_Model_List::LISTTYPE_GROUP);
+        if (isset($_record->type) && $_record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
+            if (empty($_record->group_id)) {
+                throw Tinebase_Exception_UnexpectedValue('group_id is empty, must not happen for list type group');
+            }
+
+            // check rights
+            $this->_checkGroupGrant($_record, TRUE, 'can not add list of type ' . Addressbook_Model_List::LISTTYPE_GROUP);
+
+            // check if group is there, if not => not found exception
+            Admin_Controller_Group::getInstance()->get($_record->group_id);
         }
     }
 
@@ -280,8 +319,28 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if (isset($record->type) && $record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
-            throw new Addressbook_Exception_InvalidArgument('can not update list of type ' . Addressbook_Model_List::LISTTYPE_GROUP);
+        if (! empty($_record->group_id)) {
+
+            // first check if something changed that requires special rights
+            $changeGroup = false;
+            foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
+                if ($_record->{$field} != $_oldRecord->{$field}) {
+                    $changeGroup = true;
+                    break;
+                }
+            }
+
+            // then do the update, the group controller will check manage accounts right
+            if ($changeGroup) {
+                $groupController = Admin_Controller_Group::getInstance();
+                $group = $groupController->get($_record->group_id);
+
+                foreach (Addressbook_Model_List::getManageAccountFields() as $field) {
+                    $group->{$field} = $_record->{$field};
+                }
+
+                $groupController->update($group, false);
+            }
         }
     }
 
