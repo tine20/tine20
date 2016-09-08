@@ -26,7 +26,7 @@
     }],
     "require": {
         "tine20/composerapploader": "dev-master",
-        "syncroton/syncroton": "1.1.*",
+        "syncroton/syncroton": "1.2.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "codeplex/phpexcel": "1.7.8",
         "phpoffice/phpword": "0.12.*",

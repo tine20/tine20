@@ -288,4 +288,16 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
         
         return $newResult;
     }
+
+    /**
+     * Parses a WebDAV multistatus response body
+     *
+     * @param string $body xml body
+     * @return array
+     */
+    public function parseMultiStatus($body)
+    {
+        // remove possible broken chars here to avoid simplexml_load_string errors
+        return parent::parseMultiStatus(Tinebase_Helper::removeIllegalXMLChars($body));
+    }
 }

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -304,5 +304,16 @@ class Tinebase_Helper
         }
         
         return $exists;
+    }
+
+    /**
+     * removes characters that are illegal in XML (those characters are not even in CDATA allowed)
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function removeIllegalXMLChars($string)
+    {
+        return preg_replace('/[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]/u', '', $string);
     }
 }
