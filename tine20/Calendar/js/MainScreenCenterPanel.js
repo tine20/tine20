@@ -1252,7 +1252,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
 
                 attendeeStore.remove(sourceAttendee);
                 attendeeStore.add(destinationAttendee);
-
+                record.view = destinationView;
+                
                 Tine.Calendar.Model.Attender.getAttendeeStore.getData(attendeeStore, record);
             }
         }

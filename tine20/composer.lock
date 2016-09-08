@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3496e2e39fcb36109640c4136e17ac1e",
-    "content-hash": "771d5e33b7e909e551ba18cbdc16baff",
+    "hash": "8bab05e9a01d6f226e49d50daf326ebb",
+    "content-hash": "71abf00e999709d0f7a03ed894bef23a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1248,11 +1248,11 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "dev-master",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "00200ee5b5e8e0b5c02ccd4d07c53e19c71ebde7"
+                "reference": "8465fcaa278fb2e10917bd7de71db945300f063d"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -2174,9 +2174,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "tine20/composerapploader": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

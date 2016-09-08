@@ -260,7 +260,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         return $userProfile;
     }
-    
+
     /**
      * inspect update of one record (after update)
      *
@@ -346,6 +346,25 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
+        }
+
+        if (! empty($_record->account_id) || $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+
+            // first check if something changed that requires special rights
+            $changeAccount = false;
+            foreach (Addressbook_Model_Contact::getManageAccountFields() as $field) {
+                if ($_record->{$field} != $_oldRecord->{$field}) {
+                    $changeAccount = true;
+                    break;
+                }
+            }
+
+            // if so, check rights
+            if ($changeAccount) {
+                if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                    throw new Tinebase_Exception_AccessDenied('No permission to change account properties.');
+                }
+            }
         }
     }
     

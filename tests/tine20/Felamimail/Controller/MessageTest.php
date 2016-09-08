@@ -616,6 +616,8 @@ class Felamimail_Controller_MessageTest extends TestCase
                     echo "body: " . $message->body . "\n";
                     echo "attachements: ";
                     print_r($message->attachments);
+
+                    print_r($message->structure);
                 }
             }
         }
