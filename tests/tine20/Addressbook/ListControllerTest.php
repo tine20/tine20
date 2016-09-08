@@ -4,43 +4,19 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
+ * Test class for Addressbook_Controller_List
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
- * Test class for Tinebase_Group
- */
-class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
+class Addressbook_ListControllerTest extends TestCase
 {
     /**
      * @var array test objects
      */
     protected $objects = array();
-
-    /**
-     * set geodata for contacts
-     * 
-     * @var boolean
-     */
-    protected $_geodata = FALSE;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook List Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -50,9 +26,8 @@ class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        
+        parent::setUp();
+
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -155,18 +130,6 @@ class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown()
-    {
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts($this->_geodata);
-        Tinebase_TransactionManager::getInstance()->rollBack();
-    }
-    
-    /**
      * try to add a list
      */
     public function testAddList()
@@ -266,5 +229,31 @@ class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Addressbook_Exception_AccessDenied');
         $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         Addressbook_Controller_Contact::getInstance()->delete($userContact->getId());
+    }
+
+    /**
+     * @see 0011522: improve handling of group-lists
+     */
+    public function testChangeListWithoutManageGrant()
+    {
+        // try to set memberships without MANAGE_ACCOUNTS
+        $this->_removeRoleRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS, true);
+
+        $listId = Tinebase_Group::getInstance()->getDefaultGroup()->list_id;
+        try {
+            Addressbook_Controller_List::getInstance()->addListMember($listId, array($this->objects['contact1']->getId()));
+            $this->fail('should not be possible to add list member to system group');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $this->assertEquals('No permission to add list member.', $tead->getMessage());
+        }
+
+        $list = Addressbook_Controller_List::getInstance()->get($listId);
+        $list->name = 'my new name';
+        try {
+            Addressbook_Controller_List::getInstance()->update($list);
+            $this->fail('should not be possible to set name of system group');
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $this->assertEquals('You are not allowed to MANAGE_ACCOUNTS in application Admin !', $tead->getMessage());
+        }
     }
 }

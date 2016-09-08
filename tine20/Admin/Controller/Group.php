@@ -209,9 +209,10 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      * update existing group
      *
      * @param Tinebase_Model_Group $_group
+     * @param boolean $_updateList
      * @return Tinebase_Model_Group
      */
-    public function update(Tinebase_Model_Group $_group)
+    public function update(Tinebase_Model_Group $_group, $_updateList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
@@ -229,7 +230,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+        if (true === $_updateList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $_group->list_id = $oldGroup->list_id;
             $list = $this->createOrUpdateList($_group);
             $_group->list_id = $list->getId();
@@ -255,15 +256,16 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      *
      * @param int $_groupId
      * @param int $_accountId
+     * @param  boolean $_addToList
      * @return void
      */
-    public function addGroupMember($_groupId, $_userId)
+    public function addGroupMember($_groupId, $_userId, $_addToList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
         
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+        if (true === $_addToList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $group = $this->get($_groupId);
             $user  = Tinebase_User::getInstance()->getUserById($_userId);
             
@@ -273,7 +275,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                         . ' Could not add member to list ' . $group->list_id . ' (it does not exist)');
                 } else {
                     $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
-                    Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id);
+                    Addressbook_Controller_List::getInstance()->addListMember($group->list_id, $user->contact_id, false);
                     Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
                 }
             }
@@ -290,22 +292,23 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
      *
      * @param int $_groupId
      * @param int $_accountId
+     * @param  boolean $_removeFromList
      * @return void
      */
-    public function removeGroupMember($_groupId, $_userId)
+    public function removeGroupMember($_groupId, $_userId, $_removeFromList = true)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
         
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+        if (true === $_removeFromList && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $group = $this->get($_groupId);
             $user  = Tinebase_User::getInstance()->getUserById($_userId);
             
             if (!empty($user->contact_id) && !empty($group->list_id)) {
                 try {
                     $aclChecking = Addressbook_Controller_List::getInstance()->doContainerACLChecks(FALSE);
-                    Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id);
+                    Addressbook_Controller_List::getInstance()->removeListMember($group->list_id, $user->contact_id, false);
                     Addressbook_Controller_List::getInstance()->doContainerACLChecks($aclChecking);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 

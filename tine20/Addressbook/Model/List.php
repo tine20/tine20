@@ -50,6 +50,17 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      * @var string
      */
     const LISTTYPE_GROUP = 'group';
+
+    /**
+     * name of fields which require manage accounts to be updated
+     *
+     * @var array list of fields which require manage accounts to be updated
+     */
+    protected static $_manageAccountsFields = array(
+        'name',
+        'description',
+        'email',
+    );
     
     /**
      * list of zend validator
@@ -105,7 +116,15 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
-    
+
+    /**
+     * @return array
+     */
+    static public function getManageAccountFields()
+    {
+        return self::$_manageAccountsFields;
+    }
+
     /**
      * converts a string or Addressbook_Model_List to a list id
      *
