@@ -30,6 +30,16 @@ Ext.namespace('Tine.Timetracker');
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
+    /**
+     * activates copy action
+     */
+    copyEditAction: true,
+
+    /**
+     * only allow multi edit with manage_timeaccounts right (because of timeaccount handling in edit dlg)
+     */
+    multipleEditRequiredRight: 'manage_timeaccounts',
+
     initComponent: function() {
         this.defaultFilters = [
             {field: 'start_date', operator: 'within', value: 'weekThis'},
