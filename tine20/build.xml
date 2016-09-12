@@ -40,7 +40,12 @@
         <foreach param="name" absparam="path" target="prepared-build-module">
             <fileset dir=".">
                 <type type="dir" />
+                <!-- build all apps -->
                 <include name="*" />
+
+                <!-- only build a single app -->
+                <!--include name="ExampleApplication" /-->
+
                 <exclude name="/" />
                 <exclude name="*.*" />
                 <exclude name=".tx" />
@@ -247,10 +252,10 @@
         <available file="${builddir}/${name}/js/webpack.config.js" property="webpack" value="Yes"/>
 
 
-        <!-- do jsb2tk build -->
+        <echo msg="Do jsb2tk build..." />
         <jsb2tk-build appName="${name}" />
 
-        <!-- replace buildstuff -->
+        <echo message="Replace buildstuff..." />
         <reflexive>
             <filterchain>
                 <replaceregexp>
@@ -265,7 +270,7 @@
             </fileset>
         </reflexive>
 
-        <!-- debug mode for debug files -->
+        <echo msg="Apply debug mode for debug files..." />
         <reflexive>
             <filterchain>
                 <replaceregexp>
@@ -278,7 +283,7 @@
             </fileset>
         </reflexive>
 
-        <!-- original jsb2 builds -->
+        <echo msg="Copy jsb2 builds and adopt paths..." />
         <!-- NOTE as jsb2tk has no path adoption yet we need to do it here -->
         <copy toDir="${project.basedir}">
             <fileset dir="${builddir}">
@@ -291,10 +296,9 @@
                     <regexp pattern="(\.\.\/){2,}library" replace="../../library" modifiers="i"/>
                 </replaceregexp>
             </filterchain>
-
         </copy>
 
-        <!-- adopt path for getJS/getCSS -->
+        <echo msg="Adopt path for getJS/getCSS..." />
         <!-- TODO add deploymode GETTER and move this to jsb2tk -->
         <copy toDir="${project.basedir}">
             <mapper type="regexp" from="^(.*\.(js|css))" to="\1.inc"/>
@@ -309,14 +313,14 @@
             <fileset dir="${builddir}">
                 <include name="${name}/*/*" />
             </fileset>
-
         </copy>
 
-        <!-- translations -->
+        <echo message="[Translations] Checking js dir ${project.basedir}/${name}/js ..." />
         <if>
-            <available file="${builddir}/${name}/js" type="dir" property="has_jsdir"/>
+            <available file="${project.basedir}/${name}/js" type="dir" property="has_jsdir"/>
             <then>
-                <echo message="Building translations..." />
+                <echo message="[Translations] Building translations..." />
+                <mkdir dir="${builddir}/${name}/js" />
                 <translation-build appName="${name}" />
                 <jsMin targetDir="${builddir}/${name}/js" failOnError="false">
                     <fileset dir="${builddir}/${name}/js">
