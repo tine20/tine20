@@ -486,6 +486,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * @see 0007934: change pw button active even if it is not allowed
      * @see 0008310: apps should be sorted the other way round in menu
      * @see 0009130: Can't open login page on Ubuntu "due to a temporary overloading"
+     * @see 0012188: add copyOmitFields to modelconfig
      */
     public function testGetAllRegistryData()
     {
@@ -517,6 +518,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
             $this->assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
                 . print_r($configuredSalesModels, true));
         }
+
+        $this->assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
+        $this->assertEquals(array(
+            'billed_in',
+            'invoice_id',
+            'status',
+            'cleared_at',
+        ), $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
     }
 
     /**
