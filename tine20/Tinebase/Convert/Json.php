@@ -82,22 +82,27 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             
             foreach ($resolveRecords as $foreignRecordClassName => $fields) {
                 $foreignIds = array();
+                $foreignRecordsArray = array();
                 $fields = (array) $fields;
                 foreach ($fields as $field) {
                     $idsForField = $_records->{$field};
                     foreach ($idsForField as $key => $value) {
-                        if ($value && ! in_array($value, $foreignIds)) {
-                            $foreignIds[] = $value;
+                        if ($value instanceof Tinebase_Record_Abstract) {
+                            $foreignRecordsArray[$value->getId()] = $value;
+                        } else {
+                            if ($value && !isset($foreignRecordsArray[$value])) {
+                                $foreignIds[$value] = $value;
+                            }
                         }
                     }
                 }
                 
-                if (empty($foreignIds)) {
+                if (empty($foreignIds) && empty($foreignRecordsArray)) {
                     continue;
                 }
                 
                 $cfg = $resolveFields[$fields[0]];
-                
+
                 if ($cfg['type'] == 'user') {
                     $foreignRecords = Tinebase_User::getInstance()->getMultiple($foreignIds);
                 } else if ($cfg['type'] == 'container') {
@@ -106,8 +111,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' No handling for container foreign records implemented');
 
-                    $foreignRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
+                    //$foreignRecords = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
                     // $foreignRecords->addRecord(Tinebase_Container::getInstance()->get(XXX));
+                    continue;
                 } else {
                     try {
                         $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
@@ -116,6 +122,12 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' No right to access application of record ' . $foreignRecordClassName);
                         continue;
+                    }
+                }
+
+                foreach($foreignRecordsArray as $id => $rec) {
+                    if ($foreignRecords->getById($id) === false) {
+                        $foreignRecords->addRecord($rec);
                     }
                 }
                 
