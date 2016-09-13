@@ -195,8 +195,13 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
         
         this.activateDefaultApp();
         
-        // check for new version 
-        if (Tine.Tinebase.common.hasRight('check_version', 'Tinebase')) {
+        // check for new version
+        // TODO add helper function for fetching config ... this condition sucks.
+        if ((      ! Tine.Tinebase.registry.get("config")
+                || ! Tine.Tinebase.registry.get("config").versionCheck
+                ||   Tine.Tinebase.registry.get("config").versionCheck.value
+            ) && Tine.Tinebase.common.hasRight('check_version', 'Tinebase')
+        ) {
             Tine.widgets.VersionCheck();
         }
         

@@ -362,6 +362,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
 
     /**
+     * @var array of strings
+     */
+    const VERSION_CHECK = 'versionCheck';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -843,6 +848,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::VERSION_CHECK => array(
+            //_('Version check enabled')
+            'label'                 => 'Version check enabled',
+            'description'           => 'Version check enabled',
+            'type'                  => 'bool',
+            'default'               => true,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
         ),
         self::FAT_CLIENT_CUSTOM_JS => array(
             // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
