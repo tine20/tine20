@@ -119,6 +119,10 @@ Tine.widgets.grid.RendererManager.register('Phone', 'Call', 'line_id', function(
     return (v && v.hasOwnProperty('linenumber')) ? v.linenumber : '';
 });
 
+Tine.widgets.grid.RendererManager.register('Phone', 'Call', 'contact_id', function(v) {
+    return (v && v.hasOwnProperty('n_fn')) ? v.n_fn : '';
+});
+
 /***************************** utils ****************************************/
 
 Ext.namespace('Tine.Phone.utils');
