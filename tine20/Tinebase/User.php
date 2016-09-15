@@ -569,9 +569,22 @@ class Tinebase_User
                 . ' new contact: ' . print_r($contact->toArray(), true)
                 . ' orig contact:' . print_r($originalContact->toArray(), true));
 
-            $syncPhoto = isset($options['syncContactPhoto']) && $options['syncContactPhoto'];
-            $diff = $contact->diff($originalContact, $syncPhoto ? array() : array('jpegphoto'));
-            if (! $diff->isEmpty() || ($originalContact->jpegphoto == 0 && ! empty($contact->jpegphoto))) {
+            if (isset($options['syncContactPhoto']) && $options['syncContactPhoto']) {
+                $syncPhoto = true;
+                if ($originalContact->jpegphoto == 1) {
+                    // TODO use generic function with ignoreAcl ...
+                    //$originalContact->jpegphoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $originalContact->getId())->getBlob();
+                    $adb = new Addressbook_Backend_Sql();
+                    $originalContact->jpegphoto = $adb->getImage($originalContact->getId());
+                }
+                if ($contact->jpegphoto == 1) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Removing/unset current jpegphoto');
+                    $contact->jpegphoto = false;
+                }
+            }
+            $diff = $contact->diff($originalContact, $syncPhoto ? array('n_fn') : array('jpegphoto', 'n_fn'));
+            if (! $diff->isEmpty() || ($originalContact->jpegphoto === 0 && ! empty($contact->jpegphoto)) ) {
                 // add modlog info
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
                 if ($contact->container_id !== null) {
@@ -719,6 +732,11 @@ class Tinebase_User
                 default:
                     $contact->{$contactKey} = $user->{$userKey};
             }
+        }
+
+        if ($contact->n_fn !== $user->accountFullName) {
+            // use accountFullName overwrites contact n_fn
+            $contact->n_fn = $user->accountFullName;
         }
         
         return $contact;
