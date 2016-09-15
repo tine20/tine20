@@ -55,9 +55,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             
             header('HTTP/1.0 404 Not found');
             
-            $view = new Zend_View();
-            $view->setScriptPath('Filemanager/views');
-            
+            $view = $this->_getView();
             header('Content-Type: text/html; charset=utf-8');
             die($view->render('notfound.phtml'));
         }
@@ -129,11 +127,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _listDirectory(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Filemanager/views');
-        
-        $view->path = '/' . implode('/', $path);
-        
+        $this->_getView($path, $node);
         $view->files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
         
         header('Content-Type: text/html; charset=utf-8');
@@ -149,16 +143,25 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _displayFile(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
-        $view = new Zend_View();
-        $view->setScriptPath('Filemanager/views');
-        
-        $view->path = '/' . implode('/', $path);
-        
+        $view = $this->_getView($path, $node);
+
         $view->file = $node;
         $view->file->path = $download->getDownloadUrl('get') . '/' . implode('/', $path);
         
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('file.phtml'));
+    }
+
+    protected function _getView($path = null, $node = null)
+    {
+        $view = new Zend_View();
+        $view->setScriptPath('Filemanager/views');
+
+        $view->logoPath = Tinebase_Core::getUrl() . '/images/tine_logo.png';
+
+        if ($path !== null) {
+            $view->path = (empty($path)) ? '/' . $node->name : '/' . implode('/', $path);
+        }
     }
     
     /**
