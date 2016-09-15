@@ -297,7 +297,27 @@ class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
      */
     public function parseMultiStatus($body)
     {
-        // remove possible broken chars here to avoid simplexml_load_string errors
-        return parent::parseMultiStatus(Tinebase_Helper::removeIllegalXMLChars($body));
+        $oldSetting = libxml_use_internal_errors(true);
+
+        try {
+            $result = parent::parseMultiStatus($body);
+
+            if (count($xmlErrors = libxml_get_errors()) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' XML errors occured: ' . print_r($xmlErrors, true));
+            }
+            libxml_clear_errors();
+            libxml_use_internal_errors($oldSetting);
+
+        } catch(InvalidArgumentException $e) {
+            libxml_clear_errors();
+            libxml_use_internal_errors($oldSetting);
+
+            // remove possible broken chars here to avoid simplexml_load_string errors
+            // this line may throw an Exception again! thats why the libxml_* functions are called in try and catch!
+            $result = parent::parseMultiStatus(Tinebase_Helper::removeIllegalXMLChars($body));
+        }
+
+        return $result;
     }
 }

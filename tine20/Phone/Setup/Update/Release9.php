@@ -71,4 +71,14 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Phone', '9.1');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Phone', '10.0');
+    }
 }

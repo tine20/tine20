@@ -104,7 +104,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'label'                 => 'Cleared in', // _('Cleared in')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit'              => TRUE,
-                'shy'                   => TRUE
+                'shy'                   => TRUE,
+                'copyOmit'              => true,
             ),
             'invoice_id'            => array(
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -116,6 +117,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     'modelName'             => 'Invoice',
                     'idProperty'            => 'id'
                 ),
+                'copyOmit'              => true,
             ),
             'is_cleared'            => array(
                 'label'                 => NULL,
@@ -123,7 +125,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'type'                  => 'boolean',
                 'default'               => 0,
                 'copyOmit'              => TRUE,
-                'shy'                   => TRUE
+                'shy'                   => TRUE,
+                'copyOmit'              => true,
             ),
             'is_cleared_combined'   => array(
                 'label'                 => 'Cleared', // _('Cleared')

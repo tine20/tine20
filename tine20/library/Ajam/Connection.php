@@ -44,6 +44,7 @@ class Ajam_Connection extends Zend_Http_Client
         
         $_config['useragent'] = 'PHP ajam remote client (rev: 0.2)';
         $_config['keepalive'] = TRUE;
+        $_config['encodecookies'] = false;
         
         parent::__construct($_baseUri, $_config);
         

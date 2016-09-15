@@ -648,6 +648,12 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
+        if (! method_exists($configuration, 'getAutoincrementFields')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' CLass has no getAutoincrementFields(): ' . get_class($configuration));
+            return;
+        }
+
         foreach ($configuration->getAutoincrementFields() as $fieldDef) {
             $createNewValue = false;
             $checkValue = false;

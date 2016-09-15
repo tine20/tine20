@@ -120,4 +120,14 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '9.7');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_7()
+    {
+        $this->setApplicationVersion('Calendar', '10.0');
+    }
 }

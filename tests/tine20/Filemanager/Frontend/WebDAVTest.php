@@ -21,7 +21,16 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * @var Sabre\DAV\ObjectTree
      */
     protected $_webdavTree;
-    
+
+    /**
+     * tear down tests
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+    }
+
     /**
      * testgetNodeForPath
      */
@@ -236,6 +245,24 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         $savedMTime = new Tinebase_DateTime($node->getLastModified());
         $this->assertEquals($mtime, $savedMTime, 'X_OC_MTIME not saved');
+    }
+    
+    public function testgetNodeForPath_webdav_filemanager_currentuser2()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
+    
+        $this->assertInstanceOf('Filemanager_Frontend_WebDAV', $node, 'wrong node class');
+        $this->assertEquals(Tinebase_Core::getUser()->accountLoginName, $node->getName());
+    
+        $children = $node->getChildren();
+    
+        $this->assertGreaterThanOrEqual(1, count($children));
+        $this->assertInstanceOf('Filemanager_Frontend_WebDAV_Container', $children[0], 'wrong node class');
+    
+        $this->setExpectedException('Sabre\DAV\Exception\Forbidden');
+    
+        $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
     }
 
     /**

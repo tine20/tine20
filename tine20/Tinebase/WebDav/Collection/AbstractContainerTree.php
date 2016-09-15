@@ -64,7 +64,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     protected $_useIdAsName;
     
     protected static $_classCache = array (
-        '_getContact' => array()
+        '_getUser' => array()
     );
     
     /**
@@ -77,6 +77,16 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     {
         $this->_path        = $path;
         $this->_useIdAsName = $useIdAsName;
+    }
+
+    /**
+     * use login as folder name
+     *
+     * @return boolean
+     */
+    protected function _useLoginAsFolderName()
+    {
+        return Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME);
     }
     
     /**
@@ -94,7 +104,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
      * (non-PHPdoc)
      * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
      */
-    function createExtendedCollection($name, array $resourceType, array $properties)
+    public function createExtendedCollection($name, array $resourceType, array $properties)
     {
         return $this->_createContainer(array(
             'name'  => isset($properties['{DAV:}displayname']) ? $properties['{DAV:}displayname'] : $name,
@@ -126,13 +136,17 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         
                     } else {
                         try {
-                            $contact = $this->_getContact($name);
+                            // check if it exists only
+                            $this->_getUser($name);
                             
                         } catch (Tinebase_Exception_NotFound $tenf) {
-                            throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                            $message = "Directory $this->_path/$name not found";
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                                __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                            throw new \Sabre\DAV\Exception\NotFound($message);
                         }
                         
-                        $path = $this->_path . '/' . ($this->_useIdAsName ? $contact->getId() : $contact->n_fileas);
+                        $path = $this->_path . '/' . $name;
                     }
                     
                 } else {
@@ -185,7 +199,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         
                     } else {
                         try {
-                            $accountId = $this->_getContact(Tinebase_Helper::array_value(1, $this->_getPathParts()))->account_id;
+                            $accountId = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()))->accountId;
                             
                         } catch (Tinebase_Exception_NotFound $tenf) {
                             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
@@ -266,8 +280,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 
                 if ($this->_hasPersonalFolders) {
                     $children[] = $this->getChild(
-                        $this->_useIdAsName ? Tinebase_Core::getUser()->contact_id :
-                        Addressbook_Controller_Contact::getInstance()->get(Tinebase_Core::getUser()->contact_id)->n_fileas
+                        $this->_useIdAsName ? Tinebase_Core::getUser()->contact_id : $this->_useLoginAsFolderName() ? Tinebase_Core::getUser()->accountLoginName : Tinebase_Core::getUser()->accountDisplayName
                     );
                     
                     $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(), array(
@@ -278,8 +291,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     foreach ($otherUsers as $user) {
                         if ($user->contact_id && $user->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
                             try {
-                                $folderId = $this->_useIdAsName ? $user->contact_id :
-                                    Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->n_fileas;
+                                $folderId = $this->_useIdAsName ? $user->contact_id : $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
 
                                 $children[] = $this->getChild($folderId);
                             } catch (\Sabre\DAV\Exception\NotFound $sdavenf) {
@@ -310,7 +322,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         
                     } else {
                         try {
-                            $accountId = $this->_getContact(Tinebase_Helper::array_value(1, $this->_getPathParts()))->account_id;
+                            $accountId = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()))->accountId;
                         } catch (Tinebase_Exception_NotFound $tenf) {
                             throw new \Sabre\DAV\Exception\NotFound("Path $this->_path not found");
                         }
@@ -466,9 +478,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
             !$this->_useIdAsName
         ) {
             try {
-                $contact = $this->_getContact(Tinebase_Helper::array_value(1, $this->_getPathParts()));
+                $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
                 
-                $name = $contact->n_fileas;
+                $name = $this->_useLoginAsFolderName() ? $user->accountLoginName : $user->accountDisplayName;
                 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
@@ -492,12 +504,12 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     {
         if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
             try {
-                $contact = $this->_getContact(Tinebase_Helper::array_value(1, $this->_getPathParts()));
+                $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
             } catch (Tinebase_Exception_NotFound $tenf) {
                 return null;
             }
             
-            return 'principals/users/' . $contact->getId();
+            return 'principals/users/' . $user->contact_id;
         }
         
         return null;
@@ -521,7 +533,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 case '{DAV:}displayname':
                     if (count($this->_getPathParts()) === 2 && $this->getName() !== Tinebase_Model_Container::TYPE_SHARED) {
                         try {
-                            $contact = $this->_getContact(Tinebase_Helper::array_value(1, $this->_getPathParts()));
+                            $user = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()));
+                            $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
                         } catch (Tinebase_Exception_NotFound $tenf) {
                             continue;
                         }
@@ -726,41 +739,28 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
         
         return $pathParts;
     }
-    
-    /**
-     * resolve contact_id to Addressbook_Model_Contact
-     * 
-     * @return Addressbook_Model_Contact
-     */
-    protected function _getContact($contactId)
+
+    protected function _getUser($_id)
     {
-        $classCacheId = ($this->_useIdAsName ? 'id' : 'n_fileas') . $contactId;
-        
+        $classCacheId = ($this->_useIdAsName ? 'contact_id' : $this->_useLoginAsFolderName() ? 'accountLoginName' : 'accountDisplayName') . $_id;
+
         if (isset(self::$_classCache[__FUNCTION__][$classCacheId])) {
             return self::$_classCache[__FUNCTION__][$classCacheId];
         }
-        
-        $filter = new Addressbook_Model_ContactFilter(array(
-            array(
-                'field'     => 'type',
-                'operator'  => 'equals',
-                'value'     => Addressbook_Model_Contact::CONTACTTYPE_USER
-            ),
-            array(
-                'field'     => $this->_useIdAsName ? 'id' : 'n_fileas',
-                'operator'  => 'equals',
-                'value'     => $contactId
-            ),
-        ));
-        
-        $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-        
-        if (!$contact) {
-            throw new Tinebase_Exception_NotFound('contact not found');
+
+        if ($this->_useIdAsName) {
+            $contact = Addressbook_Controller_Contact::getInstance()->get($_id);
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $contact->account_id, 'Tinebase_Model_FullUser');
+        } else {
+            if ($this->_useLoginAsFolderName()) {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $_id, 'Tinebase_Model_FullUser');
+            } else {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountDisplayName', $_id, 'Tinebase_Model_FullUser');
+            }
         }
-        
-        self::$_classCache[__FUNCTION__][$classCacheId] = $contact;
-        
-        return $contact;
+
+        self::$_classCache[__FUNCTION__][$classCacheId] = $user;
+
+        return $user;
     }
 }

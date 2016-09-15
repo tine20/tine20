@@ -75,4 +75,14 @@ class Crm_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Crm', '9.2');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Crm', '10.0');
+    }
 }
