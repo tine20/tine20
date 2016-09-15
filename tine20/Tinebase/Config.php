@@ -373,12 +373,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * maintenance mode
      *
-     * @var bool
+     * @var string
      */
     const MAINTENANCE_MODE = 'maintenanceMode';
 
     /**
-     * @var array of strings
+     * @var string
      */
     const FAT_CLIENT_CUSTOM_JS = 'fatClientCustomJS';
     
@@ -387,6 +387,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const BRANDING_TITLE = 'branding_title';
     const BRANDING_WEBURL = 'branding_weburl';
     const BRANDING_DESCRIPTION = 'branding_description';
+
+    /**
+     * @var string
+     */
+    const USE_LOGINNAME_AS_FOLDERNAME = 'useLoginnameAsFoldername';
+
+    /**
+     * @var string
+     */
+    const VERSION_CHECK = 'versionCheck';
 
     /**
      * (non-PHPdoc)
@@ -883,6 +893,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        self::VERSION_CHECK => array(
+            //_('Version check enabled')
+            'label'                 => 'Version check enabled',
+            'description'           => 'Version check enabled',
+            'type'                  => 'bool',
+            'default'               => true,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => false,
+        ),
         self::FAT_CLIENT_CUSTOM_JS => array(
             // NOTE: it's possible to deliver customjs vom vfs by using the tine20:// streamwrapper
             //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
@@ -950,6 +970,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 'clientRegistryInclude' => FALSE,
                 'setByAdminModule'      => FALSE,
                 'setBySetupModule'      => FALSE,
+        ),
+        self::USE_LOGINNAME_AS_FOLDERNAME => array(
+        //_('Use login name instead of full name')
+            'label'                 => 'Use login name instead of full name',
+        //_('Use login name instead of full name for webdav.')
+            'description'           => 'Use login name instead of full name for webdav.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => FALSE,
         ),
     );
     
