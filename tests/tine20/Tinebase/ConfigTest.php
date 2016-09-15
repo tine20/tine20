@@ -20,6 +20,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 {
     /**
      * unit under test (UIT)
+     *
      * @var Tinebase_Config
      */
     protected $_instance;
@@ -30,7 +31,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     protected $_filenamesToDelete = array();
-    
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -56,16 +57,16 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
 
         Tinebase_Config::getInstance()->clearCache();
     }
-    
+
     /**
      * test instance retrival
-     * 
+     *
      */
     public function testConfigInstance()
     {
         $this->assertTrue($this->_instance === Tinebase_Core::getConfig(), 'Tinebase_Core::getConfig() is wrong instance');
     }
-    
+
     /**
      * test basic config getting/setting/deleting cycle
      */
@@ -73,14 +74,14 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     {
         $this->_instance->set(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
         $this->assertEquals('phpunit', $this->_instance->{Tinebase_Config::PAGETITLEPOSTFIX}, 'could not set config');
-        
+
         $this->_instance->delete(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
-        
+
         $this->assertEquals('###PHPUNIT-NOTSET###', $this->_instance->get(Tinebase_Config::PAGETITLEPOSTFIX, '###PHPUNIT-NOTSET###'), 'config got not deleted');
-        
+
         $this->assertFalse(isset($this->_instance->{Tinebase_Config::PAGETITLEPOSTFIX}), '__isset not working');
     }
-    
+
     /**
      * test if config from config.inc.php overwrites config in db
      *
@@ -88,20 +89,20 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     public function testConfigFromFileOverwrites()
     {
         $configData = include('config.inc.php');
-        
-        if (! (isset($configData['Overwrite Test']) || array_key_exists('Overwrite Test', $configData))) {
+
+        if (!(isset($configData['Overwrite Test']) || array_key_exists('Overwrite Test', $configData))) {
             $this->markTestSkipped('config.inc.php has no test key "Overwrite Test"');
             return;
         }
-        
+
         $overwrittenValue = Tinebase_Record_Abstract::generateUID();
         $this->_instance->{'Overwrite Test'} = $overwrittenValue;
-        
+
         $this->assertEquals($configData['Overwrite Test'], $this->_instance->{'Overwrite Test'});
-        
+
         $this->_instance->delete('Overwrite Test');
     }
-    
+
     /**
      * test get config from config.inc.php
      *
@@ -109,11 +110,11 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     public function testGetConfigFromFile()
     {
         $dbConfig = $this->_instance->database;
-        
+
         $this->assertGreaterThan(0, count($dbConfig), 'could not get db config');
         $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname');
     }
-    
+
     /**
      * test config value is a struct
      *
@@ -121,15 +122,15 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     public function testConfigTypeStruct()
     {
         $dbConfig = $this->_instance->database;
-        
+
         $this->assertTrue($dbConfig instanceof Tinebase_Config_Struct, 'db config is not a struct');
         $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname via arrayAccess');
         $this->assertTrue($dbConfig->dbname != '', 'could not get dbname via objectAccess');
     }
-    
+
     /**
      * test client config retrival
-     * 
+     *
      */
     public function testGetClientRegistryConfig()
     {
@@ -137,10 +138,10 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($clientConfig instanceof Tinebase_Config_Struct, 'clientconfig is not a struct');
         $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
         $this->assertEquals(Calendar_Config::getInstance()->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
-        
+
         $this->assertFalse((isset($clientConfig->Tinebase['SMTP']) || array_key_exists('SMTP', $clientConfig->Tinebase)), 'SMTP is not a client config');
     }
-    
+
     /**
      * test if config returns empty array if it's empty
      */
@@ -148,52 +149,52 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     {
         // Hold original value for further tests of sieve.
         $keepOriginalValue = $this->_instance->get("sieve");
-        
+
         // Ensure  sieve key is null
         $this->_instance->set("sieve", null);
-        
+
         // If key is null it throws an exception, so return empty array if it's null.
         $this->assertTrue($this->_instance->get("sieve") instanceof Tinebase_Config_Struct);
-        
+
         // Check common function of the getFunction
         $this->assertTrue(is_numeric($this->_instance->get("acceptedTermsVersion")));
-        
+
         // restore value
         $this->_instance->set("sieve", $keepOriginalValue);
     }
-    
+
     /**
      * testApplicationDefaultConfig
      */
     public function testApplicationDefaultConfig()
     {
         $defaultConfigFile = $this->_getSalesCustomDefaultConfig();
-        
+
         if (file_exists($defaultConfigFile)) {
             $this->markTestSkipped('ignore test because Sales default config exists');
         }
-        
+
         $ignoreBillablesConfig = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
         $this->assertEquals('2000-01-01 22:00:00', $ignoreBillablesConfig);
-        
+
         copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $defaultConfigFile);
         $this->_filenamesToDelete[] = $defaultConfigFile;
 
         Sales_Config::getInstance()->clearCache();
-        
+
         $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
         $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
     }
-    
+
     protected function _getSalesCustomDefaultConfig()
     {
         return dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
-            . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+        . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
     }
-    
+
     /**
      * testFeatureEnabled
-     * 
+     *
      * @see 0010756: add feature switches for easy enabling/disabling of features
      */
     public function testFeatureEnabled()
@@ -202,9 +203,9 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         if (file_exists($customConfigFilename)) {
             $this->markTestSkipped('do not test with existing custom config');
         }
-        
+
         $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
-        
+
         $this->assertTrue($invoicesFeatureEnabled);
     }
 
@@ -216,7 +217,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     public function testComposeConfigDir()
     {
         $confdfolder = Tinebase_Config::getInstance()->get(Tinebase_Config::CONFD_FOLDER);
-        if (empty($confdfolder) || ! is_readable($confdfolder)) {
+        if (empty($confdfolder) || !is_readable($confdfolder)) {
             $this->markTestSkipped('no confdfolder configured/readable');
         }
 
@@ -238,5 +239,15 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         // TODO maybe we need to remove the current config if is set
         $defaultPolicy = ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEFAULT_POLICY, null);
         $this->assertTrue(is_null($defaultPolicy), 'config should be null: ' . var_export($defaultPolicy, true));
+    }
+
+    /**
+     * set + get bool config
+     */
+    public function testBoolConfig()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+
+        $this->assertEquals(true, Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME));
     }
 }

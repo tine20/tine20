@@ -344,4 +344,14 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '9.9');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_9()
+    {
+        $this->setApplicationVersion('Addressbook', '10.0');
+    }
 }

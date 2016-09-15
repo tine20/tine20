@@ -49,4 +49,14 @@ class Felamimail_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', 21);
         $this->setApplicationVersion('Felamimail', '9.2');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Felamimail', '10.0');
+    }
 }

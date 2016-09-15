@@ -55,4 +55,14 @@ class Sales_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Sales', '9.3');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Sales', '10.0');
+    }
 }

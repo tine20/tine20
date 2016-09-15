@@ -281,4 +281,14 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->createTable('numberable', $declaration);
         $this->setApplicationVersion('Tinebase', '9.9');
     }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_9()
+    {
+        $this->setApplicationVersion('Tinebase', '10.0');
+    }
 }
