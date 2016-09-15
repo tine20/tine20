@@ -43,6 +43,15 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     }
 
     /**
+     * tear down tests
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+    }
+
+    /**
      * test getPluginName method
      */
     public function testGetPluginName()
@@ -86,6 +95,47 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
         
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
+        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+    }
+    
+    /**
+     * test testGetProperties method with alternate loginname config
+     */
+    public function testGetProperties2()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        
+        $body = '<?xml version="1.0" encoding="utf-8"?>
+                 <propfind xmlns="DAV:">
+                    <prop>
+                        <getlastmodified xmlns="DAV:"/>
+                        <getcontentlength xmlns="DAV:"/>
+                        <resourcetype xmlns="DAV:"/>
+                        <getetag xmlns="DAV:"/>
+                        <id xmlns="http://owncloud.org/ns"/>
+                    </prop>
+                 </propfind>';
+    
+        $request = new Sabre\HTTP\Request(array(
+                'REQUEST_METHOD' => 'PROPFIND',
+                'REQUEST_URI'    => '/remote.php/webdav/' . Tinebase_Core::getUser()->accountLoginName,
+                'HTTP_DEPTH'     => '0',
+        ));
+        $request->setBody($body);
+    
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        //var_dump($this->response->body);
+        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+    
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($this->response->body);
+        //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
+    
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/owncloud:id');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());

@@ -1216,11 +1216,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "31d151de7cba6fa95ffd34efffd85444ccab0b2d"
+                "reference": "05ff4ef7b67d7ad92ca21a8b086c5e92e090a365"
             },
             "require": {
                 "php": ">=5.3.0",
