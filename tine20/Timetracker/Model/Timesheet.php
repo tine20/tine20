@@ -60,7 +60,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'config'                => array(
                     'appName'               => 'Timetracker',
                     'modelName'             => 'Timeaccount',
-                    'idProperty'            => 'id'
+                    'idProperty'            => 'id',
+                    'doNotCheckModuleRight'      => TRUE
                 ),
                 // TODO ?????
                 //'default'               => array('account_grants' => array('bookOwnGrant' => true)),
