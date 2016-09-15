@@ -28,17 +28,14 @@ class Tinebase_WebDav_RootTest extends TestCase
      * @var array test objects
      */
     protected $objects = array();
-    
+
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
+     * tear down tests
      */
-    public static function main()
+    protected function tearDown()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_WebDav_RootTest');
-        PHPUnit_TextUI_TestRunner::run($suite);
+        parent::tearDown();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
     }
 
     /**
@@ -88,6 +85,54 @@ class Tinebase_WebDav_RootTest extends TestCase
             $properties = $child->getProperties(array('{DAV:}getetag'));
             $this->assertArrayHasKey('{DAV:}getetag', $properties);
         }
+    }
+    
+    /**
+     * test getLastModified method
+     */
+    public function testGetLastModified2()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        
+        $remoteWebDav = $this->_getWebDAVTree()->getNodeForPath('/remote.php/webdav');
+        
+        $this->assertNotEmpty($remoteWebDav->getLastModified());
+        
+        $personal = $remoteWebDav->getChild(Tinebase_Core::getUser()->accountLoginName);
+        
+        $this->assertNotEmpty($personal->getLastModified());
+        
+        $shared = $remoteWebDav->getChild('shared');
+        
+        $this->assertNotEmpty($shared->getLastModified());
+        
+        $this->assertContains($remoteWebDav->getLastModified(), array($personal->getLastModified(), $shared->getLastModified()));
+        
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
+        
+    }
+    
+    /**
+     * test getETag
+     */
+    public function testGetETag2()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
+        
+        $remoteWebDav = $this->_getWebDAVTree()->getNodeForPath('/remote.php/webdav');
+        $properties = $remoteWebDav->getProperties(array('{DAV:}getetag'));
+        $this->assertArrayHasKey('{DAV:}getetag', $properties);
+    
+        $currentUser = $remoteWebDav->getChild(Tinebase_Core::getUser()->accountLoginName);
+        $properties = $currentUser->getProperties(array('{DAV:}getetag'));
+        $this->assertArrayHasKey('{DAV:}getetag', $properties);
+    
+        foreach ($currentUser->getChildren() as $child) {
+            $properties = $child->getProperties(array('{DAV:}getetag'));
+            $this->assertArrayHasKey('{DAV:}getetag', $properties);
+        }
+        
+        Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, false);
     }
     
     /**

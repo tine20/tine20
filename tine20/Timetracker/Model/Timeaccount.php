@@ -159,6 +159,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'billed_in'         => array(
                 'label'                 => "Cleared in", // _("Cleared in"),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'copyOmit'              => true,
             ),
             'invoice_id'        => array(
                 'label'                 => 'Invoice', // _('Invoice')
@@ -170,6 +171,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     'idProperty'            => 'id'
                 ),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'copyOmit'              => true,
             ),
             'status'            => array(
                 // is_open = Status, status = Billed
@@ -180,11 +182,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     'jsConfig'              => array('filtertype' => 'timetracker.timeaccountbilled')
                 ),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
+                'copyOmit'              => true,
             ),
             'cleared_at'        => array(
                 'label'                 => "Cleared at", // _("Cleared at")
                 'type'                  => 'datetime',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'copyOmit'              => true,
             ),
             'deadline'          => array(
                 'label'                 => 'Booking deadline', // _('Booking deadline')

@@ -607,7 +607,7 @@ class Tinebase_ModelConfiguration {
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
         'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig',
-        'hasPersonalContainer'
+        'hasPersonalContainer', 'copyOmitFields'
     );
 
     /**
@@ -700,6 +700,13 @@ class Tinebase_ModelConfiguration {
     protected $_converterDefaultMapping = array(
         'json'      => array('Tinebase_Model_Converter_Json'),
     );
+
+    /**
+     * Collection of copy omit properties for frontend
+     *
+     * @var array
+     */
+    protected $_copyOmitFields = NULL;
 
     /**
      * the constructor (must be called by the singleton pattern)
@@ -835,8 +842,7 @@ class Tinebase_ModelConfiguration {
 
             if ($fieldDef['type'] == 'keyfield') {
                 $fieldDef['length'] = 40;
-
-            } elseif ($fieldDef['type'] == 'virtual') {
+            } else if ($fieldDef['type'] == 'virtual') {
                 $fieldDef = isset($fieldDef['config']) ? $fieldDef['config'] : array();
                 $fieldDef['key'] = $fieldKey;
                 $fieldDef['sortable'] = FALSE;
@@ -847,10 +853,16 @@ class Tinebase_ModelConfiguration {
                 $this->_virtualFields[] = $fieldDef;
                 continue;
 
-            } elseif($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
+            } else if ($fieldDef['type'] == 'numberableStr' || $fieldDef['type'] == 'numberableInt') {
                 $this->_autoincrementFields[] = $fieldDef;
             }
 
+            if (isset($fieldDef['copyOmit']) && $fieldDef['copyOmit']) {
+                if (!is_array($this->_copyOmitFields)) {
+                    $this->_copyOmitFields = array();
+                }
+                $this->_copyOmitFields[] = $fieldKey;
+            }
 
             // set default value
             // TODO: implement complex default values

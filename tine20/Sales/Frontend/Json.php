@@ -672,7 +672,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
         Sales_Controller_Invoice::getInstance()->delete(array($id));
     
-        return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contractm, true);
+        return Sales_Controller_Invoice::getInstance()->createAutoInvoices($date, $contract, true);
     }
     
     /**

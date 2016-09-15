@@ -443,7 +443,12 @@ abstract class Tinebase_Model_Filter_Abstract
             $relatedFilter = new $filterModel(array(
                 array('field' => 'query',   'operator' => $operator, 'value' => $this->_value),
             ));
-            $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
+            
+            try {
+                $relatedIds = Tinebase_Core::getApplicationInstance($relatedModel)->search($relatedFilter, NULL, FALSE, TRUE);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                continue;
+            }
             Tinebase_Core::set('ADVANCED_SEARCHING', false);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -456,7 +461,7 @@ abstract class Tinebase_Model_Filter_Abstract
             ));
             $ownIds = array_merge($ownIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id);
         }
-
+        
         return new Tinebase_Model_Filter_Id('id', $not?'notin':'in', $ownIds);
     }
 }
