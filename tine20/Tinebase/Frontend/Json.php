@@ -477,16 +477,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $username the username
      * @param  string $password the password
      * @param  string $securitycode the security code(captcha)
+     * @param  string $otp  the second factor password
      * @return array
      */
-    public function login($username, $password, $securitycode = null)
+    public function login($username, $password, $securitycode = null, $otp = null)
     {
         Tinebase_Core::startCoreSession();
         
         if (is_array(($response = $this->_getCaptchaResponse($securitycode)))) {
             return $response;
         }
-        
+
+        // TODO move security code here and use params
+        Tinebase_Controller::getInstance()->setRequestContext(array(
+            'otp' => $otp
+        ));
+
         // try to login user
         $success = Tinebase_Controller::getInstance()->login(
             $username,
@@ -722,9 +728,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
+        $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
         
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
+            'secondFactor'     => $secondFactorConfig && $secondFactorConfig->active,
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => array(
                 'locale'   => $locale->toString(),
