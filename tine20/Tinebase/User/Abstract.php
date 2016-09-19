@@ -126,6 +126,22 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         $this->_plugins[$className] = $_plugin;
     }
 
+    public function removePlugin($_plugin)
+    {
+        $className = get_class($_plugin);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Removing " . $className . ' plugin.');
+
+        $result = null;
+        if (isset($this->_plugins[$className])) {
+            $result = $this->_plugins[$className];
+            unset($this->_plugins[$className]);
+        }
+
+        return $result;
+    }
+
     /**
      * unregisterAllPlugins
      */

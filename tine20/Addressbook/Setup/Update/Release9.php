@@ -344,4 +344,28 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Addressbook', '9.9');
     }
+
+    /**
+     * update to 9.10
+     *
+     * add multiple sync backends / ldap implementation
+     *
+     * @return void
+     */
+    public function update_9()
+    {
+        if ($this->getTableVersion('addressbook') < 21) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>syncBackendIds</name>
+                    <type>text</type>
+                    <length>16000</length>
+                </field>');
+            $this->_backend->addCol('addressbook', $declaration);
+
+            $this->setTableVersion('addressbook', 21);
+        }
+
+        $this->setApplicationVersion('Addressbook', '9.10');
+    }
 }

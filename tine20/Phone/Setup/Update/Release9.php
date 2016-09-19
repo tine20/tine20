@@ -22,7 +22,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
             return;
         }
 
-        $setupUser = $this->_getSetupFromConfigOrCreateOnTheFly();
+        $setupUser = static::getSetupFromConfigOrCreateOnTheFly();
 
         if ($setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
