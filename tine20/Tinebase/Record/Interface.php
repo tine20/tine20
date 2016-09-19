@@ -28,13 +28,12 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * Default constructor
      * Constructs an object and sets its record related properties.
      *
-     * @param mixed $_contactData
+     * @param mixed $_data
      * @param bool $_bypassFilters Bypass filters at object creation with data
      * this is usefull when datas are for sure valid, e.g. after database query
      * @param array $_convertDates array with Tinebase_DateTime constructor parameters part and locale
-     * 
-     * @return void
-     * @throws Tinebase_Record_Exception
+     *
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
 
@@ -119,9 +118,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * validate the the internal data
      *
+     * @param $_throwExceptionOnInvalidData
      * @return bool
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function isValid();
+    public function isValid($_throwExceptionOnInvalidData = false);
     
     /**
      * returns array of fields with validation errors 
@@ -167,4 +168,15 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return boolean
      */
     public function has($_field);
+
+    public function runConvertToRecord();
+
+    public function runConvertToData();
+
+    /**
+     * returns read only fields
+     *
+     * @return array
+     */
+    public function getReadOnlyFields();
 }

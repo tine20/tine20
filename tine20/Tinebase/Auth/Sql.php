@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */ 
 
@@ -37,7 +37,7 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
     
     /**
      * @param string $acctname The name to canonicalize
-     * @param int $type The desired form of canonicalization
+     * @param int $form The desired form of canonicalization
      * @return string The canonicalized name in the desired form
      * @throws Zend_Auth_Adapter_Exception
      */

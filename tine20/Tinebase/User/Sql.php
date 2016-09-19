@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        extend Tinebase_Application_Backend_Sql and replace some functions
@@ -907,10 +907,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Abstract $_user
+     * @param  Tinebase_Record_Interface $_user
      * @return array
      */
-    protected function _recordToRawData($_user)
+    protected function _recordToRawData(Tinebase_Record_Interface $_user)
     {
         $accountData = array(
             'id'                => $_user->accountId,

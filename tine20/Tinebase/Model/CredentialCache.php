@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -14,6 +14,14 @@
  * 
  * @package     Tinebase
  * @subpackage  Model
+ *
+ * @property string id
+ * @property string key
+ * @property string cache
+ * @property string username
+ * @property string password
+ * @property string creation_time
+ * @property string valid_until
  */
 class Tinebase_Model_CredentialCache extends Tinebase_Record_Abstract 
 {

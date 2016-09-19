@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        set timestamp field (add default to model?)
  */
@@ -114,10 +114,10 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Interface $_record
      * @return array
      */
-    protected function _recordToRawData($_record)
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $result = parent::_recordToRawData($_record);
 

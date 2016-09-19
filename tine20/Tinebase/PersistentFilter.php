@@ -229,9 +229,9 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Grants
      * add default grants
      * 
      * @param   Tinebase_Record_Interface $record
-     * @param   $boolean $addDuringSetup -> let admin group have all rights instead of user
+     * @param   boolean $addDuringSetup -> let admin group have all rights instead of user
      */
-    protected function _setDefaultGrants($record, $addDuringSetup = false)
+    protected function _setDefaultGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
     {
         parent::_setDefaultGrants($record, $addDuringSetup);
         
