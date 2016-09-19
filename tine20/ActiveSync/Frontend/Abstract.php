@@ -372,6 +372,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " update CollectionId: $folderId Id: $serverId");
         
         try {
+            $this->_assertContentControllerParams($folderId);
             $oldEntry = $this->_contentController->get($serverId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
