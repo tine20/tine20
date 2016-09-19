@@ -14,6 +14,7 @@
  *
  * @package     Tinebase
  * @subpackage  Configuration
+ * @property    string titleProperty
  *
  */
 class Tinebase_ModelConfiguration {

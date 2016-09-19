@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        extend/use sql abstract backend
@@ -398,13 +398,16 @@ class Tinebase_Acl_Roles
     /**
      * get list of role memberships
      *
-     * @param   int $accountId
-     * @param   string $type
-     * @return  array of array with role ids
-     * @throws  Tinebase_Exception_NotFound
+     * @param int $accountId
+     * @param string $type
+     * @return array of array with role ids
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function getRoleMemberships($accountId, $type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
+        $groupMemberships = null;
+
         if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
             $accountId        = Tinebase_Model_User::convertUserIdToInt($accountId);
             $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($accountId);
@@ -483,13 +486,15 @@ class Tinebase_Acl_Roles
         
         $this->resetClassCache();
     }
-    
+
     /**
      * set all roles an user is member of
      *
-     * @param  array  $_account as role member ("account_type" => account type, "account_id" => account id)
-     * @param  mixed  $_roleIds
+     * @param  array $_account as role member ("account_type" => account type, "account_id" => account id)
+     * @param  mixed $_roleIds
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
     public function setRoleMemberships($_account, $_roleIds)
     {
@@ -524,12 +529,14 @@ class Tinebase_Acl_Roles
         
         return $this->getRoleMemberships($_account['id']);
     }
-    
+
     /**
      * add a new member to a role
      *
-     * @param  string  $_roleId
-     * @param  array   $_account as role member ("account_type" => account type, "account_id" => account id)
+     * @param  string $_roleId
+     * @param  array $_account as role member ("account_type" => account type, "account_id" => account id)
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Zend_Db_Adapter_Exception
      */
     public function addRoleMember($_roleId, $_account)
     {
@@ -560,12 +567,13 @@ class Tinebase_Acl_Roles
         
         $this->resetClassCache();
     }
-    
+
     /**
      * remove one member from the role
      *
-     * @param  mixed  $_groupId
-     * @param  array   $_account as role member ("type" => account type, "id" => account id)
+     * @param  mixed $_roleId
+     * @param  array $_account as role member ("type" => account type, "id" => account id)
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function removeRoleMember($_roleId, $_account)
     {
@@ -632,7 +640,7 @@ class Tinebase_Acl_Roles
      * set role rights 
      *
      * @param   int    $roleId
-     * @param   array  $_roleRights  with role rights array(("application_id" => app id, "right" => the right to set), (...))
+     * @param   array  $roleRights  with role rights array(("application_id" => app id, "right" => the right to set), (...))
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public function setRoleRights($roleId, array $roleRights)
@@ -676,9 +684,9 @@ class Tinebase_Acl_Roles
     /**
      * add one role right
      * 
-     * @param unknown $roleId
-     * @param unknown $applicationId
-     * @param unknown $right
+     * @param int $roleId
+     * @param string $applicationId
+     * @param string $right
      */
     public function addRoleRight($roleId, $applicationId, $right)
     {
@@ -696,9 +704,9 @@ class Tinebase_Acl_Roles
     /**
      * remove one role right
      * 
-     * @param unknown $roleId
-     * @param unknown $applicationId
-     * @param unknown $right
+     * @param int $roleId
+     * @param string $applicationId
+     * @param string $right
      */
     public function deleteRoleRight($roleId, $applicationId, $right)
     {

@@ -100,11 +100,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * update foreign key values
      * 
      * @param string $_mode create|update
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * 
      * @todo support update mode
      */
-    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Interface $_record)
     {
         if ($_mode == 'create') {
             foreach ($this->_foreignTables as $key => $foreign) {
