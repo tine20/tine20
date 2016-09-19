@@ -70,7 +70,14 @@ class Calendar_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MAX_FILTER_PERIOD_CALDAV = 'maxfilterperiodcaldav';
-    
+
+    /**
+     * MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN
+     *
+     * @var string
+     */
+    const MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN = 'maxfilterperiodcaldavsynctoken';
+
     /**
      * MAX_NOTIFICATION_PERIOD_FROM
      * 
@@ -284,6 +291,17 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
             'default'               => 2,
+        ),
+        self::MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN => array(
+            //_('Filter timeslot for CalDAV events with SyncToken')
+            'label'                 => 'Filter timeslot for CalDAV events with SyncToken',
+            //_('For how long in the past (in months) the events should be synchronized.')
+            'description'           => 'For how long in the past (in months) the events should be synchronized.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'default'               => 100,
         ),
         self::MAX_NOTIFICATION_PERIOD_FROM => array(
         //_('Timeslot for event notifications')
