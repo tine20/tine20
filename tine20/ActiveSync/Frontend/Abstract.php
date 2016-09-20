@@ -265,7 +265,8 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " create entry");
-        
+
+        $this->_assertContentControllerParams($folderId);
         $entry = $this->toTineModel($entry);
         
         // container_id gets set to personal folder in application specific controller if missing

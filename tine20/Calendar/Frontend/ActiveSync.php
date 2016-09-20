@@ -605,7 +605,6 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             $lastName  = $attendee->name;
                         }
                         
-                        // @todo handle resources
                         $newAttendees[] = array(
                             'userType'  => Calendar_Model_Attender::USERTYPE_USER,
                             'firstName' => $firstName,
