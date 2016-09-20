@@ -309,7 +309,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * sets notes of a record
      * 
-     * @param Tinebase_Record_Abstract  $_record            the record object
+     * @param Tinebase_Record_Interface  $_record            the record object
      * @param string                    $_backend           backend (default: 'Sql')
      * @param string                    $_notesProperty     the property in the record where the tags are in (default: 'notes')
      * 
@@ -790,6 +790,39 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @throws Tinebase_Exception_NotImplemented
      */
     public function getType()
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * sets modlog active flag
+     *
+     * @param $_bool
+     * @return Tinebase_Backend_Sql_Abstract
+     */
+    public function setModlogActive($_bool)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * checks if modlog is active or not
+     *
+     * @return bool
+     */
+    public function getModlogActive()
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * fetch a single property for all records defined in array of $ids
+     *
+     * @param array|string $ids
+     * @param string $property
+     * @return array (key = id, value = property value)
+     */
+    public function getPropertyByIds($ids, $property)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }

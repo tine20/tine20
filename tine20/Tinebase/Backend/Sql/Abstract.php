@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -220,7 +220,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (empty($_id)) {
             throw new Tinebase_Exception_NotFound('$_id can not be empty');
         }
-        
+
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
         
         return $this->getByProperty($id, $this->_identifier, $_getDeleted);

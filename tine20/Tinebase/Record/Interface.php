@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -21,6 +21,26 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property array $customfields
+ *
+ * @property string $container_id
+ *
+ * TODO are these all strings?!? guess not
+ * @property string $created_by
+ * @property string $creation_time
+ * @property string $last_modified_by
+ * @property string $last_modified_time
+ * @property string $is_deleted
+ * @property string $deleted_time
+ * @property string $deleted_by
+ * @property string $seq
+ *
+ * @property array|Tinebase_Record_RecordSet $relations
+ * @property array|Tinebase_Record_RecordSet $notes
+ * @property array|Tinebase_Record_RecordSet $tags
+ * @property array|Tinebase_Record_RecordSet $alarms
+ * @property array|Tinebase_Record_RecordSet $attachments
  */
 interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {
@@ -29,9 +49,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * Constructs an object and sets its record related properties.
      *
      * @param mixed $_data
-     * @param bool $_bypassFilters Bypass filters at object creation with data
+     * @param boolean $_bypassFilters Bypass filters at object creation with data
      * this is usefull when datas are for sure valid, e.g. after database query
-     * @param array $_convertDates array with Tinebase_DateTime constructor parameters part and locale
+     * @param boolean $_convertDates array with Tinebase_DateTime constructor parameters part and locale
      *
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
@@ -47,7 +67,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * sets identifier of record
      * 
-     * @param string identifier
+     * @param string $_id
      */
     public function setId($_id);
     
@@ -75,22 +95,22 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * sets record related properties
      * 
-     * @param string name of property
-     * @param mixed value of property
+     * @param string $_name of property
+     * @param mixed $_value of property
      */
     public function __set($_name, $_value);
     
     /**
      * unsets record related properties
      * 
-     * @param string name of property
+     * @param string $_name of property
      */
     public function __unset($_name);
     
     /**
      * gets record related properties
      * 
-     * @param string name of property
+     * @param string $_name of property
      * @return mixed value of property
      */
     public function __get($_name);

@@ -45,4 +45,28 @@ interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
      * @return array
      */
     public function getSchema();
+
+    /**
+     * sets modlog active flag
+     *
+     * @param $_bool
+     * @return Tinebase_Backend_Sql_Abstract
+     */
+    public function setModlogActive($_bool);
+
+    /**
+     * checks if modlog is active or not
+     *
+     * @return bool
+     */
+    public function getModlogActive();
+
+    /**
+     * fetch a single property for all records defined in array of $ids
+     *
+     * @param array|string $ids
+     * @param string $property
+     * @return array (key = id, value = property value)
+     */
+    public function getPropertyByIds($ids, $property);
 }

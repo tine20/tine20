@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
@@ -460,7 +460,7 @@ class Tinebase_Tags
      * Gets tags of a given record where user has the required right to
      * The tags are stored in the records $_tagsProperty.
      *
-     * @param Tinebase_Record_Abstract  $_record        the record object
+     * @param Tinebase_Record_Interface $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
      * @param string                    $_right         the required right current user must have on the tags
      * @return Tinebase_Record_RecordSet tags of record
@@ -548,7 +548,7 @@ class Tinebase_Tags
      * NOTE: Only touches tags the user has use right for
      * NOTE: Non existing personal tags will be created on the fly
      *
-     * @param Tinebase_Record_Abstract  $_record        the record object
+     * @param Tinebase_Record_Interface  $_record        the record object
      * @param string                    $_tagsProperty  the property in the record where the tags are in (defaults: 'tags')
      */
     public function setTagsOfRecord($_record, $_tagsProperty = 'tags')

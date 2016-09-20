@@ -2394,20 +2394,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm', NULL, $_alarm);
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm', NULL, array('alarm' => $_alarm));
     }
     
     /**
      * send notifications 
      * 
-     * @param Calendar_Model_Event       $_event
-     * @param Tinebase_Model_FullAccount $_updater
-     * @param Sting                      $_action
-     * @param Calendar_Model_Event       $_oldEvent
-     * @param Array                      $_additionalRecipients
-     * @return void
+     * @param Tinebase_Record_Interface  $_event
+     * @param Tinebase_Model_FullUser    $_updater
+     * @param String                     $_action
+     * @param Tinebase_Record_Interface  $_oldEvent
+     * @param Array                      $_additionalData
      */
-    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent = NULL)
+    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
         Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
             $_event, 
