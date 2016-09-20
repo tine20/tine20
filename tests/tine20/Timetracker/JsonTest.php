@@ -161,7 +161,31 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(1, count($searchResult['filter']), 'did not get ta filter: ' . print_r($searchResult, TRUE));
         $this->assertEquals($timeaccountData['id'], $searchResult['filter'][0]['value']['id']);
     }
-    
+
+    /**
+     * try to get a Timeaccount with a tag filter
+     *
+     * @see 0012238: tag filter is not working for timesheets
+     */
+    public function testSearchTimesheetsWithTagFilter()
+    {
+        $timeaccount = $this->_getTimesheet();
+        $timeaccount['tags'] = array(array(
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => 'mytag',
+            'description'   => 'testtagfilter',
+            'color'         => '#009B31',
+        ));
+        $timeaccountData = $this->_json->saveTimesheet($timeaccount->toArray());
+        $this->assertEquals(1, count($timeaccountData['tags']));
+
+        $filter = array(
+            array('field' => 'tag', 'operator' => 'equals', 'value' => $timeaccountData['tags'][0]['id']),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
     /**
      * try to add a Timeaccount with grants
      */
