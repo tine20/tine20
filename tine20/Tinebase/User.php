@@ -582,6 +582,8 @@ class Tinebase_User
                         . ' Removing/unset current jpegphoto');
                     $contact->jpegphoto = false;
                 }
+            } else {
+                $syncPhoto = false;
             }
             $diff = $contact->diff($originalContact, $syncPhoto ? array('n_fn') : array('jpegphoto', 'n_fn'));
             if (! $diff->isEmpty() || ($originalContact->jpegphoto === 0 && ! empty($contact->jpegphoto)) ) {
