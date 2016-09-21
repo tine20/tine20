@@ -266,17 +266,28 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
     },
 
+    /**
+     * check user exportGrant for timeaccounts
+     * NOTE: manage_timeaccounts ALWAYS allows to export
+     *
+     * @param action
+     * @param grants
+     * @param records
+     * @returns {boolean}
+     */
     updateExportAction: function(action, grants, records) {
         var exportGrant = true;
-        Ext.each(records, function(record) {
-            var c = record.get('timeaccount_id').container_id;
-            if (c.hasOwnProperty('account_grants')) {
-                if (! c.account_grants.exportGrant) {
-                    exportGrant = false;
-                    return false;
+        if (! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+            Ext.each(records, function (record) {
+                var c = record.get('timeaccount_id').container_id;
+                if (c.hasOwnProperty('account_grants')) {
+                    if (!c.account_grants.exportGrant) {
+                        exportGrant = false;
+                        return false;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         var disable = ! exportGrant;
         action.setDisabled(disable);
