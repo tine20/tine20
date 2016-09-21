@@ -36,11 +36,11 @@
  * @property string $deleted_by
  * @property string $seq
  *
- * @property array|Tinebase_Record_RecordSet $relations
- * @property array|Tinebase_Record_RecordSet $notes
- * @property array|Tinebase_Record_RecordSet $tags
- * @property array|Tinebase_Record_RecordSet $alarms
- * @property array|Tinebase_Record_RecordSet $attachments
+ * @property array|Tinebase_Record_RecordSet                        $relations
+ * @property array|Tinebase_Record_RecordSet                        $notes
+ * @property array|Tinebase_Record_RecordSet                        $tags
+ * @property array|Tinebase_Record_RecordSet|Tinebase_Model_Alarm   $alarms
+ * @property array|Tinebase_Record_RecordSet                        $attachments
  */
 interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {
@@ -162,7 +162,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * returns an array with differences to the given record
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
-     * @return array with differences field => different value
+     * @return Tinebase_Record_Diff with differences field => different value
      */
     public function diff($_record);
     
@@ -199,4 +199,22 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return array
      */
     public function getReadOnlyFields();
+
+    /**
+     * wrapper for setFromJason which expects datetimes in array to be in
+     * users timezone and converts them to UTC
+     *
+     * @todo move this to a generic __call interceptor setFrom<API>InUsersTimezone
+     *
+     * @param  string $_data json encoded data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     */
+    public function setFromJsonInUsersTimezone($_data);
+
+    /**
+     * returns the title of the record
+     *
+     * @return string
+     */
+    public function getTitle();
 }

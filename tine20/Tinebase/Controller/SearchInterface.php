@@ -8,7 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        activate functions again when admin controllers are refactored
  */
 
 /**
@@ -26,17 +25,17 @@ interface Tinebase_Controller_SearchInterface
      * @param Tinebase_Model_Pagination $_pagination
      * @param bool $_getRelations
      * @param bool $_onlyIds
-     * @param string|optional $_action
+     * @param string $_action
      * @return Tinebase_Record_RecordSet
      */
-    //public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get');
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get');
     
     /**
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string|optional $_action
+     * @param string $_action
      * @return int
      */
-    //public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get');
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get');
 }

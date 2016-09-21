@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
@@ -163,7 +163,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string|Tinebase_Model_Application $_applicationId application object, id or name
      * @param string                            $_modelName
      * @param string                            $_requiredGrant (read grant by default)
-     * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
+     * @return Tinebase_Record_RecordSet|Tinebase_Model_CustomField_Config of Tinebase_Model_CustomField_Config records
      */
     public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ)
     {
@@ -701,9 +701,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param Tinebase_Model_Pagination $_pagination
      * @param bool $_getRelations (unused)
      * @param boolean $_onlyIds (unused)
+     * @param string $_action
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = $this->_backendValue->search($_filter, $_pagination);
         return $result;
@@ -713,9 +714,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter) 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $count = $this->_backendValue->searchCount($_filter);
         return $count;

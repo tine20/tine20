@@ -226,6 +226,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
      * @return  integer number of updated records
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function updateMultiple($_what, $_data)
     {
@@ -237,6 +238,7 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      *
      * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet of $this->_modelName
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function getMultiple($_ids)
     {
@@ -249,10 +251,24 @@ class Admin_Controller_Config implements Tinebase_Controller_SearchInterface, Ti
      * @param string $_orderBy Order result by
      * @param string $_orderDirection Order direction - allowed are ASC and DESC
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
      * @return Tinebase_Record_RecordSet
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
         throw new Tinebase_Exception_NotImplemented('Not Implemented');
+    }
+
+    /**
+     * Gets total count of search with $_filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action
+     * @return int
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 }

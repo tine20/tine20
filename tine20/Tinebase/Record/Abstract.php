@@ -496,6 +496,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         if ($_recursive) {
+            /** @var Tinebase_Record_Interface  $value */
             foreach ($recordArray as $property => $value) {
                 if ($this->_hasToArray($value)) {
                     $recordArray[$property] = $value->toArray();
@@ -932,6 +933,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($ownField instanceof DateTime
                     && $recordField instanceof DateTime) {
+
+                    /** @var Tinebase_DateTime $recordField */
                     
                     if (! $ownField instanceof Tinebase_DateTime) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 

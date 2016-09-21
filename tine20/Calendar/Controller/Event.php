@@ -1484,10 +1484,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * restore original alarm time of recurring events
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      */
-    protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
+    protected function _inspectAlarmGet(Tinebase_Record_Interface $_record)
     {
         foreach ($_record->alarms as $alarm) {
             if ($recurid = $alarm->getOption('recurid')) {
@@ -1502,13 +1502,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * adopt alarm time to next occurance for recurring events
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Model_Alarm $_alarm
      * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
+    protected function _inspectAlarmSet(Tinebase_Record_Interface $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         parent::_inspectAlarmSet($_record, $_alarm);
         $this->adoptAlarmTime($_record, $_alarm, 'time');

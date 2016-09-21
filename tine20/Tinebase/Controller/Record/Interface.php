@@ -22,7 +22,7 @@ interface Tinebase_Controller_Record_Interface
      * get by id
      *
      * @param string $_id
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function get($_id);
@@ -81,7 +81,7 @@ interface Tinebase_Controller_Record_Interface
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array $_ids array of record identifiers
+     * @param   array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_ids array of record identifiers
      * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids);
