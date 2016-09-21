@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -174,6 +174,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * resolve some settings
      * 
      * @param array $_settings
+     * @return array
      */
     protected function _resolveConfigSettings($_settings)
     {
@@ -213,12 +214,13 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
         $models = $this->getModels();
         return (count($models) > 0) ? $models[0] : null;
     }
-    
+
     /**
      * returns controller instance for given $_controllerName
-     * 
+     *
      * @param string $_controllerName
      * @return Tinebase_Controller
+     * @throws Exception
      */
     public static function getController($_controllerName)
     {
@@ -237,6 +239,7 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
      * delete all personal user folders and the content associated with these folders
      *
      * @param Tinebase_Model_User|string $_accountId the account object
+     * @param string $model
      */
     public function deletePersonalFolder($_accountId, $model = '')
     {
@@ -378,10 +381,10 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     /**
      * returns true if $fileinfo describes a model file
      *
-     * @param $fileinfo
+     * @param DirectoryIterator $fileinfo
      * @return bool
      */
-    protected function _isModelFile($fileinfo)
+    protected function _isModelFile(DirectoryIterator $fileinfo)
     {
         $isModel = (
             ! $fileinfo->isDot() &&

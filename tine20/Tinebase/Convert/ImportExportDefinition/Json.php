@@ -27,6 +27,7 @@ class Tinebase_Convert_ImportExportDefinition_Json extends Tinebase_Convert_Json
      */
     public function fromTine20Model(Tinebase_Record_Abstract $_model)
     {
+        /** @var Tinebase_Model_ImportExportDefinition $_model */
         $this->_convertOptions($_model);
         
         $result = parent::fromTine20Model($_model);

@@ -235,6 +235,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             . ' Setting default grants ...');
         
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
+        /** @var Tinebase_Model_Grants $grant */
         $grant = new $this->_grantsModel(array(
             'account_type' => $addDuringSetup ? Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             'record_id'    => $record->getId(),

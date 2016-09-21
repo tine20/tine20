@@ -39,3 +39,19 @@ interface Tinebase_Controller_SearchInterface
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

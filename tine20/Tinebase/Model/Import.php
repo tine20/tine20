@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Spahn <m.spahn@metaways.de
  * 
  */
@@ -15,6 +15,20 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string id
+ * @property string timestamp
+ * @property string user_id
+ * @property string model
+ * @property string application_id
+ * @property string synctoken
+ * @property string interval
+ * @property string container_id
+ * @property string sourcetype
+ * @property string options
+ * @property string source
+ * @property int    failcount
+ * @property string lastfail
  */
 class Tinebase_Model_Import extends Tinebase_Record_Abstract 
 {

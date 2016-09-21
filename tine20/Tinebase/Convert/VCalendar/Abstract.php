@@ -32,7 +32,8 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     protected $_modelName = null;
     
     /**
-     * @param  string  $version  the version of the client
+     * @param string  $version  the version of the client
+     * @throws Tinebase_Exception
      */
     public function __construct($version = null)
     {
@@ -144,8 +145,8 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * parse valarm properties
      * 
      * @param Tinebase_Record_Abstract $record
-     * @param iteratable $valarms
-     * @param \Sabre\VObject\Component $vcalendar
+     * @param Traversable $valarms
+     * @param \Sabre\VObject\Component $vcomponent
      */
     protected function _parseAlarm(Tinebase_Record_Abstract $record, $valarms, \Sabre\VObject\Component $vcomponent)
     {

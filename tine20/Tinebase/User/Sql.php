@@ -1189,4 +1189,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $userIds = $sqlbackend->search(null, null, Tinebase_Backend_Sql_Abstract::IDCOL);
         return $userIds;
     }
+
+    /**
+     * get user by property from backend
+     *
+     * @param   string  $_property      the key to filter
+     * @param   string  $_value         the value to search for
+     * @param   string  $_accountClass  type of model to return
+     *
+     * @return  Tinebase_Model_User the user object
+     */
+    public function getUserByPropertyFromBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
+    {
+        return $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass);
+    }
 }

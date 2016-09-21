@@ -217,4 +217,16 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return string
      */
     public function getTitle();
+
+    /**
+     * returns the foreignId fields (used in Tinebase_Convert_Json)
+     * @return array
+     */
+    public static function getResolveForeignIdFields();
+
+    /** convert this to string
+     *
+     * @return string
+     */
+    public function __toString();
 }
