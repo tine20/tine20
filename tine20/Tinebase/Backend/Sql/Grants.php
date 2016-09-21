@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -73,7 +73,7 @@ class Tinebase_Backend_Sql_Grants extends Tinebase_Backend_Sql
     /**
      * get select with acl (grants) by record
      * 
-     * @param string|array $recordIds
+     * @param string|array $recordId
      * @return Zend_Db_Select
      */
     protected function _getAclSelectByRecordIds($recordIds)

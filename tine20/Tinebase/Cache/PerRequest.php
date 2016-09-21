@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Cache
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO refactor persistent cache visiblity handling as this is not quite easy to read/understand
@@ -102,14 +102,15 @@ class Tinebase_Cache_PerRequest
     /**
      * set/get persistent cache usage
      *
-     * @param  boolean $setTo
+     * @param  boolean optional
      * @return boolean
      */
-    public function usePersistentCache($setTo = NULL)
+    public function usePersistentCache()
     {
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
         $currValue = $this->_usePersistentCache;
-        if ($setTo !== NULL) {
-            $this->_usePersistentCache = (bool)$setTo;
+        if ($value !== NULL) {
+            $this->_usePersistentCache = $value;
         }
         
         return $currValue;

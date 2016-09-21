@@ -18,7 +18,7 @@
  * @todo update db to json encode all configs
  * @todo support array collections definitions
  */
-abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
+abstract class Tinebase_Config_Abstract
 {
     /**
      * object config type
@@ -124,6 +124,18 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @var array
      */
     protected static $_serverPlugins = array();
+
+    /**
+     * get properties definitions 
+     * 
+     * NOTE: as static late binding is not possible in PHP < 5.3 
+     *       this function has to be implemented in each subclass
+     *       and can not even be declared here
+     * 
+     * @return array
+     * TODO should be possible now as we no longer support PHP < 5.3
+     */
+//    abstract public static function getProperties();
     
     /**
      * get config object for application
@@ -260,7 +272,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     /**
      * Magic function so that $obj->value will work.
      *
-     * @param string $_name
+     * @param string $name
      * @return mixed
      */
     public function __get($_name)
@@ -303,7 +315,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     protected function _getConfigFileData()
     {
         if (! self::$_configFileData) {
-            /** @noinspection PhpIncludeInspection */
             self::$_configFileData = include('config.inc.php');
             
             if (self::$_configFileData === false) {
@@ -462,12 +473,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @param  string                   $_name
      * @return Tinebase_Model_Config|NULL
      */
-    protected function _loadConfig($_name)
+    protected function _loadConfig($name)
     {
         if ($this->_cachedApplicationConfig === NULL) {
             $this->_loadAllAppConfigsInCache();
         }
-        $result = (isset($this->_cachedApplicationConfig[$_name])) ? $this->_cachedApplicationConfig[$_name] :  NULL;
+        $result = (isset($this->_cachedApplicationConfig[$name])) ? $this->_cachedApplicationConfig[$name] :  NULL;
         
         return $result;
     }
@@ -658,7 +669,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     public function getDefinition($_name)
     {
-        $properties = static::getProperties();
+        // NOTE we can't call statecally here (static late binding again)
+        $properties = $this->getProperties();
         
         return (isset($properties[$_name]) || array_key_exists($_name, $properties)) ? $properties[$_name] : NULL;
     }
