@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -50,10 +50,10 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Interface $_record
+     * @param  Tinebase_Record_Abstract $_record
      * @return array
      */
-    protected function _recordToRawData(Tinebase_Record_Interface $_record)
+    protected function _recordToRawData($_record)
     {
         // special handling, convert to UNIX timestamp
         if(isset($_record['regseconds']) && $_record['regseconds'] instanceof DateTime) {

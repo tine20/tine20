@@ -17,8 +17,6 @@
  * @package     Tinebase
  * @subpackage  ActiveDirectory
  *
- * @method Tinebase_Ldap getLdap()
- *
  */
 trait Tinebase_ActiveDirectory_DomainConfigurationTrait
 {

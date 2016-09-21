@@ -7,7 +7,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -280,7 +280,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
      * @param  Tinebase_Model_Pagination $_pagination
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
+    public function search(Tinebase_Record_Interface $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {
         
     }
@@ -288,10 +288,10 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
     /**
      * Gets total count of search with $_filter
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Record_Interface $_filter
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Record_Interface $_filter)
     {
         
     }
@@ -312,7 +312,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
      * @param string $_id uuid / uidnumber ???
      * @return Tinebase_Record_Interface
      */
-    public function get($_id, $_getDeleted = FALSE)
+    public function get($_id)
     {
         $contactData = $this->_ldap->fetch($this->_baseDn, "entryuuid=$_id", $this->_getSupportedLdapAttributes());
         
@@ -566,17 +566,5 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
         }
         
         return $this->_supportedRecordFields;
-    }
-
-    /**
-     * Updates multiple entries
-     *
-     * @param array $_ids to update
-     * @param array $_data
-     * @return integer number of affected rows
-     */
-    public function updateMultiple($_ids, $_data)
-    {
-        // TODO: Implement updateMultiple() method.
     }
 }

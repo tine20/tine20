@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -64,11 +64,11 @@ class Tinebase_Auth_CredentialCache_Adapter_Config implements Tinebase_Auth_Cred
     public function resetCache()
     {
     }
-
+    
     /**
      * getDefaultKey() - get default cache key
+     * 
      * @return string
-     * @throws Tinebase_Exception_NotFound
      */
     public function getDefaultKey()
     {

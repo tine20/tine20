@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -32,7 +32,7 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     
     /**
      * @param string $field
-     * @return Zend_Db_Expr
+     * @return string
      * @todo replace by equivalent function of MySQL GROUP_CONCAT in Oracle
      */
     public function getAggregate($field)
@@ -41,12 +41,11 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
         
         return new Zend_Db_Expr("GROUP_CONCAT( DISTINCT $quotedField)");
     }
-
+    
     /**
      * @param string $field
      * @param mixed $returnIfTrue
      * @param mixed $returnIfFalse
-     * @return Zend_Db_Expr
      */
     public function getIfIsNull($field, $returnIfTrue, $returnIfFalse)
     {
@@ -161,7 +160,6 @@ class Tinebase_Backend_Sql_Command_Oracle implements Tinebase_Backend_Sql_Comman
     /**
      * escape special char
      *
-     * @param string $value
      * @return string
      */
      public function escapeSpecialChar($value)

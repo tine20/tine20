@@ -112,10 +112,10 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Interface $_record
+     * @param  Tinebase_Record_Abstract $_record
      * @return array
      */
-    protected function _recordToRawData(Tinebase_Record_Interface $_record)
+    protected function _recordToRawData($_record)
     {
         $record = parent::_recordToRawData($_record);
         
@@ -129,9 +129,9 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
      * update foreign key values
      * 
      * @param string $_mode create|update
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Abstract $_record
      */
-    protected function _updateForeignKeys($_mode, Tinebase_Record_Interface $_record)
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
     {
         if (empty($_record->hash)) {
             return;

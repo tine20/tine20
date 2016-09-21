@@ -17,12 +17,6 @@
  *
  * @package     Tinebase
  * @subpackage  ActionQueue
- *
- * @method int getQueueSize()
- * @method int waitForJob()
- * @method string receive(integer $jobId)
- * @method void delete(integer $jobId)
- *
  */
  class Tinebase_ActionQueue implements Tinebase_Controller_Interface
  {
@@ -80,10 +74,8 @@
     {
         $options = null;
         $backend = self::BACKEND_DIRECT;
-
-        /** @noinspection PhpUndefinedFieldInspection */
+        
         if (isset(Tinebase_Core::getConfig()->actionqueue) && Tinebase_Core::getConfig()->actionqueue->active) {
-            /** @noinspection PhpUndefinedFieldInspection */
             $options = Tinebase_Core::getConfig()->actionqueue->toArray();
             
             $backend = (isset($options['backend']) || array_key_exists('backend', $options)) ? ucfirst(strtolower($options['backend'])) : $backend;
@@ -105,15 +97,13 @@
             throw new Tinebase_Exception_UnexpectedValue('backend does not implement Tinebase_ActionQueue_Backend_Interface');
         }
     }
-
-     /**
-      * execute action defined in queue message
-      *
-      * @param  array $message action
-      * @return mixed
-      * @throws Tinebase_Exception_AccessDenied
-      * @throws Tinebase_Exception_NotFound
-      */
+    
+    /**
+     * execute action defined in queue message
+     * 
+     * @param  array  $message  action
+     * @return mixed
+     */
     public function executeAction($message)
     {
         if (! is_array($message) || ! (isset($message['action']) || array_key_exists('action', $message)) || strpos($message['action'], '.') === FALSE) {
@@ -121,7 +111,7 @@
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __LINE__ . '::' . __METHOD__ . " executing action: '{$message['action']}'");
+            __METHOD__ . '::' . __LINE__ . " executing action: '{$message['action']}'");
         
         list($appName, $actionName) = explode('.', $message['action']);
         $controller = Tinebase_Core::getApplicationInstance($appName);
@@ -157,11 +147,10 @@
             $this->delete($jobId);
         }
     }
-
-     /** @noinspection PhpDocSignatureInspection */
-     /**
+    
+    /**
      * queues an action
-     *
+     * 
      * @param string $_action
      * @param mixed  $_arg1
      * @param mixed  $_arg2

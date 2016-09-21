@@ -6,11 +6,11 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * @requires    PhpRedis https://github.com/phpredis/phpredis
+ * @requires     PhpRedis https://github.com/nicolasff/phpredis
  * @package     Tinebase
  * @subpackage  ActionQueue
  */
@@ -61,7 +61,8 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
     /**
      * Constructor
      *
-     * @param  array  $options  An array having configuration data
+     * @param  array  $config  An array having configuration data
+     * @return void
      */
     public function __construct($options)
     {
@@ -112,7 +113,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
     public function delete($jobId)
     {
         // remove from redis
-        $this->_redis->lRemove($this->_daemonStructName ,     $jobId, 0);
+        $this->_redis->lRemove($this->_daemonStructName ,     $jobId);
         $this->_redis->delete ($this->_dataStructName . ":" . $jobId);
     }
     
@@ -122,7 +123,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      */
     public function getQueueSize()
     {
-        return $this->_redis->lLen($this->_queueStructName);
+        return $this->_redis->lSize($this->_queueStructName);
     }
     
     /**
@@ -159,8 +160,6 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      */
     public function reschedule($jobId)
     {
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @noinspection PhpUndefinedMethodInspection */
         $this->_redis->multi()
             ->hIncrBy($this->_dataStructName . ":" . $jobId, 'retry' , 1)
             ->lRemove($this->_daemonStructName , $jobId)
@@ -172,7 +171,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      * Send a message to the queue
      *
      * @param  mixed   $message  Message to send to the active queue
-     * @return string|null     job id
+     * @return string            job id
      */
     public function send($message)
     {
@@ -180,14 +179,14 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             $encodedMessage = serialize($message);
             
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(
-                __METHOD__ . '::' . __LINE__ . " failed to serialize message: '{$message}'");
-            Tinebase_Core::getLogger()->err(
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . " failed to serialize message for action: '{$action}'");
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
                 __METHOD__ . '::' . __LINE__ . " exception message: " . $e->getMessage());
-            Tinebase_Core::getLogger()->err(
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
                 __METHOD__ . '::' . __LINE__ . " exception stacktrace: " . $e->getTraceAsString());
             
-            return null;
+            return;
         }
         
         $jobId = Tinebase_Record_Abstract::generateUID();
@@ -201,8 +200,6 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         );
 
         // run in transaction
-        /** @noinspection PhpInternalEntityUsedInspection */
-        /** @noinspection PhpUndefinedMethodInspection */
         $this->_redis->multi()
             ->hMset($this->_dataStructName . ':' . $jobId, $data)
             ->lPush($this->_queueStructName, $jobId)

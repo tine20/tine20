@@ -6,7 +6,7 @@
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009-2013 Serpro (http://www.serpro.gov.br)
- * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Mário César Kolling <mario.koling@serpro.gov.br>
  */
 
@@ -21,47 +21,36 @@ class Tinebase_Auth_ModSsl extends Zend_Auth_Adapter_ModSsl implements Tinebase_
     /**
      * Constructor
      *
-     * @param array  $options An array of arrays of IMAP options
-     * @param string $username
-     * @param string $password
+     * @param  array  $options  An array of arrays of IMAP options
+     * @return void
      */
     public function __construct(array $options = array(), $username = null, $password = null)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
             __METHOD__ . '::' . __LINE__ . ' ' . print_r($options, true));
-
-        // TODO does this make sense?
-        /** @noinspection PhpUndefinedMethodInspection */
+        
         parent::__construct($options, $username, $password);
     }
     
     /**
      * set loginname
      *
-     * TODO function probably doesnt work
-     *
      * @param  string  $identity
-     * @return Tinebase_Auth_ModSsl
+     * @return Tinebase_Auth_Imap
      */
     public function setIdentity($identity)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        parent::setUsername($identity);
-        return $this;
+        return parent::setUsername($identity);
     }
     
     /**
      * set password
      *
-     * TODO function probably doesnt work
-     *
      * @param  string  $credential
-     * @return Tinebase_Auth_ModSsl
+     * @return Tinebase_Auth_Imap
      */
     public function setCredential($credential)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        parent::setPassword($credential);
-        return $this;
+        return parent::setPassword($credential);
     }
 }

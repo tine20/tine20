@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
@@ -147,7 +147,6 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     public static function getTranslatedRightDescriptions()
     {
-        /** @var Zend_Translate_Adapter $translate */
         $translate = Tinebase_Translation::getTranslation('Tinebase');
 
         $rightDescriptions = array(

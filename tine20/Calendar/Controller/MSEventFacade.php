@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -164,14 +164,14 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup             $_filter
-     * @param Tinebase_Model_Pagination                     $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup|optional    $_filter
+     * @param Tinebase_Model_Pagination|optional            $_pagination
      * @param bool                                          $_getRelations
      * @param boolean                                       $_onlyIds
      * @param string                                        $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = $this->_getEvents($_filter, $_action);
 

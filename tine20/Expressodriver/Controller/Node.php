@@ -6,7 +6,7 @@
  * @package     Expressodriver
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Marcelo Teixeira <marcelo.teixeira@serpro.gov.br>
  * @author      Edgar de Lucca <edgar.lucca@serpro.gov.br>
@@ -167,14 +167,14 @@ class Expressodriver_Controller_Node
     /**
      * search tree nodes
      *
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
      * @param bool $_getRelations
      * @param bool $_onlyIds
-     * @param string $_action
+     * @param string|optional $_action
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $query = '';
         $path = null;

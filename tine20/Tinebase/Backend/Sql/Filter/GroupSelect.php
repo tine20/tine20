@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     New BSD License
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -47,6 +47,7 @@ class Tinebase_Backend_Sql_Filter_GroupSelect
      * save an instance of the select object
      *
      * @param  Zend_Db_Select|Tinebase_Backend_Sql_Filter_GroupSelect $_select
+     * @return void
      */
     public function __construct($_select)
     {

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -49,7 +49,6 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
      * returns concatenation expression
      *
      * @param array $values
-     * @return Zend_Db_Expr
      */
     public function getConcat($values)
     {
@@ -82,6 +81,7 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     }
     
     /**
+     * @param Zend_Db_Adapter_Abstract $adapter
      * @param string $condition
      * @param string $returnIfTrue
      * @param string $returnIfFalse
@@ -220,7 +220,6 @@ class Tinebase_Backend_Sql_Command_Pgsql implements Tinebase_Backend_Sql_Command
     /**
      * escape special char
      *
-     * @param  string $value
      * @return string
      */
      public function escapeSpecialChar($value)

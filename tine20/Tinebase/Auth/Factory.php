@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,7 +20,7 @@ class Tinebase_Auth_Factory
     /**
      * factory function to return a selected authentication backend class
      *
-     * @param   string $_type
+     * @param   string $type
      * @return  Tinebase_Auth_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      */

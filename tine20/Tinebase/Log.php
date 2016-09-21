@@ -14,12 +14,6 @@
  * 
  * @package Tinebase
  * @subpackage Log
- *
- * @method void trace(string $msg)
- * @method void debug(string $msg)
- * @method void info(string $msg)
- * @method void warn(string $msg)
- * @method void err(string $msg)
  */
 class Tinebase_Log extends Zend_Log
 {
@@ -50,7 +44,6 @@ class Tinebase_Log extends Zend_Log
      * adds a priority in flippedPriorities array
      * @param string  $name
      * @param integer $priority
-     * @return void
      */
     public function addPriority($name, $priority)
     {

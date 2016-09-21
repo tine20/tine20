@@ -16,7 +16,6 @@
  * @subpackage  Record
  * 
  * @property    string  name
- * @property    string  status
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -74,14 +74,14 @@ interface Tinebase_Controller_Record_Interface
      * @param   array $_data
      * @return  integer number of updated records
      */
-    public function updateMultiple($_filter, $_data);
+    public function updateMultiple($_what, $_data);
     
     /**
      * Deletes a set of records.
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array $_ids array of record identifiers
+     * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids);

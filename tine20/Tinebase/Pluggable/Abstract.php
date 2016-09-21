@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Pluggable
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
  * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  *
@@ -40,7 +40,7 @@ abstract class Tinebase_Pluggable_Abstract
      */
     public static function attachPlugin($method, $namespace)
     {
-        static::$_plugins[$method] = $namespace;
+        self::$_plugins[$method] = $namespace;
         Zend_Loader_Autoloader::getInstance()->registerNamespace(
             current(explode('_', $namespace)));
     }
@@ -56,7 +56,7 @@ abstract class Tinebase_Pluggable_Abstract
     public static function attachPlugins(array $methods, $namespace)
     {
         foreach ($methods as $method => $class) {
-            static::$_plugins[$method] = $class;
+            self::$_plugins[$method] = $class;
         }
         Zend_Loader_Autoloader::getInstance()->registerNamespace(
             current(explode('_', $namespace)));
@@ -71,8 +71,8 @@ abstract class Tinebase_Pluggable_Abstract
      */
     public function __call($method, array $args)
     {
-        if (isset(static::$_plugins[$method])) {
-            $class = static::$_plugins[$method];
+        if (isset(self::$_plugins[$method])) {
+            $class = self::$_plugins[$method];
             $plugin = new $class();
             return call_user_func_array(array(
                 $plugin,

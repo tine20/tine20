@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  */
-interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
+interface Tinebase_Backend_Sql_Interface
 {
     /**
      * get table prefix

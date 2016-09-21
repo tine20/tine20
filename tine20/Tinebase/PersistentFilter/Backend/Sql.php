@@ -6,7 +6,7 @@
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -63,10 +63,10 @@ class Tinebase_PersistentFilter_Backend_Sql extends Tinebase_Backend_Sql_Abstrac
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Interface $_record
+     * @param  Tinebase_Record_Abstract $_record
      * @return array
      */
-    protected function _recordToRawData(Tinebase_Record_Interface $_record)
+    protected function _recordToRawData($_record)
     {
         if (is_object($_record->filters)) {
             $_record->filters->removeId();
