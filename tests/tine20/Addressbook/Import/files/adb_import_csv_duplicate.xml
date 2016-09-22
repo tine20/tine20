@@ -109,5 +109,9 @@
             <source>customfield2</source>
             <destination>customfield2</destination>
         </field>
+        <field>
+            <source>customfield3</source>
+            <destination>customfield3</destination>
+        </field>
     </mapping>
 </config>
