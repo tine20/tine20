@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -37,13 +37,13 @@ class Tinebase_ImageHelper
     {
         $_image->resize($_width, $_height, $_ratiomode);
     }
-    
+
     /**
      * returns image metadata
-     * 
-     * @param   blob  $_blob
-     * @return  array
-     * @throws  Tinebase_Exception_UnexpectedValue
+     *
+     * @param   string $_blob
+     * @return array
+     * @throws Tinebase_Exception
      */
     public static function getImageInfoFromBlob($_blob)
     {

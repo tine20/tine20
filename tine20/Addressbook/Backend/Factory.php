@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 /**
  * backend factory class for the addressbook
@@ -19,13 +19,6 @@
  */
 class Addressbook_Backend_Factory
 {
-    /**
-     * object instance
-     *
-     * @var Addressbook_Backend_Factory
-     */
-    private static $_instance = NULL;
-    
     /**
      * backend object instances
      */
@@ -65,18 +58,18 @@ class Addressbook_Backend_Factory
                 }
                 $instance = self::$_backends[$_type];
                 break;
-            case self::LDAP:
+            /*case self::LDAP:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Addressbook_Backend_Ldap();
                 }
                 $instance = self::$_backends[$_type];
-                break;
-            case self::SALUTATION:
+                break;*/
+            /*case self::SALUTATION:
                 if (!isset(self::$_backends[$_type])) {
                     self::$_backends[$_type] = new Addressbook_Backend_Salutation();
                 }
                 $instance = self::$_backends[$_type];
-                break;
+                break;*/
             default:
                 throw new Addressbook_Exception_InvalidArgument('Unknown backend type (' . $_type . ').');
                 break;

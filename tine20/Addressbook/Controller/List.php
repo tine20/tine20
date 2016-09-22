@@ -90,9 +90,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     *
      * @see Tinebase_Controller_Record_Abstract::get()
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @return Addressbook_Model_List
      */
     public function get($_id, $_containerId = NULL)
     {
@@ -143,9 +145,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     *
      * @see Tinebase_Controller_Record_Abstract::search()
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param bool $_getRelations
+     * @param bool $_onlyIds
+     * @param string $_action
+     * @return array|Tinebase_Record_RecordSet
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
@@ -159,9 +166,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * (non-PHPdoc)
-     *
      * @see Tinebase_Controller_Record_Abstract::getMultiple()
+     *
+     * @param array $_ids
+     * @param bool $_ignoreACL
+     * @return Tinebase_Record_RecordSet
      */
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
@@ -280,14 +289,14 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * inspect creation of one record
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
+     * @param  Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         if (isset($_record->type) && $_record->type == Addressbook_Model_List::LISTTYPE_GROUP) {
             if (empty($_record->group_id)) {
-                throw Tinebase_Exception_UnexpectedValue('group_id is empty, must not happen for list type group');
+                throw new Tinebase_Exception_UnexpectedValue('group_id is empty, must not happen for list type group');
             }
 
             // check rights
@@ -307,6 +316,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
+        /** @var Addressbook_Model_List $_createdRecord */
         $this->_fireChangeListeEvent($_createdRecord);
     }
 
@@ -347,9 +357,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (after update)
      *
-     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
-     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @param   Addressbook_Model_List $updatedRecord   the just updated record
+     * @param   Addressbook_Model_List $record          the update record
+     * @param   Addressbook_Model_List $currentRecord   the current record (before update)
      * @return  void
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
@@ -477,7 +487,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         foreach ($_userIds as $userId) {
-            $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userId);
+            $user = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $userId);
             if (!empty($user->contact_id)) {
                 $contactIds[] = $user->contact_id;
             }
@@ -511,6 +521,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = FALSE)
     {
+        /** @var Addressbook_Model_List $record */
         if (isset($record->memberroles)) {
             // get migration
             // TODO add generic helper fn for this?
@@ -550,7 +561,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     /**
      * add related data to record
      *
-     * @param Tinebase_Record_Interface $record
+     * @param Addressbook_Model_List $record
      */
     protected function _getRelatedData($record)
     {
@@ -561,6 +572,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         parent::_getRelatedData($record);
     }
 
+    /**
+     * @param Addressbook_Model_List $record
+     * @return Tinebase_Record_RecordSet|Addressbook_Model_ListMemberRole
+     */
     protected function _getMemberRoles($record)
     {
         $result = $this->_getMemberRolesBackend()->getMultipleByProperty($record->getId(), 'list_id');

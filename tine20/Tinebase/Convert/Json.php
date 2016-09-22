@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -67,7 +67,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_Record_RecordSet $_records the records
      * @param Tinebase_ModelConfiguration $modelConfig
      */
-    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfig = NULL)
+    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, Tinebase_ModelConfiguration $modelConfig = NULL)
     {
         if (! $modelConfig) {
             return;
@@ -349,6 +349,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             
             if ($foreignRecords->count() > 0) {
+                /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
                     $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);

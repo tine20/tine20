@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -16,21 +16,26 @@
  * the usage of this datatype should be restricted to administrative tasks only
  * 
  * @package     Tinebase
- * @property    string                  accountStatus
- * @property    Tinebase_Model_SAMUser  sambaSAM            object holding samba settings
- * @property    string                  accountEmailAddress email address of user
- * @property    DateTime                accountExpires      date when account expires  
- * @property    string                  accountFullName     fullname of the account
- * @property    string                  accountDisplayName  displayname of the account
- * @property    string                  accountLoginName    account login name
- * @property    string                  accountLoginShell   account login shell
- * @property    string                  accountPrimaryGroup primary group id
- * @property    string                  container_id        
- * @property    array                   groups              list of group memberships
- * @property    DateTime                lastLoginFailure    time of last login failure
- * @property    int                     loginFailures       number of login failures
- * @property    string                  visibility          displayed/hidden in/from addressbook
  * @subpackage  User
+ *
+ * @property    string                      accountStatus
+ * @property    Tinebase_Model_SAMUser      sambaSAM            object holding samba settings
+ * @property    string                      accountEmailAddress email address of user
+ * @property    DateTime                    accountExpires      date when account expires
+ * @property    string                      accountFullName     fullname of the account
+ * @property    string                      accountDisplayName  displayname of the account
+ * @property    string                      accountLoginName    account login name
+ * @property    string                      accountLoginShell   account login shell
+ * @property    string                      accountPrimaryGroup primary group id
+ * @property    string                      container_id
+ * @property    array                       groups              list of group memberships
+ * @property    DateTime                    lastLoginFailure    time of last login failure
+ * @property    int                         loginFailures       number of login failures
+ * @property    string                      visibility          displayed/hidden in/from addressbook
+ * @property    Tinebase_Model_EmailUser    emailUser
+ * @property    Tinebase_Model_EmailUser    imapUser
+ * @property    Tinebase_Model_EmailUser    smtpUser
+ *
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
 {

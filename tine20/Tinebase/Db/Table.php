@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Db
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,13 +20,13 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
     /**
      * wrapper around Zend_Db_Table_Abstract::fetchAll
      *
-     * @param strin|array $_where OPTIONAL
+     * @param string|array $_where OPTIONAL
      * @param string $_order OPTIONAL
      * @param string $_dir OPTIONAL
      * @param int $_count OPTIONAL
      * @param int $_offset OPTIONAL
      * @throws Tinebase_Exception_InvalidArgument if $_dir is not ASC or DESC
-     * @return the row results per the Zend_Db_Adapter fetch mode.
+     * @return array the row results per the Zend_Db_Adapter fetch mode.
      */
     public function fetchAll($_where = NULL, $_order = NULL, $_dir = 'ASC', $_count = NULL, $_offset = NULL)
     {
@@ -62,14 +62,14 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
     public function getTotalCount($_where)
     {
         $tableInfo = $this->info();
-            
-        if (is_array($_where) || is_string($_where)) {
+
+        if ($_where instanceof Zend_Db_Select ) {
+            $select = $_where;
+        } else {
             $select = $this->getAdapter()->select();
             foreach((array)$_where as $where) {
                 $select->where($where);
             }
-        } elseif ($_where instanceof Zend_Db_Select ) {
-            $select = $_where;
         }
         
         $select->from($tableInfo['name'], array('count' => 'COUNT(*)'));
@@ -131,6 +131,7 @@ class Tinebase_Db_Table extends Zend_Db_Table_Abstract
             
             // if APC extension is installed also store in APC
             if (function_exists('apc_store')) {
+                /** @noinspection PhpUndefinedVariableInspection */
                 apc_store($apcCacheId, $result, 3600);
             }
         }

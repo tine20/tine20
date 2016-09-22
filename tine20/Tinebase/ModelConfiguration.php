@@ -14,9 +14,84 @@
  *
  * @package     Tinebase
  * @subpackage  Configuration
- * @property    string titleProperty
  *
+
+ * these properties are availbale throug __get which prefixes them with _
+ *
+ * @property array      $availableApplications this holds (caches) the availability info of applications globally
+ * @property string     $idProperty the id property
+ * @property array      $table table definition
+ * @property string     $version model version
+ * @property string     $identifier legacy
+ * @property string     $recordName Human readable name of the record
+ * @property string     $recordsName Human readable name of multiple records
+ * @property string     $containerProperty The property of the container, if any
+ * @property boolean    $containerUsesFilter set this to false, if no filter and grid column should be created - default is true
+ * @property boolean    $hasPersonalContainer set this to false, if personal containers should be ommited - default is true
+ * @property string     $titleProperty The property of the title, if any - if an array is given, the second item is the array of arguments for vsprintf, the first the format string
+ * @property boolean    $exposeJsonApi If this is true, the json api (smd) is generated automatically
+ * @property string     $containerName Human readable name of the container
+ * @property string     $containersName Human readable name of multiple containers
+ * @property boolean    $hasRelations If this is true, the record has relations
+ * @property boolean    $hasCustomFields If this is true, the record has customfields
+ * @property boolean    $hasNotes If this is true, the record has notes
+ * @property boolean    $hasTags If this is true, the record has tags
+ * @property boolean    $hasAttachments If this is true, the record has file attachments
+ * @property boolean    $modlogActive If this is true, a modlog will be created
+ * @property boolean    $multipleEdit If this is true, multiple edit of records of this model is possible
+ * @property string     $multipleEditRequiredRight If multiple edit requires a special right, it's defined here
+ * @property boolean    $splitButton if this is set to true, this model will be added to the global add splitbutton
+ * @property string     $moduleGroup Group name of this model (will create a parent node in the modulepanel with this name)
+ * @property string     $defaultFilter Set the default Filter (defaults to query)
+ * @property array      $defaultSortInfo Set the default sort info for the gridpanel (Tine.widgets.grid.GridPanel.defaultSortInfo)
+ * @property string     $requiredRight Defines the right to see this model
+ * @property boolean    $singularContainerMode no containers
+ * @property array      $fields Holds the field definitions in an associative array
+ * @property boolean    $resolveVFGlobally if this is set to true, all virtual fields get resolved by the record controller method "resolveVirtualFields"
+ * @property array      $recordsFields holds all field definitions of type records
+ * @property array      $recordFields holds all field definitions of type record (foreignId fields)
+ * @property boolean    $resolveRelated if this is set to true, related data will be fetched on fetching dependent records by frontend json
+ * @property array      $virtualFields holds virtual field definitions used for non-persistent fields getting calculated on each call of the record
+ * @property array      $fieldGroups maps fieldgroup keys to their names
+ * @property array      $fieldGroupRights here you can define one right (Tinebase_Acl_Rights_Abstract) for each field
+ * @property array      $fieldGroupFeDefaults every field group will be nested into a fieldset, here you can define the defaults (Ext.Container.defaults)
+ * @property boolean    $createModule
+ * @property boolean    $useGroups If any field has a group, this will be set to true (autoset by the constructor)
+ * @property string     $appName the application this configuration belongs to (if the class has the name "Calendar_Model_Event", this will be resolved to "Calendar")
+ * @property string     $application legacy
+ * @property string     $applicationName legacy
+ * @property string     $modelName the name of the model (if the class has the name "Calendar_Model_Event", this will be resolved to "Event")
+ * @property array      $fieldKeys holds the keys of all fields
+ * @property array      $timeFields holds the time fields
+ * @property array      $modlogOmitFields holds the fields which will be omitted in the modlog
+ * @property array      $readOnlyFields these fields will just be readOnly
+ * @property array      $datetimeFields holds the datetime fields
+ * @property array      $dateFields holds the date fields (maybe we use Tinebase_Date sometimes)
+ * @property array      $alarmDateTimeField holds the alarm datetime fields
+ * @property array      $filterModel The calculated filters for this model (auto set)
+ * @property array      $validators holds the validators for the model (auto set)
+ * @property array      $ownValidators holds validators which will be instanciated on model construction
+ * @property boolean    $isDependent if a record is dependent to another, this is true
+ * @property array      $filters input filters (will be set by field configuration)
+ * @property array      $converters converters (will be set by field configuration)
+ * @property array      $defaultData Holds the default Data for the model (autoset from field config)
+ * @property array      $autoincrementFields holds the fields of type autoincrement (will be auto set by field configuration)
+ * @property array      $duplicateCheckFields holds the fields / groups to check for duplicates (will be auto set by field configuration)
+ * @property array      $filterProperties properties to collect for the filters (_appName and _modelName are set in the filter)
+ * @property array      $modelProperties properties to collect for the model
+ * @property array      $frontendProperties properties to collect for the frontend
+ * @property string     $group the module group (will be on the same leaf of the content type tree panel)
+ * @property array      $modelConfiguration the backend properties holding the collected properties
+ * @property array      $frontendConfiguration holds the collected values for the frontendconfig (autoset on first call of getFrontendConfiguration)
+ * @property array      $filterConfiguration the backend properties holding the collected properties
+ * @property array      $attributeConfig
+ * @property array      $filterModelMapping This defines the filters use for all known types
+ * @property array      $inputFilterDefaultMapping This maps field types to own validators, which will be instanciated in the constructor.
+ * @property array      $validatorMapping This maps field types to their default validators, just zendfw validators can be used here.
+ * @property array      $converterDefaultMapping This maps field types to their default converter
+ * @property array      $copyOmitFields Collection of copy omit properties for frontend
  */
+
 class Tinebase_ModelConfiguration {
 
     /**
