@@ -49,7 +49,7 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contactIds);
         }
         foreach ($records as $list) {
-            if (isset($record->memberroles)) {
+            if (isset($list->memberroles)) {
                 foreach ($list->memberroles as $memberrole) {
                     $contact = $contacts->getById($memberrole->contact_id);
                     if ($contact) {

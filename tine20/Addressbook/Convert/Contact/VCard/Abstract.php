@@ -37,6 +37,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * @var string
      */
     protected $_version;
+
+    /**
+     * should be overwritten by concrete class
+     *
+     * @var array
+     */
+    protected $_emptyArray;
     
     /**
      * @param  string  $_version  the version of the client
@@ -75,7 +82,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  \Sabre\VObject\Component|stream|string  $blob       the vcard to parse
+     * @param  \Sabre\VObject\Component|resource|string  $blob       the vcard to parse
      * @param  Tinebase_Record_Abstract                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
@@ -92,6 +99,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         $data = $this->_emptyArray;
 
+        /** @var \Sabre\VObject\Property $property */
         foreach ($vcard->children() as $property) {
             switch ($property->name) {
                 case 'VERSION':
@@ -266,38 +274,40 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         $telField = null;
         
         if (isset($property['TYPE'])) {
+            /** @var \Sabre\VObject\Parameter $typeParameter */
+            $typeParameter = $property['TYPE'];
             // comvert all TYPE's to lowercase and ignore voice and pref
-            $property['TYPE']->setParts(array_diff(
+            $typeParameter->setParts(array_diff(
                 array_map('strtolower', $property['TYPE']->getParts()), 
                 array('voice', 'pref')
             ));
             
             // CELL
-            if ($property['TYPE']->has('cell')) {
-                if (count($property['TYPE']->getParts()) == 1 || $property['TYPE']->has('work')) {
+            if ($typeParameter->has('cell')) {
+                if (count($typeParameter->getParts()) == 1 || $typeParameter->has('work')) {
                     $telField = 'tel_cell';
-                } elseif ($property['TYPE']->has('home')) {
+                } elseif ($typeParameter->has('home')) {
                     $telField = 'tel_cell_private';
                 }
                 
             // PAGER
-            } elseif ($property['TYPE']->has('pager')) {
+            } elseif ($typeParameter->has('pager')) {
                 $telField = 'tel_pager';
                 
             // FAX
-            } elseif ($property['TYPE']->has('fax')) {
-                if (count($property['TYPE']->getParts()) == 1 || $property['TYPE']->has('work')) {
+            } elseif ($typeParameter->has('fax')) {
+                if (count($typeParameter->getParts()) == 1 || $typeParameter->has('work')) {
                     $telField = 'tel_fax';
-                } elseif ($property['TYPE']->has('home')) {
+                } elseif ($typeParameter->has('home')) {
                     $telField = 'tel_fax_home';
                 }
                 
             // HOME
-            } elseif ($property['TYPE']->has('home')) {
+            } elseif ($typeParameter->has('home')) {
                 $telField = 'tel_home';
                 
             // WORK
-            } elseif ($property['TYPE']->has('work')) {
+            } elseif ($typeParameter->has('work')) {
                 $telField = 'tel_work';
             }
         } else {
@@ -368,6 +378,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _fromTine20ModelAddGeoData(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
     {
+        /** @var Addressbook_Model_Contact $record */
         if ($record->adr_one_lat && $record->adr_one_lon) {
             $card->add('GEO', array($record->adr_one_lat, $record->adr_one_lon));
             
@@ -384,6 +395,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _fromTine20ModelAddBirthday(Tinebase_Record_Abstract $record, \Sabre\VObject\Component $card)
     {
+        /** @var Addressbook_Model_Contact $record */
         if ($record->bday instanceof Tinebase_DateTime) {
             $date = clone $record->bday;
             $date->setTimezone(Tinebase_Core::getUserTimezone());
@@ -395,10 +407,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * parse categories from Tine20 model to VCard and attach it to VCard $card
      *
-     * @param Tinebase_Record_Abstract &$_record
+     * @param Tinebase_Record_Abstract $record
      * @param Sabre\VObject\Component $card
      */
-        protected function _fromTine20ModelAddCategories(Tinebase_Record_Abstract &$record, Sabre\VObject\Component $card)
+        protected function _fromTine20ModelAddCategories(Tinebase_Record_Abstract $record, Sabre\VObject\Component $card)
         {
             if (!isset($record->tags)) {
                 // If the record has not been populated yet with tags, let's try to get them all and update the record
@@ -439,6 +451,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected function _fromTine20ModelRequiredFields(Tinebase_Record_Abstract $record)
     {
+        /** @var Addressbook_Model_Contact $record */
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
         
         $card = new \Sabre\VObject\Component\VCard(array(

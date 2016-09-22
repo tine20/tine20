@@ -38,7 +38,7 @@
  *
  * @property array|Tinebase_Record_RecordSet                        $relations
  * @property array|Tinebase_Record_RecordSet                        $notes
- * @property array|Tinebase_Record_RecordSet                        $tags
+ * @property array|Tinebase_Record_RecordSet|Tinebase_Model_Tag     $tags
  * @property array|Tinebase_Record_RecordSet|Tinebase_Model_Alarm   $alarms
  * @property array|Tinebase_Record_RecordSet                        $attachments
  */
