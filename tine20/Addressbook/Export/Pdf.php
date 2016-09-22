@@ -125,6 +125,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
             $tmpPath .= $tineImage->getImageExtension();
             file_put_contents($tmpPath, $tineImage->blob);
+            /** @var Zend_PDF_Image $contactPhoto */
             $contactPhoto = Zend_Pdf_Image::imageWithPath($tmpPath);
             unlink($tmpPath);
         } catch (Exception $e) {

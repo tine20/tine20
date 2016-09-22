@@ -27,14 +27,14 @@
  * @property string $container_id
  *
  * TODO are these all strings?!? guess not
- * @property string $created_by
- * @property string $creation_time
- * @property string $last_modified_by
- * @property string $last_modified_time
+ * @property string             $created_by
+ * @property Tinebase_DateTime  $creation_time
+ * @property Tinebase_DateTime  $last_modified_by
+ * @property Tinebase_DateTime  $last_modified_time
  * @property string $is_deleted
- * @property string $deleted_time
+ * @property Tinebase_DateTime  $deleted_time
  * @property string $deleted_by
- * @property string $seq
+ * @property int $seq
  *
  * @property array|Tinebase_Record_RecordSet                        $relations
  * @property array|Tinebase_Record_RecordSet                        $notes
