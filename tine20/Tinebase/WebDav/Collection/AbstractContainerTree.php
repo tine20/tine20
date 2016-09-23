@@ -114,7 +114,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
     }
     
     /**
-     * (non-PHPdoc)
+     * @param string $name
+     * @return Tinebase_WebDav_Container_Abstract|Tinebase_WebDav_Collection_AbstractContainerTree|Tinebase_Frontend_WebDAV_RecordCollection
      * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($name)
