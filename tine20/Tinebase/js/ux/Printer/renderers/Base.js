@@ -105,6 +105,10 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     doc.write(this.generateHTML(component));
     doc.close();
 
+    // resize to full height as browser might print only the visible area
+    var totalHeight = Ext.fly(doc.body).getHeight();
+    Ext.fly(frame).setStyle('height', totalHeight+'px');
+
     this.doPrintOnStylesheetLoad.defer(10, this, [frame.contentWindow, component]);
   },
   

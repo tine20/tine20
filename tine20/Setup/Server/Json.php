@@ -67,7 +67,7 @@ class Setup_Server_Json extends Tinebase_Server_Json
                 ));
             }
             
-            // check json key for all methods but some exceptoins
+            // check json key for all methods but some exceptions
             if (! in_array($method, $anonymnousMethods) && Setup_Core::configFileExists()
                      && ( empty($jsonKey) || $jsonKey != Setup_Core::get('jsonKey')
                             || !Setup_Core::isRegistered(Setup_Core::USER)
