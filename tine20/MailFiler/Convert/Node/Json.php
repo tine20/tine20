@@ -1,0 +1,50 @@
+<?php
+/**
+ * convert functions for records from/to json (array) format
+ * 
+ * @package     Tinebase
+ * @subpackage  Convert
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
+/**
+ * convert functions for records from/to json (array) format
+ *
+ * @package     Tinebase
+ * @subpackage  Convert
+ */
+class MailFiler_Convert_Node_Json extends Tinebase_Convert_Json
+{
+    /**
+     * resolves child records before converting the record set to an array
+     * 
+     * @param Tinebase_Record_RecordSet $records
+     * @param Tinebase_ModelConfiguration $modelConfiguration
+     * @param boolean $multiple
+     */
+    protected function _resolveBeforeToArray($records, $modelConfiguration, $multiple = false)
+    {
+        parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
+
+        $this->_resolveMessages($records);
+    }
+
+    protected function _resolveMessages($records)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Resolving mails of nodes ....');
+
+        $filter = new MailFiler_Model_MessageFilter(array('field' => 'id', 'operator' => 'in', 'value' => $records->getArrayOfIds()));
+        $messages = MailFiler_Controller_Message::getInstance()->search($filter);
+        foreach ($messages as $message) {
+            $idx = $records->getIndexById($message->node_id);
+            if (isset($idx) && $idx !== FALSE) {
+                $message->body = MailFiler_Controller_Message::getInstance()->getMessageBodyFromNode($message, $records[$idx]);
+                $message->attachments = MailFiler_Controller_Message::getInstance()->getAttachments($message);
+                $records[$idx]->message = $message;
+            }
+        }
+    }
+}

@@ -26,7 +26,7 @@ class Tinebase_Convert_Factory
     const TYPE_JSON     = 'Json';
     
     /**
-     * factory function to return a selected vcalendar backend class
+     * factory function to return a selected converter backend class
      *
      * @param   string|Tinebase_Record_Abstract $_record record object or class name
      * @param   string $_type

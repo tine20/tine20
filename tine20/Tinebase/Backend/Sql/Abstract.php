@@ -383,13 +383,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _rawDataToRecordSet(array $_rawDatas)
     {
         $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
-        
-        if (! empty($this->_foreignTables)) {
-            foreach ($result as $record) {
+
+        foreach ($result as $record) {
+            if (! empty($this->_foreignTables)) {
                 $this->_explodeForeignValues($record);
             }
+            $record->runConvertToRecord();
         }
-        
+
         return $result;
     }
     

@@ -64,6 +64,10 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
+
+        if (! this.app) {
+            this.app = Tine.Tinebase.appMgr.get('Filemanager');
+        }
         
         Tine.Tinebase.uploadManager.on('update', this.onUpdate);
         
