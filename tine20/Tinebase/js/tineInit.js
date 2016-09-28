@@ -84,6 +84,11 @@ Tine.Tinebase.tineInit = {
     stateful: true,
 
     /**
+     * @cfg {String} jsonKeyCookieId
+     */
+    jsonKeyCookieId: 'TINE20JSONKEY',
+
+    /**
      * @cfg {String} requestUrl
      */
     requestUrl: 'index.php',
@@ -356,9 +361,9 @@ Tine.Tinebase.tineInit = {
         Ext.Ajax.on('beforerequest', function (connection, options) {
 
             var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
-            if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY')) {
-                var cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get('TINE20JSONKEY');
-                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear('TINE20JSONKEY');
+            if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId)) {
+                var cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId);
+                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(this.jsonKeyCookieId);
                 // NOTE cookie reset is not always working in IE, so we need to check jsonKey again
                 if (cookieJsonKey && cookieJsonKey != "null") {
                     jsonKey = cookieJsonKey;
@@ -417,6 +422,8 @@ Tine.Tinebase.tineInit = {
                 json: options.jsonData
             };
         });
+
+
         
         /**
          * inspect completed responses => staus code == 200

@@ -225,8 +225,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * The default values must also be set, even if no filtering is done!
      * 
      * @param mixed $_data
-     * @param bool $bypassFilters sets {@see this->bypassFilters}
-     * @param mixed $convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
+     * @param bool $_bypassFilters sets {@see this->bypassFilters}
+     * @param mixed $_convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
@@ -306,7 +306,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * sets identifier of record
      * 
-     * @param int identifier
+     * @param int $_id
      * @return void
      */
     public function setId($_id)
@@ -496,6 +496,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         if ($_recursive) {
+            /** @var Tinebase_Record_Interface  $value */
             foreach ($recordArray as $property => $value) {
                 if ($this->_hasToArray($value)) {
                     $recordArray[$property] = $value->toArray();
@@ -579,8 +580,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * sets record related properties
      * 
-     * @param string _name of property
-     * @param mixed _value of property
+     * @param string $_name of property
+     * @param mixed $_value of property
      * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
@@ -630,7 +631,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * unsets record related properties
      * 
-     * @param string _name of property
+     * @param string $_name of property
      * @throws Tinebase_Exception_UnexpectedValue
      * @return void
      */
@@ -652,7 +653,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * checkes if an propertiy is set
      * 
-     * @param string _name name of property
+     * @param string $_name name of property
      * @return bool property is set or not
      */
     public function __isset($_name)
@@ -685,7 +686,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * returns a Zend_Filter for the $_filters and $_validators of this record class.
      * we just create an instance of Filter if we really need it.
-     * 
+     *
+     * @param string $field
      * @return Zend_Filter_Input
      */
     protected function _getFilter($field = null)
@@ -766,7 +768,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         $value = (int)$value == 0 ? NULL : new Tinebase_DateTime($value);
                         
                     }
-                } catch (Tinebase_DateTime_Exception $zde) {
+                } catch (Tinebase_Exception_Date $zde) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Error while converting date field "' . $field . '": ' . $zde->getMessage());
                     $value = NULL;
                 }
@@ -795,42 +797,6 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * Converts time into iso representation (hh:mm:ss)
-     *
-     * @param array &$_data
-     * @return void
-     * 
-     * @todo    add support for hh:mm:ss AM|PM
-     */
-    protected function _convertTime(&$_data)
-    {
-        foreach ($this->_timeFields as $field) {
-            if (!isset($_data[$field]) || empty($_data[$field])) {
-                continue;
-            }
-            
-            $hhmmss = explode(":", $_data[$field]);
-            if (count($hhmmss) === 2) {
-                // seconds missing
-                $hhmmss[] = '00';
-            }
-            list($hours, $minutes, $seconds) = $hhmmss;
-            if (preg_match('/AM|PM/', $minutes)) {
-                list($minutes, $notation) = explode(" ", $minutes);
-                switch($notation) {
-                    case 'AM':
-                        $hours = ($hours == '12') ? 0 : $hours;
-                        break;
-                    case 'PM':
-                        $hours = $hours + 12;
-                        break;
-                }
-                $_data[$field] = implode(':', $hhmmss);
-            }
-        }
-    }
-    
-    /**
      * returns the default filter group for this model
      * @return string
      */
@@ -841,6 +807,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     
     /**
      * required by ArrayAccess interface
+     *
+     * @param mixed $_offset
+     * @return boolean
      */
     public function offsetExists($_offset)
     {
@@ -849,6 +818,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     
     /**
      * required by ArrayAccess interface
+     *
+     * @param mixed $_offset
+     * @return mixed
      */
     public function offsetGet($_offset)
     {
@@ -857,14 +829,19 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     
     /**
      * required by ArrayAccess interface
+     *
+     * @param mixed $_offset
+     * @param mixed $_value
      */
     public function offsetSet($_offset, $_value)
     {
-        return $this->__set($_offset, $_value);
+        $this->__set($_offset, $_value);
     }
     
     /**
      * required by ArrayAccess interface
+     *
+     * @param mixed $_offset
      * @throws Tinebase_Exception_Record_NotAllowed
      */
     public function offsetUnset($_offset)
@@ -884,7 +861,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * returns a random 40-character hexadecimal number to be used as 
      * universal identifier (UID)
      * 
-     * @param int|optional $_length the length of the uid, defaults to 40
+     * @param int|boolean $_length the length of the uid, defaults to 40
      * @return string 40-character hexadecimal number
      */
     public static function generateUID($_length = false)
@@ -897,17 +874,19 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         
         return $uid;
     }
-    
+
     /**
-    * converts a int, string or Tinebase_Record_Interface to a id
-    *
-    * @param int|string|Tinebase_Record_Abstract $_id the id to convert
-    * @param string $_modelName
-    * @return int|string
-    */
+     * converts a int, string or Tinebase_Record_Interface to a id
+     *
+     * @param int|string|Tinebase_Record_Abstract $_id the id to convert
+     * @param string $_modelName
+     * @return int|string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public static function convertId($_id, $_modelName = 'Tinebase_Record_Abstract')
     {
         if ($_id instanceof $_modelName) {
+            /** @var Tinebase_Record_Interface $_id */
             if (! $_id->getId()) {
                 throw new Tinebase_Exception_InvalidArgument('No id set!');
             }
@@ -950,10 +929,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             
             $ownField = $this->__get($fieldName);
             $recordField = $_record->$fieldName;
-            
+
+            if ($fieldName == 'customfields' && is_array($ownField) && is_array($recordField)) {
+                // special handling for customfields, remove empty customfields from array
+                foreach (array_keys($recordField, '', true) as $key) {
+                    unset($recordField[$key]);
+                }
+                foreach (array_keys($ownField, '', true) as $key) {
+                    unset($ownField[$key]);
+                }
+            }
+
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($ownField instanceof DateTime
                     && $recordField instanceof DateTime) {
+
+                    /** @var Tinebase_DateTime $recordField */
                     
                     if (! $ownField instanceof Tinebase_DateTime) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
@@ -1049,14 +1040,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     {
         return $this->_isDirty;
     }
-    
+
     /**
      * returns TRUE if given record obsoletes this one
-     * 
+     *
      * @param  Tinebase_Record_Interface $_record
      * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function isObsoletedBy($_record)
+    public function isObsoletedBy(Tinebase_Record_Interface $_record)
     {
         if (get_class($_record) !== get_class($this)) {
             throw new Tinebase_Exception_InvalidArgument('Records could not be compared');
@@ -1264,6 +1256,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return;
         foreach ($conf->getConverters() as $key => $converters) {
             if (isset($this->_properties[$key])) {
+                /** @var Tinebase_Model_Converter_Interface $converter */
                 foreach ($converters as $converter) {
                     $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
                 }
@@ -1279,6 +1272,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         foreach ($conf->getConverters() as $key => $converters) {
             if (isset($this->_properties[$key])) {
                 foreach ($converters as $converter) {
+                    /** @var Tinebase_Model_Converter_Interface $converter */
                     $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
                 }
             }

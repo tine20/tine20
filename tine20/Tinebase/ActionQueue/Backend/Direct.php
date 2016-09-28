@@ -6,7 +6,7 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -22,8 +22,7 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
     /**
      * Constructor
      *
-     * @param  array  $config  An array having configuration data
-     * @return void
+     * @param  array  $options  An array having configuration data
      */
     public function __construct($options)
     {
@@ -34,7 +33,6 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
      * Send a message to the queue
      *
      * @param  mixed $message Message to send to the active queue
-     * @return Zend_Queue_Message
      */
     public function send($message)
     {
@@ -49,15 +47,36 @@ class Tinebase_ActionQueue_Backend_Direct implements Tinebase_ActionQueue_Backen
     {
         return 0;
     }
-    
+
     /**
      * wait for a new job in queue
-     *
-     * @param  integer  $timeout  
-     * @return mixed              false on timeout or job id
+     * @return mixed false on timeout or job id
      */
-    public function waitForJob($timeout = 1)
+    public function waitForJob()
     {
         return FALSE;
+    }
+
+    /**
+     * get one job from the queue
+     *
+     * @param  integer  $jobId  the id of the job
+     * @throws Tinebase_Exception_NotImplemented
+     * @return string           the job
+     */
+    public function receive($jobId)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Delete a job from the queue
+     *
+     * @param  string  $jobId  the id of the job
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function delete($jobId)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 }

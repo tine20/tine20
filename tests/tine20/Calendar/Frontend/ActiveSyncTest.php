@@ -494,7 +494,7 @@ Zeile 3</AirSyncBase:Data>
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
-        
+
         $syncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         
         $this->assertEquals(0,         $syncrotonEvent->allDayEvent, 'alldayEvent');
@@ -1206,37 +1206,37 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $this->assertNotEmpty($syncrotonEvent->attendees, 'Events attendees not found in default calendar');
     }
 
-    public function testUpdateEntriesIPhone()
+    public function testUpdateEntriesIPhone($syncrotonFolder = null)
     {
-        // create event
-        $syncrotonFolder = $this->testCreateFolder();
-        $syncrotonFolder2 = $this->testCreateFolder();
-        
-        //make $syncrotonFolder2 the default
-        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
-        
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
-        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+        // ensure folder is default
+        $syncrotonFolder = $syncrotonFolder ? $syncrotonFolder : $this->testCreateFolder();
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder->serverId);
 
-        // update event
+        // create event with external attendee in default calendar
+        $xml = new SimpleXMLElement(file_get_contents(__DIR__ . '/files/event_with_attendee.xml'));
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        // assert external attendee is present
         $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertEquals(2, count($syncrotonEventtoUpdate->attendees), 'event: ' . var_export($syncrotonEventtoUpdate->attendees, TRUE));
+
+        // update event in non default folder
         $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
         $syncrotonEventtoUpdate->exceptions[0]->startTime->addHour(1);
         $syncrotonEventtoUpdate->exceptions[0]->endTime->addHour(1);
-
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
-        // assert update
+        // assert update in default folder
         $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         $this->assertEquals('update', $updatedSyncrotonEvent->exceptions[0]->subject);
-        $this->assertNotEquals($syncrotonEvent->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
-        $this->assertEquals($syncrotonEventtoUpdate->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
+        $this->assertEquals('2012-11-25 15:00:00', $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
+        $this->assertEquals(2, count($updatedSyncrotonEvent->attendees), 'event: ' . var_export($updatedSyncrotonEvent->attendees, TRUE));
 
-        // assert attendee are preserved
-        $updatedEvent = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
-        $this->assertNotEmpty($updatedEvent, 'attendee must be preserved during update');
+        return array($serverId, $updatedSyncrotonEvent);
     }
 
     /**
@@ -1247,21 +1247,21 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
      */
     public function testUpdateEntriesIPhoneNonDefaultFolder()
     {
-        // create event in folder1
+        // create event in default folder
         $syncrotonFolder = $this->testCreateFolder();
-        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
-        list($serverId, $syncrotonEvent) = $this->testCreateEntry($syncrotonFolder);
+        list($serverId, $syncrotonEvent) = $this->testUpdateEntriesIPhone($syncrotonFolder);
 
         // create new default folder2
         $syncrotonFolder2 = $this->testCreateFolder();
         Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder2->serverId);
 
-        // load event in non default folder2
+        // load event in non default folder
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         $this->assertEmpty($syncrotonEventtoUpdate->attendees, 'attendee in non default folders must be removed for ios');
 
         // update event in non default folder
-        $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
+        $syncrotonEventtoUpdate->exceptions[0]->subject = 'update2';
         $syncrotonEventtoUpdate->exceptions[0]->startTime->addHour(1);
         $syncrotonEventtoUpdate->exceptions[0]->endTime->addHour(1);
 
@@ -1269,13 +1269,44 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
         $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
-        // assert update from non default folder
+        // assert update from default folder
         $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder2->serverId)), $serverId);
-        $this->assertEquals('update', $updatedSyncrotonEvent->exceptions[0]->subject);
+        $this->assertEquals('update2', $updatedSyncrotonEvent->exceptions[0]->subject);
         $this->assertNotEquals($syncrotonEvent->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
         $this->assertEquals($syncrotonEventtoUpdate->exceptions[0]->startTime->toString(), $updatedSyncrotonEvent->exceptions[0]->startTime->toString());
+        $this->assertEquals(2, count($updatedSyncrotonEvent->attendees), 'event: ' . var_export($updatedSyncrotonEvent->attendees, TRUE));
+    }
 
-        // assert attendee are preserved
-        $this->assertNotEmpty($updatedSyncrotonEvent->attendees, 'attendee must be preserved during update');
+    public function testCreateUpdateGroupEvents()
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder->serverId);
+
+        $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
+
+        // create event with default user group (without explicit groupmembers)
+        $xml = new SimpleXMLElement(str_replace(array(
+            'usersgroupid',
+        ), $defaultUserGroup->getId(), file_get_contents(__DIR__ . '/files/event_with_group_attendee.xml')));
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        // assert created group & groupmembers
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved');
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->exceptions[0]->attendees, 'groupmembers not resolved');
+
+        // update event
+        $syncrotonEventtoUpdate->exceptions[0]->subject = 'update';
+        $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
+        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
+
+        // assert updated group & groupmembers
+        $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->attendees, 'groupmembers not resolved');
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->exceptions[0]->attendees, 'groupmembers not resolved');
     }
 }

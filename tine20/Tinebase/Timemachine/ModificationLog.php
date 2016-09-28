@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -658,8 +658,8 @@ class Tinebase_Timemachine_ModificationLog
      * NOTE: expects last_modified_by and last_modified_time to be set
      * properly in the $_newRecord
      * 
-     * @param  Tinebase_Record_Abstract $_newRecord record from user data
-     * @param  Tinebase_Record_Abstract $_curRecord record from storage
+     * @param  Tinebase_Record_Interface $_newRecord record from user data
+     * @param  Tinebase_Record_Interface $_curRecord record from storage
      * @param  string $_model
      * @param  string $_backend
      * @param  string $_id
@@ -902,9 +902,9 @@ class Tinebase_Timemachine_ModificationLog
     /**
      * sets record modification data and protects it from spoofing
      * 
-     * @param   Tinebase_Record_Abstract $_newRecord record from user data
+     * @param   Tinebase_Record_Interface $_newRecord record from user data
      * @param   string                    $_action    one of {create|update|delete}
-     * @param   Tinebase_Record_Abstract $_curRecord record from storage
+     * @param   Tinebase_Record_Interface $_curRecord record from storage
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function setRecordMetaData($_newRecord, $_action, $_curRecord = NULL)

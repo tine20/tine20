@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,7 +26,10 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     protected $_application;
     
     protected $_applicationName;
-    
+
+    /**
+     * @var string|Tinebase_Model_Container
+     */
     protected $_container;
     
     protected $_controller;

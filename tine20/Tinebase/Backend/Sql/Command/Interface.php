@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -50,12 +50,12 @@ interface Tinebase_Backend_Sql_Command_Interface
     public function getSwitch($field, $cases);
     
     /**
-     * @param date $date
+     * @param mixed $date
      */
     public function setDate($date);
     
     /**
-     * @param date $date
+     * @param mixed $date
      */
     public function setDateValue($date);
 
@@ -72,7 +72,7 @@ interface Tinebase_Backend_Sql_Command_Interface
     public function getTrueValue();
     
     /**
-     * @param array $field
+     *
      */
     public function setDatabaseJokerCharacters();
     
@@ -102,7 +102,8 @@ interface Tinebase_Backend_Sql_Command_Interface
     /**
      * escape special char
      *
-     * @ return string
+     * @param string $value
+     * @return string
      */
     public function escapeSpecialChar($value);
     

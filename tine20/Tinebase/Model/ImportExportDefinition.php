@@ -14,6 +14,17 @@
  * 
  * @package     Tinebase
  * @subpackage  Import
+ *
+ * @property string id
+ * @property string application_id
+ * @property string model
+ * @property string name
+ * @property string label
+ * @property string description
+ * @property string type
+ * @property string plugin
+ * @property string plugin_options
+ * @property string filename
  */
 class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_Abstract 
 {

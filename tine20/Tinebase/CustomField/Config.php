@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -86,7 +86,8 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
      * all grants for configs given by array of ids
      * 
      * @param string $_accountId
-     * @param array $_id => account_grants
+     * @param array $_ids => account_grants
+     * @return array
      */
     public function getAclForIds($_accountId, $_ids)
     {
@@ -113,10 +114,12 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * (non-PHPdoc)
-     * @see tine20/Tinebase/Backend/Sql/Abstract.php::_rawDataToRecordSet()
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Interface $_record
+     * @return array
      */
-    protected function _recordToRawData($_record)
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $data = $_record->toArray();
         if (is_object($data['definition']) && method_exists($data['definition'], 'toArray')) {

@@ -147,4 +147,14 @@ class Tinebase_WebDav_RootTest extends TestCase
         
         return $this->_webdavTree;
     }
+
+    /**
+     * @see 0012216: Caldav Directory calendars not found
+     */
+    public function testCalendarRoot()
+    {
+        $calendarRoot = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true);
+        $children = $calendarRoot->getChildren();
+        $this->assertTrue(count($children) > 0 && $children[0] instanceof Calendar_Frontend_WebDAV);
+    }
 }

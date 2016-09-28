@@ -34,6 +34,7 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
 Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function () {
     Tine.Tinebase.tineInit.clearRegistry();
     Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
+    Tine.Tinebase.tineInit.jsonKeyCookieId = 'TINE20SETUPJSONKEY';
     Tine.Tinebase.tineInit.stateful = false;
     
     return true;

@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -14,6 +14,8 @@
  * 
  * @package     Addressbook
  * @subpackage  Import
+ *
+ * @property Addressbook_Controller_Contact     $_controller    protected property!
  */
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
@@ -48,7 +50,7 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     public function __construct(array $_options = array())
     {
         parent::__construct($_options);
-        
+
         // don't set geodata for imported contacts as this is too much traffic for the nominatim server
         $this->_controller->setGeoDataForContacts(FALSE);
         

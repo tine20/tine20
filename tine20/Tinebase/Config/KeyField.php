@@ -13,6 +13,9 @@
  * 
  * @package     Tinebase
  * @subpackage  Config
+ * @property    Tinebase_Record_RecordSet   $records
+ * @property    string                      $name
+ * @property    mixed                       $default
  */
 class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
 {
@@ -32,13 +35,13 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
 
     /**
      * (non-PHPdoc)
-     * @see tine20/Tinebase/Record/Abstract::$_identifier
+     * @see Tinebase_Record_Abstract::$_identifier
      */
     protected $_identifier = 'name';
     
     /**
      * (non-PHPdoc)
-     * @see tine20/Tinebase/Record/Abstract::$_validators
+     * @see Tinebase_Record_Abstract::$_validators
      */
     protected $_validators = array(
         'name'                   => array('allowEmpty' => true),
@@ -50,7 +53,7 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * create a new instance
      * 
      * @param mixed     $_data
-     * @param string    $_keyFieldRecordModel
+     * @param array     $_options
      * @return          Tinebase_Config_KeyField 
      */
     public static function create($_data, array $_options = array())
@@ -73,8 +76,8 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     }
     
     /**
-     * (non-PHPdoc)
-     * @see tine20/Tinebase/Record/Abstract::setFromArray()
+     * @param array $_data
+     * @see Tinebase_Record_Abstract::setFromArray()
      */
     public function setFromArray(array $_data)
     {
@@ -113,7 +116,7 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * get KeyfieldRecord by value
      *
      * @param string $_value
-     * @return array
+     * @return Tinebase_Config_KeyFieldRecord
      */
     public function getKeyfieldRecordByValue($_value) {
         $record = $this->records->filter('value', $_value);
@@ -123,15 +126,14 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     /**
      * get default KeyfieldRecord
      *
-     * @param string $_value
-     * @return array
+     * @return Tinebase_Config_KeyFieldRecord
      */
     public function getKeyfieldDefault() {
-        if (!empty($this->default)) {
+        if (!empty($this->default) && $this->records instanceof Tinebase_Record_RecordSet) {
             $record = $this->records->filter('id', $this->default);
             return $record->getFirstRecord();
         }
-        return '';
+        return null;
     }
 
     /**
@@ -145,6 +147,7 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
         if (! $this->records instanceof Tinebase_Record_RecordSet) {
             return '';
         }
+
 
         $record = $this->records->filter('id', $id)->getFirstRecord();
         if (! $record) {

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -26,8 +26,8 @@ abstract class Tinebase_Controller_Event extends Tinebase_Controller_Abstract im
     protected $_disabledEvents = false;
     
     /**
-     * (non-PHPdoc)
      * @see Tinebase_Event_Interface::handleEvent()
+     * @param Tinebase_Event_Abstract $_eventObject
      */
     public function handleEvent(Tinebase_Event_Abstract $_eventObject)
     {

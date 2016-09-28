@@ -14,6 +14,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Tags
+ *
+ * @property string     $name
  */
 class Tinebase_Model_Tag extends Tinebase_Record_Abstract
 {
@@ -99,8 +101,9 @@ class Tinebase_Model_Tag extends Tinebase_Record_Abstract
     /**
      * converts an array of tags names to a recordSet of Tinebase_Model_Tag
      * 
-     * @param  iteratable           $tagNames
-     * @param  bool                 $implicitAddMissingTags
+     * @param  array    $tagNames
+     * @param  string   $applicationName
+     * @param  bool     $implicitAddMissingTags
      * @return Tinebase_Record_RecordSet
      */
     public static function resolveTagNameToTag($tagNames, $applicationName, $implicitAddMissingTags = true)

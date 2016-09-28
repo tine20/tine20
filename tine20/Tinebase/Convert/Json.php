@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,10 +19,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 {
     /**
      * converts external format to Tinebase_Record_Abstract
-     * 
-     * @param  mixed                     $_blob   the input data to parse
-     * @param  Tinebase_Record_Abstract  $_record  update existing record
+     *
+     * @param  mixed $_blob the input data to parse
+     * @param  Tinebase_Record_Abstract $_record update existing record
      * @return Tinebase_Record_Abstract
+     * @throws Tinebase_Exception_NotImplemented
      */
     public function toTine20Model($_blob, Tinebase_Record_Abstract $_record = NULL)
     {
@@ -42,6 +43,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         // for resolving we'll use recordset
+        /** @var Tinebase_Record_Interface $recordClassName */
         $recordClassName = get_class($_record);
         $records = new Tinebase_Record_RecordSet($recordClassName, array($_record));
         $modelConfiguration = $recordClassName::getConfiguration();
@@ -65,7 +67,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param Tinebase_Record_RecordSet $_records the records
      * @param Tinebase_ModelConfiguration $modelConfig
      */
-    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, $modelConfig = NULL)
+    protected function _resolveSingleRecordFields(Tinebase_Record_RecordSet $_records, Tinebase_ModelConfiguration $modelConfig = NULL)
     {
         if (! $modelConfig) {
             return;
@@ -166,7 +168,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * resolves multiple records (fallback)
      * 
      * @deprecated use Tinebase_ModelConfiguration to configure your models, so this won't be used anymore 
-     * @param Tinebase_Record_RecordSet $_records the records
+     * @param Tinebase_Record_RecordSet $records the records
      * @param array $resolveFields
      */
     public static function resolveMultipleIdFields($records, $resolveFields = NULL)
@@ -174,7 +176,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         if (! $records instanceof Tinebase_Record_RecordSet || !$records->count()) {
             return;
         }
-        
+
+        /** @var Tinebase_Record_Interface $ownRecordClass */
         $ownRecordClass = $records->getRecordClassName();
         if ($resolveFields === NULL) {
             $resolveFields = $ownRecordClass::getResolveForeignIdFields();
@@ -293,6 +296,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
 
             // fetch the fields by the refIfField
+            /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
+            /** @noinspection PhpUndefinedMethodInspection */
             $controller = $config['controllerClassName']::getInstance();
             $filterName = $config['filterClassName'];
             
@@ -302,7 +307,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
                 $filterArray = $config['addFilters'];
             }
-            
+
+            /** @var Tinebase_Model_Filter_FilterGroup $filter */
             $filter = new $filterName($filterArray);
             $filter->addFilter(new Tinebase_Model_Filter_Id(array('field' => $config['refIdField'], 'operator' => 'in', 'value' => $ownIds)));
             
@@ -312,6 +318,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             
             $foreignRecords = $controller->search($filter, $paging);
+            /** @var Tinebase_Record_Interface $foreignRecordClass */
             $foreignRecordClass = $foreignRecords->getRecordClassName();
             $foreignRecordModelConfiguration = $foreignRecordClass::getConfiguration();
             
@@ -342,6 +349,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
             
             if ($foreignRecords->count() > 0) {
+                /** @var Tinebase_Record_Interface $record */
                 foreach ($_records as $record) {
                     $filtered = $foreignRecords->filter($config['refIdField'], $record->getId())->toArray();
                     $filtered = $this->_resolveAfterToArray($filtered, $foreignRecordModelConfiguration, TRUE);
@@ -354,13 +362,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
     }
-    
+
     /**
      * resolves virtual fields, if a function has been defined in the field definition
-     * 
+     *
      * @param array $resultSet
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
+     * @return array
      */
     protected function _resolveVirtualFields($resultSet, $modelConfiguration = NULL, $multiple = false)
     {
@@ -369,7 +378,8 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         }
         
         if ($modelConfiguration->resolveVFGlobally === TRUE) {
-            
+
+            /** @var Tinebase_Controller_Record_Interface $controller */
             $controller = $modelConfiguration->getControllerInstance();
             
             if ($multiple) {
@@ -455,6 +465,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
         // TODO find an additional condition to better detect the attachments that should be the record image(s)
 
+        /** @var Tinebase_Record_Interface $record */
         foreach ($records as $record) {
             if ($record->has('image') && $record->attachments instanceof Tinebase_Record_RecordSet) {
                 foreach ($record->attachments as $attachment) {
@@ -485,13 +496,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     /**
      * converts Tinebase_Record_RecordSet to external format
      * 
-     * @param Tinebase_Record_RecordSet  $_records
+     * @param Tinebase_Record_RecordSet|Tinebase_Record_Abstract  $_records
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * 
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, /** @noinspection PhpUnusedParameterInspection */
+                                        $_filter = NULL, /** @noinspection PhpUnusedParameterInspection */ $_pagination = NULL)
     {
         if (! $_records || count($_records) == 0) {
             return array();
@@ -501,6 +513,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             . ' Processing ' . count($_records) . ' records ...');
         
         // find out if there is a modelConfiguration
+        /** @var Tinebase_Record_Interface $ownRecordClass */
         $ownRecordClass = $_records->getRecordClassName();
         $config = $ownRecordClass::getConfiguration();
         

@@ -129,7 +129,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     /**
      * import the data
      *
-     * @param resource $_resource (if $_filename is a stream)
+     * @param resource|string $_resource (if $_filename is a stream)
      * @param array $_clientRecordData
      * @return array with import data (imported records, failures, duplicates and totalcount)
      */

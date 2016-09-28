@@ -49,10 +49,10 @@ class Voipmanager_Backend_Asterisk_Voicemail extends Tinebase_Backend_Sql_Abstra
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Interface $_record
      * @return array
      */
-    protected function _recordToRawData($_record)
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $result = parent::_recordToRawData($_record);
         

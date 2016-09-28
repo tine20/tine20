@@ -14,6 +14,13 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string $id
+ * @property string application_id
+ * @property string model
+ * @property string name
+ * @property string definition
+ * @property string account_grants
  */
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract 
 {

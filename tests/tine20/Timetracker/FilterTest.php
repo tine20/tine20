@@ -184,4 +184,15 @@ class Timetracker_FilterTest extends Timetracker_AbstractTest
         
         $this->assertEquals(1, $results->count());
     }
+    
+    /**
+     * tests if the Timeaccount Filter is there
+     */
+    public function testTimeaccountfilterWithoutAdmin()
+    {
+        $this->_removeRoleRight('Timetracker', Tinebase_Acl_Rights::ADMIN);
+        $this->assertFalse(Tinebase_Core::getUser()->hasRight('Timetracker', Tinebase_Acl_Rights::ADMIN));
+        $config = Tinebase_ModelConfiguration::getFrontendConfigForModels(array('Timetracker_Model_Timesheet'));
+        $this->assertTrue(isset($config['Timesheet']['filterModel']['timeaccount_id']));
+    }
 }

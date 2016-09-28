@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -525,14 +525,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional    $_filter
-     * @param Tinebase_Model_Pagination|optional            $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup             $_filter
+     * @param Tinebase_Model_Pagination                     $_pagination
      * @param bool                                          $_getRelations
      * @param boolean                                       $_onlyIds
      * @param string                                        $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         if (! $_onlyIds) {
@@ -1484,10 +1484,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * restore original alarm time of recurring events
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      */
-    protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
+    protected function _inspectAlarmGet(Tinebase_Record_Interface $_record)
     {
         foreach ($_record->alarms as $alarm) {
             if ($recurid = $alarm->getOption('recurid')) {
@@ -1502,13 +1502,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * adopt alarm time to next occurance for recurring events
      * 
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Model_Alarm $_alarm
      * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
+    protected function _inspectAlarmSet(Tinebase_Record_Interface $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         parent::_inspectAlarmSet($_record, $_alarm);
         $this->adoptAlarmTime($_record, $_alarm, 'time');
@@ -2394,20 +2394,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm', NULL, $_alarm);
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm', NULL, array('alarm' => $_alarm));
     }
     
     /**
      * send notifications 
      * 
-     * @param Calendar_Model_Event       $_event
-     * @param Tinebase_Model_FullAccount $_updater
-     * @param Sting                      $_action
-     * @param Calendar_Model_Event       $_oldEvent
-     * @param Array                      $_additionalRecipients
-     * @return void
+     * @param Tinebase_Record_Interface  $_event
+     * @param Tinebase_Model_FullUser    $_updater
+     * @param String                     $_action
+     * @param Tinebase_Record_Interface  $_oldEvent
+     * @param Array                      $_additionalData
      */
-    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent = NULL)
+    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
         Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
             $_event, 

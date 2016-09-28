@@ -38,7 +38,7 @@ interface Tinebase_Import_Interface
     /**
      * import the data
      *
-     * @param  stream $_resource 
+     * @param  stream|string $_resource
      * @return array : 
      *  'results'           => Tinebase_Record_RecordSet, // for dryrun only
      *  'totalcount'        => int,
