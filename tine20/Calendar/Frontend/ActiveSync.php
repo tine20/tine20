@@ -284,9 +284,9 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     
                 case 'attendee':
                     if ($this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       != $this->_getDefaultContainerId()) {
                         
-                        continue;
+                        break;
                     }
                     
                     // fill attendee cache
@@ -556,7 +556,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                 } else {
                     if ($tine20Property === 'attendee' && $entry &&
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       != $this->_getDefaultContainerId()) {
                             // keep attendees as the are / they were not sent to the device before
                     } else {
                         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
@@ -570,18 +570,17 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
             switch ($tine20Property) {
                 case 'alarms':
                     // handled after switch statement
-                    
                     break;
                     
                 case 'attendee':
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
-                        $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
+                        $this->_syncFolderId       != $this->_getDefaultContainerId()) {
 
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                             __METHOD__ . '::' . __LINE__ . " keep attendees as the are / they were not sent to the device before ");
 
-                        continue;
+                        break;
                     }
 
                     $newAttendees = array();

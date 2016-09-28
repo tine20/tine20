@@ -1310,7 +1310,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
 
         // assert created group & groupmembers
         $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved');
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved: ' . print_r($syncrotonEventtoUpdate->attendees, true));
         $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->exceptions[0]->attendees, 'groupmembers not resolved');
 
         // update event
