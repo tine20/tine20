@@ -443,6 +443,19 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     }
                 }
 
+                // does a list with this id exist?
+                if (! $attendeeId) {
+                    try {
+                        $group = Tinebase_Group::getInstance()->getGroupById($newAttendee['email']);
+                        if ($group) {
+                            $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
+                            $attendeeId = $group->getId();
+                        }
+                    } catch (Exception $e) {
+                        // do nothing
+                    }
+                }
+
                 if (! $attendeeId) {
                     // autocreate a contact if allowed
                     $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);

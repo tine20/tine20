@@ -929,7 +929,17 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             
             $ownField = $this->__get($fieldName);
             $recordField = $_record->$fieldName;
-            
+
+            if ($fieldName == 'customfields' && is_array($ownField) && is_array($recordField)) {
+                // special handling for customfields, remove empty customfields from array
+                foreach (array_keys($recordField, '', true) as $key) {
+                    unset($recordField[$key]);
+                }
+                foreach (array_keys($ownField, '', true) as $key) {
+                    unset($ownField[$key]);
+                }
+            }
+
             if (in_array($fieldName, $this->_datetimeFields)) {
                 if ($ownField instanceof DateTime
                     && $recordField instanceof DateTime) {

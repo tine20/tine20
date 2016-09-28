@@ -55,8 +55,9 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
             cropper = node.getElementsByClassName('cal-daysviewpanel-cropper')[0],
             body = node.getElementsByClassName('cal-daysviewpanel-body')[0],
             dayStartPx = view.getTimeOffset(view.dayStart),
+            dayEndPx = view.getTimeOffset(view.dayEnd),
             fullHeight = view.getTimeOffset(view.startDate.add(Date.DAY, 1).add(Date.MINUTE, -1)),
-            cropHeight = view.dayEndPx - dayStartPx + 20,
+            cropHeight = dayEndPx - dayStartPx + 20,
             scrollerHeight = view.cropDayTime ? cropHeight : fullHeight;
 
         daysViewPanel.id = this.panelId = Ext.id();
@@ -65,6 +66,7 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
         // @TODO: if you have a lot of allDayEvents, your scroller gets smaller,
         //        this might be confusing in print
         header.style.height = Math.max(header.firstChild.style.height, header.style.height);
+        scroller.style.height = scrollerHeight + 'px';
         scroller.style.width = null;
 
         return this.generateTitle(view) + node.innerHTML;

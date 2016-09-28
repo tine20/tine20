@@ -11,7 +11,7 @@
 /**
  * Timetracker_AbstractTest Test class
  */
-abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
+abstract class Timetracker_AbstractTest extends TestCase
 {
     /**
      * @var Timetracker_Frontend_Json

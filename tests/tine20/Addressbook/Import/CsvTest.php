@@ -294,7 +294,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $result = $this->_doImport(array(), $definition);
         
         $this->assertEquals(1, $result['updatecount'], 'should have updated 1 contact');
-        $this->assertEquals(0, $result['totalcount']);
+        $this->assertEquals(0, $result['totalcount'], 'should have imported 0 records: ' . print_r($result['results']->toArray(), true));
         $this->assertEquals(0, $result['failcount']);
         $this->assertEquals('joerg@home.com', $result['results'][0]->email_home, 'duplicates resolving did not work: ' . print_r($result['results']->toArray(), true));
         $this->assertEquals('Jörg', $result['results'][0]->n_given, 'wrong encoding: ' . print_r($result['results']->toArray(), true));
@@ -309,6 +309,8 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     {
         $this->_createCustomField('customfield1');
         $this->_createCustomField('customfield2');
+        // empty values: should not trigger record updates
+        $this->_createCustomField('customfield3');
 
         $result = $this->testImportDuplicateResolve(/* $withCustomfields */ true);
 
@@ -361,12 +363,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $this->assertEquals('Straßbough', $result['results'][1]['adr_one_locality'],
                 'should have changed the locality of contact #2: ' . print_r($result['results'][1]->toArray(), true));
         $this->assertEquals('Gartencenter Röhr & Vater', $result['results'][3]['n_family']);
-
-        // TODO this should be researched, imho the relation should not trigger an update of the record
-//        $this->assertEquals(1, $result['results'][3]['seq'], 'Wolfer has been updated - relations changed');
-//        $this->assertEquals('Weixdorf DD', $result['results'][0]['adr_one_locality'], 'locality should persist');
-//        $this->assertEquals('Gartencenter Röhr & Vater', $result['results'][4]['n_fileas']);
-//        $this->assertEquals('Straßback', $result['results'][5]['adr_one_locality']);
     }
 
     public function testSplitField()

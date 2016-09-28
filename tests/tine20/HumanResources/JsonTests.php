@@ -181,6 +181,18 @@ class HumanResources_JsonTests extends HumanResources_TestCase
     }
 
     /**
+     * @see 0012228: employee bday should be saved as datetime
+     */
+    public function testBirthday()
+    {
+        $e = $this->_getEmployee();
+        $datetime = new Tinebase_DateTime('2009-03-02 00:00:00');
+        $e->bday = $datetime;
+        $savedEmployee = $this->_json->saveEmployee($e->toArray());
+        $this->assertEquals($datetime->toString(), $savedEmployee['bday']);
+    }
+
+    /**
      * Tests the duplicate check
      */
     public function testDuplicateException()
