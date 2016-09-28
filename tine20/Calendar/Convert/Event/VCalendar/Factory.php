@@ -26,7 +26,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
-	const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     
     /**
      * cache parsed user-agent strings
@@ -135,7 +135,6 @@ class Calendar_Convert_Event_VCalendar_Factory
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
             $version = $matches['version'];
-			
         } else {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
             $version = null;
@@ -152,18 +151,32 @@ class Calendar_Convert_Event_VCalendar_Factory
     /**
      * parse useragent and return backend and version
      *
-     * @return array
+     * @param string $_userAgent
+     * @return boolean
      */
     static public function supportsSyncToken($_userAgent)
     {
+        $result = false;
         list($backend, $version) = self::parseUserAgent($_userAgent);
-        switch($backend)
-        {
+        switch ($backend) {
             case self::CLIENT_MACOSX:
-                if (version_compare($version, '10.9', '>='))
-                    return true;
+                if (version_compare($version, '10.9', '>=')) {
+                    $result = true;
+                }
+                break;
+            case self::CLIENT_THUNDERBIRD:
+                if (version_compare($version, '4', '>=')) {
+                    $result = true;
+                }
                 break;
         }
-        return false;
+
+        if ($result) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' Client ' . $backend . ' version ' . $version . ' supports SyncToken.');
+        }
+
+        return $result;
     }
 }

@@ -578,8 +578,11 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                     if ($entry && 
                         $this->_device->devicetype === Syncroton_Model_Device::TYPE_IPHONE &&
                         $this->_syncFolderId       !== $this->_getDefaultContainerId()) {
-                            // keep attendees as the are / they were not sent to the device before
-                            continue;
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . " keep attendees as the are / they were not sent to the device before ");
+
+                        continue;
                     }
 
                     $newAttendees = array();
@@ -603,7 +606,6 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
                             $lastName  = $attendee->name;
                         }
                         
-                        // @todo handle resources
                         $newAttendees[] = array(
                             'userType'  => Calendar_Model_Attender::USERTYPE_USER,
                             'firstName' => $firstName,

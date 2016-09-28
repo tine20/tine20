@@ -17,6 +17,15 @@
  *
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string $own_model
+ * @property string $own_backend
+ * @property string $own_id
+ * @property string $related_degree
+ * @property string $related_model
+ * @property string $related_backend
+ * @property string $related_id
+ * @property string $type
  */
 class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 {

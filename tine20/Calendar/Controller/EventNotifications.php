@@ -122,15 +122,21 @@
     /**
      * send notifications 
      * 
-     * @param Calendar_Model_Event       $_event
-     * @param Tinebase_Model_FullAccount $_updater
-     * @param Sting                      $_action
-     * @param Calendar_Model_Event       $_oldEvent
-     * @param Tinebase_Model_Alarm       $_alarm
-     * @return void
+     * @param Tinebase_Record_Interface  $_event
+     * @param Tinebase_Model_FullUser    $_updater
+     * @param String                     $_action
+     * @param Tinebase_Record_Interface  $_oldEvent
+     * @param Array                      $_additionalData
      */
-    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL, $_alarm=NULL)
+    public function doSendNotifications(Tinebase_Record_Interface $_event, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
+        if (isset($_additionalData['alarm']))
+        {
+            $_alarm = $_additionalData['alarm'];
+        } else {
+            $_alarm = null;
+        }
+
         // we only send notifications to attendee
         if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

@@ -334,9 +334,13 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     protected function _getMaxPeriodFrom()
     {
-        //if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active, allow to filter for all calendar events => return 100 years
+        // if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active
         if (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT'])) {
-            return 100;
+            $result = Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN, 100);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' SyncToken active: allow to filter for all calendar events => return ' . $result . ' months');
+            return $result;
         }
         return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
     }

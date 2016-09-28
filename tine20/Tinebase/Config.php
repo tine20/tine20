@@ -54,7 +54,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
-    
+
+    /**
+     * authentication second factor
+     *
+     * @var string
+     */
+    const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
+
     /**
      * save automatic alarms when creating new record
      * 
@@ -472,6 +479,27 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Authentication Configuration',
                                    //_('Authentication backend configuration.')
             'description'           => 'Authentication backend configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        /**
+         * example config:
+         *
+         * array(
+         *      'active'                => true,
+         *      'provider'              => 'PrivacyIdea',
+         *      'url'                   => 'https://localhost/validate/check',
+         *      'allow_self_signed'     => true,
+         *      'ignorePeerName'        => true,
+         * )
+         */
+        self::AUTHENTICATIONSECONDFACTOR => array(
+            //_('Second Factor Authentication Configuration')
+            'label'                 => 'Second Factor Authentication Configuration',
+            'description'           => 'Second Factor Authentication Configuration',
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => FALSE,

@@ -9,7 +9,7 @@ use Sabre\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,7 +37,7 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
     
     public function __construct($_userId)
     {
-        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->get($_userId);
+        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->getUserById($_userId, 'Tinebase_Model_FullUser');
         $this->_containerName = Tinebase_Translation::getTranslation('Addressbook')->_('All Contacts');
     }
     
@@ -85,22 +85,23 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
      * The contents of the new file must be a valid VCARD
      *
      * @param  string    $name
-     * @param  resource  $vcardData
+     * @param  resource  $vobjectData
      * @return string    the etag of the record
      */
     public function createFile($name, $vobjectData = null)
     {
-        $objectClass = 'Addressbook_Frontend_WebDAV_Contact';
-        
         $container = Tinebase_Container::getInstance()->getDefaultContainer('Addressbook_Model_Contact', $this->_user);
-        $object = $objectClass::create($container, $name, $vobjectData);
+        $object = Addressbook_Frontend_WebDAV_Contact::create($container, $name, $vobjectData);
     
         return $object->getETag();
     }
-    
+
     /**
-     * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
+     *
+     * @param string $_name
+     * @return Addressbook_Frontend_WebDAV_Contact
+     * @throws \Sabre\DAV\Exception\NotFound
      */
     public function getChild($_name)
     {
@@ -125,9 +126,8 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
         }
         
         $container = Tinebase_Container::getInstance()->getContainerById($object->container_id);
-        $objectClass = 'Addressbook_Frontend_WebDAV_Contact';
     
-        return new $objectClass($container, $object);
+        return new Addressbook_Frontend_WebDAV_Contact($container, $object);
     }
     
    

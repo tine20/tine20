@@ -20,8 +20,9 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
     /**
      * Constructor
      *
-     * @param  array  $options  An array of arrays of Zend_Ldap options
-     * @return void
+     * @param array  $options An array of arrays of Zend_Ldap options
+     * @param string $username
+     * @param string $password
      */
     public function __construct(array $options = array(),  $username = null, $password = null)
     {
@@ -51,7 +52,7 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
     }
     
     /**
-     * set loginname
+     * set login name
      *
      * @param string $_identity
      * @return Tinebase_Auth_Ldap

@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
- * @copyright   Copyright (c) 2011-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -40,11 +40,12 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
         
         return new Zend_Db_Expr("GROUP_CONCAT( DISTINCT $quotedField)");
     }
-    
+
     /**
      * returns concatenation expression
-     * 
+     *
      * @param array $values
+     * @return Zend_Db_Expr
      */
     public function getConcat($values)
     {
@@ -64,11 +65,12 @@ class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command
         
         return new Zend_Db_Expr($str);
     }
-    
+
     /**
      * @param string $field
      * @param mixed $returnIfTrue
      * @param mixed $returnIfFalse
+     * @return Zend_Db_Expr
      */
     public function getIfIsNull($field, $returnIfTrue, $returnIfFalse)
     {

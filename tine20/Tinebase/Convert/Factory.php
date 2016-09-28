@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -31,6 +31,7 @@ class Tinebase_Convert_Factory
      * @param   string|Tinebase_Record_Abstract $_record record object or class name
      * @param   string $_type
      * @return  Tinebase_Convert_Interface
+     * @throws  Tinebase_Exception_NotImplemented
      */
     static public function factory($_record, $_type = self::TYPE_JSON)
     {

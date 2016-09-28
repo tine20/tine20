@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -21,6 +21,26 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property array $customfields
+ *
+ * @property string $container_id
+ *
+ * TODO are these all strings?!? guess not
+ * @property string             $created_by
+ * @property Tinebase_DateTime  $creation_time
+ * @property Tinebase_DateTime  $last_modified_by
+ * @property Tinebase_DateTime  $last_modified_time
+ * @property string $is_deleted
+ * @property Tinebase_DateTime  $deleted_time
+ * @property string $deleted_by
+ * @property int $seq
+ *
+ * @property array|Tinebase_Record_RecordSet                        $relations
+ * @property array|Tinebase_Record_RecordSet                        $notes
+ * @property array|Tinebase_Record_RecordSet|Tinebase_Model_Tag     $tags
+ * @property array|Tinebase_Record_RecordSet|Tinebase_Model_Alarm   $alarms
+ * @property array|Tinebase_Record_RecordSet                        $attachments
  */
 interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate 
 {
@@ -28,13 +48,12 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * Default constructor
      * Constructs an object and sets its record related properties.
      *
-     * @param mixed $_contactData
-     * @param bool $_bypassFilters Bypass filters at object creation with data
+     * @param mixed $_data
+     * @param boolean $_bypassFilters Bypass filters at object creation with data
      * this is usefull when datas are for sure valid, e.g. after database query
-     * @param array $_convertDates array with Tinebase_DateTime constructor parameters part and locale
-     * 
-     * @return void
-     * @throws Tinebase_Record_Exception
+     * @param boolean $_convertDates array with Tinebase_DateTime constructor parameters part and locale
+     *
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true);
 
@@ -48,7 +67,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * sets identifier of record
      * 
-     * @param string identifier
+     * @param string $_id
      */
     public function setId($_id);
     
@@ -76,22 +95,22 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * sets record related properties
      * 
-     * @param string name of property
-     * @param mixed value of property
+     * @param string $_name of property
+     * @param mixed $_value of property
      */
     public function __set($_name, $_value);
     
     /**
      * unsets record related properties
      * 
-     * @param string name of property
+     * @param string $_name of property
      */
     public function __unset($_name);
     
     /**
      * gets record related properties
      * 
-     * @param string name of property
+     * @param string $_name of property
      * @return mixed value of property
      */
     public function __get($_name);
@@ -119,9 +138,11 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * validate the the internal data
      *
+     * @param $_throwExceptionOnInvalidData
      * @return bool
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function isValid();
+    public function isValid($_throwExceptionOnInvalidData = false);
     
     /**
      * returns array of fields with validation errors 
@@ -141,7 +162,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * returns an array with differences to the given record
      * 
      * @param  Tinebase_Record_Interface $_record record for comparism
-     * @return array with differences field => different value
+     * @return Tinebase_Record_Diff with differences field => different value
      */
     public function diff($_record);
     
@@ -167,4 +188,45 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * @return boolean
      */
     public function has($_field);
+
+    public function runConvertToRecord();
+
+    public function runConvertToData();
+
+    /**
+     * returns read only fields
+     *
+     * @return array
+     */
+    public function getReadOnlyFields();
+
+    /**
+     * wrapper for setFromJason which expects datetimes in array to be in
+     * users timezone and converts them to UTC
+     *
+     * @todo move this to a generic __call interceptor setFrom<API>InUsersTimezone
+     *
+     * @param  string $_data json encoded data
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     */
+    public function setFromJsonInUsersTimezone($_data);
+
+    /**
+     * returns the title of the record
+     *
+     * @return string
+     */
+    public function getTitle();
+
+    /**
+     * returns the foreignId fields (used in Tinebase_Convert_Json)
+     * @return array
+     */
+    public static function getResolveForeignIdFields();
+
+    /** convert this to string
+     *
+     * @return string
+     */
+    public function __toString();
 }

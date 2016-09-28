@@ -14,10 +14,22 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
- * @property    string application_id
- * @property    int    seq
- * @property    string type
- * @property    sting  owner_id
+ *
+ * @property    string $application_id
+ * @property    string $type
+ * @property    string $owner_id
+ * @property    string $id
+ * @property    string $name
+ * @property    string $backend
+ * @property    string $order
+ * @property    string $color
+ * @property    string $account_grants
+ * @property    string $path
+ * @property    string $model
+ * @property    string $uuid
+
+// only gets updated in increaseContentSequence() + readonly in normal record context
+'content_seq'       => array('allowEmpty' => true),
  * 
  * NOTE: container class is in the transition from int based grants to string based
  *       grants! In the next refactoring step of container class, int based grants 

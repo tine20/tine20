@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -72,8 +72,9 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     );
     
     /**
-     * (non-PHPdoc)
      * @see Tinebase_Backend_Sql_Abstract::__construct()
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
+     * @param array $_options (optional)
      */
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
@@ -160,7 +161,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * returns contact image
      *
      * @param int $contactId
-     * @return blob|string
+     * @return string
      */
     public function getImage($contactId)
     {
@@ -177,8 +178,8 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * saves image to db
      *
      * @param  string $contactId
-     * @param  blob $imageData
-     * @return blob|string
+     * @param  string $imageData
+     * @return string
      */
     public function _saveImage($contactId, $imageData)
     {

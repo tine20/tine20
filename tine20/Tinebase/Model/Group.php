@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -14,10 +14,14 @@
  * 
  * @package     Tinebase
  * @subpackage  Group
+ *
  * @property    string  id
  * @property    string  name
+ * @property    string  description
+ * @property    string  email
  * @property    array   members
  * @property    string  visibility
+ * @property    string  list_id
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {

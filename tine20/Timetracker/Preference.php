@@ -28,6 +28,11 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
     const TSODSEXPORTCONFIG = 'tsOdsExportConfig';
 
     /**
+     * Quicktag
+     */
+    const QUICKTAG = 'quickTag';
+
+    /**
      * application
      *
      * @var string
@@ -45,6 +50,7 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
     {
         $allPrefs = array(
             self::TSODSEXPORTCONFIG,
+            self::QUICKTAG
         );
             
         return $allPrefs;
@@ -64,6 +70,10 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Timesheets ODS export configuration'),
                 'description'   => $translate->_('Use this configuration for the timesheet ODS export.'),
             ),
+            self::QUICKTAG => array(
+                'label'         => $translate->_('A Tag which is available in context menu for fast assignment'),
+                'description'   => $translate->_('Quick Tag allows to simply assign a predefined tag by the context menu.')
+            )
         );
         
         return $prefDescriptions;
@@ -82,6 +92,9 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
         switch($_preferenceName) {
             case self::TSODSEXPORTCONFIG:
                 $preference->value      = 'ts_default_ods';
+                break;
+            case self::QUICKTAG:
+                $preference->value      = 'false';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
@@ -115,6 +128,24 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
                 } else {
                     $result[] = array('default', $translate->_('default'));
                 }
+                break;
+
+            case self::QUICKTAG:
+                // Get all shared tags
+                $tagController = Tinebase_Tags::getInstance();
+                $filter = new Tinebase_Model_TagFilter(array(
+                    'type' => Tinebase_Model_Tag::TYPE_SHARED,
+                ));
+                $tags = $tagController->searchTags($filter);
+
+                $availableTags = array();
+
+                /* @var $tag Tinebase_Model_Tag */
+                foreach($tags as $tag) {
+                    $availableTags[] = array($tag->id, $tag->name);
+                }
+
+                return $availableTags;
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);

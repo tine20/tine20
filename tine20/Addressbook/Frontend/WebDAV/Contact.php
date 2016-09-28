@@ -8,7 +8,7 @@ use \Sabre\DAV;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -40,14 +40,15 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     protected $_vcard;
     
     /**
-     * @var Addressbook_Convert_Contact_VCard_Interface
+     * @var Addressbook_Convert_Contact_VCard_Abstract
      */
     protected $_converter;
-    
+
     /**
-     * Constructor 
-     * 
-     * @param  string|Addressbook_Model_Contact  $_contact  the id of a contact or the contact itself 
+     * Constructor
+     *
+     * @param Tinebase_Model_Container $_container
+     * @param  string|Addressbook_Model_Contact $_contact the id of a contact or the contact itself
      */
     public function __construct(Tinebase_Model_Container $_container, $_contact = null) 
     {
@@ -58,14 +59,17 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         
         $this->_converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
     }
-    
+
     /**
      * this function creates a Addressbook_Model_Contact and stores it in the database
-     * 
+     *
      * @todo the header handling does not belong here. It should be moved to the DAV_Server class when supported
-     * 
-     * @param  Tinebase_Model_Container  $container
-     * @param  stream|string           $vcardData
+     *
+     * @param  Tinebase_Model_Container $container
+     * @param  string $name
+     * @param  resource|string $vcardData
+     * @return Addressbook_Frontend_WebDAV_Contact
+     * @throws DAV\Exception\Forbidden
      */
     public static function create(Tinebase_Model_Container $container, $name, $vcardData)
     {
@@ -91,12 +95,12 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         
         return $card;
     }
-    
+
     /**
      * Deletes the card
      *
-     * @return void
-     * 
+     * @throws DAV\Exception\Forbidden
+     * @throws Exception
      * @see Calendar_Frontend_WebDAV_Event::delete()
      */
     public function delete() 
@@ -121,7 +125,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     /**
      * Returns the VCard-formatted object 
      * 
-     * @return stream
+     * @return resource
      */
     public function get() 
     {
@@ -153,7 +157,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     public function getOwner() 
     {
         return null;
-        return $this->addressBookInfo['principaluri'];
+        //return $this->addressBookInfo['principaluri'];
     }
 
     /**
@@ -180,13 +184,13 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      *      be updated. 
      * 
      * @todo add the real logic
-     * @return array 
+     * @return array|null
      */
     public function getACL() 
     {
         return null;
         
-        return array(
+        /*return array(
             array(
                 'privilege' => '{DAV:}read',
                 'principal' => $this->addressBookInfo['principaluri'],
@@ -197,7 +201,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
                 'principal' => $this->addressBookInfo['principaluri'],
                 'protected' => true,
             ),
-        );
+        );*/
 
     }
     
@@ -225,7 +229,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     /**
      * Returns the last modification date as a unix timestamp
      *
-     * @return time
+     * @return string
      */
     public function getLastModified() 
     {
@@ -242,12 +246,13 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     {
         return strlen($this->_getVCard());
     }
-    
+
     /**
      * Updates the VCard-formatted object
      *
      * @param string $cardData
-     * @return void
+     * @throws DAV\Exception\Forbidden
+     * @return string
      */
     public function put($cardData) 
     {
@@ -271,24 +276,25 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         
         return $this->getETag();
     }
-    
+
     /**
      * Updates the ACL
      *
-     * This method will receive a list of new ACE's. 
-     * 
-     * @param array $acl 
-     * @return void
+     * This method will receive a list of new ACE's.
+     *
+     * @param array $acl
+     * @throws DAV\Exception\MethodNotAllowed
      */
     public function setACL(array $acl) 
     {
         throw new DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
-    
+
     /**
      * return Addressbook_Model_Contact and convert contact id to model if needed
-     * 
+     *
      * @return Addressbook_Model_Contact
+     * @throws DAV\Exception\Forbidden
      */
     public function getRecord()
     {

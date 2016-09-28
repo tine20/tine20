@@ -63,7 +63,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      */
     getLoginPanel: function () {
         //Do we have a cutom Logo for branding?
-        var modSsl = Tine.Tinebase.registry.get('modSsl')
+        var modSsl = Tine.Tinebase.registry.get('modSsl'),
+            secondFactor = Tine.Tinebase.registry.get('secondFactor'),
             logo = this.loginLogo ? this.loginLogo : Tine.logo;
         
         if (! this.loginPanel) {
@@ -112,14 +113,22 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     fieldLabel: i18n._('Password'),
                     id: 'password',
                     name: 'password',
-                    //allowBlank: false,
                     selectOnFocus: true,
                     value: this.defaultPassword,
                     disabled: modSsl ? true : false,
                     listeners: {
                         render: this.setLastLoginUser.createDelegate(this) 
                     }
-                    
+                }, {
+                    xtype: 'textfield',
+                    tabindex: 4,
+                    width: 170,
+                    inputType: 'password',
+                    hidden: secondFactor ? false : true,
+                    fieldLabel: i18n._('Two-Factor Authentication Code'),
+                    id: 'otp',
+                    name: 'otp',
+                    selectOnFocus: true
                 }, {
                     xtype: 'displayfield',
                     style: {
@@ -466,7 +475,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     method: this.loginMethod,
                     username: values.username,
                     password: values.password,
-                    securitycode: values.securitycode
+                    securitycode: values.securitycode,
+                    otp: values.otp
                 },
                 timeout: 60000, // 1 minute
                 success:function(response) {

@@ -14,49 +14,54 @@
  * 
  * @package     Addressbook
  * @subpackage  Model
- * @property    string account_id                 id of associated user
- * @property    string adr_one_countryname        name of the country the contact lives in
- * @property    string adr_one_locality           locality of the contact
- * @property    string adr_one_postalcode         postalcode belonging to the locality
- * @property    string adr_one_region             region the contact lives in
- * @property    string adr_one_street             street where the contact lives
- * @property    string adr_one_street2            street2 where contact lives
- * @property    string adr_two_countryname        second home/country where the contact lives
- * @property    string adr_two_locality           second locality of the contact
- * @property    string adr_two_postalcode         ostalcode belonging to second locality
- * @property    string adr_two_region             second region the contact lives in
- * @property    string adr_two_street             second street where the contact lives
- * @property    string adr_two_street2            second street2 where the contact lives
- * @property    string assistent                  name of the assistent of the contact
- * @property    datetime bday                     date of birth of contact
- * @property    integer container_id              id of container
- * @property    string email                      the email address of the contact
- * @property    string email_home                 the private email address of the contact
- * @property    blob jpegphoto                    photo of the contact
- * @property    string n_family                   surname of the contact
- * @property    string n_fileas                   display surname, name
- * @property    string n_fn                       the full name
- * @property    string n_given                    forename of the contact
- * @property    string n_middle                   middle name of the contact
- * @property    string note                       notes of the contact
- * @property    string n_prefix
- * @property    string n_suffix
- * @property    string org_name                   name of the company the contact works at
- * @property    string org_unit
- * @property    string role                       type of role of the contact
- * @property    string tel_assistent              phone number of the assistent
- * @property    string tel_car
- * @property    string tel_cell                   mobile phone number
- * @property    string tel_cell_private           private mobile number
- * @property    string tel_fax                    number for calling the fax
- * @property    string tel_fax_home               private fax number
- * @property    string tel_home                   telephone number of contact's home
- * @property    string tel_pager                  contact's pager number
- * @property    string tel_work                   contact's office phone number
- * @property    string title                      special title of the contact
- * @property    string type                       type of contact
- * @property    string url                        url of the contact
- * @property    string url_home                   private url of the contact
+ *
+ * @property    string $account_id                 id of associated user
+ * @property    string $adr_one_countryname        name of the country the contact lives in
+ * @property    string $adr_one_locality           locality of the contact
+ * @property    string $adr_one_postalcode         postalcode belonging to the locality
+ * @property    string $adr_one_region             region the contact lives in
+ * @property    string $adr_one_street             street where the contact lives
+ * @property    string $adr_one_street2            street2 where contact lives
+ * @property    string $adr_one_lon
+ * @property    string $adr_one_lat
+ * @property    string $adr_two_countryname        second home/country where the contact lives
+ * @property    string $adr_two_locality           second locality of the contact
+ * @property    string $adr_two_postalcode         ostalcode belonging to second locality
+ * @property    string $adr_two_region             second region the contact lives in
+ * @property    string $adr_two_street             second street where the contact lives
+ * @property    string $adr_two_street2            second street2 where the contact lives
+ * @property    string $adr_two_lon
+ * @property    string $adr_two_lat
+ * @property    string $assistent                  name of the assistent of the contact
+ * @property    datetime $bday                     date of birth of contact
+ * @property    integer $container_id              id of container
+ * @property    string $email                      the email address of the contact
+ * @property    string $email_home                 the private email address of the contact
+ * @property    string $jpegphoto                    photo of the contact
+ * @property    string $n_family                   surname of the contact
+ * @property    string $n_fileas                   display surname, name
+ * @property    string $n_fn                       the full name
+ * @property    string $n_given                    forename of the contact
+ * @property    string $n_middle                   middle name of the contact
+ * @property    string $note                       notes of the contact
+ * @property    string $n_prefix
+ * @property    string $n_suffix
+ * @property    string $org_name                   name of the company the contact works at
+ * @property    string $org_unit
+ * @property    string $role                       type of role of the contact
+ * @property    string $tel_assistent              phone number of the assistent
+ * @property    string $tel_car
+ * @property    string $tel_cell                   mobile phone number
+ * @property    string $tel_cell_private           private mobile number
+ * @property    string $tel_fax                    number for calling the fax
+ * @property    string $tel_fax_home               private fax number
+ * @property    string $tel_home                   telephone number of contact's home
+ * @property    string $tel_pager                  contact's pager number
+ * @property    string $tel_work                   contact's office phone number
+ * @property    string $title                      special title of the contact
+ * @property    string $type                       type of contact
+ * @property    string $url                        url of the contact
+ * @property    string $url_home                   private url of the contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
 {

@@ -189,7 +189,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     {
         $currentUser = Tinebase_Core::getUser();
         // set user who created the import job
-        $importUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
+        $importUser = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
         Tinebase_Core::set(Tinebase_Core::USER, $importUser);
         
         $importer = $record->getOption('plugin');
@@ -212,6 +212,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         
         if ($toImport) {
             try {
+                /** @var Tinebase_Import_Interface $importer */
                 $importer = new $importer($options);
                 $importer->import($toImport);
                 $record->failcount = 0;
@@ -258,9 +259,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     /**
      * Creates a remote import for events
      * 
-     * @param string $remoteUrl
-     * @param string $interval
-     * @param array $importOptions
+     * @param array $data
      * @throws Calendar_Exception_InvalidUrl
      * @return Tinebase_Record_Interface
      */

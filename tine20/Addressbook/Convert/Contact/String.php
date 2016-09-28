@@ -91,7 +91,7 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     /**
     * converts Addressbook_Model_Contact to string
     *
-    * @param  Addressbook_Model_Contact  $_model
+    * @param  Tinebase_Record_Abstract  $_record
     * @return string
     */
     public function fromTine20Model(Tinebase_Record_Abstract $_record)

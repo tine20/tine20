@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,6 +32,10 @@ class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
     
     protected $_defaultExportname = 'adb_default_doc';
 
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function processIteration($_records)
     {
         $record = $_records->getFirstRecord();
@@ -48,7 +52,7 @@ class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
     /**
      * returns a formal salutation
      *
-     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Interface $resolved
      * @return string
      */
     protected function _getSalutation($resolved)
@@ -68,7 +72,7 @@ class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
     /**
      * returns a short salutation
      *
-     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Interface $resolved
      * @return string
      */
     protected function _getShortSalutation($resolved)

@@ -29,14 +29,14 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @param boolean $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
@@ -111,7 +111,10 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         if (empty($record->grants)) {
             return false;
         }
-        
+
+        /**
+         * @var Tinebase_Model_Grants $grantRecord
+         */
         foreach ($record->grants as $grantRecord) {
             if ($grantRecord->userHasGrant($grant)) {
                 return true;
@@ -137,17 +140,19 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         
         return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData);
     }
-    
+
     /**
      * set grants of record
-     * 
-     * @param Tinebase_Record_Abstract $record
-     * @param $boolean $addDuringSetup -> let admin group have all rights instead of user
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param bool $addDuringSetup -> let admin group have all rights instead of user
      * @return Tinebase_Record_RecordSet of record grants
-     * 
+     * @throws Timetracker_Exception_UnexpectedValue
+     * @throws Tinebase_Exception_Backend
+     *
      * @todo improve algorithm: only update/insert/delete changed grants
      */
-    public function setGrants($record, $addDuringSetup = false)
+    public function setGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
     {
         $recordId = $record->getId();
         
@@ -222,14 +227,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * add default grants
      * 
      * @param   Tinebase_Record_Interface $record
-     * @param   $boolean $addDuringSetup -> let admin group have all rights instead of user
+     * @param   boolean $addDuringSetup -> let admin group have all rights instead of user
      */
-    protected function _setDefaultGrants($record, $addDuringSetup = false)
+    protected function _setDefaultGrants(Tinebase_Record_Interface $record, $addDuringSetup = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Setting default grants ...');
         
         $record->grants = new Tinebase_Record_RecordSet($this->_grantsModel);
+        /** @var Tinebase_Model_Grants $grant */
         $grant = new $this->_grantsModel(array(
             'account_type' => $addDuringSetup ? Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
             'record_id'    => $record->getId(),
@@ -274,7 +280,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
     /**
      * get record grants
      * 
-     * @param Tinebase_Record_Abstract|Tinebase_Record_RecordSet $records
+     * @param Tinebase_Record_Interface|Tinebase_Record_RecordSet $records
      */
     protected function _getGrants($records)
     {

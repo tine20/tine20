@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -80,7 +80,7 @@ class Tinebase_DateTime extends DateTime
      * Returns new DateTime object
      * 
      * @param string|int|DateTime $_time
-     * @param DateTimeZone $_timezone
+     * @param string|DateTimeZone $_timezone
      */
     public function __construct($_time = "now", $_timezone = NULL)
     {

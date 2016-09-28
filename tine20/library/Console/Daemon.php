@@ -4,7 +4,7 @@
  * 
  * @package     Console
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -71,14 +71,17 @@ abstract class Console_Daemon
         pcntl_signal(SIGHUP,  array($this, "handleSigHUP"));
         pcntl_signal(SIGINT,  array($this, "handleSigINT"));
         pcntl_signal(SIGTERM, array($this, "handleSigTERM"));
-        
+
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($this->_getConfig()->general->daemonize == 1) {
             $this->_becomeDaemon();
         }
         
         $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ .    " Started with pid: " . posix_getpid());
-        
+
+        /** @noinspection PhpUndefinedFieldInspection */
         if (isset($this->_getConfig()->general) && isset($this->_getConfig()->general->user) && isset($this->_getConfig()->general->group)) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->_changeIdentity($this->_getConfig()->general->user, $this->_getConfig()->general->group);
         }
     }
@@ -90,7 +93,7 @@ abstract class Console_Daemon
      */
     public function getConfig()
     {
-        return $this->_getConfig();;
+        return $this->_getConfig();
     }
     
     /**
@@ -108,6 +111,7 @@ abstract class Console_Daemon
      */
     public function getPidFile()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->_config->general->pidfile;
     }
     
@@ -141,10 +145,9 @@ abstract class Console_Daemon
     /**
      * handle terminated children
      * 
-     * @param unknown $pid
-     * @param unknown $status
+     * @param mixed $pid
      */
-    protected function _childTerminated($pid, $status)
+    protected function _childTerminated($pid)
     {
         unset($this->_children[$pid]);
     }
@@ -174,7 +177,9 @@ abstract class Console_Daemon
             $config = $this->_getConfig();
             
             $this->_logger = new Zend_Log();
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->_logger->addWriter(new Zend_Log_Writer_Stream($config->general->logfile ? $config->general->logfile : STDOUT));
+            /** @noinspection PhpUndefinedFieldInspection */
             $this->_logger->addFilter(new Zend_Log_Filter_Priority((int) $config->general->loglevel));
         }
         
@@ -187,10 +192,13 @@ abstract class Console_Daemon
      */
     protected function _loadConfigFile(Zend_Config $config)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         if (file_exists($config->general->configfile)) {
             try {
+                /** @noinspection PhpUndefinedFieldInspection */
                 $configIniFile = new Zend_Config_Ini($config->general->configfile);
             } catch (Zend_Config_Exception $e) {
+                /** @noinspection PhpUndefinedFieldInspection */
                 fwrite(STDERR, "Error while parsing config file({$config->general->configfile}) " .  $e->getMessage() . PHP_EOL);
                 exit(1);
             }
@@ -288,7 +296,8 @@ abstract class Console_Daemon
     
     /**
      * parse commandline options
-     * 
+     *
+     * @param Zend_Config $config
      * @return Zend_Console_Getopt
      */
     protected function _parseOptions(Zend_Config $config)
@@ -300,7 +309,8 @@ abstract class Console_Daemon
            fwrite(STDOUT, $e->getUsageMessage());
            exit(1);
         }
-        
+
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($opts->h) {
             fwrite(STDOUT, $opts->getUsageMessage());
             
@@ -309,11 +319,13 @@ abstract class Console_Daemon
 
         // pid file path
         if (isset($opts->p)) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $config->general->pidfile = $opts->p;
         }
         
         // become daemon
         if (isset($opts->d)) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $config->general->daemonize = 1;
         }
         
@@ -322,9 +334,8 @@ abstract class Console_Daemon
     
     /**
      * handle signal SIGTERM
-     * @param int $signal  the signal
      */
-    public function handleSigTERM($signal)
+    public function handleSigTERM()
     {
         $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGTERM received");
         
@@ -344,9 +355,8 @@ abstract class Console_Daemon
     
     /**
      * handle signal SIGCHILD
-     * @param int $signal  the signal
      */
-    public function handleSigCHLD($signal)
+    public function handleSigCHLD()
     {
         while (($pid = pcntl_waitpid(0, $status, WNOHANG)) > 0) {
             $this->_childTerminated($pid, $status);
@@ -355,9 +365,8 @@ abstract class Console_Daemon
     
     /**
      * handle signal SIGINT
-     * @param int $signal  the signal
      */
-    public function handleSigHUP($signal)
+    public function handleSigHUP()
     {
         $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ .    " SIGHUP received");
         

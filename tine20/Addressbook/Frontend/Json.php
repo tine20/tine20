@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -34,9 +34,10 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public static function resolveImages(Tinebase_Record_RecordSet $_records)
     {
+        /** @var Tinebase_Record_Interface $record */
         foreach($_records as &$record) {
             if($record['jpegphoto'] == '1') {
-                $record['jpegphoto'] = Tinebase_Model_Image::getImageUrl('Addressbook', $record->__get('id'), '');
+                $record['jpegphoto'] = Tinebase_Model_Image::getImageUrl('Addressbook', $record->getId(), '');
             }
         }
     }
@@ -124,17 +125,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
          }
          return array("results" => $results, "totalcount" => $lists["totalcount"]+$contacts["totalcount"]);
-    } 
-    
+    }
+
     /**
      * return autocomplete suggestions for a given property and value
-     * 
+     *
      * @todo have spechial controller/backend fns for this
      * @todo move to abstract json class and have tests
      *
-     * @param  string   $property
-     * @param  string   $startswith
+     * @param  string $property
+     * @param  string $startswith
      * @return array
+     * @throws Tasks_Exception_UnexpectedValue
      */
     public function autoCompleteContactProperty($property, $startswith)
     {

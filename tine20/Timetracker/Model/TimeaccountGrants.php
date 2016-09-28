@@ -68,6 +68,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
             self::VIEW_ALL,
             self::BOOK_ALL,
             self::MANAGE_BILLABLE,
+            self::GRANT_EDIT,
             Tinebase_Model_Grants::GRANT_EXPORT,
             Tinebase_Model_Grants::GRANT_ADMIN,
         );

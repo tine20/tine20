@@ -148,7 +148,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             ),
             'bday' => array(
                 'label' => 'Birthday', //_('Birthday')
-                'type'  => 'date',
+                'type'  => 'datetime',
                 'group' => 'private',
             ),
             'bank_account_holder' => array(

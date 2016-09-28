@@ -14,6 +14,16 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string     id
+ * @property string     application
+ * @property string     location
+ * @property string     width
+ * @property string     height
+ * @property string     bits
+ * @property string     channels
+ * @property string     mime
+ * @property string     blob
  */
 class Tinebase_Model_Image extends Tinebase_Record_Abstract 
 {

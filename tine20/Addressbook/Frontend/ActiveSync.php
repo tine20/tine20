@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -143,8 +143,11 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
     }
     
     /**
-     * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::toSyncrotonModel()
+     *
+     * @param Addressbook_Model_Contact $entry
+     * @param array $options
+     * @return Syncroton_Model_Contact
      */
     public function toSyncrotonModel($entry, array $options = array())
     {
@@ -212,7 +215,8 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
     /**
      * convert contact from xml to Addressbook_Model_Contact
      *
-     * @param SimpleXMLElement $_data
+     * @param Syncroton_Model_IEntry $data
+     * @param $entry
      * @return Addressbook_Model_Contact
      */
     public function toTineModel(Syncroton_Model_IEntry $data, $entry = null)

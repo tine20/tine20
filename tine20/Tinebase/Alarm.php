@@ -201,11 +201,11 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     /**
      * set alarms of record
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param string $_alarmsProperty
      * @return void
      */
-    public function setAlarmsOfRecord(Tinebase_Record_Abstract $_record, $_alarmsProperty = 'alarms')
+    public function setAlarmsOfRecord(Tinebase_Record_Interface $_record, $_alarmsProperty = 'alarms')
     {
         $model = get_class($_record);
         $alarms = $_record->{$_alarmsProperty};
