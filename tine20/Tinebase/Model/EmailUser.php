@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  LDAP
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        make default quota configurable
@@ -18,6 +18,25 @@
  * 
  * @package     Tinebase
  * @subpackage  LDAP
+ *
+ * @property string emailUID
+ * @property string emailGID
+ * @property string emailMailQuota
+ * @property string emailMailSize
+ * @property string emailSieveQuota
+ * @property string emailSieveSize
+ * @property string emailUserId
+ * @property string emailLastLogin
+ * @property string emailPassword
+ * @property string emailForwards
+ * @property string emailForwardOnly
+ * @property string emailAliases
+ * @property string emailAddress
+ * @property string emailUsername
+ * @property string emailHost
+ * @property string emailPort
+ * @property string emailSecure
+ * @property string emailAuth
  */
 class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract 
 {

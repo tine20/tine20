@@ -63,7 +63,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     /**
      * the constructor
      * 
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      */
     public function __construct($_dbAdapter = NULL, $_options = array()) 
@@ -117,10 +117,11 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     /**
      * caches given credentials
      *
-     * @param  string $_username
-     * @param  string $_password
-     * @param  string $_key [optional]
-     * @param  boolean $_saveInSession
+     * @param  string $username
+     * @param  string $password
+     * @param  string $key [optional]
+     * @param  boolean $persist
+     * @param  Tinebase_DateTime $validUntil
      * @return Tinebase_Model_CredentialCache
      */
     public function cacheCredentials($username, $password, $key = NULL, $persist = FALSE, $validUntil = null)
@@ -180,11 +181,11 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     /**
      * returns cached credentials
      *
-     * @param Tinebase_Model_CredentialCache
+     * @param Tinebase_Model_CredentialCache $_cache
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function getCachedCredentials($_cache)
+    public function getCachedCredentials(Tinebase_Model_CredentialCache $_cache)
     {
         if (! $_cache || $_cache === NULL || ! $_cache instanceof Tinebase_Model_CredentialCache) {
             throw new Tinebase_Exception_InvalidArgument('No valid Tinebase_Model_CredentialCache given!');
@@ -217,19 +218,19 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         } catch (Zend_Session_Exception $zse) {
             // nothing to do
         }
-        
+
+        /** @var Tinebase_Model_CredentialCache $result */
         $result = $this->get($id);
         $this->_saveInSession($result);
         
         return $result;
     }
-    
+
     /**
-     * encryptes username and password into cache
+     * encrypts username and password into cache
      *
      * @param  Tinebase_Model_CredentialCache $_cache
-     * @return void
-     * 
+     * @throws Tinebase_Exception_SystemGeneric
      * @todo check which cipher to use for encryption
      */
     protected function _encrypt($_cache)
@@ -250,12 +251,13 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         mcrypt_generic_deinit($td);
         mcrypt_module_close($td);
     }
-    
+
     /**
      * decrypts username and password
      *
      * @param  Tinebase_Model_CredentialCache $_cache
-     * @return void
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _decrypt($_cache)
     {

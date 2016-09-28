@@ -43,7 +43,7 @@ class Addressbook_Convert_Contact_VCard_Factory
      *
      * @param   string $_backend
      * @param   string $_version
-     * @return  Addressbook_Convert_Contact_VCard_Interface
+     * @return  Addressbook_Convert_Contact_VCard_Abstract
      */
     static public function factory($_backend, $_version = null)
     {

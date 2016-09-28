@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -29,6 +29,26 @@ Ext.namespace('Tine.Timetracker');
  * Create a new Tine.Timetracker.TimesheetGridPanel
  */
 Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    /**
+     * record class
+     * @cfg {Tine.Timetracker.Model.Timesheet} recordClass
+     */
+    recordClass: Tine.Timetracker.Model.Timesheet,
+    
+    /**
+     * @private grid cfg
+     */
+    defaultSortInfo: {field: 'start_date', direction: 'DESC'},
+    gridConfig: {
+        autoExpandColumn: 'description'
+    },
+    copyEditAction: true,
+    multipleEdit: true,
+    multipleEditRequiredRight: 'manage_timeaccounts',
+
+    /**
+     * @private
+     */
 
     /**
      * activates copy action
@@ -50,7 +70,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // only eval grants in action updater if user does not have the right to manage timeaccounts
         this.evalGrants = ! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
-        
+
+
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
     },
 
@@ -202,7 +223,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                     break;
                                 default:
                                     value += type;
-                            }
+                            }                           
                         } else {
                             value = Ext.util.Format.htmlEncode(value);
                         }
@@ -218,11 +239,36 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             })
         });
     },
-
+    
     /**
      * @private
      */
     initActions: function() {
+        var hiddenQuickTag = false,
+            quicktagName,
+            quicktagId;
+
+        quicktagId = Tine.Timetracker.registry.get('quicktagId');
+        quicktagName = Tine.Timetracker.registry.get('quicktagName');
+
+        if (!quicktagId || !quicktagName) {
+            hiddenQuickTag = true;
+        }
+
+        this.actions_massQuickTag = new Ext.Action({
+            hidden: hiddenQuickTag,
+            requiredGrant: 'editGrant',
+            text: String.format(
+                this.app.i18n._('Assign \'{0}\' Tag'),
+                quicktagName
+            ),
+            disabled: true,
+            allowMultiple: true,
+            handler: this.onApplyQuickTag.createDelegate(this),
+            iconCls: 'action_tag',
+            scope: this
+        });
+
         this.actions_exportTimesheet = new Ext.Action({
             text: this.app.i18n._('Export Timesheets'),
             iconCls: 'action_export',
@@ -260,23 +306,73 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportTimesheet
+            this.actions_exportTimesheet,
+            this.actions_massQuickTag
         ]);
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
     },
 
-    updateExportAction: function(action, grants, records) {
-        var exportGrant = true;
-        Ext.each(records, function(record) {
-            var c = record.get('timeaccount_id').container_id;
-            if (c.hasOwnProperty('account_grants')) {
-                if (! c.account_grants.exportGrant) {
-                    exportGrant = false;
-                    return false;
-                }
+    /**
+     * Apply quick tag to current selection
+     */
+    onApplyQuickTag: function() {
+        var quickTagId,
+            filter,
+            filterModel,
+            me;
+
+        me = this;
+
+        // Tag to assign
+        quickTagId = Tine.Timetracker.registry.get('quicktagId');
+
+        // Get filter model for current selection
+        filter = this.selectionModel.getSelectionFilter();
+        filterModel = this.recordClass.getMeta('appName') + '_Model_' +  this.recordClass.getMeta('modelName') + 'Filter';
+
+        // Send request to backend
+        Ext.Ajax.request({
+            scope: this,
+            timeout: 1800000,
+            success: function(response, options) {
+                // In case of success, just reload grid
+                me.getStore().reload();
+            },
+            params: {
+                method: 'Tinebase.attachTagToMultipleRecords',
+                filterData: filter,
+                filterName: filterModel,
+                tag: quickTagId
+            },
+            failure: function(response, options) {
+                Tine.Tinebase.ExceptionHandler.handleRequestException(response, options);
             }
         });
+    },
+
+    /**
+     * check user exportGrant for timeaccounts
+     * NOTE: manage_timeaccounts ALWAYS allows to export
+     *
+     * @param action
+     * @param grants
+     * @param records
+     * @returns {boolean}
+     */
+    updateExportAction: function(action, grants, records) {
+        var exportGrant = true;
+        if (! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+            Ext.each(records, function (record) {
+                var c = record.get('timeaccount_id').container_id;
+                if (c.hasOwnProperty('account_grants')) {
+                    if (!c.account_grants.exportGrant) {
+                        exportGrant = false;
+                        return false;
+                    }
+                }
+            });
+        }
 
         var disable = ! exportGrant;
         action.setDisabled(disable);
@@ -306,6 +402,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getContextMenuItems: function() {
         var items = [
             '-',
+            this.actions_massQuickTag,
             this.actions_exportTimesheet
         ];
         

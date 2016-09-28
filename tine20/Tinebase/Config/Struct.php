@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -19,8 +19,8 @@ class Tinebase_Config_Struct extends ArrayObject
     /**
      * Retrieve a value and return $default if there is no element set.
      *
-     * @param  string $name
-     * @param  mixed  $default
+     * @param  string $_name
+     * @param  mixed  $_default
      * @return mixed
      */
     public function get($_name, $_default = null)
@@ -51,7 +51,7 @@ class Tinebase_Config_Struct extends ArrayObject
     /**
      * Magic function so that $obj->value will work.
      *
-     * @param string $name
+     * @param string $_name
      * @return mixed
      */
     public function __get($_name)

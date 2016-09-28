@@ -43,6 +43,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract implem
     /**
      * the constructor
      *
+     * @param array $_options
      */
     public function __construct(array $_options = array())
     {

@@ -309,7 +309,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * sets notes of a record
      * 
-     * @param Tinebase_Record_Abstract  $_record            the record object
+     * @param Tinebase_Record_Interface  $_record            the record object
      * @param string                    $_backend           backend (default: 'Sql')
      * @param string                    $_notesProperty     the property in the record where the tags are in (default: 'notes')
      * 
@@ -666,5 +666,164 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         $this->_noteTypesTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteTypeId));
     }
-    
+
+    /**
+     * Search for records matching given filter
+     *
+     *
+     * @param  Tinebase_Model_Filter_FilterGroup $_filter
+     * @param  Tinebase_Model_Pagination $_pagination
+     * @param  array|string|boolean $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Gets total count of search with $_filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Return a single record
+     *
+     * @param string $_id
+     * @param boolean $_getDeleted get deleted records
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function get($_id, $_getDeleted = FALSE)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Returns a set of records identified by their id's
+     *
+     * @param string|array $_ids Ids
+     * @param array $_containerIds all allowed container ids that are added to getMultiple query
+     * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function getMultiple($_ids, $_containerIds = NULL)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Gets all entries
+     *
+     * @param string $_orderBy Order result by
+     * @param string $_orderDirection Order direction - allowed are ASC and DESC
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Create a new persistent contact
+     *
+     * @param  Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Upates an existing persistent record
+     *
+     * @param  Tinebase_Record_Interface $_record
+     * @return Tinebase_Record_Interface|NULL
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Updates multiple entries
+     *
+     * @param array $_ids to update
+     * @param array $_data
+     * @return integer number of affected rows
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function updateMultiple($_ids, $_data)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * Deletes one or more existing persistent record(s)
+     *
+     * @param string|array $_identifier
+     * @return void
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function delete($_identifier)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * get backend type
+     *
+     * @return string
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function getType()
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * sets modlog active flag
+     *
+     * @param $_bool
+     * @return Tinebase_Backend_Sql_Abstract
+     */
+    public function setModlogActive($_bool)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * checks if modlog is active or not
+     *
+     * @return bool
+     */
+    public function getModlogActive()
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * fetch a single property for all records defined in array of $ids
+     *
+     * @param array|string $ids
+     * @param string $property
+     * @return array (key = id, value = property value)
+     */
+    public function getPropertyByIds($ids, $property)
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
 }

@@ -53,7 +53,7 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'is_ope
 // add renderer for invoice position gridpanel
 Tine.Timetracker.HumanHourRenderer = function(value) {
     return Ext.util.Format.round(value, 2);
-}
+};
 
 Tine.Timetracker.registerRenderers = function() {
     

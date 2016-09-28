@@ -19,6 +19,8 @@ require_once 'vcardphp/vcard.php';
  * @package     Addressbook
  * @subpackage  Import
  * @see ftp://ftp.rfc-editor.org/in-notes/rfc2426.txt
+ *
+ * @property Addressbook_Controller_Contact     $_controller    protected property!
  */
 class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 {
@@ -65,8 +67,9 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 
     /**
      * constructs a new importer from given config
-     * 
+     *
      * @param array $_options
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function __construct(array $_options = array())
     {
@@ -131,8 +134,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     protected function _getRawData(&$_resource) 
     {
         $card = new VCard();
-        
-        $result = FALSE;
+
         while ($card->parse($_resource)) {
             if ($card->getProperty('N')) {
                 return $card;
@@ -148,7 +150,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * do the mapping and replacements
      *
      * @param VCard $card
-     * @param array $_headline [optional]
      * @return array
      * 
      * @todo split this into smaller parts

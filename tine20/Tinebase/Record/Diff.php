@@ -15,6 +15,10 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property string id
+ * @property string model
+ * @property array  diff
  */
 class Tinebase_Record_Diff extends Tinebase_Record_Abstract 
 {

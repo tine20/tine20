@@ -717,7 +717,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * get max attachment size for outgoing mails
      * 
-     * - currently it is set to memory_limit / 10
+     * - currently it is set to memory_limit
      * - returns size in Bytes
      * 
      * @return integer
@@ -734,6 +734,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $configuredMemoryLimit = '512M';
         }
         
-        return Tinebase_Helper::convertToBytes($configuredMemoryLimit) / 10;
+        return Tinebase_Helper::convertToBytes($configuredMemoryLimit);
     }
 }

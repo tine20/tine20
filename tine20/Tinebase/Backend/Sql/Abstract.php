@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -136,7 +136,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      *  - tablePrefix
      *  - modlogActive
      *  
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
@@ -147,6 +147,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_modelName            = (isset($_options['modelName']) || array_key_exists('modelName', $_options))            ? $_options['modelName']    : $this->_modelName;
         $this->_tableName            = (isset($_options['tableName']) || array_key_exists('tableName', $_options))            ? $_options['tableName']    : $this->_tableName;
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
         $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
         
@@ -185,11 +186,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         return $this->_modlogActive;
     }
-    
+
     /**
      * returns the db schema
-     * 
      * @return array
+     * @throws Tinebase_Exception_Backend_Database
      */
     public function getSchema()
     {
@@ -210,7 +211,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * Gets one entry (by id)
      *
      * @param integer|Tinebase_Record_Interface $_id
-     * @param $_getDeleted get deleted records
+     * @param boolean $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
@@ -219,7 +220,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (empty($_id)) {
             throw new Tinebase_Exception_NotFound('$_id can not be empty');
         }
-        
+
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
         
         return $this->getByProperty($id, $this->_identifier, $_getDeleted);
@@ -233,6 +234,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _getRecordIdentifier()
     {
         if (preg_match("/\./", $this->_identifier)) {
+            /** @noinspection PhpUnusedLocalVariableInspection */
             list($table, $identifier) = explode('.', $this->_identifier);
         } else {
             $identifier = $this->_identifier;
@@ -311,6 +313,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _rawDataToRecord(array $_rawData)
     {
+        /** @var Tinebase_Record_Abstract $result */
         $result = new $this->_modelName($_rawData, true);
 
         $result->runConvertToRecord();
@@ -587,7 +590,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $searchCountCols['sum_' . $column] = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
         }
         
-        list($subSelectColumns, $getIdValuePair) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
+        list($subSelectColumns/*, $getIdValuePair*/) = $this->_getColumnsToFetch(self::IDCOL, $_filter);
         if (!empty($this->_additionalSearchCountCols)) {
             $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
         }
@@ -728,6 +731,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _checkTracing(Zend_Db_Select $select)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $config = Tinebase_Core::getConfig()->logger) {
             if ($config->traceQueryOrigins) {
                 $e = new Exception();
@@ -862,6 +866,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @param array $finalCols
      * @param array $interimCols
+     * @return boolean
      */
     protected function _compareRequiredJoins( $finalCols, $interimCols )
     {
@@ -920,15 +925,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /*************************** create / update / delete ****************************/
-    
+
     /**
      * Creates new entry
      *
      * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_InvalidArgument
-     * @throws  Tinebase_Exception_UnexpectedValue
-     * 
+     * @return Tinebase_Record_Interface
+     * @throws Exception
      * @todo    remove autoincremental ids later
      */
     public function create(Tinebase_Record_Interface $_record) 
@@ -941,10 +944,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
 
             }
-            
+
+            /** @var Tinebase_Record_Interface $_record */
             // set uid if record has hash id and id is empty
             if (empty($_record->$identifier) && $this->_hasHashId()) {
-                $_record->setId($_record->generateUID());
+                $_record->setId(Tinebase_Record_Abstract::generateUID());
             }
             
             $recordArray = $this->_recordToRawData($_record);
@@ -1119,10 +1123,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Interface $_record
      * @return array
      */
-    protected function _recordToRawData($_record)
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $_record->runConvertToData();
         $readOnlyFields = $_record->getReadOnlyFields();
@@ -1164,9 +1168,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * update foreign key values
      * 
      * @param string $_mode create|update
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      */
-    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Interface $_record)
     {
         if (! empty($this->_foreignTables)) {
             
@@ -1228,11 +1232,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * do something after creation of record
      * 
-     * @param Tinebase_Record_Abstract $_newRecord
-     * @param Tinebase_Record_Abstract $_recordToCreate
+     * @param Tinebase_Record_Interface $_newRecord
+     * @param Tinebase_Record_Interface $_recordToCreate
      * @return void
      */
-    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
+    protected function _inspectAfterCreate(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_recordToCreate)
     {
     }
     
@@ -1250,7 +1254,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (!$_record instanceof $this->_modelName) {
             throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
         }
-        
+
+        /** @var Tinebase_Record_Interface $_record */
         $_record->isValid(TRUE);
         
         $id = $_record->getId();
@@ -1336,7 +1341,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * Deletes entries
       * 
       * @param string|integer|Tinebase_Record_Interface|array $_id
-      * @return void
       * @return int The number of affected rows.
       */
     public function delete($_id)
@@ -1545,7 +1549,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Public service for grouping treatment
      * 
-     * @param string $tablePrefix
      * @param Zend_Db_Select $select
      */
     public static function traitGroup(Zend_Db_Select $select)
@@ -1690,7 +1693,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * return etag set for given container
      * 
      * @param string $containerId
-     * @return multitype:Ambigous <mixed, Ambigous <string, boolean, mixed>>
+     * @return mixed
      */
     public function getEtagsForContainerId($containerId)
     {
@@ -1715,8 +1718,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  string   $method
      * @param  string   $cacheId
      * @param  string   $value
-     * @param  string   $usePersistentCache
-     * @param  integer  $persistantCacheTTL
+     * @param  boolean  $usePersistentCache
+     * @param  boolean  $persistantCacheTTL
      * @return Tinebase_Cache_PerRequest
      */
     public function saveInClassCache($method, $cacheId, $value, $usePersistentCache = false, $persistantCacheTTL = false)
@@ -1727,8 +1730,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * load value from in-class cache
      * 
-     * @param string $method
-     * @param string $cacheId
+     * @param string  $method
+     * @param string  $cacheId
+     * @param boolean $usePersistentCache
      * @return mixed
      */
     public function loadFromClassCache($method, $cacheId, $usePersistentCache = false)
@@ -1739,8 +1743,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * reset class cache
      * 
-     * @param string $key
-     * @return Tinebase_Model_Filter_Abstract
+     * @param string $method
+     * @return Tinebase_Backend_Sql_Abstract
      */
     public function resetClassCache($method = null)
     {

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -20,8 +20,9 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
     /**
      * Constructor
      *
-     * @param  array  $options  An array of arrays of IMAP options
-     * @return void
+     * @param array  $options An array of arrays of IMAP options
+     * @param string $username
+     * @param string $password
      */
     public function __construct(array $options = array(), $username = null, $password = null)
     {
@@ -39,7 +40,8 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function setIdentity($_identity)
     {
-        return parent::setUsername($_identity);
+        parent::setUsername($_identity);
+        return $this;
     }
     
     /**
@@ -50,6 +52,7 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function setCredential($_credential)
     {
-        return parent::setPassword($_credential);
+        parent::setPassword($_credential);
+        return $this;
     }    
 }

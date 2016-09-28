@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -57,10 +57,10 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * fetch all file attachments of a record
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function getRecordAttachments(Tinebase_Record_Abstract $record)
+    public function getRecordAttachments(Tinebase_Record_Interface $record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Fetching attachments of ' . get_class($record) . ' record with id ' . $record->getId() . ' ...');
@@ -156,9 +156,9 @@ class Tinebase_FileSystem_RecordAttachments
     /**
      * set file attachments of a record
      * 
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
-    public function setRecordAttachments(Tinebase_Record_Abstract $record)
+    public function setRecordAttachments(Tinebase_Record_Interface $record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' Record: ' . print_r($record->toArray(), TRUE));

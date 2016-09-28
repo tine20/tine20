@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,7 +25,7 @@ interface Tinebase_Backend_Interface
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  array|string|boolean                 $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet|array
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*');
     
@@ -41,17 +41,17 @@ interface Tinebase_Backend_Interface
      * Return a single record
      *
      * @param string $_id
-     * @param $_getDeleted get deleted records
+     * @param boolean $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
      */
     public function get($_id, $_getDeleted = FALSE);
-    
+
     /**
      * Returns a set of records identified by their id's
-     * 
-     * @param  string|array $_id Ids
+     *
+     * @param string|array $_ids Ids
      * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_RecordSet of Tinebase_Record_Interface
+     * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
      */
     public function getMultiple($_ids, $_containerIds = NULL);
 
@@ -76,7 +76,7 @@ interface Tinebase_Backend_Interface
     /**
      * Upates an existing persistent record
      *
-     * @param  Tinebase_Record_Interface $_contact
+     * @param  Tinebase_Record_Interface $_record
      * @return Tinebase_Record_Interface|NULL
      */
     public function update(Tinebase_Record_Interface $_record);

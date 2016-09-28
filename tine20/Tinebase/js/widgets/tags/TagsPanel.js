@@ -89,7 +89,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                 paging : {}
             }
         });
-        
+
         this.searchField = new Tine.widgets.tags.TagCombo({
             app: this.app,
             onlyUsableTags: true,

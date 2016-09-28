@@ -75,7 +75,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      *  - tablePrefix
      *  - modlogActive
      *  
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
@@ -101,10 +101,10 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     /**
      * converts record into raw data for adapter
      *
-     * @param  Tinebase_Record_Abstract $_record
+     * @param  Tinebase_Record_Interface $_record
      * @return array
      */
-    protected function _recordToRawData($_record)
+    protected function _recordToRawData(Tinebase_Record_Interface $_record)
     {
         $result = parent::_recordToRawData($_record);
         
@@ -124,6 +124,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      */
     public function addListMember($_listId, $_newMembers)
     {
+        /** @var Addressbook_Model_List $list */
         $list = $this->get($_listId);
         
         if (empty($_newMembers)) {
@@ -174,6 +175,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
      */
     public function removeListMember($_listId, $_membersToRemove)
     {
+        /** @var Addressbook_Model_List $list */
         $list = $this->get($_listId);
         
         if (empty($_membersToRemove)) {

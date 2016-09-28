@@ -15,9 +15,12 @@
  *
  * @package     Addressbook
  * @subpackage  Controller
+ *
+ * @property Addressbook_Backend_Sql $_backend protected member, you don't have access to that
  */
 class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 {
+
     /**
      * set geo data for contacts
      * 
@@ -86,7 +89,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * gets binary contactImage
      *
      * @param int $_contactId
-     * @return blob
+     * @return string
      */
     public function getImage($_contactId) {
         // ensure user has rights to see image
@@ -119,17 +122,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $_filter->addFilter($disabledFilter);
         }
     }
-    
+
     /**
      * fetch one contact identified by $_userId
      *
      * @param   int $_userId
      * @param   boolean $_ignoreACL don't check acl grants
-     * @return  Addressbook_Model_Contact
-     * @throws  Addressbook_Exception_AccessDenied if user has no read grant
-     * @throws  Addressbook_Exception_NotFound if contact is hidden from addressbook
-     * 
-     * @todo this is almost always called with ignoreACL = TRUE because contacts can be hidden from addressbook. 
+     * @return Addressbook_Model_Contact
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     * @todo this is almost always called with ignoreACL = TRUE because contacts can be hidden from addressbook.
      *       is this the way we want that?
      */
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
@@ -159,13 +162,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
     * can be called to activate/deactivate if geodata should be set for contacts (ignoring the config setting)
     *
-    * @param  boolean optional
+    * @param  boolean $setTo (optional)
     * @return boolean
     */
-    public function setGeoDataForContacts()
+    public function setGeoDataForContacts($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_setGeoDataForContacts', $value);
+        return $this->_setBooleanMemberVar('_setGeoDataForContacts', $setTo);
     }
     
     /**
@@ -210,6 +212,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
 
             try {
+
                 $record = new $this->_modelName($data);
                 $record->__set('jpegphoto', NULL);
                 $updatedRecord = $this->update($record, FALSE);
@@ -251,7 +254,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         unset($contact->jpegphoto);
         
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
-        
+
+        /** @var Addressbook_Model_Contact $contact */
         $contact = $this->update($userProfile, FALSE);
         
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
@@ -264,9 +268,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * inspect update of one record (after update)
      *
-     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
-     * @param   Tinebase_Record_Interface $record          the update record
-     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @param   Addressbook_Model_Contact $updatedRecord   the just updated record
+     * @param   Addressbook_Model_Contact $record          the update record
+     * @param   Addressbook_Model_Contact $currentRecord   the current record (before update)
      * @return  void
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
@@ -285,39 +289,43 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _deleteRecord(Tinebase_Record_Interface $_record)
     {
+        /** @var Addressbook_Model_Contact $_record */
         if (!empty($_record->account_id)) {
             throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
         }
         
         parent::_deleteRecord($_record);
     }
-    
+
     /**
      * inspect creation of one record
-     * 
+     *
      * @param   Tinebase_Record_Interface $_record
-     * @return  void
+     * @throws Addressbook_Exception_InvalidArgument
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        /** @var Addressbook_Model_Contact $_record */
         $this->_setGeoData($_record);
         
         if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             throw new Addressbook_Exception_InvalidArgument('can not add contact of type user');
         }
     }
-    
+
     /**
      * inspect update of one record
-     * 
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
-     * @return  void
-     * 
+     *
+     * @param   Tinebase_Record_Interface $_record the update record
+     * @param   Tinebase_Record_Interface $_oldRecord the current persistent record
+     * @throws Tinebase_Exception_AccessDenied
      * @todo remove system note for updated jpegphoto when images are modlogged (@see 0000284: modlog of contact images / move images to vfs)
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        /** @var Addressbook_Model_Contact $_record */
+        /** @var Addressbook_Model_Contact $_oldRecord */
+
         // do update of geo data only if one of address field changed
         $addressDataChanged = FALSE;
         foreach ($this->_addressFields as $field) {
@@ -594,6 +602,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         // fetch all groups and role memberships and add to path
         $listIds = Addressbook_Controller_List::getInstance()->getMemberships($record);
         foreach ($listIds as $listId) {
+            /** @var Addressbook_Model_List $list */
             $list = Addressbook_Controller_List::getInstance()->get($listId);
             $listPaths = $this->_getPathsOfRecord($list);
             if (count($listPaths) === 0) {

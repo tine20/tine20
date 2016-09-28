@@ -195,4 +195,11 @@ interface Setup_Backend_Interface
      */
     public function restore($options);
 
+    /**
+     * execute statement without return values
+     *
+     * @param string $_statement
+     * @param array  $bind
+     */
+    public function execQueryVoid($_statement, $bind = array());
 }

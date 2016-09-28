@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use other/shared namespaces
  * @todo        extend Tinebase_Controller_Record Abstract and add modlog fields and acl
@@ -106,12 +106,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @param bool $_getRelations
+     * @param bool $_onlyIds
+     * @param string $_action
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $filterValues = $this->_extractFilter($_filter);
         
@@ -138,14 +140,15 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         return $result;
     }
-    
+
     /**
      * Gets total count of search with $_filter
-     * 
+     *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         $filterValues = $this->_extractFilter($_filter);
         

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Translation
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -261,7 +261,7 @@ class Tinebase_Translation
      * 
      * @param  string $_applicationName
      * @param  Zend_Locale $_locale [optional]
-     * @return Zend_Translate
+     * @return Zend_Translate_Adapter
      * 
      * @todo return 'void' if locale = en
     */

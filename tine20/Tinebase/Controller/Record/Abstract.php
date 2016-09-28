@@ -185,16 +185,17 @@ abstract class Tinebase_Controller_Record_Abstract
      * returns controller for records of given model
      *
      * @param string $_model
+     * @return Tinebase_Controller|Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract
      */
     public static function getController($_model)
     {
-        list($appName, $i, $modelName) = explode('_', $_model);
+        list($appName, /*$i*/, $modelName) = explode('_', $_model);
         return Tinebase_Core::getApplicationInstance($appName, $modelName);
     }
     
     /**
      * returns backend for this controller
-     * 
+     * @return Tinebase_Backend_Sql_Interface
      */
     public function getBackend()
     {
@@ -206,14 +207,14 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * get list of records
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @param boolean|array $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
@@ -230,6 +231,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 if ($_getRelations === true) {
                     $_getRelations = NULL;
                 }
+                /** @noinspection PhpUndefinedMethodInspection */
                 $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_getBackendType(), $result->getId(), NULL, array(), FALSE, $_getRelations));
             }
             if ($this->resolveCustomfields()) {
@@ -272,13 +274,12 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * set/get the sendNotifications state
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function sendNotifications()
+    public function sendNotifications($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_sendNotifications', $value);
+        return $this->_setBooleanMemberVar('_sendNotifications', $setTo);
     }
     
     /**
@@ -294,7 +295,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($value !== NULL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Resetting ' . $name . ' to ' . (int) $value);
-            $this->{$name} = $value;
+            $this->{$name} = (bool)$value;
         }
         
         return $currValue;
@@ -313,37 +314,34 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * set/get purging of record when deleting
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function purgeRecords()
+    public function purgeRecords($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_purgeRecords', $value);
+        return $this->_setBooleanMemberVar('_purgeRecords', $setTo);
     }
 
     /**
      * set/get checking ACL rights
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function doContainerACLChecks()
+    public function doContainerACLChecks($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_doContainerACLChecks', $value);
+        return $this->_setBooleanMemberVar('_doContainerACLChecks', $setTo);
     }
     
     /**
      * set/get resolving of customfields
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function resolveCustomfields()
+    public function resolveCustomfields($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        $currentValue = ($this->_setBooleanMemberVar('_resolveCustomFields', $value) 
+        $currentValue = ($this->_setBooleanMemberVar('_resolveCustomFields', $setTo)
             && Tinebase_CustomField::getInstance()->appHasCustomFields($this->_applicationName, $this->_modelName));
         return $currentValue;
     }
@@ -351,21 +349,22 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * set/get modlog active
      *
-     * @param  boolean optional
-     * @return boolean
+     * @param  boolean $setTo
+     * @return bool
+     * @throws Tinebase_Exception_NotFound
      */
-    public function modlogActive()
+    public function modlogActive($setTo = NULL)
     {
         if (! $this->_backend) {
             throw new Tinebase_Exception_NotFound('Backend not defined');
         }
 
         $currValue = $this->_backend->getModlogActive();
-        if (func_num_args() === 1) {
-            $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $paramValue);
-            $this->_backend->setModlogActive($paramValue);
-            $this->_omitModLog = ! $paramValue;
+        if (NULL !== $setTo) {
+            $setTo = (bool)$setTo;
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $setTo);
+            $this->_backend->setModlogActive($setTo);
+            $this->_omitModLog = ! $setTo;
         }
 
         return $currValue;
@@ -374,48 +373,46 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * set/get relation update
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function doRelationUpdate()
+    public function doRelationUpdate($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_doRelationUpdate', $value);
+        return $this->_setBooleanMemberVar('_doRelationUpdate', $setTo);
     }
     
     /**
      * set/get force modlog info
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-    public function doForceModlogInfo()
+    public function doForceModlogInfo($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_doForceModlogInfo', $value);
+        return $this->_setBooleanMemberVar('_doForceModlogInfo', $setTo);
     }
     
     /**
      * set/get _inspectRelatedRecords
-     * 
+     *
+     * @param boolean $setTo
      * @return boolean
      */
-    public function doInspectRelatedRecords()
+    public function doInspectRelatedRecords($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_inspectRelatedRecords', $value);
+        return $this->_setBooleanMemberVar('_inspectRelatedRecords', $setTo);
     }
     
     /**
      * set/get duplicateCheckFields
      * 
-     * @param array optional
+     * @param array $setTo
      * @return array
      */
-    public function duplicateCheckFields()
+    public function duplicateCheckFields($setTo = NULL)
     {
-        if (func_num_args() === 1) {
-            $this->_duplicateCheckFields = func_get_arg(0);
+        if (NULL !== $setTo) {
+            $this->_duplicateCheckFields = $setTo;
         }
         
         return $this->_duplicateCheckFields;
@@ -424,13 +421,12 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * disable this to do not check any rights
      *
-     * @param  boolean optional
+     * @param  boolean $setTo
      * @return boolean
      */
-     public function doRightChecks()
+     public function doRightChecks($setTo = NULL)
      {
-         $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-         return $this->_setBooleanMemberVar('_doRightChecks', $value);
+         return $this->_setBooleanMemberVar('_doRightChecks', $setTo);
      }
 
     /**
@@ -636,7 +632,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->_clearCustomFieldsCache) {
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
         }
-        
+
+        /** @noinspection PhpUndefinedVariableInspection */
         return $this->get($createdRecord);
     }
 
@@ -791,7 +788,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
     {
-        if (empty($this->_duplicateCheckFields)) {
+        if (!is_array($this->_duplicateCheckFields) || count($this->_duplicateCheckFields) === 0) {
             return NULL;
         }
         
@@ -842,7 +839,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! empty($recordId)) {
             $filterData[] = array('field' => 'id', 'operator' => 'notin', 'value' => array($recordId));
         }
-        
+
+        /** @var Tinebase_Model_Filter_Abstract $filter */
         $filter = new $filterClass($filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
@@ -868,6 +866,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $type = isset($this->_duplicateCheckConfig['relations']['type']) ? $this->_duplicateCheckConfig['relations']['type'] : '';
         $relations = $relations->filter('type', $type);
         if (count($relations) > 0) {
+            /** @var Tinebase_Model_Relation $duplicateRelation */
             $duplicateRelation = $relations->getFirstRecord();
             if ($duplicateRelation->related_id) {
                 $filter = array(
@@ -895,7 +894,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * increase container content sequence
      * 
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $record
      * @param string $action
      */
     protected function _increaseContainerContentSequence(Tinebase_Record_Interface $record, $action = NULL)
@@ -1025,6 +1024,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('customfields'));
         }
 
+        /** @noinspection PhpUndefinedVariableInspection */
         return $this->get($updatedRecord->getId());
     }
     
@@ -1050,17 +1050,17 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_checkRight('update');
         }
     }
-    
+
     /**
      * concurrency management & history log
-     * 
+     *
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_Interface $_currentRecord
      */
     protected function _concurrencyManagement($_record, $_currentRecord)
     {
         if (! $_record->has('created_by')) {
-            return NULL;
+            return;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1105,7 +1105,8 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Writing modlog for ' . get_class($_newRecord));
     
-        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName, $this->_getBackendType(), $_newRecord->getId());
+        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
+                                                                                        $this->_getBackendType(), $_newRecord->getId());
         
         return $currentMods;
     }
@@ -1171,10 +1172,10 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param $updatedRecord
-     * @param $record
-     * @param $currentRecord
-     * @param $relationsTouched
+     * @param Tinebase_Record_Interface $updatedRecord
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Interface $currentRecord
+     * @param boolean $relationsTouched
      */
     protected function _rebuildRelationPaths($updatedRecord, $record, $currentRecord, $relationsTouched)
     {
@@ -1291,6 +1292,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 . ' Writing modlog for ' . count($ids) . ' records ...');
             
             $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLogMultiple($ids, $_oldData, $_newData, $this->_modelName, $this->_getBackendType(), $updateMetaData);
+            /** @noinspection PhpUndefinedVariableInspection */
             Tinebase_Notes::getInstance()->addMultipleModificationSystemNotes($currentMods, $currentAccountId, $this->_modelName);
         }
     }
@@ -1410,7 +1412,7 @@ abstract class Tinebase_Controller_Record_Abstract
             'options'    => array('getRelations' => $getRelations),
             'function'   => 'processUpdateMultipleIteration',
         ));
-        $result = $iterator->iterate($_data);
+        /*$result = */$iterator->iterate($_data);
     
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updated ' . $this->_updateMultipleResult['totalcount'] . ' records.');
@@ -1426,19 +1428,18 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * enable / disable notes
      *
-     * @param boolean $_value
-     * @return void
+     * @param boolean $setTo
+     * @return boolean
      */
-    public function useNotes()
+    public function useNotes($setTo = NULL)
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
-        return $this->_setBooleanMemberVar('_setNotes', $value);
+        return $this->_setBooleanMemberVar('_setNotes', $setTo);
     }
     
     /**
      * iterate relations
      * 
-     * @param Tinebase_Record_Abstract $currentRecord
+     * @param Tinebase_Record_Interface $currentRecord
      * @return array
      */
     protected function _iterateRelations($currentRecord)
@@ -1446,8 +1447,6 @@ abstract class Tinebase_Controller_Record_Abstract
         if(! $currentRecord->relations || get_class($currentRecord->relations) != 'Tinebase_Record_RecordSet') {
             $currentRecord->relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         }
-        
-        $be = new Tinebase_Relation_Backend_Sql();
 
         // handle relations to remove
         if($this->_removeRelations) {
@@ -1485,20 +1484,23 @@ abstract class Tinebase_Controller_Record_Abstract
         
         return $currentRecord->relations->toArray();
     }
-    
+
     /**
-    * update multiple records in an iteration
-    * @see Tinebase_Record_Iterator / self::updateMultiple()
-    *
-    * @param Tinebase_Record_RecordSet $_records
-    * @param array $_data
-    */
+     * update multiple records in an iteration
+     * @see Tinebase_Record_Iterator / self::updateMultiple()
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_data
+     * @throws Exception
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public function processUpdateMultipleIteration($_records, $_data)
     {
         if (count($_records) === 0) {
             return;
         }
         $bypassFilters = FALSE;
+        /** @var Tinebase_Record_Interface $currentRecord */
         foreach ($_records as $currentRecord) {
             $oldRecordArray = $currentRecord->toArray();
             unset($oldRecordArray['relations']);
@@ -1511,7 +1513,8 @@ abstract class Tinebase_Controller_Record_Abstract
             try {
                 $record = new $this->_modelName($data, $bypassFilters);
                 $updatedRecord = $this->update($record, FALSE);
-                
+
+                /** @noinspection PhpUndefinedMethodInspection */
                 $this->_updateMultipleResult['results']->addRecord($updatedRecord);
                 $this->_updateMultipleResult['totalcount'] ++;
                 
@@ -1519,6 +1522,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 if ($this->_updateMultipleValidateEachRecord === FALSE) {
                     throw $e;
                 }
+                /** @noinspection PhpUndefinedMethodInspection */
                 $this->_updateMultipleResult['exceptions']->addRecord(new Tinebase_Model_UpdateMultipleException(array(
                     'id'         => $currentRecord->getId(),
                     'exception'  => $e,
@@ -1534,21 +1538,23 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
     }
-    
+
     /**
      * Deletes a set of records.
      *
      * If one of the records could not be deleted, no record is deleted
      *
-     * @param   array $_ids array of record identifiers
-     * @return  Tinebase_Record_RecordSet
-     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+     * @param  array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_ids array of record identifiers
+     * @return Tinebase_Record_RecordSet
+     * @throws Exception
      */
     public function delete($_ids)
     {
-        if ($_ids instanceof $this->_modelName) {
+        if ($_ids instanceof $this->_modelName || $_ids instanceof Tinebase_Record_RecordSet) {
+            /** @var Tinebase_Record_Interface $_ids */
             $_ids = (array)$_ids->getId();
         }
+        /** @var array $_ids */
 
         $ids = $this->_inspectDelete((array) $_ids);
 
@@ -1637,7 +1643,10 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param mixed $_records (can be record set, filter, array, string)
      * @param mixed $_target (string, container record, ...)
+     * @param string $_containerProperty
      * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     public function move($_records, $_target, $_containerProperty = 'container_id')
     {
@@ -1677,7 +1686,7 @@ abstract class Tinebase_Controller_Record_Abstract
         $filter = new $filterClass(array(
             array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
         ));
-        $updateResult = $this->updateMultiple($filter, array(
+        /*$updateResult = */$this->updateMultiple($filter, array(
             $_containerProperty => $targetContainerId
         ));
         
@@ -1763,7 +1772,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         foreach ($relations as $relation) {
             if (in_array($relation->related_model, $modelsToDelete) || in_array($relation->type, $typesToDelete)) {
-                list($appName, $i, $itemName) = explode('_', $relation->related_model);
+                list($appName, /*$i*/, $itemName) = explode('_', $relation->related_model);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
 
                 try {
@@ -1774,6 +1783,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
     }
+
 
     /**
      * check grant for action (CRUD)
@@ -1788,8 +1798,10 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @todo use this function in other create + update functions
      * @todo invent concept for simple adding of grants (plugins?)
+     *
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.',
+        /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = NULL)
     {
         if (   ! $this->_doContainerACLChecks
             || ! $_record->has('container_id')) {
@@ -1818,7 +1830,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT);
                 break;
             case 'delete':
-                $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
@@ -1837,10 +1848,10 @@ abstract class Tinebase_Controller_Record_Abstract
      * overwrite this function to check rights
      *
      * @param string $_action {get|create|update|delete}
-     * @return void
      * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _checkRight($_action)
+    protected function _checkRight(/** @noinspection PhpUnusedParameterInspection */
+                                    $_action)
     {
         return;
     }
@@ -1856,7 +1867,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! $this->_doContainerACLChecks) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                 . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
-            return TRUE;
+            return;
         }
 
         $aclFilters = $_filter->getAclFilters();
@@ -1904,10 +1915,10 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * saves alarms of given record
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      */
-    protected function _saveAlarms(Tinebase_Record_Abstract $_record)
+    protected function _saveAlarms(Tinebase_Record_Interface $_record)
     {
         if (! $_record->alarms instanceof Tinebase_Record_RecordSet) {
             $_record->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm');
@@ -1925,7 +1936,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . " About to save " . count($alarms) . " alarms for {$_record->id} ");
+            . " About to save " . count($alarms) . " alarms for {$_record->getId()} ");
         $_record->alarms = $alarms;
 
         Tinebase_Alarm::getInstance()->setAlarmsOfRecord($_record);
@@ -1934,12 +1945,12 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * inspect alarm and set time
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Model_Alarm $_alarm
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _inspectAlarmSet(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm)
+    protected function _inspectAlarmSet(Tinebase_Record_Interface $_record, Tinebase_Model_Alarm $_alarm)
     {
         if (! $_record->{$this->_recordAlarmField} instanceof DateTime) {
             throw new Tinebase_Exception_InvalidArgument('alarm reference time is not set');
@@ -1988,10 +1999,10 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * inspect alarms of record (all alarms minutes_before fields are set here by default)
      *
-     * @param Tinebase_Record_Abstract $_record
+     * @param Tinebase_Record_Interface $_record
      * @return void
      */
-    protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
+    protected function _inspectAlarmGet(Tinebase_Record_Interface $_record)
     {
         $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
     }
@@ -2070,13 +2081,17 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has($_property) && $_record->{$_property}) {
             $recordClassName = $_fieldConfig['recordClassName'];
             $new = new Tinebase_Record_RecordSet($recordClassName);
+            /** @var Tinebase_Controller_Interface $ccn */
             $ccn = $_fieldConfig['controllerClassName'];
+            /** @var Tinebase_Controller_Record_Interface $controller */
             $controller = $ccn::getInstance();
-    
+
+            /** @var Tinebase_Record_Interface $rec */
             // legacy - should be already done in frontend json - remove if all record properties are record sets before getting to controller
             if (is_array($_record->{$_property})) {
                 $rs = new Tinebase_Record_RecordSet($recordClassName);
                 foreach ($_record->{$_property} as $recordArray) {
+                    /** @var Tinebase_Record_Interface $rec */
                     $rec = new $recordClassName(array(),true);
                     $rec->setFromJsonInUsersTimezone($recordArray);
                     
@@ -2111,7 +2126,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $_createdRecord->{$_property} = $new->toArray();
         }
     }
-    
+
     /**
      * updates dependent records on update the parent record
      *
@@ -2119,8 +2134,11 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface $_oldRecord
      * @param string $_property
      * @param array $_fieldConfig
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
-    protected function _updateDependentRecords(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
+    protected function _updateDependentRecords(Tinebase_Record_Interface $_record, /** @noinspection PhpUnusedParameterInspection */
+                                               Tinebase_Record_Interface $_oldRecord, $_property, $_fieldConfig)
     {
         if (! (isset($_fieldConfig['dependentRecords']) || array_key_exists('dependentRecords', $_fieldConfig)) || ! $_fieldConfig['dependentRecords']) {
             return;
@@ -2137,11 +2155,14 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             return;
         }
-        
+
+        /** @var Tinebase_Controller_Interface $ccn */
         $ccn = $_fieldConfig['controllerClassName'];
+        /** @var Tinebase_Controller_Record_Interface|Tinebase_Controller_SearchInterface $controller */
         $controller = $ccn::getInstance();
         $recordClassName = $_fieldConfig['recordClassName'];
         $filterClassName = $_fieldConfig['filterClassName'];
+        /** @var Tinebase_Record_RecordSet|Tinebase_Record_Interface $existing */
         $existing = new Tinebase_Record_RecordSet($recordClassName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -2153,6 +2174,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (is_array($_record->{$_property})) {
                 $rs = new Tinebase_Record_RecordSet($recordClassName);
                 foreach ($_record->{$_property} as $recordArray) {
+                    /** @var Tinebase_Record_Interface $rec */
                     $rec = new $recordClassName(array(),true);
                     $rec->setFromJsonInUsersTimezone($recordArray);
                     $rs->addRecord($rec);
@@ -2220,6 +2242,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
         $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text($_fieldConfig['refIdField'], 'equals', $_record->getId()));
         
@@ -2247,13 +2270,13 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * returns path of record
      *
-     * @param     $record
-     * @param int $depth
+     * @param Tinebase_Record_Interface     $record
+     * @param boolean|int                   $depth
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Tinebase_Exception
      */
-    protected function _getPathsOfRecord($record, $depth = false)
+    protected function _getPathsOfRecord(Tinebase_Record_Interface $record, $depth = false)
     {
         if (false !== $depth && $depth > 8) {
             throw new Tinebase_Exception('too many recursions while calculating record path');
@@ -2303,13 +2326,13 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param $record
+     * @param Tinebase_Record_Interface $record
      * @param $relation
      * @return string
      *
      * TODO use decorators
      */
-    protected function _getPathPart($record, $relation = null)
+    protected function _getPathPart(Tinebase_Record_Interface $record, $relation = null)
     {
         $type = $this->_getTypeForPathPart($relation);
 
@@ -2322,13 +2345,13 @@ abstract class Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * @param $record
+     * @param Tinebase_Record_Interface $record
      * @param $relation
      * @return string
      *
      * TODO use decorators
      */
-    protected function _getShadowPathPart($record, $relation = null)
+    protected function _getShadowPathPart(Tinebase_Record_Interface $record, $relation = null)
     {
         $type = $this->_getTypeForPathPart($relation);
 
@@ -2346,5 +2369,22 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($this->_useRecordPaths) {
             Tinebase_Record_Path::getInstance()->generatePathForRecord($record, $rebuildRecursively);
         }
+    }
+
+    // we dont want to mention the throw there, or it would be reflected everywhere
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
+     * send notifications
+     *
+     * @param Tinebase_Record_Interface  $_record
+     * @param Tinebase_Model_FullUser    $_updater
+     * @param String                     $_action
+     * @param Tinebase_Record_Interface  $_oldRecord
+     * @param Array                      $_additionalData
+     */
+    public function doSendNotifications(/** @noinspection PhpUnusedParameterInspection */
+        Tinebase_Record_Interface $_record, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldRecord = NULL, array $_additionalData = array())
+    {
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
 }

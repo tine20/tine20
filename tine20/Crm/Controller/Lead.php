@@ -8,7 +8,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -88,13 +88,13 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * search for leads
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Record_Interface $_pagination
+     * @param Tinebase_Model_Pagination $_pagination
      * @param boolean $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $leads = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
@@ -145,13 +145,14 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      *  - add products?
      *  - add notification levels
      *  
-     * @param Crm_Model_Lead            $_lead
+     * @param Tinebase_Record_Interface $_lead
      * @param Tinebase_Model_FullUser   $_updater
      * @param string                    $_action   {created|changed}
-     * @param Crm_Model_Lead            $_oldLead
+     * @param Tinebase_Record_Interface $_oldLead
+     * @param Array                     $_additionalData
      * @return void
      */
-    protected function doSendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
+    public function doSendNotifications(Tinebase_Record_Interface $_lead, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldLead = NULL, array $_additionalData = array())
     {
         $sendOnOwnActions = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
         if (! $sendOnOwnActions) {

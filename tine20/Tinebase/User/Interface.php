@@ -72,4 +72,15 @@ interface Tinebase_User_Interface
      * @return integer
      */
     public function countNonSystemUsers();
+
+    /**
+     * get user by property from backend
+     *
+     * @param   string  $_property      the key to filter
+     * @param   string  $_value         the value to search for
+     * @param   string  $_accountClass  type of model to return
+     *
+     * @return  Tinebase_Model_User the user object
+     */
+    public function getUserByPropertyFromBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User');
 }

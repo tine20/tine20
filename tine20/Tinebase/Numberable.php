@@ -47,7 +47,14 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
         parent::__construct(array_merge($_numberableConfiguration, self::$_baseConfiguration), $_dbAdapter, $_options);
     }
 
-    public static function getNumberable($_class, $_field, $_config)
+    /**
+     * @param string $_class
+     * @param string $_field
+     * @param array $_config
+     * @return Tinebase_Numberable_Abstract
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public static function getNumberable($_class, $_field, array $_config)
     {
         if (!isset(self::$_numberableCache[$_class . '_#_' . $_field])) {
             if ($_config['type'] === 'numberableStr') {

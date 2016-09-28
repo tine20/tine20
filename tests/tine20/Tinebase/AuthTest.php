@@ -207,4 +207,17 @@ class Tinebase_AuthTest extends TestCase
         $result = $db->fetchCol('SELECT id FROM ' . $db->quoteIdentifier($table) . ' WHERE ' . $db->quoteInto($db->quoteIdentifier('valid_until') .' < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)));
         $this->assertNotContains($id, $result);
     }
+
+    /**
+     * @see 0011366: support privacyIdea authentication
+     */
+    public function testSecondFactor()
+    {
+        $result = Tinebase_Auth::validateSecondFactor('phil', 'phil', array(
+            'active' => true,
+            'provider'              => 'Mock',
+            'url' => 'https://localhost/validate/check',
+        ));
+        $this->assertEquals(Tinebase_Auth::SUCCESS, $result);
+    }
 }
