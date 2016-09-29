@@ -15,6 +15,14 @@
  */
 class Addressbook_Config extends Tinebase_Config_Abstract
 {
+
+    /**
+     * contact nominatim during contact import
+     *
+     * @var string
+     */
+    const CONTACT_IMPORT_NOMINATIM = 'contactImportNominatim';
+
     /**
      * fields for contact record duplicate check
      * 
@@ -128,6 +136,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                         array('id' => 'MAILINGLIST',    'value' => 'Mailing list'), //_('Mailing list')
                     ),
             )
+        ),
+        self::CONTACT_IMPORT_NOMINATIM => array(
+            //_('Use Nominatim during contact import')
+            'label'                 => 'Use Nominatim during contact import',
+            'description'           => 'Use Nominatim during contact import',
+            'type'                  => 'bool',
+            'default'               => false,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
         ),
     );
     
