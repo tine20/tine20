@@ -852,7 +852,7 @@ class Tinebase_ModelConfiguration {
                     'key'     => 'tag',
                     'filter'  => $this->_filterModelMapping['tag'],
                     'options' => array(
-                           'idProperty' => $this->_idProperty,
+                           'idProperty' => $this->_getTableName() . '.' . $this->_idProperty,
                            'applicationName' => $this->_appName
                     )
                 )
@@ -1039,6 +1039,28 @@ class Tinebase_ModelConfiguration {
     }
 
     /**
+     * get table name for model
+     *
+     * @return string
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getTableName()
+    {
+        if (is_array($this->_table) && isset($this->_table['name'])) {
+            $tableName = $this->_table['name'];
+        } else {
+            // legacy way to find out table name, model conf should bring its table name
+            $backend = Tinebase_Core::getApplicationInstance(
+                $this->_applicationName, $this->_modelName, /* $_ignoreACL */
+                true)->getBackend();
+            $tableName = $backend->getTableName();
+        }
+
+        return $tableName;
+    }
+
+    /**
      * constructs the query filter
      *
      * adds ExplicitRelatedRecords-filters to query filter (relatedModels) to allow search in relations
@@ -1191,14 +1213,10 @@ class Tinebase_ModelConfiguration {
             case 'custom':
                 try {
                     // prepend table name to id prop because of ambiguous ids
-                    // TODO find a better way to get table name, maybe we should put it in the modelconfig?
-                    $backend = Tinebase_Core::getApplicationInstance(
-                        $this->_applicationName, $this->_modelName, /* $_ignoreACL */ true)->getBackend();
-                    $tableName = $backend->getTableName();
                     $this->_filterModel['customfield'] = array(
                         'filter' => 'Tinebase_Model_Filter_CustomField', 
                         'options' => array(
-                            'idProperty' => $tableName . '.' . $this->_idProperty
+                            'idProperty' => $this->_getTableName() . '.' . $this->_idProperty
                         )
                     );
                 } catch (Exception $e) {
