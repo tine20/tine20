@@ -436,18 +436,6 @@ Zeile 3</AirSyncBase:Data>
     </Sync>';
 
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync Controller Calendar Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-    
-    /**
      * (non-PHPdoc)
      * @see ActiveSync/ActiveSync_TestCase::setUp()
      */
@@ -1295,7 +1283,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
 
         // assert created group & groupmembers
         $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
-        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved');
+        $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->attendees, 'groupmembers not resolved: ' . print_r($syncrotonEventtoUpdate->attendees, true));
         $this->assertCount(count($defaultUserGroupMembers) + 1, $syncrotonEventtoUpdate->exceptions[0]->attendees, 'groupmembers not resolved');
 
         // update event

@@ -17,13 +17,6 @@
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
     /**
-     * holds the configuration object (must be declared in the concrete class)
-     *
-     * @var Tinebase_ModelConfiguration
-     */
-    protected static $_configurationObject = NULL;
-
-    /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
@@ -43,6 +36,10 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'titleProperty'     => 'title',
         'appName'           => 'Timetracker',
         'modelName'         => 'Timesheet',
+        'table'             => array(
+            'name'              => 'timetracker_timesheet',
+        ),
+
         'multipleEdit'      => TRUE,
         'splitButton'       => TRUE,
 
