@@ -45,3 +45,5 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
         }
     }
 }
+
+

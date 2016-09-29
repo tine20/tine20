@@ -322,8 +322,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
     }
     
     /**
-     * (non-PHPdoc)
-     * @see Tinebase/Record/Tinebase_Record_Abstract#setFromArray($_data)
+     * @see Tinebase_Record_Abstract::setFromArray
+     *
+     * @param array $_data            the new data to set
      */
     public function setFromArray(array $_data)
     {
@@ -377,6 +378,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * Overwrites the __set Method from Tinebase_Record_Abstract
      * Also sets n_fn and n_fileas when org_name, n_given or n_family should be set
      * @see Tinebase_Record_Abstract::__set()
+     * @param string $_name of property
+     * @param mixed $_value of property
      */
     public function __set($_name, $_value) {
         
