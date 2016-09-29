@@ -13,14 +13,14 @@
  *
  * @package     Addressbook
  *
- * @property    string      id
- * @property    string      container_id
- * @property    string      name
- * @property    string      description
- * @property    array       members
- * @property    array       memberroles
- * @property    string      email
- * @property    string      type                 type of list
+ * @property    string      $id
+ * @property    string      $container_id
+ * @property    string      $name
+ * @property    string      $description
+ * @property    array       $members
+ * @property    array       $memberroles
+ * @property    string      $email
+ * @property    string      $type                 type of list
  */
 class Addressbook_Model_List extends Tinebase_Record_Abstract
 {

@@ -51,9 +51,12 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     {
         parent::__construct($_options);
 
-        // don't set geodata for imported contacts as this is too much traffic for the nominatim server
-        $this->_controller->setGeoDataForContacts(FALSE);
-        
+        if (! Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_IMPORT_NOMINATIM)) {
+            // don't set geodata for imported contacts as this might be too much traffic for the nominatim server
+            // TODO make this setting overwritable via import definition/options
+            $this->_controller->setGeoDataForContacts(FALSE);
+        }
+
         // get container id from default container if not set
         if (empty($this->_options['container_id'])) {
             $defaultContainer = $this->_controller->getDefaultAddressbook();

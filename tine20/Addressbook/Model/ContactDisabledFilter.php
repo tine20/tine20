@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -26,7 +26,6 @@ class Addressbook_Model_ContactDisabledFilter extends Tinebase_Model_Filter_Bool
     public function appendFilterSql($_select, $_backend)
     {
         $db        = $_backend->getAdapter();
-        $dbCommand = $_backend->getDbCommand();
 
         // prepare value
         $value = $this->_value ? 1 : 0;
