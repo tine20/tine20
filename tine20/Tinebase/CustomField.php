@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
@@ -697,8 +697,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * get list of custom field values
      *
-     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
-     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @param bool $_getRelations (unused)
      * @param boolean $_onlyIds (unused)
      * @return Tinebase_Record_RecordSet
@@ -719,5 +719,33 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $count = $this->_backendValue->searchCount($_filter);
         return $count;
+    }
+
+    /**
+     * get list of custom field values
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param bool $_getRelations (unused)
+     * @param boolean $_onlyIds (unused)
+     * @return Tinebase_Record_RecordSet
+     */
+    public function searchConfig(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE)
+    {
+        $result = $this->_backendConfig->search($_filter, $_pagination);
+        return $result;
+    }
+
+    public function deleteCustomFieldValue($_ids)
+    {
+        return $this->_backendValue->delete($_ids);
+    }
+
+    public function saveCustomFieldValue(Tinebase_Model_CustomField_Value $_record)
+    {
+        if (!empty($_record->getId())) {
+            return $this->_backendValue->update($_record);
+        }
+        return $this->_backendValue->create($_record);
     }
 }

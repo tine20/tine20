@@ -255,4 +255,232 @@ class Tinebase_ApplicationTest extends TestCase
             }
         }
     }
+
+    /**
+     * Test
+     */
+    public function testGetModelsOfAllApplications()
+    {
+        $models = Tinebase_Application::getInstance()->getModelsOfAllApplications();
+        $applications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        $appNames = $applications->name;
+
+        $expectedData = array(
+            'ActiveSync' => array(
+                'ActiveSync_Model_Policy',
+                'ActiveSync_Model_Device',
+            ),
+            'Addressbook' => array(
+                'Addressbook_Model_Salutation',
+                'Addressbook_Model_List',
+                'Addressbook_Model_ListRole',
+                'Addressbook_Model_ListMemberRole',
+                'Addressbook_Model_Contact',
+            ),
+            'Admin' => array(
+                'Admin_Model_Config',
+                'Admin_Model_SambaMachine',
+            ),
+            'Calendar' => array(
+                'Calendar_Model_Resource',
+                'Calendar_Model_iMIP',
+                'Calendar_Model_Rrule',
+                'Calendar_Model_AttendeeRole',
+                'Calendar_Model_Event',
+                'Calendar_Model_FreeBusy',
+                'Calendar_Model_Exdate',
+                'Calendar_Model_Attender',
+                'Calendar_Model_AttendeeStatus',
+            ),
+            'CoreData' => array(
+                'CoreData_Model_CoreData',
+            ),
+            'Courses' => array(
+                'Courses_Model_Course',
+            ),
+            'Crm' => array(
+                'Crm_Model_LeadType',
+                'Crm_Model_LeadSource',
+                'Crm_Model_LeadState',
+                'Crm_Model_Lead',
+            ),
+            'ExampleApplication' => array(
+                'ExampleApplication_Model_ExampleRecord',
+                'ExampleApplication_Model_Status',
+            ),
+            'Expressomail' => array(
+                'Expressomail_Model_Account',
+                'Expressomail_Model_Sieve_Vacation',
+                'Expressomail_Model_Sieve_Rule',
+                'Expressomail_Model_PreparedMessagePart',
+                'Expressomail_Model_Message',
+                'Expressomail_Model_Folder',
+            ),
+            'Felamimail' => array(
+                'Felamimail_Model_Account',
+                'Felamimail_Model_Sieve_Vacation',
+                'Felamimail_Model_Sieve_Rule',
+                'Felamimail_Model_PreparedMessagePart',
+                'Felamimail_Model_Message',
+                'Felamimail_Model_Folder',
+            ),
+            'Filemanager' => array(
+                'Filemanager_Model_Node',
+                'Filemanager_Model_DownloadLink',
+            ),
+            'HumanResources' => array(
+                'HumanResources_Model_ExtraFreeTime',
+                'HumanResources_Model_Account',
+                'HumanResources_Model_Employee',
+                'HumanResources_Model_FreeTimeType',
+                'HumanResources_Model_ExtraFreeTimeType',
+                'HumanResources_Model_FreeTimeStatus',
+                'HumanResources_Model_Contract',
+                'HumanResources_Model_CostCenter',
+                'HumanResources_Model_FreeDay',
+                'HumanResources_Model_WorkingTime',
+                'HumanResources_Model_FreeTime',
+            ),
+            'Inventory' => array(
+                'Inventory_Model_Status',
+                'Inventory_Model_InventoryItem',
+            ),
+            'Phone' => array(
+                'Phone_Model_Call',
+                'Phone_Model_MyPhone',
+            ),
+            'Projects' => array(
+                'Projects_Model_Project',
+                'Projects_Model_AttendeeRole',
+                'Projects_Model_Status',
+            ),
+            'Sales' => array(
+                'Sales_Model_Number',
+                'Sales_Model_Config',
+                'Sales_Model_PurchaseInvoice',
+                'Sales_Model_Supplier',
+                'Sales_Model_PaymentMethod',
+                'Sales_Model_OrderConfirmation',
+                'Sales_Model_Customer',
+                'Sales_Model_Address',
+                'Sales_Model_ProductCategory',
+                'Sales_Model_InvoiceCleared',
+                'Sales_Model_InvoiceType',
+                'Sales_Model_Invoice',
+                'Sales_Model_Contract',
+                'Sales_Model_InvoicePosition',
+                'Sales_Model_Division',
+                'Sales_Model_ProductAggregate',
+                'Sales_Model_Offer',
+                'Sales_Model_CostCenter',
+                'Sales_Model_Product',
+            ),
+            'SimpleFAQ' => array(
+                'SimpleFAQ_Model_Faq',
+                'SimpleFAQ_Model_Config',
+            ),
+            'Tasks' => array(
+                'Tasks_Model_Task',
+                'Tasks_Model_Priority',
+                'Tasks_Model_Pagination',
+                'Tasks_Model_Status',
+            ),
+            'Timetracker' => array(
+                'Timetracker_Model_TimeaccountGrants',
+                'Timetracker_Model_Timesheet',
+                'Timetracker_Model_Timeaccount',
+            ),
+            'Tinebase' => array(
+                'Tinebase_Model_AccessLog',
+                'Tinebase_Model_ContainerContent',
+                'Tinebase_Model_Application',
+                'Tinebase_Model_Registration',
+                'Tinebase_Model_Image',
+                'Tinebase_Model_Tree_Node',
+                'Tinebase_Model_Tree_FileObject',
+                'Tinebase_Model_ModificationLog',
+                'Tinebase_Model_Config',
+                'Tinebase_Model_Group',
+                'Tinebase_Model_State',
+                'Tinebase_Model_CredentialCache',
+                'Tinebase_Model_PersistentFilterGrant',
+                'Tinebase_Model_AsyncJob',
+                'Tinebase_Model_CustomField_Value',
+                'Tinebase_Model_CustomField_Config',
+                'Tinebase_Model_CustomField_Grant',
+                'Tinebase_Model_Container',
+                'Tinebase_Model_Tag',
+                'Tinebase_Model_Relation',
+                'Tinebase_Model_TagRight',
+                'Tinebase_Model_NoteType',
+                'Tinebase_Model_Alarm',
+                'Tinebase_Model_FullTag',
+                'Tinebase_Model_SAMGroup',
+                'Tinebase_Model_EmailUser',
+                'Tinebase_Model_Department',
+                'Tinebase_Model_ImportException',
+                'Tinebase_Model_User',
+                'Tinebase_Model_Role',
+                'Tinebase_Model_Note',
+                'Tinebase_Model_RoleRight',
+                'Tinebase_Model_Pagination',
+                'Tinebase_Model_TempFile',
+                'Tinebase_Model_ImportExportDefinition',
+                'Tinebase_Model_OpenId_Association',
+                'Tinebase_Model_OpenId_TrustedSite',
+                'Tinebase_Model_FullUser',
+                'Tinebase_Model_Import',
+                'Tinebase_Model_UpdateMultipleException',
+                'Tinebase_Model_SAMUser',
+                'Tinebase_Model_Path',
+                'Tinebase_Model_Preference',
+                'Tinebase_Model_PersistentObserver',
+                'Tinebase_Model_Grants',
+            ),
+        );
+
+        // remove bogus apps
+        $remove = array('Voipmanager', 'RequestTracker', 'Sipgate', 'Expressodriver');
+        foreach($remove as $r)
+        {
+            if (($key = array_search($r, $appNames)) !== false) {
+                unset($appNames[$key]);
+            }
+        }
+
+        // check all expected models are there
+        foreach($expectedData as $appName => $expectedModels) {
+            if (array_search($appName, $appNames) !== false) {
+                foreach ($expectedModels as $expectedModel) {
+                    $this->assertTrue(array_search($expectedModel, $models) !== false, 'did not find model: ' . $expectedModel);
+                }
+            }
+        }
+
+        // if there is at least one model, remove the app
+        foreach($models as $model) {
+            list($appName) = explode('_', $model);
+            if (($key = array_search($appName, $appNames)) !== false) {
+                unset($appNames[$key]);
+            }
+        }
+
+        // no apps should remain => we found models for each app, expect the bogus ones from above
+        $this->assertEquals(0, count($appNames), 'applications found for which no models where found: '.print_r($appNames, true));
+
+        // check if we found to much models
+        $appNames = $applications->name;
+        foreach($expectedData as $appName => $expectedModels) {
+            if (array_search($appName, $appNames) !== false) {
+                foreach ($expectedModels as $expectedModel) {
+                    if (($key = array_search($expectedModel, $models)) !== false) {
+                        unset($models[$key]);
+                    }
+                }
+            }
+        }
+
+        // no models should remain
+        $this->assertEquals(0, count($models), 'unexpected models found: '.print_r($models, true));
+    }
 }
