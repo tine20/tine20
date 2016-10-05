@@ -1139,6 +1139,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 
                 $container->name = $destination->name;
                 $container = Tinebase_Container::getInstance()->update($container);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Creating container ' . $destination->name);
+                $container = $this->_createContainer($destination->name, $destination->containerType);
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

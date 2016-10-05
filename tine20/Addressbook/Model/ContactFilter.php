@@ -140,7 +140,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'showDisabled'         => array('filter' => 'Addressbook_Model_ContactDisabledFilter', 'options' => array(
             'requiredCols'  => array('account_id' => 'accounts.id')
         )),
-        
+        'salutation'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
     );
 }

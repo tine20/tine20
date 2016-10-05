@@ -75,7 +75,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var notBillable = false;
         var notClearable = false;
 
-        var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
+        // TODO timeaccount.get('account_grants') contains [Object object] -> why is that so? this should be fixed
+        var grants = this.record.get('timeaccount_id')
+            ? this.record.get('timeaccount_id').account_grants
+            : (timeaccount && timeaccount.get('container_id') && timeaccount.get('container_id').account_grants
+                ? timeaccount.get('container_id').account_grants
+                :  {});
         
         if (grants) {
             var setDisabled = ! (grants.bookAllGrant || grants.adminGrant || manageRight);
