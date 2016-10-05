@@ -293,7 +293,7 @@ Tine.Tinebase.ApplicationStarter = {
         if (fieldconfig && (fieldconfig.type == 'record' || fieldconfig.type == 'records')) {
             var opt = fieldconfig.config;
             
-            if (opt && (! Tine.Tinebase.common.hasRight('view', opt.appName, opt.modelName.toLowerCase()))) {
+            if (opt && (! opt.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', opt.appName, opt.modelName.toLowerCase()))) {
                 return null;
             }
         }
@@ -424,7 +424,7 @@ Tine.Tinebase.ApplicationStarter = {
                         }
                     }, this);
                     
-                    // TODO: registry looses info if gridpanel resides in an editDialog
+                    // TODO: registry loses info if gridpanel resides in an editDialog
                     // delete filterModel as all filters are in the filter registry now
                     // delete modelConfig.filterModel;
                     
