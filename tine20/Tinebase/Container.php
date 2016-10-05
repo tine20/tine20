@@ -1565,6 +1565,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
+            Tinebase_Exception::log($e);
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
         

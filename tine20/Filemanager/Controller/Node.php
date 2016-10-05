@@ -166,7 +166,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_AccessDenied('No permission to get node');
         }
         $record = parent::get($_id);
-        if($record) {
+        if ($record) {
             $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
         }
         return $record;
@@ -483,7 +483,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     /**
      * create node(s)
      * 
-     * @param array $_filenames
+     * @param string|array $_filenames
      * @param string $_type directory or file
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
@@ -494,7 +494,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         $nodeExistsException = NULL;
         
-        foreach ($_filenames as $idx => $filename) {
+        foreach ((array) $_filenames as $idx => $filename) {
             $tempFileId = (isset($_tempFileIds[$idx])) ? $_tempFileIds[$idx] : NULL;
 
             try {
@@ -720,7 +720,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             'type'           => $_type,
             'backend'        => 'sql',
             'application_id' => $app->getId(),
-            'model'          => 'Filemanager_Model_Node'
+            'model'          => $this->_modelName
         )));
         
         return $container;
@@ -827,8 +827,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $dest = explode('/', $destinationPathRecord->statpath);
             $source = explode('/', $sourcePathRecord->statpath);
             $isSub = TRUE;
-            
-            for ($i = 0; $i < count($source); $i++) {
+
+            $i = 0;
+            for ($iMax = count($source); $i < $iMax; $i++) {
                 
                 if (! isset($dest[$i])) {
                     break;
@@ -1138,6 +1139,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 
                 $container->name = $destination->name;
                 $container = Tinebase_Container::getInstance()->update($container);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Creating container ' . $destination->name);
+                $container = $this->_createContainer($destination->name, $destination->containerType);
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1251,5 +1256,108 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         }
         
         return $nodes;
+    }
+
+    /**
+     * file message
+     *
+     * @param                          $targetPath
+     * @param Felamimail_Model_Message $message
+     * @returns Filemanager_Model_Node
+     * @throws
+     * @throws Filemanager_Exception_NodeExists
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws null
+     */
+    public function fileMessage($targetPath, Felamimail_Model_Message $message)
+    {
+        // save raw message in temp file
+        $rawMessagePart = Felamimail_Controller_Message::getInstance()->getMessagePart($message->getId());
+        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
+        file_put_contents($tempFilename, $rawMessagePart->getContent());
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+
+        $filename = $this->_getMessageNodeFileame($message);
+
+        $emlNode = $this->createNodes(
+            array($targetPath . '/' . $filename),
+            Tinebase_Model_Tree_Node::TYPE_FILE,
+            array($tempFile->getId()),
+            /* $_forceOverwrite */ true
+        )->getFirstRecord();
+
+        $emlNode->description = $this->_getMessageNodeDescription($message);
+        $emlNode->last_modified_time = Tinebase_DateTime::now();
+        return $this->update($emlNode);
+    }
+
+    /**
+     * create node filename from message data
+     *
+     * @param $message
+     * @return string
+     */
+    protected function _getMessageNodeFileame($message)
+    {
+        $name = mb_substr($message->subject, 0, 245) . '_' . substr(md5($message->messageId), 0, 10) . '.eml';
+
+        return $name;
+    }
+
+    /**
+     * create node description from message data
+     *
+     * @param Felamimail_Model_Message $message
+     * @return string
+     *
+     * TODO use/create toString method for Felamimail_Model_Message?
+     */
+    protected function _getMessageNodeDescription(Felamimail_Model_Message $message)
+    {
+        // switch to user tz
+        $message->setTimezone(Tinebase_Core::getUserTimezone());
+
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+
+        $description = '';
+        $fieldsToAddToDescription = array(
+            $translate->_('Received') => 'received',
+            $translate->_('To') => 'to',
+            $translate->_('Cc') => 'cc',
+            $translate->_('Bcc') => 'bcc',
+            $translate->_('From (E-Mail)') => 'from_email',
+            $translate->_('From (Name)') => 'from_name',
+            $translate->_('Body') => 'body',
+            $translate->_('Attachments') => 'attachments'
+        );
+
+        foreach ($fieldsToAddToDescription as $label => $field) {
+            $description .= $label . ': ';
+
+            switch ($field) {
+//                case 'to':
+//                case 'cc':
+//                case 'bcc':
+//                    $description .= implode(', ', $message->{$field});
+//                    break;
+                case 'received':
+                    $description .= $message->received->toString();
+                    break;
+                case 'body':
+                    $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+                    $description .= substr($completeMessage->getPlainTextBody(), 0, 1000) . "\n";
+                    break;
+                default:
+                    $value = $message->{$field};
+                    if (is_array($value)) {
+                        $description .= implode(', ', $message->{$field});
+                    } else {
+                        $description .= $value;
+                    }
+            }
+            $description .= "\n";
+        }
+
+        return $description;
     }
 }

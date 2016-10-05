@@ -143,5 +143,63 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Admin.customfield.GridPanel.superclass.onAfterDelete.apply(this, arguments);
         
         Tine.Tinebase.common.confirmApplicationRestart();
+    },
+    
+    deleteRecords: function(sm, records) {
+        // directly remove records from the store (only for non-filter-selection)
+        if (Ext.isArray(records)) {
+            Ext.each(records, function(record) {
+                this.store.remove(record);
+            });
+            // if nested in an editDialog, just change the parent record
+            if (this.editDialog) {
+                var items = [];
+                this.store.each(function(item) {
+                    items.push(item.data);
+                });
+                this.editDialog.record.set(this.editDialogRecordProperty, items);
+                this.editDialog.fireEvent('updateDependent');
+                return;
+            }
+        }
+
+        if (this.recordProxy) {
+            if (this.usePagingToolbar) {
+                this.pagingToolbar.refresh.disable();
+            }
+
+            var i18nItems = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length),
+                recordIds = [].concat(records).map(function(v){ return v.id; });
+
+            this.deleteQueue = this.deleteQueue.concat(recordIds);
+
+            var options = {
+                scope: this,
+                success: function() {
+                    this.refreshAfterDelete(recordIds);
+                    this.onAfterDelete(recordIds);
+                },
+                failure: function (exception) {
+                    if (exception.code == 703) {
+                        Ext.Msg.confirm(this.app.i18n._('This custom field is still in use!'),
+                            this.app.i18n._('Are you sure you want to delete them?'),
+                            function(btn) {
+                                if (btn == 'yes') {
+                                    this.recordProxy.deleteRecords(records, options, {'context': { 'skipUsageCheck': true }});
+                                } else {
+                                    this.refreshAfterDelete(recordIds);
+                                    this.loadGridData();
+                                }
+                            }, this);
+                    } else {
+                        this.refreshAfterDelete(recordIds);
+                        this.loadGridData();
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+                    }
+                }
+            };
+        
+        this.recordProxy.deleteRecords(records, options);
+        }
     }
 });

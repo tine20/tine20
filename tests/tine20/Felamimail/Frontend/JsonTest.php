@@ -7,14 +7,9 @@ use Sabre\DAV;
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -1123,7 +1118,46 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $messageData = $this->_getMessageData('', $subject);
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($messageData);
-        $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
+        $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
+    }
+
+    /**
+     * @see 0012160: save emails in filemanager
+     */
+    public function testFileMessages()
+    {
+        $personalFilemanagerContainer = $this->_getPersonalContainer('Filemanager_Model_Node');
+        $message = $this->_sendMessage();
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        $filter = array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        ));
+        $result = $this->_json->fileMessages($filter, 'Filemanager', $path);
+        $this->assertTrue(isset($result['totalcount']));
+        $this->assertEquals(1, $result['totalcount'], 'message should be filed.' . print_r($result, true));
+
+        // check if message exists in Filemanager
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => $path
+        ), array(
+            'field'    => 'name',
+            'operator' => 'contains',
+            'value'    => $message['subject']
+        )));
+        $emlNode = Filemanager_Controller_Node::getInstance()->search($filter)->getFirstRecord();
+        $this->assertTrue($emlNode !== null, 'could not find eml file node');
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $emlNode->type);
+        $this->assertEquals('message/rfc822', $emlNode->contenttype);
+        $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
+
+        $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
+        $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
+        $this->assertContains($message['received'], $nodeWithDescription->description);
+        $this->assertContains('aaaaaä', $nodeWithDescription->description);
     }
     
     /**

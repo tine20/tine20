@@ -20,6 +20,9 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      * @cfg {Boolean} allowNodeSelect
      */
     allowNodeSelect: false,
+
+    allowToplevelNodeSelect: true,
+
     /**
      * @cfg {array}
      * default container
@@ -93,6 +96,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     mode: 'local',
     valueField: 'id',
     displayField: 'name',
+    treePanelClass: Tine.widgets.container.TreePanel,
     
     /**
      * is set to true if subpanels (selectionDialog) are active
@@ -328,10 +332,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         this.dlg = new Tine.widgets.container.selectionDialog({
             recordClass: this.recordClass,
             allowNodeSelect: this.allowNodeSelect,
+            allowToplevelNodeSelect: this.allowToplevelNodeSelect,
             containerName: this.containerName,
             containersName: this.containersName,
             requiredGrants: this.requiredGrants,
-            TriggerField: this
+            TriggerField: this,
+            treePanelClass: this.treePanelClass
         });
     },
     
@@ -348,8 +354,10 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     setValue: function(container) {
         
-        if(!container) return;
-        
+        if (! container) {
+            return;
+        }
+
         if (container.hasOwnProperty('get') && Ext.isFunction(container.get)) {
             // container is a record -> already in store -> nothing to do
         } else if (this.store.getById(container)) {
@@ -375,7 +383,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             // reject container
             return this;
         }
-        
+
+        if (Ext.isObject(container.get('name'))) {
+            // sanitize name for display
+            container.set('name', container.get('name').name);
+        }
+
         container.set('is_container_node', !!!Tine.Tinebase.container.pathIsContainer(container.get('path')));
         this.selectedContainer = container.data;
         
@@ -389,7 +402,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             this.setDisabled(! container.account_grants.deleteGrant);
         }
         
-        if(this.qtip) {
+        if (this.qtip) {
             this.qtip.remove();
         }
         
@@ -443,6 +456,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * @cfg {Boolean} allowNodeSelect
      */
     allowNodeSelect: false,
+    allowToplevelNodeSelect: true,
     /**
      * @cfg {Tine.data.Record} recordClass
      */
@@ -479,7 +493,11 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
      * grants which are required to select leaf node(s)
      */
     requiredGrants: ['readGrant'],
-    
+
+    treePanelClass: null,
+
+    allowNonLeafSelection: false,
+
     /**
      * @private
      */
@@ -510,19 +528,11 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             this.windowHeight = Ext.getBody().getHeight(true) * 0.7;
         }
 
-        this.tree = new Tine.widgets.container.TreePanel({
-            recordClass: this.recordClass,
-            allowMultiSelection: false,
-            containerName: this.TriggerField.containerName,
-            containersName: this.TriggerField.containersName,
-            appName: this.TriggerField.appName,
-            defaultContainer: this.TriggerField.defaultContainer,
-            requiredGrants: this.requiredGrants
-        });
-        
-        this.tree.on('click', this.onTreeNodeClick, this);
-        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
-        
+        if (! this.treePanelClass) {
+            this.treePanelClass = Tine.widgets.container.TreePanel;
+        }
+        this.initTree();
+
         this.win = Tine.WindowFactory.getWindow({
             title: this.title,
             closeAction: 'close',
@@ -544,12 +554,44 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             items: [ this.tree ]
         });
     },
-    
+
+    initTree: function() {
+        this.tree = new this.treePanelClass({
+            recordClass: this.recordClass,
+            allowMultiSelection: false,
+            containerName: this.TriggerField.containerName,
+            containersName: this.TriggerField.containersName,
+            appName: this.TriggerField.appName,
+            defaultContainer: this.TriggerField.defaultContainer,
+            requiredGrants: this.requiredGrants,
+            // TODO find a better way for this. currently the Filemanager container tree subfolder creation works differently...
+            // this disables context menu for *File' containers...
+            hasContextMenu: this.recordClass.getRecordName() != 'File'
+        });
+
+        this.tree.on('click', this.onTreeNodeClick, this);
+        this.tree.on('dblclick', this.onTreeNoceDblClick, this);
+    },
+
     /**
      * @private
      */
     onTreeNodeClick: function(node) {
-        this.okAction.setDisabled(! (node.leaf ||this.allowNodeSelect));
+        this.okAction.setDisabled(
+            ! (node.leaf
+                || (this.allowNodeSelect
+                    // TODO create isTopLevelNode() in Tine.Tinebase.container
+                    && (this.allowToplevelNodeSelect
+                        || node.attributes
+                            && (
+                                   (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
+                                || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
+                                || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2)
+                        )
+                    )
+                )
+            )
+        );
         
         if (! node.leaf ) {
             node.expand();
