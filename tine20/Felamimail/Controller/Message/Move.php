@@ -10,7 +10,7 @@
  */
 
 /**
- * message flags controller for Felamimail
+ * message move controller for Felamimail
  *
  * @package     Felamimail
  * @subpackage  Controller

@@ -1283,7 +1283,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
     protected function _getPersonalFilemanagerContainer()
     {
         if (!$this->_personalContainer) {
-            $this->_personalContainer = $this->_getPersonalContainer('Filemanager');
+            $this->_personalContainer = $this->_getPersonalContainer('Filemanager_Model_Node');
         }
         
         return $this->_personalContainer;

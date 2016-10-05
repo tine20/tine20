@@ -19,8 +19,8 @@
  * 
  * @property    string                      containerType
  * @property    string                      containerOwner
- * @property    string                      flatpath
- * @property    string                      statpath
+ * @property    string                      flatpath           "real" name path like /personal/user/containername
+ * @property    string                      statpath           id path like /personal/USERID/CONTAINERID
  * @property    string                      realpath           path without app/type/container stuff 
  * @property    string                      streamwrapperpath
  * @property    Tinebase_Model_Application  application
@@ -53,7 +53,12 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * root type
      */
     const TYPE_ROOT = 'root';
-    
+
+    /**
+     * folders path part
+     */
+    const FOLDERS_PART = 'folders';
+
     /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
@@ -113,7 +118,58 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         return $pathRecord;
     }
-    
+
+    /**
+     * create new path record from given stat path (= path with ids) string
+     *
+     * @param string $statPath
+     * @param string $appName
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    public static function createFromStatPath($statPath, $appName = null)
+    {
+        $statPath = preg_replace('@^/@', '', $statPath);
+        $pathParts = explode('/', $statPath);
+        if ($appName !== null) {
+            $app = Tinebase_Application::getInstance()->getApplicationByName($appName);
+            array_unshift($pathParts, $app->getId(), self::FOLDERS_PART);
+        }
+        $newStatPath = '/' . implode('/', $pathParts);
+        $container = null;
+
+        if (count($pathParts) > 3) {
+            // replace account id with login name
+            $userId = $pathParts[3];
+            try {
+                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $pathParts[3], 'Tinebase_Model_FullUser');
+                $containerType = $user->getId() === Tinebase_Core::getUser()->getId()
+                    ? Tinebase_Model_Container::TYPE_PERSONAL
+                    : Tinebase_Model_Container::TYPE_OTHERUSERS;
+                $pathParts[3] = $user->accountLoginName;
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // not a user -> shared
+                $containerType = Tinebase_Model_Container::TYPE_SHARED;
+            }
+
+            // replace container name with id
+            $containerPartIdx = ($containerType === Tinebase_Model_Container::TYPE_SHARED) ? 3 : 4;
+            if (isset($pathParts[$containerPartIdx])) {
+                $container = Tinebase_Container::getInstance()->getContainerById($pathParts[$containerPartIdx]);
+                $pathParts[$containerPartIdx] = $container->name;
+            }
+        }
+
+        $flatPath = '/' . implode('/', $pathParts);
+        $pathRecord = new Tinebase_Model_Tree_Node_Path(array(
+            'flatpath'      => $flatPath,
+            'containerType' => $containerType,
+            'statpath'      => $newStatPath,
+            'container'     => $container,
+        ));
+
+        return $pathRecord;
+    }
+
     /**
      * create new parent path record from given path string
      * 
@@ -196,11 +252,15 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $pathParts = $this->_getPathParts($_path);
         
         $this->name                 = $pathParts[count($pathParts) - 1];
-        $this->containerType        = $this->_getContainerType($pathParts);
+        $this->containerType        = isset($this->containerType) && in_array($this->containerType, array(
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            Tinebase_Model_Container::TYPE_SHARED,
+            Tinebase_Model_Container::TYPE_OTHERUSERS,
+        )) ? $this->containerType : $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
-        $this->container            = $this->_getContainer($pathParts);
-        $this->statpath             = $this->_getStatPath($pathParts);
+        $this->container            = $this->container instanceof Tinebase_Model_Container ? $this->container : $this->_getContainer($pathParts);
+        $this->statpath             = isset($this->statpath) ? $this->statpath : $this->_getStatPath($pathParts);
         $this->realpath             = $this->_getRealPath($pathParts);
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }

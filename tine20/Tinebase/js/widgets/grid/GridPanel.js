@@ -455,7 +455,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 
                 // don't show record field if the user doesn't have the right on the application
-                if (fieldConfig.type == 'record' && (! Tine.Tinebase.common.hasRight('view', fieldConfig.config.appName, fieldConfig.config.modelName.toLowerCase() + 's'))) {
+                if (fieldConfig.type == 'record' && !(fieldConfig.config && fieldConfig.config.doNotCheckModuleRight) && (! Tine.Tinebase.common.hasRight('view', fieldConfig.config.appName, fieldConfig.config.modelName.toLowerCase() + 's'))) {
                     return true;
                 }
                 

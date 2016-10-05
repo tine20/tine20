@@ -119,6 +119,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     enableDrop: true,
     ddGroup: 'containerDDGroup',
     hasPersonalContainer: true,
+    hasContextMenu: true,
 
     /**
      * @fixme not needed => all events hand their events over!!!
@@ -190,13 +191,17 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             },
             completeDrop: Ext.emptyFn
         };
-        
-        this.initContextMenu();
+
+        if (this.hasContextMenu) {
+            this.initContextMenu();
+        }
               
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
-        this.on('contextmenu', this.onContextMenu, this);
+        if (this.hasContextMenu) {
+            this.on('contextmenu', this.onContextMenu, this);
+        }
         this.on('beforenodedrop', this.onBeforeNodeDrop, this);
         this.on('append', this.onAppendNode, this);
         this.on('beforecollapsenode', this.onBeforeCollapse, this);

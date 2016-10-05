@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -300,7 +300,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_delete',
             scope: this
         });
-        
+
+        this.action_fileRecord = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('File Message'),
+            handler: this.onFileRecords,
+            disabled: true,
+            iconCls: 'action_file',
+            scope: this
+        });
+
         this.action_addAccount = new Ext.Action({
             text: this.app.i18n._('Add Account'),
             handler: this.onAddAccount,
@@ -330,11 +340,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
         this.actionUpdater.addActions([
-//            this.action_write,
             this.action_deleteRecord,
             this.action_reply,
             this.action_replyAll,
             this.action_forward,
+            this.action_fileRecord,
             this.action_flag,
             this.action_markUnread,
             this.action_addAccount,
@@ -349,7 +359,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_forward,
                 this.action_flag,
                 this.action_markUnread,
-                this.action_deleteRecord
+                this.action_deleteRecord,
+                this.action_fileRecord
             ]
         });
     },
@@ -429,15 +440,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.SplitButton(this.action_print), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign:'top',
-                            arrowAlign:'right'
-                        }),
-                        this.action_flag,
+                        this.action_print,
+                        this.action_markUnread,
                         this.action_addAccount,
-                        this.action_markUnread
+                        this.action_fileRecord,
+                        this.action_flag
                     ]
                 }, this.getActionToolbarItems()]
             });
@@ -672,6 +679,80 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             trashConfigured = (account.get('trash_folder'));
             
         return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
+    },
+
+    /**
+     * file selected messages to a Filemanager
+     */
+    onFileRecords: function() {
+        // show filemanager tree to get target
+        // TODO allow to decide which Filemanager to file the messages in (config or combo?)
+
+        // show folder select combo
+        this.folderCombo = new Tine.widgets.container.selectionComboBox({
+            recordClass: Tine.Filemanager.Model.Node,
+            treePanelClass: Tine.Filemanager.NodeTreePanel,
+            allowNodeSelect: true,
+            allowToplevelNodeSelect: false
+        });
+        var fileRecordsWin = Tine.WindowFactory.getWindow({
+            layout: 'fit',
+            width: 250,
+            height: 100,
+            padding: '5px',
+            modal: true,
+            title: this.app.i18n._('File Messages To Folder'),
+            items: [{
+                xtype: 'form',
+                buttonAlign: 'right',
+                border: false,
+                layout: 'fit',
+                items: [
+                    this.folderCombo
+                ],
+                buttons: [{
+                    text: i18n._('Cancel'),
+                    minWidth: 70,
+                    scope: this,
+                    handler: function () {
+                        fileRecordsWin.close();
+                    },
+                    iconCls: 'action_cancel'
+                }, {
+                    text: i18n._('Ok'),
+                    disabled: this.folderCombo.getValue == '',
+                    minWidth: 70,
+                    scope: this,
+                    handler: function() {
+                        // get path from combo
+                        // TODO use stat path???
+                        var folder = this.folderCombo.getStore().getById(this.folderCombo.getValue()),
+                            path = folder ? folder.get('path') : null;
+                        if (path) {
+                            this.fileRecords(path);
+                            fileRecordsWin.close();
+                        }
+                    },
+                    iconCls: 'action_saveAndClose'
+                }]
+            }]
+        });
+    },
+
+    fileRecords: function(path) {
+        var sm = this.getGrid().getSelectionModel(),
+            filter = sm.getSelectionFilter(),
+            msgsIds = [];
+
+        if (sm.isFilterSelect) {
+            var msgs = this.getStore();
+        } else {
+            var msgs = sm.getSelectionsCollection();
+        }
+
+        // TODO show some kind of feedback when message filing has been (un)successful
+        // TODO reload grid when request returns?
+        Tine.Felamimail.fileMessages(filter, 'Filemanager', path);
     },
 
     /**
