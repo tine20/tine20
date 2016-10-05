@@ -185,10 +185,18 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
         {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
         {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
+        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+        {
+            label: app.i18n._('Salutation'),
+            field: 'salutation',
+            filtertype: 'tine.widget.keyfield.filter',
+            app: app,
+            keyfieldName: 'contactSalutation',
+            defaultOperator: 'in'
+        }
     ];
 };
-    
+
 /**
  * default timesheets backend
  */

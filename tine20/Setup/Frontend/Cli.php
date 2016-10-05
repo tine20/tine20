@@ -528,6 +528,10 @@ class Setup_Frontend_Cli
         $configKey = (string)$options['configkey'];
         $configValue = self::parseConfigValue($options['configvalue']);
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
+
+        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+            $errors[] = $applicationName . ' is not installed';
+        }
         
         if (empty($errors)) {
            Setup_Controller::getInstance()->setConfigOption($configKey, $configValue, $applicationName);
@@ -548,13 +552,21 @@ class Setup_Frontend_Cli
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
-        $config = Tinebase_Config_Abstract::factory($applicationName);
-        
+
         $errors = array();
+        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+            $errors[] = $applicationName . ' is not installed';
+            $config = null;
+        } else {
+            $config = Tinebase_Config_Abstract::factory($applicationName);
+        }
+
         if (empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
-            $errors[] = 'Available config settings:';
-            $errors[] = print_r($config::getProperties(), true);
+            if ($config) {
+                $errors[] = 'Available config settings:';
+                $errors[] = print_r($config::getProperties(), true);
+            }
         }
         $configKey = (string)$options['configkey'];
         
