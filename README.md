@@ -3,11 +3,13 @@
 Welcome to the Tine 2.0 Community Edition, the base of our popular [Tine 2.0 Business Edition](http://www.tine20.com).
 
 ## Official Community ressources
+* [Github Page](https://tine20.github.io/Tine-2.0-Open-Source-Groupware-and-CRM/)
 * [Documentation Wiki](https://www.tine20.org/wiki/)
 * [Issue tracker](https://forge.tine20.org/mantisbt/)
 * [Forum](https://www.tine20.org/forum/)
 * [Package Downloads](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/releases)
 * [Twitter](https://twitter.com/tine20org)
+* [Matrix chat room #tine20:matrix.org](https://riot.im/app/#/room/#tine20:matrix.org)
 * [Slack (send us a message for invitation)](https://tine20.slack.com)
 
 ## Free Software without compromise
@@ -49,7 +51,6 @@ a new major release of our business edition.
 Each [Tine 2.0 Business Edition](http://www.tine20.com) is maintained with security patches and bug fixes for at least two 
 years. Our [partners](https://www.tine20.com/partner/) offer a wide range of commercial support for different business needs.
 
-
 ## Licenses, Copyrights and Trademarks 
 Tine 2.0 - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
 
@@ -59,7 +60,6 @@ all Tine 2.0 specific source code it's possible to offer it with different licen
 
 The name "Tine 2.0" is our registered trademark. This is for your and our safety. We can use the name and logo without
 legal fraught from other parties.
-
 
 ## Contributors Guide
 To start developing with tine20 and GIT please visit
