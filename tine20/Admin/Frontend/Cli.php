@@ -40,7 +40,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     );
 
     /**
-     * create system groups for addressbook lists that dont have a system group
+     * create system groups for addressbook lists that don't have a system group
      *
      * @param $_opts
      */
