@@ -77,7 +77,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'attachments', omitDuplicateResolving: true},
     {name: 'paths', omitDuplicateResolving: true},
     {name: 'type', omitDuplicateResolving: true},
-    {name: 'memberroles', omitDuplicateResolving: true}
+    {name: 'memberroles', omitDuplicateResolving: true},
+    {name: 'industry', omitDuplicateResolving: true}
 ]);
 
 /**
@@ -151,7 +152,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
     
     var typeStore = [['contact', app.i18n._('Contact')], ['user', app.i18n._('User Account')]];
     
-    return [
+    var filters = [
         {label: i18n._('Quick Search'),                                                      field: 'query',              operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Addressbook.Model.Contact},
         {filtertype: 'addressbook.listMember', app: app},
@@ -193,6 +194,15 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
             defaultOperator: 'in'
         }
     ];
+    
+    if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
+        filters.push({filtertype: 'foreignrecord', 
+            app: app,
+            foreignRecordClass: Tine.Addressbook.Model.Industry,
+            ownField: 'industry'
+        });
+    }
+    return filters;
 };
 
 /**
@@ -333,7 +343,7 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
     appName: 'Addressbook',
     modelName: 'ListRole',
     titleProperty: 'name',
-    // ngettext('List Role', List Roles', n); gettext('List Roles');
+    // ngettext('List Role', 'List Roles', n); gettext('List Roles');
     recordName: 'List Role',
     recordsName: 'List Roles'
 });
@@ -346,6 +356,37 @@ Tine.Addressbook.Model.ListRole = Tine.Tinebase.data.Record.create([
  * @return {Array} filterModel definition
  */
 Tine.Addressbook.Model.ListRole.getFilterModel = function() {
+    return [
+        {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
+    ];
+};
+
+/**
+
+/**
+ * Industry model
+ */
+Tine.Addressbook.Model.Industry = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'}
+], {
+    appName: 'Addressbook',
+    modelName: 'Industry',
+    titleProperty: 'name',
+    // ngettext('Industry', 'Industries', n); gettext('Industries');
+    recordName: 'Industry',
+    recordsName: 'Industries'
+});
+
+/**
+ * get filtermodel of Industry model
+ *
+ * @namespace Tine.Addressbook.Model
+ * @static
+ * @return {Array} filterModel definition
+ */
+Tine.Addressbook.Model.Industry.getFilterModel = function() {
     return [
         {label: i18n._('Quick search'),       field: 'query',              operators: ['contains']}
     ];

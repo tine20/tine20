@@ -24,6 +24,14 @@
           "path": "js/"
         },
         {
+          "text": "IndustryEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "IndustrySearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "GenericContactGridPanelHook.js",
           "path": "js/"
         },

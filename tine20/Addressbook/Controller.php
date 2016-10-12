@@ -194,6 +194,14 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             )));
         }
 
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_INDUSTRY)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                    'id' => 'adb_industries',
+                    'application_id' => $application,
+                    'model' => 'Addressbook_Model_Industry',
+                    'label' => 'Industries' // _('Industries')
+            )));
+        }
         return $result;
     }
 }

@@ -142,5 +142,12 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         )),
         'salutation'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'industry'             => array(
+            'filter' => 'Tinebase_Model_Filter_ForeignId',
+            'options' => array(
+                    'filtergroup' => 'Addressbook_Model_IndustryFilter',
+                    'controller' => 'Addressbook_Controller_Industry'
+            )
+        ),
     );
 }

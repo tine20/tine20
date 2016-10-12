@@ -576,7 +576,6 @@ class Addressbook_JsonTest extends TestCase
 
     /**
      * test getting contact
-     *
      */
     public function testGetContact()
     {
@@ -585,6 +584,27 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->_uit->getContact($contact['id']);
 
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
+    }
+
+    /**
+     * @see 0012280: Add Industries to Contact
+     */
+    public function testUpdateContactWithIndustry()
+    {
+        if (! Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_INDUSTRY)) {
+            $this->markTestSkipped('feature disabled');
+        }
+
+        // create industry
+        $industry = $this->_testSimpleRecordApi('Industry', /* $nameField */ 'name', /* $descriptionField */ 'description', /* $delete */ false);
+
+        // use industry in contact
+        $newContactData = $this->_getContactData();
+        $newContactData['industry'] = $industry['id'];
+        $contact = $this->_uit->saveContact($newContactData);
+
+        // check if industry is resolved in contact
+        $this->assertTrue(is_array($contact['industry']), 'Industry not resolved: ' . print_r($contact, true));
     }
 
     /**

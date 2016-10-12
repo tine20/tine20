@@ -277,6 +277,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Addressbook_Model_ListRole',
                 'Addressbook_Model_ListMemberRole',
                 'Addressbook_Model_Contact',
+                'Addressbook_Model_Industry'
             ),
             'Admin' => array(
                 'Admin_Model_Config',
