@@ -82,6 +82,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             xtype: 'panel',
                             layout: 'hbox',
                             align: 'stretch',
+                            plugins: [{
+                                ptype: 'ux.itemregistry',
+                                key:   'Tine.Addressbook.editDialog.northPanel'
+                            }],
                             items: [{
                                 flex: 1,
                                 xtype: 'columnform',
@@ -181,6 +185,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         region: 'center',
                         title: this.app.i18n._('Contact Information'),
                         autoScroll: true,
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   'Tine.Addressbook.editDialog.centerPanel'
+                        }],
                         items: [{
                             xtype: 'columnform',
                             items: [[{
@@ -267,6 +275,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         defaults: {
                             frame: true
                         },
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   'Tine.Addressbook.editDialog.southPanel'
+                        }],
                         items: [{
                             title: this.app.i18n._('Company Address'),
                             xtype: 'columnform',
@@ -340,6 +352,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tine.Addressbook.editDialog.eastPanel'
+                    }],
                     items: [
                         new Ext.Panel({
                             // @todo generalise!
