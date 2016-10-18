@@ -305,6 +305,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $model = new $this->_modelName();
                 $filterData['options']['related_model'] = $modelName;
                 $filterData['options']['idProperty'] = $model->getIdProperty();
+                if (isset($_filterData['options']) && isset($_filterData['options']['own_model'])) {
+                    $filterData['options']['own_model'] = $_filterData['options']['own_model'];
+                }
                 $filter = new Tinebase_Model_Filter_Relation($filterData);
                 break;
 
