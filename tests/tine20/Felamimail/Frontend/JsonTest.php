@@ -1320,7 +1320,57 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $ruleData[0]['enabled'] = 0;
         $this->_sieveTestHelper($ruleData);
     }
-    
+
+    /**
+     * @see 0006222: Keep a copy from mails forwarded to another emailaddress
+     */
+    public function testSetForwardRuleWithCopy()
+    {
+        $ruleData = array(array(
+            'id'            => 1,
+            'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT,
+            'action_argument' => array(
+                'emails' => 'someaccount@example.org',
+                'copy'   => 1,
+            ),
+            'conjunction'     => 'allof',
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header'        => 'From',
+                'key'           => 'info@example.org',
+            )),
+            'enabled'       => 1,
+        ));
+
+        $this->_sieveTestHelper($ruleData);
+    }
+
+    /**
+     * @see 0006222: Keep a copy from mails forwarded to another emailaddress
+     */
+    public function testSetForwardRuleWithoutCopy()
+    {
+        $ruleData = array(array(
+            'id'            => 1,
+            'action_type'   => Felamimail_Sieve_Rule_Action::REDIRECT,
+            'action_argument' => array(
+                'emails' => 'someaccount@example.org',
+                'copy'   => 0,
+            ),
+            'conjunction'     => 'allof',
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
+                'header'        => 'From',
+                'key'           => 'info@example.org',
+            )),
+            'enabled'       => 1,
+        ));
+
+        $this->_sieveTestHelper($ruleData);
+    }
+
     /**
      * testGetVacationTemplates
      *

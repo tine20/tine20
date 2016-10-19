@@ -266,16 +266,19 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     actionRenderer: function(type, metadata, record) {
         var types = Tine.Felamimail.sieve.RuleEditDialog.getActionTypes(this.app),
-            result = type;
-        
+            result = type,
+            action_argument = record.get('action_argument');
+
         for (i=0; i < types.length; i++) {
             if (types[i][0] == type) {
                 result = types[i][1];
             }
         }
         
-        if (record.get('action_argument') && record.get('action_argument') != '') {
-            result += ' ' + record.get('action_argument');
+        if (action_argument && action_argument != '') {
+            result += Ext.isObject(action_argument)
+                ? ': '  + action_argument.emails + (action_argument.copy ? ' (' + this.app.i18n._('Keep a copy') + ')' : '')
+                : action_argument;
         }
             
         return Ext.util.Format.htmlEncode(result);
