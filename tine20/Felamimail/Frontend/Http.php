@@ -19,7 +19,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected $_applicationName = 'Felamimail';
     
-
     /**
      * download email attachment
      *
@@ -123,27 +122,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         exit;
-    }
-    
-    /**
-     * prepares the header for attachment download
-     * 
-     * @param string $filename
-     * @param string $contentType
-     */
-    protected function _prepareHeader($filename, $contentType)
-    {
-        // cache for 3600 seconds
-        $maxAge = 3600;
-        $disposition = 'attachment';
-        header('Cache-Control: private, max-age=' . $maxAge);
-        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-        
-        // overwrite Pragma header from session
-        header("Pragma: cache");
-        
-        header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
-        header("Content-Type: " . $contentType);
     }
     
     /**

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>10.0</version>
+    <version>10.1</version>
     <tables>
         <table>
             <name>applications</name>
@@ -3178,7 +3178,7 @@
         
         <table>
             <name>tree_fileobjects</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3211,7 +3211,6 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>

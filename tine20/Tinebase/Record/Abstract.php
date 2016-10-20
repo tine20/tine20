@@ -1252,8 +1252,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function runConvertToRecord()
     {
         $conf = self::getConfiguration();
-        if (null === $conf)
+        if (null === $conf) {
             return;
+        }
         foreach ($conf->getConverters() as $key => $converters) {
             if (isset($this->_properties[$key])) {
                 /** @var Tinebase_Model_Converter_Interface $converter */
@@ -1267,8 +1268,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function runConvertToData()
     {
         $conf = self::getConfiguration();
-        if (null === $conf)
+        if (null === $conf) {
             return;
+        }
         foreach ($conf->getConverters() as $key => $converters) {
             if (isset($this->_properties[$key])) {
                 foreach ($converters as $converter) {

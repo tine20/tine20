@@ -130,7 +130,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      *
      * NOTE: This is not the contents of body_content_type!
      *       body_content_type is the type of the original message derrived by the message structure.
-     *       But the server transforms the original type into the requested format/diplay_format.
+     *       But the server transforms the original type into the requested format/display_format.
      */
     getBodyType: function() {
         return this.get('body_content_type_of_body_property_of_this_record');

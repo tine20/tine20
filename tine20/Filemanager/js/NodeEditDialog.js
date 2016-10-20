@@ -212,7 +212,6 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 preventScrollbars: false,
                                 anchor: '100% 100%',
                                 emptyText: this.app.i18n._('Enter description'),
-                                maxLength: 255,
                                 requiredGrant: 'editGrant'
                             }]
                         }),

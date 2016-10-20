@@ -25,6 +25,13 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
      * @var string
      */
     protected static $_defaultModel = 'Filemanager_Model_Node';
+
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Filemanager';
     
     /**
      * holds the instance of the singleton

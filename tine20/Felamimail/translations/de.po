@@ -1,4 +1,4 @@
-# 
+#
 # Translators:
 # Alexander Stintzing <a.stintzing@metaways.de>, 2012
 # Björn Balazs <transifex@lazs.de>, 2013
@@ -17,17 +17,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2016-08-11 15:14+0000\n"
+"PO-Revision-Date: 2016-10-19 11:41+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: Acl/Rights.php:106
 msgid "manage email accounts"
@@ -86,12 +85,12 @@ msgstr "Weiterleiten"
 msgid "Save"
 msgstr "Speichern"
 
-#: js/MessageDisplayDialog.js:79 js/GridPanel.js:321
+#: js/MessageDisplayDialog.js:79 js/GridPanel.js:332
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1348
-#: js/GridPanel.js:1364
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:324 js/GridPanel.js:1502
+#: js/GridPanel.js:1518
 msgid "Print Preview"
 msgstr "Druckvorschau"
 
@@ -223,7 +222,7 @@ msgstr "Header \"{0}\" enthält \"{1}\""
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Header \"{0}\" enthält \"{1}\""
 
-#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:168 js/GridPanel.js:488
+#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:168 js/GridPanel.js:496
 msgid "From (Email)"
 msgstr "Von (E-Mail)"
 
@@ -240,12 +239,12 @@ msgid "To (Email CC)"
 msgstr "An (E-Mail CC)"
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:167 js/MessageEditDialog.js:1202 js/GridPanel.js:482
+#: js/Model.js:167 js/MessageEditDialog.js:1210 js/GridPanel.js:490
 #: Controller/Message/Send.php:295
 msgid "Subject"
 msgstr "Betreff"
 
-#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:537
+#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:545
 msgid "Size"
 msgstr "Größe"
 
@@ -337,7 +336,7 @@ msgstr[1] "{0} ungelesene Nachrichten"
 msgid "Message not available."
 msgstr "Nachricht nicht verfügbar"
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1079
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1087
 msgid "From"
 msgstr "Von"
 
@@ -357,7 +356,7 @@ msgstr "Datum"
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der E-Mail-Header"
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:1012 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:1020 js/GridPanel.js:476
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -365,7 +364,7 @@ msgstr "Anhänge"
 msgid "Compose email"
 msgstr "E-Mail verfassen"
 
-#: js/GridPanelHook.js:49 js/Model.js:170 js/GridPanel.js:507
+#: js/GridPanelHook.js:49 js/Model.js:170 js/GridPanel.js:515
 msgid "To"
 msgstr "An"
 
@@ -392,7 +391,7 @@ msgstr "\"{0}\" Empfänger"
 
 #: js/FolderFilterModel.js:30 js/TreeContextMenu.js:64
 #: js/TreeContextMenu.js:67 js/TreeContextMenu.js:70 js/Model.js:56
-#: js/Model.js:539 js/GridPanel.js:529
+#: js/Model.js:544 js/GridPanel.js:537
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Ordner"
@@ -465,7 +464,7 @@ msgstr[1] "Nachrichten"
 msgid "Subject/From"
 msgstr "Betreff/Von"
 
-#: js/Model.js:169 js/GridPanel.js:494
+#: js/Model.js:169 js/GridPanel.js:502
 msgid "From (Name)"
 msgstr "Von (Name)"
 
@@ -477,75 +476,75 @@ msgstr "Kopie"
 msgid "Bcc"
 msgstr "Blindkopie"
 
-#: js/Model.js:173 js/GridPanel.js:475
+#: js/Model.js:173 js/GridPanel.js:483
 msgid "Flags"
 msgstr "Flags"
 
-#: js/Model.js:176 js/GridPanel.js:522
+#: js/Model.js:176 js/GridPanel.js:530
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/Model.js:399 js/AccountEditDialog.js:117
+#: js/Model.js:404 js/AccountEditDialog.js:117
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
 msgstr[1] "Konten"
 
-#: js/Model.js:402
+#: js/Model.js:407
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "E-Mail-Konto"
 msgstr[1] "E-Mail-Konten"
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "INBOX"
 msgstr "Posteingang"
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Drafts"
 msgstr "Entwürfe"
 
-#: js/Model.js:533 js/GridPanel.js:514
+#: js/Model.js:538 js/GridPanel.js:522
 msgid "Sent"
 msgstr "Gesendet"
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Templates"
 msgstr "Vorlagen"
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Junk"
 msgstr "Unerwünschtes"
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Trash"
 msgstr "Mülleimer"
 
-#: js/Model.js:542 js/Model.js:662 js/Model.js:728
+#: js/Model.js:547 js/Model.js:667 js/Model.js:733
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Nachrichtenliste"
 msgstr[1] "Nachrichtenlisten"
 
-#: js/Model.js:659
+#: js/Model.js:664
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Abwesenheitsnotiz"
 msgstr[1] "Abwesenheitsnotizen"
 
-#: js/Model.js:725
+#: js/Model.js:730
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regeln"
 
-#: js/Model.js:852
+#: js/Model.js:857
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flag"
 msgstr[1] "Flags"
 
-#: js/Model.js:855
+#: js/Model.js:860
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flag-Liste"
@@ -573,9 +572,10 @@ msgstr "E-Mailnotiz anlegen"
 
 #: js/MessageEditDialog.js:195
 msgid ""
-"Activate this toggle button to save the email text as a note attached to the"
-" recipient(s) contact(s)."
-msgstr "Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
+"Activate this toggle button to save the email text as a note attached to the "
+"recipient(s) contact(s)."
+msgstr ""
+"Diesen Knopf aktivieren um die E-Mail als Notiz bei dem Empfänger anzuhängen."
 
 #: js/MessageEditDialog.js:199
 msgid "Reading Confirmation"
@@ -595,7 +595,9 @@ msgstr "E-Mail mit Mailvelope verschlüsseln"
 
 #: js/MessageEditDialog.js:239
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
+msgstr ""
+"Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste "
+"hinzuzufügen."
 
 #: js/MessageEditDialog.js:433
 msgid "Encrypted Content"
@@ -623,7 +625,7 @@ msgstr "Fehlgeschlagen"
 msgid "{0} account setting empty."
 msgstr "{0} E-Mailaccount-Einstellung leer."
 
-#: js/MessageEditDialog.js:781 js/MessageEditDialog.js:1246
+#: js/MessageEditDialog.js:781 js/MessageEditDialog.js:1254
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
@@ -636,24 +638,24 @@ msgstr "Am {0}, schrieb {1}"
 msgid "Original message"
 msgstr "Originalnachricht"
 
-#: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1212
+#: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1220
 msgid "Compose email:"
 msgstr "E-Mail verfassen:"
 
-#: js/MessageEditDialog.js:1156
+#: js/MessageEditDialog.js:1164
 msgid "Convert to formated text"
 msgstr "In formatierten Text konvertieren"
 
-#: js/MessageEditDialog.js:1162 js/MessageEditDialog.js:1169
+#: js/MessageEditDialog.js:1170 js/MessageEditDialog.js:1177
 #: Controller/Message/Send.php:295
 msgid "Body"
 msgstr "Nachricht"
 
-#: js/MessageEditDialog.js:1271
+#: js/MessageEditDialog.js:1279
 msgid "Empty subject"
 msgstr "Leerer Betreff"
 
-#: js/MessageEditDialog.js:1272
+#: js/MessageEditDialog.js:1280
 msgid "Do you really want to send a message with an empty subject?"
 msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
 
@@ -674,7 +676,9 @@ msgstr "Empfänger fehlen."
 msgid ""
 "Cannot encrypt message. Public keys for the following recipients are "
 "missing: {0}"
-msgstr "Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel für die folgenden Empfänger fehlen: {0}"
+msgstr ""
+"Die Nachricht kann nicht verschlüsseltet werden. Die öffentliche Schlüssel "
+"für die folgenden Empfänger fehlen: {0}"
 
 #: js/RecipientGrid.js:234
 msgid "Click here to set To/CC/BCC."
@@ -696,11 +700,11 @@ msgstr "Bcc:"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: js/FolderSelectPanel.js:75
+#: js/FolderSelectPanel.js:75 js/GridPanel.js:783
 msgid "Cancel"
 msgstr "Abbruch"
 
-#: js/FolderSelectPanel.js:84
+#: js/FolderSelectPanel.js:84 js/GridPanel.js:791
 msgid "Ok"
 msgstr "Ok"
 
@@ -733,52 +737,60 @@ msgstr "Markierung an/aus"
 msgid "Mark read/unread"
 msgstr "(Un)gelesen markieren"
 
-#: js/GridPanel.js:305
+#: js/GridPanel.js:307
+msgid "File Message"
+msgstr "Nachricht ablegen"
+
+#: js/GridPanel.js:316
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/GridPanel.js:461
+#: js/GridPanel.js:469
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:500
+#: js/GridPanel.js:508
 msgid "Sender"
 msgstr "Absender"
 
-#: js/GridPanel.js:577 Controller/Message/Flags.php:25
+#: js/GridPanel.js:585 Controller/Message/Flags.php:25
 msgid "Answered"
 msgstr "Beantwortet"
 
-#: js/GridPanel.js:580
+#: js/GridPanel.js:588
 msgid "Forwarded"
 msgstr "Weitergeleitet"
 
-#: js/GridPanel.js:583
+#: js/GridPanel.js:591
 msgid "Tine20"
 msgstr "Tine20"
 
-#: js/GridPanel.js:586
+#: js/GridPanel.js:594
 msgid "Recent"
 msgstr "Neueste"
 
-#: js/GridPanel.js:968
+#: js/GridPanel.js:775
+msgid "File Messages To Folder"
+msgstr "Nachricht in einem Ordner ablegen"
+
+#: js/GridPanel.js:1122
 msgid "Send Reading Confirmation"
 msgstr "Sende Lesebestätigung"
 
-#: js/GridPanel.js:969
+#: js/GridPanel.js:1123
 msgid "Do you want to send a reading confirmation message?"
 msgstr "Wollen Sie eine Lesebestätigung senden?"
 
-#: js/GridPanel.js:1193
+#: js/GridPanel.js:1347
 #, python-brace-format
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1201
+#: js/GridPanel.js:1355
 msgid "Your quota"
 msgstr "Ihr Kontingent"
 
-#: js/GridPanel.js:1202
+#: js/GridPanel.js:1356
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr "{0} verfügbar (insgesamt: {1})"
@@ -791,7 +803,9 @@ msgstr "Mailvelope Entschlüsselungs-Fehler [{0}]"
 #: js/PGPDetailsPanel.js:33
 #, python-brace-format
 msgid "To decrypt this message please install {0} with API support enabled"
-msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese Nachricht zu entschlüsseln."
+msgstr ""
+"Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese "
+"Nachricht zu entschlüsseln."
 
 #: js/PGPDetailsPanel.js:36
 msgid "PGP encrypted Message"
@@ -882,13 +896,17 @@ msgstr "Zugangsdaten für Empfangsserver (IMAP) falsch"
 
 #: js/Felamimail.js:924
 msgid "Your email credentials are wrong. Please contact your administrator"
-msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
+msgstr ""
+"Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren "
+"Administrator."
 
 #: js/Felamimail.js:940
 msgid ""
 "One of your folders was deleted or renamed by another client. Please update "
 "the folder list of this account."
-msgstr "Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  Bitte aktualisieren Sie die Ordnerliste."
+msgstr ""
+"Einer Ihrer Ordner wurde von einem anderen Client gelöscht oder umbenannt.  "
+"Bitte aktualisieren Sie die Ordnerliste."
 
 #: js/Felamimail.js:969
 msgid "SMTP Error"
@@ -1137,7 +1155,9 @@ msgstr "Für mailto: Verweise verwenden"
 #: Preference.php:122
 msgid ""
 "Use Felamimail in mailto links, otherwise use the default desktop client."
-msgstr "Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm verwenden"
+msgstr ""
+"Felamimail für mailto: Verweise verwenden oder externes E-Mailprogramm "
+"verwenden"
 
 #: Preference.php:125
 msgid "Use for NOTES"
@@ -1145,7 +1165,9 @@ msgstr "E-Mail-Notiz erzeugen"
 
 #: Preference.php:126
 msgid "Save Note default Value."
-msgstr "Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht erzeugt."
+msgstr ""
+"Es wird standardmäßig eine E-Mail-Notiz beim versenden einer Nachricht "
+"erzeugt."
 
 #: Preference.php:129
 msgid "Confirm Delete"
@@ -1162,51 +1184,61 @@ msgstr ".eml Dateianhang in weitergeleiteten Mails"
 #: Preference.php:134
 msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+msgstr ""
+"Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge "
+"seperat"
 
-#: Config.php:60
+#: Config.php:67
 msgid "Vacation Templates Container ID"
 msgstr "Container ID für Abwesenheitsnotizvorlagen"
 
-#: Config.php:69
+#: Config.php:76
 msgid "Custom Vacation Message"
 msgstr "Benutzerdefnierte Abwesenheitsnotiz"
 
-#: Config.php:71
+#: Config.php:78
 msgid "User is allowed to set custom vacation message for system account"
-msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
+msgstr ""
+"Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das "
+"Systemkonto einstellen"
 
-#: Config.php:80
+#: Config.php:87
 msgid "Cache email body"
 msgstr "E-Mail zwischenspeichern"
 
-#: Config.php:82
+#: Config.php:89
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
-msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
+msgstr ""
+"Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP "
+"Verbindungen)"
 
-#: Config.php:91
+#: Config.php:98
+msgid "Delete Archived Mail"
+msgstr "Archivierte E-Mail löschen"
+
+#: Config.php:108
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
 
-#: Config.php:93
+#: Config.php:110
 msgid "Enabled features in Felamimail application."
 msgstr "Feature in der Felamimail Applikation aktivieren."
 
-#: Config.php:100
+#: Config.php:117
 msgid "Tine 2.0 Flag"
 msgstr "Tine 2.0 Flag"
 
-#: Config.php:101
+#: Config.php:118
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
 
-#: Config.php:109
+#: Config.php:126
 msgid "Filter E-Mail URIs"
 msgstr "E-Mail URIs filtern"
 
-#: Config.php:111
+#: Config.php:128
 msgid ""
 "Should the email body uris be filtered. Only anchors with URIs are allowed "
 "if this is turned on.)"

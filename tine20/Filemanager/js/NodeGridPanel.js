@@ -153,30 +153,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         return value;
                     }
                 }
-            },
-//            {
-//                id: 'revision',
-//                header: this.app.i18n._("Revision"),
-//                width: 10,
-//                sortable: true,
-//                dataIndex: 'revision',
-//                renderer: function(value, metadata, record) {
-//                    if(record.data.type == 'folder') {
-//                        return '';
-//                    }
-//                    else {
-//                        return value;
-//                    }
-//                }
-//            },
-            {
+            },{
                 id: 'creation_time',
                 header: this.app.i18n._("Creation Time"),
                 width: 50,
                 sortable: true,
                 dataIndex: 'creation_time',
                 renderer: Tine.Tinebase.common.dateTimeRenderer
-                
             },{
                 id: 'created_by',
                 header: this.app.i18n._("Created By"),
@@ -209,7 +192,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             columns: columns
         });
     },
-    
+
     /**
      * status column renderer
      * @param {string} value

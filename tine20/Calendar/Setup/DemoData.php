@@ -288,8 +288,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // create shared events
         foreach($this->sharedEventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
     }
 
@@ -402,8 +401,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         );
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -439,8 +437,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
     }
     
@@ -538,8 +535,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         );
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -580,8 +576,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
     }
 
@@ -699,8 +694,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             )
         );
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -749,8 +743,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
     }
@@ -885,8 +878,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ),
         );
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
     }
@@ -1026,8 +1018,7 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             )
         );
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
 
         $cal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -1079,8 +1070,20 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         );
 
         foreach($eventsData as $eData) {
-            $event = new Calendar_Model_Event($eData);
-            $this->_controller->create($event, false);
+            $this->_createEvent($eData, false);
         }
+    }
+
+    protected function _createEvent($eData, $checkBusy = true)
+    {
+        $tz = static::$_de ? 'Europe/Berlin' : 'UTC';
+
+        $eData['originator_tz'] = $tz;
+        date_default_timezone_set($tz);
+        $event = new Calendar_Model_Event($eData);
+        $event->setTimezone('UTC');
+        date_default_timezone_set('UTC');
+
+        $this->_controller->create($event, $checkBusy);
     }
 }

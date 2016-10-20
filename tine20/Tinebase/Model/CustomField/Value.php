@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -14,6 +14,11 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property    string      id
+ * @property    string      record_id
+ * @property    string      customfield_id
+ * @property    string      value
  */
 class Tinebase_Model_CustomField_Value extends Tinebase_Record_Abstract 
 {

@@ -32,6 +32,13 @@ class Courses_Controller extends Tinebase_Controller_Event
      * @var string
      */
     protected static $_defaultModel = 'Courses_Model_Course';
+
+    /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Courses';
     
     /**
      * constructor (get current user)

@@ -72,7 +72,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      *
      * @var array
      */
-    protected $_validators = array (
+    protected $_validators = array(
     // tine 2.0 generic fields
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),

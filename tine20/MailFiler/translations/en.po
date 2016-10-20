@@ -1,0 +1,408 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - MailFiler\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller.php:104
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's personal files"
+
+#: Exception/DestinationIsSameNode.php:26
+msgid "Destination has the same Path"
+msgstr "Destination has the same Path"
+
+#: Exception/DestinationIsSameNode.php:31
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+"The destination has the same path the source has. No action has been "
+"performed."
+
+#: Exception/DestinationIsOwnChild.php:26
+msgid "Destination is a Subfolder"
+msgstr "Destination is a Subfolder"
+
+#: Exception/DestinationIsOwnChild.php:31
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+
+#: Acl/Rights.php:104
+msgid "manage shared folders"
+msgstr "manage shared folders"
+
+#: Acl/Rights.php:105
+msgid "Create new shared folders"
+msgstr "Create new shared folders"
+
+#: Acl/Rights.php:108
+msgid "Manage anonymous download links"
+msgstr "Manage anonymous download links"
+
+#: Acl/Rights.php:109
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr "Allow to see, add and delete download links of files and folders"
+
+#: Model/Message.php:48 js/GridDetailsPanel.js:187 js/Model.js:533
+#: js/NodeGridPanel.js:163
+msgid "Subject"
+msgstr "Subject"
+
+#: js/NodeEditDialog.js:48 js/MailFiler.js:32 js/NodeGridPanel.js:443
+msgid "Save locally"
+msgstr "Save locally"
+
+#: js/NodeEditDialog.js:64
+msgid "Edit folder"
+msgstr "Edit folder"
+
+#: js/NodeEditDialog.js:64
+msgid "edit file"
+msgstr "edit file"
+
+#: js/NodeEditDialog.js:66 js/Model.js:44 js/NodeGridPanel.js:232
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Folder"
+msgstr[1] "Folders"
+
+#: js/NodeEditDialog.js:66 js/Model.js:41
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+msgstr[1] "Files"
+
+#: js/NodeEditDialog.js:138 js/NodeGridPanel.js:149
+msgid "Name"
+msgstr "Name"
+
+#: js/NodeEditDialog.js:145 js/Model.js:528
+msgid "Type"
+msgstr "Type"
+
+#: js/NodeEditDialog.js:153 js/DownloadLinkGridPanel.js:246
+#: js/NodeGridPanel.js:248
+msgid "Created By"
+msgstr "Created By"
+
+#: js/NodeEditDialog.js:156 js/DownloadLinkGridPanel.js:254 js/Model.js:530
+#: js/NodeGridPanel.js:240
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/NodeEditDialog.js:165
+msgid "Modified By"
+msgstr "Modified By"
+
+#: js/NodeEditDialog.js:168
+msgid "Last Modified"
+msgstr "Last Modified"
+
+#: js/NodeEditDialog.js:191
+msgid "Description"
+msgstr "Description"
+
+#: js/NodeEditDialog.js:205
+msgid "Enter description"
+msgstr "Enter description"
+
+#: js/NodeTreePanel.js:739
+msgid "Upload Failed"
+msgstr "Upload Failed"
+
+#: js/NodeTreePanel.js:740
+msgid "Putting files in this folder is not allowed!"
+msgstr "Putting files in this folder is not allowed!"
+
+#: js/DownloadLinkGridPanel.js:63
+msgid "Create Public Link"
+msgstr "Create Public Link"
+
+#: js/DownloadLinkGridPanel.js:71
+msgid "Remove record"
+msgstr "Remove record"
+
+#: js/DownloadLinkGridPanel.js:135
+msgid "Creating new Download Link..."
+msgstr "Creating new Download Link..."
+
+#: js/DownloadLinkGridPanel.js:173
+msgid "Deleting Download Links..."
+msgstr "Deleting Download Links..."
+
+#: js/DownloadLinkGridPanel.js:173
+msgid "Deleting Download Link..."
+msgstr "Deleting Download Link..."
+
+#: js/DownloadLinkGridPanel.js:230
+msgid "Url"
+msgstr "Url"
+
+#: js/DownloadLinkGridPanel.js:262
+msgid "Expiration Time"
+msgstr "Expiration Time"
+
+#: js/DownloadLinkGridPanel.js:271
+msgid "Access Count"
+msgstr "Access Count"
+
+#: js/DownloadLinkGridPanel.js:278 js/NodeGridPanel.js:255
+msgid "Last Modified Time"
+msgstr "Last Modified Time"
+
+#: js/DownloadLinkGridPanel.js:286 js/NodeGridPanel.js:263
+msgid "Last Modified By"
+msgstr "Last Modified By"
+
+#: js/GridDetailsPanel.js:188
+msgid "From"
+msgstr "From"
+
+#: js/GridDetailsPanel.js:189
+msgid "Add"
+msgstr "Add"
+
+#: js/GridDetailsPanel.js:190
+msgid "Add contact to addressbook"
+msgstr "Add contact to addressbook"
+
+#: js/GridDetailsPanel.js:191
+msgid "Date"
+msgstr "Date"
+
+#: js/GridDetailsPanel.js:193
+msgid "Show or hide header information"
+msgstr "Show or hide header information"
+
+#: js/GridDetailsPanel.js:287
+msgid "Attachments"
+msgstr "Attachments"
+
+#: js/GridContextMenu.js:34
+#, python-brace-format
+msgid "Please enter the new name of the {0}:"
+msgstr "Please enter the new name of the {0}:"
+
+#: js/GridContextMenu.js:40
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Not renamed {0}"
+
+#: js/GridContextMenu.js:40 js/NodeGridPanel.js:733
+#, python-brace-format
+msgid "You have to supply a {0} name!"
+msgstr "You have to supply a {0} name!"
+
+#: js/GridContextMenu.js:144 js/NodeGridPanel.js:774
+msgid "Do you really want to delete the following files?"
+msgstr "Do you really want to delete the following files?"
+
+#: js/MailFiler.js:24
+msgid "MailFiler"
+msgstr "MailFiler"
+
+#: js/PathFilterModel.js:50
+msgid "path"
+msgstr "path"
+
+#: js/Model.js:280 js/Model.js:296
+#, python-brace-format
+msgid "Copying data .. {0}"
+msgstr "Copying data .. {0}"
+
+#: js/Model.js:283 js/Model.js:298
+#, python-brace-format
+msgid "Moving data .. {0}"
+msgstr "Moving data .. {0}"
+
+#: js/Model.js:302
+msgid "Please wait"
+msgstr "Please wait"
+
+#: js/Model.js:527
+msgid "Quick Search"
+msgstr "Quick Search"
+
+#: js/Model.js:529 js/NodeGridPanel.js:223
+msgid "Contenttype"
+msgstr "Contenttype"
+
+#: js/Model.js:534 js/NodeGridPanel.js:170
+msgid "From (Email)"
+msgstr "From (Email)"
+
+#: js/Model.js:535 js/NodeGridPanel.js:177
+msgid "From (Name)"
+msgstr "From (Name)"
+
+#: js/Model.js:536 js/NodeGridPanel.js:192
+msgid "To"
+msgstr "To"
+
+#: js/Model.js:537
+msgid "Cc"
+msgstr "Cc"
+
+#: js/Model.js:538
+msgid "Bcc"
+msgstr "Bcc"
+
+#: js/Model.js:539 js/NodeGridPanel.js:156
+msgid "Flags"
+msgstr "Flags"
+
+#: js/Model.js:542 js/NodeGridPanel.js:208
+msgid "Received"
+msgstr "Received"
+
+#: js/Model.js:564
+msgid "Download Link"
+msgid_plural "Download Links"
+msgstr[0] "Download Link"
+msgstr[1] "Download Links"
+
+#: js/ExceptionHandler.js:32
+msgid "Service Unavailable"
+msgstr "Service Unavailable"
+
+#: js/ExceptionHandler.js:33
+#, python-brace-format
+msgid ""
+"The MailFiler is not configured correctly. Please refer to the {0}Tine 2.0 "
+"Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+"The MailFiler is not configured correctly. Please refer to the {0}Tine 2.0 "
+"Admin FAQ{1} for configuration advice or contact your administrator."
+
+#: js/ExceptionHandler.js:55
+msgid "Files already exists"
+msgstr "Files already exists"
+
+#: js/ExceptionHandler.js:55
+msgid "Do you want to replace the following file(s)?"
+msgstr "Do you want to replace the following file(s)?"
+
+#: js/ExceptionHandler.js:99
+msgid "Failure on create folder"
+msgstr "Failure on create folder"
+
+#: js/ExceptionHandler.js:100
+msgid "Item with this name already exists!"
+msgstr "Item with this name already exists!"
+
+#: js/DownloadLinkDialog.js:52
+msgid "Node Download Links"
+msgstr "Node Download Links"
+
+#: js/NodeGridPanel.js:141
+msgid "Tags"
+msgstr "Tags"
+
+#: js/NodeGridPanel.js:184
+msgid "Sender"
+msgstr "Sender"
+
+#: js/NodeGridPanel.js:200
+msgid "Sent"
+msgstr "Sent"
+
+#: js/NodeGridPanel.js:215
+msgid "Size"
+msgstr "Size"
+
+#: js/NodeGridPanel.js:295
+msgid "Answered"
+msgstr "Answered"
+
+#: js/NodeGridPanel.js:298
+msgid "Forwarded"
+msgstr "Forwarded"
+
+#: js/NodeGridPanel.js:301
+msgid "Tine20"
+msgstr "Tine20"
+
+#: js/NodeGridPanel.js:371
+#, python-brace-format
+msgid "The max. Upload Filesize is {0} MB"
+msgstr "The max. Upload Filesize is {0} MB"
+
+#: js/NodeGridPanel.js:411
+msgid "Edit Properties"
+msgstr "Edit Properties"
+
+#: js/NodeGridPanel.js:422
+msgid "Create Folder"
+msgstr "Create Folder"
+
+#: js/NodeGridPanel.js:432
+msgid "Folder Up"
+msgstr "Folder Up"
+
+#: js/NodeGridPanel.js:453 js/NodeGridPanel.js:454 js/NodeGridPanel.js:456
+msgid "Delete"
+msgstr "Delete"
+
+#: js/NodeGridPanel.js:509
+msgid "Compose"
+msgstr "Compose"
+
+#: js/NodeGridPanel.js:518
+msgid "Reply"
+msgstr "Reply"
+
+#: js/NodeGridPanel.js:528
+msgid "Reply To All"
+msgstr "Reply To All"
+
+#: js/NodeGridPanel.js:538
+msgid "Forward"
+msgstr "Forward"
+
+#: js/NodeGridPanel.js:547
+msgid "Print Preview"
+msgstr "Print Preview"
+
+#: js/NodeGridPanel.js:555
+msgid "Print Message"
+msgstr "Print Message"
+
+#: js/NodeGridPanel.js:729
+msgid "New Folder"
+msgstr "New Folder"
+
+#: js/NodeGridPanel.js:729
+msgid "Please enter the name of the new folder:"
+msgstr "Please enter the name of the new folder:"
+
+#: js/NodeGridPanel.js:733
+#, python-brace-format
+msgid "No {0} added"
+msgstr "No {0} added"
+
+#: Config.php:26
+msgid "Public Download URL"
+msgstr "Public Download URL"
+
+#: Config.php:28
+msgid ""
+"Possible status. Please note that additional status might impact other "
+"MailFiler systems on export or syncronisation."
+msgstr ""
+"Possible status. Please note that additional status might impact other "
+"MailFiler systems on export or syncronisation."

@@ -1,0 +1,84 @@
+{
+  "projectName": "Tine 2.0 - MailFiler",
+  "deployDir": "MailFiler",
+  "licenseText": "Tine 2.0 - MailFiler \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "MailFiler FAT Client",
+      "file": "js/MailFiler-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridContextMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderSelect.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "PathFilterPlugin.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeTreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "NodeGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DownloadLinkDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "DownloadLinkGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MailFiler.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "MailFiler FAT Client",
+      "file": "css/MailFiler-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "MailFiler.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

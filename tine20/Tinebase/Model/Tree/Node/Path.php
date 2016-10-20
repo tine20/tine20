@@ -36,8 +36,8 @@
  * [0] => app id [required]
  * [1] => folders [required]
  * [2] => type [required] (personal|shared)
- * [3] => container | accountLoginName
- * [4] => container | directory
+ * [3] => container name | accountLoginName
+ * [4] => container name | directory
  * [5] => directory
  * [6] => directory
  * [...]
@@ -183,9 +183,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $pathParts = $pathParts = explode('/', trim($_path, '/'));
         $child = array_pop($pathParts);
         
-        $pathRecord = new Tinebase_Model_Tree_Node_Path(array(
-            'flatpath'  => '/' . implode('/', $pathParts)
-        ));
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . implode('/', $pathParts));
         
         return array(
             $pathRecord,
@@ -348,28 +346,57 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' PATH PARTS: ' . print_r($_pathParts, true));
         
-        $container = NULL;
-        
+        $container = null;
+        $containerName = null;
+
         try {
             switch ($this->containerType) {
                 case Tinebase_Model_Container::TYPE_SHARED:
                     if (!empty($_pathParts[3])) {
+                        $containerName = $_pathParts[3];
                         $container = Tinebase_Container::getInstance()->getContainerByName(
-                            $this->application->name, $_pathParts[3], Tinebase_Model_Container::TYPE_SHARED);
+                            $this->application->name, $containerName, Tinebase_Model_Container::TYPE_SHARED);
                     }
                     break;
                     
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     if (count($_pathParts) > 4) {
                         $subPathParts = explode('/', $_pathParts[4], 2);
-                        $owner = ($this->containerOwner) ? Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner) : Tinebase_Core::getUser();
+                        $owner = null;
+                        $containerName = $subPathParts[0];
+                        if ($this->containerOwner) {
+                            try {
+                                $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountLoginName', $this->containerOwner, 'Tinebase_Model_FullUser');
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                // TODO should be fixed! always assure correct path with names .. we seem to have a statpath here
+                                // find owner by login name not found, try with id
+                                try {
+                                    $owner = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $this->containerOwner, 'Tinebase_Model_FullUser');
+                                } catch (Tinebase_Exception_NotFound $tenf) {
+                                }
+                            }
+                        }
+                        if (! $owner) {
+                            $owner = Tinebase_Core::getUser();
+                        }
                         $container = Tinebase_Container::getInstance()->getContainerByName(
-                            $this->application->name, $subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL, $owner->getId());
+                            $this->application->name, $containerName, Tinebase_Model_Container::TYPE_PERSONAL, $owner->getId());
                     }
                     break;
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // container not found
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Not found: ' . $tenf->getMessage());
+        }
+
+        if (! $container && $containerName && (int) $containerName !== 0) {
+            // TODO should be fixed! always assure correct path with names .. we seem to have a statpath here
+            try {
+                $container = Tinebase_Container::getInstance()->getContainerById($containerName);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not get container by id: ' . $e->getMessage());
+            }
         }
         
         return $container;

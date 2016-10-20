@@ -565,8 +565,8 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             defaultContainer: this.TriggerField.defaultContainer,
             requiredGrants: this.requiredGrants,
             // TODO find a better way for this. currently the Filemanager container tree subfolder creation works differently...
-            // this disables context menu for *File' containers...
-            hasContextMenu: this.recordClass.getRecordName() != 'File'
+            // this disables context menu for *Node' containers...
+            hasContextMenu: this.recordClass.getMeta('modelName') != 'Node'
         });
 
         this.tree.on('click', this.onTreeNodeClick, this);
