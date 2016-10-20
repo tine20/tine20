@@ -1,0 +1,245 @@
+/*
+ * Tine 2.0
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+Ext.ns('Tine.MailFiler');
+
+/**
+ * @namespace   Tine.MailFiler
+ * @class       Tine.MailFiler.NodeEditDialog
+ * @extends     Tine.widgets.dialog.EditDialog
+ * 
+ * <p>Node Compose Dialog</p>
+ * <p></p>
+ * 
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Alexander Stintzing <a.stintzing@metaways.de>
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.MailFiler.NodeEditDialog
+ */
+Tine.MailFiler.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+    
+    /**
+     * @private
+     */
+    windowNamePrefix: 'NodeEditWindow_',
+    appName: 'MailFiler',
+    recordClass: Tine.MailFiler.Model.Node,
+    recordProxy: Tine.MailFiler.fileRecordBackend,
+    tbarItems: null,
+    evalGrants: true,
+    showContainerSelector: false,
+    displayNotes: true,
+    
+    /**
+     * @type Tine.MailFiler.DownloadLinkGridPanel
+     */
+    initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('MailFiler');
+        this.downloadAction = new Ext.Action({
+            requiredGrant: 'readGrant',
+            allowMultiple: false,
+            actionType: 'download',
+            text: this.app.i18n._('Save locally'),
+            handler: this.onDownload,
+            iconCls: 'action_filemanager_save_all',
+            disabled: false,
+            scope: this
+        });
+        
+        this.tbarItems = [this.downloadAction];
+        
+        Tine.MailFiler.NodeEditDialog.superclass.initComponent.call(this);
+    },
+    /**
+     * folder or file?
+     */
+    getFittingTypeTranslation: function (isWindowTitle) {
+        if (isWindowTitle) {
+            return this.record.data.type == 'folder' ? this.app.i18n._('Edit folder') : this.app.i18n._('edit file');
+        } else {
+            return this.record.data.type == 'folder' ? this.app.i18n._('Folder') : this.app.i18n._('File');
+        }
+    },
+    
+    /**
+     * executed when record is loaded
+     * @private
+     */
+    onRecordLoad: function() {
+        Tine.MailFiler.NodeEditDialog.superclass.onRecordLoad.apply(this, arguments);
+        
+        this.window.setTitle(this.getFittingTypeTranslation(true));
+    },
+    
+    /**
+     * download file
+     */
+    onDownload: function() {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'MailFiler.downloadFile',
+                requestType: 'HTTP',
+                path: '',
+                id: this.record.get('id')
+            }
+        }).start();
+    },
+    
+    /**
+     * returns dialog
+     * @return {Object}
+     * @private
+     */
+    getFormItems: function() {
+        var formFieldDefaults = {
+            xtype:'textfield',
+            anchor: '100%',
+            labelSeparator: '',
+            columnWidth: .5,
+            readOnly: true,
+            disabled: true
+        };
+        
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain:true,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            activeTab: 0,
+            border: false,
+            items:[{
+                title: this.getFittingTypeTranslation(false),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'border',
+                items: [{
+                    region: 'center',
+                    layout: 'hfit',
+                    border: false,
+                    items: [{
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.getFittingTypeTranslation(false),
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: formFieldDefaults,
+                            items: [[{
+                                    fieldLabel: this.app.i18n._('Name'),
+                                    name: 'name',
+                                    allowBlank: false,
+                                    readOnly: false,
+                                    columnWidth: .75,
+                                    disabled: false
+                                }, {
+                                    fieldLabel: this.app.i18n._('Type'),
+                                    name: 'contenttype',
+                                    columnWidth: .25
+                                }],[
+                                Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                    userOnly: true,
+                                    useAccountRecord: true,
+                                    blurOnSelect: true,
+                                    fieldLabel: this.app.i18n._('Created By'),
+                                    name: 'created_by'
+                                }), {
+                                    fieldLabel: this.app.i18n._('Creation Time'),
+                                    name: 'creation_time',
+                                    xtype: 'datefield'
+                                }
+                                ],[
+                                Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                    userOnly: true,
+                                    useAccountRecord: true,
+                                    blurOnSelect: true,
+                                    fieldLabel: this.app.i18n._('Modified By'),
+                                    name: 'last_modified_by'
+                                }), {
+                                    fieldLabel: this.app.i18n._('Last Modified'),
+                                    name: 'last_modified_time',
+                                    xtype: 'datefield'
+                                }
+                                ]]
+                        }]
+                    }
+                    
+                    ]
+                }, {
+                    // activities and tags
+                    layout: 'accordion',
+                    animate: true,
+                    region: 'east',
+                    width: 210,
+                    split: true,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    header: false,
+                    margins: '0 5 0 5',
+                    border: true,
+                    items: [
+                        new Ext.Panel({
+                            title: this.app.i18n._('Description'),
+                            iconCls: 'descriptionIcon',
+                            layout: 'form',
+                            labelAlign: 'top',
+                            border: false,
+                            items: [{
+                                style: 'margin-top: -4px; border 0px;',
+                                labelSeparator: '',
+                                xtype: 'textarea',
+                                name: 'description',
+                                hideLabel: true,
+                                grow: false,
+                                preventScrollbars: false,
+                                anchor: '100% 100%',
+                                emptyText: this.app.i18n._('Enter description'),
+                                requiredGrant: 'editGrant'
+                            }]
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'MailFiler',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
+                }]
+            }, 
+            new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: this.record.id,
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+                }),
+            ]
+        };
+    }
+    
+});
+
+/**
+ * MailFiler Edit Popup
+ * 
+ * @param   {Object} config
+ * @return  {Ext.ux.Window}
+ */
+Tine.MailFiler.NodeEditDialog.openWindow = function (config) {
+    var id = (config.record && config.record.id) ? config.record.id : 0;
+    var window = Tine.WindowFactory.getWindow({
+        width: 800,
+        height: 570,
+        name: Tine.MailFiler.NodeEditDialog.prototype.windowNamePrefix + id,
+        contentPanelConstructor: 'Tine.MailFiler.NodeEditDialog',
+        contentPanelConstructorConfig: config
+    });
+    
+    return window;
+};

@@ -360,24 +360,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return $select;
     }
-    
-    /**
-     * get containers with bad names (name == uuid)
-     * 
-     * @return Tinebase_Record_RecordSet
-     */
-    public function getContainersWithBadNames()
-    {
-        $select = $this->_getSelect();
-        $select->where($this->_db->quoteIdentifier('uuid') . ' = ' . $this->_db->quoteIdentifier('name'));
-        $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
-        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows, TRUE);
-        
-        return $result;
-    }
-    
+
     /**
      * return all container, which the user has the requested right for
      *

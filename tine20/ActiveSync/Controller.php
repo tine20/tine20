@@ -17,6 +17,13 @@
 class ActiveSync_Controller extends Tinebase_Controller_Abstract
 {
     /**
+     * application name (is needed in checkRight())
+     *
+     * @var string
+     */
+    protected $_applicationName = 'ActiveSync';
+
+    /**
      * holds the instance of the singleton
      *
      * @var ActiveSync_Controller

@@ -220,6 +220,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
         }
         
         Tinebase_TransactionManager::getInstance()->rollBack();
+
+        // needed to clear cache of containers
+        Tinebase_Container::getInstance()->resetClassCache();
     }
 
     /************************ test functions *********************************/
@@ -1123,10 +1126,12 @@ class Felamimail_Frontend_JsonTest extends TestCase
 
     /**
      * @see 0012160: save emails in filemanager
+     *
+     * @param string  $appName
      */
-    public function testFileMessages()
+    public function testFileMessages($appName = 'Filemanager')
     {
-        $personalFilemanagerContainer = $this->_getPersonalContainer('Filemanager_Model_Node');
+        $personalFilemanagerContainer = $this->_getPersonalContainer($appName . '_Model_Node');
         $message = $this->_sendMessage();
         $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
             . '/' . Tinebase_Core::getUser()->accountLoginName
@@ -1134,11 +1139,11 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $filter = array(array(
             'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
         ));
-        $result = $this->_json->fileMessages($filter, 'Filemanager', $path);
+        $result = $this->_json->fileMessages($filter, $appName, $path);
         $this->assertTrue(isset($result['totalcount']));
-        $this->assertEquals(1, $result['totalcount'], 'message should be filed.' . print_r($result, true));
+        $this->assertEquals(1, $result['totalcount'], 'message should be filed in ' . $appName . ': ' . print_r($result, true));
 
-        // check if message exists in Filemanager
+        // check if message exists in $appName
         $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'    => 'path',
             'operator' => 'equals',
@@ -1148,18 +1153,120 @@ class Felamimail_Frontend_JsonTest extends TestCase
             'operator' => 'contains',
             'value'    => $message['subject']
         )));
-        $emlNode = Filemanager_Controller_Node::getInstance()->search($filter)->getFirstRecord();
+        $nodeController = Tinebase_Core::getApplicationInstance($appName . '_Model_Node');
+        $emlNode = $nodeController->search($filter)->getFirstRecord();
         $this->assertTrue($emlNode !== null, 'could not find eml file node');
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $emlNode->type);
         $this->assertEquals('message/rfc822', $emlNode->contenttype);
         $this->assertTrue(preg_match('/[a-f0-9]{10}/', $emlNode->name) == 1, 'no message id hash in node name: ' . print_r($emlNode->toArray(), true));
 
-        $nodeWithDescription = Filemanager_Controller_Node::getInstance()->get($emlNode['id']);
+        $nodeWithDescription = $nodeController->get($emlNode['id']);
         $this->assertTrue(isset($nodeWithDescription->description), 'description missing from node: ' . print_r($nodeWithDescription->toArray(), true));
         $this->assertContains($message['received'], $nodeWithDescription->description);
         $this->assertContains('aaaaaä', $nodeWithDescription->description);
     }
-    
+
+    /**
+     * @see 0012162: create new MailFiler application
+     */
+    public function testFileMessagesInMailFiler()
+    {
+        $this->testFileMessages('MailFiler');
+
+        $personalFilemanagerContainer = $this->_getPersonalContainer('MailFiler_Model_Node');
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => $path
+        ), array(
+            'field'    => 'subject',
+            'operator' => 'equals',
+            'value'    => 'test'
+        ));
+        $mailFilerJson = new MailFiler_Frontend_Json();
+        $emlNodes = $mailFilerJson->searchNodes($filter, array());
+        $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
+        $emlNode = $emlNodes['results'][0];
+
+        // check email fields
+        $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
+        $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress), $emlNode['message']['to'], print_r($emlNode['message'], true));
+        $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
+        $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
+        $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
+    }
+
+    /**
+     * @see 0012162: create new MailFiler application
+     */
+    public function testFileMessagesInMailFilerWithAttachment()
+    {
+        $emlNode = $this->_fileMessageInMailFiler();
+        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
+        $this->assertEquals(1, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
+        $this->assertEquals('moz-screenshot-83.png', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
+    }
+
+    /**
+     * @param string $messageFile
+     * @return array
+     */
+    protected function _fileMessageInMailFiler($messageFile = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
+    {
+        $appName = 'MailFiler';
+        $personalFilemanagerContainer = $this->_getPersonalContainer($appName . '_Model_Node');
+        $testFolder = $this->_getFolder($this->_testFolderName);
+        $message = fopen(dirname(__FILE__) . '/../files/' . $messageFile, 'r');
+        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
+
+        $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
+        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
+            . '/' . Tinebase_Core::getUser()->accountLoginName
+            . '/' . $personalFilemanagerContainer->name;
+        $filter = array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        ));
+        $this->_json->fileMessages($filter, $appName, $path);
+        $filter = array(array(
+            'field'    => 'path',
+            'operator' => 'equals',
+            'value'    => $path
+        ), array(
+            'field'    => 'subject',
+            'operator' => 'equals',
+            'value'    => $message['subject']
+        ));
+        $mailFilerJson = new MailFiler_Frontend_Json();
+        $emlNodes = $mailFilerJson->searchNodes($filter, array());
+        $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
+        $emlNode = $emlNodes['results'][0];
+
+        return $emlNode;
+    }
+
+    /**
+     * @see 0012162: create new MailFiler application
+     */
+    public function testFileMessagesInMailFilerWithSingleBodyPart()
+    {
+        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ssss" at Oct 12, 2016 4:00:00 PM');
+        $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
+    }
+
+    /**
+     * @see 0012162: create new MailFiler application
+     */
+    public function testFileMessageWithDelete()
+    {
+        $emlNode = $this->_fileMessageInMailFiler();
+        $mailFilerJson = new MailFiler_Frontend_Json();
+        $result = $mailFilerJson->deleteNodes(array($emlNode['path']));
+        self::assertEquals('success', $result['status']);
+    }
+
     /**
      * testMessageWithInvalidICS
      *

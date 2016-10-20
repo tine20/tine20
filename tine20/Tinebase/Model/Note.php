@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -14,6 +14,13 @@
  * 
  * @package     Tinebase
  * @subpackage  Notes
+ *
+ * @property    string      $id
+ * @property    string      $note_type_id
+ * @property    string      $note
+ * @property    string      $record_id
+ * @property    string      $record_model
+ * @property    string      $record_backend
  */
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {

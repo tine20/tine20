@@ -503,11 +503,163 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             echo "\nCleaning modlog...";
             $this->cleanModlog();
+
+            echo "\nCleaning customfields...";
+            $this->cleanCustomfields();
+
+            echo "\nCleaning notes...";
+            $this->cleanNotes();
         }
 
         echo "\n\n";
         
         return TRUE;
+    }
+
+    public function cleanNotes()
+    {
+        $notesController = Tinebase_Notes::getInstance();
+        $notes = $notesController->getAllNotes();
+        $controllers = array();
+        $models = array();
+        $deleteIds = array();
+
+        /** @var Tinebase_Model_Note $note */
+        foreach ($notes as $note) {
+            if (!isset($controllers[$note->record_model])) {
+                if (strpos($note->record_model, 'Tinebase') === 0) {
+                    continue;
+                }
+                try {
+                    $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
+                } catch(Tinebase_Exception_AccessDenied $e) {
+                    // TODO log
+                    continue;
+                }
+                $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
+                $models[$note->record_model] = array(
+                    0 => new $note->record_model(),
+                    1 => class_exists($note->record_model . 'Filter'),
+                    2 => $note->record_model . 'Filter',
+                    3 => $oldACLCheckValue
+                );
+            }
+            $controller = $controllers[$note->record_model];
+            $model = $models[$note->record_model];
+
+            if ($model[1]) {
+                $filter = new $model[2](array(
+                    array('field' => $model[0]->getIdProperty(), 'operator' => 'equals', 'value' => $note->record_id)
+                ));
+                if ($model[0]->has('is_deleted')) {
+                    $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'is_deleted', 'operator' => 'notnull', 'value' => NULL)));
+                }
+                $result = $controller->searchCount($filter);
+
+                if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
+                    $result = (int)$result;
+                }
+
+                if (!is_int($result)) {
+                    if (is_array($result) && isset($result['totalcount'])) {
+                        $result = (int)$result['totalcount'];
+                    } elseif(is_array($result) && isset($result['count'])) {
+                        $result = (int)$result['count'];
+                    } else {
+                        // todo log
+                        // dummy line, remove!
+                        $result = 1;
+                    }
+                }
+
+                if ($result === 0) {
+                    $deleteIds[] = $note->getId();
+                }
+            } else {
+                try {
+                    $controller->get($note->record_id, null, false, true);
+                } catch(Tinebase_Exception_NotFound $tenf) {
+                    $deleteIds[] = $note->getId();
+                }
+            }
+        }
+
+        if (count($deleteIds) > 0) {
+            $notesController->purgeNotes($deleteIds);
+        }
+
+        foreach($controllers as $model => $controller) {
+            $controller->doContainerACLChecks($models[$model][3]);
+        }
+    }
+
+    public function cleanCustomfields()
+    {
+        $customFieldController = Tinebase_CustomField::getInstance();
+        $customFieldConfigs = $customFieldController->searchConfig();
+
+        /** @var Tinebase_Model_CustomField_Config $customFieldConfig */
+        foreach($customFieldConfigs as $customFieldConfig) {
+            $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
+            $oldACLCheckValue = $controller->doContainerACLChecks(false);
+            $filterClass = $customFieldConfig->model . 'Filter';
+
+            $filter = new Tinebase_Model_CustomField_ValueFilter(array(
+                array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
+            ));
+            $customFieldValues = $customFieldController->search($filter);
+            $deleteIds = array();
+
+            if (class_exists($filterClass)) {
+                $model = new $customFieldConfig->model();
+                /** @var Tinebase_Model_CustomField_Value $customFieldValue */
+                foreach ($customFieldValues as $customFieldValue) {
+                    $filter = new $filterClass(array(
+                        array('field' => $model->getIdProperty(), 'operator' => 'equals', 'value' => $customFieldValue->record_id)
+                    ));
+                    if ($model->has('is_deleted')) {
+                        $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'is_deleted', 'operator' => 'notnull', 'value' => NULL)));
+                    }
+
+                    $result = $controller->searchCount($filter);
+
+                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
+                        $result = (int)$result;
+                    }
+
+                    if (!is_int($result)) {
+                        if (is_array($result) && isset($result['totalcount'])) {
+                            $result = (int)$result['totalcount'];
+                        } elseif(is_array($result) && isset($result['count'])) {
+                            $result = (int)$result['count'];
+                        } else {
+                            // todo log
+                            // dummy line, remove!
+                            $result = 1;
+                        }
+                    }
+
+                    if ($result === 0) {
+                        $deleteIds[] = $customFieldValue->getId();
+                    }
+                }
+            } else {
+                /** @var Tinebase_Model_CustomField_Value $customFieldValue */
+                foreach ($customFieldValues as $customFieldValue) {
+                    try {
+                        $controller->get($customFieldValue->record_id, null, false, true);
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $customFieldValue->getId();
+                    }
+                }
+            }
+
+            if (count($deleteIds) > 0) {
+                $customFieldController->deleteCustomFieldValue($deleteIds);
+            }
+
+            $controller->doContainerACLChecks($oldACLCheckValue);
+        }
     }
     
     /**
@@ -976,74 +1128,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         exit($result);
     }
-    
-    /**
-     * repairs container names
-     * 
-     * @param Zend_Console_Getopt $opts
-     */
-    public function repairContainerName($opts)
-    {
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
-        $dryrun = $opts->d;
-        
-        $this->_addOutputLogWriter();
-        $args = $this->_parseArgs($opts);
-        
-        $containersWithBadNames = Tinebase_Container::getInstance()->getContainersWithBadNames();
-        
-        $locale = Tinebase_Translation::getLocale((isset($args['locale']) ?$args['locale'] : 'auto'));
 
-        if ($dryrun) {
-            print_r($containersWithBadNames->toArray());
-            echo "Using Locale " . $locale . "\n";
-        }
-        
-        $appContainerNames = array(
-            'Calendar' => 'calendar',
-            'Tasks'    => 'tasks',
-            'Addressbook'    => 'addressbook',
-        );
-        
-        foreach ($containersWithBadNames as $container) {
-            if (empty($container->owner_id)) {
-                if ($dryrun) {
-                    echo "Don't rename shared container " . $container->id . "\n";
-                }
-                continue;
-            }
-            $app = Tinebase_Application::getInstance()->getApplicationById($container->application_id);
-            $appContainerName = isset($appContainerNames[$app->name]) ? $appContainerNames[$app->name] : "container";
-            $translation = Tinebase_Translation::getTranslation($app->name, $locale);
-            $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $container->owner_id);
-            $newName = $newBaseName = sprintf($translation->_("%s's personal " . $appContainerName), $account->accountFullName);
-            
-            $count = 1;
-            do {
-                try {
-                    Tinebase_Container::getInstance()->getContainerByName($app->name, $newName, Tinebase_Model_Container::TYPE_PERSONAL, $container->owner_id);
-                    $found = true;
-                    $newName = $newBaseName . ' ' . ++$count;
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $found = false;
-                }
-                
-            } while ($found);
-            if ($dryrun) {
-                echo "Rename container id " . $container->id . ' to ' . $newName . "\n";
-            } else {
-                
-                $container->name = $newName;
-                Tinebase_Container::getInstance()->update($container);
-            }
-        }
-        
-        $result = 0;
-        exit($result);
-    }
-    
     /**
      * transfer relations
      * 

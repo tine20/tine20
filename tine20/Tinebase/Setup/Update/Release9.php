@@ -281,13 +281,34 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->createTable('numberable', $declaration);
         $this->setApplicationVersion('Tinebase', '9.9');
     }
-    
+
+    /**
+     * update to 9.10
+     *
+     * @see 0012162: create new MailFiler application
+     */
+    public function update_9()
+    {
+        if ($this->getTableVersion('tree_fileobjects') < 3) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+            ');
+            $this->_backend->alterCol('tree_fileobjects', $declaration);
+            $this->setTableVersion('tree_fileobjects', '3');
+        }
+
+        $this->setApplicationVersion('Tinebase', '9.10');
+    }
     /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_9()
+    public function update_10()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }

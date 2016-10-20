@@ -119,10 +119,15 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                     if ($key == 'flags') {
                         $data = array(
                             'flag'      => $data,
-                            'folder_id' => $_record->folder_id
                         );
+                        if ($_record->has('folder_id')) {
+                            $data['folder_id'] = $_record->folder_id;
+                        }
                     } else {
                         // need to filter input as 'name' could contain invalid chars (emojis, ...) here
+                        if (! is_array($data)) {
+                            $data = array($foreign['field'] => $data);
+                        }
                         foreach ($data as $field => $value) {
                             $data[$field] = Tinebase_Core::filterInputForDatabase($data[$field]);
                         }

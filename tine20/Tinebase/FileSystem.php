@@ -34,7 +34,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * @var Tinebase_Tree_Node
      */
-    protected $_treeNodeBackend;
+    protected $_treeNodeBackend = null;
+
+    protected $_treeNodeModel = 'Tinebase_Model_Tree_Node';
     
     /**
      * path where physical files gets stored
@@ -63,8 +65,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     public function __construct() 
     {
         $this->_fileObjectBackend  = new Tinebase_Tree_FileObject();
-        $this->_treeNodeBackend    = new Tinebase_Tree_Node();
-        
+
         if (! Tinebase_Core::isFilesystemAvailable()) {
             throw new Tinebase_Exception_Backend('No base path (filesdir) configured or path not writeable');
         }
@@ -145,13 +146,24 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function get($_id, $_getDeleted = FALSE)
     {
-        $node = $this->_treeNodeBackend->get($_id, $_getDeleted);
+        $node =$this->_getTreeNodeBackend()->get($_id, $_getDeleted);
         $fileObject = $this->_fileObjectBackend->get($node->object_id);
         $node->description = $fileObject->description;
         
         return $node;
     }
-    
+
+    protected function _getTreeNodeBackend()
+    {
+        if ($this->_treeNodeBackend === null) {
+            $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
+                'modelName' => $this->_treeNodeModel
+            ));
+        }
+
+        return $this->_treeNodeBackend;
+    }
+
     /**
      * Get multiple tree nodes identified by id
      *
@@ -160,7 +172,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function getMultipleTreeNodes($_id) 
     {
-        return $this->_treeNodeBackend->getMultiple($_id);
+        return$this->_getTreeNodeBackend()->getMultiple($_id);
     }
     
     /**
@@ -256,7 +268,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $destinationNode->parent_id = $parentNode->getId();
         $destinationNode->name      = $destinationNodeName;
         
-        $createdNode = $this->_treeNodeBackend->create($destinationNode);
+        $createdNode =$this->_getTreeNodeBackend()->create($destinationNode);
         
         // update hash of all parent folders
         $this->_updateDirectoryNodesHash(dirname(implode('/', $destinationPathParts)));
@@ -599,7 +611,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             $node->name = basename($newPath);
         }
     
-        $node = $this->_treeNodeBackend->update($node);
+        $node =$this->_getTreeNodeBackend()->update($node);
         
         $this->clearStatCache($oldPath);
         
@@ -674,7 +686,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             }
         }
         
-        $this->_treeNodeBackend->delete($node->getId());
+       $this->_getTreeNodeBackend()->delete($node->getId());
         $this->clearStatCache($path);
 
         // delete object only, if no other tree node refers to it
@@ -715,7 +727,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if ((isset($this->_statCache[$cacheId]) || array_key_exists($cacheId, $this->_statCache))) {
             try {
                 // let's try to get the node from backend, to make sure it still exists
-                return $this->_treeNodeBackend->get($this->_statCache[$cacheId]);
+                return$this->_getTreeNodeBackend()->get($this->_statCache[$cacheId]);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // something went wrong. let's clear the whole statCache
                 $this->clearStatCache();
@@ -738,7 +750,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $missingPathParts = array_diff_assoc($this->_splitPath($path), $pathParts);
         
         foreach ($missingPathParts as $pathPart) {
-            $node = $this->_treeNodeBackend->getChild($parentNode, $pathPart);
+            $node =$this->_getTreeNodeBackend()->getChild($parentNode, $pathPart);
             
             // keep track of current path position
             array_push($pathParts, $pathPart);
@@ -796,7 +808,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             throw new Tinebase_Exception_InvalidArgument('can not unlink directories');
         }
         
-        $this->_treeNodeBackend->delete($node->getId());
+       $this->_getTreeNodeBackend()->delete($node->getId());
         
         // delete object only, if no one uses it anymore
         if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
@@ -829,7 +841,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             'object_id'     => $directoryObject->getId(),
             'parent_id'     => $parentId
         ));
-        $treeNode = $this->_treeNodeBackend->create($treeNode);
+        $treeNode =$this->_getTreeNodeBackend()->create($treeNode);
         
         return $treeNode;
     }
@@ -873,7 +885,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
             ' ' . print_r($treeNode->toArray(), TRUE));
         
-        $treeNode = $this->_treeNodeBackend->create($treeNode);
+        $treeNode =$this->_getTreeNodeBackend()->create($treeNode);
 
         return $treeNode;
     }
@@ -956,10 +968,25 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
      */
     public function searchNodes(Tinebase_Model_Tree_Node_Filter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
     {
-        $result = $this->_treeNodeBackend->search($_filter, $_pagination);
+        $result =$this->_getTreeNodeBackend()->search($_filter, $_pagination);
         return $result;
     }
-    
+
+    /**
+     * search tree nodes
+     *
+     * TODO replace searchNodes
+     *
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function search(Tinebase_Model_Tree_Node_Filter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $onlyIds = false)
+    {
+        $result = $this->_getTreeNodeBackend()->search($_filter, $_pagination, $onlyIds);
+        return $result;
+    }
+
     /**
     * search tree nodes count
     *
@@ -968,7 +995,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     */
     public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = NULL)
     {
-        $result = $this->_treeNodeBackend->searchCount($_filter);
+        $result =$this->_getTreeNodeBackend()->searchCount($_filter);
         return $result;
     }
     
@@ -1005,7 +1032,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Getting tree node ' . $parentId . '/'. $_name);
         
-        return $this->_treeNodeBackend->getChild($_parentId, $_name);
+        return$this->_getTreeNodeBackend()->getChild($_parentId, $_name);
     }
     
     /**
@@ -1070,7 +1097,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         $fileObject->description = $_node->description;
         $this->_updateFileObject($fileObject, $_node->hash);
         
-        return $this->_treeNodeBackend->update($_node);
+        return$this->_getTreeNodeBackend()->update($_node);
     }
     
     /**
@@ -1228,13 +1255,13 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
             $start += $limit;
         } while ($fileObjects->count() >= $limit);
         
-        $nodeIdsToDelete = $this->_treeNodeBackend->search(new Tinebase_Model_Tree_Node_Filter(array(array(
+        $nodeIdsToDelete =$this->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter(array(array(
             'field'     => 'object_id',
             'operator'  => 'in',
             'value'     => $toDeleteIds
         ))), NULL, Tinebase_Backend_Sql_Abstract::IDCOL);
         
-        $deleteCount = $this->_treeNodeBackend->delete($nodeIdsToDelete);
+        $deleteCount =$this->_getTreeNodeBackend()->delete($nodeIdsToDelete);
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed ' . $deleteCount . ' obsolete filenode(s) from the database.');
         

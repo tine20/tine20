@@ -1182,6 +1182,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _deleteNode($_flatpath)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Delete path: ' . $_flatpath);
+
         $flatpathWithBasepath = $this->addBasePath($_flatpath);
         list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
@@ -1272,12 +1275,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function fileMessage($targetPath, Felamimail_Model_Message $message)
     {
         // save raw message in temp file
-        $rawMessagePart = Felamimail_Controller_Message::getInstance()->getMessagePart($message->getId());
+        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
         $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
-        file_put_contents($tempFilename, $rawMessagePart->getContent());
+        file_put_contents($tempFilename, $rawContent);
         $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
 
-        $filename = $this->_getMessageNodeFileame($message);
+        $filename = $this->_getMessageNodeFilename($message);
 
         $emlNode = $this->createNodes(
             array($targetPath . '/' . $filename),
@@ -1297,7 +1300,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param $message
      * @return string
      */
-    protected function _getMessageNodeFileame($message)
+    protected function _getMessageNodeFilename($message)
     {
         $name = mb_substr($message->subject, 0, 245) . '_' . substr(md5($message->messageId), 0, 10) . '.eml';
 
@@ -1335,11 +1338,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $description .= $label . ': ';
 
             switch ($field) {
-//                case 'to':
-//                case 'cc':
-//                case 'bcc':
-//                    $description .= implode(', ', $message->{$field});
-//                    break;
                 case 'received':
                     $description .= $message->received->toString();
                     break;
@@ -1347,16 +1345,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
                     $description .= substr($completeMessage->getPlainTextBody(), 0, 1000) . "\n";
                     break;
+                case 'attachments':
+                    foreach ((array) $message->{$field} as $attachment) {
+                        if (is_array($attachment) && isset($attachment['filename']))
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' ' . print_r($attachment, true));
+                        $description .= '  ' . $attachment['filename'] . "\n";
+                    }
+                    break;
                 default:
                     $value = $message->{$field};
                     if (is_array($value)) {
-                        $description .= implode(', ', $message->{$field});
+                        $description .= implode(', ', $value);
                     } else {
                         $description .= $value;
                     }
             }
             $description .= "\n";
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Description: ' . $description);
 
         return $description;
     }
