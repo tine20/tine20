@@ -278,7 +278,6 @@ class Felamimail_Message extends Zend_Mail_Message
             switch($headerName) {
                 case 'subject':
                     $message->$headerName = $headerValue;
-                    
                     break;
                     
                 case 'from':
@@ -300,29 +299,71 @@ class Felamimail_Message extends Zend_Mail_Message
                     break;
             }
         }
-        
-        
+
         $contentType    = $_zendMailMessage->getHeaderField('content-type', 0);
         $message->content_type = $contentType;
         
         // @todo convert to utf-8 if needed
-        $charset        = $_zendMailMessage->getHeaderField('content-type', 'charset');
-        
-        $encoding       = $_zendMailMessage->getHeaderField('content-transfer-encoding');
-        
+        //$charset        = $_zendMailMessage->getHeaderField('content-type', 'charset');
+        $message->body = self::getDecodedContent($_zendMailMessage);
+
+        return $message;
+    }
+
+    public static function getDecodedContent($partOrMessage)
+    {
+        $encoding       = $partOrMessage->headerExists('content-transfer-encoding')
+            ? $partOrMessage->getHeaderField('content-transfer-encoding')
+            : Zend_Mime::ENCODING_QUOTEDPRINTABLE; // TODO best default?
+
         switch ($encoding) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $message->body = quoted_printable_decode($_zendMailMessage->getContent());
+                $result = quoted_printable_decode($partOrMessage->getContent());
                 break;
             case Zend_Mime::ENCODING_BASE64:
-                $message->body = base64_decode($_zendMailMessage->getContent());
+                $result = base64_decode($partOrMessage->getContent());
                 break;
-                
             default:
-                $message->body = $_zendMailMessage->getContent();
+                $result = $partOrMessage->getContent();
                 break;
         }
-        
-        return $message;
+
+        return $result;
+    }
+
+    /**
+     * getDecodedPartContent
+     *
+     * @param $partId
+     * @return string
+     * @throws Zend_Mail_Exception
+     */
+    public function getDecodedPartContent($partId)
+    {
+        $part = $this->getPart($partId);
+        return self::getDecodedContent($part);
+    }
+
+    /**
+     * Get part of multipart message
+     *
+     * @param  int|string $num number of part starting with 1 for first part
+     * @return Zend_Mail_Part wanted part
+     * @throws Zend_Mail_Exception
+     */
+    public function getPart($num)
+    {
+        if (strpos($num, '.') !== false) {
+            // recurse into sub-parts (for example 1.1, 1.1.2, ...)
+            $parts = explode('.', $num);
+            $part = $this;
+            while (count($parts) > 0) {
+                $part = $part->getPart(array_shift($parts));
+            }
+        } else {
+            $part = parent::getPart($num);
+        }
+
+        return $part;
     }
 }

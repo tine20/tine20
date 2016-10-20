@@ -826,4 +826,35 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
+
+    /**
+     * get all Notes, including deleted ones, no ACL check
+     *
+     * @ param boolean $ignoreACL
+     * @ param boolean $getDeleted
+     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
+     */
+    public function getAllNotes()
+    {
+        $select = $this->_db->select()
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'));
+
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
+
+        return $result;
+    }
+
+    /**
+     * permanently delete notes by id
+     *
+     * @param array $_ids
+     * @return int
+     */
+    public function purgeNotes(array $_ids)
+    {
+        return $this->_db->delete(SQL_TABLE_PREFIX . 'notes', $this->_db->quoteInto('id IN (?)', $_ids));
+    }
 }

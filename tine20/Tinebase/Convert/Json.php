@@ -118,8 +118,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     continue;
                 } else {
                     try {
-                        $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
-                        $foreignRecords = $controller->getMultiple($foreignIds);
+                        $foreignRecords = $this->_getForeignRecords($foreignIds, $foreignRecordClassName);
                     } catch (Tinebase_Exception_AccessDenied $tead) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' No right to access application of record ' . $foreignRecordClassName);
@@ -127,7 +126,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     }
                 }
 
-                foreach($foreignRecordsArray as $id => $rec) {
+                foreach ($foreignRecordsArray as $id => $rec) {
                     if ($foreignRecords->getById($id) === false) {
                         $foreignRecords->addRecord($rec);
                     }
@@ -145,19 +144,31 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                 if ($fr && $fr->has('notes')) {
                     Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
                 }
-                
-                foreach ($_records as $record) {
-                    foreach ($fields as $field) {
-                        $foreignId = $record->{$field};
-                        if (is_scalar($foreignId)) {
-                            $idx = $foreignRecords->getIndexById($foreignId);
-                            if (isset($idx) && $idx !== FALSE) {
-                                $record->{$field} = $foreignRecords[$idx];
-                            } else {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . ' No matching foreign record found for id: ' . $foreignId);
-                            }
-                        }
+
+                $this->_mapForeignRecords($_records, $fields, $foreignRecords);
+            }
+        }
+    }
+
+    protected function _getForeignRecords($foreignIds, $foreignRecordClassName)
+    {
+        $controller = Tinebase_Core::getApplicationInstance($foreignRecordClassName);
+        $foreignRecords = $controller->getMultiple($foreignIds);
+        return $foreignRecords;
+    }
+
+    protected function _mapForeignRecords($records, $fields, $foreignRecords)
+    {
+        foreach ($records as $record) {
+            foreach ($fields as $field) {
+                $foreignId = $record->{$field};
+                if (is_scalar($foreignId)) {
+                    $idx = $foreignRecords->getIndexById($foreignId);
+                    if (isset($idx) && $idx !== FALSE) {
+                        $record->{$field} = $foreignRecords[$idx];
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' No matching foreign record found for id: ' . $foreignId);
                     }
                 }
             }

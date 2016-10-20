@@ -8,10 +8,39 @@
 
 Ext.ns('Tine.widgets.customfields');
 
-Tine.widgets.customfields.Field = {
+/**
+ * wrap for lazy cf init
+ *
+ * use like this:
+ * {
+ *    columnWidth: 0.5,
+ *    xtype: 'customfield',
+ *    modelName: 'Addressbook_Model_Contact',
+ *    customFieldName: 'test'
+ * }
+ */
+Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
+    layout: 'form',
+    autoHeight: true,
+    border: false,
+    initComponent: function() {
+        this.appName = this.appName ? this.appName : this.modelName.split('_')[0];
+
+        var fieldConfig = Tine.widgets.customfields.ConfigManager.getConfig(this.appName, this.modelName, this.customFieldName),
+            field = Tine.widgets.customfields.Field.get(this.appName, fieldConfig, {
+                anchor: '100%',
+                labelSeparator: ''
+            });
+
+        this.items = [field];
+        Tine.widgets.customfields.Field.superclass.initComponent.call(this);
+    }
+});
+
     /**
      * get the form field 
-     * 
+     *
+     * @static
      * @param {Tine.Tinebase.Application} app the application the customfield belongs to
      * @param {Tine.Tinebase.data.Record} cfConfig customfields config record
      * @param {Object} config additional field config
@@ -19,7 +48,7 @@ Tine.widgets.customfields.Field = {
      * 
      * @return {Ext.form.Field}
      */
-    get: function (app, cfConfig, config, editDialog) {
+    Tine.widgets.customfields.Field.get = function (app, cfConfig, config, editDialog) {
         Tine.log.debug(cfConfig);
         
         if (! cfConfig) {
@@ -110,5 +139,6 @@ Tine.widgets.customfields.Field = {
             Tine.log.debug(e);
             Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
         }
-    }
-};
+    };
+
+Ext.reg('customfield', Tine.widgets.customfields.Field);

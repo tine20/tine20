@@ -20,12 +20,19 @@
 
 class Tinebase_Model_Converter_Json implements Tinebase_Model_Converter_Interface
 {
-
+    /**
+     * @param $blob
+     * @return mixed
+     */
     static public function convertToRecord($blob)
     {
-        return Zend_Json::decode($blob);
+        return Tinebase_Helper::jsonDecode($blob);
     }
 
+    /**
+     * @param $fieldValue
+     * @return string
+     */
     static public function convertToData($fieldValue)
     {
         if (is_null($fieldValue)) {

@@ -306,4 +306,191 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertGreaterThan(1, count($matches));
         $this->assertGreaterThanOrEqual(1, $matches[1], 'at least unittest user should have logged in once');
     }
+
+    /**
+     * test cleanNotes
+     */
+    public function testCleanNotes()
+    {
+        // initial clean... tests don't clean up properly
+        ob_start();
+        $this->_cli->cleanNotes();
+        $out = ob_get_clean();
+
+        $noteController = Tinebase_Notes::getInstance();
+        $models = Tinebase_Application::getInstance()->getModelsOfAllApplications();
+
+        $allNotes = $noteController->getAllNotes();
+        $dbArtifacts = $allNotes->count();
+
+        $notesCreated = 0;
+        $realDataNotes = 0;
+        foreach($models as $model) {
+            /** @var Tinebase_Record_Interface $instance */
+            $instance = new $model();
+            if ($instance->has('notes')) {
+
+                if (strpos($model, 'Tinebase') === 0) {
+                    continue;
+                }
+
+                //create dead notes for each of those models
+                $note = new Tinebase_Model_Note(array(
+                    'note_type_id' => 1,
+                    'note'  => 'test note text',
+                    'record_id' => Tinebase_Record_Abstract::generateUID(),
+                    'record_model' => $model,
+                ));
+
+                $noteController->addNote($note);
+                ++$notesCreated;
+            }
+        }
+
+        // add some real data
+        $contact = new Addressbook_Model_Contact(array(
+            'n_family' => 'someone',
+            'notes' => array(array(
+                'note_type_id' => 1,
+                'note'  => 'test note text for real record',
+            ))
+        ));
+        Addressbook_Controller_Contact::getInstance()->create($contact);
+        $realDataNotes += 2; //created and custom note
+
+        $event = new Calendar_Model_Event(array(
+            'organizer' => 'a@b.shooho',
+            'dtstart'   => '2015-01-01 00:00:00',
+            'dtend'     => '2015-01-01 01:00:00',
+            'summary'   => 'test event',
+            'notes' => array(array(
+                'note_type_id' => 1,
+                'note'  => 'test note text for real record',
+            ))
+        ));
+        Calendar_Controller_Event::getInstance()->create($event);
+        $realDataNotes += 2; //created and custom note
+
+        $allNotes = $noteController->getAllNotes();
+        $this->assertEquals($notesCreated + $realDataNotes + $dbArtifacts, $allNotes->count(), 'notes created and notes in DB mismatch');
+
+        ob_start();
+        $this->_cli->cleanNotes();
+        $out = ob_get_clean();
+
+        $this->assertTrue('' === $out, 'CLI job produced output: ' . $out);
+
+        $allNotes = $noteController->getAllNotes();
+        $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
+    }
+
+
+    /**
+     * test cleanCustomfields
+     */
+    public function testCleanCustomfields()
+    {
+        $customFieldController = Tinebase_CustomField::getInstance();
+        $models = Tinebase_Application::getInstance()->getModelsOfAllApplications();
+
+        $customFieldConfigs = $customFieldController->searchConfig();
+        foreach($customFieldConfigs as $customFieldConfig) {
+            $filter = new Tinebase_Model_CustomField_ValueFilter(array(
+                array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
+            ));
+            $customFieldValues = $customFieldController->search($filter);
+
+            $this->assertEquals(0, $customFieldValues->count(), 'custom field values found!');
+        }
+
+        $customFieldsCreated = 0;
+        $realDataCustomFields = 0;
+        foreach($models as $model) {
+            /** @var Tinebase_Record_Interface $instance */
+            $instance = new $model();
+            list($appName) = explode('_', $model);
+
+            if ($instance->has('customfields')) {
+
+                if (strpos($model, 'Tinebase') === 0) {
+                    continue;
+                }
+
+                $cf = $customFieldController->addCustomField(
+                    new Tinebase_Model_CustomField_Config(array(
+                        'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
+                        'model'             => $model,
+                        'name'              => $model,
+                        'definition'        => array(
+                            'label'             => $model,
+                            'length'            => 255,
+                            'required'          => false,
+                            'type'              => 'string',
+                        ),
+                    ))
+                );
+
+                //create dead customfield value for each of those models
+                $customFieldValue = new Tinebase_Model_CustomField_Value(array(
+                    'record_id' => Tinebase_Record_Abstract::generateUID(),
+                    'customfield_id' => $cf->getId(),
+                    'value' => 'shoo value',
+                ));
+
+                $customFieldController->saveCustomFieldValue($customFieldValue);
+                ++$customFieldsCreated;
+            }
+        }
+
+        // add some real data
+        $contact = new Addressbook_Model_Contact(array(
+            'n_family' => 'someone',
+            'customfields' => array(
+                'Addressbook_Model_Contact' => 'test customfield text for real record',
+            )
+        ));
+        Addressbook_Controller_Contact::getInstance()->create($contact);
+        $realDataCustomFields += 1;
+
+        $event = new Calendar_Model_Event(array(
+            'organizer' => 'a@b.shooho',
+            'dtstart'   => '2015-01-01 00:00:00',
+            'dtend'     => '2015-01-01 01:00:00',
+            'summary'   => 'test event',
+            'customfields' => array(
+                'Calendar_Model_Event' => 'test customfield text for real record',
+            )
+        ));
+        Calendar_Controller_Event::getInstance()->create($event);
+        $realDataCustomFields += 1;
+
+        $sum = 0;
+        $customFieldConfigs = $customFieldController->searchConfig();
+        foreach($customFieldConfigs as $customFieldConfig) {
+            $filter = new Tinebase_Model_CustomField_ValueFilter(array(
+                array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
+            ));
+            $customFieldValues = $customFieldController->search($filter);
+
+            $sum += $customFieldValues->count();
+        }
+        $this->assertEquals($customFieldsCreated + $realDataCustomFields, $sum, 'customfields created and customfields in DB mismatch');
+
+        ob_start();
+        $this->_cli->cleanCustomfields();
+        $out = ob_get_clean();
+
+        $this->assertTrue('' === $out, 'CLI job produced output: ' . $out);
+
+        $sum = 0;
+        foreach($customFieldConfigs as $customFieldConfig) {
+            $filter = new Tinebase_Model_CustomField_ValueFilter(array(
+                array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
+            ));
+            $customFieldValues = $customFieldController->search($filter);
+
+            $sum += $customFieldValues->count();
+        }
+        $this->assertEquals($realDataCustomFields, $sum, 'customfields not completely cleaned');
+    }
 }

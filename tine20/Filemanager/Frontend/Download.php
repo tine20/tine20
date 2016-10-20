@@ -162,6 +162,8 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         if ($path !== null) {
             $view->path = (empty($path)) ? '/' . $node->name : '/' . implode('/', $path);
         }
+        
+        return $view;
     }
     
     /**

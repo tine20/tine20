@@ -570,4 +570,33 @@ class Tinebase_Application
         
         return $this->_db;
     }
+
+    /**
+     * returns the Models of all installed applications
+     * uses Tinebase_Application::getApplicationsByState
+     * and Tinebase_Controller_Abstract::getModels
+     *
+     * @return array
+     */
+    public function getModelsOfAllApplications()
+    {
+        $models = array();
+
+        $apps = $this->getApplicationsByState(Tinebase_Application::ENABLED);
+
+        /** @var Tinebase_Model_Application $app */
+        foreach($apps as $app) {
+            $controllerClass = $app->name . '_Controller';
+            if (!class_exists(($controllerClass))) {
+                continue;
+            }
+
+            $appModels = $controllerClass::getInstance()->getModels();
+            if (is_array($appModels)) {
+                $models = array_merge($models, $appModels);
+            }
+        }
+
+        return $models;
+    }
 }

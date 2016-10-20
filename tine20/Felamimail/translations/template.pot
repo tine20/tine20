@@ -70,12 +70,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:79 js/GridPanel.js:321
+#: js/MessageDisplayDialog.js:79 js/GridPanel.js:332
 msgid "Print Message"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1348
-#: js/GridPanel.js:1364
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:324 js/GridPanel.js:1502
+#: js/GridPanel.js:1518
 msgid "Print Preview"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr ""
 
-#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:168 js/GridPanel.js:488
+#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:168 js/GridPanel.js:496
 msgid "From (Email)"
 msgstr ""
 
@@ -224,12 +224,12 @@ msgid "To (Email CC)"
 msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:167 js/MessageEditDialog.js:1202 js/GridPanel.js:482
+#: js/Model.js:167 js/MessageEditDialog.js:1210 js/GridPanel.js:490
 #: Controller/Message/Send.php:295
 msgid "Subject"
 msgstr ""
 
-#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:537
+#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:545
 msgid "Size"
 msgstr ""
 
@@ -321,7 +321,7 @@ msgstr[1] ""
 msgid "Message not available."
 msgstr ""
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1079
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:1087
 msgid "From"
 msgstr ""
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Show or hide header information"
 msgstr ""
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:1012 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:1020 js/GridPanel.js:476
 msgid "Attachments"
 msgstr ""
 
@@ -349,7 +349,7 @@ msgstr ""
 msgid "Compose email"
 msgstr ""
 
-#: js/GridPanelHook.js:49 js/Model.js:170 js/GridPanel.js:507
+#: js/GridPanelHook.js:49 js/Model.js:170 js/GridPanel.js:515
 msgid "To"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgstr ""
 
 #: js/FolderFilterModel.js:30 js/TreeContextMenu.js:64
 #: js/TreeContextMenu.js:67 js/TreeContextMenu.js:70 js/Model.js:56
-#: js/Model.js:539 js/GridPanel.js:529
+#: js/Model.js:544 js/GridPanel.js:537
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -449,7 +449,7 @@ msgstr[1] ""
 msgid "Subject/From"
 msgstr ""
 
-#: js/Model.js:169 js/GridPanel.js:494
+#: js/Model.js:169 js/GridPanel.js:502
 msgid "From (Name)"
 msgstr ""
 
@@ -461,75 +461,75 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
-#: js/Model.js:173 js/GridPanel.js:475
+#: js/Model.js:173 js/GridPanel.js:483
 msgid "Flags"
 msgstr ""
 
-#: js/Model.js:176 js/GridPanel.js:522
+#: js/Model.js:176 js/GridPanel.js:530
 msgid "Received"
 msgstr ""
 
-#: js/Model.js:399 js/AccountEditDialog.js:117
+#: js/Model.js:404 js/AccountEditDialog.js:117
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:402
+#: js/Model.js:407
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "INBOX"
 msgstr ""
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:533 js/GridPanel.js:514
+#: js/Model.js:538 js/GridPanel.js:522
 msgid "Sent"
 msgstr ""
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Templates"
 msgstr ""
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Junk"
 msgstr ""
 
-#: js/Model.js:533
+#: js/Model.js:538
 msgid "Trash"
 msgstr ""
 
-#: js/Model.js:542 js/Model.js:662 js/Model.js:728
+#: js/Model.js:547 js/Model.js:667 js/Model.js:733
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:659
+#: js/Model.js:664
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:725
+#: js/Model.js:730
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:852
+#: js/Model.js:857
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:855
+#: js/Model.js:860
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] ""
@@ -607,7 +607,7 @@ msgstr ""
 msgid "{0} account setting empty."
 msgstr ""
 
-#: js/MessageEditDialog.js:781 js/MessageEditDialog.js:1246
+#: js/MessageEditDialog.js:781 js/MessageEditDialog.js:1254
 msgid "Files are still uploading."
 msgstr ""
 
@@ -620,24 +620,24 @@ msgstr ""
 msgid "Original message"
 msgstr ""
 
-#: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1212
+#: js/MessageEditDialog.js:939 js/MessageEditDialog.js:1220
 msgid "Compose email:"
 msgstr ""
 
-#: js/MessageEditDialog.js:1156
+#: js/MessageEditDialog.js:1164
 msgid "Convert to formated text"
 msgstr ""
 
-#: js/MessageEditDialog.js:1162 js/MessageEditDialog.js:1169
+#: js/MessageEditDialog.js:1170 js/MessageEditDialog.js:1177
 #: Controller/Message/Send.php:295
 msgid "Body"
 msgstr ""
 
-#: js/MessageEditDialog.js:1271
+#: js/MessageEditDialog.js:1279
 msgid "Empty subject"
 msgstr ""
 
-#: js/MessageEditDialog.js:1272
+#: js/MessageEditDialog.js:1280
 msgid "Do you really want to send a message with an empty subject?"
 msgstr ""
 
@@ -680,11 +680,11 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: js/FolderSelectPanel.js:75
+#: js/FolderSelectPanel.js:75 js/GridPanel.js:783
 msgid "Cancel"
 msgstr ""
 
-#: js/FolderSelectPanel.js:84
+#: js/FolderSelectPanel.js:84 js/GridPanel.js:791
 msgid "Ok"
 msgstr ""
 
@@ -717,52 +717,60 @@ msgstr ""
 msgid "Mark read/unread"
 msgstr ""
 
-#: js/GridPanel.js:305
+#: js/GridPanel.js:307
+msgid "File Message"
+msgstr ""
+
+#: js/GridPanel.js:316
 msgid "Add Account"
 msgstr ""
 
-#: js/GridPanel.js:461
+#: js/GridPanel.js:469
 msgid "Id"
 msgstr ""
 
-#: js/GridPanel.js:500
+#: js/GridPanel.js:508
 msgid "Sender"
 msgstr ""
 
-#: js/GridPanel.js:577 Controller/Message/Flags.php:25
+#: js/GridPanel.js:585 Controller/Message/Flags.php:25
 msgid "Answered"
 msgstr ""
 
-#: js/GridPanel.js:580
+#: js/GridPanel.js:588
 msgid "Forwarded"
 msgstr ""
 
-#: js/GridPanel.js:583
+#: js/GridPanel.js:591
 msgid "Tine20"
 msgstr ""
 
-#: js/GridPanel.js:586
+#: js/GridPanel.js:594
 msgid "Recent"
 msgstr ""
 
-#: js/GridPanel.js:968
+#: js/GridPanel.js:775
+msgid "File Messages To Folder"
+msgstr ""
+
+#: js/GridPanel.js:1122
 msgid "Send Reading Confirmation"
 msgstr ""
 
-#: js/GridPanel.js:969
+#: js/GridPanel.js:1123
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
-#: js/GridPanel.js:1193
+#: js/GridPanel.js:1347
 #, python-brace-format
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1201
+#: js/GridPanel.js:1355
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1202
+#: js/GridPanel.js:1356
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr ""
@@ -1148,49 +1156,53 @@ msgid ""
 "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
 msgstr ""
 
-#: Config.php:60
+#: Config.php:67
 msgid "Vacation Templates Container ID"
 msgstr ""
 
-#: Config.php:69
+#: Config.php:76
 msgid "Custom Vacation Message"
 msgstr ""
 
-#: Config.php:71
+#: Config.php:78
 msgid "User is allowed to set custom vacation message for system account"
 msgstr ""
 
-#: Config.php:80
+#: Config.php:87
 msgid "Cache email body"
 msgstr ""
 
-#: Config.php:82
+#: Config.php:89
 msgid ""
 "Should the email body be cached (recommended for slow IMAP server "
 "connections)"
 msgstr ""
 
-#: Config.php:91
+#: Config.php:98
+msgid "Delete Archived Mail"
+msgstr ""
+
+#: Config.php:108
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:93
+#: Config.php:110
 msgid "Enabled features in Felamimail application."
 msgstr ""
 
-#: Config.php:100
+#: Config.php:117
 msgid "Tine 2.0 Flag"
 msgstr ""
 
-#: Config.php:101
+#: Config.php:118
 msgid "Add a Tine 2.0 flag to sent messages"
 msgstr ""
 
-#: Config.php:109
+#: Config.php:126
 msgid "Filter E-Mail URIs"
 msgstr ""
 
-#: Config.php:111
+#: Config.php:128
 msgid ""
 "Should the email body uris be filtered. Only anchors with URIs are allowed "
 "if this is turned on.)"
