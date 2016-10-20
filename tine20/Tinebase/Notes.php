@@ -666,5 +666,43 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         $this->_noteTypesTable->delete($this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_noteTypeId));
     }
-    
+
+    /**
+     * get all Notes, including deleted ones, no ACL check
+     *
+     * @ param boolean $ignoreACL
+     * @ param boolean $getDeleted
+     * @return Tinebase_Record_RecordSet subtype Tinebase_Model_Note
+     */
+    public function getAllNotes()
+    {
+        $select = $this->_db->select()
+            ->from(array('notes' => SQL_TABLE_PREFIX . 'notes'))
+            //->where($this->_db->quoteIdentifier('is_deleted') . ' = 0')
+            ;
+
+        /*if (! $ignoreACL) {
+            $this->_checkFilterACL($_filter);
+        }*/
+
+        //Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $_filter, $this);
+
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
+
+        return $result;
+    }
+
+    /**
+     * permanently delete notes by id
+     *
+     * @param array $_ids
+     * @return int
+     */
+    public function purgeNotes(array $_ids)
+    {
+        return $this->_db->delete(SQL_TABLE_PREFIX . 'notes', $this->_db->quoteInto('id IN (?)', $_ids));
+    }
 }

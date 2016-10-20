@@ -522,6 +522,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
         $this->_wednesday2week->addWeek(1);
         $this->_friday2week = clone $this->_nextFriday;
         $this->_friday2week->addWeek(1);
+
+
     }
 
     /**

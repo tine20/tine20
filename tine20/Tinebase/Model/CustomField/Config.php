@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -14,6 +14,13 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @property    string      id
+ * @property    string      application_id
+ * @property    string      model
+ * @property    string      name
+ * @property    string      definition
+ * @property    string      account_grants
  */
 class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract 
 {
@@ -58,8 +65,9 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
     }
     
     /**
-     * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract.php::setFromArray()
+     * @param array $_data
+     * @return array
      */
     public function setFromArray(array $_data)
     {

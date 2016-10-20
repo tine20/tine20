@@ -406,7 +406,9 @@ abstract class Tinebase_Model_Filter_Abstract
         $returnValue = str_replace(array('*', '_'),  $this->_dbCommand->setDatabaseJokerCharacters(), $value);
 
         // add wildcard to value according to operator
-        $returnValue = str_replace('?', $returnValue, $action['wildcards']);
+        if (isset($action['wildcards'])) {
+            $returnValue = str_replace('?', $returnValue, $action['wildcards']);
+        }
 
         return $returnValue;
     }
