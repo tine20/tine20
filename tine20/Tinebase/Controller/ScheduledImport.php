@@ -150,8 +150,8 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     protected function _getFileToImport($source)
     {
         if (strpos($source, 'http') === 0) {
-            $client = new Zend_Http_Client($source);
             try {
+                $client = new Zend_Http_Client($source);
                 $requestBody = $client->request()->getBody();
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
