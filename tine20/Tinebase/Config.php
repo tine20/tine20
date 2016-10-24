@@ -611,9 +611,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Use of external Geolocation services is allowed.')
             'description'           => 'Use of external Geolocation services is allowed.',
             'type'                  => 'bool',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => FALSE,
-            'setBySetupModule'      => TRUE,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+            'default'               => true,
         ),
         self::LDAP_DISABLE_TLSREQCERT => array(
                                    //_('Disable LDAP TLS Certificate Check')
