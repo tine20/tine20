@@ -441,7 +441,7 @@ class Tinebase_ApplicationTest extends TestCase
         );
 
         // remove bogus apps
-        $remove = array('Voipmanager', 'RequestTracker', 'Sipgate', 'Expressodriver');
+        $remove = array('Voipmanager', 'RequestTracker', 'Sipgate', 'Expressodriver', 'MailFiler');
         foreach($remove as $r)
         {
             if (($key = array_search($r, $appNames)) !== false) {

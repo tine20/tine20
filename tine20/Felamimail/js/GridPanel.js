@@ -800,7 +800,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         // TODO use stat path???
                         var folder = this.folderCombo.getStore().getById(this.folderCombo.getValue()),
                             path = folder ? folder.get('path') : null,
-                            appName = this.fileAppCombo.getValue();
+                            appName = this.fileAppCombo
+                                        ? this.fileAppCombo.getValue()
+                                        : (Tine.Tinebase.common.hasRight('run', 'MailFiler') ? 'MailFiler' : 'Filemanager');
                         if (path) {
                             this.fileRecords(appName, path);
                             fileRecordsWin.close();
