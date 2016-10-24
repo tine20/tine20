@@ -745,7 +745,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
 
     public function saveCustomFieldValue(Tinebase_Model_CustomField_Value $_record)
     {
-        if (!empty($_record->getId())) {
+        $recordId = $_record->getId();
+        if (! empty($recordId)) {
             return $this->_backendValue->update($_record);
         }
         return $this->_backendValue->create($_record);
