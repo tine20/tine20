@@ -6,7 +6,7 @@
  * @subpackage  Sieve
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -78,7 +78,20 @@ class Felamimail_Sieve_Rule_Action
             case self::DISCARD:
                 return "    $this->_type;";
                 break;
-                
+
+            case self::REDIRECT:
+                if (is_array($this->_argument)) {
+                    if (isset($this->_argument['copy']) && $this->_argument['copy'] == 1) {
+                        $argument = $this->_quoteString($this->_argument['emails']);
+                        return "    $this->_type :copy $argument;";
+                    } else {
+                        $argument = $this->_quoteString($this->_argument['emails']);
+                        return "    $this->_type $argument;";
+                    }
+
+                    break;
+                }
+
             default:
                 $argument = $this->_quoteString($this->_argument);
                 return "    $this->_type $argument;";
