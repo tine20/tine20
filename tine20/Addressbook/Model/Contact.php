@@ -235,6 +235,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
         ),
         'paths'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'syncBackendIds'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

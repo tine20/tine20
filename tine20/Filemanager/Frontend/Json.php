@@ -36,7 +36,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchNodes($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_Node_Filter');
+        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Filemanager_Model_NodeFilter');
         $this->_removeAppIdFromPathFilter($result);
         
         return $result;

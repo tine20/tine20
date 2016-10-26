@@ -72,17 +72,9 @@ class Phone_Controller_Call extends Tinebase_Controller_Record_Abstract
             $controller = Addressbook_Controller_Contact::getInstance();
             $contacts = $controller->search($filter);
 
-            $relations = $_record->relations;
-            foreach ($contacts as $contact) {
-                $relations[] = array(
-                    'related_model' => 'Addressbook_Model_Contact',
-                    'related_id' => $contact->getId(),
-                    'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'type' => 'CALLER',
-                );
+            if ($contacts->count() > 0) {
+                $_record->contact_id = $contacts->getFirstRecord()->getId();
             }
-            $_record->relations = $relations;
         }
     }
 

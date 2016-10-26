@@ -266,9 +266,8 @@ class Tinebase_GroupTest extends TestCase
         ));
         $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($testUser);
         $testUser->contact_id = $contact->getId();
-        $testUser = Tinebase_User::getInstance()->addUserInSqlBackend($testUser);
-        
-        Tinebase_User::createContactForSyncedUser($testUser);
+        $testUser = Tinebase_User::getInstance()->addUser($testUser);
+
         Tinebase_User::getInstance()->updateUserInSqlBackend($testUser);
         
         $this->testSetGroupMembers($testGroup, array($testUser->accountId));

@@ -84,11 +84,16 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if (isset($this->_options['own_model'])) {
+            $ownModel = $this->_options['own_model'];
+        } else {
+            $ownModel = $_backend->getModelName();
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
-            . 'Adding Relation filter: ' . $_backend->getModelName() . ' <-> ' . $this->_options['related_model']);
+            . 'Adding Relation filter: ' . $ownModel . ' <-> ' . $this->_options['related_model']);
         
         $this->_resolveForeignIds();
-        $ownIds = $this->_getOwnIds($_backend->getModelName());
+        $ownIds = $this->_getOwnIds($ownModel);
         
         $idField = (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options)) ? $this->_options['idProperty'] : 'id';
         $db = $_backend->getAdapter();

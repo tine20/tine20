@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>10.0</version>
+    <version>10.1</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>20</version>
+            <version>21</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -458,6 +458,11 @@
                     <length>128</length>
                     <notnull>true</notnull>
                     <default>contact</default>
+                </field>
+                <field>
+                    <name>syncBackendIds</name>
+                    <type>text</type>
+                    <length>16000</length>
                 </field>
                 <index>
                     <name>id</name>

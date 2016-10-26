@@ -16,7 +16,7 @@ class Phone_Call_ControllerTest extends TestCase
     /**
      * @see 0011934: show contacts in phone call grid
      */
-    public function testContactRelation()
+    public function testContactId()
     {
         $phoneNumber = '0406437435';
         $myContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
@@ -32,7 +32,7 @@ class Phone_Call_ControllerTest extends TestCase
         ));
         $call = Phone_Controller_Call::getInstance()->create($call);
 
-        $this->assertEquals(1, count($call->relations), 'my contact should be added as relation to the call' . print_r($call->toArray(), true));
-        $this->assertEquals($myContact->getId(), $call->relations->getFirstRecord()->related_id);
+        $this->assertTrue(isset($call->contact_id));
+        $this->assertEquals($myContact->getId(), $call->contact_id);
     }
 }
