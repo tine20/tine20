@@ -94,6 +94,10 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
         $this->_rules = array();
         foreach ($ruleRecords as $ruleRecord) {
             $ruleRecord->conditions = Zend_Json::decode($ruleRecord->conditions);
+            if (Tinebase_Helper::is_json($ruleRecord->action_argument)) {
+                $ruleRecord->action_argument = Zend_Json::decode($ruleRecord->action_argument);
+            }
+
             $this->_rules[] = $ruleRecord->getFSR();
         }
     }
@@ -159,6 +163,9 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
                 $ruleRecord->setFromFSR($rule);
                 $ruleRecord->account_id = $this->_accountId;
                 $ruleRecord->conditions = Zend_Json::encode($ruleRecord->conditions);
+                if (is_array($ruleRecord->action_argument)) {
+                    $ruleRecord->action_argument = Zend_Json::encode($ruleRecord->action_argument);
+                }
                 $this->_rulesBackend->create($ruleRecord);
             }
             
