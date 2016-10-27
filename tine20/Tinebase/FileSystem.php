@@ -975,7 +975,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * search tree nodes
      *
-     * TODO replace searchNodes
+     * TODO replace searchNodes / or refactor this - tree objects has no search function yet / might be ambiguous...
      *
      * @param Tinebase_Model_Tree_Node_Filter $_filter
      * @param Tinebase_Record_Interface $_pagination
