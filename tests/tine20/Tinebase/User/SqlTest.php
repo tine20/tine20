@@ -68,7 +68,7 @@ class Tinebase_User_SqlTest extends TestCase
         $this->objects['users']['addedUser'] = $this->_backend->addUser($testUser);
         
         $this->assertEquals($testUser->getId(),      $this->objects['users']['addedUser']->getId());
-        $this->assertEquals('displayed',             $this->objects['users']['addedUser']->visibility);
+        $this->assertEquals('hidden',                $this->objects['users']['addedUser']->visibility);
         $this->assertEquals('Tinebase_Model_FullUser', get_class($testUser), 'wrong type');
         
         return $this->objects['users']['addedUser'];
@@ -134,7 +134,7 @@ class Tinebase_User_SqlTest extends TestCase
         $user = $this->_backend->updateUser($testUser);
         
         $this->assertEquals($user->accountLoginName, $user->accountLoginName);
-        $this->assertEquals('displayed',             $user->visibility);
+        $this->assertEquals('hidden',                $user->visibility);
         $this->assertEquals('disabled',              $user->accountStatus);
     }
     
@@ -334,7 +334,7 @@ class Tinebase_User_SqlTest extends TestCase
             'summary' => 'testevent',
             'dtstart' => '2015-12-24 12:00:00',
             'dtend' => '2015-12-24 13:00:00',
-            'organizer' => $testUser->accountEmailAddress,
+//            'organizer' => $testUser->conta
         ), true));
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_given' => 'testcontact'

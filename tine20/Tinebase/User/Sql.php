@@ -87,41 +87,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
 
     /**
-     * registerPlugin
+     * registerPlugins
      * 
-     * @param Tinebase_User_Plugin_Interface $plugin
+     * @param array $plugins
      */
-    public function registerPlugin(Tinebase_User_Plugin_Interface $plugin)
+    public function registerPlugins($plugins)
     {
-        parent::registerPlugin($plugin);
-
-        if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
-            $className = get_class($plugin);
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Registering " . $className . ' SQL plugin.');
-
-            $this->_sqlPlugins[$className] = $plugin;
-        }
-    }
-
-    public function removePlugin($plugin)
-    {
-        $result = parent::removePlugin($plugin);
-
-        if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
-            $className = get_class($plugin);
-            if (isset($this->_sqlPlugins[$className])) {
-
+        parent::registerPlugins($plugins);
+        
+        foreach ($this->_plugins as $plugin) {
+            if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Removing " . $className . ' SQL plugin.');
-
-                $result = $this->_sqlPlugins[$className];
-                unset($this->_sqlPlugins[$className]);
+                    . " Registering " . get_class($plugin) . ' SQL plugin.');
+                $this->_sqlPlugins[] = $plugin;
             }
         }
-
-        return $result;
     }
     
     /**
@@ -775,21 +755,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_user)
     {
-        $visibility = $_user->visibility;
-
         if($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->updateUserInSyncBackend($_user);
         }
         
         $updatedUser = $this->updateUserInSqlBackend($_user);
         $this->updatePluginUser($updatedUser, $_user);
-
-        $contactId = $updatedUser->contact_id;
-        if (!empty($visibility) && !empty($contactId) && $visibility != $updatedUser->visibility) {
-            $updatedUser->visibility = $visibility;
-            $updatedUser = $this->updateUserInSqlBackend($updatedUser);
-            $this->updatePluginUser($updatedUser, $_user);
-        }
         
         return $updatedUser;
     }
@@ -873,8 +844,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUser(Tinebase_Model_FullUser $_user)
     {
-        $visibility = $_user->visibility;
-
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
             $userFromSyncBackend = $this->addUserToSyncBackend($_user);
             if ($userFromSyncBackend !== NULL) {
@@ -882,16 +851,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $_user->setId($userFromSyncBackend->getId());
             }
         }
-
+        
         $addedUser = $this->addUserInSqlBackend($_user);
         $this->addPluginUser($addedUser, $_user);
-
-        $contactId = $addedUser->contact_id;
-        if (!empty($visibility) && !empty($contactId) && $visibility != $addedUser->visibility) {
-            $addedUser->visibility = $visibility;
-            $addedUser = $this->updateUserInSqlBackend($addedUser);
-            $this->updatePluginUser($addedUser, $_user);
-        }
         
         return $addedUser;
     }
@@ -927,10 +889,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $userId = $_user->generateUID();
             $_user->setId($userId);
         }
-
-        $contactId = $_user->contact_id;
-        if (empty($contactId)) {
-            $_user->visibility = Tinebase_Model_FullUser::VISIBILITY_HIDDEN;
+        
+        if (empty($_user->contact_id)) {
+            $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
         

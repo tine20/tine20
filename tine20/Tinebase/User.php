@@ -189,9 +189,7 @@ class Tinebase_User
         //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
         //    . print_r($options, TRUE));
         
-        $options['plugins'] = array(
-            Addressbook_Controller_Contact::getInstance(),
-        );
+        $options['plugins'] = array();
         
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
@@ -439,16 +437,7 @@ class Tinebase_User
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
-
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
-            $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
-            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-            if (null !== $plugin) {
-                Tinebase_User::getInstance()->registerPlugin($plugin);
-            }
-        }
-
+        
         $userBackend  = Tinebase_User::getInstance();
         if (isset($options['ldapplugins']) && is_array($options['ldapplugins'])) {
             foreach ($options['ldapplugins'] as $plugin) {
@@ -472,9 +461,6 @@ class Tinebase_User
         self::getPrimaryGroupForUser($user);
 
         try {
-
-            // this will Tinebase_User::getInstance()->updatePluginUser
-            // the addressbook is registered as a plugin
             $syncedUser = self::_syncDataAndUpdateUser($user, $options);
 
         } catch (Tinebase_Exception_NotFound $ten) {
@@ -486,24 +472,16 @@ class Tinebase_User
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
             }
-
-            $visibility = $user->visibility;
-            if ($visibility === null) {
-                $visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
+            
+            if ($user->visibility !== Tinebase_Model_FullUser::VISIBILITY_HIDDEN) {
+                self::createContactForSyncedUser($user);
             }
-
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
             $syncedUser = $userBackend->addUserInSqlBackend($user);
-            // the addressbook is registered as a plugin and will take care of the create
             $userBackend->addPluginUser($syncedUser, $user);
-
-            $contactId = $syncedUser->contact_id;
-            if (!empty($contactId) && $visibility != $syncedUser->visibility) {
-                $syncedUser->visibility = $visibility;
-                $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
-                Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
-            }
         }
+        
+        self::syncContactData($syncedUser, $options);
         
         Tinebase_Group::syncMemberships($syncedUser);
 
@@ -536,6 +514,13 @@ class Tinebase_User
             }
         }
 
+        if (! empty($user->visibility) && $currentUser->visibility !== $user->visibility) {
+            $currentUser->visibility            = $user->visibility;
+            if (empty($currentUser->contact_id) && $currentUser->visibility == Tinebase_Model_FullUser::VISIBILITY_DISPLAYED) {
+                self::createContactForSyncedUser($currentUser);
+            }
+        }
+
         if ($recordNeedsUpdate) {
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
             $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
@@ -545,11 +530,89 @@ class Tinebase_User
         if (! empty($user->container_id)) {
             $syncedUser->container_id = $user->container_id;
         }
-
-        // Addressbook is registered as plugin and will take care of the update
         Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
 
         return $syncedUser;
+    }
+
+    /**
+     * import contact data(phone, address, fax, birthday. photo)
+     * 
+     * @param Tinebase_Model_FullUser $syncedUser
+     * @param array $options
+     */
+    public static function syncContactData($syncedUser, $options)
+    {
+        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true)
+                || ! isset($options['syncContactData'])
+                || ! $options['syncContactData']
+                || ! Tinebase_Application::getInstance()->isInstalled('Addressbook')
+                ||   $syncedUser->visibility === Tinebase_Model_FullUser::VISIBILITY_HIDDEN
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Contact data sync disabled');
+            return;
+        }
+        
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+
+        try {
+            $contact = $addressbook->getByUserId($syncedUser->getId());
+            $originalContact = clone $contact;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' user: ' .print_r($syncedUser->toArray(), true));
+
+            Tinebase_User::getInstance()->updateContactFromSyncBackend($syncedUser, $contact);
+            $contact = self::_user2Contact($syncedUser, $contact);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' new contact: ' . print_r($contact->toArray(), true)
+                . ' orig contact:' . print_r($originalContact->toArray(), true));
+
+            if (isset($options['syncContactPhoto']) && $options['syncContactPhoto']) {
+                $syncPhoto = true;
+                if ($originalContact->jpegphoto == 1) {
+                    // TODO use generic function with ignoreAcl ...
+                    //$originalContact->jpegphoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $originalContact->getId())->getBlob();
+                    $adb = new Addressbook_Backend_Sql();
+                    $originalContact->jpegphoto = $adb->getImage($originalContact->getId());
+                }
+                if ($contact->jpegphoto == 1) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Removing/unset current jpegphoto');
+                    $contact->jpegphoto = false;
+                }
+            } else {
+                $syncPhoto = false;
+            }
+            $diff = $contact->diff($originalContact, $syncPhoto ? array('n_fn') : array('jpegphoto', 'n_fn'));
+            if (! $diff->isEmpty() || ($originalContact->jpegphoto === 0 && ! empty($contact->jpegphoto)) ) {
+                // add modlog info
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+                if ($contact->container_id !== null) {
+                    Tinebase_Container::getInstance()->increaseContentSequence($contact->container_id);
+                }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating contact data for user ' . $syncedUser->accountLoginName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Diff: ' . print_r($diff->toArray(), true));
+
+                $addressbook->update($contact);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User contact is up to date.');
+            }
+        } catch (Addressbook_Exception_NotFound $aenf) {
+            self::createContactForSyncedUser($syncedUser);
+            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
+
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Contact information seems to be missing in sync backend');
+            Tinebase_Exception::log($tenf);
+        }
     }
     
     /**
@@ -621,13 +684,38 @@ class Tinebase_User
     }
     
     /**
+     * create contact in addressbook
+     * 
+     * @param Tinebase_Model_FullUser $user
+     */
+    public static function createContactForSyncedUser($user)
+    {
+        if (! Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+            return;
+        }
+        
+        $contact = self::_user2Contact($user);
+        
+        // add modlog info
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+        
+        $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contact = $addressbook->create($contact);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " Added contact " . $contact->n_given);
+        
+        $user->contact_id = $contact->getId();
+    }
+    
+    /**
      * sync user data to contact
      * 
      * @param Tinebase_Model_FullUser $user
      * @param Addressbook_Model_Contact $contact
      * @return Addressbook_Model_Contact
      */
-    public static function user2Contact($user, $contact = null)
+    protected static function _user2Contact($user, $contact = null)
     {
         if ($contact === null) {
             $contact = new Addressbook_Model_Contact(array(), true);
@@ -653,8 +741,6 @@ class Tinebase_User
             // use accountFullName overwrites contact n_fn
             $contact->n_fn = $user->accountFullName;
         }
-
-        $contact->account_id = $user->getId();
         
         return $contact;
     }
@@ -668,22 +754,6 @@ class Tinebase_User
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             .' Start synchronizing users with options ' . print_r($options, true));
-
-        $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
-        $oldRequestContext = Addressbook_Controller_Contact::getInstance()->getRequestContext();
-        $removedPlugin = null;
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true)
-            || ! isset($options['syncContactData'])
-            || ! $options['syncContactData']) {
-
-            $removedPlugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
-        }
-
-        $requestContext = array();
-        if (!isset($options['syncContactPhoto']) || !$options['syncContactPhoto']) {
-            $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_PHOTO] = true;
-        }
-        Addressbook_Controller_Contact::getInstance()->setRequestContext($requestContext);
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
@@ -703,13 +773,6 @@ class Tinebase_User
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
             self::_syncDeletedUsers($users);
         }
-
-        if (null !== $removedPlugin) {
-            Tinebase_User::getInstance()->registerPlugin($removedPlugin);
-        }
-
-        Addressbook_Controller_Contact::getInstance()->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
-        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
@@ -750,10 +813,8 @@ class Tinebase_User
                 // TODO make time span configurable?
                 if ($user->accountExpires->isEarlier($now->subYear(1))) {
                     // if he or she is already expired longer than configured expiry, we remove them!
-                    // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
                     Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
 
-                    // now we make the addressbook hard delete, which is ok, because we went through the addressbook_controller_contact::delete already
                     if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' Deleting user contact of ' . $user->accountLoginName);
@@ -834,28 +895,6 @@ class Tinebase_User
         if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'])) {
             throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.', 503);
         }
-
-        $addressBookController = Addressbook_Controller_Contact::getInstance();
-
-        // make sure we have a setup user:
-        // remove plugin, create setup user if required, register it again
-        Tinebase_User::getInstance()->removePlugin($addressBookController);
-        $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-        if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
-            Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-        }
-        Tinebase_User::getInstance()->registerPlugin($addressBookController);
-
-
-        $oldAcl = $addressBookController->doContainerACLChecks(false);
-        $oldRequestContext = $addressBookController->getRequestContext();
-        $requestContext = array(
-            Addressbook_Controller_Contact::CONTEXT_ALLOW_CREATE_USER => true,
-            Addressbook_Controller_Contact::CONTEXT_NO_ACCOUNT_UPDATE => true,
-        );
-        $addressBookController->setRequestContext($requestContext);
-
-
         
         $adminLoginName     = $_options['adminLoginName'];
         $adminPassword      = $_options['adminPassword'];
@@ -897,8 +936,6 @@ class Tinebase_User
             $userBackend->getUserByProperty('accountLoginName', $adminLoginName);
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'update');
             $user = $userBackend->updateUserInSqlBackend($user);
-            // Addressbook is registered as plugin and will take care of the update
-            Tinebase_User::getInstance()->updatePluginUser($user, $user);
         } catch (Tinebase_Exception_NotFound $ten) {
             // call addUser here to make sure, sql user plugins (email, ...) are triggered
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
@@ -914,8 +951,5 @@ class Tinebase_User
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
         Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
-
-        $addressBookController->doContainerACLChecks($oldAcl);
-        $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
     }
 }
