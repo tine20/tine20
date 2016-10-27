@@ -223,4 +223,14 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         return $imageData;
     }
+
+    public function updateSyncBackendIds($_contactId, $_syncBackendIds)
+    {
+        $where  = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_contactId),
+        );
+        $this->_db->update($this->_tablePrefix . 'addressbook', array(
+            'syncBackendIds'         => $_syncBackendIds
+        ), $where);
+    }
 }

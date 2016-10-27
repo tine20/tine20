@@ -1007,7 +1007,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             if (isset($_userData[$ldapKey])) {
                 switch ($tineKey) {
                     case 'bday':
-                        $_contact->$tineKey = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0]);
+                        $origBday = $_contact->$tineKey;
+                        if (!empty($origBday)) {
+                            $_contact->$tineKey = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0])->
+                                setHour($origBday->getHour())->setMinute($origBday->getMinute())->setSecond($origBday->getSecond());
+                        } else {
+                            $_contact->$tineKey = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0]);
+                        }
                         break;
                     default:
                         $_contact->$tineKey = $_userData[$ldapKey][0];

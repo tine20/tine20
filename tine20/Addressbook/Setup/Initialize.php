@@ -32,6 +32,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
+        parent::createInitialRights($_application);
+
         $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
         
         if (Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
@@ -53,21 +55,19 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         
         parent::_initialize($_application, $_options);
     }
-    
+
     /**
-     * init/create user contacts
+     * create inital rights
+     *
+     * @param Tinebase_Application $application
+     * @return void
      */
-    protected function _initializeUserContacts()
+    public static function createInitialRights(Tinebase_Model_Application $_application)
     {
-        foreach (Tinebase_User::getInstance()->getFullUsers() as $fullUser) {
-            $fullUser->container_id = $this->_getInternalAddressbook()->getId();
-            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($fullUser);
-            
-            $fullUser->contact_id = $contact->getId();
-            Tinebase_User::getInstance()->updateUser($fullUser);
-        }
+        // we do nothing to work our way through the jungle here
+        // we call parent::createInitialRights at the time we like it in _initialize
     }
-    
+
     /**
      * returns internal addressbook
      * 
