@@ -95,7 +95,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
             $relationBackend->purgeRelationsByType('CALLER');
         }
 
-        $setupUser = self::getSetupFromConfigOrCreateOnTheFly();
+        $setupUser = $this->_getSetupFromConfigOrCreateOnTheFly();
 
         if ($setupUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
