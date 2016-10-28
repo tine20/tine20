@@ -220,7 +220,8 @@ class Tinebase_Core
         // check transaction header
         if ($request->getHeaders()->has('X-TINE20-TRANSACTIONID')) {
             $transactionId = $request->getHeaders()->get('X-TINE20-TRANSACTIONID')->getFieldValue();
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Client transaction $transactionId");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Client transaction $transactionId");
             Tinebase_Log_Formatter::setPrefix(substr($transactionId, 0, 5));
         }
         
@@ -668,7 +669,8 @@ class Tinebase_Core
         
         self::set(self::LOGGER, $logger);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized.'
+            . (isset($writer) ? ' Writer: ' . get_class($writer) : ''));
         if (isset($config->logger) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
             .' Logger settings: ' . print_r($config->logger->toArray(), TRUE));
     }
@@ -695,10 +697,21 @@ class Tinebase_Core
             }
         }
 
+        $backendOptions = array();
+
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
-            $logging = ($config->caching->logging) ? $config->caching->logging : false;
-            $logger = self::getLogger();
+            $logging = isset($config->caching->logging) ? $config->caching->logging : false;
+
+            if ($logging) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Cache logging enabled");
+                $logger = self::getLogger();
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Cache logging disabled");
+                $logger = null;
+            }
 
             $frontendOptions = array(
                 'lifetime'                  => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
@@ -711,9 +724,9 @@ class Tinebase_Core
             );
             
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
-            $backendOptions = ($config->caching->backendOptions) ? $config->caching->backendOptions->toArray() : false;
+            $backendOptions = ($config->caching->backendOptions) ? $config->caching->backendOptions->toArray() : array();
             
-            if (! $backendOptions) {
+            if (! empty($backendOptions)) {
                 switch ($backendType) {
                     case 'File':
                         $backendOptions = array(
@@ -761,25 +774,19 @@ class Tinebase_Core
                         break;
                 }
             }
-            
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                // logger is an object, that makes ugly traces :)
-                $backendOptionsWithoutLogger = $backendOptions;
-                if (isset($backendOptionsWithoutLogger['logger'])) {
-                    unset($backendOptionsWithoutLogger['logger']);
-                }
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptionsWithoutLogger, TRUE));
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Caching options: "
+                    . print_r($config->caching->toArray(), TRUE));
             }
             
         } else {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
-            );
-            $backendOptions = array(
             );
         }
         
@@ -791,9 +798,9 @@ class Tinebase_Core
             Tinebase_Exception::log($e);
 
             $enabled = false;
-            if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
-                if (mkdir($backendOptions['cache_dir'], 0770, true)) {
+            if ('File' === $backendType && isset($backendOptions['cache_dir']) && ! is_dir($backendOptions['cache_dir'])) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
+                if (@mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
             }
@@ -885,9 +892,11 @@ class Tinebase_Core
                 $dbBackend = constant($constName);
             }
         }
-        
-        self::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating ' . $dbBackend . ' DB adapter');
-        
+
+        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Creating ' . $dbBackend . ' DB adapter'
+            . (isset($dbConfigArray['dbname']) ? ' (db name: ' . $dbConfigArray['dbname'] . ')' : ''));
+
         // set utf8 charset
         $dbConfigArray['charset'] = 'UTF8';
         $dbConfigArray['adapterNamespace'] = 'Tinebase_Backend_Sql_Adapter';
@@ -1144,19 +1153,10 @@ class Tinebase_Core
         $oldMaxExcecutionTime = ini_get('max_execution_time');
         
         if ($oldMaxExcecutionTime > 0) {
-            $safeModeSetting = ini_get('safe_mode');
-            if ($safeModeSetting !== 'off' && (bool) $safeModeSetting === true) {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                        . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' 
-                        . $_seconds . ' because of safe mode restrictions. safe_mode = ' . $safeModeSetting);
-                }
-            } else {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
-                }
-                set_time_limit($_seconds);
+            if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
             }
+            set_time_limit($_seconds);
         }
         
         return $oldMaxExcecutionTime;
@@ -1173,18 +1173,10 @@ class Tinebase_Core
         $oldMaxMemoryLimit = ini_get('memory_limit');
         
         if (! empty($oldMaxMemoryLimit)) {
-            if ((bool)ini_get('safe_mode') === true) {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                        . ' memory_limit(' . $oldMaxMemoryLimit . ') is too low. Can\'t set limit to ' 
-                        . $_limit . ' because of safe mode restrictions.');
-                }
-            } else {
-                if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting memory limit to: ' . $_limit);
-                }
-                ini_set('memory_limit', $_limit);
+            if (Tinebase_Core::isRegistered(self::LOGGER) && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting memory limit to: ' . $_limit);
             }
+            ini_set('memory_limit', $_limit);
         }
         
         return $oldMaxMemoryLimit;
