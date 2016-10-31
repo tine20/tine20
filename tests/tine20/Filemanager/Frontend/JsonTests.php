@@ -1012,7 +1012,28 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         return $node;
     }
-    
+
+    /**
+     * testAttachTag
+     *
+     * @see 0012284: file type changes to 'directory' if tag is assigned
+     */
+    public function testAttachTagPreserveContentType()
+    {
+        $node = $this->testCreateFileNodeWithTempfile();
+        $node['tags'] = array(array(
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => 'file tag',
+        ));
+        $node['path'] = '';
+        // remove hash field that the client does not send
+        unset($node['hash']);
+        $updatedNode = $this->_json->saveNode($node);
+
+        $this->assertEquals(1, count($updatedNode['tags']));
+        $this->assertEquals($node['contenttype'], $updatedNode['contenttype'], 'contenttype  not preserved');
+    }
+
     /**
      * testSetRelation
      * 
