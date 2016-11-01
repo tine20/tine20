@@ -539,7 +539,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
                 $models[$note->record_model] = array(
                     0 => new $note->record_model(),
-                    1 => class_exists($note->record_model . 'Filter'),
+                    1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
                     2 => $note->record_model . 'Filter',
                     3 => $oldACLCheckValue
                 );
@@ -602,7 +602,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach($customFieldConfigs as $customFieldConfig) {
             $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
             $oldACLCheckValue = $controller->doContainerACLChecks(false);
-            $filterClass = $customFieldConfig->model . 'Filter';
+            if ($customFieldConfig->model !== 'Filemanager_Model_Node') {
+                $filterClass = $customFieldConfig->model . 'Filter';
+            } else {
+                $filterClass = 'ClassThatDoesNotExist';
+            }
 
             $filter = new Tinebase_Model_CustomField_ValueFilter(array(
                 array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)

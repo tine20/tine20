@@ -1140,21 +1140,31 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $acl = $controller->doContainerACLChecks(FALSE);
         }
         if ($controller && class_exists($filterName)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Delete ' . $model . ' records in container ' . $container->getId());
 
-            $filter = new $filterName(array(array(
-                'field'    => 'container_id',
-                'operator' => 'equals',
-                'value'    => intval($container->id)
-            )), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+            // workaround to fix Filemanager/MailFiler as we don't want to delete container contents when moving folders
+            // TODO find a better solution here - needs Filemanager refactoring
+            $backend = $controller::getInstance()->getBackend();
+            if (! in_array($model, array('Filemanager_Model_Node', 'MailFiler_Model_Node')) && method_exists($backend, 'search')) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Delete ' . $model . ' records in container ' . $container->getId());
 
-            if ($_ignoreAcl) {
-                $backend = $controller::getInstance()->getBackend();
-                $idsToDelete = $backend->search($filter, null, /* $_onlyIds */ true);
-                $controller::getInstance()->delete($idsToDelete);
+                $filter = new $filterName(array(array(
+                    'field' => 'container_id',
+                    'operator' => 'equals',
+                    'value' => intval($container->id)
+                )), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+
+                if ($_ignoreAcl) {
+
+                    $idsToDelete = $backend->search($filter, null, /* $_onlyIds */
+                        true);
+                    $controller::getInstance()->delete($idsToDelete);
+                } else {
+                    $controller::getInstance()->deleteByFilter($filter);
+                }
             } else {
-                $controller::getInstance()->deleteByFilter($filter);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip delete container contents in container ' . $container->getId());
             }
         }
 

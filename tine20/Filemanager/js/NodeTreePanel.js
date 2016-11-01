@@ -744,18 +744,17 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
         };
         
         node.attributes.nodeRecord.beginEdit();
-        node.attributes.nodeRecord.set('name', newName);
-        node.attributes.nodeRecord.set('path', nodeData.path);
-        node.attributes.path = nodeData.path;
-        node.attributes.nodeRecord.commit(false);
-        
-        if(typeof node.attributes.name == 'object') {
+        if (typeof node.attributes.name == 'object') {
             node.attributes.name.name = newName;
-        }
-        else {
+            node.attributes.nodeRecord.data.name.name = newName;
+        } else {
             node.attributes.name = newName;
+            node.attributes.nodeRecord.set('name', newName);
         }
-        
+        node.attributes.path = nodeData.path;
+        node.attributes.nodeRecord.set('path', nodeData.path);
+        node.attributes.nodeRecord.commit(false);
+
         grid.currenFolderNode = node;
         
         Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, this.getSelectionModel(), node);

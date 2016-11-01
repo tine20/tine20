@@ -46,7 +46,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         Ext.each(this.items, function(item) {
             item.template = buttonTpl;
         }, this);
-        
+
+        this.plugins = this.plugins || [];
+        this.plugins.push({
+            ptype: 'ux.itemregistry',
+            key:   'Tine.Tinebase.MainMenu'
+        });
+
         this.supr().initComponent.call(this);
     },
     
