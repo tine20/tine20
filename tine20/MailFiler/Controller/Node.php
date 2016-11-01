@@ -125,6 +125,9 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
      */
     protected function _createMessageInMailFiler($message, $node)
     {
+        // unset id to prevent duplicate constraint problems on messages added multiple times
+        unset($message->id);
+
         $mailFilerMessage = new MailFiler_Model_Message();
         $mailFilerMessage->setFromJsonInUsersTimezone($message->toArray());
         $mailFilerMessage->structure = $message->structure;

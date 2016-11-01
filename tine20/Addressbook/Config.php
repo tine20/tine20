@@ -59,13 +59,6 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_LIST_VIEW = 'featureListView';
 
     /**
-     * config for the syncBackends
-     *
-     * @var string
-     */
-    const SYNC_BACKENDS = 'syncBackends';
-
-    /**
      * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -110,6 +103,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Addressbook_Model_Salutation'),
             'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
             'default'               => array(
                 'records' => array(
                     array('id' => 'MR',      'value' => 'Mr',      'gender' => Addressbook_Model_Salutation::GENDER_MALE,   'image' => 'images/empty_photo_male.png',    'system' => true), //_('Mr')
@@ -153,16 +147,6 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
-        ),
-        self::SYNC_BACKENDS => array(
-            //_('Sync Backends')
-            'label'                 => 'Sync Backends',
-            //_('Sync Backends')
-            'description'           => 'Sync Backends',
-            'type'                  => 'array',
-            'clientRegistryInclude' => false,
-            'setByAdminModule'      => true,
-            'default'               => array()
         ),
     );
     

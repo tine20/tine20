@@ -303,8 +303,8 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
 
             $results = $result->fetchAll(Zend_Db::FETCH_ASSOC);
 
-            foreach($results as $row) {
-                foreach($columns as $col) {
+            foreach ($results as $row) {
+                foreach ($columns as $col) {
                     if (!empty($row[$col])) {
                         $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNoCountry((string)$row[$col]);
                     }
@@ -346,33 +346,9 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 9.10
-     *
-     * 0012276: LDAP addressbook sync
-     *
-     * @return void
-     */
-    public function update_9()
-    {
-        if ($this->getTableVersion('addressbook') < 21) {
-            $declaration = new Setup_Backend_Schema_Field_Xml(
-                '<field>
-                    <name>syncBackendIds</name>
-                    <type>text</type>
-                    <length>16000</length>
-                </field>');
-            $this->_backend->addCol('addressbook', $declaration);
-
-            $this->setTableVersion('addressbook', 21);
-        }
-
-        $this->setApplicationVersion('Addressbook', '9.10');
-    }
-
-    /**
      * update to 10.0
      */
-    public function update_10()
+    public function update_9()
     {
         $this->setApplicationVersion('Addressbook', '10.0');
     }

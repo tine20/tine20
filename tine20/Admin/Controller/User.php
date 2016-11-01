@@ -439,8 +439,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             if (empty($_user->contact_id)) { // jump to catch block
                 throw new Tinebase_Exception_NotFound('contact_id is empty');
             }
-
-            /** @var Addressbook_Model_Contact $contact */
+            
             $contact = $contactsBackend->get($_user->contact_id);
             
             // update exisiting contact
@@ -451,8 +450,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $contact->email      = $_user->accountEmailAddress;
             $contact->type       = Addressbook_Model_Contact::CONTACTTYPE_USER;
             $contact->container_id = $_user->container_id;
-
-            unset($contact->jpegphoto);
             
             // add modlog info
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');

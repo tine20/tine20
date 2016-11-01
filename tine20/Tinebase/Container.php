@@ -1141,9 +1141,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         if ($controller && class_exists($filterName)) {
 
-            // workaround to fix Filemanager as Tinebase_Filesystem does not implement search
+            // workaround to fix Filemanager/MailFiler as we don't want to delete container contents when moving folders
+            // TODO find a better solution here - needs Filemanager refactoring
             $backend = $controller::getInstance()->getBackend();
-            if (method_exists($backend, 'search')) {
+            if (! in_array($model, array('Filemanager_Model_Node', 'MailFiler_Model_Node')) && method_exists($backend, 'search')) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Delete ' . $model . ' records in container ' . $container->getId());
 
@@ -1161,6 +1162,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 } else {
                     $controller::getInstance()->deleteByFilter($filter);
                 }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Skip delete container contents in container ' . $container->getId());
             }
         }
 
