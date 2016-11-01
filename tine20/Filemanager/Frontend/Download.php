@@ -127,7 +127,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _listDirectory(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
-        $this->_getView($path, $node);
+        $view = $this->_getView($path, $node);
         $view->files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
         
         header('Content-Type: text/html; charset=utf-8');
