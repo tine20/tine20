@@ -466,6 +466,14 @@ class Tinebase_ApplicationTest extends TestCase
             }
         }
 
+        // check model dir -> app might have no models
+        foreach ($appNames as $key => $appName) {
+            $modelDir = __DIR__ . "../../tine20/$appName/Model/";
+            if (! file_exists($modelDir)) {
+                unset($appNames[$key]);
+            }
+        }
+        
         // no apps should remain => we found models for each app, expect the bogus ones from above
         $this->assertEquals(0, count($appNames), 'applications found for which no models where found: '.print_r($appNames, true));
 
