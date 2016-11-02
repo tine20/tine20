@@ -457,11 +457,12 @@ abstract class Tinebase_Model_Filter_Abstract
                 . ' Found ' . count($relatedIds) . ' related ids');
 
             $relationFilter = new Tinebase_Model_RelationFilter(array(
-                array('field' => 'own_model',     'operator' => 'equals', 'value' => $ownModel),
-                array('field' => 'related_model', 'operator' => 'equals', 'value' => $relatedModel),
-                array('field' => 'related_id',    'operator' => 'in'    , 'value' => $relatedIds)
+                array('field' => 'own_model'    , 'operator' => 'equals', 'value' => $relatedModel),
+                array('field' => 'own_backend'  , 'operator' => 'equals', 'value' => 'Sql'),
+                array('field' => 'own_id'       , 'operator' => 'in'    , 'value' => $relatedIds),
+                array('field' => 'related_model', 'operator' => 'equals', 'value' => $ownModel)
             ));
-            $ownIds = array_merge($ownIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->own_id);
+            $ownIds = array_merge($ownIds, Tinebase_Relations::getInstance()->search($relationFilter, NULL)->related_id);
         }
         
         return new Tinebase_Model_Filter_Id('id', $not?'notin':'in', $ownIds);
