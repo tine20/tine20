@@ -156,14 +156,15 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
      * @param boolean $fromString
      * @return Tinebase_Record_RecordSet
      */
-    protected function _importHelper($filename, $expectedNumber = 1, $fromString = false, $additionalOptions = array())
+    protected function _importHelper($filename, $expectedNumber = 1, $fromString = false, $additionalOptions = array(), $failureMessage = 'Events were not imported')
     {
         $importer = new Calendar_Import_Ical(array_merge($additionalOptions,array(
             'container_id' => $this->_getTestCalendar()->getId(),
         )));
         
         if ($fromString) {
-            $icalData = file_get_contents(dirname(__FILE__) . '/files/' . $filename);
+            $path = __DIR__ . '/files/' . $filename;
+            $icalData = file_exists($path) ? file_get_contents($path) : $filename;
             $importer->importData($icalData);
         } else {
             $importer->importFile(dirname(__FILE__) . '/files/' . $filename);
@@ -173,7 +174,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId())
         )), NULL);
         
-        $this->assertEquals($expectedNumber, $events->count(), 'Events were not imported');
+        $this->assertEquals($expectedNumber, $events->count(), $failureMessage);
         return $events;
     }
     
@@ -289,5 +290,19 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         foreach ($emptyFields as $field) {
             $this->assertTrue(empty($event->alarms), 'field ' . $field . ' should be empty in event ' . print_r($event->toArray(), true));
         }
+    }
+
+    public function testImportDeleteMissing()
+    {
+        $loader = new Twig_Loader_Filesystem(__DIR__ . '/files');
+        $twig = new Twig_Environment($loader);
+        $icalData = $twig->render('current.ics.twig');
+
+        $this->_importHelper($icalData, 4, true);
+
+        $icalData = $twig->render('current.ics.twig', array('excludes' => array(2, 3)));
+
+        // NOTE: only future event shold be deleted
+        $this->_importHelper($icalData, 3, true, array('deleteMissing' => true), 'missing event was not deleted');
     }
 }
