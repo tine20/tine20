@@ -241,7 +241,7 @@ class Felamimail_Message extends Zend_Mail_Message
         // add anchor to email addresses (remove mailto hrefs first)
         $mailtoPattern = '/<a[="a-z\-0-9 ]*href="mailto:([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})"[^>]*>.*<\/a>/iU';
         $result = preg_replace($mailtoPattern, "\\1", $_content);
-        $emailRegex = Tinebase_Mail::EMAIL_ADDRESS_REGEXP;
+        $emailRegex = Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP;
         // don't match emails with '=' as used in subscription uris (?email=blabla@aha.com)
         $emailRegex = str_replace('/(', '/^=(', $emailRegex);
         $result = preg_replace($emailRegex, "<a href=\"#\" id=\"123:\\1\" class=\"tinebase-email-link\">\\1</a>", $result);

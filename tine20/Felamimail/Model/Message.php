@@ -678,18 +678,16 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 }
                 
                 foreach ($recipients as $key => &$recipient) {
-                    // get address 
-                    // @todo get name here
-                    //<*([a-zA-Z@_\-0-9\.]+)>*/
-                    if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $recipient, $matches) > 0) {
-                        $recipient = $matches[1];
+                    // extract email address if name and address given
+                    if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
+                        $recipient = $matches[2];
                     }
                     if (empty($recipient)) {
                         unset($recipients[$key]);
                     }
                 }
 
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recipients, true));
                 
                 $recordData[$field] = array_unique($recipients);
             }
