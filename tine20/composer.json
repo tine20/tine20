@@ -33,7 +33,7 @@
         "metaways/opendocument": "1.1",
         "metaways/timezoneconvert": "0.2",
         "zendframework/zend-http": "2.4.*",
-        "doctrine/orm": "2.5.*"
+        "doctrine/orm": "2.5.*",
         "twig/twig": "~1.0"
     },
     "require-dev": {
