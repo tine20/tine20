@@ -239,6 +239,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'add',
             text: this.app.i18n._('Compose'),
             handler: this.onMessageCompose.createDelegate(this),
+            // TODO reactivate when account becomes available as sometimes this stays deactivated
             disabled: ! this.app.getActiveAccount(),
             iconCls: this.app.appName + 'IconCls'
         });

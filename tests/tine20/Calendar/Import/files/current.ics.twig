@@ -1,0 +1,44 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//tine20.com//Tine 2.0 Calendar V8.4//EN
+{% if 1 not in excludes %}
+BEGIN:VEVENT
+CLASS:PUBLIC
+DTEND:{{ "-1 week 12:00"|date("Ymd\\THis\\Z", "UTC") }}
+DTSTART:{{ "-1 week 10:00"|date("Ymd\\THis\\Z", "UTC") }}
+SEQUENCE:0
+SUMMARY:-1 week 10:00
+UID:current-import-test-1
+END:VEVENT
+{% endif %}
+{% if 2 not in excludes %}
+BEGIN:VEVENT
+CLASS:PUBLIC
+DTEND:{{ "-2 days 12:00"|date("Ymd\\THis\\Z", "UTC") }}
+DTSTART:{{ "-2 days 10:00"|date("Ymd\\THis\\Z", "UTC") }}
+SEQUENCE:0
+SUMMARY:-2 days 10:00
+UID:current-import-test-2
+END:VEVENT
+{% endif %}
+{% if 3 not in excludes %}
+BEGIN:VEVENT
+CLASS:PUBLIC
+DTEND:{{ "+2 days 12:00"|date("Ymd\\THis\\Z", "UTC") }}
+DTSTART:{{ "+2 days 10:00"|date("Ymd\\THis\\Z", "UTC") }}
+SEQUENCE:0
+SUMMARY:+2 days 10:00
+UID:current-import-test-3
+END:VEVENT
+{% endif %}
+{% if 4 not in excludes %}
+BEGIN:VEVENT
+CLASS:PUBLIC
+DTEND:{{ "+1 week 12:00"|date("Ymd\\THis\\Z", "UTC") }}
+DTSTART:{{ "+1 week 10:00"|date("Ymd\\THis\\Z", "UTC") }}
+SEQUENCE:0
+SUMMARY:+2 days 10:00
+UID:current-import-test-4
+END:VEVENT
+{% endif %}
+END:VCALENDAR
