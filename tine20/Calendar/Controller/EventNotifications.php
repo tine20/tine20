@@ -288,7 +288,7 @@
             // external (non account) notification
             if (! $attendeeAccountId) {
                 // external organizer needs status updates
-                $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferedEmailAddress() ? 40 : 30;
+                $sendLevel = is_object($organizer) && $_attender->getEmail() == $organizer->getPreferredEmailAddress() ? 40 : 30;
                 $sendOnOwnActions = false;
                 $sendAlarms = false;
             }
@@ -301,8 +301,8 @@
             // NOTE prefUser is organizer for external notifications
             if (($attendeeAccountId == $_updater->getId() && ! $sendOnOwnActions) 
                 || ($sendLevel < $_notificationLevel && (
-                        ((is_object($organizer) && method_exists($attendee, 'getPreferedEmailAddress') && $attendee->getPreferedEmailAddress() != $organizer->getPreferedEmailAddress())
-                        || (is_object($organizer) && !method_exists($attendee, 'getPreferedEmailAddress') && $attendee->email != $organizer->getPreferedEmailAddress()))
+                        ((is_object($organizer) && method_exists($attendee, 'getPreferredEmailAddress') && $attendee->getPreferredEmailAddress() != $organizer->getPreferredEmailAddress())
+                        || (is_object($organizer) && !method_exists($attendee, 'getPreferredEmailAddress') && $attendee->email != $organizer->getPreferredEmailAddress()))
                         || $sendLevel == self::NOTIFICATION_LEVEL_NONE)
                    )
                 ) {

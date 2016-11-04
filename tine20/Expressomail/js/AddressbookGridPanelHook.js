@@ -109,7 +109,7 @@ Ext.apply(Tine.Expressomail.AddressbookGridPanelHook.prototype, {
                 contact = new Tine.Addressbook.Model.Contact(contact);
             }
             
-            var mailAddress = contact.getPreferedEmail();
+            var mailAddress = contact.getPreferredEmail();
             if (mailAddress) {
                 mailAddresses.push(mailAddress);
             }

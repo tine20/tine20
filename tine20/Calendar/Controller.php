@@ -126,7 +126,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         if ($_eventObject->keepAsContact()) {
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get($contactId);
-                $contactEmail = $contact->getPreferedEmailAddress();
+                $contactEmail = $contact->getPreferredEmailAddress();
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // ignore
                 $contactEmail = $_eventObject->account->accountEmailAddress;
@@ -239,7 +239,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
     public function getInvitationContainer($organizer, $emailAddress = null)
     {
         if (null!==$organizer) {
-            $containerName = $organizer->getPreferedEmailAddress();
+            $containerName = $organizer->getPreferredEmailAddress();
         } else {
             $containerName = $emailAddress;
         }

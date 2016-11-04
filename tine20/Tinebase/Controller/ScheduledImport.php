@@ -169,6 +169,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         if (strpos($source, 'http') === 0) {
             try {
                 $client = new Zend_Http_Client($source);
+                // 0011054: Problems with ScheduledImport of external ics calendars
+                // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
+                $client->setHeaders('Accept-encoding', 'identity');
                 $requestBody = $client->request()->getBody();
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
@@ -226,21 +229,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 $record->failcount = $record->failcount + 1;
             }
 
-            if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || !$record->timestamp instanceof Tinebase_DateTime) {
-                $record->timestamp = Tinebase_DateTime::now();
-            }
-
-            switch ($record->interval) {
-                case Tinebase_Model_Import::INTERVAL_DAILY:
-                    $record->timestamp->addDay(1);
-                    break;
-                case Tinebase_Model_Import::INTERVAL_WEEKLY:
-                    $record->timestamp->addWeek(1);
-                    break;
-                case Tinebase_Model_Import::INTERVAL_HOURLY:
-                    $record->timestamp->addHour(1);
-                    break;
-            }
+            $record->timestamp = Tinebase_DateTime::now();
 
             $record = $this->update($record);
             

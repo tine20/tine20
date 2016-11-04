@@ -866,7 +866,7 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
     
         if ($organizer instanceof Addressbook_Model_Contact) {
             $organizerName = $organizer->n_fileas;
-            $organizerEmail = $organizer->getPreferedEmailAddress();
+            $organizerEmail = $organizer->getPreferredEmailAddress();
         } else {
             // set the current account as organizer
             // if organizer is not set, you can not edit the event on the Motorola Milestone
