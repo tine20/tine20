@@ -114,10 +114,8 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     /**
      * returns true preferred email if available
      * @return {String}
-     *
-     * TODO fix typo (prefered -> preferred)
      */
-    getPreferedEmail: function(preferred) {
+    getPreferredEmail: function(preferred) {
         var preferred = preferred || 'email',
             other = preferred == 'email' ? 'email_home' : 'email';
             
@@ -131,7 +129,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
             appName: 'Tinebase'
         });
         if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
-            var email = this.getPreferedEmail();
+            var email = this.getPreferredEmail();
             if (email !== '') {
                 result += ' (' + email + ')';
             }
@@ -297,10 +295,10 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     containersName: 'Addressbooks',
     copyOmitFields: ['group_id'],
 
-    getPreferedEmail: function(preferred) {
+    getPreferredEmail: function(preferred) {
         var emails = this.get("emails");
-        if (!this.get("email")) {
-            return  this.get("emails");
+        if (! this.get("email") && ! this.get("email_home")) {
+            return this.get("emails");
         } else {
             var preferred = preferred || 'email',
             other = preferred == 'email' ? 'email_home' : 'email';

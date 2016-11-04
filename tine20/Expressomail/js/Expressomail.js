@@ -982,7 +982,7 @@ Tine.Expressomail.getEmailStringFromContact = function(contact) {
     Tine.log.debug(contact);
 
     var result = contact.get('n_fn') + ' <';
-    result += contact.getPreferedEmail();
+    result += contact.getPreferredEmail();
     result += '>';
 
    if (contact.get('org_unit') != '' && contact.get('org_unit') != null ) {
