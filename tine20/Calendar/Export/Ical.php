@@ -130,7 +130,7 @@ class Calendar_Export_Ical
         // organizer
         $organizerId = $_event->organizer instanceof Addressbook_Model_Contact ? array($_event->organizer->getId()) : array($_event->organizer);
         $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple($organizerId, TRUE)->getFirstRecord();
-        if ($organizer && $organizerEmail = $organizer->getPreferedEmailAddress()) {
+        if ($organizer && $organizerEmail = $organizer->getPreferredEmailAddress()) {
             $vevent->addProperty(new qCal_Property_Organizer("mailto:$organizerEmail", array('CN' => $organizer->n_fileas)));
         }
         

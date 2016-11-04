@@ -217,7 +217,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         }
         
         if (!contact.get("members")) {
-            var mailAddress = (contact.getPreferedEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
+            var mailAddress = (contact.getPreferredEmail()) ? Tine.Felamimail.getEmailStringFromContact(contact) : null;
             if (mailAddress)
                 mailAddresses.push(mailAddress);
         } else {

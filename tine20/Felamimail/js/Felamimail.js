@@ -871,7 +871,7 @@ Tine.Felamimail.getEmailStringFromContact = function(contact) {
     Tine.log.debug(contact);
     
     var result = contact.get('n_fileas') + ' <';
-    result += contact.getPreferedEmail();
+    result += contact.getPreferredEmail();
     result += '>';
     
     return result;

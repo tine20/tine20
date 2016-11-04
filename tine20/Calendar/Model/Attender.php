@@ -147,7 +147,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         switch ($this->user_type) {
             case self::USERTYPE_USER:
             case self::USERTYPE_GROUPMEMBER:
-                return $resolvedUser->getPreferedEmailAddress();
+                return $resolvedUser->getPreferredEmailAddress();
                 break;
             case self::USERTYPE_GROUP:
                 return $resolvedUser->getId();
