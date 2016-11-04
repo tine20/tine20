@@ -38,94 +38,64 @@ class Tinebase_ScheduledImportTest extends TestCase
     /**
      * Test create a scheduled import
      */
-    public function createScheduledImport($source = 'http://localhost/test.ics')
+    public function createScheduledImport($source = '')
     {
-        $id = Tinebase_Record_Abstract::generateUID();
+        $source = $source ?: __DIR__ . '/../Calendar/Import/files/lightning.ics';
+
         $import = new Tinebase_Model_Import(
             array(
-                'id'                => $id,
                 'user_id'           => $this->_originalTestUser->getId(),
                 'interval'          => Tinebase_Model_Import::INTERVAL_HOURLY,
                 'model'             => Calendar_Controller::getInstance()->getDefaultModel(),
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'container_id'      => $this->_testCalendar->getId(),
                 'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
                 'source'            => $source,
-                'options'           => json_encode(array(
-                    'forceUpdateExisting' => TRUE,
-                    'import_defintion' => NULL,
-                    'plugin' => 'Calendar_Import_Ical'
-                ))
-            )
+                'options'           => array(
+                    'forceUpdateExisting'   => TRUE,
+                    'importFileByScheduler' => TRUE,
+                    'plugin'                => 'Calendar_Import_Ical',
+                    'container_id'          => $this->_testCalendar->getId(),
+                )
+            ), true
         );
         
         $record = $this->_uit->create($import);
 
-        $this->assertEquals(Calendar_Controller::getInstance()->getDefaultModel(), $this->_uit->get($id)->model);
+        $this->assertEquals(Calendar_Controller::getInstance()->getDefaultModel(), $this->_uit->get($record->getId())->model);
 
         return $record;
     }
     
     /**
      * testNextScheduledImport
-     *
-     * TODO this should run without the need for internet access to http://www.schulferien.org
-     *      maybe we should put the file into the local filesystem
      */
     public function testNextScheduledImport()
     {
-        $this->markTestSkipped('FIXME: use local ics file for this test / see TODO in doc block');
-
-        $icsUri = 'http://www.schulferien.org/iCal/Ferien/icals/Ferien_Hamburg_2014.ics';
-        $client = new Zend_Http_Client($icsUri);
-        try {
-            $client->request()->getBody();
-        } catch (Exception $e) {
-            $this->markTestSkipped('no access to ' . $icsUri);
-        }
-
         $cc = Calendar_Controller_Event::getInstance();
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         ));
-        
-        $all = $cc->search($filter);
-        
-        $this->assertEquals(0, $all->count());
-        
-        $now = Tinebase_DateTime::now()->subHour(1);
-        
-        $record = $this->createScheduledImport($icsUri);
-        
-        // assert setting timestamp to start value
-        $this->assertEquals($now->format('YMDHi'), $record->timestamp->format('YMDHi'));
-        
-        $record = $this->_uit->runNextScheduledImport();
 
-        $this->assertTrue($record !== null, 'import did not run');
-        
-        // assert updating timestamp after successful run
-        $now->addHour(1);
-        $this->assertEquals($now->format('YMDHi'), $record->timestamp->format('YMDHi'));
-        
+        $record = $this->createScheduledImport();
+        $this->_uit->runNextScheduledImport();
+
         $all = $cc->search($filter);
         $seq = $all->getFirstRecord()->seq;
+
         // assert all events have been imported
-        $this->assertEquals(7, $all->count());
+        $this->assertEquals(1, $all->count());
         
         // this must not be run, the interval is not exceed
         $this->_uit->runNextScheduledImport();
         $all = $cc->search($filter);
         $this->assertEquals($seq, $all->getFirstRecord()->seq);
-        
-        // setting manual timestamp to force run again
-        $record->timestamp = $record->timestamp->subHour(1)->subSecond(1);
-        
-        $this->_uit->update($record);
-        
-        $this->_uit->runNextScheduledImport();
+
+        $record = $this->_uit->get($record->getId());
+        $this->_uit->doScheduledImport($record);
+
         $all = $cc->search($filter);
-        $this->assertEquals(7, $all->count());
+        $this->assertEquals(1, $all->count());
+        $this->assertGreaterThan($seq, $all->getFirstRecord()->seq);
     }
 
     /**
