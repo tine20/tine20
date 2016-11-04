@@ -239,6 +239,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'add',
             text: this.app.i18n._('Compose'),
             handler: this.onMessageCompose.createDelegate(this),
+            // TODO reactivate when account becomes available as sometimes this stays deactivated
             disabled: ! this.app.getActiveAccount(),
             iconCls: this.app.appName + 'IconCls'
         });
@@ -814,6 +815,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
 
+    /**
+     * file messages
+     *
+     * @param appName
+     * @param path
+     */
     fileRecords: function(appName, path) {
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
@@ -825,9 +832,32 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = sm.getSelectionsCollection();
         }
 
-        // TODO show some kind of feedback when message filing has been (un)successful
-        // TODO reload grid when request returns?
-        Tine.Felamimail.fileMessages(filter, appName, path);
+        this.fileMessagesLoadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Filing Messages')});
+        this.fileMessagesLoadMask.show();
+        // last params are the callback & scope
+        Tine.Felamimail.fileMessages(filter, appName, path, this.afterFileRecords, this);
+    },
+
+    /**
+     * show feedback when message filing has been (un)successful
+     *
+     * TODO reload grid when request returns?
+     */
+    afterFileRecords: function(unknown, result) {
+        Tine.log.info('Tine.Felamimail.GridPanel::afterFileRecords');
+        Tine.log.debug(result);
+
+        this.fileMessagesLoadMask.hide();
+
+        if (result && result.type && result.type == 'exception') {
+            var error = result.error ? result.error : null;
+            Ext.Msg.show({
+                title: this.app.i18n._('Error Filing Message'),
+                msg: error && error.message ? error.message : this.app.i18n._('Could not file message.'),
+                icon: Ext.MessageBox.ERROR,
+                buttons: Ext.Msg.OK
+            });
+        }
     },
 
     /**

@@ -332,15 +332,19 @@ abstract class Tinebase_Controller_Abstract extends Tinebase_Pluggable_Abstract 
     /**
      * get models from application directory
      *
-     * @return array|null
+     * @return array
      */
     protected function _getModelsFromAppDir()
     {
         try {
-            $dir = new DirectoryIterator(dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/');
+            $modelDir = dirname(dirname(dirname(__FILE__))) . '/' . $this->_applicationName . '/Model/';
+            if (! file_exists($modelDir)) {
+                return array();
+            }
+            $dir = new DirectoryIterator($modelDir);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
-            return null;
+            return array();
         }
 
         $models = array();

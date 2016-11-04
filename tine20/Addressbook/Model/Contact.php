@@ -315,7 +315,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * 
      * @return string
      */
-    public function getPreferedEmailAddress()
+    public function getPreferredEmailAddress()
     {
         // prefer work mail over private mail till we have prefs for this
         return $this->email ? $this->email : $this->email_home;

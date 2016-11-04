@@ -38,6 +38,10 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          */
         'forceUpdateExisting'   => FALSE,
         /**
+         * delete events missing in import file (future only)
+         */
+        'deleteMissing'         => FALSE,
+        /**
          * container the events should be imported in
          * @var string
          */
@@ -54,30 +58,6 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          * @var string
          */
         'onlyBasicData'         => NULL,
-    );
-    
-    /**
-     * default timezone from VCALENDAR. If not present, users default tz will be taken
-     * @var string
-     */
-    protected $_defaultTimezoneId;
-    
-    /**
-     * maps tine20 propertynames to ical propertynames
-     * @var array
-     */
-    protected $_eventPropertyMap = array(
-        'summary'               => 'SUMMARY',
-        'description'           => 'DESCRIPTION',
-        'class'                 => 'CLASS',
-        'transp'                => 'TRANSP',
-        'seq'                   => 'SEQUENCE',
-        'uid'                   => 'UID',
-        'dtstart'               => 'DTSTART',
-        'dtend'                 => 'DTEND',
-        'rrule'                 => 'RRULE',
-        'creation_time'         => 'CREATED',
-        'last_modified_time'    => 'LAST-MODIFIED',
     );
     
     /**
@@ -203,6 +183,21 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                 $this->_importResult['failcount'] += 1;
             }
         }
+
+        if ($this->_options['deleteMissing']) {
+            $missingEventsFilter = new Calendar_Model_EventFilter(array(
+                array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_options['container_id']),
+                array('field' => 'uid', 'operator' => 'notin', 'value' => array_unique($events->uid)),
+                array('field' => 'period', 'operator' => 'within', 'value' => array(
+                    'from'  => new Tinebase_DateTime('now'),
+                    'until' => new Tinebase_DateTime('+ 100 years'),
+                ))
+            ));
+            $missingEvents = $cc->search($missingEventsFilter);
+
+            $cc->delete($missingEvents->id);
+        }
+
         Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' '
