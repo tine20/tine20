@@ -209,21 +209,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 Tinebase_Exception::log($e);
             }
 
-            if ($record->interval === Tinebase_Model_Import::INTERVAL_ONCE || !$record->timestamp instanceof Tinebase_DateTime) {
-                $record->timestamp = Tinebase_DateTime::now();
-            }
-
-            switch ($record->interval) {
-                case Tinebase_Model_Import::INTERVAL_DAILY:
-                    $record->timestamp->addDay(1);
-                    break;
-                case Tinebase_Model_Import::INTERVAL_WEEKLY:
-                    $record->timestamp->addWeek(1);
-                    break;
-                case Tinebase_Model_Import::INTERVAL_HOURLY:
-                    $record->timestamp->addHour(1);
-                    break;
-            }
+            $record->timestamp = Tinebase_DateTime::now();
 
             // update record
             $record = $this->update($record);
