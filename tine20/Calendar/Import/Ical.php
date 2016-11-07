@@ -105,6 +105,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         }
 
         $cc = Calendar_Controller_MSEventFacade::getInstance();
+        $cc->assertEventFacadeParams($container);
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
