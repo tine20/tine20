@@ -65,6 +65,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
+        $this->_resolveCustomFields = true;
         $this->_backend = Tinebase_FileSystem::getInstance();
     }
     
@@ -166,7 +167,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             throw new Tinebase_Exception_AccessDenied('No permission to get node');
         }
         $record = parent::get($_id);
-        if($record) {
+        if ($record) {
             $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
         }
         return $record;
@@ -185,7 +186,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         // perform recursive search on recursive filter set
-        if($_filter->getFilter('recursive')) {
+        if ($_filter->getFilter('recursive')) {
             return $this->_searchNodesRecursive($_filter, $_pagination);
         } else {
             $path = $this->_checkFilterACL($_filter, $_action);

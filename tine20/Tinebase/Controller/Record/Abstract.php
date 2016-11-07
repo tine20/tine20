@@ -507,13 +507,18 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Tags::getInstance()->getTagsOfRecord($record);
         }
         if ($record->has('relations')) {
-            $record->relations = Tinebase_Relations::getInstance()->getRelations($this->_modelName, $this->_getBackendType(), $record->getId());
+            $record->relations = Tinebase_Relations::getInstance()->getRelations(
+                $this->_modelName,
+                $this->_getBackendType(),
+                $record->getId());
         }
         if ($record->has('alarms')) {
             $this->getAlarms($record);
         }
         if ($this->resolveCustomfields()) {
-            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record);
+            $cfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication(
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($record, null, $cfConfigs);
         }
         if ($record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);

@@ -355,18 +355,26 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $updatedFileObject = clone($currentFileObject);
         $updatedFileObject->hash = $_hash;
-        $updatedFileObject->size = filesize($_hashFile);
-        
-        if (version_compare(PHP_VERSION, '5.3.0', '>=') && function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $_hashFile);
-            if ($mimeType !== false) {
-                $updatedFileObject->contenttype = $mimeType;
+
+        if (file_exists($_hashFile)) {
+            $updatedFileObject->size = filesize($_hashFile);
+
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($finfo, $_hashFile);
+                if ($mimeType !== false) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting file contenttype to " . $mimeType);
+                    $updatedFileObject->contenttype = $mimeType;
+                }
+                finfo_close($finfo);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' finfo_open() is not available: Could not get file information.');
             }
-            finfo_close($finfo);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' finfo_open() is not available: Could not get file information.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' File hash does not exist - directory?');
         }
         
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();

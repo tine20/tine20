@@ -438,7 +438,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
-     * get custom fields and add them to $_record->customfields arraay
+     * get custom fields and add them to $_record->customfields array
      *
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_RecordSet $_customFields

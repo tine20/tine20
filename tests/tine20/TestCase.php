@@ -93,10 +93,21 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     protected $_releaseDBLockIds = array();
 
     /**
+     * customfields that should be deleted later
+     *
+     * @var array
+     */
+    protected $_customfieldIdsToDelete = array();
+
+    /**
      * set up tests
      */
     protected function setUp()
     {
+        foreach ($this->_customfieldIdsToDelete as $cfd) {
+            Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
+        }
+
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
@@ -571,5 +582,26 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     {
         $db = Tinebase_Core::getDb();
         return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
+    }
+
+    /**
+     * created customfield config
+     *
+     * @param string $cfName
+     * @return Tinebase_Model_CustomField_Config
+     */
+    protected function _createCustomfield($cfName = NULL, $model = 'Addressbook_Model_Contact')
+    {
+        $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
+        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(substr($model, 0, strpos($model, '_')))->getId(),
+            'model'          => $model,
+            'name'           => $cfName,
+        ));
+
+        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
+        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
+
+        return $createdCustomField;
     }
 }
