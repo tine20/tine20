@@ -13,12 +13,25 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
     /**
      * update to 10.1
      *
-     * - convert is_deleted to smallint
-     * - convert deprecated_status to smallint
-     *
      * @return void
      */
     public function update_0()
+    {
+        $this->setApplicationVersion('Inventory', '10.1');
+    }
+
+    /**
+     * update to 10.1
+     *
+     * - convert is_deleted to smallint
+     * - convert deprecated_status to smallint
+     * - create price (float)
+     *
+     * @see 0012182: item price is not saved
+     *
+     * @return void
+     */
+    public function update_1()
     {
         // update according to current modelconfigV2 definition using doctrine2
         // NOTE: depending on update action you might need to move this to a later update
@@ -26,6 +39,6 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
         //      (this) update
         $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
 
-        $this->setApplicationVersion('Inventory', '10.1');
+        $this->setApplicationVersion('Inventory', '10.2');
     }
 }
