@@ -57,7 +57,8 @@ class Inventory_TestCase extends PHPUnit_Framework_TestCase
                 'name'          => 'minimal inventory item by PHPUnit::Inventory_JsonTest',
                 'type'          => '1',
                 'location'      => 'hamburg',
-                'description'   => 'Default description by PHPUnit::Inventory_JsonTest'
+                'description'   => 'Default description by PHPUnit::Inventory_JsonTest',
+                'price'         => 40.4,
         ));
     }
     

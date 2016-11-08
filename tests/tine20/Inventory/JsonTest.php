@@ -39,6 +39,8 @@ class Inventory_JsonTest extends Inventory_TestCase
     
     /**
      * test creation of an InventoryItem
+     *
+     * @see 0012182: item price is not saved
      */
     public function testCreateInventoryItem()
     {
@@ -53,7 +55,9 @@ class Inventory_JsonTest extends Inventory_TestCase
         
         $returnedGet = $this->_json->getInventoryItem($returnedRecord['id'], 0 , '');
         $this->assertEquals($inventoryItem['description'], $returnedGet['description']);
-        
+        $this->assertTrue(isset($returnedGet['price']), 'price property missing from record ' . print_r($returnedGet, true));
+        $this->assertEquals($inventoryItem['price'], $returnedGet['price']);
+
         return $returnedRecord;
     }
     

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2ebf4669ccf4c389e36fc387f901a928",
-    "content-hash": "66c9edfdde7271e72d74805b0f3175b9",
+    "hash": "4355c1e70a51bae4703a374af49a89d0",
+    "content-hash": "6274a13846d3db4dcbe7b15834cf43d2",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1216,11 +1216,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "912c6af79d15f8a093b33f2eddbb3256fec2f49c"
+                "reference": "978a03f0332b10509d1d00544e0e0510efc13b88"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1244,7 +1244,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2016-10-31 16:16:43"
+            "time": "2016-11-03 08:10:34"
         },
         {
             "name": "tine20/composerapploader",
@@ -1643,11 +1643,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl2",
+            "version": "1.12.20pl3",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "a7ff5a0dffe718f8e9ae60cb2d69ed44aab46dd6"
+                "reference": "86507882fbc5a805332cde6452fb18b05f87e836"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1664,7 +1664,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2016-09-15 08:24:09"
+            "time": "2016-11-07 18:22:32"
         }
     ],
     "packages-dev": [
@@ -2224,7 +2224,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch2",
+            "version": "1.12.20.0-patch3",
             "package": "zendframework/zendframework1"
         },
         {

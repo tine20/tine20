@@ -25,4 +25,10 @@
  */
 class Filemanager_Model_Node extends Tinebase_Model_Tree_Node
 {
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'Filemanager';
 }

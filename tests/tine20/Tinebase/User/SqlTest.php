@@ -254,11 +254,19 @@ class Tinebase_User_SqlTest extends TestCase
     {
         $user = $this->testAddUser();
 
-        $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
+        $password = '0b%@%g1SL?](;*HNE%';
+        $this->_backend->setPassword($user, $password);
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
         $this->assertNotEquals($user->accountLastPasswordChange, $testUser->accountLastPasswordChange);
+
+        // try tp authenticate with pw
+        $auth = Tinebase_Auth_Factory::factory(Tinebase_Auth::SQL);
+        $auth->setIdentity($user->accountLoginName);
+        $auth->setCredential($password);
+        $result = $auth->authenticate();
+        $this->assertTrue($result->isValid());
     }
         
     /**

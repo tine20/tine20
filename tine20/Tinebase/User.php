@@ -114,6 +114,8 @@ class Tinebase_User
             'password' => '',
             'bindRequiresDn' => true,
             'useStartTls' => false,
+            'useSsl' => false,
+            'port' => 0,
             'useRfc2307bis' => false,
             'userDn' => '',
             'userFilter' => 'objectclass=posixaccount',
