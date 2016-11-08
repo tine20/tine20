@@ -305,6 +305,10 @@ class Tinebase_ApplicationTest extends TestCase
                 'Crm_Model_LeadState',
                 'Crm_Model_Lead',
             ),
+            'Events' => array(
+                'Events_Model_Status',
+                'Events_Model_Event',
+            ),
             'ExampleApplication' => array(
                 'ExampleApplication_Model_ExampleRecord',
                 'ExampleApplication_Model_Status',

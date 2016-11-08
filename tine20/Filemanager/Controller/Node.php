@@ -65,6 +65,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
+        $this->_resolveCustomFields = true;
         $this->_backend = Tinebase_FileSystem::getInstance();
     }
     
@@ -185,7 +186,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         // perform recursive search on recursive filter set
-        if($_filter->getFilter('recursive')) {
+        if ($_filter->getFilter('recursive')) {
             return $this->_searchNodesRecursive($_filter, $_pagination);
         } else {
             $path = $this->_checkFilterACL($_filter, $_action);

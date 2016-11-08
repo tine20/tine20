@@ -37,13 +37,6 @@ class Addressbook_JsonTest extends TestCase
     protected $_contactIdsToDelete = array();
 
     /**
-     * customfields that should be deleted later
-     *
-     * @var array
-     */
-    protected $_customfieldIdsToDelete = array();
-
-    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -122,10 +115,6 @@ class Addressbook_JsonTest extends TestCase
         
         $this->_uit->deleteContacts($this->_contactIdsToDelete);
 
-        foreach ($this->_customfieldIdsToDelete as $cfd) {
-            Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
-        }
-        
         if ($this->_makeSCleverVisibleAgain) {
             $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
             $sclever->visibility = Tinebase_Model_User::VISIBILITY_DISPLAYED;
@@ -409,26 +398,6 @@ class Addressbook_JsonTest extends TestCase
 
         $this->assertEquals(3, $result['failcount'], 'failcount does not show the correct number');
         $this->assertEquals(0, $result['totalcount'], 'totalcount does not show the correct number');
-    }
-    
-    /**
-     * created customfield config
-     * 
-     * @return Tinebase_Model_CustomField_Config
-     */
-    protected function _createCustomfield($cfName = NULL)
-    {
-        $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
-        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'model'          => 'Addressbook_Model_Contact',
-            'name'           => $cfName,
-        ));
-        
-        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
-        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
-        
-        return $createdCustomField;
     }
     
     /**
