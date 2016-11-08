@@ -22,7 +22,7 @@
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
-        "zendframework/zendframework1": "1.12.20pl2 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl3 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
         "syncroton/syncroton": "1.2.*",
         "ezyang/htmlpurifier": "v4.6.0",
