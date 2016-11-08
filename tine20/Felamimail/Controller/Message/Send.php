@@ -87,9 +87,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             } else {
                 $messageText = $e->getMessage();
             }
-            $message = sprintf($translation->_('Error: %s'), $messageText);
-            $tesg = new Tinebase_Exception_SystemGeneric($message);
-            $tesg->setTitle($translation->_('Could not send message'));
+            $tesg = $this->_getErrorException($messageText);
             throw $tesg;
         }
         
@@ -449,33 +447,57 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $nonPrivateRecipients = array();
         $punycodeConverter = $this->getPunycodeConverter();
+        $invalidEmailAddresses = array();
         
         foreach (array('to', 'cc', 'bcc') as $type) {
             if (isset($_message->{$type})) {
                 foreach((array) $_message->{$type} as $address) {
-                    
-                    $address = $punycodeConverter->encode($address);
-                    
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Add ' . $type . ' address: ' . $address);
+
+                    $punyCodedAddress = $punycodeConverter->encode($address);
+
+                    if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
+                        $invalidEmailAddresses[] = $address;
+                        continue;
+                    }
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' Add ' . $type . ' address: ' . $punyCodedAddress);
                     
                     switch($type) {
                         case 'to':
-                            $_mail->addTo($address);
-                            $nonPrivateRecipients[] = $address;
+                            $_mail->addTo($punyCodedAddress);
+                            $nonPrivateRecipients[] = $punyCodedAddress;
                             break;
                         case 'cc':
-                            $_mail->addCc($address);
-                            $nonPrivateRecipients[] = $address;
+                            $_mail->addCc($punyCodedAddress);
+                            $nonPrivateRecipients[] = $punyCodedAddress;
                             break;
                         case 'bcc':
-                            $_mail->addBcc($address);
+                            $_mail->addBcc($punyCodedAddress);
                             break;
                     }
                 }
             }
         }
+
+        if (count($invalidEmailAddresses) > 0) {
+            $translation = Tinebase_Translation::getTranslation('Felamimail');
+            $messageText = '<' . implode(',', $invalidEmailAddresses) . '>: ' . $translation->_('Invalid address format');
+            $tesg = $this->_getErrorException($messageText);
+            throw $tesg;
+        }
         
         return $nonPrivateRecipients;
+    }
+
+    protected function _getErrorException($messageText)
+    {
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $message = sprintf($translation->_('Error: %s'), $messageText);
+        $tesg = new Tinebase_Exception_SystemGeneric($message);
+        $tesg->setTitle($translation->_('Could not send message'));
+
+        return $tesg;
     }
     
     /**
