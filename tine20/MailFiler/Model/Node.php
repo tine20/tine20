@@ -26,6 +26,13 @@
 class MailFiler_Model_Node extends Tinebase_Model_Tree_Node
 {
     /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = 'MailFiler';
+
+    /**
      * overwrite constructor to add more filters
      *
      * @param mixed $_data

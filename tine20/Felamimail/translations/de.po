@@ -1271,3 +1271,12 @@ msgstr "Alle Entwürfe"
 #: Setup/Initialize.php:68
 msgid "All mails with the draft flag"
 msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
+
+msgid "Filing Messages"
+msgstr "Speichere Nachrichten"
+
+msgid "Error Filing Message"
+msgstr "Fehler beim Speichern von Nachrichten"
+
+msgid "Could not file message."
+msgstr "Konnte Nachrichten nicht ablegen."

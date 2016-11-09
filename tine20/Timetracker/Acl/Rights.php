@@ -59,7 +59,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      *
      * disabled. use the singleton
      */
-    private function __clone() 
+    protected function __clone()
     {
     }
     
@@ -67,7 +67,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * the constructor
      *
      */
-    private function __construct()
+    protected function __construct()
     {
         
     }    
@@ -132,7 +132,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_SHARED_TIMESHEET_FAVORITES => array(
                 'text'          => $translate->_('Manage shared timesheet favorites'),
                 'description'   => $translate->_('Create or update shared timesheet favorites'),
-            ),
+            )
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());

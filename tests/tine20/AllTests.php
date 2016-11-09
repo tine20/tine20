@@ -43,6 +43,7 @@ class AllTests
         $suite->addTest(Projects_AllTests::suite());
         $suite->addTest(HumanResources_AllTests::suite());
         $suite->addTest(Inventory_AllTests::suite());
+        $suite->addTest(Events_AllTests::suite());
         $suite->addTest(ExampleApplication_AllTests::suite());
         $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(SimpleFAQ_AllTests::suite());

@@ -133,7 +133,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  * we can work with the data synced during previous login
                  */
                 try {
-                    Tinebase_User::syncUser($_username,array('syncContactData' => TRUE));
+                    // only syncContactData if webclient!
+                    $syncOptions = in_array($_accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE)
+                        ? array()
+                        : array('syncContactData' => TRUE));
+
+                    Tinebase_User::syncUser($_username, $syncOptions);
                 } catch (Exception $e) {
                     Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Failed to sync user data for: ' . $_username . ' reason: ' . $e->getMessage());
                     Tinebase_Exception::log($e);

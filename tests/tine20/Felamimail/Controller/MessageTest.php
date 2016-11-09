@@ -65,18 +65,6 @@ class Felamimail_Controller_MessageTest extends TestCase
     protected $_accountsToDelete = array();
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Message Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -1121,8 +1109,6 @@ class Felamimail_Controller_MessageTest extends TestCase
      */
     public function testSendWithWrongLineEnd()
     {
-        $this->markTestSkipped('FIXME: 0011688: fix line end encoding in attachments');
-
         // build message with wrong line end rfc822 part
         $mail = new Tinebase_Mail('utf-8');
         $mail->setBodyText('testmail' . "\r\n" . "\r\n");
@@ -1159,7 +1145,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $this->assertEquals(0, $badLineEndCount);
         
         $unixLineEndCount = preg_match_all("/\\x0d/", $smtpLog, $matches);
-        $this->assertTrue($unixLineEndCount > 70, 'unix line ends are missing (got ' . $unixLineEndCount . ' unix line ends)');
+        $this->assertTrue($unixLineEndCount > 60, 'unix line ends are missing (got ' . $unixLineEndCount . ' unix line ends)');
     }
     
    /**

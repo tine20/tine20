@@ -231,6 +231,98 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
          }
     }
 
+    /**
+     * Return registry data for timeaccount favorites
+     *
+     * @return array
+     * @throws \Tinebase_Exception_InvalidArgument
+     */
+    public function getTimeAccountFavoriteRegistry()
+    {
+        $appPrefs = Tinebase_Core::getPreference($this->_applicationName);
+
+        // Get preference
+        $quickTagPreferences = $appPrefs->search(
+            new Tinebase_Model_PreferenceFilter([
+                'name' => Timetracker_Preference::QUICKTAG
+            ])
+        );
+
+        // There could be only one result, if not do nothing.
+        if ($quickTagPreferences->count() !== 1) {
+            return null;
+        }
+
+        $quickTagPreference = $quickTagPreferences->getFirstRecord();
+
+        if ($quickTagPreference->value === false) {
+            return null;
+        }
+
+        // Resolve tag by it's id
+        $tag = Tinebase_Tags::getInstance()->get($quickTagPreference->value);
+
+        $pref = array();
+        $pref['quicktagId'] = $quickTagPreference->value;
+        $pref['quicktagName'] = $tag->name;
+
+        return $pref;
+    }
+
+    /**
+     * Return registry data
+     *
+     * @return array
+     * @throws \Tinebase_Exception_InvalidArgument
+     */
+    public function getRegistryData()
+    {
+        $registry = [];
+
+        if (Timetracker_Config::getInstance()->featureEnabled(Timetracker_Config::FEATURE_TIMEACCOUNT_BOOKMARK)) {
+            $registry = array_merge($registry, $this->getOwnTimeAccountBookmarks());
+        }
+
+        $timeaccountFavorites = $this->getTimeAccountFavoriteRegistry();
+
+        if ($timeaccountFavorites !== null) {
+            $registry = array_merge($registry, $this->getTimeAccountFavoriteRegistry());
+        }
+
+        return $registry;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getOwnTimeAccountBookmarks() {
+        $ownFavoritesFilter = new Timetracker_Model_TimeaccountFavoriteFilter([
+            'account_id' => Tinebase_Core::getUser()->accountId,
+        ]);
+
+        $timeAccountFavs = Timetracker_Controller_TimeaccountFavorites::getInstance()->search($ownFavoritesFilter);
+        $timeAccountFavsArray = [];
+
+        foreach($timeAccountFavs as $timeAccountFav) {
+            $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($timeAccountFav->timeaccount_id);
+
+            // timeaccount will be used to set the defaults for opening new timesheet record in frontend
+            // Resolve here to save loading time
+            $timeAccountFavsArray[] = [
+                'timeaccount' => $timeaccount->toArray(),
+                'favId' => $timeAccountFav->id,
+                'text' => $timeaccount->title,
+                'leaf' => true,
+                'iconCls' => 'task'
+            ];
+        }
+
+        $pref = array();
+        $pref['timeaccountFavorites'] = $timeAccountFavsArray;
+
+        return $pref;
+    }
+
     /************************************** public API **************************************/
 
     /**
@@ -288,44 +380,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * Return registry data
-     *
-     * @return array
-     * @throws \Tinebase_Exception_InvalidArgument
-     */
-    public function getRegistryData()
-    {
-        $appPrefs = Tinebase_Core::getPreference($this->_applicationName);
-
-        // Get preference
-        $quickTagPreferences = $appPrefs->search(
-            new Tinebase_Model_PreferenceFilter([
-                'name' => Timetracker_Preference::QUICKTAG
-            ])
-        );
-
-        // There could be only one result, if not do nothing.
-        if ($quickTagPreferences->count() !== 1) {
-            return array();
-        }
-
-        $quickTagPreference = $quickTagPreferences->getFirstRecord();
-
-        if ($quickTagPreference->value === false) {
-            return array();
-        }
-
-        // Resolve tag by it's id
-        $tag = Tinebase_Tags::getInstance()->get($quickTagPreference->value);
-
-        $pref = array();
-        $pref['quicktagId'] = $quickTagPreference->value;
-        $pref['quicktagName'] = $tag->name;
-
-        return $pref;
-    }
-
-    /**
      * Search for records matching given arguments
      *
      * @param  array $filter
@@ -368,5 +422,38 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function deleteTimeaccounts($ids)
     {
         return $this->_delete($ids, $this->_timeaccountController);
+    }
+
+    /**
+     * Add given timeaccount id as a users favorite
+     *
+     * @param $timeaccountId
+     * @return Timetracker_Model_Timeaccount
+     */
+    public function addTimeAccountFavorite($timeaccountId)
+    {
+        $timeaccount = new Timetracker_Model_TimeaccountFavorite();
+        $timeaccount->timeaccount_id = $timeaccountId;
+        $timeaccount->account_id = Tinebase_Core::getUser()->accountId;
+
+        Timetracker_Controller_TimeaccountFavorites::getInstance()->create($timeaccount);
+
+        return $this->getOwnTimeAccountBookmarks();
+    }
+
+    /**
+     * Delete given timeaccount favorite
+     *
+     * @param $favId
+     * @return Tinebase_Record_RecordSet
+     * @throws \Tinebase_Exception
+     */
+    public function deleteTimeAccountFavorite($favId)
+    {
+        Timetracker_Controller_TimeaccountFavorites::getInstance()->delete([
+            $favId
+        ]);
+
+        return $this->getOwnTimeAccountBookmarks();
     }
 }

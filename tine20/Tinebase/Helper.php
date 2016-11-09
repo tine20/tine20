@@ -335,18 +335,25 @@ class Tinebase_Helper
      * Prepare function input to be an array. Input maybe already an array or (empty) text.
      * Starting PHP 7 Zend_Json::decode can't handle empty strings.
      *
-     * @param $jsonOrArray
-     * @return mixed
+     * @param mixed $jsonOrArray
+     * @return array
      * @throws Zend_Json_Exception
      */
     public static function jsonDecode($jsonOrArray)
     {
         if (is_array($jsonOrArray)) {
             return $jsonOrArray;
-        } else if (trim($jsonOrArray) == '') {
+        } else if (empty($jsonOrArray) || trim($jsonOrArray) == '') {
             return Zend_Json::decode("{}");
         } else {
-            return Zend_Json::decode($jsonOrArray);
+            try {
+                return Zend_Json::decode($jsonOrArray);
+            } catch (Zend_Json_Exception $zje) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not json decode: ' . var_export($jsonOrArray, true) . ' - assuming empty array.');
+                Tinebase_Exception::log($zje, false);
+                return Zend_Json::decode("{}");
+            }
         }
     }
 

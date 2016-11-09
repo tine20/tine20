@@ -11,16 +11,19 @@ BASEDIR=`readlink -f ./tine20build`
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-CODENAME="Egon"
+CODENAME="2016.09"
 GITURL="http://git.tine20.org/git/tine20"
 
 RELEASE=""
-GITBRANCH="2016.03"
+GITBRANCH="2016.09"
 PACKAGEDIR=""
 
 PATH=$MISCPACKAGESDIR:$TEMPDIR/tine20/vendor/bin:$PATH
 
-ADDITIONALRELEASEFILES="CoreData"
+ADDITIONALRELEASEFILES=""
+
+REPOCACHEDIR=$(dirname $(dirname $(realpath -s ${BASH_SOURCE[0]})))
+REPOCACHEDIR="${REPOCACHEDIR}/repoCache"
 
 #
 # checkout url to local directory
@@ -185,12 +188,12 @@ function activateReleaseMode()
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
 
-    sed -i -e "s#'TINE20_CODENAME',      Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i -e "s#'TINE20SETUP_CODENAME',       Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
-    sed -i -e "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i -e "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
-    sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i -e "s/'TINE20SETUP_RELEASETIME',   'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s#'TINE20_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s#'TINE20SETUP_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/'TINE20_PACKAGESTRING', *'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s/'TINE20SETUP_PACKAGESTRING', *'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/'TINE20_RELEASETIME', *'none'/'TINE20_RELEASETIME', '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s/'TINE20SETUP_RELEASETIME', *'none'/'TINE20SETUP_RELEASETIME', '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     sed -i -e "s/Tinebase_Helper::getDevelopmentRevision()/Tinebase_Helper::getCodename()/" $TEMPDIR/tine20/build.xml
 
     sed -i -e "s/Tine.clientVersion.buildRevision[^;]*/Tine.clientVersion.buildRevision = '$REVISION'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
@@ -288,14 +291,7 @@ function createArchives()
                     # remove composer dev requires
                     composer install --no-dev -d $TEMPDIR/tine20
 
-                    # remove npm dev requires
-                    if [ -e $TEMPDIR/tine20/Tinebase/js/package.json ]
-                    then
-                      cd Tinebase/js
-                      npm prune --production
-                      cd ../..
-                    fi
-
+                    rm -rf $TEMPDIR/tine20/Tinebase/js/node_modules
                     rm -rf $TEMPDIR/tine20/vendor/phpdocumentor
                     rm -rf $TEMPDIR/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
 
@@ -310,7 +306,7 @@ function createArchives()
                     rm -rf $TEMPDIR/tine20/composer.*
 
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase images library vendor docs fonts themes"
+                    local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor docs fonts themes"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
                     local FILES="$FILES CREDITS LICENSE PRIVACY README RELEASENOTES init_plugins.php favicon.ico"
 
@@ -327,9 +323,15 @@ function createArchives()
 
                 *)
                     echo " $FILE"
+
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "empty\.js"))
-                    (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    if [ -d "$TEMPDIR/tine20/$FILE/js" ]; then
+                        (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-" | grep -v "empty\.js"))
+                    fi
+                    if [ -d "$TEMPDIR/tine20/$FILE/css" ]; then
+                        (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    fi
+
                     echo "building "
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILE)
                     (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILE)
