@@ -637,7 +637,12 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $data = parent::getRegistryData();
         $ci = HumanResources_Config::getInstance();
         $calid = $ci->get($ci::DEFAULT_FEAST_CALENDAR, NULL);
-        $data[$ci::DEFAULT_FEAST_CALENDAR] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : NULL;
+        try {
+            $data[$ci::DEFAULT_FEAST_CALENDAR] = $calid ? Tinebase_Container::getInstance()->get($calid)->toArray() : null;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Exception::log($tenf);
+            $data[$ci::DEFAULT_FEAST_CALENDAR] = null;
+        }
         $data[$ci::VACATION_EXPIRES] = $ci->get($ci::VACATION_EXPIRES);
         return $data;
     }

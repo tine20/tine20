@@ -203,11 +203,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $cache = new Zend_Cache_Frontend_File(array(
                     'master_files'              => $masterFiles,
                     'lifetime'                  => null,
-                    'automatic_serialization'   => true, // turn that off for more speed
-                    'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
+                    'automatic_serialization'   => true,  // turn that off for more speed
+                    'automatic_cleaning_factor' => 0,     // no garbage collection as this is done by a scheduler task
                     'write_control'             => false, // don't read cache entry after it got written
-                    'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
-                    'logger'                    => Tinebase_Core::getLogger(),
+                    'logging'                   => Tinebase_Core::getCache()->getOption('logging'),
+                    'logger'                    => Tinebase_Core::getCache()->getOption('logger'),
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .

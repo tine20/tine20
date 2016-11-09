@@ -1,0 +1,56 @@
+{
+  "projectName": "Tine 2.0 - Events",
+  "deployDir": "Events",
+  "licenseText": "Tine 2.0 - Events \nCopyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Events FAT Client",
+      "file": "js/Events-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Events.js",
+          "path": "js/"
+        },
+        {
+          "text": "CalendarEventEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CalendarEventGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "EventEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "EventGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "EventDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Events FAT Client",
+      "file": "css/Events-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Events.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

@@ -354,7 +354,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * update file object with hash file info
      * 
-     * @param string $_id
+     * @param string|Tinebase_Model_Tree_FileObject $_id file object (or id)
      * @param string $_hash
      * @param string $_hashFile
      * @return Tinebase_Model_Tree_FileObject
@@ -362,23 +362,35 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     protected function _updateFileObject($_id, $_hash, $_hashFile = null)
     {
         $currentFileObject = $_id instanceof Tinebase_Record_Abstract ? $_id : $this->_fileObjectBackend->get($_id);
-        
+
+        if (! $_hash) {
+            // use existing hash from file object
+            $_hash = $currentFileObject->hash;
+        }
         $_hashFile = $_hashFile ?: ($this->_basePath . '/' . substr($_hash, 0, 3) . '/' . substr($_hash, 3));
         
         $updatedFileObject = clone($currentFileObject);
         $updatedFileObject->hash = $_hash;
-        $updatedFileObject->size = filesize($_hashFile);
-        
-        if (version_compare(PHP_VERSION, '5.3.0', '>=') && function_exists('finfo_open')) {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mimeType = finfo_file($finfo, $_hashFile);
-            if ($mimeType !== false) {
-                $updatedFileObject->contenttype = $mimeType;
+
+        if (file_exists($_hashFile)) {
+            $updatedFileObject->size = filesize($_hashFile);
+
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($finfo, $_hashFile);
+                if ($mimeType !== false) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting file contenttype to " . $mimeType);
+                    $updatedFileObject->contenttype = $mimeType;
+                }
+                finfo_close($finfo);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' finfo_open() is not available: Could not get file information.');
             }
-            finfo_close($finfo);
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' finfo_open() is not available: Could not get file information.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' File hash does not exist - directory?');
         }
         
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
@@ -975,7 +987,7 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
     /**
      * search tree nodes
      *
-     * TODO replace searchNodes
+     * TODO replace searchNodes / or refactor this - tree objects has no search function yet / might be ambiguous...
      *
      * @param Tinebase_Model_Tree_Node_Filter $_filter
      * @param Tinebase_Record_Interface $_pagination

@@ -22,9 +22,9 @@
         "url": "http://git.syncroton.org/Syncroton"
     }],
     "require": {
-        "zendframework/zendframework1": "1.12.20pl2 as 1.12.20",
+        "zendframework/zendframework1": "1.12.20pl3 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
-        "syncroton/syncroton": "1.3.*",
+        "syncroton/syncroton": "dev-master#2fb2980cfb263579f4cb9e7b4794a6f7fe98de7b",
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",
         "phpoffice/phpword": "v0.13.*",
@@ -33,7 +33,8 @@
         "metaways/opendocument": "1.1",
         "metaways/timezoneconvert": "0.2",
         "zendframework/zend-http": "2.4.*",
-        "doctrine/orm": "2.5.*"
+        "doctrine/orm": "2.5.*",
+        "twig/twig": "~1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.*",

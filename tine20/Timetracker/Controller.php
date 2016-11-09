@@ -36,14 +36,14 @@ class Timetracker_Controller extends Tinebase_Controller_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    protected function __construct() {
     }
     
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() 
+    protected function __clone()
     {
     }
     

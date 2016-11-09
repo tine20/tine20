@@ -23,7 +23,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
     /**
      * @var array modelConfigType => Doctrine2Type
      */
-    protected static $_typeMap= array(
+    protected static $_typeMap = array(
         'string'        => 'string',
         'text'          => 'text',
         'datetime'      => 'datetime',
@@ -32,6 +32,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
         'integer'       => 'integer',
         'numberableInt' => 'integer',
         'numberableStr' => 'string',
+        'float'         => 'float',
         'json'          => 'text',
         'container'     => 'integer',
         'record'        => 'string',

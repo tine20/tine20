@@ -76,7 +76,16 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             if (this.record.get('action_type') == type) {
                 var field = this.getForm().findField('action_argument_' + type);
                 if (field !== null) {
-                    field.setValue(this.record.get('action_argument'));
+                    switch (type) {
+                        case 'redirect':
+                           var data = this.record.get('action_argument'),
+                               checkbox = this.getForm().findField('action_argument_redirect_copy');
+                           field.setValue(data.emails);
+                           checkbox.setValue(data.copy);
+                           break;
+                        default:
+                           field.setValue(this.record.get('action_argument'));
+                    }
                 }
             }
         }
@@ -111,9 +120,19 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         Tine.Felamimail.sieve.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
         this.record.set('conditions', this.getConditions());
-        
-        var argumentField = this.getForm().findField('action_argument_' + this.actionTypeCombo.getValue()),
+
+        var argumentFieldName = 'action_argument_' + this.actionTypeCombo.getValue();
+            argumentField = this.getForm().findField(argumentFieldName),
             argumentValue = (argumentField !== null) ? argumentField.getValue() : '';
+
+        // add additional action arguments
+        if (argumentFieldName === 'action_argument_redirect') {
+            argumentValue = {
+                emails: argumentValue,
+                copy: this.getForm().findField('action_argument_redirect_copy').getValue()
+            };
+        }
+        
         this.record.set('action_argument', argumentValue);
     },
     
@@ -359,6 +378,10 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             emptyText: 'test@example.org',
                             width: 200,
                             hideLabel: true
+                        }, {
+                            name: 'action_argument_redirect_copy',
+                            xtype: 'checkbox',
+                            fieldLabel: this.app.i18n._('Keep a copy')
                         }]
                     }, {
                         id: this.idPrefix + 'reject',

@@ -45,10 +45,11 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         operator: 'equals',
         value: true
     }],
+    action_bookmark: null,
     
     initComponent: function() {
         Tine.Timetracker.TimeaccountGridPanel.superclass.initComponent.call(this);
-        
+
         this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'));
         this.action_editInNewWindow.requiredGrant = 'editGrant';
     },
@@ -77,12 +78,61 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             }
         });
 
+        this.action_bookmark = new Ext.Action({
+            text: i18n._('Bookmark Timeaccount'),
+            iconCls: 'action_add',
+            requiredGrant: 'readGrant',
+            scope: this,
+            disabled: true,
+            allowMultiple: false,
+            visible: false,
+            handler: this.addBookmark
+        });
+
+
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_exportTimeaccount
+            this.actions_exportTimeaccount,
+            this.action_bookmark
         ]);
 
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
+    },
+
+    addBookmark: function () {
+        var grid = this,
+            app = this.app,
+            selectionModel = grid.selectionModel;
+
+        Ext.each(selectionModel.getSelections(), function (record) {
+            Ext.Ajax.request({
+                url: 'index.php',
+                scope: this,
+                params: {
+                    method: 'Timetracker.addTimeAccountFavorite',
+                    timeaccountId: record.get('id')
+                },
+                success : function(_result, _request) {
+                    if (_result.responseText) {
+                        Tine.Timetracker.registry.set('timeaccountFavorites', JSON.parse(_result.responseText).timeaccountFavorites);
+
+                        var rootNode = Ext.getCmp('TimeaccountFavoritesPanel').getRootNode();
+
+                        if (!rootNode.hasChildNodes()) {
+                            rootNode.removeAll();
+                        }
+
+                        rootNode.removeAll();
+                        rootNode.appendChild(Tine.Timetracker.registry.get('timeaccountFavorites'));
+
+                        rootNode.expand();
+                    }
+                },
+                failure: function(result) {
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(result);
+                }
+            });
+        });
     },
 
     /**
@@ -109,13 +159,17 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         var items = [
             '-', {
                 text: Tine.Tinebase.appMgr.get('Timetracker').i18n._('Close Timeaccount'),
-                iconCls: 'action_edit',
+                iconCls: 'action_close',
                 scope: this,
                 disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
                 itemId: 'closeAccount',
                 handler: this.onCloseTimeaccount.createDelegate(this)
             }
         ];
+
+        if (this.app.featureEnabled('featureTimeaccountBookmark')) {
+            items.push(this.action_bookmark);
+        }
 
         return items;
     },

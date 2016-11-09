@@ -490,7 +490,7 @@ class Phone_JsonTest extends TestCase
     /**
      * @see 0011934: show contacts in phone call grid
      */
-    public function testContactRelations()
+    public function testContactId()
     {
         // search phone 2 calls (on should be linked to sclever)
         $result = $this->_json->searchCalls($this->_objects['filter3'], $this->_objects['paging']);
@@ -503,8 +503,7 @@ class Phone_JsonTest extends TestCase
         }
 
         $this->assertTrue($scleverCall !== null);
-        $this->assertTrue(isset($scleverCall['relations']));
-        $this->assertEquals(1, count($scleverCall['relations']), print_r($scleverCall, true));
-        $this->assertEquals('Susan', $scleverCall['relations'][0]['related_record']['n_given'], print_r($scleverCall, true));
+        $this->assertTrue(isset($scleverCall['contact_id']));
+        $this->assertEquals($this->_personas['sclever']->getId(), $scleverCall['contact_id']['account_id'], print_r($scleverCall['contact_id'], true));
     }
 }

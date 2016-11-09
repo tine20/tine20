@@ -305,6 +305,10 @@ class Tinebase_ApplicationTest extends TestCase
                 'Crm_Model_LeadState',
                 'Crm_Model_Lead',
             ),
+            'Events' => array(
+                'Events_Model_Status',
+                'Events_Model_Event',
+            ),
             'ExampleApplication' => array(
                 'ExampleApplication_Model_ExampleRecord',
                 'ExampleApplication_Model_Status',
@@ -390,6 +394,7 @@ class Tinebase_ApplicationTest extends TestCase
                 'Timetracker_Model_TimeaccountGrants',
                 'Timetracker_Model_Timesheet',
                 'Timetracker_Model_Timeaccount',
+                'Timetracker_Model_TimeaccountFavorite'
             ),
             'Tinebase' => array(
                 'Tinebase_Model_AccessLog',
@@ -466,6 +471,14 @@ class Tinebase_ApplicationTest extends TestCase
             }
         }
 
+        // check model dir -> app might have no models
+        foreach ($appNames as $key => $appName) {
+            $modelDir = __DIR__ . "../../tine20/$appName/Model/";
+            if (! file_exists($modelDir)) {
+                unset($appNames[$key]);
+            }
+        }
+        
         // no apps should remain => we found models for each app, expect the bogus ones from above
         $this->assertEquals(0, count($appNames), 'applications found for which no models where found: '.print_r($appNames, true));
 

@@ -526,13 +526,31 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testCreateDirectoryNodeInPersonalWithSameNameAsOtherUsersDir()
     {
-        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        $this->testCreateContainerNodeInPersonalFolder();
         
         $personas = Zend_Registry::get('personas');
         Tinebase_Core::set(Tinebase_Core::USER, $personas['sclever']);
         $personalContainerNodeOfsclever = $this->testCreateContainerNodeInPersonalFolder();
         
         $this->assertEquals('/personal/sclever/testcontainer', $personalContainerNodeOfsclever['path']);
+    }
+
+    /**
+     * testUpdateNodeWithCustomfield
+     *
+     * ·@see 0009292: Filemanager Custom Fields not saved
+     */
+    public function testUpdateNodeWithCustomfield()
+    {
+        $cf = $this->_createCustomfield('fmancf', 'Filemanager_Model_Node');
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+
+        $personalContainerNode = $this->_json->getNode($personalContainerNode['id']);
+        $personalContainerNode['customfields'][$cf->name] = 'cf value';
+        $updatedNode = $this->_json->saveNode($personalContainerNode);
+
+        $this->assertTrue(isset($updatedNode['customfields']) && isset($updatedNode['customfields'][$cf->name]), 'no customfields in record');
+        $this->assertEquals($personalContainerNode['customfields'][$cf->name], $updatedNode['customfields'][$cf->name]);
     }
     
     /**
@@ -1012,7 +1030,28 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         return $node;
     }
-    
+
+    /**
+     * testAttachTag
+     *
+     * @see 0012284: file type changes to 'directory' if tag is assigned
+     */
+    public function testAttachTagPreserveContentType()
+    {
+        $node = $this->testCreateFileNodeWithTempfile();
+        $node['tags'] = array(array(
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => 'file tag',
+        ));
+        $node['path'] = '';
+        // remove hash field that the client does not send
+        unset($node['hash']);
+        $updatedNode = $this->_json->saveNode($node);
+
+        $this->assertEquals(1, count($updatedNode['tags']));
+        $this->assertEquals($node['contenttype'], $updatedNode['contenttype'], 'contenttype  not preserved');
+    }
+
     /**
      * testSetRelation
      * 

@@ -504,4 +504,23 @@ class Timetracker_ControllerTest extends TestCase
         
         $this->assertEquals(10, count($result));
     }
+
+    /**
+     * Tests if a time account favorite can be created
+     */
+    public function testCreateTimeaccountFavorite()
+    {
+        $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($this->_getTimeaccount());
+        $user = Tinebase_Core::getUser();
+
+        $timeaccountFavorite = new Timetracker_Model_TimeaccountFavorite([
+            'account_id' => $user->accountId,
+            'timeaccount_id' => $timeaccount->getId()
+        ]);
+
+        $timeaccountCreated = Timetracker_Controller_TimeaccountFavorites::getInstance()->create($timeaccountFavorite);
+
+        static::assertEquals($timeaccountCreated->account_id, $user->getId());
+        static::assertEquals($timeaccountCreated->timeaccount_id, $timeaccount->id);
+    }
 }

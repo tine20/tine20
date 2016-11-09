@@ -24,7 +24,7 @@ Tine.Tinebase.Application = function(config) {
     
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
-    
+
     this.init();
     if (Tine.CoreData && Tine.CoreData.Manager) {
         this.registerCoreData();
