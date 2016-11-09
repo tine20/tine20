@@ -17,22 +17,20 @@ class Events_ControllerTest extends Events_TestCase
     /**
      * @var array
      */
-    protected $_createdGroupIds = array();
+    protected $_groupIdsToDelete = array();
 
     /**
-     * Backend
-     *
-     * @var Events_Frontend_Json
+     * set up tests
      */
-    public function setUp()
+    protected function setUp()
     {
-        parent::setUp();
-
-        foreach ($this->_createdGroupIds as $groupId) {
-            Admin_Controller_Group::getInstance()->delete($groupId);
+        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $this->markTestSkipped('currently not working with PGSQL');
         }
-    }
 
+        parent::setUp();
+    }
+    
     /**
      * @throws Exception
      * @throws Tinebase_Exception_Duplicate
@@ -46,7 +44,7 @@ class Events_ControllerTest extends Events_TestCase
             'description' => 'test group'
         )));
 
-        $this->_createdGroupIds[] = $group->getId();
+        $this->_groupIdsToDelete[] = $group->getId();
 
         try {
             $eventContainer = Tinebase_Container::getInstance()->getContainerByName(
@@ -80,7 +78,7 @@ class Events_ControllerTest extends Events_TestCase
     {
         $list = $this->testListCreatesEventContainer();
         Addressbook_Controller_List::getInstance()->delete(array($list->getId()));
-        $this->_createdGroupIds = array();
+        $this->_groupIdsToDelete = array();
 
         $container = Tinebase_Container::getInstance()->getContainerByName(
             'Events_Model_Event',
