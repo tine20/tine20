@@ -585,23 +585,40 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * created customfield config
+     * get custom field record
      *
-     * @param string $cfName
+     * @param string $name
+     * @param string $model
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _createCustomfield($cfName = NULL, $model = 'Addressbook_Model_Contact')
+    protected function _createCustomField($name = 'Yomi Name', $model = 'Addressbook_Model_Contact')
     {
-        $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
-        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(substr($model, 0, strpos($model, '_')))->getId(),
-            'model'          => $model,
-            'name'           => $cfName,
+        $application = substr($model, 0, strpos($model, '_'));
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'name'              => $name,
+            'model'             => $model,
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
         ));
 
-        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
-        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
+        try {
+            $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+            $this->_customfieldIdsToDelete[] = $result->getId();
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // customfield already exists
+            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+            $result = $cfs->filter('name', $name)->getFirstRecord();
+        }
 
-        return $createdCustomField;
+        return $result;
     }
 }
