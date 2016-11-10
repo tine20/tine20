@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>9.10</version>
+    <version>9.11</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -464,6 +464,11 @@
                     <length>128</length>
                     <notnull>true</notnull>
                     <default>contact</default>
+                </field>
+                <field>
+                    <name>syncBackendIds</name>
+                    <type>text</type>
+                    <length>16000</length>
                 </field>
                 <index>
                     <name>id</name>

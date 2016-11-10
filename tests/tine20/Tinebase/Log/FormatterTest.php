@@ -71,13 +71,19 @@ class Tinebase_Log_FormatterTest extends PHPUnit_Framework_TestCase
         $loggerFile = file_get_contents($logfile);
         $writer->shutdown();
         unlink($logfile);
-        
+
+        if (strpos($loggerFile, 'setupuser') !== false) {
+            $username = 'setupuser';
+        } else {
+            $username = Tinebase_Core::getUser()->accountLoginName;
+        }
+
         $this->assertFalse(strpos($loggerFile, $password), 'pw found!');
         $this->assertContains('********', $loggerFile);
         if ($config->logger->logruntime || $config->logger->logdifftime) {
-            $this->assertTrue(preg_match('/' . Tinebase_Core::getUser()->accountLoginName . ' \d/', $loggerFile) === 1);
+            $this->assertTrue(preg_match('/' . $username . ' \d/', $loggerFile) === 1);
         } else {
-            $this->assertContains(Tinebase_Core::getUser()->accountLoginName . ' - ', $loggerFile);
+            $this->assertContains($username . ' - ', $loggerFile);
         }
     }
 }

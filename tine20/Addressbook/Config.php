@@ -66,6 +66,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const FEATURE_INDUSTRY = 'featureIndustry';
 
     /**
+     * config for the syncBackends
+     *
+     * @var string
+     */
+    const SYNC_BACKENDS = 'syncBackends';
+
+    /**
      * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -159,6 +166,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
+        ),
+        self::SYNC_BACKENDS => array(
+            //_('Sync Backends')
+            'label'                 => 'Sync Backends',
+            //_('Sync Backends')
+            'description'           => 'Sync Backends',
+            'type'                  => 'array',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'default'               => array()
         ),
     );
     
