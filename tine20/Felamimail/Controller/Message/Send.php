@@ -80,14 +80,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            if (preg_match('/^501 5\.1\.3/', $e->getMessage())) {
-                $messageText = $translation->_('Bad recipient address syntax');
-            } else if (preg_match('/^550 5\.1\.1 <(.*?)>/', $e->getMessage(), $match)) {
-                $messageText = '<' . $match[1] . '>: ' . $translation->_('Recipient address rejected');
-            } else {
-                $messageText = $e->getMessage();
-            }
-            $tesg = $this->_getErrorException($messageText);
+            $message = sprintf($translation->_('Error: %s'), $e->getMessage());
+            $tesg = new Tinebase_Exception_SystemGeneric($message);
+            $tesg->setTitle($translation->_('Could not send message'));
             throw $tesg;
         }
         
@@ -447,57 +442,33 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $nonPrivateRecipients = array();
         $punycodeConverter = $this->getPunycodeConverter();
-        $invalidEmailAddresses = array();
         
         foreach (array('to', 'cc', 'bcc') as $type) {
             if (isset($_message->{$type})) {
                 foreach((array) $_message->{$type} as $address) {
-
-                    $punyCodedAddress = $punycodeConverter->encode($address);
-
-                    if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $punyCodedAddress)) {
-                        $invalidEmailAddresses[] = $address;
-                        continue;
-                    }
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                        . __LINE__ . ' Add ' . $type . ' address: ' . $punyCodedAddress);
+                    
+                    $address = $punycodeConverter->encode($address);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Add ' . $type . ' address: ' . $address);
                     
                     switch($type) {
                         case 'to':
-                            $_mail->addTo($punyCodedAddress);
-                            $nonPrivateRecipients[] = $punyCodedAddress;
+                            $_mail->addTo($address);
+                            $nonPrivateRecipients[] = $address;
                             break;
                         case 'cc':
-                            $_mail->addCc($punyCodedAddress);
-                            $nonPrivateRecipients[] = $punyCodedAddress;
+                            $_mail->addCc($address);
+                            $nonPrivateRecipients[] = $address;
                             break;
                         case 'bcc':
-                            $_mail->addBcc($punyCodedAddress);
+                            $_mail->addBcc($address);
                             break;
                     }
                 }
             }
         }
-
-        if (count($invalidEmailAddresses) > 0) {
-            $translation = Tinebase_Translation::getTranslation('Felamimail');
-            $messageText = '<' . implode(',', $invalidEmailAddresses) . '>: ' . $translation->_('Invalid address format');
-            $tesg = $this->_getErrorException($messageText);
-            throw $tesg;
-        }
         
         return $nonPrivateRecipients;
-    }
-
-    protected function _getErrorException($messageText)
-    {
-        $translation = Tinebase_Translation::getTranslation('Felamimail');
-        $message = sprintf($translation->_('Error: %s'), $messageText);
-        $tesg = new Tinebase_Exception_SystemGeneric($message);
-        $tesg->setTitle($translation->_('Could not send message'));
-
-        return $tesg;
     }
     
     /**
