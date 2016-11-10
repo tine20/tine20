@@ -131,7 +131,7 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
         });
         if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
             var email = this.getPreferredEmail();
-            if (email !== '') {
+            if (email) {
                 result += ' (' + email + ')';
             }
         }
