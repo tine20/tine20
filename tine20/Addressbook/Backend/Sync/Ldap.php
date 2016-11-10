@@ -71,7 +71,7 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
          * @link https://wiki.mozilla.org/MailNews:LDAP_Address_Books#LDAP_Address_Book_Schema
          */
 
-          /*  'adr_one_street2'       => 'mozillaworkstreet2',
+            'adr_one_street2'       => 'mozillaworkstreet2',
             'adr_one_countryname'   => 'c', // 2 letter country code
             'adr_two_street'        => 'mozillahomestreet',
             'adr_two_street2'       => 'mozillahomestreet2',
@@ -80,7 +80,7 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
             'adr_two_postalcode'    => 'mozillahomepostalcode',
             'adr_two_countryname'   => 'mozillahomecountryname',
             'email_home'            => 'mozillasecondemail',
-            'url_home'              => 'mozillahomeurl',*/
+            'url_home'              => 'mozillahomeurl',
             //'' => 'displayName'
             //'' => 'mozillaCustom1'
             //'' => 'mozillaCustom2'
