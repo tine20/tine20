@@ -1378,7 +1378,7 @@ class Addressbook_JsonTest extends TestCase
         $filter = array(
             array('field' => 'n_family', 'operator' => 'contains', 'value' => strtolower('PHPUNIT'))
         );
-        $result = $this->_instance->searchContacts($filter, array());
+        $result = $this->_uit->searchContacts($filter, array());
 
         $this->assertGreaterThan(0, $result['totalcount'], 'contact not found: ' . print_r($result, true));
     }
