@@ -178,31 +178,19 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $plugin = 'Calendar_Import_Ical';
         }
 
-        $credentialCache = Tinebase_Auth_CredentialCache::getInstance();
-        $credentials = $credentialCache->cacheCredentials(
-            $importOptions['username'],
-            $importOptions['password'],
-            null,
-            /* persist */       true,
-            /* valid until */   Tinebase_DateTime::now()->addYear(100)
-        );
-
-        $record = Tinebase_Controller_ScheduledImport::getInstance()->createRemoteImportEvent(array(
+        $record = Tinebase_Controller_ScheduledImport::getInstance()->create( new Tinebase_Model_Import(array(
             'source'            => $remoteUrl,
+            'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
             'interval'          => $interval,
             'options'           => array_replace($importOptions, array(
                 'plugin' => $plugin,
                 'importFileByScheduler' => $importOptions['sourceType'] != 'remote_caldav',
-                'cid' => $credentials->getId(),
-                'ckey' => $credentials->key
             )),
             'model'             => 'Calendar_Model_Event',
-            'user_id'           => Tinebase_Core::getUser()->getId(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-        ));
+        ), true));
 
         $result = $this->_recordToJson($record);
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'container_id:'  .  print_r($result['container_id'], true));
 
         return $result;
     }
