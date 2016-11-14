@@ -179,22 +179,22 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $importUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
         Tinebase_Core::set(Tinebase_Core::USER, $importUser);
 
-        // handle options
-        $options = Zend_Json::decode($record->options);
-        $options['url'] = $record->source;
-
-        if (isset($options['cid']) && isset($options['ckey'])) {
-            $credentials = new Tinebase_Model_CredentialCache($options);
-            Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentials);
-
-            $options['username'] = $credentials->username;
-            $options['password'] = $credentials->password;
-        }
-
-        $importer = $record->getOption('plugin');
-        $resource = $record->getOption('importFileByScheduler') ? $this->_getFileToImport($options['url']) : null;
-
         try {
+            // handle options
+            $options = Zend_Json::decode($record->options);
+            $options['url'] = $record->source;
+
+            if (isset($options['cid']) && isset($options['ckey'])) {
+                $credentials = new Tinebase_Model_CredentialCache($options);
+                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentials);
+
+                $options['username'] = $credentials->username;
+                $options['password'] = $credentials->password;
+            }
+
+            $importer = $record->getOption('plugin');
+            $resource = $record->getOption('importFileByScheduler') ? $this->_getFileToImport($options['url']) : null;
+
             $importer = new $importer($options);
             $importer->import($resource);
         } catch (Exception $e) {
