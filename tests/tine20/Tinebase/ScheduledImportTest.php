@@ -154,7 +154,7 @@ class Tinebase_ScheduledImportTest extends TestCase
     public function testDeactivatingImport()
     {
         // create invalid import
-        $import1 = $this->createScheduledImport();
+        $import1 = $this->createScheduledImport('/non/existing/file.ics');
 
         // run 5 (maxfailcount) times
         for ($i = 1; $i <= Tinebase_Controller_ScheduledImport::MAXFAILCOUNT; $i++) {
