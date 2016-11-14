@@ -112,11 +112,15 @@ Tine.Tinebase.ApplicationStarter = {
             switch (config.type) {
                 case 'record':
                     if (Tine.Tinebase.common.hasRight('view', config.config.appName, config.config.modelName.toLowerCase())) {
-                        gridRenderer = function(value, row, record) {
-                            var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
-                            var titleProperty = foreignRecordClass.getMeta('titleProperty');
-                            return record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
-                        };
+                        var foreignRecordClass = Tine[config.config.appName].Model[config.config.modelName];
+                        if (foreignRecordClass) {
+                            gridRenderer = function (value, row, record) {
+                                var titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                return record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
+                            };
+                        } else {
+                            gridRenderer = null;
+                        }
                     } else {
                         gridRenderer = null;
                     }

@@ -824,8 +824,11 @@ class Tinebase_ModelConfiguration {
                 $fieldDef['type'] = 'string';
             }
             
-            // don't handle field if app is not available
-            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef)) && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records') && (! $this->_isAvailable($fieldDef['config']))) {
+            // don't handle field if app is not available or feature disabled
+            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))
+                && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records')
+                && (! $this->_isAvailable($fieldDef['config'])))
+            {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
                 continue;
@@ -1174,7 +1177,8 @@ class Tinebase_ModelConfiguration {
     
     /**
      * checks if app and model is available for the user at record and records fields
-     * later this can be used to use field acl
+     * - later this can be used to use field acl
+     * - also checks feature switches
      * 
      * @param array $_fieldConfig the field configuration
      */
@@ -1183,7 +1187,17 @@ class Tinebase_ModelConfiguration {
         if (! (isset(self::$_availableApplications[$_fieldConfig['appName']]) || array_key_exists($_fieldConfig['appName'], self::$_availableApplications))) {
             self::$_availableApplications[$_fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($_fieldConfig['appName'], TRUE);
         }
-        return self::$_availableApplications[$_fieldConfig['appName']];
+        $result = self::$_availableApplications[$_fieldConfig['appName']];
+
+        if ($result && isset($_fieldConfig['feature'])) {
+            $config = Tinebase_Config_Abstract::factory($_fieldConfig['appName']);
+            $result = $config->featureEnabled($_fieldConfig['feature']);
+
+            if (! $result && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Feature ' . $_fieldConfig['feature'] . ' disables field');
+        }
+
+        return $result;
     }
     
     /**
