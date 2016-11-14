@@ -928,7 +928,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'title'         => 'Tacss',
             'description'   => 'blabla',
             'is_open'       => 1,
-            'status'        => 'open',
             'budget'        => NULL,
             
         )))->getFirstRecord();
