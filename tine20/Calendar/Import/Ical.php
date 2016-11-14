@@ -16,8 +16,6 @@
  * 
  * @package     Calendar
  * @subpackage  Import
- * 
- * @see for german holidays http://www.sunbird-kalender.de/extension/kalender/
  */
 class Calendar_Import_Ical extends Tinebase_Import_Abstract
 {
@@ -33,7 +31,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          */
         'updateExisting'        => TRUE,
         /**
-         * updates exiting events if sequence number is higher
+         * update exiting events even if imported sequence number isn't higher
          * @var boolean
          */
         'forceUpdateExisting'   => FALSE,
@@ -45,19 +43,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
          * container the events should be imported in
          * @var string
          */
-        'container_id'     => NULL,
-        
-        /**
-         * Model to be used for import
-         * @var string
-         */
-        'model' => 'Calendar_Model_Event',
-        
+        'container_id'          => NULL,
         /**
          * import only basic data (i.e. without attendee, alarms, uid, ...)
          * @var string
          */
         'onlyBasicData'         => NULL,
+
+        'model'                 => 'Calendar_Model_Event',
     );
     
     /**
@@ -90,11 +83,13 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
     public function import($_resource = NULL, $_clientRecordData = array())
     {
         $this->_initImportResult();
-        
-        if (! $this->_options['container_id']) {
-            throw new Tinebase_Exception_InvalidArgument('you need to define a container_id');
-        }
-        
+
+        // make sure container exists
+        $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' '
+            . ' Import into calendar: ' . print_r($this->_options['container_id'], true));
+
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         if (isset($this->_options['onlyBasicData'])) {
             $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));
@@ -108,38 +103,9 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             $isce->setParseError($e);
             throw $isce;
         }
-        
-        
-        try {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' 
-                . ' Trying to find container with ID ' . print_r($this->_options['container_id'], true));
-            $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
-        } catch (Tinebase_Exception_InvalidArgument $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' 
-                . ' Could not found container with Id ' . print_r($this->_options['container_id'], true) . ' assuming this is a container name.' );
-                         
-            $container = new Tinebase_Model_Container(array(
-                'name'              => $this->_options['container_id'],
-                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'backend'           => Tinebase_User::SQL,
-                'color'             => '#ffffff',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-                'owner_id'          => Tinebase_Core::getUser()->getId(),
-                'model'             => 'Calendar_Model_Event'
-            ));
-            $container = Tinebase_Container::getInstance()->addContainer($container);
-        }
-        
-        try {
-            $this->_options['container_id'] = $container->getId();
-        } catch (Exception $ex) {
-            throw new Tinebase_Exception_NotFound('Could not find container by ID: ' . $this->_options['container_id']);
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' 
-            . ' Import into calendar: ' . print_r($this->_options['container_id'], true));
-        
+
         $cc = Calendar_Controller_MSEventFacade::getInstance();
+        $cc->assertEventFacadeParams($container);
         $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
@@ -165,9 +131,10 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                     $this->_importResult['totalcount'] += 1;
                     $this->_importResult['results']->addRecord($event);
                 } else if ($this->_options['forceUpdateExisting'] || ($this->_options['updateExisting'] && $event->seq > $existingEvent->seq)) {
+                    $event->container_id = $this->_options['container_id'];
                     $event->id = $existingEvent->getId();
                     $event->last_modified_time = ($existingEvent->last_modified_time instanceof Tinebase_DateTime) ? clone $existingEvent->last_modified_time : NULL;
-                    $cc->update($event, FALSE);
+                    $event = $cc->update($event, FALSE);
                     $this->_importResult['results']->addRecord($event);
                     $this->_importResult['totalcount'] += 1;
                 } else {

@@ -1370,6 +1370,20 @@ class Addressbook_JsonTest extends TestCase
     }
 
     /**
+     * testTextFilterCaseSensitivity
+     */
+    public function testTextFilterCaseSensitivity()
+    {
+        $contact = $this->_addContact();
+        $filter = array(
+            array('field' => 'n_family', 'operator' => 'contains', 'value' => strtolower('PHPUNIT'))
+        );
+        $result = $this->_instance->searchContacts($filter, array());
+
+        $this->assertGreaterThan(0, $result['totalcount'], 'contact not found: ' . print_r($result, true));
+    }
+
+    /**
      * return event organizuer filter
      *
      * @return array
