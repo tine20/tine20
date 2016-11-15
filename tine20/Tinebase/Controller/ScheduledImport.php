@@ -67,7 +67,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     public function runNextScheduledImport()
     {
         if ($record = $this->_getNextScheduledImport()) {
-            return $this->_doScheduledImport($record)->toArray();
+            return $this->doScheduledImport($record)->toArray();
         }
         
         return null;
@@ -185,16 +185,17 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     
     /**
      * Execute scheduled import
+     *
      * @param Tinebase_Model_Import $record
      * @return Tinebase_Model_Import
      */
-    protected function _doScheduledImport(Tinebase_Model_Import $record)
+    public function doScheduledImport(Tinebase_Model_Import $record)
     {
         $currentUser = Tinebase_Core::getUser();
         // set user who created the import job
         $importUser = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
         Tinebase_Core::set(Tinebase_Core::USER, $importUser);
-        
+
         $importer = $record->getOption('plugin');
         
         $options = array(
@@ -212,90 +213,103 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 'options'      => $record->options
             );
         }
-        
-        if ($toImport) {
-            try {
-                /** @var Tinebase_Import_Interface $importer */
-                $importer = new $importer($options);
-                $importer->import($toImport);
-                $record->failcount = 0;
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
-                        . ' Import failed.');
-                }
-                Tinebase_Exception::log($e);
 
-                $record->lastfail = $e->getMessage();
-                $record->failcount = $record->failcount + 1;
+        try {
+            // handle options
+            $options = Zend_Json::decode($record->options);
+            $options['url'] = $record->source;
+
+            if (isset($options['cid']) && isset($options['ckey'])) {
+                $credentials = new Tinebase_Model_CredentialCache($options);
+                Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentials);
+
+                $options['username'] = $credentials->username;
+                $options['password'] = $credentials->password;
             }
 
-            $record->timestamp = Tinebase_DateTime::now();
+            $importer = $record->getOption('plugin');
+            $resource = $record->getOption('importFileByScheduler') ? $this->_getFileToImport($options['url']) : null;
 
-            $record = $this->update($record);
-            
-        } else {
+            $importer = new $importer($options);
+            $importer->import($resource);
+            $record->failcount = 0;
+        } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__ . ' The source could not be loaded: "' . $record->source . '"');
+                Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                    . ' Import failed.');
             }
+            Tinebase_Exception::log($e);
+
+            $record->lastfail = $e->getMessage();
+            $record->failcount = $record->failcount + 1;
         }
-        
+
+        $record->timestamp = Tinebase_DateTime::now();
+        $record = $this->update($record);
+
         Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
-        
+
         return $record;
     }
-    
+
     /**
-     * Creates a remote import for events
-     * 
-     * @param array $data
-     * @throws Calendar_Exception_InvalidUrl
-     * @return Tinebase_Record_Interface
+     * add one record
+     *
+     * @param   Tinebase_Model_Import $import
+     * @param   boolean $duplicateCheck
+     * @return  Tinebase_Model_Import
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    public function createRemoteImportEvent($data)
+    public function create(Tinebase_Record_Interface $import, $duplicateCheck = true)
     {
-        $possibleIntervals = array(
-            Tinebase_Model_Import::INTERVAL_DAILY,
-            Tinebase_Model_Import::INTERVAL_HOURLY,
-            Tinebase_Model_Import::INTERVAL_ONCE,
-            Tinebase_Model_Import::INTERVAL_WEEKLY
-        );
-        
-        if (! in_array($data['interval'], $possibleIntervals)) {
-            $data['interval'] = Tinebase_Model_Import::INTERVAL_ONCE;
+        // handle credentials
+        if ($import->getOption('password')) {
+            $credentialCache = Tinebase_Auth_CredentialCache::getInstance();
+            $credentials = $credentialCache->cacheCredentials(
+                $import->getOption('username'),
+                $import->getOption('password'),
+                /* key */           null,
+                /* persist */       true,
+                /* valid until */   Tinebase_DateTime::now()->addYear(100)
+            );
+
+            $import->deleteOption('password');
+            $import->deleteOption('username');
+
+            $import->setOption('cid', $credentials->getId());
+            $import->setOption('ckey', $credentials->key);
         }
-        
-        // find container or create a new one
-        $containerId = $data['options']['container_id'];
-        
+
+        // options over own field
+        $containerId = $import->getOption('container_id') ?: $import->container_id;
+
+        // handle container
         try {
             $container = Tinebase_Container::getInstance()->getContainerById($containerId);
         } catch (Tinebase_Exception_InvalidArgument $e) {
             $container = new Tinebase_Model_Container(array(
-                'name'              => $data['options']['container_id'],
+                'name'              => $containerId,
                 'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
                 'backend'           => Tinebase_User::SQL,
-                'color'             => '#ffffff',
-                'application_id'    => $data['application_id'],
-                'owner_id'          => $data['user_id'],
-                'model'             => $data['model'],
+                'color'             => '#ff0000',
+                'application_id'    => $import->application_id,
+                'owner_id'          => $import->user_id,
+                'model'             => $import->model,
             ));
 
             $container = Tinebase_Container::getInstance()->addContainer($container);
         }
-        
-        $data['options'] = json_encode(array_replace(array(
-            'forceUpdateExisting' => TRUE,
-            'import_defintion' => NULL,
-        ), $data['options']));
-        
-        $record = new Tinebase_Model_Import(array_replace(array(
-            'id'                => Tinebase_Record_Abstract::generateUID(),
-            'user_id'           => Tinebase_Core::getUser()->getId(),
-            'sourcetype'        => Tinebase_Model_Import::SOURCETYPE_REMOTE,
-            'container_id'      => $container->getId(),
-        ), $data));
-        
-        return $this->create($record);
+
+        $import->setOption('container_id', $container->getId());
+        $import->container_id = $container->getId();
+        $import->user_id = $import->user_id ?: Tinebase_Core::getUser()->getId();
+
+        // @TODO TBD
+        $import->setOption('forceUpdateExisting', true);
+
+        // @TODO fix schema so column id has 40 chars only
+        $import->setId(Tinebase_Record_Abstract::generateUID());
+
+        return parent::create($import, $duplicateCheck);
     }
 }

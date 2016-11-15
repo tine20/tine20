@@ -640,8 +640,15 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         
         for (var i=0; i<this.filterModels.length; i++) {
-            var config = this.filterModels[i],
-                fm = this.createFilterModel(config);
+            try {
+                var config = this.filterModels[i],
+                    fm = this.createFilterModel(config);
+            } catch (e) {
+                Tine.log.error('Could not create filter model - skipping');
+                Tine.log.error(e.stack ? e.stack : e);
+                Tine.log.debug(config);
+                continue;
+            }
             
             this.filterModelMap[fm.field] = fm;
             filtersFields.push(fm);
