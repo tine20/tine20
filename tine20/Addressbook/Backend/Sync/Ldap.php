@@ -98,9 +98,9 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
             'cn',
             'sn',
         ),
-        //'mozillaAbPersonAlpha' => array(
+        'mozillaAbPersonAlpha' => array(
             //'cn',
-        //),
+        ),
     );
 
     /**
@@ -255,12 +255,33 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
         /** @var Addressbook_Model_Contact $_record */
         $dn = $this->_generateDn($_record);
 
-        if ($this->_ldap->getEntry($dn) === null) {
+        if (($oldEntry = $this->_ldap->getEntry($dn)) === null) {
             $this->create($_record);
             return;
         }
 
         $ldapData = $this->_contact2ldap($_record);
+
+        foreach($this->_objectClasses as $reqAttributes) {
+            foreach($reqAttributes as $reqAttrb) {
+                if (!isset($ldapData[$reqAttrb]) || $ldapData[$reqAttrb] === '' ) {
+                    $ldapData[$reqAttrb] = '-';
+                }
+            }
+        }
+
+        foreach($ldapData as $key => $val) {
+            if ($val === '' && !isset($oldEntry[$key])) {
+                unset($ldapData[$key]);
+            }
+        }
+        foreach($oldEntry as $key => $val) {
+            if (!isset($ldapData[$key])) {
+                $ldapData[$key] = '';
+            }
+        }
+
+        $ldapData['objectclass'] = array_unique(array_merge($oldEntry['objectclass'], array_keys($this->_objectClasses)));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' dn: ' . $dn . ' ldapData: ' . print_r($ldapData, true));
