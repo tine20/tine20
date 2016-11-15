@@ -196,24 +196,6 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
         $importUser = Tinebase_User::getInstance()->getUserByPropertyFromBackend('accountId', $record->user_id, 'Tinebase_Model_FullUser');
         Tinebase_Core::set(Tinebase_Core::USER, $importUser);
 
-        $importer = $record->getOption('plugin');
-        
-        $options = array(
-            'container_id' => $record->container_id,
-            // legacy
-            'importContainerId' => $record->container_id,
-        );
-        
-        if ($record->getOption('importFileByScheduler') === true) {
-            $toImport = $this->_getFileToImport($record->source);
-        } else {
-            $toImport = array(
-                'remoteUrl'    => $record->source,
-                'container_id' => $record->container_id,
-                'options'      => $record->options
-            );
-        }
-
         try {
             // handle options
             $options = Zend_Json::decode($record->options);
