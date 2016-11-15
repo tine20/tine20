@@ -48,9 +48,111 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'addressbookId' => 'only export contcts of the given addressbook',
                 'tagId'         => 'only export contacts having the given tag'
             )
+        ),
+        'syncbackends' => array(
+            'description'   => 'Syncs all contacts to the sync backends',
+            'params'        => array(),
         )
     );
-    
+
+    public function syncbackends($_opts)
+    {
+        $sqlBackend = new Addressbook_Backend_Sql();
+        $controller = Addressbook_Controller_Contact::getInstance();
+        $syncBackends = $controller->getSyncBackends();
+
+        foreach ($sqlBackend->getAll() as $contact) {
+            $oldRecordBackendIds = $contact->syncBackendIds;
+            if (is_string($oldRecordBackendIds)) {
+                $oldRecordBackendIds = explode(',', $contact->syncBackendIds);
+            } else {
+                $oldRecordBackendIds = array();
+            }
+
+            $updateSyncBackendIds = false;
+            
+            foreach($syncBackends as $backendId => $backendArray)
+            {
+                if (isset($backendArray['filter'])) {
+                    $oldACL = $controller->doContainerACLChecks(false);
+
+                    $filter = new Addressbook_Model_ContactFilter($backendArray['filter']);
+                    $filter->addFilter(new Addressbook_Model_ContactIdFilter(
+                        array('field' => $contact->getIdProperty(), 'operator' => 'equals', 'value' => $contact->getId())
+                    ));
+
+                    // record does not match the filter, attention searchCount returns a STRING! "1"...
+                    if ($controller->searchCount($filter) != 1) {
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' record did not match filter of syncBackend "' . $backendId . '"');
+
+                        // record is stored in that backend, so we remove it from there
+                        if (in_array($backendId, $oldRecordBackendIds)) {
+
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' deleting record from syncBackend "' . $backendId . '"');
+
+                            try {
+                                $backendArray['instance']->delete($contact);
+
+                                $contact->syncBackendIds = trim(preg_replace('/(^|,)' . $backendId . '($|,)/', ',', $contact->syncBackendIds), ',');
+
+                                $updateSyncBackendIds = true;
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete record from sync backend "' .
+                                    $backendId . '": ' . $e->getMessage());
+                                Tinebase_Exception::log($e, false);
+                            }
+                        }
+
+                        $controller->doContainerACLChecks($oldACL);
+
+                        continue;
+                    }
+                    $controller->doContainerACLChecks($oldACL);
+                }
+
+                // if record is in this syncbackend, update it
+                if (in_array($backendId, $oldRecordBackendIds)) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' update record in syncBackend "' . $backendId . '"');
+
+                    try {
+                        $backendArray['instance']->update($contact);
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not update record in sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                        Tinebase_Exception::log($e, false);
+                    }
+
+                    // else create it
+                } else {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' create record in syncBackend "' . $backendId . '"');
+
+                    try {
+                        $backendArray['instance']->create($contact);
+
+                        $contact->syncBackendIds = (empty($contact->syncBackendIds)?'':$contact->syncBackendIds . ',') . $backendId;
+
+                        $updateSyncBackendIds = true;
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create record in sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                        Tinebase_Exception::log($e, false);
+                    }
+                }
+            }
+
+            if (true === $updateSyncBackendIds) {
+                $sqlBackend->updateSyncBackendIds($contact->getId(), $contact->syncBackendIds);
+            }
+        }
+    }
+
     /**
      * import contacts
      *
