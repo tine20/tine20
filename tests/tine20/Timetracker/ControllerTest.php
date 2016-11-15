@@ -280,7 +280,7 @@ class Timetracker_ControllerTest extends TestCase
 
         $filter = $this->_getTimesheetFilter();
 
-		$be = new Timetracker_Backend_Timesheet();
+        $be = new Timetracker_Backend_Timesheet();
         $result = $be->search($filter)->toArray();
         $this->assertArrayHasKey('is_billable_combined', $result[0]);
 
@@ -311,6 +311,11 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testAddTimesheetExceedingDeadline()
     {
+        // TODO should work without invoices feature, too ...
+        if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $this->markTestSkipped('needs enabled invoices module');
+        }
+
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',

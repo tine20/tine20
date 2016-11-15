@@ -1252,6 +1252,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testTimesheetInvoiceId()
     {
+        if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $this->markTestSkipped('needs enabled invoices module');
+        }
+
         $timesheet = $this->_getTimesheet();
         $tsData = $timesheet->toArray();
         $tsData['invoice_id'] = '';
