@@ -443,12 +443,8 @@ class Tinebase_User
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . "  sync user data for: " . $username);
 
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
-            $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-            if (null !== $plugin) {
-                Tinebase_User::getInstance()->registerPlugin($plugin);
-            }
         }
 
         $userBackend  = Tinebase_User::getInstance();

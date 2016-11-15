@@ -437,6 +437,8 @@ class Setup_Update_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new setupuser.');
 
+        $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
         $setupUser = new Tinebase_Model_FullUser(array(
             'accountLoginName' => 'setupuser',
@@ -478,6 +480,10 @@ class Setup_Update_Abstract
             // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
             Tinebase_Exception::log($e);
             $setupUser = null;
+        }
+
+        if (null !== $plugin) {
+            Tinebase_User::getInstance()->registerPlugin($plugin);
         }
 
         return $setupUser;
