@@ -336,11 +336,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' deleting record from syncBackend "' . $backendId . '"');
 
-                        $backendArray['instance']->delete($updatedRecord);
+                        try {
+                            $backendArray['instance']->delete($updatedRecord);
 
-                        $updatedRecord->syncBackendIds = trim(preg_replace('/(^|,)' . $backendId . '($|,)/', ',', $updatedRecord->syncBackendIds), ',');
+                            $updatedRecord->syncBackendIds = trim(preg_replace('/(^|,)' . $backendId . '($|,)/', ',', $updatedRecord->syncBackendIds), ',');
 
-                        $updateSyncBackendIds = true;
+                            $updateSyncBackendIds = true;
+                        } catch (Exception $e) {
+                            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete record from sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                            Tinebase_Exception::log($e, false);
+                        }
                     }
 
                     $this->doContainerACLChecks($oldACL);
@@ -356,7 +362,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' update record in syncBackend "' . $backendId . '"');
 
-                $backendArray['instance']->update($updatedRecord);
+                try {
+                    $backendArray['instance']->update($updatedRecord);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not update record in sync backend "' .
+                        $backendId . '": ' . $e->getMessage());
+                    Tinebase_Exception::log($e, false);
+                }
 
             // else create it
             } else {
@@ -364,11 +376,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' create record in syncBackend "' . $backendId . '"');
 
-                $backendArray['instance']->create($updatedRecord);
+                try {
+                    $backendArray['instance']->create($updatedRecord);
 
-                $updatedRecord->syncBackendIds = (empty($updatedRecord->syncBackendIds)?'':$updatedRecord->syncBackendIds . ',') . $backendId;
+                    $updatedRecord->syncBackendIds = (empty($updatedRecord->syncBackendIds)?'':$updatedRecord->syncBackendIds . ',') . $backendId;
 
-                $updateSyncBackendIds = true;
+                    $updateSyncBackendIds = true;
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create record in sync backend "' .
+                        $backendId . '": ' . $e->getMessage());
+                    Tinebase_Exception::log($e, false);
+                }
             }
         }
 
@@ -422,11 +440,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' create record in syncBackend "' . $backendId . '"');
 
-            $backendArray['instance']->create($_createdRecord);
+            try {
+                $backendArray['instance']->create($_createdRecord);
 
-            $_createdRecord->syncBackendIds = (empty($_createdRecord->syncBackendIds)?'':$_createdRecord->syncBackendIds . ',') . $backendId;
+                $_createdRecord->syncBackendIds = (empty($_createdRecord->syncBackendIds)?'':$_createdRecord->syncBackendIds . ',') . $backendId;
 
-            $updateSyncBackendIds = true;
+                $updateSyncBackendIds = true;
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create record in sync backend "' .
+                    $backendId . '": ' . $e->getMessage());
+                Tinebase_Exception::log($e, false);
+            }
         }
 
         if (true === $updateSyncBackendIds) {
@@ -439,7 +463,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_syncBackends = null;
     }
 
-    protected function getSyncBackends()
+    public function getSyncBackends()
     {
         if ($this->_syncBackends !== null) {
             return $this->_syncBackends;
@@ -485,7 +509,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             //get sync backends
             foreach ($this->getSyncBackends() as $backendId => $backendArray) {
                 if (in_array($backendId, $recordBackends)) {
-                    $backendArray['instance']->delete($_record);
+                    try {
+                        $backendArray['instance']->delete($_record);
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete record from sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                        Tinebase_Exception::log($e, false);
+                    }
                 }
             }
         }
