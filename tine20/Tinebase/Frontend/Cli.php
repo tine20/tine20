@@ -535,6 +535,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 } catch(Tinebase_Exception_AccessDenied $e) {
                     // TODO log
                     continue;
+                } catch(Tinebase_Exception_NotFound $tenf) {
+                    $deleteIds[] = $note->getId();
+                    continue;
                 }
                 $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
                 $models[$note->record_model] = array(
@@ -600,13 +603,24 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         /** @var Tinebase_Model_CustomField_Config $customFieldConfig */
         foreach($customFieldConfigs as $customFieldConfig) {
-            $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
-            $oldACLCheckValue = $controller->doContainerACLChecks(false);
-            if ($customFieldConfig->model !== 'Filemanager_Model_Node') {
-                $filterClass = $customFieldConfig->model . 'Filter';
-            } else {
-                $filterClass = 'ClassThatDoesNotExist';
+            $deleteAll = false;
+            try {
+                $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
+
+                $oldACLCheckValue = $controller->doContainerACLChecks(false);
+                if ($customFieldConfig->model !== 'Filemanager_Model_Node') {
+                    $filterClass = $customFieldConfig->model . 'Filter';
+                } else {
+                    $filterClass = 'ClassThatDoesNotExist';
+                }
+            } catch(Tinebase_Exception_AccessDenied $e) {
+                // TODO log
+                continue;
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $deleteAll = true;
             }
+
+
 
             $filter = new Tinebase_Model_CustomField_ValueFilter(array(
                 array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
@@ -614,7 +628,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $customFieldValues = $customFieldController->search($filter);
             $deleteIds = array();
 
-            if (class_exists($filterClass)) {
+            if (true === $deleteAll) {
+                $deleteIds = $customFieldValues->getId();
+            } elseif (class_exists($filterClass)) {
                 $model = new $customFieldConfig->model();
                 /** @var Tinebase_Model_CustomField_Value $customFieldValue */
                 foreach ($customFieldValues as $customFieldValue) {
@@ -662,7 +678,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $customFieldController->deleteCustomFieldValue($deleteIds);
             }
 
-            $controller->doContainerACLChecks($oldACLCheckValue);
+            if (true !== $deleteAll) {
+                $controller->doContainerACLChecks($oldACLCheckValue);
+            }
         }
     }
     
