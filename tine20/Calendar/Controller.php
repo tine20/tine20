@@ -66,7 +66,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' handle event of type ' . get_class($_eventObject));
         
         switch (get_class($_eventObject)) {
             case 'Admin_Event_AddAccount':
@@ -85,16 +85,16 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 break;
                 
             case 'Admin_Event_UpdateGroup':
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $_eventObject->group->name);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' updated group ' . $_eventObject->group->name);
                 Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->group->getId());
                 break;
             case 'Admin_Event_AddGroupMember':
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' add groupmember ' . (string) $_eventObject->userId . ' to group ' . (string) $_eventObject->groupId);
                 Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->groupId);
                 break;
                 
             case 'Admin_Event_RemoveGroupMember':
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
                 Tinebase_ActionQueue::getInstance()->queueAction('Calendar.onUpdateGroup', $_eventObject->groupId);
                 break;
                 
@@ -296,7 +296,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal calendar"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_account,
+            'owner_id'          => $account->getId(),
             'backend'           => Tinebase_User::SQL,
             'color'             => '#FF6600',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
@@ -318,7 +318,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
      */
     protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' (' . __LINE__ . ') about to handle Tinebase_Event_Container_BeforeCreate' );
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
+            . ' about to handle Tinebase_Event_Container_BeforeCreate' );
         
         if ($_eventObject->container && 
             $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&

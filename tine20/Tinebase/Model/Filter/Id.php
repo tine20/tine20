@@ -26,7 +26,8 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'equals',
         'not',
         'in',
-        'notin'
+        'notin',
+        'isnull',
     );
     
     /**
@@ -36,7 +37,8 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
         'equals'     => array('sqlop' => ' = ?'   ),
         'not'        => array('sqlop' => ' != ?'  ),
         'in'         => array('sqlop' => ' IN (?)'),
-        'notin'      => array('sqlop' => ' NOT IN (?)')
+        'notin'      => array('sqlop' => ' NOT IN (?)'),
+        'isnull'     => array('sqlop' => ' IS NULL'),
     );
     
     /**
@@ -60,7 +62,7 @@ class Tinebase_Model_Filter_Id extends Tinebase_Model_Filter_Abstract
              // prevent sql error
              if ($this->_operator == 'in' || $this->_operator == 'equals') {
                  if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                     . ' Empty value with "in" operator (model: ' 
+                     . ' Empty value with "' . $this->_operator . '"" operator (model: '
                      . (isset($this->_options['modelName']) ? $this->_options['modelName'] : 'unknown / no modelName defined in filter options'). ')');
                  $_select->where('1=0');
              }

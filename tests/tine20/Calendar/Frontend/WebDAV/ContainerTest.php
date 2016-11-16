@@ -52,7 +52,12 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
         )));
         
-        Tinebase_Container::getInstance()->addGrants($this->objects['initialContainer'], Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Core::getUser()->accountPrimaryGroup, array(Tinebase_Model_Grants::GRANT_READ));
+        Tinebase_Container::getInstance()->addGrants(
+            $this->objects['initialContainer'],
+            Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            Tinebase_Core::getUser()->accountPrimaryGroup,
+            array(Tinebase_Model_Grants::GRANT_READ)
+        );
 
         // rw cal agent
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
@@ -362,9 +367,10 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $shares = $container->getShares();
 
-        $this->assertEquals(3, count($shares));
+        $this->assertEquals(2, count($shares), 'should find 2 shares');
         $this->assertEquals('urn:uuid:anyone', $shares[0]['href']);
-        $this->assertEquals('urn:uuid:' . Tinebase_Core::getUser()->contact_id, $shares[2]['href']);
+        $this->assertEquals('urn:uuid:'
+            . Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup)->list_id, $shares[1]['href']);
     }
     
     /**

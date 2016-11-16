@@ -408,7 +408,7 @@ class Setup_Update_Abstract
     }
 
     /**
-     * try to get user for cronjob from config
+     * try to get user for setup tasks from config
      *
      * @return Tinebase_Model_FullUser
      */
@@ -422,7 +422,9 @@ class Setup_Update_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
 
             $setupUser = static::createSetupuser();
-            Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
+            if ($setupUser) {
+                Tinebase_Config::getInstance()->set(Tinebase_Config::SETUPUSERID, $setupUser->getId());
+            }
         }
 
         return $setupUser;

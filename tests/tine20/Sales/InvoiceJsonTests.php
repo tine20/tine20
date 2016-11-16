@@ -14,16 +14,14 @@
  */
 class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
 {
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
+
+    protected function setUp()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Sales Invoice Json Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
+        if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $this->markTestSkipped('needs enabled invoices module');
+        }
+
+        parent::setUp();
     }
 
     /**

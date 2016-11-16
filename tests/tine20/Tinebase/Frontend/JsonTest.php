@@ -517,15 +517,22 @@ class Tinebase_Frontend_JsonTest extends TestCase
             $configuredSalesModels = array_keys($registryData['Sales']['models']);
             $this->assertTrue(in_array('Invoice', $configuredSalesModels), 'Invoices is missing from configured models: '
                 . print_r($configuredSalesModels, true));
+            $copyOmitFields = array(
+                'billed_in',
+                'invoice_id',
+                'status',
+                'cleared_at',
+            );
+        } else {
+            $copyOmitFields = array(
+                'billed_in',
+                'status',
+                'cleared_at',
+            );
         }
 
         $this->assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
-        $this->assertEquals(array(
-            'billed_in',
-            'invoice_id',
-            'status',
-            'cleared_at',
-        ), $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
+        $this->assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
     }
 
     /**

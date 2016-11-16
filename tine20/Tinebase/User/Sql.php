@@ -625,7 +625,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
         );
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
+            . ' ' . $_status . ' user with id ' . $accountId);
+
         $result = $accountsTable->update($accountData, $where);
         
         return $result;
