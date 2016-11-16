@@ -37,18 +37,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     protected $_instance = NULL;
     
     /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -56,7 +44,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_geodata = Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(false);
+        $this->_instance = Addressbook_Controller_Contact::getInstance();
+        $this->_geodata = $this->_instance->setGeoDataForContacts(false);
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
@@ -157,8 +146,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
         ));
-        
-        $this->_instance = Addressbook_Controller_Contact::getInstance();
     }
 
     /**
