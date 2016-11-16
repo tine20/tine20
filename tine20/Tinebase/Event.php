@@ -46,15 +46,17 @@ class Tinebase_Event
                 continue;
             }
             if($controller instanceof Tinebase_Event_Interface) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
+                    . __LINE__ . ' calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
                 try {
                     $controller->handleEvent($_eventObject);
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' (' . __LINE__ . ') ' 
-                        . (string) $application . ' threw an exception: '
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
+                        . __LINE__ . ' ' . (string) $application . ' threw an exception: '
                         . $e->getMessage()
                     );
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') ' . $e->getTraceAsString());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' '
+                        . __LINE__ . ' ' . $e->getTraceAsString());
                 }
             }
         }
@@ -64,12 +66,12 @@ class Tinebase_Event
             if (@class_exists('CustomEventHooks')) {
                 $methods = get_class_methods('CustomEventHooks');
                 if (in_array('handleEvent', (array)$methods)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . ' (' . __LINE__ . ') ' . ' about to process user defined event hook for '. get_class($_eventObject));
+                    Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' ' . ' about to process user defined event hook for '. get_class($_eventObject));
                     CustomEventHooks::handleEvent($_eventObject);
                 }
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . ' (' . __LINE__ . ') ' . ' failed to process user defined event hook with message: ' . $e);
+            Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ . ' ' . ' failed to process user defined event hook with message: ' . $e);
         }
         
         unset(self::$events[get_class($_eventObject)][$_eventObject->getId()]);
