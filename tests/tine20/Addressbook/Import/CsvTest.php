@@ -235,41 +235,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         
         return $definition;
     }
-    
-    /**
-    * get custom field record
-    * 
-    * @param string $name
-    * @return Tinebase_Model_CustomField_Config
-    */
-    protected function _createCustomField($name = 'Yomi Name')
-    {
-        $cfData = new Tinebase_Model_CustomField_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'name'              => $name,
-            'model'             => 'Addressbook_Model_Contact',
-            'definition'        => array(
-                'label' => Tinebase_Record_Abstract::generateUID(),
-                'type'  => 'string',
-                'uiconfig' => array(
-                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
-                    'length' => 10,
-                    'group'  => 'unittest',
-                    'order'  => 100,
-                )
-            )
-        ));
-        
-        try {
-            $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
-        } catch (Zend_Db_Statement_Exception $zdse) {
-            // customfield already exists
-            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication('Addressbook');
-            $result = $cfs->filter('name', $name)->getFirstRecord();
-        }
-        
-        return $result;
-    }
 
     /**
      * testImportDuplicateResolve

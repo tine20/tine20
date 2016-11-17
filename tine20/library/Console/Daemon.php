@@ -141,13 +141,14 @@ abstract class Console_Daemon
             throw new RuntimeException("failed to change user to $_username");
         }
     }
-    
+
     /**
      * handle terminated children
-     * 
-     * @param mixed $pid
+     *
+     * @param unknown $pid
+     * @param unknown $status
      */
-    protected function _childTerminated($pid)
+    protected function _childTerminated($pid, $status)
     {
         unset($this->_children[$pid]);
     }

@@ -227,6 +227,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $filter = $this->_getBaseFilter();
 
         if (!empty($_filter)) {
+            /** @noinspection PhpDeprecationInspection */
             $filter = $filter->addFilter(Zend_Ldap_Filter::orFilter(
                 Zend_Ldap_Filter::contains($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
                 Zend_Ldap_Filter::contains($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
@@ -334,9 +335,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * get user by login name
      *
-     * @param   string  $_property
-     * @param   string  $_accountId
+     * @param   string $_property
+     * @param   string $_accountId
+     * @param   string $_accountClass
      * @return Tinebase_Model_User the user object
+     * @throws Tinebase_Exception_NotFound
      */
     public function getUserByPropertyFromSyncBackend($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
@@ -439,7 +442,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * get LDAP user status values depending on tine20 status
      *
-     * @param $status one of expired, enabled, disabled
+     * @param string $status one of expired, enabled, disabled
      * @return array
      */
     protected function _getUserStatusValues($status)
@@ -533,6 +536,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         // do we need to rename the entry?
         if (isset($ldapData[key($rdn)]) && $rdn[key($rdn)] != $ldapData[key($rdn)]) {
+            /** @var Tinebase_Group_Ldap $groupsBackend */
             $groupsBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
             
             // get the current group memberships
@@ -616,7 +620,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 $this->_ldap->delete($metaData['dn']);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' user not found in sync backend: ' . $_userId);
         }
     }
@@ -639,9 +643,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
     /**
      * return ldap entry of user
-     * 
-     * @param string $_uid
+     *
+     * @param string $_property
+     * @param string $_userId
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getLdapEntry($_property, $_userId)
     {
@@ -650,6 +656,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
                 break;
             default:
+                /** @noinspection PhpDeprecationInspection */
                 $value = Zend_Ldap::filterEscape($_userId);
                 break;
         }
@@ -687,12 +694,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         return $accounts->getFirst();
     }
-    
+
     /**
      * get metadata of existing user
      *
-     * @param  string  $_userId
+     * @param  string $_userId
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getMetaData($_userId)
     {
@@ -733,14 +741,14 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         return $newDn;
     }
-    
+
     /**
      * generates a uidnumber
      *
      * @todo add a persistent registry which id has been generated lastly to
      *       reduce amount of userid to be transfered
-     *
      * @return int
+     * @throws Tinebase_Exception_NotImplemented
      */
     protected function _generateUidNumber()
     {
@@ -764,7 +772,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         // fetch also the uidnumbers of machine accounts, if needed
         // @todo move this to samba plugin
+        /** @noinspection PhpUndefinedFieldInspection */
         if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $accounts = $this->_ldap->search(
                 $filter,
                 Tinebase_Core::getConfig()->samba->get('machineDn'),
@@ -825,7 +835,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * update contact data(first name, last name, ...) of user
      * 
-     * @param Addressbook_Model_Contact $contact
+     * @param Addressbook_Model_Contact $_contact
      * @todo implement logic
      */
     public function updateContactInSyncBackend($_contact)
@@ -838,7 +848,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      *
      * @param array $_userData
      * @param string $_accountClass
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Model_User
      */
     protected function _ldap2User(array $_userData, $_accountClass)
     {
@@ -983,7 +993,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected function _ldap2Contact($_userData, Addressbook_Model_Contact $_contact)
     {
         $rowNameMapping = array(
-            'bday'                  => 'birthdate',
+            // we currently dont know which schema to use for "birthdate", its not in inetOrgPerson, nor mozillaABAlpha
+//            'bday'                  => 'birthdate',
             'tel_cell'              => 'mobile',
             'tel_work'              => 'telephonenumber',
             'tel_home'              => 'homephone',
@@ -1005,14 +1016,21 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $overwrittenFields = Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_OVERWRITE_CONTACT_FIELDS);
         foreach ($rowNameMapping as $tineKey => $ldapKey) {
             if (isset($_userData[$ldapKey])) {
-                switch ($tineKey) {
-                    case 'bday':
-                        $_contact->$tineKey = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0]);
+                /*switch ($tineKey) {
+                    case 'bday':*/
+                        /** @var Tinebase_DateTime $origBday */
+                        /*$origBday = $_contact->bday;
+                        if (is_object($origBday)) {
+                            $_contact->bday = new Tinebase_DateTime($_userData[$ldapKey][0], $origBday->getTimezone());
+                            $_contact->bday->setHour($origBday->getHour())->setMinute($origBday->getMinute())->setSecond($origBday->getSecond());
+                        } else {
+                            $_contact->bday = Tinebase_DateTime::createFromFormat('Y-m-d', $_userData[$ldapKey][0]);
+                        }
                         break;
-                    default:
+                    default:*/
                         $_contact->$tineKey = $_userData[$ldapKey][0];
-                        break;
-                }
+                        /*break;
+                }*/
             } else if (in_array($tineKey, $overwrittenFields)) {
                 // should empty values in ldap overwrite tine values
                 $_contact->$tineKey = '';
@@ -1024,6 +1042,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * returns array of ldap data
      *
      * @param  Tinebase_Model_FullUser $_user
+     * @param  array $_ldapEntry
      * @return array
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array $_ldapEntry = array())
@@ -1045,7 +1064,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         $ldapData = array_merge($ldapData, $this->_getUserStatusValues($value));
                         break;
                     case 'accountPrimaryGroup':
-                        $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
+                        /** @var Tinebase_Group_Ldap $groupController */
+                        $groupController = Tinebase_Group::getInstance();
+                        $ldapData[$ldapProperty] = $groupController->resolveUUIdToGIdNumber($value);
                         break;
                     default:
                         $ldapData[$ldapProperty] = $value;
@@ -1082,6 +1103,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             return $_uidNumber;
         }
 
+        /** @noinspection PhpDeprecationInspection */
         $filter = Zend_Ldap_Filter::equals(
             'uidnumber', Zend_Ldap::filterEscape($_uidNumber)
         );

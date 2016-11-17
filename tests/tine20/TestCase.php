@@ -540,8 +540,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * test record json api
      *
      * @param $modelName
+     * @return array
      */
-    protected function _testSimpleRecordApi($modelName, $nameField = 'name', $descriptionField = 'description')
+    protected function _testSimpleRecordApi($modelName, $nameField = 'name', $descriptionField = 'description', $delete = true)
     {
         $uit = $this->_getUit();
         if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
@@ -564,13 +565,17 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         $this->assertEquals(1, $result['totalcount']);
 
-        call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
-        try {
-            call_user_func(array($uit, 'get' . $modelName), $updatedRecord['id']);
-            $this->fail('should delete Record');
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+        if ($delete) {
+            call_user_func(array($uit, 'delete' . $modelName . 's'), array($updatedRecord['id']));
+            try {
+                call_user_func(array($uit, 'get' . $modelName), $updatedRecord['id']);
+                $this->fail('should delete Record');
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->assertTrue($tenf instanceof Tinebase_Exception_NotFound);
+            }
         }
+
+        return $updatedRecord;
     }
 
     /**
@@ -585,23 +590,40 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * created customfield config
+     * get custom field record
      *
-     * @param string $cfName
+     * @param string $name
+     * @param string $model
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _createCustomfield($cfName = NULL, $model = 'Addressbook_Model_Contact')
+    protected function _createCustomField($name = 'Yomi Name', $model = 'Addressbook_Model_Contact')
     {
-        $cfName = ($cfName !== NULL) ? $cfName : Tinebase_Record_Abstract::generateUID();
-        $cfc = Tinebase_CustomFieldTest::getCustomField(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(substr($model, 0, strpos($model, '_')))->getId(),
-            'model'          => $model,
-            'name'           => $cfName,
+        $application = substr($model, 0, strpos($model, '_'));
+        $cfData = new Tinebase_Model_CustomField_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($application)->getId(),
+            'name'              => $name,
+            'model'             => $model,
+            'definition'        => array(
+                'label' => Tinebase_Record_Abstract::generateUID(),
+                'type'  => 'string',
+                'uiconfig' => array(
+                    'xtype'  => Tinebase_Record_Abstract::generateUID(),
+                    'length' => 10,
+                    'group'  => 'unittest',
+                    'order'  => 100,
+                )
+            )
         ));
 
-        $createdCustomField = Tinebase_CustomField::getInstance()->addCustomField($cfc);
-        $this->_customfieldIdsToDelete[] = $createdCustomField->getId();
+        try {
+            $result = Tinebase_CustomField::getInstance()->addCustomField($cfData);
+            $this->_customfieldIdsToDelete[] = $result->getId();
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // customfield already exists
+            $cfs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+            $result = $cfs->filter('name', $name)->getFirstRecord();
+        }
 
-        return $createdCustomField;
+        return $result;
     }
 }

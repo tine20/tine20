@@ -398,13 +398,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $egt = new Calendar_Controller_EventGrantsTests();
         $egt->setup();
         
-        $pwulfPersonalCal = $this->_getPersonasDefaultCals('sclever');
-        $pwulf = new Calendar_Model_Attender(array(
+        $scleverCalendar = $this->_getPersonasDefaultCals('sclever');
+        $sclever = new Calendar_Model_Attender(array(
             'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
             'user_id'      => $this->_getPersonasContacts('sclever')->getId(),
         ));
         
-        $this->_testEventMissingAttendee($pwulfPersonalCal, $pwulf);
+        $this->_testEventMissingAttendee($scleverCalendar, $sclever);
     }
     
     /**

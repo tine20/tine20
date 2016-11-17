@@ -646,7 +646,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         foreach ($orderedApplications as $application) {
             switch($_fileType) {
                 case 'css':
-                    $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
+                    $cssFile = "{$application}/css/{$application}-FAT.css.inc";
+                    if (file_exists($cssFile)) {
+                        $filesToWatch[] = $cssFile;
+                    }
                     break;
                 case 'js':
                     $prefix = "{$application}/js/{$application}";
@@ -656,15 +659,22 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     if (file_exists($webpackFile)) {
                         $filesToWatch[] = $webpackFile;
                     }
-                    $filesToWatch[] = "{$prefix}{$suffix}";
+
+                    $jsFile = "{$prefix}{$suffix}";
+                    if (file_exists($jsFile)) {
+                        $filesToWatch[] = $jsFile;
+                    }
                     break;
                 case 'lang':
                     $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
                     $lang = Tinebase_Core::getLocale();
                     $customPath = Tinebase_Config::getInstance()->translations;
                     $basePath = is_readable("$customPath/$lang/$fileName") ?  "$customPath/$lang" : '.';
-                    
-                    $filesToWatch[] = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+
+                    $langFile = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    if (file_exists($langFile)) {
+                        $filesToWatch[] = $langFile;
+                    }
                     break;
                 default:
                     throw new Exception('no such fileType');

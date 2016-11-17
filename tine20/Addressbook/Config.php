@@ -57,6 +57,20 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const FEATURE_LIST_VIEW = 'featureListView';
+    
+    /**
+     * FEATURE_INDUSTRY
+     *
+     * @var string
+     */
+    const FEATURE_INDUSTRY = 'featureIndustry';
+
+    /**
+     * config for the syncBackends
+     *
+     * @var string
+     */
+    const SYNC_BACKENDS = 'syncBackends';
 
     /**
      * (FEATURE_LIST_VIEW-PHPdoc)
@@ -74,11 +88,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
            'content'               => array(
                self::FEATURE_LIST_VIEW => array(
                    'label'         => 'Addressbook List View', //_('Addressbook List View')
-                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Shows an additional view for lists inside the addressbook)
+                   'description'   => 'Shows an additional view for lists inside the addressbook', //_('Shows an additional view for lists inside the addressbook')
+               ),
+               self::FEATURE_INDUSTRY => array(
+                       'label'         => 'Addressbook Industries', //_('Addressbook Industries')
+                       'description'   => 'Add Industry field to Adressbook', //_('Add Industry field to Adressbook')
                ),
            ),
            'default'               => array(
-               self::FEATURE_LIST_VIEW => false,
+               self::FEATURE_LIST_VIEW   => false,
+               self::FEATURE_INDUSTRY    => true,
            ),
         ),
         self::CONTACT_DUP_FIELDS => array(
@@ -147,6 +166,16 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
+        ),
+        self::SYNC_BACKENDS => array(
+            //_('Sync Backends')
+            'label'                 => 'Sync Backends',
+            //_('Sync Backends')
+            'description'           => 'Sync Backends',
+            'type'                  => 'array',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'default'               => array()
         ),
     );
     

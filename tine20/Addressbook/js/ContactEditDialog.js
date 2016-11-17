@@ -138,7 +138,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     fieldLabel: this.app.i18n._('Unit'),
                                     name: 'org_unit',
                                     maxLength: 64
-                                }]/* move to seperate tab, [{
+                                }
+                                ]/* move to seperate tab, [{
                                     columnWidth: .4,
                                     fieldLabel: this.app.i18n._('Suffix'),
                                     name:'n_suffix'
@@ -161,13 +162,21 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         }, {
                             xtype: 'columnform',
                             items: [[
+                                !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
                                 {
                                     columnWidth: 0.64,
                                     xtype: 'combo',
                                     fieldLabel: this.app.i18n._('Display Name'),
                                     name: 'n_fn',
                                     disabled: true
-                                }, {
+                                } :
+                                (
+                                    new Tine.Addressbook.IndustrySearchCombo({
+                                    fieldLabel: this.app.i18n._('Industry'),
+                                    columnWidth: 0.64,
+                                    name: 'industry'
+                                    })
+                                ), {
                                      columnWidth: 0.36,
                                      fieldLabel: this.app.i18n._('Job Title'),
                                      name: 'title',

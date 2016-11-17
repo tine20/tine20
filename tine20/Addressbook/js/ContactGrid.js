@@ -271,7 +271,7 @@ Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
  * Statically constructs the columns used to represent a contact. Reused by ListMemberGridPanel + ListMemberRoleGridPanel
  */
 Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
-    return [
+    var columns = [
         { id: 'type', header: i18n._('Type'), dataIndex: 'type', width: 30, renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false },
         { id: 'tags', header: i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
         { id: 'salutation', header: i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
@@ -321,6 +321,11 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
         { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
     ]
+    if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
+        columns.push({ id: 'industry', header: i18n._('Industry'), dataIndex: 'industry', renderer: Tine.Tinebase.common.foreignRecordRenderer});
+    }
+    
+    return columns;
 };
 
 /**

@@ -128,7 +128,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         $newContainer = new Tinebase_Model_Container(array(
             'name'              => sprintf($translation->_("%s's personal addressbook"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'owner_id'          => $_account,
+            'owner_id'          => $account->getId(),
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
             'model'             => 'Addressbook_Model_Contact'
@@ -194,6 +194,14 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             )));
         }
 
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_INDUSTRY)) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                    'id' => 'adb_industries',
+                    'application_id' => $application,
+                    'model' => 'Addressbook_Model_Industry',
+                    'label' => 'Industries' // _('Industries')
+            )));
+        }
         return $result;
     }
 }

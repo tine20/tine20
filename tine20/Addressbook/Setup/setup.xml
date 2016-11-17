@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>10.0</version>
+    <version>10.1</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>20</version>
+            <version>21</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -415,6 +415,12 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>industry</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>created_by</name>
                     <type>text</type>
                     <length>40</length>
@@ -458,6 +464,11 @@
                     <length>128</length>
                     <notnull>true</notnull>
                     <default>contact</default>
+                </field>
+                <field>
+                    <name>syncBackendIds</name>
+                    <type>text</type>
+                    <length>16000</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -840,7 +851,7 @@
                     </reference>
                 </index>
                 <index>
-                    <name>adb_list_m_role::list_role_id--addressbook_list_role::id</name>
+                    <name>adb_list_m_role::list_role_id--adb_list_role::id</name>
                     <field>
                         <name>list_role_id</name>
                     </field>
@@ -851,6 +862,76 @@
                         <ondelete>CASCADE</ondelete>
                         <onupdate>CASCADE</onupdate>
                     </reference>
+                </index>
+            </declaration>
+        </table>
+                <table>
+            <name>addressbook_industry</name>
+            <engine>InnoDB</engine>
+            <charset>utf8</charset>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>256</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
                 </index>
             </declaration>
         </table>
