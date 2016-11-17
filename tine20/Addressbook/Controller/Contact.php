@@ -24,6 +24,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     const CONTEXT_ALLOW_CREATE_USER = 'context_allow_create_user';
     const CONTEXT_NO_ACCOUNT_UPDATE = 'context_no_account_update';
     const CONTEXT_NO_SYNC_PHOTO = 'context_no_sync_photo';
+    const CONTEXT_NO_SYNC_CONTACT_DATA = 'context_no_sync_contact_data';
 
     /**
      * set geo data for contacts
@@ -898,7 +899,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $contact = Tinebase_User::user2Contact($_addedUser);
 
         $userController = Tinebase_User::getInstance();
-        if ($userController instanceof Tinebase_User_Interface_SyncAble) {
+        if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true) &&
+            (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
             // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
             $userController->updateContactFromSyncBackend($_addedUser, $contact);
         }
@@ -970,7 +972,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $contact = Tinebase_User::user2Contact($_updatedUser, clone $oldContact);
 
         $userController = Tinebase_User::getInstance();
-        if ($userController instanceof Tinebase_User_Interface_SyncAble) {
+        if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true) &&
+            (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
             // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
             $userController->updateContactFromSyncBackend($_updatedUser, $contact);
         }
