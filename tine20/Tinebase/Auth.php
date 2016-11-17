@@ -430,5 +430,25 @@ class Tinebase_Auth
             return self::$_backendConfigurationDefaults;
         }
     }
-    
+
+    /**
+     * Second factor authentication
+     *
+     * @param string $username
+     * @param string $password
+     * @param array $options
+     * @return int
+     * @throws Tinebase_Exception_Backend
+     */
+    public static function validateSecondFactor($username, $password, $options)
+    {
+        if (isset($options['provider'])) {
+            $authProviderClass = 'Tinebase_Auth_SecondFactor_' . $options['provider'];
+            if (class_exists($authProviderClass)) {
+                $authProvider = new $authProviderClass($options);
+                return $authProvider->validate($username, $password);
+            }
+        }
+        throw new Tinebase_Exception_Backend('Second factor backend not recognized / misconfigured');
+    }
 }

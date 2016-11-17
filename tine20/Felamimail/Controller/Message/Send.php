@@ -641,7 +641,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $part = $this->getMessagePart($message->original_id, ($message->original_part_id) ? $message->original_part_id : NULL);
         $part->decodeContent();
 
-        $attachment['name'] = $attachment['name'] . '.eml';
+        // replace some chars from attachment name
+        $attachment['name'] = preg_replace("/[\s'\"]*/", "", $attachment['name']) . '.eml';
 
         return $part;
     }

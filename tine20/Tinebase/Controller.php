@@ -708,6 +708,27 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             
             return false;
         }
+
+        // 2nd factor
+        $secondFactorConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::AUTHENTICATIONSECONDFACTOR);
+
+        if ($secondFactorConfig && $secondFactorConfig->active && $accessLog->clienttype === 'JSON-RPC') {
+            $context = $this->getRequestContext();
+            if (Tinebase_Auth::validateSecondFactor($user->accountLoginName,
+                $context['otp'],
+                $secondFactorConfig->toArray()
+            ) !== Tinebase_Auth::SUCCESS) {
+                $authResult = new Zend_Auth_Result(
+                    Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID,
+                    $user->accountLoginName,
+                    array('Second factor authentication failed.')
+                );
+                $accessLog->result = Tinebase_Auth::FAILURE;
+                $this->_loginFailed($authResult, $accessLog);
+
+                return false;
+            }
+        }
         
         return $user;
     }
