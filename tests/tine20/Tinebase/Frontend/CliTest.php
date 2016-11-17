@@ -355,8 +355,12 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'note'  => 'test note text for real record',
             ))
         ));
-        Addressbook_Controller_Contact::getInstance()->create($contact);
-        $realDataNotes += 2; //created and custom note
+        try {
+            Addressbook_Controller_Contact::getInstance()->create($contact);
+        } catch (Tinebase_Exception_Duplicate $ted) {
+
+        }
+        $realDataNotes += 2; // created a custom note
 
         $event = new Calendar_Model_Event(array(
             'organizer' => 'a@b.shooho',
@@ -369,7 +373,7 @@ class Tinebase_Frontend_CliTest extends TestCase
             ))
         ));
         Calendar_Controller_Event::getInstance()->create($event);
-        $realDataNotes += 2; //created and custom note
+        $realDataNotes += 2;  // created a custom note
 
         $allNotes = $noteController->getAllNotes();
         $this->assertEquals($notesCreated + $realDataNotes + $dbArtifacts, $allNotes->count(), 'notes created and notes in DB mismatch');
@@ -378,7 +382,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_cli->cleanNotes();
         $out = ob_get_clean();
 
-        $this->assertTrue('' === $out, 'CLI job produced output: ' . $out);
+        $this->assertTrue(preg_match('/deleted \d+ notes/', $out) == 1, 'CLI job produced output: ' . $out);
 
         $allNotes = $noteController->getAllNotes();
         $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
@@ -480,7 +484,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->_cli->cleanCustomfields();
         $out = ob_get_clean();
 
-        $this->assertTrue('' === $out, 'CLI job produced output: ' . $out);
+        $this->assertTrue(preg_match('/deleted \d+ customfield values/', $out) == 1, 'CLI job produced output: ' . $out);
 
         $sum = 0;
         foreach($customFieldConfigs as $customFieldConfig) {
