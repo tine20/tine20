@@ -276,7 +276,7 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
             }
         }
         foreach($oldEntry as $key => $val) {
-            if (!isset($ldapData[$key])) {
+            if (!isset($ldapData[$key]) && $key !== 'uid' && $key !== 'dn') {
                 $ldapData[$key] = '';
             }
         }
