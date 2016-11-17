@@ -425,7 +425,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
                 </declaration>
             </table>
             ');
-            $this->_backend->createTable($table, 'Addressbook', 'addressbook_industry');
+            $this->createTable('addressbook_industry', $table, 'Addressbook');
         }
         
         if ($this->getTableVersion('addressbook') == 20) {
