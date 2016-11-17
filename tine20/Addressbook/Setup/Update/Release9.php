@@ -18,7 +18,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
     public function update_0()
     {
         $table = Setup_Backend_Schema_Table_Factory::getSimpleRecordTable('addressbook_list_role');
-        $this->_backend->createTable($table, 'Addressbook', 'addressbook_list_role');
+        $this->createTable($table, 'Addressbook', 'addressbook_list_role');
         $this->setApplicationVersion('Addressbook', '9.1');
     }
 
@@ -109,7 +109,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
                     </reference>
                 </index>
                 <index>
-                    <name>adb_list_m_role::list_role_id--addressbook_list_role::id</name>
+                    <name>adb_list_m_role::list_role_id--adb_list_role::id</name>
                     <field>
                         <name>list_role_id</name>
                     </field>
@@ -124,7 +124,7 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
             </declaration>
         </table>
         ');
-        $this->_backend->createTable($table, 'Addressbook', 'adb_list_m_role');
+        $this->createTable($table, 'Addressbook', 'adb_list_m_role');
         $this->setApplicationVersion('Addressbook', '9.4');
     }
 
