@@ -493,6 +493,10 @@ class Tinebase_Application
             Tinebase_FileSystem::getInstance()->rmdir($_application->getId(), true);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // nothing to do
+            Tinebase_Exception::log($tenf);
+        } catch (Tinebase_Exception_Backend $teb) {
+            // nothing to do
+            Tinebase_Exception::log($teb);
         }
 
         $dataToDelete = array(

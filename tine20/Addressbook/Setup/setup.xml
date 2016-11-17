@@ -851,7 +851,7 @@
                     </reference>
                 </index>
                 <index>
-                    <name>adb_list_m_role::list_role_id--addressbook_list_role::id</name>
+                    <name>adb_list_m_role::list_role_id--adb_list_role::id</name>
                     <field>
                         <name>list_role_id</name>
                     </field>
