@@ -458,21 +458,29 @@ class Tinebase_User
         $user->accountPrimaryGroup = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
         $userProperties = method_exists($userBackend, 'getLastUserProperties') ? $userBackend->getLastUserProperties() : array();
-        
+
+
         $hookResult = self::_syncUserHook($user, $userProperties);
         if (! $hookResult) {
             return null;
         }
 
-        $contactId = $user->contact_id;
-        $removedPlugin = null;
-        if ((!isset($option['syncContactData']) || !$option['syncContactData']) && !empty($contactId) ) {
-            $removedPlugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
-        }
 
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' 
             . print_r($user->toArray(), TRUE));
+
+        $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $oldRequestContext = Addressbook_Controller_Contact::getInstance()->getRequestContext();
+
+        $requestContext = array();
+        if (!isset($options['syncContactPhoto']) || !$options['syncContactPhoto']) {
+            $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_PHOTO] = true;
+        }
+        if (!isset($options['syncContactData']) || !$options['syncContactData']) {
+            $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_CONTACT_DATA] = true;
+        }
+        Addressbook_Controller_Contact::getInstance()->setRequestContext($requestContext);
         
         self::getPrimaryGroupForUser($user);
 
@@ -512,9 +520,8 @@ class Tinebase_User
         
         Tinebase_Group::syncMemberships($syncedUser);
 
-        if (null !== $removedPlugin) {
-            Tinebase_User::getInstance()->registerPlugin($removedPlugin);
-        }
+        Addressbook_Controller_Contact::getInstance()->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);
 
         return $syncedUser;
     }
@@ -677,19 +684,6 @@ class Tinebase_User
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             .' Start synchronizing users with options ' . print_r($options, true));
-
-        $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
-        $oldRequestContext = Addressbook_Controller_Contact::getInstance()->getRequestContext();
-        $removedPlugin = null;
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true)) {
-            $removedPlugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
-        }
-
-        $requestContext = array();
-        if (!isset($options['syncContactPhoto']) || !$options['syncContactPhoto']) {
-            $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_PHOTO] = true;
-        }
-        Addressbook_Controller_Contact::getInstance()->setRequestContext($requestContext);
         
         $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
@@ -709,13 +703,6 @@ class Tinebase_User
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {
             self::_syncDeletedUsers($users);
         }
-
-        if (null !== $removedPlugin) {
-            Tinebase_User::getInstance()->registerPlugin($removedPlugin);
-        }
-
-        Addressbook_Controller_Contact::getInstance()->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
-        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
@@ -728,6 +715,8 @@ class Tinebase_User
      */
     protected static function _syncDeletedUsers(Tinebase_Record_RecordSet $usersInSyncBackend)
     {
+        $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+
         $userIdsInSqlBackend = Tinebase_User::getInstance()->getAllUserIdsFromSqlBackend();
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
@@ -757,7 +746,7 @@ class Tinebase_User
                 if ($user->accountExpires->isEarlier($now->subYear(1))) {
                     // if he or she is already expired longer than configured expiry, we remove them!
                     // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
-                    Tinebase_User::getInstance()->deleteUserInSqlBackend($userToDelete);
+                    Tinebase_User::getInstance()->deleteUser($userToDelete);
 
                     // now we make the addressbook hard delete, which is ok, because we went through the addressbook_controller_contact::delete already
                     if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
@@ -772,6 +761,8 @@ class Tinebase_User
                 }
             }
         }
+
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerAcl);
     }
 
     /**
@@ -781,7 +772,7 @@ class Tinebase_User
      */
     public static function getSystemUsernames()
     {
-        return array('cronuser', 'calendarscheduling');
+        return array('cronuser', 'calendarscheduling', 'setupuser');
     }
 
     /**
