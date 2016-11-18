@@ -202,6 +202,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      */    
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Add new column to table ' . $_tableName);
+
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD COLUMN " ;
         
         $statement .= $this->getFieldDeclarations($_declaration);

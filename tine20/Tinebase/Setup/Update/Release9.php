@@ -311,7 +311,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_10()
     {
-        if ($this->getTableVersion('container') < 10) {
+        if ($this->getTableVersion('container') < 11) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
                 <name>owner_id</name>
@@ -332,11 +332,9 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             ');
 
             $this->_backend->addIndex('container', $declaration);
-            $this->setTableVersion('relations', '8');
+            $this->setTableVersion('container', 11);
         }
-        $this->setTableVersion('container', '10');
 
-        //Tinebase_Core::getCache()->clean();
         $this->_setContainerOwners();
 
         $this->setApplicationVersion('Tinebase', '9.11');

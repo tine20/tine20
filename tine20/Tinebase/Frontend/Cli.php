@@ -516,6 +516,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return TRUE;
     }
 
+    /**
+     * cleanNotes
+     */
     public function cleanNotes()
     {
         $notesController = Tinebase_Notes::getInstance();
@@ -594,12 +597,18 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
+
+        echo "\ndeleted " . count($deleteIds) . " notes\n";
     }
 
+    /**
+     * cleanCustomfields
+     */
     public function cleanCustomfields()
     {
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
+        $deleteCount = 0;
 
         /** @var Tinebase_Model_CustomField_Config $customFieldConfig */
         foreach($customFieldConfigs as $customFieldConfig) {
@@ -676,12 +685,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             if (count($deleteIds) > 0) {
                 $customFieldController->deleteCustomFieldValue($deleteIds);
+                $deleteCount += count($deleteIds);
             }
 
             if (true !== $deleteAll) {
                 $controller->doContainerACLChecks($oldACLCheckValue);
             }
         }
+
+        echo "\ndeleted " . $deleteCount . " customfield values\n";
     }
     
     /**
