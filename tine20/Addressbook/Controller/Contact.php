@@ -18,8 +18,13 @@
  *
  * @property Addressbook_Backend_Sql $_backend protected member, you don't have access to that
  */
-class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
+class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract implements Tinebase_User_Plugin_SqlInterface
 {
+
+    const CONTEXT_ALLOW_CREATE_USER = 'context_allow_create_user';
+    const CONTEXT_NO_ACCOUNT_UPDATE = 'context_no_account_update';
+    const CONTEXT_NO_SYNC_PHOTO = 'context_no_sync_photo';
+    const CONTEXT_NO_SYNC_CONTACT_DATA = 'context_no_sync_contact_data';
 
     /**
      * set geo data for contacts
@@ -27,6 +32,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @var boolean
      */
     protected $_setGeoDataForContacts = FALSE;
+
+    /**
+     * configured syncBackends
+     *
+     * @var array|null
+     */
+    protected $_syncBackends = NULL;
 
     /**
      * the constructor
@@ -275,9 +287,202 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        if ($updatedRecord->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
-            Tinebase_User::getInstance()->updateContact($updatedRecord);
+        if (isset($record->account_id) && !isset($updatedRecord->account_id)) {
+            $updatedRecord->account_id = $record->account_id;
         }
+
+        if ($updatedRecord->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) ||
+                !$this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE]) {
+                Tinebase_User::getInstance()->updateContact($updatedRecord);
+            }
+        }
+
+        // assertion
+        if ($updatedRecord->syncBackendIds !== $currentRecord->syncBackendIds) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' updatedRecord and currentRecord have different syncBackendIds values, must never happen. "'
+                . $updatedRecord->syncBackendIds .'", "' . $currentRecord->syncBackendIds . '"');
+        }
+
+        $oldRecordBackendIds = $currentRecord->syncBackendIds;
+        if (is_string($oldRecordBackendIds)) {
+            $oldRecordBackendIds = explode(',', $currentRecord->syncBackendIds);
+        } else {
+            $oldRecordBackendIds = array();
+        }
+
+        $updateSyncBackendIds = false;
+
+        //get sync backends
+        foreach($this->getSyncBackends() as $backendId => $backendArray)
+        {
+            if (isset($backendArray['filter'])) {
+                $oldACL = $this->doContainerACLChecks(false);
+
+                $filter = new Addressbook_Model_ContactFilter($backendArray['filter']);
+                $filter->addFilter(new Addressbook_Model_ContactIdFilter(
+                    array('field' => $updatedRecord->getIdProperty(), 'operator' => 'equals', 'value' => $updatedRecord->getId())
+                ));
+
+                // record does not match the filter, attention searchCount returns a STRING! "1"...
+                if ($this->searchCount($filter) != 1) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' record did not match filter of syncBackend "' . $backendId . '"');
+
+                    // record is stored in that backend, so we remove it from there
+                    if (in_array($backendId, $oldRecordBackendIds)) {
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' deleting record from syncBackend "' . $backendId . '"');
+
+                        try {
+                            $backendArray['instance']->delete($updatedRecord);
+
+                            $updatedRecord->syncBackendIds = trim(preg_replace('/(^|,)' . $backendId . '($|,)/', ',', $updatedRecord->syncBackendIds), ',');
+
+                            $updateSyncBackendIds = true;
+                        } catch (Exception $e) {
+                            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete record from sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                            Tinebase_Exception::log($e, false);
+                        }
+                    }
+
+                    $this->doContainerACLChecks($oldACL);
+
+                    continue;
+                }
+                $this->doContainerACLChecks($oldACL);
+            }
+
+            // if record is in this syncbackend, update it
+            if (in_array($backendId, $oldRecordBackendIds)) {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' update record in syncBackend "' . $backendId . '"');
+
+                try {
+                    $backendArray['instance']->update($updatedRecord);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not update record in sync backend "' .
+                        $backendId . '": ' . $e->getMessage());
+                    Tinebase_Exception::log($e, false);
+                }
+
+            // else create it
+            } else {
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' create record in syncBackend "' . $backendId . '"');
+
+                try {
+                    $backendArray['instance']->create($updatedRecord);
+
+                    $updatedRecord->syncBackendIds = (empty($updatedRecord->syncBackendIds)?'':$updatedRecord->syncBackendIds . ',') . $backendId;
+
+                    $updateSyncBackendIds = true;
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create record in sync backend "' .
+                        $backendId . '": ' . $e->getMessage());
+                    Tinebase_Exception::log($e, false);
+                }
+            }
+        }
+
+        if (true === $updateSyncBackendIds) {
+            $this->_backend->updateSyncBackendIds($updatedRecord->getId(), $updatedRecord->syncBackendIds);
+        }
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        // assertion
+        if (! empty($_createdRecord->syncBackendIds)) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' $_createdRecord->syncBackendIds is not empty, must never happen. "' . $_createdRecord->syncBackendIds . '"');
+        }
+        if (isset($_record->account_id) && !isset($_createdRecord->account_id)) {
+            $_createdRecord->account_id = $_record->account_id;
+        }
+
+        $updateSyncBackendIds = false;
+
+        //get sync backends
+        foreach($this->getSyncBackends() as $backendId => $backendArray) {
+            if (isset($backendArray['filter'])) {
+                $oldACL = $this->doContainerACLChecks(false);
+
+                $filter = new Addressbook_Model_ContactFilter($backendArray['filter']);
+                $filter->addFilter(new Addressbook_Model_ContactIdFilter(
+                    array('field' => $_createdRecord->getIdProperty(), 'operator' => 'equals', 'value' => $_createdRecord->getId())
+                ));
+
+                // record does not match the filter, attention searchCount returns a STRING! "1"...
+                if ($this->searchCount($filter) != 1) {
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' record did not match filter of syncBackend "' . $backendId . '"');
+
+                    $this->doContainerACLChecks($oldACL);
+                    continue;
+                }
+                $this->doContainerACLChecks($oldACL);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' create record in syncBackend "' . $backendId . '"');
+
+            try {
+                $backendArray['instance']->create($_createdRecord);
+
+                $_createdRecord->syncBackendIds = (empty($_createdRecord->syncBackendIds)?'':$_createdRecord->syncBackendIds . ',') . $backendId;
+
+                $updateSyncBackendIds = true;
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create record in sync backend "' .
+                    $backendId . '": ' . $e->getMessage());
+                Tinebase_Exception::log($e, false);
+            }
+        }
+
+        if (true === $updateSyncBackendIds) {
+            $this->_backend->updateSyncBackendIds($_createdRecord->getId(), $_createdRecord->syncBackendIds);
+        }
+    }
+
+    public function resetSyncBackends()
+    {
+        $this->_syncBackends = null;
+    }
+
+    public function getSyncBackends()
+    {
+        if ($this->_syncBackends !== null) {
+            return $this->_syncBackends;
+        }
+
+        $this->_syncBackends = Addressbook_Config::getInstance()->get(Addressbook_Config::SYNC_BACKENDS);
+        foreach($this->_syncBackends as $name => &$val) {
+            if (!isset($val['class'])) {
+                throw new Tinebase_Exception_UnexpectedValue('bad addressbook syncbackend configuration: "' . $name . '" missing class');
+            }
+            if (isset($val['options'])) {
+                $val['instance'] = new $val['class']($val['options']);
+            } else {
+                $val['instance'] = new $val['class']();
+            }
+        }
+
+        return $this->_syncBackends;
     }
 
     /**
@@ -293,8 +498,28 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (!empty($_record->account_id)) {
             throw new Addressbook_Exception_AccessDenied('It is not allowed to delete a contact linked to an user account!');
         }
-        
+
+        $recordBackendIds = $_record->syncBackendIds;
+
         parent::_deleteRecord($_record);
+
+        // delete in syncBackendIds
+        if (is_string($recordBackendIds)) {
+
+            $recordBackends = explode(',', $recordBackendIds);
+            //get sync backends
+            foreach ($this->getSyncBackends() as $backendId => $backendArray) {
+                if (in_array($backendId, $recordBackends)) {
+                    try {
+                        $backendArray['instance']->delete($_record);
+                    } catch (Exception $e) {
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not delete record from sync backend "' .
+                            $backendId . '": ' . $e->getMessage());
+                        Tinebase_Exception::log($e, false);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -309,8 +534,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_setGeoData($_record);
         
         if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
-            throw new Addressbook_Exception_InvalidArgument('can not add contact of type user');
+            if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER]) ||
+                !$this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER]) {
+                throw new Addressbook_Exception_InvalidArgument('can not add contact of type user');
+            }
         }
+
+        // syncBackendIds is read only property!
+        unset($_record->syncBackendIds);
     }
 
     /**
@@ -358,22 +589,27 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         if (! empty($_record->account_id) || $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
 
-            // first check if something changed that requires special rights
-            $changeAccount = false;
-            foreach (Addressbook_Model_Contact::getManageAccountFields() as $field) {
-                if ($_record->{$field} != $_oldRecord->{$field}) {
-                    $changeAccount = true;
-                    break;
+            if ($this->doContainerACLChecks()) {
+                // first check if something changed that requires special rights
+                $changeAccount = false;
+                foreach (Addressbook_Model_Contact::getManageAccountFields() as $field) {
+                    if ($_record->{$field} != $_oldRecord->{$field}) {
+                        $changeAccount = true;
+                        break;
+                    }
                 }
-            }
 
-            // if so, check rights
-            if ($changeAccount) {
-                if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
-                    throw new Tinebase_Exception_AccessDenied('No permission to change account properties.');
+                // if so, check rights
+                if ($changeAccount) {
+                    if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                        throw new Tinebase_Exception_AccessDenied('No permission to change account properties.');
+                    }
                 }
             }
         }
+
+        // syncBackendIds is read only property!
+        unset($_record->syncBackendIds);
     }
     
     /**
@@ -640,5 +876,183 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         return $result;
+    }
+
+    /**
+     * inspect data used to create user
+     *
+     * @param Tinebase_Model_FullUser $_addedUser
+     * @param Tinebase_Model_FullUser $_newUserProperties
+     */
+    public function inspectAddUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
+    {
+        $contactId = $_addedUser->contact_id;
+        if (!empty($contactId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " addedUser does have contact_id set: " . $_addedUser->accountLoginName . ' updating existing contact now.');
+
+            $this->inspectUpdateUser($_addedUser, $_newUserProperties);
+            return;
+        }
+
+        // create new contact
+        $contact = Tinebase_User::user2Contact($_addedUser);
+
+        $userController = Tinebase_User::getInstance();
+        if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true) &&
+            (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
+            // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
+            $userController->updateContactFromSyncBackend($_addedUser, $contact);
+        }
+
+        if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
+            $this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO] && isset($contact->jpegphoto)) {
+            unset($contact->jpegphoto);
+        }
+
+        // we need to set context to avoid _inspectBeforeCreate to freak out about $contact->account_id
+        $oldContext = $this->_requestContext;
+        if (!is_array($this->_requestContext)) {
+            $this->_requestContext = array();
+        }
+        if (!isset($this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER])) {
+            $this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER] = true;
+        }
+        if (!isset($this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE])) {
+            $this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE] = true;
+        }
+        $oldACL = $this->doContainerACLChecks(false);
+
+
+        $contact = $this->create($contact, false);
+
+        $this->_requestContext = $oldContext;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " Added contact " . $contact->n_given);
+
+        $_addedUser->contact_id = $contact->getId();
+        $userController->updateUserInSqlBackend($_addedUser);
+
+        $this->doContainerACLChecks($oldACL);
+        $this->_requestContext = $oldContext;
+    }
+
+    /**
+     * inspect data used to update user
+     *
+     * @param Tinebase_Model_FullUser $_updatedUser
+     * @param Tinebase_Model_FullUser $_newUserProperties
+     */
+    public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
+    {
+        $contactId = $_updatedUser->contact_id;
+        if (empty($contactId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " updatedUser does not have contact_id set: " . $_updatedUser->accountLoginName . ' creating new contact now.');
+
+            $this->inspectAddUser($_updatedUser, $_newUserProperties);
+            return;
+        }
+
+        $oldACL = $this->doContainerACLChecks(false);
+
+        try {
+            $oldContact = $this->get($_updatedUser->contact_id);
+        } catch(Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " updatedUser does has contact_id set which was not found by get: " . $_updatedUser->accountLoginName . ' creating new contact now.');
+
+            $_updatedUser->contact_id = null;
+            $this->inspectAddUser($_updatedUser, $_newUserProperties);
+            return;
+        }
+
+        // update base information
+        $contact = Tinebase_User::user2Contact($_updatedUser, clone $oldContact);
+
+        $userController = Tinebase_User::getInstance();
+        if ($userController instanceof Tinebase_User_Interface_SyncAble && Tinebase_Config::getInstance()->get(Tinebase_Config::SYNC_USER_CONTACT_DATA, true) &&
+            (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA]) || !$this->_requestContext[self::CONTEXT_NO_SYNC_CONTACT_DATA])) {
+            // let the syncbackend e.g. Tinebase_User_Ldap etc. decide what to add to our $contact
+            $userController->updateContactFromSyncBackend($_updatedUser, $contact);
+        }
+
+        if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
+            $this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) {
+            $syncPhoto = false;
+            unset($contact->jpegphoto);
+        } else {
+            $syncPhoto = true;
+
+            if ($oldContact->jpegphoto == 1) {
+                $adb = new Addressbook_Backend_Sql();
+                $oldContact->jpegphoto = $adb->getImage($oldContact->getId());
+            }
+            if ($contact->jpegphoto == 1) {
+                $contact->jpegphoto = false;
+            }
+        }
+
+        $diff = $contact->diff($oldContact, $syncPhoto ? array('n_fn') : array('jpegphoto', 'n_fn'));
+        if (! $diff->isEmpty() || ($oldContact->jpegphoto === 0 && !empty($contact->jpegphoto))) {
+
+            $oldContext = $this->_requestContext;
+            if (!is_array($this->_requestContext)) {
+                $this->_requestContext = array();
+            }
+            if (!isset($this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE])) {
+                $this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE] = true;
+            }
+
+            $this->update($contact, false);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " updated contact " . $contact->n_given);
+
+            $this->_requestContext = $oldContext;
+        }
+
+        $this->doContainerACLChecks($oldACL);
+    }
+
+    /**
+     * delete user by id
+     *
+     * @param   Tinebase_Model_FullUser $_user
+     */
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
+    {
+        if (empty($_user->contact_id)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " updatedUser does not have contact_id set: " . $_user->accountLoginName);
+            return;
+        }
+
+        $oldACL = $this->doContainerACLChecks(false);
+
+        $this->delete($_user->contact_id);
+
+        $this->doContainerACLChecks($oldACL);
+    }
+
+    /**
+     * update/set email user password
+     *
+     * @param  string $_userId
+     * @param  string $_password
+     * @param  bool $_encrypt encrypt password
+     */
+    public function inspectSetPassword($_userId, $_password, $_encrypt = TRUE)
+    {
+    }
+
+    /**
+     * inspect get user by property
+     *
+     * @param Tinebase_Model_User $_user the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
     }
 }

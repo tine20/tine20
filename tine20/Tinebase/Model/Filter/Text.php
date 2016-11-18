@@ -68,19 +68,20 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     protected function _setOpSqlMap()
     {
         $db = Tinebase_Core::getDb();
+        $sqlCommand = Tinebase_Backend_Sql_Command::factory($db);
         $this->_opSqlMap = array(
-            'equals'            => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'  ),
-            'contains'          => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '%?%'),
-            'notcontains'       => array('sqlop' => ' NOT LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),      'wildcards' => '%?%'),
-            'startswith'        => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?%' ),
-            'endswith'          => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '%?' ),
-            'not'               => array('sqlop' => ' NOT LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),      'wildcards' => '?'  ),
+            'equals'            => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
+            'contains'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?%'),
+            'notcontains'       => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '%?%'),
+            'startswith'        => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?%' ),
+            'endswith'          => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '%?' ),
+            'not'               => array('sqlop' => ' NOT ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),      'wildcards' => '?'  ),
             'in'                => array('sqlop' => ' IN (?)',          'wildcards' => '?'  ),
             'notin'             => array('sqlop' => ' NOT IN (?)',      'wildcards' => '?'  ),
             'isnull'            => array('sqlop' => ' IS NULL',         'wildcards' => '?'  ),
             'notnull'           => array('sqlop' => ' IS NOT NULL',     'wildcards' => '?'  ),
-            'group'             => array('sqlop' => " NOT LIKE  ''",    'wildcards' => '?'  ),
-            'equalsspecial'     => array('sqlop' => ' LIKE ' . Tinebase_Backend_Sql_Command::factory($db)->prepareForILike('(?)'),          'wildcards' => '?'  ),
+            'group'             => array('sqlop' => ' NOT ' . $sqlCommand->getLike() . "  ''",    'wildcards' => '?'  ),
+            'equalsspecial'     => array('sqlop' => ' ' .$sqlCommand->getLike() .' ' . $sqlCommand->prepareForILike('(?)'),          'wildcards' => '?'  ),
         );
     }
 

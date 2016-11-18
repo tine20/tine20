@@ -33,6 +33,23 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_1()
     {
+        // convert price column to double for pgsql as this can't be done with the doctrine schema tool
+        // ERROR:  column "price" cannot be cast automatically to type double precision
+        if ($this->_db instanceof Zend_Db_Adapter_Pdo_Pgsql) {
+            $field = '
+             <field>
+                    <name>price</name>
+                    <type>float</type>
+                </field>';
+
+            $declaration = new Setup_Backend_Schema_Field_Xml($field);
+            $this->_backend->alterCol('inventory_item', $declaration);
+
+            // this is needed to make doctrine work correctly after alter column
+            $this->_db->commit();
+            $this->_db->beginTransaction();
+        }
+
         // update according to current modelconfigV2 definition using doctrine2
         // NOTE: depending on update action you might need to move this to a later update
         //       as your update case might be gone after this got executed in an previous

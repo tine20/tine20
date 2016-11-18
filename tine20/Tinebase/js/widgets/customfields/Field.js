@@ -52,8 +52,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
         Tine.log.debug(cfConfig);
         
         if (! cfConfig) {
-            Tine.log.error('cfConfig empty!');
-            return;
+            Tine.log.error('cfConfig empty -> skipping field');
+            return Ext.ComponentMgr.create({xtype: 'hidden'});
         }
         
         var def = cfConfig.get('definition'),
@@ -137,7 +137,8 @@ Tine.widgets.customfields.Field = Ext.extend(Ext.Panel, {
             return fieldObj;
         } catch (e) {
             Tine.log.debug(e);
-            Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
+            Tine.log.error('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');Tine.log.error('cfConfig empty -> skipping field');
+            return Ext.ComponentMgr.create({xtype: 'hidden'});
         }
     };
 

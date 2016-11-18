@@ -94,13 +94,17 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
         'model'              => array('presence' => 'required'),
         'application_id'     => array('presence' => 'required'),
         'synctoken'          => array('allowEmpty' => true),
-        'interval'           => array('allowEmpty' => false, array(
-            'InArray', array(Tinebase_Model_Import::INTERVAL_DAILY,
-                Tinebase_Model_Import::INTERVAL_HOURLY,
+        'interval'           => array(
+            Zend_Filter_Input::ALLOW_EMPTY => false,
+            array('InArray', array(
                 Tinebase_Model_Import::INTERVAL_ONCE,
-                Tinebase_Model_Import::INTERVAL_WEEKLY)
-            )
+                Tinebase_Model_Import::INTERVAL_DAILY,
+                Tinebase_Model_Import::INTERVAL_HOURLY,
+                Tinebase_Model_Import::INTERVAL_WEEKLY
+            )),
+            Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_Import::INTERVAL_ONCE,
         ),
+        // NOTE: if container_id is also in options, options should win
         'container_id'       => array('presence' => 'required'),
         'sourcetype'         => array('presence' => 'required'),
         'options'            => array('allowEmpty' => true),
@@ -155,7 +159,21 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
         $options = $this->options ? Zend_Json::decode($this->options) : array();
         return isset($options[$_key]) ? $options[$_key] : NULL;
     }
-    
+
+    /**
+     * gets an option
+     *
+     * @param  string $_key
+     * @return scalar|array of scalar
+     */
+    public function deleteOption($_key)
+    {
+        $options = $this->options ? Zend_Json::decode($this->options) : array();
+        unset($options[$_key]);
+
+        $this->options = Zend_Json::encode($options);
+    }
+
     /**
      * sets the record related properties from user generated input.
      *
@@ -166,6 +184,10 @@ class Tinebase_Model_Import extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
+        if (isset($_data['options']) && is_array($_data['options'])) {
+            $_data['options'] = Zend_Json::encode($_data['options']);
+        }
+
         parent::setFromArray($_data);
         $timestamp = Tinebase_DateTime::now();
         

@@ -29,21 +29,47 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
          */
         'updateExisting'        => true,
         /**
-         * updates exiting events if sequence number is higher
+         * update exiting events even if imported sequence number isn't higher
          * @var boolean
          */
         'forceUpdateExisting'   => false,
         /**
+         * ?
+         */
+        'allowDuplicateEvents'  => false,
+        /**
          * container the events should be imported in
          * @var string
          */
-        'container_id'     => null,
-        
+        'container_id'          => null,
         /**
-         * Model to be used for import
+         * url of calDAV service
          * @var string
          */
-        'model' => 'Calendar_Model_Event'
+        'url'                   => null,
+        /**
+         * username for calDAV service
+         * @var string
+         */
+        'username'              => null,
+        /**
+         * password for calDAV service
+         * @var string
+         */
+        'password'              => null,
+        /**
+         * credential cache id instead of username/password
+         * @var string
+         */
+        'cid'                   => null,
+        /**
+         * credential cache key instead of username/password
+         * @var string
+         */
+        'ckey'                  => null,
+
+        'model'                 => 'Calendar_Model_Event',
+
     );
     
     protected $_calDAVClient = null;
@@ -81,38 +107,20 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL, $_clientRecordData = array())
     {
-        $_resource['options'] = Zend_Json::decode($_resource['options']);
-        
-        $credentials = new Tinebase_Model_CredentialCache(array(
-            'id'    => $_resource['options']['cid'],
-            'key'   => $_resource['options']['ckey']
-        ));
-        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($credentials);
-        
-        $uri = $this->_splitUri($_resource['remoteUrl']);
+        $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
+
+        $uri = $this->_splitUri($this->_options['url']);
         
         $caldavClientOptions = array(
             'baseUri' => $uri['host'],
             'calenderUri' => $uri['path'],
-            'userName' => $credentials->username,
-            'password' => $credentials->password,
-            'allowDuplicateEvents' => isset($_resource['options']['allowDuplicateEvents']) ? $_resource['options']['allowDuplicateEvents'] : false,
+            'userName' => $this->_options['username'],
+            'password' => $this->_options['password'],
+            'allowDuplicateEvents' => $this->_options['allowDuplicateEvents'],
         );
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Trying to get calendar container Name:' . $_resource['options']['container_id']);
-        $container = Tinebase_Container::getInstance()->getContainerById($this->_getImportCalendarByName($_resource['options']['container_id']));
-        
-        if ($container === false) {
-            throw new Tinebase_Exception('Could not import, aborting ..');
-            return false;
-        }
-        
-        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($credentials->username, $credentials->password);
-        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $_resource['remoteUrl']);
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);
         }
         
         $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic', $container->name);
@@ -120,56 +128,4 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
         $this->_calDAVClient->getDecorator()->initCalendarImport();
         $this->_calDAVClient->updateAllCalendarData();
     }
-    
-    /**
-     * Return container id of newly created container for import
-     * 
-     *  - the given container name is not allowed to exist
-     * 
-     * @param type $containerName
-     * @return boolean
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getImportCalendarByName ($containerName)
-    {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Get calendar by name for CalDAV import. Name:' . $containerName);
-
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array(
-                'field' => 'name', 
-                'operator' => 'equals', 
-                'value' => $containerName
-            ),
-            array(
-                'field' => 'application_id',
-                'operator' => 'equals',
-                'value' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
-            )
-        ));
-        $search = Tinebase_Container::getInstance()->search($filter);
-
-        if ($search->count() > 0) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Calendar already exists ' . $containerName . ' ID: ' . $search->getFirstRecord()->getId());
-            return $search->getFirstRecord()->getId();
-        }
-            
-        $container = new Tinebase_Model_Container(array(
-            'name'              => $containerName,
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-            'backend'           => Tinebase_User::SQL,
-            'color'             => '#ff0000',
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
-            'owner_id'          => Tinebase_Core::getUser()->getId(),
-            'model'             => 'Calendar_Model_Event',
-        ));
-
-        $container = Tinebase_Container::getInstance()->addContainer($container);
-
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Added calendar ' . $containerName . ' with ID: ' . $container->getId());
-
-        return $container->getId();
-    }
-}
+ }

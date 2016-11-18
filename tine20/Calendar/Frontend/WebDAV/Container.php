@@ -389,6 +389,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     break;
                     
                 case 'user':
+                    // apple clients don't want own shares ...
                     if ((string)$this->_container->owner_id === (string)$grant->account_id) {
                         continue 2;
                     }

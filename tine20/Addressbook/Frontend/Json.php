@@ -243,6 +243,51 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_save($recordData, Addressbook_Controller_ListRole::getInstance(), 'ListRole');
     }
+    
+    /**
+     * get one industry identified by $id
+     *
+     * @param string $id
+     * @return array
+     */
+    public function getIndustry($id)
+    {
+        return $this->_get($id, Addressbook_Controller_Industry::getInstance());
+    }
+    
+    /**
+     * Search for industries matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchIndustrys($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Addressbook_Controller_Industry::getInstance(), 'Addressbook_Model_IndustryFilter');
+    }
+    
+    /**
+     * delete multiple industries
+     *
+     * @param array $ids list of listId's to delete
+     * @return array
+     */
+    public function deleteIndustrys($ids)
+    {
+        return $this->_delete($ids, Addressbook_Controller_Industry::getInstance());
+    }
+    
+    /**
+     * save industry
+     *
+     * @param $recordData
+     * @return array
+     */
+    public function saveIndustry($recordData)
+    {
+        return $this->_save($recordData, Addressbook_Controller_Industry::getInstance(), 'Industry');
+    }
 
     /**
      * save one contact

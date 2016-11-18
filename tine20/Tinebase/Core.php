@@ -726,7 +726,7 @@ class Tinebase_Core
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
             $backendOptions = ($config->caching->backendOptions) ? $config->caching->backendOptions->toArray() : array();
             
-            if (! empty($backendOptions)) {
+            if (empty($backendOptions)) {
                 switch ($backendType) {
                     case 'File':
                         $backendOptions = array(
