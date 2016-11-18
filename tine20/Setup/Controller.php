@@ -58,7 +58,9 @@ class Setup_Controller
      * @var integer
      */
     protected $_updatedApplications = 0;
-    
+
+    const MAX_DB_PREFIX_LENGTH = 10;
+
     /**
      * don't clone. Use the singleton.
      *
@@ -198,6 +200,23 @@ class Setup_Controller
         $result['success'] = TRUE;
         
         return $result;
+    }
+    
+    /**
+     * Check if tableprefix is longer than 6 charcters
+     *
+     * @return boolean
+     */
+    public function checkDatabasePrefix()
+    {
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if (isset($config->database->tableprefix) && strlen($config->database->tableprefix) > self::MAX_DB_PREFIX_LENGTH) {
+            if (Setup_Core::isLogLevel(Zend_Log::ERR)) Setup_Core::getLogger()->error(__METHOD__ . '::' . __LINE__
+                . ' Tableprefix: "' . $config->database->tableprefix . '" is longer than ' . self::MAX_DB_PREFIX_LENGTH
+                . '  characters! Please check your configuration.');
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -1457,6 +1476,10 @@ class Setup_Controller
             throw new Tinebase_Exception_Backend_Database('Need configured and working database backend for install.');
         }
         
+        if (!$this->checkDatabasePrefix()) {
+            throw new Tinebase_Exception_Backend_Database('Tableprefix is too long');
+        }
+        
         try {
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
@@ -1525,7 +1548,7 @@ class Setup_Controller
     protected function _createTable($table)
     {
         if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
-
+        
         try {
             $this->_backend->createTable($table);
         } catch (Zend_Db_Statement_Exception $zdse) {
