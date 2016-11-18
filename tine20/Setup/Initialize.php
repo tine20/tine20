@@ -76,16 +76,27 @@ class Setup_Initialize
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         self::initializeApplicationRights($_application);
+        $initClasses = array($this);
 
-        $reflectionClass = new ReflectionClass($this);
-        $methods = $reflectionClass->getMethods();
-        foreach ($methods as $method) {
-            $methodName = $method->name;
-            if (strpos($methodName, '_initialize') === 0 && $methodName !== '_initialize') {
-                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Calling init function '
-                    . get_class($this) . '::' . $methodName);
-                
-                $this->$methodName($_application, $_options);
+        $customInitClass = $_application->name . '_Setup_Initialize_Custom';
+        if (class_exists($customInitClass)) {
+            $customInit = new $customInitClass();
+            $initClasses[] = $customInit;
+        }
+
+        foreach ($initClasses as $initClass) {
+            $reflectionClass = new ReflectionClass($initClass);
+            $methods = $reflectionClass->getMethods();
+            foreach ($methods as $method) {
+                $methodName = $method->name;
+                if ((strpos($methodName, '_initialize') === 0 && $methodName !== '_initialize')
+                    || (get_class($initClass) === $customInitClass && (strpos($methodName, 'initialize') === 0))
+                ) {
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Calling init function '
+                        . get_class($initClass) . '::' . $methodName);
+
+                    $initClass->$methodName($_application, $_options);
+                }
             }
         }
     }

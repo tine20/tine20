@@ -67,10 +67,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
      * list of zend inputfilter
-     * 
+     *
      * this filter get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
@@ -78,10 +78,10 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     protected $_filters = array(
         'name'              => 'StringTrim'
     );
-    
+
     /**
      * list of zend validator
-     * 
+     *
      * this validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array
@@ -95,14 +95,14 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent
-        'owner_id'          => array('allowEmpty' => true), // non persistent + only set for personal folders
+        'owner_id'          => array('allowEmpty' => true),
         'path'              => array('allowEmpty' => true), // non persistent
         'model'             => array('allowEmpty' => true),
         'uuid'              => array('allowEmpty' => true),
-        
+
     // only gets updated in increaseContentSequence() + readonly in normal record context
         'content_seq'       => array('allowEmpty' => true),
-    
+
     // modlog fields
         'created_by'             => array('allowEmpty' => true),
         'creation_time'          => array('allowEmpty' => true),
@@ -113,7 +113,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'deleted_by'             => array('allowEmpty' => true),
         'seq'                    => array('allowEmpty' => true),
     );
-    
+
     /**
      * datetime fields
      *

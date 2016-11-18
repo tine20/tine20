@@ -168,7 +168,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'config'                => array(
                     'appName'               => 'Sales',
                     'modelName'             => 'Invoice',
-                    'idProperty'            => 'id'
+                    'idProperty'            => 'id',
+                    // TODO we should replace this with a generic approach to fetch configured models of an app
+                    // -> APP_Frontend_Json::$_configuredModels should be moved from json to app controller
+                    'feature'               => 'invoicesModule', // Sales_Config::FEATURE_INVOICES_MODULE
                 ),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'copyOmit'              => true,

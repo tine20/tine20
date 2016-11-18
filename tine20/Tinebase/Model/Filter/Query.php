@@ -124,7 +124,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
             case 'notin':
             case 'in':
                 foreach ($this->_options['fields'] as $qField) {
-                    // if field has . in name, then we allready have tablename
+                    // if field has . in name, then we already have tablename
                     if (strpos($qField, '.') !== FALSE) {
                         $whereParts[] = $db->quoteInto($db->quoteIdentifier($qField) . ($not?' NOT':'') . ' IN (?)', (array) $this->_value);
                     }

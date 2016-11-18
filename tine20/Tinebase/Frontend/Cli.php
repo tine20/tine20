@@ -516,6 +516,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return TRUE;
     }
 
+    /**
+     * cleanNotes
+     */
     public function cleanNotes()
     {
         $notesController = Tinebase_Notes::getInstance();
@@ -534,6 +537,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
                 } catch(Tinebase_Exception_AccessDenied $e) {
                     // TODO log
+                    continue;
+                } catch(Tinebase_Exception_NotFound $tenf) {
+                    $deleteIds[] = $note->getId();
                     continue;
                 }
                 $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
@@ -591,22 +597,39 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
         }
+
+        echo "\ndeleted " . count($deleteIds) . " notes\n";
     }
 
+    /**
+     * cleanCustomfields
+     */
     public function cleanCustomfields()
     {
         $customFieldController = Tinebase_CustomField::getInstance();
         $customFieldConfigs = $customFieldController->searchConfig();
+        $deleteCount = 0;
 
         /** @var Tinebase_Model_CustomField_Config $customFieldConfig */
         foreach($customFieldConfigs as $customFieldConfig) {
-            $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
-            $oldACLCheckValue = $controller->doContainerACLChecks(false);
-            if ($customFieldConfig->model !== 'Filemanager_Model_Node') {
-                $filterClass = $customFieldConfig->model . 'Filter';
-            } else {
-                $filterClass = 'ClassThatDoesNotExist';
+            $deleteAll = false;
+            try {
+                $controller = Tinebase_Core::getApplicationInstance($customFieldConfig->model);
+
+                $oldACLCheckValue = $controller->doContainerACLChecks(false);
+                if ($customFieldConfig->model !== 'Filemanager_Model_Node') {
+                    $filterClass = $customFieldConfig->model . 'Filter';
+                } else {
+                    $filterClass = 'ClassThatDoesNotExist';
+                }
+            } catch(Tinebase_Exception_AccessDenied $e) {
+                // TODO log
+                continue;
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $deleteAll = true;
             }
+
+
 
             $filter = new Tinebase_Model_CustomField_ValueFilter(array(
                 array('field' => 'customfield_id', 'operator' => 'equals', 'value' => $customFieldConfig->id)
@@ -614,7 +637,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $customFieldValues = $customFieldController->search($filter);
             $deleteIds = array();
 
-            if (class_exists($filterClass)) {
+            if (true === $deleteAll) {
+                $deleteIds = $customFieldValues->getId();
+            } elseif (class_exists($filterClass)) {
                 $model = new $customFieldConfig->model();
                 /** @var Tinebase_Model_CustomField_Value $customFieldValue */
                 foreach ($customFieldValues as $customFieldValue) {
@@ -660,10 +685,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             if (count($deleteIds) > 0) {
                 $customFieldController->deleteCustomFieldValue($deleteIds);
+                $deleteCount += count($deleteIds);
             }
 
-            $controller->doContainerACLChecks($oldACLCheckValue);
+            if (true !== $deleteAll) {
+                $controller->doContainerACLChecks($oldACLCheckValue);
+            }
         }
+
+        echo "\ndeleted " . $deleteCount . " customfield values\n";
     }
     
     /**

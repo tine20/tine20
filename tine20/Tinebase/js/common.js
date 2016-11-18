@@ -529,6 +529,18 @@ Tine.Tinebase.common = {
     },
 
     /**
+     * foreign record renderer
+     *
+     * @param record
+     * @param metadata
+     *
+     * TODO use title fn? allow to configure displayed field(s)?
+     */
+    foreignRecordRenderer: function(record, metaData) {
+        return record && record.name ? record.name : '';
+    },
+
+    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id

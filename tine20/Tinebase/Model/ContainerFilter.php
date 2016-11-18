@@ -44,7 +44,7 @@ class Tinebase_Model_ContainerFilter extends Tinebase_Model_Filter_FilterGroup
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'query'             => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
-        'owner'             => array('filter' => 'Tinebase_Model_Filter_ContainerOwner'),
+        'owner_id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'uuid'              => array('filter' => 'Tinebase_Model_Filter_Text'),
     );

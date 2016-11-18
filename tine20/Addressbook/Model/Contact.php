@@ -119,8 +119,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User' => array('created_by', 'last_modified_by'),
-        'recursive'           => array('attachments' => 'Tinebase_Model_Tree_Node'),
+        'Tinebase_Model_User'        => array('created_by', 'last_modified_by'),
+        'Addressbook_Model_Industry' => array('industry'),
+        'recursive'                  => array('attachments' => 'Tinebase_Model_Tree_Node'),
     );
     
     /**
@@ -235,6 +236,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
             array('InArray', array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)),
         ),
         'paths'                         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'industry'                      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'syncBackendIds'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**

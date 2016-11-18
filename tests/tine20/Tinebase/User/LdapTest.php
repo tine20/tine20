@@ -224,7 +224,7 @@ class Tinebase_User_LdapTest extends TestCase
     /**
      * execute Tinebase_User::syncUser
      *
-     * TODO test bday
+     * TODO eventually add birthdate in case its turned on again in Tinebase_User_Ldap::_ldap2Contact
      */
     public function testSyncUsersContactData()
     {
@@ -273,6 +273,50 @@ class Tinebase_User_LdapTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($syncedUser->getId());
         $this->assertEquals('', $contact->tel_work);
         $this->assertEquals(0, $contact->jpegphoto);
+    }
+
+    /**
+     * execute Tinebase_User::syncUser
+     */
+    public function testSyncUsersNoContactData()
+    {
+        // add user in LDAP
+        $user = $this->_backend->addUserToSyncBackend(self::getTestRecord());
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, false);
+        $syncedUser = Tinebase_User::syncUser($user);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, true);
+
+        // check if user is synced
+        $this->assertEquals(Tinebase_Model_User::VISIBILITY_DISPLAYED, $syncedUser->visibility,
+            print_r($syncedUser->toArray(), true));
+        $this->assertFalse(empty($syncedUser->contact_id), 'contact id not set');
+        $contact = Addressbook_Controller_Contact::getInstance()->get($syncedUser->contact_id);
+        $this->assertFalse(isset($contact->tel_work), 'tel_work is set');
+
+        // add phone data in ldap and check that it did not reach adb
+        $syncOptions = array(
+            'syncContactData' => true,
+            'syncContactPhoto' => true,
+        );
+        $ldap = $this->_backend->getLdap();
+        $dn = $this->_backend->generateDn($syncedUser);
+        $number = '040-428457634';
+        $jpegImage = file_get_contents(dirname(dirname(dirname(dirname(__DIR__))))
+            . '/tine20/Admin/Setup/DemoData/persona_sclever.jpg');
+        $ldap->updateProperty($dn, array(
+            'telephonenumber' => $number,
+            'jpegphoto'       => $jpegImage,
+        ));
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, false);
+        $syncedUser = Tinebase_User::syncUser($user, $syncOptions);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SYNC_USER_CONTACT_DATA, true);
+
+        $contact = Addressbook_Controller_Contact::getInstance()->get($syncedUser->contact_id);
+        $this->assertFalse(isset($contact->tel_work), 'tel_work is set');
+        $this->assertEquals(0, $contact->jpegphoto, 'jpegphoto is not 0');
     }
 
     /**

@@ -33,7 +33,15 @@ class Setup_SchemaTool
         return $dbParams;
     }
 
-    public static function getConfig($appName, $modelNames=null)
+    /**
+     * get orm config
+     *
+     * @param      string $appName
+     * @param null|array  $modelNames
+     * @return \Doctrine\ORM\Configuration
+     * @throws Setup_Exception
+     */
+    public static function getConfig($appName, $modelNames = null)
     {
         $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
 
@@ -50,7 +58,7 @@ class Setup_SchemaTool
         }
 
         $tableNames = array();
-        foreach($modelNames as $modelName) {
+        foreach ($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             if (! $mappingDriver->isTransient($modelName)) {
                 throw new Setup_Exception('Model not yet doctrine2 ready');
@@ -58,13 +66,16 @@ class Setup_SchemaTool
             $tableNames[] = SQL_TABLE_PREFIX . Tinebase_Helper::array_value('name', $modelConfig->getTable());
         }
 
-        $config = Setup::createConfiguration();
+        // TODO we could use the tine20 redis cache here if configured (see \Doctrine\ORM\Tools\Setup::createConfiguration)
+        // but as createConfiguration() tries to setup a redis cache if redis extension is available, we need to
+        // setup a manual ArrayCache for the moment
+        $cache = new \Doctrine\Common\Cache\ArrayCache();
+        $config = Setup::createConfiguration(/* isDevMode = */ false, /* $proxyDir = */ null, $cache);
         $config->setMetadataDriverImpl($mappingDriver);
 
         $config->setFilterSchemaAssetsExpression('/'. implode('|',$tableNames) . '/');
 
         return $config;
-
     }
 
     public static function getEntityManager($appName, $modelNames=null)

@@ -10,4 +10,19 @@
  */
 class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
 {
+    /**
+     * update to 10.1:
+     * - add multiple sync backends / ldap implementation
+     * - add addressbook_industry table and column
+     *
+     * @return void
+     */
+    public function update_0()
+    {
+        $release9 = new Addressbook_Setup_Update_Release9($this->_backend);
+        $release9->update_9();
+        $release9->update_10();
+
+        $this->setApplicationVersion('Addressbook', '10.1');
+    }
 }

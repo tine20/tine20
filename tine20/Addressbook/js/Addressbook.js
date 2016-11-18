@@ -86,6 +86,41 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }
         );
+        
+        Tine.CoreData.Manager.registerGrid(
+            'adb_industries',
+            Tine.widgets.grid.GridPanel,
+            {
+                recordClass: Tine.Addressbook.Model.Industry,
+                app: this,
+                initialLoadAfterRender: false,
+                // TODO move this to a generic place
+                gridConfig: {
+                    autoExpandColumn: 'name',
+                    columns: [{
+                        id: 'id',
+                        header: this.i18n._("ID"),
+                        width: 150,
+                        sortable: true,
+                        dataIndex: 'id',
+                        hidden: true
+                    }, {
+                        id: 'name',
+                        header: this.i18n._("Name"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'name'
+                    }, {
+                        id: 'description',
+                        header: this.i18n._("Description"),
+                        width: 300,
+                        sortable: true,
+                        dataIndex: 'description',
+                        hidden: true
+                    }]
+                }
+            }
+        );
     }
 });
 
