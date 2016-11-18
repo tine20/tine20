@@ -515,7 +515,7 @@
         </table>
         <table>
             <name>container</name>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
