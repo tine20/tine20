@@ -831,7 +831,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_sendMessage();
         
         $replyMessage = $this->_getReply($message);
-        $returned = $this->_json->saveMessage($replyMessage);
+        $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
         
@@ -845,6 +845,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 $originalMessage = $mail;
             }
         }
+
+        $this->assertTrue(isset($replyMessageFound['id']) && isset($originalMessage['id']));
+
         $replyMessageFound = $this->_json->getMessage($replyMessageFound['id']);
         $originalMessage = $this->_json->getMessage($originalMessage['id']);
         
