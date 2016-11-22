@@ -233,6 +233,20 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @see 0012222: customfields with space in name are not shown
+     */
+    public function testAddCustomFieldWithSpace()
+    {
+        $createdCustomField = $this->_instance->addCustomField(self::getCustomField(array(
+            'name'              => 'my customfield',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_Contact',
+        )));
+
+        self::assertEquals('mycustomfield', $createdCustomField->name);
+    }
+
+    /**
      * get custom field record
      *
      * @param array $config

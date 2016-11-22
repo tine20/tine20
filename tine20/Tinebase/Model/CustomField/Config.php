@@ -32,7 +32,7 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'Tinebase';
-    
+
     /**
      * record validators
      *
@@ -82,5 +82,21 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         }
         
         return parent::setFromArray($_data);
+    }
+
+    /**
+     * Default constructor
+     * Constructs an object and sets its record related properties.
+     *
+     * @param mixed $_data
+     * @param bool $bypassFilters sets {@see this->bypassFilters}
+     * @param mixed $convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_filters = array('name' => new Tinebase_Model_InputFilter_RemoveWhitespace());
+
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
     }
 }
