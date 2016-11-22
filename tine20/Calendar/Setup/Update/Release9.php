@@ -122,11 +122,24 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 9.8
+     *
+     * Update Calendar Import Export definitions
+     */
+    public function update_7()
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Calendar');
+        Setup_Controller::getInstance()->createImportExportDefinitions($app);
+        
+        $this->setApplicationVersion('Calendar', '9.8');
+    }
+
+    /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_7()
+    public function update_8()
     {
         $this->setApplicationVersion('Calendar', '10.0');
     }
