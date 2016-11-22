@@ -137,6 +137,9 @@ class Felamimail_Frontend_JsonTest extends TestCase
         
         // get (or create) test accout
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        if ($this->_account === null) {
+            $this->markTestSkipped('no account found');
+        }
         $this->_oldSieveVacationActiveState = $this->_account->sieve_vacation_active;
         try {
             $this->_oldSieveData = new Felamimail_Sieve_Backend_Sql($this->_account);
@@ -565,21 +568,41 @@ class Felamimail_Frontend_JsonTest extends TestCase
     /**
      * test send message to invalid recipient
      */
-    public function testSendMessageToInvalidRecipient()
+    public function testSendMessageToInvalidRecipient($invalidEmail = null, $toField = 'to', $expectedExceptionMessage = 'Recipient address rejected')
     {
         $messageToSend = $this->_getMessageData($this->_account->email);
-        $invalidEmail = 'invaliduser@' . $this->_mailDomain;
-        $messageToSend['to'] = array($invalidEmail);
-        
+        if ($invalidEmail === null) {
+            $invalidEmail = 'invaliduser@' . $this->_mailDomain;
+        }
+        if ($toField !== 'to') {
+            $messageToSend['to'] = array(Tinebase_Core::getUser()->accountEmailAddress);
+        }
+        $messageToSend[$toField] = array($invalidEmail);
+
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+
         try {
-            $returned = $this->_json->saveMessage($messageToSend);
+            $this->_json->saveMessage($messageToSend);
             $this->fail('Tinebase_Exception_SystemGeneric expected');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $this->assertContains('550 5.1.1 <' . $invalidEmail . '>: Recipient address rejected', $tesg->getMessage(),
+            $this->assertContains('>: ' . $translation->_($expectedExceptionMessage), $tesg->getMessage(),
                 'exception message did not match: ' . $tesg->getMessage());
         }
     }
-    
+
+    /**
+     * test send message to invalid recipients (invalid email addresses)
+     *
+     * @see 0012292: check and show invalid email addresses before sending mail
+     */
+    public function testSendMessageWithInvalidEmails()
+    {
+        $this->testSendMessageToInvalidRecipient('memyselfandi.de', 'to', 'Invalid address format');
+        $this->testSendMessageToInvalidRecipient('ich bins <mymail@ ' . $this->_mailDomain .'>', 'cc', 'Invalid address format');
+        $this->testSendMessageToInvalidRecipient('ich bins nicht <mymail\@' . $this->_mailDomain .'>', 'bcc', 'Invalid address format');
+        $this->testSendMessageToInvalidRecipient('my@mail@' . $this->_mailDomain, 'bcc', 'Invalid address format');
+    }
+
     /**
      * try to get a message from imap server (with complete body, attachments, etc)
      *

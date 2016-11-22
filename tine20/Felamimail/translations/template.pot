@@ -49,20 +49,20 @@ msgstr ""
 msgid "on"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:47 js/GridPanel.js:294 js/GridPanel.js:295
-#: js/GridPanel.js:297
+#: js/MessageDisplayDialog.js:47 js/GridPanel.js:295 js/GridPanel.js:296
+#: js/GridPanel.js:298
 msgid "Delete"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:54 js/GridPanel.js:249
+#: js/MessageDisplayDialog.js:54 js/GridPanel.js:250
 msgid "Reply"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:60 js/GridPanel.js:258
+#: js/MessageDisplayDialog.js:60 js/GridPanel.js:259
 msgid "Reply To All"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:66 js/GridPanel.js:267
+#: js/MessageDisplayDialog.js:66 js/GridPanel.js:268
 msgid "Forward"
 msgstr ""
 
@@ -70,12 +70,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:79 js/GridPanel.js:321
+#: js/MessageDisplayDialog.js:79 js/GridPanel.js:322
 msgid "Print Message"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:85 js/GridPanel.js:313 js/GridPanel.js:1348
-#: js/GridPanel.js:1364
+#: js/MessageDisplayDialog.js:85 js/GridPanel.js:314 js/GridPanel.js:1349
+#: js/GridPanel.js:1365
 msgid "Print Preview"
 msgstr ""
 
@@ -189,25 +189,29 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:308
+#: js/sieve/RulesGridPanel.js:280 js/sieve/RuleEditDialog.js:384
+msgid "Keep a copy"
+msgstr ""
+
+#: js/sieve/RulesGridPanel.js:311
 msgid "is greater than"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:308
+#: js/sieve/RulesGridPanel.js:311
 msgid "is less than"
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:319
+#: js/sieve/RulesGridPanel.js:322
 #, python-brace-format
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr ""
 
-#: js/sieve/RulesGridPanel.js:319
+#: js/sieve/RulesGridPanel.js:322
 #, python-brace-format
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr ""
 
-#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:156 js/GridPanel.js:488
+#: js/sieve/RuleConditionsPanel.js:71 js/Model.js:156 js/GridPanel.js:489
 msgid "From (Email)"
 msgstr ""
 
@@ -224,12 +228,12 @@ msgid "To (Email CC)"
 msgstr ""
 
 #: js/sieve/RuleConditionsPanel.js:75 js/GridDetailsPanel.js:245
-#: js/Model.js:155 js/MessageEditDialog.js:1007 js/GridPanel.js:482
+#: js/Model.js:155 js/MessageEditDialog.js:1013 js/GridPanel.js:483
 #: Controller/Message/Send.php:288
 msgid "Subject"
 msgstr ""
 
-#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:537
+#: js/sieve/RuleConditionsPanel.js:76 js/GridPanel.js:538
 msgid "Size"
 msgstr ""
 
@@ -249,43 +253,43 @@ msgstr ""
 msgid "Header regex"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:97
+#: js/sieve/RuleEditDialog.js:106
 msgid "Edit Filter Rule"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:263
+#: js/sieve/RuleEditDialog.js:284
 msgid "Apply filter if"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:267
+#: js/sieve/RuleEditDialog.js:288
 msgid "all conditions match"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:268
+#: js/sieve/RuleEditDialog.js:289
 msgid "any condition matches"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:315
+#: js/sieve/RuleEditDialog.js:336
 msgid "Do this action:"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:407
+#: js/sieve/RuleEditDialog.js:432
 msgid "Move mail to folder"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:408
+#: js/sieve/RuleEditDialog.js:433
 msgid "Redirect mail to address"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:409
+#: js/sieve/RuleEditDialog.js:434
 msgid "Reject mail with this text"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:410
+#: js/sieve/RuleEditDialog.js:435
 msgid "Discard mail"
 msgstr ""
 
-#: js/sieve/RuleEditDialog.js:411
+#: js/sieve/RuleEditDialog.js:436
 msgid "Keep mail"
 msgstr ""
 
@@ -321,7 +325,7 @@ msgstr[1] ""
 msgid "Message not available."
 msgstr ""
 
-#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:913
+#: js/GridDetailsPanel.js:246 js/MessageEditDialog.js:919
 msgid "From"
 msgstr ""
 
@@ -341,7 +345,7 @@ msgstr ""
 msgid "Show or hide header information"
 msgstr ""
 
-#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:847 js/GridPanel.js:468
+#: js/GridDetailsPanel.js:348 js/MessageEditDialog.js:853 js/GridPanel.js:469
 msgid "Attachments"
 msgstr ""
 
@@ -349,7 +353,7 @@ msgstr ""
 msgid "Compose email"
 msgstr ""
 
-#: js/GridPanelHook.js:49 js/Model.js:158 js/GridPanel.js:507
+#: js/GridPanelHook.js:49 js/Model.js:158 js/GridPanel.js:508
 msgid "To"
 msgstr ""
 
@@ -376,7 +380,7 @@ msgstr ""
 
 #: js/FolderFilterModel.js:30 js/TreeContextMenu.js:64
 #: js/TreeContextMenu.js:67 js/TreeContextMenu.js:70 js/Model.js:55
-#: js/Model.js:514 js/GridPanel.js:529
+#: js/Model.js:514 js/GridPanel.js:530
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] ""
@@ -449,7 +453,7 @@ msgstr[1] ""
 msgid "Subject/From"
 msgstr ""
 
-#: js/Model.js:157 js/GridPanel.js:494
+#: js/Model.js:157 js/GridPanel.js:495
 msgid "From (Name)"
 msgstr ""
 
@@ -461,11 +465,11 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
-#: js/Model.js:161 js/GridPanel.js:475
+#: js/Model.js:161 js/GridPanel.js:476
 msgid "Flags"
 msgstr ""
 
-#: js/Model.js:164 js/GridPanel.js:522
+#: js/Model.js:164 js/GridPanel.js:523
 msgid "Received"
 msgstr ""
 
@@ -489,7 +493,7 @@ msgstr ""
 msgid "Drafts"
 msgstr ""
 
-#: js/Model.js:508 js/GridPanel.js:514
+#: js/Model.js:508 js/GridPanel.js:515
 msgid "Sent"
 msgstr ""
 
@@ -604,55 +608,55 @@ msgstr ""
 msgid "{0} account setting empty."
 msgstr ""
 
-#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1044
+#: js/MessageEditDialog.js:722 js/MessageEditDialog.js:1050
 msgid "Files are still uploading."
 msgstr ""
 
-#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1017
+#: js/MessageEditDialog.js:787 js/MessageEditDialog.js:1023
 msgid "Compose email:"
 msgstr ""
 
-#: js/MessageEditDialog.js:982 Controller/Message/Send.php:288
+#: js/MessageEditDialog.js:988 Controller/Message/Send.php:288
 msgid "Body"
 msgstr ""
 
-#: js/MessageEditDialog.js:1072
+#: js/MessageEditDialog.js:1078
 msgid "Empty subject"
 msgstr ""
 
-#: js/MessageEditDialog.js:1073
+#: js/MessageEditDialog.js:1079
 msgid "Do you really want to send a message with an empty subject?"
 msgstr ""
 
-#: js/MessageEditDialog.js:1094
+#: js/MessageEditDialog.js:1100
 msgid "Add Note"
 msgstr ""
 
-#: js/MessageEditDialog.js:1095
+#: js/MessageEditDialog.js:1101
 msgid "Edit Email Note Text:"
 msgstr ""
 
-#: js/MessageEditDialog.js:1118
+#: js/MessageEditDialog.js:1124
 msgid "No recipients set."
 msgstr ""
 
-#: js/RecipientGrid.js:233
+#: js/RecipientGrid.js:234
 msgid "Click here to set To/CC/BCC."
 msgstr ""
 
-#: js/RecipientGrid.js:237 js/RecipientGrid.js:261
+#: js/RecipientGrid.js:238 js/RecipientGrid.js:262
 msgid "To:"
 msgstr ""
 
-#: js/RecipientGrid.js:240 js/RecipientGrid.js:262
+#: js/RecipientGrid.js:241 js/RecipientGrid.js:263
 msgid "Cc:"
 msgstr ""
 
-#: js/RecipientGrid.js:243 js/RecipientGrid.js:263
+#: js/RecipientGrid.js:244 js/RecipientGrid.js:264
 msgid "Bcc:"
 msgstr ""
 
-#: js/RecipientGrid.js:389
+#: js/RecipientGrid.js:390
 msgid "Remove"
 msgstr ""
 
@@ -685,60 +689,60 @@ msgstr ""
 msgid "Compose"
 msgstr ""
 
-#: js/GridPanel.js:275
+#: js/GridPanel.js:276
 msgid "Toggle highlighting"
 msgstr ""
 
-#: js/GridPanel.js:284
+#: js/GridPanel.js:285
 msgid "Mark read/unread"
 msgstr ""
 
-#: js/GridPanel.js:305
+#: js/GridPanel.js:306
 msgid "Add Account"
 msgstr ""
 
-#: js/GridPanel.js:461
+#: js/GridPanel.js:462
 msgid "Id"
 msgstr ""
 
-#: js/GridPanel.js:500
+#: js/GridPanel.js:501
 msgid "Sender"
 msgstr ""
 
-#: js/GridPanel.js:577 Controller/Message/Flags.php:25
+#: js/GridPanel.js:578 Controller/Message/Flags.php:25
 msgid "Answered"
 msgstr ""
 
-#: js/GridPanel.js:580
+#: js/GridPanel.js:581
 msgid "Forwarded"
 msgstr ""
 
-#: js/GridPanel.js:583
+#: js/GridPanel.js:584
 msgid "Tine20"
 msgstr ""
 
-#: js/GridPanel.js:586
+#: js/GridPanel.js:587
 msgid "Recent"
 msgstr ""
 
-#: js/GridPanel.js:968
+#: js/GridPanel.js:969
 msgid "Send Reading Confirmation"
 msgstr ""
 
-#: js/GridPanel.js:969
+#: js/GridPanel.js:970
 msgid "Do you want to send a reading confirmation message?"
 msgstr ""
 
-#: js/GridPanel.js:1193
+#: js/GridPanel.js:1194
 #, python-brace-format
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1201
+#: js/GridPanel.js:1202
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1202
+#: js/GridPanel.js:1203
 #, python-brace-format
 msgid "{0} available (total: {1})"
 msgstr ""
