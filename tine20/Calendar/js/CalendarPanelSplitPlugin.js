@@ -111,9 +111,12 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     },
     
     onMainStoreBeforeLoad: function(store, options) {
+        var ret = true;
         this.attendeeViews.each(function(attendeeView) {
-            attendeeView.store.fireEvent('beforeload', store, options);
+            ret = ret && attendeeView.store.fireEvent('beforeload', store, options);
         }, this);
+
+        return ret;
     },
     
     onMainStoreLoad: function(store, options) {
