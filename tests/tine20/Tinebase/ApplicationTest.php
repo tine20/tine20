@@ -442,10 +442,24 @@ class Tinebase_ApplicationTest extends TestCase
                 'Tinebase_Model_PersistentObserver',
                 'Tinebase_Model_Grants',
             ),
+            'Voipmanager' => array(
+                'Voipmanager_Model_Snom_Template',
+                'Voipmanager_Model_Snom_Software',
+                'Voipmanager_Model_Snom_PhoneRight',
+                'Voipmanager_Model_Snom_Line',
+                'Voipmanager_Model_Snom_Phone',
+                'Voipmanager_Model_Snom_PhoneSettings',
+                'Voipmanager_Model_Snom_Setting',
+                'Voipmanager_Model_Snom_Location',
+                'Voipmanager_Model_Asterisk_SipPeer',
+                'Voipmanager_Model_Asterisk_Voicemail',
+                'Voipmanager_Model_Asterisk_Meetme',
+                'Voipmanager_Model_Asterisk_Context',
+            ),
         );
 
         // remove bogus apps
-        $remove = array('Voipmanager', 'RequestTracker', 'Sipgate', 'Expressodriver');
+        $remove = array('RequestTracker', 'Sipgate', 'Expressodriver');
         foreach($remove as $r)
         {
             if (($key = array_search($r, $appNames)) !== false) {
