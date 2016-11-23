@@ -39,11 +39,17 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             form = this.getForm();
         
         isValid = Tine.Sales.CustomerEditDialog.superclass.isValid.call(this)
-            
+
         if (Ext.isEmpty(form.findField('adr_street').getValue()) && Ext.isEmpty(form.findField('adr_pobox').getValue())) {
             isValid = false;
             var msg = this.app.i18n._('Either street or postbox is required!');
             form.markInvalid( {'adr_street': msg, 'adr_pobox': msg});
+        }
+
+        var number = form.findField('number').getValue();
+        if (number.match(/[^0-9^]+/)) {
+            isValid = false;
+            form.markInvalid( {'number': this.app.i18n._('Only numbers are allowed!')});
         }
 
         return isValid;

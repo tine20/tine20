@@ -179,7 +179,55 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (! headers_sent()) {
             header('Content-type: application/json');
         }
-        echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
+
+        try {
+            $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
+            $output = (string) $output;
+        } catch (ErrorException $ee) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Got non-json response, last json error: ' . json_last_error_msg());
+                foreach ($response as $r) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' response: ' . print_r($r->getResult(), true));
+                }
+            }
+
+            // trying to fix this:
+            foreach($response as $r) {
+                $result = $r->getResult();
+                $this->_jsonClean($result);
+                $r->setResult($result);
+            }
+
+            try {
+                $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
+                $output = (string) $output;
+            } catch (ErrorException $eee) {
+                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg());
+                $output = $this->_handleException($request, $exception);
+            }
+        }
+
+        echo $output;
+    }
+
+    protected function _jsonClean(&$data)
+    {
+        if (is_null($data) || is_int($data)) {
+            // just return
+        } elseif (is_string($data)) {
+            $data = @mb_convert_encoding($data, 'utf8', 'utf8');
+        } elseif (is_array($data)) {
+            foreach($data as &$val) {
+                $this->_jsonClean($val);
+            }
+            unset($val);
+        } /*elseif (is_object($data)) {
+            // bad, lets just hope for the best
+        } else {
+            // bad, lets just hope for the best
+        }*/
     }
     
     /**

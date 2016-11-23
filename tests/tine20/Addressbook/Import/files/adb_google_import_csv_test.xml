@@ -19,7 +19,7 @@
         </field>
         <field>
             <source>Yomi Name</source>
-            <destination>Yomi Name</destination>
+            <destination>YomiName</destination>
         </field>
         <field>
             <source>Family Name</source>

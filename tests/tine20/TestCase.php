@@ -596,7 +596,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $model
      * @return Tinebase_Model_CustomField_Config
      */
-    protected function _createCustomField($name = 'Yomi Name', $model = 'Addressbook_Model_Contact')
+    protected function _createCustomField($name = 'YomiName', $model = 'Addressbook_Model_Contact')
     {
         $application = substr($model, 0, strpos($model, '_'));
         $cfData = new Tinebase_Model_CustomField_Config(array(
