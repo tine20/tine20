@@ -6,13 +6,18 @@
         docMode = document.documentMode,
         isIE10 = ((check(/msie 10/) && docMode != 7 && docMode != 8  && docMode != 9) || docMode == 10),
         isIE11 = ((check(/trident\/7\.0/) && docMode != 7 && docMode != 8 && docMode != 9 && docMode != 10) || docMode == 11),
-        isNewIE = (Ext.isIE9 || isIE10 || isIE11);
+        isNewIE = (Ext.isIE9 || isIE10 || isIE11),
+        isTouchDevice =
+            // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
+            'ontouchstart' in window        // works on most browsers
+            || navigator.maxTouchPoints;    // works on IE10/11 and Surface
 
     Ext.apply(Ext, {
         isIE10 : isIE10,
         isIE11 : isIE11,
         
-        isNewIE : isNewIE
+        isNewIE : isNewIE,
+        isTouchDevice: isTouchDevice
     })
 })();
 

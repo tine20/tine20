@@ -1828,6 +1828,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.EventObject} e
      */
     onRowContextMenu: function(grid, row, e) {
+        console.log(e);
         e.stopEvent();
         var selModel = grid.getSelectionModel();
         if (!selModel.isSelected(row)) {

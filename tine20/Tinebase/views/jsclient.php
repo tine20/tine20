@@ -20,8 +20,14 @@
     <meta http-equiv="X-Tine20-Version" content="<?php echo TINE20_PACKAGESTRING ?>" />
     
     <link rel="shortcut icon" href="<?php echo $theme_config['favicon']; ?>" type="image/x-icon" />
-    <link rel="chrome-application-definition" href="chrome_web_app.json" />
     <?php echo $theme_config['extJs'] . "\n"; ?>
+
+    <link rel="apple-touch-icon" href="<?php echo $theme_config['favicon']; ?>" />
+    <link rel="apple-touch-icon-precomposed" href="<?php echo $theme_config['favicon']; ?>" />
+
+<!--    <meta name="apple-mobile-web-app-capable" content="yes">-->
+<!--    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">-->
 </head>
 <body>
     <!-- Loading Indicator -->

@@ -942,8 +942,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @private
      */
     onMouseDown: function(e) {
-        // only care for left mouse button
-        if (e.button !== 0) {
+        // don't care for right btn
+        if (e.button > 0) {
             return;
         }
         
@@ -976,6 +976,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             event.dirty = true;
             
             e.stopEvent();
+            e.preventDefault();
+
             this.createEvent.defer(100, this, [e, event]);
         }
     },
