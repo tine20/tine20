@@ -568,5 +568,24 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         } else {
             this.alertInvalidData();
         }
+    },
+    
+    isValid: function () {
+        var form = this.getForm(),
+            result = form.isValid(),
+            maxPrefixLength = 10;
+        
+        // check prefix length
+        if (form.findField('database_tableprefix') && 
+            form.findField('database_tableprefix').getValue() &&
+            form.findField('database_tableprefix').getValue().length > maxPrefixLength)
+        {
+            form.markInvalid([{
+                id: 'database_tableprefix',
+                msg: String.format(this.app.i18n._("This prefix is too long. Please choose a prefix no longer than {0} chars."), maxPrefixLength)
+            }]);
+            result = false;
+        }
+        return result;
     }
 });

@@ -167,7 +167,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         )));
         $this->assertEquals(1, count($contacts));
         $ando = $contacts->getFirstRecord();
-        $this->assertEquals(array('Yomi Name' => 'yomi'), $ando->customfields);
+        $this->assertEquals(array('YomiName' => 'yomi'), $ando->customfields);
     }
     
     /**
@@ -178,6 +178,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     public function testExportAndImportWithCustomField()
     {
         $customField = $this->_createCustomField();
+        $this->assertTrue($customField instanceof Tinebase_Model_CustomField_Config);
         $ownContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $cfValue = array($customField->name => 'testing');
         $ownContact->customfields = $cfValue;
@@ -186,8 +187,8 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_tine_import_csv');
         $definition->plugin_options = preg_replace('/<\/mapping>/',
             '<field>
-                <source>Yomi Name</source>
-                <destination>Yomi Name</destination>
+                <source>' . $customField->name . '</source>
+                <destination>'. $customField->name . '</destination>
             </field></mapping>', $definition->plugin_options);
         $result = $this->_doImport(array(), $definition, new Addressbook_Model_ContactFilter(array(
             array('field' => 'id', 'operator' => 'equals', 'value' => $ownContact->getId()),

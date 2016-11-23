@@ -26,5 +26,6 @@ scripts/custom
 scripts/syncuuids/conf.php
 tine20/*/translations/*.mo
 tine20/.htaccess
-tine20/vendor*
+tine20/install.properties
 tine20/Tinebase/js/node_modules*
+tine20/vendor*
