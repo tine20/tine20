@@ -329,7 +329,11 @@ Tine.Calendar.CalendarPanelSplitPlugin.prototype = {
     
     setActiveAttendeeView: function(view) {
         view = Ext.isString(view) ? this.attendeeViews.get(view) : view;
-        
+
+        if (view != this.activeAttendeeView && this.activeAttendeeView.endEditSummary && this.activeAttendeeView.editing) {
+            this.activeAttendeeView.endEditSummary();
+        }
+
         this.activeAttendeeView = view;
     },
     

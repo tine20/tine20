@@ -673,7 +673,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
-        if(this.editing) {
+        if(this.editing == event) {
             this.abortCreateEvent(event);
         }
 
@@ -784,13 +784,16 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         });
     },
     
-    endEditSummary: function(field, e) {
+    endEditSummary: function(f, e) {
+        if (! this.editing || this.validateMsg) {
+            return;
+        }
+
+        var field   = this.editing.summaryEditor;
         var event   = field.event;
         var summary = field.getValue();
 
-        if (! this.editing || this.validateMsg || !Ext.isDefined(e)) {
-            return;
-        }
+
 
         // abort edit on ESC key
         if (e && (e.getKey() == e.ESC)) {
@@ -825,7 +828,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
 
         this.editing = false;
         event.summaryEditor = false;
-        
+
         event.set('summary', summary);
         
         this.store.suspendEvents();
