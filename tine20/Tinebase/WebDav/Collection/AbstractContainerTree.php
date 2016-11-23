@@ -167,11 +167,14 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                         if ($name instanceof Tinebase_Model_Container) {
                             $container = $name;
                         } elseif ($this->_useIdAsName) {
-                            // first try to fetch by uuid ...
                             try {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                    __METHOD__ . '::' . __LINE__ . ' First try to fetch container by uuid ..');
                                 $container = Tinebase_Container::getInstance()->getByProperty((string) $name, 'uuid');
                             } catch (Tinebase_Exception_NotFound $tenf) {
-                                // ... if that fails by id
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                    __METHOD__ . '::' . __LINE__ . ' If that fails by id ...');
+
                                 $container = Tinebase_Container::getInstance()->getContainerById($name);
                             }
                         } else {
@@ -239,8 +242,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                     throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                 }
                 
-                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) ||
-                    !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                if (! Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) ||
+                    ! Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
+                        . ' has neither READ nor SYNC grants for container ' . $container->getId());
                     throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                 }
                 
