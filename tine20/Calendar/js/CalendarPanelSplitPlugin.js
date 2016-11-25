@@ -448,7 +448,7 @@ Ext.preg('Calendar.CalendarPanelSplitPlugin', Tine.Calendar.CalendarPanelSplitPl
 
 Tine.Calendar.CalendarPanelSplitPlugin.SplitBtn = Ext.extend(Ext.Button, {
     enableToggle: true,
-    pressed: true,
+    pressed: false,
     disabled: true,
     scale: 'medium',
     rowspan: 2,
