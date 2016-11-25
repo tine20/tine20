@@ -844,7 +844,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $filterData[] = array('field' => 'id', 'operator' => 'notin', 'value' => array($recordId));
         }
 
-        /** @var Tinebase_Model_Filter_Abstract $filter */
+        /** @var Tinebase_Model_Filter_FilterGroup $filter */
         $filter = new $filterClass($filterData);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '

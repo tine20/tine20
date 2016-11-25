@@ -46,7 +46,7 @@ class Tinebase_Numberable_Abstract
      * see parent class
      *
      * @param array $_numberableConfiguration
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
@@ -55,16 +55,49 @@ class Tinebase_Numberable_Abstract
         $this->_backend = new Tinebase_Numberable_Backend_Sql_Abstract($_numberableConfiguration, $_dbAdapter, $_options);
     }
 
+    /**
+     * returns the next numberable
+     *
+     * @return int|string
+     */
     public function getNext()
     {
         return $this->_backend->getNext();
     }
 
+    /**
+     * inserts a new numberable
+     *
+     * @param int $value
+     * @return bool
+     */
     public function insert($value)
     {
         if (!is_int($value)) {
-            throw new Tinebase_Exception_UnexpectedValue('value needs to be of type int');
+            $tmp = intval($value);
+            if (((string)$tmp) !== ((string)$value)) {
+                throw new Tinebase_Exception_UnexpectedValue('value needs to be of type int');
+            }
+            $value = $tmp;
         }
         return $this->_backend->insert($value);
+    }
+
+    /**
+     * frees a numberable
+     *
+     * @param int $value
+     * @return bool
+     */
+    public function free($value)
+    {
+        if (!is_int($value)) {
+            $tmp = intval($value);
+            if (((string)$tmp) !== ((string)$value)) {
+                throw new Tinebase_Exception_UnexpectedValue('value needs to be of type int');
+            }
+            $value = $tmp;
+        }
+        return $this->_backend->free($value);
     }
 }

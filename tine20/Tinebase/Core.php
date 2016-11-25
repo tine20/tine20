@@ -234,12 +234,13 @@ class Tinebase_Core
         self::finishProfiling();
         self::getDbProfiling();
     }
-    
+
     /**
      * dispatch request
-     * 
+     *
      * @param \Zend\Http\Request $request
-     * @return Tinebase_Server_Interface|null
+     * @return null|Tinebase_Server_Interface
+     * @throws Tinebase_Exception
      */
     public static function getDispatchServer(\Zend\Http\Request $request)
     {
@@ -323,10 +324,14 @@ class Tinebase_Core
             if (! defined('XHPROF_LIB_ROOT')) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  ' . print_r($xhprof_data, TRUE));
             } else {
+                /** @noinspection PhpIncludeInspection */
                 include_once XHPROF_LIB_ROOT . "/utils/xhprof_lib.php";
+                /** @noinspection PhpIncludeInspection */
                 include_once XHPROF_LIB_ROOT . "/utils/xhprof_runs.php";
+                /** @noinspection PhpUndefinedClassInspection */
                 $xhprof_runs = new XHProfRuns_Default();
-                $run_id = $xhprof_runs->save_run($xhprof_data, "tine");
+                /** @noinspection PhpUndefinedMethodInspection */
+                $xhprof_runs->save_run($xhprof_data, "tine");
             }
         }
     }
@@ -338,8 +343,10 @@ class Tinebase_Core
      *
      * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
-     * @return  Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
-     * @throws  Tinebase_Exception_NotFound
+     * @param boolean $_ignoreACL
+     * @return Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     public static function getApplicationInstance($_applicationName, $_modelName = '', $_ignoreACL = FALSE)
     {
@@ -354,10 +361,10 @@ class Tinebase_Core
         // modified (some model names can have both . and _ in their names and we should treat them as JS model name
         if (strpos($_applicationName, '_') && ! strpos($_applicationName, '.')) {
             // got (complete) model name name as first param
-            list($appName, $i, $modelName) = explode('_', $_applicationName, 3);
+            list($appName, /*$i*/, $modelName) = explode('_', $_applicationName, 3);
         } else if (strpos($_applicationName, '.')) {
             // got (complete) model name name as first param (JS style)
-            list($j, $appName, $i, $modelName) = explode('.', $_applicationName, 4);
+            list(/*$j*/, $appName, /*$i*/, $modelName) = explode('.', $_applicationName, 4);
         } else {
             $appName = $_applicationName;
             $modelName = $_modelName;
@@ -775,7 +782,7 @@ class Tinebase_Core
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
             
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " Caching options: "
@@ -783,7 +790,7 @@ class Tinebase_Core
             }
             
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cache disabled');
             $backendType = 'Test';
             $frontendOptions = array(
                 'caching' => false
@@ -799,7 +806,7 @@ class Tinebase_Core
 
             $enabled = false;
             if ('File' === $backendType && isset($backendOptions['cache_dir']) && ! is_dir($backendOptions['cache_dir'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create cache directory and re-try');
                 if (@mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
@@ -929,7 +936,9 @@ class Tinebase_Core
                 
             case self::ORACLE:
                 $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
+                /** @noinspection PhpUndefinedMethodInspection */
                 $db->supportPositionalParameters(true);
+                /** @noinspection PhpUndefinedMethodInspection */
                 $db->setLobAsString(true);
                 break;
                 
@@ -1209,10 +1218,11 @@ class Tinebase_Core
     }
     
     /******************************* REGISTRY ************************************/
-    
+
     /**
      * get a value from the registry
-     *
+     * @param $index
+     * @return mixed|null
      */
     public static function get($index)
     {
@@ -1222,12 +1232,13 @@ class Tinebase_Core
             return null;
         }
     }
-    
+
     /**
      * set a registry value
-     * 
+     *
+     * @param string $index
+     * @param mixed $value
      * @throws Tinebase_Exception_InvalidArgument
-     * @return mixed value
      */
     public static function set($index, $value)
     {
@@ -1250,10 +1261,11 @@ class Tinebase_Core
         
         Zend_Registry::set($index, $value);
     }
-    
+
     /**
      * checks a registry value
      *
+     * @param string $index
      * @return boolean
      */
     public static function isRegistered($index)
@@ -1413,6 +1425,7 @@ class Tinebase_Core
      * @param string $_application
      * @param boolean $_throwException throws exception if class does not exist
      * @return Tinebase_Preference_Abstract
+     * @throws Tinebase_Exception_NotFound
      */
     public static function getPreference($_application = 'Tinebase', $_throwException = FALSE)
     {
@@ -1454,11 +1467,12 @@ class Tinebase_Core
         
         return self::get(self::DB);
     }
-    
+
     /**
      * get db name
-     * 
+     *
      * @return string
+     * @throws Tinebase_Exception
      */
     public static function getDbName()
     {
