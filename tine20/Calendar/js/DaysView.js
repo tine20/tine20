@@ -175,15 +175,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      */
     minAllDayScrollerHight: 10,
     /**
-     * @property {bool} editing
+     * record currently being edited or false
+     * @property {Record} editing
      * @private
      */
     editing: false,
-    /**
-     * currently active event
-     * $type {Tine.Calendar.Model.Event}
-     */
-    activeEvent: null,
     /**
      * @property {Ext.data.Store}
      * @private
@@ -677,10 +673,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
      * @param {Tine.Calendar.Model.Event} event
      */
     removeEvent: function(event) {
-        if (event == this.activeEvent) {
-            this.activeEvent = null;
-        }
-
         if(this.editing) {
             this.abortCreateEvent(event);
         }
@@ -688,25 +680,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         if (event.ui) {
             event.ui.remove();
         }
-    },
-    
-    /**
-     * sets currentlcy active event
-     * 
-     * NOTE: active != selected
-     * @param {Tine.Calendar.Model.Event} event
-     */
-    setActiveEvent: function(event) {
-        this.activeEvent = event || null;
-    },
-    
-    /**
-     * gets currentlcy active event
-     * 
-     * @return {Tine.Calendar.Model.Event} event
-     */
-    getActiveEvent: function() {
-        return this.activeEvent;
     },
     
     /**
@@ -737,7 +710,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
         var registry = event.get('is_all_day_event') ? this.parallelWholeDayEventsRegistry : this.parallelScrollerEventsRegistry;
         registry.register(event);
         this.insertEvent(event);
-        //this.setActiveEvent(event);
         this.onLayout();
         
         //var eventEls = event.ui.getEls();
@@ -1142,7 +1114,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
             this.insertEvent(parallelEvents[j]);
         }
         
-        this.setActiveEvent(this.getActiveEvent());
         this.onLayout();
     },
 
@@ -1162,8 +1133,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
                 this.removeEvent(parallelEvents[j]);
                 this.insertEvent(parallelEvents[j]);
             }
-            
-            //this.setActiveEvent(event);
         }
         
         this.onLayout();
@@ -1188,6 +1157,10 @@ Ext.extend(Tine.Calendar.DaysView, Ext.Container, {
     },
     
     onBeforeLoad: function(store, options) {
+        if (options.autoRefresh && this.editing) {
+            Tine.log.debug('Tine.Calendar.DaysView::onBeforeLoad skipping autorefresh as editing is in progress');
+            return false;
+        }
         if (! options.refresh) {
             this.store.each(this.removeEvent, this);
             this.transitionEvents = [];

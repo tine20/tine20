@@ -592,10 +592,16 @@ class Tinebase_Application
         foreach($apps as $app) {
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
-                continue;
+                try {
+                    $controllerInstance = Tinebase_Core::getApplicationInstance($app->name);
+                } catch(Tinebase_Exception_NotFound $tenf) {
+                    continue;
+                }
+            } else {
+                $controllerInstance = $controllerClass::getInstance();
             }
 
-            $appModels = $controllerClass::getInstance()->getModels();
+            $appModels = $controllerInstance->getModels();
             if (is_array($appModels)) {
                 $models = array_merge($models, $appModels);
             }
