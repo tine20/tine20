@@ -99,11 +99,6 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
      */
     denyDragOnMissingEditGrant: true,
     /**
-     * @property {Tine.Calendar.Model.Event} activeEvent
-     * @private
-     */
-    activeEvent: null,
-    /**
      * @private {Date} toDay
      */
     toDay: null,
@@ -165,16 +160,7 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
         }
         this.dateMesh = mesh;
     },
-    
-    /**
-     * gets currentlcy active event
-     * 
-     * @return {Tine.Calendar.Model.Event} event
-     */
-    getActiveEvent: function() {
-        return this.activeEvent;
-    },
-    
+
     /**
      * returns index of dateCell given date is in
      * @param {Date} date
@@ -589,8 +575,6 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
                 this.removeEvent(parallelEvents[j]);
                 this.insertEvent(parallelEvents[j]);
             }
-            
-            this.setActiveEvent(event);
         }
         
         this.layoutDayCells();
@@ -737,7 +721,6 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
         }
         
         event.commit(true);
-        this.setActiveEvent(this.getActiveEvent());
         this.layoutDayCells();
     },
     
@@ -773,10 +756,6 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
     removeEvent: function(event) {
         if (! event) {
             return;
-        }
-        
-        if (event == this.activeEvent) {
-            this.activeEvent = null;
         }
         
         if (event.ui) {
@@ -817,17 +796,7 @@ Ext.extend(Tine.Calendar.YearView, Ext.Container, {
                 
         this.el.update(m.join(""));
     },
-       
-    /**
-     * sets currentlcy active event
-     * 
-     * NOTE: active != selected
-     * @param {Tine.Calendar.Model.Event} event
-     */
-    setActiveEvent: function(event) {
-        this.activeEvent = event || null;
-    },
-    
+
     updatePeriod: function(period) {
         this.toDay = new Date().clearTime();
         this.startDate = period.from;

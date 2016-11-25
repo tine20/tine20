@@ -1626,6 +1626,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             refresh: !!options
         };
         Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::refresh(' + options.refresh + ')');
+
+        // reset autoRefresh it might get lost if request fails
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 2000);
+        }
+
         var panel = this.getCalendarPanel(this.activeView);
         panel.getStore().load(options);
         
@@ -1795,6 +1801,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.calendarPanels[which].on('keydown', this.onKeyDown, this);
             
             this.calendarPanels[which].relayEvents(this, ['show', 'beforehide']);
+
+            // rebind store so it's event listeners get called at last.
+            // -> otherwise loading spinner would be active event if the view beforeload cancels the request
+            tbar.unbind(store);
+            tbar.bind(store);
         }
         
         return this.calendarPanels[which];
