@@ -114,11 +114,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
      */
     denyDragOnMissingEditGrant: true,
     /**
-     * @property {Tine.Calendar.Model.Event} activeEvent
-     * @private
-     */
-    activeEvent: null,
-    /**
      * @private {Date} toDay
      */
     toDay: null,
@@ -183,16 +178,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         
         this.dateMesh = mesh;
     },
-    
-    /**
-     * gets currentlcy active event
-     * 
-     * @return {Tine.Calendar.Model.Event} event
-     */
-    getActiveEvent: function() {
-        return this.activeEvent;
-    },
-    
+
     /**
      * returns index of dateCell given date is in
      * @param {Date} date
@@ -644,8 +630,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
                 this.removeEvent(parallelEvents[j]);
                 this.insertEvent(parallelEvents[j]);
             }
-            
-            this.setActiveEvent(event);
         }
         
         this.layoutDayCells();
@@ -826,7 +810,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         }
         
         event.commit(true);
-        this.setActiveEvent(this.getActiveEvent());
         this.layoutDayCells();
     },
     
@@ -862,10 +845,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
     removeEvent: function(event) {
         if (! event) {
             return;
-        }
-        
-        if (event == this.activeEvent) {
-            this.activeEvent = null;
         }
         
         if (event.ui) {
@@ -909,56 +888,6 @@ Ext.extend(Tine.Calendar.MonthView, Ext.Container, {
         
                 
         this.el.update(m.join(""));
-    },
-    
-    /**
-     * sets currentlcy active event
-     * 
-     * @param {Tine.Calendar.Model.Event} event
-     *
-    setActiveEvent: function(event) {
-        if (this.activeEvent) {
-            var curEls = this.getEventEls(this.activeEvent);
-            for (var i=0; i<curEls.length; i++) {
-                curEls[i].removeClass('cal-monthview-active');
-                if (this.activeEvent.is_all_day_event) {
-                    curEls[i].setStyle({'background-color': this.activeEvent.bgColor});
-                    curEls[i].setStyle({'color': '#000000'});
-                } else {
-                    curEls[i].setStyle({'background-color': ''});
-                    curEls[i].setStyle({'color': event.color});
-                }
-            }
-        }
-        
-        
-        
-        var els = this.getEventEls(event);
-        if (event && els && els.length > 0) {
-            var els = this.getEventEls(event);
-            for (var i=0; i<els.length; i++) {
-                els[i].addClass('cal-monthview-active');
-                if (event.is_all_day_event) {
-                    els[i].setStyle({'background-color': event.color});
-                    els[i].setStyle({'color': '#FFFFFF'});
-                } else {
-                    els[i].setStyle({'background-color': event.color});
-                    els[i].setStyle({'color': '#FFFFFF'});
-                }
-            }
-            this.activeEvent = event;
-        }
-    },
-    */
-    
-    /**
-     * sets currentlcy active event
-     * 
-     * NOTE: active != selected
-     * @param {Tine.Calendar.Model.Event} event
-     */
-    setActiveEvent: function(event) {
-        this.activeEvent = event || null;
     },
     
     updatePeriod: function(period) {
