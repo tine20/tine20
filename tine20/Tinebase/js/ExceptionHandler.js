@@ -347,10 +347,10 @@ Tine.Tinebase.ExceptionHandler = function() {
     };
     
     // init window error handler
-    window.onerror = !window.onerror ? 
-        onWindowError :
-        window.onerror.createSequence(onWindowError);
-        
+    window.onerror = window.onerror && Ext.isFunction(window.onerror) && Ext.isFunction(window.onerror.createSequence) ?
+        window.onerror.createSequence(onWindowError) :
+        onWindowError;
+
     return {
         handleRequestException: handleRequestException
     };
