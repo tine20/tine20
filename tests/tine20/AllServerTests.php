@@ -23,6 +23,7 @@ class AllServerTests
         $suite->addTestSuite('Tinebase_ControllerServerTest');
         $suite->addTestSuite('Tinebase_Server_WebDAVTests');
         $suite->addTestSuite('Tinebase_Server_JsonTests');
+        $suite->addTestSuite('Tinebase_Server_HttpTests');
 
         return $suite;
     }

@@ -124,4 +124,65 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
             }
         }
     }
+
+    /**
+     * get default modelconfig methods
+     *
+     * @return array of Zend_Server_Method_Definition
+     *
+     * // TODO add caching?
+     */
+    protected static function _getModelConfigMethods($frontend)
+    {
+        // get all apps user has RUN right for
+        $userApplications = Tinebase_Core::getUser()->getApplications();
+
+        $definitions = array();
+        foreach ($userApplications as $application) {
+            try {
+                $controller = Tinebase_Core::getApplicationInstance($application->name);
+                $models = $controller->getModels();
+                if (!$models) {
+                    continue;
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                continue;
+            }
+
+            foreach ($models as $model) {
+                $config = $model::getConfiguration();
+                if ($frontend::exposeApi($config)) {
+                    $simpleModelName = Tinebase_Record_Abstract::getSimpleModelName($application, $model);
+                    $commonApiMethods = $frontend::_getCommonApiMethods($application, $simpleModelName);
+
+                    foreach ($commonApiMethods as $name => $method) {
+                        $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
+                        $object = $frontend::_getFrontend($application);
+
+                        $definitions[$key] = new Zend_Server_Method_Definition(array(
+                            'name'            => $key,
+                            'prototypes'      => array(array(
+                                'returnType' => 'array',
+                                'parameters' => $method['params']
+                            )),
+                            'methodHelp'      => $method['help'],
+                            'invokeArguments' => array(),
+                            'object'          => $object,
+                            'callback'        => array(
+                                'type'   => 'instance',
+                                'class'  => get_class($object),
+                                'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
+                            ),
+                        ));
+                    }
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
+
+        return $definitions;
+    }
 }

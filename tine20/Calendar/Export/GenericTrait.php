@@ -39,9 +39,6 @@ trait Calendar_Export_GenericTrait
      */
     public function init(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
-        $this->_applicationName = 'Calendar';
-        $this->_modelName = 'Event';
-
         $periodFilter = $_filter->getFilter('period', false, true);
 
         if ($periodFilter) {

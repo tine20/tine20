@@ -47,12 +47,12 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'exposeJsonApi'     => TRUE,
 
-        'createModule'    => TRUE,
+        'createModule'      => TRUE,
 
-        'appName'         => 'Inventory',
-        'modelName'       => 'InventoryItem',
+        'appName'           => 'Inventory',
+        'modelName'         => 'InventoryItem',
 
-        'table'           => array(
+        'table'             => array(
             'name'    => 'inventory_item',
             'options' => array('collate' => 'utf8_general_ci'),
             'indexes' => array(
@@ -68,9 +68,14 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 //            )
         ),
 
+        'import'            => array(
+            'defaultImportContainerRegistryKey' => 'defaultInventoryItemContainer',
+        ),
+        'export'            => array(
+            'supportedFormats' => array('csv', 'ods'),
+        ),
 
-
-        'fields'          => array(
+        'fields'            => array(
             'name' => array(
                 'type'        => 'string',
                 'length'      => 255,

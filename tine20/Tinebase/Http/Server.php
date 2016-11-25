@@ -17,6 +17,9 @@
  * @subpackage Server
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ *
+ * TODO move to ZF1
+ * TODO replace Zend_Json_Server_Exception
  */
 
 /**
@@ -79,12 +82,14 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     {
         set_exception_handler(array($this, "fault"));
         $this->_reflection = new Zend_Server_Reflection();
+
+        parent::__construct();
     }
 
     /**
      * Implement Zend_Server_Interface::handle()
      * 
-     * the called functions output the generated content directly themself
+     * the called functions output the generated content directly themselves
      *
      * @param array $request
      */
@@ -96,60 +101,55 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         if (isset($request['method'])) {
             $this->_method = $request['method'];
             if (isset($this->_functions[$this->_method])) {
-                if ($this->_functions[$this->_method] instanceof Zend_Server_Reflection_Function || $this->_functions[$this->_method] instanceof Zend_Server_Reflection_Method && $this->_functions[$this->_method]->isPublic()) {
+                $method = $this->_functions[$this->_method];
+                if ($method instanceof Zend_Server_Reflection_Function
+                    || ($method instanceof Zend_Server_Reflection_Method && $method->isPublic())
+                ) {
                     $request_keys = array_keys($request);
                     array_walk($request_keys, array(__CLASS__, "lowerCase"));
                     $request = array_combine($request_keys, $request);
-                    
-                    $func_args = $this->_functions[$this->_method]->getParameters();
-                    
-                    $calling_args = array();
-                    foreach ($func_args as $arg) {
-                        if (isset($request[strtolower($arg->getName())])) {
-                            $calling_args[] = $request[strtolower($arg->getName())];
-                        }
-                    }
-                    
-                    foreach ($request as $key => $value) {
-                        if (substr($key, 0, 3) == 'arg') {
-                            $key = str_replace('arg', '', $key);
-                            $calling_args[$key]= $value;
-                        }
-                    }
-                    
-                    if (sizeof($calling_args) < sizeof($func_args)) {
-                        throw new Zend_Json_Server_Exception('Invalid Method Call to ' .$this->_method. '. Requires ' .sizeof($func_args). ', ' .sizeof($calling_args). ' given.', 400);
-                    }
-                    
-                    if ($this->_functions[$this->_method] instanceof Zend_Server_Reflection_Method) {
+
+                    $func_args = $method->getParameters();
+                    $calling_args = $this->_getCallingArgs($func_args, $request);
+
+                    if ($method instanceof Zend_Server_Reflection_Method) {
                         // Get class
-                        $class = $this->_functions[$this->_method]->getDeclaringClass()->getName();
-        
-                        if ($this->_functions[$this->_method]->isStatic()) {
+                        $class = $method->getDeclaringClass()->getName();
+
+                        if ($method->isStatic()) {
                             // for some reason, invokeArgs() does not work the same as 
                             // invoke(), and expects the first argument to be an object. 
                             // So, using a callback if the method is static.
-                            $result = call_user_func_array(array($class, $this->_functions[$this->_method]->getName()), $calling_args);
+                            $result = call_user_func_array(array($class, $method->getName()), $calling_args);
                         }
-        
+
                         // Object methods
                         try {
-                            if ($this->_functions[$this->_method]->getDeclaringClass()->getConstructor()) {
-                                $object = $this->_functions[$this->_method]->getDeclaringClass()->newInstanceArgs($this->_args);
+                            if ($method->getDeclaringClass()->getConstructor()) {
+                                $object = $method->getDeclaringClass()->newInstanceArgs($this->_args);
                             } else {
-                                $object = $this->_functions[$this->_method]->getDeclaringClass()->newInstance();
+                                $object = $method->getDeclaringClass()->newInstance();
                             }
                         } catch (Exception $e) {
-                            throw new Zend_Json_Server_Exception('Error instantiating class ' . $class . ' to invoke method ' . $this->_functions[$this->_method]->getName(), 500);
+                            throw new Zend_Json_Server_Exception('Error instantiating class ' . $class . ' to invoke method ' . $method->getName(), 500);
                         }
-                        
+
                         // the called function generates the needed output
-                        $this->_functions[$this->_method]->invokeArgs($object, $calling_args);
+                        $method->invokeArgs($object, $calling_args);
                     } else {
                         // the called function generates the needed output
-                        call_user_func_array($this->_functions[$this->_method]->getName(), $calling_args); //$result = $this->_functions[$this->_method]->invokeArgs($calling_args);
+                        call_user_func_array($method->getName(), $calling_args);
                     }
-                    
+
+                } else if ($method instanceof Zend_Server_Method_Definition) {
+                    // handle dynamic api definition
+                    $prototypes = $method->getPrototypes();
+                    $func_args = $prototypes[0]->getParameterObjects();
+                    $calling_args = $this->_getCallingArgs($func_args, $request);
+                    $callback = $method->getCallback();
+                    $callbackMethod = $callback->getMethod();
+                    call_user_func_array(array($method->getObject(), $callbackMethod), $calling_args);
+
                 } else {
                     throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);
                 }
@@ -159,6 +159,31 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         } else {
             throw new Zend_Json_Server_Exception("No Method Specified.", 404);
         }
+    }
+
+    protected function _getCallingArgs($func_args, $request)
+    {
+        $calling_args = array();
+        foreach ($func_args as $arg) {
+            if (isset($request[strtolower($arg->getName())])) {
+                $calling_args[] = $request[strtolower($arg->getName())];
+            }
+        }
+
+        foreach ($request as $key => $value) {
+            if (substr($key, 0, 3) == 'arg') {
+                $key = str_replace('arg', '', $key);
+                $calling_args[$key] = $value;
+            }
+        }
+
+        if (count($calling_args) < count($func_args)) {
+            throw new Zend_Json_Server_Exception('Invalid Method Call to '
+                . $this->_method . '. Requires ' . count($func_args) . ' parameters, '
+                . count($calling_args) . ' given.', 400);
+        }
+
+        return $calling_args;
     }
     
     /**
@@ -185,7 +210,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      */
     public function fault($exception = null, $code = null)
     {
-        if (isset($this->_functions[$this->_method])) {
+        if (isset($method)) {
             $function = $this->_functions[$this->_method];
         } else {
             $function = $this->_method;
@@ -269,12 +294,18 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     /**
      * Implement Zend_Server_Interface::loadFunctions()
      *
-     * @todo Implement
-     * @param array $functions
+     * @param array $definition
      */
-    public function loadFunctions($functions)
+    public function loadFunctions($definition)
     {
-        
+        if (!is_array($definition) && (!$definition instanceof Zend_Server_Definition)) {
+            require_once 'Zend/Json/Server/Exception.php';
+            throw new Zend_Json_Server_Exception('Invalid definition provided to loadFunctions()');
+        }
+
+        foreach ($definition as $key => $method) {
+            $this->_functions[$key] = $method;
+        }
     }
     
     /**

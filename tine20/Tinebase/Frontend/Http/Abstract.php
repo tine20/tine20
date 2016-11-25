@@ -84,11 +84,14 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         // write headers
         $contentType = $export->getDownloadContentType();
         $filename = $export->getDownloadFilename($_filter->getApplicationName(), $format);
-        header("Pragma: public");
-        header("Cache-Control: max-age=0");
-        header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
-        header("Content-Description: $format File");
-        header("Content-type: $contentType");
+
+        if (! headers_sent()) {
+            header("Pragma: public");
+            header("Cache-Control: max-age=0");
+            header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
+            header("Content-Description: $format File");
+            header("Content-type: $contentType");
+        }
         
         // output export file
         switch ($format) {
@@ -151,5 +154,44 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
         header("Content-Type: " . $contentType);
+    }
+
+    /**
+     * magic method for http api
+     *
+     * @param string $method
+     * @param array  $args
+     */
+    public function __call($method, array $args)
+    {
+        // provides api for default application methods
+        if (preg_match('/^(export)([a-z0-9]+)/i', $method, $matches)) {
+            $apiMethod = $matches[1];
+            $model = in_array($apiMethod, array('export')) ? substr($matches[2],0,-1) : $matches[2];
+            $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
+            switch ($apiMethod) {
+                case 'export':
+
+                    $decodedFilter = Zend_Json::decode($args[0]);
+                    $decodedOptions = Zend_Json::decode($args[1]);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Export filter: ' . print_r($decodedFilter, true)
+                        . ' Options: ' . print_r($decodedOptions, true));
+
+                    if (! is_array($decodedFilter)) {
+                        $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
+                    }
+
+                    $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    $filter = new $filterName($decodedFilter);
+
+                    return $this->_export($filter, $decodedOptions, $modelController);
+                    break;
+            }
+        }
+
+        // call plugin method (see Tinebase_Pluggable_Abstract)
+        return parent::__call($method, $args);
     }
 }
