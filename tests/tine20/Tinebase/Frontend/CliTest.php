@@ -334,6 +334,10 @@ class Tinebase_Frontend_CliTest extends TestCase
                     continue;
                 }
 
+                if (! $this->_idPropertyIsVarChar($instance, $model)) {
+                    continue;
+                }
+
                 //create dead notes for each of those models
                 $note = new Tinebase_Model_Note(array(
                     'note_type_id' => 1,
@@ -388,6 +392,21 @@ class Tinebase_Frontend_CliTest extends TestCase
         $this->assertEquals($realDataNotes + $dbArtifacts, $allNotes->count(), 'notes not completely cleaned');
     }
 
+    protected function _idPropertyIsVarChar($instance, $model)
+    {
+        $controller = Tinebase_Core::getApplicationInstance($model);
+        $backend = $controller->getBackend();
+        if (method_exists($backend, 'getSchema')) {
+            $schema = $backend->getSchema();
+            if (isset($schema[$instance->getIdProperty()]) && strtoupper($schema[$instance->getIdProperty()]['DATA_TYPE']) != 'VARCHAR'
+                && strtoupper($schema[$instance->getIdProperty()]['DATA_TYPE']) != 'CHAR'
+            ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * test cleanCustomfields
@@ -417,6 +436,10 @@ class Tinebase_Frontend_CliTest extends TestCase
             if ($instance->has('customfields')) {
 
                 if (strpos($model, 'Tinebase') === 0) {
+                    continue;
+                }
+
+                if (! $this->_idPropertyIsVarChar($instance, $model)) {
                     continue;
                 }
 

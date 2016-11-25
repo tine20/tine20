@@ -615,22 +615,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             dtStartField.clearInvalid();
             return true;
         }
-    },
-    
-    /**
-     * is called from onApplyChanges
-     * @param {Boolean} closeWindow
-     */
-    doApplyChanges: function(closeWindow) {
-        this.onRecordUpdate();
-        if (this.isValid()) {
-            this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
-            this.onAfterApplyChanges(closeWindow);
-        } else {
-            this.saving = false;
-            this.loadMask.hide();
-            Ext.MessageBox.alert(i18n._('Errors'), this.getValidationErrorMessage());
-        }
     }
 });
 
