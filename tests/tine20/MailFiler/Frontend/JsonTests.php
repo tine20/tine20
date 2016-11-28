@@ -55,19 +55,25 @@ class MailFiler_Frontend_JsonTests extends TestCase
      */
     public function testSearchWithMessageFilter()
     {
+        $this->testCreateContainerNodeInPersonalFolder();
         $filter = array(array(
             'field' => 'path',
             'operator' => 'equals',
-            'value' => '/'
+            'value' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . 'testcontainer'
         ), array(
             'field' => 'to',
             'operator' => 'contains',
             'value' => 'vagrant'
+        ), array(
+            'field' => 'flags',
+            'operator' => 'in',
+            'value' => array(
+                '\Tine20'
+            )
         ));
         $result = $this->_json->searchNodes($filter, array());
-        self::assertEquals(2, count($result['filter']));
-        // TODO is it correct to show the root nodes even if "to" filter is set?
-        self::assertEquals(3, $result['totalcount']);
+        self::assertEquals(5, count($result['filter']));
+        self::assertEquals(0, $result['totalcount']);
     }
 
     /**
