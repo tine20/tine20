@@ -133,7 +133,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
             }
             
-            if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties)) {
+            if ($firstRecord->has('tags') && in_array('tags', $_resolveProperties) && ! $firstRecord->tags instanceof Tinebase_Record_RecordSet) {
                 Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
             }
         }

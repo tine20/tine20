@@ -116,4 +116,22 @@ class MailFiler_Frontend_JsonTests extends TestCase
         self::assertEquals(1, count($result));
         self::assertEquals($targetFilePath, $result[0]['path']);
     }
+
+    /**
+     * testAttachTagToFolderNode
+     *
+     * @see 0012370: tags not working
+     */
+    public function testAttachTagToFolderNode()
+    {
+        $node = $this->testCreateContainerNodeInPersonalFolder();
+        $node['tags'] = array(array(
+            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'          => 'file tag',
+        ));
+        $node['name'] = $node['name']['id'];
+        $updatedNode = $this->_json->saveNode($node);
+
+        $this->assertEquals(1, count($updatedNode['tags']));
+    }
 }
