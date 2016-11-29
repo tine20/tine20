@@ -132,8 +132,8 @@ class MailFiler_Frontend_JsonTests extends TestCase
     {
         $node = $this->testCreateContainerNodeInPersonalFolder();
         $node['tags'] = array(array(
-            'type'          => Tinebase_Model_Tag::TYPE_PERSONAL,
-            'name'          => 'file tag',
+            'type' => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name' => 'file tag',
         ));
         $node['name'] = $node['name']['id'];
         $updatedNode = $this->_json->saveNode($node);

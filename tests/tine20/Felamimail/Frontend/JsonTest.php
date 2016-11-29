@@ -1293,6 +1293,18 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
+     * @see 0012162: create new MailFiler application
+     */
+    public function testFileMessageWithMultipartAttachment()
+    {
+        $emlNode = $this->_fileMessageInMailFiler('multipart_attachments.eml', 'Testmail mit Anhang');
+        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
+        $this->assertEquals(5, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
+        $this->assertEquals('TS Lagerstände.jpg', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
+        $this->assertContains('Siehe Dateien anbei', $emlNode['message']['body'], print_r($emlNode['message'], true));
+    }
+
+    /**
      * testMessageWithInvalidICS
      *
      * @see 0008786: broken ics causes js error when showing details
