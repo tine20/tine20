@@ -504,13 +504,6 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initMailActions: function() {
 
         var fMailApp = Tine.Tinebase.appMgr.get('Felamimail');
-        this.action_write = new Ext.Action({
-            actionType: 'add',
-            text: this.app.i18n._('Compose'),
-            handler: this.onMessageCompose.createDelegate(this),
-            disabled: ! fMailApp.getActiveAccount(),
-            iconCls: fMailApp.appName + 'IconCls'
-        });
 
         this.action_reply = new Ext.Action({
             requiredGrant: 'readGrant',
@@ -565,17 +558,6 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //});
     },
 
-    /**
-     * compose new message handler
-     */
-    onMessageCompose: function() {
-        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
-
-        var win = Tine.Felamimail.MessageEditDialog.openWindow({
-            accountId: activeAccount ? activeAccount.id : null,
-        });
-    },
-
     onMessageReplyTo: function(toAll) {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected().get('message');
@@ -606,14 +588,14 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     updateMessageAction: function(action, grants, records) {
-        var isFile = true;
+        var isFile = false;
         Ext.each(records, function (record) {
-            if (record.get('type') == 'folder') {
-                isFile = false;
-                return false;
+            if (record.get('type') == 'file') {
+                isFile = true;
+                return true;
             }
         });
-
+        
         var disable = records.length > 1 || ! isFile;
         action.setDisabled(disable);
         return false;
