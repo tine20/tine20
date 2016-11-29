@@ -20,19 +20,6 @@ Ext.ns('Tine.widgets.grid');
 Tine.widgets.form.FieldManager = function() {
     var fields = {};
 
-    /**
-     * modelConfigType => xtype
-     */
-    var typeMap = {
-        'date':     'datefield',
-        'time':     'timefield',
-        'datetime': 'datetimefield',
-        'string':   'textfield',
-        'text':     'textarea',
-        //'bool':     'checkbox',
-        //'boolean':  'checkbox',
-    };
-
     return {
         /**
          * const for category editDialog
@@ -115,9 +102,14 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'addressbookcontactpicker';
                     field.userOnly = true;
                     break;
-                case 'keyField':
+                case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
-                    var keyFieldName = fieldDefinition.keyFieldConfigName;
+                    field.app = app;
+                    field.keyFieldName = fieldDefinition.name;
+                    break;
+                case 'text':
+                    field.xtype = 'textarea';
+                    field.height = 70; // 5 lines
                     break;
                 default:
                     field.xtype = 'textfield';
