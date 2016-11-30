@@ -52,7 +52,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
                 <type>text</type>
                 <length>40</length>
             </field>');
-        $this->_backend->alterCol('phone_callhistory', $declaration);
+        $this->_backend->addCol('phone_callhistory', $declaration);
 
         $this->setTableVersion('phone_callhistory', 3);
 
