@@ -625,6 +625,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             ) {
                 $part = $this->_getRfc822Attachment($attachment, $_message);
 
+            } else if (isset($attachment['type'])
+                && $attachment['type'] == 'filenode'
+            ) {
+                $part = $this->_getFileNodeAttachment($attachment);
+
             } else if ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
                 $part = $this->_getTempFileAttachment($attachment);
 
@@ -672,6 +677,55 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         // replace some chars from attachment name
         $attachment['name'] = preg_replace("/[\s'\"]*/", "", $attachment['name']) . '.eml';
+
+        return $part;
+    }
+
+    /**
+     * get attachment defined by a file node (mailfiler or filemanager)
+     *
+     * @param $attachment
+     * @return null|Zend_Mime_Part
+     * @throws Tinebase_Exception_NotFound
+     *
+     * TODO support Filemanager files
+     * TODO allow to omit $messageuid, $partId
+     */
+    protected function _getFileNodeAttachment(&$attachment)
+    {
+        list($appname, $path, $messageuid, $partId) = explode('|', $attachment['id']);
+
+        $nodeController = Tinebase_Core::getApplicationInstance($appname . '_Model_Node');
+
+        // remove filename from path
+        // TODO remove DRY with \MailFiler_Frontend_Http::downloadAttachment
+        $pathParts = explode('/', $path);
+        array_pop($pathParts);
+        $path = implode('/', $pathParts);
+
+        $filter = array(
+            array(
+                'field'    => 'path',
+                'operator' => 'equals',
+                'value'    => $path
+            ),
+            array(
+                'field'    => 'messageuid',
+                'operator' => 'equals',
+                'value'    => $messageuid
+            ));
+        $node = $nodeController->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
+        if ($node) {
+            $mailpart = $nodeController->getPartFromNode($node, $partId);
+            // TODO use streams
+            $content = $content = Felamimail_Message::getDecodedContent($mailpart);
+            $part = new Zend_Mime_Part($content);
+            $part->encoding = Zend_Mime::ENCODING_BASE64;
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not find file node attachment');
+            $part = null;
+        }
 
         return $part;
     }
