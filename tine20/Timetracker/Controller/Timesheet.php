@@ -177,10 +177,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             
             if ($dayOfWeek >= 2) {
                 // only allow to add ts for this week
-                $date->sub($dayOfWeek, Tinebase_DateTime::MODIFIER_DAY);
+                $date->sub($dayOfWeek-1, Tinebase_DateTime::MODIFIER_DAY);
             } else {
                 // only allow to add ts for last week
-                $date->sub($dayOfWeek+7, Tinebase_DateTime::MODIFIER_DAY);
+                $date->sub($dayOfWeek+6, Tinebase_DateTime::MODIFIER_DAY);
             }
             
             // convert start date to Tinebase_DateTime

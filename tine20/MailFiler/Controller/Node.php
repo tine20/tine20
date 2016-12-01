@@ -84,8 +84,31 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
     {
         $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
 
-        // we need to have the correct model
-        $nodes = new Tinebase_Record_RecordSet($this->_modelName, $result->toArray(), /* $_bypassFilters */ true);
+        $nodes = $this->_convertToMailFilerModelNodeRecordSet($result);
+        return $nodes;
+    }
+
+    /**
+     * we need to have the correct model
+     *
+     * @param $records
+     * @return Tinebase_Record_RecordSet
+     *
+     * TODO improve this: parent get/search should already return the correct model...
+     */
+    protected function _convertToMailFilerModelNodeRecordSet($records)
+    {
+        $nodes = new Tinebase_Record_RecordSet($this->_modelName, array());
+        foreach ($records as $record) {
+            $recordArray = $record->toArray();
+            $node = new $this->_modelName($recordArray, /* $_bypassFilters */ true);
+            foreach ($recordArray as $key => $value) {
+                if ($record->{$key} instanceof Tinebase_Record_RecordSet) {
+                    $node->{$key} = $record->{$key};
+                }
+            }
+            $nodes->addRecord($node);
+        }
         return $nodes;
     }
 
@@ -96,7 +119,7 @@ class MailFiler_Controller_Node extends Filemanager_Controller_Node
     public function get($_id, $_containerId = NULL)
     {
         $result = parent::get($_id, $_containerId);
-        return new $this->_modelName($result->toArray());
+        return $this->_convertToMailFilerModelNodeRecordSet(array($result))->getFirstRecord();
     }
 
     /**

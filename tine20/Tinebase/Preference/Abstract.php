@@ -439,7 +439,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             if ($_value !== Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // no preference yet -> create
                 $preference = new Tinebase_Model_Preference(array(
-                    'application_id'    => $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
                     'name'              => $_preferenceName,
                     'value'             => $_value,
                     'account_id'        => $_accountId,
