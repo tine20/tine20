@@ -20,22 +20,25 @@
 class MailFiler_Model_NodeFilter extends Tinebase_Model_Tree_Node_Filter
 {
     /**
-     * @var string class name of this filter group
-     *      this is needed to overcome the static late binding
-     *      limitation in php < 5.3
+     * sets this filter group from filter data in array representation
+     *
+     * @param array $_data
      */
-    protected $_className = 'Tinebase_Model_Tree_Node_Filter';
-    
-    /**
-     * @var string application of this filter group
-     */
-    protected $_applicationName = 'Tinebase';
-    
-    /**
-     * @var string name of model this filter group is designed for
-     */
-    protected $_modelName = 'Tinebase_Model_Tree_Node';
-    
+    public function setFromArray($_data)
+    {
+        foreach ($_data as $key => &$filterData) {
+            if (isset($filterData['field']) && $filterData['field'] === 'foreignRecord' &&
+                $filterData['value']['linkType'] === 'relation') {
+                if (!isset($filterData['options']) || !is_array($filterData['options'])) {
+                    $filterData['options'] = array();
+                }
+                $filterData['options']['own_model'] = 'MailFiler_Model_Node';
+            }
+        }
+
+        parent::setFromArray($_data);
+    }
+
     /**
      * @var array filter model fieldName => definition
      */
@@ -82,6 +85,10 @@ class MailFiler_Model_NodeFilter extends Tinebase_Model_Tree_Node_Filter
             'filter' => 'Tinebase_Model_Filter_Text',
             'options' => array('tablename' => 'tree_fileobjects')
         ),
+        'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
+            'idProperty' => 'tree_nodes.id',
+            'applicationName' => 'Tinebase',
+        )),
     // tree_filerevisions table
         'size'                 => array(
             'filter' => 'Tinebase_Model_Filter_Int',

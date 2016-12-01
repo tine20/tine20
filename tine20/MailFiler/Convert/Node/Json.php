@@ -36,7 +36,7 @@ class MailFiler_Convert_Node_Json extends Tinebase_Convert_Json
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Resolving mails of nodes ....');
 
-        $filter = new MailFiler_Model_MessageFilter(array('field' => 'id', 'operator' => 'in', 'value' => $records->getArrayOfIds()));
+        $filter = new MailFiler_Model_MessageFilter(array(array('field' => 'node_id', 'operator' => 'in', 'value' => $records->getArrayOfIds())));
         $messages = MailFiler_Controller_Message::getInstance()->search($filter);
         foreach ($messages as $message) {
             $idx = $records->getIndexById($message->node_id);

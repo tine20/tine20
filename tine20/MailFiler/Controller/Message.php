@@ -113,6 +113,9 @@ class MailFiler_Controller_Message extends Felamimail_Controller_Message
                     $partid = 1;
                 }
 
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' raw message: ' . $mimeMessage->getContent());
+
                 $body = $mimeMessage->getDecodedPartContent($partid);
             } else {
                 $body = Felamimail_Message::getDecodedContent($mimeMessage);

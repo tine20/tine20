@@ -504,13 +504,6 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initMailActions: function() {
 
         var fMailApp = Tine.Tinebase.appMgr.get('Felamimail');
-        this.action_write = new Ext.Action({
-            actionType: 'add',
-            text: this.app.i18n._('Compose'),
-            handler: this.onMessageCompose.createDelegate(this),
-            disabled: ! fMailApp.getActiveAccount(),
-            iconCls: fMailApp.appName + 'IconCls'
-        });
 
         this.action_reply = new Ext.Action({
             requiredGrant: 'readGrant',
@@ -565,35 +558,55 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         //});
     },
 
-    /**
-     * compose new message handler
-     */
-    onMessageCompose: function() {
-        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
-
-        var win = Tine.Felamimail.MessageEditDialog.openWindow({
-            accountId: activeAccount ? activeAccount.id : null,
-        });
-    },
-
     onMessageReplyTo: function(toAll) {
         var sm = this.getGrid().getSelectionModel(),
-            msg = sm.getSelected().get('message');
+            node = sm.getSelected();
+            msg = node.get('message'),
+            msgBody = msg.body;
 
-        // TODO pass all relevant params (body, subject, ...) to prevent mail loading in Felamimail
+        msgBody = '<br/>'
+            + '<blockquote class="felamimail-body-blockquote">' + msgBody + '</blockquote><br/>';
+
+        var date = msg.sent
+            ? msg.sent
+            : (msg.received) ? msg.received : new Date();
+
+        var quote = String.format(this.app.i18n._('On {0}, {1} wrote'),
+                Tine.Tinebase.common.dateTimeRenderer(date),
+                Ext.util.Format.htmlEncode(msg.from_name)
+            ) + ':';
+
+        // pass all relevant params (body, subject, ...) to prevent mail loading in Felamimail
         var win = Tine.Felamimail.MessageEditDialog.openWindow({
+            //record: msg,
             replyTo : Ext.encode(msg),
-            replyToAll: toAll
+            replyToAll: toAll,
+            msgBody: quote + msgBody
         });
     },
 
     onMessageForward: function() {
         var sm = this.getGrid().getSelectionModel(),
-            msg = sm.getSelected().get('message');
+            node = sm.getSelected();
+            msg = node.get('message'),
+            msgBody = msg.body,
+            quote = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
+                '<br /><b>',
+                '</b><br />'),
+            attachments = msg.attachments;
 
-        // TODO pass all relevant params (body, subject, ...) to prevent mail loading in Felamimail
+        Ext.each(attachments, function(attachment) {
+            // set name and MailFiler path for fetching attachment from filesystem when sending
+            attachment.name = attachment.filename;
+            attachment.type = 'filenode';
+            attachment.id = 'MailFiler'  + '|' + node.get('path') + '|' + msg.messageuid  + '|' + attachment.partId
+        }, this);
+
+        // pass all relevant params (body, subject, ...) to prevent mail loading in Felamimail
         var win = Tine.Felamimail.MessageEditDialog.openWindow({
-            forwardMsgs : Ext.encode([msg])
+            forwardMsgs : Ext.encode([msg]),
+            attachments: attachments,
+            msgBody: quote + msgBody
         });
     },
 
@@ -606,14 +619,14 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     updateMessageAction: function(action, grants, records) {
-        var isFile = true;
+        var isFile = false;
         Ext.each(records, function (record) {
-            if (record.get('type') == 'folder') {
-                isFile = false;
-                return false;
+            if (record.get('type') == 'file') {
+                isFile = true;
+                return true;
             }
         });
-
+        
         var disable = records.length > 1 || ! isFile;
         action.setDisabled(disable);
         return false;

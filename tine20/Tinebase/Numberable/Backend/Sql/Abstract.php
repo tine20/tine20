@@ -18,7 +18,7 @@
  */
 class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abstract
 {
-    // ?!?
+    // parent constructor expects _modelName to be set
     protected $_modelName = 'shooo';
 
 
@@ -42,7 +42,7 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
      * see parent class
      *
      * @param array $_numberableConfiguration
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
@@ -77,6 +77,12 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
         }
     }
 
+    /**
+     * returns the next number for the current numberable
+     *
+     * @return string|int
+     * @throws Tinebase_Exception_Backend_Database
+     */
     public function getNext()
     {
         $stmt = $this->_getNext();
@@ -111,6 +117,11 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
         return $result[0][0];
     }
 
+    /**
+     * tries to insert the next value and returns the result as Zend_Db_Stmt
+     *
+     * @return Zend_Db_Statement_Interface
+     */
     protected function _getNext()
     {
         $tableName = $this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName);
@@ -132,6 +143,23 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
     public function insert($value)
     {
         $rowCount = $this->_db->insert($this->_tablePrefix . $this->_tableName, array($this->_bucketColumn => $this->_bucketKey, $this->_numberableColumn => $value));
+        if ( $rowCount !== 1 ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * tries to delete give value, returns true on success, false otherwise
+     *
+     * @param int $value
+     * @return bool
+     */
+    public function free($value)
+    {
+        $rowCount = $this->_db->delete($this->_tablePrefix . $this->_tableName,
+            $this->_db->quoteIdentifier($this->_bucketColumn) . ' = ' . $this->_db->quote($this->_bucketKey) . ' AND ' .
+            $this->_db->quoteIdentifier($this->_numberableColumn) . ' = ' .  $this->_db->quote($value, Zend_Db::INT_TYPE));
         if ( $rowCount !== 1 ) {
             return false;
         }

@@ -508,9 +508,7 @@ class Tinebase_Tags
             return;
         }
 
-        // get first record to determine application
-        $first = $_records->getFirstRecord();
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($first->getApplication())->getId();
+        $appId = $this->_getApplicationForModel($_records->getRecordClassName())->getId();
 
         $select = $this->_getSelect($recordIds, $appId);
         $select->group(array('tagging.tag_id', 'tagging.record_id'));
@@ -556,7 +554,7 @@ class Tinebase_Tags
         $tagsToSet = $this->_createTagsOnTheFly($_record[$_tagsProperty]);
         $currentTags = $this->getTagsOfRecord($_record, 'tags', Tinebase_Model_TagRight::USE_RIGHT);
         
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
+        $appId = $this->_getApplicationForModel(get_class($_record))->getId();
         if (! $this->_userHasPersonalTagRight($appId)) {
             $tagsToSet = $tagsToSet->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
             $currentTags = $currentTags->filter('type', Tinebase_Model_Tag::TYPE_SHARED);
@@ -593,6 +591,24 @@ class Tinebase_Tags
     }
 
     /**
+     * @param $modelName
+     * @return Tinebase_Model_Application
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getApplicationForModel($modelName)
+    {
+        // FIXME this needs to be resolved - currently tags are saved with Tinebase app id for Filemanager/MailFiler ...
+        if (in_array($modelName, array('Filemanager_Model_Node', 'MailFiler_Model_Node'))) {
+            $appName = 'Tinebase';
+        } else {
+            list($appName, , ) = explode('_', $modelName);
+        }
+
+        return Tinebase_Application::getInstance()->getApplicationByName($appName);
+    }
+
+    /**
      * attach tag to multiple records identified by a filter
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -614,9 +630,8 @@ class Tinebase_Tags
         $tag = $tags->getFirstRecord();
         $tagId = $tag->getId();
 
-        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        $appId = $this->_getApplicationForModel($_filter->getModelName())->getId();
+        $controller = Tinebase_Core::getApplicationInstance($_filter->getModelName());
 
         // only get records user has update rights to
         $controller->checkFilterACL($_filter, 'update');
@@ -691,9 +706,9 @@ class Tinebase_Tags
      */
     public function detachTagsFromMultipleRecords($_filter, $_tag)
     {
-        list($appName, $i, $modelName) = explode('_', $_filter->getModelName());
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($appName)->getId();
-        $controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
+        $app = $this->_getApplicationForModel($_filter->getModelName());
+        $appId = $app->getId();
+        $controller = Tinebase_Core::getApplicationInstance($app->name, $_filter->getModelName());
         
         // only get records user has update rights to
         $controller->checkFilterACL($_filter, 'update');

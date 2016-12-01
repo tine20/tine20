@@ -188,7 +188,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Got non-json response, last json error: ' . json_last_error_msg());
                 foreach ($response as $r) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' response: ' . print_r($r->getResult(), true));
                 }
             }

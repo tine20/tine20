@@ -89,8 +89,6 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                     for (var i=0; i<dd.dragData.selections.length; i++) {
                         if (n.node.id == dd.dragData.selections[i].id) {
                             preventDrop = true;
-                        } else if (this.isSubPath(dd.dragData.selections[i].data.path, n.node.attributes.path)) {
-                            preventDrop = true;
                         }
                         if(dd.dragData.selections[i].data.type == 'file') {
                             selectionContainsFiles = true;
@@ -127,8 +125,6 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if (n.node.id == dd.dragData.selections[i].id) {
                             preventDrop = true;
-                        } else if (this.isSubPath(dd.dragData.selections[i].data.path, n.node.attributes.path)) {
-                            preventDrop = true;
                         }
     
                         if(dd.dragData.selections[i].data.type == 'file') {
@@ -158,30 +154,8 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
                 t.ui.endDrop();
                 this.tree.fireEvent("nodedrop", de);
             },
-            
-            /**
-             * checks if the path needle is a sub path of haystack
-             */
-            isSubPath: function(haystack, needle) {
-                var h = haystack.split('/');
-                var n = needle.split('/');
-                var res = true;
-                
-                for (var index = 0; index < h.length; index++) {
-                    
-                    if (n.length <= index) {
-                        break;
-                    }
-                    
-                    if (h[index] != n[index]) {
-                        res = false;
-                    }
-                }
-                
-                return res;
-            }
         };
-        
+
         this.dragConfig = {
             ddGroup: this.ddGroup || 'fileDDGroup',
             scroll: this.ddScroll,
