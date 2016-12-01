@@ -41,21 +41,6 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     /**
-     * renders container name + color
-     * 
-     * @param {Array} container
-     * @return {String} html
-     */
-    containerRenderer: function(container) {
-        if(this.record) {   // no record after delete
-            var renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Event', 'container_id');
-            return renderer.call(this, container, {}, this.record);
-        } else {
-            return '';
-        }
-    },
-    
-    /**
      * renders datetime
      * 
      * @param {Date} dt
@@ -112,35 +97,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-        
-        /*
-        this.defaultPanel = this.getDefaultPanel();
-        this.eventDetailsPanel = this.getEventDetailsPanel();
-        
-        this.cardPanel = new Ext.Panel({
-            layout: 'card',
-            border: false,
-            activeItem: 0,
-            items: [
-                this.defaultPanel,
-                this.eventDetailsPanel
-            ]
-        });
-        
-        this.items = [
-            this.cardPanel
-        ];
-        */
-        
-        // TODO generalize this
-        this.containerTpl = new Ext.XTemplate(
-            '<div class="x-tree-node-leaf x-unselectable file">',
-                '<img class="x-tree-node-icon" unselectable="on" src="', Ext.BLANK_IMAGE_URL, '">',
-                '<span style="color: {color};">&nbsp;&#9673;&nbsp</span>',
-                '<span>{name}</span>',
-            '</div>'
-        ).compile();
-        
+
         Tine.Calendar.EventDetailsPanel.superclass.initComponent.call(this);
     },
     
@@ -191,52 +148,22 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      * @return {Ext.ux.display.DisplayPanel}
      */
     getSingleRecordPanel: function() {
+        var me = this;
         if (! this.singleRecordPanel) {
-            this.singleRecordPanel = new Ext.ux.display.DisplayPanel ({
-                layout: 'fit',
-                border: false,
-                items: [{
-                    layout: 'vbox',
-                    border: false,
-                    layoutConfig: {
-                        align:'stretch'
-                    },
-                    items: [{
-                        layout: 'hbox',
-                        flex: 0,
-                        height: 16,
-                        border: false,
-                        style: 'padding-left: 5px; padding-right: 5px',
-                        layoutConfig: {
-                            align:'stretch'
-                        },
-                        items: [{
-                            flex: 0.5,
-                            xtype: 'ux.displayfield',
-                            name: 'summary',
-                            style: 'padding-top: 2px',
-                            cls: 'x-ux-display-header',
-                            htmlEncode: false,
-                            renderer: this.summaryRenderer.createDelegate(this)
-                        }, {
-                            flex: 0.5,
-                            xtype: 'ux.displayfield',
-                            style: 'text-align: right;',
-                            cls: 'x-ux-display-header',
-                            name: 'container_id',
-                            htmlEncode: false,
-                            renderer: this.containerRenderer.createDelegate(this)
-                        }]
-                    }, {
+            this.singleRecordPanel = new Tine.widgets.display.RecordDisplayPanel({
+                recordClass: Tine.Calendar.Model.Event,
+                titleRenderer: this.summaryRenderer.createDelegate(this),
+                getBodyItems: function() {
+                    return [{
                         layout: 'hbox',
                         flex: 1,
                         border: false,
                         layoutConfig: {
-                            padding:'5',
-                            align:'stretch'
+                            padding: '0',
+                            align: 'stretch'
                         },
-                        defaults:{
-                            margins:'0 5 0 0'
+                        defaults: {
+                            margins: '0 5 0 0'
                         },
                         items: [{
                             flex: 2,
@@ -246,30 +173,25 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 background: 'solid'
                             },
                             items: [{
-                                // TODO try to increase padding/margin of first element
-                                /*
-                                style: 'margin-top: 4px',
-                                labelStyle: 'margin-top: 4px',
-                                */
                                 xtype: 'ux.displayfield',
                                 name: 'dtstart',
                                 fieldLabel: this.app.i18n._('Start Time'),
-                                renderer: this.datetimeRenderer.createDelegate(this)
+                                renderer: me.datetimeRenderer.createDelegate(me)
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'dtend',
                                 fieldLabel: this.app.i18n._('End Time'),
-                                renderer: this.datetimeRenderer.createDelegate(this)
+                                renderer: me.datetimeRenderer.createDelegate(me)
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'transp',
                                 fieldLabel: this.app.i18n._('Blocking'),
-                                renderer: this.transpRenderer.createDelegate(this)
+                                renderer: me.transpRenderer.createDelegate(me)
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'status',
                                 fieldLabel: this.app.i18n._('Tentative'),
-                                renderer: this.statusRenderer.createDelegate(this)
+                                renderer: me.statusRenderer.createDelegate(me)
                             }, {
                                 xtype: 'ux.displayfield',
                                 name: 'location',
@@ -278,7 +200,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 xtype: 'ux.displayfield',
                                 name: 'organizer',
                                 fieldLabel: this.app.i18n._('Organizer'),
-                                renderer: function(organizer) {
+                                renderer: function (organizer) {
                                     return organizer && organizer.n_fileas ? organizer.n_fileas : '';
                                 }
                             }]
@@ -296,21 +218,21 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 nl2br: true,
                                 htmlEncode: false,
                                 fieldLabel: this.app.i18n._('Attendee'),
-                                renderer: this.attendeeRenderer
+                                renderer: me.attendeeRenderer
                             }]
                         }, {
                             flex: 3,
                             layout: 'fit',
-                            
+
                             border: false,
                             items: [{
                                 cls: 'x-ux-display-background-border',
                                 xtype: 'ux.displaytextarea',
                                 name: 'description'
                             }]
-                        }]
-                    }]
-                }]
+                        }],
+                    }];
+                }
             });
         }
         

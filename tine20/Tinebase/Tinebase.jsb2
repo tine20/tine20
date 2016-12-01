@@ -498,6 +498,14 @@
           "path": "js/widgets/dialog/"
         },
         {
+          "text": "RecordDisplayPanel.js",
+          "path": "js/widgets/display/"
+        },
+        {
+          "text": "DefaultDisplayPanel.js",
+          "path": "js/widgets/display/"
+        },
+        {
           "text": "TabPanelKeyPlugin.js",
           "path": "js/ux/"
         },
