@@ -25,7 +25,7 @@ class Timetracker_Exception_ClosedTimeaccount extends Tinebase_Exception_AccessD
      * @param integer $_code
      * @return void
      */
-    public function __construct($_message = 'This Timeaccount is already closed!', $_code = 403) {
+    public function __construct($_message = 'This Timeaccount is already closed!', $_code = 444) {
         parent::__construct($_message, $_code);
     }
 }
