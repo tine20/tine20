@@ -1448,8 +1448,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     if ($model == 'Timetracker_Model_Timeaccount') {
                         $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
                         $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $record->getId())));
+                        $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'status', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::STATUS_BILLED)));
+                        $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'cleared_at', 'operator' => 'isnull', 'value' => '')));
                         
-                        Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                        Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL, 'status' => Timetracker_Model_Timeaccount::STATUS_TO_BILL));
                     }
                 }
                 

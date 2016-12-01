@@ -38,7 +38,7 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
      * see parent class
      *
      * @param array $_numberableConfiguration
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
@@ -58,12 +58,47 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
         }
     }
 
+    /**
+     * returns the next numberable
+     *
+     * @return string
+     */
     public function getNext()
     {
         return $this->_prefix . str_pad('' . parent::getNext(), $this->_zerofill, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * inserts a new numberable
+     *
+     * @param string $value
+     * @return bool
+     */
     public function insert($value)
+    {
+        return parent::insert($this->_cutStringConvertToInt($value));
+    }
+
+    /**
+     * frees a numberable
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function free($value)
+    {
+        return parent::free($this->_cutStringConvertToInt($value));
+    }
+
+    /**
+     * removes the configured prefix and leading zeros, etc.
+     * performs a strict format check
+     * returns the integer part of the numberable
+     *
+     * @param string $value
+     * @return int
+     */
+    protected function _cutStringConvertToInt($value)
     {
         $_value = $value;
         if (($len = strlen($this->_prefix)) > 0)
@@ -94,6 +129,6 @@ class Tinebase_Numberable_String extends Tinebase_Numberable
             throw new Tinebase_Exception_UnexpectedValue('improper format: wrong prefix or non digit found where none should be "' . $value . '"');
         }
 
-        return parent::insert($intValue);
+        return $intValue;
     }
 }

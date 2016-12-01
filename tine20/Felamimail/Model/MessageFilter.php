@@ -210,10 +210,10 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 $value[]      = '%' . $customValue . '%';
             }
         }
-        
+
         if ($_filterData['field'] == 'flags') {
             $havingColumn = ($db instanceof Zend_Db_Adapter_Pdo_Pgsql)
-                ? Tinebase_Backend_Sql_Command::factory($db)->getAggregate('felamimail_cache_msg_flag.flag')
+                ? Tinebase_Backend_Sql_Command::factory($db)->getAggregate($foreignTables['flags']['table']  . '.flag')
                 : 'flags';
             if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
                 $_select->having($db->quoteInto($havingColumn . ' LIKE ?', $value));

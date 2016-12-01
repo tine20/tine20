@@ -184,7 +184,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     'filter'                => 'Tinebase_Model_Filter_Text',
                     'jsConfig'              => array('filtertype' => 'timetracker.timeaccountbilled')
                 ),
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'not yet billed'),
+                'validators'            => array(
+                                                Zend_Filter_Input::ALLOW_EMPTY => true,
+                                                Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED,
+                                                array('InArray', array(self::STATUS_NOT_YET_BILLED, self::STATUS_TO_BILL, self::STATUS_BILLED)),
+                                            ),
                 'copyOmit'              => true,
             ),
             'cleared_at'        => array(
@@ -273,6 +277,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * = booking timesheets allowed until monday midnight for the last week
      */
     const DEADLINE_LASTWEEK = 'lastweek';
+
+    const STATUS_NOT_YET_BILLED = 'not yet billed';
+    const STATUS_TO_BILL = 'to bill';
+    const STATUS_BILLED = 'billed';
 
     /**
      * set from array data
@@ -440,18 +448,25 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $this->_referenceContract = $contract;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), true));
-        
-        if (! $this->is_open || $this->status == 'billed' || $this->cleared_at || $this->invoice_id) {
-            return FALSE;
-        }
-        
+
         if (intval($this->budget) > 0) {
-             if ($this->status == 'to bill' && $this->invoice_id == NULL) {
+
+            // we don't touch cleared TAs at all
+            if ($this->cleared_at) {
+                return false;
+            }
+
+            if ($this->status === self::STATUS_TO_BILL && $this->invoice_id !== NULL) {
+                $this->_cleanToBillWithInvoiceId();
+                return true;
+            }
+
+            if ($this->status === self::STATUS_TO_BILL && $this->invoice_id === NULL) {
                 // if there is a budget, this timeaccount should be billed and there is no invoice linked, bill it
                 return TRUE;
-             } else {
-                 return FALSE;
-             }
+            } else {
+                return FALSE;
+            }
         } else {
             
             if (! $this->is_billable) {
@@ -546,7 +561,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $this->_disableTimesheetChecks($tsController);
         
         if (intval($this->budget) > 0) {
+
+            if ($this->status != self::STATUS_TO_BILL && $this->invoice_id != NULL) {
+                return;
+            }
+
             // set this ta billed
+            $this->status = self::STATUS_BILLED;
             $this->invoice_id = $invoice->getId();
             Timetracker_Controller_Timeaccount::getInstance()->update($this, FALSE);
 
@@ -632,8 +653,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         
         // if this timeaccount has a budget, close and bill this and set cleared at date
         if (intval($this->budget) > 0) {
+
+            if ($this->invoice_id !== $invoice->getId()) {
+                return;
+            }
+
             $this->is_open    = 0;
-            $this->status     = 'billed';
+            $this->status     = self::STATUS_BILLED;
             $this->cleared_at = Tinebase_DateTime::now();
             
             Timetracker_Controller_Timeaccount::getInstance()->update($this);
@@ -647,6 +673,25 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $this->_enableTimesheetChecks($tsController);
     }
 
+    protected function _cleanToBillWithInvoiceId()
+    {
+        $this->invoice_id = null;
+        Timetracker_Controller_Timeaccount::getInstance()->update($this);
+
+        // we unassign all assigned TS
+        $filter = new Timetracker_Model_TimesheetFilter(array(
+            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+            array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+        ), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
+        ));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' TS Filter: ' . print_r($filter->toArray(), true));
+        Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => null));
+    }
+
     /**
      * returns true if this invoice needs to be recreated because data changed
      *
@@ -658,6 +703,57 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      */
     public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract)
     {
+        if (intval($this->budget) > 0) {
+
+            // we dont touch cleared TAs at all
+            if ($this->cleared_at) {
+                return false;
+            }
+
+            if ($this->invoice_id === null) {
+                if ($this->status === self::STATUS_TO_BILL) {
+                    // we should bill this TA
+                    return true;
+                }
+                // nothing to do
+                return false;
+
+                // a sanity checks required to fix old data...
+            } elseif($this->status === self::STATUS_TO_BILL) {
+
+                $this->_cleanToBillWithInvoiceId();
+
+                // time to bill this TA now
+                return true;
+
+                // we are a relation of all invoices, but we will only be billed in one. If this is the one, we continue, else its not our business
+            } elseif ($this->invoice_id != $invoice->getId()) {
+                return false;
+            }
+
+            // did the status change? or anything else?
+            if ($this->status !== self::STATUS_BILLED || $this->last_modified_time->isLater($invoice->creation_time)) {
+                return true;
+            }
+
+            // we just assign all unassigned TS to our invoice silently and gracefully
+            $filter = new Timetracker_Model_TimesheetFilter(array(
+                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+            ), 'AND');
+            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
+            ));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(
+                array('field' => 'invoice_id', 'operator' => 'not', 'value' => $invoice->getId())
+            ));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' TS Filter: ' . print_r($filter->toArray(), true));
+            Timetracker_Controller_Timesheet::getInstance()->updateMultiple($filter, array('invoice_id' => $invoice->getId()));
+
+            return false;
+        }
+
         $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())

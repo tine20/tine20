@@ -38,7 +38,7 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
      * see parent class
      *
      * @param array $_numberableConfiguration
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */

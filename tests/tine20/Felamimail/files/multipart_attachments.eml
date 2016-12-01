@@ -1,0 +1,88 @@
+Return-path: <lala@lolo.com>
+Envelope-to: lali@lolo.com
+Delivery-date: Thu, 24 Nov 2016 16:39:55 +0100
+X-Tine20TestMessage: multipart_attachments.eml
+Received: from [81.19.149.138] (helo=mx28lb.world4you.com)
+	by mail26.world4you.com with esmtp (Exim 4.77)
+	(envelope-from <lala@lolo.com>)
+	id 1c9w7v-0006I2-NX
+	for lali@lolo.com; Thu, 24 Nov 2016 16:39:55 +0100
+Received: from [209.85.213.54] (helo=mail-vk0-f54.google.com)
+	by mx28lb.world4you.com with esmtps (TLSv1.2:DHE-RSA-AES256-SHA:256)
+	(Exim 4.84_2)
+	(envelope-from <lala@lolo.com>)
+	id 1c9w7r-0001cj-2Z
+	for lali@lolo.com; Thu, 24 Nov 2016 16:39:55 +0100
+Received: by mail-vk0-f54.google.com with SMTP id x186so28688524vkd.1
+        for <lali@lolo.com>; Thu, 24 Nov 2016 07:39:51 -0800 (PST)
+X-Gm-Message-State: AKaTC02K6F2C95RbOBtUJWZs9k+qYB5T/y7c5KlIUkCKODBNItSxfrnvk+J+gExFwHF8scxxjwEYtARNL97z+g==
+X-Received: by 10.31.221.66 with SMTP id u63mr1008264vkg.16.1480001989463;
+ Thu, 24 Nov 2016 07:39:49 -0800 (PST)
+MIME-Version: 1.0
+Received: by 10.10.12.139 with HTTP; Thu, 24 Nov 2016 07:39:48 -0800 (PST)
+From: Freizeit <lala@lolo.com>
+Date: Thu, 24 Nov 2016 16:39:48 +0100
+Message-ID: <CAAj1EEy-5JvzguK0iwoKAH_s6FwzN_Sk2kWc-A09xLNrSUgFHQ@mail.gmail.com>
+To: lali@lolo.com
+Content-Type: multipart/mixed; boundary=94eb2c07db68d9787105420dd049
+X-SA-Exim-Connect-IP: 209.85.213.54
+X-SA-Exim-Mail-From: lala@lolo.com
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on mx28lb.world4you.com
+X-Spam-Level: 
+X-Spam-Status: No, score=0.4 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_FROM,
+	GREYLIST_ISWHITE,HTML_MESSAGE,SPF_PASS,T_FREEMAIL_DOC_PDF autolearn=disabled
+	version=3.3.1
+Subject: Testmail mit Anhang
+X-SA-Exim-Version: 4.2.1 (built Thu, 10 Mar 2016 11:08:04 +0100)
+X-SA-Exim-Scanned: Yes (on mx28lb.world4you.com)
+
+--94eb2c07db68d9787105420dd049
+Content-Type: multipart/alternative; boundary=94eb2c07db68d9786b05420dd047
+
+--94eb2c07db68d9786b05420dd047
+Content-Type: text/plain; charset=UTF-8
+
+Siehe Dateien anbei
+
+--94eb2c07db68d9786b05420dd047
+Content-Type: text/html; charset=UTF-8
+
+<div dir="ltr">Siehe Dateien anbei<div><br></div></div>
+
+--94eb2c07db68d9786b05420dd047--
+--94eb2c07db68d9787105420dd049
+Content-Type: text/plain; name="=?UTF-8?Q?TS_Lagerst=C3=A4nde=2Ejpg?="
+Content-Disposition: attachment; filename="=?UTF-8?Q?TS_Lagerst=C3=A4nde=2Ejpg?="
+X-Attachment-Id: f_ivwiy07s0
+
+ATTACHMENT1
+--94eb2c07db68d9787105420dd049
+Content-Type: text/plain; name="Ticket-829168.pdf"
+Content-Disposition: attachment; filename="Ticket-829168.pdf"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ivwiy0aj1
+
+ATTACHMENT2
+--94eb2c07db68d9787105420dd049
+Content-Type: text/plain; charset=UTF-8; name="adb_tine_import.csv"
+Content-Disposition: attachment; filename="adb_tine_import.csv"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ivwiy0ar2
+
+ATTACHMENT3
+--94eb2c07db68d9787105420dd049
+Content-Type: text/plain; name="02-I 11 SPAM-Information v2.doc"
+Content-Disposition: attachment; filename="02-I 11 SPAM-Information v2.doc"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ivwiz1t23
+
+ATTACHMENT4
+--94eb2c07db68d9787105420dd049
+Content-Type: text/plain; name="PC-Beschriftung.xls"
+Content-Disposition: attachment; filename="PC-Beschriftung.xls"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ivwiz1t74
+
+ATTACHMENT5
+--94eb2c07db68d9787105420dd049--
