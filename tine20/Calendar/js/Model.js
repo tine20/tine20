@@ -249,7 +249,19 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
                 ownAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
                 
             attendeeStore.each(function(attendee){
-                var attendeeData = attendee.data.user_type == 'user' ? Ext.apply(attendee.data, defaultAttendeeData) : Ext.apply(attendee.data, defaultResourceData);
+                var attendeeData = Ext.applyIf(Ext.decode(Ext.encode(attendee.data)), defaultAttendeeData);
+
+                switch (attendeeData.user_type.toLowerCase()) {
+                    case 'memberof':
+                        attendeeData.user_type = 'group';
+                        break;
+                    case 'resource':
+                        Ext.apply(attendeeData, defaultResourceData);
+                        break;
+                    default:
+                        break;
+                }
+
                 if (attendee == ownAttendee) {
                     attendeeData.status = 'ACCEPTED';
                 }
