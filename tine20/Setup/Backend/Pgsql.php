@@ -35,7 +35,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             'defaultLength' => 1),
         'text' => array(
             'lengthTypes' => array(
-                256 => 'character varying', //@todo this should be 255 indeed but we have 256 in our setup.xml files
+                255 => 'character varying',
                 65535 => 'character varying',
                 16777215 => 'character varying',
                 4294967295 => 'character varying'),
