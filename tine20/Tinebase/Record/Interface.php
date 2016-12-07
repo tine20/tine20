@@ -154,9 +154,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     /**
      * returns array with record related properties 
      *
+     * @param boolean $_recursive
      * @return array
      */
-    public function toArray();
+    public function toArray($_recursive = TRUE);
     
     /**
      * returns an array with differences to the given record

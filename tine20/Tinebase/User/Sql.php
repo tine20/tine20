@@ -160,7 +160,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $this->rowNameMapping['accountFirstName'], 
                 $this->rowNameMapping['accountLoginName']
             );
-            
+
             // prepare for case insensitive search
             foreach ($defaultValues as $defaultValue) {
                 $whereStatement[] = $this->_dbCommand->prepareForILike($this->_db->quoteIdentifier($defaultValue)) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
@@ -174,6 +174,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
+
+        $select->where($this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . 'is_deleted') . ' = 0');
         
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -209,6 +211,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
+
+        $select->where($this->_db->table_prefix . $this->_tableName . '.' . $this->_db->quoteIdentifier('is_deleted') . ' = 0');
         
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
@@ -1009,9 +1013,66 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
     }
-    
+
     /**
-     * delete a user
+     * hard delete a user from DB, fire Tinebase_Event_User_DeleteAccount event
+     *
+     * @param  string|Tinebase_Model_FullUser $_userId the user(id) to delete
+     * @return Tinebase_Model_FullUser the deleted user
+     * @throws Exception
+     */
+    public function directDeleteUserInSqlBackend($_userId)
+    {
+        if ($_userId instanceof Tinebase_Model_FullUser) {
+            $user = $_userId;
+        } else {
+            $user = $this->getFullUserById($_userId);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Deleting user' . $user->accountLoginName);
+
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+
+        try {
+            $event = new Tinebase_Event_User_DeleteAccount(
+                Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
+            );
+            $event->account = $user;
+            Tinebase_Event::fireEvent($event);
+
+            $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+            $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $user->getId()),
+            );
+            $groupMembersTable->delete($where);
+
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')   . ' = ?', $user->getId()),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+            );
+            $roleMembersTable->delete($where);
+
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
+            );
+            $accountsTable->delete($where);
+
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error while deleting account ' . $e->__toString());
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw($e);
+        }
+
+        return $user;
+    }
+
+    /**
+     * delete a user (delayed; its marked deleted, disabled, hidden and stripped from groups and roles immediately. Full delete and event are fired "async" via actionQueue)
      *
      * @param  mixed  $_userId
      * @return Tinebase_Model_FullUser  the delete user
@@ -1027,19 +1088,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting user' . $user->accountLoginName);
 
-        $event = new Tinebase_Event_User_DeleteAccount(
-            Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct())->toArray()
-        );
-        $event->account = $user;
-        Tinebase_Event::fireEvent($event);
-        
-        $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-        $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
         
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
+
+            $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+            $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $user->getId()),
             );
@@ -1050,11 +1106,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
             );
             $roleMembersTable->delete($where);
-            
+
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
             );
-            $accountsTable->delete($where);
+            $accountsTable->update(array(   'is_deleted' => 1,
+                                            'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+                                            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
+
+            Tinebase_ActionQueue::getInstance()->queueAction('Tinebase_FOO_User.directDeleteUserInSqlBackend', $user->getId());
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
@@ -1175,7 +1235,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $select = $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
             ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED))
+            ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
         $userCount = $this->_db->fetchOne($select);
         return $userCount;
@@ -1226,6 +1287,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $sqlbackend = new Tinebase_Backend_Sql(array(
             'modelName' => 'Tinebase_Model_FullUser',
             'tableName' => $this->_tableName,
+            'modlogActive' => true,
         ));
 
         $userIds = $sqlbackend->search(null, null, Tinebase_Backend_Sql_Abstract::IDCOL);
