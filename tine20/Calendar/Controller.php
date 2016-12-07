@@ -99,6 +99,12 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
 
     protected function _handleDeleteUserEvent($_eventObject)
     {
+        // this needs to happen before deletePersonalFolder. Otherwise the attender display container (the personal folder) is gone and the attendee filter doesnt work anymore!
+        if (!$_eventObject->keepAsContact()) {
+            // remove all event attenders for this contact
+            $this->_deleteEventAttenders($_eventObject);
+        }
+
         if ($_eventObject->keepOrganizerEvents()) {
             $this->_keepOrganizerEvents($_eventObject);
         }
@@ -106,6 +112,50 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
         if ($_eventObject->deletePersonalContainers()) {
             $this->deletePersonalFolder($_eventObject->account);
         }
+    }
+
+    protected function _deleteEventAttenders($_eventObject)
+    {
+        $contactId = $_eventObject->account->contact_id;
+
+        $filter = new Calendar_Model_EventFilter(array(array(
+            'field' => 'attender', 'operator' => 'in', 'value' => array(array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $contactId,
+            ))
+        )));
+
+        $eventController = Calendar_Controller_Event::getInstance();
+        $oldAcl = $eventController->doContainerACLChecks(false);
+        $oldSendNotification = $eventController->sendNotifications(false);
+
+        $events = $eventController->search($filter);
+        /** @var Calendar_Model_Event $event */
+        foreach($events as $event)
+        {
+            $toRemove = array();
+            foreach ($event->attendee as $key => $attendee) {
+                $attendeeUserId = $attendee->user_id instanceof Tinebase_Record_Abstract
+                    ? $attendee->user_id->getId()
+                    : $attendee->user_id;
+
+                if ($attendeeUserId === $contactId && ($attendee->user_type === Calendar_Model_Attender::USERTYPE_USER ||
+                                                        $attendee->user_type === Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
+                {
+                    $toRemove[] = $key;
+                }
+            }
+            if (count($toRemove) > 0) {
+                foreach($toRemove as $index) {
+                    $event->attendee->offsetUnset($index);
+                }
+
+                $eventController->update($event);
+            }
+        }
+
+        $eventController->doContainerACLChecks($oldAcl);
+        $eventController->sendNotifications($oldSendNotification);
     }
 
     protected function _keepOrganizerEvents($_eventObject)

@@ -2105,4 +2105,37 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         
     }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE, $_filter = null)
+    {
+        $model = $_container->model;
+        $filterName = $model . 'Filter';
+
+        // workaround to fix Filemanager as Tinebase_Filesystem does not implement search
+        if (method_exists($this->_backend, 'search') && ($_filter !== null || class_exists($filterName))) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Delete ' . $model . ' records in container ' . $_container->getId());
+
+            if (null === $_filter) {
+                /** @var Tinebase_Model_Filter_FilterGroup $_filter */
+                $_filter = new $filterName(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+                // we add the container_id filter like this because Calendar Filters have special behaviour that we want to avoid
+                // alternatively the calender event controller would have to overwrite this method and deal with this application
+                // specifics itself. But for the time being, this seems like a good generic solution
+                $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+            }
+
+            if ($_ignoreAcl) {
+                $idsToDelete = $this->_backend->search($_filter, null, /* $_onlyIds */true);
+                $this->delete($idsToDelete);
+            } else {
+                $this->deleteByFilter($_filter);
+            }
+        }
+    }
 }

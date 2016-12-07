@@ -51,6 +51,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
         switch($containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $application, $owner, $requiredGrants);
+                $containers->sort('name');
                 break;
                 
             case Tinebase_Model_Container::TYPE_SHARED:

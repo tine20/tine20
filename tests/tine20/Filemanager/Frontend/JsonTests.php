@@ -76,6 +76,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->_json = new Filemanager_Frontend_Json();
         $this->_fsController = Tinebase_FileSystem::getInstance();
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
+        Tinebase_Container::getInstance()->getDefaultContainer('Filemanager');
     }
     
     /**
@@ -711,6 +712,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testMoveFolderNodesToFolderExisting()
     {
+        sleep(1);
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
         $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/dir1';
         $result = $this->_json->moveNodes(array($targetNode['path']), array($testPath), FALSE);
