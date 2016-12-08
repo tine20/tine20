@@ -379,12 +379,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             );
             return;
         }
-        
+
+        $credentials = null;
         if ($_oldRecord->credentials_id) {
             $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
             $credentials->key = substr($userCredentialCache->password, 0, 24);
-            $credentialsBackend->getCachedCredentials($credentials);
-        } else {
+            try {
+                $credentialsBackend->getCachedCredentials($credentials);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new credentials in this case
+                Tinebase_Exception::log($tenf);
+                $credentials = null;
+            }
+        }
+
+        if (! $credentials) {
             $credentials = new Tinebase_Model_CredentialCache(array(
                 'username'  => '',
                 'password'  => ''
