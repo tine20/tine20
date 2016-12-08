@@ -299,4 +299,26 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Set owner for ' . $count . ' containers.');
     }
+
+    /**
+     * update to 9.10
+     *
+     * change length of groups.description column from varchar(255) to text
+     */
+    public function update_9()
+    {
+        if ($this->getTableVersion('groups') < 6) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+            ');
+            $this->_backend->alterCol('groups', $declaration);
+            $this->setTableVersion('groups', '6');
+        }
+
+        $this->setApplicationVersion('Tinebase', '9.10');
+    }
 }
