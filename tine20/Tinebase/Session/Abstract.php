@@ -227,6 +227,8 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                     if (!is_dir($sessionSavepath)) {
                         mkdir($sessionSavepath, 0700);
                     }
+                } else {
+                    $sessionSavepath = $defaultSessionSavePath;
                 }
                 
                 $lastSessionCleanup = Tinebase_Config::getInstance()->get(Tinebase_Config::LAST_SESSIONS_CLEANUP_RUN);
@@ -235,14 +237,14 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
                         'gc_probability' => 0,
                         'gc_divisor'     => 100
                     ));
-                } else if (@opendir($defaultSessionSavePath) !== FALSE) {
+                } else if (@opendir($sessionSavepath) !== FALSE) {
                     Zend_Session::setOptions(array(
                         'gc_probability' => 1,
                         'gc_divisor'     => 100
                     ));
                 } else {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . " Unable to initialize automatic session cleanup. Check permissions to " . ini_get('session.save_path'));
+                        . " Unable to initialize automatic session cleanup. Check permissions to " . $sessionSavepath);
                 }
                 
                 break;
