@@ -170,7 +170,13 @@ class Tinebase_Group
             try {
                 $groupBackend->getGroupById($groupId);
             } catch (Tinebase_Exception_Record_NotDefined $tern) {
-                $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
+                try {
+                    $group = $groupBackend->getGroupByIdFromSyncBackend($groupId);
+                    // TODO use exact exception class Ldap something?
+                } catch (Exception $e) {
+                    // we dont get the group? ok, just ignore it, maybe we don't have rights to view it.
+                    continue;
+                }
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($group, 'create');
                 $groupBackend->addGroupInSqlBackend($group);
             }
