@@ -1102,11 +1102,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Delete ' . $model . ' records in container ' . $container->getId());
 
-                $filter = new $filterName(array(array(
-                    'field' => 'container_id',
-                    'operator' => 'equals',
-                    'value' => intval($container->id)
-                )), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+                $filter = new $filterName(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND
+                    , array('ignoreAcl' => $_ignoreAcl));
+                $filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $container->id));
 
                 if ($_ignoreAcl) {
 
