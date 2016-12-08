@@ -338,9 +338,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
                     + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
             );
-        } else if (response.code && response.code == 403) {
+        } else if (response.code && response.code == 444) {
             //Time Account is closed
-            console.warn(this.grants);
             if(Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
                 this.onClosedWarning.apply(this, arguments);
             } else {

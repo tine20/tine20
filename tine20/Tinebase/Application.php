@@ -128,7 +128,6 @@ class Tinebase_Application
         $application = $this->getApplications()->find('name', $_applicationName);
         
         if (!$application) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Name: ' . $_applicationName);
             throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
         
