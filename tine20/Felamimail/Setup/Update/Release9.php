@@ -49,4 +49,24 @@ class Felamimail_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', 21);
         $this->setApplicationVersion('Felamimail', '9.2');
     }
+    
+    /**
+     * update to 9.3
+     *
+     * change signature to medium text
+     */
+    public function update_2()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>signature</name>
+                    <type>text</type>
+                    <length>16777215</length>
+                </field>');
+        
+        $this->_backend->alterCol('felamimail_account', $declaration);
+        
+        $this->setApplicationVersion('Felamimail', '9.3');
+        $this->setTableVersion('felamimail_account', '22');
+    }
 }
