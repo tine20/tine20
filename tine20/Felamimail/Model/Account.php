@@ -350,6 +350,22 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     $credentials = $credentialsBackend->get($this->{$credentialsField});
                     $credentials->key = substr($userCredentialCache->password, 0, 24);
                     $credentialsBackend->getCachedCredentials($credentials);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // try to use imap credentials & reset smtp credentials if different
+                    if ($_smtp) {
+                        // TODO ask user for smtp creds if this fails
+                        if ($this->smtp_credentials_id !== $this->credentials_id) {
+                            $this->smtp_credentials_id = $this->credentials_id;
+                            Felamimail_Controller_Account::getInstance()->update($this);
+                            return $this->resolveCredentials($_onlyUsername, $_throwExceptio, $_smtp);
+                        }
+                    }
+
+                    if ($_throwException) {
+                        throw $tenf;
+                    } else {
+                        return FALSE;
+                    }
                 } catch (Exception $e) {
                     if ($_throwException) {
                         throw $e;
