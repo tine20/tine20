@@ -652,8 +652,7 @@ Tine.Tinebase.common = {
      * @returns {Boolean} 
      */
     hasRight: function (right, application, resource) {
-        var userRights = [];
-        
+
         if (! (Tine && Tine[application] && Tine[application].registry && Tine[application].registry.get('rights'))) {
             if (Tine.Tinebase.tineInit.isReloading) {
                 Tine.log.info('Tine 2.0 is reloading ...');
@@ -666,9 +665,14 @@ Tine.Tinebase.common = {
             }
             return false;
         }
-        userRights = Tine[application].registry.get('rights');
-        
-        //console.log(userRights);
+        var userRights = Tine[application].registry.get('rights'),
+            allAppRights = Tine[application].registry.get('allrights');
+
+        if (allAppRights && right === 'view' && allAppRights.indexOf('view') < 0) {
+            // switch to run as app has no view right
+            right = 'run';
+        }
+
         var result = false;
         
         for (var i = 0; i < userRights.length; i += 1) {

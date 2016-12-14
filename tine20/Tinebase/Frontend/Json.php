@@ -852,6 +852,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($userApplications as $application) {
                 $appRegistry = array();
                 $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
                 $appRegistry['config'] = isset($clientConfig[$application->name])
                     ? $clientConfig[$application->name]->toArray()
                     : array();
