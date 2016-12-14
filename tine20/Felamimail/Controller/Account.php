@@ -71,7 +71,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_backend = new Felamimail_Backend_Account();
         
-        $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        $this->setImapConfig();
         $this->_useSystemAccount = ((isset($this->_imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $this->_imapConfig)) && $this->_imapConfig['useSystemAccount']);
     }
     
@@ -95,6 +95,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+
+    public function setImapConfig()
+    {
+        $this->_imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
     }
 
     /**
@@ -200,6 +205,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // force a $userFilter filter (ACL)
         if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
+            if (! is_object(Tinebase_Core::getUser())) {
+                throw new Tinebase_Exception_AccessDenied('user object not found');
+            }
             $userFilter = $_filter->createFilter('user_id', 'equals', Tinebase_Core::getUser()->getId());
             $_filter->addFilter($userFilter);
         }
@@ -379,12 +387,21 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             );
             return;
         }
-        
+
+        $credentials = null;
         if ($_oldRecord->credentials_id) {
             $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
             $credentials->key = substr($userCredentialCache->password, 0, 24);
-            $credentialsBackend->getCachedCredentials($credentials);
-        } else {
+            try {
+                $credentialsBackend->getCachedCredentials($credentials);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create new credentials in this case
+                Tinebase_Exception::log($tenf);
+                $credentials = null;
+            }
+        }
+
+        if (! $credentials) {
             $credentials = new Tinebase_Model_CredentialCache(array(
                 'username'  => '',
                 'password'  => ''

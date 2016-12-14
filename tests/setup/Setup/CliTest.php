@@ -83,4 +83,16 @@ class Setup_CliTest extends TestCase
         $this->assertEquals("foo", $result[0]);
         $this->assertEquals("bar", $result[1]);
     }
+
+    /**
+     * Test compare
+     */
+    public function testCompare()
+    {
+        $this->testSetConfig();
+        $result = $this->_cliHelper('compare', array('--compare','--','otherdb=tine20'));
+        $this->assertContains("Array
+(
+)", $result);
+    }
 }

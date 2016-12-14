@@ -46,15 +46,16 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
             $relationBackend->purgeRelationsByType('CALLER');
         }
 
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-            <field>
-                <name>contact_id</name>
-                <type>text</type>
-                <length>40</length>
-            </field>');
-        $this->_backend->addCol('phone_callhistory', $declaration);
-
-        $this->setTableVersion('phone_callhistory', 3);
+        if ($this->getTableVersion('phone_callhistory') < 3) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                <field>
+                    <name>contact_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>');
+            $this->_backend->addCol('phone_callhistory', $declaration);
+            $this->setTableVersion('phone_callhistory', 3);
+        }
 
         $setupUser = self::getSetupFromConfigOrCreateOnTheFly();
 
