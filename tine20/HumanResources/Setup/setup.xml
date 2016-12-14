@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>HumanResources</name>
-    <version>10.0</version>
+    <version>10.1</version>
     <order>51</order>
     <depends>
         <application>Calendar</application>
@@ -755,7 +755,7 @@
         </table>
         <table>
             <name>humanresources_extrafreetime</name>
-            <version>2</version>
+            <version>3</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -773,6 +773,7 @@
                     <name>days</name>
                     <type>integer</type>
                     <notnull>true</notnull>
+                    <unsigned>false</unsigned>
                     <length>4</length>
                 </field>
                 <field>

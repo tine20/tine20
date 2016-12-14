@@ -4,20 +4,15 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Felamimail_Controller_Account
  */
-class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
+class Felamimail_Controller_AccountTest extends TestCase
 {
     /**
      * @var Felamimail_Controller_Account
@@ -42,18 +37,8 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      * @var boolean
      */
     protected $_pwChanged = false;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Felamimail Account Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+
+    protected $_oldConfig = null;
 
     /**
      * Sets up the fixture.
@@ -63,7 +48,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        parent::setUp();
         
         $this->_controller = Felamimail_Controller_Account::getInstance();
         $this->_account = $this->_controller->search()->getFirstRecord();
@@ -85,11 +70,15 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             }
         }
         
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        parent::tearDown();
         
         if ($this->_pwChanged) {
             $testCredentials = TestServer::getInstance()->getTestCredentials();
             $this->_setCredentials($testCredentials['username'], $testCredentials['password']);
+        }
+
+        if ($this->_oldConfig) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_oldConfig);
         }
     }
     
@@ -102,7 +91,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected function _setCredentials($_username, $_password)
     {
         Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_password, true, false);
-        
+
         $oldCredentialCache = Tinebase_Core::getUserCredentialCache();
         
         // update credential cache
@@ -266,5 +255,26 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $savedAccount->resolveCredentials();
         $this->assertEquals('abcde@tine20.org', $savedAccount->user);
         $this->assertEquals('abcde', $savedAccount->password);
+    }
+
+    /**
+     * testUseEmailAsLoginName without dovecot imap user backend
+     *
+     * @see 0012404: useEmailAsUsername IMAP config option not working for standard system accounts
+     */
+    public function testUseEmailAsLoginName()
+    {
+        // change config to standard imap backend
+        $this->_oldConfig = $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $imapConfig->backend = Tinebase_EmailUser::IMAP_STANDARD;
+        $imapConfig->domain = '';
+        $imapConfig->useEmailAsUsername = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
+
+        Felamimail_Controller_Account::getInstance()->delete(array($this->_account->getId()));
+        $this->_account = $this->_controller->search()->getFirstRecord();
+
+        $this->_account->resolveCredentials();
+        $this->assertEquals(Tinebase_Core::getUser()->accountEmailAddress, $this->_account->user);
     }
 }

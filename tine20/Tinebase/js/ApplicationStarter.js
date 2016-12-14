@@ -563,7 +563,13 @@ Tine.Tinebase.ApplicationStarter = {
                     } else {
                         Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
                     }
-                    
+
+                    if (! Tine[appName][gridPanelName].prototype.detailsPanel) {
+                        Tine[appName][gridPanelName].prototype.detailsPanel = {
+                            xtype: 'widget-detailspanel',
+                            recordClass: Tine[appName].Model[modelName]
+                        }
+                    }
                     // add model to global add splitbutton if set
                     if (modelConfig.hasOwnProperty('splitButton') && modelConfig.splitButton == true) {
                         var iconCls = appName + modelName;

@@ -373,11 +373,33 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
+     * update to 9.12
+     *
+     * change length of groups.description column from varchar(255) to text
+     */
+    public function update_11()
+    {
+        if ($this->getTableVersion('groups') < 6) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+            ');
+            $this->_backend->alterCol('groups', $declaration);
+            $this->setTableVersion('groups', '6');
+        }
+
+        $this->setApplicationVersion('Tinebase', '9.12');
+    }
+
+    /**
      * update to 10.0
      *
      * @return void
      */
-    public function update_11()
+    public function update_12()
     {
         $this->setApplicationVersion('Tinebase', '10.0');
     }

@@ -856,6 +856,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _getRelationDuplicateFilter($record)
     {
         $filter = null;
+        /** @var Tinebase_Record_RecordSet $relations */
         $relations = $record->relations;
         
         if (count($relations) === 0 || ! isset($this->_duplicateCheckConfig['relations']['filterField'])) {
@@ -2390,5 +2391,40 @@ abstract class Tinebase_Controller_Record_Abstract
         Tinebase_Record_Interface $_record, Tinebase_Model_FullUser $_updater, $_action, Tinebase_Record_Interface $_oldRecord = NULL, array $_additionalData = array())
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @param Tinebase_Model_Container $_container
+     * @param bool $_ignoreAcl
+     * @param null $_filter
+     */
+    public function deleteContainerContents(Tinebase_Model_Container $_container, $_ignoreAcl = FALSE, $_filter = null)
+    {
+        $model = $_container->model;
+        $filterName = $model . 'Filter';
+
+        // workaround to fix Filemanager/MailFiler as we don't want to delete container contents when moving folders
+        // TODO find a better solution here - needs Filemanager refactoring
+        if (! in_array($model, array('Filemanager_Model_Node', 'MailFiler_Model_Node')) &&
+            method_exists($this->_backend, 'search') && ($_filter !== null || class_exists($filterName))) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Delete ' . $model . ' records in container ' . $_container->getId());
+
+            if (null === $_filter) {
+                /** @var Tinebase_Model_Filter_FilterGroup $_filter */
+                $_filter = new $filterName(array(), Tinebase_Model_Filter_FilterGroup::CONDITION_AND, array('ignoreAcl' => $_ignoreAcl));
+                // we add the container_id filter like this because Calendar Filters have special behaviour that we want to avoid
+                // alternatively the calender event controller would have to overwrite this method and deal with this application
+                // specifics itself. But for the time being, this seems like a good generic solution
+                $_filter->addFilter(new Tinebase_Model_Filter_Id('container_id', 'equals', $_container->id));
+            }
+
+            if ($_ignoreAcl) {
+                $idsToDelete = $this->_backend->search($_filter, null, /* $_onlyIds */true);
+                $this->delete($idsToDelete);
+            } else {
+                $this->deleteByFilter($_filter);
+            }
+        }
     }
 }

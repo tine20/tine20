@@ -341,6 +341,8 @@ class Tinebase_Core
     /**
      * returns an instance of the controller of an application
      *
+     * ATTENTION if ever refactored, this is called via ActionQueue with the single parameter 'Tinebase_FOO_User' to get Tinebase_User (triggered in Tinebase_User_Sql::deleteUserInSqlBackend()
+     *
      * @param   string $_applicationName appname / modelname
      * @param   string $_modelName
      * @param boolean $_ignoreACL
@@ -392,6 +394,9 @@ class Tinebase_Core
                 throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerNameModel . ')!');
             } else {
                 $controllerName = $controllerNameModel;
+                if (! class_exists($controllerName)) {
+                    throw new Tinebase_Exception_NotFound('No Application Controller found (checked class ' . $controllerName . ')!');
+                }
             }
         } else if (! class_exists($controllerName)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

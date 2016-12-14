@@ -964,7 +964,7 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -1308,13 +1308,13 @@
                 <field>
                     <name>model</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
                     <name>title</name>
                     <type>text</type>
-                    <length>256</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

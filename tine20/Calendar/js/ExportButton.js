@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2-14 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 Ext.ns('Tine.Calendar');
@@ -32,6 +32,7 @@ Tine.Calendar.ExportButton = Ext.extend(Tine.widgets.grid.ExportButton, {
                 })
             });
         } else {
+            this.gridPanel = centerPanel;
             this.startDownload(filterData);
         }
     }

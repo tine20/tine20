@@ -199,7 +199,7 @@ class Tinebase_Acl_Roles
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
         if ($application->status !== Tinebase_Application::ENABLED) {
-            throw new Tinebase_Exception_AccessDenied('User has no rights. the application is disabled.');
+            throw new Tinebase_Exception_AccessDenied('User has no rights. The application ' . $_application . ' is disabled.');
         }
         
         $roleMemberships = $this->getRoleMemberships($_accountId);

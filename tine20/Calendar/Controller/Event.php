@@ -1708,7 +1708,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        if (! $hasGrantsFilter) {
+        if (! $hasGrantsFilter && $this->_doContainerACLChecks) {
             // force a grant filter
             // NOTE: actual grants are set via setRequiredGrants later
             $grantsFilter = $_filter->createFilter('grants', 'in', '@setRequiredGrants');

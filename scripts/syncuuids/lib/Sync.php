@@ -127,8 +127,15 @@ class Sync
         ini_set('display_errors', 1);
         ini_set('log_errors', 1);
         set_error_handler('Tinebase_Core::errorHandler', E_ALL);
-        
-        ini_set('iconv.internal_encoding', 'utf-8');
+
+        if (PHP_VERSION_ID > 50600) {
+            ini_set('default_charset', 'UTF-8');
+        } else {
+            // set default internal encoding
+            if (extension_loaded('iconv')) {
+                iconv_set_encoding('internal_encoding', "UTF-8");
+            }
+        }
     }
     
     /**

@@ -393,6 +393,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     border: false,
                     frame: true,
                     layout: 'border',
+                    defaults: { autoScroll: true },
                     items: [Ext.applyIf(this.getRecordFormItems(), {
                         region: 'center',
                         xtype: 'columnform',

@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+PRODID:-//Microsoft Corporation//Outlook 12.0 MIMEDIR//EN
+VERSION:2.0
+METHOD:PUBLISH
+BEGIN:VEVENT
+CLASS:PUBLIC
+CREATED:20081105T104258Z
+DESCRIPTION:A discussion with Tyler about how everything is over coffee
+  and donuts. I imagine we'll probably talk about our personal projects.
+DTEND:20081105T160000Z
+DTSTAMP:20081105T104200Z
+DTSTART:20081105T150000Z
+LAST-MODIFIED:20081105T104258Z
+SEQUENCE:0
+SUMMARY:Meeting with Tyler at Starbucks
+TRANSP:OPAQUE
+UID:5aaratdeecgjat4cbjpif5dvms@google
+END:VEVENT
+END:VCALENDAR

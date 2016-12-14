@@ -431,6 +431,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        /**
+         * config keys:
+         *
+         * useSystemAccount (bool)
+         * domain (string)
+         * useEmailAsUsername (bool)
+         * host (string)
+         * port (integer)
+         * ssl (bool)
+         * user (string) ?
+         * backend (string) - see Tinebase_EmailUser::$_supportedBackends
+         *
+         */
         self::IMAP => array(
                                    //_('System IMAP')
             'label'                 => 'System IMAP',

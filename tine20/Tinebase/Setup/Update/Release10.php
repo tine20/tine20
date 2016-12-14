@@ -23,7 +23,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 10.1
+     * update to 10.2
      *
      * @see 0012300: add container owner column
      */
@@ -32,5 +32,17 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
         $release9->update_10();
         $this->setApplicationVersion('Tinebase', '10.2');
+    }
+
+    /**
+     * update to 10.3
+     *
+     * change length of groups.description column from varchar(255) to text
+     */
+    public function update_2()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_11();
+        $this->setApplicationVersion('Tinebase', '10.3');
     }
 }

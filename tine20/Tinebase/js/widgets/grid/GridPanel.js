@@ -522,8 +522,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             items: this.grid
         }];
 
+
         // add detail panel
         if (this.detailsPanel) {
+
+            // just in case it's a config only
+            this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
+
             this.items.push({
                 region: 'south',
                 border: false,
