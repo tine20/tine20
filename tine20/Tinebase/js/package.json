@@ -11,7 +11,7 @@
     "postal.xwindow": "tine20/postal.xwindow"
   },
   "devDependencies": {
-    "unminified-webpack-plugin": "tine20/unminified-webpack-plugin",
+    "unminified-webpack-plugin": "tine20/unminified-webpack-plugin#1.0.0pl1",
     "webpack": "https://registry.npmjs.org/webpack/-/webpack-1.13.0.tgz",
     "webpack-dev-server": "^1.14.1"
   }
