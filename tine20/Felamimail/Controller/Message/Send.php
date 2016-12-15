@@ -518,7 +518,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if ($_mail->getMessageId() === NULL) {
             $domainPart = substr($_account->email, strpos($_account->email, '@'));
             $uid = Tinebase_Record_Abstract::generateUID();
-            $_mail->setMessageId('<' . $uid . $domainPart . '>');
+            $_mail->setMessageId($uid . $domainPart);
         }
         
         if ($_message !== NULL) {
