@@ -139,7 +139,9 @@ Tine.Tinebase.tineInit = {
     },
 
     initPostal: function () {
-        if (! window.postal) return;
+        if (! window.postal) {
+            return;
+        }
 
         var config = postal.fedx.transports.xwindow.configure();
         postal.fedx.transports.xwindow.configure( {
@@ -831,7 +833,10 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    Tine.Tinebase.tineInit.checkWebpack();
+    if (Tine.clientVersion.buildType === 'DEVELOPMENT') {
+        // TODO do something similar for RELEASE/DEBUG?
+        Tine.Tinebase.tineInit.checkWebpack();
+    }
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
