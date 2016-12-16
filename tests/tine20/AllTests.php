@@ -44,7 +44,6 @@ class AllTests
         $suite->addTest(Inventory_AllTests::suite());
         $suite->addTest(Events_AllTests::suite());
         $suite->addTest(ExampleApplication_AllTests::suite());
-        $suite->addTest(Sipgate_AllTests::suite());
         $suite->addTest(SimpleFAQ_AllTests::suite());
         $suite->addTest(CoreData_AllTests::suite());
         $suite->addTest(Zend_AllTests::suite());
