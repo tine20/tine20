@@ -690,6 +690,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * TODO support Filemanager files
      * TODO allow to omit $messageuid, $partId
+     * TODO write a test for this
      */
     protected function _getFileNodeAttachment(&$attachment)
     {
@@ -716,11 +717,18 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             ));
         $node = $nodeController->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
         if ($node) {
-            $mailpart = $nodeController->getPartFromNode($node, $partId);
-            // TODO use streams
-            $content = $content = Felamimail_Message::getDecodedContent($mailpart);
-            $part = new Zend_Mime_Part($content);
-            $part->encoding = Zend_Mime::ENCODING_BASE64;
+            if ($appname === 'MailFiler') {
+                $mailpart = MailFiler_Controller_Message::getInstance()->getPartFromNode($node, $partId);
+
+                // TODO use streams
+                $content = Felamimail_Message::getDecodedContent($mailpart);
+                $part = new Zend_Mime_Part($content);
+                $part->encoding = Zend_Mime::ENCODING_BASE64;
+
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' We don\'t support ' . $appname . ' nodes as attachment yet.');
+            }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not find file node attachment');
