@@ -244,27 +244,24 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view = new Zend_View();
         $baseDir = dirname(dirname(dirname(__FILE__)));
         $view->setScriptPath("$baseDir/Tinebase/views");
-        
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
-        
-        require_once 'jsb2tk/jsb2tk.php';
-        $view->jsb2tk = new jsb2tk(array(
-            'deploymode'    => jsb2tk::DEPLOYMODE_STATIC,
-            'includemode'   => jsb2tk::INCLUDEMODE_INDIVIDUAL,
-            'appendctime'   => TRUE,
-            'htmlindention' => "    ",
-        ));
-        
-        
-        foreach($orderedApplications as $appName) {
-            $jsb2File = "$baseDir/$appName/$appName.jsb2";
-            if (is_readable($jsb2File)){
-                $view->jsb2tk->register($jsb2File, $appName);
+
+        if (TINE20_BUILDTYPE =='DEVELOPMENT') {
+            $devIncludes = array();
+            $jsFilestoInclude = $this->_getFilesToWatch('js');
+
+            $webpackHelper = __DIR__ . '/../js/webpack-dev-includes.js';
+            $webpackBuilds = json_decode(`node -e 'console.log(JSON.stringify(require("$webpackHelper")))'`);
+
+            foreach($jsFilestoInclude as $jsFileToInclude) {
+                if (in_array($jsFileToInclude, $webpackBuilds)) {
+                    $devIncludes[] = $jsFileToInclude;
+
+                }
             }
+
+            $view->devIncludes = $devIncludes;
         }
-        
+
         $view->registryData = array();
         
         $this->_setMainscreenHeaders();
@@ -514,46 +511,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         die();
     }
-      
+
     /**
-     * return hash for js files
-     * hash changes if files get changed or list of filesnames changes
-     * 
-     */
-    public function getJsCssHash()
-    {
-        // hash for js files
-        $filesToWatch = $this->_getFilesToWatch('js');
-        
-        $serverETag = hash('sha1', implode('', $filesToWatch));
-        $lastModified = $this->_getLastModified($filesToWatch);
-        
-        $hash = hash('sha1', $serverETag . $lastModified);
-        
-        // hash for css files + hash of js files
-        $filesToWatch = $this->_getFilesToWatch('css');
-        
-        $serverETag = hash('sha1', implode('', $filesToWatch));
-        $lastModified = $this->_getLastModified($filesToWatch);
-        
-        $hash = hash('sha1', $hash . $serverETag . $lastModified);
-        
-        return $hash;
-    }
-    
-    /**
-     * return css files if changed
-     * 
-     */
-    public function getCssFiles()
-    {
-        $this->_deliverChangedFiles('css');
-        
-        die();
-    }
-    
-    /**
-     * check if js or css files have changed and return all js/css as one big file or return "HTTP/1.0 304 Not Modified" if files don't have changed
+     * check if js files have changed and return all js as one big file or return "HTTP/1.0 304 Not Modified" if files don't have changed
      * 
      * @param string $_fileType
      * @param array $filesToWatch
@@ -584,6 +544,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
 
         }
+
+        $filesToWatch = array_filter($filesToWatch, 'file_exists');
+
         $lastModified = $this->_getLastModified($filesToWatch);
         
         // use last modified time also
@@ -621,7 +584,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
             
             header("Last-Modified: " . $lastModified);
-            header('Content-Type: ' . ($_fileType == 'css' ? 'text/css' : 'application/javascript'));
+            header('Content-Type: application/javascript');
             header('Etag: "' . $serverETag . '"');
             
             flush();
@@ -642,28 +605,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
         $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
-        
+        $filesToWatch = array();
+
         foreach ($orderedApplications as $application) {
             switch($_fileType) {
-                case 'css':
-                    $cssFile = "{$application}/css/{$application}-FAT.css.inc";
-                    if (file_exists($cssFile)) {
-                        $filesToWatch[] = $cssFile;
-                    }
-                    break;
                 case 'js':
                     $prefix = "{$application}/js/{$application}";
-                    $suffix = '-FAT' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : '') . '.js.inc';
-
-                    $webpackFile = "{$prefix}-libs{$suffix}";
-                    if (file_exists($webpackFile)) {
-                        $filesToWatch[] = $webpackFile;
-                    }
+                    $suffix = '-FAT' . (TINE20_BUILDTYPE == 'DEBUG' ? '.debug' : '') . '.js';
 
                     $jsFile = "{$prefix}{$suffix}";
-                    if (file_exists($jsFile)) {
-                        $filesToWatch[] = $jsFile;
-                    }
+                    $filesToWatch[] = $jsFile;
                     break;
                 case 'lang':
                     $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
@@ -672,9 +623,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $basePath = is_readable("$customPath/$lang/$fileName") ?  "$customPath/$lang" : '.';
 
                     $langFile = "{$basePath}/{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale() . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
-                    if (file_exists($langFile)) {
-                        $filesToWatch[] = $langFile;
-                    }
+                    $filesToWatch[] = $langFile;
                     break;
                 default:
                     throw new Exception('no such fileType');
@@ -866,66 +815,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         $this->_downloadFileNode($node, $path);
         exit;
-    }
-
-    /**
-     * get resources for caching purposes
-     *
-     * TODO make this OS independent (currently this needs find, grep egrep)
-     */
-    public function getResources()
-    {
-        $tine20path = dirname(dirname(dirname(__FILE__)));
-        $files = array(
-            'Tinebase/css/tine-all.css',
-            'Tinebase/js/tine-all.js',
-            'styles/tine20.css',
-            'library/ExtJS/ext-all.js',
-            'library/ExtJS/adapter/ext/ext-base.js',
-            'library/ExtJS/resources/css/ext-all.css',
-            'images/oxygen/16x16/actions/knewstuff.png' // ???
-        );
-
-        // no subdirs! => solaris does not know find -maxdeps 1
-        exec("cd \"$tine20path\"; ls images/* | grep images/ | egrep '\.png|\.gif|\.jpg'", $baseImages);
-        $files = array_merge($files, $baseImages);
-
-        $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
-        preg_match_all('/url\(..\/..\/(images.*)\)/U', $tineCSS, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        $tineCSS = file_get_contents($tine20path . '/Tinebase/css/tine-all-debug.css');
-        preg_match_all('/url\(..\/..\/(library.*)\)/U', $tineCSS, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
-        preg_match_all('/labelIcon: [\'|"](.*png)/U', $tineJs, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
-        preg_match_all('/labelIcon: [\'|"](.*gif)/U', $tineJs, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
-        preg_match_all('/src=[\'|"](.*png)/U', $tineJs, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        $tineJs = file_get_contents($tine20path . '/Tinebase/js/tine-all-debug.js');
-        preg_match_all('/src=[\'|"](.*gif)/U', $tineJs, $matches);
-        $files = array_merge($files, $matches[1]);
-
-        exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.gif", $extImages);
-        $files = array_merge($files, $extImages);
-        exec("cd \"$tine20path\"; find library/ExtJS/resources/images -type f -name *.png", $extImages);
-        $files = array_merge($files, $extImages);
-
-        exec("cd \"$tine20path\"; find styles -type f", $tine20Styles);
-        $files = array_merge($files, $tine20Styles);
-
-        $files = array_unique($files);
-
-        // return resources as js array
-        echo '["' . implode('", "', $files) . '""]';
     }
 
     /**

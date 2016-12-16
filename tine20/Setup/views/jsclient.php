@@ -21,12 +21,7 @@
     <!-- EXT JS -->
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css" />
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-blue.css" />
-    <?php /*
-    <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" />
-    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/yui-utilities.js"></script> -->
-    <!-- <script type="text/javascript" src="library/ExtJS/adapter/yui/ext-yui-adapter.js"></script> --> 
-    */?>
-    
+
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
 
@@ -39,21 +34,15 @@
         $locale = Zend_Registry::get('locale');
         switch(TINE20_BUILDTYPE) {
             case 'RELEASE':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT.css' />";
-                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT.css' />";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-libs-FAT.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . ".js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . ".js'></script>";
                 break;
                 
             case 'DEBUG':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT.css' />";
-                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT.css' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT-debug.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-libs-FAT-debug.js'></script>";
-                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT-debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-lang-" . (string)$locale . "-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-lang-" . (string)$locale . "-debug.js'></script>";
                 break;
@@ -62,12 +51,12 @@
             default:
                 echo "\n    <!-- amd/commonjs loader dependencies -->";
                 $webPackDevServerUrl = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ':10443/';
-                echo "\n    <script src='{$webPackDevServerUrl}Tinebase-libs-FAT.js'></script>";
+                echo "\n    <script src='{$webPackDevServerUrl}Tinebase-FAT.js'></script>";
+                echo "\n    <script src='{$webPackDevServerUrl}Setup-FAT.js'></script>";
                 echo "\n    <script src='{$webPackDevServerUrl}webpack-dev-server.js'></script>";
 
-                echo "\n\n    <!-- jsbuilder dependencies -->";
-                echo $this->jsb2tk->getHTML();
-                echo '    <script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+                echo "\n    <!-- translations -->";
+                echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
                 break;
         }?>
 </head>

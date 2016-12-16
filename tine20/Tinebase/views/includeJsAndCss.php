@@ -11,7 +11,7 @@
  * @todo        check if build script puts the translation files in build dir $tineBuildPath
  */
 
-echo "<!-- Tine 2.0 static files -->\n";
+echo "\n    <!-- Tine 2.0 static files -->";
 
 // this variable gets replaced by the buildscript
 $tineBuildPath = '';
@@ -20,14 +20,14 @@ $locale = (Tinebase_Core::isRegistered(Tinebase_Core::LOCALE)) ? Tinebase_Core::
 
 switch(TINE20_BUILDTYPE) {
     case 'DEVELOPMENT':
-        echo "\n    <!-- amd/commonjs loader dependencies -->";
-        $webPackDevServerUrl = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ':10443/';
-        echo "\n    <script src='{$webPackDevServerUrl}Tinebase-libs-FAT.js'></script>";
-        echo "\n    <script src='{$webPackDevServerUrl}webpack-dev-server.js'></script>";
+        echo "\n    <!-- webpack-dev-server includes -->";
+        foreach($this->devIncludes as $devInclude) {
+            echo "\n    <script src='{$devInclude}'></script>";
+        }
+        echo "\n    <script src='webpack-dev-server.js'></script>";
 
-        echo "\n\n    <!-- jsbuilder dependencies -->";
-        echo $this->jsb2tk->getHTML();
-        echo '    <script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+        echo "\n    <!-- translations -->";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
         $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
         if (! empty($customJSFiles)) {
             echo "\n    <!-- HEADS UP! CUSTOMJS IN PLACE! -->";
@@ -37,7 +37,6 @@ switch(TINE20_BUILDTYPE) {
 
     case 'DEBUG':
     case 'RELEASE':
-        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
         echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
         echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations\"></script>";
         break;

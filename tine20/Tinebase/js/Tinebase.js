@@ -18,6 +18,9 @@ require('postal.xwindow');
 require('postal.request-response');
 var html2canvas = require('html2canvas');
 
+// include traditional stuff as defined in jsb2
+require('./../../Tinebase/Tinebase.jsb2');
+
 module.exports = {
     postal: postal,
     html2canvas: html2canvas,
