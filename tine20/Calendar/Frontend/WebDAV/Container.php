@@ -180,7 +180,6 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $properties = array(
             '{http://calendarserver.org/ns/}getctag' => $ctags,
-            '{DAV:}sync-token'  => Tinebase_WebDav_Plugin_SyncToken::SYNCTOKEN_PREFIX . $ctags,
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
@@ -193,7 +192,14 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar ' . $this->_container->name,
             '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
         );
-        
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+            $properties['{DAV:}sync-token'] = Tinebase_WebDav_Plugin_SyncToken::SYNCTOKEN_PREFIX . $ctags;
+        } else {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+		}
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
             $properties['{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
         }
@@ -335,13 +341,17 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     protected function _getMaxPeriodFrom()
     {
         // if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active
-        if (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT'])) {
+        if ((Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED))  && (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT']))) {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
             $result = Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV_SYNCTOKEN, 100);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' SyncToken active: allow to filter for all calendar events => return ' . $result . ' months');
             return $result;
         }
+		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+			Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled or client does not support it');
         return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
     }
     
@@ -470,7 +480,14 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function supportsSyncToken()
     {
-        return true;
+		if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+			return true;
+		}
+		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+		return false;
     }
 
     /**
