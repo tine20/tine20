@@ -231,11 +231,101 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 9.9
+     * update to 9.11
+     *
+     * @see 0012300: add container owner column
+     */
+    public function update_8()
+    {
+        if ($this->getTableVersion('container') < 11) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                <name>owner_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>false</notnull>
+            </field>
+            ');
+            $this->_backend->addCol('container', $declaration);
+
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>owner_id</name>
+                    <field>
+                        <name>owner_id</name>
+                    </field>
+                </index>
+            ');
+
+            $this->_backend->addIndex('container', $declaration);
+            $this->setTableVersion('container', 11);
+        }
+
+        $this->_setContainerOwners();
+
+        $this->setApplicationVersion('Tinebase', '9.9');
+    }
+
+    /**
+     * write owner to all personal containers
+     */
+    protected function _setContainerOwners()
+    {
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL),
+            array('field' => 'owner_id', 'operator' => 'isnull', 'value' => ''),
+        ));
+        $count = 0;
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => 0,
+            'limit' => 100,
+        ));
+        $containers = Tinebase_Container::getInstance()->search($filter, $paging);
+        while (count($containers) > 0) {
+            foreach ($containers as $container) {
+                $ownerId = Tinebase_Container::getInstance()->getContainerOwner($container);
+                if ($ownerId) {
+                    $container->owner_id = $ownerId;
+                    Tinebase_Container::getInstance()->update($container);
+                    $count++;
+                }
+            }
+            $paging->start += $paging->limit;
+            $containers = Tinebase_Container::getInstance()->search($filter, $paging);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Set owner for ' . $count . ' containers.');
+    }
+
+    /**
+     * update to 9.10
+     *
+     * change length of groups.description column from varchar(255) to text
+     */
+    public function update_9()
+    {
+        if ($this->getTableVersion('groups') < 6) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>description</name>
+                    <type>text</type>
+                    <notnull>false</notnull>
+                </field>
+            ');
+            $this->_backend->alterCol('groups', $declaration);
+            $this->setTableVersion('groups', '6');
+        }
+
+        $this->setApplicationVersion('Tinebase', '9.10');
+    }
+
+    /**
+     * update to 9.11
      *
      * @see xxx: add numberables
      */
-    public function update_8()
+    public function update_10()
     {
         $declaration = new Setup_Backend_Schema_Table_Xml('<table>
             <name>numberable</name>
@@ -279,15 +369,15 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         </table>');
 
         $this->createTable('numberable', $declaration);
-        $this->setApplicationVersion('Tinebase', '9.9');
+        $this->setApplicationVersion('Tinebase', '9.11');
     }
 
     /**
-     * update to 9.10
+     * update to 9.12
      *
      * @see 0012162: create new MailFiler application
      */
-    public function update_9()
+    public function update_11()
     {
         if ($this->getTableVersion('tree_fileobjects') < 3) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
@@ -299,96 +389,6 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
             ');
             $this->_backend->alterCol('tree_fileobjects', $declaration);
             $this->setTableVersion('tree_fileobjects', '3');
-        }
-
-        $this->setApplicationVersion('Tinebase', '9.10');
-    }
-
-    /**
-     * update to 9.11
-     *
-     * @see 0012300: add container owner column
-     */
-    public function update_10()
-    {
-        if ($this->getTableVersion('container') < 11) {
-            $declaration = new Setup_Backend_Schema_Field_Xml(
-                '<field>
-                <name>owner_id</name>
-                <type>text</type>
-                <length>40</length>
-                <notnull>false</notnull>
-            </field>
-            ');
-            $this->_backend->addCol('container', $declaration);
-
-            $declaration = new Setup_Backend_Schema_Index_Xml('
-                <index>
-                    <name>owner_id</name>
-                    <field>
-                        <name>owner_id</name>
-                    </field>
-                </index>
-            ');
-
-            $this->_backend->addIndex('container', $declaration);
-            $this->setTableVersion('container', 11);
-        }
-
-        $this->_setContainerOwners();
-
-        $this->setApplicationVersion('Tinebase', '9.11');
-    }
-
-    /**
-     * write owner to all personal containers
-     */
-    protected function _setContainerOwners()
-    {
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL),
-            array('field' => 'owner_id', 'operator' => 'isnull', 'value' => ''),
-        ));
-        $count = 0;
-        $paging = new Tinebase_Model_Pagination(array(
-            'start' => 0,
-            'limit' => 100,
-        ));
-        $containers = Tinebase_Container::getInstance()->search($filter, $paging);
-        while (count($containers) > 0) {
-            foreach ($containers as $container) {
-                $ownerId = Tinebase_Container::getInstance()->getContainerOwner($container);
-                if ($ownerId) {
-                    $container->owner_id = $ownerId;
-                    Tinebase_Container::getInstance()->update($container);
-                    $count++;
-                }
-            }
-            $paging->start += $paging->limit;
-            $containers = Tinebase_Container::getInstance()->search($filter, $paging);
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Set owner for ' . $count . ' containers.');
-    }
-
-    /**
-     * update to 9.12
-     *
-     * change length of groups.description column from varchar(255) to text
-     */
-    public function update_11()
-    {
-        if ($this->getTableVersion('groups') < 6) {
-            $declaration = new Setup_Backend_Schema_Field_Xml(
-                '<field>
-                    <name>description</name>
-                    <type>text</type>
-                    <notnull>false</notnull>
-                </field>
-            ');
-            $this->_backend->alterCol('groups', $declaration);
-            $this->setTableVersion('groups', '6');
         }
 
         $this->setApplicationVersion('Tinebase', '9.12');

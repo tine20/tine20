@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<application>
-    <name>RequestTracker</name>
-    <version>5.0</version>
-    <order>70</order>
-    <depends />
-    <tables />
-    <status>disabled</status>
-</application>
