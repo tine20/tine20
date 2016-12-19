@@ -406,6 +406,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const VERSION_CHECK = 'versionCheck';
 
     /**
+     * WEBDAV_SYNCTOKEN_ENABLED
+     *
+     * @var string
+     */
+    const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -1005,6 +1012,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'Use login name instead of full name',
         //_('Use login name instead of full name for webdav.')
             'description'           => 'Use login name instead of full name for webdav.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => FALSE,
+        ),
+        self::WEBDAV_SYNCTOKEN_ENABLED => array(
+        //_('Enable SyncToken plugin')
+            'label'                 => 'Enable SyncToken plugin',
+        //_('Enable the use of the SyncToken plugin.')
+            'description'           => 'Enable the use of the SyncToken plugin.',
             'type'                  => 'bool',
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,

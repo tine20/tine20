@@ -156,27 +156,33 @@ class Calendar_Convert_Event_VCalendar_Factory
      */
     static public function supportsSyncToken($_userAgent)
     {
-        $result = false;
-        list($backend, $version) = self::parseUserAgent($_userAgent);
-        switch ($backend) {
-            case self::CLIENT_MACOSX:
-                if (version_compare($version, '10.9', '>=')) {
-                    $result = true;
-                }
-                break;
-            case self::CLIENT_THUNDERBIRD:
-                if (version_compare($version, '4', '>=')) {
-                    $result = true;
-                }
-                break;
-        }
+		$result = false;
+		if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+			list($backend, $version) = self::parseUserAgent($_userAgent);
+			switch ($backend) {
+				case self::CLIENT_MACOSX:
+					if (version_compare($version, '10.9', '>=')) {
+						$result = true;
+					}
+					break;
+				case self::CLIENT_THUNDERBIRD:
+					if (version_compare($version, '4', '>=')) {
+						$result = true;
+					}
+					break;
+			}
 
-        if ($result) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' Client ' . $backend . ' version ' . $version . ' supports SyncToken.');
-        }
-
+			if ($result) {
+				if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+					Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+						' Client ' . $backend . ' version ' . $version . ' supports SyncToken.');
+			}
+		} else {
+			if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+				Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+		}
         return $result;
     }
 }
