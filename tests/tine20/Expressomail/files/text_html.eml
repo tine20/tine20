@@ -1,0 +1,70 @@
+Received-SPF: pass (mail-3.metaways.net: domain of
+	gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org designates
+	208.92.234.80 as permitted sender)
+Received: from lists.gentoo.org (pigeon.gentoo.org [208.92.234.80])
+	by mail3.metaways.net (Postfix) with ESMTPS id D02561AAA
+	for <lars@kneschke.de>; Mon, 13 Apr 2009 14:46:08 +0200 (MEST)
+Received: from pigeon.gentoo.org (localhost [127.0.0.1])
+	by pigeon.gentoo.org (Postfix) with SMTP id BA76AE0A8D;
+	Mon, 13 Apr 2009 12:21:38 +0000 (UTC)
+X-Original-To: gentoo-dev@lists.gentoo.org
+Delivered-To: gentoo-dev@lists.gentoo.org
+Received: from smtprelay04.ispgateway.de (smtprelay04.ispgateway.de [80.67.18.16])
+	by pigeon.gentoo.org (Postfix) with ESMTP id 89B01E0A8D
+	for <gentoo-dev@lists.gentoo.org>; Mon, 13 Apr 2009 12:21:38 +0000 (UTC)
+Received: from [85.179.2.185] (helo=[192.168.0.3])
+	by smtprelay04.ispgateway.de
+	with esmtpsa (TLSv1:AES256-SHA:256)	(Exim 4.68)	(envelope-from <webmaster@hartwork.org>)
+	id 1LtLAP-0000Xj-LF	for gentoo-dev@lists.gentoo.org;
+	Mon, 13 Apr 2009 14:21:37 +0200
+Message-ID: <49E32E51.60204@hartwork.org>
+Date: Mon, 13 Apr 2009 14:21:37 +0200
+From: Pipping, Sebastian (Luxembourg) <webmaster@changchung.org>
+User-Agent: Thunderbird 2.0.0.19 (X11/20090216)
+Precedence: bulk
+List-Post: <mailto:gentoo-dev@lists.gentoo.org>
+List-Help: <mailto:gentoo-dev+help@lists.gentoo.org>
+List-Unsubscribe: <mailto:gentoo-dev+unsubscribe@lists.gentoo.org>
+List-Subscribe: <mailto:gentoo-dev+subscribe@lists.gentoo.org>
+List-Id: Gentoo Linux mail <gentoo-dev.gentoo.org>
+X-BeenThere: gentoo-dev@lists.gentoo.org
+X-Tine20TestMessage: text_html.eml
+Reply-to: gentoo-dev@lists.gentoo.org
+To: gentoo-dev@lists.gentoo.org, webmaster@changchung.org
+Subject: Re: [gentoo-dev] `paludis --info' is not like `emerge --info'
+References: <20090218232212.5452b86d@epia.jer-c2.orkz.net>
+	<20090218225506.14b91815@snowcone> <20090404151730.55b89242@gentoo.org>
+In-Reply-To: <20090404151730.55b89242@gentoo.org>
+X-Df-Sender: 874396
+X-Antispam: No, score=-0.0/5.0, scanned in 3.266sec at (mail3.metaways.net
+	[127.0.0.1])
+	by smf-spamd v1.3.1 - http://smfs.sf.net/
+X-Virus-Scanned: ClamAV 0.92.1/9228/Mon Apr 13 01:21:25 2009 on
+	mail-3.metaways.net
+X-Virus-Status: Clean
+Return-Path: gentoo-dev+bounces-35440-lars=kneschke.de@lists.gentoo.org
+MIME-Version: 1.0
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+
+<html>
+<body>
+Just an idea without knowing all the details:
+Could
+
+ - "--emerge-info" and "--emerge-info-verbose"
+   options be added to paludis or
+
+ - a converter script be written to convert
+   paludis output to feel like emerge output
+
+to solves this issue?  Would that technically
+be possible?  Is paludis returning a superset
+of the information returned by portage?
+
+
+
+Sebastian
+</body>
+</html>
+

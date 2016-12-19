@@ -1,0 +1,27 @@
+sujet: November 2010 Crystal Newsletter - Cut the Rope Update Released!
+De: Crystal Newsletter <noreply@crystalsdk.com> [+]
+Date: Wed Dec 01 2010 23:27:40 GMT+0100 (Romance Standard Time)
+to: ,inscription@arrakeen.net 
+return-path: <noreply@crystalsdk.com>
+x-original-to: inscription@arrakeen.net
+delivered-to: inscription@arrakeen.net
+received: from localhost (localhost [127.0.0.1]) by server.arrakeen.net (Postfix) with ESMTP id 724D7AF73 for <inscription@arrakeen.net>; Wed, 1 Dec 2010 23:27:40 +0100 (CET),from server.arrakeen.net ([127.0.0.1]) by localhost (server.arrakeen.net [127.0.0.1]) (amavisd-new, port 10024) with ESMTP id 5EDnWCdk9brX for <inscription@arrakeen.net>; Wed, 1 Dec 2010 23:27:20 +0100 (CET),from mirror1.chillingo.com (unknown [67.201.43.101]) by server.arrakeen.net (Postfix) with ESMTPS id EEDD9AF60 for <inscription@arrakeen.net>; Wed, 1 Dec 2010 23:27:09 +0100 (CET),(qmail 25856 invoked by uid 10002); 30 Nov 2010 19:26:04 -0800
+x-quarantine-id: <5EDnWCdk9brX>
+x-virus-scanned: Debian amavisd-new at arrakeen.net
+x-amavis-alert: BAD HEADER SECTION, Duplicate header field: "To"
+x-spam-flag: NO
+x-spam-score: 4.649
+x-spam-level: ****
+x-spam-status: No, score=4.649 tagged_above=2 required=6.31 tests=[BAYES_50=0.8, DATE_IN_PAST_12_24=1.049, HTML_IMAGE_RATIO_04=0.556, HTML_MESSAGE=0.001, RCVD_IN_BRBL_LASTEXT=1.449, RCVD_IN_SORBS_DUL=0.001, RDNS_NONE=0.793] autolearn=no
+date: 30 Nov 2010 19:26:04 -0800
+message-id: <20101201032604.25853.qmail@mirror1.chillingo.com>
+to: ,inscription@arrakeen.net
+subject: November 2010 Crystal Newsletter - Cut the Rope Update Released!
+from: Crystal Newsletter <noreply@crystalsdk.com>
+reply-to: noreply@crystalsdk.com
+mime-version: 1.0
+content-type: text/plain
+X-Tine20TestMessage: text/comma
+Content-Transfer-Encoding: 7bit
+
+testtext

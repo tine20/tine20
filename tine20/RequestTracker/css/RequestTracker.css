@@ -1,0 +1,107 @@
+/*
+ * Tine 2.0
+ * 
+ * @package     RequestTracker
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id:Phone.css 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ */
+ 
+.RequestTrackerIconCls {
+    background-image:url(../../images/oxygen/16x16/actions/news-subscribe.png) !important;
+}
+.x-btn-medium .RequestTrackerIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/news-subscribe.png) !important;
+}
+.x-btn-large .RequestTrackerIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/news-subscribe.png) !important;
+}
+
+.RequestTracker-History {
+    /*padding: 2px;*/
+    border-bottom: 1px solid #EDEDED;
+    font-family:arial,tahoma,helvetica,sans-serif;
+    font-size:11px;
+    font-size-adjust:none;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+}
+
+.RequestTracker-History-Item {
+    padding: 2px 0px 2px 5px;
+    border-top: 1px solid #EDEDED;
+}
+
+.RequestTracker-History-Created {
+    float: left;
+    padding-right: 10px;
+}
+
+.RequestTracker-History-Description {
+    font-weight: bold;
+    clear: right;
+}
+
+.RequestTracker-History-Content {
+    padding-left: 30px;
+}
+
+/******************* History Types *******************/
+.RequestTracker-History-Correspond {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+.RequestTracker-History-Comment {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+.RequestTracker-History-Create {
+    border-left: 5px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+.RequestTracker-History-Take {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Give {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-AddWatcher {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Force {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Steal {
+    border-left: 5px solid #4488CC;
+    border-right: 2px solid #4488CC;
+}
+
+.RequestTracker-History-Status {
+    border-left: 5px solid #BB3322;
+    border-right: 2px solid #BB3322;
+}
+
+.RequestTracker-History-Set {
+    border-left: 5px solid #BB3322;
+    border-right: 2px solid #BB3322;
+}
+
+.RequestTracker-History-AddReminder {
+    border-left: 5px solid #888888;
+    border-right: 2px solid #888888;
+}
+

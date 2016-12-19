@@ -1,0 +1,5 @@
+- copy mails (as .eml) to tests/tine20/Felamimail/files/other
+     * - add following header:
+     *      X-Tine20TestMessage: _filename_
+     * - run the test with ->
+     * $ phpunit --filter testCheckOtherMails Felamimail_Controller_MessageTest

@@ -1,0 +1,95 @@
+/**
+ * Tine 2.0
+ *
+ * @package     Expressodriver
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Serpro (http://www.serpro.gov.br)
+ * @author      Marcelo Teixeira <marcelo.teixeira@serpro.gov.br>
+ * @author      Edgar de Lucca <edgar.lucca@serpro.gov.br>
+ *
+ */
+
+.ExpressodriverIconCls, .tine-recordclass-gridicon.ExpressodriverNode {
+    background-image:url(../../images/oxygen/16x16/apps/system-file-manager.png) !important;
+}
+.x-btn-medium .ExpressodriverIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/system-file-manager.png) !important;
+}
+.x-btn-large .ExpressodriverIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/system-file-manager.png) !important;
+}
+
+.action_edit_file {
+    background-image:url(../../images/oxygen/16x16/apps/kjournal.png) !important;
+}
+
+.x-btn-medium .action_edit_file {
+    background-image:url(../../images/oxygen/22x22/apps/kjournal.png) !important;
+}
+
+.x-btn-large .action_edit_file {
+    background-image:url(../../images/oxygen/32x32/apps/kjournal.png) !important;
+}
+
+.action_expressodriver_folder_up {
+    background-image:url(../../images/oxygen/16x16/actions/go-up-search.png) !important;
+}
+.x-btn-medium .action_expressodriver_folder_up {
+    background-image:url(../../images/oxygen/22x22/actions/go-up-search.png) !important;
+}
+.x-btn-large .action_expressodriver_folder_up {
+    background-image:url(../../images/oxygen/32x32/actions/go-up-search.png) !important;
+}
+
+.action_expressodriver_save_all {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+.x-btn-medium .action_expressodriver_save_all {
+    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
+}
+.x-btn-large .action_expressodriver_save_all {
+    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+}
+.action_filemanager_save_all {
+    background-image:url(../../images/oxygen/16x16/actions/save-all.png) !important;
+}
+.x-btn-medium .action_filemanager_save_all {
+    background-image:url(../../images/oxygen/22x22/actions/save-all.png) !important;
+}
+.x-btn-large .action_filemanager_save_all {
+    background-image:url(../../images/oxygen/32x32/actions/save-all.png) !important;
+}
+
+.action_create_folder {
+    background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
+}
+
+.action_pause {
+    background-image: url("../../images/oxygen/16x16/actions/media-playback-pause.png");
+    background-repeat: no-repeat;
+}
+
+.action_resume {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-repeat: no-repeat;
+}
+
+.x-btn-medium .action_create_folder {
+    background-image:url(../../images/oxygen/22x22/actions/folder-new.png) !important;
+}
+.x-btn-large .action_create_folder {
+    background-image:url(../../images/oxygen/32x32/actions/folder-new.png) !important;
+}
+
+.x-tinebase-typefolder .x-grid3-cell-inner {
+    background-image:url(../../themes/tine20/resources/images/tine20/tree/folder.gif);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-typeoctet .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-octet-stream.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}

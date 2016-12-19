@@ -1,0 +1,474 @@
+Return-Path: <bounce-2+baAAATJSAAAADT6AAABB52QPA@list-server.ham.srv.abc.de>
+Received: from mail04.viaducts.net ([20.230.3.190])
+	by mail04.viaducts.net (Dovecot) with LMTP id el1UHaATLlD6FwAAT5mwPQ
+	; Fri, 17 Aug 2012 11:49:52 +0200
+Received: from mx04.viaducts.net ([127.0.0.1])
+	by mail04.viaducts.net (Dovecot) with LMTP id S6hzI8ATLlBDGAAAT5mwPQ
+	; Fri, 17 Aug 2012 11:49:52 +0200
+Received: from list-server.ham.srv.abc.de (list-server.ham.srv.abc.de [20.230.103.252])
+	by mx04.viaducts.net (Postfix) with ESMTP id C635FA0D8
+	for <root@viaducts.de>; Fri, 17 Aug 2012 11:49:51 +0200 (CEST)
+Received: from inxmail-local.ham.srv.abc.de (inxmail-2 [10.60.2.252])
+	by list-server.ham.srv.abc.de (Postfix) with ESMTP id 4C7FD3BA04C
+	for <root@viaducts.de>; Fri, 17 Aug 2012 11:43:27 +0200 (CEST)
+Date: Fri, 17 Aug 2012 11:43:27 +0200 (CEST)
+From: abc Computer Systeme GmbH <service@abc.de>
+Reply-to: root@viaducts.de
+To: root@viaducts.de
+Message-ID: <INX.121a0d5b64993589ad925641587.87b.137ae.58.13933f741b9fc.bounce-2@list-server.ham.srv.abc.de>
+Subject: Probelauf der abc-Netzersatzanlagen am 21.08.
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_1532900_213270273.1345196607311"
+X-Mailer: Inxmail EE 4.0.2.117
+X-Tine20TestMessage: heavyhtml.eml
+X-Spam-Status: No, score=-0.1 required=5.0 tests=AWL,HTML_MESSAGE,
+	RP_MATCHES_RCVD,T_FRT_CONTACT autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on mail04.viaducts.net
+
+------=_Part_1532900_213270273.1345196607311
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Dieseltest am 21.08.
+
+Sehr geehrte Damen und Herren,
+
+
+    am Dienstag, dem 21. August 2012 in der Zeit von 06.00 - 08.00 Uhr
+
+f=C3=BChren wir einen turnusm=C3=A4=C3=9Figen Testlauf unserer Netzersatzan=
+lagen durch.
+
+Es sind keinerlei Beeintr=C3=A4chtigungen des Betriebes zu erwarten, wir m=
+=C3=B6chten
+Sie aber sicherheitshalber trotzdem darauf hinweisen. F=C3=BCr den
+unwahrscheinlichen Fall, dass Probleme auftreten sollten, erreichen Sie uns
+w=C3=A4hrend der gesamten Testdauer unter
+
+040-53773-160
+
+
+Mit freundlichen Gr=C3=BC=C3=9Fen,
+
+
+arp zarp
+Teamleiter Data Center Services=20
+
+
+abc COMPUTER SYSTEME GmbH
+
+E-Mail: auto-service@abc.de
+Web: http://www.abc.de
+
+Eingetragen im Handelsregister Hamburg B122
+------=_Part_1532900_213270273.1345196607311
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<?xml version=3D"1.0" encoding=3D"UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"=20
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns=3D"http://www.w3.org/1999/xhtml" lang=3D"en" xml:lang=3D"en">=
+=20
+<head>
+  <meta http-equiv=3D"Content-Style-Type" content=3D"text/css" />
+  <meta http-equiv=3D"Content-Language" content=3D"de" />
+  <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF-8" =
+/>
+  <meta name=3D"Publisher" content=3D" Computer Systeme GmbH" />
+  <meta name=3D"Copyright" content=3D" Computer Systeme GmbH" />
+  <title>Headline</title>
+  <base  href=3D"http://www.abc.de/" />
+  =20
+  <style type=3D"text/css" media=3D"screen" >
+body {
+   margin:0;
+   padding:0;
+   font-family:Arial, sans-serif;
+}
+
+a {
+   color:#6590bd;
+   text-decoration:none;
+}
+
+a:hover {
+   color:052d60;
+}
+
+
+#headerColors_left {
+   background-color:#c63833;
+   float:left;
+   width:700;
+   height:216px;
+   z-index: 2;
+}
+
+#headerPrint {
+   display:none;
+}
+
+#headerColors {
+   position:absolute;
+   width:100%;
+   background-color:#013E75;
+   float:left;
+   height:216px;
+   z-index: 1;
+}
+
+
+#headerImages {
+   background-image:url('http://www.abc.de/abc.jpg');
+   z-index:3;
+   clear:both;
+   height:216px;
+   width:660px;
+   margin-left:40px;
+   position:relative;
+}
+
+#headerImages div {
+   float:left;
+   width:660px;
+   height:100%;
+}
+
+#headerNav_division {
+   width:876px;
+   height:151px;
+   margin-left:0px;
+}
+
+#headerNav_fallback_text {
+   position:absolute;=20
+   width:876px;
+   height:151px;
+   margin-left:40px;
+   padding-top:40px;
+   font-size:12px;
+   z-index: 1;
+}
+
+#headerNav_fallback_spacer {
+   position:absolute;=20
+   width:876px;
+   height:151px;
+   background: url('http://www.abc.de/abc.jpg') repeat;
+   margin-left:40px;
+   z-index: 2;
+}
+
+
+#headerNav {
+   position:absolute;=20
+   width:876px;
+   height:151px;
+   background: url('http://www.abc.de/abc.jpg') repeat-x 0 1=
+21px;
+   margin-left:40px;
+   z-index: 3;
+}
+
+#headerNav h1 {
+   margin:0;
+   padding:0;
+   padding-top:30px;
+}
+
+#headerNav h1 a span {
+   display:none;
+}
+
+#headerNav h1 a {
+   background: url('http://www.abc.de/abc.jpg') no-repeat;
+   height:71px;
+   width:110px;
+   display:block;
+}
+
+#hNavL {
+   position:absolute;
+   width:660px;
+   float:left;
+   height:100%;
+}
+
+
+#hauptnavigation {
+   margin:0;
+   padding:0;
+   margin-top:25px;
+}
+
+#hauptnavigation li {
+   float:left;
+   list-style-type:none;
+   margin-right:13px;
+}
+#hauptnavigation li.last {
+   margin-right:0;
+}
+
+
+#hauptnavigation a  {
+   text-decoration:none;
+   font-size:11px;
+   text-transform:uppercase;
+   color:#6590bd;
+}
+
+#hauptnavigation a:hover {
+   color:#052d60;
+}
+
+
+
+#content {
+   margin-top: 216px;
+   border-top:20px solid white;
+   width:876px;
+   margin-left:40px;
+}
+
+
+#content, td {
+   color:#052d60;
+   font-size:13px;
+}
+
+
+#main {
+   float:left;
+   width:620px;
+   margin-left:0px;
+   background:white url('http://www.abc.de/abc.jpg') repeat-=
+y;
+
+   padding-left:20px;
+   padding-right:20px;
+   border-bottom:20px solid white;
+   line-height:15px;
+}
+
+#right {
+   float:right;
+   width:197px;
+   margin:0;
+   padding:0;
+   list-style-type:none;
+   padding-left:17px;
+   line-height:15px;
+}
+
+
+#headline {
+   margin-top:0;
+   padding-top:0;
+   font-size:16px;
+   line-height:20px;
+}
+
+#teaser {
+   font-weight:bold;
+   font-size:12px;
+   line-height:16px;
+   margin-bottom:12px;
+}
+
+#footer {
+   margin-top: 48px;
+   padding-top: 24px;
+   border-top:1px dotted black;
+}
+
+#footer_main_content {
+  width:100%
+  margin: 0px;
+  padding: 0px;
+}
+
+#footer_left {
+   width: 50%;
+   float:left;
+}
+
+#footer_right {
+    width: 50%;
+    float:right;
+    text-align: right;
+}
+
+#footer_abmeldung {
+   font-size: 10px;
+}
+
+ .hr {
+   height:15px;
+   background:url('http://www.abc.de/dot_vh.gif') repeat-x top =
+left;
+   clear:both;
+   margin-top:14px;
+}
+
+input.button {
+   padding:3px;
+}
+
+input.text, textarea.text {
+   border:1px groove #002855;
+}
+
+input.text {
+   height:16px;
+}
+
+h1, h3, h4, h5, h6 {
+   color:#002855;
+}
+
+h2 {
+        font-size:                      1.64em;
+        margin-bottom:          .9em;
+        color:#c63833;
+
+}
+
+h3 {
+        font-size:                      1.2em;
+}
+p {
+   margin:0;
+   padding:0;
+}
+
+a img {
+   border:none;
+}
+a:hover {
+   text-decoration:underline !important;
+}
+
+</style>
+
+<style type=3D"text/css" media=3D"print" >
+#headerPrint {
+   display:visible;
+}
+#headerCI {
+   display:none;
+}
+
+#headerNav_division {
+   display:none;
+}
+</style>
+
+
+</head>
+
+<body>
+<a name=3D"seitenanfang" id=3D"seitenanfang"></a>=20
+<div id=3D"headerPrint">
+<img src=3D"http://www.abc.de//signet.gif" height=3D"71" width=
+=3D"110" alt=3D"abc sumpfheim Computer Systeme GmbH" />
+</div>
+
+<div id=3D"headerNav_division">
+<div id=3D"headerNav_fallback_text">abc sumpfheim Computer Systeme GmbH</div>
+<div id=3D"headerNav_fallback_spacer"></div>
+<div id=3D"headerNav">
+<div id=3D"hNavL">
+<h1><a href=3D"http://www.abc.de/index.php" title=3D"Home"><span>abc Moorbe=
+k Computer Systeme
+GmbH</span></a></h1>
+
+<ul id=3D"hauptnavigation">
+  <li><a href=3D"http://www.abc.de/">Website</a></li>
+  <li><a href=3D"http://www.abc.de/de/kontakt/index.php" title=3D"Kontakt">=
+Kontakt</a></li>
+  <li><a href=3D"http://www.abc.de/de/service/impressum.php" title=3D"Impre=
+ssum ">Impressum</a></li>
+  <li class=3D"last"><a href=3D"http://www.abc.de/en/index.php" title=3D"Ab=
+stract">Abstract</a></li>
+</ul>
+</div>
+<!-- ende div hNavL -->
+</div>
+
+<!-- ende div headerNav -->
+</div>
+</div>
+</div>
+<!-- ende div headerNav_division -->
+<div id=3D"headerCI">
+ <div id=3D"headerColors">
+  <div id=3D"headerColors_left">
+   <div id=3D"headerImages">
+   </div>
+  </div>
+ </div>
+</div>
+<img src=3D"http://list-server.ham.srv.abc.de/inxmail2/d/d.gif?utie000gigq0=
+q000d0000lu01855" width=3D"1" height=3D"1">
+<!-- end headerCI -->
+
+
+<div id=3D"content">
+<div id=3D"main">
+
+<h2 id=3D"headline">Dieseltest am 21.08.</h2>=20
+<p>
+
+<p>
+Sehr geehrte Damen und Herren,<br/><br/>
+<blockquote>
+<b>am Dienstag, dem 21. August 2012 in der Zeit von 06.00 - 08.00 Uhr</b><b=
+r><br>=20
+</blockquote>
+
+f&uuml;hren wir einen turnusm&auml&szlig;igen Testlauf unserer Netzersatzan=
+lagen durch.<br><br>
+
+Es sind keinerlei Beeintr&auml;chtigungen des Betriebes zu erwarten, wir m&=
+ouml;chten Sie aber
+sicherheitshalber trotzdem darauf hinweisen.
+
+F=C3=BCr den unwahrscheinlichen Fall, dass Probleme auftreten sollten, erre=
+ichen Sie uns w&auml;hrend der
+gesamten Testdauer unter<br><br>
+
+040-53773-160 <br><br>
+
+Mit freundlichen Gr&uuml;&szlig;en,<br>
+
+<br/>
+sumpfheim<br/>
+Teamleiter Data Center Services
+<br/>
+
+
+
+</p>
+
+<div id=3D"footer">
+<div id=3D"footer_left">
+<p>
+<b>abc sumpfheim COMPUTER SYSTEME GmbH</b><br><br>
+
+E-Mail: <a href=3D"mailto:auto-service@abc.de">abc Service</a><br>
+Web: http://www.abc.de
+<br><br>
+Eingetragen im Handelsregister Hamburg <br>
+Gesch&auml;ftsf&uuml;hrer: br>
+</p>
+<!-- end footer -->
+
+</div>
+</div>
+
+</body>
+</html>
+------=_Part_1532900_213270273.1345196607311--

@@ -1,0 +1,178 @@
+Return-Path: <notification+zj4oafzf6coc@facebookmail.com>
+Received: from mail02.metaways.net ([10.129.3.249])
+	by mail03.metaways.net (Dovecot) with LMTP id zXoaJkYCN1FwTwAA5ANymA
+	; Wed, 06 Mar 2013 09:47:07 +0100
+Received: from mx02.metaways.net ([127.0.0.1])
+	by mail02.metaways.net (Dovecot) with LMTP id 4jigNYsCN1G1dgAAk4785w
+	; Wed, 06 Mar 2013 09:47:07 +0100
+Received: from mx-out.facebook.com (outmail024.snc7.facebook.com [69.171.232.158])
+	by mx02.metaways.net (Postfix) with ESMTP id 5258D4063
+	for <unittest@tine20.org>; Wed,  6 Mar 2013 09:47:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=facebookmail.com;
+	s=s1024-2011-q2; t=1362559618;
+	bh=DR8jvSJgyVskh9A9cfeuH6S6sZYAjI19Q7WNL/ip3r4=;
+	h=Date:To:From:Subject:MIME-Version:Content-Type;
+	b=aAkyDobBhyJgAzHhIKpd4tQGCe/Y2Z8J9/TPhbB/TouGuXxEn576wVKOhjYZjrlLp
+	 ClM6NaO4T/xYsdDNKsGatkPZpN1QJHumsmXiViKjbybslLFCh4EdDpjysLpkbKcGt7
+	 ZuuOZFmIKUzyn0qs+uUanfwD6aXO6pxNNE6jsHY4=
+Received: from [10.216.118.91] ([10.216.118.91:48339])
+	by smout021.snc7.facebook.com (envelope-from <notification+zj4oafzf6coc@facebookmail.com>)
+	(ecelerity 3.5.1.37927 r(/root/Momo-dev:tip)) with ECSTREAM
+	id 25/F4-15373-28207315; Wed, 06 Mar 2013 00:46:58 -0800
+X-Facebook: from zuckmail ([MTI3LjAuMC4x]) 
+	by www.facebook.com with HTTP (ZuckMail);
+Date: Wed, 6 Mar 2013 00:46:57 -0800
+To: unittest@tine20.org
+From: "Facebook" <notification+zj4oafzf6coc@facebookmail.com>
+Reply-to: Facebook <notification+zj4oafzf6coc@facebookmail.com>
+Subject: =?UTF-8?B?Qm9qYW4gUmFmbGUgZ2Vm?=
+ =?UTF-8?B?w6RsbHQgVGluZSAyLjA=?=
+Message-ID: <1c0e681cd9a1b29b656550de8da3af37@www.facebook.com>
+X-Priority: 3
+X-Mailer: ZuckMail [version 1.00]
+Errors-To: notification+zj4oafzf6coc@facebookmail.com
+X-Facebook-Notify: page_new_likes; mailid=7a0ffadG5af33a8a9c98Ga61c449Gdd
+X-FACEBOOK-PRIORITY: 0
+X-Auto-Response-Suppress: All
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="b1_1c0e681cd9a1b29b656550de8da3af37"
+X-Spam-Status: No, score=-0.1 required=5.0 tests=AWL,DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HTML_MESSAGE,T_REMOTE_IMAGE autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on mail02.metaways.net
+X-Tine20TestMessage: facebook_notification.eml
+
+
+--b1_1c0e681cd9a1b29b656550de8da3af37
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+http://www.facebook.com/n/?tine20org&mid=3D7a0ffadG5af33a8a9c98Ga61c449Gdd=
+&bcode=3D1.1362559617.Abl6w95TdWQc0VVS&n_m=3Dtine20%40metaways.de
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Hallo,
+
+firstname lastname gef=C3=A4llt Tine 2.0.
+
+Gr=C3=BC=C3=9Fe,
+Das Facebook-Team
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Diese Nachricht wurde an unittest@tine20.org gesendet. Falls du diese =
+E-Mails in Zukunft nicht von Facebook erhalten m=C3=B6chtest, folge dem =
+Link unten, um sie abzubestellen.
+http://www.facebook.com/o.php?k=3DAS0kfnK7FOKXeB5X&u=3D100000705715352&mid=
+=3D7a0ffadG5af33a8a9c98Ga61c449Gdd
+Facebook, Inc., Attention: Department 415, PO Box 10005, Palo Alto, CA =
+94303
+
+
+--b1_1c0e681cd9a1b29b656550de8da3af37
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional =
+//EN"><html><head><title>Facebook</title><meta http-equiv=3D"Content-Type" =
+content=3D"text/html; charset=3Dutf-8" /></head><body style=3D"margin: 0; =
+padding: 0;" dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" =
+id=3D"email_table" style=3D"border-collapse:collapse;width:98%;" =
+border=3D"0"><tr><td id=3D"email_content" =
+style=3D"font-size:12px;font-family:&#039;lucida =
+grande&#039;,tahoma,verdana,arial,sans-serif;"><table cellspacing=3D"0" =
+cellpadding=3D"0" style=3D"border-collapse:collapse;width:620px;"><tr><td =
+style=3D"font-size:16px;font-family:&#039;lucida grande&#039;,tahoma,verda=
+na,arial,sans-serif;background:#3b5998;color:#FFFFFF;font-weight:bold;vert=
+ical-align:baseline;letter-spacing:-0.03em;text-align:left;padding:10px =
+38px 4px;"><a style=3D"text-decoration: none;" href=3D"http://www.facebook=
+.com/n/?tine20org&amp;mid=3D7a0ffadG5af33a8a9c98Ga61c449Gdd&amp;bcode=3D1.=
+1362559617.Abl6w95TdWQc0VVS&amp;n_m=3Dtine20%40metaways.de"><span =
+style=3D"background:#3b5998;color:#FFFFFF;font-weight:bold;font-family:&#0=
+39;lucida =
+grande&#039;,tahoma,verdana,arial,sans-serif;vertical-align:middle; =
+font-size:16px;letter-spacing:-0.03em;text-align:left;vertical-align:basel=
+ine;">facebook</span></a></td></tr></table><table cellspacing=3D"0" =
+cellpadding=3D"0" style=3D"border-collapse:collapse;width:620px;"><tr><td =
+style=3D"font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans=
+-serif;padding:10px 25px;background-color:#fff;border-left:1px solid =
+#ccc;border-right:1px solid #ccc;border-top:1px solid =
+#ccc;border-bottom:1px solid #ccc;color:#333333;"><table cellspacing=3D"0" =
+cellpadding=3D"0" width=3D"100%" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"font-size:11px;font-f=
+amily:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:10px =
+25px;color:#333333;width:620px;"><table cellspacing=3D"0" =
+cellpadding=3D"0" width=3D"100%" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"font-size:11px;font-f=
+amily:LucidaGrande,tahoma,verdana,arial,sans-serif;padding-bottom:10px;"><=
+table cellspacing=3D"0" cellpadding=3D"0" =
+style=3D"border-collapse:collapse;"><tr><td valign=3D"top" =
+style=3D"padding-right:10px;font-size: 0px;"><a href=3D"http://www.faceboo=
+k.com/n/?rafle&amp;mid=3D7a0ffadG5af33a8a9c98Ga61c449Gdd&amp;bcode=3D1.136=
+2559617.Abl6w95TdWQc0VVS&amp;n_m=3Dtine20%40metaways.de" =
+style=3D"color:#3b5998;text-decoration:none;"><img src=3D"http://profile.a=
+k.fbcdn.net/hprofile-ak-ash4/274974_663397731_151710037_q.jpg" =
+style=3D"border:0;" /></a></td><td valign=3D"top" =
+style=3D"width:100%;"><span style=3D"font-size: 13px;">firstname lastname =
+gef=C3=A4llt Tine 2.0.</span></td></tr></table></td></tr><tr><td =
+style=3D"font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans=
+-serif;"><table cellspacing=3D"0" cellpadding=3D"0" border=3D"0" =
+style=3D"border-collapse:collapse;width:100%;"><tr><td =
+style=3D"font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans=
+-serif;padding:10px;background-color:#f2f2f2;border-left:none;border-right=
+:none;border-top:1px solid #ccc;border-bottom:1px solid #ccc;"><table =
+cellspacing=3D"0" cellpadding=3D"0" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"font-size:11px;font-f=
+amily:LucidaGrande,tahoma,verdana,arial,sans-serif;padding-right:10px;"><t=
+able cellspacing=3D"0" cellpadding=3D"0" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"border-width: =
+1px;border-style: solid;border-color: #29447E #29447E =
+#1a356e;background-color: #5b74a8;"><table cellspacing=3D"0" =
+cellpadding=3D"0" style=3D"border-collapse:collapse;"><tr><td =
+style=3D"font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans=
+-serif;padding:2px 6px 4px;border-top:1px solid #8a9cc2;"><a =
+href=3D"http://www.facebook.com/n/?tine20org&amp;mid=3D7a0ffadG5af33a8a9c9=
+8Ga61c449Gdd&amp;bcode=3D1.1362559617.Abl6w95TdWQc0VVS&amp;n_m=3Dtine20%40=
+metaways.de" style=3D"color:#3b5998;text-decoration:none;"><span =
+style=3D"font-weight:bold;white-space:nowrap;color: #fff;font-size: =
+11px;">Aktualisiere Tine =
+2.0</span></a></td></tr></table></td></tr></table></td><td =
+style=3D"font-size:11px;font-family:LucidaGrande,tahoma,verdana,arial,sans=
+-serif;"><table cellspacing=3D"0" cellpadding=3D"0" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"border-width: =
+1px;border-style: solid;border-color: #999 #999 #888;background-color: =
+#eee;"><table cellspacing=3D"0" cellpadding=3D"0" =
+style=3D"border-collapse:collapse;"><tr><td style=3D"font-size:11px;font-f=
+amily:LucidaGrande,tahoma,verdana,arial,sans-serif;padding:2px 6px =
+4px;border-top:1px solid #fff;"><a href=3D"http://www.facebook.com/n/?noti=
+fications&amp;id=3D295475095891&amp;mid=3D7a0ffadG5af33a8a9c98Ga61c449Gdd&=
+amp;bcode=3D1.1362559617.Abl6w95TdWQc0VVS&amp;n_m=3Dtine20%40metaways.de" =
+style=3D"color:#3b5998;text-decoration:none;"><span =
+style=3D"font-weight:bold;white-space:nowrap;color: #333;font-size: =
+11px;">Alle Benachrichtigungen anzeigen</span></a></td></tr></table></td><=
+/tr></table></td></tr></table></td></tr></table></td></tr></table></td></t=
+r></table></td></tr></table><table cellspacing=3D"0" cellpadding=3D"0" =
+border=3D"0" style=3D"border-collapse:collapse;width:620px;"><tr><td =
+style=3D"font-size:11px;font-family:&#039;lucida grande&#039;, tahoma, =
+verdana, arial, sans-serif;padding:10px;background-color:#fff;border-left:=
+none;border-right:none;border-top:none;border-bottom:none;color:#999999;bo=
+rder:none;">Diese Nachricht wurde an <a =
+href=3D"mailto:tine20&#064;metaways.de" =
+style=3D"color:#3b5998;text-decoration:none;">tine20&#064;metaways.de</a> =
+gesendet. Falls du diese E-Mails in Zukunft nicht von Facebook erhalten =
+m=C3=B6chtest, <a href=3D"http://www.facebook.com/o.php?k=3DAS0kfnK7FOKXeB=
+5X&amp;u=3D100000705715352&amp;mid=3D7a0ffadG5af33a8a9c98Ga61c449Gdd" =
+style=3D"color:#3b5998;text-decoration:none;">bestelle sie ab</a>.<br =
+/>Facebook, Inc., Attention: Department 415, PO Box 10005, Palo Alto, CA =
+94303</td></tr></table><span style=3D"width:620px;"><img =
+src=3D"http://www.facebook.com/email_open_log_pic.php?mid=3D7a0ffadG5af33a=
+8a9c98Ga61c449Gdd" style=3D"border:0;width:1px;height:1px;" =
+/></span></td></tr></table></body></html>
+
+
+
+--b1_1c0e681cd9a1b29b656550de8da3af37--
+

@@ -41,6 +41,7 @@ class AllTests
             'Inventory',
             'Events',
             'ExampleApplication',
+            'Sipgate',
             'SimpleFAQ',
             'CoreData',
             'Zend',

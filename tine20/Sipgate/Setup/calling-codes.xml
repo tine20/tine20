@@ -1,0 +1,1209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- http://www.itu.int/itudoc/itu-t/ob-lists/icc/e164_763.html -->
+<options>
+    <option>
+        <value>+93</value>
+        <!-- _("+93 (Afghanistan)") -->
+        <label>+93 (Afghanistan)</label>
+    </option>
+    <option>
+        <value>+355</value>
+        <!-- _("+355 (Albania (Republic of))") -->
+        <label>+355 (Albania (Republic of))</label>
+    </option>
+    <option>
+        <value>+213</value>
+        <!-- _("+213 (Algeria (People's Democratic Republic of))") -->
+        <label>+213 (Algeria (People's Democratic Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (American Samoa)") -->
+        <label>+1 (American Samoa)</label>
+    </option>
+    <option>
+        <value>+376</value>
+        <!-- _("+376 (Andorra (Principality of))") -->
+        <label>+376 (Andorra (Principality of))</label>
+    </option>
+    <option>
+        <value>+244</value>
+        <!-- _("+244 (Angola (Republic of))") -->
+        <label>+244 (Angola (Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Anguilla)") -->
+        <label>+1 (Anguilla)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Antigua and Barbuda)") -->
+        <label>+1 (Antigua and Barbuda)</label>
+    </option>
+    <option>
+        <value>+54</value>
+        <!-- _("+54 (Argentine Republic)") -->
+        <label>+54 (Argentine Republic)</label>
+    </option>
+    <option>
+        <value>+374</value>
+        <!-- _("+374 (Armenia (Republic of))") -->
+        <label>+374 (Armenia (Republic of))</label>
+    </option>
+    <option>
+        <value>+297</value>
+        <!-- _("+297 (Aruba)") -->
+        <label>+297 (Aruba)</label>
+    </option>
+    <option>
+        <value>+247</value>
+        <!-- _("+247 (Ascension)") -->
+        <label>+247 (Ascension)</label>
+    </option>
+    <option>
+        <value>+61</value>
+        <!-- _("+61 (Australia)") -->
+        <label>+61 (Australia)</label>
+    </option>
+    <option>
+        <value>+672</value>
+        <!-- _("+672 (Australian External Territories)") -->
+        <label>+672 (Australian External Territories)</label>
+    </option>
+    <option>
+        <value>+43</value>
+        <!-- _("+43 (Austria)") -->
+        <label>+43 (Austria)</label>
+    </option>
+    <option>
+        <value>+994</value>
+        <!-- _("+994 (Azerbaijani Republic)") -->
+        <label>+994 (Azerbaijani Republic)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Bahamas (Commonwealth of the))") -->
+        <label>+1 (Bahamas (Commonwealth of the))</label>
+    </option>
+    <option>
+        <value>+973</value>
+        <!-- _("+973 (Bahrain (Kingdom of))") -->
+        <label>+973 (Bahrain (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+880</value>
+        <!-- _("+880 (Bangladesh (People's Republic of))") -->
+        <label>+880 (Bangladesh (People's Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Barbados)") -->
+        <label>+1 (Barbados)</label>
+    </option>
+    <option>
+        <value>+375</value>
+        <!-- _("+375 (Belarus (Republic of))") -->
+        <label>+375 (Belarus (Republic of))</label>
+    </option>
+    <option>
+        <value>+32</value>
+        <!-- _("+32 (Belgium)") -->
+        <label>+32 (Belgium)</label>
+    </option>
+    <option>
+        <value>+501</value>
+        <!-- _("+501 (Belize)") -->
+        <label>+501 (Belize)</label>
+    </option>
+    <option>
+        <value>+229</value>
+        <!-- _("+229 (Benin (Republic of))") -->
+        <label>+229 (Benin (Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Bermuda)") -->
+        <label>+1 (Bermuda)</label>
+    </option>
+    <option>
+        <value>+975</value>
+        <!-- _("+975 (Bhutan (Kingdom of))") -->
+        <label>+975 (Bhutan (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+591</value>
+        <!-- _("+591 (Bolivia (Republic of))") -->
+        <label>+591 (Bolivia (Republic of))</label>
+    </option>
+    <option>
+        <value>+387</value>
+        <!-- _("+387 (Bosnia and Herzegovina)") -->
+        <label>+387 (Bosnia and Herzegovina)</label>
+    </option>
+    <option>
+        <value>+267</value>
+        <!-- _("+267 (Botswana (Republic of))") -->
+        <label>+267 (Botswana (Republic of))</label>
+    </option>
+    <option>
+        <value>+55</value>
+        <!-- _("+55 (Brazil (Federative Republic of))") -->
+        <label>+55 (Brazil (Federative Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (British Virgin Islands)") -->
+        <label>+1 (British Virgin Islands)</label>
+    </option>
+    <option>
+        <value>+673</value>
+        <!-- _("+673 (Brunei Darussalam)") -->
+        <label>+673 (Brunei Darussalam)</label>
+    </option>
+    <option>
+        <value>+359</value>
+        <!-- _("+359 (Bulgaria (Republic of))") -->
+        <label>+359 (Bulgaria (Republic of))</label>
+    </option>
+    <option>
+        <value>+226</value>
+        <!-- _("+226 (Burkina Faso)") -->
+        <label>+226 (Burkina Faso)</label>
+    </option>
+    <option>
+        <value>+257</value>
+        <!-- _("+257 (Burundi (Republic of))") -->
+        <label>+257 (Burundi (Republic of))</label>
+    </option>
+    <option>
+        <value>+855</value>
+        <!-- _("+855 (Cambodia (Kingdom of))") -->
+        <label>+855 (Cambodia (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+237</value>
+        <!-- _("+237 (Cameroon (Republic of))") -->
+        <label>+237 (Cameroon (Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Canada)") -->
+        <label>+1 (Canada)</label>
+    </option>
+    <option>
+        <value>+238</value>
+        <!-- _("+238 (Cape Verde (Republic of))") -->
+        <label>+238 (Cape Verde (Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Cayman Islands)") -->
+        <label>+1 (Cayman Islands)</label>
+    </option>
+    <option>
+        <value>+236</value>
+        <!-- _("+236 (Central African Republic)") -->
+        <label>+236 (Central African Republic)</label>
+    </option>
+    <option>
+        <value>+235</value>
+        <!-- _("+235 (Chad (Republic of))") -->
+        <label>+235 (Chad (Republic of))</label>
+    </option>
+    <option>
+        <value>+56</value>
+        <!-- _("+56 (Chile)") -->
+        <label>+56 (Chile)</label>
+    </option>
+    <option>
+        <value>+86</value>
+        <!-- _("+86 (China (People's Republic of))") -->
+        <label>+86 (China (People's Republic of))</label>
+    </option>
+    <option>
+        <value>+57</value>
+        <!-- _("+57 (Colombia (Republic of))") -->
+        <label>+57 (Colombia (Republic of))</label>
+    </option>
+    <option>
+        <value>+269</value>
+        <!-- _("+269 (Comoros (Union of the))") -->
+        <label>+269 (Comoros (Union of the))</label>
+    </option>
+    <option>
+        <value>+242</value>
+        <!-- _("+242 (Congo (Republic of the))") -->
+        <label>+242 (Congo (Republic of the))</label>
+    </option>
+    <option>
+        <value>+682</value>
+        <!-- _("+682 (Cook Islands)") -->
+        <label>+682 (Cook Islands)</label>
+    </option>
+    <option>
+        <value>+506</value>
+        <!-- _("+506 (Costa Rica)") -->
+        <label>+506 (Costa Rica)</label>
+    </option>
+    <option>
+        <value>+225</value>
+        <!-- _("+225 (Côte d'Ivoire (Republic of))") -->
+        <label>+225 (Côte d'Ivoire (Republic of))</label>
+    </option>
+    <option>
+        <value>+385</value>
+        <!-- _("+385 (Croatia (Republic of))") -->
+        <label>+385 (Croatia (Republic of))</label>
+    </option>
+    <option>
+        <value>+53</value>
+        <!-- _("+53 (Cuba)") -->
+        <label>+53 (Cuba)</label>
+    </option>
+    <option>
+        <value>+357</value>
+        <!-- _("+357 (Cyprus (Republic of))") -->
+        <label>+357 (Cyprus (Republic of))</label>
+    </option>
+    <option>
+        <value>+420</value>
+        <!-- _("+420 (Czech Republic)") -->
+        <label>+420 (Czech Republic)</label>
+    </option>
+    <option>
+        <value>+850</value>
+        <!-- _("+850 (Democratic People's Republic of Korea)") -->
+        <label>+850 (Democratic People's Republic of Korea)</label>
+    </option>
+    <option>
+        <value>+243</value>
+        <!-- _("+243 (Democratic Republic of the Congo)") -->
+        <label>+243 (Democratic Republic of the Congo)</label>
+    </option>
+    <option>
+        <value>+670</value>
+        <!-- _("+670 (Democratic Republic of Timor-Leste)") -->
+        <label>+670 (Democratic Republic of Timor-Leste)</label>
+    </option>
+    <option>
+        <value>+45</value>
+        <!-- _("+45 (Denmark)") -->
+        <label>+45 (Denmark)</label>
+    </option>
+    <option>
+        <value>+246</value>
+        <!-- _("+246 (Diego Garcia)") -->
+        <label>+246 (Diego Garcia)</label>
+    </option>
+    <option>
+        <value>+253</value>
+        <!-- _("+253 (Djibouti (Republic of))") -->
+        <label>+253 (Djibouti (Republic of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Dominica (Commonwealth of))") -->
+        <label>+1 (Dominica (Commonwealth of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Dominican Republic)") -->
+        <label>+1 (Dominican Republic)</label>
+    </option>
+    <option>
+        <value>+593</value>
+        <!-- _("+593 (Ecuador)") -->
+        <label>+593 (Ecuador)</label>
+    </option>
+    <option>
+        <value>+20</value>
+        <!-- _("+20 (Egypt (Arab Republic of))") -->
+        <label>+20 (Egypt (Arab Republic of))</label>
+    </option>
+    <option>
+        <value>+503</value>
+        <!-- _("+503 (El Salvador (Republic of))") -->
+        <label>+503 (El Salvador (Republic of))</label>
+    </option>
+    <option>
+        <value>+240</value>
+        <!-- _("+240 (Equatorial Guinea (Republic of))") -->
+        <label>+240 (Equatorial Guinea (Republic of))</label>
+    </option>
+    <option>
+        <value>+291</value>
+        <!-- _("+291 (Eritrea)") -->
+        <label>+291 (Eritrea)</label>
+    </option>
+    <option>
+        <value>+372</value>
+        <!-- _("+372 (Estonia (Republic of))") -->
+        <label>+372 (Estonia (Republic of))</label>
+    </option>
+    <option>
+        <value>+251</value>
+        <!-- _("+251 (Ethiopia (Federal Democratic Republic of))") -->
+        <label>+251 (Ethiopia (Federal Democratic Republic of))</label>
+    </option>
+    <option>
+        <value>+500</value>
+        <!-- _("+500 (Falkland Islands (Malvinas))") -->
+        <label>+500 (Falkland Islands (Malvinas))</label>
+    </option>
+    <option>
+        <value>+298</value>
+        <!-- _("+298 (Faroe Islands)") -->
+        <label>+298 (Faroe Islands)</label>
+    </option>
+    <option>
+        <value>+679</value>
+        <!-- _("+679 (Fiji (Republic of))") -->
+        <label>+679 (Fiji (Republic of))</label>
+    </option>
+    <option>
+        <value>+358</value>
+        <!-- _("+358 (Finland)") -->
+        <label>+358 (Finland)</label>
+    </option>
+    <option>
+        <value>+33</value>
+        <!-- _("+33 (France)") -->
+        <label>+33 (France)</label>
+    </option>
+    <option>
+        <value>+594</value>
+        <!-- _("+594 (French Guiana (French Department of))") -->
+        <label>+594 (French Guiana (French Department of))</label>
+    </option>
+    <option>
+        <value>+689</value>
+        <!-- _("+689 (French Polynesia (Territoire français d'outre-mer))") -->
+        <label>+689 (French Polynesia (Territoire français d'outre-mer))</label>
+    </option>
+    <option>
+        <value>+241</value>
+        <!-- _("+241 (Gabonese Republic)") -->
+        <label>+241 (Gabonese Republic)</label>
+    </option>
+    <option>
+        <value>+220</value>
+        <!-- _("+220 (Gambia (Republic of the))") -->
+        <label>+220 (Gambia (Republic of the))</label>
+    </option>
+    <option>
+        <value>+995</value>
+        <!-- _("+995 (Georgia)") -->
+        <label>+995 (Georgia)</label>
+    </option>
+    <option>
+        <value>+49</value>
+        <!-- _("+49 (Germany (Federal Republic of))") -->
+        <label>+49 (Germany (Federal Republic of))</label>
+    </option>
+    <option>
+        <value>+233</value>
+        <!-- _("+233 (Ghana)") -->
+        <label>+233 (Ghana)</label>
+    </option>
+    <option>
+        <value>+350</value>
+        <!-- _("+350 (Gibraltar)") -->
+        <label>+350 (Gibraltar)</label>
+    </option>
+    <option>
+        <value>+30</value>
+        <!-- _("+30 (Greece)") -->
+        <label>+30 (Greece)</label>
+    </option>
+    <option>
+        <value>+299</value>
+        <!-- _("+299 (Greenland (Denmark))") -->
+        <label>+299 (Greenland (Denmark))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Grenada)") -->
+        <label>+1 (Grenada)</label>
+    </option>
+    <option>
+        <value>+388</value>
+        <!-- _("+388 (Group of countries, shared code)") -->
+        <label>+388 (Group of countries, shared code)</label>
+    </option>
+    <option>
+        <value>+590</value>
+        <!-- _("+590 (Guadeloupe (French Department of))") -->
+        <label>+590 (Guadeloupe (French Department of))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Guam)") -->
+        <label>+1 (Guam)</label>
+    </option>
+    <option>
+        <value>+502</value>
+        <!-- _("+502 (Guatemala (Republic of))") -->
+        <label>+502 (Guatemala (Republic of))</label>
+    </option>
+    <option>
+        <value>+224</value>
+        <!-- _("+224 (Guinea (Republic of))") -->
+        <label>+224 (Guinea (Republic of))</label>
+    </option>
+    <option>
+        <value>+245</value>
+        <!-- _("+245 (Guinea-Bissau (Republic of))") -->
+        <label>+245 (Guinea-Bissau (Republic of))</label>
+    </option>
+    <option>
+        <value>+592</value>
+        <!-- _("+592 (Guyana)") -->
+        <label>+592 (Guyana)</label>
+    </option>
+    <option>
+        <value>+509</value>
+        <!-- _("+509 (Haiti (Republic of))") -->
+        <label>+509 (Haiti (Republic of))</label>
+    </option>
+    <option>
+        <value>+504</value>
+        <!-- _("+504 (Honduras (Republic of))") -->
+        <label>+504 (Honduras (Republic of))</label>
+    </option>
+    <option>
+        <value>+852</value>
+        <!-- _("+852 (Hong Kong, China)") -->
+        <label>+852 (Hong Kong, China)</label>
+    </option>
+    <option>
+        <value>+36</value>
+        <!-- _("+36 (Hungary (Republic of))") -->
+        <label>+36 (Hungary (Republic of))</label>
+    </option>
+    <option>
+        <value>+354</value>
+        <!-- _("+354 (Iceland)") -->
+        <label>+354 (Iceland)</label>
+    </option>
+    <option>
+        <value>+91</value>
+        <!-- _("+91 (India (Republic of))") -->
+        <label>+91 (India (Republic of))</label>
+    </option>
+    <option>
+        <value>+62</value>
+        <!-- _("+62 (Indonesia (Republic of))") -->
+        <label>+62 (Indonesia (Republic of))</label>
+    </option>
+    <option>
+        <value>+871</value>
+        <!-- _("+871 (Inmarsat (Atlantic Ocean-East))") -->
+        <label>+871 (Inmarsat (Atlantic Ocean-East))</label>
+    </option>
+    <option>
+        <value>+874</value>
+        <!-- _("+874 (Inmarsat (Atlantic Ocean-West))") -->
+        <label>+874 (Inmarsat (Atlantic Ocean-West))</label>
+    </option>
+    <option>
+        <value>+873</value>
+        <!-- _("+873 (Inmarsat (Indian Ocean))") -->
+        <label>+873 (Inmarsat (Indian Ocean))</label>
+    </option>
+    <option>
+        <value>+872</value>
+        <!-- _("+872 (Inmarsat (Pacific Ocean))") -->
+        <label>+872 (Inmarsat (Pacific Ocean))</label>
+    </option>
+    <option>
+        <value>+870</value>
+        <!-- _("+870 (Inmarsat SNAC)") -->
+        <label>+870 (Inmarsat SNAC)</label>
+    </option>
+    <option>
+        <value>+800</value>
+        <!-- _("+800 (International Freephone Service)") -->
+        <label>+800 (International Freephone Service)</label>
+    </option>
+    <option>
+        <value>+881</value>
+        <!-- _("+881 (International Mobile, shared code)") -->
+        <label>+881 (International Mobile, shared code)</label>
+    </option>
+    <option>
+        <value>+882</value>
+        <!-- _("+882 (International Networks, shared code)") -->
+        <label>+882 (International Networks, shared code)</label>
+    </option>
+    <option>
+        <value>+979</value>
+        <!-- _("+979 (International Premium Rate Service (IPRS))") -->
+        <label>+979 (International Premium Rate Service (IPRS))</label>
+    </option>
+    <option>
+        <value>+808</value>
+        <!-- _("+808 (International Shared Cost Service (ISCS))") -->
+        <label>+808 (International Shared Cost Service (ISCS))</label>
+    </option>
+    <option>
+        <value>+98</value>
+        <!-- _("+98 (Iran (Islamic Republic of))") -->
+        <label>+98 (Iran (Islamic Republic of))</label>
+    </option>
+    <option>
+        <value>+964</value>
+        <!-- _("+964 (Iraq (Republic of))") -->
+        <label>+964 (Iraq (Republic of))</label>
+    </option>
+    <option>
+        <value>+353</value>
+        <!-- _("+353 (Ireland)") -->
+        <label>+353 (Ireland)</label>
+    </option>
+    <option>
+        <value>+972</value>
+        <!-- _("+972 (Israel (State of))") -->
+        <label>+972 (Israel (State of))</label>
+    </option>
+    <option>
+        <value>+39</value>
+        <!-- _("+39 (Italy)") -->
+        <label>+39 (Italy)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Jamaica)") -->
+        <label>+1 (Jamaica)</label>
+    </option>
+    <option>
+        <value>+81</value>
+        <!-- _("+81 (Japan)") -->
+        <label>+81 (Japan)</label>
+    </option>
+    <option>
+        <value>+962</value>
+        <!-- _("+962 (Jordan (Hashemite Kingdom of))") -->
+        <label>+962 (Jordan (Hashemite Kingdom of))</label>
+    </option>
+    <option>
+        <value>+7</value>
+        <!-- _("+7 (Kazakhstan (Republic of))") -->
+        <label>+7 (Kazakhstan (Republic of))</label>
+    </option>
+    <option>
+        <value>+254</value>
+        <!-- _("+254 (Kenya (Republic of))") -->
+        <label>+254 (Kenya (Republic of))</label>
+    </option>
+    <option>
+        <value>+686</value>
+        <!-- _("+686 (Kiribati (Republic of))") -->
+        <label>+686 (Kiribati (Republic of))</label>
+    </option>
+    <option>
+        <value>+82</value>
+        <!-- _("+82 (Korea (Republic of))") -->
+        <label>+82 (Korea (Republic of))</label>
+    </option>
+    <option>
+        <value>+965</value>
+        <!-- _("+965 (Kuwait (State of))") -->
+        <label>+965 (Kuwait (State of))</label>
+    </option>
+    <option>
+        <value>+996</value>
+        <!-- _("+996 (Kyrgyz Republic)") -->
+        <label>+996 (Kyrgyz Republic)</label>
+    </option>
+    <option>
+        <value>+856</value>
+        <!-- _("+856 (Lao People's Democratic Republic)") -->
+        <label>+856 (Lao People's Democratic Republic)</label>
+    </option>
+    <option>
+        <value>+371</value>
+        <!-- _("+371 (Latvia (Republic of))") -->
+        <label>+371 (Latvia (Republic of))</label>
+    </option>
+    <option>
+        <value>+961</value>
+        <!-- _("+961 (Lebanon)") -->
+        <label>+961 (Lebanon)</label>
+    </option>
+    <option>
+        <value>+266</value>
+        <!-- _("+266 (Lesotho (Kingdom of))") -->
+        <label>+266 (Lesotho (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+231</value>
+        <!-- _("+231 (Liberia (Republic of))") -->
+        <label>+231 (Liberia (Republic of))</label>
+    </option>
+    <option>
+        <value>+218</value>
+        <!-- _("+218 (Libya (Socialist People's Libyan Arab Jamahiriya))") -->
+        <label>+218 (Libya (Socialist People's Libyan Arab Jamahiriya))</label>
+    </option>
+    <option>
+        <value>+423</value>
+        <!-- _("+423 (Liechtenstein (Principality of))") -->
+        <label>+423 (Liechtenstein (Principality of))</label>
+    </option>
+    <option>
+        <value>+370</value>
+        <!-- _("+370 (Lithuania (Republic of))") -->
+        <label>+370 (Lithuania (Republic of))</label>
+    </option>
+    <option>
+        <value>+352</value>
+        <!-- _("+352 (Luxembourg)") -->
+        <label>+352 (Luxembourg)</label>
+    </option>
+    <option>
+        <value>+853</value>
+        <!-- _("+853 (Macao, China)") -->
+        <label>+853 (Macao, China)</label>
+    </option>
+    <option>
+        <value>+261</value>
+        <!-- _("+261 (Madagascar (Republic of))") -->
+        <label>+261 (Madagascar (Republic of))</label>
+    </option>
+    <option>
+        <value>+265</value>
+        <!-- _("+265 (Malawi)") -->
+        <label>+265 (Malawi)</label>
+    </option>
+    <option>
+        <value>+60</value>
+        <!-- _("+60 (Malaysia)") -->
+        <label>+60 (Malaysia)</label>
+    </option>
+    <option>
+        <value>+960</value>
+        <!-- _("+960 (Maldives (Republic of))") -->
+        <label>+960 (Maldives (Republic of))</label>
+    </option>
+    <option>
+        <value>+223</value>
+        <!-- _("+223 (Mali (Republic of))") -->
+        <label>+223 (Mali (Republic of))</label>
+    </option>
+    <option>
+        <value>+356</value>
+        <!-- _("+356 (Malta)") -->
+        <label>+356 (Malta)</label>
+    </option>
+    <option>
+        <value>+692</value>
+        <!-- _("+692 (Marshall Islands (Republic of the))") -->
+        <label>+692 (Marshall Islands (Republic of the))</label>
+    </option>
+    <option>
+        <value>+596</value>
+        <!-- _("+596 (Martinique (French Department of))") -->
+        <label>+596 (Martinique (French Department of))</label>
+    </option>
+    <option>
+        <value>+222</value>
+        <!-- _("+222 (Mauritania (Islamic Republic of))") -->
+        <label>+222 (Mauritania (Islamic Republic of))</label>
+    </option>
+    <option>
+        <value>+230</value>
+        <!-- _("+230 (Mauritius (Republic of))") -->
+        <label>+230 (Mauritius (Republic of))</label>
+    </option>
+    <option>
+        <value>+269</value>
+        <!-- _("+269 (Mayotte)") -->
+        <label>+269 (Mayotte)</label>
+    </option>
+    <option>
+        <value>+52</value>
+        <!-- _("+52 (Mexico)") -->
+        <label>+52 (Mexico)</label>
+    </option>
+    <option>
+        <value>+691</value>
+        <!-- _("+691 (Micronesia (Federated States of))") -->
+        <label>+691 (Micronesia (Federated States of))</label>
+    </option>
+    <option>
+        <value>+373</value>
+        <!-- _("+373 (Moldova (Republic of))") -->
+        <label>+373 (Moldova (Republic of))</label>
+    </option>
+    <option>
+        <value>+377</value>
+        <!-- _("+377 (Monaco (Principality of))") -->
+        <label>+377 (Monaco (Principality of))</label>
+    </option>
+    <option>
+        <value>+976</value>
+        <!-- _("+976 (Mongolia)") -->
+        <label>+976 (Mongolia)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Montserrat)") -->
+        <label>+1 (Montserrat)</label>
+    </option>
+    <option>
+        <value>+212</value>
+        <!-- _("+212 (Morocco (Kingdom of))") -->
+        <label>+212 (Morocco (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+258</value>
+        <!-- _("+258 (Mozambique (Republic of))") -->
+        <label>+258 (Mozambique (Republic of))</label>
+    </option>
+    <option>
+        <value>+95</value>
+        <!-- _("+95 (Myanmar (Union of))") -->
+        <label>+95 (Myanmar (Union of))</label>
+    </option>
+    <option>
+        <value>+264</value>
+        <!-- _("+264 (Namibia (Republic of))") -->
+        <label>+264 (Namibia (Republic of))</label>
+    </option>
+    <option>
+        <value>+674</value>
+        <!-- _("+674 (Nauru (Republic of))") -->
+        <label>+674 (Nauru (Republic of))</label>
+    </option>
+    <option>
+        <value>+977</value>
+        <!-- _("+977 (Nepal)") -->
+        <label>+977 (Nepal)</label>
+    </option>
+    <option>
+        <value>+31</value>
+        <!-- _("+31 (Netherlands (Kingdom of the))") -->
+        <label>+31 (Netherlands (Kingdom of the))</label>
+    </option>
+    <option>
+        <value>+599</value>
+        <!-- _("+599 (Netherlands Antilles)") -->
+        <label>+599 (Netherlands Antilles)</label>
+    </option>
+    <option>
+        <value>+687</value>
+        <!-- _("+687 (New Caledonia (Territoire français d'outre-mer))") -->
+        <label>+687 (New Caledonia (Territoire français d'outre-mer))</label>
+    </option>
+    <option>
+        <value>+64</value>
+        <!-- _("+64 (New Zealand)") -->
+        <label>+64 (New Zealand)</label>
+    </option>
+    <option>
+        <value>+505</value>
+        <!-- _("+505 (Nicaragua)") -->
+        <label>+505 (Nicaragua)</label>
+    </option>
+    <option>
+        <value>+227</value>
+        <!-- _("+227 (Niger (Republic of the))") -->
+        <label>+227 (Niger (Republic of the))</label>
+    </option>
+    <option>
+        <value>+234</value>
+        <!-- _("+234 (Nigeria (Federal Republic of))") -->
+        <label>+234 (Nigeria (Federal Republic of))</label>
+    </option>
+    <option>
+        <value>+683</value>
+        <!-- _("+683 (Niue)") -->
+        <label>+683 (Niue)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Northern Mariana Islands (Commonwealth of the))") -->
+        <label>+1 (Northern Mariana Islands (Commonwealth of the))</label>
+    </option>
+    <option>
+        <value>+47</value>
+        <!-- _("+47 (Norway)") -->
+        <label>+47 (Norway)</label>
+    </option>
+    <option>
+        <value>+968</value>
+        <!-- _("+968 (Oman (Sultanate of))") -->
+        <label>+968 (Oman (Sultanate of))</label>
+    </option>
+    <option>
+        <value>+92</value>
+        <!-- _("+92 (Pakistan (Islamic Republic of))") -->
+        <label>+92 (Pakistan (Islamic Republic of))</label>
+    </option>
+    <option>
+        <value>+680</value>
+        <!-- _("+680 (Palau (Republic of))") -->
+        <label>+680 (Palau (Republic of))</label>
+    </option>
+    <option>
+        <value>+507</value>
+        <!-- _("+507 (Panama (Republic of))") -->
+        <label>+507 (Panama (Republic of))</label>
+    </option>
+    <option>
+        <value>+675</value>
+        <!-- _("+675 (Papua New Guinea)") -->
+        <label>+675 (Papua New Guinea)</label>
+    </option>
+    <option>
+        <value>+595</value>
+        <!-- _("+595 (Paraguay (Republic of))") -->
+        <label>+595 (Paraguay (Republic of))</label>
+    </option>
+    <option>
+        <value>+51</value>
+        <!-- _("+51 (Peru)") -->
+        <label>+51 (Peru)</label>
+    </option>
+    <option>
+        <value>+63</value>
+        <!-- _("+63 (Philippines (Republic of the))") -->
+        <label>+63 (Philippines (Republic of the))</label>
+    </option>
+    <option>
+        <value>+48</value>
+        <!-- _("+48 (Poland (Republic of))") -->
+        <label>+48 (Poland (Republic of))</label>
+    </option>
+    <option>
+        <value>+351</value>
+        <!-- _("+351 (Portugal)") -->
+        <label>+351 (Portugal)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Puerto Rico)") -->
+        <label>+1 (Puerto Rico)</label>
+    </option>
+    <option>
+        <value>+974</value>
+        <!-- _("+974 (Qatar (State of))") -->
+        <label>+974 (Qatar (State of))</label>
+    </option>
+    <option>
+        <value>+262</value>
+        <!-- _("+262 (Reunion (French Department of))") -->
+        <label>+262 (Reunion (French Department of))</label>
+    </option>
+    <option>
+        <value>+40</value>
+        <!-- _("+40 (Romania)") -->
+        <label>+40 (Romania)</label>
+    </option>
+    <option>
+        <value>+7</value>
+        <!-- _("+7 (Russian Federation)") -->
+        <label>+7 (Russian Federation)</label>
+    </option>
+    <option>
+        <value>+250</value>
+        <!-- _("+250 (Rwanda (Republic of))") -->
+        <label>+250 (Rwanda (Republic of))</label>
+    </option>
+    <option>
+        <value>+290</value>
+        <!-- _("+290 (Saint Helena)") -->
+        <label>+290 (Saint Helena)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Saint Kitts and Nevis)") -->
+        <label>+1 (Saint Kitts and Nevis)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Saint Lucia)") -->
+        <label>+1 (Saint Lucia)</label>
+    </option>
+    <option>
+        <value>+508</value>
+        <!-- _("+508 (Saint Pierre and Miquelon (Collectivité territoriale de la République française))") -->
+        <label>+508 (Saint Pierre and Miquelon (Collectivité territoriale de la République française))</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Saint Vincent and the Grenadines)") -->
+        <label>+1 (Saint Vincent and the Grenadines)</label>
+    </option>
+    <option>
+        <value>+685</value>
+        <!-- _("+685 (Samoa (Independent State of))") -->
+        <label>+685 (Samoa (Independent State of))</label>
+    </option>
+    <option>
+        <value>+378</value>
+        <!-- _("+378 (San Marino (Republic of))") -->
+        <label>+378 (San Marino (Republic of))</label>
+    </option>
+    <option>
+        <value>+239</value>
+        <!-- _("+239 (Sao Tome and Principe (Democratic Republic of))") -->
+        <label>+239 (Sao Tome and Principe (Democratic Republic of))</label>
+    </option>
+    <option>
+        <value>+966</value>
+        <!-- _("+966 (Saudi Arabia (Kingdom of))") -->
+        <label>+966 (Saudi Arabia (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+221</value>
+        <!-- _("+221 (Senegal (Republic of))") -->
+        <label>+221 (Senegal (Republic of))</label>
+    </option>
+    <option>
+        <value>+381</value>
+        <!-- _("+381 (Serbia and Montenegro)") -->
+        <label>+381 (Serbia and Montenegro)</label>
+    </option>
+    <option>
+        <value>+248</value>
+        <!-- _("+248 (Seychelles (Republic of))") -->
+        <label>+248 (Seychelles (Republic of))</label>
+    </option>
+    <option>
+        <value>+232</value>
+        <!-- _("+232 (Sierra Leone)") -->
+        <label>+232 (Sierra Leone)</label>
+    </option>
+    <option>
+        <value>+65</value>
+        <!-- _("+65 (Singapore (Republic of))") -->
+        <label>+65 (Singapore (Republic of))</label>
+    </option>
+    <option>
+        <value>+421</value>
+        <!-- _("+421 (Slovak Republic)") -->
+        <label>+421 (Slovak Republic)</label>
+    </option>
+    <option>
+        <value>+386</value>
+        <!-- _("+386 (Slovenia (Republic of))") -->
+        <label>+386 (Slovenia (Republic of))</label>
+    </option>
+    <option>
+        <value>+677</value>
+        <!-- _("+677 (Solomon Islands)") -->
+        <label>+677 (Solomon Islands)</label>
+    </option>
+    <option>
+        <value>+252</value>
+        <!-- _("+252 (Somali Democratic Republic)") -->
+        <label>+252 (Somali Democratic Republic)</label>
+    </option>
+    <option>
+        <value>+27</value>
+        <!-- _("+27 (South Africa (Republic of))") -->
+        <label>+27 (South Africa (Republic of))</label>
+    </option>
+    <option>
+        <value>+34</value>
+        <!-- _("+34 (Spain)") -->
+        <label>+34 (Spain)</label>
+    </option>
+    <option>
+        <value>+94</value>
+        <!-- _("+94 (Sri Lanka (Democratic Socialist Republic of))") -->
+        <label>+94 (Sri Lanka (Democratic Socialist Republic of))</label>
+    </option>
+    <option>
+        <value>+249</value>
+        <!-- _("+249 (Sudan (Republic of the))") -->
+        <label>+249 (Sudan (Republic of the))</label>
+    </option>
+    <option>
+        <value>+597</value>
+        <!-- _("+597 (Suriname (Republic of))") -->
+        <label>+597 (Suriname (Republic of))</label>
+    </option>
+    <option>
+        <value>+268</value>
+        <!-- _("+268 (Swaziland (Kingdom of))") -->
+        <label>+268 (Swaziland (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+46</value>
+        <!-- _("+46 (Sweden)") -->
+        <label>+46 (Sweden)</label>
+    </option>
+    <option>
+        <value>+41</value>
+        <!-- _("+41 (Switzerland (Confederation of))") -->
+        <label>+41 (Switzerland (Confederation of))</label>
+    </option>
+    <option>
+        <value>+963</value>
+        <!-- _("+963 (Syrian Arab Republic)") -->
+        <label>+963 (Syrian Arab Republic)</label>
+    </option>
+    <option>
+        <value>+992</value>
+        <!-- _("+992 (Tajikistan (Republic of))") -->
+        <label>+992 (Tajikistan (Republic of))</label>
+    </option>
+    <option>
+        <value>+255</value>
+        <!-- _("+255 (Tanzania (United Republic of))") -->
+        <label>+255 (Tanzania (United Republic of))</label>
+    </option>
+    <option>
+        <value>+66</value>
+        <!-- _("+66 (Thailand)") -->
+        <label>+66 (Thailand)</label>
+    </option>
+    <option>
+        <value>+389</value>
+        <!-- _("+389 (The Former Yugoslav Republic of Macedonia)") -->
+        <label>+389 (The Former Yugoslav Republic of Macedonia)</label>
+    </option>
+    <option>
+        <value>+228</value>
+        <!-- _("+228 (Togolese Republic)") -->
+        <label>+228 (Togolese Republic)</label>
+    </option>
+    <option>
+        <value>+690</value>
+        <!-- _("+690 (Tokelau)") -->
+        <label>+690 (Tokelau)</label>
+    </option>
+    <option>
+        <value>+676</value>
+        <!-- _("+676 (Tonga (Kingdom of))") -->
+        <label>+676 (Tonga (Kingdom of))</label>
+    </option>
+    <option>
+        <value>+991</value>
+        <!-- _("+991 (Trial of a proposed new international telecommunication public correspondence service, shared code)") -->
+        <label>+991 (Trial of a proposed new international telecommunication public correspondence service, shared code)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Trinidad and Tobago)") -->
+        <label>+1 (Trinidad and Tobago)</label>
+    </option>
+    <option>
+        <value>+216</value>
+        <!-- _("+216 (Tunisia)") -->
+        <label>+216 (Tunisia)</label>
+    </option>
+    <option>
+        <value>+90</value>
+        <!-- _("+90 (Turkey)") -->
+        <label>+90 (Turkey)</label>
+    </option>
+    <option>
+        <value>+993</value>
+        <!-- _("+993 (Turkmenistan)") -->
+        <label>+993 (Turkmenistan)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (Turks and Caicos Islands)") -->
+        <label>+1 (Turks and Caicos Islands)</label>
+    </option>
+    <option>
+        <value>+688</value>
+        <!-- _("+688 (Tuvalu)") -->
+        <label>+688 (Tuvalu)</label>
+    </option>
+    <option>
+        <value>+256</value>
+        <!-- _("+256 (Uganda (Republic of))") -->
+        <label>+256 (Uganda (Republic of))</label>
+    </option>
+    <option>
+        <value>+380</value>
+        <!-- _("+380 (Ukraine)") -->
+        <label>+380 (Ukraine)</label>
+    </option>
+    <option>
+        <value>+971</value>
+        <!-- _("+971 (United Arab Emirates)") -->
+        <label>+971 (United Arab Emirates)</label>
+    </option>
+    <option>
+        <value>+44</value>
+        <!-- _("+44 (United Kingdom of Great Britain and Northern Ireland)") -->
+        <label>+44 (United Kingdom of Great Britain and Northern Ireland)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (United States of America)") -->
+        <label>+1 (United States of America)</label>
+    </option>
+    <option>
+        <value>+1</value>
+        <!-- _("+1 (United States Virgin Islands)") -->
+        <label>+1 (United States Virgin Islands)</label>
+    </option>
+    <option>
+        <value>+878</value>
+        <!-- _("+878 (Universal Personal Telecommunication Service (UPT))") -->
+        <label>+878 (Universal Personal Telecommunication Service (UPT))</label>
+    </option>
+    <option>
+        <value>+598</value>
+        <!-- _("+598 (Uruguay (Eastern Republic of))") -->
+        <label>+598 (Uruguay (Eastern Republic of))</label>
+    </option>
+    <option>
+        <value>+998</value>
+        <!-- _("+998 (Uzbekistan (Republic of))") -->
+        <label>+998 (Uzbekistan (Republic of))</label>
+    </option>
+    <option>
+        <value>+678</value>
+        <!-- _("+678 (Vanuatu (Republic of))") -->
+        <label>+678 (Vanuatu (Republic of))</label>
+    </option>
+    <option>
+        <value>+39</value>
+        <!-- _("+39 (Vatican City State)") -->
+        <label>+39 (Vatican City State)</label>
+    </option>
+    <option>
+        <value>+379</value>
+        <!-- _("+379 (Vatican City State)") -->
+        <label>+379 (Vatican City State)</label>
+    </option>
+    <option>
+        <value>+58</value>
+        <!-- _("+58 (Venezuela (Bolivarian Republic of))") -->
+        <label>+58 (Venezuela (Bolivarian Republic of))</label>
+    </option>
+    <option>
+        <value>+84</value>
+        <!-- _("+84 (Viet Nam (Socialist Republic of))") -->
+        <label>+84 (Viet Nam (Socialist Republic of))</label>
+    </option>
+    <option>
+        <value>+681</value>
+        <!-- _("+681 (Wallis and Futuna (Territoire français d'outre-mer))") -->
+        <label>+681 (Wallis and Futuna (Territoire français d'outre-mer))</label>
+    </option>
+    <option>
+        <value>+967</value>
+        <!-- _("+967 (Yemen (Republic of))") -->
+        <label>+967 (Yemen (Republic of))</label>
+    </option>
+    <option>
+        <value>+260</value>
+        <!-- _("+260 (Zambia (Republic of))") -->
+        <label>+260 (Zambia (Republic of))</label>
+    </option>
+    <option>
+        <value>+263</value>
+        <!-- _("+263 (Zimbabwe (Republic of))") -->
+        <label>+263 (Zimbabwe (Republic of))</label>
+    </option>
+</options>

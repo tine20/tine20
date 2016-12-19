@@ -1,0 +1,55 @@
+Return-Path: <unittest@tine20.org>
+Delivered-To: <unittest@tine20.org>
+Received: from mail04.metaways.net ([10.129.3.200])
+	by mail03.metaways.net (Dovecot) with LMTP id vjczJhDi5lAWCwAA5ANymA
+	for <unittest@tine20.org>; Fri, 04 Jan 2013 15:08:35 +0100
+Received: from mx04.metaways.net ([127.0.0.1])
+	by mail04.metaways.net (Dovecot) with LMTP id 8o00JPPh5lCuEwAAT5mwPQ
+	; Fri, 04 Jan 2013 15:08:35 +0100
+Received: from localhost (e176057020.adsl.alicedsl.de [85.176.57.20])
+	by mx04.metaways.net (Postfix) with ESMTPSA id 8194FA0A6
+	for <unittest@tine20.org>; Fri,  4 Jan 2013 15:08:35 +0100 (CET)
+Subject: neueneu
+From: "Tine 2.0 Admin Account" <unittest@tine20.org>
+To: unittest@tine20.org
+User-Agent: Tine 2.0 Email Client (version 7624: 5f0c52c653926683d5fd119fa3268085cdbc0adb (2013-01-04 12:44:58) - none)
+Message-Id: <65b1e9b051eea90ab99020446119bcf00602dc42@tine20.org>
+X-MailGenerator: Tine 2.0
+Date: Fri, 04 Jan 2013 14:08:34 +0000
+Content-Type: multipart/mixed; charset=UTF-8;
+ boundary="=_c4492e5cf2f9a553e023faf07a5c6553"
+X-Tine20TestMessage: attachmentUmlaut.eml
+MIME-Version: 1.0
+
+This is a message in Mime Format.  If you see this, your mail reader does not support this format.
+
+--=_c4492e5cf2f9a553e023faf07a5c6553
+Content-Type: multipart/alternative;
+ boundary="=_82785430c2280c268fc58c48d14b08c9"
+Content-Transfer-Encoding: 8bit
+
+
+--=_82785430c2280c268fc58c48d14b08c9
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+
+
+--=_82785430c2280c268fc58c48d14b08c9
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; char=
+set=3DUTF-8"><title></title><style type=3D"text/css">.felamimail-body-bl=
+ockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px sol=
+id #000088;} </style></head><body></body></html>
+
+--=_82785430c2280c268fc58c48d14b08c9--
+
+--=_c4492e5cf2f9a553e023faf07a5c6553
+Content-Type: text/plain; name="=?utf-8?Q?=C3=A4=C3=B6ppop=C3=A4.txt?="
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment
+
+
+--=_c4492e5cf2f9a553e023faf07a5c6553--

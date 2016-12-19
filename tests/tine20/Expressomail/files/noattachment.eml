@@ -1,0 +1,55 @@
+Received: from mail02.metaways.net ([10.129.3.249])
+	by mail03.metaways.net (Dovecot) with LMTP id lLB0B1d9DlH/cAAA5ANymA
+	; Sun, 03 Feb 2013 16:08:07 +0100
+Received: from mx02.metaways.net ([127.0.0.1])
+	by mail02.metaways.net (Dovecot) with LMTP id w3GeBld9DlFnEQAAk4785w
+	; Sun, 03 Feb 2013 16:08:07 +0100
+Received: from nick.hrz.tu-chemnitz.de (nick.hrz.tu-chemnitz.de [134.109.228.11])
+	by mx02.metaways.net (Postfix) with ESMTPS id 8E09F4063
+	for <unittest@tine20.org>; Sun,  3 Feb 2013 16:08:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tu-chemnitz.de; s=dkim2010;
+	h=Message-ID:To:Reply-To:Date:From:Subject:MIME-Version:Content-Type; bh=KEGspuBilfDM2hfQQ9V4uV5dlzEjprFrFepFW3c5W+M=;
+	b=ofv8AOJ3HOWZwM6KnC5A3GcKScJiVHrjd335krXnsvW+0zSvPP0GFHj4mdjG91A+l1oAbrgXVDSxavymCA3HcIGnqWGLidMdfsT5cahSl6RLfXROm9EoNFGWETJgk+VHfSzCA6Rtgv+NOpqWwb2nIcWiLm0fcYV/nui5mMGW8f0=;
+Received: from pat.hrz.tu-chemnitz.de ([134.109.133.4] helo=mailbox.hrz.tu-chemnitz.de)
+	by nick.hrz.tu-chemnitz.de with esmtps (TLSv1:DHE-RSA-AES256-SHA:256)
+	(Exim 4.80.1)
+	(envelope-from <mail@example.org>)
+	id 1U20sf-0004Vv-Mf
+	for unittest@tine20.org; Sun, 03 Feb 2013 15:49:17 +0100
+Received: from braun.hrz.tu-chemnitz.de ([134.109.200.34])
+	by mailbox.hrz.tu-chemnitz.de with esmtp (Exim 4.80.1)
+	(envelope-from <mail@example.org>)
+	id 1U20sf-00034C-Ji
+	for unittest@tine20.org; Sun, 03 Feb 2013 15:49:17 +0100
+Content-Type: multipart/mixed; boundary="===============2939218738777855418=="
+MIME-Version: 1.0
+Subject: Beitrag [CLT2013]
+From: Vorname Nachname <vortraege@example.org>
+Date: Sun,  3 Feb 2013 15:49:17 +0200 (CEST)
+Reply-To: vortraege@example.org
+To: unittest@tine20.org
+Message-ID: <1359902957.3842088@fix.hrz.tu-chemnitz.de>
+X-Scan-AV: mailbox.hrz.tu-chemnitz.de;2013-02-03 15:49:17;caa3aeb58baf33008c53f0f554ee36d4
+X-purgate: clean
+X-purgate-type: clean
+X-purgate-ID: 154106::1359902957-000004D6-64DFBD6E/0-0/0-0
+X-Scan-SA: nick.hrz.tu-chemnitz.de;2013-02-03 15:49:17;ea5d200c31ec16509266621ce7cbbbc3
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.3 required=5.0 tests=AWL,DKIM_SIGNED,DKIM_VALID,
+	RCVD_IN_DNSWL_MED,RP_MATCHES_RCVD autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on mail02.metaways.net
+X-Tine20TestMessage: noattachment.eml
+
+You will not see this in a MIME-aware mail reader.
+
+--===============2939218738777855418==
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+
+Sehr geehrter Herr X,
+
+Viele Gr=FC=DFe und nochmals herzlichen Dank f=FCr die Anmeldung!
+	Vorname Nachname.
+
+--===============2939218738777855418==--

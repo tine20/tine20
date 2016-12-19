@@ -1,0 +1,468 @@
+Received: from mail3.meetup.com (mail3.meetup.com [64.90.170.33])
+	by mx03.metaways.net (Postfix) with ESMTP id BA8FA2107
+	for <c.weiss@metaways.de>; Mon, 12 Dec 2011 14:12:25 +0100 (CET)
+Received: from mail4.phi.meetup.com (38.123.132.114)
+	by mail3.meetup.com (PowerMTA(TM) v3.5r6) id hsnuri0l1joi
+	for <c.weiss@metaways.de>;
+	Mon, 12 Dec 2011 08:12:18 -0500 (envelope-from <info@meetup.com>)
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=meetup; d=meetup.com;
+	b=L7klAbbJYvtCgBKrJYJi7ihgv+gwfeIcFvNcGXXYRnVGmcYdmMd251K0X8YWL6CAzSq8eg1yTmCx  
+	lQrkEmkJDKEtzre+ofKLDgO4vOZBsiI+Rz7nRTtUIKfulQgWS6sY1PBRLMnETNHzbqnuuHKxeiiZ  
+	wVfJiIGsKuqstzitkuQ=;
+Received: from jobs0.meetup.com (10.3.0.30)
+	by mail4.phi.meetup.com (PowerMTA(TM) v3.5r16) id hsnur412560r
+	for <c.weiss@metaways.de>;
+	Mon, 12 Dec 2011 08:12:18 -0500 (envelope-from <info@meetup.com>)
+Message-ID: <339204423.1323695538855.JavaMail.root@jobs0.meetup.com>
+From: "HH.js" <info@meetup.com>
+Sender: info@meetup.com
+To: c.weiss@metaways.de
+Subject: =?iso-8859-1?Q?N=E4chste_Woche:_HH.js_Meetup?=
+X-MEETUP-MESG-ID: 940032342
+X-MEETUP-RECIP-ID: 14436437
+X-MEETUP-TRACK: me2p
+Date: Mon, 12 Dec 2011 08:12:18 -0500
+X-Spam-Status: No, score=-2.1 required=5.0 tests=AWL,DKIM_SIGNED,DKIM_VALID,
+	DKIM_VALID_AU,HTML_MESSAGE,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD
+	autolearn=disabled version=3.3.1
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+	mail03.metaways.net
+Return-Path: info@meetup.com
+X-Tine20TestMessage: meetup.eml
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_Part_22890491_1902335162.1323695538854"
+
+------=_Part_22890491_1902335162.1323695538854
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_22890492_810531198.1323695538854"
+
+------=_Part_22890492_810531198.1323695538854
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
+
+   Nur eine kurze Erinnerung: HH.js hat ein Meetup in einer Woche. Kommst d=
+u?
+
+
+Malte hat dieses Meetup f=FCr HH.js hinzugef=FCgt
+
+Was: HH.js Meetup
+
+Wann: {TITLE}
+
+Wo: Dieses Meetup braucht einen Treffpunkt
+
+Monthly meetup of the JavaScript community in Hamburg
+
+Klicke hier um mit "Komme' zu antworten http://www.meetup.com/hamburg-js/ev=
+ents/37413422/t/me2p_rt
+
+--=20
+info@meetup.com Deinem Adressenbuch hinzuf=FCgen, um alle Meetup E-Mails zu=
+ erhalten
+
+Um Deine E-Mail Einstellungen f=FCr diese Gruppe zu verwalten: http://www.m=
+eetup.com/hamburg-js/settings/
+Meetup, PO Box 4668 #37895 New York, New York 10163-4668
+
+Meetup HQ in NYC is hiring!  http://www.meetup.com/jobs/
+
+------=_Part_22890492_810531198.1323695538854
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+
+  =20
+<!-- X-track: me2p -->
+<!-- Rsvp: $ other.response -->
+
+
+
+<html>
+        <head>
+                <title>Meetup</title>
+                <style type=3D"text/css">
+                        @media only screen and (max-device-width: 480px) {
+                        =09.other-meetups-tearsheet {
+                        =09=09display:none;
+                        =09}
+                        }
+=09=09=09@media only screen and (max-device-width: 320px) {
+=09=09=09=09.event-meta,
+=09=09=09=09.event-rsvp-box,
+=09=09=09=09.event-rsvp-box-status {
+=09=09=09=09=09float:none!important;
+=09=09=09=09=09width:auto!important;
+=09=09=09=09}
+=09=09=09=09.event-rsvp-box {
+=09=09=09=09=09margin-top:8px;
+=09=09=09=09}
+                        =09.other-meetups-rsvp {
+=09=09=09=09=09width:40%!important;
+=09=09=09=09}
+                        =09.other-meetups-event-meta {
+=09=09=09=09=09width:60%!important;
+                        =09}
+                        =09.event-rsvp-box-actions {
+                        =09=09width:100%;
+=09=09=09=09}
+
+=09=09=09}
+=09=09=09@media only screen and (min-width: 10px) {
+=09=09=09=09.meetup-button-gradient {
+=09=09=09=09=09background-image:-webkit-gradient(linear,left top,left botto=
+m,from(#e6304c),to(#cb1834));
+=09=09=09=09=09background-image:-moz-linear-gradient(center top,#e6304c,#cb=
+1834);
+=09=09=09=09=09text-shadow:#b8263c -1px -1px 0;
+=09=09=09=09=09-moz-box-shadow:#ed6e81 1px 1px 0 0 inset;
+=09=09=09=09=09-webkit-box-shadow:#ed6e81 1px 1px 0 0 inset;
+=09=09=09=09=09-o-box-shadow:#ed6e81 1px 1px 0 0 inset;
+=09=09=09=09=09box-shadow:#ed6e81 1px 1px 0 0 inset;
+=09=09=09=09}
+=09=09=09=09.meetup-button-link {
+=09=09=09=09=09border: none!important;
+=09=09=09=09=09padding: 5px 18px!important;
+=09=09=09=09}
+=09=09=09}
+                </style>
+        </head>
+        <body style=3D"margin:0;padding:0;font-family:arial;color:#333;back=
+ground-color:#fff;text-align:center;">
+
+=09=09                <table cellpadding=3D"0" cellspacing=3D"0" style=3D"w=
+idth:100%;">
+                        <tr>
+                                <td style=3D"width:49%;padding:0;" valign=
+=3D"top"><div style=3D"height:22px;background:#e6304c;">&nbsp;</div></td>
+=09=09=09=09=09=09=09=09<td style=3D"width:52px;padding:0;"><a href=3D"http=
+://www.meetup.com/t/me2p"><img src=3D"http://www.meetup.com/t/img/me2p/1443=
+6437/logo_52x35.gif" width=3D"52" height=3D"39" alt=3D"Meetup" style=3D"bor=
+der:0;" /></a></td>
+                                <td style=3D"width:49%;padding:0;" valign=
+=3D"top"><div style=3D"height:22px;background:#e6304c;">&nbsp;</div></td>
+                        </tr>               =20
+                </table>
+=09=09
+=09=09                <div style=3D"width:94%;min-width:220px;max-width:550=
+px;margin:0 auto;padding-top:6px;text-align:left;font-family:arial,sans-ser=
+if;font-size:14px;line-height:20px;color:#545454;">
+
+=09=09=09=09=09=09=09=09=09<span style=3D"background:#e6304c;color:#fff;bor=
+der:2px solid #e6304c;text-transform:uppercase;font-size:11px;">
+=09=09=09=09=09=09=09=09=09N=E4chste Woche
+=09=09=09=09=09=09=09</span><br>
+=09=09=09                        <h1 style=3D"margin:8px 0 6px 0;text-decor=
+ation:none;color:#e6304c;font-size:32px;line-height:24px;">
+=09=09=09=09<a href=3D"http://www.meetup.com/hamburg-js/events/37413422/t/m=
+e2p_grp/?rv=3Dme2p" style=3D"color:#e6304c!important;text-decoration:none;"=
+><font color=3D"#e6304c">HH.js Meetup</font></a>
+=09=09=09</h1>
+                        <h2 style=3D"margin-top:0;color:#ccc!important;font=
+-size:18px;font-weight:normal;">HH.js</h2>
+=09=09=09
+=09=09=09                        <div style=3D"border-top:1px dotted #ccc;m=
+argin-bottom:8px;overflow:hidden;width:100%;">
+
+=09=09=09=09<div class=3D"event-meta" style=3D"float:left;width:50%;border-=
+top:8px solid #fff;">
+=09=09=09=09=09=09=09=09=09=09<p style=3D"margin:0 10px 10px 0;">
+=09=09=09=09=09=09=09=09=09=09=09=09=09<span style=3D"color:#111111;">Monta=
+g, 19. Dezember 2011</span><br>19:00
+=09=09=09=09=09=09=09=09=09=09=09</p>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<p style=3D"margin:0 10px 0 0;=
+">
+=09=09=09=09=09=09=09=09=09=09=09=09=09Braucht einen Treffpunkt<br />
+=09=09=09=09=09=09=09Demn=E4chst hier!
+=09=09=09=09=09=09=09=09=09=09=09</p>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09</d=
+iv>
+=09=09=09=09<div class=3D"event-rsvp-box" style=3D"width:166px;float:right;=
+border-top:8px solid #fff;">
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09
+=09=09=09=09=09=09=09=09=09=09=09<div class=3D"event-rsvp-box-status" style=
+=3D"background-color:#eee;padding:12px;">
+=09=09=09=09=09=09=09<div style=3D"font-weight:normal;font-size:16px;color:=
+#545454!important;">
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09Will you attend?
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09</div>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<div style=
+=3D"padding-top:4px;">
+=09=09=09=09=09=09=09<table class=3D"event-rsvp-box-actions" cellspacing=3D=
+"0" cellpadding=3D"0">
+=09=09=09=09=09=09=09=09<tr>
+=09=09=09=09=09=09=09=09=09<td style=3D"width:50%;padding-right:4px;">
+=09=09=09=09=09=09=09=09=09=09<span style=3D"border:1px solid #9d1328;displ=
+ay:block;background-color:#e9003c;-moz-border-radius: 3px 3px 3px 3px;-webk=
+it-border-radius: 3px 3px 3px 3px;border-radius: 3px 3px 3px 3px;"><span cl=
+ass=3D"meetup-button-gradient" style=3D"background-color:#e9003c;display:bl=
+ock;"><a href=3D"http://www.meetup.com/hamburg-js/events/37413422/t/me2p_ln=
+m/?response=3D3&fromEmail=3D37413422&action=3Drsvp&rv=3Dme2p&refund_policy=
+=3Dtrue" class=3D"meetup-button-link" style=3D"border-color:#e9003c;border-=
+width:5px 18px;border-style:solid;font-family:arial,sans-serif;font-weight:=
+bold;white-space:nowrap;color:#fff!important;display:block;text-decoration:=
+none;text-align:center;cursor:pointer;"><font color=3D"#FFFFFF"><nobr>Ja</n=
+obr></font></a></span></span>
+=09=09=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09<td style=3D"width:50%;">
+=09=09=09=09=09=09=09=09=09=09<span style=3D"border:1px solid #9d1328;displ=
+ay:block;background-color:#e9003c;-moz-border-radius: 3px 3px 3px 3px;-webk=
+it-border-radius: 3px 3px 3px 3px;border-radius: 3px 3px 3px 3px;"><span cl=
+ass=3D"meetup-button-gradient" style=3D"background-color:#e9003c;display:bl=
+ock;"><a href=3D"http://www.meetup.com/hamburg-js/events/37413422/t/me2p_ln=
+m/?response=3D2&action=3Drsvp&rv=3Dme2p&refund_policy=3Dtrue" class=3D"meet=
+up-button-link" style=3D"border-color:#e9003c;border-width:5px 18px;border-=
+style:solid;font-family:arial,sans-serif;font-weight:bold;white-space:nowra=
+p;color:#fff!important;display:block;text-decoration:none;text-align:center=
+;cursor:pointer;"><font color=3D"#FFFFFF"><nobr>Nein</nobr></font></a></spa=
+n></span>
+=09=09=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09</tr>
+=09=09=09=09=09=09=09</table>
+=09=09=09=09=09=09=09</div>
+=09=09=09=09=09=09</div>
+=09=09=09=09=09=09=09=09=09</div>
+                        </div>
+=09=09=09
+=09=09=09=09=09=09=09=09=09<div style=3D"border-top:1px dotted #ccc;clear:b=
+oth;">
+=09=09=09=09<div style=3D"border-top:10px solid #fff;">
+=09=09=09=09<table cellspacing=3D"0" cellpadding=3D"0">
+=09=09=09=09=09<tr>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<td style=3D"width:40=
+px;height:40px;overflow:hidden;" align=3D"center" valign=3D"top">
+=09=09=09=09=09=09=09=09<div style=3D"width:40px;height:40px;overflow:hidde=
+n;margin-right:1px;background-color:#eee;"><a href=3D"http://www.meetup.com=
+/hamburg-js/events/37413422/t/me2p_lnm/?rv=3Dme2p"><img height=3D"40" src=
+=3D"http://photos4.meetupstatic.com/photos/member/a/9/1/2/thumb_32923282.jp=
+eg" border=3D"0" style=3D"display:block;margin:0;" /></a></div>
+=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<td=
+ style=3D"width:40px;height:40px;overflow:hidden;" align=3D"center" valign=
+=3D"top">
+=09=09=09=09=09=09=09=09<div style=3D"width:40px;height:40px;overflow:hidde=
+n;margin-right:1px;background-color:#eee;"><a href=3D"http://www.meetup.com=
+/hamburg-js/events/37413422/t/me2p_lnm/?rv=3Dme2p"><img height=3D"40" src=
+=3D"http://photos4.meetupstatic.com/photos/member/c/b/8/6/thumb_32812102.jp=
+eg" border=3D"0" style=3D"display:block;margin:0;" /></a></div>
+=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<td=
+ style=3D"width:40px;height:40px;overflow:hidden;" align=3D"center" valign=
+=3D"top">
+=09=09=09=09=09=09=09=09<div style=3D"width:40px;height:40px;overflow:hidde=
+n;margin-right:1px;background-color:#eee;"><a href=3D"http://www.meetup.com=
+/hamburg-js/events/37413422/t/me2p_lnm/?rv=3Dme2p"><img height=3D"40" src=
+=3D"http://photos3.meetupstatic.com/photos/member/c/2/e/e/thumb_32329902.jp=
+eg" border=3D"0" style=3D"display:block;margin:0;" /></a></div>
+=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<td=
+ style=3D"width:40px;height:40px;overflow:hidden;" align=3D"center" valign=
+=3D"top">
+=09=09=09=09=09=09=09=09<div style=3D"width:40px;height:40px;overflow:hidde=
+n;margin-right:1px;background-color:#eee;"><a href=3D"http://www.meetup.com=
+/hamburg-js/events/37413422/t/me2p_lnm/?rv=3Dme2p"><img height=3D"40" src=
+=3D"http://photos1.meetupstatic.com/photos/member/5/8/5/e/thumb_23962622.jp=
+eg" border=3D"0" style=3D"display:block;margin:0;" /></a></div>
+=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<td=
+ style=3D"width:40px;height:40px;overflow:hidden;" align=3D"center" valign=
+=3D"top">
+=09=09=09=09=09=09=09=09<div style=3D"width:40px;height:40px;overflow:hidde=
+n;margin-right:1px;background-color:#eee;"><a href=3D"http://www.meetup.com=
+/hamburg-js/events/37413422/t/me2p_lnm/?rv=3Dme2p"><img height=3D"40" src=
+=3D"http://photos3.meetupstatic.com/photos/member/4/8/7/8/thumb_24558552.jp=
+eg" border=3D"0" style=3D"display:block;margin:0;" /></a></div>
+=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09</tr>
+=09=09=09=09</table>
+=09=09=09=09<div style=3D"margin:4px 0 0 0;font-size:13px;border-bottom:4px=
+ solid #fff;">
+=09=09=09=09=09<a href=3D"http://www.meetup.com/hamburg-js/events/37413422/=
+t/me2p_evn/?rv=3Dme2p" style=3D"color:#545454;text-decoration:none;">16 Jav=
+aScripters attending</a>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09</div>
+=09=09=09=09</div>
+=09=09=09</div>
+=09=09=09=09=09=09
+=09=09=09=09=09=09=09=09=09
+=09=09=09=09=09=09=09=09=09=09<div style=3D"border-top:1px dotted #ccc;padd=
+ing:8px 0;">
+=09=09=09=09=09Monthly meetup of the JavaScript community in Hamburg<br>
+=09=09=09=09=09<a href=3D"http://www.meetup.com/hamburg-js/events/37413422/=
+t/me2p_grp/?rv=3Dme2p" style=3D"color:#06C;text-transform:uppercase;text-de=
+coration:none;font-size:12px;">Mehr erfahren</a>
+=09=09=09=09</div>
+=09=09=09=09=09=09
+=09=09=09
+=09=09=09=09=09=09=09=09=09
+=09=09=09=09=09=09<br/>
+=09=09=09<div style=3D"background-color:#eee;">
+=09=09=09=09<div style=3D"font-weight:bold;border:8px solid #eee;color:#545=
+454!important;font-size:16px;"><a href=3D"http://www.meetup.com/hamburg-js/=
+" style=3D"color:#545454!important;text-decoration:none;"><font color=3D"#5=
+45454">Mehr Meetups dieser Gruppe</font></a></div>
+=09=09=09=09<table cellpadding=3D"0" cellspacing=3D"0" style=3D"width:100%;=
+background-color:#eee;">
+=09=09=09=09=09=09=09=09=09<tr>
+=09=09=09=09=09=09<td class=3D"other-meetups-tearsheet" style=3D"width:32px=
+;background-color:#eee;vertical-align:top;border-top:1px solid #fff;padding=
+:8px 0 8px 8px;">
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09<div style=3D"border:1px solid #5=
+55;">
+=09=09=09=09=09=09=09=09<div style=3D"background-color:#555;text-transform:=
+uppercase;color:#fff!important;font-weight:bold;text-align:center;font-size=
+:9px;line-height:14px;padding:0 4px;"><font color=3D"#ffffff">Jan</font></d=
+iv>
+=09=09=09=09=09=09=09=09<div style=3D"background-color:#fff;font-size:16px;=
+font-weight:bold;text-align:center;padding:1px 4px 0 4px;">16</div>
+=09=09=09=09=09=09=09</div>
+=09=09=09=09=09=09=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09<td style=3D"vertical-align:top;padding:8px;border-top:1p=
+x solid #fff;">
+=09=09=09=09=09=09=09<table cellpadding=3D"0" cellspacing=3D"0" style=3D"wi=
+dth:100%;">
+=09=09=09=09=09=09=09=09<tr>
+=09=09=09=09=09=09=09=09=09<td style=3D"background-color:#eee;vertical-alig=
+n:top;">
+=09=09=09=09=09=09=09=09=09=09<a href=3D"http://www.meetup.com/hamburg-js/e=
+vents/41923892/t/me2p_evn/?rv=3Dme2p" style=3D"color:#0066cc!important;font=
+-size:14px;text-decoration: none;">HH.js Meetup</a><br/>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09<div style=3D"p=
+adding:2px 0 4px 0;font-size:12px;line-height:16px;">
+=09=09=09=09=09=09=09=09=09=09=09Montag, 16. Januar 2012 19:00
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09&middot; =
+<nobr>1 sind dabei</nobr>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09</div>
+=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09=09<td style=3D"background-color:#eee;width:76px;ve=
+rtical-align:top;">
+=09=09=09=09=09=09=09=09=09=09<span style=3D"border:1px solid #9d1328;displ=
+ay:block;background-color:#e9003c;-moz-border-radius: 3px 3px 3px 3px;-webk=
+it-border-radius: 3px 3px 3px 3px;border-radius: 3px 3px 3px 3px;"><span cl=
+ass=3D"meetup-button-gradient" style=3D"background-color:#e9003c;display:bl=
+ock;"><a href=3D"http://www.meetup.com/hamburg-js/events/41923892/t/me2p_ev=
+n/?rv=3Dme2p" class=3D"meetup-button-link" style=3D"border-color:#e9003c;bo=
+rder-width:5px 18px;border-style:solid;font-family:arial,sans-serif;font-we=
+ight:bold;white-space:nowrap;color:#fff!important;display:block;text-decora=
+tion:none;text-align:center;cursor:pointer;"><font color=3D"#FFFFFF"><nobr>=
+Antwort</nobr></font></a></span></span>
+=09=09=09=09=09=09=09=09=09</td>
+=09=09=09=09=09=09=09=09</tr>
+=09=09=09=09=09=09=09</table>
+=09=09=09=09=09=09</td>
+=09=09=09=09=09</tr>
+=09=09=09=09=09=09=09=09</table>
+=09=09=09</div>
+=09=09=09=09=09=09
+=09=09=09
+=09=09=09=09=09=09
+<br/>
+<div style=3D"background-color:#eee;">
+=09=09=09<div style=3D"border-bottom:1px solid #fff;font-size:13px;">
+=09=09=09<div style=3D"border:8px solid #eee;">
+=09=09=09=09Sponsored by
+=09=09=09=09=09=09=09=09=09=09=09=09<span style=3D"white-space:nowrap;line-=
+height:22px;font-size:13px;"><a href=3D"http://www.meetup.com/hamburg-js/sp=
+onsors/" style=3D"color:#0066CC;text-decoration:none;">SinnerSchrader</a></=
+span>
+=09=09=09=09=09=09=09</div>
+=09=09</div>
+=09=09=09=09<div style=3D"border:8px solid #eee;">
+=09=09=09<span style=3D"font-size:13px;">Follow us!</span>
+=09=09=09
+=09=09=09=09=09=09=09<span style=3D"white-space:nowrap;padding-right:2px;ve=
+rtical-align:top;"><a href=3D"http://twitter.com/hhjs/"><img style=3D"verti=
+cal-align:middle;" src=3D"http://img1.meetupstatic.com/img/externalservice/=
+socialmediaicons/twitter-16x16.png" width=3D16 height=3D16 border=3D0></a><=
+/span>
+=09=09=09
+=09=09=09
+=09=09=09
+=09=09=09
+=09=09=09=09=09</div>
+=09</div>
+
+                </div><br/>
+=09 =09
+=09=09                <div style=3D"background:#555;text-align:center;borde=
+r:5px solid #555">
+                        =09<div style=3D"width:80%;min-width:220px;max-widt=
+h:650px;margin:0 auto;padding:20px 0;text-align:left;font-family:arial;colo=
+r:#ccc;font-size:10px;line-height:14px;">
+=09=09<p style=3D"margin: 0 0 .25em;color:#ccc;">F=FCge <strong><a href=3D"=
+mailto:info@meetup.com" style=3D"color:#ccc;">info@meetup.com</a></strong> =
+zu deinem Adressenbuch hinzu, um alle Meetup E-Mails zu erhalten.</p>
+=09=09=09=09=09<p style=3D"margin: 0 0 .25em;color:#ccc;"> <a href=3D"http:=
+//www.meetup.com/account/comm/" style=3D"color:#ccc;">Klicke hier</a>, um d=
+eine E-Mail Einstellung zu verwalten.</p>
+=09=09=09=09<p style=3D"margin: 0 0 .25em;color:#ccc;">Meetup, PO Box 4668 =
+#37895 New York, New York 10163-4668</p>
+=09=09<p style=3D"margin: 0 0 .25em;color:#ccc;"><strong>Meetup HQ in NYC i=
+s hiring!</strong>  <a href=3D"http://www.meetup.com/jobs/" style=3D"color:=
+#ccc;">http://www.meetup.com/jobs/</a></p>
+=09</div>
+                </div>
+=09=09
+        </body>
+</html>
+
+------=_Part_22890492_810531198.1323695538854--
+
+------=_Part_22890491_1902335162.1323695538854
+Content-Type: text/calendar; name=meetup.ics; charset=us-ascii; 
+	method=REQUEST
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=meetup.ics
+
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Meetup//Meetup Events v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Meetup Events
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+TZURL:http://tzurl.org/zoneinfo-outlook/Europe/Berlin
+X-LIC-LOCATION:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+TZOFFSETTO:+0200
+TZNAME:CEST
+DTSTART:19700329T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+TZOFFSETTO:+0100
+TZNAME:CET
+DTSTART:19701025T030000
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTAMP:20111212T130955Z
+DTSTART;TZID=Europe/Berlin:20111219T190000
+DTEND;TZID=Europe/Berlin:20111219T210000
+STATUS:CONFIRMED
+SUMMARY:HH.js Meetup
+DESCRIPTION:HH.js\nMonday\, December 19 at 7:00 PM\n\nMonthly meetup of t
+ he JavaScript community in Hamburg\n\nDetails: http://www.meetup.com/ham
+ burg-js/events/37413422/
+ORGANIZER;CN=Meetup Reminder:MAILTO:info@meetup.com
+CLASS:PUBLIC
+CREATED:20111014T192454Z
+GEO:53.54;10.00
+URL:http://www.meetup.com/hamburg-js/events/37413422/
+LAST-MODIFIED:20111014T192454Z
+UID:event_wsftpypqbzb@meetup.com
+END:VEVENT
+END:VCALENDAR
+
+------=_Part_22890491_1902335162.1323695538854--
+
