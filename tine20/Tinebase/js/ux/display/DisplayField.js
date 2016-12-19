@@ -20,7 +20,10 @@ Ext.ns('Ext.ux.display');
 Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     htmlEncode: true,
     nl2br: false,
-    
+
+    // don't enumerate as form field
+    clearInvalid: false,
+
     renderer: function(v) {
         return v;
     },
@@ -56,6 +59,9 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
     readOnly: true,
     cls: 'x-ux-display-textarea',
 
+    // don't enumerate as form field
+    clearInvalid: false,
+    
     renderer: Ext.ux.display.DisplayField.prototype.renderer,
 
     setValue : function(value) {
