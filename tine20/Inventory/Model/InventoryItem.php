@@ -15,7 +15,8 @@
  * 
  * @package     Inventory
  * @subpackage  Model
- * @property    $name
+ *
+ * @property    string $name
  */
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
@@ -32,7 +33,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 9,
+        'version'           => 10,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
@@ -118,7 +119,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'default'    => NULL,
                 'type'       => 'datetime',
                 'nullable'     => true,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'total_number' => array(
                 'type'         => 'integer',
@@ -152,9 +152,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'hidden'       => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
-            'costcentre' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'Cost centre', // _('Cost Center')
+            'costcenter' => array(
+                'label'      => 'Cost center', // _('Cost Center')
                 'hidden'     => TRUE,
                 'type'       => 'record',
                 'nullable'   => true,

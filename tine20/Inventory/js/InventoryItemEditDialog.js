@@ -253,13 +253,13 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }, 
                           (Tine.hasOwnProperty('Sales') && Tine.Tinebase.common.hasRight('view', 'Sales', 'costcenter')) ?
                             Tine.widgets.form.RecordPickerManager.get('Sales', 'CostCenter', {
-                                name: 'costcentre',
+                                name: 'costcenter',
                                 allowBlank: true,
-                                fieldLabel: this.app.i18n._('Cost centre'),
+                                fieldLabel: this.app.i18n._('Cost center'),
                                 columnWidth: 0.5
                             }) : {
                                     xtype: 'textfield',
-                                    name: 'costcentre',
+                                    name: 'costcenter',
                                     disabled: true,
                                     hidden: true,
                                     columnWidth: 0.5
