@@ -110,7 +110,28 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends PHPUnit_Framework_Te
         
         return $contact;
     }
-    
+
+    /**
+     * test converting vcard from sogo connector to Addressbook_Model_Contact
+     *
+     * @return Addressbook_Model_Contact
+     */
+    public function testConvertToTine20ModelWithoutAddressType()
+    {
+        $vcardStream = fopen(dirname(__FILE__) . '/../../../Import/files/without_adr_type.vcf', 'r');
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC);
+
+        $contact = $converter->toTine20Model($vcardStream);
+
+        $this->assertEquals(null,          $contact->adr_one_countryname, 'no address should be set');
+        $this->assertEquals(null,          $contact->adr_two_countryname, 'no address should be set');
+    }
+
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
     public function testConvertToVCard()
     {
         $contact = $this->testConvertToTine20Model();
