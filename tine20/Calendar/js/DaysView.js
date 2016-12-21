@@ -22,7 +22,7 @@ Tine.Calendar.DaysView = function(config){
     Tine.Calendar.DaysView.superclass.constructor.call(this);
     
     this.printRenderer = Tine.Calendar.Printer.DaysViewRenderer;
-    
+
     this.addEvents(
         /**
          * @event click

@@ -497,8 +497,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         $this->_deliverChangedFiles('lang');
-
-        die();
     }
     
     /**
@@ -508,8 +506,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function getJsFiles()
     {
         $this->_deliverChangedFiles('js');
-        
-        die();
     }
 
     /**
@@ -523,16 +519,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
 
-        $config          = Tinebase_Config::getInstance();
-        $cacheId         = null;
-        $clientETag      = null;
         $ifModifiedSince = null;
 
-        if (isset($_SERVER['If_None_Match'])) {
-            $clientETag     = trim($_SERVER['If_None_Match'], '"');
+        if (isset($_SERVER['If_Modified_Since'])) {
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
-        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-            $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
+        } elseif (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
         }
 
@@ -542,24 +533,10 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if (! empty($customJSFiles)) {
                 $filesToWatch = array_merge($filesToWatch, (array)$customJSFiles);
             }
-
         }
 
         $filesToWatch = array_filter($filesToWatch, 'file_exists');
-
         $lastModified = $this->_getLastModified($filesToWatch);
-        
-        // use last modified time also
-        $serverETag = hash('sha1', implode('', $filesToWatch) . $lastModified);
-        
-        $cache = new Zend_Cache_Frontend_File(array(
-            'master_files' => $filesToWatch
-        ));
-        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
-        
-        if ($clientETag && $ifModifiedSince) {
-            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $clientETag . $ifModifiedSince);
-        }
         
         // cache for 60 seconds
         $maxAge = 60;
@@ -567,28 +544,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
         
         // overwrite Pragma header from session
-        header("Pragma: cache");
-        
+        header_remove('Pragma');
+
         // if the cache id is still valid, the files don't have changed on disk
-        if ($clientETag == $serverETag && $cache->test($cacheId)) {
+        if ($ifModifiedSince == $lastModified) {
             header("Last-Modified: " . $ifModifiedSince);
             header("HTTP/1.0 304 Not Modified");
-            header('Content-Length: 0');
         } else {
-            // get new cacheId
-            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $serverETag . $lastModified);
-            
-            // do we need to update the cache? maybe the client did not send an etag
-            if (!$cache->test($cacheId)) {
-                $cache->save(TINE20_BUILDTYPE, $cacheId, array(), null);
-            }
-            
             header("Last-Modified: " . $lastModified);
             header('Content-Type: application/javascript');
-            header('Etag: "' . $serverETag . '"');
-            
-            flush();
-            
+
             // send files to client
             foreach ($filesToWatch as $file) {
                 readfile($file);
@@ -648,7 +613,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " can't deliver custom js: \n" . $exception);
 
         }
-        die();
     }
 
     /**
