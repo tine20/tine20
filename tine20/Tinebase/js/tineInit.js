@@ -833,7 +833,7 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    if (Tine.clientVersion.buildType === 'DEVELOPMENT') {
+    if (Tine.clientVersion.buildType === 'DEVELOPMENT' || Tine.clientVersion.buildType === 'none') {
         // TODO do something similar for RELEASE/DEBUG?
         Tine.Tinebase.tineInit.checkWebpack();
     }
