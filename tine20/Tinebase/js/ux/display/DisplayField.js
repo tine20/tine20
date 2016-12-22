@@ -22,7 +22,7 @@ Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     nl2br: false,
 
     // don't enumerate as form field
-    clearInvalid: false,
+    markInvalid: null,
 
     renderer: function(v) {
         return v;
@@ -60,7 +60,7 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
     cls: 'x-ux-display-textarea',
 
     // don't enumerate as form field
-    clearInvalid: false,
+    markInvalid: null,
     
     renderer: Ext.ux.display.DisplayField.prototype.renderer,
 

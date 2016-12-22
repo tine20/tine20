@@ -116,7 +116,7 @@ Tine.Tinebase.ApplicationStarter = {
                         if (foreignRecordClass) {
                             gridRenderer = function (value, row, record) {
                                 var titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                return record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
+                                return record && record.get(field) ? Ext.util.Format.htmlEncode(record.get(field)[titleProperty]) : '';
                             };
                         } else {
                             gridRenderer = null;
