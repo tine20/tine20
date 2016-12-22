@@ -17,8 +17,6 @@
             <identifier>description</identifier>
             <header>Description</header>
             <type>string</type>
-            <maxcharacters>250</maxcharacters>
-            <maxlines>30</maxlines>
         </column>
         <column>
             <identifier>timeaccount_number</identifier>
