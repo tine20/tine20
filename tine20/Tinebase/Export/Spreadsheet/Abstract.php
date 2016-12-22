@@ -168,11 +168,6 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             case 'container_id':
                 $result = $this->_getContainer($_record, $_field->field, $_field->type);
                 break;
-                /*
-            case 'config':
-                $result = Tinebase_Config::getOptionString($_record, $_field->identifier);
-                break;
-                */
             case 'relation':
                 $result = $this->_addRelations(
                     $_record,

@@ -46,11 +46,13 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
     protected $_requiredObjectClass = array(
         'sambaSamAccount'
     );
-    
+
     /**
      * the constructor
      *
-     * @param  array          $options  options used in connecting, binding, etc.
+     * @param array $_options
+     * @throws Exception
+     * @internal param array $options options used in connecting, binding, etc.
      */
     public function __construct(array $_options = array()) 
     {
@@ -172,17 +174,19 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         
         return $_user;
     }
-    
+
     /**
      * return sid of group
-     * 
-     * @param string  $_groupId
-     * @return string the sid of the group 
+     *
+     * @param string $_groupId
+     * @return string the sid of the group
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _getGroupSID($_groupId)
     {
         $ldapOptions = Tinebase_User::getBackendConfiguration();
-        
+
+        /** @noinspection PhpDeprecationInspection */
         $filter = Zend_Ldap_Filter::equals(
             $ldapOptions['groupUUIDAttribute'], Zend_Ldap::filterEscape($_groupId)
         );
@@ -206,10 +210,11 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         
         return $group['sambasid'][0];
     }
-        
+
     /**
-     * (non-PHPdoc)
-     * @see Tinebase_User_Plugin_LdapAbstract::_user2ldap()
+     * @param Tinebase_Model_FullUser $_user
+     * @param array $_ldapData
+     * @param array $_ldapEntry
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {

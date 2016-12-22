@@ -77,4 +77,17 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         }
         $this->setApplicationVersion('Tinebase', '10.5');
     }
+
+    /**
+     * update to 10.6
+     *
+     * add account sync scheduler job
+     */
+    public function update_5()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+
+        $this->setApplicationVersion('Tinebase', '10.6');
+    }
 }

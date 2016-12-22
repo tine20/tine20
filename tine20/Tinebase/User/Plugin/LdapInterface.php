@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,11 +24,12 @@ interface Tinebase_User_Plugin_LdapInterface extends Tinebase_User_Plugin_Interf
      * @param  array                    $_ldapData
      */
     public function inspectAddUser(Tinebase_Model_FullUser $_user, array &$_ldapData);
-    
+
     /**
      * inspect get user by property
-     * 
-     * @param  Tinebase_Model_User  $_user  the user object
+     *
+     * @param  Tinebase_Model_User $_user the user object
+     * @param  array $_ldapEntry
      */
     public function inspectGetUserByProperty(Tinebase_Model_User $_user, array &$_ldapEntry);
       

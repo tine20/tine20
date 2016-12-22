@@ -343,9 +343,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $userController = Tinebase_User::getInstance();
         
-        // deactivate user plugins (like postfix/dovecot email backends) for async job user
-        $userController->unregisterAllPlugins();
-        
         try {
             $cronuser = $userController->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {

@@ -115,6 +115,11 @@ class Tinebase_Config_Struct extends ArrayObject
     {
         return $this->get($_name);
     }
+
+    public function __set($_name, $_value)
+    {
+        $this[$_name] = $_value;
+    }
     
     /**
      * Support isset() overloading on PHP 5.1
