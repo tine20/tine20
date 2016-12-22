@@ -157,7 +157,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
      */
     protected function _getEmailUserName(Tinebase_Model_User $user)
     {
-        if (isset($this->_config['useEmailAsUsername'])) {
+        if (isset($this->_config['useEmailAsUsername']) && $this->_config['useEmailAsUsername']) {
             return $user->accountEmailAddress;
         }
         
