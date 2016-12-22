@@ -200,9 +200,10 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 'type'  => 'record',
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'config' => array(
-                    'appName'     => 'HumanResources',
-                    'modelName'   => 'Employee',
-                    'idProperty'  => 'id'
+                    'appName'       => 'HumanResources',
+                    'modelName'     => 'Employee',
+                    'idProperty'    => 'id',
+                    'titleProperty' => 'n_fn' // TODO add documentation
                 )
             ),
             'division_id' => array(
