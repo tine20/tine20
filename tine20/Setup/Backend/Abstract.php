@@ -530,8 +530,12 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                             } elseif(isset($typeMapping['defaultScale'])) {
                                 $scale = ',' . $typeMapping['defaultScale'];
                             }
-                             
-                            $options = "({$_field->length}{$scale})";
+
+                            if (!isset($typeMapping['lengthLessTypes']) || ! in_array($type, $typeMapping['lengthLessTypes'])) {
+                                $options = "({$_field->length}{$scale})";
+                            } else {
+                                $options = '';
+                            }
                             break;
                         }
                     }

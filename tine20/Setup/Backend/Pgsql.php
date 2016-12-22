@@ -37,10 +37,13 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
             'lengthTypes' => array(
                 255 => 'character varying',
                 65535 => 'character varying',
-                16777215 => 'character varying',
-                4294967295 => 'character varying'),
+                16777215 => 'text',
+                4294967295 => 'text'),
             'defaultType' => 'text',
-            'defaultLength' => null),
+            'defaultLength' => null,
+            'lengthLessTypes' => array(
+                'text',
+            )),
         'float' => array(
             'defaultType' => 'double precision',
             'defaultLength' => null),
