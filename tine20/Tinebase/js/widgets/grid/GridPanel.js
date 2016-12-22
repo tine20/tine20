@@ -676,7 +676,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     initActionsImportExport: function() {
-        if (this.modelConfig && this.modelConfig.export) {
+        if (this.modelConfig && this.modelConfig['export']) {
             var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
                 items = [
                     new Tine.widgets.grid.ExportButton({
@@ -689,8 +689,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 ];
 
             // create items from available export formats
-            if (this.modelConfig.export.supportedFormats) {
-                Ext.each(this.modelConfig.export.supportedFormats, function (format) {
+            if (this.modelConfig['export'].supportedFormats) {
+                Ext.each(this.modelConfig['export'].supportedFormats, function (format) {
                     items.unshift(new Tine.widgets.grid.ExportButton({
                         // TODO format toUpper
                         text: String.format(this.app.i18n._('Export as {0}'), format),
@@ -1429,7 +1429,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
 
             // only do this for generic model config import/export
-            if (this.modelConfig && (this.modelConfig.export || this.modelConfig.import)) {
+            if (this.modelConfig && (this.modelConfig['export'] || this.modelConfig.import)) {
                 var importExportButtons = [];
 
                 if (this.actions_export) {

@@ -231,30 +231,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
 
     /**
-     * get the filter group object
-     *
-     * @param $filterModel
-     * @return Tinebase_Model_Filter_FilterGroup
-     */
-    protected function _getFilterObject($filterModel)
-    {
-        if (! class_exists($filterModel)) {
-            $configuredModel = preg_replace('/Filter$/', '', $filterModel);
-
-            // TODO check if model class exists?
-            //if (class_exists($configuredModel))
-
-            // use generic filter model
-            $filter = new Tinebase_Model_Filter_FilterGroup();
-            $filter->setConfiguredModel($configuredModel);
-        } else {
-            $filter = new $filterModel();
-        }
-
-        return $filter;
-    }
-
-    /**
      * creates/updates a record
      *
      * @param   array $_recordData
@@ -453,20 +429,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         return array(
             'status'    => 'success'
         );
-    }
-
-    /**
-     * returns function parameter as object, decode Json if needed
-     *
-     * Prepare function input to be an array. Input maybe already an array or (empty) text.
-     * Starting PHP 7 Zend_Json::decode can't handle empty strings.
-     *
-     * @param  mixed $_dataAsArrayOrJson
-     * @return array
-     */
-    protected function _prepareParameter($_dataAsArrayOrJson)
-    {
-        return Tinebase_Helper::jsonDecode($_dataAsArrayOrJson);
     }
 
     /**

@@ -171,20 +171,16 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             switch ($apiMethod) {
                 case 'export':
-
-                    $decodedFilter = Zend_Json::decode($args[0]);
-                    $decodedOptions = Zend_Json::decode($args[1]);
+                    $decodedFilter = $this->_prepareParameter($args[0]);
+                    $decodedOptions = $this->_prepareParameter($args[1]);
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Export filter: ' . print_r($decodedFilter, true)
                         . ' Options: ' . print_r($decodedOptions, true));
 
-                    if (! is_array($decodedFilter)) {
-                        $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
-                    }
-
-                    $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
-                    $filter = new $filterName($decodedFilter);
+                    $filterModel = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    $filter = $this->_getFilterObject($filterModel);
+                    $filter->setFromArrayInUsersTimezone($decodedFilter);
 
                     return $this->_export($filter, $decodedOptions, $modelController);
                     break;
