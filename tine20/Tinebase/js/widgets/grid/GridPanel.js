@@ -717,7 +717,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.actionUpdater.addActions([this.actions_export]);
         }
 
-        if (this.modelConfig && this.modelConfig.import) {
+        if (this.modelConfig && this.modelConfig['import']) {
             this.actions_import = new Ext.Action({
                 requiredGrant: 'addGrant',
                 text: this.app.i18n._('Import items'),
@@ -741,7 +741,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
-            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(this.modelConfig.import.defaultImportContainerRegistryKey),
+            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
             listeners: {
                 scope: this,
                 'finish': function() {
@@ -1429,7 +1429,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
 
             // only do this for generic model config import/export
-            if (this.modelConfig && (this.modelConfig['export'] || this.modelConfig.import)) {
+            if (this.modelConfig && (this.modelConfig['export'] || this.modelConfig['import'])) {
                 var importExportButtons = [];
 
                 if (this.actions_export) {
