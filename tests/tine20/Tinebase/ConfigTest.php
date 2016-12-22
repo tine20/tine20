@@ -75,7 +75,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->_instance->set(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
         $this->assertEquals('phpunit', $this->_instance->{Tinebase_Config::PAGETITLEPOSTFIX}, 'could not set config');
 
-        $this->_instance->delete(Tinebase_Config::PAGETITLEPOSTFIX, 'phpunit');
+        $this->_instance->delete(Tinebase_Config::PAGETITLEPOSTFIX);
 
         $this->assertEquals('###PHPUNIT-NOTSET###', $this->_instance->get(Tinebase_Config::PAGETITLEPOSTFIX, '###PHPUNIT-NOTSET###'), 'config got not deleted');
 
@@ -88,6 +88,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testConfigFromFileOverwrites()
     {
+        /** @noinspection PhpIncludeInspection */
         $configData = include('config.inc.php');
 
         if (!(isset($configData['Overwrite Test']) || array_key_exists('Overwrite Test', $configData))) {
@@ -168,28 +169,26 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testApplicationDefaultConfig()
     {
-        $defaultConfigFile = $this->_getSalesCustomDefaultConfig();
+        $defaultConfigFile = $this->_getExampleApplicationCustomDefaultConfig();
 
-        if (file_exists($defaultConfigFile)) {
-            $this->markTestSkipped('ignore test because Sales default config exists');
-        }
+        $this->assertFalse(file_exists($defaultConfigFile), 'test needs to be recoded because Example Application default config exists');
 
-        $ignoreBillablesConfig = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
-        $this->assertEquals('2000-01-01 22:00:00', $ignoreBillablesConfig);
+        $exampleString = ExampleApplication_Config::getInstance()->get(ExampleApplication_Config::EXAMPLE_STRING);
+        $this->assertEquals(ExampleApplication_Config::EXAMPLE_STRING, $exampleString);
 
         copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configtest.inc.php', $defaultConfigFile);
         $this->_filenamesToDelete[] = $defaultConfigFile;
 
-        Sales_Config::getInstance()->clearCache();
+        ExampleApplication_Config::getInstance()->clearCache();
 
-        $ignoreBillablesConfigAppDefault = Sales_Config::getInstance()->get(Sales_Config::IGNORE_BILLABLES_BEFORE);
-        $this->assertEquals('1999-10-01 22:00:00', $ignoreBillablesConfigAppDefault);
+        $exampleString = ExampleApplication_Config::getInstance()->get(ExampleApplication_Config::EXAMPLE_STRING);
+        $this->assertEquals('something else', $exampleString);
     }
 
-    protected function _getSalesCustomDefaultConfig()
+    protected function _getExampleApplicationCustomDefaultConfig()
     {
         return dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
-        . DIRECTORY_SEPARATOR . 'Sales' . DIRECTORY_SEPARATOR . 'config.inc.php';
+        . DIRECTORY_SEPARATOR . 'ExampleApplication' . DIRECTORY_SEPARATOR . 'config.inc.php';
     }
 
     /**
@@ -199,14 +198,13 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
      */
     public function testFeatureEnabled()
     {
-        $customConfigFilename = $this->_getSalesCustomDefaultConfig();
-        if (file_exists($customConfigFilename)) {
-            $this->markTestSkipped('do not test with existing custom config');
-        }
+        $customConfigFilename = $this->_getExampleApplicationCustomDefaultConfig();
 
-        $invoicesFeatureEnabled = Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE);
+        $this->assertFalse(file_exists($customConfigFilename), 'test needs to be recoded because Example Application default config exists');
 
-        $this->assertTrue($invoicesFeatureEnabled);
+        $exampleFeatureEnabled = ExampleApplication_Config::getInstance()->featureEnabled(ExampleApplication_Config::EXAMPLE_FEATURE);
+
+        $this->assertTrue($exampleFeatureEnabled);
     }
 
     /**
@@ -249,5 +247,36 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
 
         $this->assertEquals(true, Tinebase_Config::getInstance()->get(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME));
+    }
+
+    public function testConfigStructure()
+    {
+        $exampleConfig = ExampleApplication_Config::getInstance();
+
+        $defaultConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20'
+            . DIRECTORY_SEPARATOR . 'ExampleApplication' . DIRECTORY_SEPARATOR . 'config.inc.php';
+
+        $this->assertFalse(file_exists($defaultConfigFile), 'test needs to be recoded because ExampleApplication default config exists');
+
+        copy(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'configExampleAppTest.inc.php', $defaultConfigFile);
+        $this->_filenamesToDelete[] = $defaultConfigFile;
+
+        $exampleConfig->clearCache();
+
+        $smtpStruct = $exampleConfig->{ExampleApplication_Config::EXAMPLE_MAILCONFIG}->{ExampleApplication_Config::SMTP};
+        $imapStruct = $exampleConfig->{ExampleApplication_Config::EXAMPLE_MAILCONFIG}->{ExampleApplication_Config::IMAP};
+
+        $this->assertTrue($smtpStruct instanceof Tinebase_Config_Struct);
+        $this->assertTrue(is_string($smtpStruct->{ExampleApplication_Config::HOST}) && $smtpStruct->{ExampleApplication_Config::HOST} === 'localhost');
+        $this->assertTrue(is_int($smtpStruct->{ExampleApplication_Config::PORT}) && $smtpStruct->{ExampleApplication_Config::PORT} === 123);
+        $this->assertTrue(is_bool($smtpStruct->{ExampleApplication_Config::SSL}) && $smtpStruct->{ExampleApplication_Config::SSL} === true);
+
+        $this->assertTrue($imapStruct instanceof Tinebase_Config_Struct);
+        $this->assertTrue(is_string($imapStruct->{ExampleApplication_Config::HOST}) && $imapStruct->{ExampleApplication_Config::HOST} === '123');
+        $this->assertTrue(is_int($imapStruct->{ExampleApplication_Config::PORT}) && $imapStruct->{ExampleApplication_Config::PORT} === 999);
+        $this->assertTrue(is_bool($imapStruct->{ExampleApplication_Config::SSL}) && $imapStruct->{ExampleApplication_Config::SSL} === true);
+
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $imapStruct->shooo;
     }
 }

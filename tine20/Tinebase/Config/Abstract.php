@@ -3,7 +3,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -315,6 +315,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
 
                 if (file_exists($cachedConfigFile)) {
+                    /** @noinspection PhpIncludeInspection */
                     $cachedConfigData = include($cachedConfigFile);
                 } else {
                     $cachedConfigData = false;
@@ -360,6 +361,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         while (false !== ($direntry = readdir($dh))) {
             if (strpos($direntry, '.inc.php') === (strlen($direntry) - 8)) {
                 // TODO do lint!?! php -l $confdFolder . DIRECTORY_SEPARATOR . $direntry
+                /** @noinspection PhpIncludeInspection */
                 $tmpArray = include($confdFolder . DIRECTORY_SEPARATOR . $direntry);
                 if (false !== $tmpArray) {
                     foreach ($tmpArray as $key => $value) {
@@ -425,6 +427,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Looking for defaults config.inc.php at ' . $configFilename);
             if (file_exists($configFilename)) {
+                /** @noinspection PhpIncludeInspection */
                 $configData = include($configFilename);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Found default config.inc.php for app ' . $this->_appName);
@@ -608,7 +611,19 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         
         return self::$_backend;
     }
-    
+
+    /**
+     * converts raw data to config values of defined type
+     *
+     * @param   mixed     $_rawData
+     * @param   string    $_name
+     * @return  mixed
+     */
+    protected function _rawToConfig($_rawData, $_name)
+    {
+        return static::rawToConfig($_rawData, self::getDefinition($_name), $this->_appName);
+    }
+
     /**
      * converts raw data to config values of defined type
      * 
@@ -616,22 +631,23 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @TODO support interceptors
      * 
      * @param   mixed     $_rawData
-     * @param   string    $_name
+     * @param   array     $definition
+     * @param   string    $appName
      * @return  mixed
      */
-    protected function _rawToConfig($_rawData, $_name)
+    public static function rawToConfig($_rawData, $definition, $appName)
     {
         if ($_rawData === null) {
             return $_rawData;
         }
 
-        $definition = self::getDefinition($_name);
-        
-        if (! $definition) {
+        // TODO make definition mandatory => should be an error
+        if (!is_array($definition) || !isset($definition['type'])) {
             return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
         if ($definition['type'] === self::TYPE_OBJECT && isset($definition['class']) && @class_exists($definition['class'])) {
-            return new $definition['class'](is_array($_rawData) ? $_rawData : array());
+            return new $definition['class'](is_array($_rawData) ? $_rawData : array(),
+                isset($definition['content']) ? $definition['content'] : null, $appName);
         }
 
         switch ($definition['type']) {
@@ -643,9 +659,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             case self::TYPE_DATETIME:   return new DateTime($_rawData);
             case self::TYPE_KEYFIELD_CONFIG:
                 $options = (isset($definition['options']) || array_key_exists('options', $definition)) ? (array) $definition['options'] : array();
-                $options['appName'] = $this->_appName;
+                $options['appName'] = $appName;
                 return Tinebase_Config_KeyField::create($_rawData, $options);
 
+            // TODO this should be an error
             default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
