@@ -120,8 +120,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
-        exit;
     }
     
     /**

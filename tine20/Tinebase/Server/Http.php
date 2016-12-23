@@ -74,10 +74,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 
                 if (Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
                     try {
-                        if (file_exists($applicationName.'_Frontend_Http')) {
+                        if (class_exists($applicationName.'_Frontend_Http')) {
                             $server->setClass($applicationName . '_Frontend_Http', $applicationName);
                         } else {
-                            // TODo check if this is required
                             $server->setClass('Tinebase_Frontend_Http_Generic', $applicationName);
                         }
                     } catch (Exception $e) {
