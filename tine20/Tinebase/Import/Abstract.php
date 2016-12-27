@@ -1143,11 +1143,20 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _handleDuplicateExceptions(Tinebase_Exception_Duplicate $ted, $recordIndex, $record = null, $allowToResolveDuplicates = true)
     {
-        $firstDuplicateRecord = $ted->getData()->getFirstRecord();
+        $duplicates = $ted->getData();
         $resolveStrategy = isset($this->_options['duplicateResolveStrategy']) ? $this->_options['duplicateResolveStrategy'] : null;
 
-        // switch to keep strategy for records of current import run
-        if (in_array($firstDuplicateRecord->getId(), $this->_importResult['results']->getArrayOfIds())) {
+        $foundOldDuplicate = false;
+        foreach ($duplicates as $duplicate) {
+            $duplicateRecord = $duplicate;
+            if (! in_array($duplicate->getId(), $this->_importResult['results']->getArrayOfIds())) {
+                $foundOldDuplicate = true;
+                break;
+            }
+        }
+
+        // switch to keep strategy for duplicate records of current import run
+        if (! $foundOldDuplicate) {
             $allowToResolveDuplicates = true;
             $resolveStrategy = 'keep';
         }
@@ -1163,11 +1172,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     $this->_importResult['results']->addRecord($updatedRecord);
                 } else {
                     // check the diff
-                    if ($firstDuplicateRecord->diff($ted->getClientRecord(), array('id', 'creation_time', 'seq'))->isEmpty()) {
+                    if ($duplicateRecord->diff($ted->getClientRecord(), array('id', 'creation_time', 'seq'))->isEmpty()) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . " Records are already the same. Nothing to do here.");
                     } else {
-                        $updatedRecord = $this->_importAndResolveConflict($firstDuplicateRecord, $resolveStrategy, $ted->getClientRecord());
+                        $updatedRecord = $this->_importAndResolveConflict($duplicateRecord, $resolveStrategy, $ted->getClientRecord());
                         $this->_importResult['results']->addRecord($updatedRecord);
                     }
                 }
