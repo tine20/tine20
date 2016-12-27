@@ -171,18 +171,16 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      * return mail addresses of given contacts 
      * 
      * @param {Array} contacts
-     * @param {String} prefered
      * @return {Array}
      */
     getMailAddresses: function(records) {
         var mailAddresses = [];
         
         Ext.each(records, function(record) {
-            var contact = null;
             if (this.contactInRelation && record.get('relations')) {
                 Ext.each(record.get('relations'), function(relation) {
                     if (relation.type === this.relationType) {
-                       this.addMailFromAddressBook(mailAddresses, relation.related_record);
+                        this.addMailFromAddressBook(mailAddresses, relation.related_record);
                     }
                 }, this);
             } else if (Ext.isFunction(this.addMailFromRecord)){
@@ -191,12 +189,9 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             } else {
                 this.addMailFromAddressBook(mailAddresses, record);
             }
-            
         }, this);
         
-        Tine.log.debug('Tine.Felamimail.GridPanelHook::getMailAddresses - Got ' + mailAddresses.length + ' email addresses.');
         if (mailAddresses.length > 0) {
-            Tine.log.debug(mailAddresses);
             this.mailAddresses = mailAddresses;
         }
         
