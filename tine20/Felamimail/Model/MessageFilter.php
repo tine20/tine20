@@ -142,12 +142,20 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         
         $folderIds = array();
         foreach ((array)$_filterData['value'] as $filterValue) {
-            if (empty($filterValue)) {
+            if (is_array($filterValue) && isset($filterValue['path'])) {
+                $filterValue = $filterValue['path'];
+            }
+            if ($filterValue === null || empty($filterValue)) {
                 $_select->where('1 = 0');
             } else if ($filterValue === self::PATH_ALLINBOXES) {
                 $folderIds = array_merge($folderIds, $this->_getFolderIdsOfAllInboxes());
             } else if (strpos($filterValue, '/') !== FALSE) {
                 $pathParts = explode('/', $filterValue);
+                if (! $pathParts) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Could not explode filter:' . var_export($filterValue, true));
+                    continue;
+                }
                 array_shift($pathParts);
                 if (count($pathParts) == 1) {
                     // we only have an account id
