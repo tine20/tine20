@@ -50,10 +50,9 @@
             case 'DEVELOPMENT':
             default:
                 echo "\n    <!-- amd/commonjs loader dependencies -->";
-                $webPackDevServerUrl = Tinebase_Core::getUrl('protocol') . '://' . Tinebase_Core::getUrl('host') . ':10443/';
-                echo "\n    <script src='{$webPackDevServerUrl}Tinebase-FAT.js'></script>";
-                echo "\n    <script src='{$webPackDevServerUrl}Setup-FAT.js'></script>";
-                echo "\n    <script src='{$webPackDevServerUrl}webpack-dev-server.js'></script>";
+                echo "\n    <script src='Tinebase/js/Tinebase-FAT.js'></script>";
+                echo "\n    <script src='Setup/js/Setup-FAT.js'></script>";
+                echo "\n    <script src='webpack-dev-server.js'></script>";
 
                 echo "\n    <!-- translations -->";
                 echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
