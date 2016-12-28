@@ -303,8 +303,8 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
 
             $results = $result->fetchAll(Zend_Db::FETCH_ASSOC);
 
-            foreach($results as $row) {
-                foreach($columns as $col) {
+            foreach ($results as $row) {
+                foreach ($columns as $col) {
                     if (!empty($row[$col])) {
                         $data[$col . '_normalized'] = Addressbook_Model_Contact::normalizeTelephoneNoCountry((string)$row[$col]);
                     }
@@ -463,5 +463,13 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Addressbook', '9.11');
+    }
+
+    /**
+     * update to 10.0
+     */
+    public function update_11()
+    {
+        $this->setApplicationVersion('Addressbook', '10.0');
     }
 }

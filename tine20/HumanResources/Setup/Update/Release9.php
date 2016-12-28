@@ -30,4 +30,14 @@ class HumanResources_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->setTableVersion('humanresources_extrafreetime', '3');
         $this->setApplicationVersion('HumanResources', '9.1');
     }
+
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('HumanResources', '10.0');
+    }
 }

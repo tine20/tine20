@@ -2,7 +2,7 @@
 <application>
     <name>Events</name>
     <!-- gettext('Events') -->   
-    <version>1.0</version>
+    <version>10.0</version>
     <order>60</order>
     <status>enabled</status>
     <tables>

@@ -57,16 +57,27 @@ class Felamimail_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_2()
     {
-        $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>signature</name>
-                    <type>text</type>
-                    <length>16777215</length>
-                </field>');
-        
-        $this->_backend->alterCol('felamimail_account', $declaration);
-        
+        if ($this->getTableVersion('felamimail_account') < 22) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+                    <field>
+                        <name>signature</name>
+                        <type>text</type>
+                        <length>16777215</length>
+                    </field>');
+            $this->_backend->alterCol('felamimail_account', $declaration);
+            $this->setTableVersion('felamimail_account', '22');
+        }
+
         $this->setApplicationVersion('Felamimail', '9.3');
-        $this->setTableVersion('felamimail_account', '22');
+    }
+
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Felamimail', '10.0');
     }
 }

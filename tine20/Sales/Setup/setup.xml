@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>9.3</version>
+    <version>10.1</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -789,7 +789,7 @@
         </table>
         <table>
             <name>sales_purchase_invoices</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -806,8 +806,6 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
-                    <length>254</length>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>date</name>

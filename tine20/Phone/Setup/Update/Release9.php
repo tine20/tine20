@@ -29,7 +29,7 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 9.3
+     * update to 9.3: adds contact_id col
      *
      * @return void
      */
@@ -94,5 +94,15 @@ class Phone_Setup_Update_Release9 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Phone', '9.3');
+    }
+    
+    /**
+     * update to 10.0
+     *
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Phone', '10.0');
     }
 }
