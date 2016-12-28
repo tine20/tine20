@@ -158,12 +158,6 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 'Sales' => array(
                     'manage_products','run'
                 ),
-                'Sipgate' => array(
-                    'manage_private_accounts','manage_shared_accounts','sync_lines','manage_accounts','run'
-                ),
-                'RequestTracker' => array(
-                    'run'
-                ),
                 'Inventory' => array(
                     'run'
                 ),
@@ -206,14 +200,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 'HumanResources' => array(
                     'run','edit_private'
                 ),
-                'Sipgate' => array(
-                    'run','manage_private_accounts','manage_shared_accounts','manage_accounts','sync_lines'
-                ),
                 'Sales' => array(
                     'run','manage_products'
-                ),
-                'RequestTracker' => array(
-                    'run'
                 ),
                 'Projects' => array(
                     'run','manage_shared_project_favorites'
@@ -274,13 +262,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
                 'HumanResources' => array(
                     'run'
                 ),
-                'Sipgate' => array(
-                    'run'
-                ),
                 'Sales' => array(
-                    'run'
-                ),
-                'RequestTracker' => array(
                     'run'
                 ),
                 'Projects' => array(
