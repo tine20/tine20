@@ -160,17 +160,10 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 value: 'NEEDS-ACTION'
             })
         }, {
-            id: 'creation_time',
-            header: this.app.i18n._("Creation Time"),
-            hidden: true,
-            width: 90,
-            dataIndex: 'creation_time',
-            renderer: Tine.Tinebase.common.dateTimeRenderer
-        }, {
             id: 'completed',
             header: this.app.i18n._("Completed"),
             hidden: true,
-            width: 90,
+            width: 70,
             dataIndex: 'completed',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
@@ -187,8 +180,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 allowEmpty: true,
                 value: Tine.Tinebase.registry.get('currentAccount')
             })
-          // TODO add customfields and modlog columns, atm they break the layout :(
-        }]);/*.concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))*/
+        }].concat(this.getModlogColumns().concat(this.getCustomfieldColumns())));
         
         return new Ext.grid.ColumnModel({
             defaults: {
