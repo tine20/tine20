@@ -46,11 +46,17 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
 
-        'createModule'    => TRUE,
+        'createModule'      => TRUE,
 
-        'appName'         => 'ExampleApplication',
-        'modelName'       => 'ExampleRecord',
-        
+        'exposeHttpApi'     => true,
+
+        'appName'           => 'ExampleApplication',
+        'modelName'         => 'ExampleRecord',
+
+        'export'            => array(
+            'supportedFormats' => array('csv'),
+        ),
+
         'fields'          => array(
             'name' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),

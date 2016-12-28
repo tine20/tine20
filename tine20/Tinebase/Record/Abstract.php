@@ -1281,4 +1281,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             }
         }
     }
+
+    public static function getSimpleModelName($application, $model)
+    {
+        $appName = is_string($application) ? $application : $application->name;
+        return str_replace($appName . '_Model_', '', $model);
+    }
 }

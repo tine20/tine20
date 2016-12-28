@@ -91,7 +91,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
     },
 
     getHeadlineItems: function() {
-        return [{
+        var headlineItems = [{
             flex: 0.5,
             xtype: 'ux.displayfield',
             name: this.recordClass.getMeta('titleProperty'),
@@ -99,15 +99,21 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             cls: 'x-ux-display-header',
             htmlEncode: false,
             renderer: this.titleRenderer.createDelegate(this)
-        }, {
-            flex: 0.5,
-            xtype: 'ux.displayfield',
-            style: 'text-align: right;',
-            cls: 'x-ux-display-header',
-            name: this.recordClass.getMeta('containerProperty'),
-            htmlEncode: false,
-            renderer: this.containerRenderer
         }];
+
+        if (this.recordClass.getMeta('containerProperty')) {
+            headlineItems.push({
+                flex: 0.5,
+                xtype: 'ux.displayfield',
+                style: 'text-align: right;',
+                cls: 'x-ux-display-header',
+                name: this.recordClass.getMeta('containerProperty'),
+                htmlEncode: false,
+                renderer: this.containerRenderer
+            });
+        }
+
+        return headlineItems;
     },
 
     getBodyItems: function() {
@@ -119,7 +125,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             ],
             fieldNames = this.recordClass.getFieldNames(),
             displayFields = [],
-            disiplayAreas = [];
+            displayAreas = [];
 
         Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
 
@@ -139,7 +145,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                         cls: 'x-ux-display-background-border',
                         xtype: 'ux.displaytextarea'
                     });
-                    disiplayAreas.push(field);
+                    displayAreas.push(field);
                 } else {
                     var renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName, fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
                     if (renderer) {
@@ -161,7 +167,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
                 background: 'solid'
             },
             items: [displayFields]
-        }].concat(disiplayAreas);
+        }].concat(displayAreas);
     },
 
     loadRecord: function(record) {

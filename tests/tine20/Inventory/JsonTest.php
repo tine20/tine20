@@ -187,14 +187,14 @@ class Inventory_JsonTest extends Inventory_TestCase
         ));
         
         $inventoryItem = $this->_getInventoryItem();
-        $inventoryItem->costcentre = $cc->getId();
+        $inventoryItem->costcenter = $cc->getId();
         
         $this->_json->saveInventoryItem($inventoryItem->toArray());
     
         $inventoryItem = $this->_getInventoryItem();
         $this->_json->saveInventoryItem($inventoryItem->toArray());
         
-        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"costcentre","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$cc->getId().'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
+        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"costcenter","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$cc->getId().'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
         
         $result = $this->_json->searchInventoryItems($filter, array());
     

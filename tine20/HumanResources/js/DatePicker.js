@@ -249,10 +249,13 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         if (Ext.isArray(iterate)) {
             Ext.each(iterate, function(fd) {
-                var split = fd.date.split(' '), dateSplit = split[0].split('-');
-                fd.date = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
-                fd.date.clearTime();
-                this.store.add(new this.recordClass(fd));
+                // TODO check cases when fd.date has no split()
+                if (Ext.isFunction(fd.date.split)) {
+                    var split = fd.date.split(' '), dateSplit = split[0].split('-');
+                    fd.date = new Date(dateSplit[0], dateSplit[1] - 1, dateSplit[2]);
+                    fd.date.clearTime();
+                    this.store.add(new this.recordClass(fd));
+                }
             }, this);
         }
 
@@ -451,6 +454,17 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             return;
         }
         
+        // dont't handle click on feast days
+        if (Ext.fly(t.parentNode).hasClass('hr-date-feast')) {
+            return;
+        }
+        
+        // dont't handle click on already defined vacation days from different vacation entries
+        if (Ext.fly(t.parentNode).hasClass('hr-date-vacation') &&
+           !Ext.fly(t.parentNode).hasClass('x-date-selected')) {
+            return;
+        }
+        
         var date = new Date(t.dateValue),
             existing = this.store.getByDate(date);
             
@@ -481,6 +495,10 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         
         if (existing) {
             this.store.remove(existing);
+            var index = this.vacationDates.indexOf(t.dateValue);
+            if (index > -1) {
+                this.vacationDates.splice(index, 1);
+            }
         } else {
             this.store.addSorted(new this.recordClass({date: date, duration: 1}));
         }
@@ -511,6 +529,9 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
                 c.addClass('x-date-selected');
             } else {
                 c.removeClass('x-date-selected');
+                if (c.hasClass('hr-date-vacation')) {
+                    c.removeClass('hr-date-vacation');
+                }
             }
             
             if (this.vacationDates.indexOf(timestamp) > -1) {

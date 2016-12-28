@@ -487,6 +487,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * @see 0008310: apps should be sorted the other way round in menu
      * @see 0009130: Can't open login page on Ubuntu "due to a temporary overloading"
      * @see 0012188: add copyOmitFields to modelconfig
+     * @see 0012364: generalize import/export and allow to configure via modelconfig
      */
     public function testGetAllRegistryData()
     {
@@ -533,6 +534,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         $this->assertTrue(isset($registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']), 'Timeaccount copyOmitFields empty/missing');
         $this->assertEquals($copyOmitFields, $registryData['Timetracker']['models']['Timeaccount']['copyOmitFields']);
+        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']), 'no InventoryItem export config found: '
+            . print_r($registryData['Inventory']['models']['InventoryItem'], true));
+        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']));
+        $this->assertEquals(array('csv', 'ods'), $registryData['Inventory']['models']['InventoryItem']['export']['supportedFormats']);
+        $this->assertTrue(isset($registryData['Inventory']['models']['InventoryItem']['import']));
     }
 
     /**

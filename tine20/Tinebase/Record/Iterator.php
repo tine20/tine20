@@ -185,9 +185,9 @@ class Tinebase_Record_Iterator
         }
         
         // get records by filter (ensure acl)
-        $filterClassname = get_class($this->_filter);
         $recordIdsForIteration = array_splice($this->_recordIds, 0, $this->_options['limit']);
-        $idFilter = new $filterClassname(array(
+        $idFilter = clone($this->_filter);
+        $idFilter->setFromArray(array(
             array('field' => (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options))
                 ? $this->_options['idProperty']
                 : 'id', 'operator' => 'in', 'value' => $recordIdsForIteration)

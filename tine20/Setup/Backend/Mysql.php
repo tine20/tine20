@@ -41,7 +41,12 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
                 16777215 => 'mediumtext',
                 4294967295 => 'longtext'),
             'defaultType' => 'text',
-            'defaultLength' => null),
+            'defaultLength' => null,
+            'lengthLessTypes' => array(
+                'mediumtext',
+                'longtext'
+            )
+        ),
         'float' => array(
             'defaultType' => 'double'),
         'decimal' => array(

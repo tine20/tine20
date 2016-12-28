@@ -288,7 +288,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
 
         if (self::userIsRegistered()) {
-            $definitions = self::_getModelConfigMethods();
+            $definitions = self::_getModelConfigMethods('Tinebase_Server_Json');
             $server->loadFunctions($definitions);
         }
         
@@ -428,118 +428,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     }
 
     /**
-     * get default modelconfig methods
-     *
-     * @return array of Zend_Server_Method_Definition
-     */
-    protected static function _getModelConfigMethods()
-    {
-        // get all apps user has RUN right for
-        $userApplications = Tinebase_Core::getUser()->getApplications();
-
-        $definitions = array();
-        foreach ($userApplications as $application) {
-            try {
-                $controller = Tinebase_Core::getApplicationInstance($application->name);
-                $models = $controller->getModels();
-                if (!$models) {
-                    continue;
-                }
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-                continue;
-            }
-
-            foreach ($models as $model) {
-                $config = $model::getConfiguration();
-                if ($config && $config->exposeJsonApi) {
-                    // TODO replace this with generic method
-                    $simpleModelName = str_replace($application->name . '_Model_', '', $model);
-
-                    $commonJsonApiMethods = array(
-                        'get' => array(
-                            'params' => array(
-                                new Zend_Server_Method_Parameter(array(
-                                    'type' => 'string',
-                                    'name' => 'id',
-                                )),
-                            ),
-                            'help'   => 'get one ' . $simpleModelName . ' identified by $id',
-                            'plural' => false,
-                        ),
-                        'search' => array(
-                            'params' => array(
-                                new Zend_Server_Method_Parameter(array(
-                                    'type' => 'array',
-                                    'name' => 'filter',
-                                )),
-                                new Zend_Server_Method_Parameter(array(
-                                    'type' => 'array',
-                                    'name' => 'paging',
-                                )),
-                            ),
-                            'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',
-                            'plural' => true,
-                        ),
-                        'save' => array(
-                            'params' => array(
-                                new Zend_Server_Method_Parameter(array(
-                                    'type' => 'array',
-                                    'name' => 'recordData',
-                                )),
-                            ),
-                            'help'   => 'Save ' . $simpleModelName . '',
-                            'plural' => false,
-                        ),
-                        'delete' => array(
-                            'params' => array(
-                                new Zend_Server_Method_Parameter(array(
-                                    'type' => 'array',
-                                    'name' => 'ids',
-                                )),
-                            ),
-                            'help'   => 'Delete multiple ' . $simpleModelName . 's',
-                            'plural' => true,
-                        ),
-                    );
-
-                    foreach ($commonJsonApiMethods as $name => $method) {
-                        $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
-                        $appJsonFrontendClass = $application->name . '_Frontend_Json';
-                        if (class_exists($appJsonFrontendClass)) {
-                            $class = $appJsonFrontendClass;
-                            $object = null;
-                        } else {
-                            $class = 'Tinebase_Frontend_Json_Generic';
-                            $object = new Tinebase_Frontend_Json_Generic($application->name);
-                        }
-                        $definitions[$key] = new Zend_Server_Method_Definition(array(
-                            'name'            => $key,
-                            'prototypes'      => array(array(
-                                'returnType' => 'array',
-                                'parameters' => $method['params']
-                            )),
-                            'methodHelp'      => $method['help'],
-                            'invokeArguments' => array(),
-                            'object'          => $object,
-                            'callback'        => array(
-                                'type'   => 'instance',
-                                'class'  => $class,
-                                'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
-                            ),
-                        ));
-                    }
-                }
-            }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
-
-        return $definitions;
-    }
-
-    /**
      * check json key
      *
      * @param string $method
@@ -590,5 +478,74 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
     {
         return Tinebase_Core::isRegistered(Tinebase_Core::USER)
             && is_object(Tinebase_Core::getUser());
+    }
+
+    public static function exposeApi($config)
+    {
+        return $config && $config->exposeJsonApi;
+    }
+
+    protected static function _getCommonApiMethods($simpleModelName)
+    {
+        $commonJsonApiMethods = array(
+            'get' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'string',
+                        'name' => 'id',
+                    )),
+                ),
+                'help'   => 'get one ' . $simpleModelName . ' identified by $id',
+                'plural' => false,
+            ),
+            'search' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'filter',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'paging',
+                    )),
+                ),
+                'help'   => 'Search for ' . $simpleModelName . 's matching given arguments',
+                'plural' => true,
+            ),
+            'save' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'recordData',
+                    )),
+                ),
+                'help'   => 'Save ' . $simpleModelName . '',
+                'plural' => false,
+            ),
+            'delete' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'ids',
+                    )),
+                ),
+                'help'   => 'Delete multiple ' . $simpleModelName . 's',
+                'plural' => true,
+            ),
+        );
+
+        return $commonJsonApiMethods;
+    }
+
+    protected static function _getFrontend($application)
+    {
+        $appJsonFrontendClass = $application->name . '_Frontend_Json';
+        if (class_exists($appJsonFrontendClass)) {
+            $object = new $appJsonFrontendClass();
+        } else {
+            $object = new Tinebase_Frontend_Json_Generic($application->name);
+        }
+
+        return $object;
     }
 }

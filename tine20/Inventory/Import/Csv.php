@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -14,6 +14,8 @@
  *
  * @package     Inventory
  * @subpackage  Import
+ *
+ * @property Inventory_Controller_InventoryItem $_controller NOT public, workaround to typecast protected member
  */
 class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
@@ -31,7 +33,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
      *
      * @param  Tinebase_Model_ImportExportDefinition $_definition
      * @param  array                                 $_options
-     * @return Calendar_Import_Ical
+     * @return Inventory_Import_Csv
      *
      * @todo move this to abstract when we no longer need to be php 5.2 compatible
      */
@@ -51,6 +53,7 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         
         // get container id from default container if not set
         if (empty($this->_options['container_id'])) {
+            /** @var Tinebase_Record_Abstract $defaultContainer */
             $defaultContainer = $this->_controller->getDefaultInventory();
             $this->_options['container_id'] = $defaultContainer->getId();
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting default container id: ' . $this->_options['container_id']);
@@ -94,11 +97,11 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
                 $result['inventory_id'] = Tinebase_Record_Abstract::generateUID(40);
         }
         
-        if ((isset($result["costcentre"]) || array_key_exists("costcentre", $result))) {
-            $result["costcentre"] = $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
+        if ((isset($result["costcenter"]) || array_key_exists("costcenter", $result))) {
+            $result["costcenter"] = $c = Sales_Controller_CostCenter::getInstance()->search(new Sales_Model_CostCenterFilter(array(array(
                 'field'    => 'number',
                 'operator' => 'equals',
-                'value'    => $result["costcentre"]
+                'value'    => $result["costcenter"]
             ))))->getFirstRecord();
         }
         

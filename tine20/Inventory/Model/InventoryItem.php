@@ -15,7 +15,8 @@
  * 
  * @package     Inventory
  * @subpackage  Model
- * @property    $name
+ *
+ * @property    string $name
  */
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
@@ -32,7 +33,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 9,
+        'version'           => 10,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
@@ -47,12 +48,12 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'exposeJsonApi'     => TRUE,
 
-        'createModule'    => TRUE,
+        'createModule'      => TRUE,
 
-        'appName'         => 'Inventory',
-        'modelName'       => 'InventoryItem',
+        'appName'           => 'Inventory',
+        'modelName'         => 'InventoryItem',
 
-        'table'           => array(
+        'table'             => array(
             'name'    => 'inventory_item',
             'options' => array('collate' => 'utf8_general_ci'),
             'indexes' => array(
@@ -68,9 +69,14 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 //            )
         ),
 
+        'import'            => array(
+            'defaultImportContainerRegistryKey' => 'defaultInventoryItemContainer',
+        ),
+        'export'            => array(
+            'supportedFormats' => array('csv', 'ods'),
+        ),
 
-
-        'fields'          => array(
+        'fields'            => array(
             'name' => array(
                 'type'        => 'string',
                 'length'      => 255,
@@ -113,7 +119,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'default'    => NULL,
                 'type'       => 'datetime',
                 'nullable'     => true,
-                'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             'total_number' => array(
                 'type'         => 'integer',
@@ -147,9 +152,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'hidden'       => TRUE,
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
-            'costcentre' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label'      => 'Cost centre', // _('Cost Center')
+            'costcenter' => array(
+                'label'      => 'Cost center', // _('Cost Center')
                 'hidden'     => TRUE,
                 'type'       => 'record',
                 'nullable'   => true,

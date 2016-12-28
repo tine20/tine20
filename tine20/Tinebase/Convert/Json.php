@@ -47,17 +47,59 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         $recordClassName = get_class($_record);
         $records = new Tinebase_Record_RecordSet($recordClassName, array($_record));
         $modelConfiguration = $recordClassName::getConfiguration();
-        
-        $this->_resolveBeforeToArray($records, $modelConfiguration, FALSE);
-        
-        $_record = $records->getFirstRecord();
-        $_record->setTimezone(Tinebase_Core::getUserTimezone());
-        $_record->bypassFilters = true;
-        
-        $result = $_record->toArray();
-        
-        $result = $this->_resolveAfterToArray($result, $modelConfiguration, FALSE);
-        
+
+        return $this->_fromTine20RecordSet($records, $modelConfiguration, false);
+    }
+
+    /**
+     * converts Tinebase_Record_RecordSet to external format
+     *
+     * @param Tinebase_Record_RecordSet|Tinebase_Record_Abstract  $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     *
+     * @return mixed
+     */
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, /** @noinspection PhpUnusedParameterInspection */
+                                        $_filter = NULL, /** @noinspection PhpUnusedParameterInspection */ $_pagination = NULL)
+    {
+        if (! $_records || count($_records) == 0) {
+            return array();
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Processing ' . count($_records) . ' records ...');
+
+        // find out if there is a modelConfiguration
+        /** @var Tinebase_Record_Interface $ownRecordClass */
+        $ownRecordClass = $_records->getRecordClassName();
+        $config = $ownRecordClass::getConfiguration();
+
+        return $this->_fromTine20RecordSet($_records, $config, true);
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet $_records
+     * @param $config
+     * @param bool $multiple
+     * @return array
+     */
+    protected function _fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $config, $multiple)
+    {
+        $this->_resolveBeforeToArray($_records, $config, $multiple);
+
+        $_records->setTimezone(Tinebase_Core::getUserTimezone());
+        $_records->convertDates = true;
+
+        if (false === $multiple) {
+            $result = $_records->getFirstRecord()->toArray();
+        } else {
+            $result = $_records->toArray();
+        }
+
+        // resolve all virtual fields after converting to array, so we can add these properties "virtually"
+        $result = $this->_resolveAfterToArray($result, $config, $multiple);
+
         return $result;
     }
 
@@ -157,6 +199,11 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         return $foreignRecords;
     }
 
+    /**
+     * @param $records
+     * @param $fields
+     * @param Tinebase_Record_RecordSet $foreignRecords
+     */
     protected function _mapForeignRecords($records, $fields, $foreignRecords)
     {
         foreach ($records as $record) {
@@ -401,16 +448,26 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         
         foreach ($virtualFields as $field) {
             // resolve virtual relation record from relations property
-            if (! $multiple && isset($field['type']) && $field['type'] == 'relation') {
-                $fc = $field['config'];
-                if (isset($resultSet['relations']) && (is_array($resultSet['relations']))) {
-                    foreach($resultSet['relations'] as $relation) {
-                        if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
-                            $resultSet[$field['key']] = $relation['related_record'];
+            if (isset($field['type']) && $field['type'] == 'relation') {
+
+                // tODO probably move this array nesting to the top of the function, check 'function' todo below though
+                if ($multiple) {
+                    $tmp = &$resultSet;
+                } else {
+                    $tmp = array(&$resultSet);
+                }
+                foreach($tmp as &$rS) {
+                    $fc = $field['config'];
+                    if (isset($rS['relations']) && (is_array($rS['relations']))) {
+                        foreach ($rS['relations'] as $relation) {
+                            if (($relation['type'] == $fc['type']) && ($relation['related_model'] == ($fc['appName'] . '_Model_' . $fc['modelName']))) {
+                                $rS[$field['key']] = $relation['related_record'];
+                            }
                         }
                     }
                 }
             // resolve virtual field by function
+                // TODO multiple is not passed along and not part of the if condition! this is bad I guess this is dead code?
             } else if ((isset($field['function']) || array_key_exists('function', $field))) {
                 if (is_array($field['function'])) {
                     if (count($field['function']) > 1) { // static method call
@@ -488,56 +545,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             }
         }
     }
-    
+
     /**
      * resolves child records after converting the record set to an array
-     * 
+     *
      * @param array $result
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
-     * 
+     *
      * @return array
      */
     protected function _resolveAfterToArray($result, $modelConfiguration, $multiple = false)
     {
         $result = $this->_resolveVirtualFields($result, $modelConfiguration, $multiple);
-        return $result;
-    }
-    
-    /**
-     * converts Tinebase_Record_RecordSet to external format
-     * 
-     * @param Tinebase_Record_RecordSet|Tinebase_Record_Abstract  $_records
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
-     * 
-     * @return mixed
-     */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, /** @noinspection PhpUnusedParameterInspection */
-                                        $_filter = NULL, /** @noinspection PhpUnusedParameterInspection */ $_pagination = NULL)
-    {
-        if (! $_records || count($_records) == 0) {
-            return array();
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Processing ' . count($_records) . ' records ...');
-        
-        // find out if there is a modelConfiguration
-        /** @var Tinebase_Record_Interface $ownRecordClass */
-        $ownRecordClass = $_records->getRecordClassName();
-        $config = $ownRecordClass::getConfiguration();
-        
-        $this->_resolveBeforeToArray($_records, $config, TRUE);
-        
-        $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->convertDates = true;
-        
-        $result = $_records->toArray();
-        
-        // resolve all virtual fields after converting to array, so we can add these properties "virtually"
-        $result = $this->_resolveAfterToArray($result, $config, TRUE);
-        
         return $result;
     }
 }

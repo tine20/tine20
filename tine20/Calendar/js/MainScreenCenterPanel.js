@@ -847,10 +847,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     } else {
                         this.refresh();
                     }
-                    
-                    if (view && view.rendered) {
-                        view.getSelectionModel().select(createdEvent);
-                    }
                 }
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)

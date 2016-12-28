@@ -110,35 +110,34 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     
                 case 'ADR':
                     $type = null;
-                    
-                    foreach ($property['TYPE'] as $typeProperty) {
-                        $typeProperty = strtolower($typeProperty);
-                        
-                        if (in_array($typeProperty, array('home','work'))) {
-                            $type = $typeProperty;
-                            break;
+
+                    if (isset($property['TYPE']) && (is_array($property['TYPE']) || $property['TYPE'] instanceof Traversable)) {
+                        foreach ($property['TYPE'] as $typeProperty) {
+                            $typeProperty = strtolower($typeProperty);
+
+                            if (in_array($typeProperty, array('home', 'work'))) {
+                                $type = $typeProperty;
+                                break;
+                            }
                         }
                     }
-                    
-                    $parts = $property->getParts();
 
-                    if ($type == 'home') {
-                        // home address
-                        $data['adr_two_street2']     = $parts[1];
-                        $data['adr_two_street']      = $parts[2];
-                        $data['adr_two_locality']    = $parts[3];
-                        $data['adr_two_region']      = $parts[4];
-                        $data['adr_two_postalcode']  = $parts[5];
-                        $data['adr_two_countryname'] = $parts[6];
-                    } elseif ($type == 'work') {
-                        // work address
-                        $data['adr_one_street2']     = $parts[1];
-                        $data['adr_one_street']      = $parts[2];
-                        $data['adr_one_locality']    = $parts[3];
-                        $data['adr_one_region']      = $parts[4];
-                        $data['adr_one_postalcode']  = $parts[5];
-                        $data['adr_one_countryname'] = $parts[6];
+                    if ($type) {
+                        $parts = $property->getParts();
+                        $partsIndex = 1;
+
+                        if ($type == 'home') {
+                            // home address
+                            $addressFields = array('adr_two_street2', 'adr_two_street', 'adr_two_locality', 'adr_two_region', 'adr_two_postalcode', 'adr_two_countryname');
+                        } elseif ($type == 'work') {
+                            // work address
+                            $addressFields = array('adr_one_street2', 'adr_one_street', 'adr_one_locality', 'adr_one_region', 'adr_one_postalcode', 'adr_one_countryname');
+                        }
+                        foreach ($addressFields as $field) {
+                            $data[$field] = $parts[$partsIndex++];
+                        }
                     }
+
                     break;
                     
                 case 'CATEGORIES':

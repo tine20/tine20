@@ -20,13 +20,31 @@ Ext.ns('Ext.ux.display');
 Ext.ux.display.DisplayField = Ext.extend(Ext.form.DisplayField, {
     htmlEncode: true,
     nl2br: false,
-    
+
+    // don't enumerate as form field
+    markInvalid: null,
+
     renderer: function(v) {
         return v;
     },
-    
+
+    // try to apply grid compatible renderer
+    applyRenderer: function(v) {
+        var parentWithRecord = this.findParentBy(function(c) {return !!c.record}),
+            metadata = {css: {}, attr: {}},
+            record = parentWithRecord ? parentWithRecord.record : null,
+            store = record ? record.store : null;
+
+        return this.renderer(v, metadata, record, 0, 0, store);
+    },
+
     setRawValue : function(value) {
-        var v = this.renderer(value);
+        var v = this.applyRenderer(value);
+
+        if (String(v) == '[object Object]') {
+            v = '...';
+            this.hide();
+        }
         
         if(this.htmlEncode){
             v = Ext.util.Format.htmlEncode(v);
@@ -56,7 +74,11 @@ Ext.ux.display.DisplayTextArea = Ext.extend(Ext.form.TextArea, {
     readOnly: true,
     cls: 'x-ux-display-textarea',
 
+    // don't enumerate as form field
+    markInvalid: null,
+    
     renderer: Ext.ux.display.DisplayField.prototype.renderer,
+    applyRenderer: Ext.ux.display.DisplayField.prototype.applyRenderer,
 
     setValue : function(value) {
         var v = this.renderer(value);

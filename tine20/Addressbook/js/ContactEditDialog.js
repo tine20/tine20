@@ -104,7 +104,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                             'select': function (combo, record, index) {
                                                 var jpegphoto = this.getForm().findField('jpegphoto');
                                                 // set new empty photo depending on chosen salutation only if user doesn't have own image
-                                                jpegphoto.setDefaultImage(record.json.image);
+                                                jpegphoto.setDefaultImage(record.json.image || 'images/empty_photo_blank.png');
                                             }
                                         }
                                 }), {

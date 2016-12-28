@@ -657,6 +657,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     else action.setDisabled(false);
                 }
         });
+
+        this.initActionsImportExport();
         
         // add actions to updater
         this.actionUpdater.addActions([
@@ -672,7 +674,88 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init actionToolbar (needed for correct fitertoolbar init atm -> fixme)
         this.getActionToolbar();
     },
-    
+
+    initActionsImportExport: function() {
+        if (this.modelConfig && this.modelConfig['export']) {
+            var exportFunction = this.app.name + '.export' + this.recordClass.getMeta('modelName') + 's',
+                items = [
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ...'),
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: exportFunction,
+                        showExportDialog: true,
+                        gridPanel: this
+                    })
+                ];
+
+            // create items from available export formats
+            if (this.modelConfig['export'].supportedFormats) {
+                Ext.each(this.modelConfig['export'].supportedFormats, function (format) {
+                    items.unshift(new Tine.widgets.grid.ExportButton({
+                        // TODO format toUpper
+                        text: String.format(this.app.i18n._('Export as {0}'), format),
+                        format: format,
+                        iconCls: 'tinebase-action-export-' + format,
+                        exportFunction: exportFunction,
+                        gridPanel: this
+                    }))
+                }, this);
+            }
+
+            this.actions_export = new Ext.Action({
+                text: this.app.i18n._('Export items'),
+                iconCls: 'action_export',
+                scope: this,
+                requiredGrant: 'exportGrant',
+                disabled: true,
+                allowMultiple: true,
+                menu: {
+                    items: items
+                }
+            });
+
+            this.actionUpdater.addActions([this.actions_export]);
+        }
+
+        if (this.modelConfig && this.modelConfig['import']) {
+            this.actions_import = new Ext.Action({
+                requiredGrant: 'addGrant',
+                text: this.app.i18n._('Import items'),
+                disabled: false,
+                handler: this.onImport,
+                iconCls: 'action_import',
+                scope: this,
+                allowMultiple: true
+            });
+
+            this.actionUpdater.addActions([this.actions_import]);
+        }
+    },
+
+    /**
+     * import inventory items
+     *
+     * @param {Button} btn
+     */
+    onImport: function(btn) {
+        var popupWindow = Tine.widgets.dialog.ImportDialog.openWindow({
+            appName: this.app.name,
+            modelName: this.recordClass.getMeta('modelName'),
+            defaultImportContainer: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(this.modelConfig['import'].defaultImportContainerRegistryKey),
+            listeners: {
+                scope: this,
+                'finish': function() {
+                    this.loadGridData({
+                        preserveCursor:     false,
+                        preserveSelection:  false,
+                        preserveScroller:   false,
+                        removeStrategy:     'default'
+                    });
+                }
+            }
+        });
+    },
+
     /**
      * initializes the delete action
      * 
@@ -1344,7 +1427,36 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-            
+
+            // only do this for generic model config import/export
+            if (this.modelConfig && (this.modelConfig['export'] || this.modelConfig['import'])) {
+                var importExportButtons = [];
+
+                if (this.actions_export) {
+                    importExportButtons.push(Ext.apply(new Ext.Button(this.actions_export), {
+                        scale: 'small',
+                        rowspan: 1,
+                        iconAlign: 'left'
+                    }));
+                }
+                if (this.actions_import) {
+                    importExportButtons.push(Ext.apply(new Ext.Button(this.actions_import), {
+                        scale: 'small',
+                        rowspan: 1,
+                        iconAlign: 'left'
+                    }));
+                }
+
+                if (importExportButtons.length > 0) {
+                    items.push({
+                        xtype: 'buttongroup',
+                        columns: 1,
+                        frame: false,
+                        items: importExportButtons
+                    });
+                }
+            }
+
             this.actionToolbar = new Ext.Toolbar({
                 items: [{
                     xtype: 'buttongroup',

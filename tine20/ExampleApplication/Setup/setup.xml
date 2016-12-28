@@ -4,7 +4,7 @@
     <!-- gettext('ExampleApplication') -->   
     <version>0.1</version>
     <order>60</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <!-- TODO switch to doctrine config -->
     <tables>
         <table>

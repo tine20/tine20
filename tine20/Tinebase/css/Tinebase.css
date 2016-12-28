@@ -8,13 +8,13 @@ html, body {
 }
 
 .ApplicationIconCls {
-    background-image:url(../../images/oxygen/16x16/apps/preferences-plugin.png); !important;
+    background-image:url(../../images/oxygen/16x16/apps/preferences-plugin.png) !important;
 }
 .x-btn-medium .ApplicationIconCls {
-    background-image:url(../../images/oxygen/22x22/apps/preferences-plugin.png); !important;
+    background-image:url(../../images/oxygen/22x22/apps/preferences-plugin.png) !important;
 }
 .x-btn-large .ApplicationIconCls {
-    background-image:url(../../images/oxygen/32x32/apps/preferences-plugin.png); !important;
+    background-image:url(../../images/oxygen/32x32/apps/preferences-plugin.png) !important;
 }
 
 /* ----- actions -------------------------------------------------------------*/
@@ -800,8 +800,6 @@ html, body {
 .tine-editorgrid-row-invalid, .x-grid3-row-selected .tine-editorgrid-row-invalid {
     border: 1px dotted red!important;
 }
-
-x-grid3-row   x-grid3-dirty-row tine-editorgrid-row-invalid x-grid3-row-first  
 
 .tine-duplicateresolve-keepvalue {
     color: #006600;

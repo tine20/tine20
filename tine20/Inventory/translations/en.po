@@ -139,8 +139,8 @@ msgid "Accounting"
 msgstr "Accounting"
 
 #: js/InventoryItemEditDialog.js:264
-msgid "Cost centre"
-msgstr "Cost centre"
+msgid "Cost center"
+msgstr "Cost center"
 
 #: Preference.php:60
 msgid "Default Inventory Item Container"

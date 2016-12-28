@@ -39,7 +39,7 @@
             <identifier>price</identifier>
         </column>
         <column>
-            <identifier>costcentre</identifier>
+            <identifier>costcenter</identifier>
         </column>
         <column>
             <identifier>invoice</identifier>
