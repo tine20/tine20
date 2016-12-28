@@ -244,7 +244,7 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree extends \Sabre\D
                 
                 if (! Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) ||
                     ! Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                         __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
                         . ' has neither READ nor SYNC grants for container ' . $container->getId());
                     throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
