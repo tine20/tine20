@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e8c7becd12e91d44c9b2307b2a905d9e",
-    "content-hash": "cedc515f4cee5aedf2ae9b67e20b3d26",
+    "hash": "96fa58140e68832550dbeed54fdaa655",
+    "content-hash": "4980156528b581be4f03a32e5d4a868a",
     "packages": [
         {
             "name": "codeplex/phpexcel",
@@ -137,11 +137,11 @@
         },
         {
             "name": "metaways/timezoneconvert",
-            "version": "0.2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/timezoneconvert",
-                "reference": "1eba807e6104c80c31a2170cf34923610de9ab23"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -168,7 +168,7 @@
                 "Timezones",
                 "UTC"
             ],
-            "time": "2014-06-02 12:00:27"
+            "time": "2016-04-25 08:20:13"
         },
         {
             "name": "phpoffice/phpword",
