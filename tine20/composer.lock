@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4355c1e70a51bae4703a374af49a89d0",
-    "content-hash": "6274a13846d3db4dcbe7b15834cf43d2",
+    "hash": "fbeef4196c528f08fc23ee3020fd834e",
+    "content-hash": "6e519f687f2f02537de2f52bde4c80f4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1643,11 +1643,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl3",
+            "version": "1.12.20pl5",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "86507882fbc5a805332cde6452fb18b05f87e836"
+                "reference": "580315d960c6a1de4c367a3a9d48ed9c3a3a056e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1664,7 +1664,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2016-11-07 18:22:32"
+            "time": "2016-12-29 12:10:05"
         }
     ],
     "packages-dev": [
@@ -2224,7 +2224,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch3",
+            "version": "1.12.20.0-patch5",
             "package": "zendframework/zendframework1"
         },
         {
