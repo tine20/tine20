@@ -264,7 +264,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $this->_availableUpdateTime = $_time;
        
-        try { 
+        try {
             $this->_expungeCacheFolder($folder, $imap);
         } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
             return $folder;
@@ -321,18 +321,22 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         try {
             $_imap->expunge(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            Tinebase_Exception::log($zmse);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Marking folder as not selectable: ' . print_r($_folder->toArray(), true));
-            
-            // mark folder as not selectable + finish cache update
-            $_folder->is_selectable = 0;
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $zmse);
+
             $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-            $_folder = Felamimail_Controller_Folder::getInstance()->update($_folder);
-            
-            // @todo check if folder is really deleted?
-            //Felamimail_Controller_Cache_Folder::getInstance()->delete($_folder->getId());
+            $_folder->is_selectable = 0;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Finish cache update and mark folder as not selectable: ' . print_r($_folder->toArray(), true));
+
+            if (! $_folder->has_children) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Removing folder from database');
+                Felamimail_Controller_Cache_Folder::getInstance()->delete($_folder->getId());
+            } else {
+                $_folder = Felamimail_Controller_Folder::getInstance()->update($_folder);
+            }
             
             throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found / is not selectable: ' . $_folder->globalname);
         }
