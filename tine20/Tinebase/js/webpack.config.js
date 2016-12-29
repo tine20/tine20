@@ -70,6 +70,10 @@ module.exports = {
         })
     ],
     module: {
+        preLoaders: [
+            // use script loader for old library classes as some of them the need to be included in window context
+            {test: /\.js$/, include: [baseDir + '/library'], loader: "script!uglify!"},
+        ],
         loaders: [
             {test: /\.jsb2$/, loader: "./jsb2-loader"},
             {test: /\.css$/, loader: "style-loader!css-loader"},
