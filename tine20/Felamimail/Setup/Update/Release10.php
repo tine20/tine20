@@ -17,8 +17,8 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $update8 = new Felamimail_Setup_Update_Release9($this->_backend);
-        $update8->update_2();
+        $update9 = new Felamimail_Setup_Update_Release9($this->_backend);
+        $update9->update_2();
         $this->setApplicationVersion('Felamimail', '10.1');
     }
 }

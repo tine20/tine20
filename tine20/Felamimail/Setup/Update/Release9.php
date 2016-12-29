@@ -64,11 +64,10 @@ class Felamimail_Setup_Update_Release9 extends Setup_Update_Abstract
                         <type>text</type>
                         <length>16777215</length>
                     </field>');
+            $this->_backend->alterCol('felamimail_account', $declaration);
             $this->setTableVersion('felamimail_account', '22');
         }
 
-        $this->_backend->alterCol('felamimail_account', $declaration);
-        
         $this->setApplicationVersion('Felamimail', '9.3');
     }
 

@@ -101,8 +101,12 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         if (!empty($folderData['cache_timestamp'])) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('cache_timestamp') . ' = ?', $folderData['cache_timestamp']);
         }
-        
-        $affectedRows = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+
+        try {
+            $affectedRows = $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+        } catch (PDOException $pdoe) {
+            return false;
+        }
         
         if ($affectedRows !== 1) {
             return false;
