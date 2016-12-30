@@ -46,8 +46,31 @@ class Calendar_JsonTests extends Calendar_TestCase
         $registryData = $this->_uit->getRegistryData();
         
         $this->assertTrue(is_array($registryData['defaultContainer']['account_grants']));
+        $this->assertTrue(is_array($registryData['defaultContainer']['ownerContact']));
     }
-    
+
+    /**
+     * test shared calendar as default
+     * @see 0011986: Default Calender in Preferences restet to personal one after logout/login
+     */
+    public function testGetRegistryDataWithSharedDefault()
+    {
+        $fe = new Tinebase_Frontend_Json_Container();
+        $container = $fe->addContainer('Calendar', 'testdeletecontacts', Tinebase_Model_Container::TYPE_SHARED, '');
+
+        Tinebase_Core::set(Tinebase_Core::PREFERENCES, array());
+        Tinebase_Core::getPreference('Calendar')
+            ->setValue(Calendar_Preference::DEFAULTCALENDAR, $container['id']);
+
+        $registryData = $this->_uit->getRegistryData();
+
+        $this->assertTrue(is_array($registryData['defaultContainer']['account_grants']));
+        $this->assertFalse(isset($registryData['defaultContainer']['ownerContact']));
+
+        Tinebase_Core::getPreference('Calendar')
+            ->deleteUserPref(Calendar_Preference::DEFAULTCALENDAR);
+    }
+
     /**
      * testCreateEvent
      * 
