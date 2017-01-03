@@ -1280,8 +1280,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     public function testFileMessagesInMailFilerWithSingleBodyPart()
     {
-        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ssss" at Oct 12, 2016 4:00:00 PM');
+        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM');
         $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
+        $this->assertContains('"ss/ss"', $emlNode['message']['subject'], print_r($emlNode['message'], true));
+        $this->assertContains('"ssss"', $emlNode['name'], print_r($emlNode, true));
     }
 
     /**
