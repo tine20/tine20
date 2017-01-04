@@ -194,7 +194,11 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         $sessionId = Tinebase_Core::getSessionId();
 
         try {
-            $loginRecord = $this->_backend->getByProperty($sessionId, 'sessionid');
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USERACCESSLOG)) {
+                $loginRecord = Tinebase_Core::get(Tinebase_Core::USERACCESSLOG);
+            } else {
+                $loginRecord = $this->_backend->getByProperty($sessionId, 'sessionid');
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' Could not find access log login record for session id ' . $sessionId);
@@ -274,7 +278,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         if (in_array($accessLog->clienttype, array(Tinebase_Server_WebDAV::REQUEST_TYPE, ActiveSync_Server_Http::REQUEST_TYPE))) {
             try {
                 $previousAccessLog = Tinebase_AccessLog::getInstance()->getPreviousAccessLog($accessLog);
-                $accessLog->sessionid = $previousAccessLog->sessionid;
+                $accessLog->merge($previousAccessLog);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // ignore
             }
