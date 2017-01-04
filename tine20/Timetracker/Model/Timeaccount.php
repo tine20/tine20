@@ -404,7 +404,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $this->_billables = array();
         
         if (intval($this->budget) > 0) {
-            
+
+            $date = clone $date;
+            $date->subMonth(1);
             $month = $date->format('Y-m');
             
             $this->_billables[$month] = array($this);
