@@ -133,7 +133,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  * we can work with the data synced during previous login
                  */
                 try {
-                    Tinebase_User::syncUser($_username, array('syncContactData' => true, 'syncContactPhoto' => true));
+                    // only syncContactData if non-sync client!
+                    $syncOptions = $this->_isSyncClient($_accessLog)
+                        ? array()
+                        : array(
+                            'syncContactData' => true,
+                            'syncContactPhoto' => true
+                        );
+
+                    Tinebase_User::syncUser($_username, $syncOptions);
                 } catch (Exception $e) {
                     Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Failed to sync user data for: ' . $_username . ' reason: ' . $e->getMessage());
                     Tinebase_Exception::log($e);
@@ -154,6 +162,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         
         return $user;
+    }
+
+    protected function _isSyncClient($accessLog)
+    {
+        return in_array($accessLog->clienttype, array(
+            Tinebase_Server_WebDAV::REQUEST_TYPE,
+            ActiveSync_Server_Http::REQUEST_TYPE
+        ));
     }
     
     /**
@@ -697,7 +713,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         // check if user is expired or blocked
         $this->_checkUserStatus($user, $accessLog);
-        
+
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
             
@@ -727,7 +743,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         return $user;
     }
-    
+
     /**
      * returns true if user account has been changed
      * 
