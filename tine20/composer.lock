@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fbeef4196c528f08fc23ee3020fd834e",
-    "content-hash": "6e519f687f2f02537de2f52bde4c80f4",
+    "hash": "a9882596d7eb9343045d825eff531c79",
+    "content-hash": "2a4220683812deb361c7beeeaf9b6f78",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1216,11 +1216,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.2.4",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "978a03f0332b10509d1d00544e0e0510efc13b88"
+                "reference": "fbd03e07c494556f291f67841111dc5321c07893"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1244,7 +1244,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2016-11-03 08:10:34"
+            "time": "2017-01-03 16:14:20"
         },
         {
             "name": "tine20/composerapploader",
