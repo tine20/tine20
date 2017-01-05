@@ -139,7 +139,9 @@ Tine.Tinebase.tineInit = {
     },
 
     initPostal: function () {
-        if (! window.postal) return;
+        if (! window.postal) {
+            return;
+        }
 
         var config = postal.fedx.transports.xwindow.configure();
         postal.fedx.transports.xwindow.configure( {
@@ -782,18 +784,6 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
-     * init external libraries
-     */
-    initLibs: function () {
-        if (OpenLayers) {
-            // fix OpenLayers script location to find images/themes/...
-            OpenLayers._getScriptLocation = function () {
-                return 'library/OpenLayers/';
-            };
-        }
-    },
-    
-    /**
      * initialise application manager
      */
     initAppMgr: function () {
@@ -831,13 +821,15 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    Tine.Tinebase.tineInit.checkWebpack();
+    if (Tine.clientVersion.buildType === 'DEVELOPMENT' || Tine.clientVersion.buildType === 'none') {
+        // TODO do something similar for RELEASE/DEBUG?
+        Tine.Tinebase.tineInit.checkWebpack();
+    }
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
-    Tine.Tinebase.tineInit.initLibs();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
         Tine.Tinebase.tineInit.initWindowMgr();

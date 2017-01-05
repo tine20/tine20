@@ -2,7 +2,7 @@
     border-color:#a9bfd3;
     border-style:solid;
     border-width:0 1px 1px 1px;
-    background:#d0def0 url(../images/default/toolbar/bg.gif) repeat-x top left;
+    background:#d0def0 url(../../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x top left;
 }
 
 .x-panel-footer-wizard-status {

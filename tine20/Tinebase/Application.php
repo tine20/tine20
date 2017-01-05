@@ -128,7 +128,6 @@ class Tinebase_Application
         $application = $this->getApplications()->find('name', $_applicationName);
         
         if (!$application) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Application not found. Name: ' . $_applicationName);
             throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
         }
         
@@ -481,13 +480,14 @@ class Tinebase_Application
     
     /**
      * delete containers, configs and other data of an application
+     * ATTENTION this does NOT delete the application data itself! only auxiliary data
      * 
      * NOTE: if a table with foreign key constraints to applications is added, we need to make sure that the data is deleted here 
      * 
      * @param Tinebase_Model_Application $_applicationName
      * @return void
      */
-    public function removeApplicationData(Tinebase_Model_Application $_application)
+    public function removeApplicationAuxiliaryData(Tinebase_Model_Application $_application)
     {
         try {
             Tinebase_FileSystem::getInstance()->rmdir($_application->getId(), true);
@@ -518,7 +518,7 @@ class Tinebase_Application
         foreach ($dataToDelete as $dataType => $info) {
             switch ($dataType) {
                 case 'container':
-                    $count = Tinebase_Container::getInstance()->deleteContainerByApplicationId($_application->getId());
+                    $count = Tinebase_Container::getInstance()->dropContainerByApplicationId($_application->getId());
                     break;
                 case 'config':
                     $count = Tinebase_Config::getInstance()->deleteConfigByApplicationId($_application->getId());

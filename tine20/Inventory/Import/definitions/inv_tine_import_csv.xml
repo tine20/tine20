@@ -64,7 +64,7 @@
         </field>
         <field>
             <source>Kostenstelle</source>
-            <destination>costcentre</destination>
+            <destination>costcenter</destination>
         </field>
         <field>
             <source>Rechnung</source>

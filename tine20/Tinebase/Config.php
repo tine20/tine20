@@ -406,6 +406,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const VERSION_CHECK = 'versionCheck';
 
     /**
+     * WEBDAV_SYNCTOKEN_ENABLED
+     *
+     * @var string
+     */
+    const WEBDAV_SYNCTOKEN_ENABLED = 'webdavSynctokenEnabled';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -431,6 +438,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),
+        /**
+         * config keys:
+         *
+         * useSystemAccount (bool)
+         * domain (string)
+         * useEmailAsUsername (bool)
+         * host (string)
+         * port (integer)
+         * ssl (bool)
+         * user (string) ?
+         * backend (string) - see Tinebase_EmailUser::$_supportedBackends
+         *
+         */
         self::IMAP => array(
                                    //_('System IMAP')
             'label'                 => 'System IMAP',
@@ -1011,6 +1031,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => FALSE,
         ),
+        self::WEBDAV_SYNCTOKEN_ENABLED => array(
+        //_('Enable SyncToken plugin')
+            'label'                 => 'Enable SyncToken plugin',
+        //_('Enable the use of the SyncToken plugin.')
+            'description'           => 'Enable the use of the SyncToken plugin.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => TRUE,
+        ),
     );
     
     /**
@@ -1095,8 +1126,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                         . ' ' . print_r($definition, TRUE));
                     
-                    if ((isset($definition['clientRegistryInclude']) || array_key_exists('clientRegistryInclude', $definition))
-                        && $definition['clientRegistryInclude'] === TRUE)
+                    if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === TRUE)
                     {
                         // add definition here till we have a better place
                         try {

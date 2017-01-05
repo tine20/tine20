@@ -460,7 +460,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             foreach ($this->_properties as $property => $propValue) {
                 if ($propValue && is_object($propValue) &&
                         (in_array('Tinebase_Record_Interface', class_implements($propValue)) ||
-                            $propValue instanceof Tinebase_Record_Recordset) ) {
+                            $propValue instanceof Tinebase_Record_RecordSet) ) {
 
                     $propValue->setTimezone($_timezone, TRUE);
                 }
@@ -914,6 +914,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function diff($_record, $omitFields = array())
     {
         if (! $_record instanceof Tinebase_Record_Abstract) {
+            /** @var Tinebase_Record_Diff $_record  ... really?!? */
             return $_record;
         }
         
@@ -1279,5 +1280,11 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 }
             }
         }
+    }
+
+    public static function getSimpleModelName($application, $model)
+    {
+        $appName = is_string($application) ? $application : $application->name;
+        return str_replace($appName . '_Model_', '', $model);
     }
 }

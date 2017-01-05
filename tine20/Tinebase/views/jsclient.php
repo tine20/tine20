@@ -21,6 +21,7 @@
     
     <link rel="shortcut icon" href="<?php echo $theme_config['favicon']; ?>" type="image/x-icon" />
     <link rel="chrome-application-definition" href="chrome_web_app.json" />
+    <?php echo $theme_config['extJs'] . "\n"; ?>
 </head>
 <body>
     <!-- Loading Indicator -->
@@ -32,11 +33,6 @@
     }
     ?>    
     <!-- EXT JS -->
-
-    <?php 
-        echo $theme_config['extJs'] . "\n";
-    ?>
-
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     

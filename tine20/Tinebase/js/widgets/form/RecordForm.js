@@ -26,7 +26,7 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
     recordClass: null,
 
     initComponent: function() {
-        var appName = this.recordClass.getAppName(),
+        var appName = this.recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
             fieldNames = this.recordClass.getFieldNames(),
             modelConfig = this.recordClass.getModelConfiguration(),

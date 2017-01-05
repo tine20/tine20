@@ -661,6 +661,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     columns: [
                         exceptionExpander,
                         { id: 'index', header: i18n._('Index'), width: 60, sortable: false, dataIndex: 'index'},
+                        { id: 'exception', header: i18n._('Record'), width: 120, sortable: false, dataIndex: 'exception', renderer: function(exception) {
+                            // TODO find a way to show record more pretty
+                            return exception.clientRecord ? Ext.util.JSON.encode(exception.clientRecord) : '';
+                        }},
                         { id: 'failure', header: i18n._('Failure'), width: 60, sortable: false, dataIndex: 'message'}
                     ],
                     autoExpandColumn: 'failure'

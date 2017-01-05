@@ -17,19 +17,8 @@
  * @subpackage  Export
  *
  */
-class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc {
-    /**
-     * @var string application name of this export class
-     */
-    protected $_applicationName = 'Addressbook';
-    
-    /**
-     * the record model
-     *
-     * @var string
-     */
-    protected $_modelName = 'Contact';
-    
+class Addressbook_Export_Doc extends Tinebase_Export_Richtext_Doc
+{
     protected $_defaultExportname = 'adb_default_doc';
 
     /**

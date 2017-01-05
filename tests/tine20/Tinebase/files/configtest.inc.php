@@ -1,5 +1,5 @@
 <?php
 
 return array(
-    'ignoreBillablesBefore' => '1999-10-01 22:00:00',
+    ExampleApplication_Config::EXAMPLE_STRING => 'something else',
 );

@@ -428,7 +428,7 @@ class Tinebase_User
      * 
      * @param  mixed  $username  the login id of the user to synchronize
      * @param  array $options
-     * @return Tinebase_Model_FullUser
+     * @return Tinebase_Model_FullUser|null
      * @throws Tinebase_Exception
      * 
      * @todo make use of dbmail plugin configurable (should be false by default)
@@ -493,7 +493,14 @@ class Tinebase_User
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
                 $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                if (isset($options['deleteUsers']) && $options['deleteUsers']) {
+                    // handle removed users differently with "sync deleted users" config
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . " Skipping user: " . $username . '. Do not remove as it might be the same user as before with different ID.');
+                    return null;
+                }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
                     . " Remove invalid user: " . $username);
                 $userBackend->deleteUserInSqlBackend($invalidUser);
             } catch (Tinebase_Exception_NotFound $ten) {

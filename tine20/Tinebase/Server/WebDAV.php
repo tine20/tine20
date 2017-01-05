@@ -135,8 +135,14 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
-        self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
-
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport enabled');
+            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' SyncTokenSupport disabled');
+        }
         $contentType = self::$_server->httpRequest->getHeader('Content-Type');
         $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && preg_match('/^text/', $contentType);
 

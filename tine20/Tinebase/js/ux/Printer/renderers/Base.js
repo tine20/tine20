@@ -133,23 +133,27 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     if (this.useHtml2Canvas) {
       var me = this;
 
-      var canvas = win.document.createElement("canvas");
-      canvas.width = win.innerWidth;
-      canvas.height = win.innerHeight;
+      require.ensure(["html2canvas"], function() {
+        var html2canvas = require ("html2canvas");
+        var canvas = win.document.createElement("canvas");
+        canvas.width = win.innerWidth;
+        canvas.height = win.innerHeight;
 
-      me.setDPI(canvas, 300);
+        me.setDPI(canvas, 300);
 
-      html2canvas(win.document.body, {
-        canvas: canvas,
-        grabMouse: false,
-        onrendered: function (canvas) {
-          var screenshot = canvas.toDataURL();
-          me.useHtml2Canvas = false;
-          win.document.body.innerHTML = '<img style="display: block; width: 100%" />';
-          win.document.body.firstChild.onload = me.doPrint.createDelegate(me, [win]);
-          win.document.body.firstChild.src = screenshot;
-        }
-      });
+        html2canvas(win.document.body, {
+          canvas: canvas,
+          grabMouse: false,
+          onrendered: function (canvas) {
+            var screenshot = canvas.toDataURL();
+            me.useHtml2Canvas = false;
+            win.document.body.innerHTML = '<img style="display: block; width: 100%" />';
+            win.document.body.firstChild.onload = me.doPrint.createDelegate(me, [win]);
+            win.document.body.firstChild.src = screenshot;
+          }
+        });
+      }, 'Tinebase/js/html2canvas');
+
     } else {
       win.print();
       this.mask.hide();

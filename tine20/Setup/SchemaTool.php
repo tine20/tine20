@@ -11,6 +11,7 @@
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
 use \Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\Common\Persistence\Mapping\StaticReflectionService;
 use \Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
 
@@ -66,15 +67,24 @@ class Setup_SchemaTool
             $tableNames[] = SQL_TABLE_PREFIX . Tinebase_Helper::array_value('name', $modelConfig->getTable());
         }
 
+        $config = self::getBasicConfig();
+        $config->setMetadataDriverImpl($mappingDriver);
+
+        $config->setFilterSchemaAssetsExpression('/'. implode('|',$tableNames) . '/');
+
+        return $config;
+    }
+
+    /**
+     * @return \Doctrine\ORM\Configuration
+     */
+    public static function getBasicConfig()
+    {
         // TODO we could use the tine20 redis cache here if configured (see \Doctrine\ORM\Tools\Setup::createConfiguration)
         // but as createConfiguration() tries to setup a redis cache if redis extension is available, we need to
         // setup a manual ArrayCache for the moment
         $cache = new \Doctrine\Common\Cache\ArrayCache();
         $config = Setup::createConfiguration(/* isDevMode = */ false, /* $proxyDir = */ null, $cache);
-        $config->setMetadataDriverImpl($mappingDriver);
-
-        $config->setFilterSchemaAssetsExpression('/'. implode('|',$tableNames) . '/');
-
         return $config;
     }
 
@@ -116,5 +126,33 @@ class Setup_SchemaTool
         $classes = self::getMetadata($appName, $modelNames);
 
         $tool->updateSchema($classes, true);
+    }
+
+    /**
+     * compare two tine20 databases with each other
+     *
+     * @param $otherDbName
+     * @return array of sql statements
+     */
+    public static function compareSchema($otherDbName)
+    {
+        $dbParams = self::getDBParams();
+
+        $myConn = \Doctrine\DBAL\DriverManager::getConnection(
+            $dbParams
+        );
+        $mySm = $myConn->getSchemaManager();
+
+        $otherDbParams = $dbParams;
+        $otherDbParams['dbname'] = $otherDbName;
+        $otherConn = \Doctrine\DBAL\DriverManager::getConnection(
+            $otherDbParams
+        );
+        $otherSm = $otherConn->getSchemaManager();
+
+        $comparator = new Comparator();
+        $schemaDiff = $comparator->compare($mySm->createSchema(), $otherSm->createSchema());
+
+        return $schemaDiff->toSql($myConn->getDatabasePlatform());
     }
 }

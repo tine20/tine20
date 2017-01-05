@@ -62,6 +62,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'restore'                   => 'restore config and data
                          Examples:
                            setup.php --restore -- config=1 db=1 files=1 backupDir=/backup/tine20',
+                'compare'                   => 'compare schemas with another database
+                        Examples:
+                           setup.php --compare -- otherdb=tine20other',
             ));
             $opts->parse();
         } catch (Zend_Console_Getopt_Exception $e) {
@@ -85,6 +88,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->setconfig) && 
             empty($opts->backup) &&
             empty($opts->restore) &&
+            empty($opts->compare) &&
             empty($opts->getconfig)))
         {
             echo $opts->getUsageMessage();

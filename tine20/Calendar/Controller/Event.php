@@ -1708,7 +1708,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        if (! $hasGrantsFilter) {
+        if (! $hasGrantsFilter && $this->_doContainerACLChecks) {
             // force a grant filter
             // NOTE: actual grants are set via setRequiredGrants later
             $grantsFilter = $_filter->createFilter('grants', 'in', '@setRequiredGrants');
@@ -2126,7 +2126,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // attach to display calendar if attender has/is a useraccount
         if ($userAccountId) {
             if ($calendar->type == Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
-                // if attender has admin grant to personal physical container, this phys. cal also gets displ. cal
+                // if attender has admin grant to (is owner of) personal physical container, this phys. cal also gets displ. cal
                 $attender->displaycontainer_id = $calendar->getId();
             } else if ($attender->displaycontainer_id && $userAccountId == Tinebase_Core::getUser()->getId() && Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 // allow user to set his own displ. cal

@@ -1,4 +1,0 @@
-/**
- * SomeComponent.js
- */
- 

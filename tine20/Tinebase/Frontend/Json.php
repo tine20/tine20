@@ -744,7 +744,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
-                'filesHash'     => TINE20_BUILDTYPE != 'DEVELOPMENT' ? $tbFrontendHttp->getJsCssHash() : null
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
@@ -852,6 +851,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($userApplications as $application) {
                 $appRegistry = array();
                 $appRegistry['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                $appRegistry['allrights'] = Tinebase_Application::getInstance()->getAllRights($application->getId());
                 $appRegistry['config'] = isset($clientConfig[$application->name])
                     ? $clientConfig[$application->name]->toArray()
                     : array();

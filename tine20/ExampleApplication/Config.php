@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,12 +23,87 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
     const EXAMPLE_STATUS = 'exampleStatus';
 
     const EXAMPLE_REASON = 'exampleReason';
+
+    const EXAMPLE_FEATURE = 'exampleFeature';
+
+    const EXAMPLE_STRING = 'exampleString';
+
+    const EXAMPLE_MAILCONFIG = 'exampleMailConfig';
+    const SMTP = 'smtp';
+    const IMAP = 'imap';
+    const HOST = 'host';
+    const PORT = 'port';
+    const SSL = 'ssl';
     
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
+        self::EXAMPLE_MAILCONFIG => array(
+            'label'                 => 'Example Mail Config',
+            'description'           => 'explain some stuff here',
+            'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
+            'class'                 => 'Tinebase_Config_Struct',
+            'content'               => array(
+                self::SMTP              => array(
+                    'label'                 => 'Example SMTP Config',
+                    'description'           => 'explain some stuff here',
+                    'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
+                    'class'                 => 'Tinebase_Config_Struct',
+                    'content'               => array(
+                        self::HOST              => array(
+                            'label'                 => 'Example SMTP Host',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+                            'default'               => 'localhost'
+                        ),
+                        self::PORT              => array(
+                            'label'                 => 'Example SMTP Port',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+                            'default'               => 123
+                        ),
+                        self::SSL              => array(
+                            'label'                 => 'Example SMTP SSL usage',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+                            'default'               => true
+                        ),
+                    ),
+                    'default' => array(),
+                ),
+                self::IMAP              => array(
+                    'label'                 => 'Example IMAP Config',
+                    'description'           => 'explain some stuff here',
+                    'type'                  => Tinebase_Config_Abstract::TYPE_OBJECT,
+                    'class'                 => 'Tinebase_Config_Struct',
+                    'content'               => array(
+                        self::HOST              => array(
+                            'label'                 => 'Example IMAP Host',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+                            'default'               => 'foreignhost'
+                        ),
+                        self::PORT              => array(
+                            'label'                 => 'Example IMAP Port',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_INT,
+                            'default'               => 346
+                        ),
+                        self::SSL              => array(
+                            'label'                 => 'Example SMTP SSL usage',
+                            'description'           => 'explain some stuff here',
+                            'type'                  => Tinebase_Config_Abstract::TYPE_BOOL,
+                            'default'               => false
+                        ),
+                    ),
+                    'default' => array(),
+                )
+            ),
+            'default' => array(),
+        ),
+
         self::EXAMPLE_STATUS => array(
                                    //_('Status Available')
             'label'                 => 'Status Available',
@@ -74,6 +149,34 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
                 'default' => array('COMPLETED:CHANGE', 'CANCELLED:REQCHANGE', 'IN-PROCESS:IMPLEMENTATION'),
             )
         ),
+
+        self::ENABLED_FEATURES => array(
+            //_('Enabled Features')
+            'label'                 => 'Enabled Features',
+            //_('Enabled Features in Sales Application.')
+            'description'           => 'Enabled Features in Example Application.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => TRUE,
+            'content'               => array(
+                self::EXAMPLE_FEATURE => array(
+                    'label'         => 'Invoices Module', //_('Invoices Module')
+                    'description'   => 'Invoices Module',
+                    'type'          => 'boolean',
+                    'default'       => true,
+                ),
+            ),
+            'default'               => array(),
+        ),
+
+        self::EXAMPLE_STRING => array(
+            //_('Example String')
+            'label'                 => 'Example String',
+            //_('Just an example string for test purpose')
+            'description'           => 'Just an example string for test purpose',
+            'type'                  => 'string',
+            'default'               => self::EXAMPLE_STRING,
+        )
     );
     
     /**

@@ -16,43 +16,55 @@ Ext.ns('Tine.widgets');
  * @class       Tine.widgets.MapPanel
  * @extends     GeoExt.MapPanel
  */
-Tine.widgets.MapPanel = Ext.extend(GeoExt.MapPanel, {
-    zoom: 4,
-    map: null,
-    layers: null,
-    
-    /**
-     * @private
-     */
+Tine.widgets.MapPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
-        this.map =  new OpenLayers.Map();
-        this.layers = [
-            new OpenLayers.Layer.OSM()
-        ];
-        
-        if(this.center instanceof Array) {
-            this.center = new OpenLayers.LonLat(this.center[0], this.center[1]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-        }
 
         Tine.widgets.MapPanel.superclass.initComponent.call(this);
     },
-    
+
+    afterRender: function() {
+        var me = this;
+        require.ensure(["../../../library/OpenLayers/OpenLayers", "../../../library/GeoExt/script/GeoExt"], function() {
+            require("../../../library/OpenLayers/OpenLayers");
+            require("../../../library/GeoExt/script/GeoExt");
+
+            // fix OpenLayers script location to find images/themes/...
+            OpenLayers._getScriptLocation = function () {
+                return 'library/OpenLayers/';
+            };
+
+            me.geoExtPanel = new GeoExt.MapPanel({
+                zoom: me.zoom || 4,
+                map:  new OpenLayers.Map(),
+                layers: [
+                    new OpenLayers.Layer.OSM()
+                ]
+            });
+
+            me.add(me.geoExtPanel);
+            me.fireEvent('mapAdded', me);
+
+        }, 'Tinebase/js/OpenLayers');
+
+        Tine.widgets.MapPanel.superclass.afterRender.call(this);
+    },
+
     setCenter: function(lon, lat) {
-        this.center = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), this.map.getProjectionObject());
-        this.map.setCenter(this.center);
-        
+        this.geoExtPanel.center = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"), this.geoExtPanel.map.getProjectionObject());
+        this.geoExtPanel.map.setCenter(this.center);
+
         // add a marker
         var size = new OpenLayers.Size(32,32);
         var offset = new OpenLayers.Pixel(0, -size.h);
         var icon = new OpenLayers.Icon('images/oxygen/32x32/actions/flag-red.png', size, offset);
-        
+
         var markers = new OpenLayers.Layer.Markers( "Markers" );
-        markers.addMarker(new OpenLayers.Marker(this.center, icon));
-        this.map.addLayer(markers);
+        markers.addMarker(new OpenLayers.Marker(this.geoExtPanel.center, icon));
+        this.geoExtPanel.map.addLayer(markers);
     },
-    
+
     beforeDestroy: function() {
-        delete this.map;
+        delete this.geoExtPanel.map;
         this.supr().beforeDestroy.apply(this, arguments);
     }
 });

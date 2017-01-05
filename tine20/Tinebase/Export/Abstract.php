@@ -64,21 +64,21 @@ abstract class Tinebase_Export_Abstract
     /**
      * @var string application name of this export class
      */
-    protected $_applicationName = 'Tinebase';
+    protected $_applicationName = null;
     
     /**
      * the record model
      *
      * @var string
      */
-    protected $_modelName = NULL;
+    protected $_modelName = null;
     
     /**
      * filter to generate export for
      * 
      * @var Tinebase_Model_Filter_FilterGroup
      */
-    protected $_filter = NULL;
+    protected $_filter = null;
     
     /**
      * sort records by this field (array keys: sort / dir / ...)
@@ -154,8 +154,14 @@ abstract class Tinebase_Export_Abstract
      */
     public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
-        $this->_modelName = $_filter->getModelName();
         $this->_filter = $_filter;
+        if (! $this->_modelName) {
+            $this->_modelName = $this->_filter->getModelName();
+        }
+        if (! $this->_applicationName) {
+            $this->_applicationName = $this->_filter->getApplicationName();
+        }
+
         $this->_controller = ($_controller !== NULL) ? $_controller : Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
         $this->_translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $this->_config = $this->_getExportConfig($_additionalOptions);

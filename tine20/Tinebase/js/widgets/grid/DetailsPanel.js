@@ -33,7 +33,13 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * default Heights
      */
     defaultHeight: 125,
-    
+
+    /**
+     * @cfg {Ext.data.Record} recordClass
+     * record definition class
+     */
+    recordClass: null,
+
     /**
      * @property grid
      * @type Tine.widgets.grid.GridPanel
@@ -79,7 +85,14 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      */
     getDefaultInfosPanel: function() {
         if (! this.defaultInfosPanel) {
-            this.defaultInfosPanel = new Ext.Panel(this.defaults);
+            if (this.recordClass) {
+                this.defaultInfosPanel = new Tine.widgets.display.DefaultDisplayPanel({
+                    recordClass : this.recordClass
+                });
+                this.defaultHeight = Math.max(this.defaultHeight, this.defaultInfosPanel.defaultHeight);
+            } else {
+                this.defaultInfosPanel = new Ext.Panel(this.defaults);
+            }
         }
         return this.defaultInfosPanel;
     },
@@ -91,7 +104,15 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      */
     getSingleRecordPanel: function() {
         if (! this.singleRecordPanel) {
-            this.singleRecordPanel = new Ext.Panel(this.defaults);
+
+            if (this.recordClass) {
+                this.singleRecordPanel = new Tine.widgets.display.RecordDisplayPanel({
+                    recordClass : this.recordClass
+                });
+                this.defaultHeight = Math.max(this.defaultHeight, this.singleRecordPanel.defaultHeight);
+            } else {
+                this.singleRecordPanel = new Ext.Panel(this.defaults);
+            }
         }
         return this.singleRecordPanel;
     },
@@ -112,7 +133,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * inits this details panel
      */
     initComponent: function() {
-        
+
         this.items = [
             this.getDefaultInfosPanel(),
             this.getSingleRecordPanel(),
@@ -269,3 +290,5 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         }
     }
 });
+
+Ext.reg('widget-detailspanel', Tine.widgets.grid.DetailsPanel)

@@ -1679,7 +1679,7 @@ class Setup_Controller
                 Tinebase_Timemachine_ModificationLog::getInstance()->removeApplication($_application);
 
                 // delete containers, config options and other data for app
-                Tinebase_Application::getInstance()->removeApplicationData($_application);
+                Tinebase_Application::getInstance()->removeApplicationAuxiliaryData($_application);
             }
             
             // remove application from table of installed applications
@@ -2015,7 +2015,7 @@ class Setup_Controller
             throw new Exception("you need to specify the backupDir");
         }
 
-        if ($options['config']) {
+        if (isset($options['config']) && $options['config']) {
             $configBackupFile = $options['backupDir']. '/tine20_config.tar.bz2';
             if (! file_exists($configBackupFile)) {
                 throw new Exception("$configBackupFile not found");
@@ -2036,12 +2036,12 @@ class Setup_Controller
         Setup_Core::setupConfig();
         $config = Setup_Core::getConfig();
 
-        if ($options['db']) {
+        if (isset($options['db']) && $options['db']) {
             $this->_backend->restore($options['backupDir']);
         }
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
-        if ($options['files']) {
+        if (isset($options['files']) && $options['files']) {
             $filesBackupFile = $options['backupDir'] . '/tine20_files.tar.bz2';
             if (! file_exists($filesBackupFile)) {
                 throw new Exception("$filesBackupFile not found");
@@ -2049,5 +2049,14 @@ class Setup_Controller
 
             `cd $filesDir; tar xf $filesBackupFile`;
         }
+    }
+
+    public function compareSchema($options)
+    {
+        if (! isset($options['otherdb'])) {
+            throw new Exception("you need to specify the otherdb");
+        }
+
+        return Setup_SchemaTool::compareSchema($options['otherdb']);
     }
 }

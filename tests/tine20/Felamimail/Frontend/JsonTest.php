@@ -607,6 +607,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
      * try to get a message from imap server (with complete body, attachments, etc)
      *
      * @see 0006300: add unique message-id header to new messages (for message-id check)
+     * @see 0012436: message-id is not valid because of double brackets
      */
     public function testGetMessage()
     {
@@ -618,6 +619,8 @@ class Felamimail_Frontend_JsonTest extends TestCase
         // check
         $this->assertTrue(isset($message['headers']) && $message['headers']['message-id']);
         $this->assertContains('@' . $this->_mailDomain, $message['headers']['message-id']);
+        $this->assertNotContains('<<', $message['headers']['message-id']);
+        $this->assertNotContains('>>', $message['headers']['message-id']);
         $this->assertGreaterThan(0, preg_match('/aaaaaä/', $message['body']));
         
         // delete message on imap server and check if correct exception is thrown when trying to get it
@@ -1277,8 +1280,10 @@ class Felamimail_Frontend_JsonTest extends TestCase
      */
     public function testFileMessagesInMailFilerWithSingleBodyPart()
     {
-        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ssss" at Oct 12, 2016 4:00:00 PM');
+        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM');
         $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
+        $this->assertContains('"ss/ss"', $emlNode['message']['subject'], print_r($emlNode['message'], true));
+        $this->assertContains('"ssss"', $emlNode['name'], print_r($emlNode, true));
     }
 
     /**

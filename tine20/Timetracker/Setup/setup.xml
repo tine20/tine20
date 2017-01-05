@@ -2,7 +2,7 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>10.1</version>
+    <version>10.2</version>
     <order>60</order>
     <status>enabled</status>
     <depends>

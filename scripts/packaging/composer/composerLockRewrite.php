@@ -118,6 +118,12 @@ function loopArray(array &$a)
         }
         echo 'found version ' . $package->version . '  for package ' . $package->name . PHP_EOL;
 
+        if (isset($package->source)) {
+            unset($package->source);
+        }
+        if (!isset($package->dist)) {
+            $package->dist = new StdClass();
+        }
         $package->dist->type = $jsonSatis['packages'][$package->name][$package->version]['dist']['type'];
         $package->dist->url = $jsonSatis['packages'][$package->name][$package->version]['dist']['url'];
         $package->dist->reference = $jsonSatis['packages'][$package->name][$package->version]['dist']['reference'];

@@ -173,14 +173,20 @@ class Tinebase_ModelConfiguration {
      */
     protected $_titleProperty = 'title';
 
-
     /**
      * If this is true, the json api (smd) is generated automatically
      *
      * @var boolean
      */
     protected $_exposeJsonApi = NULL;
-    
+
+    /**
+     * If this is true, the http api (smd) is generated automatically
+     *
+     * @var boolean
+     */
+    protected $_exposeHttpApi = NULL;
+
     /**
      * Human readable name of the container
      * add plural translation information in comments like:
@@ -686,7 +692,7 @@ class Tinebase_ModelConfiguration {
         'useGroups', 'fieldGroupFeDefaults', 'fieldGroupRights', 'multipleEdit', 'multipleEditRequiredRight',
         'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'virtualFields', 'group', 'isDependent',
         'hasCustomFields', 'modlogActive', 'hasAttachments', 'idProperty', 'splitButton', 'attributeConfig',
-        'hasPersonalContainer', 'copyOmitFields'
+        'hasPersonalContainer', 'copyOmitFields', 'import', 'export'
     );
 
     /**
@@ -786,6 +792,30 @@ class Tinebase_ModelConfiguration {
      * @var array
      */
     protected $_copyOmitFields = NULL;
+
+    /**
+     * import configuration
+     *
+     * sub keys:
+     *  - defaultImportContainerRegistryKey: contains the registry key for model default comtainer
+     *      for example:
+     *          'defaultImportContainerRegistryKey' => 'defaultInventoryItemContainer',
+     *
+     * @var array
+     */
+    protected $_import = NULL;
+
+    /**
+     * export configuration
+     *
+     * sub keys:
+     *  - supportedFormats: array of supported export formats (in lowercase)
+     *      for example:
+     *          'supportedFormats' => array('csv', 'ods', 'xls'),
+     *
+     * @var array
+     */
+    protected $_export = NULL;
 
     /**
      * the constructor (must be called by the singleton pattern)

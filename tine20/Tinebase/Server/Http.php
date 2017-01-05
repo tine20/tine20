@@ -61,6 +61,10 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             
             // register additional HTTP apis only available for authorised users
             if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
+
+                $definitions = self::_getModelConfigMethods('Tinebase_Server_Http');
+                $server->loadFunctions($definitions);
+
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
@@ -68,9 +72,13 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 $applicationParts = explode('.', $this->getRequestMethod());
                 $applicationName = ucfirst($applicationParts[0]);
                 
-                if(Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
+                if (Tinebase_Core::getUser() && Tinebase_Core::getUser()->hasRight($applicationName, Tinebase_Acl_Rights_Abstract::RUN)) {
                     try {
-                        $server->setClass($applicationName.'_Frontend_Http', $applicationName);
+                        if (class_exists($applicationName.'_Frontend_Http')) {
+                            $server->setClass($applicationName . '_Frontend_Http', $applicationName);
+                        } else {
+                            $server->setClass('Tinebase_Frontend_Http_Generic', $applicationName);
+                        }
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
                     }
@@ -96,10 +104,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
             // invalid method requested or not authenticated, etc.
             Tinebase_Exception::log($zjse);
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
-            
+
             header('HTTP/1.0 403 Forbidden');
-            exit;
-            
+
         } catch (Exception $exception) {
             Tinebase_Exception::log($exception, false);
             
@@ -121,7 +128,6 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 
             } catch (Exception $e) {
                 header('HTTP/1.0 503 Service Unavailable');
-                die('Service Unavailable');
             }
         }
     }
@@ -138,5 +144,44 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         }
         
         return $this->_method;
+    }
+
+    public static function exposeApi($config)
+    {
+        return $config && $config->exposeHttpApi;
+    }
+
+    protected static function _getCommonApiMethods($simpleModelName)
+    {
+        $commonApiMethods = array(
+            'export' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'filter',
+                    )),
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'options',
+                    )),
+                ),
+                'help'   => 'export ' . $simpleModelName . ' records',
+                'plural' => true,
+            ),
+        );
+
+        return $commonApiMethods;
+    }
+
+    protected static function _getFrontend($application)
+    {
+        $appHttpFrontendClass = $application->name . '_Frontend_Http';
+        if (class_exists($appHttpFrontendClass)) {
+            $object = new $appHttpFrontendClass();
+        } else {
+            $object = new Tinebase_Frontend_Http_Generic($application->name);
+        }
+
+        return $object;
     }
 }

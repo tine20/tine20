@@ -234,7 +234,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 . ' Event base rows fetched: ' . count($rows) . ' select: ' . $select);
         
         $result = $this->_rawDataToRecordSet($rows);
-        
+
         $this->_checkGrants($result, $grantsFilter);
         
         return $_onlyIds ? $result->{is_bool($_onlyIds) ? $this->_getRecordIdentifier() : $_onlyIds} : $result;

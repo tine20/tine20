@@ -57,21 +57,7 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view = new Zend_View();
         $baseDir = dirname(dirname(dirname(__FILE__)));
         $view->setScriptPath("$baseDir/Setup/views");
-        
-        $appNames = array('Tinebase', 'Setup');
-        
-        require_once 'jsb2tk/jsb2tk.php';
-        $view->jsb2tk = new jsb2tk(array(
-            'deploymode'    => jsb2tk::DEPLOYMODE_STATIC,
-            'includemode'   => jsb2tk::INCLUDEMODE_INDIVIDUAL,
-            'appendctime'   => TRUE,
-            'htmlindention' => "    ",
-        ));
-        
-        foreach($appNames as $appName) {
-            $view->jsb2tk->register("$baseDir/$appName/$appName.jsb2", $appName);
-        }
-        
+
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('jsclient.php');
     }

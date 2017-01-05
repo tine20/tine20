@@ -348,12 +348,14 @@
             $calendarPart = null;
             $attachments = $this->_getAttachments($method, $_event, $_action, $_updater, $calendarPart);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: '{$_attender->getEmail()}'");
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
-
             $sender = $_action == 'alarm' ? $prefUser : $_updater;
-            Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
+            if (!empty($recipients)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " receiver: " . count($recipients));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " subject: '$messageSubject'");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " body: $messageBody");
+                
+                Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
+            }
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             return;
@@ -387,6 +389,8 @@
              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                      . " Do not send Notifications for this resource: ". $resource->name);
              // $recipients will still contain the resource itself
+             // Edit 13.12.2016 Remove resource as well and supress ALL notifications
+             $recipients = array();
              return true;
          }
          

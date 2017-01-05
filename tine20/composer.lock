@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8aee68faeeb4dab4ba51b850d1656558",
-    "content-hash": "e80d0d651d64d8101f443b73a29e9659",
+    "hash": "9c1b34c1556bfd3bfe75c42e0a923425",
+    "content-hash": "58d55cc1685482af7a2bbc71f82c5e76",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -685,11 +685,11 @@
         },
         {
             "name": "metaways/timezoneconvert",
-            "version": "0.2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/timezoneconvert",
-                "reference": "1eba807e6104c80c31a2170cf34923610de9ab23"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -716,7 +716,7 @@
                 "Timezones",
                 "UTC"
             ],
-            "time": "2014-06-02 12:00:27"
+            "time": "2016-04-25 08:20:13"
         },
         {
             "name": "pclzip/pclzip",
@@ -1220,7 +1220,7 @@
             "source": {
                 "type": "git",
                 "url": "http://git.syncroton.org/Syncroton",
-                "reference": "2fb2980cfb263579f4cb9e7b4794a6f7fe98de7b"
+                "reference": "7a130976f93cce5035ec9a455f65b5b7134a7142"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -1244,15 +1244,15 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2016-11-08 11:23:52"
+            "time": "2017-01-05 13:51:53"
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "8465fcaa278fb2e10917bd7de71db945300f063d"
+                "reference": "167dff0aa43cce9359c48b39bbd9e52f91d05a22"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1269,7 +1269,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2016-09-02 09:26:20"
+            "time": "2016-12-29 14:47:01"
         },
         {
             "name": "twig/twig",
@@ -1643,11 +1643,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl4",
+            "version": "1.12.20pl5",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "0d5e192796304aec59643c4298d2b48471fb108f"
+                "reference": "580315d960c6a1de4c367a3a9d48ed9c3a3a056e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1664,7 +1664,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2016-11-30 15:07:14"
+            "time": "2016-12-29 12:10:05"
         }
     ],
     "packages-dev": [
@@ -2224,7 +2224,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch4",
+            "version": "1.12.20.0-patch5",
             "package": "zendframework/zendframework1"
         },
         {

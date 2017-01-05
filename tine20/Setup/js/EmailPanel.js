@@ -212,6 +212,11 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Append domain to login name'),
                     xtype: 'textfield'
                 }, {
+                    // TODO disable imap_domain if this is checked
+                    name: 'imap_useEmailAsUsername',
+                    fieldLabel: this.app.i18n._('Use email address as login name'),
+                    xtype: 'checkbox'
+                }, {
                     id: this.imapBackendIdPrefix + 'CardLayout',
                     layout: 'card',
                     activeItem: this.imapBackendIdPrefix + 'standard',

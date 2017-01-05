@@ -36,12 +36,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             'defaultLength' => 1),
         'text' => array(
             'lengthTypes' => array(
-                256 => 'varchar', //@todo this should be 255 indeed but we have 256 in our setup.xml files
+                255 => 'varchar',
                 65535 => 'text',
                 16777215 => 'mediumtext',
                 4294967295 => 'longtext'),
             'defaultType' => 'text',
-            'defaultLength' => null),
+            'defaultLength' => null,
+            'lengthLessTypes' => array(
+                'mediumtext',
+                'longtext'
+            )
+        ),
         'float' => array(
             'defaultType' => 'double'),
         'decimal' => array(

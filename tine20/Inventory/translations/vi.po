@@ -140,7 +140,7 @@ msgid "Accounting"
 msgstr "Thống kê"
 
 #: js/InventoryItemEditDialog.js:258
-msgid "Cost centre"
+msgid "Cost center"
 msgstr "Trung tâm giá"
 
 #: Preference.php:60

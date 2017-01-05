@@ -3,7 +3,7 @@
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
  */
 if (typeof Locale == 'undefined') {
-  var Locale = function (category, locale) {
+  Locale = function (category, locale) {
     this._instance = true;
     this.LC_ALL =      'C';
     this.LC_COLLATE =  'C';

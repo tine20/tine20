@@ -20,11 +20,6 @@
 class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
 {
     /**
-     * @var string application of this export class
-     */
-    protected $_applicationName = 'Timetracker';
-    
-    /**
      * sort records by this field / dir
      *
      * @var array

@@ -21,7 +21,7 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
     }
 
     /**
-     * update to 10.1
+     * update to 10.2
      *
      * - convert is_deleted to smallint
      * - convert deprecated_status to smallint
@@ -57,5 +57,22 @@ class Inventory_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
 
         $this->setApplicationVersion('Inventory', '10.2');
+    }
+
+    /**
+     * update to 10.3
+     *
+     * - recreate import export definitions as field changed from costcentre to costcenter
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->updateSchema('Inventory', array('Inventory_Model_InventoryItem'));
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Inventory');
+        Setup_Controller::getInstance()->createImportExportDefinitions($app);
+
+        $this->setApplicationVersion('Inventory', '10.3');
     }
 }

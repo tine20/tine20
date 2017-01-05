@@ -80,6 +80,8 @@ class Setup_Frontend_Cli
             $this->_backup($_opts);
         } elseif(isset($_opts->restore)) {
             $this->_restore($_opts);
+        } elseif(isset($_opts->compare)) {
+            $this->_compare($_opts);
         }
         
         if ($exitAfterHandle) {
@@ -808,5 +810,11 @@ class Setup_Frontend_Cli
         }
         
         return $options;
+    }
+
+    protected function _compare(Zend_Console_Getopt $_opts)
+    {
+        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        print_r(Setup_Controller::getInstance()->compareSchema($options));
     }
 }

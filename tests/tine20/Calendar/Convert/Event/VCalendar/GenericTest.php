@@ -772,4 +772,15 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends PHPUnit_Framework_Tes
             $this->assertEquals('Bad Timezone: AWSTTTT', $terv->getMessage());
         }
     }
+
+    /**
+     * testConvertWithAtInUid
+     */
+    public function testConvertWithAtInUid()
+    {
+        $savedEvent = $this->_saveIcsEvent('simple_at_in_id.ics', Calendar_Convert_Event_VCalendar_Factory::CLIENT_THUNDERBIRD);
+
+        $ics = $this->_converter->fromTine20Model($savedEvent);
+        self::assertContains('UID:5aaratdeecgjat4cbjpif5dvms@google', $ics->serialize());
+    }
 }

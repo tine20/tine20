@@ -109,4 +109,13 @@ class Timetracker_Setup_Update_Release10 extends Setup_Update_Abstract
         $this->setTableVersion('timetracker_timeaccount_fav', 1);
         $this->setApplicationVersion('Timetracker', '10.1');
     }
+
+    /**
+     * 0012470: Don't shorten description in export
+     */
+    public function update_1()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Timetracker'));
+        $this->setApplicationVersion('Timetracker', '10.2');
+    }
 }
