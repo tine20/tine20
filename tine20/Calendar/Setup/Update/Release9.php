@@ -146,15 +146,15 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
             $this->_db->quoteIdentifier('attendee.id') . " AS " . $this->_db->quoteIdentifier('attendee_id') .
             " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_events") . " AS " . $this->_db->quoteIdentifier('events') .
             " INNER JOIN " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "container") . " AS " . $this->_db->quoteIdentifier('container') . " ON " .
-            $this->_db->quoteIdentifier('events.container_id') . " = " . $this->_db->quoteIdentifier('container.id') . " AND " .
-            $this->_db->quoteIdentifier('container.type') . " = " . $this->_db->quote('personal') .
+            $this->_db->quoteIdentifier('events.container_id') . " = ". $this->_db->quoteIdentifier('container.id') . " AND " .
+            $this->_db->quoteIdentifier('container.type') . " = ". $this->_db->quote('personal') .
             " INNER JOIN " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "accounts") . " AS " . $this->_db->quoteIdentifier('owner') . " ON " .
-            $this->_db->quoteIdentifier('container.owner_id') . " = " . $this->_db->quoteIdentifier('owner.id') .
+            $this->_db->quoteIdentifier('container.owner_id') . " = ". $this->_db->quoteIdentifier('owner.id') .
             " INNER JOIN " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "cal_attendee") . " AS " . $this->_db->quoteIdentifier('attendee') . " ON " .
-            $this->_db->quoteIdentifier('attendee.cal_event_id') . " = " . $this->_db->quoteIdentifier('events.id') . " AND " .
-            $this->_db->quoteIdentifier('attendee.user_id') . " = " . $this->_db->quoteIdentifier('owner.contact_id') . " AND " .
-            $this->_db->quoteIdentifier('attendee.user_type') . " IN (" . $this->_db->quote(array('user', 'groupmember')) . ") AND " .
-            $this->_db->quoteIdentifier('attendee.displaycontainer_id') . " != " . $this->_db->quoteIdentifier('events.container_id')
+            $this->_db->quoteIdentifier('attendee.cal_event_id') . " = ". $this->_db->quoteIdentifier('events.id') . " AND " .
+            $this->_db->quoteIdentifier('attendee.user_id') . " = ". $this->_db->quoteIdentifier('owner.contact_id') . " AND " .
+            $this->_db->quoteIdentifier('attendee.user_type') . " IN (". $this->_db->quote(array('user', 'groupmember')) . ") AND " .
+            $this->_db->quoteIdentifier('attendee.displaycontainer_id') . " != ". $this->_db->quoteIdentifier('events.container_id')
         )->fetchAll(Zend_Db::FETCH_ASSOC);
 
         foreach ($allBroken as $broken) {
@@ -175,16 +175,17 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
                     $this->_db->quoteIdentifier("last_modified_time") . " = " . $this->_db->quote($time) .
                     " WHERE " . $this->_db->quoteIdentifier("id") . " = " . $this->_db->quote($broken['event_id'])
                 );
+                $quotedIdentifier = $this->_db->quoteIdentifier("content_seq");
                 $this->_db->query(
                     "UPDATE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "container") .
-                    " SET " . $this->_db->quoteIdentifier("content_seq") . " = (" . $this->_db->quoteIdentifier('content_seq') . " +1)" .
+                    " SET " . $quotedIdentifier . " = " .  new Zend_Db_Expr('(CASE WHEN ' . $quotedIdentifier . ' >= 1 THEN ' . $quotedIdentifier . ' + 1 ELSE 1 END)') .
                     " WHERE " . $this->_db->quoteIdentifier("id") . " = " . $this->_db->quote($broken['container_id'])
                 );
                 $content_seq = Tinebase_Helper::array_value('content_seq', Tinebase_Helper::array_value(0, $this->_db->query(
                     "SELECT " . $this->_db->quoteIdentifier('content_seq') .
                     " FROM " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "container") .
                     " WHERE " . $this->_db->quoteIdentifier('id') . " = " . $this->_db->quote($broken['container_id'])
-                )->fetchAll(Zend_Db::FETCH_ASSOC)));
+                )->fetchAll(Zend_Db::FETCH_ASSOC))) ?: 1;
                 $this->_db->query(
                     "INSERT INTO" . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . "container_content") .
                     " (" .
@@ -207,7 +208,10 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
             $this->_db->query("COMMIT");
         }
 
-        $this->setApplicationVersion('Calendar', '9.9');
+        // if called out of normal update process
+        if ($this->getApplicationVersion == '9.8') {
+            $this->setApplicationVersion('Calendar', '9.9');
+        }
     }
 
     /**
