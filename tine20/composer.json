@@ -24,7 +24,7 @@
     "require": {
         "zendframework/zendframework1": "1.12.20pl5 as 1.12.20",
         "tine20/composerapploader": "1.0.*",
-        "syncroton/syncroton": "1.2.*",
+        "syncroton/syncroton": "1.3.*",
         "ezyang/htmlpurifier": "v4.6.0",
         "phpoffice/phpexcel": "1.8.*",
         "phpoffice/phpword": "v0.13.*",
