@@ -1303,7 +1303,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _getMessageNodeFilename($message)
     {
-        $name = mb_substr($message->subject, 0, 245) . '_' . substr(md5($message->messageId), 0, 10) . '.eml';
+        // remove '/' from name as this might break paths
+        $subject = preg_replace('/[\/]+/', '', $message->subject);
+        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageId), 0, 10) . '.eml';
 
         return $name;
     }

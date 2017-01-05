@@ -784,18 +784,6 @@ Tine.Tinebase.tineInit = {
     },
     
     /**
-     * init external libraries
-     */
-    initLibs: function () {
-        if (OpenLayers) {
-            // fix OpenLayers script location to find images/themes/...
-            OpenLayers._getScriptLocation = function () {
-                return 'library/OpenLayers/';
-            };
-        }
-    },
-    
-    /**
      * initialise application manager
      */
     initAppMgr: function () {
@@ -842,7 +830,6 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initBootSplash();
     Tine.Tinebase.tineInit.initLocale();
     Tine.Tinebase.tineInit.initAjax();
-    Tine.Tinebase.tineInit.initLibs();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
         Tine.Tinebase.tineInit.initWindowMgr();

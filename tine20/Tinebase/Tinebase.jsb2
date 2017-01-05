@@ -42,10 +42,6 @@
           "path": "js/Locale/"
         },
         {
-          "text": "OpenLayers.js",
-          "path": "../library/OpenLayers/"
-        },
-        {
           "text": "core.js",
           "path": "../library/CryptoJS/"
         },
@@ -56,10 +52,6 @@
         {
           "text": "enc-base64.js",
           "path": "../library/CryptoJS/"
-        },
-        {
-          "text": "GeoExt.js",
-          "path": "../library/GeoExt/script/"
         },
         {
           "text": "store2.js",

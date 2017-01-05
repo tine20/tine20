@@ -20,4 +20,14 @@ class Calendar_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_7();
         $this->setApplicationVersion('Calendar', '10.1');
     }
+
+    /**
+     * fix displaycontainer in organizers attendee records
+     */
+    public function update_1()
+    {
+        $release9 = new Calendar_Setup_Update_Release9($this->_backend);
+        $release9->update_8();
+        $this->setApplicationVersion('Calendar', '10.2');
+    }
 }

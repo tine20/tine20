@@ -106,7 +106,7 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
                 zoom: 15,
                 listeners: {
                     scope: this,
-                    'activate': function (p) {
+                    'mapAdded': function (p) {
                         if (! p.center) {
                             Tine.log.debug('Loading company address map coordinates: ' + this.record.get('adr_one_lon') + ', ' + this.record.get('adr_one_lat'));
                             p.setCenter(this.record.get('adr_one_lon'), this.record.get('adr_one_lat'));
@@ -127,7 +127,7 @@ Tine.Addressbook.MapPanel = Ext.extend(Ext.Panel, {
                 zoom: 15,
                 listeners: {
                     scope: this,
-                    'activate': function (p) {
+                    'mapAdded': function (p) {
                         if (! p.center) {
                             Tine.log.debug('Loading private address map coordinates: ' + this.record.get('adr_two_lon') + ', ' + this.record.get('adr_two_lat'));
                             p.setCenter(this.record.get('adr_two_lon'), this.record.get('adr_two_lat'));

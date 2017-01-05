@@ -134,10 +134,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                  */
                 try {
                     // only syncContactData if non-sync client!
-                    $syncOptions = in_array($_accessLog->clienttype, array(
-                        Tinebase_Server_WebDAV::REQUEST_TYPE,
-                        ActiveSync_Server_Http::REQUEST_TYPE
-                    ))
+                    $syncOptions = $this->_isSyncClient($_accessLog)
                         ? array()
                         : array(
                             'syncContactData' => true,
@@ -165,6 +162,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         
         return $user;
+    }
+
+    protected function _isSyncClient($accessLog)
+    {
+        return in_array($accessLog->clienttype, array(
+            Tinebase_Server_WebDAV::REQUEST_TYPE,
+            ActiveSync_Server_Http::REQUEST_TYPE
+        ));
     }
     
     /**
@@ -708,7 +713,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         // check if user is expired or blocked
         $this->_checkUserStatus($user, $accessLog);
-        
+
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
             
@@ -738,7 +743,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         
         return $user;
     }
-    
+
     /**
      * returns true if user account has been changed
      * 

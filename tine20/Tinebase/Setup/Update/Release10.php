@@ -30,7 +30,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_1()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_10();
+        $release9->update_4();
         $this->setApplicationVersion('Tinebase', '10.2');
     }
 
@@ -42,7 +42,7 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
     public function update_2()
     {
         $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
-        $release9->update_11();
+        $release9->update_5();
         $this->setApplicationVersion('Tinebase', '10.3');
     }
 }

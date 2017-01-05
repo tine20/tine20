@@ -5,7 +5,7 @@ Received: from localhost (localhost [127.0.0.1])
 	(No client certificate requested)
 	by vagrant-ubuntu-trusty-32 (Postfix) with ESMTPS id E16BF419C9
 	for <vagrant@example.org>; Wed, 12 Oct 2016 13:53:06 +0000 (UTC)
-Subject: Alarm for event "ssss" at Oct 12, 2016 4:00:00 PM
+Subject: Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM
 X-Tine20-Type: Notification
 Precedence: bulk
 User-Agent: Tine 2.0 Notification Service(version 12162: 00bc36b852154705a7fac1b892295f4d1ff02317 (2016-10-12 08:39:27) - none)
