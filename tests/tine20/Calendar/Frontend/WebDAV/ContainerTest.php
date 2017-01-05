@@ -148,6 +148,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         
         $mutations = array(
             '{http://apple.com/ns/ical/}calendar-color'      => '#123456FF',
+            '{http://apple.com/ns/ical/}calendar-order'      => 2,
             '{DAV:}displayname'                              => 'testUpdateProperties',
             '{http://calendarserver.org/ns/}invalidProperty' => null
         );
@@ -159,12 +160,14 @@ class Calendar_Frontend_WebDAV_ContainerTest extends PHPUnit_Framework_TestCase
         $updatedContainer = Tinebase_Container::getInstance()->get($this->objects['initialContainer']);
         
         $this->assertEquals($result[200]["{http://apple.com/ns/ical/}calendar-color"],      null);
+        $this->assertEquals($result[200]["{http://apple.com/ns/ical/}calendar-order"],      null);
         $this->assertEquals($result[200]["{DAV:}displayname"],                              null);
         $this->assertEquals($result[403]["{http://calendarserver.org/ns/}invalidProperty"], null);
         $this->assertEquals($updatedContainer->color, substr($mutations['{http://apple.com/ns/ical/}calendar-color'], 0, 7));
+        $this->assertEquals($updatedContainer->order,  2);
         $this->assertEquals($updatedContainer->name,  $mutations['{DAV:}displayname']);
     }
-    
+
     /**
      * test getCreateFile
      * 
