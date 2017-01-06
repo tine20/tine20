@@ -1735,11 +1735,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     }
     
     /**
-     * get content history since given content_seq 
+     * get content history since given content_seq
+     *
+     * returns null if the lastContentSeq was not found in DB and was not -1 or 0
+     * -1 is used when paging or for inbox which actually doesnt have a sync token
+     * 0 is the initial container content_seq, thus the initial sync token for an empty container
      * 
      * @param integer|Tinebase_Model_Container $containerId
      * @param integer $lastContentSeq
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet|null
      */
     public function getContentHistory($containerId, $lastContentSeq = -1)
     {
@@ -1751,7 +1755,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             'sort' => 'content_seq'
         ));
         $result = $this->getContentBackend()->search($filter, $pagination);
-        if ($lastContentSeq != -1) {
+        if ($lastContentSeq != -1 && $lastContentSeq != 0) {
             if ($result->count() === 0) {
                 return null;
             }
