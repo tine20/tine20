@@ -17,6 +17,10 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
  */
 Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     /**
+     * @cfg {Tine.Tinebase.Application} app
+     */
+    app: null,
+    /**
      * @cfg {Boolean} allowNodeSelect
      */
     allowNodeSelect: false,
@@ -90,7 +94,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     stateful: true,
     stateEvents: ['select'],
     
-    mode: 'local',
+    mode: 'remote',
     valueField: 'id',
     displayField: 'name',
     
@@ -148,7 +152,20 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             ]};
             
         }
-        
+
+        // autoconfig app
+        if (! this.app && this.appName) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+        if (! this.app && this.recordClass) {
+            this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
+        }
+        if (this.app && ! this.appName) {
+            this.appName = this.app.appName;
+        }
+
+        this.recents = {};
+
         //this.title = String.format(_('Recently used {0}:'), this.containersName);
         
         Tine.widgets.container.selectionComboBox.superclass.initComponent.call(this);
@@ -162,7 +179,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
                 return false;
             }
         }, this);
-        this.on('beforequery', this.onBeforeQuery, this);
     },
     
     /**
@@ -171,13 +187,19 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     initStore: function() {
         var state = this.stateful ? Ext.state.Manager.get(this.stateId) : null;
         var recentsData = state && state.recentsData || [];
-        
+
         this.store = new Ext.data.JsonStore({
             id: 'id',
-            data: recentsData,
+            data: {results: recentsData},
             remoteSort: false,
             fields: Tine.Tinebase.Model.Container,
-            listeners: {beforeload: this.onBeforeLoad.createDelegate(this)}
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            listeners: {
+                beforeload: this.onBeforeLoad.createDelegate(this),
+                load: this.onStoreLoad.createDelegate(this)
+            }
         });
         this.setStoreFilter();
     },
@@ -233,31 +255,50 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     onBeforeLoad: function(store, options) {
         options.params = {
-            method: 'Tinebase_Container.getContainer',
-            application: this.appName,
-            containerType: Tine.Tinebase.container.TYPE_PERSONAL,
-            owner: Tine.Tinebase.container.pathIsPersonalNode(this.startPath)
+            method: 'Tinebase_Container.searchContainers',
+            filter: [
+                {field: 'application_id', operator: 'equals', value: this.app.id },
+            ]
         };
-    },
-    
-    /**
-     * if this.startPath correspondes to a personal node, 
-     * directly do a remote search w.o. container tree dialog
-     * 
-     * @private
-     * @param {} queryEvent
-     */
-    onBeforeQuery: function(queryEvent) {
-        queryEvent.query = new Date().getTime();
-        this.mode = Tine.Tinebase.container.pathIsPersonalNode(this.startPath) ? 'remote' : 'local' ;
-        
-        // skip combobox nativ filtering to preserv our filters
-        if (this.mode == 'local') {
-            this.onLoad();
-            return false;
+        if (this.recordClass) {
+            options.params.filter.push(
+                {field: 'model', operator: 'equals', value: this.recordClass.getMeta('phpClassName')}
+            );
+        }
+
+        if (Tine.Tinebase.container.pathIsPersonalNode(this.startPath)) {
+            // direct search
+            options.params.filter.push(
+                {field: 'type',     operator: 'equals', value: Tine.Tinebase.container.TYPE_PERSONAL},
+                {field: 'owner_id', operator: 'equals', value: Tine.Tinebase.container.pathIsPersonalNode(this.startPath)}
+            );
+        } else {
+            // validate recents
+            this.recents = {};
+            this.store.each(function(r) {
+                if (r != this.otherRecord) {
+                    this.recents[r.id] = r.get('dtselect');
+                }
+            }, this);
+
+            options.params.filter.push(
+                {field: 'id',       operator: 'in',     value: Object.keys(this.recents)}
+            );
         }
     },
-    
+
+    onStoreLoad: function() {
+        if (! this.store) return;
+
+        if (! Tine.Tinebase.container.pathIsPersonalNode(this.startPath)) {
+            this.store.each(function(r) {
+                r.set('dtselect', this.recents[r.id]);
+            }, this);
+            this.store.sort('dtselect', 'DESC');
+            this.store.add(this.otherRecord);
+        }
+    },
+
     /**
      * filter store according to this.startPath and this.allowNodeSelect
      * 
@@ -337,7 +378,6 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
     
     /**
      * @private
-     * @todo // records might be in from state, but value is conainerData only
      */
     setValue: function(container) {
         
@@ -349,11 +389,12 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
             // store already has a record of this container
             container = this.store.getById(container);
             
-        } else if (container.path && this.store.findExact('path', container.path) >= 0) {
-            // store already has a record of this container
-            container = this.store.getAt(this.store.findExact('path', container.path));
-            
         } else if (container.path || container.id) {
+            if (container.path && this.store.findExact('path', container.path) >= 0) {
+                // store already has a record of this container -> refresh
+                this.store.remove(this.store.getAt(this.store.findExact('path', container.path)));
+            }
+
             // ignore server name for node 'My containers'
             if (container.path && container.path === Tine.Tinebase.container.getMyNodePath()) {
                 container.name = null;
@@ -375,7 +416,7 @@ Tine.widgets.container.selectionComboBox = Ext.extend(Ext.form.ComboBox, {
         // make sure other is _last_ entry in list
         this.store.remove(this.otherRecord);
         this.store.add(this.otherRecord);
-        
+
         Tine.widgets.container.selectionComboBox.superclass.setValue.call(this, container.id);
         
         if (container.account_grants) {

@@ -23,7 +23,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
+class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tinebase_Controller_SearchInterface
 {
     /**
      * Table name without prefix
@@ -119,6 +119,33 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         return $this->_contentBackend;
+    }
+
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
+     * @param bool $_getRelations
+     * @param bool $_onlyIds
+     * @param string $_action
+     * @return Tinebase_Record_RecordSet
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    {
+        return parent::search($_filter, $_pagination, $_onlyIds);
+    }
+
+    /**
+     * Gets total count of search with $_filter
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        return parent::searchCount($_filter);
     }
     
     /**
