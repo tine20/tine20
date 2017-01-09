@@ -331,48 +331,50 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_10()
     {
-        $declaration = new Setup_Backend_Schema_Table_Xml('<table>
-            <name>numberable</name>
-            <version>1</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>bucket</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>number</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
+        if ($this->getTableVersion('numberable') === 0) {
+            $declaration = new Setup_Backend_Schema_Table_Xml('<table>
+                <name>numberable</name>
+                <version>1</version>
+                <declaration>
                     <field>
                         <name>id</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
+                        <autoincrement>true</autoincrement>
                     </field>
-                </index>
-                <index>
-                    <name>bucket_number</name>
-                    <unique>true</unique>
                     <field>
                         <name>bucket</name>
+                        <type>text</type>
+                        <length>255</length>
+                        <notnull>false</notnull>
                     </field>
                     <field>
                         <name>number</name>
+                        <type>integer</type>
+                        <notnull>true</notnull>
                     </field>
-                </index>
-            </declaration>
-        </table>');
+                    <index>
+                        <name>id</name>
+                        <primary>true</primary>
+                        <field>
+                            <name>id</name>
+                        </field>
+                    </index>
+                    <index>
+                        <name>bucket_number</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>bucket</name>
+                        </field>
+                        <field>
+                            <name>number</name>
+                        </field>
+                    </index>
+                </declaration>
+            </table>');
 
-        $this->createTable('numberable', $declaration);
+            $this->createTable('numberable', $declaration);
+        }
         $this->setApplicationVersion('Tinebase', '9.11');
     }
 
