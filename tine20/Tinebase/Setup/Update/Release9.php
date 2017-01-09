@@ -90,42 +90,9 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
         }
         $this->setTableVersion('container', '10');
 
-        //Tinebase_Core::getCache()->clean();
-        $this->_setContainerOwners();
+        Tinebase_Container::getInstance()->setContainerOwners();
 
         $this->setApplicationVersion('Tinebase', '9.5');
-    }
-
-    /**
-     * write owner to all personal containers
-     */
-    protected function _setContainerOwners()
-    {
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL),
-            array('field' => 'owner_id', 'operator' => 'isnull', 'value' => ''),
-        ));
-        $count = 0;
-        $paging = new Tinebase_Model_Pagination(array(
-            'start' => 0,
-            'limit' => 100,
-        ));
-        $containers = Tinebase_Container::getInstance()->search($filter, $paging);
-        while (count($containers) > 0) {
-            foreach ($containers as $container) {
-                $ownerId = Tinebase_Container::getInstance()->getContainerOwner($container);
-                if ($ownerId) {
-                    $container->owner_id = $ownerId;
-                    Tinebase_Container::getInstance()->update($container);
-                    $count++;
-                }
-            }
-            $paging->start += $paging->limit;
-            $containers = Tinebase_Container::getInstance()->search($filter, $paging);
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Set owner for ' . $count . ' containers.');
     }
 
     /**

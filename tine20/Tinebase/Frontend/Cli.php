@@ -1047,4 +1047,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     *
+     *
+     * @return int
+     */
+    public function repairContainerOwner()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $this->_addOutputLogWriter(6);
+        Tinebase_Container::getInstance()->setContainerOwners();
+
+        return 0;
+    }
 }

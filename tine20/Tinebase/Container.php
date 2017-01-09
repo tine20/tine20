@@ -1911,4 +1911,36 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         return parent::update($_record);
     }
+
+    public function setContainerOwners()
+    {
+        $select = $this->_getSelect('id')
+            ->where('type = ?', Tinebase_Model_Container::TYPE_PERSONAL)
+            ->where('owner_id is null or owner_id = ?', '');
+
+        $stmt = $this->_db->query($select);
+        $containers = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $count = 0;
+        foreach ($containers as $container) {
+            $id = $container['id'];
+            $grants = $this->getGrantsOfContainer($id, /* ignore acl */ true);
+            foreach ($grants as $grant) {
+                if ($grant->adminGrant && $grant->account_type == 'user') {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Set owner for container id ' . $id . ': ' .  $grant->account_id);
+                    $where  = array(
+                        $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $id),
+                    );
+
+                    $this->_db->update($this->_tablePrefix . $this->_tableName, array('owner_id' => $grant->account_id), $where);
+
+                    $count++;
+                }
+            }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Set owner for ' . $count . ' containers.');
+    }
 }
