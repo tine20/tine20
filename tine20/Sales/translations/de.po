@@ -28,7 +28,7 @@ msgstr ""
 
 #: Export/Ods/Invoice.php:125
 msgid "CLEARED"
-msgstr "ABGERECHNET"
+msgstr "GEBUCHT"
 
 #: Export/Ods/Invoice.php:128
 msgid "INVOICE"
@@ -72,13 +72,13 @@ msgstr "Die Nummer die Sie für diesen Datensatz verwenden wollten, ist bereits 
 #: Exception/InvoiceAlreadyClearedEdit.php:26
 #: Exception/InvoiceAlreadyClearedDelete.php:26
 msgid "Invoice is cleared already"
-msgstr "Rechnung ist bereits abgerechnet"
+msgstr "Rechnung ist bereits gebucht"
 
 #: Exception/InvoiceAlreadyClearedEdit.php:31
 msgid ""
 "The Invoice you tried to edit is cleared already, so no editing is possible "
 "anymore!"
-msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits abgerechnet und kann nicht weiter bearbeitet werden!"
+msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht weiter bearbeitet werden!"
 
 #: Exception/UnknownCurrencyCode.php:26
 msgid "Unknown Currency Code"
@@ -94,7 +94,7 @@ msgstr "Der Währungscode, den Sie versucht haben, einzugeben, ist nicht gültig
 msgid ""
 "The Invoice you tried to delete is cleared already, so deleting is not "
 "possible anymore!"
-msgstr "Die Rechnung die Sie löschen wollten, ist bereits abgerechnet und kann nicht mehr gelöscht werden!"
+msgstr "Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nicht mehr gelöscht werden!"
 
 #: Exception/AlterOCNumberForbidden.php:26
 msgid "No Right to alter the Number"
@@ -641,11 +641,11 @@ msgstr "Datum"
 
 #: Model/Invoice.php:109 js/InvoiceEditDialog.js:554
 msgid "Interval Begins"
-msgstr "Abrechnungszeitraum Beginn"
+msgstr "Buchungszeitraum Beginn"
 
 #: Model/Invoice.php:113 js/InvoiceEditDialog.js:559
 msgid "Interval Ends"
-msgstr "Abrechnungszeitraum Ende"
+msgstr "Buchungszeitraum Ende"
 
 #: Model/Invoice.php:116 js/InvoiceEditDialog.js:526
 #: js/InvoiceDetailsPanel.js:129 js/PurchaseInvoiceDetailsPanel.js:129
@@ -656,7 +656,7 @@ msgstr "Zahlungsziel in Tagen"
 #: js/InvoiceDetailsPanel.js:131 js/PurchaseInvoiceDetailsPanel.js:131
 #: js/PurchaseInvoiceEditDialog.js:506 Setup/Update/Release8.php:213
 msgid "Cleared"
-msgstr "Abgerechnet"
+msgstr "Gebucht"
 
 #: Model/Invoice.php:137 Model/InvoicePosition.php:49
 #: js/InvoiceEditDialog.js:453 js/InvoiceDetailsPanel.js:102
@@ -1068,7 +1068,7 @@ msgstr "Vertragsintervall automatisch abrechnen"
 
 #: Config.php:147
 msgid "Sets the biggest interval, contracts will be billed."
-msgstr "Setze das größte Intervall, zu dem Verträge abgerechnet werden"
+msgstr "Setze das größte Intervall, zu dem Verträge gebucht werden"
 
 #: Config.php:155
 msgid "Ignore Billables Before Date"
@@ -1204,19 +1204,19 @@ msgstr "Paypal"
 
 #: Config.php:299
 msgid "Invoice Cleared"
-msgstr "Rechnung abgerechnet"
+msgstr "Rechnung gebucht"
 
 #: Config.php:301
 msgid "Possible Invoice Cleared States."
-msgstr "Mögliche Werte für Abgerechnetstatus"
+msgstr "Mögliche Werte für Buchungsstatus"
 
 #: Config.php:308
 msgid "to clear"
-msgstr "abzurechnen"
+msgstr "zu buchen"
 
 #: Config.php:309
 msgid "cleared"
-msgstr "abgerechnet"
+msgstr "gebucht"
 
 #: Config.php:330
 msgid "Enabled Features"
@@ -1284,7 +1284,7 @@ msgstr "Status"
 
 #: Setup/Update/Release8.php:219
 msgid "Cleared In"
-msgstr "Abgerechnet in"
+msgstr "Gebucht in"
 
 #: Setup/Update/Release8.php:1403
 msgid "All Suppliers"
