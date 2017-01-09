@@ -469,7 +469,12 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                     $this->_container->color = substr($value, 0, 7);
                     $result['200'][$key] = null;
                     break;
-                
+
+                case '{http://apple.com/ns/ical/}calendar-order':
+                    $this->_container->order = (int) $value;
+                    $result['200'][$key] = null;
+                    break;
+
                 default:
                     $result['403'][$key] = null;
             }

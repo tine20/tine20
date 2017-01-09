@@ -45,4 +45,16 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_5();
         $this->setApplicationVersion('Tinebase', '10.3');
     }
+
+    /**
+     * update to 10.4
+     *
+     * dd numberables
+     */
+    public function update_3()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        $release9->update_10();
+        $this->setApplicationVersion('Tinebase', '10.4');
+    }
 }

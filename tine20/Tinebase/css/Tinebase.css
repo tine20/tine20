@@ -775,7 +775,7 @@ html, body {
     white-space: nowrap;
 }
 
-.tw-activities-grid .x-grid3-cell-inner, .x-grid3-hd-inner {
+.tw-activities-grid .x-grid3-cell-inner {
     white-space: normal;
 }
 
