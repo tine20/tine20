@@ -1248,11 +1248,11 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "8465fcaa278fb2e10917bd7de71db945300f063d"
+                "reference": "8857dd3bc5e22f0ed528ca8d3dc30689dea8fcae"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1269,7 +1269,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2016-09-02 09:26:20"
+            "time": "2017-01-09 11:45:37"
         },
         {
             "name": "twig/twig",
