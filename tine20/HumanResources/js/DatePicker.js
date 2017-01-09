@@ -439,16 +439,16 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
     handleDateClick: function(e, t) {
         // don't handle date click, if this is disabled, or the clicked node doesn't have a timestamp assigned
         if (this.disabled || ! t.dateValue) {
-            return;
+            return Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
         }
         // don't handle click on disabled dates defined by contract or feast calendar
         if (Ext.fly(t.parentNode).hasClass('x-date-disabled')) {
-            return;
+            return Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
         }
         
         // dont't handle click on already defined sickness days
         if (Ext.fly(t.parentNode).hasClass('hr-date-sickness')) {
-            return;
+            return Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
         }
         
         var date = new Date(t.dateValue),
@@ -457,28 +457,28 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
         date.clearTime();
         
         if (this.accountPickerActive) {
-            
+
             var remaining = this.editDialog.getForm().findField('remaining_vacation_days').getValue();
-            
+
             if (existing) {
                 remaining++;
             } else {
                 remaining--;
             }
-            
+
             if (remaining < 0) {
                 Ext.MessageBox.show({
-                    title: this.app.i18n._('No more vacation days'), 
+                    title: this.app.i18n._('No more vacation days'),
                     msg: this.app.i18n._('The Employee has no more possible vacation days left for this year. Create a new vacation and use another personal account the vacation should be taken from.'),
                     icon: Ext.MessageBox.WARNING,
                     buttons: Ext.Msg.OK
                 });
-                return;
+                return Tine.HumanResources.DatePicker.superclass.handleDateClick.call(this, e, t);
             }
         } else {
             var remaining = 0;
         }
-        
+
         if (existing) {
             this.store.remove(existing);
         } else {
@@ -491,7 +491,7 @@ Tine.HumanResources.DatePicker = Ext.extend(Ext.DatePicker, {
             } else {
                 this.editDialog.accountPicker.enable();
             }
-            
+
             this.editDialog.getForm().findField('remaining_vacation_days').setValue(remaining);
         }
         
