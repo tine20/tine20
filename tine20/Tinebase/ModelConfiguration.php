@@ -736,6 +736,9 @@ class Tinebase_ModelConfiguration {
     /**
      * This defines the filters use for all known types
      * @var array
+     *
+     * NOTE: "records" type has no automatic filter definition/mapping!
+     * TODO generalize this for "records" type (see Sales_Model_Filter_ContractProductAggregateFilter)
      */
     protected $_filterModelMapping = array(
         'date'     => 'Tinebase_Model_Filter_Date',
@@ -998,25 +1001,8 @@ class Tinebase_ModelConfiguration {
             // TODO: Refactor: key 'tag' should be 'tags' in filter definition / quick hack
             // also see ticket 8944 (https://forge.tine20.org/mantisbt/view.php?id=8944)
             
-            // set filter model
-            if ((isset($fieldDef['filterDefinition']) || array_key_exists('filterDefinition', $fieldDef))) {
-                // use filter from definition
-                $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
-                $this->_filterModel[$key] = $fieldDef['filterDefinition'];
-            } else if ((isset($this->_filterModelMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_filterModelMapping))) {
-                // if no filterDefinition is given, try to use the default one
-                $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$fieldDef['type']]);
-                if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))) {
-                    $this->_filterModel[$fieldKey]['options'] = $fieldDef['config'];
-                    
-                    // set id filter controller
-                    if ($fieldDef['type'] == 'record') {
-                        $this->_filterModel[$fieldKey]['options']['filtergroup'] = $fieldDef['config']['appName'] . '_Model_' . $fieldDef['config']['modelName'] . 'Filter';
-                        $this->_filterModel[$fieldKey]['options']['controller']  = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
-                    }
-                }
-            }
-            
+            $this->_setFieldFilterModel($fieldDef, $fieldKey);
+
             if ((isset($fieldDef['queryFilter']) || array_key_exists('queryFilter', $fieldDef))) {
                 $queryFilters[] = $fieldKey;
             }
@@ -1072,6 +1058,33 @@ class Tinebase_ModelConfiguration {
         }
         $this->_filterModel[$this->_idProperty] = array('filter' => 'Tinebase_Model_Filter_Id', 'options' => array('idProperty' => $this->_idProperty, 'modelName' => $this->_appName . '_Model_' . $this->_modelName));
         $this->_fieldKeys = array_keys($this->_fields);
+    }
+
+    /**
+     * set filter model for field
+     *
+     * @param $fieldDef
+     * @param $fieldKey
+     */
+    protected function _setFieldFilterModel($fieldDef, $fieldKey)
+    {
+        if ((isset($fieldDef['filterDefinition']) || array_key_exists('filterDefinition', $fieldDef))) {
+            // use filter from definition
+            $key = isset($fieldDef['filterDefinition']['key']) ? $fieldDef['filterDefinition']['key'] : $fieldKey;
+            $this->_filterModel[$key] = $fieldDef['filterDefinition'];
+        } else if ((isset($this->_filterModelMapping[$fieldDef['type']]) || array_key_exists($fieldDef['type'], $this->_filterModelMapping))) {
+            // if no filterDefinition is given, try to use the default one
+            $this->_filterModel[$fieldKey] = array('filter' => $this->_filterModelMapping[$fieldDef['type']]);
+            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))) {
+                $this->_filterModel[$fieldKey]['options'] = $fieldDef['config'];
+
+                // set id filter controller
+                if ($fieldDef['type'] == 'record') {
+                    $this->_filterModel[$fieldKey]['options']['filtergroup'] = $fieldDef['config']['appName'] . '_Model_' . $fieldDef['config']['modelName'] . 'Filter';
+                    $this->_filterModel[$fieldKey]['options']['controller']  = $fieldDef['config']['appName'] . '_Controller_' . $fieldDef['config']['modelName'];
+                }
+            }
+        }
     }
 
     /**
