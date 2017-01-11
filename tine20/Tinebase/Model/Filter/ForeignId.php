@@ -66,8 +66,6 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $db = Tinebase_Core::getDb();
-        
         if (! is_array($this->_foreignIds)) {
             $this->_foreignIds = $this->_getController()->search($this->_filterGroup, new Tinebase_Model_Pagination(), FALSE, TRUE);
         }

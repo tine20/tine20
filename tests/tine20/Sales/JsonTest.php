@@ -263,6 +263,45 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(1, $search['totalcount']);
     }
 
+    /**
+     * try to get a contract by product
+     */
+    public function testSearchContractsByProduct()
+    {
+        // create & add aggregate
+        $prodTest = new Sales_ProductControllerTest();
+        $product = $prodTest->testCreateProduct();
+
+        $contract = $this->_getContract();
+        $contract->products = array(
+            array(
+                'product_id' => $product->getId(),
+                'quantity' => 1,
+                'interval' => 1,
+                'billing_point' => 1,
+            ),
+        );
+        $contractData = $this->_instance->saveContract($contract->toArray());
+
+        // search & check
+        $filter = $this->_getFilter($contract->title);
+        $filter[] = array('field' => 'products', 'operator' => 'contains', 'value' => 'product');
+        $search = $this->_instance->searchContracts($filter, $this->_getPaging());
+        $this->assertEquals($contract->title, $search['results'][0]['title']);
+        $this->assertEquals(1, $search['totalcount']);
+    }
+
+    /**
+     * assert products filter
+     */
+    public function testContractFilterModel()
+    {
+        $config = Sales_Model_Contract::getConfiguration();
+        $filterModel = $config->getFilterModel();
+        $this->assertTrue(isset($filterModel['_filterModel']['customer']), 'customer not found in filter model: ' . print_r($filterModel, true));
+        $this->assertTrue(isset($filterModel['_filterModel']['products']), 'products not found in filter model: ' . print_r($filterModel, true));
+    }
+
     public function testSearchEmptyDateTimeFilter()
     {
         // create

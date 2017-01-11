@@ -416,7 +416,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             }], [
                                 this.dateOfInvoiceField,
                                 this.dueInDaysField,
-                                this.dueAtField,
+                                this.dueAtField
                                 /*{
                                     xtype: 'extuxclearabledatefield',
                                     name: 'overdue_at',

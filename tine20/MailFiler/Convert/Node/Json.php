@@ -41,6 +41,8 @@ class MailFiler_Convert_Node_Json extends Tinebase_Convert_Json
         foreach ($messages as $message) {
             $idx = $records->getIndexById($message->node_id);
             if (isset($idx) && $idx !== FALSE) {
+                // TODO body2html?
+                // TODO add config/preference for format?
                 $message->body = MailFiler_Controller_Message::getInstance()->getMessageBodyFromNode($message, $records[$idx]);
                 $message->attachments = MailFiler_Controller_Message::getInstance()->getAttachments($message);
                 $records[$idx]->message = $message;

@@ -108,7 +108,13 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'related_model' => 'Addressbook_Model_Contact',
                 ),
                 'jsConfig' => array('filtertype' => 'sales.contract-contact-external')
-            )
+            ),
+            'products' => array(
+                // TODO generalize this for "records" type (Tinebase_Model_Filter_ForeignRecords?)
+                'filter' => 'Sales_Model_Filter_ContractProductAggregateFilter',
+                'label' => 'Products', // _('Products')
+                'jsConfig' => array('filtertype' => 'sales.contract-product')
+            ),
         ),
         
         'fields'            => array(
@@ -206,7 +212,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             'products' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Products', // _('Products')
-                'type'       => 'records',
+                'type'       => 'records', // be careful: records type has no automatic filter definition!
                 'config'     => array(
                     'appName'     => 'Sales',
                     'modelName'   => 'ProductAggregate',
