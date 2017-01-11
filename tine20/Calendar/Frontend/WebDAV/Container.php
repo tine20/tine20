@@ -477,7 +477,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getChanges($syncToken)
     {
-        $result = parent::getChanges($syncToken);
+        if (null === ($result = parent::getChanges($syncToken))) {
+            return $result;
+        }
 
         $newResult = array();
         $backend = Calendar_Controller_Event::getInstance()->getBackend();

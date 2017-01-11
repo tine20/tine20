@@ -135,7 +135,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
     {
         $body = '<?xml version="1.0" encoding="UTF-8"?>
                 <A:sync-collection xmlns:A="DAV:">
-                    <A:sync-token>http://tine20.net/ns/sync/0</A:sync-token>
+                    <A:sync-token>http://tine20.net/ns/sync/-1</A:sync-token>
                     <A:sync-level>1</A:sync-level>
                     <A:prop>
                         <A:getetag/>

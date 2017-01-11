@@ -1714,16 +1714,26 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param integer $lastContentSeq
      * @return Tinebase_Record_RecordSet
      */
-    public function getContentHistory($containerId, $lastContentSeq = 0)
+    public function getContentHistory($containerId, $lastContentSeq = -1)
     {
         $filter = new Tinebase_Model_ContainerContentFilter(array(
             array('field' => 'container_id', 'operator' => 'equals',  'value' => Tinebase_Model_Container::convertContainerIdToInt($containerId)),
-            array('field' => 'content_seq',  'operator' => 'greater', 'value' => $lastContentSeq),
+            array('field' => 'content_seq',  'operator' => 'greater', 'value' => ($lastContentSeq == -1 ? $lastContentSeq : $lastContentSeq - 1)),
         ));
         $pagination = new Tinebase_Model_Pagination(array(
             'sort' => 'content_seq'
         ));
         $result = $this->getContentBackend()->search($filter, $pagination);
+        if ($lastContentSeq != -1) {
+            if ($result->count() === 0) {
+                return null;
+            }
+            $firstRecord = $result->getFirstRecord();
+            if ($firstRecord->content_seq != $lastContentSeq) {
+                return null;
+            }
+            $result->removeRecord($firstRecord);
+        }
         return $result;
     }
 

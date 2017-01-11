@@ -567,6 +567,9 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         );
 
         $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
+        if (null === $resultSet) {
+            return null;
+        }
         foreach($resultSet as $contentModel) {
             switch($contentModel->action) {
                 case Tinebase_Model_ContainerContent::ACTION_DELETE:
