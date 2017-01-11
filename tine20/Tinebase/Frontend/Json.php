@@ -878,10 +878,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $customAppRegistry = $this->_getCustomAppRegistry($application);
                 if (empty($customAppRegistry)) {
                     // TODO always get this from app controller (and remove from _getCustomAppRegistry)
-                    $appController = Tinebase_Core::getApplicationInstance($application->name);
-                    $models = $appController->getModels();
-                    $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                    $appRegistry['defaultModel'] = $appController->getDefaultModel();
+                    try {
+                        $appController = Tinebase_Core::getApplicationInstance($application->name);
+                        $models = $appController->getModels();
+                        $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
+                        $appRegistry['defaultModel'] = $appController->getDefaultModel();
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        // do not add prefs if user has no run right
+                    }
 
                 } else {
                     $appRegistry = array_merge_recursive($appRegistry, $customAppRegistry);

@@ -92,9 +92,9 @@ class MailFiler_Controller_Message extends Felamimail_Controller_Message
      * @param string $contentType
      * @return string
      */
-    public function getMessageBodyFromNode(MailFiler_Model_Message $message, MailFiler_Model_Node $node, $contentType = Zend_Mime::TYPE_TEXT)
+    public function getMessageBodyFromNode(MailFiler_Model_Message $message, MailFiler_Model_Node $node, $contentType = Zend_Mime::TYPE_HTML)
     {
-        $cacheId = Tinebase_Helper::convertCacheId('getMessageBodyFromNode_' . $node->getId());
+        $cacheId = Tinebase_Helper::convertCacheId('getMessageBodyFromNode_' . $node->getId() . $contentType);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             return Tinebase_Core::getCache()->load($cacheId);
         }

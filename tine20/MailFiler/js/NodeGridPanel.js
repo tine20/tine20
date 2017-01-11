@@ -562,7 +562,7 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             node = sm.getSelected();
             msg = node.get('message'),
-            msgBody = msg.body;
+            msgBody = Ext.util.Format.nl2br(msg.body);
 
         msgBody = '<br/>'
             + '<blockquote class="felamimail-body-blockquote">' + msgBody + '</blockquote><br/>';
@@ -589,7 +589,7 @@ Tine.MailFiler.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             node = sm.getSelected();
             msg = node.get('message'),
-            msgBody = msg.body,
+            msgBody = Ext.util.Format.nl2br(msg.body),
             quote = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
                 '<br /><b>',
                 '</b><br />'),

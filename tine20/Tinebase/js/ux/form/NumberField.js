@@ -45,6 +45,14 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
         }
         
         Ext.ux.form.NumberField.superclass.initComponent.call(this);
+        
+        this.on('focus', this.emptyField, this);
+    },
+    
+    emptyField: function() {
+        if (this.getValue() == '0') {
+            this.setRawValue("");
+        }
     },
     
     /**
