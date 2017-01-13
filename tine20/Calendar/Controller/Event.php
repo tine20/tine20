@@ -329,14 +329,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $conflictFilter->addFilterGroup($periodCandidates);
         $conflictCandidates = $this->search($conflictFilter);
 
-        $from = Tinebase_DateTime::now();
-        $until = Tinebase_DateTime::now();
-
+        $from = $until = false;
         foreach ($periodCandidates as $periodFilter) {
             $period = $periodFilter->getValue();
-            $from = min($from, $period['from']);
-            $until = max($until, $period['until']);
-//            Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $period['from'], $period['until']);
+            $from = $from ? min($from, $period['from']) : $period['from'];
+            $until = $until ?  max($until, $period['until']) : $period['until'];
         }
         Calendar_Model_Rrule::mergeRecurrenceSet($conflictCandidates, $from, $until);
 
