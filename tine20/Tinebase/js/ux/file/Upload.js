@@ -313,7 +313,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 
         var transaction = conn.request({
             headers: {
-                "X-File-Name"           : CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(this.fileRecord.get('name'))),
+                "X-File-Name"           : window.btoa(unescape(encodeURIComponent(this.fileRecord.get('name')))),
                 "X-File-Type"           : this.fileRecord.get('type'),
                 "X-File-Size"           : this.fileRecord.get('size')
             },

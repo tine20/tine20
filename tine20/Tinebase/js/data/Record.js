@@ -323,14 +323,14 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
 };
 
 Tine.Tinebase.data.Record.generateUID = function(length) {
-    var uid = String(CryptoJS.SHA1(String(Math.floor(Math.random()*Math.pow(10, 16))) + String(new Date().getMilliseconds())));
-    
-    if (length) {
-        uid = uid.substring(0, length);
+    var s = '0123456789abcdef',
+        uuid = new Array(length);
+    for(var i=0; i<length; i++) {
+        uuid[i] = s.charAt(Math.ceil(Math.random() *15));
     }
-    
-    return uid;
+    return uuid.join('');
 };
+
 Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
     add: function(record) {
         if (! Ext.isFunction(record.getMeta)) {
