@@ -24,7 +24,7 @@
         <php expression="Tinebase_Helper::getDevelopmentRevision();" returnProperty="buildRevision" />
         <echo msg="$buildRevision: ${buildRevision}" />
 
-        <php expression="date_create('now')->format('Y-m-d H:i:s');" returnProperty="buildDate" />
+        <php expression="date_create('now', new DateTimeZone('UTC'))->format('Y-m-d H:i:s');" returnProperty="buildDate" />
         <echo msg="$buildDate: ${buildDate}" />
 
         <echo msg="Making build directory" />
@@ -246,7 +246,7 @@
             <available file="${project.basedir}/${name}/js/webpack.config.js"/>
             <then>
                 <echo message="Starting webpack build..." />
-                <exec command="./node_modules/webpack/bin/webpack.js --progress --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
+                <exec command="./node_modules/webpack/bin/webpack.js --progress -p --env.builddir ${builddir}/${name}/js" dir="${project.basedir}/${name}/js" passthru="true" />
             </then>
         </if>
 
