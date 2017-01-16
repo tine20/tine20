@@ -419,24 +419,26 @@ Ext.extend(Tine.Filemanager.NodeTreePanel, Tine.widgets.container.TreePanel, {
     
     /**
      * convert filesystem path to treePath
-     * 
+     *
      * NOTE: only the first depth gets converted!
      *       fs pathes of not yet loaded tree nodes can't be converted!
-     * 
+     *
      * @param {String} containerPath
      * @return {String} tree path
      */
-    getTreePath: function(path) {
-        var treePath = '/' + this.getRootNode().id;
-        
-        if (path && path != '/') {
-            if (path == '/personal') {
-                treePath += '/otherUsers';
+    getTreePath: function(containerPath) {
+        var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
+
+        // replace personal with otherUsers if personal && ! personal/myaccountid
+        var matches = containerPath.match(/^\/personal\/{0,1}([^\/]*)\/{0,1}/i);
+        if (matches) {
+            if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
+                treePath = treePath.replace('personal', 'otherUsers');
+            } else {
+                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
             }
-            
-            treePath += String(path).replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
         }
-        
+
         return treePath;
     },
     
