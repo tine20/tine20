@@ -604,14 +604,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $_folders->sort('localname', 'ASC', 'natcasesort');
         $_folders->addIndices(array('globalname'));
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Sorting subfolders of "' . $_parentFolder . '".');
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders->globalname, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Sorting subfolders of "' . $_parentFolder . '".');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($_folders->globalname, TRUE));
         
         foreach ($this->_systemFolders as $systemFolderName) {
             $folders = $_folders->filter('globalname', '@^' . $systemFolderName . '$@i', TRUE);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $systemFolderName . ' => ' . print_r($folders->toArray(), TRUE));
             if (count($folders) > 0) {
                 $sortedFolders->addRecord($folders->getFirstRecord());
             }
@@ -622,9 +622,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 $sortedFolders->addRecord($folder);
             }
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($sortedFolders->globalname, TRUE));
-        
+
         return $sortedFolders;
     }
 

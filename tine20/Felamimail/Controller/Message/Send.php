@@ -65,7 +65,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     public function sendMessage(Felamimail_Model_Message $_message)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
         
@@ -363,9 +363,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     public function sendZendMail($accountId, Zend_Mail $mail, $saveInSent = false, $originalMessage = NULL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Sending message with subject ' . $mail->getSubject() 
-        );
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+            ' Sending message with subject "' . $mail->getSubject() . '" to ' . print_r($mail->getRecipients(), TRUE));
         if ($originalMessage !== NULL) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Original Message subject: ' . $originalMessage->subject . ' / Flag to set: ' . var_export($originalMessage->flags, TRUE)
