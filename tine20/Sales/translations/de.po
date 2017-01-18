@@ -1353,3 +1353,6 @@ msgstr "Alle Auftragsbestätigungsdatensätze"
 #: Setup/Update/Release5.php:64
 msgid "Products created by myself"
 msgstr "Von mir erstellte Produkte"
+
+msgid "EC card"
+msgstr "EC Karte"
