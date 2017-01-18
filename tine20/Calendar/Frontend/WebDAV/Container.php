@@ -122,14 +122,6 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                     'field'     => 'container_id',
                     'operator'  => 'equals',
                     'value'     => $this->_container->getId()
-                ),
-                array(
-                    'field'    => 'period',
-                    'operator'  => 'within',
-                    'value'     => array(
-                        'from'  => Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom()),
-                        'until' => Tinebase_DateTime::now()->addYear(4)
-                    )
                 )
             ));
 
@@ -162,7 +154,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $children = array();
         
         foreach ($objects as $object) {
-            $children[$object->getId()] = $this->getChild($object);
+            $children[$object->getId() . $this->_suffix] = $this->getChild($object);
         }
         
         return $children;
@@ -215,7 +207,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         return $response;
     }
-    
+
+
     protected function _getController()
     {
         if ($this->_controller === null) {
@@ -302,23 +295,25 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             }
         }
 
-        // @see 0009162: CalDAV Performance issues for many events
-        // create default time-range end in 4 years from now and 2 months back (configurable) if no filter was set by client
-        if ($periodFrom === null) {
-            $periodFrom = Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom());
+        if ($periodFrom !== null || $periodUntil !== null) {
+            // @see 0009162: CalDAV Performance issues for many events
+            // create default time-range end in 4 years from now and 2 months back (configurable) if no filter was set by client
+            if ($periodFrom === null) {
+                $periodFrom = Tinebase_DateTime::now()->subMonth($this->_getMaxPeriodFrom());
+            }
+            if ($periodUntil === null) {
+                $periodUntil = Tinebase_DateTime::now()->addYear(1000);
+            }
+
+            $filterArray[] = array(
+                'field' => 'period',
+                'operator' => 'within',
+                'value' => array(
+                    'from' => $periodFrom,
+                    'until' => $periodUntil
+                )
+            );
         }
-        if ($periodUntil === null) {
-            $periodUntil = Tinebase_DateTime::now()->addYear(4);
-        }
-        
-        $filterArray[] = array(
-            'field' => 'period',
-            'operator' => 'within',
-            'value' => array(
-                'from'  => $periodFrom,
-                'until' => $periodUntil
-            )
-        );
         
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
@@ -329,17 +324,13 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     }
     
     /**
-     * get max period (from) in months (default: 2)
+     * get max period (from) in months (default: 12000)
      * 
      * @return integer
      */
     protected function _getMaxPeriodFrom()
     {
-        //if the client does support sync tokens and the plugin Tinebase_WebDav_Plugin_SyncToken is active, allow to filter for all calendar events => return 100 years
-        if (Calendar_Convert_Event_VCalendar_Factory::supportsSyncToken($_SERVER['HTTP_USER_AGENT'])) {
-            return 100;
-        }
-        return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 2);
+        return Calendar_Config::getInstance()->get(Calendar_Config::MAX_FILTER_PERIOD_CALDAV, 12000);
     }
     
     /**
@@ -478,7 +469,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     public function getChanges($syncToken)
     {
-        $result = parent::getChanges($syncToken);
+        if (null === ($result = parent::getChanges($syncToken))) {
+            return $result;
+        }
 
         $newResult = array();
         $backend = Calendar_Controller_Event::getInstance()->getBackend();

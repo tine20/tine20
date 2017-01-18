@@ -301,7 +301,17 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         
         return Tinebase_DateTime::now()->getTimestamp();
     }
-    
+
+    /**
+     * Returns the id of the node
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_container->getId();
+    }
+
     /**
      * Returns the name of the node
      *
@@ -553,7 +563,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      */
     public function getSyncToken()
     {
-       return Tinebase_Container::getInstance()->getContentSequence($this->_container);
+        // this only returns null if the container is not found or if container.content_seq = NULL, this does not look up the content history!
+        return Tinebase_Container::getInstance()->getContentSequence($this->_container);
     }
 
     /**
@@ -571,7 +582,15 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
             Tinebase_Model_ContainerContent::ACTION_DELETE => array(),
         );
 
+        // if the sync token did not change, we don't mind anything and return. Probably clients never send such requests, but better save than sorry
+        if ($result['syncToken'] == $syncToken) {
+            return $result;
+        }
+
         $resultSet = Tinebase_Container::getInstance()->getContentHistory($this->_container, $syncToken);
+        if (null === $resultSet) {
+            return null;
+        }
         foreach($resultSet as $contentModel) {
             switch($contentModel->action) {
                 case Tinebase_Model_ContainerContent::ACTION_DELETE:
@@ -589,5 +608,13 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
         }
 
         return $result;
+    }
+
+    /**
+     * @return Tinebase_Model_Container
+     */
+    public function getContainer()
+    {
+        return $this->_container;
     }
 }
