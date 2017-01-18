@@ -70,13 +70,14 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' requestUri:' . $this->_request->getRequestUri());
         
         self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        \Sabre\DAV\Server::$exposeVersion = false;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             self::$_server->debugExceptions = true;
             $contentType = self::$_server->httpRequest->getHeader('Content-Type');
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType);
             
-            if (preg_match('/^text/', $contentType)) {
+            if (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false) {
                 // NOTE inputstream can not be rewinded
                 $debugStream = fopen('php://temp','r+');
                 stream_copy_to_stream($this->_body, $debugStream);
@@ -124,7 +125,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         
         self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
-        self::$_server->addPlugin(new \Sabre\CalDAV\Plugin());
+        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
         self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
         self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginDefaultAlarms());
@@ -136,9 +137,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
         self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
         self::$_server->addPlugin(new Tinebase_WebDav_Plugin_SyncToken());
+        self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
 
         $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-        $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && preg_match('/^text/', $contentType);
+        $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && (stripos($contentType, 'text') === 0 || stripos($contentType, '/xml') !== false);
 
         if ($logOutput) {
             ob_start();

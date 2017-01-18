@@ -570,8 +570,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (! $this->_event instanceof Calendar_Model_Event) {
             Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
-            
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($this->_event->toArray(), true));
         }
 
         return $this->_event;

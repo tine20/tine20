@@ -235,6 +235,17 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         };
     },
 
+    // state might have tiny window (e.g. because of small beamer attached)
+    // -> only apply bigger states
+    applyState : function(state){
+        if(state){
+            state.width = Math.max(state.width, this.width);
+            state.height = Math.max(state.height, this.height);
+        }
+
+        Ext.ux.PopupWindow.superclass.applyState.call(this, state);
+    },
+
     /**
      * rename window name
      * 

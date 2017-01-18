@@ -17,7 +17,20 @@
  */
 class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
 {
-   /**
+
+    /**
+     * Search for Container matching given arguments
+     *
+     * @param array $filter
+     * @param array $paging
+     * @return array
+     */
+    public function searchContainers($filter, $paging)
+    {
+        return parent::_search($filter, $paging, Tinebase_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
+    }
+
+    /**
      * gets container / container folder
      * 
      * Backend function for containerTree widget
@@ -53,30 +66,8 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
                 throw new Exception('no such NodeType');
         }
         
-        $response = array();
-        foreach ($containers as $container) {
-            $containerArray = $container->toArray();
-            
-            if ($container instanceof Tinebase_Model_Container) {
-                $containerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
-                $containerArray['path'] = $container->getPath();
-                $ownerId = $container->getOwner();
-            } else {
-                $containerArray['path'] = "personal/{$container->getId()}";
-                $ownerId = $container->getId();
-            }
-            if (! empty($ownerId)) {
-                try {
-                    $containerArray['ownerContact'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId, true)->toArray();
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " can't resolve ownerContact: " . $e);
-                }
-            }
-            
-            $response[] = $containerArray;
-        }
-        
-        return $response;
+        $converter = new Tinebase_Convert_Container_Json();
+        return $converter->fromTine20RecordSet($containers);
     }
     
     /**

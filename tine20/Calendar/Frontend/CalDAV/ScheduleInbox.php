@@ -159,7 +159,8 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
     public function getProperties($requestedProperties)
     {
         $properties = array(
-            '{http://calendarserver.org/ns/}getctag' => round(time()/60),
+            // static ctag as this inbox implementation actually does nothing, it is a dummy
+            '{http://calendarserver.org/ns/}getctag' => 'samesame',
             'id'                => 'schedule-inbox',
             'uri'               => 'schedule-inbox',
             '{DAV:}resource-id'    => 'urn:uuid:schedule-inbox',
@@ -167,6 +168,8 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => 'Schedule Inbox',
             '{http://apple.com/ns/ical/}calendar-color' => '#666666',
+            // static sync-token, only -1 works!
+            '{DAV:}sync-token'  => Tinebase_WebDav_Plugin_SyncToken::SYNCTOKEN_PREFIX . '-1',
             
             '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
             '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Property\SupportedCalendarData(),
@@ -313,5 +316,31 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    /**
+     * indicates whether the concrete class supports sync-token
+     *
+     * @return bool
+     */
+    public function supportsSyncToken()
+    {
+        return true;
+    }
+
+    /**
+     * returns the changes happened since the provided syncToken which is the content sequence
+     *
+     * @param string $syncToken
+     * @return array
+     */
+    public function getChanges($syncToken)
+    {
+        return array(
+            'syncToken' => '-1',
+            Tinebase_Model_ContainerContent::ACTION_CREATE => array(),
+            Tinebase_Model_ContainerContent::ACTION_UPDATE => array(),
+            Tinebase_Model_ContainerContent::ACTION_DELETE => array(),
+        );
     }
 }

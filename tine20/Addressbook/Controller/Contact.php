@@ -633,8 +633,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             
             return;
         }
-        
-        $nominatim = new Zend_Service_Nominatim();
+
+        $nominatim = $this->_getNominatimService();
 
         if (! empty($_record->{$_address . 'locality'})) {
             $nominatim->setVillage($_record->{$_address . 'locality'});
@@ -690,6 +690,22 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $_record->{$_address . 'lon'} = NULL;
             $_record->{$_address . 'lat'} = NULL;
         }
+    }
+
+    /**
+     * @return Zend_Service_Nominatim
+     */
+    protected function _getNominatimService()
+    {
+        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
+        if (!empty($proxyConfig)) {
+            $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+            $httpClient = new Zend_Http_Client(/* url */ null, $proxyConfig);
+        } else {
+            $httpClient = null;
+        }
+        $nominatim = new Zend_Service_Nominatim(/* url */ null, $httpClient);
+        return $nominatim;
     }
     
     /**
