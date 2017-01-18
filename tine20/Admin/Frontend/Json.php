@@ -1296,9 +1296,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = parent::_recordToJson($_record);
 
         if ($_record instanceof Tinebase_Model_Container) {
-            $result['account_grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['account_grants']);
+            $result['account_grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($_record['account_grants']->toArray());
         }
-        
+
         return $result;
     }
     
