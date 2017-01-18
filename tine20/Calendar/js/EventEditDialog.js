@@ -86,7 +86,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             listeners: {render: function(field){field.focus(false, 250);}},
                             allowBlank: false,
                             requiredGrant: 'editGrant',
-                            maxLength: 255
+                            maxLength: 1024
                         }]
                     }, {
                         layout: 'hbox',
