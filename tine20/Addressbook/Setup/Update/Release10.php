@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
@@ -24,5 +24,16 @@ class Addressbook_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_10();
 
         $this->setApplicationVersion('Addressbook', '10.1');
+    }
+
+    /**
+     * fixes adb table version (versions got mixed up in previous update scripts)
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setTableVersion('addressbook', 22);
+        $this->setApplicationVersion('Addressbook', '10.2');
     }
 }

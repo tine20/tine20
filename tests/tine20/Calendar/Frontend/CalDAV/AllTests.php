@@ -26,6 +26,7 @@ class Calendar_Frontend_CalDAV_AllTests
         $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAV_ProxyTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest');
+        $suite->addTestSuite('Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest');
         return $suite;
     }
 }

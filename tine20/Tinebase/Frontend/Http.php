@@ -252,8 +252,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $webpackHelper = __DIR__ . '/../js/webpack-dev-includes.js';
             $webpackBuilds = json_decode(`node -e 'console.log(JSON.stringify(require("$webpackHelper")))'`);
 
-            foreach($jsFilestoInclude as $jsFileToInclude) {
-                if (in_array($jsFileToInclude, $webpackBuilds)) {
+            foreach ($jsFilestoInclude as $jsFileToInclude) {
+                if ($webpackBuilds && in_array($jsFileToInclude, $webpackBuilds)) {
                     $devIncludes[] = $jsFileToInclude;
 
                 }
@@ -534,6 +534,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $filesToWatch = array_merge($filesToWatch, (array)$customJSFiles);
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__
+            . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
 
         $filesToWatch = array_filter($filesToWatch, 'file_exists');
         $lastModified = $this->_getLastModified($filesToWatch);

@@ -75,6 +75,14 @@
             </style>
         </column>
         <column>
+            <identifier>contract</identifier>
+            <header>Contract</header>
+            <!--type>customer</type-->
+            <style>
+                <column-width>6cm</column-width>
+            </style>
+        </column>
+	<column>
             <identifier>customer</identifier>
             <header>Customer</header>
             <!--type>customer</type-->

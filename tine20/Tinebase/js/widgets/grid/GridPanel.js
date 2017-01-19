@@ -385,7 +385,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
+        this.on('resize', this.onContentResize, this, {buffer: 100});
+
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
+    },
+
+    onContentResize: function() {
+        // make sure details panel doesn't hide grid
+        if (this.detailsPanel) {
+            var gridHeight = this.grid.getHeight(),
+                detailsHeight = this.detailsPanel.getHeight();
+
+            if (detailsHeight/2 > gridHeight) {
+                var newDetailsHeight = this.getHeight() *.4;
+                this.layout.south.panel.setHeight(newDetailsHeight);
+                this.doLayout();
+            }
+        }
     },
 
     /**

@@ -54,7 +54,7 @@ Ext.ux.layout.HorizontalFitLayout = Ext.extend(Ext.layout.ContainerLayout, {
         Ext.layout.FitLayout.superclass.onLayout.call(this, ct, target);
         if(!this.container.collapsed){
             var size = target.getStyleSize();
-            size.width = ct.containsScrollbar ? size.width-16 : size.width;
+            size.width = ct.getContentTarget().isScrollable() ? size.width-Ext.getScrollBarWidth() : size.width;
             
             ct.items.each(function(item){
                 this.setItemSize(item,  size);
