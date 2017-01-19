@@ -105,6 +105,47 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * forces containers that support sync token to resync via WebDAV sync tokens
+     *
+     * this will cause 2 BadRequest responses to sync token requests
+     * the first one as soon as the client notices that something changed and sends a sync token request
+     * eventually the client receives a false sync token (as we increased content sequence, but we dont have a content history entry)
+     * eventually not (if something really changed in the calendar in the meantime)
+     *
+     * in case the client got a fake sync token, the clients next sync token request (once something really changed) will fail again
+     * after something really changed valid sync tokens will be handed out again
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function forceSyncTokenResync($_opts)
+    {
+        $args = $this->_parseArgs($_opts, array());
+
+        if (isset($args['containerIds'])) {
+            $resultStr = '';
+
+            if (!is_array($args['containerIds'])) {
+                $args['containerIds'] = array($args['containerIds']);
+            }
+
+            $db = Tinebase_Core::getDb();
+
+            $container = Tinebase_Container::getInstance();
+            $contentBackend = $container->getContentBackend();
+            foreach($args['containerIds'] as $id) {
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+                $container->increaseContentSequence($id);
+                $resultStr = ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
+
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            }
+
+            echo "\nDeleted containers(num content history records): " . $resultStr . "\n";
+        }
+    }
+
+    /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      */
     public function cleanModlog()
@@ -1235,6 +1276,23 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 . ' Set default grants for ' . $filtersWithoutGrants . ' filters'
                 . ' (checked ' . count($filters) . ' in total).');
         }
+
+        return 0;
+    }
+
+    /**
+     *
+     *
+     * @return int
+     */
+    public function repairContainerOwner()
+    {
+        if (! $this->_checkAdminRight()) {
+            return -1;
+        }
+
+        $this->_addOutputLogWriter(6);
+        Tinebase_Container::getInstance()->setContainerOwners();
 
         return 0;
     }

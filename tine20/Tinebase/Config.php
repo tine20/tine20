@@ -21,6 +21,41 @@
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
     /**
+     * authentication backend config
+     *
+     * @var string
+     */
+    const AUTHENTICATIONBACKEND = 'Tinebase_Authentication_BackendConfiguration';
+
+    /**
+     * authentication backend type config
+     *
+     * @var string
+     */
+    const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
+
+    /**
+     * authentication second factor
+     *
+     * @var string
+     */
+    const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
+
+    /**
+     * save automatic alarms when creating new record
+     *
+     * @var string
+     */
+    const AUTOMATICALARM = 'automaticalarm';
+
+    /**
+     * INTERNET_PROXY
+     *
+     * @var string
+     */
+    const INTERNET_PROXY = 'internetProxy';
+
+    /**
      * imap conf name
      * 
      * @var string
@@ -41,34 +76,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const SIEVE = 'sieve';
 
-    /**
-     * authentication backend config
-     * 
-     * @var string
-     */
-    const AUTHENTICATIONBACKEND = 'Tinebase_Authentication_BackendConfiguration';
-    
-    /**
-     * authentication backend type config
-     * 
-     * @var string
-     */
-    const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
-
-    /**
-     * authentication second factor
-     *
-     * @var string
-     */
-    const AUTHENTICATIONSECONDFACTOR = 'Tinebase_Authentication_SecondFactor';
-
-    /**
-     * save automatic alarms when creating new record
-     * 
-     * @var string
-     */
-    const AUTOMATICALARM = 'automaticalarm';
-    
     /**
      * user backend config
      * 
@@ -437,6 +444,24 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
+        ),
+        /**
+         * config keys (see Zend_Http_Client_Adapter_Proxy):
+         *
+         * 'proxy_host' => 'proxy.com',
+         * 'proxy_port' => 3128,
+         * 'proxy_user' => 'user',
+         * 'proxy_pass' => 'pass'
+         */
+        self::INTERNET_PROXY => array(
+            //_('Internet proxy config')
+            'label'                 => 'Internet proxy config',
+            'description'           => 'Internet proxy config',
+            'type'                  => 'array',
+            'default'               => array(),
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
         ),
         /**
          * config keys:
