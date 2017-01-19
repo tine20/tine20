@@ -700,6 +700,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             }
         }
 
+        // we don't need related record relations
+        unset($recordArray['relations']);
+
         $relation['related_record'] = $recordArray;
 
         return $relation;
