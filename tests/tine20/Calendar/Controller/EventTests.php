@@ -568,7 +568,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->setExpectedException('Calendar_Exception_AttendeeBusy');
         $this->_controller->update($persitentConflictEvent, TRUE);
     }
-    
+
     public function testAttendeeAuthKeyPreserv()
     {
         $event = $this->_getEvent();

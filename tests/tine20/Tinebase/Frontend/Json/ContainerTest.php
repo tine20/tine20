@@ -190,7 +190,34 @@ class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
 
         $container = Tinebase_Container::getInstance()->getContainerById($container['id']);
     }
-}        
+    
+    /**
+     * try to search containers
+     *
+     */
+    public function testSearchContainers()
+    {
+        $container = $this->_backend->addContainer('Addressbook', 'Winter', Tinebase_Model_Container::TYPE_PERSONAL);
+        $this->assertEquals('Winter', $container['name']);
+        
+        $filter = array(array(
+                'field'     => 'query',
+                'operator'     => 'contains',
+                'value'     => 'Winter'
+        ));
+        $paging = array(
+                'start'    => 0,
+                'limit'    => 1
+        );
+        
+        $result = $this->_backend->searchContainers($filter, $paging);
+
+        $this->assertGreaterThan(0, $result['totalcount']);
+        $this->assertEquals($container['name'], $result['results'][0]['name']);
+        $this->assertTrue(isset($result['results'][0]['account_grants']['readGrant']), 'account_grants missing');
+        $this->assertTrue(isset($result['results'][0]['ownerContact']['email']), 'ownerContact missing');
+    }
+}
     
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_ContainerTest::main') {

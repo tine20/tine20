@@ -455,16 +455,20 @@ class Addressbook_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_10()
     {
-        if ($this->getTableVersion('addressbook') < 21) {
+        if ($this->getTableVersion('addressbook') < 22) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
                 '<field>
                     <name>syncBackendIds</name>
                     <type>text</type>
                     <length>16000</length>
                 </field>');
-            $this->_backend->addCol('addressbook', $declaration);
+            try {
+                $this->_backend->addCol('addressbook', $declaration);
+            } catch (Zend_Db_Exception $zde) {
+                Tinebase_Exception::log($zde);
+            }
 
-            $this->setTableVersion('addressbook', 21);
+            $this->setTableVersion('addressbook', 22);
         }
 
         $this->setApplicationVersion('Addressbook', '9.11');

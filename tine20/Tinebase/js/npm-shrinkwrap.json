@@ -1818,9 +1818,9 @@
       "dev": true
     },
     "unminified-webpack-plugin": {
-      "version": "1.0.0",
-      "from": "tine20/unminified-webpack-plugin#1.0.0pl1",
-      "resolved": "git://github.com/tine20/unminified-webpack-plugin.git#e78e9053c21fc4e5dd327e4d40184dd81cb99105",
+      "version": "1.2.0",
+      "from": "unminified-webpack-plugin@latest",
+      "resolved": "https://registry.npmjs.org/unminified-webpack-plugin/-/unminified-webpack-plugin-1.2.0.tgz",
       "dev": true
     },
     "unpipe": {
