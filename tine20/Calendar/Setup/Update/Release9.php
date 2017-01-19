@@ -198,7 +198,7 @@ class Calendar_Setup_Update_Release9 extends Setup_Update_Abstract
         }
 
         // if called out of normal update process
-        if ($this->getApplicationVersion == '9.7') {
+        if ($this->getApplicationVersion('Calendar') == '9.7') {
             $this->setApplicationVersion('Calendar', '9.8');
         }
     }
