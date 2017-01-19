@@ -170,7 +170,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
 
         $db = Tinebase_Core::getDb();
 
-        $stmt = $db->query('SELECT ev.id, SHA1(CONCAT(ev.id, ev.seq)) AS etag FROM tine20_cal_events AS ev WHERE ev.is_deleted = 0 AND ' .
+        $stmt = $db->query('SELECT ev.id, ev.seq FROM tine20_cal_events AS ev WHERE ev.is_deleted = 0 AND ' .
             'ev.recurid IS NULL AND (ev.container_id = ' . $db->quote($node->getId()) . ' OR ev.id IN (
             SELECT cal_event_id FROM tine20_cal_attendee WHERE displaycontainer_id = ' . $db->quote($node->getId()) . ')) GROUP BY ev.id');
 
@@ -197,7 +197,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
         foreach ($result as $row) {
             $a = array();
             $a[200] = array(
-                '{DAV:}getetag' => '"' . $row['etag'] . '"',
+                '{DAV:}getetag' => '"' . sha1($row['id'] . $row['seq']) . '"',
                 '{DAV:}getcontenttype' => 'text/calendar',
             );
             $href = $uri . '/' . $row['id'] . '.ics';
