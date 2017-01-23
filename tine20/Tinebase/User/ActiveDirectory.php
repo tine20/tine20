@@ -433,7 +433,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'accountExpires':
-                        if ($value === '0' || $value[0] === '9223372036854775807') {
+                        if ($value === '0' || $value[0] === '0' || $value[0] === '9223372036854775807') {
                             $accountArray[$keyMapping] = null;
                         } else {
                             $accountArray[$keyMapping] = self::convertADTimestamp($value[0]);
@@ -458,7 +458,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 
         $accountArray['accountStatus'] = (isset($_userData['useraccountcontrol']) && ($_userData['useraccountcontrol'][0] & self::ACCOUNTDISABLE)) ? 'disabled' : 'enabled';
         if ($accountArray['accountExpires'] instanceof Tinebase_DateTime && Tinebase_DateTime::now()->compare($accountArray['accountExpires']) == -1) {
-            $accountArray['accountStatus'] = 'disabled';
+            $accountArray['accountStatus'] = Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED;
         }
         
         /*
