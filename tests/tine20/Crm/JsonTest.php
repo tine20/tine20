@@ -375,6 +375,26 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
     }
+
+    public function testUpdateContactRelationOnCreate()
+    {
+        $contact      = $this->_getContact();
+        $savedContact = Addressbook_Controller_Contact::getInstance()->create($contact, FALSE);
+        $lead         = $this->_getLead();
+
+        $leadData = $lead->toArray();
+        $street = 'Heinrichstrasse 193';
+        $contactData = $savedContact->toArray();
+        $contactData['adr_one_street'] = $street;
+        $leadData['relations'] = array(
+            array('type'  => 'CUSTOMER', 'related_record' => $contactData),
+        );
+        $savedLead = $this->_getUit()->saveLead($leadData);
+        $this->assertTrue(isset($savedLead['relations'][0]));
+        $contactRelation = $savedLead['relations'][0];
+        $this->assertEquals($street, $contactRelation['related_record']['adr_one_street'],
+            'street not set in contact: ' . print_r($contactRelation, true));
+    }
     
     /**
      * testConcurrentRelationSetting
