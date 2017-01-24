@@ -846,6 +846,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
                 $originalMessage = $mail;
             }
         }
+        $this->assertTrue(isset($replyMessageFound['id']), 'replied message not found');
         $replyMessageFound = $this->_json->getMessage($replyMessageFound['id']);
         $originalMessage = $this->_json->getMessage($originalMessage['id']);
         
