@@ -163,13 +163,12 @@ Tine.Tinebase.ExceptionHandler = function() {
         switch (exception.code) {
             // not authorised
             case 401:
-                Tine.Tinebase.registry.remove('currentAccount');
-
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: _('Authorisation Required'), 
                     msg: _('Your session timed out. You need to login again.'),
                     fn: function() {
-
+                        Tine.Tinebase.registry.remove('currentAccount');
+                        
                         /*
                         // NOTE: this should be a password only longing box
                         //       as we can't handle user changes here!
