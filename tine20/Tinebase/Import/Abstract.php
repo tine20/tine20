@@ -665,7 +665,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 array('field' => $field['filter'], 'operator' => $operator, 'value' => $value . $filterValueToAdd)
         ));
         $result = $controller->search($filter, null, /* $_getRelations */ true);
-        return $result->getFirstRecord();
+        $relatedRecord = $result->getFirstRecord();
+
+        if ($relatedRecord && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Found related record: ' . print_r($relatedRecord->toArray(), true));
+        }
+
+        return $relatedRecord;
     }
 
     protected function _getRelationData($record, $field, $data, $value)
@@ -682,13 +689,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $relation['related_id'] = $record->getId();
             $recordArray = $record->toArray();
         } else {
-            // create new related record
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Create new related record');
+            }
             $recordArray = array(
                 (isset($field['related_field']) ? $field['related_field'] : $field['filter']) => $value
             );
             if (! empty($filterValueToAdd)) {
                 $recordArray[str_replace($relationType . '_', '', $field['filterValueAdd'])] = trim($filterValueToAdd);
             }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Import data:' . print_r($data, true));
         }
 
         // add more data for this relation if available
@@ -702,6 +717,11 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
 
         // we don't need related record relations
         unset($recordArray['relations']);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Related record: ' . print_r($recordArray, true));
+        }
 
         $relation['related_record'] = $recordArray;
 
