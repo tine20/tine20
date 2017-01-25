@@ -1276,7 +1276,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         // create event with default user group (without explicit groupmembers)
         $xml = new SimpleXMLElement(str_replace(array(
             'usersgroupid',
-        ), $defaultUserGroup->getId(), file_get_contents(__DIR__ . '/files/event_with_group_attendee.xml')));
+        ), $defaultUserGroup->list_id, file_get_contents(__DIR__ . '/files/event_with_group_attendee.xml')));
         $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
         $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
@@ -1296,5 +1296,6 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $updatedSyncrotonEvent = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
         $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->attendees, 'groupmembers not resolved');
         $this->assertCount(count($defaultUserGroupMembers) + 1, $updatedSyncrotonEvent->exceptions[0]->attendees, 'groupmembers not resolved');
+
     }
 }
