@@ -1303,9 +1303,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _getMessageNodeFilename($message)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($message->toArray(), true));
+
         // remove '/' from name as this might break paths
         $subject = preg_replace('/[\/]+/', '', $message->subject);
-        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageId), 0, 10) . '.eml';
+        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
 
         return $name;
     }
