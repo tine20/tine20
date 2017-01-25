@@ -136,16 +136,6 @@ Tine.Tinebase.tineInit = {
         }, this);
     },
 
-    checkWebpack: function() {
-        if (! window.postal) {
-            var wikiurl = 'https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack';
-            Ext.Msg.alert('Webpack-dev-server missing?',
-                'You need to install and run webpack-dev-server! <a target="_blank" href="' + wikiurl + '">Installation instructions in the Wiki</a>.', function() {
-                Tine.Tinebase.common.reload();
-            });
-        }
-    },
-
     initPostal: function () {
         if (! window.postal) {
             return;
@@ -251,6 +241,7 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
                     Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
+                    Tine.Tinebase.tineInit.checkClientVersion();
                     Tine.Tinebase.tineInit.initWindowMgr();
                     Tine.Tinebase.tineInit.renderWindow();
                 });
@@ -663,7 +654,7 @@ Tine.Tinebase.tineInit = {
         Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
         Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
-        
+
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
@@ -680,6 +671,29 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.tineInit.initUploadMgr();
 
         Tine.Tinebase.tineInit.initLoginPanel();
+    },
+
+    /**
+     * check client version and reload on demand
+     */
+    checkClientVersion: function() {
+        var serverHash = Tine.Tinebase.registry.get('version').filesHash,
+            clientHash = Tine.clientVersion.filesHash;
+
+        if (clientHash && clientHash != serverHash) {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: i18n._('Your Client is Outdated'),
+                msg: i18n._('A new client is available, press OK to get this version'),
+                fn: function() {
+                    Tine.Tinebase.common.reload({
+                        keepRegistry: false,
+                        clearCache: true
+                    });
+                }
+            });
+        }
     },
 
     /**
@@ -811,10 +825,6 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    if (Tine.clientVersion.buildType === 'DEVELOPMENT' || Tine.clientVersion.buildType === 'none') {
-        // TODO do something similar for RELEASE/DEBUG?
-        Tine.Tinebase.tineInit.checkWebpack();
-    }
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
@@ -822,6 +832,7 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
+        Tine.Tinebase.tineInit.checkClientVersion();
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });
