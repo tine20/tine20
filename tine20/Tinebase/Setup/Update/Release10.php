@@ -61,4 +61,20 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
         $release9->update_10();
         $this->setApplicationVersion('Tinebase', '10.4');
     }
+
+    /**
+     * needs to be done again to make sure we have the column!
+     *
+     * @see 0012300: add container owner column
+     */
+    public function update_4()
+    {
+        $release9 = new Tinebase_Setup_Update_Release9($this->_backend);
+        try {
+            $release9->update_4();
+        } catch (Zend_Db_Exception $zde) {
+            Tinebase_Exception::log($zde);
+        }
+        $this->setApplicationVersion('Tinebase', '10.5');
+    }
 }
