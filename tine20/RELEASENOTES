@@ -1,105 +1,14 @@
 
 =TINE 2.0 RELEASENOTES=
                     
-  Release:     Egon (2016.11)
-  Last change: 2016-12-15
+  Release:     2017.02
+  Last change: 2017-01-25
 
-== Update to latest Version of Zend Framework==
+== Removal of Community Applications ==
 
+We no longer support Expressomail, Expressodriver, Sipgate and RequestTracker.
 
-* Current ZF 1 Version used: 1.12.18
-* All ZF 1 classes in tine20/Zend, tine20/library/Zend and tine20/library/zf1ext have been removed
-* Overwritten ZF 1 classes are now in our own ZF repository and will be put into tine20/vendor/zendframework/zendframework
-* Additional Information: 0011160: Update to latest ZF1 / https://forge.tine20.org/view.php?id=11160
+They have been moved to a separate branch (community_apps):
+https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/community_apps
 
-== Update libraries managed by composer==
-
-* zendframework 2.2.10 -> 2.4.9
-* phing 2.6 -> 2.13
-* ... and some more
-* Additional Information: 0011320: avoid dead/outdated dependencies / https://forge.tine20.org/view.php?id=11320
-
-== PHP 5.5 is now required==
-
-* ... because Tine 2.0 uses traits.
-
-== PHP 7 is supported==
-
-== CoreData: New CoreData application has been added==
-
-* New Tine 2.0 application for handling data that does not change very often (like Calendar resources, Addressbook lists,
-  Keyfields, ...)
-* Additional Information: 0011568: add new CoreData application / https://forge.tine20.org/view.php?id=11568
-
-== Addressbook: Record paths to ease searching in hierarchical structures==
-
-* Currently this is used for contacts that have parent/child relationsips with other contacts or are group members
-* Additional Information: 0011620: add "path" filter for records / https://forge.tine20.org/view.php?id=11620
-
-== Calendar: Free-Busy types added==
-
-* ... to allow/forbid resource overbooking
-* Additional Information: 0011592: Optionally Deny Resource Overbooking / https://forge.tine20.org/view.php?id=11592
-
-== Calendar: Doc-Export==
-
-* Template-based export for events
-* Additional Information: 0011596: add calendar doc export / https://forge.tine20.org/view.php?id=11596
-
-== Calendar: Color Strategies==
-
-* Adds new color strategies for calendar events: Tags + Displaycontainer
-
-== Calendar: Visible hour in day/week view==
-
-* By setting the visible hours it is possible to zoom in and out in week and days view
-* Additional Information: 011642: add config for visible hours in day|week sheet view
-
-== Calendar: Single Event Printing==
-
-* 0006054: Single Event printable
-
-== CRM: Configs now use new concept==
-
-* CRM status/source/type configs have been ported to new config style
-* see0011676: apply new config concept to CRM
-
-
-== Felamimail: PGP-Mail-Encryption via Mailvelope==
-
-* Additional Information: 0011384: use mailvelope API if available / https://forge.tine20.org/view.php?id=11384
-
-== JavaScript Client: Allow custom JS files==
-
-
-* Additional Information: 0011502: allow custom/additional javascript for FAT client / https://forge.tine20.org/view.php?id=11502
-
-== Admin: new GUI for application config==
-
-* Allows to manage application config in a Applications/Settings module of Admin area
-
-== Admin: user data deletion behavior==
-
-* Added new config option to define handling of data of a deleted user (remove/keep data)
-* Additional Information: 0001500: User is deleted - his containers still exists / https://forge.tine20.org/view.php?id=1500
-
-== User login failure behavior change==
-
-* Users are no longer blocked if they try to login with wrong credentials
-* Time user needs to wait until next login attempt is increased instead
-* Additional Information: 0011440: rework login failure handling / https://forge.tine20.org/view.php?id=11440
-
-== Improved OwnCloud Client support==
-
-* Tine 2.0 is now supporting OwnClouds X-OC-Mtime-Header for improved file synchronization capability.
-* Additional Information: 0011784: support ownclouds X-OC-MTime header / https://forge.tine20.org/view.php?id=11784
-
-== 2FA Support==
-
-* Tine 2.0 now supports 2FA via privacyIDEA.
- see https://www.privacyidea.org/tine-2-0-with-two-factor-support-using-privacyidea/
-   + https://forge.tine20.org/view.php?id=11366
-
-== customize branding via config==
-
-* https://forge.tine20.org/view.php?id=12006
+== TODO: add more new stuff (from 2016.11-develop and 2016.09) ==
