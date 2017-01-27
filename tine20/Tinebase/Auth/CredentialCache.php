@@ -6,7 +6,7 @@
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -53,21 +53,36 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     private static $_instance = NULL;
     
     const SESSION_NAMESPACE = 'credentialCache';
+    const CIPHER_ALGORITHM = 'aes-256-ctr';
+    const HASH_ALGORITHM = 'sha256';
     
     /**
      * don't clone. Use the singleton.
      *
      */
     private function __clone() {}
-    
+
     /**
      * the constructor
-     * 
+     *
      * @param Zend_Db_Adapter_Abstract $_dbAdapter (optional)
      * @param array $_options (optional)
+     * @throws Tinebase_Exception_SystemGeneric
      */
     public function __construct($_dbAdapter = NULL, $_options = array()) 
     {
+        if (! extension_loaded('openssl')) {
+            throw new Tinebase_Exception_SystemGeneric('openssl extension required');
+        }
+        if (!in_array(self::CIPHER_ALGORITHM, openssl_get_cipher_methods(true)))
+        {
+            throw new Tinebase_Exception_SystemGeneric('cipher algorithm: ' . self::CIPHER_ALGORITHM . ' not supported');
+        }
+        if (!in_array(self::HASH_ALGORITHM, openssl_get_md_methods(true)))
+        {
+            throw new Tinebase_Exception_SystemGeneric('hash algorithm: ' . self::HASH_ALGORITHM . ' not supported');
+        }
+
         parent::__construct($_dbAdapter, $_options);
         
         // set default adapter
@@ -229,27 +244,40 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     /**
      * encrypts username and password into cache
      *
+     * reference implementation: https://github.com/ioncube/php-openssl-cryptor
+     *
      * @param  Tinebase_Model_CredentialCache $_cache
-     * @throws Tinebase_Exception_SystemGeneric
-     * @todo check which cipher to use for encryption
+     * @throws Tinebase_Exception
      */
     protected function _encrypt($_cache)
     {
-        if (! extension_loaded('mcrypt')) {
-            throw new Tinebase_Exception_SystemGeneric('mcrypt extension required');
-        }
-
-        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
-        
-        $data = array_merge($_cache->toArray(), array(
+        $data = Zend_Json::encode(array_merge($_cache->toArray(), array(
             'username' => $_cache->username,
             'password' => $_cache->password,
-        ));
-        $_cache->cache = base64_encode(mcrypt_generic($td, Zend_Json::encode($data)));
-        
-        mcrypt_generic_deinit($td);
-        mcrypt_module_close($td);
+        )));
+
+        // there was a bug with openssl_random_pseudo_bytes but its fixed in all major PHP versions, so we use it. People have to update their PHP versions
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length(self::CIPHER_ALGORITHM), $secure);
+        if (!$secure) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' openssl_random_pseudo_bytes returned weak random bytes!');
+            if (function_exists('random_bytes')) {
+                $iv = random_bytes(openssl_cipher_iv_length(self::CIPHER_ALGORITHM));
+            } elseif (function_exists('mcrypt_create_iv')) {
+                $iv = mcrypt_create_iv(openssl_cipher_iv_length(self::CIPHER_ALGORITHM), MCRYPT_DEV_URANDOM);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' openssl_random_pseudo_bytes returned weak random bytes and we could not find a method better suited!');
+            }
+        }
+
+        $hash = openssl_digest($_cache->key, self::HASH_ALGORITHM, true);
+
+        if (false === ($encrypted = openssl_encrypt($data, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))) {
+            throw new Tinebase_Exception('encryption failed: ' . openssl_error_string());
+        }
+
+        $_cache->cache = base64_encode($iv . $encrypted);
     }
 
     /**
@@ -257,24 +285,49 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      *
      * @param  Tinebase_Model_CredentialCache $_cache
      * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _decrypt($_cache)
     {
-        if (! extension_loaded('mcrypt')) {
-            throw new Tinebase_Exception_SystemGeneric('mcrypt extension required');
+        $encryptedData = base64_decode($_cache->cache);
+        $ivLength = openssl_cipher_iv_length(self::CIPHER_ALGORITHM);
+
+        if (strlen($encryptedData) < $ivLength)
+        {
+            throw new Tinebase_Exception('encrypted data is less');
         }
 
-        $encryptedData = base64_decode($_cache->cache);
-        
-        $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
-        mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
+        $iv = substr($encryptedData, 0, $ivLength);
+        $encryptedData = substr($encryptedData, $ivLength);
+        $hash = openssl_digest($_cache->key, self::HASH_ALGORITHM, true);
+        $persistAgain = false;
 
-        $jsonEncodedData = trim(mdecrypt_generic($td, $encryptedData));
-        $cacheData = Tinebase_Helper::jsonDecode($jsonEncodedData);
+        if (false === ($jsonEncodedData = openssl_decrypt($encryptedData, self::CIPHER_ALGORITHM, $hash, OPENSSL_RAW_DATA, $iv))
+            || ! Tinebase_Helper::is_json(trim($jsonEncodedData)))
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' lets try to decode it with the old algorithm, if successful, persist again if this is a persistent cache');
 
-        mcrypt_generic_deinit($td);
-        mcrypt_module_close($td);
+            if (false !== ($jsonEncodedData = openssl_decrypt(
+                    base64_decode($_cache->cache), 'AES-128-CBC',
+                    $_cache->key,
+                    OPENSSL_RAW_DATA|OPENSSL_ZERO_PADDING,
+                    substr($_cache->getId(), 0, 16)
+                ))) {
+                $persistAgain = true;
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' decryption failed');
+                throw new Tinebase_Exception_NotFound('decryption failed: ' . openssl_error_string());
+            }
+        }
+
+        try {
+            $cacheData = Tinebase_Helper::jsonDecode(trim($jsonEncodedData));
+        } catch(Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' persisted cache data is no valid json');
+            throw new Tinebase_Exception_NotFound('persisted cache data is no valid json');
+        }
 
         if (! isset($cacheData['username']) && ! isset($cacheData['password'])) {
             throw new Tinebase_Exception_NotFound('could not find valid credential cache');
@@ -282,6 +335,18 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
 
         $_cache->username = $cacheData['username'];
         $_cache->password = $cacheData['password'];
+
+        if (true === $persistAgain) {
+            try {
+                $this->get($_cache->getId());
+                $this->_encrypt($_cache);
+                $this->_persistCache($_cache);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                // shouldn't happen anyway, just to be save.
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' cache is not in DB, so we don\'t persist it again, just continue gracefully');
+            }
+        }
     }
     
     /**

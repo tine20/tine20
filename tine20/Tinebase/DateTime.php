@@ -112,6 +112,11 @@ class Tinebase_DateTime extends DateTime
         if (is_numeric($_time)) {
             $this->setTimezone('UTC');
         }
+
+        if (PHP_VERSION_ID >= 70100) {
+            list ($h, $m, $i) = explode(' ', $this->format('H i s'));
+            parent::setTime($h, $m, $i, 0);
+        }
     }
     
     /**

@@ -280,7 +280,7 @@ class Tinebase_Helper
         }
         
         // check if error occured (only if json_last_error() exists)
-        return (! function_exists('json_last_error') || json_last_error() == JSON_ERROR_NONE);
+        return (! function_exists('json_last_error') || json_last_error() === JSON_ERROR_NONE);
     }
     
     /**
