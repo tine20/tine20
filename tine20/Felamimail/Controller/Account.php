@@ -862,12 +862,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _addFolderDefaults($_account, $_force = FALSE)
     {
         // set some default settings if not set
-        $folderDefaults = array(
+        $folderDefaults = Felamimail_Config::getInstance()->get(Felamimail_Config::SYSTEM_ACCOUNT_FOLDER_DEFAULTS, array(
             'sent_folder'       => 'Sent',
             'trash_folder'      => 'Trash',
             'drafts_folder'     => 'Drafts',
             'templates_folder'  => 'Templates',
-        );
+        ));
         
         $changed = FALSE;
         foreach ($folderDefaults as $key => $value) {
