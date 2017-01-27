@@ -210,6 +210,141 @@ class Calendar_Frontend_CalDAVTest extends TestCase
         $this->assertEquals($randomName, $properties['{DAV:}displayname']);
     }
 
+    public function testCreateVTodoXML()
+    {
+        $randomName = Tinebase_Record_Abstract::generateUID();
+
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+<B:mkcalendar xmlns:B="urn:ietf:params:xml:ns:caldav">
+  <A:set xmlns:A="DAV:">
+    <A:prop>
+      <B:schedule-calendar-transp>
+        <B:transparent/>
+      </B:schedule-calendar-transp>
+      <B:calendar-timezone>BEGIN:VCALENDAR&#13;
+VERSION:2.0&#13;
+CALSCALE:GREGORIAN&#13;
+BEGIN:VTIMEZONE&#13;
+TZID:Europe/Berlin&#13;
+BEGIN:DAYLIGHT&#13;
+TZOFFSETFROM:+0100&#13;
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU&#13;
+DTSTART:19810329T020000&#13;
+TZNAME:MESZ&#13;
+TZOFFSETTO:+0200&#13;
+END:DAYLIGHT&#13;
+BEGIN:STANDARD&#13;
+TZOFFSETFROM:+0200&#13;
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU&#13;
+DTSTART:19961027T030000&#13;
+TZNAME:MEZ&#13;
+TZOFFSETTO:+0100&#13;
+END:STANDARD&#13;
+END:VTIMEZONE&#13;
+END:VCALENDAR&#13;
+</B:calendar-timezone>
+      <B:supported-calendar-component-set>
+        <B:comp name="VTODO"/>
+      </B:supported-calendar-component-set>
+      <D:calendar-order xmlns:D="http://apple.com/ns/ical/">1</D:calendar-order>
+      <A:displayname>' . $randomName. '</A:displayname>
+    </A:prop>
+  </A:set>
+</B:mkcalendar>';
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'MKCALENDAR',
+            'REQUEST_URI'    => '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/9708036E-674E-4067-A0E9-698066374C6B/'
+        ));
+        $request->setBody($body);
+
+        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $server->httpRequest = $request;
+        $server->exec();
+
+        $container = Tinebase_Container::getInstance()->getContainerByName('Tasks', $randomName, Tinebase_Model_Container::TYPE_PERSONAL, Tinebase_Core::getUser());
+        $this->assertTrue($container instanceof Tinebase_Model_Container);
+
+        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $subCollection = $collection->getChild('9708036E-674E-4067-A0E9-698066374C6B');
+        $this->assertEquals('9708036E-674E-4067-A0E9-698066374C6B', $subCollection->getName());
+
+        $properties = $subCollection->getProperties(array('{DAV:}displayname'));
+        $this->assertEquals($randomName, $properties['{DAV:}displayname']);
+    }
+
+    public function testGetChildrenXML()
+    {
+        $body = '<?xml version="1.0" encoding="UTF-8"?>
+<A:propfind xmlns:A="DAV:">
+  <A:prop>
+    <A:add-member/>
+    <C:allowed-sharing-modes xmlns:C="http://calendarserver.org/ns/"/>
+    <D:autoprovisioned xmlns:D="http://apple.com/ns/ical/"/>
+    <E:bulk-requests xmlns:E="http://me.com/_namespace/"/>
+    <B:calendar-alarm xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <D:calendar-color xmlns:D="http://apple.com/ns/ical/"/>
+    <B:calendar-description xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <B:calendar-free-busy-set xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <D:calendar-order xmlns:D="http://apple.com/ns/ical/"/>
+    <B:calendar-timezone xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <A:current-user-privilege-set/>
+    <B:default-alarm-vevent-date xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <B:default-alarm-vevent-datetime xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <A:displayname/>
+    <C:getctag xmlns:C="http://calendarserver.org/ns/"/>
+    <C:invite xmlns:C="http://calendarserver.org/ns/"/>
+    <D:language-code xmlns:D="http://apple.com/ns/ical/"/>
+    <D:location-code xmlns:D="http://apple.com/ns/ical/"/>
+    <A:owner/>
+    <C:pre-publish-url xmlns:C="http://calendarserver.org/ns/"/>
+    <C:publish-url xmlns:C="http://calendarserver.org/ns/"/>
+    <C:push-transports xmlns:C="http://calendarserver.org/ns/"/>
+    <C:pushkey xmlns:C="http://calendarserver.org/ns/"/>
+    <A:quota-available-bytes/>
+    <A:quota-used-bytes/>
+    <D:refreshrate xmlns:D="http://apple.com/ns/ical/"/>
+    <A:resource-id/>
+    <A:resourcetype/>
+    <B:schedule-calendar-transp xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <B:schedule-default-calendar-URL xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <C:source xmlns:C="http://calendarserver.org/ns/"/>
+    <C:subscribed-strip-alarms xmlns:C="http://calendarserver.org/ns/"/>
+    <C:subscribed-strip-attachments xmlns:C="http://calendarserver.org/ns/"/>
+    <C:subscribed-strip-todos xmlns:C="http://calendarserver.org/ns/"/>
+    <B:supported-calendar-component-set xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <B:supported-calendar-component-sets xmlns:B="urn:ietf:params:xml:ns:caldav"/>
+    <A:supported-report-set/>
+    <A:sync-token/>
+  </A:prop>
+</A:propfind>';
+
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD' => 'PROPFIND',
+            'REQUEST_URI'    => '/' . \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . Tinebase_Core::getUser()->contact_id . '/'
+        ));
+        $request->setBody($body);
+
+
+
+        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $server->httpRequest = $request;
+        $response = new Sabre\HTTP\ResponseMock();
+        $server->httpResponse = $response;
+        $server->exec();
+
+        $responseDoc = new DOMDocument();
+        $responseDoc->loadXML($response->body);
+//        $responseDoc->formatOutput = true; echo $responseDoc->saveXML();
+        $xpath = new DomXPath($responseDoc);
+        $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
+
+        $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:supported-calendar-component-set/cal:comp[@name="VTODO"]');
+        $this->assertGreaterThanOrEqual(1, $nodes->length);
+    }
+
     /**
      * 
      * @return \Sabre\DAV\ObjectTree
