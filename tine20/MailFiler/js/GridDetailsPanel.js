@@ -330,13 +330,12 @@ Ext.ns('Tine.MailFiler');
         switch (selector) {
             case 'span[class=tinebase-download-link]':
                 var idx = target.id.split(':')[1],
-                    attachment = this.record.get('attachments')[idx];
-                    
-                // remove part id if set (that is the case in message/rfc822 attachments)
-                //var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.messageuid;
-                var messageId = this.record.get('messageuid');
+                    attachment = this.record.get('attachments')[idx],
+                    nodeId = this.nodeRecord.get('id');
 
                 // TODO support 'message/rfc822'?
+                // remove part id if set (that is the case in message/rfc822 attachments)
+                //var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.messageuid;
                 //if (attachment['content-type'] === 'message/rfc822') {
                 //
                 //    Tine.log.debug('Tine.MailFiler.GridDetailsPanel::onClick openWindow for:"' + messageId + '_' + attachment.partId + '".');
@@ -355,7 +354,7 @@ Ext.ns('Tine.MailFiler');
                         requestType: 'HTTP',
                         method: 'MailFiler.downloadAttachment',
                         path: this.nodeRecord.get('path'),
-                        messageId: messageId,
+                        nodeId: nodeId,
                         partId: attachment.partId
                     }
                 }).start();
