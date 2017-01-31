@@ -585,6 +585,20 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         return $backend->searchCount($filter);
     }
 
+    /**
+     * check admin group membership
+     *
+     * @param Tinebase_Model_FullUser $user
+     */
+    public function assertAdminGroupMembership($user)
+    {
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
+        if (! in_array($adminGroup->getId(), $memberships)) {
+            Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
+        }
+    }
+
     /******************* abstract functions *********************/
     
     /**
