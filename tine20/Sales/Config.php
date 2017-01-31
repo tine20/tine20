@@ -290,6 +290,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                     array('id' => 'CANCELLATION',  'value' => 'Cancellation',  'system' => true),  // _('Cancellation')
                     array('id' => 'CREDIT',  'value' => 'Credit',  'system' => true),  // _('Credit')
                     array('id' => 'CREDIT CARD',  'value' => 'Credit card',  'system' => true),  // _('Credit card')
+                    array('id' => 'EC CARD',  'value' => 'EC card',  'system' => true),  // _('EC card')
                     array('id' => 'PAYPAL',  'value' => 'Paypal',  'system' => true),  // _('Paypal')
                 ),
                 'default' => 'BANK TRANSFER'

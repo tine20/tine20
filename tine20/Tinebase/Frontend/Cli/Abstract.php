@@ -321,7 +321,7 @@ class Tinebase_Frontend_Cli_Abstract
     {
         // check if admin for tinebase
         if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Tinebase_Acl_Rights::ADMIN)) {
-            echo "No permission.\n";
+            echo "No admin right for application " . $this->_applicationName . "\n";
             return FALSE;
         }
         

@@ -446,10 +446,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a list with this id exist?
                 if (! $attendeeId) {
                     try {
-                        $group = Tinebase_Group::getInstance()->getGroupById($newAttendee['email']);
-                        if ($group) {
+                        $list = Addressbook_Controller_List::getInstance()->get($newAttendee['email']);
+                        if ($list) {
                             $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
-                            $attendeeId = $group->getId();
+                            $attendeeId = $list->getId();
                         }
                     } catch (Exception $e) {
                         // do nothing
@@ -613,9 +613,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             if ($groupAttender->user_id instanceof Addressbook_Model_List) {
                 $listId = $groupAttender->user_id->getId();
             } else if ($groupAttender->user_id !== NULL) {
-                $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
-                if (!empty($group->list_id)) {
-                    $listId = $group->list_id;
+                try {
+                    $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
+                    $listId = $list->getId();
+                } catch (Exception $e) {
+                    // lets try group
+                    $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
+                    if (!empty($group->list_id)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__  . ' fixme: depricated use of  group id');
+                        $listId = $group->list_id;
+                    }
                 }
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
