@@ -136,7 +136,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
                 $container->increaseContentSequence($id);
-                $resultStr = ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
+                $resultStr .= ($resultStr!==''?', ':'') . $id . '(' . $contentBackend->deleteByProperty($id, 'container_id') . ')';
 
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
@@ -375,6 +375,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $cronuserId = Tinebase_Config::getInstance()->get(Tinebase_Config::CRONUSERID);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $cronuserId . ' as cronuser.');
             $cronuser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $cronuserId, 'Tinebase_Model_FullUser');
+            try {
+                Tinebase_User::getInstance()->assertAdminGroupMembership($cronuser);
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
             
@@ -384,7 +389,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return $cronuser;
     }
-    
+
     /**
      * create new cronuser
      * 

@@ -776,7 +776,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $defaultContainerId = Tinebase_Core::getPreference($meta['appName'])->getValueForUser($defaultContainerPreferenceName, $account->getId());
             try {
                 $result = $this->getContainerById($defaultContainerId);
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Got default container from preferences: ' . $result->name);
                 return $result;
             } catch (Tinebase_Exception $te) {

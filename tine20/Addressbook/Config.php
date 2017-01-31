@@ -116,7 +116,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         ),
         self::CONTACT_SALUTATION => array(
         //_('Contact salutations available')
-            'label'                 => 'Task priorities available',
+            'label'                 => 'Contact salutations available',
         //_('Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation.')
             'description'           => 'Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation.',
             'type'                  => 'keyFieldConfig',
