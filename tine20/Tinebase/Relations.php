@@ -122,11 +122,16 @@ class Tinebase_Relations
         
         // add new relations
         foreach ($toAdd as $idx) {
-            if(isset($emptyRelatedId[$idx])) {
-                $relations[$idx]->related_id = null;
-                $this->_setAppRecord($relations[$idx], $_doCreateUpdateCheck);
+            $relation = $relations[$idx];
+            if (isset($emptyRelatedId[$idx])) {
+                // create related record
+                $relation->related_id = null;
+                $this->_setAppRecord($relation, $_doCreateUpdateCheck);
+            } else if ($_inspectRelated && ! empty($relation->related_id) && ! empty($relation->related_record)) {
+                // update related record
+                $this->_setAppRecord($relation, $_doCreateUpdateCheck);
             }
-            $this->_addRelation($relations[$idx]);
+            $this->_addRelation($relation);
         }
         
         // update relations

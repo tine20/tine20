@@ -42,18 +42,6 @@
           "path": "js/Locale/"
         },
         {
-          "text": "core.js",
-          "path": "../library/CryptoJS/"
-        },
-        {
-          "text": "sha1.js",
-          "path": "../library/CryptoJS/"
-        },
-        {
-          "text": "enc-base64.js",
-          "path": "../library/CryptoJS/"
-        },
-        {
           "text": "store2.js",
           "path": "../library/Store/"
         },

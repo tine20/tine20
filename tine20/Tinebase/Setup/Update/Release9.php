@@ -65,7 +65,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_4()
     {
-        if ($this->getTableVersion('container') < 10) {
+        if (! $this->_backend->columnExists('owner_id', 'container')) {
             $declaration = new Setup_Backend_Schema_Field_Xml(
             '<field>
                 <name>owner_id</name>
@@ -121,7 +121,7 @@ class Tinebase_Setup_Update_Release9 extends Setup_Update_Abstract
      */
     public function update_6()
     {
-        if ($this->getTableVersion('container') < 11) {
+        if (! $this->_backend->columnExists('order', 'container')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('<field>
                         <name>order</name>
                         <type>integer</type>

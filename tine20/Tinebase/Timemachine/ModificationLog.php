@@ -835,6 +835,7 @@ class Tinebase_Timemachine_ModificationLog
      * @todo create result model / should be used in Tinebase_Controller_Record_Abstract::updateMultiple, too
      * @todo use transaction with rollback for dryrun?
      * @todo allow to undo tags/customfields/...
+     * @todo add interactive mode
      */
     public function undo(Tinebase_Model_ModificationLogFilter $filter, $overwrite = FALSE, $dryrun = FALSE)
     {

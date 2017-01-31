@@ -64,7 +64,12 @@ class Setup_Core extends Tinebase_Core
     public static function startSetupSession ()
     {
         if (! Setup_Session::isStarted()) {
-            Setup_Session::setSessionBackend();
+            try {
+                Setup_Session::setSessionBackend();
+            } catch (PDOException $pdoe) {
+                Tinebase_Exception::log($pdoe);
+                return;
+            }
             Zend_Session::start();
         }
 
