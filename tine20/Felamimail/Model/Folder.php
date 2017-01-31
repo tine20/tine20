@@ -219,7 +219,7 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      */
     public static function extractLocalnameAndParent($_folderName, $_delimiter)
     {
-        $globalNameParts = explode($_delimiter, $_folderName);
+        $globalNameParts = ($_delimiter && $_delimiter != '') ? explode($_delimiter, $_folderName) : array($_folderName);
         $localname = array_pop($globalNameParts);
         $parent = (count($globalNameParts) > 0) ? implode($_delimiter, $globalNameParts) : '';
         
