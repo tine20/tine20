@@ -618,8 +618,15 @@ class Setup_Frontend_Cli
                 Tinebase_User::getInstance()->setPassword($user, $password);
                 echo "User password has been reset.\n";
             }
-            
-            $this->_checkAdminGroupMembership($user);
+
+            try {
+                Tinebase_User::getInstance()->assertAdminGroupMembership($user);
+                echo "Added user to default admin group\n";
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                echo "Could not add user to default admin group: " . $e->getMessage();
+            }
+
             $this->_checkAdminRole($user);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -634,27 +641,7 @@ class Setup_Frontend_Cli
         }
     }
 
-    /**
-     * check admin group membership
-     * 
-     * @param Tinebase_Model_FullUser $user
-     */
-    protected function _checkAdminGroupMembership($user)
-    {
-        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
-        $memberships = Tinebase_Group::getInstance()->getGroupMemberships($user);
-        if (! in_array($adminGroup->getId(), $memberships)) {
-            try {
-                Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
-                echo "Added user to default admin group\n";
-                // @todo clear roles/groups cache
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-                echo "Could not add user to default admin group: " . $e->getMessage();
-            }
-        }
-    }
-    
+
     /**
      * check admin role membership
      * 
