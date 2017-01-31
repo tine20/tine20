@@ -294,10 +294,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         }
         
         var r = (value !== "") ? this.findRecord(this.valueField, /* id = */ value) : null,
-            text = value;
+            text = value,
+            description = '';
         
         if (r){
             text = r.getTitle();
+            description = r.get('description') || description;
             this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
                 // check if editDialog exists
@@ -320,6 +322,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.hiddenField.value = Ext.value(value, '');
         }
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
+        this.getEl().set({qtip: Tine.Tinebase.common.doubleEncode(description)});
         this.value = value;
         return this;
     }

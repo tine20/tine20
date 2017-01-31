@@ -9,13 +9,6 @@
 Ext.namespace('Tine.Calendar');
 
 /**
- * update app icon to reflect the current date
- */
-Ext.onReady(function(){
-    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png)');
-});
-
-/**
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.Application
  * @extends     Tine.Tinebase.Application
@@ -57,6 +50,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     init: function() {
+        this.updateIcon();
         Tine.Calendar.Application.superclass.init.apply(this.arguments);
         
         new Tine.Calendar.AddressbookGridPanelHook({app: this});
@@ -81,6 +75,12 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
                 this.supr().initLayout.call(this);
             }
         });
+    },
+
+    updateIcon: function() {
+        var imageUrl = Tine.Tinebase.common.getUrl('full') + '/images/view-calendar-day-' + new Date().getDate() + '.png';
+        Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(' + imageUrl + ')');
+
     }
 });
 

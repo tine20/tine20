@@ -700,6 +700,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     case 'MailFiler':
                         this.folderCombo = this.mailFilerFolderCombo = new Tine.widgets.container.selectionComboBox({
                             recordClass: Tine.MailFiler.Model.Node,
+                            // TODO make this work & remove mode:local
+                            //remoteMethod: 'MailFiler.searchNodes',
+                            mode: 'local',
                             treePanelClass: Tine.MailFiler.NodeTreePanel,
                             allowNodeSelect: true,
                             allowToplevelNodeSelect: false,
@@ -712,6 +715,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     case 'Filemanager':
                         this.folderCombo = this.filemanagerFolderCombo = new Tine.widgets.container.selectionComboBox({
                             recordClass: Tine.Filemanager.Model.Node,
+                            // TODO make this work & remove mode:local
+                            //remoteMethod: 'Filemanager.searchNodes',
+                            mode: 'local',
                             treePanelClass: Tine.Filemanager.NodeTreePanel,
                             allowNodeSelect: true,
                             allowToplevelNodeSelect: false,

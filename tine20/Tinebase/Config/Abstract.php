@@ -321,7 +321,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                     $cachedConfigData = false;
                 }
                 
-                if (false === $cachedConfigData || $cachedConfigData['ttlstamp'] < time()) {
+                if ($this->_doCreateCachedConfig($cachedConfigData)) {
                     $this->_createCachedConfig($tmpDir);
                 } else {
                     self::$_configFileData = $cachedConfigData;
@@ -330,6 +330,22 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
         
         return self::$_configFileData;
+    }
+
+    /**
+     * returns true if a new cached config file should be created
+     *
+     * @param $cachedConfigData
+     * @return bool
+     */
+    protected function _doCreateCachedConfig($cachedConfigData)
+    {
+        return (
+               false === $cachedConfigData
+            || TINE20_BUILDTYPE == 'DEVELOPMENT'
+            || TINE20_BUILDTYPE == 'DEBUG'
+            || $cachedConfigData['ttlstamp'] < time()
+        );
     }
     
     /**
