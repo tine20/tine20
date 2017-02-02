@@ -430,10 +430,15 @@ class Tinebase_DateTime extends DateTime
      * (non-PHPdoc)
      * @see DateTime::setTime()
      * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
+     * @note PHP 7.1 added param $microseconds
      */
-    public function setTime($hour, $minute, $second = 0)
+    public function setTime($hour, $minute, $second = 0, $microseconds = null)
     {
-        parent::setTime($hour, $minute, $second);
+        if (PHP_VERSION_ID < 70100) {
+            parent::setTime($hour, $minute, $second);
+        } else {
+            parent::setTime($hour, $minute, $second, $microseconds);
+        }
         return $this;
     }
     
