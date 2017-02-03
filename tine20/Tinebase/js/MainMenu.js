@@ -292,16 +292,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     document.execCommand('ClearAuthenticationCache');
                 }
 
-                // the reload() triggers the unload event
-                var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
-                if (redirect && redirect != '') {
-                    Tine.Tinebase.common.reload({
-                        redirectUrl: Tine.Tinebase.registry.get('redirectUrl')
-                    });
-                } else {
-                    // registry is cleared before reload
-                    Tine.Tinebase.common.reload({});
-                }
+                Tine.Tinebase.common.reload({
+                    clearCache: true
+                });
             }
         });
     }

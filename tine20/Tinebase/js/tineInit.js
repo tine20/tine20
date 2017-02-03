@@ -225,20 +225,6 @@ Tine.Tinebase.tineInit = {
             });
             mainCardPanel.add(Tine.loginPanel);
         }
-        
-        // event firing is unpredictable in IE9/10/11, you'll never know when it comes ...
-        if (! Ext.isNewIE) {
-            Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
-                if (oldValue && !newValue) {
-                    Tine.log.info('tineInit::initLoginPanel - handle logout in other window');
-                    if (window.isMainWindow) {
-                        Tine.Tinebase.common.reload();
-                    } else {
-                        Ext.ux.PopupWindow.close(window);
-                    }
-                }
-            }, this, 'currentAccount');
-        }
     },
 
     showLoginBox: function(cb, scope) {
@@ -251,12 +237,6 @@ Tine.Tinebase.tineInit = {
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
         };
-
-//        //listen for other windows login?
-//        Tine.Tinebase.registry.on('replace', function() {
-//            mainCardPanel.layout.setActiveItem(activeItem);
-//        }, this, 'currentAccount');
-
     },
 
     renderWindow: function () {
