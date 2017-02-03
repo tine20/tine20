@@ -112,7 +112,7 @@ Tine.Tinebase.tineInit = {
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
-            } else if (window.isMainWindow && e.ctrlKey && e.getKey() === e.L) {
+            } else if (window.isMainWindow && e.ctrlKey && (e.getKey() === e.L || e.getKey() === e.DELETE)) {
                 // reload on ctrl-l
                 Tine.Tinebase.common.reload({
                     clearCache: true

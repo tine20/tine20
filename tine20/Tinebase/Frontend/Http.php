@@ -307,14 +307,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
         
-        // cache mainscreen for 10 minutes
-        $maxAge = 600;
+        // cache mainscreen for one day
+        $maxAge = 86400;
         header('Cache-Control: private, max-age=' . $maxAge);
         header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-        
-        // overwrite Pragma header from session
-        header("Pragma: cache");
- 
+        header_remove('Pragma');
     }
     
     /**
@@ -541,12 +538,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filesToWatch = array_filter($filesToWatch, 'file_exists');
         $lastModified = $this->_getLastModified($filesToWatch);
         
-        // cache for 60 seconds
-        $maxAge = 60;
+        // cache for one day
+        $maxAge = 86400;
         header('Cache-Control: private, max-age=' . $maxAge);
         header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
         
-        // overwrite Pragma header from session
+        // remove Pragma header from session
         header_remove('Pragma');
 
         // if the cache id is still valid, the files don't have changed on disk

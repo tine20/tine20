@@ -13,7 +13,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-     <script src="Tinebase/js/node_modules/lodash/lodash.js"></script>
+     <script src="Tinebase/js/node_modules/lodash/index.js"></script>
      <script src="Tinebase/js/node_modules/jquery/dist/jquery.js"></script>
      <script src="Tinebase/js/node_modules/postal/lib/postal.js"></script>
      <script src="Tinebase/js/node_modules/postal.federation/lib/postal.federation.js"></script>
