@@ -1,6 +1,7 @@
 {
   "name": "tine20_tinebase",
   "private": true,
+  "main": "Tinebase.js",
   "dependencies": {
     "html2canvas": "^0.5.0-beta4",
     "jquery": "^2.1.4",
