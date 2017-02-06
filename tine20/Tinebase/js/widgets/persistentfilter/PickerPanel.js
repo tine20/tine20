@@ -64,13 +64,19 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.stateId = 'widgets-persistentfilter-pickerpanel_' + this.app.name + '_' + this.contentType;
 
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
-        var state = Ext.state.Manager.get(this.stateId, {});
-        
+
+        var state = Ext.state.Manager.get(this.stateId, {}),
+            filterModelName = this.filterModel || (this.app.appName + '_Model_' + this.contentType + 'Filter'),
+            modelName = String(filterModelName).replace(/Filter$/, '');
+
+        if (! this.recordClass) {
+            this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelName);
+        }
+
         this.recordCollection = this.store.queryBy(function(record, id) {
             if (record.get('application_id') == this.app.id) {
                 if(this.contentType || this.filterModel) {
-                    var modelName = this.filterModel || (this.app.appName + '_Model_' + this.contentType + 'Filter');
-                    if (record.get('model') == modelName) {
+                    if (record.get('model') == filterModelName) {
                         return true;
                     } else {
                         return false;
@@ -146,6 +152,18 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.currentUser = Tine.Tinebase.registry.get('currentAccount');
     },
 
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        if (this.recordClass) {
+            return [
+                this.recordClass.getMeta('modelName'),
+                'FavoritesPicker',
+            ].join(Tine.Tinebase.CanonicalPath.separator);
+        }
+    },
     /**
      * @private
      */

@@ -44,6 +44,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     border: true,
     autoScroll: true,
     layout: 'fit',
+    canonicalName: 'NotesGrid',
 
     store: null,
 
@@ -56,8 +57,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.record = this.editDialog.record;
         this.app = this.editDialog.app;
         this.title = this.i18nTitle = i18n._('Notes');
-
-        this.id = this.id + Ext.id();
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({

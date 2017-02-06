@@ -898,6 +898,10 @@
           "path": "js/"
         },
         {
+          "text": "CanonicalPath.js",
+          "path": "js/"
+        },
+        {
           "text": "tineInit.js",
           "path": "js/"
         }

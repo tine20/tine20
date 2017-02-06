@@ -13,46 +13,69 @@ Ext.ns('Tine.Admin', 'Tine.Admin.Applications');
 
 /*********************************** MAIN DIALOG ********************************************/
 
-Tine.Admin.Applications.Main = function() {
+Tine.Admin.Applications.Main = {
 
-    // references to created toolbar and grid panel
-    var applicationToolbar = null;
-    var grid_applications = null;
-    
+    init: function() {
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+
+        this._action_enable = new Ext.Action({
+            text: this.translation.gettext('Enable Application'),
+            disabled: true,
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['enabled']),
+            scope: this,
+            iconCls: 'action_enable'
+        });
+
+        this._action_disable = new Ext.Action({
+            text: this.translation.gettext('Disable Application'),
+            disabled: true,
+            handler: this._enableDisableButtonHandler.createDelegate(this, ['disabled']),
+            scope: this,
+            iconCls: 'action_disable'
+        });
+
+        this._action_settings = new Ext.Action({
+            text: this.translation.gettext('Settings'),
+            disabled: true,
+            handler: this._settingsHandler,
+            scope: this,
+            iconCls: 'action_settings'
+        });
+    },
+
     /**
      * onclick handler for edit action
      * 
      * TODO     make that more generic?
      */
-    var _settingsHandler = function(_button, _event) {
-        var selModel = Ext.getCmp('gridAdminApplications').getSelectionModel();
+    _settingsHandler: function(_button, _event) {
+        var selModel = this.gridPanel.getSelectionModel();
         if (selModel.getCount() > 0) {
             var selectedRows = selModel.getSelections();
             var appName = selectedRows[0].data.name;
             if (Tine[appName]) {
-                _openSettingsWindow(appName);
+                this._openSettingsWindow(appName);
             }
         } else {
             _button.setDisabled(true);
         }
-    };
+    },
     
-    var _openSettingsWindow = function(appName) {
-        var translation = new Locale.Gettext();
-        translation.textdomain('Admin');
+    _openSettingsWindow: function(appName) {
         Tine[appName].AdminPanel.openWindow({
             record: (Tine[appName].Model.Settings) ? new Tine[appName].Model.Settings(appName) : null,
-            title: String.format(translation.gettext('{0} Settings'), translateAppTitle(appName)),
+            title: String.format(this.translation.gettext('{0} Settings'), this.translateAppTitle(appName)),
             listeners: {
                 scope: this,
                 'update': (Tine[appName].AdminPanel.onUpdate) ? Tine[appName].AdminPanel.onUpdate : Ext.emptyFn
             }
         });
-    };
+    },
 
-    var _enableDisableButtonHandler = function(state) {
+    _enableDisableButtonHandler: function(state) {
         var applicationIds = new Array();
-        var selectedRows = Ext.getCmp('gridAdminApplications').getSelectionModel().getSelections();
+        var selectedRows = this.gridPanel.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
             applicationIds.push(selectedRows[i].id);
         }
@@ -76,34 +99,9 @@ Tine.Admin.Applications.Main = function() {
                 }
             }
         });
-    };
+    },
     
-    var translation = new Locale.Gettext();
-    translation.textdomain('Admin');
-    
-    var _action_enable = new Ext.Action({
-        text: translation.gettext('Enable Application'),
-        disabled: true,
-        handler: _enableDisableButtonHandler.createDelegate(this, ['enabled']),
-        iconCls: 'action_enable'
-    });
-
-    var _action_disable = new Ext.Action({
-        text: translation.gettext('Disable Application'),
-        disabled: true,
-        handler: _enableDisableButtonHandler.createDelegate(this, ['disabled']),
-        iconCls: 'action_disable'
-    });
-
-    var _action_settings = new Ext.Action({
-        text: translation.gettext('Settings'),
-        disabled: true,
-        handler: _settingsHandler,
-        iconCls: 'action_settings'
-    });
-
-    var _createApplicationaDataStore = function()
-    {
+    _createApplicationaDataStore: function() {
         /**
          * the datastore for lists
          */
@@ -131,23 +129,19 @@ Tine.Admin.Applications.Main = function() {
         //ds_applications.load({params:{start:0, limit:50}});
         
         return ds_applications;
-    };
+    },
 
-    var _showApplicationsToolbar = function()
-    {
+    _showApplicationsToolbar: function() {
         // if toolbar was allready created set active toolbar and return
-        if (applicationToolbar)
+        if (this.actionToolbar)
         {
-            Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar, true);
+            Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
             return;
         }
         
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Admin');
-        
-        _action_enable.setText(this.translation.gettext('enable application'));
-        _action_disable.setText(this.translation.gettext('disable application'));
-        _action_settings.setText(this.translation.gettext('settings'));
+        this._action_enable.setText(this.translation.gettext('enable application'));
+        this._action_disable.setText(this.translation.gettext('disable application'));
+        this._action_settings.setText(this.translation.gettext('settings'));
     
         var ApplicationsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'ApplicationsAdminQuickSearchField',
@@ -155,29 +149,29 @@ Tine.Admin.Applications.Main = function() {
             emptyText: i18n._hidden('enter searchfilter')
         });
         ApplicationsAdminQuickSearchField.on('change', function() {
-            Ext.getCmp('gridAdminApplications').getStore().load({params:{start:0, limit:50}});
+            this.gridPanel.getStore().load({params:{start:0, limit:50}});
         });
         
-        applicationToolbar = new Ext.Toolbar({
-            id: 'toolbarAdminApplications',
+        this.actionToolbar = new Ext.Toolbar({
+            canonicalName: ['Application', 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
             split: false,
             //height: 26,
             items: [{
                 xtype: 'buttongroup',
                 columns: 7,
                 items: [
-                    Ext.apply(new Ext.Button(_action_enable), {
+                    Ext.apply(new Ext.Button(this._action_enable), {
                     scale: 'medium',
                     rowspan: 2,
                     iconAlign: 'top'
                     }), {xtype: 'tbspacer', width: 10},
-                    Ext.apply(new Ext.Button(_action_disable), {
+                    Ext.apply(new Ext.Button(this._action_disable), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
                     }), {xtype: 'tbspacer', width: 10},
                     {xtype: 'tbseparator'}, {xtype: 'tbspacer', width: 10},
-                    Ext.apply(new Ext.Button(_action_settings), {
+                    Ext.apply(new Ext.Button(this._action_settings), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -202,8 +196,8 @@ Tine.Admin.Applications.Main = function() {
             ]
         });
         
-        Tine.Tinebase.MainScreen.setActiveToolbar(applicationToolbar, true);
-    };
+        Tine.Tinebase.MainScreen.setActiveToolbar(this.actionToolbar, true);
+    },
     
     /**
      * translate and return app title
@@ -211,45 +205,42 @@ Tine.Admin.Applications.Main = function() {
      * TODO try to generalize this fn as this gets used in Tags.js + RoleEditDialog.js as well 
      *      -> this could be moved to Tine.Admin.Application after Admin js refactoring
      */
-    var translateAppTitle = function(appName) {
+    translateAppTitle: function(appName) {
         var app = Tine.Tinebase.appMgr.get(appName);
         return (app) ? app.getTitle() : appName;
-    };
+    },
 
     /**
      * render enabled field (translate)
      */
-    var _renderEnabled = function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
-        var translation = new Locale.Gettext();
-        translation.textdomain('Admin');
-        
+    _renderEnabled: function(_value, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
         var gridValue;
         
         switch(_value) {
             case 'disabled':
-                gridValue = translation.gettext('disabled');
+                gridValue = this.translation.gettext('disabled');
                 break;
             case 'enabled':
-              gridValue = translation.gettext('enabled');
+              gridValue = this.translation.gettext('enabled');
               break;
               
             default:
-              gridValue = String.format(translation.gettext('unknown status ({0})'), value);
+              gridValue = String.format(this.translation.gettext('unknown status ({0})'), value);
               break;
         }
         
         return gridValue;
-    };
+    },
 
     /**
      * creates the address grid
      * 
      */
-    var _showApplicationsGrid = function() 
+    _showApplicationsGrid: function()
     {
         // if grid panel was allready created set active content panel and return
-        if (grid_applications) {
-            Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications, true);
+        if (this.gridPanel) {
+            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
             return;
         }
         
@@ -259,14 +250,14 @@ Tine.Admin.Applications.Main = function() {
                 key:   'Tinebase-MainContextMenu'
             }],
             items: [
-                _action_enable,
-                _action_disable,
-                _action_settings
+                this._action_enable,
+                this._action_disable,
+                this._action_settings
             ]
         });
 
         
-        var ds_applications = _createApplicationaDataStore();
+        var ds_applications = this._createApplicationaDataStore();
         
         var pagingToolbar = new Ext.PagingToolbar({ // inline paging toolbar
             pageSize: 50,
@@ -283,8 +274,8 @@ Tine.Admin.Applications.Main = function() {
             },
             columns: [
                 { header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
-                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: translateAppTitle},
-                { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: _renderEnabled},
+                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: this.translateAppTitle.createDelegate(this)},
+                { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: this._renderEnabled.createDelegate(this)},
                 { header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
             ]
         });
@@ -297,36 +288,36 @@ Tine.Admin.Applications.Main = function() {
 
             if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
                 if (rowCount < 1) {
-                    _action_enable.setDisabled(true);
-                    _action_disable.setDisabled(true);
-                    _action_settings.setDisabled(true);
+                    this._action_enable.setDisabled(true);
+                    this._action_disable.setDisabled(true);
+                    this._action_settings.setDisabled(true);
                 } else if (rowCount > 1) {
-                    _action_enable.setDisabled(false);
-                    _action_disable.setDisabled(false);
-                    _action_settings.setDisabled(true);
+                    this._action_enable.setDisabled(false);
+                    this._action_disable.setDisabled(false);
+                    this._action_settings.setDisabled(true);
                 } else {
-                    _action_enable.setDisabled(false);
-                    _action_disable.setDisabled(false);
+                    this._action_enable.setDisabled(false);
+                    this._action_disable.setDisabled(false);
                     // check if app has admin panel and is enabled
                     if (Tine[selected[0].data.name] && Tine[selected[0].data.name].AdminPanel && selected[0].data.status == 'enabled') {
-                        _action_settings.setDisabled(false);
+                        this._action_settings.setDisabled(false);
                     } else {
-                        _action_settings.setDisabled(true);
+                        this._action_settings.setDisabled(true);
                     }
                 }
                 
                 // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
                 for (var i=0; i<selected.length; i++) {
                     if (typeof selected[i].get == 'function' && selected[i].get('name').toString().match(/Tinebase|Admin|Addressbook/)) {
-                        _action_disable.setDisabled(true);
+                        this._action_disable.setDisabled(true);
                         break;
                     }
                 }
             }
-        });
+        }, this);
                 
-        grid_applications = new Ext.grid.GridPanel({
-            id: 'gridAdminApplications',
+        this.gridPanel = new Ext.grid.GridPanel({
+            canonicalName: ['Application', 'Grid'].join(Tine.Tinebase.CanonicalPath.separator),
             store: ds_applications,
             cm: cm_applications,
             tbar: pagingToolbar,     
@@ -359,57 +350,53 @@ Tine.Admin.Applications.Main = function() {
             }
         });
         
-        Tine.Tinebase.MainScreen.setActiveContentPanel(grid_applications, true);
+        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
         
-        grid_applications.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
+        this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
             _eventObject.stopEvent();
             if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
                 _grid.getSelectionModel().selectRow(_rowIndex);
 
                 if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'apps') ) {
-                    _action_enable.setDisabled(false);
-                    _action_disable.setDisabled(false);
+                    this._action_enable.setDisabled(false);
+                    this._action_disable.setDisabled(false);
                 }
                 
                 // don't allow to disable Admin, Tinebase or Addressbook as we can't deal with this yet
                 if(_grid.getSelectionModel().getSelected().get('name').toString().match(/Tinebase|Admin|Addressbook/)) {
-                    _action_enable.setDisabled(true);
-                    _action_disable.setDisabled(true);
+                    this._action_enable.setDisabled(true);
+                    this._action_disable.setDisabled(true);
                 }
             }
             ctxMenuGrid.showAt(_eventObject.getXY());
         }, this);
         
-        grid_applications.on('rowdblclick', function(grid, index, e) {
+        this.gridPanel.on('rowdblclick', function(grid, index, e) {
             var record = grid.getStore().getAt(index);
             if (record.data.status == 'enabled' && Tine[record.data.name] && Tine[record.data.name].AdminPanel) {
-                _openSettingsWindow(record.data.name);
+                this._openSettingsWindow(record.data.name);
             }
         }, this);
-    };
-    
-    // public functions and variables
-    return {
-        show: function() 
-        {
-            _showApplicationsToolbar();
-            _showApplicationsGrid();
-            
-            this.loadData();
-        },
-        
-        loadData: function()
-        {
-            var dataStore = Ext.getCmp('gridAdminApplications').getStore();
-            dataStore.load({ params: { start:0, limit:50 } });
-        },
-        
-        reload: function() 
-        {
-            if(Ext.ComponentMgr.all.containsKey('gridAdminApplications')) {
-                setTimeout ("Ext.getCmp('gridAdminApplications').getStore().reload()", 200);
-            }
+    },
+
+    show: function()
+    {
+        this.init();
+        this._showApplicationsToolbar();
+        this._showApplicationsGrid();
+
+        this.loadData();
+    },
+
+    loadData: function()
+    {
+        var dataStore = this.gridPanel.getStore();
+        dataStore.load({ params: { start:0, limit:50 } });
+    },
+
+    reload: function () {
+        if (this.gridPanel) {
+            this.gridPanel.getStore().reload.defer(200, this.gridPanel.getStore());
         }
-    };
-    
-}();
+    }
+};

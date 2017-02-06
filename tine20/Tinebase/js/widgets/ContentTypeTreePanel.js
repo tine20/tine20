@@ -45,6 +45,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
     draggable : true,
     autoScroll: false,
     autoHeight: true,
+    canonicalName: 'ModulPicker',
     
     collapsed: false,
     renderHidden: true,
@@ -163,6 +164,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             
             var c = {
                 id : 'treenode-' + recordClass.getMeta('modelName'),
+                contentType: recordClass.getMeta('modelName'),
                 iconCls: modelApp.appName + modelName,
                 text: recordClass.getRecordsName(),
                 leaf : true
@@ -175,8 +177,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
             var child = new Ext.tree.TreeNode(c);
             
             child.on('click', function() {
-                this.app.getMainScreen().activeContentType = modelName;
-                this.app.getMainScreen().activate();
+                this.app.getMainScreen().setActiveContentType(modelName);
             }, this);
 
             // append generic ctx-items (Tine.widgets.tree.ContextMenu)
@@ -249,8 +250,7 @@ Ext.extend(Tine.widgets.ContentTypeTreePanel, Ext.tree.TreePanel, {
                 node.select();
                 this.stateApplied = true;
                 var contentType = node.id.split('-')[1];
-                this.app.getMainScreen().activeContentType = contentType ? contentType : '';
-                this.app.getMainScreen().activate();
+                this.app.getMainScreen().setActiveContentType(contentType ? contentType : '');
             } else {
                 this.stateApplied = false;
             }

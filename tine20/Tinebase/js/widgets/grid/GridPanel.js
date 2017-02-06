@@ -390,6 +390,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
 
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        var pathSegment = '';
+        if (this.canonicalName) {
+            // simple segment e.g. when used in a dialog
+            pathSegment = this.canonicalName;
+        } else if (this.recordClass) {
+            // auto segment
+            pathSegment = [this.recordClass.getMeta('modelName'), 'Grid'].join(Tine.Tinebase.CanonicalPath.separator);
+        }
+
+        return pathSegment;
+    },
+
     onContentResize: function() {
         // make sure details panel doesn't hide grid
         if (this.detailsPanel) {
@@ -554,7 +571,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 split: true,
                 layout: 'fit',
                 height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
-                items: this.detailsPanel
+                items: this.detailsPanel,
+                canonicalName: 'DetailsPanel'
 
             });
             this.detailsPanel.doBind(this.grid);
@@ -1474,6 +1492,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
 
             this.actionToolbar = new Ext.Toolbar({
+                canonicalName: [this.recordClass.getMeta('modelName'), 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
                 items: [{
                     xtype: 'buttongroup',
                     plugins: [{

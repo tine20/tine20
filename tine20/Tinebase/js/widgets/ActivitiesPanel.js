@@ -64,6 +64,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
      */
     title: null,
     layout: 'fit',
+    canonicalName: 'HistoryGrid',
     
     getActivitiesGrid: function () {
         // @todo add row expander on select ?

@@ -26,9 +26,9 @@ Tine.Admin.accessLog.show = function () {
     else {
         Tine.Admin.accessLog.gridPanel.loadGridData.defer(100, Tine.Admin.accessLog.gridPanel, []);
     }
-    
-    Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.accessLog.gridPanel, true);
-    Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Admin.accessLog.gridPanel.actionToolbar, true);
+
+    app.getMainScreen().setActiveContentPanel(Tine.Admin.accessLog.gridPanel, true);
+    app.getMainScreen().setActiveToolbar(Tine.Admin.accessLog.gridPanel.actionToolbar, true);
 };
 
 /**

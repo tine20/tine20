@@ -29,12 +29,7 @@ Ext.ns('Tine.widgets.grid');
  * @constructor Create a new  Tine.widgets.grid.FileUploadGrid
  */
 Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
-    
-    /**
-     * @private
-     */
-    id: 'tinebase-file-grid',
-    
+
     /**
      * @cfg filesProperty
      * @type String
@@ -68,9 +63,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.i18nFileString = this.i18nFileString ? this.i18nFileString : i18n._('File');
         
         this.record = this.record || null;
-        this.id = this.id + Ext.id();
-        
-     // init actions
+
+        // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
             containerProperty: 'container_id', 
             evalGrants: false

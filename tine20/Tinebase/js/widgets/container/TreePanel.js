@@ -113,6 +113,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     modelConfiguration: null,
 
+    /**
+     * @cfg {String}
+     * canonical name
+     */
+    canonicalName: 'ContainerTree',
+
     useArrows: true,
     border: false,
     autoScroll: true,
@@ -208,6 +214,19 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
+    },
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        if (this.recordClass) {
+            return [
+                this.recordClass.getMeta('modelName'),
+                this.canonicalName,
+            ].join(Tine.Tinebase.CanonicalPath.separator);
+        }
     },
 
     getRoot: function(extraItems)

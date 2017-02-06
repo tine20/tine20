@@ -119,6 +119,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     monitorResize: true,
     region: 'north',
     layout: 'fit',
+    canonicalName: 'FilterToolbar',
     //split: true,
     
     record: Ext.data.Record.create([

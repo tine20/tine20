@@ -25,6 +25,20 @@ Tine.CoreData.Application = Ext.extend(Tine.Tinebase.Application, {
 Tine.CoreData.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 
     /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        var app = this.getCenterPanel().app,
+            appName = app ? app.name : 'unknown';
+
+        return [
+            this.supr().getCanonicalPathSegment.call(this),
+            appName
+        ].join(Tine.Tinebase.CanonicalPath.separator);
+    },
+
+    /**
      * get north panel for given contentType
      *
      * template method to be overridden by subclasses to modify default behaviour

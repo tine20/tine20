@@ -179,6 +179,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @type {Object}
      */
     additionalConfig: null,
+
+    /**
+     * canonical name
+     * @cfg {String} canonicalName
+     */
+    canonicalName: 'EditDialog',
     
     // private
     bodyStyle:'padding:5px',
@@ -367,6 +373,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         if (Ext.isFunction(this.window.relayEvents) && Tine.Tinebase.featureEnabled('featureRememberPopupSize')) {
             this.window.relayEvents(this, ['resize']);
+        }
+    },
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        if (this.recordClass) {
+            return ['',
+                this.recordClass.getMeta('appName'),
+                this.canonicalName,
+                this.recordClass.getMeta('modelName'),
+            ].join(Tine.Tinebase.CanonicalPath.separator);
         }
     },
 
@@ -678,14 +698,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             if (this.record && this.record.id) {
                 this.loadRemoteRecord();
             } else {
-                this.onRecordLoad();
+                this.onRecordLoad.defer(10, this);
             }
         } else {
             // note: in local mode we expect a valid record
             if (! Ext.isFunction(this.record.beginEdit)) {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
-            this.onRecordLoad();
+            this.onRecordLoad.defer(10, this);
         }
     },
     

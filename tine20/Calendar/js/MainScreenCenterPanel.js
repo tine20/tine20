@@ -1785,15 +1785,20 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.calendarPanels[which] = new Tine.Calendar.CalendarPanel({
                     tbar: tbar,
                     view: view,
-                    mainScreen: this
+                    mainScreen: this,
+                    canonicalName: ['Event', 'Sheet']
                 });
             } else if (whichParts.presentation.match(/grid/i)) {
                 this.calendarPanels[which] = new Tine.Calendar.GridView({
                     tbar: tbar,
-                    store: store
+                    store: store,
+                    canonicalName: ['Event', 'Grid']
                 });
             }
-            
+
+            this.calendarPanels[which]['canonicalName'].push(Ext.util.Format.capitalize(which.match(/[a-z]+/)[0]));
+            this.calendarPanels[which]['canonicalName'] = this.calendarPanels[which]['canonicalName'].join(Tine.Tinebase.CanonicalPath.separator);
+
             this.calendarPanels[which].on('dblclick', this.onEditInNewWindow.createDelegate(this, ["edit"]));
             this.calendarPanels[which].on('contextmenu', this.onContextMenu, this);
             this.calendarPanels[which].getSelectionModel().on('selectionchange', this.updateEventActions, this);
