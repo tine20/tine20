@@ -293,7 +293,11 @@ Tine.Admin.Roles.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuRoles', 
+                    id: 'ctxMenuRoles',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editRole,
                         this.actions.deleteRole,

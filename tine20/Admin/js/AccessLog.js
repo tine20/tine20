@@ -87,7 +87,11 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         this.contextMenu = new Ext.menu.Menu({
-            items: [this.action_deleteRecord]
+            items: [this.action_deleteRecord],
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }]
         });
     },
     

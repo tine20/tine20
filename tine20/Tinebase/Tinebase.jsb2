@@ -870,6 +870,10 @@
           "path": "js/"
         },
         {
+          "text": "MainContextMenu.js",
+          "path": "js/"
+        },
+        {
           "text": "MainMenu.js",
           "path": "js/"
         },

@@ -1580,6 +1580,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 plugins: [{
                     ptype: 'ux.itemregistry',
                     key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+                }, {
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
                 }]
             });
         }

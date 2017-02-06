@@ -206,7 +206,11 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         ];
         
         this.contextMenu = new Ext.menu.Menu({
-            items: this.actions
+            items: this.actions,
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }]
         });
 
         this.tbar = new Ext.Panel({

@@ -443,6 +443,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 plugins = [{
                     ptype: 'ux.itemregistry',
                     key:   'Attendee-GridPanel-ContextMenu'
+                }, {
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
                 }];
             }
             

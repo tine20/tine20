@@ -295,6 +295,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         var hasManageRight = this.hasRight(node.attributes);
         
         var menu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items : [{
                 text : i18n._('Delete Favorite'),
                 iconCls : 'action_delete',

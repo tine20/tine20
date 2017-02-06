@@ -393,7 +393,13 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
                 this.actions_addAsBcc,
                 this.actions_setToNone
             ];
-            this.contextMenu = new Ext.menu.Menu({items: items});
+            this.contextMenu = new Ext.menu.Menu({
+                items: items,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
+                }]
+            });
         }
         return this.contextMenu;
     }

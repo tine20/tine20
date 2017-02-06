@@ -673,6 +673,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             {
                 ptype: 'ux.itemregistry',
                 key:   'Calendar-Event-GridPanel-ContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
             }],
             items: menuitems
         });

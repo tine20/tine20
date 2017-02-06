@@ -108,7 +108,11 @@ Tine.Crm.LinkGridPanel.initActions = function() {
     }
 
     this.contextMenu = new Ext.menu.Menu({
-        items: this.actions.concat(['-', this.actionAdd])
+        items: this.actions.concat(['-', this.actionAdd]),
+        plugins: [{
+            ptype: 'ux.itemregistry',
+            key:   'Tinebase-MainContextMenu'
+        }]
     });
     
     this.actions.push(this.actionAdd);

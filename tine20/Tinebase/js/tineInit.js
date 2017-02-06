@@ -126,6 +126,14 @@ Tine.Tinebase.tineInit = {
             e.preventDefault();
             e.browserEvent.dataTransfer.dropEffect = 'none';
         }, this);
+
+        // generic context menu
+        Ext.getBody().on('contextmenu', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            Tine.Tinebase.MainContextMenu.showIf(e);
+        }, this);
     },
 
     checkWebpack: function() {

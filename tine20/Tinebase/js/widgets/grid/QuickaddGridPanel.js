@@ -161,11 +161,11 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             var items = [this.deleteAction];
             
             this.contextMenu = new Ext.menu.Menu({
-                items: items/*,
                 plugins: [{
                     ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-GridPanel-ContextMenu'
-                }]*/
+                    key:   'Tinebase-MainContextMenu'
+                }],
+                items: items
             });
         }
         

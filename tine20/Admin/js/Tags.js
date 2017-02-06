@@ -281,7 +281,11 @@ Tine.Admin.Tags.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuTags', 
+                    id: 'ctxMenuTags',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editTag,
                         this.actions.deleteTag,

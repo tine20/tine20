@@ -254,6 +254,10 @@ Tine.Admin.Applications.Main = function() {
         }
         
         var ctxMenuGrid = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: [
                 _action_enable,
                 _action_disable,

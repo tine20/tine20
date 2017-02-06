@@ -292,7 +292,11 @@ Tine.Admin.Groups.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuGroups', 
+                    id: 'ctxMenuGroups',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editGroup,
                         this.actions.deleteGroup,
