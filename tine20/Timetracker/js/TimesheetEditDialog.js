@@ -97,7 +97,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('billed_in').setDisabled(! (grants.adminGrant || manageRight));
         }
 
-        if (timeaccount) {
+        if (timeaccount && timeaccount.data) {
             notBillable = notBillable || timeaccount.data.is_billable == "0" || timeaccount.get('is_billable') == "0";
             
             // clearable depends on timeaccount is_billable as well (changed by ps / 2009-09-01, behaviour was inconsistent)
@@ -107,7 +107,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.getForm().findField('is_billable').setValue(false);
             }
         }
-        
+
         this.getForm().findField('is_billable').setDisabled(notBillable);
         this.getForm().findField('is_cleared').setDisabled(notClearable);
         
