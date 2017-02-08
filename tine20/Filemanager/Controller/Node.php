@@ -1353,7 +1353,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 case 'body':
                     $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
                     $plainText = $completeMessage->getPlainTextBody();
-                    $description .= mb_substr($plainText, 0, 1000) . "\n";
+                    $description .= $plainText ."\n";
                     break;
                 case 'attachments':
                     foreach ((array) $message->{$field} as $attachment) {
