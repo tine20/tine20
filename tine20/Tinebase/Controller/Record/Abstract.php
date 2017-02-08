@@ -1378,7 +1378,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
-     * @return  integer number of updated records
+     * @return  array $this->_updateMultipleResult
      * 
      * @todo add param $_returnFullResults (if false, do not return updated records in 'results')
      */
