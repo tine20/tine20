@@ -141,11 +141,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $filename
      * @param string $contentType
      */
-    protected function _prepareHeader($filename, $contentType)
+    protected function _prepareHeader($filename, $contentType, $disposition = 'attachment')
     {
         // cache for 3600 seconds
         $maxAge = 3600;
-        $disposition = 'attachment';
         header('Cache-Control: private, max-age=' . $maxAge);
         header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
 
