@@ -64,7 +64,12 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
      * @type Tinebase.Application 
      */
     app: null,
-    
+
+    /**
+     * @cfg {String} requiredGrant to make actions
+     */
+    requiredGrant: 'editGrant',
+
     typeColumnHeader: null,
     
     /**
@@ -213,8 +218,13 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
         (function() {
             this.highlightRowAfterAdd = true;
         }).defer(400, this);
-        
+
         // TODO perhaps we should filter all that do not match the model
+
+        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
+            this.setReadOnly(true);
+        }
+
     },
     
     /**
