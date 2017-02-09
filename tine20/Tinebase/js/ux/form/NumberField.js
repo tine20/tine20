@@ -121,6 +121,10 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
     
     // private, overwrites Ext.form.NumberField.parseValue
     parseValue : function(value){
+        if (!value) {
+            return value;
+        }
+        
         if (this.useThousandSeparator) {
             var regex = new RegExp(((this.thousandSeparator == ".") ? '\\.' : this.thousandSeparator), 'g');
             value = value.replace(regex, '');
@@ -142,18 +146,17 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
      * @return {String}
      */
     validateValue: function(value) {
-        
-        if (this.prefix) {
+        if (value && this.prefix) {
             var regex = new RegExp(this.prefix, 'g');
             value = value.replace(regex, '');
         }
         
-        if (this.suffix) {
+        if (value && this.suffix) {
             var regex = new RegExp(this.suffix, 'g');
             value = value.replace(regex, '');
         }
         
-        if (this.useThousandSeparator) {
+        if (value && this.useThousandSeparator) {
             var regex = new RegExp(((this.thousandSeparator == ".") ? '\\.' : this.thousandSeparator), 'g');
             value = value.replace(regex, '');
         }
