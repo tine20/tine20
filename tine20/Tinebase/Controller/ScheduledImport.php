@@ -157,32 +157,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
 
         return null;
     }
-    
-    /**
-     * Downloads file to memory
-     * 
-     * @param string $source
-     * @return string|null
-     */
-    protected function _getFileToImport($source)
-    {
-        if (strpos($source, 'http') === 0) {
-            try {
-                $client = new Zend_Http_Client($source);
-                // 0011054: Problems with ScheduledImport of external ics calendars
-                // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
-                $client->setHeaders('Accept-encoding', 'identity');
-                $requestBody = $client->request()->getBody();
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-                $requestBody = null;
-            }
-            return $requestBody;
-        } else {
-            return file_get_contents($source);
-        }
-    }
-    
+
     /**
      * Execute scheduled import
      *
@@ -210,7 +185,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
             }
 
             $importer = $record->getOption('plugin');
-            $resource = $record->getOption('importFileByScheduler') ? $this->_getFileToImport($options['url']) : null;
+            $resource = $record->getOption('importFileByScheduler')
+                ? Tinebase_Helper::getFileOrUriContents($options['url'])
+                : null;
 
             $importer = new $importer($options);
             $importer->import($resource);
