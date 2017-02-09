@@ -342,8 +342,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         return (
                false === $cachedConfigData
-            || TINE20_BUILDTYPE == 'DEVELOPMENT'
-            || TINE20_BUILDTYPE == 'DEBUG'
+            || (defined(TINE20_BUILDTYPE) && TINE20_BUILDTYPE == 'DEVELOPMENT')
+            || (defined(TINE20_BUILDTYPE) && TINE20_BUILDTYPE == 'DEBUG')
             || $cachedConfigData['ttlstamp'] < time()
         );
     }
@@ -390,7 +390,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
         $ttl = 60;
         if (isset(self::$_configFileData['composeConfigTTL'])) {
-            $ttl = intval(self::$_configFileData['composeConfigTTL']);
+            $ttl = (int) self::$_configFileData['composeConfigTTL'];
             if ($ttl < 1) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                     . ' composeConfigTTL needs to be an integer > 0, current value: "'
@@ -401,7 +401,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         self::$_configFileData['ttlstamp'] = time() + $ttl;
         
         $filename = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
-        $filenameTmp = $filename . uniqid();
+        $filenameTmp = $filename . uniqid('tine20', true);
         $fh = fopen($filenameTmp, 'w');
         if (false === $fh) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
