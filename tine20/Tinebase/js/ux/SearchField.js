@@ -41,7 +41,7 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
      * @private
      */
     initComponent : function(){
-        this.emptyText = i18n._('enter searchfilter');
+        this.emptyText = this.emptyText || i18n._('enter searchfilter');
         
         Ext.ux.SearchField.superclass.initComponent.call(this);
         this.on('specialkey', function(f, e){
@@ -77,3 +77,5 @@ Ext.ux.SearchField = Ext.extend(Ext.form.TwinTriggerField, {
         this.triggers[0][v.length < 1 ? 'hide' : 'show']();
     }
 });
+
+Ext.reg('ux-searchfield', Ext.ux.SearchField);
