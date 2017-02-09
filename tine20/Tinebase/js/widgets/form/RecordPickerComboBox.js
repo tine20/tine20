@@ -322,7 +322,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.hiddenField.value = Ext.value(value, '');
         }
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
-        this.getEl().set({qtip: Tine.Tinebase.common.doubleEncode(description)});
+        
+        var el = this.getEl();
+        if (el) {
+            el.set({qtip: Tine.Tinebase.common.doubleEncode(description)});
+        }
+        
         this.value = value;
         return this;
     }
