@@ -40,7 +40,7 @@ Tine.Admin.Groups.Main = {
          * onclick handler for editBtn
          */
         editGroup: function (button, event) {
-            var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
+            var selectedRows = this.gridPanel.getSelectionModel().getSelections();
             this.openEditWindow(selectedRows[0]);
         },
 
@@ -53,7 +53,7 @@ Tine.Admin.Groups.Main = {
                 if (button === 'yes') {
                 
                     var groupIds = [],
-                        selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
+                        selectedRows = this.gridPanel.getSelectionModel().getSelections();
                         
                     for (var i = 0; i < selectedRows.length; ++i) {
                         groupIds.push(selectedRows[i].id);
@@ -68,7 +68,7 @@ Tine.Admin.Groups.Main = {
                         scope: this,
                         text: this.translation.gettext('Deleting group(s)...'),
                         success: function (result, request) {
-                            Ext.getCmp('AdminGroupsGrid').getStore().reload();
+                            this.gridPanel.getStore().reload();
                         },
                         failure: function (result, request) {
                             Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.'));
@@ -131,10 +131,11 @@ Tine.Admin.Groups.Main = {
     },
     
     displayGroupsToolbar: function () {
-        
+        var app = Tine.Tinebase.appMgr.get('Admin');
+
         // if toolbar was allready created set active toolbar and return
         if (this.groupsToolbar) {
-            Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
+            app.getMainScreen().setActiveToolbar(this.groupsToolbar, true);
             return;
         }
         
@@ -144,7 +145,7 @@ Tine.Admin.Groups.Main = {
             emptyText: i18n._hidden('enter searchfilter')
         });
         GroupsAdminQuickSearchField.on('change', function () {
-            Ext.getCmp('AdminGroupsGrid').getStore().load({
+            this.gridPanel.getStore().load({
                 params: {
                     start: 0,
                     limit: this.pageSize
@@ -153,7 +154,7 @@ Tine.Admin.Groups.Main = {
         }, this);
         
         this.groupsToolbar = new Ext.Toolbar({
-            id: 'AdminGroupsToolbar',
+            canonicalName: ['Group', 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
             split: false,
             items: [{
                 xtype: 'buttongroup',
@@ -182,14 +183,15 @@ Tine.Admin.Groups.Main = {
             ]
         });
 
-        Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
+        app.getMainScreen().setActiveToolbar(this.groupsToolbar, true);
     },
 
     displayGroupsGrid: function () {
-        
+        var app = Tine.Tinebase.appMgr.get('Admin');
+
         // if grid panel was allready created set active content panel and return
         if (this.gridPanel)    {
-            Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+            app.getMainScreen().setActiveContentPanel(this.gridPanel, true);
             return;
         }
         
@@ -265,7 +267,7 @@ Tine.Admin.Groups.Main = {
         
         // the gridpanel
         this.gridPanel = new Ext.grid.GridPanel({
-            id: 'AdminGroupsGrid',
+            canonicalName: ['Group', 'Grid'].join(Tine.Tinebase.CanonicalPath.separator),
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -283,7 +285,7 @@ Tine.Admin.Groups.Main = {
             enableHdMenu: false,
             plugins: [new Ext.ux.grid.GridViewMenuPlugin()]
         });
-        
+
         this.gridPanel.on('rowcontextmenu', function (grid, rowIndex, eventObject) {
             eventObject.stopEvent();
             if (! grid.getSelectionModel().isSelected(rowIndex)) {
@@ -292,7 +294,11 @@ Tine.Admin.Groups.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuGroups', 
+                    id: 'ctxMenuGroups',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editGroup,
                         this.actions.deleteGroup,
@@ -312,14 +318,14 @@ Tine.Admin.Groups.Main = {
         }, this);
 
         // add the grid to the layout
-        Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
+        app.getMainScreen().setActiveContentPanel(this.gridPanel, true);
     },
     
     /**
      * update datastore with node values and load datastore
      */
     loadData: function () {
-        var dataStore = Ext.getCmp('AdminGroupsGrid').getStore();
+        var dataStore = this.gridPanel.getStore();
         dataStore.load({ params: { start: 0, limit: this.pageSize } });
     },
 
@@ -335,8 +341,8 @@ Tine.Admin.Groups.Main = {
     },
     
     reload: function () {
-        if (Ext.ComponentMgr.all.containsKey('AdminGroupsGrid')) {
-            setTimeout("Ext.getCmp('AdminGroupsGrid').getStore().reload()", 200);
+        if (this.gridPanel) {
+            this.gridPanel.getStore().reload.defer(200, this.gridPanel.getStore());
         }
     }
 };

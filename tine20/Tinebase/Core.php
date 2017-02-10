@@ -359,22 +359,11 @@ class Tinebase_Core
         if (isset(self::$appInstanceCache[$cacheKey])) {
             return self::$appInstanceCache[$cacheKey];
         }
-        
-        // modified (some model names can have both . and _ in their names and we should treat them as JS model name
-        if (strpos($_applicationName, '_') && ! strpos($_applicationName, '.')) {
-            // got (complete) model name name as first param
-            list($appName, /*$i*/, $modelName) = explode('_', $_applicationName, 3);
-        } else if (strpos($_applicationName, '.')) {
-            // got (complete) model name name as first param (JS style)
-            list(/*$j*/, $appName, /*$i*/, $modelName) = explode('.', $_applicationName, 4);
-        } else {
-            $appName = $_applicationName;
-            $modelName = $_modelName;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Extracted appName: ' . $appName . ' modelName: ' . $modelName);
-        
+
+        $extract = Tinebase_Application::extractAppAndModel($_applicationName, $_modelName);
+        $appName = $extract['appName'];
+        $modelName = $extract['modelName'];
+
         $controllerName = ucfirst((string) $appName);
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // only app controllers are called "App_Controller_Model"

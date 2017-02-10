@@ -215,6 +215,10 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
             this.ctxMenu = new Ext.menu.Menu({
                 items: items,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
+                }],
                 listeners: {
                     scope: this,
                     hide: function() {

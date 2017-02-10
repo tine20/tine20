@@ -584,7 +584,7 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
             . print_r($_record->toArray(),true));
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Create new ' . $this->_modelName);
@@ -1378,7 +1378,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
      * @param   array $_data
-     * @return  integer number of updated records
+     * @return  array $this->_updateMultipleResult
      * 
      * @todo add param $_returnFullResults (if false, do not return updated records in 'results')
      */

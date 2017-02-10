@@ -44,6 +44,10 @@ Tine.Phone.PhoneTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         // create context menu
         var contextMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: [
                 this.grid.action_editPhoneSettings
             ],

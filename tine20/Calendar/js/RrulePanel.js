@@ -27,6 +27,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     
     layout: 'form',
     frame: true,
+    canonicalName: 'RecurrenceConfig',
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
@@ -446,8 +447,10 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.countRadio.render(countradioel);
         this.count.render(countel);
 
-        this.constrains.render(Ext.get(this.limitId + 'constraints'));
-        this.constrains.wrap.setWidth(260);
+        if (this.app.featureEnabled('featureRecurExcept')) {
+            this.constrains.render(Ext.get(this.limitId + 'constraints'));
+            this.constrains.wrap.setWidth(260);
+        }
     },
     
     onLimitRadioCheck: function(radio, checked) {

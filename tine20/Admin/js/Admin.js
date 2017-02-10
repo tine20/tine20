@@ -265,6 +265,7 @@ Tine.Admin = function () {
                    
                    if (! this.infoPanel) {
                        this.infoPanel = new Ext.Panel({
+                           canonicalName: 'ServerInfo',
                            html: response.html,
                            autoScroll: true
                        });

@@ -47,6 +47,8 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      * @cfg {Bool} disableSelectAllPages
      */
     disableSelectAllPages: false,
+
+    canonicalName: 'PagingToolbar',
     
     /**
      * @private

@@ -1614,6 +1614,7 @@ class Setup_Controller
             if ($_application->name == 'Tinebase') {
                 $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
                 if (count($installedApplications) !== 1) {
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installed apps: ' . print_r($installedApplications->name, true));
                     throw new Setup_Exception_Dependency('Failed to uninstall application "Tinebase" because of dependencies to other installed applications.');
                 }
             }

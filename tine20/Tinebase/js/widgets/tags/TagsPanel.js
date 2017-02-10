@@ -177,6 +177,10 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             }
             
             var menu = new Ext.menu.Menu({
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
+                }],
                 items: [
                     new Ext.Action({
                         scope: this,

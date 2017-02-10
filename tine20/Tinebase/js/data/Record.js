@@ -323,6 +323,8 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
 };
 
 Tine.Tinebase.data.Record.generateUID = function(length) {
+    length = length || 40;
+        
     var s = '0123456789abcdef',
         uuid = new Array(length);
     for(var i=0; i<length; i++) {

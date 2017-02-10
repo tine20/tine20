@@ -1308,6 +1308,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         // remove '/' from name as this might break paths
         $subject = preg_replace('/[\/]+/', '', $message->subject);
+        // remove possible harmful utf-8 chars
+        // TODO should not be enabled by default (configurable?)
+        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
         $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
 
         return $name;
@@ -1350,7 +1353,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 case 'body':
                     $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
                     $plainText = $completeMessage->getPlainTextBody();
-                    $description .= mb_substr($plainText, 0, 1000) . "\n";
+                    $description .= $plainText ."\n";
                     break;
                 case 'attachments':
                     foreach ((array) $message->{$field} as $attachment) {

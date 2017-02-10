@@ -34,23 +34,14 @@ Tine.Tinebase.widgets.form.UidTriggerField = Ext.extend(Ext.form.TriggerField, {
     },
 
     /**
-     * Shows trigger field if value is empty and hides if it is filled
-     */
-    manageTriggerField: function () {
-        this.setHideTrigger(this.getValue());
-    },
-
-    /**
      * Overrides setValue and shows trigger field if value is empty and hides if it is filled
-     * 
-     * @param Mixed
+     *
      * @return {Ext.form.Field} this
+     * @param value
      */
     setValue: function (value) {
-        var ret = Tine.Tinebase.widgets.form.UidTriggerField.superclass.setValue.call(this, value);
-
-        this.manageTriggerField();
-        return ret;
+        this.setHideTrigger(this.getValue());
+        return Tine.Tinebase.widgets.form.UidTriggerField.superclass.setValue.call(this, value);
     },
 
     /**

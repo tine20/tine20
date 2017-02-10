@@ -29,13 +29,10 @@ abstract class ImportTestCase extends TestCase
 
     /**
      * @var boolean
-     *
-     * TODO needed here?
      */
     protected $_deleteImportFile = true;
 
-    protected $_importerClassName = null;
-    protected $_exporterClassName = null;
+    protected $_importerClassName = 'Tinebase_Import_Csv_Generic';
     protected $_modelName = null;
     protected $_testContainer = null;
 
@@ -49,6 +46,11 @@ abstract class ImportTestCase extends TestCase
         if ($this->_testContainer) {
             Tinebase_Container::getInstance()->deleteContainer($this->_testContainer);
         }
+
+        // cleanup
+        if (file_exists($this->_filename) && $this->_deleteImportFile) {
+             unlink($this->_filename);
+        }
     }
 
     /**
@@ -60,18 +62,22 @@ abstract class ImportTestCase extends TestCase
      * @throws Tinebase_Exception_NotFound
      * @return array
      */
-    protected function _doImport(array $_options, $_definition, Tinebase_Model_Filter_FilterGroup $_exportFilter = NULL)
+    protected function _doImport(array $_options = array(), $_definition = null, Tinebase_Model_Filter_FilterGroup $_exportFilter = null)
     {
         if (! $this->_importerClassName || ! $this->_modelName) {
             throw new Tinebase_Exception_NotFound('No import class or model name given');
         }
 
-        $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
+        if ($_definition === null) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_modelName);
+        } else {
+            $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
+        }
         $this->_instance = call_user_func_array($this->_importerClassName . '::createFromDefinition' , array($definition, $_options));
 
         // export first
-        if ($_exportFilter !== NULL && $this->_exporterClassName) {
-            $exporter = new $this->_exporterClassName($_exportFilter, Tinebase_Core::getApplicationInstance($this->_modelName));
+        if ($_exportFilter !== NULL) {
+            $exporter = Tinebase_Export::factory($_exportFilter, 'csv', Tinebase_Core::getApplicationInstance($this->_modelName));
             $this->_filename = $exporter->generate();
         }
 

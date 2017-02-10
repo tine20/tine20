@@ -355,6 +355,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: [
                 this.action_reply,
                 this.action_replyAll,
@@ -419,6 +423,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 plugins: [{
                                     ptype: 'ux.itemregistry',
                                     key:   'Tine.widgets.grid.GridPanel.addButton'
+                                },{
+                                    ptype: 'ux.itemregistry',
+                                    key:   'Tinebase-MainContextMenu'
                                 }]
                             })
                         }),

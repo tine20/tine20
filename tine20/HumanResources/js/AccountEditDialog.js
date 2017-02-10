@@ -49,7 +49,11 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
             return;
         }
         Tine.HumanResources.AccountEditDialog.superclass.onRecordLoad.call(this);
-        this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1} - {2}'), this.i18nRecordName, Ext.util.Format.htmlEncode(this.record.get('employee_id').n_fn), this.record.get('year')));
+
+        var employee = this.record.get('employee_id'),
+            name = employee ? employee.n_fn : 'unknown';
+
+        this.window.setTitle(String.format(this.app.i18n._('Edit {0} for {1} - {2}'), this.i18nRecordName, Ext.util.Format.htmlEncode(name), this.record.get('year')));
     },
 
     /**

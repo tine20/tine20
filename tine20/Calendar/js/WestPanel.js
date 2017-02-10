@@ -23,13 +23,15 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     
     cls: 'cal-tree',
-    
+    canonicalName: 'Event',
+
     getAdditionalItems: function() {
         return [
             Ext.apply(this.getAttendeeFilter(), this.defaults),
             
             Ext.apply({
                 title: this.app.i18n._('Mini Calendar'),
+                canonicalName: 'MiniDatePicker',
                 forceLayout: true,
                 border: false,
                 layout: 'hbox',
@@ -86,6 +88,7 @@ Tine.Calendar.WestPanel = Ext.extend(Tine.widgets.mainscreen.WestPanel, {
     getAttendeeFilter: function() {
         if (! this.attendeeFilter) {
             this.attendeeFilter = new Tine.Calendar.AttendeeFilterGrid({
+                canonicalName: 'AttendeeFilter',
                 autoHeight: true,
                 title: this.app.i18n._('Attendee')
             });

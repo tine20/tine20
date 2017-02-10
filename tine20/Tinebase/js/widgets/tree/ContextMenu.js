@@ -185,6 +185,10 @@ Tine.widgets.tree.ContextMenu = {
         /******************* return menu **********************/
         
         return new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: items
         });
     },
