@@ -609,4 +609,34 @@ class Tinebase_Application
 
         return $models;
     }
+
+    /**
+     * extract model and app name from model name
+     *
+     * @param      $modelOrApplication
+     * @param null $model
+     * @return array
+     */
+    public static function extractAppAndModel($modelOrApplication, $model = null)
+    {
+        // modified (some model names can have both . and _ in their names and we should treat them as JS model name
+        if (strpos($modelOrApplication, '_') && ! strpos($modelOrApplication, '.')) {
+            // got (complete) model name name as first param
+            list($appName, /*$i*/, $modelName) = explode('_', $modelOrApplication, 3);
+        } else if (strpos($modelOrApplication, '.')) {
+            // got (complete) model name name as first param (JS style)
+            list(/*$j*/, $appName, /*$i*/, $modelName) = explode('.', $modelOrApplication, 4);
+        } else {
+            $appName = $modelOrApplication;
+            $modelName = $model;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Extracted appName: ' . $appName . ' modelName: ' . $modelName);
+
+        return array(
+            'appName'   => $appName,
+            'modelName' => $modelName
+        );
+    }
 }

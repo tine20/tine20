@@ -20,6 +20,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     autoExpandColumn: 'user_id',
     clicksToEdit: 1,
     enableHdMenu: false,
+    canonicalName: 'AttendeeGrid',
     
     /**
      * @cfg defaut text for new attendee combo
@@ -443,6 +444,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 plugins = [{
                     ptype: 'ux.itemregistry',
                     key:   'Attendee-GridPanel-ContextMenu'
+                }, {
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
                 }];
             }
             

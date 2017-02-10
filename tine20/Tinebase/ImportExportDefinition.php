@@ -144,7 +144,11 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         if (! $cache->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Generate new Zend_Config_Xml object' . $cacheId);
-            $config = new Zend_Config_Xml($_definition->plugin_options, /* section = */ null, /* runtime mods allowed = */ true);
+
+            $xmlConfig = (empty($_definition->plugin_options))
+                ? '<?xml version="1.0" encoding="UTF-8"?><config></config>'
+                : $_definition->plugin_options;
+            $config = new Zend_Config_Xml($xmlConfig, /* section = */ null, /* runtime mods allowed = */ true);
             $cache->save($config, $cacheId);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -224,5 +228,42 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 $this->update($definition);
             }
         }
+    }
+
+    /**
+     * get generic import definition
+     *
+     * @param string $application
+     * @param $model
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    public function getGenericImport($model)
+    {
+        $extract = Tinebase_Application::extractAppAndModel($model);
+        $appName = $extract['appName'];
+
+        $xmlOptions = '<?xml version="1.0" encoding="UTF-8"?>
+        <config>
+            <headline>1</headline>
+            <dryrun>0</dryrun>
+            <delimiter>,</delimiter>
+            <extension>csv</extension>
+        </config>';
+        $definition = new Tinebase_Model_ImportExportDefinition(array(
+            'application_id'              => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId(),
+            'name'                        => $model . '_tine_generic_import_csv',
+            // TODO translate
+            'label'                       => 'Tine 2.0 ' . $model . ' import',
+            'type'                        => 'import',
+            'model'                       => $model,
+            'plugin'                      => 'Tinebase_Import_Csv_Generic',
+            'headline'                    => 1,
+            'delimiter'                   => ',',
+            'plugin_options'              => $xmlOptions,
+//            'description'                 => $config->description,
+//            'filename'                    => $basename,
+        ));
+
+        return $definition;
     }
 }

@@ -69,10 +69,16 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * @type Objcet resutls of the last import request
      */
     lastImportResponse: null,
-    
+
+    /**
+     * canonical name
+     * @cfg {String} canonicalName
+     */
+    canonicalName: 'ImportDialog',
+
     // private config overrides
     windowNamePrefix: 'ImportWindow_',
-    
+
     /**
      * init import wizard
      */
@@ -123,6 +129,20 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
         this.items = this.getItems();
 
         Tine.widgets.dialog.ImportDialog.superclass.initComponent.call(this);
+    },
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        if (this.recordClass) {
+            return ['',
+                this.recordClass.getMeta('appName'),
+                this.canonicalName,
+                this.recordClass.getMeta('modelName'),
+            ].join(Tine.Tinebase.CanonicalPath.separator);
+        }
     },
 
     getItems: function() {
@@ -230,6 +250,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             xtype: 'ux.displaypanel',
             frame: true,
             ref: '../filePanel',
+            canonicalName: 'ImportFileAndFormat',
             items: [{
                 xtype: 'panel',
                 baseCls: 'ux-subformpanel',
@@ -343,6 +364,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             xtype: 'form',
             frame: true,
             ref: '../optionsPanel',
+            canonicalName: 'ImportOptions',
             items: [{
                 xtype: 'label',
                 html: '<p>' + String.format(i18n._('Select {0} to add you {1} to:'), this.recordClass.getContainerName(), this.recordClass.getRecordsName()) + '</p>'
@@ -363,6 +385,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 },
                 requiredGrant: false // 'add' ?
             }), new Tine.widgets.tags.TagPanel({
+                canonicalName: 'ImportTags',
                 app: this.appName,
                 ref: '../tagsPanel',
                 style: 'margin-top: 15px; border: 1px solid silver; border-top: none;',
@@ -438,6 +461,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             xtype: 'form',
             frame: true,
             ref: '../conflictsPanel',
+            canonicalName: 'ImportResolveConflicts',
             items: [/*{
                 xtype: 'label',
                 ref: '../conflictsLabel',
@@ -637,6 +661,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             frame: true,
             ref: '../summaryPanel',
             autoScroll: true,
+            canonicalName: 'ImportSummary',
             items: [{
                 height: 100,
                 ref: '../summaryPanelInfo',

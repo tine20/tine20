@@ -16,7 +16,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
     protected $_deletePersonalContacts = false;
 
     protected $_importerClassName = 'Addressbook_Import_Csv';
-    protected $_exporterClassName = 'Addressbook_Export_Csv';
     protected $_modelName = 'Addressbook_Model_Contact';
 
     /**
@@ -39,11 +38,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     protected function tearDown()
     {
-        // cleanup
-        if (file_exists($this->_filename) && $this->_deleteImportFile) {
-            unlink($this->_filename);
-        }
-        
         if ($this->_deletePersonalContacts) {
             Addressbook_Controller_Contact::getInstance()->deleteByFilter(new Addressbook_Model_ContactFilter(array(array(
                 'field' => 'container_id', 'operator' => 'equals', 'value' => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId()

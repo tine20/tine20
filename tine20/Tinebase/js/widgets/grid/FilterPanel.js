@@ -481,6 +481,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
                 };
             }
 
+            quickfilterConfig.canonicalName = 'QuickSearchBox';
             this.quickFilterGroup = new Ext.ButtonGroup(quickfilterConfig);
         }
         

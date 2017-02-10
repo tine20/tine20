@@ -49,8 +49,24 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.Sales.AddressEditDialog.superclass.initComponent.call(this);
+
+        // code expect fixedFields to be present
+        if (! this.fixedFields) {
+            this.fixedFields = new Ext.util.MixedCollection();
+        }
     },
-    
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        return [
+            this.supr().getCanonicalPathSegment.call(this),
+            Ext.util.Format.capitalize(this.addressType)
+        ].join(Tine.Tinebase.CanonicalPath.separator);
+    },
+
     /**
      * executed after record got updated from proxy
      * 
@@ -68,11 +84,11 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.record.set('customer_id', this.fixedFields.get('customer_id'));
-        this.record.set('type',        this.fixedFields.get('type').toLowerCase());
+        this.record.set('type',        String(this.fixedFields.get('type')).toLowerCase());
         
         Tine.Sales.AddressEditDialog.superclass.onRecordLoad.call(this);
         
-        if (this.fixedFields.get('type').toLowerCase() == 'billing') {
+        if (String(this.fixedFields.get('type')).toLowerCase() == 'billing') {
             this.i18nRecordName = this.app.i18n._('Billing Address');
             this.i18nRecordsName = this.app.i18n._('Billing Addresses');
         } else {
@@ -85,7 +101,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var l = this.record.get('locality') ? ' (' + this.record.get('locality') + ')' : '';
             this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, c.name + l));
         } else if (! this.record.id) {
-            if (this.fixedFields.get('type').toLowerCase() == 'billing') {
+            if (String(this.fixedFields.get('type')).toLowerCase() == 'billing') {
                 this.window.setTitle(this.app.i18n._('Add new Billing Address'));
             } else {
                 this.window.setTitle(this.app.i18n._('Add new Delivery Address'));
@@ -101,7 +117,7 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Sales.AddressEditDialog.superclass.onRecordUpdate.call(this);
         
-        this.record.set('type',        this.fixedFields.get('type').toLowerCase());
+        this.record.set('type',        String(this.fixedFields.get('type')).toLowerCase());
         this.record.set('customer_id', this.fixedFields.get('customer_id'));
     },
     

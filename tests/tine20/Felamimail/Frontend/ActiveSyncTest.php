@@ -352,10 +352,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * 
      * @see 0008572: email reply text garbled
      */
-    public function testSendBase64DecodedMessage ()
+    public function testSendBase64DecodedMessage()
     {
-        $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
-        
         $messageId = '<j4wxaho1t8ggvk5cef7kqc6i.1373048280847@email.android.com>';
         
         $email = '<?xml version="1.0" encoding="utf-8"?>
@@ -382,9 +380,56 @@ dGVzdAo=&#13;
     }
 
     /**
+     * Test whether Base64Decoded Messages can be send or not
+     *
+     * @see 0012320: Too much linebreaks using Nine Client
+     */
+    public function testSendBase64DecodedMessageNine()
+    {
+        $messageId = '<j4wxaho1t8ggvk5cef7kqc6i.1373048280847@email.android.com>';
+
+        $email = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SendMail xmlns="uri:ComposeMail">
+  <ClientId>36d4de51-539a-4dd3-a54f-7891e5bf053a-1</ClientId>
+  <SaveInSentItems/>
+  <Mime>Date: Thu, 01 Dec 2016 14:30:32 +0100&#13;
+Subject: Test Mail&#13;
+Message-ID: ' . htmlspecialchars($messageId) . '&#13;
+From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+MIME-Version: 1.0&#13;
+Content-Type: multipart/alternative; boundary=--_com.ninefolders.hd3.email_118908611723655_alt&#13;
+&#13;
+----_com.ninefolders.hd3.email_118908611723655_alt&#13;
+Content-Type: text/plain; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+SGksClBsZWFzZSBUaW5lMjAgYW5zd2VyIG1lLgpCZXN0CgoKCg==&#13;
+----_com.ninefolders.hd3.email_118908611723655_alt&#13;
+Content-Type: text/html; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+PGRpdiBzdHlsZT0iZm9udC1mYW1pbHk6SGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZjsgZm9u&#13;
+dC1zaXplOjEyLjBwdDsgbGluZS1oZWlnaHQ6MS4zOyBjb2xvcjojMDAwMDAwIj5IaSw8YnI+UGxl&#13;
+YXNlIFRpbmUyMCBhbnN3ZXIgbWUuPGJyPkJlc3Q8YnI+PGJyPjxkaXYgaWQ9InNpZ25hdHVyZS14&#13;
+IiBzdHlsZT0iLXdlYmtpdC11c2VyLXNlbGVjdDpub25lOyBmb250LWZhbWlseTpIZWx2ZXRpY2Es&#13;
+IEFyaWFsLCBzYW5zLXNlcmlmOyBmb250LXNpemU6MTIuMHB0OyBjb2xvcjojMDAwMDAwIiBjbGFz&#13;
+cyA9ICJzaWduYXR1cmVfZWRpdG9yIj48ZGl2Pjxicj48L2Rpdj48L2Rpdj48L2Rpdj4gPGJyIHR5&#13;
+cGU9J2F0dHJpYnV0aW9uJz4=&#13;
+----_com.ninefolders.hd3.email_118908611723655_alt--&#13;
+</Mime>
+</SendMail>';
+
+        $stringToCheck = 'Please Tine20 answer me.';
+
+        $this->_sendMailTestHelper($email, $messageId, $stringToCheck, "Syncroton_Command_SendMail");
+    }
+
+    /**
      * @see 0011556: sending mails to multiple recipients fails
      */
-    public function testSendMessageToMultipleRecipients ()
+    public function testSendMessageToMultipleRecipients()
     {
         $controller = $this->_getController($this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID_40));
 

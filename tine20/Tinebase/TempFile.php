@@ -215,7 +215,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      */
     public function joinTempFiles($_tempFiles)
     {
-        $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
+        $path = self::getTempPath();
         $name = preg_replace('/\.\d+\.chunk$/', '', $_tempFiles->getFirstRecord()->name);
         $type = $_tempFiles->getFirstRecord()->type;
         $size = 0.0;

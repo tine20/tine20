@@ -557,19 +557,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         /** @var Addressbook_Model_Contact $_record */
         /** @var Addressbook_Model_Contact $_oldRecord */
 
-        // do update of geo data only if one of address field changed
-        $addressDataChanged = FALSE;
-        foreach ($this->_addressFields as $field) {
-               if (
-                   ($_record->{'adr_one_' . $field} != $_oldRecord->{'adr_one_' . $field}) ||
-                   ($_record->{'adr_two_' . $field} != $_oldRecord->{'adr_two_' . $field})
-               ) {
-                $addressDataChanged = TRUE;
-                break;
-            }
-        }
-        
-        if ($addressDataChanged) {
+        if ($this->_doUpdateGeoData($_record, $_oldRecord)) {
             $this->_setGeoData($_record);
         }
         
@@ -610,6 +598,50 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
+    }
+
+    /**
+     * do update of geo data only if one of address field changed
+     *
+     * @param $record
+     * @param $oldRecord
+     * @return bool
+     */
+    protected function _doUpdateGeoData($record, $oldRecord)
+    {
+        if (! $this->_setGeoDataForContacts) {
+            return false;
+        }
+
+        $addressDataChanged = false;
+        $addrOneEmpty = true;
+        $addrTwoEmpty = true;
+        foreach ($this->_addressFields as $field) {
+            if (
+                ($record->{'adr_one_' . $field} != $oldRecord->{'adr_one_' . $field}) ||
+                ($record->{'adr_two_' . $field} != $oldRecord->{'adr_two_' . $field})
+            ) {
+                $addressDataChanged = true;
+                break;
+            }
+            if ($addrOneEmpty && ! empty($record->{'adr_one_' . $field})) {
+                $addrOneEmpty = false;
+            }
+            if ($addrTwoEmpty && ! empty($record->{'adr_two_' . $field})) {
+                $addrTwoEmpty = false;
+            }
+        }
+        if ($addressDataChanged) {
+            return true;
+        }
+        if (! $addrOneEmpty && empty($record->adr_one_lat)) {
+            return true;
+        }
+        if (! $addrTwoEmpty && empty($record->adr_one_lat)) {
+            return true;
+        }
+
+        return false;
     }
     
     /**

@@ -58,7 +58,24 @@ Tine.Sales.AddressGridPanel = Ext.extend(Tine.widgets.grid.BbarGridPanel, {
         
         Tine.Sales.AddressGridPanel.superclass.initComponent.call(this);
     },
-    
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        var pathSegment = '';
+        if (this.canonicalName) {
+            // simple segment e.g. when used in a dialog
+            pathSegment = this.canonicalName;
+        } else if (this.recordClass) {
+            // auto segment
+            pathSegment = [this.recordClass.getMeta('modelName'), Ext.util.Format.capitalize(this.addressType), 'Grid'].join(Tine.Tinebase.CanonicalPath.separator);
+        }
+
+        return pathSegment;
+    },
+
     /**
      * called from this.clipboardAction
      * 

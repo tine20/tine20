@@ -1,14 +1,15 @@
 {
   "name": "tine20_tinebase",
   "private": true,
+  "main": "Tinebase.js",
   "dependencies": {
     "html2canvas": "^0.5.0-beta4",
     "jquery": "^2.1.4",
-    "lodash": "3.x",
-    "postal": "2.0.0",
-    "postal.federation": ">=0.5.2",
-    "postal.request-response": ">=0.3.1",
-    "postal.xwindow": "tine20/postal.xwindow"
+    "lodash": "^4.17.4",
+    "postal": "^2.0.5",
+    "postal.federation": "github:tine20/postal.federation",
+    "postal.request-response": "github:tine20/postal.request-response",
+    "postal.xwindow": "github:tine20/postal.xwindow"
   },
   "devDependencies": {
     "css-loader": "^0.26.1",

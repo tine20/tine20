@@ -28,6 +28,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
     layout      : 'fit',
     border      : true,
     frame       : true,
+    canonicalName: 'AlarmGrid',
     
     
     initComponent: function() {

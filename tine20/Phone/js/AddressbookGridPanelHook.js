@@ -29,6 +29,11 @@ Tine.Phone.AddressbookGridPanelHook = function(config) {
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
     this.phoneMenu = new Ext.menu.Menu({
+        items: [],
+        plugins: [{
+            ptype: 'ux.itemregistry',
+            key:   'Tinebase-MainContextMenu'
+        }]
     });
     
     this.callContactAction = new Ext.Action({

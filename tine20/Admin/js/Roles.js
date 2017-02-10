@@ -36,7 +36,7 @@ Tine.Admin.Roles.Main = {
          * onclick handler for editBtn
          */
         editRole: function(_button, _event) {
-            var selectedRows = Ext.getCmp('AdminRolesGrid').getSelectionModel().getSelections();
+            var selectedRows = this.gridPanel.getSelectionModel().getSelections();
             this.openEditWindow(selectedRows[0]);
         },
 
@@ -48,7 +48,7 @@ Tine.Admin.Roles.Main = {
                 if (_button == 'yes') {
                 
                     var roleIds = new Array();
-                    var selectedRows = Ext.getCmp('AdminRolesGrid').getSelectionModel().getSelections();
+                    var selectedRows = this.gridPanel.getSelectionModel().getSelections();
                     for (var i = 0; i < selectedRows.length; ++i) {
                         roleIds.push(selectedRows[i].id);
                     }
@@ -63,7 +63,7 @@ Tine.Admin.Roles.Main = {
                         },
                         text: this.translation.gettext('Deleting role(s)...'),
                         success: function(_result, _request){
-                            Ext.getCmp('AdminRolesGrid').getStore().reload();
+                            this.gridPanel.getStore().reload();
                         },
                         failure: function(result, request){
                             Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.'));
@@ -143,7 +143,7 @@ Tine.Admin.Roles.Main = {
             emptyText: i18n._hidden('enter searchfilter')
         });
         RolesQuickSearchField.on('change', function(){
-            Ext.getCmp('AdminRolesGrid').getStore().load({
+            this.gridPanel.getStore().load({
                 params: {
                     start: 0,
                     limit: this.pageSize
@@ -152,7 +152,7 @@ Tine.Admin.Roles.Main = {
         }, this);
         
         this.rolesToolbar = new Ext.Toolbar({
-            id: 'AdminRolesToolbar',
+            canonicalName: ['Role', 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
             split: false,
             items: [{
                 // create buttongroup to be consistent
@@ -268,7 +268,7 @@ Tine.Admin.Roles.Main = {
         
         // the gridpanel
         this.gridPanel = new Ext.grid.GridPanel({
-            id: 'AdminRolesGrid',
+            canonicalName: ['Role', 'Grid'].join(Tine.Tinebase.CanonicalPath.separator),
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -293,7 +293,11 @@ Tine.Admin.Roles.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuRoles', 
+                    id: 'ctxMenuRoles',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editRole,
                         this.actions.deleteRole,
@@ -321,7 +325,7 @@ Tine.Admin.Roles.Main = {
      */
     loadData: function() 
     {
-        var dataStore = Ext.getCmp('AdminRolesGrid').getStore();
+        var dataStore = this.gridPanel.getStore();
         dataStore.load({ params: { start: 0, limit: this.pageSize } });
     },
 
@@ -336,10 +340,10 @@ Tine.Admin.Roles.Main = {
 
         this.loadData();
     },
-    
-    reload: function() {
-        if(Ext.ComponentMgr.all.containsKey('AdminRolesGrid')) {
-            setTimeout ("Ext.getCmp('AdminRolesGrid').getStore().reload()", 200);
+
+    reload: function () {
+        if (this.gridPanel) {
+            this.gridPanel.getStore().reload.defer(200, this.gridPanel.getStore());
         }
     }
 };
