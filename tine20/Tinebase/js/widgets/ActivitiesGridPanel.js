@@ -44,6 +44,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     border: true,
     autoScroll: true,
     layout: 'fit',
+    canonicalName: 'NotesGrid',
 
     store: null,
 
@@ -56,8 +57,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.record = this.editDialog.record;
         this.app = this.editDialog.app;
         this.title = this.i18nTitle = i18n._('Notes');
-
-        this.id = this.id + Ext.id();
 
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
@@ -270,6 +269,10 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         //@todo make tine edit notes if client sents modified data
         this.contextMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: [
                 //this.action_edit,
                 this.action_remove

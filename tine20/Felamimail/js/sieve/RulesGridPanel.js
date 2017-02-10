@@ -253,7 +253,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onStoreBeforeload: function(store, options) {
         Tine.Felamimail.sieve.RulesGridPanel.superclass.onStoreBeforeload.call(this, store, options);
         
-        options.params.filter = this.account.id;
+        options.params.filter = this.account ? this.account.id : '';
     },
     
     /**

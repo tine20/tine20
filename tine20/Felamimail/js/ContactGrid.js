@@ -165,13 +165,15 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {Void}
      */
     onContactStoreLoad: function(store, records, options) {
-        Ext.each(records, function(record) {
-            Ext.each(['to', 'cc', 'bcc'], function(type) {
-                if (this.messageRecord.data[type].indexOf(Tine.Felamimail.getEmailStringFromContact(record)) !== -1) {
-                    this.setTypeRadio(record, type);
-                }
+        if (Ext.isRecord(this.messageRecord) && Ext.isArray(this.messageRecord.data[type])) {
+            Ext.each(records, function (record) {
+                Ext.each(['to', 'cc', 'bcc'], function (type) {
+                    if (this.messageRecord.data[type].indexOf(Tine.Felamimail.getEmailStringFromContact(record)) !== -1) {
+                        this.setTypeRadio(record, type);
+                    }
+                }, this);
             }, this);
-        }, this);
+        }
     },
     
     /**
@@ -393,7 +395,13 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
                 this.actions_addAsBcc,
                 this.actions_setToNone
             ];
-            this.contextMenu = new Ext.menu.Menu({items: items});
+            this.contextMenu = new Ext.menu.Menu({
+                items: items,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
+                }]
+            });
         }
         return this.contextMenu;
     }

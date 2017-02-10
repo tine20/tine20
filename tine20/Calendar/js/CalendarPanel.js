@@ -30,7 +30,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     layout: 'fit',
     autoScroll: false,
     autoWidth: false,
-    
     /**
      * @private
      */

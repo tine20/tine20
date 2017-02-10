@@ -112,7 +112,7 @@ Tine.Tinebase.tineInit = {
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
-            } else if (window.isMainWindow && e.ctrlKey && e.getKey() === e.L) {
+            } else if (window.isMainWindow && e.ctrlKey && (e.getKey() === e.L || e.getKey() === e.DELETE)) {
                 // reload on ctrl-l
                 Tine.Tinebase.common.reload({
                     clearCache: true
@@ -125,6 +125,14 @@ Tine.Tinebase.tineInit = {
             e.stopPropagation();
             e.preventDefault();
             e.browserEvent.dataTransfer.dropEffect = 'none';
+        }, this);
+
+        // generic context menu
+        Ext.getBody().on('contextmenu', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            Tine.Tinebase.MainContextMenu.showIf(e);
         }, this);
     },
 

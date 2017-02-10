@@ -228,6 +228,10 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             plugins: [new Ext.ux.file.BrowsePlugin({})]
         });
         this.ctxMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: [upload, {
                 text: i18n._('Crop Image'),
                 iconCls: 'action_cropImage',

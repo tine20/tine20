@@ -447,6 +447,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 plugins: [{
                                     ptype: 'ux.itemregistry',
                                     key:   'Tine.widgets.grid.GridPanel.addButton'
+                                }, {
+                                    ptype: 'ux.itemregistry',
+                                    key:   'Tinebase-MainContextMenu'
                                 }]
                             })
                         }) : 

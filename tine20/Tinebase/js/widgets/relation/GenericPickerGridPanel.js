@@ -98,6 +98,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     layout: 'fit',
     stateful: true,
     stateId: 'widgets-relation-genereic-picker-grid',
+    canonicalName: 'RelationsGrid',
 
     /**
      * initializes the component

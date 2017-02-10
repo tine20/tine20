@@ -50,7 +50,18 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.i18nRecordName = this.app.i18n._('Sieve Filter Rules');
     },
-    
+
+    /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        return ['',
+            this.appName,
+            'EditDialog',
+        ].join(Tine.Tinebase.CanonicalPath.separator);
+    },
+
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * 
@@ -79,7 +90,8 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        var title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name'));
+        var accountName = this.account ? this.account.get('name') : 'unknown',
+            title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), accountName);
         this.window.setTitle(title);
         
         this.loadMask.hide();

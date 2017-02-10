@@ -26,6 +26,7 @@ class ExampleApplication_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ExampleApplication All Tests');
         
         $suite->addTestSuite('ExampleApplication_JsonTest');
+        $suite->addTestSuite('ExampleApplication_ImportTest');
         return $suite;
     }
 }

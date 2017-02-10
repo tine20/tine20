@@ -367,4 +367,54 @@ class Tinebase_Helper
     {
         return preg_replace('/[^\x09\x0A\x0D\x20-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]/u', '', $string);
     }
+
+    /**
+     * fetches contents from file or uri
+     *
+     * @param string $source
+     * @return string|null
+     */
+    public static function getFileOrUriContents($filenameOrUrl)
+    {
+        if (strpos($filenameOrUrl, 'http') === 0) {
+            try {
+                $client = new Zend_Http_Client($filenameOrUrl);
+                // 0011054: Problems with ScheduledImport of external ics calendars
+                // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
+                $client->setHeaders('Accept-encoding', 'identity');
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Fetching content from ' . $filenameOrUrl);
+
+                $requestBody = $client->request()->getBody();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $requestBody = null;
+            }
+            return $requestBody;
+        } else if (file_exists($filenameOrUrl)) {
+            return file_get_contents($filenameOrUrl);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
+                    . ' File not found');
+
+            return null;
+        }
+    }
+
+    /**
+     * @param $content
+     * @return null|string filename
+     */
+    public static function writeToTempFile($content)
+    {
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $file = fopen($tempPath);
+        if ($file) {
+            fwrite($file, $content);
+            return $tempPath;
+        }
+
+        return null;
+    }
 }

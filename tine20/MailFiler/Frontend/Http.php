@@ -49,13 +49,13 @@ class MailFiler_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * download email attachment
      *
      * @param  string  $path
-     * @param  string  $messageId
+     * @param  string  $nodeId
      * @param  string  $partId
      */
-    public function downloadAttachment($path, $messageId, $partId)
+    public function downloadAttachment($path, $nodeId, $partId)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Downloading Attachment ' . $partId . ' of message with uid ' . $messageId . ' in path ' . $path
+            . ' Downloading Attachment ' . $partId . ' of node with id ' . $nodeId . ' in path ' . $path
         );
 
         // remove filename from path
@@ -70,9 +70,9 @@ class MailFiler_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 'value'    => $path
             ),
             array(
-                'field'    => 'messageuid',
+                'field'    => 'id',
                 'operator' => 'equals',
-                'value'    => $messageId
+                'value'    => $nodeId
         ));
         $node = MailFiler_Controller_Node::getInstance()->search(new MailFiler_Model_NodeFilter($filter))->getFirstRecord();
 

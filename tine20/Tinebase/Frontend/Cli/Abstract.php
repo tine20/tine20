@@ -344,7 +344,7 @@ class Tinebase_Frontend_Cli_Abstract
                 echo "Doing dry run.\n";
             }
         }
-        
+
         if ((isset($args['definition']) || array_key_exists('definition', $args)))  {
             if (preg_match("/\.xml/", $args['definition'])) {
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
@@ -361,8 +361,12 @@ class Tinebase_Frontend_Cli_Abstract
             $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else if ((isset($args['plugin']) || array_key_exists('plugin', $args))) {
             $importer =  new $args['plugin']($args);
+        } else if (isset($args['model'])) {
+            // use generic import
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($args['model']);
+            $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else {
-            echo "You need to define a plugin OR a definition at least! \n";
+            echo "You need to define a plugin OR a definition OR a model at least! \n";
             exit;
         }
         

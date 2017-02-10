@@ -53,6 +53,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
     border: true,
     autoScroll: true,
     layout: 'fit',
+    canonicalName: 'AttachmentsGrid',
 
     /**
      * initializes the component

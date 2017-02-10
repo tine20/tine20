@@ -164,6 +164,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         var contextItems = [this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
+            plugins: [{
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }],
             items: contextItems.concat(this.contextMenuItems)
         });
         

@@ -12,26 +12,24 @@ var baseDir  = path.resolve(__dirname , '../../'),
 fs.readdirSync(baseDir).forEach(function(baseName) {
     var entryFile = '';
 
-    // try jsb2 file
     try {
-        var jsb2File = baseName + '/' + baseName + '.jsb2';
-        if (fs.statSync(baseDir + '/' + jsb2File).isFile()) {
-            entryFile = baseDir + '/' + jsb2File;
+        // try npm package.json
+        var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
+        entryFile = baseDir + '/' + baseName + '/js/' + (pkgDef.main ? pkgDef.main : 'index.js');
+
+    } catch (e) {
+        // fallback to legacy jsb2 file
+        var jsb2File = baseDir + '/' + baseName + '/' + baseName + '.jsb2';
+        if (! entryFile) {
+            try {
+                if (fs.statSync(jsb2File).isFile()) {
+                    ;
+                    entryFile = jsb2File;
+                }
+            } catch (e) {}
         }
+    }
 
-        if (baseName == 'Tinebase') {
-            entryFile = __dirname + '/Tinebase.js';
-        }
-    } catch (e) {}
-
-
-    //// try generic app js instead
-    //try {
-    //    var entry = baseName + '/js/' + baseName + '.js';
-    //    if (fs.statSync(baseDir + jsb2File).isFile()) {
-    //        console.log(entry);
-    //    }
-    //} catch (e) {}
     if (entryFile /* && (baseName == 'Admin')*/) {
         entry[baseName + '/js/' + baseName] = entryFile;
     }

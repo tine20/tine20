@@ -43,7 +43,7 @@ Tine.Tinebase.MainScreenPanel = Ext.extend(Ext.Panel, {
 
         this.supr().initComponent.apply(this, arguments);
     },
-    
+
     /**
      * @private
      */

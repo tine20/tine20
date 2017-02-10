@@ -50,6 +50,19 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     },
 
     /**
+     * returns canonical path part
+     * @returns {string}
+     */
+    getCanonicalPathSegment: function () {
+        if (this.app) {
+            return ['',
+                this.app.name,
+                'MainScreen'
+            ].join(Tine.Tinebase.CanonicalPath.separator);
+        }
+    },
+
+    /**
      * @private
      */
     initLayout: function() {
@@ -336,6 +349,16 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     showNorthPanel: function() {
         this.setActiveToolbar(this.getNorthPanel(this.getActiveContentType()), true);
+    },
+
+    /**
+     * sets the active content type
+     *
+     * @param {String} contentType to activate
+     */
+    setActiveContentType: function(contentType) {
+        this.activeContentType = contentType;
+        this.activate();
     },
 
     /**

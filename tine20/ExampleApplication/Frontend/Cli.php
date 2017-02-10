@@ -16,7 +16,7 @@
  * @package     ExampleApplication
  * @subpackage  Frontend
  */
-class ExampleApplication_Frontend_Cli
+class ExampleApplication_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
@@ -51,5 +51,15 @@ class ExampleApplication_Frontend_Cli
                 echo "$param \t $description \n";
             }
         }
+    }
+
+    /**
+     * import contacts
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function import($_opts)
+    {
+        parent::_import($_opts);
     }
 }

@@ -47,19 +47,22 @@ Ext.extend(Tine.Tinebase.StateProvider, Ext.state.Provider, {
     
     // private
     set: function(name, value) {
-        if(typeof value == "undefined" || value === null){
+        if (typeof value == "undefined" || value === null) {
             this.clear(name);
             return;
         }
-        
-        var encodedValue = this.encodeValue(value);
-        // persistent save
-        Tine.Tinebase.setState(name, encodedValue);
-        
-        // store back in registry (as needed for popups)
-        var stateInfo = Tine.Tinebase.registry.get('stateInfo');
-        stateInfo[name] = encodedValue;
-        
+
+        var stateInfo = Tine.Tinebase.registry.get('stateInfo'),
+            encodedValue = this.encodeValue(value);
+
+        if (stateInfo[name] != encodedValue) {
+            // persistent save
+            Tine.Tinebase.setState(name, encodedValue);
+
+            // store back in registry (as needed for popups)
+            stateInfo[name] = encodedValue;
+        }
+
         Tine.Tinebase.StateProvider.superclass.set.call(this, name, value);
     }
 });

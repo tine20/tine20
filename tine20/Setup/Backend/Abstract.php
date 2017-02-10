@@ -306,7 +306,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      */
     public function columnExists($_columnName, $_tableName)
     {
-        $columns = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $_tableName, $this->_db); 
+        // read description from database
+        $columns = $this->_db->describeTable(SQL_TABLE_PREFIX . $_tableName);
         return (isset($columns[$_columnName]) || array_key_exists($_columnName, $columns));
     }
     

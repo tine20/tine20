@@ -45,7 +45,7 @@ Tine.Admin.Tags.Main = {
          * onclick handler for editBtn
          */
         editTag: function (button, event) {
-            var selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
+            var selectedRows = this.gridPanel.getSelectionModel().getSelections();
             Tine.Admin.Tags.EditDialog.openWindow({
                 tag: selectedRows[0],
                 listeners: {
@@ -65,7 +65,7 @@ Tine.Admin.Tags.Main = {
                 if (button === 'yes') {
                 
                     var tagIds = [],
-                        selectedRows = Ext.getCmp('AdminTagsGrid').getSelectionModel().getSelections();
+                        selectedRows = this.gridPanel.getSelectionModel().getSelections();
                         
                     for (var i = 0; i < selectedRows.length; ++i) {
                         tagIds.push(selectedRows[i].id);
@@ -81,7 +81,7 @@ Tine.Admin.Tags.Main = {
                         },
                         text: this.translation.gettext('Deleting tag(s)...'),
                         success: function (result, request) {
-                            Ext.getCmp('AdminTagsGrid').getStore().reload();
+                            this.gridPanel.getStore().reload();
                         }
                     });
                 }
@@ -137,7 +137,7 @@ Tine.Admin.Tags.Main = {
         });
         
         TagsQuickSearchField.on('change', function () {
-            Ext.getCmp('AdminTagsGrid').getStore().load({
+            this.gridPanel.getStore().load({
                 params: {
                     start: 0,
                     limit: this.pageSize
@@ -146,7 +146,7 @@ Tine.Admin.Tags.Main = {
         }, this);
         
         this.tagsToolbar = new Ext.Toolbar({
-            id: 'AdminTagsToolbar',
+            canonicalName: ['Tag', 'ActionToolbar'].join(Tine.Tinebase.CanonicalPath.separator),
             split: false,
             //height: 26,
             items: [{
@@ -256,7 +256,7 @@ Tine.Admin.Tags.Main = {
         
         // the gridpanel
         this.gridPanel = new Ext.grid.GridPanel({
-            id: 'AdminTagsGrid',
+            canonicalName: ['Tag', 'Grid'].join(Tine.Tinebase.CanonicalPath.separator),
             store: dataStore,
             cm: columnModel,
             tbar: pagingToolbar,     
@@ -281,7 +281,11 @@ Tine.Admin.Tags.Main = {
             
             if (! this.contextMenu) {
                 this.contextMenu = new Ext.menu.Menu({
-                    id: 'ctxMenuTags', 
+                    id: 'ctxMenuTags',
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   'Tinebase-MainContextMenu'
+                    }],
                     items: [
                         this.actions.editTag,
                         this.actions.deleteTag,
@@ -314,7 +318,7 @@ Tine.Admin.Tags.Main = {
      * update datastore with node values and load datastore
      */
     loadData: function () {
-        var dataStore = Ext.getCmp('AdminTagsGrid').getStore();
+        var dataStore = this.gridPanel.getStore();
         dataStore.load({ params: { start: 0, limit: this.pageSize } });
     },
 
@@ -328,10 +332,10 @@ Tine.Admin.Tags.Main = {
 
         this.loadData();
     },
-    
+
     reload: function () {
-        if (Ext.ComponentMgr.all.containsKey('AdminTagsGrid')) {
-            setTimeout("Ext.getCmp('AdminTagsGrid').getStore().reload()", 200);
+        if (this.gridPanel) {
+            this.gridPanel.getStore().reload.defer(200, this.gridPanel.getStore());
         }
     }
 };

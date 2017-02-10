@@ -25,9 +25,9 @@ Tine.Admin.user.show = function () {
     else {
         Tine.Admin.user.gridPanel.loadGridData.defer(100, Tine.Admin.user.gridPanel, []);
     }
-    
-    Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.user.gridPanel, true);
-    Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Admin.user.gridPanel.actionToolbar, true);
+
+    app.getMainScreen().setActiveContentPanel(Tine.Admin.user.gridPanel, true);
+    app.getMainScreen().setActiveToolbar(Tine.Admin.user.gridPanel.actionToolbar, true);
 };
 
 
