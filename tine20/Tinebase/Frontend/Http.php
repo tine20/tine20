@@ -294,12 +294,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
-        
-        // cache mainscreen for one day
-        $maxAge = 86400;
-        header('Cache-Control: private, max-age=' . $maxAge);
-        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-        header_remove('Pragma');
+
+        if (! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT') {
+            // cache mainscreen for one day
+            $maxAge = 86400;
+            header('Cache-Control: private, max-age=' . $maxAge);
+            header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+            header_remove('Pragma');
+        }
     }
     
     /**
