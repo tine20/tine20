@@ -24,7 +24,8 @@ class Tasks_Convert_Task_VCalendar_Factory
     const CLIENT_MACOSX      = 'macosx';
     const CLIENT_THUNDERBIRD = 'thunderbird';
     const CLIENT_EMCLIENT    = 'emclient';
-	const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
+    const CLIENT_DAVDROID    = 'davdroid';
     
     /**
      * cache parsed user-agent strings
@@ -60,10 +61,12 @@ class Tasks_Convert_Task_VCalendar_Factory
                  
             case Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT:
                 return new Tasks_Convert_Task_VCalendar_EMClient($_version);
-                
-			case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
+
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER:
                 return new Tasks_Convert_Task_VCalendar_CalDAVSynchronizer($_version);
-                
+
+            case Tasks_Convert_Task_VCalendar_Factory::CLIENT_DAVDROID:
+                return new Tasks_Convert_Task_VCalendar_DavDroid($_version);
         }
 		return new Tasks_Convert_Task_VCalendar_Generic($_version);
     }
@@ -99,14 +102,19 @@ class Tasks_Convert_Task_VCalendar_Factory
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_THUNDERBIRD;
             $version = $matches['version'];
         
-         // EMClient       
+        // EMClient       
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_EMClient::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT;
             $version = $matches['version'];
-			
-		// CalDAVSynchronizer
+
+        // CalDAVSynchronizer
         } elseif (preg_match(Tasks_Convert_Task_VCalendar_CalDAVSynchronizer::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_CALDAVSYNCHRONIZER;
+            $version = $matches['version'];
+        
+        // DavDroid
+        } elseif (preg_match(Tasks_Convert_Task_VCalendar_DavDroid::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Tasks_Convert_Task_VCalendar_Factory::CLIENT_DAVDROID;
             $version = $matches['version'];
         
         } else {
