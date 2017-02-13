@@ -140,6 +140,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param string $filename
      * @param string $contentType
+     * @param string $disposition
      */
     protected function _prepareHeader($filename, $contentType, $disposition = 'attachment')
     {
@@ -151,7 +152,9 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
         // overwrite Pragma header from session
         header("Pragma: cache");
 
-        header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
+        if ($disposition) {
+            header('Content-Disposition: ' . $disposition . '; filename="' . $filename . '"');
+        }
         header("Content-Type: " . $contentType);
     }
 
