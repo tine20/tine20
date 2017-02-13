@@ -15,63 +15,8 @@
  * @package     Calendar
  * @subpackage  Import
  */
-class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
+class Calendar_Import_CalDAV extends Calendar_Import_Abstract
 {
-    /**
-     * config options
-     * 
-     * @var array
-     */
-    protected $_options = array(
-        /**
-         * force update of existing events 
-         * @var boolean
-         */
-        'updateExisting'        => true,
-        /**
-         * update exiting events even if imported sequence number isn't higher
-         * @var boolean
-         */
-        'forceUpdateExisting'   => false,
-        /**
-         * ?
-         */
-        'allowDuplicateEvents'  => false,
-        /**
-         * container the events should be imported in
-         * @var string
-         */
-        'container_id'          => null,
-        /**
-         * url of calDAV service
-         * @var string
-         */
-        'url'                   => null,
-        /**
-         * username for calDAV service
-         * @var string
-         */
-        'username'              => null,
-        /**
-         * password for calDAV service
-         * @var string
-         */
-        'password'              => null,
-        /**
-         * credential cache id instead of username/password
-         * @var string
-         */
-        'cid'                   => null,
-        /**
-         * credential cache key instead of username/password
-         * @var string
-         */
-        'ckey'                  => null,
-
-        'model'                 => 'Calendar_Model_Event',
-
-    );
-    
     protected $_calDAVClient = null;
 
     /**
@@ -128,4 +73,9 @@ class Calendar_Import_CalDAV extends Tinebase_Import_Abstract
         $this->_calDAVClient->getDecorator()->initCalendarImport();
         $this->_calDAVClient->updateAllCalendarData();
     }
- }
+
+    protected function _getImportEvents($_resource, $container)
+    {
+        // not needed here
+    }
+}

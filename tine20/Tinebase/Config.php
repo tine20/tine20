@@ -932,6 +932,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => true,
         ),
+        // TODO should this be added to LDAP config array/struct?
         self::LDAP_DISABLE_TLSREQCERT => array(
                                    //_('Disable LDAP TLS Certificate Check')
             'label'                 => 'Disable LDAP TLS Certificate Check',
