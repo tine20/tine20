@@ -168,7 +168,7 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
     {
         if (strpos($source, 'http') === 0) {
             try {
-                $client = new Zend_Http_Client($source);
+                $client = Tinebase_Core::getHttpClient($source);
                 // 0011054: Problems with ScheduledImport of external ics calendars
                 // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
                 $client->setHeaders('Accept-encoding', 'identity');
