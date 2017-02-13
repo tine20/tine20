@@ -128,7 +128,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      * @var array
      */
     protected $_devicesWithMultipleFolders = array(
-        'iphone',
+        Syncroton_Model_Device::TYPE_IPHONE,
         'ipad',
         'thundertine',
         'windowsphone',
@@ -136,7 +136,8 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         'windowsoutlook15',
         'playbook',
         'blackberry',
-        'bb10'
+        'bb10',
+        Syncroton_Model_Device::TYPE_ANDROID
     );
     
     /**
@@ -194,9 +195,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     {
         $syncrotonFolders = array();
         
-        // device supports multiple folders?
-        if (in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
-        
+        if ($this->_deviceSupportsMultipleFolders()) {
             $folders = $this->_getAllFolders();
             
             foreach ($folders as $container) {
@@ -556,8 +555,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
     {
         $syncrotonFolders = array();
         
-        // device supports multiple folders ?
-        if(! in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
+        if (! $this->_deviceSupportsMultipleFolders()) {
             return $syncrotonFolders;
         }
         
@@ -574,6 +572,21 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         }
         
         return $syncrotonFolders;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _deviceSupportsMultipleFolders()
+    {
+        if (strtolower($this->_device->devicetype) === Syncroton_Model_Device::TYPE_ANDROID) {
+            // android supports multiple folders since 4.4 (we assume >= 5.0)
+            return version_compare($this->_device->getMajorVersion(), '5', '>=');
+        } else if (in_array(strtolower($this->_device->devicetype), $this->_getDevicesWithMultipleFolders())) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**
