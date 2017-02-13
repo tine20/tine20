@@ -26,6 +26,7 @@ class Calendar_Convert_Event_VCalendar_Factory
     const CLIENT_EMCLIENT7   = 'emclient7';
     const CLIENT_TINE        = 'tine';
     const CLIENT_DAVDROID    = 'davdroid';
+    const CLIENT_BUSYCAL	 = 'busycal';
     const CLIENT_CALDAVSYNCHRONIZER = 'caldavsynchronizer';
     
     /**
@@ -50,7 +51,9 @@ class Calendar_Convert_Event_VCalendar_Factory
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE:
                 return new Calendar_Convert_Event_VCalendar_Iphone($_version);
-
+                
+            case Calendar_Convert_Event_VCalendar_Factory::CLIENT_BUSYCAL:
+                return new Calendar_Convert_Event_VCalendar_BusyCal($_version);
                 
             case Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE:
                 return new Calendar_Convert_Event_VCalendar_KDE($_version);
@@ -101,6 +104,11 @@ class Calendar_Convert_Event_VCalendar_Factory
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_IPHONE;
             $version = $matches['version'];
         
+        // BusyCal
+        } elseif (preg_match(Calendar_Convert_Event_VCalendar_BusyCal::HEADER_MATCH, $_userAgent, $matches)) {
+            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_BUSYCAL;
+            $version = $matches['version'];
+                
         // KDE
         } elseif (preg_match(Calendar_Convert_Event_VCalendar_KDE::HEADER_MATCH, $_userAgent, $matches)) {
             $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_KDE;
