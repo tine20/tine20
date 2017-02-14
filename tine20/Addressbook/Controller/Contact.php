@@ -729,13 +729,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _getNominatimService()
     {
-        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
-        if (!empty($proxyConfig)) {
-            $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
-            $httpClient = new Zend_Http_Client(/* url */ null, $proxyConfig);
-        } else {
-            $httpClient = null;
-        }
+        $httpClient = Tinebase_Core::getHttpClient();
         $nominatim = new Zend_Service_Nominatim(/* url */ null, $httpClient);
         return $nominatim;
     }
