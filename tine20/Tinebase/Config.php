@@ -49,6 +49,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const AUTOMATICALARM = 'automaticalarm';
 
     /**
+     * availableLanguages
+     *
+     * @var string
+     */
+    const AVAILABLE_LANGUAGES = 'availableLanguages';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -435,6 +442,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'type'                  => 'object',
             'class'                 => 'Tinebase_Config_Struct',
             'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        /**
+         * for example: array('en', 'de')
+         */
+        self::AVAILABLE_LANGUAGES => array(
+            //_('Available Languages')
+            'label'                 => 'Available Languages',
+            //_('Whitelist available languages that can be chosen in the GUI')
+            'description'           => 'Whitelist available languages that can be chosen in the GUI',
+            'type'                  => 'array',
+            'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'setBySetupModule'      => TRUE,
         ),

@@ -57,11 +57,15 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getAvailableTranslations()
     {
+        $whitelistedLocales = Tinebase_Config::getInstance()->get(Tinebase_Config::AVAILABLE_LANGUAGES, array());
         $availableTranslations = Tinebase_Translation::getAvailableTranslations();
-        foreach($availableTranslations as &$info) {
+        foreach ($availableTranslations as $key => &$info) {
             unset($info['path']);
+            if (! empty($whitelistedLocales) && ! in_array($info['locale'], $whitelistedLocales)) {
+                unset($availableTranslations[$key]);
+            }
         }
-        
+
         return array(
             'results'    => array_values($availableTranslations),
             'totalcount' => count($availableTranslations)
