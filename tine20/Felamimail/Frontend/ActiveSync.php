@@ -688,7 +688,12 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     protected function _inspectGetCountOfChanges(Syncroton_Backend_IContent $contentBackend, Syncroton_Model_IFolder $folder, Syncroton_Model_ISyncState $syncState)
     {
         if (strpos($folder->serverId, $this->_fakePrefix) === false) {
-            Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder->serverId, 10);
+            try {
+                Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder->serverId, 10);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . " Could not update folder cache: " . $tenf);
+            }
         }
     }
     
