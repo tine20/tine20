@@ -28,7 +28,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         ), Tinebase_Application::ENABLED);
         
         parent::setUp();
-        $this->_json = new ExampleApplication_Frontend_Json();
+        $this->_json = $this->_getUit();
         $this->_recordsToDelete = array();
     }
 
