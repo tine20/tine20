@@ -38,6 +38,9 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
     resetAllOnNew: true,
     useBBar: true,
     border: false,
+    defaultCheck: null,
+    hasDefaultCheck: true,
+    cols: null,
 
     /**
      * @private
@@ -58,15 +61,17 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
         this.configI18n = this.configApp ? this.configApp.i18n : i18n;
         this.initStore();
 
-        this.defaultCheck = new Ext.ux.grid.CheckColumn({
-            id: 'default',
-            header: i18n._('Default'),
-            dataIndex: 'default',
-            sortable: false,
-            align: 'center',
-            width: 55
-        });
-        this.plugins = [this.defaultCheck];
+        if (this.hasDefaultCheck) {
+            this.defaultCheck = new Ext.ux.grid.CheckColumn({
+                id: 'default',
+                header: i18n._('Default'),
+                dataIndex: 'default',
+                sortable: false,
+                align: 'center',
+                width: 55
+            });
+            this.plugins = [this.defaultCheck];
+        }
 
         Tine.Tinebase.widgets.keyfield.ConfigGrid.superclass.initComponent.call(this);
 
@@ -96,7 +101,9 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
             fields = [].concat(recordClass.getFieldDefinitions());
 
         // add default field
-        fields.unshift({name: 'default'});
+        if (this.hasDefaultCheck) {
+            fields.unshift({name: 'default'});
+        }
 
         this.recordClass = Tine.Tinebase.data.Record.create(fields, {});
 
@@ -108,7 +115,7 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
                     rec.commit(true);
 
                     // be sure that only one default is checked
-                    if (rec.get('default')) {
+                    if (this.hasDefaultCheck && rec.get('default')) {
                         // reset other default of same parentId
                         var parentId = this.getParentId(rec);
 
@@ -135,56 +142,59 @@ Tine.Tinebase.widgets.keyfield.ConfigGrid = Ext.extend(Tine.widgets.grid.Quickad
      * @returns {Ext.grid.ColumnModel}
      */
     getColumnModel: function () {
-        var fields = this.recordClass.getFieldDefinitions(),
-            cols = [
-                this.defaultCheck,
-                {
-                    id: 'id',
-                    header: i18n._('ID'),
-                    dataIndex: 'id',
-                    hideable: false,
-                    sortable: false,
-                    editor: new Ext.form.TextField({}),
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: i18n._('Add a New ID...')
-                    })
-                }, {
-                    id: 'value',
-                    header: i18n._('Value'),
-                    dataIndex: 'value',
-                    hideable: false,
-                    sortable: false,
-                    editor: new Ext.form.TextField({}),
-                    quickaddField: new Ext.form.TextField({
-                        emptyText: i18n._('Add a New Value...')
-                    })
+        if (! this.cols) {
+            var fields = this.recordClass.getFieldDefinitions(),
+                cols = [
+                    this.defaultCheck,
+                    {
+                        id: 'id',
+                        header: i18n._('ID'),
+                        dataIndex: 'id',
+                        hideable: false,
+                        sortable: false,
+                        editor: new Ext.form.TextField({}),
+                        quickaddField: new Ext.form.TextField({
+                            emptyText: i18n._('Add a New ID...')
+                        })
+                    }, {
+                        id: 'value',
+                        header: i18n._('Value'),
+                        dataIndex: 'value',
+                        hideable: false,
+                        sortable: false,
+                        editor: new Ext.form.TextField({}),
+                        quickaddField: new Ext.form.TextField({
+                            emptyText: i18n._('Add a New Value...')
+                        })
+                    }
+                ];
 
+            Ext.each(fields, function (field) {
+                if (['default', 'id', 'value', 'i18nValue', 'system'].indexOf(field.name) == -1) {
+                    switch (field.name) {
+                        case 'color':
+                            cols.push({
+                                id: 'color',
+                                header: i18n._('Color'),
+                                dataIndex: 'color',
+                                sortable: false,
+                                width: 50,
+                                editor: new Ext.ux.form.ColorField({}),
+                                renderer: Tine.Tinebase.common.colorRenderer
+                            });
+                            break;
+                        case 'icon':
+                            // not supported yet
+                            break;
+                        default:
+                            cols.push(this.getColumn(field));
+                            break;
+                    }
                 }
-            ];
-
-        Ext.each(fields, function(field) {
-            if (['default', 'id', 'value', 'i18nValue', 'system'].indexOf(field.name) == -1) {
-                switch (field.name) {
-                    case 'color':
-                        cols.push({
-                            id: 'color',
-                            header: i18n._('Color'),
-                            dataIndex: 'color',
-                            sortable: false,
-                            width: 50,
-                            editor: new Ext.ux.form.ColorField({}),
-                            renderer: Tine.Tinebase.common.colorRenderer
-                        });
-                        break;
-                    case 'icon':
-                        // not supported yet
-                        break;
-                    default:
-                        cols.push(this.getColumn(field));
-                        break;
-                }
-            }
-        }, this);
+            }, this);
+        } else {
+            cols = this.cols;
+        }
 
         return new Ext.grid.ColumnModel(cols);
     },
