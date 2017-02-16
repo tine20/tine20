@@ -1769,4 +1769,22 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         return get_class($this);
     }
+
+    /**
+     * clear table
+     *
+     * @return integer
+     */
+    public function clearTable()
+    {
+        $table = $this->getTablePrefix() . $this->getTableName();
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removing all records from table ' . $table);
+
+        $deletedRows = $this->_db->delete($table);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed ' . $deletedRows . ' rows.');
+
+        return $deletedRows;
+    }
 }

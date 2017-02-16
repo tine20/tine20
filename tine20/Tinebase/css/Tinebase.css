@@ -261,7 +261,8 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/view-refresh.png) !important;
 }
 
-.action_loadTutorial { 
+.action_loadTutorial,
+.action_userManual {
     background-image: url(../../images/help-icon.png) !important;
 }
 

@@ -87,7 +87,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         if (! this.mainActions) {
             this.mainActions = [
                 this.action_aboutTine,
-                this.action_loadTutorial,
+                this.action_userManual,
                 '-',
                 this.getUserActions(),
                 '-',
@@ -154,10 +154,10 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             iconCls: 'action_about'
         });
         
-        this.action_loadTutorial = new Ext.Action({
+        this.action_userManual = new Ext.Action({
             text: String.format(i18n._('Help')),
-            iconCls: 'action_loadTutorial',
-            handler: this.onLoadTutorial,
+            iconCls: 'action_userManual',
+            handler: this.onLoadUserManual,
             scope: this
         });
 
@@ -221,7 +221,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     /**
      * open new window/tab to show help and tutorial
      */
-    onLoadTutorial: function() {
+    onLoadUserManual: function() {
         window.open(Tine.helpUrl,'_blank');
     },
     

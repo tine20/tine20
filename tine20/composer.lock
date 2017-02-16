@@ -1248,11 +1248,11 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.2",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/composerapploader",
-                "reference": "8857dd3bc5e22f0ed528ca8d3dc30689dea8fcae"
+                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -1269,7 +1269,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2016-12-29 14:47:01"
+            "time": "2017-02-13 11:26:52"
         },
         {
             "name": "twig/twig",
@@ -1643,11 +1643,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20pl8",
+            "version": "1.12.20pl10",
             "source": {
                 "type": "git",
                 "url": "http://git.tine20.org/git/zendframework1",
-                "reference": "5082f09d9bf9a0bb182cfc9844fa23e861cc8499"
+                "reference": "dfca06a749300d1a0a67f475eeaaebe7ca951cfc"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1664,7 +1664,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2017-01-30 15:24:28"
+            "time": "2017-02-13 10:54:50"
         }
     ],
     "packages-dev": [
@@ -2224,7 +2224,7 @@
         {
             "alias": "1.12.20",
             "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch8",
+            "version": "1.12.20.0-patch10",
             "package": "zendframework/zendframework1"
         },
         {

@@ -1761,4 +1761,27 @@ class Tinebase_Core
     {
         return 'Tine 2.0 ' . $submodule . '(version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')';
     }
+
+    /**
+     * get http client
+     *
+     * @param null $uri
+     * @param null $config
+     * @return Zend_Http_Client
+     */
+    public static function getHttpClient($uri = null, $config = null)
+    {
+        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
+        if (! empty($proxyConfig)) {
+            $proxyConfig['adapter'] = 'Zend_Http_Client_Adapter_Proxy';
+            if (is_array($config)) {
+                $config = array_merge($proxyConfig);
+            } else {
+                $config = $proxyConfig;
+            }
+        }
+        $httpClient = new Zend_Http_Client($uri, $config);
+
+        return $httpClient;
+    }
 }

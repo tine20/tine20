@@ -378,7 +378,7 @@ class Tinebase_Helper
     {
         if (strpos($filenameOrUrl, 'http') === 0) {
             try {
-                $client = new Zend_Http_Client($filenameOrUrl);
+                $client = Tinebase_Core::getHttpClient($filenameOrUrl);
                 // 0011054: Problems with ScheduledImport of external ics calendars
                 // google shows a lot of trouble with gzip in Zend_Http_Response, so let's deny it
                 $client->setHeaders('Accept-encoding', 'identity');

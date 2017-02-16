@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -33,6 +33,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        'version'           => 1,
         'recordName'        => 'example record', // _('example record') ngettext('example record', 'example records', n)
         'recordsName'       => 'example records', // _('example records')
         'containerProperty' => 'container_id',
@@ -53,12 +54,25 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
         'appName'           => 'ExampleApplication',
         'modelName'         => 'ExampleRecord',
 
+        'table'             => array(
+            'name'    => 'example_application_record',
+            'options' => array('collate' => 'utf8_general_ci'),
+            'indexes' => array(
+                'container_id' => array(
+                    'columns' => array('container_id')
+                )
+            ),
+        ),
+
         'export'            => array(
             'supportedFormats' => array('csv'),
         ),
 
         'fields'          => array(
             'name' => array(
+                'type'       => 'string',
+                'length'     => 255,
+                'nullable'   => false,
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'label'       => 'Name', // _('Name')
                 'queryFilter' => TRUE
@@ -67,13 +81,16 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label' => 'Status', // _('Status')
                 'type' => 'keyfield',
-                'name' => 'exampleStatus'
+                'nullable'   => false,
+                'name' => 'exampleStatus',
+                'default' => 'IN-PROCESS'
             ),
             'reason' => array(
                 'reason' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'label' => 'Reason', // _('Reason')
                 'type' => 'keyfield',
-                'name' => 'exampleReason'
+                'name' => 'exampleReason',
+                'nullable'   => true
             ),
             'number_str' => array(
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
