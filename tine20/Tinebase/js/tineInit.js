@@ -323,10 +323,12 @@ Tine.Tinebase.tineInit = {
          */
         Ext.Ajax.on('beforerequest', function (connection, options) {
 
-            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
-            if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId)) {
-                var cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId);
-                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(this.jsonKeyCookieId);
+            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '',
+                jsonKeyCookieId = Tine.Tinebase.tineInit.jsonKeyCookieId,
+                cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(jsonKeyCookieId);
+
+            if (cookieJsonKey) {
+                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(jsonKeyCookieId);
                 // NOTE cookie reset is not always working in IE, so we need to check jsonKey again
                 if (cookieJsonKey && cookieJsonKey != "null") {
                     jsonKey = cookieJsonKey;
