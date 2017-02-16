@@ -179,7 +179,8 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
             w,
             h,
             left,
-            top;
+            top,
+            popup;
 
         windowName = Ext.isString(windowName) ? windowName.replace(/[^a-zA-Z0-9_]/g, '') : windowName;
 
@@ -282,7 +283,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
             this.destroy();
 
-            if (popup.history && popup.history.length > 1) {
+            if (this.navigateBackOnClose) {
                 popup.history.back();
             } else {
                 Ext.ux.PopupWindow.close(popup);
@@ -298,6 +299,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
      */
     onLoad: function() {
         this.Ext.onReady(function() {
+            this.navigateBackOnClose = this.popup.history.length > 1;
             //console.log(this);
             //console.log(window);
         }, this);
@@ -333,21 +335,21 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
  */
 Ext.ux.PopupWindow.close = function(win) {
     win = win || window;
-    win.close();
 
-    // FIXME there is somthing very fishy here ... / this throws lots of errors
     // defer messagebox as it should not be displayed too early
-    //    window.setTimeout(function(){
-    //        if (! win) {
-    //            return;
-    //        }
-    //
-    //        win.Ext.MessageBox.alert(
-    //            i18n._('Window can be closed'),
-    //            String.format(i18n._('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
-    //            function() {
-    //                win.close();
-    //            }
-    //        );
-    //    }, 500);
+    win.setTimeout(function(){
+        if (! win) {
+            return;
+        }
+
+        win.Ext.MessageBox.alert(
+            i18n._('Window can be closed'),
+            String.format(i18n._('This Window can be closed now. To avoid this message please deactivate your browsers popup blocker for {0}'), Tine.title),
+            function() {
+                win.close();
+            }
+        );
+    }, 2000);
+
+    win.close();
 };
