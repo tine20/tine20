@@ -320,5 +320,5 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
         { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
-    ]
+    ];
 };
