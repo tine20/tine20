@@ -126,7 +126,12 @@ class Tinebase_TransactionManager
          if ($numOpenTransactions === 0) {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  no more open transactions in queue commiting all transactionables");
 
-             foreach($this->_onCommitCallbacks as $callable) {
+             // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+             $callbacks = $this->_onCommitCallbacks;
+             $this->_onCommitCallbacks = array();
+             $this->_onRollbackCallbacks = array();
+
+             foreach($callbacks as $callable) {
                  call_user_func_array($callable[0], $callable[1]);
              }
 
@@ -137,8 +142,6 @@ class Tinebase_TransactionManager
              }
              $this->_openTransactionables = array();
              $this->_openTransactions = array();
-             $this->_onCommitCallbacks = array();
-             $this->_onRollbackCallbacks = array();
          } else {
              if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  commiting defered, as there are still $numOpenTransactions in the queue");
          }
@@ -153,7 +156,11 @@ class Tinebase_TransactionManager
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  rollBack request, rollBack all transactionables");
 
-        foreach ($this->_onRollbackCallbacks as $callable) {
+        // avoid loop backs. The callback may trigger a new transaction + commit/rollback...
+        $callbacks = $this->_onRollbackCallbacks;
+        $this->_onCommitCallbacks = array();
+        $this->_onRollbackCallbacks = array();
+        foreach ($callbacks as $callable) {
             call_user_func_array($callable[0], $callable[1]);
         }
 
@@ -165,8 +172,6 @@ class Tinebase_TransactionManager
 
         $this->_openTransactionables = array();
         $this->_openTransactions = array();
-        $this->_onCommitCallbacks = array();
-        $this->_onRollbackCallbacks = array();
     }
 
     /**
