@@ -38,9 +38,20 @@ Ext.ux.Notification = function(){
             } else if (window.webkitNotifications !== undefined && window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
                 var notification = window.webkitNotifications.createNotification(iconUrl, title, text);
                 notification.show();
-                setTimeout(function(){
+                setTimeout(function () {
                     notification.cancel();
                 }, 15000);
+
+            // Notification (see https://notifications.spec.whatwg.org/)
+            } else if (Notification && Notification.permission == 'granted') {
+                var notification = new Notification(title, {
+                    icon: iconUrl,
+                    body: text,
+                });
+
+                //notification.onclick = function () {
+                //    window.open("http://stackoverflow.com/a/13328397/1269037");
+                //};
                 
             // default behaviour
             } else {

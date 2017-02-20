@@ -210,12 +210,18 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: i18n._('Allow desktop notifications'),
             tooltip:  i18n._('Request permissions for webkit desktop notifications.'),
             iconCls: 'action_edit',
-            disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
-            handler: function() {
-                window.webkitNotifications.requestPermission(Ext.emptyFn);
-            },
+            disabled: ! this.systemTrayNotificationsEnabled(),
+            handler: this.requestNotificationPermission,
             scope: this
         });
+    },
+
+    systemTrayNotificationsEnabled: function() {
+        return (Notification && Notification.permission !== 'granted')
+    },
+
+    requestNotificationPermission: function() {
+        Notification.requestPermission(Ext.emptyFn);
     },
     
     /**
