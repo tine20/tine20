@@ -449,7 +449,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
             value = {'records': []};
 
         Ext.each(attributeKeys, function(key) {
-            if (attributes[key]) {
+            if (attributes && attributes[key]) {
                 value.records.push({
                     id: key,
                     value: attributes[key]
