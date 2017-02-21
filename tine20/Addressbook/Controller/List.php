@@ -19,20 +19,6 @@
 class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * application name (is needed in checkRight())
-     *
-     * @var string
-     */
-    protected $_applicationName = 'Addressbook';
-
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = 'Addressbook_Model_List';
-
-    /**
      * @var null|Tinebase_Backend_Sql
      */
     protected $_memberRolesBackend = null;
@@ -46,6 +32,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     {
         $this->_resolveCustomFields = true;
         $this->_backend = new Addressbook_Backend_List();
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->_useRecordPaths = true;
+        }
+        $this->_modelName = 'Addressbook_Model_List';
+        $this->_applicationName = 'Addressbook';
     }
 
     /**
@@ -63,7 +54,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     private static $_instance = NULL;
 
-    protected function _getMemberRolesBackend()
+    public function getMemberRolesBackend()
     {
         if ($this->_memberRolesBackend === null) {
             $this->_memberRolesBackend = new Tinebase_Backend_Sql(array(
@@ -87,6 +78,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         }
 
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
 
     /**
@@ -175,7 +171,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
         $result = parent::getMultiple($_ids, $_ignoreACL);
-        $this->_removeHiddenListMembers($result);
+        if (true !== $_ignoreACL) {
+            $this->_removeHiddenListMembers($result);
+        }
         return $result;
     }
 
@@ -545,11 +543,11 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             if (count($diff['added']) > 0) {
                 $diff['added']->list_id = $updatedRecord->getId();
                 foreach ($diff['added'] as $memberrole) {
-                    $this->_getMemberRolesBackend()->create($memberrole);
+                    $this->getMemberRolesBackend()->create($memberrole);
                 }
             }
             if (count($diff['removed']) > 0) {
-                $this->_getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
+                $this->getMemberRolesBackend()->delete($diff['removed']->getArrayOfIds());
             }
         }
 
@@ -578,7 +576,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _getMemberRoles($record)
     {
-        $result = $this->_getMemberRolesBackend()->getMultipleByProperty($record->getId(), 'list_id');
+        $result = $this->getMemberRolesBackend()->getMultipleByProperty($record->getId(), 'list_id');
         return $result;
     }
 

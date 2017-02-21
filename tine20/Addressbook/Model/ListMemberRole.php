@@ -6,7 +6,11 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ * @property string $list_id
+ * @property string $list_role_id
+ * @property string $contact_id
  */
 class Addressbook_Model_ListMemberRole extends Tinebase_Record_Abstract
 {

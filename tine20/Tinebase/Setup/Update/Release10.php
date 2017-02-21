@@ -383,12 +383,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <notnull>true</notnull>
                 </field>
                 <field>
-                    <name>record_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
                     <name>path</name>
                     <type>text</type>
                     <length>65535</length>
@@ -423,12 +417,6 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
                     <fulltext>true</fulltext>
                     <field>
                         <name>shadow_path</name>
-                    </field>
-                </index>
-                <index>
-                    <name>record_id</name>
-                    <field>
-                        <name>record_id</name>
                     </field>
                 </index>
             </declaration>

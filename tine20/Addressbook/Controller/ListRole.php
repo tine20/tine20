@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -34,6 +34,9 @@ class Addressbook_Controller_ListRole extends Tinebase_Controller_Record_Abstrac
             'modlogActive'  => true
         ));
         $this->_purgeRecords = FALSE;
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $this->_useRecordPaths = true;
+        }
     }
     
     /**
@@ -63,5 +66,10 @@ class Addressbook_Controller_ListRole extends Tinebase_Controller_Record_Abstrac
         }
         
         return self::$_instance;
+    }
+
+    public static function destroyInstance()
+    {
+        self::$_instance = null;
     }
 }

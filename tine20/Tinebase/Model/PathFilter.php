@@ -6,7 +6,7 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -34,7 +34,7 @@ class Tinebase_Model_PathFilter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('path'))),
-        'record_id'      => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'           => array('filter' => 'Tinebase_Model_Filter_FullText'),
+        'shadow_path'    => array('filter' => 'Tinebase_Model_Filter_StrictFullText'),
     );
 }

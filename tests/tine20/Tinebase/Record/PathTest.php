@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -21,6 +21,11 @@ class Tinebase_Record_PathTest extends TestCase
 
     protected $_oldConfig = null;
 
+    /**
+     * @var Tinebase_Record_Path $_uit
+     */
+    protected $_uit;
+
     protected function setUp()
     {
         if (!Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4')) {
@@ -32,6 +37,10 @@ class Tinebase_Record_PathTest extends TestCase
         if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
             $features = Tinebase_Cache_PerRequest::getInstance()->load('Tinebase_Config_Abstract', 'Tinebase_Config_Abstract::featureEnabled', 'Tinebase');
             $features->{Tinebase_Config::FEATURE_SEARCH_PATH} = true;
+
+            Addressbook_Controller_Contact::destroyInstance();
+            Addressbook_Controller_List::destroyInstance();
+            Addressbook_Controller_ListRole::destroyInstance();
         }
 
         if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
@@ -47,7 +56,14 @@ class Tinebase_Record_PathTest extends TestCase
     public function testBuildRelationPathForRecord()
     {
         $contact = $this->_createFatherMotherChild();
-        $result = $this->_uit->generatePathForRecord($contact, true);
+
+        $result = $this->_uit->getPathsForRecord($this->_fatherRecord);
+        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
+        $fatherPath = $result->getFirstRecord();
+        $this->assertEquals('/grandparent{t}/father{t}/tester', $fatherPath->path);
+
+
+        $result = $this->_uit->getPathsForRecord($contact);
         $this->assertTrue($result instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(2, count($result), 'should find 2 paths for record. paths:' . print_r($result->toArray(), true));
 
@@ -58,9 +74,9 @@ class Tinebase_Record_PathTest extends TestCase
                 . print_r($result->toArray(), true));
         }
 
-        $result = $this->_uit->generatePathForRecord($this->_fatherRecord);
-        $this->assertEquals(1, count($result), 'should find 1 path for record. paths:' . print_r($result->toArray(), true));
-        $this->assertEquals('/grandparent{t}/father', $result->getFirstRecord()->path);
+        // check father and tester path are the same one
+        $testerPath = $result->filter('path', '/grandparent{t}/father{t}/tester')->getFirstRecord();
+        $this->assertEquals($fatherPath->getId(), $testerPath->getId(), 'father and tester path are not the same one! ' . print_r($fatherPath, true) . PHP_EOL . print_r($testerPath, true));
     }
 
     protected function _createFatherMotherChild()
@@ -134,6 +150,7 @@ class Tinebase_Record_PathTest extends TestCase
             'name'          => 'my second role',
             'description'   => 'my test description'
         ));
+
         $memberroles = array(array(
             'contact_id'   => $contact->getId(),
             'list_role_id' => $listRole['id'],
@@ -149,7 +166,7 @@ class Tinebase_Record_PathTest extends TestCase
             'type'                  => Addressbook_Model_List::LISTTYPE_LIST,
         ));
 
-        $recordPaths = $this->_uit->generatePathForRecord($contact, true);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
         $this->assertTrue($recordPaths instanceof Tinebase_Record_RecordSet);
         $this->assertEquals(2, count($recordPaths), 'should find 2 path for record. paths:' . print_r($recordPaths->toArray(), true));
         $expectedPaths = array('/my test group/my role/tester', '/my test group/my second role/tester');
@@ -173,7 +190,7 @@ class Tinebase_Record_PathTest extends TestCase
             'relations' => array($relation1)
         )));
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact, true);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
         $this->assertEquals(1, count($recordPaths));
 
         $motherRecord = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
@@ -186,7 +203,7 @@ class Tinebase_Record_PathTest extends TestCase
         $contact->relations = $relations;
         Addressbook_Controller_Contact::getInstance()->update($contact);
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
         $this->assertEquals(2, count($recordPaths));
 
         // check both paths
@@ -214,7 +231,7 @@ class Tinebase_Record_PathTest extends TestCase
         $this->_fatherRecord->n_family = 'stepfather';
         Addressbook_Controller_Contact::getInstance()->update($this->_fatherRecord);
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
         $this->assertEquals(2, count($recordPaths));
 
         // check both paths again
@@ -249,7 +266,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         Addressbook_Controller_Contact::getInstance()->update($father);
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
         $this->assertEquals(1, count($recordPaths));
 
         // check remaining path again
@@ -328,7 +345,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         $this->assertEquals(3, count($updatedContact->relations), print_r($updatedContact->relations->toArray(), true));
 
-        $recordPaths = $this->_uit->getPathsForRecords($contact);
+        $recordPaths = $this->_uit->getPathsForRecord($contact);
 
         // check the 3 paths
         $this->assertEquals(3, count($recordPaths), 'paths: ' . print_r($recordPaths->toArray(), true));

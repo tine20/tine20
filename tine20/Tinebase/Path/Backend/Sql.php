@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Path
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  */
@@ -40,8 +40,8 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Tinebase_Model_Path';
 
     protected static $_modelStore = array();
-    protected static $_rawStore = array();
     protected static $_shadowPathMapping = array();
+    protected static $_idToShadowPath = array();
     protected static $_newIds = array();
     protected static $_toDelete = array();
 
@@ -68,11 +68,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if (true !== static::$_delayDisabled) {
             if (isset(static::$_modelStore[$_id])) {
                 return static::$_modelStore[$_id];
-            }
-            if (isset(static::$_rawStore[$_id])) {
-                static::$_modelStore[$_id] = $ret = new Tinebase_Model_Path(static::$_rawStore[$_id]);
-                unset(static::$_rawStore[$_id]);
-                return $ret;
             }
             if (isset(static::$_toDelete[$_id])) {
                 throw new Tinebase_Exception_NotFound('path ' . $_id . ' was already deleted');
@@ -116,13 +111,11 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
 
         if (count(static::$_modelStore) > 0) {
-            return current(static::$_modelStore);
-        }
-        if (count(static::$_rawStore) > 0) {
-            list($id, $data) = each(static::$_rawStore);
-            $ret = static::$_modelStore[$id] = new Tinebase_Model_Path($data);
-            unset(static::$_rawStore[$id]);
-            return $ret;
+            foreach(static::$_modelStore as $record) {
+                if (strcmp((string)$value, (string)($record->{$_property})) === 0) {
+                    return $record;
+                }
+            }
         }
 
         $ret = parent::getByProperty($value, $property, $getDeleted);
@@ -174,11 +167,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             if (isset(static::$_modelStore[$id])) {
                 $parentResult->removeById($id);
                 $parentResult->addRecord(static::$_modelStore[$id]);
-            } elseif (isset(static::$_rawStore[$id])) {
-                $parentResult->removeById($id);
-                static::$_modelStore[$id] = $record = new Tinebase_Model_Path(static::$_rawStore[$id]);
-                unset(static::$_rawStore[$_id]);
-                $parentResult->addRecord($record);
             } elseif(isset(static::$_toDelete[$id])) {
                 $parentResult->removeById($id);
             }
@@ -213,17 +201,10 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         if (count(static::$_shadowPathMapping) > 0) {
             foreach((array)$_value as $value) {
-                foreach (static::$_modelStore as $id => $record) {
+                foreach (static::$_modelStore as $record) {
                     if (strcmp((string)$value, (string)($record->{$_property})) === 0) {
                         $parentResult->removeById($record->getId());
                         $parentResult->addRecord($record);
-                    }
-                }
-
-                foreach (static::$_rawStore as $id => $data) {
-                    if (isset($data[$_property]) && strcmp((string)$value, (string)($data[$_property])) === 0) {
-                        $parentResult->removeById($data['id']);
-                        $parentResult->addRecord(new Tinebase_Model_Path($data));
                     }
                 }
             }
@@ -341,12 +322,9 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         foreach($idArray as $id) {
             if (isset(static::$_modelStore[$id])) {
-                unset(static::$_shadowPathMapping[static::$_modelStore[$id]->shadow_path]);
+                unset(static::$_shadowPathMapping[static::$_idToShadowPath[$id]]);
+                unset(static::$_idToShadowPath[$id]);
                 unset(static::$_modelStore[$id]);
-            }
-            if (isset(static::$_rawStore[$id])) {
-                unset(static::$_shadowPathMapping[static::$_rawStore[$id]['shadow_path']]);
-                unset(static::$_rawStore[$id]);
             }
             unset(static::$_newIds[$id]);
             static::$_toDelete[$id] = true;
@@ -359,6 +337,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function deleteAll()
     {
         $this->_db->delete($this->_tablePrefix . $this->_tableName);
+        $this->_resetDelay();
     }
 
     /**
@@ -468,23 +447,11 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         if (count(static::$_shadowPathMapping) > 0 && count($values) > 0) {
 
-            $rawRemove = array();
             if ($operator === 'equals') {
                 foreach (static::$_modelStore as $id => $record) {
                     $parentResult->removeById($id);
                     foreach($values as $value) {
                         if (mb_stripos($record->{$field}, $value) === 0 && strlen($record->{$field}) === strlen($value)) {
-                            $parentResult->addRecord($record);
-                            break;
-                        }
-                    }
-                }
-                foreach (static::$_rawStore as $id => $data) {
-                    $parentResult->removeById($id);
-                    foreach($values as $value) {
-                        if (mb_stripos($data[$field], $value) === 0 && strlen($data[$field]) === strlen($value)) {
-                            static::$_modelStore[$id] = $record = new Tinebase_Model_Path($data);
-                            $rawRemove[] = $id;
                             $parentResult->addRecord($record);
                             break;
                         }
@@ -509,39 +476,12 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                             $parentResult->addRecord($record);
                         }
                     }
-                    foreach (static::$_rawStore as $id => $data) {
-                        $parentResult->removeById($id);
-                        $fvalue = preg_replace('# +#u', ' ', trim(preg_replace('#[^\w\d ]|_#u', ' ', $data[$field])));
-                        $success = true;
-                        foreach($values as $value) {
-                            if (mb_stripos($fvalue, $value) === false) {
-                                $success = false;
-                                break;
-                            }
-                        }
-                        if (true === $success) {
-                            static::$_modelStore[$id] = $record = new Tinebase_Model_Path($data);
-                            $rawRemove[] = $id;
-                            $parentResult->addRecord($record);
-                        }
-                    }
 
                 } else {
                     foreach (static::$_modelStore as $id => $record) {
                         $parentResult->removeById($id);
                         foreach($values as $value) {
                             if (mb_stripos($record->{$field}, $value) !== false) {
-                                $parentResult->addRecord($record);
-                                break;
-                            }
-                        }
-                    }
-                    foreach (static::$_rawStore as $id => $data) {
-                        $parentResult->removeById($id);
-                        foreach($values as $value) {
-                            if (mb_stripos($data[$field], $value) !== false) {
-                                static::$_modelStore[$id] = $record = new Tinebase_Model_Path($data);
-                                $rawRemove[] = $id;
                                 $parentResult->addRecord($record);
                                 break;
                             }
@@ -559,21 +499,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                         }
                     }
                 }
-                foreach (static::$_rawStore as $id => $data) {
-                    $parentResult->removeById($id);
-                    foreach($values as $value) {
-                        if (mb_stripos($data[$field], $value) === 0 && strlen($data[$field]) === strlen($value)) {
-                            static::$_modelStore[$id] = $record = new Tinebase_Model_Path($data);
-                            $rawRemove[] = $id;
-                            $parentResult->addRecord($record);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            foreach($rawRemove as $id) {
-                unset(static::$_rawStore[$id]);
             }
         }
 
@@ -595,15 +520,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             }
         }
 
-        foreach(static::$_rawStore as $id => $data) {
-            if (isset(static::$_newIds[$id])) {
-                $this->_db->insert($this->_tablePrefix . $this->_tableName, $data);
-            } else {
-                $this->_db->update($this->_tablePrefix . $this->_tableName, $data,
-                    $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $data['id']));
-            }
-        }
-
         if (count(static::$_toDelete) > 0) {
             $this->_db->delete($this->_tablePrefix . $this->_tableName,
                 $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' IN (?)', array_keys(static::$_toDelete)));
@@ -618,105 +534,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
 
     /***
-     ** path specific methods
-     **
-     ***/
-
-    /**
-     * @param string $shadowPath
-     * @param string $newPath
-     * @param string $oldPath
-     * @return void
-     */
-    public function replacePathForShadowPathTree($shadowPath, $newPath, $oldPath)
-    {
-        if (true !== static::$_delayDisabled) {
-            $this->_registerCallBacks();
-            $this->_replaceInStore($shadowPath, $newPath, $oldPath);
-        }
-
-        $result = $this->_db->select()->from($this->_tablePrefix . $this->_tableName)
-            ->where('MATCH (' . $this->_db->quoteIdentifier('shadow_path') .
-                $this->_db->quoteInto(') AGAINST (? IN BOOLEAN MODE) AND ', '+' . join(' +', $this->splitPath($shadowPath))) .
-                $this->_db->quoteIdentifier('shadow_path') .
-                $this->_db->quoteInto(' like ?', $shadowPath . '_%'))->query(Zend_Db::FETCH_ASSOC);
-
-        $rows = $result->fetchAll(Zend_Db::FETCH_ASSOC);
-        foreach($rows as $row) {
-
-            if (0 !== strpos($row['path'], $oldPath)) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow tree / path mismatch. shadow tree: ' . $shadowPath . ' path record: ' . print_r($row, true) . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-                continue;
-            }
-            $row['path'] = $newPath . substr($row['path'], strlen($oldPath));
-
-            if (true === static::$_delayDisabled) {
-                $this->_db->update($this->_tablePrefix . $this->_tableName, array(
-                    'path' => $row['path']
-                ), $this->_db->quoteIdentifier('id') . $this->_db->quoteInto(' = ?', $row['id']));
-
-            } else {
-                $this->_addToRawStore($row);
-            }
-        }
-    }
-
-    /**
-     * @param  $shadowPath
-     * @return void
-     */
-    public function deleteForShadowPathTree($shadowPath)
-    {
-        if (true !== static::$_delayDisabled) {
-            $this->_registerCallBacks();
-            $this->_deleteInStore($shadowPath);
-        }
-
-        $this->_db->delete($this->_tablePrefix . $this->_tableName,
-            'MATCH (' . $this->_db->quoteIdentifier('shadow_path') .
-            $this->_db->quoteInto(') AGAINST (? IN BOOLEAN MODE) AND ', '+' . join(' +', $this->splitPath($shadowPath))) .
-            $this->_db->quoteIdentifier('shadow_path') .
-            $this->_db->quoteInto(' like ?', $shadowPath . '_%')
-        );
-    }
-
-    /**
-     * @param $shadowPath
-     * @param $newPath
-     * @param $oldPath
-     * @param $newShadowPath
-     * @param $oldShadowPath
-     */
-    public function copyTreeByShadowPath($shadowPath, $newPath, $oldPath, $newShadowPath, $oldShadowPath)
-    {
-        if (true !== static::$_delayDisabled) {
-            $this->_registerCallBacks();
-            $this->_copyInStore($shadowPath, $newPath, $oldPath, $newShadowPath, $oldShadowPath);
-        }
-
-        $select = $this->_db->select()->from($this->_tablePrefix . $this->_tableName)
-            ->where('MATCH (' . $this->_db->quoteIdentifier('shadow_path') .
-                $this->_db->quoteInto(') AGAINST (? IN BOOLEAN MODE) AND ', '+' . join(' +', $this->splitPath($shadowPath))) .
-                $this->_db->quoteIdentifier('shadow_path') .
-                $this->_db->quoteInto(' like ?', $shadowPath . '_%')
-            );
-        $stmt = $this->_db->query($select);
-        $entries = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
-        foreach($entries as $entry) {
-
-            if (true === static::$_delayDisabled) {
-                $this->_replacePaths($entry, $newPath, $oldPath, $newShadowPath, $oldShadowPath);
-                $entry['id'] = Tinebase_Record_Abstract::generateUID();
-                $this->_db->insert($this->_tablePrefix . $this->_tableName, $entry);
-
-            } elseif(!isset(static::$_rawStore[$entry['id']]) && !isset(static::$_modelStore[$entry['id']])) {
-                $this->_replacePaths($entry, $newPath, $oldPath, $newShadowPath, $oldShadowPath, true);
-            }
-        }
-    }
-
-    /***
      ** protected methods
      **
      ***/
@@ -725,10 +542,10 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         static::$_registeredCallback = false;
         static::$_modelStore = array();
-        static::$_rawStore = array();
         static::$_shadowPathMapping = array();
         static::$_newIds = array();
         static::$_toDelete = array();
+        static::$_idToShadowPath = array();
     }
 
     protected function _deleteInStoreByProp($_value, $_property)
@@ -736,7 +553,8 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $toDelete = array();
         foreach(static::$_modelStore as $id => $record) {
             if (strcmp((string)$_value, (string)($record->{$_property})) === 0) {
-                unset(static::$_shadowPathMapping[$record->shadow_path]);
+                unset(static::$_shadowPathMapping[static::$_idToShadowPath[$id]]);
+                unset(static::$_idToShadowPath[$id]);
                 unset(static::$_newIds[$id]);
                 static::$_toDelete[$id] = true;
                 $toDelete[] = $id;
@@ -745,20 +563,6 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         foreach($toDelete as $id) {
             unset(static::$_modelStore[$id]);
-        }
-
-        $toDelete = array();
-        foreach(static::$_rawStore as $id => $data) {
-            if (isset($data[$_property]) && strcmp((string)$_value, (string)($data[$_property])) === 0) {
-                unset(static::$_shadowPathMapping[$data['shadow_path']]);
-                unset(static::$_newIds[$id]);
-                static::$_toDelete[$id] = true;
-                $toDelete[] = $id;
-            }
-        }
-
-        foreach($toDelete as $id) {
-            unset(static::$_rawStore[$id]);
         }
     }
 
@@ -788,16 +592,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             if (false === $_replace) {
                 throw new Tinebase_Exception_UnexpectedValue('path id already in modelStore');
             } else {
-                unset(static::$_shadowPathMapping[static::$_modelStore[$id]->shadow_path]);
-            }
-        }
-
-        if (isset(static::$_rawStore[$id])) {
-            if (false === $_replace) {
-                throw new Tinebase_Exception_UnexpectedValue('path id already in rawStore');
-            } else {
-                unset(static::$_shadowPathMapping[static::$_rawStore[$id]['shadow_path']]);
-                unset(static::$_rawStore[$id]);
+                unset(static::$_shadowPathMapping[static::$_idToShadowPath[$id]]);
             }
         }
 
@@ -808,160 +603,8 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         static::$_modelStore[$id] = $_record;
         if (false === $_replace) {
             static::$_newIds[$id] = true;
-        } else {
-            unset(static::$_newIds[$id]);
         }
         static::$_shadowPathMapping[$shadow_path] = $id;
-    }
-
-    protected function _addToRawStore(array $_record)
-    {
-        $id = $_record['id'];
-        $shadow_path = $_record['shadow_path'];
-
-        if (isset(static::$_toDelete[$id])) {
-            return;
-            //throw new Tinebase_Exception_UnexpectedValue('id was already deleted');
-        }
-        if (isset(static::$_modelStore[$id])) {
-            return;
-            //throw new Tinebase_Exception_UnexpectedValue('path id already in modelStore');
-        }
-        if (isset(static::$_rawStore[$id])) {
-            return;
-            //throw new Tinebase_Exception_UnexpectedValue('path id already in rawStore');
-        }
-
-        //if id was not found, shadow_path must not exists
-        if (isset(static::$_shadowPathMapping[$shadow_path])) {
-            throw new Tinebase_Exception_UnexpectedValue('shadow path already mapped');
-        }
-
-
-        static::$_rawStore[$id] = $_record;
-        //static::$_newIds[$id] = true;
-        static::$_shadowPathMapping[$shadow_path] = $id;
-    }
-
-    protected function _replaceInStore($shadowTree, $newPath, $oldPath)
-    {
-        $sTreeLength = strlen($shadowTree);
-
-        foreach(static::$_shadowPathMapping AS $sPath => $id) {
-            if (0 === strpos($sPath, $shadowTree) && strlen($sPath) > $sTreeLength) {
-
-                if (isset(static::$_rawStore[$id])) {
-                    $path = &static::$_rawStore[$id]['path'];
-                } elseif(isset(static::$_modelStore[$id])) {
-                    $path = static::$_modelStore[$id]->path;
-                } else {
-                    throw new Tinebase_Exception_UnexpectedValue('shadow path mapping broken, id not found');
-                }
-
-                if (0 !== strpos($path, $oldPath)) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow tree / path mismatch. shadow tree: ' . $shadowTree . ' path: ' . $path . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-                    continue;
-                }
-                $path = $newPath . substr($path, strlen($oldPath));
-
-                if(isset(static::$_modelStore[$id])) {
-                    static::$_modelStore[$id]->path = $path;
-                }
-            }
-        }
-    }
-
-    protected function _copyInStore($shadowTree, $newPath, $oldPath, $newShadowPath, $oldShadowPath)
-    {
-        $sTreeLength = strlen($shadowTree);
-
-        foreach(static::$_shadowPathMapping AS $sPath => $id) {
-            if (0 === strpos($sPath, $shadowTree) && strlen($sPath) > $sTreeLength) {
-
-                if (isset(static::$_rawStore[$id])) {
-                    $data = static::$_rawStore[$id];
-                } elseif(isset(static::$_modelStore[$id])) {
-                    $record = static::$_modelStore[$id];
-                    $data = array(
-                        'path'          => $record->path,
-                        'shadow_path'   => $record->shadow_path,
-                        'record_id'     => $record->record_id,
-                        'creation_time' => $record->creation_time,
-                    );
-                } else {
-                    throw new Tinebase_Exception_UnexpectedValue('shadow path mapping broken, id not found');
-                }
-
-                if (0 !== strpos($sPath, $oldShadowPath)) {
-                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow tree mismatch. old shadow path: ' . $oldShadowPath . ' sPath ' . $sPath . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-                    return;
-                }
-
-                $this->_replacePaths($data, $newPath, $oldPath, $newShadowPath, $oldShadowPath, true);
-            }
-        }
-    }
-
-    protected function _replacePaths(array &$data, $newPath, $oldPath, $newShadowPath, $oldShadowPath, $addToStore = false)
-    {
-        if (0 !== strpos($data['path'], $oldPath)) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow tree / path mismatch. old path: ' . $oldPath . ' path record: ' . print_r($data, true) . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-            return;
-        }
-        $data['path'] = $newPath . substr($data['path'], strlen($oldPath));
-
-        if (0 !== strpos($data['shadow_path'], $oldShadowPath)) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow tree mismatch. old shadow path: ' . $oldShadowPath . ' path record: ' . print_r($data, true) . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-            return;
-        }
-        $data['shadow_path'] = $newShadowPath . substr($data['shadow_path'], strlen($oldShadowPath));
-
-        if (isset(static::$_shadowPathMapping[$data['shadow_path']])) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' shadow path already exists. old shadow path: ' . $oldShadowPath . ' new shadow path: ' . $data['shadow_path'] . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-            return;
-        }
-
-        if (true === $addToStore) {
-            $data['id'] = $newId = Tinebase_Record_Abstract::generateUID();
-            if (isset(static::$_rawStore[$newId]) || isset(static::$_modelStore[$newId])) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' generated uid not unique.' . PHP_EOL . 'probably all paths need to be rebuild!' . PHP_EOL);
-                return;
-            }
-            static::$_rawStore[$newId] = $data;
-            static::$_newIds[$newId] = true;
-            static::$_shadowPathMapping[$data['shadow_path']] = $newId;
-        }
-    }
-
-    protected function _deleteInStore($shadowTree)
-    {
-        $sTreeLength = strlen($shadowTree);
-        $toDelete = array();
-
-        foreach(static::$_shadowPathMapping AS $sPath => $id) {
-            if (0 === strpos($sPath, $shadowTree) && strlen($sPath) > $sTreeLength) {
-                $toDelete[] = $sPath;
-                unset(static::$_modelStore[$id]);
-                unset(static::$_rawStore[$id]);
-                unset(static::$_newIds[$id]);
-                static::$_toDelete[$id] = true;
-            }
-        }
-
-        foreach($toDelete as $sPath) {
-            unset(static::$_shadowPathMapping[$sPath]);
-        }
-    }
-
-    /**
-     * splits a path into its pieces, treats the type parts as individual pieces too:
-     * /a{b}/c => array(a,b,c)
-     *
-     * @param  string $path
-     * @return array
-     */
-    protected function splitPath($path)
-    {
-        return array_filter(explode('/', str_replace('//', '/', str_replace(array('{', '}'), '/', $path))));
+        static::$_idToShadowPath[$id] = $shadow_path;
     }
 }

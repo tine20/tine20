@@ -1058,9 +1058,6 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Update record: ' . print_r($record->toArray(), true));
 
-        $pathPartChanged = false;
-        $relationsTouched = false;
-
         // relations won't be touched if the property is set to NULL
         // an empty array on the relations property will remove all relations
         if ($record->has('relations') && isset($record->relations) && is_array($record->relations)) {
@@ -1073,16 +1070,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 FALSE,
                 $this->_inspectRelatedRecords,
                 $this->_doRelatedCreateUpdateCheck);
-
-            $relationsTouched = true;
-
-        } elseif (null === $currentRecord || $this->_getPathPart($currentRecord) !== $this->_getPathPart($updatedRecord)) {
-            $pathPartChanged = true;
-        }
-
-        // rebuild paths if relations where set or if pathPart changed
-        if (true === $this->_useRecordPaths && (true === $pathPartChanged || true === $relationsTouched)) {
-            $this->_rebuildRelationPaths($updatedRecord, $currentRecord, $relationsTouched);
         }
 
         if ($record->has('tags') && isset($record->tags) && (is_array($record->tags) || $record->tags instanceof Tinebase_Record_RecordSet)) {
@@ -1101,50 +1088,14 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_getRelatedData($updatedRecord);
         }
 
+        // rebuild paths
+        if (true === $this->_useRecordPaths) {
+            Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
+        }
+
         return $updatedRecord;
     }
 
-    /**
-     * @param Tinebase_Record_Interface $updatedRecord
-     * @param Tinebase_Record_Interface $currentRecord the record before the update including relatedData / relations (but only those visible to the current user)
-     * @param boolean $relationsTouched
-     */
-    protected function _rebuildRelationPaths($updatedRecord, $currentRecord, $relationsTouched)
-    {
-        if (true !== Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
-            return;
-        }
-
-        // rebuild own paths
-        $this->buildPath($updatedRecord);
-
-        // rebuild paths of children that have been added or removed
-        if ($relationsTouched) {
-            //we need to do this to reload the relations in the next line...
-            $updatedRecord->relations = null;
-            $newChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($updatedRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-            if (null === $currentRecord) {
-                $oldChildRelations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
-            } else {
-                $oldChildRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($currentRecord, Tinebase_Model_Relation::DEGREE_CHILD);
-            }
-
-            foreach ($newChildRelations as $relation) {
-                $oldOffset = $oldChildRelations->getIndexById($relation->id);
-                // new child
-                if (false === $oldOffset) {
-                    $this->buildPath($relation->related_record);
-                } else {
-                    $oldChildRelations->offsetUnset($oldOffset);
-                }
-            }
-
-            //removed children
-            foreach ($oldChildRelations as $relation) {
-                $this->buildPath($relation->related_record);
-            }
-        }
-    }
 
     /**
      * set notes
@@ -1517,6 +1468,16 @@ abstract class Tinebase_Controller_Record_Abstract
                     $this->_getRelatedData($record);
                 }
                 $this->_deleteRecord($record);
+            }
+
+            if (true === $this->_useRecordPaths) {
+                $pathController = Tinebase_Record_Path::getInstance();
+                $shadowPathParts = array();
+                /** @var Tinebase_Record_Interface $record */
+                foreach ($records as $record) {
+                    $shadowPathParts[] = $record->getShadowPathPart();
+                }
+                $pathController->deleteShadowPathParts($shadowPathParts);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2312,57 +2273,6 @@ abstract class Tinebase_Controller_Record_Abstract
         return $result;
     }
 
-    /**
-     * @param Tinebase_Record_Interface $record
-     * @param $relation
-     * @return string
-     *
-     * TODO use decorators
-     */
-    protected function _getPathPart(Tinebase_Record_Interface $record, $relation = null)
-    {
-        $type = $this->_getTypeForPathPart($relation);
-
-        /**
-         * TODO: test in all dbms for full text search
-         * example: Pfarrei Altona{PASTORAL}/Lise Müller
-         * search for "PASTORAL Müller" needs to return this ... if not, we may need to add spaces around the
-         * special chars, but probably not
-         */
-        return $type . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($record->getTitle())), 0, 1024);
-    }
-
-    protected function _getTypeForPathPart($relation)
-    {
-        return ($relation && ! empty($relation->type)) ? '{' . str_replace(array('/', '{', '}', ' '), '', $relation->type) . '}' : '';
-    }
-
-    /**
-     * @param Tinebase_Record_Interface $record
-     * @param $relation
-     * @return string
-     *
-     * TODO use decorators
-     */
-    protected function _getShadowPathPart(Tinebase_Record_Interface $record, $relation = null)
-    {
-        $type = $this->_getTypeForPathPart($relation);
-
-        return $type . '/{' . $record->getApplication() . '}' . $record->getId();
-    }
-
-    /**
-     * shortcut to Tinebase_Record_Path::generatePathForRecord
-     *
-     * @param $record
-     * @param $rebuildRecursively
-     */
-    public function buildPath($record, $rebuildRecursively = false)
-    {
-        if ($this->_useRecordPaths) {
-            Tinebase_Record_Path::getInstance()->generatePathForRecord($record, $rebuildRecursively);
-        }
-    }
 
     // we dont want to mention the throw there, or it would be reflected everywhere
     /** @noinspection PhpDocMissingThrowsInspection */

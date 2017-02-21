@@ -110,6 +110,36 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     }
 
     /**
+     * returns fieldname of this filter
+     *
+     * @return string
+     */
+    public function getField()
+    {
+        return $this->_field;
+    }
+
+    /**
+     * gets value
+     *
+     * @return  mixed
+     */
+    public function getValue()
+    {
+        return $this->_value;
+    }
+
+    /**
+     * gets operator
+     *
+     * @return string
+     */
+    public function getOperator()
+    {
+        return $this->_operator;
+    }
+
+    /**
      * set options 
      *
      * @param  array $_options

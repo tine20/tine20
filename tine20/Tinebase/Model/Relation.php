@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  *
  * @todo        add 'options' field and use it for (crm) remarks (product price/desc/quantity)
@@ -18,14 +18,16 @@
  * @package     Tinebase
  * @subpackage  Record
  *
- * @property string $own_model
- * @property string $own_backend
- * @property string $own_id
- * @property string $related_degree
- * @property string $related_model
- * @property string $related_backend
- * @property string $related_id
- * @property string $type
+ * @property string                     $own_model
+ * @property string                     $own_backend
+ * @property string                     $own_id
+ * @property string                     $related_degree
+ * @property string                     $related_model
+ * @property string                     $related_backend
+ * @property string                     $related_id
+ * @property Tinebase_Record_Interface  $related_record
+ * @property string                     $type
+
  */
 class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 {
@@ -122,5 +124,63 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
         if ($this->remark && is_string($this->remark) && strpos($this->remark, '{') === 0) {
             $this->remark = Zend_Json::decode($this->remark);
         }
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        if ($this->related_degree === Tinebase_Model_Relation::DEGREE_PARENT) {
+            if (null !== $_child) {
+                $_child = $this;
+            }
+        } elseif ($this->related_degree === Tinebase_Model_Relation::DEGREE_CHILD) {
+            if (null !== $_parent) {
+                $_parent = $this;
+            }
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('related degree needs to be parent or child, found: ' . $this->related_degree);
+        }
+
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/' . mb_substr(str_replace(array('/', '{', '}'), '', trim($this->related_record->getTitle())), 0, 1024) . $childType;
+    }
+
+    /**
+     * @param Tinebase_Record_Interface|null $_parent
+     * @param Tinebase_Record_Interface|null $_child
+     * @return string
+     */
+    public function getShadowPathPart(Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    {
+        if ($this->related_degree === Tinebase_Model_Relation::DEGREE_PARENT) {
+            if (null !== $_child) {
+                $_child = $this;
+            }
+        } elseif ($this->related_degree === Tinebase_Model_Relation::DEGREE_CHILD) {
+            if (null !== $_parent) {
+                $_parent = $this;
+            }
+        } else {
+            throw new Tinebase_Exception_UnexpectedValue('related degree needs to be parent or child, found: ' . $this->related_degree);
+        }
+
+        $parentType = null !== $_parent ? $_parent->getTypeForPathPart() : '';
+        $childType = null !== $_child ? $_child->getTypeForPathPart() : '';
+
+        return $parentType . '/{' . get_class($this->related_record) . '}' . $this->related_record->getId() . $childType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTypeForPathPart()
+    {
+        return !empty($this->type) ? '{' . $this->type . '}' : '';
     }
 }
