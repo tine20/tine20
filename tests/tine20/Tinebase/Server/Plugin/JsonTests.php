@@ -40,7 +40,7 @@ class Tinebase_Server_Plugin_JsonTests extends TestCase
     public function testServerCORSHeader()
     {
         $request = \Zend\Http\PhpEnvironment\Request::fromString(
-            "POST /index.php HTTP/1.1\r\n".
+            "OPTIONS /index.php HTTP/1.1\r\n".
             "Host: localhost\r\n".
             "ACCESS-CONTROL-REQUEST-METHOD: application/json\r\n".
             "User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7"
