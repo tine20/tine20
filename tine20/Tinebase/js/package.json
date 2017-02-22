@@ -12,7 +12,6 @@
     "postal.xwindow": "github:tine20/postal.xwindow"
   },
   "devDependencies": {
-    "assets-webpack-plugin": "github:tine20/assets-webpack-plugin#compiler-filesystem-outputPath",
     "css-loader": "^0.26.1",
     "file-loader": "^0.9.0",
     "script-loader": "^0.7.0",

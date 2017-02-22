@@ -493,8 +493,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
     {
         $registryData = $this->_instance->getAllRegistryData();
         $currentUser = Tinebase_Core::getUser();
-
-        $this->assertTrue(isset($registryData['Tinebase']['currentAccount']), print_r($registryData['Tinebase'], true));
+        
         $this->assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
         $this->assertEquals(
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(),

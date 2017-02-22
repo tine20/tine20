@@ -2,13 +2,6 @@ var fs = require('fs');
 var path = require('path');
 var webpack = require('webpack');
 var UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
-var AssetsPlugin = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin({
-    path: 'Tinebase/js',
-    fullPath: false,
-    filename: 'webpack-assets-FAT.json',
-    prettyPrint: true
-});
 
 var baseDir  = path.resolve(__dirname , '../../'),
     entry = {};
@@ -30,6 +23,7 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
         if (! entryFile) {
             try {
                 if (fs.statSync(jsb2File).isFile()) {
+                    ;
                     entryFile = jsb2File;
                 }
             } catch (e) {}
@@ -48,8 +42,8 @@ module.exports = {
     output: {
         path: baseDir + '/',
         publicPath: '/',
-        filename: '[name]-[hash]-FAT.js',
-        chunkFilename: "[name]-[chunkhash]-FAT.js",
+        filename: '[name]-FAT.js',
+        chunkFilename: "[name]-FAT.js",
         libraryTarget: "umd",
     },
     devServer: {
@@ -67,8 +61,7 @@ module.exports = {
     plugins: [
         new UnminifiedWebpackPlugin({
             postfix : 'debug'
-        }),
-        assetsPluginInstance
+        })
     ],
     module: {
         preLoaders: [
