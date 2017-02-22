@@ -41,7 +41,7 @@ EOS
     public function testServerCORSHeader()
     {
         $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
-POST /index.php HTTP/1.1\r
+OPTIONS /index.php HTTP/1.1\r
 Host: localhost\r
 ACCESS-CONTROL-REQUEST-METHOD: application/json\r
 User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r

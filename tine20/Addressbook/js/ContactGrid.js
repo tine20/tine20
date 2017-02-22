@@ -320,7 +320,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
         { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
         { id: 'memberroles', header: i18n._('List Roles'), dataIndex: 'memberroles', renderer: Tine.Addressbook.ListMemberRoleRenderer }
-    ]
+    ];
 };
 
 /**

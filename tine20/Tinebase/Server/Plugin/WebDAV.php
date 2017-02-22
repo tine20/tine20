@@ -33,7 +33,10 @@ class Tinebase_Server_Plugin_WebDAV implements Tinebase_Server_Plugin_Interface
          * RewriteRule ^/principals   /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          * RewriteRule ^/webdav       /index.php?frontend=webdav [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
          */
-        if ($request->getQuery('frontend') === 'webdav') {
+        if ($request->getQuery('frontend') === 'webdav' &&
+            !($request->getMethod() == \Zend\Http\Request::METHOD_OPTIONS && $request->getHeaders()->has('ACCESS-CONTROL-REQUEST-METHOD'))
+
+        ) {
             return new Tinebase_Server_WebDAV();
         }
     }
