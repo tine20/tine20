@@ -90,4 +90,61 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.6');
     }
+
+
+    /**
+     * update to 10.7
+     *
+     * update timemachine_modlog table
+     */
+    public function update_6()
+    {
+        if (!$this->_backend->columnExists('instance_id', 'timemachine_modlog')) {
+
+            $this->_backend->truncateTable('timemachine_modlog');
+
+            $query = $this->_backend->addAddCol(null, 'timemachine_modlog',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>instance_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'), 'id'
+            );
+            $query = $this->_backend->addAddCol($query, 'timemachine_modlog',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>instance_seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <autoincrement>true</autoincrement>
+                </field>'), 'instance_id'
+            );
+            $query = $this->_backend->addAddCol($query, 'timemachine_modlog',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>change_type</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>'), 'instance_seq'
+            );
+            $query = $this->_backend->addAddIndex($query, 'timemachine_modlog', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>instance_id</name>
+                    <field>
+                        <name>instance_id</name>
+                    </field>
+                </index>'));
+            $query = $this->_backend->addAddIndex($query, 'timemachine_modlog', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>instance_seq</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>instance_seq</name>
+                    </field>
+                </index>'));
+            $this->_backend->execQueryVoid($query);
+
+            $this->setTableVersion('timemachine_modlog', '4');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.7');
+    }
 }

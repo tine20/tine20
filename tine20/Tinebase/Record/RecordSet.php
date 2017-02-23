@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -595,6 +595,22 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             foreach ($this->_listOfRecords as $idx => $record) {
                 return $record;
             }
+        } else {
+            return NULL;
+        }
+    }
+
+    /**
+     * returns last record of this set
+     *
+     * @return Tinebase_Record_Abstract|NULL
+     */
+    public function getLastRecord()
+    {
+        if (count($this->_listOfRecords) > 0) {
+            $return = end($this->_listOfRecords);
+            reset($this->_listOfRecords);
+            return $return;
         } else {
             return NULL;
         }

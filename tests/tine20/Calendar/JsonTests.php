@@ -504,7 +504,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     public function testCreateRecurEventWithConstrains()
     {
-        $conflictEventData = $this->testCreateEvent();
+        /* $conflictEventData = */$this->testCreateEvent();
 
         $eventData = $this->testCreateEvent();
         $eventData['rrule'] = array(
@@ -1426,8 +1426,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         // check recent changes (needs to contain attendee change)
         $exdate = Calendar_Controller_Event::getInstance()->get($exception['id']);
         $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $baseEvent['id'], NULL, 'Sql', $exdate->creation_time);
-        $this->assertGreaterThan(2, count($recentChanges), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
-        $this->assertTrue(in_array('attendee', $recentChanges->modified_attribute), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
+        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
+        $this->assertGreaterThan(2, count($changedAttributes), 'Did not get all recent changes: ' . print_r($recentChanges->toArray(), TRUE));
+        $this->assertTrue(in_array('attendee', $changedAttributes), 'Attendee change missing: ' . print_r($recentChanges->toArray(), TRUE));
         
         $exception['attendee'][] = $this->_getUserTypeAttender('unittestnotexists@example.com');
         $updatedEvent = $this->_uit->saveEvent($exception, FALSE, Calendar_Model_Event::RANGE_ALL);

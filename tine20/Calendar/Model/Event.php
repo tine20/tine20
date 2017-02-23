@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -33,6 +33,7 @@
  * @property string uid
  * @property string etag
  * @property int container_id
+ * @property Tinebase_Record_RecordSet attendee
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
@@ -255,13 +256,20 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 $rruleDiffArray = $rruleDiff->diff;
                 unset($rruleDiffArray['until']);
                 $rruleDiff->diff = $rruleDiffArray;
+
+                $rruleDiffArray = $rruleDiff->oldData;
+                unset($rruleDiffArray['until']);
+                $rruleDiff->oldData = $rruleDiffArray;
             }
             
             if (! empty($rruleDiff->diff)) {
                 $diffArray = $diff->diff;
                 $diffArray['rrule'] = $rruleDiff;
-                
                 $diff->diff = $diffArray;
+
+                $diffArray = $diff->oldData;
+                $diffArray['rrule'] = $ownRrule->toArray();
+                $diff->oldData = $diffArray;
             }
         }
         

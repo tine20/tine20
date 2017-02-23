@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -88,7 +88,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * checks if application is installed at all
      *
-     * @param unknown_type $_application
+     * @param mixed $_application
      * @return boolean
      */
     public function applicationExists($_application)
@@ -113,7 +113,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'application_tables')
             ->where($this->_db->quoteIdentifier('name') . ' = ?', SQL_TABLE_PREFIX . $_tableName)
-            ->orwhere($this->_db->quoteIdentifier('name') . ' = ?', $_tableName);
+            ->orWhere($this->_db->quoteIdentifier('name') . ' = ?', $_tableName);
 
         $stmt = $select->query();
         $version = $stmt->fetchAll();
@@ -124,7 +124,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * truncate table in database
      * 
-     * @param string tableName
+     * @param string $_tableName
      */
     public function truncateTable($_tableName)
     {
@@ -173,9 +173,6 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                         $value = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
                         break;
                     
-                    case 'account_id':
-                        break;
-                    
                     case 'application_id':
                         $application = Tinebase_Application::getInstance()->getApplicationByName((string) $field->value);
                         $value = $application->id;
@@ -195,33 +192,28 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
             $data[(string)$field->name] = (string)$value;
         }
         
-        #$table = new Tinebase_Db_Table(array(
-        #   'name' => SQL_TABLE_PREFIX . $_record->table->name
-        #));
-
-        #// final insert process
-        #$table->insert($data);
-        
-        #var_dump($data);
-        #var_dump(SQL_TABLE_PREFIX . $_record->table->name);
         $this->_db->insert(SQL_TABLE_PREFIX . $_record->table->name, $data);
     }
 
     /**
      * execute statement without return values
      * 
-     * @param string statement
+     * @param string $_statement
+     * @param array $bind
      */    
     public function execQueryVoid($_statement, $bind = array())
     {
-        $stmt = $this->_db->query($_statement, $bind);
+        if (!empty($_statement)) {
+            $this->_db->query($_statement, $bind);
+        }
     }
     
     /**
      * execute statement  return values
      * 
-     * @param string statement
-     * @return stdClass object
+     * @param string $_statement
+     * @param array $bind
+     * @return array
      */
     public function execQuery($_statement, $bind = array())
     {
@@ -233,7 +225,6 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * checks if a given table exists
      *
-     * @param string $_tableSchema
      * @param string $_tableName
      * @return boolean return true if the table exists, otherwise false
      */
@@ -325,7 +316,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * renames table in database
      * 
-     * @param string tableName
+     * @param string $_tableName
+     * @param string $_newName
      */
     public function renameTable($_tableName, $_newName)
     {
@@ -350,13 +342,33 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * drop column/field in database table
      * 
-     * @param string tableName
-     * @param string column/field name 
+     * @param string $_tableName
+     * @param string $_colName column/field name
      */    
     public function dropCol($_tableName, $_colName)
     {
-        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' DROP COLUMN ' . $this->_db->quoteIdentifier($_colName);
-        $this->execQueryVoid($statement);
+        $this->execQueryVoid($this->addDropCol(null, $_tableName, $_colName));
+    }
+
+    /**
+     * drop column/field in database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param string $_colName column/field name
+     * @return string
+     */
+    public function addDropCol($_query, $_tableName, $_colName)
+    {
+        if (empty($_query)) {
+            $_query = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        } else {
+            $_query .= ',';
+        }
+
+        $_query .= ' DROP COLUMN ' . $this->_db->quoteIdentifier($_colName);
+
+        return $_query;
     }
     
     /**
@@ -364,8 +376,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * 
      * Delegates to {@see addPrimaryKey()}
      * 
-     * @param string tableName 
-     * @param Setup_Backend_Schema_Index_Abstract declaration
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Index_Abstract $_declaration
      */
     public function addPrimaryKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
@@ -375,7 +387,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * removes a primary key from database table
      * 
-     * @param string tableName (there is just one primary key...)
+     * @param string $_tableName (there is just one primary key...)
      */
     public function dropPrimaryKey($_tableName)
     {
@@ -386,21 +398,21 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * add a foreign key to database table
      * 
-     * @param string tableName
-     * @param Setup_Backend_Schema_Index_Abstract declaration
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Index_Abstract $_declaration
      */
     public function addForeignKey($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE " . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . " ADD " 
-                    . $this->getForeignKeyDeclarations($_declaration, $_tableName);
+                    . $this->getForeignKeyDeclarations($_declaration);
         $this->execQueryVoid($statement);
     }
     
     /**
      * removes a foreign key from database table
      * 
-     * @param string tableName
-     * @param string foreign key name
+     * @param string $_tableName
+     * @param string $_name key name
      */
     public function dropForeignKey($_tableName, $_name)
     {
@@ -435,7 +447,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * helper function for removing (foreign) keys
      * 
-     * @param string tableName
+     * @param string $tableName
      * @param string $keyName
      * @param boolean $foreign
      */
@@ -451,8 +463,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * removes a key from database table
      * 
-     * @param string tableName 
-     * @param string key name
+     * @param string $_tableName
+     * @param string $_indexName name
      */
     public function dropIndex($_tableName, $_indexName)
     {
@@ -472,8 +484,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
-     * @param Setup_Backend_Schema_Field_Abstract field / column
-     * @param String | optional $_tableName [Not used in this backend (MySQL)]
+     * @param Setup_Backend_Schema_Field_Abstract $_field field / column
+     * @param String $_tableName [Not used in this backend (MySQL)]
      * @return string
      */
     public function getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
@@ -484,10 +496,13 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
 
         return $definition;
     }
-    
+
     /**
-     * Concrete implementation of 
-     * @see tine20/Setup/Backend/Setup_Backend_Interface#checkTable($_table)
+     * Compare Setup_Backend_Schema_Table_Abstract table schema with the corresponding schema
+     * read from db using {@see getExistingSchema()}
+     *
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @return bool
      */
     public function checkTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
@@ -520,8 +535,8 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * create the right mysql-statement-snippet for columns/fields
      *
-     * @param Setup_Backend_Schema_Field_Abstract field / column
-     * @param String | optional $_tableName [Not used in this backend (MySQL)]
+     * @param Setup_Backend_Schema_Field_Abstract $_field field / column
+     * @param String $_tableName [Not used in this backend (MySQL)]
      * @return string
      */
     protected function _getFieldDeclarations(Setup_Backend_Schema_Field_Abstract $_field, $_tableName = '')
@@ -585,6 +600,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
             } else {
                 $options = '';
                 if (isset($_field->value)) {
+                    $values = array();
                     foreach ($_field->value as $value) {
                         $values[] = $value;
                     }

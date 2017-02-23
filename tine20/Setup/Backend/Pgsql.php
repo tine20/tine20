@@ -95,6 +95,8 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                     // don't create sequence if is field is not auto_increment
                     $primaryKey = (strpos($fieldDeclarations, 'auto_increment') !== false) ? $primaryKey : null;
                     $fieldDeclarations = str_replace('integer NOT NULL auto_increment', 'integer NOT NULL DEFAULT nextval(' . $this->_db->quote($sequence) . ')', $fieldDeclarations);
+                } elseif(strpos($fieldDeclarations, 'auto_increment') !== false) {
+                    $fieldDeclarations = str_replace('integer NOT NULL auto_increment', 'SERIAL NOT NULL', $fieldDeclarations);
                 }
 
                 $statementSnippets[] = $fieldDeclarations;
@@ -259,13 +261,85 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function addCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL) 
     {
-        $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ADD COLUMN ';
-
-        $statement .= $this->getFieldDeclarations($_declaration);
-
-        $this->execQueryVoid($statement);
+        $this->execQueryVoid($this->addAddCol(null, $_tableName, $_declaration, $_position));
     }
 
+    /**
+     * add column/field to database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param int $_position of future column
+     * @return string
+     */
+    public function addAddCol($_query, $_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_position = NULL)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Add new column to table ' . $_tableName);
+
+        if (empty($_query)) {
+            $_query = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        } else {
+            $_query .= ',';
+        }
+
+        $_query .= ' ADD COLUMN ' . $this->getFieldDeclarations($_declaration);
+
+        return $_query;
+    }
+
+    /**
+     * rename or redefines column/field in database table
+     *
+     * @param string $_query
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Field_Abstract $_declaration
+     * @param string $_oldName column/field name
+     * @return string
+     */
+    public function addAlterCol($_query, $_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL)
+    {
+        if (empty($_query)) {
+            $_query = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        } else {
+            $_query .= ',';
+        }
+
+        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
+
+        // rename the column if needed
+        if ($_oldName !== NULL) {
+            return $_query . ' RENAME COLUMN ' . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $quotedName;
+        }
+
+        $fieldDeclaration = $this->getFieldDeclarations($_declaration);
+
+        // strip of column name from the beginning
+        $type      = trim(str_replace($quotedName, null, $fieldDeclaration));
+        // cut of NOT NULL and DEFAULT from the end
+        $type      = preg_replace(array('/ (NOT NULL|DEFAULT .*)/'), null, $type);
+
+        $_query .= ' ALTER COLUMN ' . $quotedName . ' TYPE ' . $type . ' USING CAST(' . $quotedName . ' AS ' . $type . ')';
+
+        if (preg_match('/NOT NULL/', $fieldDeclaration)) {
+            $this->execQueryVoid($_query);
+            $_query = null;
+            $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ALTER COLUMN ' . $quotedName . ' SET NOT NULL ';
+            $this->execQueryVoid($statement);
+        }
+
+        if (isset($_declaration->default)) {
+            if (null !== $_query) {
+                $this->execQueryVoid($_query);
+                $_query = null;
+            }
+            $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ALTER COLUMN ' . $quotedName . ' SET ' . $this->_db->quoteInto("DEFAULT ?", $_declaration->default);
+            $this->execQueryVoid($statement);
+        }
+
+        return $_query;
+    }
     /**
      * rename or redefines column/field in database table
      *
@@ -275,35 +349,50 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function alterCol($_tableName, Setup_Backend_Schema_Field_Abstract $_declaration, $_oldName = NULL) 
     {
-        $quotedName = $this->_db->quoteIdentifier($_declaration->name);
-        
-        $baseStatement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+        $query = $this->addAddCol(null, $_tableName, $_declaration, $_oldName);
+        if (null !== $query) {
+            $this->execQueryVoid($query);
+        }
+    }
 
-        // rename the column if needed
-        if ($_oldName !== NULL) {
-            $statement = $baseStatement . ' RENAME COLUMN ' . $this->_db->quoteIdentifier($_oldName) . ' TO ' . $quotedName;
-            $this->execQueryVoid($statement);
+    /**
+     * add a key to database table
+     *
+     * @param string $_query
+     * @param string tableName
+     * @param Setup_Backend_Schema_Index_Abstract declaration
+     * @return string
+     */
+    public function addAddIndex($_query, $_tableName, Setup_Backend_Schema_Index_Abstract $_declaration)
+    {
+        if (!empty($_declaration->primary)) {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_pkey';
+        } elseif (!empty($_declaration->unique)) {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name . '_key';
+        } else {
+            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name;
         }
 
-        $fieldDeclaration = $this->getFieldDeclarations($_declaration);
-        
-        // strip of column name from the beginning
-        $type      = trim(str_replace($quotedName, null, $fieldDeclaration));
-        // cut of NOT NULL and DEFAULT from the end
-        $type      = preg_replace(array('/ (NOT NULL|DEFAULT .*)/'), null, $type);
-        
-        $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' TYPE ' . $type . ' USING CAST(' . $quotedName . ' AS ' . $type . ')';
-        $this->execQueryVoid($statement);
-        
-        if (preg_match('/NOT NULL/', $fieldDeclaration)) {
-            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET NOT NULL ';
-            $this->execQueryVoid($statement);
+        if ($this->_constraintExists($identifier)) {
+            throw new Zend_Db_Statement_Exception('index does exist already');
         }
-        
-        if (isset($_declaration->default)) {
-            $statement = $baseStatement . ' ALTER COLUMN ' . $quotedName . ' SET ' . $this->_db->quoteInto("DEFAULT ?", $_declaration->default);
-            $this->execQueryVoid($statement);
+
+        $indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName);
+
+        if (strpos($indexSnippet, 'CREATE INDEX') !== false) {
+            $this->execQueryVoid($_query);
+            $_query = null;
+            $this->execQueryVoid($indexSnippet);
+        } else {
+            if (empty($_query)) {
+                $_query = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName);
+            } else {
+                $_query .= ',';
+            }
+            $_query .= ' ADD ' . $indexSnippet;
         }
+
+        return $_query;
     }
 
     /**
@@ -314,27 +403,7 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      */
     public function addIndex($_tableName, Setup_Backend_Schema_Index_Abstract $_declaration) 
     {
-        if (!empty($_declaration->primary)) {
-            $identifier = SQL_TABLE_PREFIX . $_tableName . '_pkey';
-        } elseif (!empty($_declaration->unique)) {
-            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name . '_key';
-        } else {
-            $identifier = SQL_TABLE_PREFIX . $_tableName . '_' . $_declaration->name;
-        }
-        
-        if ($this->_constraintExists($identifier)) {
-            throw new Zend_Db_Statement_Exception('index does exist already');
-        }
-        
-        $indexSnippet = $this->getIndexDeclarations($_declaration, $_tableName);
-        
-        if (strpos($indexSnippet, 'CREATE INDEX') !== false) {
-            $statement = $indexSnippet;
-        } else {
-            $statement = 'ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $_tableName) . ' ADD ' . $indexSnippet;
-        }
-
-        $this->execQueryVoid($statement);
+        $this->execQueryVoid($this->addAddIndex(null, $_tableName, $_declaration));
     }
 
     /**

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -56,7 +56,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap i
     {
         parent::__construct($_options);
         
-        $this->_config['emailGID'] = sprintf("%u", crc32(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()));
+        $this->_config['emailGID'] = sprintf("%u", crc32(Tinebase_Core::getTinebaseId()));
         $this->_config['domain']   = !empty($this->_options['domain']) ? $this->_options['domain'] : null;
     }
     

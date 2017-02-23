@@ -784,17 +784,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _applyDiff($event, $diff, $exdate, $overwriteMods = TRUE)
     {
         if (! $overwriteMods) {
-            $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $event, NULL, 'Sql', $exdate->creation_time);
+            $recentChanges = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Calendar', $event, NULL, 'Sql', $exdate->creation_time)->filter('change_type', Tinebase_Timemachine_ModificationLog::UPDATED);
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Recent changes (since ' . $exdate->creation_time->toString() . '): ' . print_r($recentChanges->toArray(), TRUE));
         } else {
             $recentChanges = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         }
-        
+
+        $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($recentChanges);
         $diffIgnore = array('organizer', 'seq', 'last_modified_by', 'last_modified_time', 'dtstart', 'dtend');
         foreach ($diff->diff as $key => $newValue) {
             if ($key === 'attendee') {
-                if (in_array($key, $recentChanges->modified_attribute)) {
+                if (in_array($key, $changedAttributes)) {
                     $attendeeDiff = $diff->diff['attendee'];
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                         . ' Attendee diff: ' . print_r($attendeeDiff->toArray(), TRUE));
@@ -818,7 +819,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                     $event->attendee = $attendee;
                 }
-            } else if (! in_array($key, $diffIgnore) && ! in_array($key, $recentChanges->modified_attribute)) {
+            } else if (! in_array($key, $diffIgnore) && ! in_array($key, $changedAttributes)) {
                 $event->{$key} = $exdate->{$key};
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

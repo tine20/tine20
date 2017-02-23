@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -1035,8 +1035,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'record_type',
             'modification_time',
             'modification_account',
-            'record_id',
-            'modified_attribute'
+            'record_id'
         );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
@@ -1048,7 +1047,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $dryrun = $opts->d;
         $overwrite = (isset($data['overwrite']) && $data['overwrite']) ? TRUE : FALSE;
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, (isset($data['modified_attribute'])?$data['modified_attribute']:null));
         
         if (! $dryrun) {
             echo 'Reverted ' . $result['totalcount'] . " change(s)\n";
@@ -1056,7 +1055,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "Dry run\n";
             echo 'Would revert ' . $result['totalcount'] . " change(s):\n";
             foreach ($result['undoneModlogs'] as $modlog) {
-                echo 'id ' . $modlog->record_id . ' [' . $modlog->modified_attribute . ']: ' . $modlog->new_value . ' -> ' . $modlog->old_value . "\n";
+                $modifiedAttribute = $modlog->modified_attribute;
+                if (!empty($modifiedAttribute)) {
+                    echo 'id ' . $modlog->record_id . ' [' . $modifiedAttribute . ']: ' . $modlog->new_value . ' -> ' . $modlog->old_value . PHP_EOL;
+                } else {
+                    if ($modlog->change_type === Tinebase_Timemachine_ModificationLog::CREATED) {
+                        echo 'id ' . $modlog->record_id . ' DELETE' . PHP_EOL;
+                    } elseif ($modlog->change_type === Tinebase_Timemachine_ModificationLog::DELETED) {
+                        echo 'id ' . $modlog->record_id . ' UNDELETE' . PHP_EOL;
+                    } else {
+                        $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value));
+                        foreach($diff->diff as $key => $val) {
+                            echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
+                        }
+                    }
+                }
             }
         }
         echo 'Failcount: ' . $result['failcount'] . "\n";

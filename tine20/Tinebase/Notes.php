@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notes
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        delete notes completely or just set the is_deleted flag?
@@ -441,7 +441,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 
                 $noteText .= ' | ' .$translate->_('Changed fields:');
                 foreach ($_mods as $mod) {
-                    $noteText .= ' ' . $translate->_($mod->modified_attribute) .' (' . $this->_getSystemNoteChangeText($mod) . ')';
+                    $modifiedAttribute = $mod->modified_attribute;
+                    if (empty($modifiedAttribute)) {
+                        $noteText.= ' ' . $this->_getSystemNoteChangeText($mod, $translate);
+                    } else {
+                        $noteText .= ' ' . $translate->_($mod->modified_attribute) . ' (' . $this->_getSystemNoteChangeText($mod) . ')';
+                    }
                 }
             } else if (is_string($_mods)) {
                 $noteText = $_mods;
@@ -464,25 +469,75 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * get system note change text
      * 
      * @param Tinebase_Model_ModificationLog $modification
+     * @param Zend_Translate $translate
      * @return string
      */
-    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification)
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
     {
-        // check if $modification->new_value is json string and record set diff
-        // @see 0008546: When edit event, history show "code" ...
-        if (Tinebase_Helper::is_json($modification->new_value)) {
-            $newValueArray = Zend_Json::decode($modification->new_value);
-            if ((isset($newValueArray['model']) || array_key_exists('model', $newValueArray)) && (isset($newValueArray['added']) || array_key_exists('added', $newValueArray))) {
-                $diff = new Tinebase_Record_RecordSetDiff($newValueArray);
-                
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                    .' fetching translated text for diff: ' . print_r($diff->toArray(), true));
-                
-                return $diff->getTranslatedDiffText();
+        $modifiedAttribute = $modification->modified_attribute;
+
+        // new ModificationLog implementation
+        if (empty($modifiedAttribute)) {
+            $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+            $return = '';
+            foreach ($diff->diff as $attribute => $value) {
+
+                if (is_array($value) && isset($value['model']) && isset($value['added'])) {
+                    $diff = new Tinebase_Record_RecordSetDiff($value);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' fetching translated text for diff: ' . print_r($diff->toArray(), true));
+
+                    $return .= ' ' . $translate->_($attribute) . ' (' . $diff->getTranslatedDiffText() . ')';
+                } else {
+                    $oldData = $diff->oldData[$attribute];
+                    if(is_array($oldData)) {
+                        $oldDataString = '';
+                        foreach($oldData as $key => $val) {
+                            if (is_object($val)) {
+                                $val = $val->toArray();
+                            }
+                            $oldDataString = ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        }
+                    } else {
+                        $oldDataString = $oldData;
+                    }
+                    if(is_array($value)) {
+                        $valueString = '';
+                        foreach($value as $key => $val) {
+                            if (is_object($val)) {
+                                $val = $val->toArray();
+                            }
+                            $valueString = ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        }
+                    } else {
+                        $valueString = $value;
+                    }
+
+                    $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                }
             }
+
+            return $return;
+
+        // old ModificationLog implementation
+        } else {
+            // check if $modification->new_value is json string and record set diff
+            // @see 0008546: When edit event, history show "code" ...
+            if (Tinebase_Helper::is_json($modification->new_value)) {
+                $newValueArray = Zend_Json::decode($modification->new_value);
+                if ((isset($newValueArray['model']) || array_key_exists('model', $newValueArray)) && (isset($newValueArray['added']) || array_key_exists('added', $newValueArray))) {
+                    $diff = new Tinebase_Record_RecordSetDiff($newValueArray);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' fetching translated text for diff: ' . print_r($diff->toArray(), true));
+
+                    return $diff->getTranslatedDiffText();
+                }
+            }
+
+            return $modification->old_value . ' -> ' . $modification->new_value;
         }
-        
-        return $modification->old_value . ' -> ' . $modification->new_value;
     }
     
     /**

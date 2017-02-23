@@ -380,9 +380,10 @@ class Addressbook_JsonTest extends TestCase
 
         // check if other default field value was updated properly
         $this->assertEquals($record['url'],'http://www.phpunit.de','DefaultField "url" was not updated as expected');
-        
+
+        $translate = Tinebase_Translation::getTranslation('Tinebase');
         // check 'changed' systemnote
-        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 hinzugefügt) customfields ( -> {');
+        $this->_checkChangedNote($record['id'], 'adr_one_region ( -> PHPUNIT_multipleUpdate) url ( -> http://www.phpunit.de) relations (1 '. $translate->_('added') .') customfields ( ->  ');
 
         // check relation
         $fullRecord = $this->_uit->getContact($record['id']);
@@ -411,7 +412,7 @@ class Addressbook_JsonTest extends TestCase
         $result = $this->_uit->saveContact($contact);
         
         $this->assertEquals('changed value', $result['customfields'][$cf->name]);
-        $this->_checkChangedNote($result['id'], ' -> {"' . $cf->name . '":"changed value"})');
+        $this->_checkChangedNote($result['id'], ' ->  ' . $cf->name . ': changed value)');
     }
     
     /**
@@ -485,8 +486,8 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'equals',
             'value'    =>  $contact['id']
         )));
-        $sharedTagName = $this->_createAndAttachTag($filter, $type);
-        $this->_checkChangedNote($contact['id'], array(',"name":"' . $sharedTagName . '","description":"testTagDescription"', 'tags ([] -> [{'));
+        list(,$sharedTagId) = $this->_createAndAttachTag($filter, $type);
+        $this->_checkChangedNote($contact['id'], array('tags ( ->  0: ' . $sharedTagId));
     }
     
     /**
@@ -676,8 +677,8 @@ class Addressbook_JsonTest extends TestCase
             'operator' => 'equals',
             'value'    =>  Tinebase_Core::getUser()->accountDisplayName
         )));
-        $sharedTagName = $this->_createAndAttachTag($filter);
-        $personalTagName = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
+        list($sharedTagName) = $this->_createAndAttachTag($filter);
+        list($personalTagName) = $this->_createAndAttachTag($filter, Tinebase_Model_Tag::TYPE_PERSONAL);
 
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
@@ -705,7 +706,7 @@ class Addressbook_JsonTest extends TestCase
         $tag = $this->_getTag($_tagType);
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($_filter, $tag);
         
-        return $tag->name;
+        return array($tag->name, $tag->id);
     }
     
     /**
