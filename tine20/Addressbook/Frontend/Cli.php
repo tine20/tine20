@@ -178,7 +178,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * update geodata
+     * update geodata - only updates addresses without geodata for adr_one
      *
      * @param Zend_Console_Getopt $opts
      */
@@ -188,7 +188,8 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         // get all contacts in a container
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId'])
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $params['containerId']),
+            array('field' => 'adr_one_lon', 'operator' => 'isnull', 'value' => null)
         ));
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
         $result = Addressbook_Controller_Contact::getInstance()->updateMultiple($filter, array());
