@@ -18,6 +18,10 @@
           "path": "js/"
         },
         {
+          "text": "checkboxGridSelection.js",
+          "path": "js/touch/"
+        },
+        {
           "text": "Portal.js",
           "path": "js/ux/"
         },
