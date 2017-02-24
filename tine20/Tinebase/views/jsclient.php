@@ -22,12 +22,10 @@
     <link rel="shortcut icon" href="<?php echo $theme_config['favicon']; ?>" type="image/x-icon" />
     <?php echo $theme_config['extJs'] . "\n"; ?>
 
-    <link rel="apple-touch-icon" href="<?php echo $theme_config['favicon']; ?>" />
-    <link rel="apple-touch-icon-precomposed" href="<?php echo $theme_config['favicon']; ?>" />
-
-<!--    <meta name="apple-mobile-web-app-capable" content="yes">-->
-<!--    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">-->
+    <meta name="apple-mobile-web-app-title" content="<?php echo $theme_config['title']; ?>">
+    <link rel="apple-touch-icon" href="<?php echo $theme_config['appletTouchIcon']; ?>" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
     <!-- Loading Indicator -->
