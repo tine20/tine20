@@ -1203,6 +1203,9 @@ class Tinebase_FileSystem implements Tinebase_Controller_Interface
         
         $deleteCount = 0;
         foreach ($dirIterator as $item) {
+            if (!$item->isDir()) {
+                continue;
+            }
             $subDir = $item->getFileName();
             if ($subDir[0] == '.') continue;
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

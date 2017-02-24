@@ -505,6 +505,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (! Ext.isString(path)) {
             return;
         }
+
+        event.stopPropagation();
+        event.preventDefault();
         
         if (Tine.Tinebase.container.pathIsContainer(path)) {
             if (container.account_grants && container.account_grants.adminGrant) {

@@ -46,7 +46,6 @@ Tine.Tinebase.common = {
      * @param {Object} options
      *      {Boolean} keepRegistry
      *      {Boolean} clearCache
-     *      {String}  redirectUrl
      */
     reload: function(options) {
         options = options || {};
@@ -56,12 +55,9 @@ Tine.Tinebase.common = {
             Tine.Tinebase.tineInit.clearRegistry();
         }
 
+        // give browser some time to clear registry
         window.setTimeout(function () {
-            if (options.redirectUrl && Ext.isString(options.redirectUrl)) {
-                window.location = options.redirectUrl;
-            } else {
-                window.location.reload(!!options.clearCache);
-            }
+            window.location.reload(!!options.clearCache);
         }, 500);
     },
 

@@ -216,6 +216,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createFromModelConfiguration()
     {
         if ($this->_configuredModel) {
+            /** @var Tinebase_Record_Abstract $m */
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
 

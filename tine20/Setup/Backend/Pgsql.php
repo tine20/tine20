@@ -411,9 +411,16 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
      * takes the xml stream and creates a table
      *
      * @param object $_table xml stream
+     * @return boolean
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract $_table)
     {
+        if (false === $this->_checkTableRequirements($_table)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Do not create table ' . $_table->name . ': Requirement missing.');
+            return false;
+        }
+
         // receives an array with CREATE TABLE and CREATE INDEX statements
         $statements = $this->getCreateStatement($_table);
 
@@ -440,9 +447,13 @@ class Setup_Backend_Pgsql extends Setup_Backend_Abstract
                 $this->execQueryVoid($alterSequence);
             }
 
+            return true;
+
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
         }
+
+        return false;
     }
     
     /**

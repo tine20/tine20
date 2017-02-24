@@ -19,11 +19,8 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
  */
 class ExampleApplication_JsonTest extends ExampleApplication_TestCase
 {
-    /**
-     * Backend
-     *
-     * @var ExampleApplication_Frontend_Json
-     */
+    protected $_recordsToDelete = array();
+
     public function setUp()
     {
         Tinebase_Application::getInstance()->setApplicationState(array(
@@ -32,6 +29,26 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         
         parent::setUp();
         $this->_json = new ExampleApplication_Frontend_Json();
+        $this->_recordsToDelete = array();
+    }
+
+    protected function tearDown()
+    {
+        if (count($this->_recordsToDelete) > 0)
+        {
+            $this->_json->deleteExampleRecords(array_keys($this->_recordsToDelete));
+
+            foreach($this->_recordsToDelete as $record) {
+                $className = get_class($record);
+                $configuration = $record->getConfiguration();
+                foreach ($configuration->getAutoincrementFields() as $fieldDef) {
+                    $numberable = Tinebase_Numberable::getNumberable($className, $fieldDef['fieldName'], $fieldDef);
+                    $numberable->free($record->{$fieldDef['fieldName']});
+                }
+            }
+        }
+
+        parent::tearDown();
     }
     
     /**
@@ -64,6 +81,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
         $this->assertEquals($exampleRecord['name'], $returnedGet['name']);
         $this->assertTrue(isset($returnedGet['number_str']), 'number_str missing');
         $this->assertEquals('ER-' . $expectedNumber, $returnedGet['number_str']);
+        $this->assertEquals('some words in the description for the fulltext search', $returnedGet['description']);
         
         return $returnedRecord;
     }
@@ -88,8 +106,18 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
     {
         $inventoryRecord = $this->testCreateExampleRecord();
         $inventoryRecordID = $inventoryRecord['id'];
-        
-        $searchIDFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $inventoryRecordID));
+        $this->_recordsToDelete[$inventoryRecordID] = ExampleApplication_Controller_ExampleRecord::getInstance()->get($inventoryRecordID);
+
+        // commit transaction for full text to work
+        if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            $this->_transactionId = null;
+        }
+
+        $searchIDFilter = array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $inventoryRecordID),
+            array('field' => 'description', 'operator' => 'contains', 'value' => 'description fulltext words search')
+        );
         $searchDefaultFilter = $this->_getFilter();
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
         

@@ -275,8 +275,10 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         $snippet = "  KEY `" . $_key->name . "`";
         if (!empty($_key->primary)) {
             $snippet = '  PRIMARY KEY ';
-        } else if (!empty($_key->unique)) {
+        } elseif (!empty($_key->unique)) {
             $snippet = "  UNIQUE KEY `" . $_key->name . "`" ;
+        } elseif (!empty($_key->fulltext)) {
+            $snippet = " FULLTEXT KEY `" . $_key->name . "`" ;
         }
         
         foreach ((array)$_key->field as $keyfield) {
@@ -412,5 +414,23 @@ user = {$config->username}
 password = {$config->password}
 EOT;
         file_put_contents($path, $mycnfData);
+    }
+
+    /**
+     * checks whether this backend supports a specific requirement or not
+     *
+     * @param $requirement
+     * @return bool
+     */
+    public function supports($requirement)
+    {
+        if (preg_match('/^mysql ([<>=]+) ([\d\.]+)$/', $requirement, $m))
+        {
+            $version = $this->_db->getServerVersion();
+            if (version_compare($version, $m[2], $m[1]) === true) {
+                return true;
+            }
+        }
+        return false;
     }
 }

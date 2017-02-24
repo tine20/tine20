@@ -202,4 +202,12 @@ interface Setup_Backend_Interface
      * @param array  $bind
      */
     public function execQueryVoid($_statement, $bind = array());
+
+    /**
+     * checks whether this backend supports a specific requirement or not
+     *
+     * @param $requirement
+     * @return bool
+     */
+    public function supports($requirement);
 }

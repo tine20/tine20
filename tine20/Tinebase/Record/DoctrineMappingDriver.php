@@ -26,6 +26,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
     protected static $_typeMap = array(
         'string'        => 'string',
         'text'          => 'text',
+        'fulltext'      => 'text',
         'datetime'      => 'datetime',
         'date'          => 'datetime',
         'time'          => 'datetime',
@@ -61,6 +62,25 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
 
         $table = $modelConfig->getTable();
         $table['name'] = SQL_TABLE_PREFIX . $table['name'];
+
+        // mysql supports full text for InnoDB as of 5.6 for everybody else: remove full text index
+        if ( ! Setup_Backend_Factory::factory()->supports('mysql >= 5.6') ) {
+            if (isset($table['indexes'])) {
+                $toDelete = array();
+                foreach($table['indexes'] as $key => $index) {
+                    if (isset($index['flags']) && ($offset = array_search('fulltext', $index['flags'])) !== false &&
+                            //programmer is extra strict today
+                            $offset !== null) {
+                        $toDelete[] = $key;
+                    }
+                }
+
+                foreach($toDelete as $key) {
+                    unset($table['indexes'][$key]);
+                }
+            }
+        }
+
         $metadata->setPrimaryTable($table);
         foreach ($modelConfig->getFields() as $fieldName => $config) {
             self::mapTypes($config);
