@@ -327,7 +327,9 @@ Tine.Tinebase.tineInit = {
         
         Ext.Ajax.transactions = {};
 
-        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie();
+        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie({
+            path: String(Tine.Tinebase.common.getUrl('path')).replace(/\/$/, '')
+        });
 
         /**
          * inspect all requests done via the ajax singleton

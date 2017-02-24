@@ -47,10 +47,18 @@ Ext.override(Ext.ux.util.Cookie, {
     },
 
     clear: function(name){
-        document.cookie = name + "=null; expires=Thu, 01-Jan-70 00:00:01 GMT" +
+        var c = name + "=null; expires=Thu, 01-Jan-70 00:00:01 GMT";
+
+        document.cookie = c +
         ((this.path == null) ? "" : ("; path=" + this.path)) +
         ((this.domain == null) ? "" : ("; domain=" + this.domain)) +
         ((this.secure == true) ? "; secure" : "");
+
+        // if path/domain/secure didn't match, force delete. more actions might be nessesary
+        // @see http://stackoverflow.com/questions/2959010/how-to-get-the-domain-value-for-a-cookie-in-javascript
+        if (this.get(name)) {
+            document.cookie = c;
+        }
     },
 
     encodeValue: function(value) {
