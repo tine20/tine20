@@ -1878,4 +1878,22 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             : 5;
         $this->assertEquals($supportedFlags, $regData['supportedFlags']['totalcount']);
     }
+
+    /**
+     * @see 0002284: add reply-to setting to email account
+     */
+    public function testReplyToSetting()
+    {
+        $this->_account->reply_to = 'noreply@tine20.org';
+        $this->_json->saveAccount($this->_account->toArray());
+
+        $this->_foldersToClear[] = 'INBOX';
+        $messageToSend = $this->_getMessageData();
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($messageToSend['subject']);
+
+        $complete = $this->_json->getMessage($message['id']);
+        $this->assertTrue(isset($complete['headers']['reply-to']), print_r($complete, true));
+        $this->assertEquals('"Tine 2.0 Admin Account" <noreply@tine20.org>', $complete['headers']['reply-to']);
+    }
 }

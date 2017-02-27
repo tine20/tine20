@@ -69,4 +69,26 @@ class Felamimail_Setup_Update_Release9 extends Setup_Update_Abstract
         $this->setApplicationVersion('Felamimail', '9.3');
         $this->setTableVersion('felamimail_account', '22');
     }
+
+
+    /**
+     * update to 9.4
+     *
+     * @see 0002284: add reply-to setting to email account
+     */
+    public function update_3()
+    {
+        if ($this->getTableVersion('felamimail_account') < 23) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                    <name>reply_to</name>
+                    <type>text</type>
+                    <length>255</length>
+            </field>');
+            $this->_backend->addCol('felamimail_account', $declaration, 19);
+            $this->setTableVersion('felamimail_account', 23);
+        }
+
+        $this->setApplicationVersion('Felamimail', '9.4');
+    }
 }
