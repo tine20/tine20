@@ -20,7 +20,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 class Setup_ControllerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Setup_Frontend_Json
+     * @var Setup_Controller
      */
     protected $_uit = null;
     
@@ -51,7 +51,16 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
             'adminPassword'         => $testCredentials['password'],
         ));
     }
-       
+
+    /**
+     * testLoginWithWrongUsernameAndPassword
+     */
+    public function testLoginWithWrongUsernameAndPassword()
+    {
+        $result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
+        $this->assertFalse($result);
+    }
+
     /**
      * test uninstall application and cache clearing
      *
@@ -213,7 +222,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * test install application
-     *
      */
     public function testInstallApplications()
     {
@@ -257,6 +265,33 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test install applications from dump
+     *
+     * @see 0012728: install from (backup) dump
+     */
+    public function testInstallFromDump()
+    {
+        if ($this->_uit->isInstalled('Tinebase')) {
+            $this->_uninstallAllApplications();
+        }
+
+        $oldTinebaseId = '99a88a21e657b8365bf80ae867e9d06d1c355a39';
+        $options = array(
+            'backupDir' => dirname(__DIR__) . '/files/2017-02-27-11-42-25',
+            'db' => 1,
+            'files' => 1,
+        );
+        $result = $this->_uit->getInstance()->installFromDump($options);
+        $this->assertTrue($result);
+        $this->assertTrue($this->_uit->isInstalled('Addressbook'), 'Addressbook is not installed');
+        $tinebaseId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
+        $this->assertNotEquals($oldTinebaseId, $tinebaseId);
+        $this->assertGreaterThan(40, Tinebase_Application::getInstance()->getApplicationTables($tinebaseId));
+
+        $this->_uninstallAllApplications();
+    }
+
+    /**
      * test update application
      *
      * @todo test real update process; currently this test case only tests updating an already uptodate application
@@ -266,7 +301,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         $applications->addRecord(Tinebase_Application::getInstance()->getApplicationByName('ActiveSync'));
         $result = $this->_uit->updateApplications($applications);
-        $this->assertTrue(is_array($result)); //Setup_Controller::updateApplications just returns an array of messages and throws exceptions on failure
+        $this->assertTrue(is_array($result));
     }
 
     /**
@@ -282,16 +317,6 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * testLoginWithWrongUsernameAndPassword
-     *
-     */
-    public function testLoginWithWrongUsernameAndPassword()
-    {
-        $result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
-        $this->assertFalse($result);
-    }
-    
-    /**
      * uninstallAllApplications
      */
     protected function _uninstallAllApplications()
@@ -304,6 +329,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      * installAllApplications
      *
      * @param array $_options
+     * @throws Setup_Exception
      */
     protected function _installAllApplications($_options = null)
     {
