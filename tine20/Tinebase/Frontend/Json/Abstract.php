@@ -640,8 +640,5 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                     break;
             }
         }
-
-        // call plugin method (see Tinebase_Pluggable_Abstract)
-        return parent::__call($method, $args);
     }
 }

@@ -1,21 +1,21 @@
 <?php
 /**
- * model to handle role rights
- * 
+ * model to handle role members
+ *
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
 /**
- * defines the datatype for role rights
- * 
+ * defines the data type for role members
+ *
  * @package     Tinebase
  * @subpackage  Acl
  *  */
-class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
+class Tinebase_Model_RoleMember extends Tinebase_Record_Abstract
 {
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -30,8 +30,8 @@ class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'RoleRight',
-        'recordsName'       => 'RoleRights', // ngettext('RoleRight', 'RoleRights', n)
+        'recordName'        => 'RoleMember',
+        'recordsName'       => 'RoleMembers', // ngettext('RoleMember', 'RoleMembers', n)
         'hasRelations'      => FALSE,
         'hasCustomFields'   => FALSE,
         'hasNotes'          => FALSE,
@@ -42,23 +42,23 @@ class Tinebase_Model_RoleRight extends Tinebase_Record_Abstract
 
         'titleProperty'     => 'id',
         'appName'           => 'Tinebase',
-        'modelName'         => 'RoleRight',
+        'modelName'         => 'RoleMember',
 
         'fields' => array(
             'role_id'           => array(
-                'label'             => 'Name', //_('Name')
+                'label'             => 'role_id', //_('role_id')
                 'type'              => 'string',
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
             ),
-            'application_id'    => array(
-                'label'             => 'Name', //_('Name')
+            'account_type'      => array(
+                'label'             => 'account_type', //_('account_type')
                 'type'              => 'string',
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
             ),
-            'right'             => array(
-                'label'             => 'Name', //_('Name')
+            'account_id'        => array(
+                'label'             => 'account_id', //_('account_id')
                 'type'              => 'string',
                 'queryFilter'       => TRUE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),

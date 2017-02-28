@@ -243,6 +243,14 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
     public function undo(Tinebase_Record_Diff $diff);
 
     /**
+     * applies the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function applyDiff(Tinebase_Record_Diff $diff);
+
+    /**
      * returns true if this record should be replicated
      *
      * @return boolean

@@ -5,10 +5,8 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
- * @todo        add role members and rights
  */
 
 /**
@@ -16,58 +14,77 @@
  * 
  * @package     Tinebase
  * @subpackage  Acl
+ *
+ * @property Tinebase_Record_RecordSet  $members
  *  */
 class Tinebase_Model_Role extends Tinebase_Record_Abstract
 {
     /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */    
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var string
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_application = 'Tinebase';
-    
-    /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Filter_Input
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        'name'      => 'StringTrim'
-    );
+    protected static $_configurationObject = NULL;
 
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Filter_Input
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-            'id'                    => array('allowEmpty' => true),
-            'name'                  => array('presence' => 'required'),
-            'description'           => array('allowEmpty' => true),
-            'created_by'            => array('allowEmpty' => true),
-            'creation_time'         => array('allowEmpty' => true),
-            'last_modified_by'      => array('allowEmpty' => true),
-            'last_modified_time'    => array('allowEmpty' => true),
-    );
-        
-    /**
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
+    protected static $_modelConfiguration = array(
+        'recordName'        => 'Role',
+        'recordsName'       => 'Roles', // ngettext('Role', 'Roles', n)
+        'hasRelations'      => FALSE,
+        'hasCustomFields'   => FALSE,
+        'hasNotes'          => FALSE,
+        'hasTags'           => FALSE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => FALSE,
+        'createModule'      => FALSE,
+
+        'titleProperty'     => 'name',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'Role',
+
+        'fields' => array(
+            'name'              => array(
+                'label'             => 'Name', //_('Name')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
+                'inputFilters'      => array('Zend_Filter_StringTrim' => NULL),
+            ),
+            'description'       => array(
+                'label'             => 'Description', //_('Description')
+                'type'              => 'string',
+                'queryFilter'       => TRUE,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+            ),
+            'rights'            => array(
+                'label'             => 'Rights', // _('Rights')
+                'type'              => 'records', // be careful: records type has no automatic filter definition!
+                'config'            => array(
+                    'appName'               => 'Tinebase',
+                    'modelName'             => 'RoleRight',
+                    'controllerClassName'   => 'Tinebase_RoleRight',
+                    'refIdField'            => 'role_id',
+                    'dependentRecords'      => TRUE,
+                ),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+            ),
+            'members'           => array(
+                'label'             => 'Members', // _('Members')
+                'type'              => 'records', // be careful: records type has no automatic filter definition!
+                'config'            => array(
+                    'appName'               => 'Tinebase',
+                    'modelName'             => 'RoleMember',
+                    'controllerClassName'   => 'Tinebase_RoleMember',
+                    'refIdField'            => 'role_id',
+                    'dependentRecords'      => TRUE,
+                ),
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+            ),
+        )
     );
     
     /**
@@ -79,5 +96,14 @@ class Tinebase_Model_Role extends Tinebase_Record_Abstract
     {
         return $this->name;
     }
-    
+
+    /**
+     * returns true if this record should be replicated
+     *
+     * @return boolean
+     */
+    public function isReplicable()
+    {
+        return true;
+    }
 }

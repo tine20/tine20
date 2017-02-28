@@ -39,6 +39,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      * @var array holds recordId's we create log entries for
      */
     protected $_recordIds = array();
+
     
     /**
      * Runs the test methods of this class.
@@ -341,5 +342,82 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $diff = new Tinebase_Record_Diff(json_decode($modlog->getFirstRecord()->new_value, true));
         $this->assertEquals(1, count($modlog));
         $this->assertEquals((string) $task->due, (string)($diff->diff['due']), 'new value mismatch: ' . print_r($modlog->toArray(), TRUE));
+    }
+
+    public function testGetReplicationModificationsByInstanceSeq()
+    {
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq(-1, 10000);
+        $instance_seq = $modifications->getLastRecord()->instance_seq;
+
+        /** @var Tinebase_Acl_Roles $roleController */
+        $roleController = Tinebase_Core::getApplicationInstance('Tinebase_Model_Role');
+        $this->assertEquals('Tinebase_Acl_Roles', get_class($roleController));
+
+        $role = new Tinebase_Model_Role(array('name' => 'unittest test role'));
+        $role = $roleController->create($role);
+
+        $roleController->addRoleMember($role->getId(), array(
+            'id' => Tinebase_Core::getUser()->getId(),
+            'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+        );
+        $roleController->addRoleMember($role->getId(), array(
+                'id' => 'test1',
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+        );
+        $roleController->addRoleMember($role->getId(), array(
+                'id' => 'test2',
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+        );
+        $roleController->removeRoleMember($role->getId(), array(
+                'id' => 'test2',
+                'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+        ));
+
+        $role = $roleController->get($role->getId());
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $roleModifications = $modifications->filter('record_type', 'Tinebase_Model_Role');
+        //$groupModifications = $modifications->filter('record_type', 'Tinebase_Model_Group');
+        //$userModifications = $modifications->filter('record_type', '/Tinebase_Model_User.*/', true);
+
+        // rollback
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $notFound = false;
+        try {
+            $roleController->get($role->getId());
+        } catch(Tinebase_Exception_NotFound $tenf) {
+            $notFound = true;
+        }
+        $this->assertTrue($notFound, 'roll back did not work...');
+
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($roleModifications);
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+
+        $newRole = $roleController->get($role->getId());
+
+        $diff = $role->diff($newRole, array('creation_time', 'created_by', 'last_modified_by', 'last_modified_time'));
+
+        $this->assertTrue($diff->isEmpty(), 'diff should be empty: ' . print_r($diff, true));
+
+        $mod = clone ($roleModifications->getByIndex(2));
+        $diff = new Tinebase_Record_Diff(json_decode($mod->new_value, true));
+        $rsDiff = new Tinebase_Record_RecordSetDiff($diff->diff['members']);
+        $modified = $rsDiff->added;
+        $rsDiff->added = array();
+        $modified[0]['account_id'] = 'test3';
+        $rsDiff->modified = $modified;
+        $diffArray = $diff->diff;
+        $diffArray['members'] = $rsDiff;
+        $diff->diff = $diffArray;
+        $mod->new_value = json_encode($diff->toArray());
+
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplactionModLogs failed');
+
+        /** @var Tinebase_Model_Role $newRole */
+        $newRole = $roleController->get($role->getId());
+        $this->assertEquals(1, $newRole->members->filter('account_id', 'test3')->count(), 'record set diff modified didn\'t work, test3 not found');
     }
 }

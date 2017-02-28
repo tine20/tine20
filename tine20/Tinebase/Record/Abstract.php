@@ -1302,16 +1302,50 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function undo(Tinebase_Record_Diff $diff)
     {
         /* TODO special treatment? for what? how?
-         * TODO FIX IT!
+         * oldData does not contain RecordSetDiffs. It plainly contains the old data present in the property before it was changed.
          */
 
         if ($this->has('is_deleted')) {
             $this->is_deleted = 0;
         }
 
-        foreach($diff->oldData as $property => $oldValue)
+        foreach((array)($diff->oldData) as $property => $oldValue)
         {
             $this->$property = $oldValue;
+        }
+    }
+
+    /**
+     * applies the change stored in the diff
+     *
+     * @param Tinebase_Record_Diff $diff
+     * @return void
+     */
+    public function applyDiff(Tinebase_Record_Diff $diff)
+    {
+        /* TODO special treatment? for what? how? */
+
+        if ($this->has('is_deleted')) {
+            $this->is_deleted = 0;
+        }
+
+        foreach((array)($diff->diff) as $property => $oldValue)
+        {
+            if (is_array($oldValue) && count($oldValue) === 4 &&
+                    isset($oldValue['model']) && isset($oldValue['added']) &&
+                    isset($oldValue['removed']) && isset($oldValue['modified'])) {
+                // RecordSetDiff
+                $recordSetDiff = new Tinebase_Record_RecordSetDiff($oldValue);
+
+                if (! $this->$property instanceof Tinebase_Record_RecordSet) {
+                    $this->$property = new Tinebase_Record_RecordSet($oldValue['model'],
+                        is_array($this->$property)?$this->$property:array());
+                }
+
+                $this->$property->applyRecordSetDiff($recordSetDiff);
+            } else {
+                $this->$property = $oldValue;
+            }
         }
     }
 

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -344,7 +344,7 @@ class Tinebase_Helper
         if (is_array($jsonOrArray)) {
             return $jsonOrArray;
         } else if (empty($jsonOrArray) || trim($jsonOrArray) == '') {
-            return Zend_Json::decode("{}");
+            return array();
         } else {
             try {
                 return Zend_Json::decode($jsonOrArray);
@@ -352,7 +352,7 @@ class Tinebase_Helper
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Could not json decode: ' . var_export($jsonOrArray, true) . ' - assuming empty array.');
                 Tinebase_Exception::log($zje, false);
-                return Zend_Json::decode("{}");
+                return array();
             }
         }
     }

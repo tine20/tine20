@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -42,9 +42,14 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $this->_setupConfigOptions($_options);
         $this->_setupGroups();
 
-        Tinebase_Acl_Roles::getInstance()->createInitialRoles();
+        $roleController = Tinebase_Acl_Roles::getInstance();
+        $roleController->createInitialRoles();
 
+        $oldNotesValue = $roleController->useNotes(false);
+        $oldModLogValue = $roleController->modlogActive(false);
         parent::_initialize($_application, $_options);
+        $roleController->useNotes($oldNotesValue);
+        $roleController->modlogActive($oldModLogValue);
     }
 
     /**
@@ -156,5 +161,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
         Tinebase_Scheduler_Task::addImportTask($scheduler);
         Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
+        Tinebase_Scheduler_Task::addReplicationTask($scheduler);
     }
 }

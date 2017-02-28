@@ -39,7 +39,7 @@
  *       log anymore!
  * @todo refactor this to use generic sql backend + remove Tinebase_Db_Table usage
  */
-class Tinebase_Timemachine_ModificationLog
+class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interface
 {
     const CREATED = 'created';
     const DELETED = 'deleted';
@@ -105,6 +105,13 @@ class Tinebase_Timemachine_ModificationLog
      * @var string
      */
     protected $_applicationId = NULL;
+
+    /**
+     * if set, all newly created modlogs will have this external instance id. this is used during applying replication logs
+     *
+     * @var string
+     */
+    protected $_externalInstanceId = NULL;
     
     /**
      * the singleton pattern
@@ -418,6 +425,12 @@ class Tinebase_Timemachine_ModificationLog
         $id = $modification->generateUID();
         $modification->setId($id);
         $modification->convertDates = true;
+
+        // mainly if we are applying replication modlogs on the slave, we set the masters instance id here
+        if (null !== $this->_externalInstanceId) {
+            $modification->instance_id = $this->_externalInstanceId;
+        }
+
         $modificationArray = $modification->toArray();
         if (is_array($modificationArray['new_value'])) {
             throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
@@ -842,6 +855,8 @@ class Tinebase_Timemachine_ModificationLog
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      * @throws Tinebase_Exception_NotImplemented
      * @internal param array $_oldData
+     *
+     * TODO instance id is never set in this code path! => thus replication doesn't work here!
      */
     public function writeModLogMultiple($_ids, $_currentData, $_newData, $_model, $_backend, $updateMetaData = array())
     {
@@ -1111,7 +1126,7 @@ class Tinebase_Timemachine_ModificationLog
         $result = array();
 
         /** @var Tinebase_Model_ModificationLog $modlog */
-        foreach($modLogs as $modlog) {
+        foreach ($modLogs as $modlog) {
             $modAtrb = $modlog->modified_attribute;
             if (empty($modAtrb)) {
                 $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
@@ -1122,5 +1137,161 @@ class Tinebase_Timemachine_ModificationLog
         }
 
         return array_keys($result);
+    }
+
+    /**
+     * @return bool
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function readModificationLogFromMaster()
+    {
+        // check if we are a replication slave
+        if (!($slaveConfiguration = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_SLAVE)) ||
+            !($slaveConfiguration instanceof Tinebase_Config_Struct)) {
+            return true;
+        }
+
+        $result = Tinebase_Lock::aquireDBSessionLock(__METHOD__);
+        if (false === $result) {
+            // we are already running
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                ' failed to aquire DB lock, it seems we are already running in a parallel process.');
+            return true;
+        }
+        if (null === $result) {
+            // DB backend does not suppport lock, no way we do replication without proper thread concurrency!
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' failed to aquire DB lock, the DB backend doesn\'t support locks. You should not run a replication on this type of DB backend!');
+            return false;
+        }
+
+        $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
+        $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
+        $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' trying to connect to master host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
+
+        $tine20Service = new Zend_Service_Tine20($tine20Url);
+
+        $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
+        if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
+            throw new Tinebase_Exception_AccessDenied('login failed');
+        }
+        unset($authResponse);
+
+        //get replication state:
+        $state = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->state;
+        if (!is_array($state) || !isset($state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID])) {
+            $masterReplicationId = 0;
+        } else {
+            $masterReplicationId = $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID];
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' master replication id: ' . $masterReplicationId);
+
+        $tinebaseProxy = $tine20Service->getProxy('Tinebase');
+        /** @noinspection PhpUndefinedMethodInspection */
+        $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId, 100);
+        /* TODO make the amount above configurable  */
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' received ' . count($result['results']) . ' modification logs');
+
+        // memory cleanup
+        unset($tinebaseProxy);
+        unset($tine20Service);
+
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $result['results']);
+        unset($result);
+
+        return $this->applyReplicationModLogs($modifications);
+    }
+
+    /**
+     * apply modification logs from a replication master locally
+     *
+     * @param Tinebase_Record_RecordSet $modifications
+     * @return boolean
+     */
+    public function applyReplicationModLogs(Tinebase_Record_RecordSet $modifications)
+    {
+        $currentRecordType = NULL;
+        $controller = NULL;
+        $controllerCache = array();
+
+        $transactionManager = Tinebase_TransactionManager::getInstance();
+        $db = Tinebase_Core::getDb();
+        $applicationController = Tinebase_Application::getInstance();
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+        if (!is_array($tinebaseApplication->state)) {
+            $tinebaseApplication->state = array();
+        }
+
+        /** @var Tinebase_Model_ModificationLog $modification */
+        foreach($modifications as $modification)
+        {
+            $transactionId = $transactionManager->startTransaction($db);
+
+            $this->_externalInstanceId = $modification->instance_id;
+
+            try {
+                if ($currentRecordType !== $modification->record_type || !isset($controller)) {
+                    $currentRecordType = $modification->record_type;
+                    if (!isset($controllerCache[$modification->record_type])) {
+                        $controller = Tinebase_Core::getApplicationInstance($modification->record_type);
+                        $controllerCache[$modification->record_type] = $controller;
+                    } else {
+                        $controller = $controllerCache[$modification->record_type];
+                    }
+                }
+
+                switch ($modification->change_type) {
+                    case Tinebase_Timemachine_ModificationLog::CREATED:
+                        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                        $model = $modification->record_type;
+                        $record = new $model($diff->diff);
+                        $controller->create($record);
+                        break;
+
+                    case Tinebase_Timemachine_ModificationLog::UPDATED:
+                        $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                        $record = $controller->get($modification->record_id, NULL, true, true);
+                        $record->applyDiff($diff);
+                        $controller->update($record);
+                        break;
+
+                    case Tinebase_Timemachine_ModificationLog::DELETED:
+                        $controller->delete($modification->record_id);
+                        break;
+
+                    default:
+                        throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
+                }
+
+                $state = $tinebaseApplication->state;
+                $state[Tinebase_Model_Application::STATE_REPLICATION_MASTER_ID] = $modification->instance_seq;
+                $tinebaseApplication->state = $state;
+                $tinebaseApplication = $applicationController->updateApplication($tinebaseApplication);
+
+                $transactionManager->commitTransaction($transactionId);
+
+            } catch (Exception $e) {
+                $this->_externalInstanceId = null;
+
+                Tinebase_Exception::log($e, false);
+
+                $transactionManager->rollBack();
+
+                // must not happen, continuing pointless!
+                return false;
+            }
+        }
+
+        $this->_externalInstanceId = null;
+
+        return true;
     }
 }

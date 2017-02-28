@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  */
-class Tinebase_Acl_Roles
+class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
 {
     /**
      * @var Zend_Db_Adapter_Abstract
@@ -57,6 +57,16 @@ class Tinebase_Acl_Roles
      */
     private function __construct() 
     {
+        $this->_applicationName = 'Tinebase';
+        $this->_modelName = 'Tinebase_Model_Role';
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Role',
+            'tableName' => 'roles',
+        ), $this->_getDb());
+        //$this->_purgeRecords = TRUE;
+        //$this->_resolveCustomFields = FALSE;
+        $this->_updateMultipleValidateEachRecord = TRUE;
+        $this->_doContainerACLChecks = FALSE;
     }
     
     /**
@@ -224,25 +234,7 @@ class Tinebase_Acl_Roles
      */
     public function searchRoles($_filter, $_paging)
     {
-        $select = $_filter->getSelect();
-        
-        $_paging->appendPaginationSql($select);
-        
-        return new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_getDb()->fetchAssoc($select));
-    }
-
-    /**
-     * Returns roles count
-     * 
-     * @param Tinebase_Model_RoleFilter $_filter
-     * @return int
-     */
-    public function searchCount($_filter)
-    {
-        $select = $_filter->getSelect();
-        
-        $roles = new Tinebase_Record_RecordSet('Tinebase_Model_Role', $this->_getDb()->fetchAssoc($select));
-        return count($roles);
+        return $this->search($_filter, $_paging);
     }
     
     /**
@@ -298,9 +290,7 @@ class Tinebase_Acl_Roles
      */
     public function createRole(Tinebase_Model_Role $role)
     {
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($role, 'create');
-        
-        $role = $this->_getRolesBackend()->create($role);
+        $role = $this->create($role);
         
         $this->resetClassCache();
         
@@ -315,9 +305,7 @@ class Tinebase_Acl_Roles
      */
     public function updateRole(Tinebase_Model_Role $role)
     {
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($role, 'update', $this->getRoleById($role->getId()));
-        
-        $role = $this->_getRolesBackend()->update($role);
+        $role = $this->update($role);
         
         $this->resetClassCache();
         
@@ -334,19 +322,7 @@ class Tinebase_Acl_Roles
     public function deleteRoles($ids)
     {
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_getDb());
-            
-            // delete role acls/members first
-            $where = array(
-                $this->_getDb()->quoteIdentifier('role_id') . ' in (?)' => (array) $ids
-            );
-            $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_accounts', $where);
-            $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_rights',   $where);
-            
-            // delete role
-            $this->_getRolesBackend()->delete($ids);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $this->delete($ids);
             
             $this->resetClassCache();
             
@@ -465,6 +441,9 @@ class Tinebase_Acl_Roles
         if ($roleId != $_roleId && $roleId > 0) {
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
+
+        /** @var Tinebase_Model_Role $oldRole */
+        $oldRole = $this->get($_roleId);
         
         // remove old members
         $where = array(
@@ -487,6 +466,8 @@ class Tinebase_Acl_Roles
             );
             $this->_getDb()->insert(SQL_TABLE_PREFIX . 'role_accounts', $data);
         }
+
+        $this->_writeModLogForRole($oldRole);
         
         $this->resetClassCache();
     }
@@ -556,6 +537,9 @@ class Tinebase_Acl_Roles
                 implode(', ', $validTypes) . ' (values given: ' . 
                 print_r($_account, true) . ')');
         }
+
+        /** @var Tinebase_Model_Role $oldRole */
+        $oldRole = $this->get($_roleId);
         
         $data = array(
             'role_id'       => $roleId,
@@ -565,11 +549,23 @@ class Tinebase_Acl_Roles
         
         try {
             $this->_getDb()->insert(SQL_TABLE_PREFIX . 'role_accounts', $data);
+
+            $this->_writeModLogForRole($oldRole);
         } catch (Zend_Db_Statement_Exception $e) {
             // account is already member of this group
         }
         
         $this->resetClassCache();
+    }
+
+    protected function _writeModLogForRole(Tinebase_Model_Role $_oldRole)
+    {
+        $seq = intval($_oldRole->seq);
+        $_oldRole->seq = $seq + 1;
+        $this->_getRolesBackend()->update($_oldRole);
+
+        $newRole = $this->get($_oldRole->getId());
+        $this->_writeModLog($newRole, $_oldRole);
     }
 
     /**
@@ -582,9 +578,12 @@ class Tinebase_Acl_Roles
     public function removeRoleMember($_roleId, $_account)
     {
         $roleId = (int)$_roleId;
-        if ($roleId != $_roleId && $roleId > 0) {
+        if ($roleId != $_roleId || $roleId < 1) {
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
+
+        /** @var Tinebase_Model_Role $oldRole */
+        $oldRole = $this->get($roleId);
         
         $where = array(
             $this->_getDb()->quoteIdentifier('role_id') . ' = ?'      => $roleId,
@@ -593,6 +592,8 @@ class Tinebase_Acl_Roles
         );
         
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_accounts', $where);
+
+        $this->_writeModLogForRole($oldRole);
         
         $this->resetClassCache();
     }
@@ -694,6 +695,9 @@ class Tinebase_Acl_Roles
      */
     public function addRoleRight($roleId, $applicationId, $right)
     {
+        /** @var Tinebase_Model_Role $oldRole */
+        $oldRole = $this->get($roleId);
+
         $data = array(
             'role_id'        => $roleId,
             'application_id' => $applicationId,
@@ -701,6 +705,8 @@ class Tinebase_Acl_Roles
         );
         
         $this->_getDb()->insert(SQL_TABLE_PREFIX . 'role_rights', $data);
+
+        $this->_writeModLogForRole($oldRole);
         
         $this->resetClassCache();
     }
@@ -714,6 +720,9 @@ class Tinebase_Acl_Roles
      */
     public function deleteRoleRight($roleId, $applicationId, $right)
     {
+        /** @var Tinebase_Model_Role $oldRole */
+        $oldRole = $this->get($roleId);
+
         $where = array(
             $this->_getDb()->quoteIdentifier('role_id') . ' = ?'        => $roleId,
             $this->_getDb()->quoteIdentifier('application_id') . ' = ?' => $applicationId,
@@ -721,6 +730,8 @@ class Tinebase_Acl_Roles
         );
         
         $this->_getDb()->delete(SQL_TABLE_PREFIX . 'role_rights', $where);
+
+        $this->_writeModLogForRole($oldRole);
         
         $this->resetClassCache();
     }
@@ -803,6 +814,11 @@ class Tinebase_Acl_Roles
         $adminGroup         = $groupsBackend->getDefaultAdminGroup();
         $userGroup          = $groupsBackend->getDefaultGroup();
         $replicationGroup   = $groupsBackend->getDefaultReplicationGroup();
+
+        $oldOmitModLog = $this->_omitModLog;
+        $oldSetNotes = $this->_setNotes;
+        $this->_omitModLog = true;
+        $this->_setNotes = false;
         
         // add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(
@@ -841,7 +857,9 @@ class Tinebase_Acl_Roles
                 'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
             )
         ));
-        
+
+        $this->_setNotes = $oldSetNotes;
+        $this->_omitModLog = $oldOmitModLog;
         $this->resetClassCache();
     }
     
@@ -874,5 +892,56 @@ class Tinebase_Acl_Roles
         }
         
         return $this->_rolesBackend;
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $config = $_record::getConfiguration()->recordsFields;
+        foreach (array_keys($config) as $property) {
+            $this->_createDependentRecords($_createdRecord, $_record, $property, $config[$property]['config']);
+        }
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $config = $_record::getConfiguration()->recordsFields;
+
+        foreach (array_keys($config) as $p) {
+            $this->_updateDependentRecords($_record, $_oldRecord, $p, $config[$p]['config']);
+        }
+    }
+
+    /**
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @param bool         $_getRelatedData
+     * @param bool $_getDeleted
+     * @return Tinebase_Record_Interface
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE)
+    {
+        $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted);
+        $modelName = $this->_modelName;
+        $modelConf = $modelName::getConfiguration();
+        $rs = new Tinebase_Record_RecordSet($this->_modelName, array($result));
+        Tinebase_ModelConfiguration::resolveRecordsPropertiesForRecordSet($rs, $modelConf);
+        return $rs->getFirstRecord();
     }
 }

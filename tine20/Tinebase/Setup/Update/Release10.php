@@ -147,4 +147,61 @@ class Tinebase_Setup_Update_Release10 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '10.7');
     }
+
+    /**
+     * update to 10.8
+     *
+     * update roles and application table
+     */
+    public function update_7()
+    {
+        if (!$this->_backend->columnExists('is_deleted', 'roles')) {
+            $query = $this->_backend->addAddCol(null, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>'), 'last_modified_time'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>'), 'is_deleted'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>'), 'deleted_by'
+            );
+            $query = $this->_backend->addAddCol($query, 'roles',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>seq</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>0</default>
+                </field>'), 'deleted_time'
+            );
+            $this->_backend->execQueryVoid($query);
+            $this->setTableVersion('roles', '2');
+        }
+
+        if (!$this->_backend->columnExists('state', 'applications')) {
+
+            $this->_backend->addCol('applications',
+                new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>state</name>
+                    <type>text</type>
+                    <length>65535</length>
+                    <notnull>false</notnull>
+                </field>')
+            );
+
+            $this->setTableVersion('applications', '4');
+        }
+
+        $this->setApplicationVersion('Tinebase', '10.8');
+    }
 }

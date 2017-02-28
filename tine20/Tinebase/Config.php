@@ -448,7 +448,27 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * @var string
      */
+    const REPLICATION_SLAVE = 'replicationSlave';
+
+    /**
+     * @var string
+     */
     const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
+
+    /**
+     * @var string
+     */
+    const MASTER_URL = 'masterURL';
+
+    /**
+     * @var string
+     */
+    const MASTER_USERNAME = 'masterUsername';
+
+    /**
+     * @var string
+     */
+    const MASTER_PASSWORD = 'masterPassword';
 
     /**
      * (non-PHPdoc)
@@ -620,6 +640,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                              => Tinebase_Config::TYPE_STRING
                 )
             ),
+        ),
+        self::REPLICATION_SLAVE => array(
+            //_('Replication slave configuration')
+            'label'                 => 'Replication slave configuration',
+            //_('Replication slave configuration.')
+            'description'           => 'Replication slave configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::MASTER_URL            => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                self::MASTER_USERNAME       => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                ),
+                self::MASTER_PASSWORD       => array(
+                    'type'                      => Tinebase_Config::TYPE_STRING,
+                )
+            )
         ),
         self::USERBACKEND => array(
                                    //_('User Configuration')
