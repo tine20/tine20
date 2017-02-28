@@ -42,11 +42,13 @@ class Tinebase_Model_ModificationLogFilter extends Tinebase_Model_Filter_FilterG
         'application_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'record_id'            => array('filter' => 'Tinebase_Model_Filter_Id'),
         'modification_account' => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'instance_id'          => array('filter' => 'Tinebase_Model_Filter_Id'),
         'modification_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'record_type'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'modified_attribute'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'old_value'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'change_type'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'seq'                  => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'instance_seq'         => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 }

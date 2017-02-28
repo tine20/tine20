@@ -1407,4 +1407,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, (int)$state);
         return $state == Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0);
     }
+
+    /**
+     * returns the replication modification logs
+     * 
+     * @param $sequence
+     * @param int $limit
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getReplicationModificationLogs($sequence, $limit = 100)
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::REPLICATION)) {
+            throw new Tinebase_Exception_AccessDenied('you do not have access to modlogs');
+        }
+
+        $result = array(
+            'results'   => Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($sequence, $limit)->toArray(),
+        );
+        $result['totalcount'] = count($result['results']);
+        
+        return $result;
+    }
 }

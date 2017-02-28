@@ -139,6 +139,8 @@ class Tinebase_Timemachine_ModificationLog
 
     /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
+     *
+     * TODO if replication is on, we need to keep the "deleted" / "pruned" message in the modlog
      */
     public function clean()
     {
@@ -308,6 +310,26 @@ class Tinebase_Timemachine_ModificationLog
             'sort' => 'seq'
         ));
         
+        return $this->_backend->search($filter, $paging);
+    }
+
+    /**
+     * get modifications for replication (instance_id == TinebaseId) by instance seq
+     *
+     * @param integer $currentSeq
+     * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
+     */
+    public function getReplicationModificationsByInstanceSeq($currentSeq, $limit = 100)
+    {
+        $filter = new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'instance_id',  'operator' => 'equals',  'value' => Tinebase_Core::getTinebaseId()),
+            array('field' => 'instance_seq', 'operator' => 'greater', 'value' => $currentSeq)
+        ));
+        $paging = new Tinebase_Model_Pagination(array(
+            'limit' => $limit,
+            'sort'  => 'instance_seq'
+        ));
+
         return $this->_backend->search($filter, $paging);
     }
     

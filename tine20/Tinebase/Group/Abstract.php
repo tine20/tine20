@@ -148,6 +148,16 @@ abstract class Tinebase_Group_Abstract
     {
         return $this->_getDefaultGroup('Administrators');
     }
+
+    /**
+     * get default replication group
+     *
+     * @return Tinebase_Model_Group
+     */
+    public function getDefaultReplicationGroup()
+    {
+        return $this->_getDefaultGroup('Replicators');
+    }
     
     /**
      * Get multiple groups
@@ -177,11 +187,17 @@ abstract class Tinebase_Group_Abstract
      */
     protected function _getDefaultGroup($_name = 'Users')
     {
-        if (! in_array($_name, array('Users', 'Administrators'))) {
+        if (! in_array($_name, array('Users', 'Administrators', 'Replicators'))) {
             throw new Tinebase_Exception_InvalidArgument('Wrong group name: ' . $_name);
         }
-        
-        $configKey = ($_name == 'Users') ? Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY : Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
+
+        if ('Users' === $_name) {
+            $configKey = Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY;
+        } elseif ('Administrators' === $_name) {
+            $configKey = Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY;
+        } else {
+            $configKey = Tinebase_User::DEFAULT_REPLICATION_GROUP_NAME_KEY;
+        }
         $defaultGroupName = Tinebase_User::getBackendConfiguration($configKey);
         if (empty($defaultGroupName)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $configKey . ' not found. Check your user backend configuration.');

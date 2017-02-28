@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        extend/use sql abstract backend
@@ -148,7 +148,7 @@ class Tinebase_Acl_Roles
      * 
      * @param   int $_accountId the numeric account id
      * @param   boolean $_anyRight is any right enough to geht app?
-     * @return  array list of enabled applications for this account
+     * @return  Tinebase_Record_RecordSet list of enabled applications for this account
      * @throws  Tinebase_Exception_AccessDenied if user has no role memberships
      */
     public function getApplications($_accountId, $_anyRight = FALSE)
@@ -259,8 +259,10 @@ class Tinebase_Acl_Roles
         if ($roleId != $_roleId && $roleId <= 0) {
             throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
         }
-        
-        return $this->_getRolesBackend()->get($roleId);
+
+        /** @var Tinebase_Model_Role $role */
+        $role = $this->_getRolesBackend()->get($roleId);
+        return $role;
     }
     
     /**
@@ -272,7 +274,9 @@ class Tinebase_Acl_Roles
      */
     public function getRoleByName($_roleName)
     {
-        return $this->_getRolesBackend()->getByProperty($_roleName, 'name');
+        /** @var Tinebase_Model_Role $role */
+        $role = $this->_getRolesBackend()->getByProperty($_roleName, 'name');
+        return $role;
     }
     
     /**
@@ -435,7 +439,7 @@ class Tinebase_Acl_Roles
                 . $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', $type));
         
         if ($type === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-            $select->orwhere($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND ' 
+            $select->orWhere($this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_id') . ' IN (?)', $groupMemberships) . ' AND '
                 .  $this->_getDb()->quoteInto($this->_getDb()->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP));
         }
         
@@ -796,8 +800,9 @@ class Tinebase_Acl_Roles
     {
         $groupsBackend = Tinebase_Group::getInstance();
         
-        $adminGroup = $groupsBackend->getDefaultAdminGroup();
-        $userGroup  = $groupsBackend->getDefaultGroup();
+        $adminGroup         = $groupsBackend->getDefaultAdminGroup();
+        $userGroup          = $groupsBackend->getDefaultGroup();
+        $replicationGroup   = $groupsBackend->getDefaultReplicationGroup();
         
         // add roles and add the groups to the roles
         $adminRole = new Tinebase_Model_Role(array(
@@ -821,6 +826,19 @@ class Tinebase_Acl_Roles
             array(
                 'id'    => $userGroup->getId(),
                 'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, 
+            )
+        ));
+
+        $replicationRole = new Tinebase_Model_Role(array(
+            'name'                  => 'replication role',
+            'description'           => 'replication role for tine. this role has only the right to access replication data per default.',
+        ));
+        $replicationRole = $this->createRole($replicationRole);
+        $this->addRoleRight($replicationRole->getId(), Tinebase_Core::getTinebaseId(), Tinebase_Acl_Rights::REPLICATION);
+        $this->setRoleMembers($replicationRole->getId(), array(
+            array(
+                'id'    => $replicationGroup->getId(),
+                'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
             )
         ));
         

@@ -441,6 +441,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const VERSION_CHECK = 'versionCheck';
 
     /**
+     * @var string
+     */
+    const REPLICATION_MASTER = 'replicationMaster';
+
+    /**
+     * @var string
+     */
+    const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
+
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -594,6 +604,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => FALSE,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
+        ),
+        self::REPLICATION_MASTER => array(
+            //_('Replication master configuration')
+            'label'                 => 'Replication master configuration',
+            //_('Replication master configuration.')
+            'description'           => 'Replication master configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+            'content'               => array(
+                self::REPLICATION_USER_PASSWORD     => array(
+                    'type'                              => Tinebase_Config::TYPE_STRING
+                )
+            ),
         ),
         self::USERBACKEND => array(
                                    //_('User Configuration')

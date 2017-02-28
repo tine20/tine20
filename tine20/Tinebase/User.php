@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -57,6 +57,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * for details and default behavior
      */
     const SYNC_WITH_CONFIG_OPTIONS = 'sync_with_config_options';
+
+    /**
+     * Key under which the default replication group name setting will be stored/retrieved
+     */
+    const DEFAULT_REPLICATION_GROUP_NAME_KEY = 'defaultReplicationGroupName';
     
     protected static $_contact2UserMapping = array(
         'n_family'      => 'accountLastName',
@@ -881,6 +886,20 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
+
+        // create the replication user
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
+
+        $replicationUser = static::createSystemUser('replicationuser', Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+        if (null !== $replicationUser) {
+            if (!($replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER)) ||
+                    empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                $password = Tinebase_Record_Abstract::generateUID(12);
+            }
+            Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+        }
+
+
         Tinebase_User::getInstance()->registerPlugin($addressBookController);
 
 
@@ -960,9 +979,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * create new system user
      *
      * @param string $accountLoginName
+     * @param Tinebase_Group $defaultGroup
      * @return Tinebase_Model_FullUser|null
      */
-    static public function createSystemUser($accountLoginName)
+    static public function createSystemUser($accountLoginName, $defaultGroup = null)
     {
         try {
             $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
@@ -975,12 +995,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
 
-        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        if (null === $defaultGroup) {
+            $defaultGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        }
         $systemUser = new Tinebase_Model_FullUser(array(
             'accountLoginName' => $accountLoginName,
             'accountStatus' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
             'visibility' => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
-            'accountPrimaryGroup' => $adminGroup->getId(),
+            'accountPrimaryGroup' => $defaultGroup->getId(),
             'accountLastName' => $accountLoginName,
             'accountDisplayName' => $accountLoginName,
             'accountExpires' => NULL,
