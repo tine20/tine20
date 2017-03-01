@@ -67,7 +67,8 @@ Tine.Admin.Roles.Main = {
                         },
                         failure: function(result, request){
                             Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.'));
-                        }
+                        },
+                        scope: this
                     });
                 }
             }, this);

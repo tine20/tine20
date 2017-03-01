@@ -82,7 +82,8 @@ Tine.Admin.Tags.Main = {
                         text: this.translation.gettext('Deleting tag(s)...'),
                         success: function (result, request) {
                             this.gridPanel.getStore().reload();
-                        }
+                        },
+                        scope: this
                     });
                 }
             }, this);
