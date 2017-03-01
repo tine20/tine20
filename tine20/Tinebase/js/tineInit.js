@@ -771,6 +771,18 @@ Tine.Tinebase.tineInit = {
                     taps: 2
                 }));
 
+                Ext.getDoc().on('orientationchange', function() {
+                    // @TODO: iOS safari only?
+                    var metas = document.getElementsByTagName('meta');
+                    for (var i = 0; i < metas.length; i++) {
+                        if (metas[i].name == "viewport") {
+                            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                        }
+                    }
+                    Tine.Tinebase.viewport.doLayout();
+                }, this);
+
+
             }, 'Tinebase/js/hammerjs');
         }
 

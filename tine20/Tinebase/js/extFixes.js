@@ -10,14 +10,19 @@
         isTouchDevice =
             // @see http://www.stucox.com/blog/you-cant-detect-a-touchscreen/
             'ontouchstart' in window        // works on most browsers
-            || navigator.maxTouchPoints;    // works on IE10/11 and Surface
+            || navigator.maxTouchPoints,    // works on IE10/11 and Surface
+        isWebApp =
+            // @see https://stackoverflow.com/questions/17989777/detect-if-ios-is-using-webapp/40932301#40932301
+            (window.navigator.standalone == true)                           // iOS safari
+            || (window.matchMedia('(display-mode: standalone)').matches);   // android chrome
 
     Ext.apply(Ext, {
         isIE10 : isIE10,
         isIE11 : isIE11,
         
         isNewIE : isNewIE,
-        isTouchDevice: isTouchDevice
+        isTouchDevice: isTouchDevice,
+        isWebApp: isWebApp
     })
 })();
 
