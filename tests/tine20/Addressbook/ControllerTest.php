@@ -17,15 +17,8 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Addressbook_Controller
  */
-class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
+class Addressbook_ControllerTest extends TestCase
 {
-    /**
-     * set geodata for contacts
-     * 
-     * @var boolean
-     */
-    protected $_geodata = FALSE;
-    
     /**
      * @var array test objects
      */
@@ -44,9 +37,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->_instance = Addressbook_Controller_Contact::getInstance();
-        $this->_geodata = $this->_instance->setGeoDataForContacts(false);
-        
+
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -156,11 +149,12 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_instance->setGeoDataForContacts($this->_geodata);
         $this->_instance->useNotes(true);
         if ((isset($this->objects['contact']) || array_key_exists('contact', $this->objects))) {
             $this->_instance->delete($this->objects['contact']);
         }
+
+        parent::tearDown();
     }
     
     /**
@@ -447,5 +441,51 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->objects['contact']->notes[0]->note = 'note';
+    }
+
+    /**
+     * @see 0012744: allow to configure when user contacts are hidden
+     */
+    public function testContactHiddenFilter()
+    {
+        $user = Tinebase_Core::getUser();
+
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'n_fileas',      'operator' => 'equals', 'value' => $user->accountDisplayName),
+            array('field' => 'showDisabled',  'operator' => 'equals', 'value' => 0),
+        ));
+
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(1, $count, 'contact should be found');
+
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+
+        // test case: disabled
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(0, $count, 'disabled contact should not be found');
+
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(1, $count, 'expired contact should be found');
+
+        // test case: expired
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'expired');
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(0, $count, 'expired contact should not be found');
+
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(1, $count, 'disabled contact be found');
+
+        // test case: never
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'never');
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(1, $count);
+
+        Tinebase_User::getInstance()->setStatus($user, Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
+        $count = $this->_instance->searchCount($filter);
+        $this->assertEquals(1, $count);
     }
 }

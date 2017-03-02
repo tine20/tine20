@@ -29,7 +29,14 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const CONTACT_DUP_FIELDS = 'contactDupFields';
-    
+
+    /**
+     * contact hidden
+     *
+     * @var string
+     */
+    const CONTACT_HIDDEN_CRITERIA = 'contactHiddenCriteria';
+
     /**
      * fields for contact salutations
      * 
@@ -94,6 +101,20 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 array('n_given', 'n_family', 'org_name'),   // all fields must match
                 array('email'),                             // single field that needs to match
             ),
+        ),
+        /**
+         * possible values: disabled, expired, never
+         *
+         * TODO only allow some values
+         */
+        self::CONTACT_HIDDEN_CRITERIA => array(
+            //_('Contact Hidden Criteria')
+            'label'                 => 'Contact Hidden Criteria',
+            //_('The contact is hidden if it is ... (one of: disabled, expired or never')
+            'description'           => 'The contact is hidden if it is ... (one of: disabled, expired or never',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'default'               => 'disabled'
         ),
         self::CONTACT_SALUTATION => array(
         //_('Contact salutations available')
