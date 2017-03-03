@@ -414,6 +414,10 @@
           "path": "js/"
         },
         {
+          "text": "EncodingHelper.js",
+          "path": "js/"
+        },
+        {
           "text": "common.js",
           "path": "js/"
         },

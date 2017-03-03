@@ -311,6 +311,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.ImageField.superclass.onDestroy.call(this);
     }
 });
+Ext.reg('ux.imagefield', Ext.ux.form.ImageField);
 
 Ext.ns('Ext.ux.util');
 

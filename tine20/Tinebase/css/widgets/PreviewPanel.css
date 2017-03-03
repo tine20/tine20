@@ -8,6 +8,9 @@
     }
 .preview-panel img {
     vertical-align: middle;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -khtml-border-radius: 8px;
     }
 .preview-panel-left{
     float:left;
@@ -27,11 +30,11 @@
     font-weight: bold;
     }
 .preview-panel-image{
-    vertical-align:middle;
-    margin:5px 2px 5px 5px;
-    width:90px;
-    height:113px;
-    padding:0px
+    padding:0px;
+    display: table-cell;
+    vertical-align: middle;
+    position: relative;
+    left: -2px;
     }
 .preview-panel-office{
     width:360px;
