@@ -275,8 +275,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             array('field' => 'record_id',           'operator' => 'equals', 'value' => $contact->getId()),
             array('field' => 'modification_time',   'operator' => 'within', 'value' => 'weekThis'),
         ));
-        $result = $this->_modLogClass->undo($filter);
-        $this->assertEquals(1, $result['totalcount'], 'did not get 1 undone modlog: ' . print_r($result, TRUE));
+        $result = $this->_modLogClass->undo($filter, true);
+        $this->assertEquals(2, $result['totalcount'], 'did not get 2 undone modlog: ' . print_r($result, TRUE));
         $this->assertContains('1234', $result['undoneModlogs']->getFirstRecord()->old_value);
         
         // check record after undo
