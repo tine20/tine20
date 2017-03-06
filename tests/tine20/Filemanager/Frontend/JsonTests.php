@@ -719,6 +719,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             'operator' => 'equals', 
             'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
         ));
+
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(0, $result['totalcount']);
     }
@@ -1495,5 +1496,44 @@ class Filemanager_Frontend_JsonTests extends TestCase
         } catch (Exception $e) {
             $this->assertTrue($e instanceof Tinebase_Exception_NotFound);
         }
+    }
+
+    /**
+     * Creating a new shared folder and moving it afterwards to a private one doesn't delete it's container
+     * And moving it back creates a new one and so on.
+     *
+     * This shouldn't happen.
+     *
+     * The correct behaviour would be, if a container is moved inside a folder, it should become a folder node
+     * and it's container should be deleted afterwards.
+     *
+     * https://forge.tine20.org/view.php?id=12740
+     */
+    public function testMovingContainerAround()
+    {
+        $private = $this->testCreateContainerNodeInPersonalFolder();
+
+        // Move shared directory folder to private folder
+        $node = $this->_json->createNode(['/shared/sharedfoldertest'], 'folder');
+        $nodePath = $node['path'];
+
+        $targetPath = $private['path'] . '/sharedfoldertest';
+
+        $this->_json->moveNodes([$nodePath], [$targetPath], false);
+        $this->_json->moveNodes([$targetPath], [$nodePath], false);
+        $this->_json->moveNodes([$nodePath], [$targetPath], false);
+        $this->_json->moveNodes([$targetPath], [$nodePath], false);
+
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array(
+                'field' => 'name',
+                'operator' => 'equals',
+                'value' => 'sharedfoldertest'
+            ),
+        ));
+
+        $sharedFolderTestContainer = Tinebase_Container::getInstance()->search($filter);
+
+        $this->assertEquals(1, $sharedFolderTestContainer->count());
     }
 }

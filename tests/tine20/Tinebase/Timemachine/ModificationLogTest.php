@@ -268,7 +268,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             Tinebase_DateTime::now()->subSecond(5), Tinebase_DateTime::now())->getFirstRecord();
         $this->assertTrue($modlog !== NULL);
         $this->assertEquals(2, $modlog->seq);
-        $this->assertEquals('+491234', $modlog->old_value);
+        $this->assertContains('1234', $modlog->old_value);
         
         $filter = new Tinebase_Model_ModificationLogFilter(array(
             array('field' => 'record_type',         'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
@@ -277,7 +277,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         ));
         $result = $this->_modLogClass->undo($filter);
         $this->assertEquals(1, $result['totalcount'], 'did not get 1 undone modlog: ' . print_r($result, TRUE));
-        $this->assertEquals('+491234', $result['undoneModlogs']->getFirstRecord()->old_value);
+        $this->assertContains('1234', $result['undoneModlogs']->getFirstRecord()->old_value);
         
         // check record after undo
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact);

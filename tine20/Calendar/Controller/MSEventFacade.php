@@ -791,8 +791,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 }
             }
             
-            // remove entry if value is not true => attender has no email address
             if (!self::$_attendeeEmailCache[$cacheId]) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' remove entry because attender has no email address: ' . $attender->user_id);
                 $event->attendee->removeRecord($attender);
             }
         }

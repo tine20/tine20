@@ -43,8 +43,8 @@ Ext.ux.Notification = function(){
                 }, 15000);
 
             // Notification (see https://notifications.spec.whatwg.org/)
-            } else if (Notification && Notification.permission == 'granted') {
-                var notification = new Notification(title, {
+            } else if (window.Notification && window.Notification.permission == 'granted') {
+                var notification = new window.Notification(title, {
                     icon: iconUrl,
                     body: text,
                 });

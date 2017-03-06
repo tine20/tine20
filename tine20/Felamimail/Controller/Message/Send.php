@@ -425,15 +425,20 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $_mail->clearFrom();
         
-        $from = (isset($_account->from) && ! empty($_account->from)) 
-            ? $_account->from 
-            : Tinebase_Core::getUser()->accountFullName;
+        $from = $this->_getSenderName($_account);
         
         $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
         
         $_mail->setFrom($email, $from);
+    }
+
+    protected function _getSenderName($account)
+    {
+        return (isset($_account->from) && ! empty($_account->from))
+            ? $_account->from
+            : Tinebase_Core::getUser()->accountFullName;
     }
     
     /**
@@ -517,6 +522,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // set organization
         if (isset($_account->organization) && ! empty($_account->organization)) {
             $_mail->addHeader('Organization', $_account->organization);
+        }
+
+        // add reply-to
+        if (! empty($_account->reply_to)) {
+            $_mail->setReplyTo($_account->reply_to, $this->_getSenderName($_account));
         }
         
         // set message-id (we could use Zend_Mail::createMessageId() here)

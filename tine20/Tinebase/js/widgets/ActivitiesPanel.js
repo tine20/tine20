@@ -173,10 +173,13 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             
             options.params.paging = Ext.copyTo({}, options.params, 'sort,dir,start,limit');
             
-            var filterToolbar = Ext.getCmp('activitiesFilterToolbar');
-            var filter = filterToolbar ? filterToolbar.getValue() : [];
+            var filterToolbar = Ext.getCmp('activitiesFilterToolbar'),
+                filter = filterToolbar ? filterToolbar.getValue() : [],
+            // sanitize model name, we need APP_Model_MODELNAME here
+                model = this.record_model.match(/_Model_/) ? this.record_model : this.app + '_Model_' + this.record_model;
+
             filter.push(
-                {field: 'record_model', operator: 'equals', value: this.record_model },
+                {field: 'record_model', operator: 'equals', value: model },
                 {field: 'record_id', operator: 'equals', value: this.getRecordId() },
                 {field: 'record_backend', operator: 'equals', value: 'Sql' }
             );

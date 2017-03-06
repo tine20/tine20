@@ -164,6 +164,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     
     /**
      * testInitialRegistry
+     *
+     * @group needsbuild
      */
     public function testInitialRegistry()
     {

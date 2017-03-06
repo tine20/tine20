@@ -246,20 +246,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $view->setScriptPath("$baseDir/Tinebase/views");
 
         if (TINE20_BUILDTYPE =='DEVELOPMENT') {
-            $devIncludes = array();
             $jsFilestoInclude = $this->_getFilesToWatch('js');
-
-            $webpackHelper = __DIR__ . '/../js/webpack-dev-includes.js';
-            $webpackBuilds = json_decode(`node -e 'console.log(JSON.stringify(require("$webpackHelper")))'`);
-
-            foreach ($jsFilestoInclude as $jsFileToInclude) {
-                if ($webpackBuilds && in_array($jsFileToInclude, $webpackBuilds)) {
-                    $devIncludes[] = $jsFileToInclude;
-
-                }
-            }
-
-            $view->devIncludes = $devIncludes;
+            $view->devIncludes = $jsFilestoInclude;
         }
 
         $view->registryData = array();
@@ -306,12 +294,14 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         // set Strict-Transport-Security; used only when served over HTTPS
         header('Strict-Transport-Security: max-age=16070400');
-        
-        // cache mainscreen for one day
-        $maxAge = 86400;
-        header('Cache-Control: private, max-age=' . $maxAge);
-        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
-        header_remove('Pragma');
+
+        if (! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT') {
+            // cache mainscreen for one day
+            $maxAge = 86400;
+            header('Cache-Control: private, max-age=' . $maxAge);
+            header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+            header_remove('Pragma');
+        }
     }
     
     /**
@@ -408,8 +398,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function mainScreen()
     {
         $this->checkAuth();
-
-        $this->_setJsonKeyCookie();
         $this->_renderMainScreen();
     }
     
@@ -516,14 +504,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // close session to allow other requests
         Tinebase_Session::writeClose(true);
 
-        $ifModifiedSince = null;
-
-        if (isset($_SERVER['If_Modified_Since'])) {
-            $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
-        } elseif (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"');
-        }
-
         $filesToWatch = $filesToWatch ? $filesToWatch : $this->_getFilesToWatch($_fileType);
         if ($_fileType == 'js' && TINE20_BUILDTYPE != 'DEVELOPMENT') {
             $customJSFiles = Tinebase_Config::getInstance()->get(Tinebase_Config::FAT_CLIENT_CUSTOM_JS);
@@ -535,9 +515,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__
             . ' (' . __LINE__ .') Got files to watch: ' . print_r($filesToWatch, true));
 
-        $filesToWatch = array_filter($filesToWatch, 'file_exists');
-        $lastModified = $this->_getLastModified($filesToWatch);
-        
         // cache for one day
         $maxAge = 86400;
         header('Cache-Control: private, max-age=' . $maxAge);
@@ -546,21 +523,61 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // remove Pragma header from session
         header_remove('Pragma');
 
-        // if the cache id is still valid, the files don't have changed on disk
-        if ($ifModifiedSince == $lastModified) {
-            header("Last-Modified: " . $ifModifiedSince);
+        $clientETag = isset($_SERVER['If_None_Match']) ? $_SERVER['If_None_Match'] :
+            isset($_SERVER['HTTP_IF_NONE_MATCH']) ? $_SERVER['HTTP_IF_NONE_MATCH'] :
+                '';
+
+        if (preg_match('/[a-f0-9]{40}/', $clientETag, $matches)) {
+            $clientETag = $matches[0];
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__CLASS__ . '::' . __METHOD__
+            . ' (' . __LINE__ .') $clientETag: ' . $clientETag);
+
+        $serverETag = $this->getAssetHash();
+
+        if ($clientETag == $serverETag) {
             header("HTTP/1.0 304 Not Modified");
         } else {
-            header("Last-Modified: " . $lastModified);
             header('Content-Type: application/javascript');
+            header('Etag: "' . $serverETag . '"');
 
             // send files to client
             foreach ($filesToWatch as $file) {
                 readfile($file);
+                echo "Tine.clientVersion.filesHash = '$serverETag';";
             }
         }
     }
-    
+
+    /**
+     * get map of asset files
+     *
+     * @return array
+     */
+    public static function getAssetsMap($asJson=false)
+    {
+        $jsonFile = 'Tinebase/js/webpack-assets-FAT.json';
+
+        if (TINE20_BUILDTYPE =='DEVELOPMENT') {
+            $devServerURL = Tinebase_Config::getInstance()->get('webpackDevServerURL', 'http://localhost:10443');
+            $jsonFileUri = $devServerURL . '/' . $jsonFile;
+            $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
+            if (! $json) {
+                Tinebase_Core::getLogger()->ERR(__CLASS__ . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
+                throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
+            }
+        } else {
+            $json = file_get_contents($jsonFile);
+        }
+
+        return $asJson ? $json : json_decode($json, true);
+    }
+
+    public static function getAssetHash()
+    {
+        return sha1(self::getAssetsMap(true) . TINE20_BUILDTYPE);
+    }
     /**
      * @param string $_fileType
      * @return array
@@ -571,14 +588,19 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
         $filesToWatch = array();
+        $fileMap = $this->getAssetsMap();
 
         foreach ($orderedApplications as $application) {
             switch($_fileType) {
                 case 'js':
-                    $prefix = "{$application}/js/{$application}";
-                    $suffix = '-FAT' . (TINE20_BUILDTYPE == 'DEBUG' ? '.debug' : '') . '.js';
+                    if (isset($fileMap["{$application}/js/{$application}"])) {
+                        $jsFile = $fileMap["{$application}/js/{$application}"]['js'];
+                    }
 
-                    $jsFile = "{$prefix}{$suffix}";
+                    if (TINE20_BUILDTYPE =='DEBUG') {
+                        $jsFile = preg_replace('/\.js$/', '.debug.js', $jsFile);
+                    }
+
                     $filesToWatch[] = $jsFile;
                     break;
                 case 'lang':

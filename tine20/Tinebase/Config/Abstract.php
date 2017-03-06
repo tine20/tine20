@@ -342,8 +342,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         return (
                false === $cachedConfigData
-            || (defined(TINE20_BUILDTYPE) && TINE20_BUILDTYPE == 'DEVELOPMENT')
-            || (defined(TINE20_BUILDTYPE) && TINE20_BUILDTYPE == 'DEBUG')
+            || (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE == 'DEVELOPMENT')
+            || (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE == 'DEBUG')
             || $cachedConfigData['ttlstamp'] < time()
         );
     }
