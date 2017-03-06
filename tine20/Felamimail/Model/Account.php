@@ -96,6 +96,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             Zend_Filter_Input::DEFAULT_VALUE => 1,
             array('InArray', array(0,1)),
         ),
+        'reply_to'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // namespaces
         'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'ns_other'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),

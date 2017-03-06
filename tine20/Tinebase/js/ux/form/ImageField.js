@@ -303,10 +303,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.buttonCt = null;
         this.textCt = null;
         this.loadMask.destroy();
-        this.ctxMenu.destroy();
+        if (this.ctxMenu) {
+            this.ctxMenu.destroy();
+        }
         this.uploader = null;
         
-        Ext.ux.form.ImageField.superclass.destroy.call(this);
+        Ext.ux.form.ImageField.superclass.onDestroy.call(this);
     }
 });
 

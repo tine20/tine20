@@ -380,6 +380,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'display_format' },
     { name: 'compose_format' },
     { name: 'preserve_format' },
+    { name: 'reply_to' },
     { name: 'ns_personal' },
     { name: 'ns_other' },
     { name: 'ns_shared' },

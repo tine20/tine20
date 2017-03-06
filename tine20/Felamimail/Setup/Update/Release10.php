@@ -21,4 +21,16 @@ class Felamimail_Setup_Update_Release10 extends Setup_Update_Abstract
         $update9->update_2();
         $this->setApplicationVersion('Felamimail', '10.1');
     }
+
+    /**
+     * update to 10.2
+     *
+     * @see 0002284: add reply-to setting to email account
+     */
+    public function update_1()
+    {
+        $update9 = new Felamimail_Setup_Update_Release9($this->_backend);
+        $update9->update_3();
+        $this->setApplicationVersion('Felamimail', '10.2');
+    }
 }

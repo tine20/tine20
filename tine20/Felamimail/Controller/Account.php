@@ -317,6 +317,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             'display_format',
             'compose_format',
             'preserve_format',
+            'reply_to',
             'has_children_support',
             'delimiter',
             'ns_personal',
