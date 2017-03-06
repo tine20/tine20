@@ -681,14 +681,14 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $recipients = array_merge($recipients, explode($delimiter, $addresses));
                     } else {
                         // single recipient
-                        $recipients[] = $addresses;
+                        $recipients[] = \trim($addresses);
                     }
                 }
                 
                 foreach ($recipients as $key => &$recipient) {
                     // extract email address if name and address given
                     if (preg_match('/(.*)<(.*)>/', $recipient, $matches) > 0) {
-                        $recipient = $matches[2];
+                        $recipient = \trim($matches[2]);
                     }
                     if (empty($recipient)) {
                         unset($recipients[$key]);

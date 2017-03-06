@@ -514,16 +514,18 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->get($contactIds[0]);
         $originalEmail =  $contact->email;
         $contact->email = $this->_account->email;
+
+        /* @var $contact Addressbook_Model_Contact */
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
 
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
         $messageToSend['bcc']  = array(Tinebase_Core::getUser()->accountEmailAddress);
-        //print_r($messageToSend);
-        $returned = $this->_json->saveMessage($messageToSend);
+
+        $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
-        
+
         // check if message is in sent folder
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
@@ -531,14 +533,35 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
         $this->assertEquals($message['bcc'][0],     $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
-        
+
         $this->_checkEmailNote($contact, $messageToSend['subject']);
-        
+
         // reset sclevers original email address
         $contact->email = $originalEmail;
         Addressbook_Controller_Contact::getInstance()->update($contact, FALSE);
     }
-    
+
+    /**
+     * test send message
+     */
+    public function testSendMessageInvalidMail()
+    {
+        // send email
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
+        $messageToSend['note'] = 1;
+        $messageToSend['to'] = [
+            sprintf(
+                '%s <    %s     >',
+                Tinebase_Core::getUser()->accountFullName,
+                Tinebase_Core::getUser()->accountEmailAddress
+            )
+        ];
+        $messageToSend['bcc']  = array(Tinebase_Core::getUser()->accountEmailAddress);
+
+        $this->_json->saveMessage($messageToSend);
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+    }
+
     /**
      * check email note
      *
@@ -1702,7 +1725,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         return array(
             'account_id'    => $this->_account->getId(),
             'subject'       => $_subject,
-            'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
+            'to'            => [Tinebase_Core::getUser()->accountEmailAddress],
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
