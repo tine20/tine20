@@ -99,6 +99,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {Array} Array of column's config objects where the config options are in
      */
     configColumns: null,
+
+    /**
+     * @cfg {Bool} readOnly
+     */
+    readOnly: false,
     
     /**
      * @private
@@ -116,6 +121,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initGrid();
         
         Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+        this.getTopToolbar().items.each(function(item) {
+            if (Ext.isFunction(item.setDisabled)) {
+                item.setDisabled(readOnly);
+            }
+        }, this);
+        this.actionRemove.setDisabled(readOnly);
     },
 
     /**
@@ -243,7 +258,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // on selectionchange handler
         this.selModel.on('selectionchange', function(sm) {
             var rowCount = sm.getCount();
-            this.actionRemove.setDisabled(rowCount == 0);
+            this.actionRemove.setDisabled(this.readOnly || rowCount == 0);
         }, this);
         
         // on rowcontextmenu handler

@@ -47,7 +47,12 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * @type Tinebase.Application
      */
     app: null,
-    
+
+    /**
+     * @cfg {String} requiredGrant to make actions
+     */
+    requiredGrant: 'editGrant',
+
     /* config */
     frame: true,
     border: true,
@@ -200,6 +205,10 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             this.store.on('remove', this.updateTitle, this);
         }
         interceptor();
+
+        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
+            this.setReadOnly(true);
+        }
     },
 
     /**
