@@ -1049,3 +1049,8 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 .tb-widgets-path-pathitem-separator {
     color: black;
 }
+
+.x-form-field-trigger-wrap input {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}

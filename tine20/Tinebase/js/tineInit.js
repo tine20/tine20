@@ -740,12 +740,57 @@ Tine.Tinebase.tineInit = {
      * initialise window and windowMgr (only popup atm.)
      */
     initWindowMgr: function () {
-        /**
-         * initialise window types
-         */
+        // touch UI support
+        if (Ext.isTouchDevice) {
+            require.ensure(["hammerjs"], function() {
+                require('hammerjs'); // global by include :-(
+
+                Ext.apply (Ext.EventObject, {
+                    // NOTE: multipoint gesture events have no xy, so we need to grab it from gesture
+                    getXY: function() {
+                        if (this.browserEvent &&
+                            this.browserEvent.gesture &&
+                            this.browserEvent.gesture.center) {
+                            this.xy = [this.browserEvent.gesture.center.x, this.browserEvent.gesture.center.y];
+                        }
+
+                        return this.xy;
+                    }
+                });
+
+                var mc = new Hammer.Manager(Ext.getDoc().dom, {
+                    domEvents: true
+                });
+
+                // convert two finger taps into contextmenu clicks
+                mc.add(new Hammer.Tap({
+                    event: 'contextmenu',
+                    pointers: 2
+                }));
+                // convert double taps into double clicks
+                mc.add(new Hammer.Tap({
+                    event: 'dblclick',
+                    taps: 2
+                }));
+
+                Ext.getDoc().on('orientationchange', function() {
+                    // @TODO: iOS safari only?
+                    var metas = document.getElementsByTagName('meta');
+                    for (var i = 0; i < metas.length; i++) {
+                        if (metas[i].name == "viewport") {
+                            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                        }
+                    }
+                    Tine.Tinebase.viewport.doLayout();
+                }, this);
+
+
+            }, 'Tinebase/js/hammerjs');
+        }
+
+        // initialise window types
         var windowType = 'Browser';
         Ext.ux.PopupWindow.prototype.url = 'index.php';
-
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
@@ -753,6 +798,7 @@ Tine.Tinebase.tineInit = {
                 windowType = 'Browser';
             }
         }
+        windowType = Ext.isTouchDevice ? 'Ext' : windowType;
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType

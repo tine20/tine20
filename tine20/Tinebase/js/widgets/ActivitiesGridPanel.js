@@ -39,6 +39,11 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     app: null,
 
+    /**
+     * @cfg {String} requiredGrant to make actions
+     */
+    requiredGrant: 'editGrant',
+
     /* config */
     frame: true,
     border: true,
@@ -211,6 +216,16 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             this.store.on('remove', this.updateTitle, this);
         }
         interceptor();
+
+        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
+            this.setReadOnly(true);
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+        this.action_add.setDisabled(readOnly);
+        this.action_remove.setDisabled(readOnly);
     },
 
     /**
@@ -223,11 +238,11 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
             this.actionUpdater.updateActions(selModel);
-            this.action_remove.setDisabled(false);
+            this.action_remove.setDisabled(this.readOnly);
 
             // The tine server can't handle edits for notes at the moment
             // @todo make this work
-            //this.action_edit.setDisabled(false);
+            //this.action_edit.setDisabled(this.readOnly);
         }, this);
     },
 
