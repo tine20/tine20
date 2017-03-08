@@ -244,12 +244,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             forceOverwrite = false,
             treeIsTarget = false,
             treeIsSource = false,
-            targetPath;
+            targetPath = target;
             
             if(target.data) {
                 targetPath = target.data.path;
             }
-            else {
+            else if (target.attributes) {
                 targetPath = target.attributes.path;
                 treeIsTarget = true;
             }

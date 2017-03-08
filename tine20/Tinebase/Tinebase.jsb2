@@ -734,7 +734,11 @@
           "path": "js/widgets/account/"
         },
         {
-          "text": "ContainerSelect.js",
+          "text": "SelectionComboBox.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "SelectionDialog.js",
           "path": "js/widgets/container/"
         },
         {

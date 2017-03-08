@@ -292,14 +292,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
-            singularText: this.app.i18n._('Delete'),
-            pluralText: this.app.i18n._('Delete'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : i18n,
             text: this.app.i18n._('Delete'),
             handler: this.onDeleteRecords,
             disabled: true,
             iconCls: 'action_delete',
             scope: this
+        });
+
+        this.action_moveRecord = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: true,
+            text: this.app.i18n._('Move'),
+            disabled: true,
+            actionType: 'edit',
+            handler: this.onMoveRecords,
+            scope: this,
+            iconCls: 'action_move'
         });
 
         this.action_fileRecord = new Ext.Action({
@@ -352,7 +360,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.action_markUnread,
             this.action_addAccount,
             this.action_print,
-            this.action_printPreview
+            this.action_printPreview,
+            this.action_moveRecord
         ]);
         
         this.contextMenu = new Ext.menu.Menu({
@@ -366,6 +375,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_forward,
                 this.action_flag,
                 this.action_markUnread,
+                this.action_moveRecord,
                 this.action_deleteRecord,
                 this.action_fileRecord
             ]
@@ -692,6 +702,25 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * delete messages handler
+     *
+     * @return {void}
+     */
+    onMoveRecords: function() {
+        var selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+            account: this.app.getActiveAccount(),
+            listeners: {
+                scope: this,
+                folderselect: function(node) {
+                    var folder = new Tine.Felamimail.Model.Folder(node.attributes, node.attributes.id);
+                    this.moveSelectedMessages(folder, false);
+                    selectPanel.close();
+                }
+            }
+        });
+    },
+
+    /**
      * file selected messages to a Filemanager
      */
     onFileRecords: function() {
@@ -706,7 +735,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 // TODO remove ctx menus from tree selection panel?
                 switch(appName) {
                     case 'MailFiler':
-                        this.folderCombo = this.mailFilerFolderCombo = new Tine.widgets.container.selectionComboBox({
+                        this.folderCombo = this.mailFilerFolderCombo = new Tine.widgets.container.SelectionComboBox({
                             recordClass: Tine.MailFiler.Model.Node,
                             // TODO make this work & remove mode:local
                             //remoteMethod: 'MailFiler.searchNodes',
@@ -721,7 +750,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         });
                         break;
                     case 'Filemanager':
-                        this.folderCombo = this.filemanagerFolderCombo = new Tine.widgets.container.selectionComboBox({
+                        this.folderCombo = this.filemanagerFolderCombo = new Tine.widgets.container.SelectionComboBox({
                             recordClass: Tine.Filemanager.Model.Node,
                             // TODO make this work & remove mode:local
                             //remoteMethod: 'Filemanager.searchNodes',

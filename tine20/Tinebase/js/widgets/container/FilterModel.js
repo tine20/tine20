@@ -139,7 +139,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         var valueType = this.getValueType(filter);
         
         filter.valueFields = {};
-        filter.valueFields.selectionComboBox = new Tine.widgets.container.selectionComboBox({
+        filter.valueFields.selectionComboBox = new Tine.widgets.container.SelectionComboBox({
             hidden: valueType != 'selectionComboBox',
             app: this.app,
             filter: filter,
@@ -167,7 +167,7 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
                     this.filter.formFields.operator.setRawValue(operatorText);
                 }
             
-                return Tine.widgets.container.selectionComboBox.prototype.setValue.call(this, value);
+                return Tine.widgets.container.SelectionComboBox.prototype.setValue.call(this, value);
             },
             listeners: {
                 scope: this, 
@@ -288,7 +288,7 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     getItems: function() {
-        var containerSelectionCombo = this.containerSelectionCombo = new Tine.widgets.container.selectionComboBox({
+        var containerSelectionCombo = this.containerSelectionCombo = new Tine.widgets.container.SelectionComboBox({
             allowNodeSelect: true,
             allowBlank: true,
             blurOnSelect: true,

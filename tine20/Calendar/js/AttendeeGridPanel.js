@@ -154,7 +154,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             tooltip: this.app.i18n._('This is the calendar where the attender has saved this event in'),
             renderer: this.renderAttenderDispContainer.createDelegate(this),
             // disable for the moment, as updating calendarSelectWidget is not working in both directions
-            editor2: new Tine.widgets.container.selectionComboBox({
+            editor2: new Tine.widgets.container.SelectionComboBox({
                 blurOnSelect: true,
                 selectOnFocus: true,
                 appName: 'Calendar',

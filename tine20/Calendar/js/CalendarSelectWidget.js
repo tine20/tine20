@@ -64,7 +64,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
     /**
      * Calendar select combo box
      * 
-     * @type Tine.widgets.container.selectionComboBox
+     * @type Tine.widgets.container.SelectionComboBox
      * @property calCombo
      */
     calCombo: null,
@@ -149,7 +149,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
             onSelect      : this.onCalMapSelect.createDelegate(this)
         });
         
-        this.calCombo = new Tine.widgets.container.selectionComboBox({
+        this.calCombo = new Tine.widgets.container.SelectionComboBox({
             hideLabel: true,
             containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
             containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),

@@ -12,11 +12,11 @@ Ext.ns('Tine.MailFiler')
  * 
  * @namespace   Tine.MailFiler
  * @class       Tine.MailFiler.folderSelectComboBox
- * @extends     Tine.widgets.container.selectionComboBox
+ * @extends     Tine.widgets.container.SelectionComboBox
  *
  * TODO implement
  */
-Tine.MailFiler.folderSelectComboBox = Ext.extend(Tine.widgets.container.selectionComboBox, {
+Tine.MailFiler.folderSelectComboBox = Ext.extend(Tine.widgets.container.SelectionComboBox, {
     /**
      * @cfg {Tine.data.Record} recordClass
      */

@@ -362,7 +362,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         }
 
         this.constrains = new Tine.widgets.container.FilterModelMultipleValueField({
-        //this.constrains = new Tine.widgets.container.selectionComboBox({
+        //this.constrains = new Tine.widgets.container.SelectionComboBox({
             app: this.app,
             allowBlank: true,
             width: 260,
