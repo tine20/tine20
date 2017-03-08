@@ -212,6 +212,7 @@ Tine.Addressbook.Model.List = Tine.Tinebase.data.Record.create([
     {name: 'container_id'},
     {name: 'created_by'},
     {name: 'creation_time'},
+    {name: 'seq'},
     {name: 'last_modified_by'},
     {name: 'last_modified_time'},
     {name: 'is_deleted'},
