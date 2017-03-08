@@ -107,7 +107,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
             layout: 'column',
             items: [
                 Ext.apply(this.searchField, {columnWidth: .99}),
-                new Ext.Button({
+                this.addTagButton = new Ext.Button({
                     text: '',
                     width: 16,
                     iconCls: 'action_add',
@@ -300,12 +300,17 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                     })
                 ]
             });
-            menu.showAt(event.getXY());
+
+            if (! this.searchField.disabled) {
+                menu.showAt(event.getXY());
+            }
+
         },this);
         
         this.formField = {
             layout: 'form',
             items: new Tine.widgets.tags.TagFormField({
+                tagsPanel: this,
                 recordTagsStore: this.recordTagsStore
             })
         };
@@ -449,6 +454,9 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
     name: 'tags',
     hidden: true,
     labelSeparator: '',
+
+    requiredGrant: 'editGrant',
+
     /**
      * @private
      */
@@ -483,6 +491,12 @@ Tine.widgets.tags.TagFormField = Ext.extend(Ext.form.Field, {
         Tine.Tinebase.Model.Tag.replaceTemplateField(value);
         
         this.recordTagsStore.loadData(value);
+    },
+
+    setDisabled: function(disabled) {
+        // disable combo, btn, context
+        this.tagsPanel.searchField.setDisabled(disabled);
+        this.tagsPanel.addTagButton.setDisabled(disabled);
     }
 
 });

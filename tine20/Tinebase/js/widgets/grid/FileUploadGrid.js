@@ -42,7 +42,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * TODO     think about that -> when we deactivate the top toolbar, we lose the dropzone for files!
      */
     //showTopToolbar: null,
-    
+
+    /**
+     * @cfg {Bool} readOnly
+     */
+    readOnly: false,
+
     /**
      * config values
      * @private
@@ -96,7 +101,13 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }, this);
         }
     },
-    
+
+    setReadOnly: function(readOnly) {
+        this.readOnly = readOnly;
+        this.action_add.setDisabled(readOnly);
+        this.action_remove.setDisabled(readOnly);
+    },
+
     /**
      * on upload failure
      * @private
@@ -390,7 +401,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.selModel.on('selectionchange', function (selModel) {
             var rowCount = selModel.getCount();
-            this.action_remove.setDisabled(rowCount === 0);
+            this.action_remove.setDisabled(this.readOnly || rowCount === 0);
             this.actionUpdater.updateActions(selModel);
 
         }, this);
