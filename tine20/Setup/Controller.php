@@ -1489,7 +1489,10 @@ class Setup_Controller
             if (isset($_xml->tables)) {
                 foreach ($_xml->tables[0] as $tableXML) {
                     $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                    $this->_createTable($table);
+                    if ($this->_createTable($table) !== true) {
+                        // table was gracefully not created, maybe due to missing requirements, just continue
+                        continue;
+                    }
                     $createdTables[] = $table;
                 }
             }
@@ -1548,14 +1551,16 @@ class Setup_Controller
     protected function _createTable($table)
     {
         if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
-        
+
         try {
-            $this->_backend->createTable($table);
+            $result = $this->_backend->createTable($table);
         } catch (Zend_Db_Statement_Exception $zdse) {
             throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdse->getMessage());
         } catch (Zend_Db_Adapter_Exception $zdae) {
             throw new Tinebase_Exception_Backend_Database('Could not create table: ' . $zdae->getMessage());
         }
+
+        return $result;
     }
     /**
      * look for import definitions and put them into the db

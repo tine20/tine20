@@ -23,6 +23,7 @@ class Tinebase_View
         $themePath = 'tine20';
         $favicon   = 'images/favicon.ico';
         $title     = 'Tine 2.0';
+        $appleTouchIcon = 'images/apple-touch-icon.gif';
         
         $themeConfig = Tinebase_Core::getConfig()->theme;
         
@@ -48,6 +49,7 @@ class Tinebase_View
         
         $result = array(
             'favicon'   => $favicon,
+            'appletTouchIcon' => $appleTouchIcon,
             'extJs'     => '<link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/' . $extJS . '" />',
             'themePath' => '<link rel="stylesheet" type="text/css" href="themes/' . $themePath . '/resources/css/' . $themePath . '.css" />',
             'title'     => $title

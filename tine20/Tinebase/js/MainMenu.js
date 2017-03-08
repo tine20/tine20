@@ -210,12 +210,18 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: i18n._('Allow desktop notifications'),
             tooltip:  i18n._('Request permissions for webkit desktop notifications.'),
             iconCls: 'action_edit',
-            disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
-            handler: function() {
-                window.webkitNotifications.requestPermission(Ext.emptyFn);
-            },
+            disabled: ! window.Notification || this.systemTrayNotificationsEnabled(),
+            handler: this.requestNotificationPermission,
             scope: this
         });
+    },
+
+    systemTrayNotificationsEnabled: function() {
+        return (window.Notification && window.Notification.permission == 'granted')
+    },
+
+    requestNotificationPermission: function() {
+        window.Notification.requestPermission(Ext.emptyFn);
     },
     
     /**
@@ -292,16 +298,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     document.execCommand('ClearAuthenticationCache');
                 }
 
-                // the reload() triggers the unload event
-                var redirect = (Tine.Tinebase.registry.get('redirectUrl'));
-                if (redirect && redirect != '') {
-                    Tine.Tinebase.common.reload({
-                        redirectUrl: Tine.Tinebase.registry.get('redirectUrl')
-                    });
-                } else {
-                    // registry is cleared before reload
-                    Tine.Tinebase.common.reload({});
-                }
+                Tine.Tinebase.common.reload({
+                    clearCache: true
+                });
             }
         });
     }

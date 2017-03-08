@@ -138,16 +138,6 @@ Tine.Tinebase.tineInit = {
         }, this);
     },
 
-    checkWebpack: function() {
-        if (! window.postal) {
-            var wikiurl = 'https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack';
-            Ext.Msg.alert('Webpack-dev-server missing?',
-                'You need to install and run webpack-dev-server! <a target="_blank" href="' + wikiurl + '">Installation instructions in the Wiki</a>.', function() {
-                Tine.Tinebase.common.reload();
-            });
-        }
-    },
-
     initPostal: function () {
         if (! window.postal) {
             return;
@@ -227,20 +217,6 @@ Tine.Tinebase.tineInit = {
             });
             mainCardPanel.add(Tine.loginPanel);
         }
-        
-        // event firing is unpredictable in IE9/10/11, you'll never know when it comes ...
-        if (! Ext.isNewIE) {
-            Tine.Tinebase.registry.on('replace', function(key, oldValue, newValue) {
-                if (oldValue && !newValue) {
-                    Tine.log.info('tineInit::initLoginPanel - handle logout in other window');
-                    if (window.isMainWindow) {
-                        Tine.Tinebase.common.reload();
-                    } else {
-                        Ext.ux.PopupWindow.close(window);
-                    }
-                }
-            }, this, 'currentAccount');
-        }
     },
 
     showLoginBox: function(cb, scope) {
@@ -253,12 +229,6 @@ Tine.Tinebase.tineInit = {
             mainCardPanel.layout.setActiveItem(activeItem);
             cb.call(scope||window, response);
         };
-
-//        //listen for other windows login?
-//        Tine.Tinebase.registry.on('replace', function() {
-//            mainCardPanel.layout.setActiveItem(activeItem);
-//        }, this, 'currentAccount');
-
     },
 
     renderWindow: function () {
@@ -273,6 +243,7 @@ Tine.Tinebase.tineInit = {
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
                     Tine.log.info('tineInit::renderWindow - registry fetched, render main window');
                     Ext.MessageBox.hide();
+                    Tine.Tinebase.tineInit.checkClientVersion();
                     Tine.Tinebase.tineInit.initWindowMgr();
                     Tine.Tinebase.tineInit.renderWindow();
                 });
@@ -358,7 +329,9 @@ Tine.Tinebase.tineInit = {
         
         Ext.Ajax.transactions = {};
 
-        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie();
+        Tine.Tinebase.tineInit.jsonKeyCookieProvider = new Ext.ux.util.Cookie({
+            path: String(Tine.Tinebase.common.getUrl('path')).replace(/\/$/, '')
+        });
 
         /**
          * inspect all requests done via the ajax singleton
@@ -372,10 +345,12 @@ Tine.Tinebase.tineInit = {
          */
         Ext.Ajax.on('beforerequest', function (connection, options) {
 
-            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
-            if (Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId)) {
-                var cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(this.jsonKeyCookieId);
-                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(this.jsonKeyCookieId);
+            var jsonKey = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '',
+                jsonKeyCookieId = Tine.Tinebase.tineInit.jsonKeyCookieId,
+                cookieJsonKey = Tine.Tinebase.tineInit.jsonKeyCookieProvider.get(jsonKeyCookieId);
+
+            if (cookieJsonKey) {
+                Tine.Tinebase.tineInit.jsonKeyCookieProvider.clear(jsonKeyCookieId);
                 // NOTE cookie reset is not always working in IE, so we need to check jsonKey again
                 if (cookieJsonKey && cookieJsonKey != "null") {
                     jsonKey = cookieJsonKey;
@@ -683,7 +658,7 @@ Tine.Tinebase.tineInit = {
         Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
         Tine.favicon = Tine.Tinebase.registry.get('brandingFavicon') ? Tine.Tinebase.registry.get('brandingFavicon') : Tine.favicon;
-        
+
         Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
@@ -700,6 +675,29 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.tineInit.initUploadMgr();
 
         Tine.Tinebase.tineInit.initLoginPanel();
+    },
+
+    /**
+     * check client version and reload on demand
+     */
+    checkClientVersion: function() {
+        var serverHash = Tine.Tinebase.registry.get('version').filesHash,
+            clientHash = Tine.clientVersion.filesHash;
+
+        if (clientHash && clientHash != serverHash) {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: i18n._('Your Client is Outdated'),
+                msg: i18n._('A new client is available, press OK to get this version'),
+                fn: function() {
+                    Tine.Tinebase.common.reload({
+                        keepRegistry: false,
+                        clearCache: true
+                    });
+                }
+            });
+        }
     },
 
     /**
@@ -742,12 +740,57 @@ Tine.Tinebase.tineInit = {
      * initialise window and windowMgr (only popup atm.)
      */
     initWindowMgr: function () {
-        /**
-         * initialise window types
-         */
+        // touch UI support
+        if (Ext.isTouchDevice) {
+            require.ensure(["hammerjs"], function() {
+                require('hammerjs'); // global by include :-(
+
+                Ext.apply (Ext.EventObject, {
+                    // NOTE: multipoint gesture events have no xy, so we need to grab it from gesture
+                    getXY: function() {
+                        if (this.browserEvent &&
+                            this.browserEvent.gesture &&
+                            this.browserEvent.gesture.center) {
+                            this.xy = [this.browserEvent.gesture.center.x, this.browserEvent.gesture.center.y];
+                        }
+
+                        return this.xy;
+                    }
+                });
+
+                var mc = new Hammer.Manager(Ext.getDoc().dom, {
+                    domEvents: true
+                });
+
+                // convert two finger taps into contextmenu clicks
+                mc.add(new Hammer.Tap({
+                    event: 'contextmenu',
+                    pointers: 2
+                }));
+                // convert double taps into double clicks
+                mc.add(new Hammer.Tap({
+                    event: 'dblclick',
+                    taps: 2
+                }));
+
+                Ext.getDoc().on('orientationchange', function() {
+                    // @TODO: iOS safari only?
+                    var metas = document.getElementsByTagName('meta');
+                    for (var i = 0; i < metas.length; i++) {
+                        if (metas[i].name == "viewport") {
+                            metas[i].content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0";
+                        }
+                    }
+                    Tine.Tinebase.viewport.doLayout();
+                }, this);
+
+
+            }, 'Tinebase/js/hammerjs');
+        }
+
+        // initialise window types
         var windowType = 'Browser';
         Ext.ux.PopupWindow.prototype.url = 'index.php';
-
         if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
             // update window factory window type (required after login)
             windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
@@ -755,6 +798,7 @@ Tine.Tinebase.tineInit = {
                 windowType = 'Browser';
             }
         }
+        windowType = Ext.isTouchDevice ? 'Ext' : windowType;
 
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
@@ -831,10 +875,6 @@ Tine.Tinebase.tineInit = {
 
 Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
-    if (Tine.clientVersion.buildType === 'DEVELOPMENT' || Tine.clientVersion.buildType === 'none') {
-        // TODO do something similar for RELEASE/DEBUG?
-        Tine.Tinebase.tineInit.checkWebpack();
-    }
     Tine.Tinebase.tineInit.initPostal();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
@@ -842,6 +882,7 @@ Ext.onReady(function () {
     Tine.Tinebase.tineInit.initAjax();
 
     Tine.Tinebase.tineInit.initRegistry(false, function() {
+        Tine.Tinebase.tineInit.checkClientVersion();
         Tine.Tinebase.tineInit.initWindowMgr();
         Tine.Tinebase.tineInit.renderWindow();
     });

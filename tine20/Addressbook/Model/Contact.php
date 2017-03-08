@@ -404,8 +404,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
                 break;
             default:
                 // normalize telephone numbers
-                if (!empty($_value) && strpos($_name, 'tel_') === 0 && strpos($_name, '_normalized') === false) {
-                    parent::__set($_name . '_normalized', static::normalizeTelephoneNoCountry($_value));
+                if (strpos($_name, 'tel_') === 0 && strpos($_name, '_normalized') === false) {
+                    parent::__set($_name . '_normalized', (empty($_value)? $_value : static::normalizeTelephoneNoCountry($_value)));
                 }
                 break;
         }

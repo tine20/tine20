@@ -106,7 +106,8 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.initQuickFilterField();
 
-        this.advancedSearchEnabled = Tine.Tinebase.featureEnabled('featureShowAdvancedSearch');
+        this.advancedSearchEnabled = Tine.Tinebase.featureEnabled('featureShowAdvancedSearch') &&
+            this.filterToolbarConfig.app.enableAdvancedSearch;
 
         this.items = [{
             region: 'east',

@@ -384,6 +384,7 @@ class Tinebase_ModelConfiguration {
      * time                      Time                datetime date                          Tinebase_DateTime Tinebase_Model_Filter_Date  ISO8601Time
      * string                    Text                varchar  string                        string            Tinebase_Model_Filter_Text
      * text                      Text with lnbr.     text     string                        string            Tinebase_Model_Filter_Text
+     * fulltext                  Text with lnbr.     text     string                        string            Tinebase_Model_Filter_FullText
      * boolean                   Boolean             boolean  bool                          bool              Tinebase_Model_Filter_Bool
      * integer                   Integer             integer  integer                       int               Tinebase_Model_Filter_Int                 number
      * integer     bytes         Bytes               integer  integer                       int               Tinebase_Model_Filter_Int
@@ -746,6 +747,7 @@ class Tinebase_ModelConfiguration {
         'time'     => 'Tinebase_Model_Filter_Date',
         'string'   => 'Tinebase_Model_Filter_Text',
         'text'     => 'Tinebase_Model_Filter_Text',
+        'fulltext' => 'Tinebase_Model_Filter_FullText',
         'json'     => 'Tinebase_Model_Filter_Text',
         'boolean'  => 'Tinebase_Model_Filter_Bool',
         'integer'  => 'Tinebase_Model_Filter_Int',
@@ -766,6 +768,7 @@ class Tinebase_ModelConfiguration {
     */
     protected $_inputFilterDefaultMapping = array(
         'text'     => array('Tinebase_Model_InputFilter_CrlfConvert'),
+        'fulltext' => array('Tinebase_Model_InputFilter_CrlfConvert'),
     );
 
     /**
@@ -1207,6 +1210,7 @@ class Tinebase_ModelConfiguration {
         switch ($fieldDef['type']) {
             case 'string':
             case 'text':
+            case 'fulltext':
             case 'integer':
             case 'float':
             case 'boolean':

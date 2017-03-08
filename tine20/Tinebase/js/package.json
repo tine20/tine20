@@ -3,6 +3,7 @@
   "private": true,
   "main": "Tinebase.js",
   "dependencies": {
+    "hammerjs": "^2.0.8",
     "html2canvas": "^0.5.0-beta4",
     "jquery": "^2.1.4",
     "lodash": "^4.17.4",
@@ -12,6 +13,7 @@
     "postal.xwindow": "github:tine20/postal.xwindow"
   },
   "devDependencies": {
+    "assets-webpack-plugin": "github:tine20/assets-webpack-plugin#compiler-filesystem-outputPath",
     "css-loader": "^0.26.1",
     "file-loader": "^0.9.0",
     "script-loader": "^0.7.0",

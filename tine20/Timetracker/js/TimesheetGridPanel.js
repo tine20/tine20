@@ -361,21 +361,42 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     updateExportAction: function(action, grants, records) {
-        var exportGrant = true;
-        if (! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
-            Ext.each(records, function (record) {
-                var c = record.get('timeaccount_id').container_id;
-                if (c.hasOwnProperty('account_grants')) {
-                    if (!c.account_grants.exportGrant) {
-                        exportGrant = false;
-                        return false;
-                    }
-                }
-            });
+        // export should be allowed always if user is allowed to manage timeaccounts
+        if (Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+            action.setDisabled(false);
+
+            // stop further events
+            return false;
         }
 
-        var disable = ! exportGrant;
+        // By default disallow export, this apply for example, if there is no selection yet
+        // E.g. filter changes and so on
+        var exportGrant = false;
+        
+        // We need to go through all timeaccounts and check if the user is trying to export a timesheet of a timeaccount
+        // where he has no permission to export.
+        Ext.each(records, function (record) {
+            var timeaccount = record.get('timeaccount_id');
+            var c = timeaccount.container_id;
+            if (c.hasOwnProperty('account_grants')) {
+                var grants = c.account_grants;
+                
+                if (!grants.exportGrant) {
+                    exportGrant = false;
+
+                    // stop loop
+                    return false;
+                } else {
+                    // If there was at least one selection which had the exportGrant, allow to export
+                    exportGrant = true;
+                }
+            }
+        });
+        
+        var disable = !exportGrant;
         action.setDisabled(disable);
+        
+        // stop further events
         return false;
     },
 

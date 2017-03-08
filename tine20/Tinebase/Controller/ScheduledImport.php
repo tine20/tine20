@@ -197,6 +197,9 @@ class Tinebase_Controller_ScheduledImport extends Tinebase_Controller_Record_Abs
                 Tinebase_Core::getLogger()->notice(__METHOD__ . ' ' . __LINE__
                     . ' Import failed.');
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && isset($resource)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' resource: ' . $resource);
+            }
             Tinebase_Exception::log($e);
 
             $record->lastfail = $e->getMessage();

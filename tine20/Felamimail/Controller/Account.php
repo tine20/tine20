@@ -317,6 +317,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             'display_format',
             'compose_format',
             'preserve_format',
+            'reply_to',
             'has_children_support',
             'delimiter',
             'ns_personal',
@@ -538,7 +539,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $felamimailSession = Felamimail_Session::getSessionNamespace();
             
             if (isset($felamimailSession->account) && is_array($felamimailSession->account) && array_key_exists($_account->getId(), $felamimailSession->account)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
                 
                 return $felamimailSession->account[$_account->getId()];
             }
@@ -548,12 +550,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Getting capabilities of account ' . $_account->name);
         
         // get imap server capabilities and save delimiter / personal namespace in account
         $capabilities = $imapBackend->getCapabilityAndNamespace();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Capabilities: ' . print_r($capabilities, TRUE));
         
         $this->_updateNamespacesAndDelimiter($_account, $capabilities);
 
@@ -587,8 +591,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // update delimiter
-        $delimiter = (! empty($_capabilities['namespace']['personal']) && strlen($_capabilities['namespace']['personal']['delimiter']) === 1) 
-            ? $_capabilities['namespace']['personal']['delimiter'] : '';
+        $delimiter = (! empty($_capabilities['namespace']['personal'])) 
+            ? $_capabilities['namespace']['personal']['delimiter'] : '/';
+
+        // care for multiple backslashes (for example from Domino IMAP server)
+        if ($delimiter == '\\\\') {
+            $delimiter = '\\';
+        }
+
+        if (strlen($delimiter) > 1) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got long delimiter: ' . $delimiter . ' Fall back to default (/)');
+            $delimiter = '/';
+        }
+
         if ($delimiter && $delimiter != $_account->delimiter) {
             $_account->delimiter = $delimiter;
         }

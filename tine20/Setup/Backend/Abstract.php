@@ -251,12 +251,19 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
     /**
      * takes the xml stream and creates a table
      *
-     * @param object $_table xml stream
-     * @param string $_appName if appname and tablename are given, we create an entry in the application table
-     * @param string $_tableName
+     * @param  Setup_Backend_Schema_Table_Abstract $_table xml stream
+     * @param  string $_appName if appname and tablename are given, we create an entry in the application table
+     * @param  string $_tableName
+     * @return bool return true on success, false in case of graceful failure, due to missing requirements for example
      */
     public function createTable(Setup_Backend_Schema_Table_Abstract $_table, $_appName = NULL, $_tableName = NULL)
     {
+        if (false === $this->_checkTableRequirements($_table)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Do not create table ' . $_table->name . ': Requirement missing.');
+            return false;
+        }
+
         $statement = $this->getCreateStatement($_table);
         $this->execQueryVoid($statement);
         
@@ -267,6 +274,35 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
                 1
             );
         }
+
+        return true;
+    }
+
+    /**
+     * checks the requirements whether to install this table or not
+     *
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @return bool return whether the requirements to install this table are met or not
+     */
+    protected function _checkTableRequirements(Setup_Backend_Schema_Table_Abstract $_table)
+    {
+        foreach($_table->requirements as $requirement) {
+            if (false === $this->supports($requirement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * checks whether this backend supports a specific requirement or not
+     *
+     * @param $requirement
+     * @return bool
+     */
+    public function supports($requirement)
+    {
+        return false;
     }
     
     /**

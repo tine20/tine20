@@ -58,8 +58,12 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
             'name'    => 'example_application_record',
             'options' => array('collate' => 'utf8_general_ci'),
             'indexes' => array(
-                'container_id' => array(
+                'testcontainer_id' => array(
                     'columns' => array('container_id')
+                ),
+                'description' => array(
+                    'columns' => array('description'),
+                    'flags' => array('fulltext')
                 )
             ),
         ),
@@ -76,6 +80,12 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
                 'validators'  => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'),
                 'label'       => 'Name', // _('Name')
                 'queryFilter' => TRUE
+            ),
+            'description' => array(
+                'type'       => 'fulltext',
+                'nullable'   => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'label'      => 'Description',
             ),
             'status' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),

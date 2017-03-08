@@ -403,6 +403,30 @@ class Tinebase_Helper
     }
 
     /**
+     * get filename (might be an url)
+     *
+     * @param $filenameOrUrl
+     * @return null|string
+     * @throws FileNotFoundException
+     */
+    public static function getFilename($filenameOrUrl)
+    {
+        if (strpos($filenameOrUrl, 'http') === 0) {
+            // TODO use "real" tempfile?
+            // fetch file and save in tempfile
+            $content = self::getFileOrUriContents($filenameOrUrl);
+            $filename = self::writeToTempFile($content);
+        } else {
+            $filename = $filenameOrUrl;
+            if (! file_exists($filenameOrUrl)) {
+                throw new FileNotFoundException('File ' . $filenameOrUrl . ' not found');
+            }
+        }
+
+        return $filename;
+    }
+
+    /**
      * @param $content
      * @return null|string filename
      */

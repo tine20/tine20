@@ -51,7 +51,7 @@ class Tinebase_Server_HttpTests extends TestCase
         $this->assertNotContains('No Application Controller found', $out);
         $this->assertNotContains('"error"', $out);
         $this->assertNotContains('PHP Fatal error', $out);
-        $this->assertContains('"name","status","reason","number_str","number_int","relations","container_id","tags","attachments","notes","seq","tags"', $out);
+        $this->assertContains('"name","description","status","reason","number_str","number_int","relations","container_id","tags","attachments","notes","seq","tags"', $out);
     }
 
     /**

@@ -67,6 +67,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     case 'display_format':
                     case 'compose_format':
                     case 'preserve_format':
+                    case 'reply_to':
                         break;
                     default:
                         item.setDisabled(true);
@@ -359,6 +360,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         [0, this.app.i18n._('No')],
                         [1,  this.app.i18n._('Yes')]
                     ]
+                }, {
+                    fieldLabel: this.app.i18n._('Reply-To Email'),
+                    name: 'reply_to',
+                    vtype: 'email'
                 }]]
             }]
         };

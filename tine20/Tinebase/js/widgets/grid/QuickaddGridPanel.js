@@ -159,7 +159,10 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     getContextMenu: function() {
         if (! this.contextMenu) {
             var items = [this.deleteAction];
-            
+
+            // lookup additional items
+            items = items.concat(this.getContextMenuItems());
+
             this.contextMenu = new Ext.menu.Menu({
                 plugins: [{
                     ptype: 'ux.itemregistry',
@@ -170,6 +173,10 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         }
         
         return this.contextMenu;
+    },
+
+    getContextMenuItems: function() {
+        return [];
     },
     
     /**
@@ -197,10 +204,10 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.store.clearData();
 
         for (var i = data.length-1; i >=0; --i) {
+            var recordData = {}
             if (this.dataField === null) {
-                var recordData = data[i];
+                recordData = data[i];
             } else {
-                var recordData = {};
                 recordData[this.dataField] = data[i];
             }
 
@@ -218,8 +225,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         this.store.each(function(record) {
             result.push((this.dataField === null) ? record.data : record.get(this.dataField));
         }, this);
-        //store.commitChanges();
-        
+
         return result;
     }
 });

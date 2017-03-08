@@ -91,6 +91,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @type {Object} constraintsConfig
      */
     constraintsConfig: null,
+
+    /**
+     * @cfg {String} requiredGrant to make actions
+     */
+    requiredGrant: 'editGrant',
+
     /* config */
     frame: true,
     border: true,
@@ -1153,6 +1159,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             this.loadRelations(relations, interceptor);
         }
 
+        if (record.constructor.hasField(this.requiredGrant) && ! record.get(this.requiredGrant)) {
+            this.setReadOnly(true);
+        }
 
     },
 

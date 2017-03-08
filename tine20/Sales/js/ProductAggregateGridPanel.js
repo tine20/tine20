@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Sales');
 
@@ -38,6 +38,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
     enableHdMenu: false,
     recordClass: 'Sales.ProductAggregate',
     validate: true,
+
     /*
      * public
      */
@@ -327,6 +328,165 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
      */
     renderProductAggregate: function(value, row, record) {
         return '<span class="tine-recordclass-gridicon SalesProduct">&nbsp;</span>' + (record ? record.getTitle() : '');
+    },
+
+    /**
+     * @private
+     */
+    initActions: function() {
+        Tine.Sales.ProductAggregateGridPanel.superclass.initActions.call(this);
+
+        // TODO prevent multiselect and change of records without defined attributes
+        this.editAttributesAction = new Ext.Action({
+            text: this.app.i18n._('Edit Attributes'),
+            iconCls: 'actionEdit',
+            handler : this.onEditAttributes,
+            scope: this
+        });
+    },
+
+    /**
+     * edit attributes: open modal window with key/value grid
+     */
+    onEditAttributes: function() {
+        var selectedRows = this.getSelectionModel().getSelections(),
+            selectedRecord = selectedRows[0],
+            attributeKeys = this.getAttributeKeysFromAccountable(selectedRecord);
+
+        if (attributeKeys.length == 0) {
+            // no attribute keys -> return
+            return;
+        }
+
+        this.initAttributesCombos(attributeKeys);
+        var cols = [
+            {
+                id: 'id',
+                // TODO pass this.app.i18n
+                header: i18n._('Attribute'),
+                dataIndex: 'id',
+                hideable: false,
+                sortable: false,
+                editor: this.attributeEditor,
+                quickaddField: this.attributesQuickadd
+            }, {
+                id: 'value',
+                header: i18n._('Value'),
+                dataIndex: 'value',
+                hideable: false,
+                sortable: false,
+                editor: new Ext.form.TextField({}),
+                quickaddField: new Ext.form.TextField({
+                    emptyText: i18n._('Add a New Value...')
+                })
+            }
+        ];
+
+        this.attributesGrid = new Tine.Tinebase.widgets.keyfield.ConfigGrid({
+            hasDefaultCheck: false,
+            cols: cols
+        });
+        this.loadAttributesFromRecord(selectedRecord, attributeKeys);
+
+        this.attributesWindow = Tine.WindowFactory.getWindow({
+            modal: true,
+            width: 500,
+            height: 320,
+            border: false,
+            // maybe we should create a common ancestor for ConfigGrid and json attributes grid
+            items: this.attributesGrid,
+            fbar: ['->', {
+                text: i18n._('Cancel'),
+                minWidth: 70,
+                scope: this,
+                handler: this.onAttributesWindowClose,
+                iconCls: 'action_cancel'
+            }, {
+                text: i18n._('OK'),
+                minWidth: 70,
+                scope: this,
+                handler: this.onAttributesWindowOK,
+                iconCls: 'action_applyChanges'
+            }]
+        });
+    },
+
+    initAttributesCombos: function(attributeKeys) {
+        var storeData = [];
+        Ext.each(attributeKeys, function(key) {
+            // TODO add translation?
+            storeData.push([key, key]);
+        });
+        var cmp = {
+            name: 'attributes',
+            fieldLabel: this.app.i18n._('Attribute'),
+            xtype: 'combo',
+            value: 'vcpus',
+            store: storeData
+        };
+
+        this.attributeEditor = new Ext.form.ComboBox(cmp);
+        this.attributesQuickadd = new Ext.form.ComboBox(cmp);
+    },
+
+    getAttributeKeysFromAccountable: function(record) {
+        var accountable = record.get('product_id').accountable;
+
+        if (accountable == 'WebAccounting_Model_ProxmoxVM') {
+            // TODO get accountable keys from modelconfig / registry (Tine.WebAccounting.registry.get('models')[MODEL])
+            return ['vcpus', 'memory', 'storage'];
+        } else {
+            return [];
+        }
+    },
+
+    /**
+     * load data from prod agg record into grid store
+     */
+    loadAttributesFromRecord: function(record, attributeKeys)
+    {
+        var attributes = record.get('json_attributes'),
+            value = {'records': []};
+
+        Ext.each(attributeKeys, function(key) {
+            if (attributes && attributes[key]) {
+                value.records.push({
+                    id: key,
+                    value: attributes[key]
+                });
+            }
+        });
+        this.attributesGrid.setValue(value);
+    },
+
+    /**
+     * put data from grid into prod agg record
+     */
+    onAttributesWindowOK: function () {
+        var selectedRows = this.getSelectionModel().getSelections(),
+            selectedRecord = selectedRows[0],
+            records = this.attributesGrid.getValue().records,
+            attributes = {};
+
+        Ext.each(records, function(attribute) {
+            attributes[attribute.id] = attribute.value;
+        }, this);
+
+        selectedRecord.set('json_attributes', attributes);
+        selectedRecord.commit();
+
+        this.onAttributesWindowClose();
+    },
+
+    /**
+     * Close store Window
+     */
+    onAttributesWindowClose: function () {
+        this.attributesWindow.purgeListeners();
+        this.attributesWindow.close();
+    },
+
+    getContextMenuItems: function() {
+        return [this.editAttributesAction];
     }
 });
-
