@@ -375,6 +375,15 @@ Tine.Tinebase.ApplicationStarter = {
                 
                 // iterate models of this app
                 Ext.iterate(models, function(modelName, modelConfig) {
+                    // create main screen
+                    if(! Tine[appName].hasOwnProperty('MainScreen')) {
+                        Tine[appName].MainScreen = Ext.extend(Tine.widgets.MainScreen, {
+                            app: appName,
+                            contentTypes: contentTypes,
+                            activeContentType: modelName
+                        });
+                    }
+
                     var containerProperty = modelConfig.hasOwnProperty('containerProperty') ? modelConfig.containerProperty : null;
                     
                     modelName = modelName.replace(/_/, '');
@@ -491,7 +500,7 @@ Tine.Tinebase.ApplicationStarter = {
                         }
                         return dd;
                     };
-                    
+
                     // create filter panel
                     var filterPanelName = modelName + 'FilterPanel';
                     if (! Tine[appName].hasOwnProperty(filterPanelName)) {
@@ -510,15 +519,6 @@ Tine.Tinebase.ApplicationStarter = {
                                 recordClass: Tine[appName].Model[modelName]
                             });
                         }
-                    }
-                    
-                    // create main screen
-                    if(! Tine[appName].hasOwnProperty('MainScreen')) {
-                        Tine[appName].MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-                            app: appName,
-                            contentTypes: contentTypes,
-                            activeContentType: modelName
-                        });
                     }
                     
                     // create editDialog openWindow function only if edit dialog exists

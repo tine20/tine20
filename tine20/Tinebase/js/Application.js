@@ -21,7 +21,11 @@ Tine.Tinebase.Application = function(config) {
     Ext.apply(this, config);
     
     Tine.Tinebase.Application.superclass.constructor.call(this);
-    
+
+    this.hasMainScreen = Ext.isBoolean(this.hasMainScreen) ? this.hasMainScreen :
+        (this.getMainScreen != Tine.Tinebase.Application.prototype.getMainScreen ||
+        typeof Tine[this.appName].MainScreen === 'function');
+
     this.i18n = new Locale.Gettext();
     this.i18n.textdomain(this.appName);
 
@@ -43,7 +47,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     /**
      * @cfg {Boolean} hasMainScreen
      */
-    hasMainScreen: true,
+    hasMainScreen: null,
 
     /**
      * @cfg {Object} routes
@@ -85,7 +89,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {Tine.widgets.app.MainScreen}
      */
     getMainScreen: function() {
-        if (! this.mainScreen && typeof Tine[this.appName].MainScreen === 'function') {
+        if (this.hasMainScreen && !this.mainScreen) {
             this.mainScreen = new Tine[this.appName].MainScreen({
                 app: this
             });
