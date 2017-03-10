@@ -463,12 +463,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * returns javascript of translations for the currently configured locale
      * 
-     * Note: This function is only used in development mode. In debug/release mode
-     * we can include the static build files in the view. With this we avoid the 
-     * need to start a php process and stream static js files through it.
-     * 
-     * @return javascript
-     *
+     * @return string (javascript)
      */
     public function getJsTranslations()
     {
