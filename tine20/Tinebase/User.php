@@ -928,4 +928,81 @@ class Tinebase_User
         $addressBookController->doContainerACLChecks($oldAcl);
         $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
     }
+
+    /**
+     * create new system user
+     *
+     * @param string $accountLoginName
+     * @return Tinebase_Model_FullUser|null
+     */
+    static public function createSystemUser($accountLoginName)
+    {
+        try {
+            $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Use existing system user ' . $accountLoginName);
+            return $systemUser;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue
+        }
+
+        $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $systemUser = new Tinebase_Model_FullUser(array(
+            'accountLoginName' => $accountLoginName,
+            'accountStatus' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility' => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup' => $adminGroup->getId(),
+            'accountLastName' => $accountLoginName,
+            'accountDisplayName' => $accountLoginName,
+            'accountExpires' => NULL,
+        ));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+            ' Creating new system user ' . print_r($systemUser->toArray(), true));
+
+        try {
+            $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
+            Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+        } catch(Zend_Ldap_Exception $zle) {
+            Tinebase_Exception::log($zle);
+            if (stripos($zle->getMessage(), 'Already exists') !== false) {
+                try {
+                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSyncBackend(
+                        'accountLoginName',
+                        $accountLoginName,
+                        'Tinebase_Model_FullUser'
+                    );
+                    Tinebase_Timemachine_ModificationLog::setRecordMetaData($user, 'create');
+                    $systemUser->merge($user);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Creating new (sql) system user ' . print_r($systemUser->toArray(), true));
+                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
+                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                } catch(Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                        ' no system user could be created');
+                    // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+                    Tinebase_Exception::log($e);
+                    $systemUser = null;
+                }
+            } else {
+                $systemUser = null;
+            }
+
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
+                ' no system user could be created');
+            // TODO we should try to fetch an admin user here (see Sales_Setup_Update_Release8::_updateContractsFields)
+            Tinebase_Exception::log($e);
+            $systemUser = null;
+        }
+
+        if (null !== $plugin) {
+            Tinebase_User::getInstance()->registerPlugin($plugin);
+        }
+
+        return $systemUser;
+    }
 }

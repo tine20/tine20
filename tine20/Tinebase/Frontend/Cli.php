@@ -381,40 +381,18 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 Tinebase_Exception::log($e);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $tenf->getMessage());
             
-            $cronuser = $this->_createCronuser();
-            Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+            $cronuser = Tinebase_User::createSystemUser('cronuser');
+            if ($cronuser) {
+                Tinebase_Config::getInstance()->set(Tinebase_Config::CRONUSERID, $cronuser->getId());
+            }
         }
         
         return $cronuser;
     }
 
-    /**
-     * create new cronuser
-     * 
-     * @return Tinebase_Model_FullUser
-     */
-    protected function _createCronuser()
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Creating new cronuser.');
-        
-        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
-        $cronuser = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'cronuser',
-            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-            'visibility'            => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
-            'accountPrimaryGroup'   => $adminGroup->getId(),
-            'accountLastName'       => 'cronuser',
-            'accountDisplayName'    => 'cronuser',
-            'accountExpires'        => NULL,
-        ));
-        $cronuser = Tinebase_User::getInstance()->addUser($cronuser);
-        Tinebase_Group::getInstance()->addGroupMember($cronuser->accountPrimaryGroup, $cronuser->getId());
-        
-        return $cronuser;
-    }
-    
     /**
      * process given queue job
      *  --message json encoded task
