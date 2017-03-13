@@ -180,6 +180,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if ($record) {
             $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Tinebase_Model_Tree_Node', $record->getId());
         }
+
+        $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
+        $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
+
         return $record;
     }
     
@@ -758,7 +762,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
     /**
      * resolve node container and path
-     * 
+     *
+     * if a single record is given, use the resulting record set, because the referenced record is no longer updated!
+     *
      * (1) add path to records 
      * (2) replace name with container record, if node name is a container id 
      *     / path is toplevel (shared/personal with useraccount
@@ -816,6 +822,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        return $records;
     }
     
     /**
