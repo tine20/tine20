@@ -429,7 +429,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
         // handle message with fmail (add to cache)
         $message = $this->_emailTestClass->messageTestHelper('meetup.eml');
         $complete = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        
+
+        self::assertGreaterThan(0, count($complete->preparedParts), 'no prepared parts found');
         $iMIP = $complete->preparedParts->getFirstRecord()->preparedData;
         
         $this->setExpectedException('Calendar_Exception_iMIP', 'iMIP preconditions failed: ATTENDEE');
